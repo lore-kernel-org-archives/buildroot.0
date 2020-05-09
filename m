@@ -1,100 +1,178 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 9 May 2020 22:41:44 +0200
-Subject: [Buildroot] [git commit] package/exfatprogs: fix compile failure
- node may be used uninitialized
-Message-ID: <20200509202604.AD8ED9122F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/exfatprogs: fix 64-bit types
+ printf compile failure
+Message-ID: <20200509202604.9338D91240@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6ff166254b8dd51d020b224a51cc95f851293d7
+commit: https://git.buildroot.net/buildroot/commit/?id=d6c4c840ab0622e62faeb3680858a7b7db447337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 
-  - http://autobuild.buildroot.net/results/5c5/5c5d71fde80a4f2f027085bdb0fae9fb76ab9d32
+  - http://autobuild.buildroot.net/results/a7364a6b3801d7d18c30c7242c6faf19431fddfd
 
-  fsck.c:1062:18: error: 'node' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-       node->parent = dir;
-                    ^
-  fsck.c:870:22: note: 'node' was declared here
-    struct exfat_inode *node;
-                        ^
+  mkfs.c:60:14: error: format '%llu' expects argument of type 'long long unsigned int', but argument 2 has type 'long unsigned int' [-Werror=format=]
+    exfat_debug("Volume Length(sectors) : %llu\n",
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...3-fsck-fix-node-may-be-used-uninitialized.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ ...-use-PRIu64-PRIx64-to-printf-64-bit-types.patch | 144 +++++++++++++++++++++
+ 1 file changed, 144 insertions(+)
 
-diff --git a/package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch b/package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
+diff --git a/package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch b/package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
 new file mode 100644
-index 0000000000..b62aaf3d1c
+index 0000000000..67dcc070ec
 --- /dev/null
-+++ b/package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
-@@ -0,0 +1,63 @@
-+From 1b0a48ef0aa33a4f5b9c8d23d9f647482d0f28dd Mon Sep 17 00:00:00 2001
++++ b/package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
+@@ -0,0 +1,144 @@
++From fb96662501a13c7a82304b2c145146c4a8741bf8 Mon Sep 17 00:00:00 2001
 +From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 9 May 2020 15:05:46 +0200
-+Subject: [PATCH] fsck: fix node may be used uninitialized
++Date: Sat, 9 May 2020 13:43:37 +0200
++Subject: [PATCH] mkfs/fsck: use PRIu64/PRIx64 to print 64-bit types
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+The complicated way of gcc to tell not all failure pathes
-+set a return value != 0 in the calls before.
++Change cpu_to_le64()/cpu_to_le32()/cpu_to_le16() defines to
++return determined types (instead of __le64/__le32/__le16) and
++use PRIu64/PRIx64 to print 64-bit types.
 +
 +Fixes:
 +
-+  fsck.c:1063:18: error: ???node??? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+       node->parent = dir;
-+                    ^
-+  fsck.c:871:22: note: ???node??? was declared here
-+    struct exfat_inode *node;
-+                        ^
-+[Upstream: https://github.com/exfatprogs/exfatprogs/pull/92]
++  mkfs.c:60:14: error: format ???%llu??? expects argument of type ???long long unsigned int???, but argument 2 has type ???long unsigned int??? [-Werror=format=]
++    exfat_debug("Volume Length(sectors) : %llu\n",
++                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++  fsck.c:484:13: error: format ???%llu??? expects argument of type ???long long unsigned int???, but argument 2 has type ???long unsigned int??? [-Werror=format=]
++     exfat_err("too large sector count: %llu\n, expected: %llu\n",
++               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++  fsck.c:851:13: error: format ???%llu??? expects argument of type ???long long unsigned int???, but argument 2 has type ???long unsigned int??? [-Werror=format=]
++     exfat_err("valid size %llu greater than size %llu: %s\n",
++               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++  fsck.c:930:14: error: format ???%llx??? expects argument of type ???long long unsigned int???, but argument 3 has type ???long unsigned int??? [-Werror=format=]
++     exfat_debug("start cluster %#x, size %#llx\n",
++                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++  fsck.c:938:13: error: format ???%llx??? expects argument of type ???long long unsigned int???, but argument 2 has type ???long unsigned int??? [-Werror=format=]
++     exfat_err("invalid size of allocation bitmap. 0x%llx\n",
++               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++  fsck.c:992:13: error: format ???%llx??? expects argument of type ???long long unsigned int???, but argument 2 has type ???long unsigned int??? [-Werror=format=]
++     exfat_err("invalid size of upcase table. 0x%llx\n",
++               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++[Upstream: https://github.com/exfatprogs/exfatprogs/pull/91]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ fsck/fsck.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
++ fsck/fsck.c            | 11 ++++++-----
++ include/exfat_ondisk.h |  6 +++---
++ mkfs/mkfs.c            |  3 ++-
++ 3 files changed, 11 insertions(+), 9 deletions(-)
 +
 +diff --git a/fsck/fsck.c b/fsck/fsck.c
-+index 67d7946..f0daa1d 100644
++index 9e04407..6b48a17 100644
 +--- a/fsck/fsck.c
 ++++ b/fsck/fsck.c
-+@@ -801,12 +801,12 @@ static int read_file_dentries(struct exfat_de_iter *iter,
-+ 	ret = exfat_de_iter_get(iter, 0, &file_de);
-+ 	if (ret || file_de->type != EXFAT_FILE) {
-+ 		exfat_err("failed to get file dentry. %d\n", ret);
-+-		return ret;
-++		return -EINVAL;
-+ 	}
-+ 	ret = exfat_de_iter_get(iter, 1, &stream_de);
-+ 	if (ret || stream_de->type != EXFAT_STREAM) {
-+ 		exfat_err("failed to get stream dentry. %d\n", ret);
-+-		return ret;
-++		return -EINVAL;
-+ 	}
++@@ -8,6 +8,7 @@
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <getopt.h>
+++#include <inttypes.h>
++ #include <string.h>
++ #include <errno.h>
++ #include <locale.h>
++@@ -481,7 +482,7 @@ static bool exfat_boot_region_check(struct exfat *exfat)
 + 
-+ 	*new_node = NULL;
-+@@ -825,6 +825,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
-+ 		ret = exfat_de_iter_get(iter, i, &name_de);
-+ 		if (ret || name_de->type != EXFAT_NAME) {
-+ 			exfat_err("failed to get name dentry. %d\n", ret);
-++			ret = -EINVAL;
-+ 			goto err;
-+ 		}
++ 	if (le64_to_cpu(bs->bsx.vol_length) * EXFAT_SECTOR_SIZE(bs) >
++ 			exfat->blk_dev->size) {
++-		exfat_err("too large sector count: %llu\n, expected: %llu\n",
+++		exfat_err("too large sector count: %" PRIu64 "\n, expected: %llu\n",
++ 				le64_to_cpu(bs->bsx.vol_length),
++ 				exfat->blk_dev->num_sectors);
++ 		goto err;
++@@ -848,7 +849,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
 + 
-+@@ -852,6 +853,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
-+ 		exfat_err("valid size %" PRIu64 " greater than size %llu: %s\n",
++ 	if (le64_to_cpu(stream_de->stream_valid_size) > node->size) {
++ 		resolve_path_parent(&path_resolve_ctx, iter->parent, node);
++-		exfat_err("valid size %llu greater than size %llu: %s\n",
+++		exfat_err("valid size %" PRIu64 " greater than size %llu: %s\n",
 + 			le64_to_cpu(stream_de->stream_valid_size), node->size,
 + 			path_resolve_ctx.local_path);
-++		ret = -EINVAL;
 + 		goto err;
-+ 	}
++@@ -927,7 +928,7 @@ static bool read_alloc_bitmap(struct exfat_de_iter *iter)
++ 	if (exfat_de_iter_get(iter, 0, &dentry))
++ 		return false;
 + 
++-	exfat_debug("start cluster %#x, size %#llx\n",
+++	exfat_debug("start cluster %#x, size %#" PRIx64 "\n",
++ 			le32_to_cpu(dentry->bitmap_start_clu),
++ 			le64_to_cpu(dentry->bitmap_size));
++ 
++@@ -935,7 +936,7 @@ static bool read_alloc_bitmap(struct exfat_de_iter *iter)
++ 
++ 	if (le64_to_cpu(dentry->bitmap_size) <
++ 			DIV_ROUND_UP(exfat->bit_count, 8)) {
++-		exfat_err("invalid size of allocation bitmap. 0x%llx\n",
+++		exfat_err("invalid size of allocation bitmap. 0x%" PRIx64 "\n",
++ 				le64_to_cpu(dentry->bitmap_size));
++ 		return false;
++ 	}
++@@ -989,7 +990,7 @@ static bool read_upcase_table(struct exfat_de_iter *iter)
++ 	size = (size_t)le64_to_cpu(dentry->upcase_size);
++ 	if (size > EXFAT_MAX_UPCASE_CHARS * sizeof(__le16) ||
++ 			size == 0 || size % sizeof(__le16)) {
++-		exfat_err("invalid size of upcase table. 0x%llx\n",
+++		exfat_err("invalid size of upcase table. 0x%" PRIx64 "\n",
++ 			le64_to_cpu(dentry->upcase_size));
++ 		return false;
++ 	}
++diff --git a/include/exfat_ondisk.h b/include/exfat_ondisk.h
++index ae2827b..70546a3 100644
++--- a/include/exfat_ondisk.h
+++++ b/include/exfat_ondisk.h
++@@ -26,9 +26,9 @@
++ #define cpu_to_le64(x)	(x)
++ #endif
++ 
++-#define le64_to_cpu(x)  cpu_to_le64(x)
++-#define le32_to_cpu(x)  cpu_to_le32(x)
++-#define le16_to_cpu(x)  cpu_to_le16(x)
+++#define le64_to_cpu(x)  ((uint64_t)cpu_to_le64(x))
+++#define le32_to_cpu(x)  ((uint32_t)cpu_to_le32(x))
+++#define le16_to_cpu(x)  ((uint16_t)cpu_to_le16(x))
++ 
++ #define PBR_SIGNATURE		0xAA55
++ 
++diff --git a/mkfs/mkfs.c b/mkfs/mkfs.c
++index 021a51a..87035ef 100644
++--- a/mkfs/mkfs.c
+++++ b/mkfs/mkfs.c
++@@ -13,6 +13,7 @@
++ #include <sys/ioctl.h>
++ #include <fcntl.h>
++ #include <getopt.h>
+++#include <inttypes.h>
++ #include <errno.h>
++ #include <math.h>
++ #include <locale.h>
++@@ -57,7 +58,7 @@ static void exfat_setup_boot_sector(struct pbr *ppbr,
++ 	memset(ppbr->boot_code, 0, 390);
++ 	ppbr->signature = cpu_to_le16(PBR_SIGNATURE);
++ 
++-	exfat_debug("Volume Length(sectors) : %llu\n",
+++	exfat_debug("Volume Length(sectors) : %" PRIu64 "\n",
++ 		le64_to_cpu(pbsx->vol_length));
++ 	exfat_debug("FAT Offset(sector offset) : %u\n",
++ 		le32_to_cpu(pbsx->fat_offset));
 +-- 
 +2.26.2
 +
