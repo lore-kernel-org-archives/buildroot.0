@@ -1,40 +1,37 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Sat, 09 May 2020 19:20:38 +0000
-Subject: [Buildroot] Help: debug binary in build_root
-In-Reply-To: <CACEFAc09yq+y0W1anXNOfHuVbE3z0kTrz37YLu9=F-gwCckJaQ@mail.gmail.com>
-References: <mailman.7.1589025603.138573.buildroot@busybox.net>
- <3c88b9e7b58476542e54ae0e13f175b5@umbiko.net>
- <CACEFAc09yq+y0W1anXNOfHuVbE3z0kTrz37YLu9=F-gwCckJaQ@mail.gmail.com>
-Message-ID: <dbb5f17540820b6e0f7d0952e0a793ab@umbiko.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 May 2020 21:21:21 +0200
+Subject: [Buildroot] [git commit branch/next] package/network-manager: don't
+ explicitly select QMI/MBIM support
+Message-ID: <20200509190545.3500B911E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kunal,
+commit: https://git.buildroot.net/buildroot/commit/?id=911f718df590224d1843efa1157356ba26f16bc2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2020-05-09 18:06, Kunal Chauhan wrote:
-> Hi team ,
-> 
-> 1. I have not done static code analysis before, no experience , would
-> you give some hint.?
+When NetworkManager is built with ModemManager support, it should only
+require the generic ModemManager dependency; it shouldn't configure
+which features ModemManager provides.
 
-Static code analysis looks at the source code and tries to find 
-anomalies. Wikipedia has a list of possible tools, some commercial, some 
-open source. The only one I have used is SonarQube, but it is mainly 
-used in CI/CD environments, not stand-alone.
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/network-manager/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-Save this for later.
-
-> 2. If i have a log till where the program shows prints and after that
-> logs is not come as binary carshes.  Will it will be help ful in
-> static analysis and i can narrow down my debugging.?
-
-Try to narrow down the crash location. Instrument your code by putting 
-more debug information inside. If that fails, use gdb. You could use the 
-existing Buildroot project to compile the necessary binaries and then 
-copy them manually to your target system.
-
-Kind regards,
-Andreas
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index e6a3f5f04f..7d44768460 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -40,8 +40,6 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+ config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+ 	bool "modem-manager support"
+ 	select BR2_PACKAGE_MODEM_MANAGER
+-	select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
+-	select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+ 	help
+ 	  This option enables support for ModemManager
+ 
