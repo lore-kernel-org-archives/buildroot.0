@@ -1,49 +1,78 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 9 May 2020 23:29:22 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/fakeroot: bump version to
- 1.24
-In-Reply-To: <20200509185010.25c376ea@windsurf.home>
-References: <20200506131130.410171-1-nolange79@gmail.com>
- <20200506131130.410171-2-nolange79@gmail.com>
- <20200509185010.25c376ea@windsurf.home>
-Message-ID: <CADYdroP1VRGH5DcZMgO5ON_JK8+UVMHMyS6JpAJxdPyUJZ=BmQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 May 2020 23:30:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix build with
+ musl-1.2.0
+In-Reply-To: <20200503075312.703486-1-bernd.kuhls@t-online.de>
+References: <20200503075312.703486-1-bernd.kuhls@t-online.de>
+Message-ID: <20200509233034.40e44309@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sa., 9. Mai 2020 um 18:50 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Wed,  6 May 2020 15:11:29 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >  ...02-Select-TCP-when-lack-of-SYSV-IPC.patch} |  0
-> >  ...nicate-check-return-status-of-msgrcv.patch | 46 -------------------
-> >  package/fakeroot/fakeroot.hash                |  6 +--
-> >  package/fakeroot/fakeroot.mk                  |  6 +--
-> >  4 files changed, 5 insertions(+), 53 deletions(-)
-> >  rename package/fakeroot/{0003-Select-TCP-when-lack-of-SYSV-IPC.patch => 0002-Select-TCP-when-lack-of-SYSV-IPC.patch} (100%)
-> >  delete mode 100644 package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
->
-> What happened to 0002-communicate-check-return-status-of-msgrcv.patch ?
-> It is removed by your patch. Why?
+On Sun,  3 May 2020 09:53:12 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Cause its included in that version
+> diff --git a/package/minidlna/0001-uuid.c-add-asm-unistd.h-include-to-fix-build-with-mu.patch b/package/minidlna/0001-uuid.c-add-asm-unistd.h-include-to-fix-build-with-mu.patch
+> new file mode 100644
+> index 0000000000..5e64103c34
+> --- /dev/null
+> +++ b/package/minidlna/0001-uuid.c-add-asm-unistd.h-include-to-fix-build-with-mu.patch
+> @@ -0,0 +1,34 @@
+> +From 9e21f3f91195a7c4a73ebf112823f7dbb94732db Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 3 May 2020 09:42:57 +0200
+> +Subject: [PATCH] uuid.c: add asm/unistd.h include to fix build with
+> + musl-1.2.0
+> +
+> +Build was broken due to musl commit
+> +https://git.musl-libc.org/cgit/musl/commit/?id=5a105f19b5aae79dd302899e634b6b18b3dcd0d6
+> +
+> +To fix also include asm/unistd.h following the configure.ac check for
+> +the __NR_clock_gettime syscall.
+> +
+> +Patch sent upstream: https://sourceforge.net/p/minidlna/patches/182/
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + uuid.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/uuid.c b/uuid.c
+> +index 6e6a9ec..78f110c 100644
+> +--- a/uuid.c
+> ++++ b/uuid.c
+> +@@ -36,6 +36,7 @@
+> + #if HAVE_MACH_MACH_TIME_H
+> + #include <mach/mach_time.h>
+> + #elif HAVE_CLOCK_GETTIME_SYSCALL
+> ++#include <asm/unistd.h>
 
->
-> Also, your PATCH 1/2 is a version bump, but PATCH 2/2 is a bug fix.
-> Since Buildroot 2020.05-rc1 has now been released, we normally don't
-> merge version bumps in master.
->
-> Could you clarify if the fchownat/fchmodat issue happens with the
-> current version of fakeroot in Buildroot (1.20) ? Or only with the
-> updated version 1.24 ? Can it be fixed with fakeroot 1.20 ?
+I am not an expert with all the time changes in the kernel/libc, but
+this seems quite wrong:
 
-issue exist with both, could certainly be fixed in 1.20 separately,
-I just don't take much interest in fixing ~ 4 year versions by default.
+ (1) Including <asm/...> headers should typically not be done
 
-Norbert
+ (2) The commit at
+     https://git.musl-libc.org/cgit/musl/commit/?id=5a105f19b5aae79dd302899e634b6b18b3dcd0d6
+     says:
+
+this patch renames the syscalls on 32-bit archs to clock_gettime32 and
+gettimeofday_time32, so that applications using the original names
+will fail to build without being fixed.
+
+     So the breakage is intentional, and it should be fixed in the
+     application.
+
+So the big question is why does minidlna wants to do the syscall
+directly instead of using clock_gettime(), which is the right thing to
+do ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
