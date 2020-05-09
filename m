@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 22:01:03 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot: add support for bundling OpenSBI
- FW_DYNAMIC into U-Boot
-In-Reply-To: <20200506100845.4356-1-jagan@amarulasolutions.com>
-References: <20200506100845.4356-1-jagan@amarulasolutions.com>
-Message-ID: <20200509220103.380c57a7@windsurf.home>
+Date: Sat, 9 May 2020 22:02:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/xerces: add enable network
+ option
+In-Reply-To: <20200504202558.24654-1-jared.bents@rockwellcollins.com>
+References: <20200504202558.24654-1-jared.bents@rockwellcollins.com>
+Message-ID: <20200509220251.0d1cd423@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jagan,
+On Mon,  4 May 2020 15:25:58 -0500
+Jared Bents <jared.bents@rockwellcollins.com> wrote:
 
-On Wed,  6 May 2020 15:38:44 +0530
-Jagan Teki <jagan@amarulasolutions.com> wrote:
-
-> Some RISC-V platforms (such as SiFive FU540) have a boot process
-> where U-Boot encapsulates the FW_DYNAMIC part of the ARM trusted
-> firmware. For such platforms, we need to build OpenSBI before U-Boot,
-> and pass a OPENSBI variable pointing to OpenSBI bl31.bin to the
-> U-Boot build process.
+> Update to add the option to compile xerces with network
+> enabled by default so it can be unselected to compile
+> without network support.
 > 
-> This commit introduces a BR2_TARGET_UBOOT_NEEDS_OPENSBI_FW_DYNAMIC
-> variable to achieve this.
-> 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  boot/uboot/Config.in | 15 +++++++++++++++
->  boot/uboot/uboot.mk  |  5 +++++
->  2 files changed, 20 insertions(+)
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
-Since you had comments from Alistair Francis on both patches, I mark
-these as Changes Requested in patchwork. Could you please take into
-account the feedback from Alistair, and send a new iteration?
+Could you expand the commit log with an explantion of the *why* we want
+to add this new option? Size impact? If so, what is the size impact?
+Some other reason?
+
+> +ifeq ($(BR2_PACKAGE_XERCES_ENABLE_NETWORK),y)
+>  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  XERCES_CONF_OPTS += -Dnetwork-accessor=curl
+>  XERCES_DEPENDENCIES += libcurl
+>  else
+>  XERCES_CONF_OPTS += -Dnetwork-accessor=socket
+>  endif
+> +else
+> +XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
+
+We don't use this :BOOL type specification anywhere in CMake packages
+in Buildroot, could you keep it consistent with the rest of the package?
 
 Thanks,
 
