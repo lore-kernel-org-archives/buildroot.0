@@ -1,61 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 16:29:16 +0200
-Subject: [Buildroot] [git commit] package/suricata: fix build with lua
-Message-ID: <20200509141342.45FEE810AE@busybox.osuosl.org>
+Date: Sat, 9 May 2020 16:29:41 +0200
+Subject: [Buildroot] [git commit] package/python-argon2-cffi: only enable
+ sse2 when supported
+Message-ID: <20200509141403.9177E9117B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0fbbdb6fc3b63b118bddc05b57169d8299a57ca
+commit: https://git.buildroot.net/buildroot/commit/?id=8120962635173f67a60df4892b023b2fa931a713
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.net/results/11bc7f4e1c54f074dd10a995233bee45c293e488
+We need to backport a commit so that we can enable/disable sse2 using
+the ARGON2_CFFI_USE_SSE2 env variable.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/030/0306d66d081dd0807c577edd50d39075a46d0dd9/build-end.log
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...nfigure.ac-fix-cross-compilation-with-lua.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ ...iable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch | 78 ++++++++++++++++++++++
+ package/python-argon2-cffi/python-argon2-cffi.mk   |  6 ++
+ 2 files changed, 84 insertions(+)
 
-diff --git a/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch b/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+diff --git a/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch b/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
 new file mode 100644
-index 0000000000..5c13ac7bec
+index 0000000000..670d9b3d40
 --- /dev/null
-+++ b/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
-@@ -0,0 +1,33 @@
-+From 8db38c21b525327305778fcaa232b2a797ffcb82 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 7 May 2020 19:05:23 +0200
-+Subject: [PATCH] configure.ac: fix cross-compilation with lua
++++ b/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
+@@ -0,0 +1,78 @@
++From 098890ed36d54a7c8beb8c01428c78de7ab77b05 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Wed, 6 May 2020 23:40:11 -0600
++Subject: [PATCH] Add env variable ARGON2_CFFI_USE_SSE2 to override sse2
++ optimizations (#61)
 +
-+lua integer size is detected through AC_RUN_IFELSE since
-+https://github.com/OISF/suricata/commit/2abcd5d27f29ca37ae31108cc0ea0143fa25d0a1
++This is useful for cross compiling since platform.machine() is broken
++for cross builds.
 +
-+This breaks cross-compilation and is needed only for rust so disable it
-+if rust is not wanted
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not submitted yet]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1 at gmail.com: backport from upstream commit
++098890ed36d54a7c8beb8c01428c78de7ab77b05]
 +---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ CHANGELOG.rst         |  2 +-
++ docs/installation.rst | 10 ++++++++++
++ setup.py              | 12 +++++++++---
++ 3 files changed, 20 insertions(+), 4 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 127848234..f5f33d42d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2225,7 +2225,7 @@ return 0;
-+     AM_CONDITIONAL([HAVE_LUA], [test "x$enable_lua" != "xno"])
++diff --git a/CHANGELOG.rst b/CHANGELOG.rst
++index 9fa2bf0..4405297 100644
++--- a/CHANGELOG.rst
+++++ b/CHANGELOG.rst
++@@ -26,7 +26,7 @@ Deprecations:
++ Changes:
++ ^^^^^^^^
 + 
-+     # If Lua is enabled, test the integer size.
-+-    if test "x$enable_lua" = "xyes"; then
-++    if test "x$enable_lua" = "xyes" && test "x$enable_rust" = "xyes"; then
-+         TMPLIBS="$LIBS"
-+         LIBS=""
++-*none*
+++- Added ``ARGON2_CFFI_USE_SSE2`` env variable to override SSE2 autodetection.
 + 
++ 
++ ----
++diff --git a/docs/installation.rst b/docs/installation.rst
++index 3ee9ccd..563c891 100644
++--- a/docs/installation.rst
+++++ b/docs/installation.rst
++@@ -57,6 +57,16 @@ This approach can lead to problems around your build chain and you can run into
++ **It is your own responsibility to deal with these risks if you choose this path.**
++ 
++ 
+++Override Automatic SSE2 Detection
+++------------------------------------------
+++
+++If you set ``ARGON2_CFFI_USE_SSE2`` to ``1`` (and *only* ``1``), ``argon2-cffi`` will build with sse2 support.
+++
+++If you set ``ARGON2_CFFI_USE_SSE2`` to ``0`` (and *only* ``0``), ``argon2-cffi`` will build without sse2 support.
+++
+++This should generally only be used if the sse2 autodetection causes a compilation failure or if you are cross compiling.
+++
+++
++ .. _SSE2: https://en.wikipedia.org/wiki/SSE2
++ .. _PyPI: https://pypi.org/project/argon2-cffi/
++ .. _CFFI environment: https://cffi.readthedocs.io/en/latest/installation.html
++diff --git a/setup.py b/setup.py
++index e91e73a..c26a691 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -19,9 +19,15 @@ from setuptools.command.install import install
++ NAME = "argon2-cffi"
++ PACKAGES = find_packages(where="src")
++ 
++-# Optimized version requires SSE2 extensions.  They have been around since
++-# 2001 so we try to compile it on every recent-ish x86.
++-optimized = platform.machine() in ("i686", "x86", "x86_64", "AMD64")
+++use_sse2 = os.environ.get("ARGON2_CFFI_USE_SSE2", None)
+++if use_sse2 == "1":
+++    optimized = True
+++elif use_sse2 == "0":
+++    optimized = False
+++else:
+++    # Optimized version requires SSE2 extensions.  They have been around since
+++    # 2001 so we try to compile it on every recent-ish x86.
+++    optimized = platform.machine() in ("i686", "x86", "x86_64", "AMD64")
++ 
++ CFFI_MODULES = ["src/argon2/_ffi_build.py:ffi"]
++ lib_base = os.path.join("extras", "libargon2", "src")
 +-- 
-+2.26.2
++2.20.1
 +
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+index 099574e9c3..df1c1d51c6 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.mk
++++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+@@ -12,4 +12,10 @@ PYTHON_ARGON2_CFFI_LICENSE = MIT
+ PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
+ PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
+ 
++ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
++PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=1
++else
++PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=0
++endif
++
+ $(eval $(python-package))
