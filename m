@@ -1,54 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 9 May 2020 16:08:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtdev2tuio: fix build with musl
- 1.2.0
-In-Reply-To: <5e59a307-054c-5eed-97d4-96a46d312089@relinux.de>
-References: <20200425104816.1229406-1-fontaine.fabrice@gmail.com>
- <20200425221618.67ddb474@windsurf.home>
- <5e59a307-054c-5eed-97d4-96a46d312089@relinux.de>
-Message-ID: <CAPi7W81nTpONcC8u9RUQ3vo=ZPP9WdSCAG-0sFR_Z7bVsDOnYg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 May 2020 16:23:41 +0200
+Subject: [Buildroot] [PATCH 2/2] support/config-fragments: add RISC-V
+ 64-bit uclibc autobuild config
+In-Reply-To: <1928858.SY0nFSyD1A@laptop>
+References: <20200508103338.16391-1-mark@dibsco.co.uk>
+ <20200508103338.16391-2-mark@dibsco.co.uk>
+ <20200509120758.62ede751@windsurf.home> <1928858.SY0nFSyD1A@laptop>
+Message-ID: <20200509162341.74f5dd94@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stephan,
+On Sat, 09 May 2020 13:37:24 +0100
+Mark Corbin <mark@dibsco.co.uk> wrote:
 
-Le sam. 9 mai 2020 ? 14:58, Stephan Hoffmann <sho@relinux.de> a ?crit :
->
-> Hello Thomas, Fabrice,
->
-> once upon a time I added mtdev2tuio because at the time it was useful in
-> multitouch szenarios. I do not use it any more.
->
-> @Fabrice: Since you seems to have adopted mtdev2tuio, do you use it? If
-> yes, could you please put yourself in the developer list instead of me?
->
-> If not, I could volunteer to remove it since it is not maintained and it
-> breaks builds every now and then.
-You can remove it, I don't use mtdev2tuio.
->
-> Kind regards
->
-> Stephan
->
-> Am 25.04.20 um 22:16 schrieb Thomas Petazzoni:
-> > On Sat, 25 Apr 2020 12:48:16 +0200
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >
-> >> Fixes:
-> >>  - http://autobuild.buildroot.org/results/a30823f1388f37820d8a4f29b9b2c1de9b3992ac
-> >>
-> >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >> ---
-> >>  ...dev2tuio.c-fix-build-with-musl-1.2.0.patch | 57 +++++++++++++++++++
-> >>  1 file changed, 57 insertions(+)
-> >>  create mode 100644 package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
-> > Applied to master, thanks. However, this project hasn't seen any commit
-> > since 2012. Is it still relevant/useful ?
-> >
-> > Thomas
-Best Regards,
+> Sorry, that was my misinterpretation of 'full' when looking at config fragments 
+> for other architectures.
 
-Fabrice
+"full" in fact is used for uClibc toolchains, where it means "all
+features enabled", i.e threads, wchar, locales, etc.
+
+> What would be preferred here? Should I leave the musl config as it is
+> and add an additional fragment for uclibc?
+
+I'm not a big fan of having too many internal toolchain configurations
+as it takes quite a lot of build time on the autobuilder machines.
+Instead, we should build external toolchains if we want to test more
+configurations.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
