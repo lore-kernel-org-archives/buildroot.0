@@ -1,177 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  9 May 2020 18:21:14 +0200
-Subject: [Buildroot] [PATCH v1 1/4] exfatprogs: fix 64-bit types printf
- compile failure
-Message-ID: <20200509162117.8728-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 May 2020 18:39:43 +0200
+Subject: [Buildroot] [PATCH] package/ndisc6: fix for codesourcery
+ compilation
+In-Reply-To: <20200509170503.346103-1-vadim4j@gmail.com>
+References: <20200509170503.346103-1-vadim4j@gmail.com>
+Message-ID: <20200509183943.126d56e0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+On Sat,  9 May 2020 20:05:03 +0300
+Vadym Kochan <vadim4j@gmail.com> wrote:
 
-  - http://autobuild.buildroot.net/results/a7364a6b3801d7d18c30c7242c6faf19431fddfd
+> trace-{udp,tcp}.c uses BSD-style headers, it builds ok on some
+> latest libc compilation because they use:
+> 
+>     __extension__ union
+> 
+> but for example on codesourcery toolchain 4.x version it requires that
+> __FAVOR_BSD is defined. So fix it by defining this define only for
+> tcp/udp headers.
+> 
+> Fixes: http://autobuild.buildroot.net/results/d05d5471d10a2b6634711ccad75d7f86d222cc31
+> 
+> Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
 
-  mkfs.c:60:14: error: format '%llu' expects argument of type 'long long unsigned int', but argument 2 has type 'long unsigned int' [-Werror=format=]
-    exfat_debug("Volume Length(sectors) : %llu\n",
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Fixing issues for "codesourcery compilation" is wrong. What is being
+fixed is either a glibc-version related issue, or a gcc-version related
+issue. But we don't fix things for one specific toolchain.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...PRIu64-PRIx64-to-printf-64-bit-types.patch | 144 ++++++++++++++++++
- 1 file changed, 144 insertions(+)
- create mode 100644 package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
+Could you investigate a bit more, and reword the patch and commit log
+accordingly ?
 
-diff --git a/package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch b/package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
-new file mode 100644
-index 0000000000..67dcc070ec
---- /dev/null
-+++ b/package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
-@@ -0,0 +1,144 @@
-+From fb96662501a13c7a82304b2c145146c4a8741bf8 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 9 May 2020 13:43:37 +0200
-+Subject: [PATCH] mkfs/fsck: use PRIu64/PRIx64 to print 64-bit types
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Change cpu_to_le64()/cpu_to_le32()/cpu_to_le16() defines to
-+return determined types (instead of __le64/__le32/__le16) and
-+use PRIu64/PRIx64 to print 64-bit types.
-+
-+Fixes:
-+
-+  mkfs.c:60:14: error: format ?%llu? expects argument of type ?long long unsigned int?, but argument 2 has type ?long unsigned int? [-Werror=format=]
-+    exfat_debug("Volume Length(sectors) : %llu\n",
-+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+  fsck.c:484:13: error: format ?%llu? expects argument of type ?long long unsigned int?, but argument 2 has type ?long unsigned int? [-Werror=format=]
-+     exfat_err("too large sector count: %llu\n, expected: %llu\n",
-+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+  fsck.c:851:13: error: format ?%llu? expects argument of type ?long long unsigned int?, but argument 2 has type ?long unsigned int? [-Werror=format=]
-+     exfat_err("valid size %llu greater than size %llu: %s\n",
-+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+  fsck.c:930:14: error: format ?%llx? expects argument of type ?long long unsigned int?, but argument 3 has type ?long unsigned int? [-Werror=format=]
-+     exfat_debug("start cluster %#x, size %#llx\n",
-+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+  fsck.c:938:13: error: format ?%llx? expects argument of type ?long long unsigned int?, but argument 2 has type ?long unsigned int? [-Werror=format=]
-+     exfat_err("invalid size of allocation bitmap. 0x%llx\n",
-+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+  fsck.c:992:13: error: format ?%llx? expects argument of type ?long long unsigned int?, but argument 2 has type ?long unsigned int? [-Werror=format=]
-+     exfat_err("invalid size of upcase table. 0x%llx\n",
-+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+[Upstream: https://github.com/exfatprogs/exfatprogs/pull/91]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ fsck/fsck.c            | 11 ++++++-----
-+ include/exfat_ondisk.h |  6 +++---
-+ mkfs/mkfs.c            |  3 ++-
-+ 3 files changed, 11 insertions(+), 9 deletions(-)
-+
-+diff --git a/fsck/fsck.c b/fsck/fsck.c
-+index 9e04407..6b48a17 100644
-+--- a/fsck/fsck.c
-++++ b/fsck/fsck.c
-+@@ -8,6 +8,7 @@
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+ #include <getopt.h>
-++#include <inttypes.h>
-+ #include <string.h>
-+ #include <errno.h>
-+ #include <locale.h>
-+@@ -481,7 +482,7 @@ static bool exfat_boot_region_check(struct exfat *exfat)
-+ 
-+ 	if (le64_to_cpu(bs->bsx.vol_length) * EXFAT_SECTOR_SIZE(bs) >
-+ 			exfat->blk_dev->size) {
-+-		exfat_err("too large sector count: %llu\n, expected: %llu\n",
-++		exfat_err("too large sector count: %" PRIu64 "\n, expected: %llu\n",
-+ 				le64_to_cpu(bs->bsx.vol_length),
-+ 				exfat->blk_dev->num_sectors);
-+ 		goto err;
-+@@ -848,7 +849,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
-+ 
-+ 	if (le64_to_cpu(stream_de->stream_valid_size) > node->size) {
-+ 		resolve_path_parent(&path_resolve_ctx, iter->parent, node);
-+-		exfat_err("valid size %llu greater than size %llu: %s\n",
-++		exfat_err("valid size %" PRIu64 " greater than size %llu: %s\n",
-+ 			le64_to_cpu(stream_de->stream_valid_size), node->size,
-+ 			path_resolve_ctx.local_path);
-+ 		goto err;
-+@@ -927,7 +928,7 @@ static bool read_alloc_bitmap(struct exfat_de_iter *iter)
-+ 	if (exfat_de_iter_get(iter, 0, &dentry))
-+ 		return false;
-+ 
-+-	exfat_debug("start cluster %#x, size %#llx\n",
-++	exfat_debug("start cluster %#x, size %#" PRIx64 "\n",
-+ 			le32_to_cpu(dentry->bitmap_start_clu),
-+ 			le64_to_cpu(dentry->bitmap_size));
-+ 
-+@@ -935,7 +936,7 @@ static bool read_alloc_bitmap(struct exfat_de_iter *iter)
-+ 
-+ 	if (le64_to_cpu(dentry->bitmap_size) <
-+ 			DIV_ROUND_UP(exfat->bit_count, 8)) {
-+-		exfat_err("invalid size of allocation bitmap. 0x%llx\n",
-++		exfat_err("invalid size of allocation bitmap. 0x%" PRIx64 "\n",
-+ 				le64_to_cpu(dentry->bitmap_size));
-+ 		return false;
-+ 	}
-+@@ -989,7 +990,7 @@ static bool read_upcase_table(struct exfat_de_iter *iter)
-+ 	size = (size_t)le64_to_cpu(dentry->upcase_size);
-+ 	if (size > EXFAT_MAX_UPCASE_CHARS * sizeof(__le16) ||
-+ 			size == 0 || size % sizeof(__le16)) {
-+-		exfat_err("invalid size of upcase table. 0x%llx\n",
-++		exfat_err("invalid size of upcase table. 0x%" PRIx64 "\n",
-+ 			le64_to_cpu(dentry->upcase_size));
-+ 		return false;
-+ 	}
-+diff --git a/include/exfat_ondisk.h b/include/exfat_ondisk.h
-+index ae2827b..70546a3 100644
-+--- a/include/exfat_ondisk.h
-++++ b/include/exfat_ondisk.h
-+@@ -26,9 +26,9 @@
-+ #define cpu_to_le64(x)	(x)
-+ #endif
-+ 
-+-#define le64_to_cpu(x)  cpu_to_le64(x)
-+-#define le32_to_cpu(x)  cpu_to_le32(x)
-+-#define le16_to_cpu(x)  cpu_to_le16(x)
-++#define le64_to_cpu(x)  ((uint64_t)cpu_to_le64(x))
-++#define le32_to_cpu(x)  ((uint32_t)cpu_to_le32(x))
-++#define le16_to_cpu(x)  ((uint16_t)cpu_to_le16(x))
-+ 
-+ #define PBR_SIGNATURE		0xAA55
-+ 
-+diff --git a/mkfs/mkfs.c b/mkfs/mkfs.c
-+index 021a51a..87035ef 100644
-+--- a/mkfs/mkfs.c
-++++ b/mkfs/mkfs.c
-+@@ -13,6 +13,7 @@
-+ #include <sys/ioctl.h>
-+ #include <fcntl.h>
-+ #include <getopt.h>
-++#include <inttypes.h>
-+ #include <errno.h>
-+ #include <math.h>
-+ #include <locale.h>
-+@@ -57,7 +58,7 @@ static void exfat_setup_boot_sector(struct pbr *ppbr,
-+ 	memset(ppbr->boot_code, 0, 390);
-+ 	ppbr->signature = cpu_to_le16(PBR_SIGNATURE);
-+ 
-+-	exfat_debug("Volume Length(sectors) : %llu\n",
-++	exfat_debug("Volume Length(sectors) : %" PRIu64 "\n",
-+ 		le64_to_cpu(pbsx->vol_length));
-+ 	exfat_debug("FAT Offset(sector offset) : %u\n",
-+ 		le32_to_cpu(pbsx->fat_offset));
-+-- 
-+2.26.2
-+
+Thanks a lot,
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
