@@ -1,29 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 21:21:39 +0200
-Subject: [Buildroot] [PATCH] package/network-manager: don't explicitly
- select QMI/MBIM support
-In-Reply-To: <20200505120606.258656-1-aleksander@aleksander.es>
-References: <20200505120606.258656-1-aleksander@aleksander.es>
-Message-ID: <20200509212139.5d106220@windsurf.home>
+Date: Sat, 9 May 2020 21:24:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add option to
+ disable unwanted features
+In-Reply-To: <20200506055919.4219-1-erwan.gautron@bertin.fr>
+References: <20200506055919.4219-1-erwan.gautron@bertin.fr>
+Message-ID: <20200509212416.028e4ac5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 May 2020 14:06:06 +0200
-Aleksander Morgado <aleksander@aleksander.es> wrote:
+Hello Erwan,
 
-> When NetworkManager is built with ModemManager support, it should only
-> require the generic ModemManager dependency; it shouldn't configure
-> which features ModemManager provides.
+On Wed,  6 May 2020 07:59:19 +0200
+Erwan GAUTRON <erwan.gautron@bertin.fr> wrote:
+
+> Openssl implements lot of algorithms that are not required in
+> some emdedded devices and cyphers known as weak.
+> Secure embedded systems shall disable unused algorithms (and weak algo)
+> in order to be certified.
+> This patch allows to select algorithms and mecanims to disable
+> such as md5
 > 
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
->  package/network-manager/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+> Signed-off-by: Erwan GAUTRON <erwan.gautron@bertin.fr>
 
-Applied to master, thanks.
+Thanks for your patch!
+
+> +config BR2_PACKAGE_LIBOPENSSL_NO_CHACHA
+> +	bool "openssl no cipher CHACHA"
+> +	help
+> +	  Remove CHACHA cipher in libopenssl.
+
+I think it is quite odd to have inverted boolean options, i.e that
+disable a feature when the option is enabled. Could we turn them
+around, so that they use positive logic ? Of course, that means adding
+a "default y" to keep backward compatibility, unless we decide that all
+those ciphers are really dangerous (many of them are!) and disable them
+by default.
+
+> +config BR2_PACKAGE_LIBOPENSSL_NO_COMP
+> +	bool "openssl no compression"
+> +	help
+> +	  Remove compression in libopenssl.
+> +
+> +config BR2_PACKAGE_LIBOPENSSL_NO_ZLIB
+> +	bool "zlib no compression"
+> +	help
+> +	  Remove zlib in libopenssl.
+
+Do these options allow to drop the zlib dependency of libopenssl ? If
+so, we should do this and make the zlib dependency optional.
+
+Thanks!
 
 Thomas
 -- 
