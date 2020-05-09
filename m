@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 13:52:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbuffer: bump to version
- 20200505
-In-Reply-To: <20200508142639.1586652-1-fontaine.fabrice@gmail.com>
-References: <20200508142639.1586652-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200509135202.528f2eb9@windsurf.home>
+Date: Sat, 9 May 2020 13:52:24 +0200
+Subject: [Buildroot] [git commit] support/gnuconfig: reference the correct
+ sha1 we're using
+Message-ID: <20200509113647.5DD0F90F6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 May 2020 16:26:39 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3bf545da78b831339f5f717dfb4d120d46ecd929
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This bump will fix a build failure with gcc 4.8
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1a7fe7ac8cbe9997bc5d1e9ade24bc2ee6ac6abe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mbuffer/mbuffer.hash | 4 ++--
->  package/mbuffer/mbuffer.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+In commit ff9f778c66f4 (support/gnuconfig: update to 2019-05-28), we
+forgot to update the README to reference the sha1 we're using, keeping
+the old one from 2016...
 
-Since it fixes a build issue, I've applied to master. Thanks.
+Update it now.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/gnuconfig/README.buildroot | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 7ba2a332a4..7e7d49830f 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -24,4 +24,4 @@ Currently no patches are needed, but they may be needed again in the
+ future.
+ 
+ The current Buildroot version is based on the Git commit
+-dafd8e767ec87b90aac62f0fcedd11944c84b50a of the config.git repository.
++104ee6463c4bfaac3f3029d9be9bdd6e93879323 of the config.git repository.
