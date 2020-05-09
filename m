@@ -1,57 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 May 2020 13:00:36 +0200
-Subject: [Buildroot] [PATCH 0/3] support/gnucomnfig: update (branch
- yem/gnuconfig)
-Message-ID: <cover.1589022016.git.yann.morin.1998@free.fr>
+Date: Sat,  9 May 2020 13:00:37 +0200
+Subject: [Buildroot] [PATCH 1/3] support/gnuconfig: reference the correct
+ sha1 we're using
+In-Reply-To: <cover.1589022016.git.yann.morin.1998@free.fr>
+References: <cover.1589022016.git.yann.morin.1998@free.fr>
+Message-ID: <83dc2de9afe3e5196ef6a2b033e19e44ae6154c4.1589022016.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+In commit ff9f778c66f4 (support/gnuconfig: update to 2019-05-28), we
+forgot to update the README to reference the sha1 we're using, keeping
+the old one from 2016...
 
-This small series updated our bundled copy of the GNU config scripts.
-The crux of this series is not the update per-se, but rather adding a
-script to do the update automatically, to avoid having a stray reference
-to the upstream sha1.
+Update it now.
 
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/gnuconfig/README.buildroot | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 7f59e2c01a78c99c933df49ee681cdd3e11f4b07
-
-  package/matchbox: add hash for license file (2020-05-08 22:02:49 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 0c4bc29d6423a6791afcf37fa05d27f855247355
-
-  support/gnuconfig: update (2020-05-09 10:17:04 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      support/gnuconfig: reference the correct sha1 we're using
-      support/gnuconfig: add update script
-      support/gnuconfig: update
-
- support/gnuconfig/README.buildroot | 14 ++-----
- support/gnuconfig/config.guess     | 80 +++++++++++++++++++++++---------------
- support/gnuconfig/config.sub       | 37 ++++++++----------
- support/gnuconfig/update           | 14 +++++++
- 4 files changed, 82 insertions(+), 63 deletions(-)
- create mode 100755 support/gnuconfig/update
-
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 7ba2a332a4..7e7d49830f 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -24,4 +24,4 @@ Currently no patches are needed, but they may be needed again in the
+ future.
+ 
+ The current Buildroot version is based on the Git commit
+-dafd8e767ec87b90aac62f0fcedd11944c84b50a of the config.git repository.
++104ee6463c4bfaac3f3029d9be9bdd6e93879323 of the config.git repository.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
