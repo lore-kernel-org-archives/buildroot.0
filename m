@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 14:38:36 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/libnftnl: bump version to
- 1.1.6
-In-Reply-To: <20200507231150.2092627-1-aduskett@gmail.com>
-References: <20200507231150.2092627-1-aduskett@gmail.com>
-Message-ID: <20200509143836.2c16ce37@windsurf.home>
+Date: Sat, 9 May 2020 14:38:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump to version 12.16.3
+In-Reply-To: <20200507224321.95559-1-james.hilliard1@gmail.com>
+References: <20200507224321.95559-1-james.hilliard1@gmail.com>
+Message-ID: <20200509143841.461e15fa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  7 May 2020 16:11:49 -0700
-aduskett at gmail.com wrote:
+On Thu,  7 May 2020 16:43:21 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/libnftnl/libnftnl.hash | 4 ++--
->  package/libnftnl/libnftnl.mk   | 2 +-
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied to next. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
