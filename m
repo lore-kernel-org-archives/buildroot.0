@@ -1,166 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 14:46:04 +0200
-Subject: [Buildroot] [git commit] package/util-linux: accept sector-size
-Message-ID: <20200509124728.51ACC91140@busybox.osuosl.org>
+Date: Sat, 9 May 2020 15:03:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: renumber patches
+In-Reply-To: <20200507224150.242211-1-fontaine.fabrice@gmail.com>
+References: <20200507224150.242211-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200509150331.23a58e1b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af787a4cf5a19c3411d83ddbd8840b9486b6fcad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  8 May 2020 00:41:49 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=12841
+> Commit 3052da3eac8c80e7375341a48bca4cf0ee12e60b did not renumber
+> remaining patches, fix that
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...add-force.patch => 0001-blkdiscard-use-O_EXCL-add-force.patch} | 0
+>  ...=> 0002-libfdisk-add-fdisk_set_disklabel_id_from_string.patch} | 0  
+>  ...patch => 0003-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch} | 0
+>  ...04-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch} | 0
+>  ...d-inckudes.patch => 0005-include-cleanup-pidfd-inckudes.patch} | 0
+>  5 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/util-linux/{0003-blkdiscard-use-O_EXCL-add-force.patch => 0001-blkdiscard-use-O_EXCL-add-force.patch} (100%)
+>  rename package/util-linux/{0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch => 0002-libfdisk-add-fdisk_set_disklabel_id_from_string.patch} (100%)
+>  rename package/util-linux/{0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch => 0003-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch} (100%)
+>  rename package/util-linux/{0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch => 0004-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch} (100%)
+>  rename package/util-linux/{0007-include-cleanup-pidfd-inckudes.patch => 0005-include-cleanup-pidfd-inckudes.patch} (100%)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...accept-sector-size-ignore-unknown-headers.patch | 138 +++++++++++++++++++++
- 1 file changed, 138 insertions(+)
+Both applied to master. Thanks!
 
-diff --git a/package/util-linux/0006-libfdisk-script-accept-sector-size-ignore-unknown-headers.patch b/package/util-linux/0006-libfdisk-script-accept-sector-size-ignore-unknown-headers.patch
-new file mode 100644
-index 0000000000..d592a9dc18
---- /dev/null
-+++ b/package/util-linux/0006-libfdisk-script-accept-sector-size-ignore-unknown-headers.patch
-@@ -0,0 +1,138 @@
-+From d8c68b52cc939a16f04ec976648a37f5f5de718c Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Tue, 4 Feb 2020 15:11:19 +0100
-+Subject: libfdisk: (script) accept sector-size, ignore unknown headers
-+
-+- add sector-size between supported headers (already in --dump output)
-+
-+- report unknown headers by -ENOTSUP
-+
-+- ignore ENOTSUP in sfdisk (but print warning) and in fdisk_script_read_file()
-+
-+Addresses: https://github.com/karelzak/util-linux/issues/949
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/commit/?id=d8c68b52cc939a16f04ec976648a37f5f5de718c]
-+---
-+ disk-utils/sfdisk.c   |  6 +++++-
-+ libfdisk/src/script.c | 49 ++++++++++++++++++++++++++-----------------------
-+ 2 files changed, 31 insertions(+), 24 deletions(-)
-+
-+diff --git a/disk-utils/sfdisk.c b/disk-utils/sfdisk.c
-+index 0db797b2d..e08862aa8 100644
-+--- a/disk-utils/sfdisk.c
-++++ b/disk-utils/sfdisk.c
-+@@ -1823,7 +1823,11 @@ static int command_fdisk(struct sfdisk *sf, int argc, char **argv)
-+ 		}
-+ 
-+ 		rc = fdisk_script_read_line(dp, stdin, buf, sizeof(buf));
-+-		if (rc < 0) {
-++		if (rc == -ENOTSUP) {
-++			buf[sizeof(buf) - 1] = '\0';
-++			fdisk_warnx(sf->cxt, _("Unknown script header '%s' -- ignore."), buf);
-++			continue;
-++		} else if (rc < 0) {
-+ 			DBG(PARSE, ul_debug("script parsing failed, trying sfdisk specific commands"));
-+ 			buf[sizeof(buf) - 1] = '\0';
-+ 			rc = loop_control_commands(sf, dp, buf);
-+diff --git a/libfdisk/src/script.c b/libfdisk/src/script.c
-+index a21771b6a..d3e67fa9c 100644
-+--- a/libfdisk/src/script.c
-++++ b/libfdisk/src/script.c
-+@@ -805,8 +805,12 @@ static inline int is_header_line(const char *s)
-+ /* parses "<name>: value", note modifies @s*/
-+ static int parse_line_header(struct fdisk_script *dp, char *s)
-+ {
-+-	int rc = -EINVAL;
-++	size_t i;
-+ 	char *name, *value;
-++	static const char *supported[] = {
-++		"label", "unit", "label-id", "device", "grain",
-++		"first-lba", "last-lba", "table-length", "sector-size"
-++	};
-+ 
-+ 	DBG(SCRIPT, ul_debugobj(dp, "   parse header '%s'", s));
-+ 
-+@@ -816,7 +820,7 @@ static int parse_line_header(struct fdisk_script *dp, char *s)
-+ 	name = s;
-+ 	value = strchr(s, ':');
-+ 	if (!value)
-+-		goto done;
-++		return -EINVAL;
-+ 	*value = '\0';
-+ 	value++;
-+ 
-+@@ -825,32 +829,30 @@ static int parse_line_header(struct fdisk_script *dp, char *s)
-+ 	ltrim_whitespace((unsigned char *) value);
-+ 	rtrim_whitespace((unsigned char *) value);
-+ 
-++	if (!*name || !*value)
-++		return -EINVAL;
-++
-++	/* check header name */
-++	for (i = 0; i < ARRAY_SIZE(supported); i++) {
-++		if (strcmp(name, supported[i]) == 0)
-++			break;
-++	}
-++	if (i == ARRAY_SIZE(supported))
-++		return -ENOTSUP;
-++
-++	/* header specific actions */
-+ 	if (strcmp(name, "label") == 0) {
-+ 		if (dp->cxt && !fdisk_get_label(dp->cxt, value))
-+-			goto done;			/* unknown label name */
-++			return -EINVAL;			/* unknown label name */
-+ 		dp->force_label = 1;
-++
-+ 	} else if (strcmp(name, "unit") == 0) {
-+ 		if (strcmp(value, "sectors") != 0)
-+-			goto done;			/* only "sectors" supported */
-+-	} else if (strcmp(name, "label-id") == 0
-+-		   || strcmp(name, "device") == 0
-+-		   || strcmp(name, "grain") == 0
-+-		   || strcmp(name, "first-lba") == 0
-+-		   || strcmp(name, "last-lba") == 0
-+-		   || strcmp(name, "table-length") == 0) {
-+-		;					/* whatever is possible */
-+-	} else
-+-		goto done;				/* unknown header */
-++			return -EINVAL;			/* only "sectors" supported */
-+ 
-+-	if (*name && *value)
-+-		rc = fdisk_script_set_header(dp, name, value);
-+-done:
-+-	if (rc)
-+-		DBG(SCRIPT, ul_debugobj(dp, "header parse error: "
-+-				"[rc=%d, name='%s', value='%s']",
-+-				rc, name, value));
-+-	return rc;
-++	}
-+ 
-++	return fdisk_script_set_header(dp, name, value);
-+ }
-+ 
-+ /* returns zero terminated string with next token and @str is updated */
-+@@ -1363,7 +1365,8 @@ int fdisk_script_set_fgets(struct fdisk_script *dp,
-+  *
-+  * Reads next line into dump.
-+  *
-+- * Returns: 0 on success, <0 on error, 1 when nothing to read.
-++ * Returns: 0 on success, <0 on error, 1 when nothing to read. For unknown headers
-++ *          returns -ENOTSUP, it's usually safe to ignore this error.
-+  */
-+ int fdisk_script_read_line(struct fdisk_script *dp, FILE *f, char *buf, size_t bufsz)
-+ {
-+@@ -1428,7 +1431,7 @@ int fdisk_script_read_file(struct fdisk_script *dp, FILE *f)
-+ 
-+ 	while (!feof(f)) {
-+ 		rc = fdisk_script_read_line(dp, f, buf, sizeof(buf));
-+-		if (rc)
-++		if (rc && rc != -ENOTSUP)
-+ 			break;
-+ 	}
-+ 
-+-- 
-+cgit 1.2-0.3.lf.el7
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
