@@ -1,70 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 22:23:18 +0200
-Subject: [Buildroot] [git commit] package/irrlicht: disable bundled libpng
- NEON support
-Message-ID: <20200509200913.A7A4491226@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 9 May 2020 22:28:17 +0200
+Subject: [Buildroot] [git commit] package/brltty: add host-gawk dependency
+Message-ID: <20200509201308.CEDA89122B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf5f4f417a9e6e7eed5ea6a99c26583958890515
+commit: https://git.buildroot.net/buildroot/commit/?id=d31da95d90c4924832b9b88fbfb813c409d4da1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
-While linking an application with libIrrlicht.so, we get an undefined reference to
-png_init_filter_functions_neon.
-Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c [1],
-so disable NEON support completely.
+host-gawk is used by brltty to build brlapi_constants.h, the build will
+fail if mawk is used instead of gawk
 
-This can be reproduced by building minetest using this defconfig for aarch64:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT=y
-BR2_PACKAGE_MINETEST_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
+Fixes:
+ - http://autobuild.buildroot.org/results/4c77f03cbc7ab9e5ae9f24fe6eead1d76c50c743
 
-Or for ARM with NEON FPU support:
-BR2_arm=y
-BR2_cortex_a15=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT=y
-BR2_PACKAGE_MINETEST_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
-
-[1] https://github.com/glennrp/libpng/tree/v1.6.37/arm
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/irrlicht/irrlicht.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/brltty/brltty.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
-index a1e190d98d..bd82815cde 100644
---- a/package/irrlicht/irrlicht.mk
-+++ b/package/irrlicht/irrlicht.mk
-@@ -38,6 +38,13 @@ ifeq ($(BR2_STATIC_LIBS),)
- IRRLICHT_CONF_OPTS += sharedlib
- endif
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index e34b9b2b76..4f40e65fc6 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -12,7 +12,11 @@ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+ BRLTTY_LICENSE = LGPL-2.1+
+ BRLTTY_LICENSE_FILES = LICENSE-LGPL README
  
-+# Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
-+# While linking an application with libIrrlicht.so, we get an undefined reference to
-+# png_init_filter_functions_neon.
-+# Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
-+# so disable NEON support completely.
-+IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
-+
- define IRRLICHT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV)
- 		$(MAKE) -C $(@D)/$(IRRLICHT_SUBDIR) $(IRRLICHT_CONF_OPTS)
+-BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
++BRLTTY_DEPENDENCIES = \
++	$(TARGET_NLS_DEPENDENCIES) \
++	host-autoconf \
++	host-gawk \
++	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
+ 
+ BRLTTY_CONF_ENV = \
