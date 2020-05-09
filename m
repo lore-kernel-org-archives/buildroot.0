@@ -1,53 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 May 2020 09:04:22 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libwpe: bump to
- version 1.6.0
-Message-ID: <20200509124718.A1A919108C@busybox.osuosl.org>
+Date: Sat, 9 May 2020 09:20:36 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/tzdata: bump to
+ version 2020a
+Message-ID: <20200509124719.25C699108C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4ac41f92d9eb233ded40d73422ecd1a3afbcc4b
+commit: https://git.buildroot.net/buildroot/commit/?id=69f2f95d52319f5bb4343caf8c39790267f7dd56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 90e735f6d9172b4bfde86a8cfa7eb6b3ce5e8860)
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7656cae01e2f5a0168b0b758dbcbc71cb50ba049)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libwpe/libwpe.hash | 10 +++++-----
- package/libwpe/libwpe.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/tzdata/tzdata.hash | 6 +++---
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index 0a616a31cc..e138c06f2b 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/libwpe-1.4.0.1.tar.xz.sums
--md5 1d4d38413ee0d0043f74d0445cab906f libwpe-1.4.0.1.tar.xz
--sha1 a41480a0a85cfa11b3f87f801b7c37bc3410e060 libwpe-1.4.0.1.tar.xz
--sha256 09849dfb34877354f34f318e138971cf22e677b2179e1f0a8ea00ab0b7bd8e9b libwpe-1.4.0.1.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.6.0.tar.xz.sums
-+md5  6e8a2c279dcc3617db5ec7ac4c03d628  libwpe-1.6.0.tar.xz
-+sha1  e8424d5e29f35861d85acdc5962d8b59b53bb1ad  libwpe-1.6.0.tar.xz
-+sha256  3587c6b8a807f4bb76b268ba74ca82c6b395b90235db41ad8252224456193c90  libwpe-1.6.0.tar.xz
- 
- # Hashes for license files:
--sha256 35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b COPYING
-+sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index 09518ce9b1..fd4f3d0cbd 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index e2338f13fe..8f0a9050fc 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2019-September/000057.html
+-sha512 2921cbb2fd44a6b8f7f2ed42c13fbae28195aa5c2eeefa70396bc97cdbaad679c6cc3c143da82cca5b0279065c02389e9af536904288c12886bf345baa8c6565 tzdata2019c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html
++sha512  2a2fc2e3ad8a6e4c574242296c847ad582c2c1d86add9c556e65c812d19b9528522e3c4dddb5239017091825d2acc5a2ccaf21dc41b900b6c300ef4264cc5a9d  tzdata2020a.tar.gz
+ # Locally computed:
+-sha256 0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf LICENSE
++sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index b656bc7f7f..b405f895cd 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBWPE_VERSION = 1.4.0.1
-+LIBWPE_VERSION = 1.6.0
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+-TZDATA_VERSION = 2019c
++TZDATA_VERSION = 2020a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
