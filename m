@@ -1,52 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 May 2020 09:04:51 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/webkitgtk: bump
- to version 2.28.0
-Message-ID: <20200509124718.D156391138@busybox.osuosl.org>
+Date: Sat, 9 May 2020 09:04:29 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wpebackend-fdo:
+ bump to version 1.6.0
+Message-ID: <20200509124718.BABCA91137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af237ed99741398dbcbd0644e0c1c5435e9f9e84
+commit: https://git.buildroot.net/buildroot/commit/?id=3cffbc6769fa8cc3674ecbf2f11ddd377a93ec68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6ebd15285300a41d6a0154f302f04199af1b7652)
+(cherry picked from commit 60992a8ce1ecc70d5c8ed48a9b63cc357c2cb80d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/wpebackend-fdo/wpebackend-fdo.hash | 10 +++++-----
+ package/wpebackend-fdo/wpebackend-fdo.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 0dfbe93137..b63a734e3d 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index fbeed390e6..1380934af3 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
 @@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.26.4.tar.xz.sums
--md5  60f881729f3b71244b7f6e58790073e0  webkitgtk-2.26.4.tar.xz
--sha1  72f209c08ecc8ad4f0f6b767d4fa1be7a652df33  webkitgtk-2.26.4.tar.xz
--sha256  4386900713dfadf9741177210b32623cab22562a79ffd0d446b66569934b113f  webkitgtk-2.26.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.28.0.tar.xz.sums
-+md5 0bf11df8117ea64f6b8de59d278a2c78 webkitgtk-2.28.0.tar.xz
-+sha1 927d0922b986fd06567015ce4425ed05d9fca209 webkitgtk-2.28.0.tar.xz
-+sha256 361f3d178f62a9c112cbadfedd46106c34455c26d57a12a28fb3b09178d20e8b webkitgtk-2.28.0.tar.xz
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.1.tar.xz.sums
+-md5 c6362491a4a38ddac42b66f140e1cff2 wpebackend-fdo-1.4.1.tar.xz
+-sha1 9217c8a5511bc53544b42cb23390256580ac4b0c wpebackend-fdo-1.4.1.tar.xz
+-sha256 6249a0b7cbfa662206a8d2fa24e2c574e75c681ad0e93468091f1dc68ddb299d wpebackend-fdo-1.4.1.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.0.tar.xz.sums
++md5  456afeed22f6749f7b2a97c11660835d  wpebackend-fdo-1.6.0.tar.xz
++sha1  d128e2c7ff273d9b9f31217f6ac25be3b266d805  wpebackend-fdo-1.6.0.tar.xz
++sha256  7f5bd7b9d8f97b1655f4dcd39fad92719d0fb3985b251da5802df13aaa09f567  wpebackend-fdo-1.6.0.tar.xz
  
  # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index cdb6556554..2578847b05 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+-sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
++sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 4a7c569d9c..99e10c5a01 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.26.4
-+WEBKITGTK_VERSION = 2.28.0
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-WPEBACKEND_FDO_VERSION = 1.4.1
++WPEBACKEND_FDO_VERSION = 1.6.0
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
