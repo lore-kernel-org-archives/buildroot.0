@@ -1,30 +1,44 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat,  9 May 2020 21:43:24 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-attrs: fix typo in hash file
-Message-ID: <20200509184324.1006590-1-asafka7@gmail.com>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Sat, 09 May 2020 18:54:34 +0000
+Subject: [Buildroot] Help: to understand build root
+In-Reply-To: <CACEFAc1yzctCtQ5ErMS_NR1R3TAMDU+8JddbisTLKakTeLGURg@mail.gmail.com>
+References: <mailman.3803.1589018066.59095.buildroot@busybox.net>
+ <d1e5de0ccecc4ca2020f5efbe473cb2d@umbiko.net>
+ <CACEFAc1yzctCtQ5ErMS_NR1R3TAMDU+8JddbisTLKakTeLGURg@mail.gmail.com>
+Message-ID: <d55a9c8e17a3531c83d5644d27ce875d@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-'computer' -> 'computed'.
+Hi Kunal,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-attrs/python-attrs.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I still have no clue what type of environment you are actually using, so 
+part of this is just guessing.
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index f8c38ee4ed..7fba53d535 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
- md5	5b2db50fcc31be34d32798183c9bd062  attrs-19.3.0.tar.gz
- sha256	f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72  attrs-19.3.0.tar.gz
--# Locally computer sha256
-+# Locally computed sha256
- sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
--- 
-2.26.2
+On 2020-05-09 18:14, Kunal Chauhan wrote:
+> Hi team,
+> 
+> Please need some clarity on some points
+> 
+> 1.  If as a developer can i compile a single binary and test it
+> without running or compiling whole firware image.?
+
+You can certainly modify and compile a single binary. If you have a 
+running system, you can deploy it separately by copying it to it's 
+proper location on the target system (e.g replace the last version with 
+the new one). sftp is your friend.
+
+> 2. How firmware image extracts all binaries to system or to target
+> harware?
+
+The internal structure of the firmware image depends on how it is built. 
+A Buildroot image contains at least a Linux kernel and a root 
+filesystem. Buildroot supports various formats, for example cpio, 
+tarball or bootable disk image. A mechanism for auto-deployment is not 
+included, normally you copy a file to a pre-determined location or use 
+dd to flash a device.
+
+Kind regards,
+Andreas
