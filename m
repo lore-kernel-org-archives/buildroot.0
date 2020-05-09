@@ -1,38 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 09 May 2020 09:14:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
- version 2.28.2
-In-Reply-To: <20200426195021.2625617-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Sun, 26 Apr 2020 22:50:21 +0300")
-References: <20200426195021.2625617-1-aperez@igalia.com>
-Message-ID: <874ksppokn.fsf@dell.be.48ers.dk>
+Date: Sat, 09 May 2020 09:23:01 +0200
+Subject: [Buildroot] [PATCH 2/2] package/zic: bump to version 2020a
+In-Reply-To: <20200427071144.30237-3-post@lespocky.de> (Alexander Dahl's
+ message of "Mon, 27 Apr 2020 09:11:44 +0200")
+References: <20200427071144.30237-1-post@lespocky.de>
+ <20200427071144.30237-3-post@lespocky.de>
+Message-ID: <87zhaho9m2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
- > This is a minor release which provides fixes for CVE-2020-11793,
- > CVE-2020-3887, CVE-2020-3894, and CVE-2020-3899.
-
- > Updating from 2.28.0 also brings a few rendering fixes, a build fix
- > on MIPS64, a build fix for GStreamer 1.12, and solves a couple of
- > crashes. The full release notes covering 2.28.1 and 2.28.2 can be
- > found at:
-
- >   https://wpewebkit.org/release/wpewebkit-2.28.1.html
- >   https://wpewebkit.org/release/wpewebkit-2.28.2.html
-
- > A detailed security advisory can be found at:
-
- >   https://wpewebkit.org/security/WSA-2020-0004.html
-
- > Note that the above does not cover all the CVEs, and a new advisory
- > including them is expected to be published in the next days.
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Alexander Dahl <post@lespocky.de>
 
 Committed to 2020.02.x, thanks.
 
