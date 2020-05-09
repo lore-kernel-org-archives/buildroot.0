@@ -1,44 +1,68 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Sat,  9 May 2020 15:36:00 +0200
-Subject: [Buildroot] [PATCH/next] package/modem-manager: bump version to
- 1.12.10
-Message-ID: <20200509133600.880639-1-aleksander@aleksander.es>
+From: William Tambe <tambewilliam@gmail.com>
+Date: Sat, 9 May 2020 09:43:44 -0400
+Subject: [Buildroot] nano package fail to build; cannot include curses.h
+In-Reply-To: <20200509151306.7c58cf1d@windsurf.home>
+References: <CAF8i9mNJroNYDMzHDOjwpWX6uwNOY=BN3Yj+RwmgfFqnB2OpLA@mail.gmail.com>
+ <20200509120149.0540a23c@windsurf.home>
+ <CAF8i9mMsfvAknQ-hOxgf8gUqx_6-8WvPFtZW=agV_fZi1Ek3QA@mail.gmail.com>
+ <20200509151306.7c58cf1d@windsurf.home>
+Message-ID: <CAF8i9mP7Ztb6E-WQyN-HEho53m9+q8eM1tT6dyKEW=UvMHX8eA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://lists.freedesktop.org/archives/modemmanager-devel/2020-May/007828.html
+On Sat, May 9, 2020 at 9:13 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello William,
+>
+> On Sat, 9 May 2020 09:04:03 -0400
+> William Tambe <tambewilliam@gmail.com> wrote:
+>
+> > diff --git a/configs/iron_defconfig b/configs/iron_defconfig
+> > new file mode 100644
+> > index 0000000000..29cc533f7d
+> > --- /dev/null
+> > +++ b/configs/iron_defconfig
+> > @@ -0,0 +1,15 @@
+> > +BR2_iron=y
+> > +BR2_STATIC_LIBS=y
+> > +BR2_TOOLCHAIN_EXTERNAL=y
+> > +BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/iron-toolchain/"
+> > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-elf"
+>
+> Usually, toolchains named $(ARCH)-elf are bare metal toolchains, i.e
+> toolchains that don't have a C library with support for an operating
+> system. Are you sure this toolchain is using glibc ?
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
----
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yes, this toolchain has glibc support.
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 2fb10368c8..bf8f965812 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  68b53d0615ba0d3e2bbf386ed029dfe644a6a30a79ab8d85523527bb4e713aff  ModemManager-1.12.8.tar.xz
-+sha256  b2b3058bbb72adf98b24707fdbebe58e590644a38145e30d574f685f154bf8aa  ModemManager-1.12.10.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 78cffe1f9c..e69f6f0f3d 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+>
+> In any case, since we don't have access to your toolchain, we have no
+> way to reproduce/investigate. On other architectures, nano builds fine.
 
--MODEM_MANAGER_VERSION = 1.12.8
-+MODEM_MANAGER_VERSION = 1.12.10
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
---
-2.26.1
+My issue seems to be that it is not able to find curses.h headers
+which buildroot already installed at the following path:
+./target/usr/include/curses.h
+./target/usr/include/ncurses.h
+./host/iron-buildroot-linux-gnu/sysroot/usr/include/curses.h
+./host/iron-buildroot-linux-gnu/sysroot/usr/include/ncurses.h
+./host/include/ncurses/curses.h
+./host/include/ncurses/ncurses.h
+
+Using something like this in nano.mk didn't help either:
+
+NANO_MAKE_ENV += \
+        $(TARGET_MAKE_ENV) \
+        CFLAGS="$(TARGET_CFLAGS) -I$(HOST_DIR)/include/ncurses"
+
+Any other suggestion I could try in debugging the issue I am having ?
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
