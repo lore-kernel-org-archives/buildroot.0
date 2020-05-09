@@ -1,30 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 14:19:49 +0200
-Subject: [Buildroot] [PATCH 3/3] support/gnuconfig: update
-In-Reply-To: <0c4bc29d6423a6791afcf37fa05d27f855247355.1589022016.git.yann.morin.1998@free.fr>
-References: <cover.1589022016.git.yann.morin.1998@free.fr>
- <0c4bc29d6423a6791afcf37fa05d27f855247355.1589022016.git.yann.morin.1998@free.fr>
-Message-ID: <20200509141949.4dcfa6c1@windsurf.home>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Sat,  9 May 2020 14:33:02 +0200
+Subject: [Buildroot] [PATCH] package/libqmi: bump to version 1.24.12
+Message-ID: <20200509123302.630581-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  9 May 2020 13:00:39 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+https://lists.freedesktop.org/archives/libqmi-devel/2020-May/003296.html
 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  support/gnuconfig/README.buildroot |  2 +-
->  support/gnuconfig/config.guess     | 80 ++++++++++++++++++------------
->  support/gnuconfig/config.sub       | 37 ++++++--------
->  3 files changed, 65 insertions(+), 54 deletions(-)
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 197ea1c007..6341bce8ea 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  c2121243b5da8bcffc8f6f5ca0d7217498f94fffd115883763282c68f255fde7  libqmi-1.24.10.tar.xz
++sha256  2d3b91a2b8a882b17b16403c9ef7bdce522db4f0ceaa3e4dff76033885428b69  libqmi-1.24.12.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index cd7fafa42a..260dcd1f66 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.24.10
++LIBQMI_VERSION = 1.24.12
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.1
