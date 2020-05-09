@@ -1,48 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 23:41:40 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/fakeroot: bump version to
- 1.24
-In-Reply-To: <CADYdroP1VRGH5DcZMgO5ON_JK8+UVMHMyS6JpAJxdPyUJZ=BmQ@mail.gmail.com>
-References: <20200506131130.410171-1-nolange79@gmail.com>
- <20200506131130.410171-2-nolange79@gmail.com>
- <20200509185010.25c376ea@windsurf.home>
- <CADYdroP1VRGH5DcZMgO5ON_JK8+UVMHMyS6JpAJxdPyUJZ=BmQ@mail.gmail.com>
-Message-ID: <20200509234140.54562aba@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat,  9 May 2020 23:42:52 +0200
+Subject: [Buildroot] [PATCH v1] package/squashfs: fix host compile multiple
+ definitions
+Message-ID: <20200509214252.23180-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 9 May 2020 23:29:22 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+Add upstream patch to fix squashfs-tools build failures because
+of missing external declaration for fwriter_buffer and
+bwriter_buffer.
 
-> > What happened to 0002-communicate-check-return-status-of-msgrcv.patch ?
-> > It is removed by your patch. Why?  
-> 
-> Cause its included in that version
+Fixes:
 
-OK.
+  - http://autobuild.buildroot.net/results/6789b668898245926e0a3a3e7caf823dff515d71
 
-> > Could you clarify if the fchownat/fchmodat issue happens with the
-> > current version of fakeroot in Buildroot (1.20) ? Or only with the
-> > updated version 1.24 ? Can it be fixed with fakeroot 1.20 ?  
-> 
-> issue exist with both, could certainly be fixed in 1.20 separately,
-> I just don't take much interest in fixing ~ 4 year versions by default.
+  /usr/bin/ld: read_fs.o:(.bss+0x0): multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
+  /usr/bin/ld: read_fs.o:(.bss+0x8): multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
 
-In the general case, I agree. But here we have already tagged -rc1, and
-we try to not merge version bumps so close to the release. And in the
-context of Buildroot, fakeroot is used by *everybody*, so any
-regression can cause issues to a significant number of users.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...ols-fix-build-failure-against-gcc-10.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
 
-So I'd prefer to see the problem fixed for 1.20, so that we can apply
-the fix on master, and then have the version bump to 1.24 in next.
-
-Thanks!
-
-Thomas
+diff --git a/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+new file mode 100644
+index 0000000000..a5fc487aac
+--- /dev/null
++++ b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+@@ -0,0 +1,49 @@
++From e1cdcfd94172a0b1ba4c9df70f4d69a41c687404 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Sun, 26 Jan 2020 18:35:13 +0000
++Subject: [PATCH] squashfs-tools: fix build failure against gcc-10
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++On gcc-10 (and gcc-9 -fno-common) build fails as:
++
++```
++cc ... -o mksquashfs
++ld: read_fs.o:(.bss+0x0):
++  multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
++ld: read_fs.o:(.bss+0x8):
++  multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Reported-by: Toralf F?rster
++Bug: https://bugs.gentoo.org/706456
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++
++[Upstream: https://github.com/plougher/squashfs-tools/commit/fe2f5da4b0f8994169c53e84b7cb8a0feefc97b5.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ squashfs-tools/mksquashfs.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/squashfs-tools/mksquashfs.h b/squashfs-tools/mksquashfs.h
++index 1beefef..b650306 100644
++--- a/squashfs-tools/mksquashfs.h
+++++ b/squashfs-tools/mksquashfs.h
++@@ -143,7 +143,7 @@ struct append_file {
++ #endif
++ 
++ extern struct cache *reader_buffer, *fragment_buffer, *reserve_cache;
++-struct cache *bwriter_buffer, *fwriter_buffer;
+++extern struct cache *bwriter_buffer, *fwriter_buffer;
++ extern struct queue *to_reader, *to_deflate, *to_writer, *from_writer,
++ 	*to_frag, *locked_fragment, *to_process_frag;
++ extern struct append_file **file_mapping;
++-- 
++2.26.2
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
