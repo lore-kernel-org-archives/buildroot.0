@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 13:55:50 +0200
-Subject: [Buildroot] [git commit branch/next] package/uacme: bump version to
- 1.3
-Message-ID: <20200509114028.D923591046@busybox.osuosl.org>
+Date: Sat, 9 May 2020 13:56:00 +0200
+Subject: [Buildroot] [git commit branch/next] package/genimage: bump to
+ version 13
+Message-ID: <20200509114028.E348691046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=682a3882f2da0d83a0339a5b36ab6338b1d8c174
+commit: https://git.buildroot.net/buildroot/commit/?id=677b0d9f574e2860cd22cb36022e5c059b4e6af5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Also update hash file formatting (2 spaces)
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uacme/uacme.hash | 2 +-
- package/uacme/uacme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/genimage/genimage.hash | 4 ++--
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-index b3ec7ed6f2..866cf86dbf 100644
---- a/package/uacme/uacme.hash
-+++ b/package/uacme/uacme.hash
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index fb5d235508..fbec5ce57b 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
-+sha256  b219484f9f018dffb4a57c4c37e0e4b6aa15bb00705ad71b6f7b8dd94baf0380  uacme-1.3.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index 7e544fce79..63d3a752c3 100644
---- a/package/uacme/uacme.mk
-+++ b/package/uacme/uacme.mk
+ # Locally calculated
+-sha256	2e9b43d1288f4e216d6c79de2a0c53ce1bd41f93cec750d8ab057aa2d0b0ee4a	genimage-12.tar.xz
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  4206e253226a384386c01591251f2ed1ea3485ef63f1e696db03600e1213db79  genimage-13.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 8960393904..dde8f8b9e0 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UACME_VERSION = 1.2.4
-+UACME_VERSION = 1.3
- # Released versions are on branch upstream/latest, tagged as
- # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
- # include .tarball-version
+-GENIMAGE_VERSION = 12
++GENIMAGE_VERSION = 13
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
