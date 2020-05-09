@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 09 May 2020 09:23:01 +0200
-Subject: [Buildroot] [PATCH 2/2] package/zic: bump to version 2020a
-In-Reply-To: <20200427071144.30237-3-post@lespocky.de> (Alexander Dahl's
- message of "Mon, 27 Apr 2020 09:11:44 +0200")
+Date: Sat, 09 May 2020 09:23:05 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tzdata: bump to version 2020a
+In-Reply-To: <20200427071144.30237-2-post@lespocky.de> (Alexander Dahl's
+ message of "Mon, 27 Apr 2020 09:11:43 +0200")
 References: <20200427071144.30237-1-post@lespocky.de>
- <20200427071144.30237-3-post@lespocky.de>
-Message-ID: <87zhaho9m2.fsf@dell.be.48ers.dk>
+ <20200427071144.30237-2-post@lespocky.de>
+Message-ID: <87v9l5o9ly.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
