@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 22:02:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/xerces: add enable network
- option
-In-Reply-To: <20200504202558.24654-1-jared.bents@rockwellcollins.com>
-References: <20200504202558.24654-1-jared.bents@rockwellcollins.com>
-Message-ID: <20200509220251.0d1cd423@windsurf.home>
+Date: Sat, 9 May 2020 22:03:13 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-gobject: bump
+ version to 3.36.1
+Message-ID: <20200509194736.891D19120A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 May 2020 15:25:58 -0500
-Jared Bents <jared.bents@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3832536115d9d48fe393202f5758a1eb1a26a4e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Update to add the option to compile xerces with network
-> enabled by default so it can be unselected to compile
-> without network support.
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-gobject/python-gobject.hash | 4 ++--
+ package/python-gobject/python-gobject.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Could you expand the commit log with an explantion of the *why* we want
-to add this new option? Size impact? If so, what is the size impact?
-Some other reason?
-
-> +ifeq ($(BR2_PACKAGE_XERCES_ENABLE_NETWORK),y)
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
->  XERCES_CONF_OPTS += -Dnetwork-accessor=curl
->  XERCES_DEPENDENCIES += libcurl
->  else
->  XERCES_CONF_OPTS += -Dnetwork-accessor=socket
->  endif
-> +else
-> +XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
-
-We don't use this :BOOL type specification anywhere in CMake packages
-in Buildroot, could you keep it consistent with the rest of the package?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+index 5ae7553abb..fd2235f201 100644
+--- a/package/python-gobject/python-gobject.hash
++++ b/package/python-gobject/python-gobject.hash
+@@ -1,3 +1,3 @@
+-# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.0.sha256sum
+-sha256  8683d2dfb5baa9e501a9a64eeba5c2c1117eadb781ab1cd7a9d255834af6daef  pygobject-3.36.0.tar.xz
++# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.1.sha256sum
++sha256  d1bf42802d1cec113b5adaa0e7bf7f3745b44521dc2163588d276d5cd61d718f  pygobject-3.36.1.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+index c93140fc66..0cada82fb7 100644
+--- a/package/python-gobject/python-gobject.mk
++++ b/package/python-gobject/python-gobject.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON_GOBJECT_VERSION_MAJOR = 3.36
+-PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).1
+ PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
+ PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
+ PYTHON_GOBJECT_LICENSE = LGPL-2.1+
