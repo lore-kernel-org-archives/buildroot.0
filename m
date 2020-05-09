@@ -1,46 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 14:31:10 +0200
-Subject: [Buildroot] [git commit branch/next] package/nodejs: bump to
- version 12.16.3
-Message-ID: <20200509122125.80B7C910F0@busybox.osuosl.org>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Sat, 09 May 2020 13:37:24 +0100
+Subject: [Buildroot] [PATCH 2/2] support/config-fragments: add RISC-V
+ 64-bit uclibc autobuild config
+In-Reply-To: <20200509120758.62ede751@windsurf.home>
+References: <20200508103338.16391-1-mark@dibsco.co.uk>
+ <20200508103338.16391-2-mark@dibsco.co.uk>
+ <20200509120758.62ede751@windsurf.home>
+Message-ID: <1928858.SY0nFSyD1A@laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b90ab938b83b701073bfd4edd8a6cff2625dcb6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Saturday, 9 May 2020 11:07:58 BST Thomas Petazzoni wrote:
+> On Fri,  8 May 2020 11:33:38 +0100
+> 
+> Mark Corbin <mark@dibsco.co.uk> wrote:
+> > Now that RISC-V 64 bit can use uclibc, glibc and musl we can add
+> > uclibc to the autobuild internal toolchain configurations by
+> > removing the musl specific config file and adding a generic one.
+> > 
+> > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> > ---
+> > 
+> >  ...v64-internal-musl.config => br-riscv64-full-internal.config} | 1 -
+> >  support/config-fragments/autobuild/toolchain-configs.csv        | 2 +-
+> >  2 files changed, 1 insertion(+), 2 deletions(-)
+> >  rename
+> >  support/config-fragments/autobuild/{br-riscv64-internal-musl.config =>
+> >  br-riscv64-full-internal.config} (57%)> 
+> > diff --git
+> > a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> > b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+> > similarity index 57%
+> > rename from
+> > support/config-fragments/autobuild/br-riscv64-internal-musl.config rename
+> > to support/config-fragments/autobuild/br-riscv64-full-internal.config
+> > index 89e7afb276..c729eb55e9 100644
+> > --- a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> > +++ b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+> > @@ -1,3 +1,2 @@
+> > 
+> >  BR2_riscv=y
+> > 
+> > -BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+> > 
+> >  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> 
+> This one is not "generic": it will only build a uClibc toolchain. It
+> seems like you believe that since this defconfig fragment doesn't
+> mention the C library, it will test glibc, musl and uclibc, but that's
+> not the case. We do not randomize the choice of the C library, and
+> since uclibc is our default, this new defconfig file will only test
+> uclibc.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Sorry, that was my misinterpretation of 'full' when looking at config fragments 
+for other architectures.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 992040d391..411b4d52b9 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.16.1/SHASUMS256.txt
--sha256  0a95845ba02c46102b5671d0c5732460073f2d397488337e18d1fc30146d412d  node-v12.16.1.tar.xz
-+# From https://nodejs.org/dist/v12.16.3/SHASUMS256.txt
-+sha256  f0559b0829c7f2ac10bf5b3e157e498227e95e26cdb6af814969c49f367359a3  node-v12.16.3.tar.xz
- 
- # Hash for license file
- sha256  3f5749f7a58edaadd77843057a90063a18067f472d8b26c0a76905cafa1063e3  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 7f875058b3..c46dc0e224 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.16.1
-+NODEJS_VERSION = 12.16.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+What would be preferred here? Should I leave the musl config as it is and add 
+an additional fragment for uclibc?
+
+Thanks
+
+Mark
