@@ -1,39 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 15:03:31 +0200
-Subject: [Buildroot] [PATCH 1/2] package/util-linux: renumber patches
-In-Reply-To: <20200507224150.242211-1-fontaine.fabrice@gmail.com>
-References: <20200507224150.242211-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200509150331.23a58e1b@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 09 May 2020 13:04:09 +0000
+Subject: [Buildroot] [Bug 12841] util-linux/sfdisk 2.35.1 fails on
+ sector-size header
+In-Reply-To: <bug-12841-163@https.bugs.busybox.net/>
+References: <bug-12841-163@https.bugs.busybox.net/>
+Message-ID: <bug-12841-163-5w3SClTzqX@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 May 2020 00:41:49 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12841
 
-> Commit 3052da3eac8c80e7375341a48bca4cf0ee12e60b did not renumber
-> remaining patches, fix that
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...add-force.patch => 0001-blkdiscard-use-O_EXCL-add-force.patch} | 0
->  ...=> 0002-libfdisk-add-fdisk_set_disklabel_id_from_string.patch} | 0  
->  ...patch => 0003-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch} | 0
->  ...04-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch} | 0
->  ...d-inckudes.patch => 0005-include-cleanup-pidfd-inckudes.patch} | 0
->  5 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/util-linux/{0003-blkdiscard-use-O_EXCL-add-force.patch => 0001-blkdiscard-use-O_EXCL-add-force.patch} (100%)
->  rename package/util-linux/{0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch => 0002-libfdisk-add-fdisk_set_disklabel_id_from_string.patch} (100%)
->  rename package/util-linux/{0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch => 0003-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch} (100%)
->  rename package/util-linux/{0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch => 0004-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch} (100%)
->  rename package/util-linux/{0007-include-cleanup-pidfd-inckudes.patch => 0005-include-cleanup-pidfd-inckudes.patch} (100%)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Both applied to master. Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Thomas
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks! Fixed by Fabrice in
+https://git.buildroot.org/buildroot/commit/?id=af787a4cf5a19c3411d83ddbd8840b9486b6fcad
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
