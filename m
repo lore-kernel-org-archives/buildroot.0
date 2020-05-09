@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 22:42:15 +0200
-Subject: [Buildroot] [PATCH v1 2/4] package/exfatprogs: fix compile
- failure node may be used uninitialized
-In-Reply-To: <20200509162117.8728-2-ps.report@gmx.net>
+Date: Sat, 9 May 2020 22:42:19 +0200
+Subject: [Buildroot] [PATCH v1 3/4] package/exfatprogs: fix compile
+ failure missing braces around initializer
+In-Reply-To: <20200509162117.8728-3-ps.report@gmx.net>
 References: <20200509162117.8728-1-ps.report@gmx.net>
- <20200509162117.8728-2-ps.report@gmx.net>
-Message-ID: <20200509224215.59de6aa0@windsurf.home>
+ <20200509162117.8728-3-ps.report@gmx.net>
+Message-ID: <20200509224219.71f3ed96@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  9 May 2020 18:21:15 +0200
+On Sat,  9 May 2020 18:21:16 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
+> Add upstream commit to fix host package compile failure.
+> 
 > Fixes:
 > 
->   - http://autobuild.buildroot.net/results/5c5/5c5d71fde80a4f2f027085bdb0fae9fb76ab9d32
+>   http://autobuild.buildroot.net/results/d9c5d17de03f5d0316d5f54f9cd579b79d311d03
 > 
->   fsck.c:1062:18: error: 'node' may be used uninitialized in this function [-Werror=maybe-uninitialized]
->        node->parent = dir;
->                     ^
->   fsck.c:870:22: note: 'node' was declared here
->     struct exfat_inode *node;
->                         ^
+>   fsck.c:1213:9: error: missing braces around initializer [-Werror=missing-braces]
+>     struct fsck_user_input ui = {0,};
+>            ^
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...k-fix-node-may-be-used-uninitialized.patch | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
+>  .../0004-fsck-Zero-init-using-memset.patch    | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
 
 Applied to master, thanks.
 
