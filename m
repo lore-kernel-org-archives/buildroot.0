@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 21:58:01 +0200
-Subject: [Buildroot] [PATCH] package/piglit: bump version
-In-Reply-To: <20200504120132.3161950-1-romain.naour@gmail.com>
-References: <20200504120132.3161950-1-romain.naour@gmail.com>
-Message-ID: <20200509215801.33f9d0a9@windsurf.home>
+Date: Sat, 9 May 2020 21:58:11 +0200
+Subject: [Buildroot] [git commit branch/next] package/libcurl: bump to 7.70.0
+Message-ID: <20200509194233.6C09E911FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 May 2020 14:01:32 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=88aebf5fcbcad32e006c04322be499a8e5b29ef6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Remove upstream patch [1].
-> 
-> This version bump contain a patch removing EGL_NO_CONFIG_MESA [2] that
-> trigger a build issue with recent Mesa version.
-> 
-> Update indentation of hash file (two spaces).
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8ed/8ede89a673f83896745f90fd51458cac5fe7bb8f
-> 
-> [1] https://gitlab.freedesktop.org/mesa/piglit/-/commit/8417ca1725d523493d8f6782699273dc056888ac
-> [2] https://gitlab.freedesktop.org/mesa/piglit/-/commit/1fe351e533a1c8b88551b06e6d76e5c2bf8228bc
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Maybe we should also bump piglit package for each mesa version bump since
-> there is no official release: https://piglit.freedesktop.org
-> ---
->  ...tests-fix-test-build-requiring-gles3.patch | 49 -------------------
->  package/piglit/piglit.hash                    | 10 ++--
->  package/piglit/piglit.mk                      |  2 +-
->  3 files changed, 6 insertions(+), 55 deletions(-)
->  delete mode 100644 package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master because it fixes a build issue. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 69cf7b5398..2157f3d2d2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
+-sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
++sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
++sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 7a29634c68..cc2ca0aa65 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.69.1
++LIBCURL_VERSION = 7.70.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
