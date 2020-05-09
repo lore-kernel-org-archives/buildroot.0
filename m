@@ -1,61 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 16:27:22 +0200
-Subject: [Buildroot] nano package fail to build; cannot include curses.h
-In-Reply-To: <CAF8i9mP7Ztb6E-WQyN-HEho53m9+q8eM1tT6dyKEW=UvMHX8eA@mail.gmail.com>
-References: <CAF8i9mNJroNYDMzHDOjwpWX6uwNOY=BN3Yj+RwmgfFqnB2OpLA@mail.gmail.com>
- <20200509120149.0540a23c@windsurf.home>
- <CAF8i9mMsfvAknQ-hOxgf8gUqx_6-8WvPFtZW=agV_fZi1Ek3QA@mail.gmail.com>
- <20200509151306.7c58cf1d@windsurf.home>
- <CAF8i9mP7Ztb6E-WQyN-HEho53m9+q8eM1tT6dyKEW=UvMHX8eA@mail.gmail.com>
-Message-ID: <20200509162722.15880f08@windsurf.home>
+Date: Sat, 9 May 2020 16:29:16 +0200
+Subject: [Buildroot] [git commit] package/suricata: fix build with lua
+Message-ID: <20200509141342.45FEE810AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 9 May 2020 09:43:44 -0400
-William Tambe <tambewilliam@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e0fbbdb6fc3b63b118bddc05b57169d8299a57ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > In any case, since we don't have access to your toolchain, we have no
-> > way to reproduce/investigate. On other architectures, nano builds fine.  
-> 
-> My issue seems to be that it is not able to find curses.h headers
-> which buildroot already installed at the following path:
-> ./target/usr/include/curses.h
-> ./target/usr/include/ncurses.h
-> ./host/iron-buildroot-linux-gnu/sysroot/usr/include/curses.h
-> ./host/iron-buildroot-linux-gnu/sysroot/usr/include/ncurses.h
-> ./host/include/ncurses/curses.h
-> ./host/include/ncurses/ncurses.h
-> 
-> Using something like this in nano.mk didn't help either:
-> 
-> NANO_MAKE_ENV += \
->         $(TARGET_MAKE_ENV) \
->         CFLAGS="$(TARGET_CFLAGS) -I$(HOST_DIR)/include/ncurses"
+Fixes:
+ - http://autobuild.buildroot.net/results/11bc7f4e1c54f074dd10a995233bee45c293e488
 
-This is terribly wrong: you are point to the headers of host libraries,
-while cross-compiling code for the target.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...nfigure.ac-fix-cross-compilation-with-lua.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-> Any other suggestion I could try in debugging the issue I am having ?
-
-Can we have access to your "iron" toolchain to reproduce ?
-
-Normally, the way it works is that Buildroot generates a toolchain
-wrapper, which calls your toolchain "gcc" after adding
---sysroot=$(STAGING_DIR), and therefore, gcc should automatically find
-headers in $(STAGING_DIR)/usr/include.
-
-I'd suggest to create a simple C file with just #include <ncurses.h>,
-and try to build it with $(HOST_DIR)/bin/iron-...-gcc. If that doesn't
-work, pass BR2_DEBUG_WRAPPER=2 when calling gcc, and check what gets
-passed to the gcc of your toolchain.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch b/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+new file mode 100644
+index 0000000000..5c13ac7bec
+--- /dev/null
++++ b/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+@@ -0,0 +1,33 @@
++From 8db38c21b525327305778fcaa232b2a797ffcb82 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 7 May 2020 19:05:23 +0200
++Subject: [PATCH] configure.ac: fix cross-compilation with lua
++
++lua integer size is detected through AC_RUN_IFELSE since
++https://github.com/OISF/suricata/commit/2abcd5d27f29ca37ae31108cc0ea0143fa25d0a1
++
++This breaks cross-compilation and is needed only for rust so disable it
++if rust is not wanted
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not submitted yet]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 127848234..f5f33d42d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2225,7 +2225,7 @@ return 0;
++     AM_CONDITIONAL([HAVE_LUA], [test "x$enable_lua" != "xno"])
++ 
++     # If Lua is enabled, test the integer size.
++-    if test "x$enable_lua" = "xyes"; then
+++    if test "x$enable_lua" = "xyes" && test "x$enable_rust" = "xyes"; then
++         TMPLIBS="$LIBS"
++         LIBS=""
++ 
++-- 
++2.26.2
++
