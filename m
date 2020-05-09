@@ -1,56 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 18:46:55 +0200
-Subject: [Buildroot] [PATCH] package/gcc9: Fix parallel build problem
- (xgcc not found)
-In-Reply-To: <1d1703f1-65b3-a17a-c6aa-2d7be1647af3@inbox.ru>
-References: <b60c5da0-cf8e-3f5b-d271-659345733aff@inbox.ru>
- <20200507215817.48d744be@windsurf.home>
- <1d1703f1-65b3-a17a-c6aa-2d7be1647af3@inbox.ru>
-Message-ID: <20200509184655.62724518@windsurf.home>
+Date: Sat, 9 May 2020 18:47:24 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: fix CVE-2020-12284
+Message-ID: <20200509163148.9CC2E911DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aab52d8722b21cb1410e8e8957f81565b29352bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 8 May 2020 15:40:25 +0300
-Maxim Kochetkov <fido_max@inbox.ru> wrote:
+cbs_jpeg_split_fragment in libavcodec/cbs_jpeg.c in FFmpeg 4.2.2 has a
+heap-based buffer overflow during JPEG_MARKER_SOS handling because of a
+missing length check.
 
->  > Do you have more details about this failure? Does it happen in our
->  > autobuilders? In which context?  
-> 
-> Similar issue described here: 
-> https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
-> 
-> I don't know about your autobuilder.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...001-avcodec-cbs_jpeg-Check-length-for-SOS.patch | 33 ++++++++++++++++++++++
+ package/ffmpeg/ffmpeg.mk                           |  3 ++
+ 2 files changed, 36 insertions(+)
 
-Our autobuilders are most likely not testing so much the gcc 9.x build,
-since Buildroot still defaults to gcc 8.x.
-
-> In my config I use CCACHE for build (try 3.6, 3.7.9 with the same 
-> result). May be it affect some timings/delay in build sequence.
-> 
-> It fails for gcc-final (9.2 and 9.3):
-> /builds/kochetkov.m/buildroot/output/build/host-gcc-final-9.3.0/build/./gcc/xgcc 
-> -B/builds/kochetkov.m/buildroot/output/build/host-gcc-final-9.3.0/build/./gcc/ 
-> -xc -nostdinc /dev/null -S -o /dev/null 
-> -fself-test=../../gcc/testsuite/selftests
-> /bin/bash: 
-> /builds/kochetkov.m/buildroot/output/build/host-gcc-final-9.3.0/build/./gcc/xgcc: 
-> No such file or directory
-> 
-> gcc build systems is trying to test compiled executables (xgcc xg++ ....)
-
-Is this only with gcc 9.x ? It doesn't appear with 8.x ? Why ?
-
-In Buildroot, we generally try to rely understand issues and fix them
-upstream, rather than just papering over the problem with the first
-workaround available.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch b/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
+new file mode 100644
+index 0000000000..343d496002
+--- /dev/null
++++ b/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
+@@ -0,0 +1,33 @@
++From 1812352d767ccf5431aa440123e2e260a4db2726 Mon Sep 17 00:00:00 2001
++From: Michael Niedermayer <michael@niedermayer.cc>
++Date: Sat, 7 Mar 2020 15:42:58 +0100
++Subject: [PATCH] avcodec/cbs_jpeg: Check length for SOS
++
++Fixes: out of array access
++Fixes: 19734/clusterfuzz-testcase-minimized-ffmpeg_BSF_TRACE_HEADERS_fuzzer-5673507031875584
++Fixes: 19353/clusterfuzz-testcase-minimized-ffmpeg_BSF_TRACE_HEADERS_fuzzer-5703944462663680
++
++Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
++Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/FFmpeg/FFmpeg/commit/1812352d767ccf5431aa440123e2e260a4db2726]
++---
++ libavcodec/cbs_jpeg.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/libavcodec/cbs_jpeg.c b/libavcodec/cbs_jpeg.c
++index 6bbce5f89b7..89512a26bbf 100644
++--- a/libavcodec/cbs_jpeg.c
+++++ b/libavcodec/cbs_jpeg.c
++@@ -197,6 +197,9 @@ static int cbs_jpeg_split_fragment(CodedBitstreamContext *ctx,
++         if (marker == JPEG_MARKER_SOS) {
++             length = AV_RB16(frag->data + start);
++ 
+++            if (length > end - start)
+++                return AVERROR_INVALIDDATA;
+++
++             data_ref = NULL;
++             data     = av_malloc(end - start +
++                                  AV_INPUT_BUFFER_PADDING_SIZE);
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 96455cb978..d01a9620da 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -16,6 +16,9 @@ FFMPEG_LICENSE += and GPL-2.0+
+ FFMPEG_LICENSE_FILES += COPYING.GPLv2
+ endif
+ 
++# 0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
++FFMPEG_IGNORE_CVES += CVE-2020-12284
++
+ FFMPEG_CONF_OPTS = \
+ 	--prefix=/usr \
+ 	--enable-avfilter \
