@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 13:51:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
- version 2.1.0
-In-Reply-To: <20200508122110.950135-1-fontaine.fabrice@gmail.com>
-References: <20200508122110.950135-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200509135147.6423617e@windsurf.home>
+Date: Sat, 9 May 2020 13:52:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbuffer: bump to version
+ 20200505
+In-Reply-To: <20200508142639.1586652-1-fontaine.fabrice@gmail.com>
+References: <20200508142639.1586652-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200509135202.528f2eb9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 May 2020 14:21:10 +0200
+On Fri,  8 May 2020 16:26:39 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Drop patch (already in version)
-> - Fix multiple CVEs: CVE-2020-11039, CVE-2020-11038, CVE-2020-11043,
->   CVE-2020-11040, CVE-2020-11041, CVE-2020-11019, CVE-2020-11017,
->   CVE-2020-11018
-> - Fix multiple leak and crash issues (#6129, #6128, #6127, #6110, #6081,
->   #6077)
+> This bump will fix a build failure with gcc 4.8
 > 
-> Extracted from:
-> https://github.com/FreeRDP/FreeRDP/commit/65d3ff44617c5a343f726985ed45e3a0a35dfaf3
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1a7fe7ac8cbe9997bc5d1e9ade24bc2ee6ac6abe
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...uwac-uwac-os.c-fix-build-with-uclibc.patch | 44 -------------------
->  package/freerdp/freerdp.hash                  |  4 +-
->  package/freerdp/freerdp.mk                    |  2 +-
->  3 files changed, 3 insertions(+), 47 deletions(-)
->  delete mode 100644 package/freerdp/0001-src-libuwac-uwac-os.c-fix-build-with-uclibc.patch
+>  package/mbuffer/mbuffer.hash | 4 ++--
+>  package/mbuffer/mbuffer.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Since it fixes a build issue, I've applied to master. Thanks.
 
 Thomas
 -- 
