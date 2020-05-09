@@ -1,76 +1,96 @@
-From: Kunal Chauhan <atkunalchauhan@gmail.com>
-Date: Sat, 9 May 2020 23:44:25 +0530
-Subject: [Buildroot] Help: to understand build root
-In-Reply-To: <d1e5de0ccecc4ca2020f5efbe473cb2d@umbiko.net>
-References: <mailman.3803.1589018066.59095.buildroot@busybox.net>
- <d1e5de0ccecc4ca2020f5efbe473cb2d@umbiko.net>
-Message-ID: <CACEFAc1yzctCtQ5ErMS_NR1R3TAMDU+8JddbisTLKakTeLGURg@mail.gmail.com>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Sat,  9 May 2020 22:09:47 +0300
+Subject: [Buildroot] [PATCH v2] package/ndisc6: fix compilation for glibc <
+ 2.19
+Message-ID: <20200509190947.453850-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi team,
+glibc version before 2.19 version allows to use BSD-mode via #define
+_BSD_SOURCE, it defines another one
 
-Please need some clarity on some points
+    __FAVOR_BSD
 
-1.  If as a developer can i compile a single binary and test it without
-running or compiling whole firware image.?
+which provides BSD-style tcp/udp headers where fields are different than
+in GNU version.
 
-2. How firmware image extracts all binaries to system or to target harware?
+In glibc > 2.18 there is no such ability to use BSD mode, but it
+supports both kinds of tcp/udp headers because of using __extension__
+union.
 
-Thanks
-Kunal
+Since trace-{udp,tcp}.c uses BSD-style tcp/udp headers, it fails on
+toolchains with glibc < 2.19 version.
 
+So fix it by defining __FAVOR_BSD define only for tcp/udp headers.
 
-On 9 May 2020 9:02 p.m., "Andreas Ziegler" <br015@umbiko.net> wrote:
+Fixes: http://autobuild.buildroot.net/results/d05d5471d10a2b6634711ccad75d7f86d222cc31
 
-> Hi Kunal,
->
-> Message: 1
->> Date: Wed, 6 May 2020 12:24:57 +0530
->> From: Kunal Chauhan <atkunalchauhan@gmail.com>
->> To: buildroot at busybox.net
->> Subject: Re: [Buildroot] Help: to understand build root (Andreas
->>         Ziegler)
->>
->
-> 1.Team just gone through the url given but still I am confused what is the
->> main purpose of making build_root directory, when we can compile our
->> source
->> in different way.
->> 2. May be I am not understanding the concept as I am  new to
->> firmware concept. but question is also how the code is built and test as a
->> developer
->>
->
-> As an embedded developer you would normally be seriously limited by the
-> production hardware (where the finished product is supposed to run): not
-> enough memory, no persistent storage, and just a serial console for talking
-> to the machine. This is why people use different hardware for development
-> and test/production.
->
-> On your development machine you would write code, do development tests, if
-> necessary by using mock-ups for missing physical interfaces, and check in
-> after you are satisfied.
->
-> The integration step pulls the software from the repository, packages it
-> with other necessary binaries and generates a firmware image. This is where
-> Buildroot comes into the picture. Buildroot is not a development
-> environment, but an integration tool.
->
-> After deploying your image for integration testing on the target hardware,
-> your options for debugging are limited. You could use, for example,
-> instrumentation of the code or gdb (supports remote debugging) for this
-> purpose.
->
-> It might make things easier if you told us something of your intended use
-> case.
->
-> Kind regards,
-> Andreas
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200509/51a25355/attachment.html>
+Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
+---
+
+v2:
+    Fix wrong description which refers to particular codesourcery
+    toolchain instead to the glibc which is the real root cause of the
+    issue.
+
+ ...x-compilation-with-glibc-which-uses-.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/ndisc6/0002-trace-udp-tcp-fix-compilation-with-glibc-which-uses-.patch
+
+diff --git a/package/ndisc6/0002-trace-udp-tcp-fix-compilation-with-glibc-which-uses-.patch b/package/ndisc6/0002-trace-udp-tcp-fix-compilation-with-glibc-which-uses-.patch
+new file mode 100644
+index 0000000000..299cefbb79
+--- /dev/null
++++ b/package/ndisc6/0002-trace-udp-tcp-fix-compilation-with-glibc-which-uses-.patch
+@@ -0,0 +1,46 @@
++From c87e9800e24d0afbebb385b049c7e7024a9c6555 Mon Sep 17 00:00:00 2001
++From: Vadym Kochan <vadim4j@gmail.com>
++Date: Sat, 9 May 2020 19:29:24 +0300
++Subject: [PATCH] trace-{udp,tcp}: fix compilation with glibc which uses
++ __FAVOR_BSD
++
++Use __FAVOR_BSD define to enable BSD-like tcp/udp headers for glibc
++versions older than 2.19, because later glibc implementations uses:
++
++    __extension__ union
++
++to provide both headers variants.
++
++Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
++---
++ src/trace-tcp.c | 1 +
++ src/trace-udp.c | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/src/trace-tcp.c b/src/trace-tcp.c
++index 1b367ae..5d6ab8f 100644
++--- a/src/trace-tcp.c
+++++ b/src/trace-tcp.c
++@@ -33,6 +33,7 @@
++ #include <unistd.h> // getpid()
++ #include <sys/socket.h> // SOCK_STREAM
++ #include <netinet/in.h>
+++#define __FAVOR_BSD
++ #include <netinet/tcp.h>
++ 
++ #include "traceroute.h"
++diff --git a/src/trace-udp.c b/src/trace-udp.c
++index aa9364e..6b287ec 100644
++--- a/src/trace-udp.c
+++++ b/src/trace-udp.c
++@@ -32,6 +32,7 @@
++ #include <sys/types.h>
++ #include <sys/socket.h> // SOCK_DGRAM
++ #include <netinet/in.h>
+++#define __FAVOR_BSD
++ #include <netinet/udp.h>
++ 
++ #include "traceroute.h"
++-- 
++2.26.2
++
+-- 
+2.26.2
