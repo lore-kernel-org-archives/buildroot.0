@@ -1,40 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 12:01:49 +0200
-Subject: [Buildroot] nano package fail to build; cannot include curses.h
-In-Reply-To: <CAF8i9mNJroNYDMzHDOjwpWX6uwNOY=BN3Yj+RwmgfFqnB2OpLA@mail.gmail.com>
-References: <CAF8i9mNJroNYDMzHDOjwpWX6uwNOY=BN3Yj+RwmgfFqnB2OpLA@mail.gmail.com>
-Message-ID: <20200509120149.0540a23c@windsurf.home>
+Date: Sat, 9 May 2020 12:05:28 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: enable
+ uclibc for riscv64
+In-Reply-To: <20200508103338.16391-1-mark@dibsco.co.uk>
+References: <20200508103338.16391-1-mark@dibsco.co.uk>
+Message-ID: <20200509120528.6ff5c45f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri,  8 May 2020 11:33:37 +0100
+Mark Corbin <mark@dibsco.co.uk> wrote:
 
-On Sat, 9 May 2020 01:43:56 -0400
-William Tambe <tambewilliam@gmail.com> wrote:
+>  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+>  	bool "uClibc-ng"
+> -	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
+> -		   BR2_arm     || BR2_armeb    || \
+> -		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+> -		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+> -		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+> -		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
+> +	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
+> +		   BR2_arm     || BR2_armeb      || \
+> +		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
+> +		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
+> +		   BR2_or1k    || BR2_powerpc    || BR2_riscv      || \
+> +		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
+> +		   BR2_xtensa  || BR2_x86_64
+> +	depends on BR2_ARCH_IS_64 || !BR2_riscv
 
-> Nano package fail to build with the following error:
-> 
-> nano.h:89:10: fatal error: curses.h: No such file or directory
-> 
-> curses.h library can be found in the following path:
-> ./target/usr/include/curses.h
-> ./target/usr/include/ncurses.h
-> ./host/iron-buildroot-linux-gnu/sysroot/usr/include/curses.h
-> ./host/iron-buildroot-linux-gnu/sysroot/usr/include/ncurses.h
-> ./host/include/ncurses/curses.h
-> ./host/include/ncurses/ncurses.h
-> 
-> Any idea why the nano package fail to build despite the headers being
-> available ?
+I think we really want to keep a single "depends on", so just add:
 
-You need to provide more details, and especially which version of
-Buildroot you're using, and a defconfig that allows to reproduce the
-issue.
+	.... || (BR2_riscv && BR2_ARCH_IS_64) ||
 
-Best regards,
+or simpler:
+
+	.... || BR2_RISCV_64 || ...
+
+You could also use BR2_RISCV_64 in package/uclibc/Config.in.
 
 Thomas
 -- 
