@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 16:30:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix build with lua
-In-Reply-To: <20200507171242.141886-1-fontaine.fabrice@gmail.com>
-References: <20200507171242.141886-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200509163013.654d5534@windsurf.home>
+Date: Sat, 9 May 2020 16:30:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: only enable
+ sse2 when supported
+In-Reply-To: <20200507203901.97715-1-james.hilliard1@gmail.com>
+References: <20200507203901.97715-1-james.hilliard1@gmail.com>
+Message-ID: <20200509163020.232ddd15@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  7 May 2020 19:12:42 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu,  7 May 2020 14:39:01 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.net/results/11bc7f4e1c54f074dd10a995233bee45c293e488
+> We need to backport a commit so that we can enable/disable sse2 using
+> the ARGON2_CFFI_USE_SSE2 env variable.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Fixes:
+> http://autobuild.buildroot.net/results/030/0306d66d081dd0807c577edd50d39075a46d0dd9/build-end.log
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...re.ac-fix-cross-compilation-with-lua.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+>  ...-ARGON2_CFFI_USE_SSE2-to-override-ss.patch | 78 +++++++++++++++++++
+>  .../python-argon2-cffi/python-argon2-cffi.mk  |  6 ++
+>  2 files changed, 84 insertions(+)
+>  create mode 100644 package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
 
-Applied to master, thanks. Please submit upstream, the project uses
-Github and seems to accept pull requests.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
