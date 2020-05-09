@@ -1,45 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 12:05:28 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: enable
- uclibc for riscv64
-In-Reply-To: <20200508103338.16391-1-mark@dibsco.co.uk>
+Date: Sat, 9 May 2020 12:07:58 +0200
+Subject: [Buildroot] [PATCH 2/2] support/config-fragments: add RISC-V
+ 64-bit uclibc autobuild config
+In-Reply-To: <20200508103338.16391-2-mark@dibsco.co.uk>
 References: <20200508103338.16391-1-mark@dibsco.co.uk>
-Message-ID: <20200509120528.6ff5c45f@windsurf.home>
+ <20200508103338.16391-2-mark@dibsco.co.uk>
+Message-ID: <20200509120758.62ede751@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  8 May 2020 11:33:37 +0100
+On Fri,  8 May 2020 11:33:38 +0100
 Mark Corbin <mark@dibsco.co.uk> wrote:
 
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  	bool "uClibc-ng"
-> -	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
-> -		   BR2_arm     || BR2_armeb    || \
-> -		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
-> -		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> -		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
-> -		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
-> +	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
-> +		   BR2_arm     || BR2_armeb      || \
-> +		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
-> +		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
-> +		   BR2_or1k    || BR2_powerpc    || BR2_riscv      || \
-> +		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
-> +		   BR2_xtensa  || BR2_x86_64
-> +	depends on BR2_ARCH_IS_64 || !BR2_riscv
+> Now that RISC-V 64 bit can use uclibc, glibc and musl we can add
+> uclibc to the autobuild internal toolchain configurations by
+> removing the musl specific config file and adding a generic one.
+> 
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> ---
+>  ...v64-internal-musl.config => br-riscv64-full-internal.config} | 1 -
+>  support/config-fragments/autobuild/toolchain-configs.csv        | 2 +-
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+>  rename support/config-fragments/autobuild/{br-riscv64-internal-musl.config => br-riscv64-full-internal.config} (57%)
+> 
+> diff --git a/support/config-fragments/autobuild/br-riscv64-internal-musl.config b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+> similarity index 57%
+> rename from support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> rename to support/config-fragments/autobuild/br-riscv64-full-internal.config
+> index 89e7afb276..c729eb55e9 100644
+> --- a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> +++ b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+> @@ -1,3 +1,2 @@
+>  BR2_riscv=y
+> -BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
-I think we really want to keep a single "depends on", so just add:
+This one is not "generic": it will only build a uClibc toolchain. It
+seems like you believe that since this defconfig fragment doesn't
+mention the C library, it will test glibc, musl and uclibc, but that's
+not the case. We do not randomize the choice of the C library, and
+since uclibc is our default, this new defconfig file will only test
+uclibc.
 
-	.... || (BR2_riscv && BR2_ARCH_IS_64) ||
-
-or simpler:
-
-	.... || BR2_RISCV_64 || ...
-
-You could also use BR2_RISCV_64 in package/uclibc/Config.in.
+Best regards,
 
 Thomas
 -- 
