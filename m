@@ -1,85 +1,94 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  9 May 2020 23:42:52 +0200
-Subject: [Buildroot] [PATCH v1] package/squashfs: fix host compile multiple
- definitions
-Message-ID: <20200509214252.23180-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 9 May 2020 23:45:12 +0200
+Subject: [Buildroot] [PATCH 2/6] boot/uboot: support building U-Boot
+ with Python 3.x
+In-Reply-To: <20200503151215.5d39140e@windsurf.home>
+References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
+ <20200502212812.51219-3-thomas.petazzoni@bootlin.com>
+ <20200503080231.GV15673@scaer>
+ <20200503151215.5d39140e@windsurf.home>
+Message-ID: <20200509214512.GU12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch to fix squashfs-tools build failures because
-of missing external declaration for fwriter_buffer and
-bwriter_buffer.
+Thomas, All,
 
-Fixes:
+On 2020-05-03 15:12 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 3 May 2020 10:02:31 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > +if BR2_TARGET_UBOOT_NEEDS_PYTHON
+> > > +
+> > > +choice
+> > > +	prompt "Python version"
+> > > +	default BR2_TARGET_UBOOT_NEEDS_PYTHON2
+> > > +
+> > > +config BR2_TARGET_UBOOT_NEEDS_PYTHON2
+> > > +	bool "python 2.x"
+> > > +	help
+> > > +	  Select this option if U-Boot needs a host Python 2.x
+> > > +	  interpreter. This is the case for some U-Boot
+> > > +	  configurations, prior to U-Boot 2020.01.
+> > > +
+> > > +config BR2_TARGET_UBOOT_NEEDS_PYTHON3
+> > > +	bool "python 3.x"
+> > > +	help
+> > > +	  Select this option if U-Boot needs a host Python 3.x
+> > > +	  interpreter. This is the case for some U-Boot
+> > > +	  configurations, after U-Boot 2020.01.
+> > > +
+> > > +endchoice  
+> > 
+> > I don't like it much that construct, where a boolean hides a choice.
+> > Instead, we can siumply use a choice (options names abbreviated as I'm
+> > lazy to type them full):
+[--SNIP--]
+> If I use depends on like you suggest, we break backward compatibility.
+> Indeed, an existing configuration with
 
-  - http://autobuild.buildroot.net/results/6789b668898245926e0a3a3e7caf823dff515d71
+Right, so I like backward compatibility, but I also do not like the
+bool-hides-a-choice construct, so here's my counter-counter proposal:
 
-  /usr/bin/ld: read_fs.o:(.bss+0x0): multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
-  /usr/bin/ld: read_fs.o:(.bss+0x8): multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
+    config BR2_TARGET_UBOOT_NEEDS_HOST_PYTHON
+        bool
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...ols-fix-build-failure-against-gcc-10.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+    choice
+        bool "U-Boot needs host python"
 
-diff --git a/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
-new file mode 100644
-index 0000000000..a5fc487aac
---- /dev/null
-+++ b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
-@@ -0,0 +1,49 @@
-+From e1cdcfd94172a0b1ba4c9df70f4d69a41c687404 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Sun, 26 Jan 2020 18:35:13 +0000
-+Subject: [PATCH] squashfs-tools: fix build failure against gcc-10
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+On gcc-10 (and gcc-9 -fno-common) build fails as:
-+
-+```
-+cc ... -o mksquashfs
-+ld: read_fs.o:(.bss+0x0):
-+  multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
-+ld: read_fs.o:(.bss+0x8):
-+  multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
-+```
-+
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
-+
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+Reported-by: Toralf F?rster
-+Bug: https://bugs.gentoo.org/706456
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+
-+[Upstream: https://github.com/plougher/squashfs-tools/commit/fe2f5da4b0f8994169c53e84b7cb8a0feefc97b5.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ squashfs-tools/mksquashfs.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/squashfs-tools/mksquashfs.h b/squashfs-tools/mksquashfs.h
-+index 1beefef..b650306 100644
-+--- a/squashfs-tools/mksquashfs.h
-++++ b/squashfs-tools/mksquashfs.h
-+@@ -143,7 +143,7 @@ struct append_file {
-+ #endif
-+ 
-+ extern struct cache *reader_buffer, *fragment_buffer, *reserve_cache;
-+-struct cache *bwriter_buffer, *fwriter_buffer;
-++extern struct cache *bwriter_buffer, *fwriter_buffer;
-+ extern struct queue *to_reader, *to_deflate, *to_writer, *from_writer,
-+ 	*to_frag, *locked_fragment, *to_process_frag;
-+ extern struct append_file **file_mapping;
-+-- 
-+2.26.2
-+
+    config BR2_TARGET_UBOOT_NEEDS_PY_NONE
+        bool "none"
+        depends on !BR2_TARGET_UBOOT_NEEDS_HOST_PYTHON
+
+    config BR2_TARGET_UBOOT_NEEDS_PY2
+        bool "python2"
+
+    config BR2_TARGET_UBOOT_NEEDS_PY3
+        bool "python3"
+
+    endchoice
+
+    config BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
+        bool "U-Boot needs pylibfdt"
+        select BR2_TARGET_UBOOT_NEEDS_HOST_PYTHON
+
+    config BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS
+        bool "U-Boot needs pyelftools"
+        select BR2_TARGET_UBOOT_NEEDS_HOST_PYTHON
+
+Yes, this is a tiny-weeny-little-bit more verbose, because there's still
+the BR2_TARGET_UBOOT_NEEDS_HOST_PYTHON boolean, but it has no prompt, so
+it is not user-visible, and it no longer hides the choice, just one
+entry of it.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
