@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 16:30:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: only enable
- sse2 when supported
-In-Reply-To: <20200507203901.97715-1-james.hilliard1@gmail.com>
-References: <20200507203901.97715-1-james.hilliard1@gmail.com>
-Message-ID: <20200509163020.232ddd15@windsurf.home>
+Date: Sat, 9 May 2020 16:31:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/libqmi: bump to
+ version 1.24.12
+Message-ID: <20200509141657.4036491187@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  7 May 2020 14:39:01 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=056920f66970be77d13e7bcfa1c6c13791817986
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> We need to backport a commit so that we can enable/disable sse2 using
-> the ARGON2_CFFI_USE_SSE2 env variable.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/030/0306d66d081dd0807c577edd50d39075a46d0dd9/build-end.log
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...-ARGON2_CFFI_USE_SSE2-to-override-ss.patch | 78 +++++++++++++++++++
->  .../python-argon2-cffi/python-argon2-cffi.mk  |  6 ++
->  2 files changed, 84 insertions(+)
->  create mode 100644 package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
+https://lists.freedesktop.org/archives/libqmi-devel/2020-May/003296.html
 
-Applied to master, thanks.
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 197ea1c007..6341bce8ea 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  c2121243b5da8bcffc8f6f5ca0d7217498f94fffd115883763282c68f255fde7  libqmi-1.24.10.tar.xz
++sha256  2d3b91a2b8a882b17b16403c9ef7bdce522db4f0ceaa3e4dff76033885428b69  libqmi-1.24.12.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index cd7fafa42a..260dcd1f66 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.24.10
++LIBQMI_VERSION = 1.24.12
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
