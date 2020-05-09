@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 13:55:35 +0200
-Subject: [Buildroot] [PATCH] package/uacme: don't allow ualpn with
- mbedTLS
-In-Reply-To: <20200509090808.3ezmxiaucoj5fzc6@einstein.dilieto.eu>
-References: <20200509090808.3ezmxiaucoj5fzc6@einstein.dilieto.eu>
-Message-ID: <20200509135535.0587e6fc@windsurf.home>
+Date: Sat, 9 May 2020 13:55:50 +0200
+Subject: [Buildroot] [git commit branch/next] package/uacme: bump version to
+ 1.3
+Message-ID: <20200509114028.D923591046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 9 May 2020 11:08:08 +0200
-Nicola Di Lieto <nicola.dilieto@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=682a3882f2da0d83a0339a5b36ab6338b1d8c174
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> ualpn requires mbedTLS to be configured and built with
-> MBEDTLS_X509_ALLOW_UNSUPPORTED_CRITICAL_EXTENSION
-> which is not the default and can be a security risk.
-> 
-> Therefore make BR2_PACKAGE_UACME_UALPN depend on
-> BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS.
-> 
-> Fixes http://autobuild.buildroot.net/results/d241121f8155bad9b6b25c16234576abb7fc940b
-> 
-> See also
-> 
-> https://github.com/ndilieto/uacme/issues/23
-> https://github.com/ARMmbed/mbedtls/issues/3241
-> https://github.com/ARMmbed/mbedtls/pull/3243
-> http://lists.busybox.net/pipermail/buildroot/2020-April/281059.html
-> http://lists.busybox.net/pipermail/buildroot/2020-April/281108.html
-> 
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
-> ---
->  package/uacme/Config.in | 4 ++++
->  package/uacme/uacme.mk  | 6 +++---
->  2 files changed, 7 insertions(+), 3 deletions(-)
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index b3ec7ed6f2..866cf86dbf 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
++sha256  b219484f9f018dffb4a57c4c37e0e4b6aa15bb00705ad71b6f7b8dd94baf0380  uacme-1.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 7e544fce79..63d3a752c3 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.2.4
++UACME_VERSION = 1.3
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
