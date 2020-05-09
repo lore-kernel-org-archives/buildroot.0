@@ -1,68 +1,54 @@
-From: William Tambe <tambewilliam@gmail.com>
-Date: Sat, 9 May 2020 09:43:44 -0400
-Subject: [Buildroot] nano package fail to build; cannot include curses.h
-In-Reply-To: <20200509151306.7c58cf1d@windsurf.home>
-References: <CAF8i9mNJroNYDMzHDOjwpWX6uwNOY=BN3Yj+RwmgfFqnB2OpLA@mail.gmail.com>
- <20200509120149.0540a23c@windsurf.home>
- <CAF8i9mMsfvAknQ-hOxgf8gUqx_6-8WvPFtZW=agV_fZi1Ek3QA@mail.gmail.com>
- <20200509151306.7c58cf1d@windsurf.home>
-Message-ID: <CAF8i9mP7Ztb6E-WQyN-HEho53m9+q8eM1tT6dyKEW=UvMHX8eA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 9 May 2020 16:08:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtdev2tuio: fix build with musl
+ 1.2.0
+In-Reply-To: <5e59a307-054c-5eed-97d4-96a46d312089@relinux.de>
+References: <20200425104816.1229406-1-fontaine.fabrice@gmail.com>
+ <20200425221618.67ddb474@windsurf.home>
+ <5e59a307-054c-5eed-97d4-96a46d312089@relinux.de>
+Message-ID: <CAPi7W81nTpONcC8u9RUQ3vo=ZPP9WdSCAG-0sFR_Z7bVsDOnYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, May 9, 2020 at 9:13 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Hello Stephan,
+
+Le sam. 9 mai 2020 ? 14:58, Stephan Hoffmann <sho@relinux.de> a ?crit :
 >
-> Hello William,
+> Hello Thomas, Fabrice,
 >
-> On Sat, 9 May 2020 09:04:03 -0400
-> William Tambe <tambewilliam@gmail.com> wrote:
+> once upon a time I added mtdev2tuio because at the time it was useful in
+> multitouch szenarios. I do not use it any more.
 >
-> > diff --git a/configs/iron_defconfig b/configs/iron_defconfig
-> > new file mode 100644
-> > index 0000000000..29cc533f7d
-> > --- /dev/null
-> > +++ b/configs/iron_defconfig
-> > @@ -0,0 +1,15 @@
-> > +BR2_iron=y
-> > +BR2_STATIC_LIBS=y
-> > +BR2_TOOLCHAIN_EXTERNAL=y
-> > +BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/iron-toolchain/"
-> > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-elf"
+> @Fabrice: Since you seems to have adopted mtdev2tuio, do you use it? If
+> yes, could you please put yourself in the developer list instead of me?
 >
-> Usually, toolchains named $(ARCH)-elf are bare metal toolchains, i.e
-> toolchains that don't have a C library with support for an operating
-> system. Are you sure this toolchain is using glibc ?
-
-Yes, this toolchain has glibc support.
-
+> If not, I could volunteer to remove it since it is not maintained and it
+> breaks builds every now and then.
+You can remove it, I don't use mtdev2tuio.
 >
-> In any case, since we don't have access to your toolchain, we have no
-> way to reproduce/investigate. On other architectures, nano builds fine.
-
-My issue seems to be that it is not able to find curses.h headers
-which buildroot already installed at the following path:
-./target/usr/include/curses.h
-./target/usr/include/ncurses.h
-./host/iron-buildroot-linux-gnu/sysroot/usr/include/curses.h
-./host/iron-buildroot-linux-gnu/sysroot/usr/include/ncurses.h
-./host/include/ncurses/curses.h
-./host/include/ncurses/ncurses.h
-
-Using something like this in nano.mk didn't help either:
-
-NANO_MAKE_ENV += \
-        $(TARGET_MAKE_ENV) \
-        CFLAGS="$(TARGET_CFLAGS) -I$(HOST_DIR)/include/ncurses"
-
-Any other suggestion I could try in debugging the issue I am having ?
-
+> Kind regards
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Stephan
+>
+> Am 25.04.20 um 22:16 schrieb Thomas Petazzoni:
+> > On Sat, 25 Apr 2020 12:48:16 +0200
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> >> Fixes:
+> >>  - http://autobuild.buildroot.org/results/a30823f1388f37820d8a4f29b9b2c1de9b3992ac
+> >>
+> >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >> ---
+> >>  ...dev2tuio.c-fix-build-with-musl-1.2.0.patch | 57 +++++++++++++++++++
+> >>  1 file changed, 57 insertions(+)
+> >>  create mode 100644 package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
+> > Applied to master, thanks. However, this project hasn't seen any commit
+> > since 2012. Is it still relevant/useful ?
+> >
+> > Thomas
+Best Regards,
+
+Fabrice
