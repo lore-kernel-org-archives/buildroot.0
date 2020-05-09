@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 09 May 2020 09:14:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
+Date: Sat, 09 May 2020 09:14:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
  version 2.28.2
-In-Reply-To: <20200426165917.2535680-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Sun, 26 Apr 2020 19:59:17 +0300")
-References: <20200426165917.2535680-1-aperez@igalia.com>
-Message-ID: <878si1pol1.fsf@dell.be.48ers.dk>
+In-Reply-To: <20200426195021.2625617-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Sun, 26 Apr 2020 22:50:21 +0300")
+References: <20200426195021.2625617-1-aperez@igalia.com>
+Message-ID: <874ksppokn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,12 +22,12 @@ To: buildroot@busybox.net
  > crashes. The full release notes covering 2.28.1 and 2.28.2 can be
  > found at:
 
- >   https://webkitgtk.org/2020/04/13/webkitgtk2.28.1-released.html
- >   https://webkitgtk.org/2020/04/24/webkitgtk2.28.2-released.html
+ >   https://wpewebkit.org/release/wpewebkit-2.28.1.html
+ >   https://wpewebkit.org/release/wpewebkit-2.28.2.html
 
  > A detailed security advisory can be found at:
 
- >   https://webkitgtk.org/security/WSA-2020-0004.html
+ >   https://wpewebkit.org/security/WSA-2020-0004.html
 
  > Note that the above does not cover all the CVEs, and a new advisory
  > including them is expected to be published in the next days.
