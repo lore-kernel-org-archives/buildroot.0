@@ -1,44 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 16:58:37 +0200
-Subject: [Buildroot] [git commit] linux: bump CIP kernel to version
- 4.19.118-cip25
-Message-ID: <20200509144610.22F3F911C4@busybox.osuosl.org>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Sat, 09 May 2020 15:32:28 +0000
+Subject: [Buildroot] Help: to understand build root
+In-Reply-To: <mailman.3803.1589018066.59095.buildroot@busybox.net>
+References: <mailman.3803.1589018066.59095.buildroot@busybox.net>
+Message-ID: <d1e5de0ccecc4ca2020f5efbe473cb2d@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b53b94690014c6db6713b7a69ebe8e4da2d5f7f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Kunal,
 
-This patch bumps Linux CIP version to v4.19.118-cip25.
+> Message: 1
+> Date: Wed, 6 May 2020 12:24:57 +0530
+> From: Kunal Chauhan <atkunalchauhan@gmail.com>
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] Help: to understand build root (Andreas
+> 	Ziegler)
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> 1.Team just gone through the url given but still I am confused what is 
+> the
+> main purpose of making build_root directory, when we can compile our 
+> source
+> in different way.
+> 2. May be I am not understanding the concept as I am  new to
+> firmware concept. but question is also how the code is built and test 
+> as a
+> developer
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d7373ab25a..7bd51c3ffb 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -30,7 +30,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.6)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (4.19.98-cip19)"
-+	bool "Latest CIP SLTS version (4.19.118-cip25)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -129,7 +129,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.6.7" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "4.19.98-cip19" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.98-cip19-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+As an embedded developer you would normally be seriously limited by the 
+production hardware (where the finished product is supposed to run): not 
+enough memory, no persistent storage, and just a serial console for 
+talking to the machine. This is why people use different hardware for 
+development and test/production.
+
+On your development machine you would write code, do development tests, 
+if necessary by using mock-ups for missing physical interfaces, and 
+check in after you are satisfied.
+
+The integration step pulls the software from the repository, packages it 
+with other necessary binaries and generates a firmware image. This is 
+where Buildroot comes into the picture. Buildroot is not a development 
+environment, but an integration tool.
+
+After deploying your image for integration testing on the target 
+hardware, your options for debugging are limited. You could use, for 
+example, instrumentation of the code or gdb (supports remote debugging) 
+for this purpose.
+
+It might make things easier if you told us something of your intended 
+use case.
+
+Kind regards,
+Andreas
