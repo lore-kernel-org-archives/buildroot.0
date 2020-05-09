@@ -1,30 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 09 May 2020 14:35:29 +0000
-Subject: [Buildroot] [Bug 12871] QT5.14 Missing module Timeline
-In-Reply-To: <bug-12871-163@https.bugs.busybox.net/>
-References: <bug-12871-163@https.bugs.busybox.net/>
-Message-ID: <bug-12871-163-5PZUXbFsI2@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 May 2020 16:35:44 +0200
+Subject: [Buildroot] [PATCH/next v2] package/qt5quicktimeline: new
+ package
+In-Reply-To: <20200509105730.13490-1-ps.report@gmx.net>
+References: <20200509105730.13490-1-ps.report@gmx.net>
+Message-ID: <20200509163544.24dffbc2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12871
+On Sat,  9 May 2020 12:57:30 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - fix license info/hashes
+> ---
+>  package/qt5/Config.in                            |  1 +
+>  package/qt5/qt5quicktimeline/Config.in           | 12 ++++++++++++
+>  .../qt5/qt5quicktimeline/qt5quicktimeline.hash   |  5 +++++
+>  package/qt5/qt5quicktimeline/qt5quicktimeline.mk | 16 ++++++++++++++++
+>  4 files changed, 34 insertions(+)
+>  create mode 100644 package/qt5/qt5quicktimeline/Config.in
+>  create mode 100644 package/qt5/qt5quicktimeline/qt5quicktimeline.hash
+>  create mode 100644 package/qt5/qt5quicktimeline/qt5quicktimeline.mk
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+Applied to next, thanks.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?h=next&id=7bbb1484ee4f61c432591511ed29c3447cb5a636.
-It is indeed going to be present only for the 2020.08 release, not the upcoming
-2020.05 release. Thanks!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
