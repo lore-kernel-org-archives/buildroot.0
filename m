@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 13:45:03 +0200
-Subject: [Buildroot] [git commit] package/mbuffer: bump to version 20200505
-Message-ID: <20200509113557.EC82B90F56@busybox.osuosl.org>
+Date: Sat, 9 May 2020 13:51:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
+ version 2.1.0
+In-Reply-To: <20200508122110.950135-1-fontaine.fabrice@gmail.com>
+References: <20200508122110.950135-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200509135147.6423617e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=692e63caf25afd242d141862f40fc4d6c91a8c34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  8 May 2020 14:21:10 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-This bump will fix a build failure with gcc 4.8
+> - Drop patch (already in version)
+> - Fix multiple CVEs: CVE-2020-11039, CVE-2020-11038, CVE-2020-11043,
+>   CVE-2020-11040, CVE-2020-11041, CVE-2020-11019, CVE-2020-11017,
+>   CVE-2020-11018
+> - Fix multiple leak and crash issues (#6129, #6128, #6127, #6110, #6081,
+>   #6077)
+> 
+> Extracted from:
+> https://github.com/FreeRDP/FreeRDP/commit/65d3ff44617c5a343f726985ed45e3a0a35dfaf3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...uwac-uwac-os.c-fix-build-with-uclibc.patch | 44 -------------------
+>  package/freerdp/freerdp.hash                  |  4 +-
+>  package/freerdp/freerdp.mk                    |  2 +-
+>  3 files changed, 3 insertions(+), 47 deletions(-)
+>  delete mode 100644 package/freerdp/0001-src-libuwac-uwac-os.c-fix-build-with-uclibc.patch
 
-Fixes:
- - http://autobuild.buildroot.org/results/1a7fe7ac8cbe9997bc5d1e9ade24bc2ee6ac6abe
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index 105fe29fe7..688ada6900 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  e4acaa1e6a9a879e7394f04e02e1ae83  mbuffer-20191016.tgz
-+md5  df39047654456f260665d66711cabcc5  mbuffer-20200505.tgz
- 
- # Locally computed after checking signature upstream
--sha256  8dc210454765c18901074bc16e126c655135a486e73d69855caf74a157ddbe17  mbuffer-20191016.tgz
-+sha256  cc046183149e51814c23b9f83fd748cc1625a88ee128651ea500aa7bd5f01f0b  mbuffer-20200505.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index f87b2b114f..6aaf29c9ca 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MBUFFER_VERSION = 20191016
-+MBUFFER_VERSION = 20200505
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
