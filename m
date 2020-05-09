@@ -1,79 +1,99 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Sat,  9 May 2020 20:05:03 +0300
-Subject: [Buildroot] [PATCH] package/ndisc6: fix for codesourcery compilation
-Message-ID: <20200509170503.346103-1-vadim4j@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat,  9 May 2020 18:21:15 +0200
+Subject: [Buildroot] [PATCH v1 2/4] package/exfatprogs: fix compile failure
+ node may be used uninitialized
+In-Reply-To: <20200509162117.8728-1-ps.report@gmx.net>
+References: <20200509162117.8728-1-ps.report@gmx.net>
+Message-ID: <20200509162117.8728-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-trace-{udp,tcp}.c uses BSD-style headers, it builds ok on some
-latest libc compilation because they use:
+Fixes:
 
-    __extension__ union
+  - http://autobuild.buildroot.net/results/5c5/5c5d71fde80a4f2f027085bdb0fae9fb76ab9d32
 
-but for example on codesourcery toolchain 4.x version it requires that
-__FAVOR_BSD is defined. So fix it by defining this define only for
-tcp/udp headers.
+  fsck.c:1062:18: error: 'node' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+       node->parent = dir;
+                    ^
+  fsck.c:870:22: note: 'node' was declared here
+    struct exfat_inode *node;
+                        ^
 
-Fixes: http://autobuild.buildroot.net/results/d05d5471d10a2b6634711ccad75d7f86d222cc31
-
-Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...x-compilation-for-codesourcery-toolc.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/ndisc6/0002-trace-udp-tcp-fix-compilation-for-codesourcery-toolc.patch
+ ...k-fix-node-may-be-used-uninitialized.patch | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
 
-diff --git a/package/ndisc6/0002-trace-udp-tcp-fix-compilation-for-codesourcery-toolc.patch b/package/ndisc6/0002-trace-udp-tcp-fix-compilation-for-codesourcery-toolc.patch
+diff --git a/package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch b/package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
 new file mode 100644
-index 0000000000..58b7584b4f
+index 0000000000..b62aaf3d1c
 --- /dev/null
-+++ b/package/ndisc6/0002-trace-udp-tcp-fix-compilation-for-codesourcery-toolc.patch
-@@ -0,0 +1,46 @@
-+From f654332ff631bf31e12c65685fd504166c93ef7f Mon Sep 17 00:00:00 2001
-+From: Vadym Kochan <vadim4j@gmail.com>
-+Date: Sat, 9 May 2020 19:29:24 +0300
-+Subject: [PATCH] trace-{udp,tcp}: fix compilation for codesourcery toolchain
++++ b/package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
+@@ -0,0 +1,63 @@
++From 1b0a48ef0aa33a4f5b9c8d23d9f647482d0f28dd Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 9 May 2020 15:05:46 +0200
++Subject: [PATCH] fsck: fix node may be used uninitialized
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Use __FAVOR_BSD define to enable BSD-like tcp/udp headers only
-+for this particular case. Looks like this is needed for some old
-+gcc versions (4.x?) because modern libc implementations uses:
++The complicated way of gcc to tell not all failure pathes
++set a return value != 0 in the calls before.
 +
-+    __extension__ union
++Fixes:
 +
-+to use both headers variants.
-+
-+Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
++  fsck.c:1063:18: error: ?node? may be used uninitialized in this function [-Werror=maybe-uninitialized]
++       node->parent = dir;
++                    ^
++  fsck.c:871:22: note: ?node? was declared here
++    struct exfat_inode *node;
++                        ^
++[Upstream: https://github.com/exfatprogs/exfatprogs/pull/92]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ src/trace-tcp.c | 1 +
-+ src/trace-udp.c | 1 +
-+ 2 files changed, 2 insertions(+)
++ fsck/fsck.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/trace-tcp.c b/src/trace-tcp.c
-+index 1b367ae..5d6ab8f 100644
-+--- a/src/trace-tcp.c
-++++ b/src/trace-tcp.c
-+@@ -33,6 +33,7 @@
-+ #include <unistd.h> // getpid()
-+ #include <sys/socket.h> // SOCK_STREAM
-+ #include <netinet/in.h>
-++#define __FAVOR_BSD
-+ #include <netinet/tcp.h>
++diff --git a/fsck/fsck.c b/fsck/fsck.c
++index 67d7946..f0daa1d 100644
++--- a/fsck/fsck.c
+++++ b/fsck/fsck.c
++@@ -801,12 +801,12 @@ static int read_file_dentries(struct exfat_de_iter *iter,
++ 	ret = exfat_de_iter_get(iter, 0, &file_de);
++ 	if (ret || file_de->type != EXFAT_FILE) {
++ 		exfat_err("failed to get file dentry. %d\n", ret);
++-		return ret;
+++		return -EINVAL;
++ 	}
++ 	ret = exfat_de_iter_get(iter, 1, &stream_de);
++ 	if (ret || stream_de->type != EXFAT_STREAM) {
++ 		exfat_err("failed to get stream dentry. %d\n", ret);
++-		return ret;
+++		return -EINVAL;
++ 	}
 + 
-+ #include "traceroute.h"
-+diff --git a/src/trace-udp.c b/src/trace-udp.c
-+index aa9364e..6b287ec 100644
-+--- a/src/trace-udp.c
-++++ b/src/trace-udp.c
-+@@ -32,6 +32,7 @@
-+ #include <sys/types.h>
-+ #include <sys/socket.h> // SOCK_DGRAM
-+ #include <netinet/in.h>
-++#define __FAVOR_BSD
-+ #include <netinet/udp.h>
++ 	*new_node = NULL;
++@@ -825,6 +825,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
++ 		ret = exfat_de_iter_get(iter, i, &name_de);
++ 		if (ret || name_de->type != EXFAT_NAME) {
++ 			exfat_err("failed to get name dentry. %d\n", ret);
+++			ret = -EINVAL;
++ 			goto err;
++ 		}
 + 
-+ #include "traceroute.h"
++@@ -852,6 +853,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
++ 		exfat_err("valid size %" PRIu64 " greater than size %llu: %s\n",
++ 			le64_to_cpu(stream_de->stream_valid_size), node->size,
++ 			path_resolve_ctx.local_path);
+++		ret = -EINVAL;
++ 		goto err;
++ 	}
++ 
 +-- 
 +2.26.2
 +
