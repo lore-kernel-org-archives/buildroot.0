@@ -1,45 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 23:16:41 +0200
-Subject: [Buildroot] [PATCH v1] package/libv4l: fix input_event related
- compile failure
-In-Reply-To: <20200504215107.27069-1-ps.report@gmx.net>
-References: <20200504215107.27069-1-ps.report@gmx.net>
-Message-ID: <20200509231641.0fd11ca9@windsurf.home>
+Date: Sat, 9 May 2020 23:19:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/capnproto: bump version to 1.8.0
+In-Reply-To: <20200503063730.GA1839@coltrane>
+References: <20200503063730.GA1839@coltrane>
+Message-ID: <20200509231926.543cdf35@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 May 2020 23:51:07 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Sun, 3 May 2020 08:37:30 +0200
+Koen Martens <gmc@sonologic.nl> wrote:
 
-> Add two upstream patches fixing input_event time related
-> compile failures.
+> The new version requires two extra features in the
+> toolchain, therefore two new toolchain options are
+> added as dependencies:
 > 
-> Fixes:
-> 
->  - http://autobuild.buildroot.net/results/3883a948e30cfd235cfca1fb8646fe8032f5e18d
-> 
->   keytable.c: In function 'test_event':
->   keytable.c:1536:11: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
->        ev[i].time.tv_sec, ev[i].time.tv_usec,
->              ^~~~
->              type
->   keytable.c:1536:30: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
->        ev[i].time.tv_sec, ev[i].time.tv_usec,
->                                 ^~~~
->                                 type
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...02-keytable-use-input_event-properly.patch | 36 +++++++++++++++++++
->  ...dd-compatibility-for-input_event_sec.patch | 35 ++++++++++++++++++
->  2 files changed, 71 insertions(+)
->  create mode 100644 package/libv4l/0002-keytable-use-input_event-properly.patch
->  create mode 100644 package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
+> * BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
 
-Applied to master, thanks.
+Could you give more details about this new dependency? Which build
+failure did you encounter, and with which toolchain/configuration?
+
+Thanks,
 
 Thomas
 -- 
