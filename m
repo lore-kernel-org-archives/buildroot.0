@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 14:30:49 +0200
-Subject: [Buildroot] [git commit branch/next] package/nftables: bump version
- to 0.9.4
-Message-ID: <20200509122125.71513910EF@busybox.osuosl.org>
+Date: Sat, 9 May 2020 14:31:10 +0200
+Subject: [Buildroot] [git commit branch/next] package/nodejs: bump to
+ version 12.16.3
+Message-ID: <20200509122125.80B7C910F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62c1304445b10b015bc07eb6f8496fc841d2fd9b
+commit: https://git.buildroot.net/buildroot/commit/?id=b90ab938b83b701073bfd4edd8a6cff2625dcb6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nftables/nftables.hash | 4 ++--
- package/nftables/nftables.mk   | 2 +-
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
-index 93c816edc7..afe16ddfaf 100644
---- a/package/nftables/nftables.hash
-+++ b/package/nftables/nftables.hash
-@@ -1,3 +1,3 @@
- # From https://netfilter.org/projects/nftables/downloads.html
--sha256	956b915ce2a7aeaff123e49006be7a0690a0964e96c062703181a36e2e5edb78	nftables-0.9.3.tar.bz2
--sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
-+sha256  08b8683a9db5fba980bc092b75288af98d218bbe8ab446daf2338570d0730f9a  nftables-0.9.4.tar.bz2
-+sha256  c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e  COPYING
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 1eef43586c..7f797797db 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 992040d391..411b4d52b9 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.16.1/SHASUMS256.txt
+-sha256  0a95845ba02c46102b5671d0c5732460073f2d397488337e18d1fc30146d412d  node-v12.16.1.tar.xz
++# From https://nodejs.org/dist/v12.16.3/SHASUMS256.txt
++sha256  f0559b0829c7f2ac10bf5b3e157e498227e95e26cdb6af814969c49f367359a3  node-v12.16.3.tar.xz
+ 
+ # Hash for license file
+ sha256  3f5749f7a58edaadd77843057a90063a18067f472d8b26c0a76905cafa1063e3  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 7f875058b3..c46dc0e224 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NFTABLES_VERSION = 0.9.3
-+NFTABLES_VERSION = 0.9.4
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
- NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
+-NODEJS_VERSION = 12.16.1
++NODEJS_VERSION = 12.16.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
