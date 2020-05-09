@@ -1,79 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 May 2020 09:02:29 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wpewebkit: bump
- to version 2.28.0
-Message-ID: <20200509124718.8430591137@busybox.osuosl.org>
+Date: Sat, 9 May 2020 09:04:22 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libwpe: bump to
+ version 1.6.0
+Message-ID: <20200509124718.A1A919108C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbe227dac688592b6ba2455b39801dc2ce518113
+commit: https://git.buildroot.net/buildroot/commit/?id=a4ac41f92d9eb233ded40d73422ecd1a3afbcc4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-Adjust fix build with musl patch for 2.28.0.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cd75229976780b1c25469cd42e0d9bbcf3c0cf55)
+(cherry picked from commit 90e735f6d9172b4bfde86a8cfa7eb6b3ce5e8860)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/0001-Fix-build-with-musl.patch | 6 +++---
- package/wpewebkit/wpewebkit.hash                 | 8 ++++----
- package/wpewebkit/wpewebkit.mk                   | 2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/libwpe/libwpe.hash | 10 +++++-----
+ package/libwpe/libwpe.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/wpewebkit/0001-Fix-build-with-musl.patch b/package/wpewebkit/0001-Fix-build-with-musl.patch
-index a436adf6ce..705c67c7f6 100644
---- a/package/wpewebkit/0001-Fix-build-with-musl.patch
-+++ b/package/wpewebkit/0001-Fix-build-with-musl.patch
-@@ -9,7 +9,7 @@ https://github.com/WebPlatformForEmbedded/meta-wpe/blob/master/recipes-wpe/wpewe
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  Source/JavaScriptCore/runtime/MachineContext.h | 10 +++++-----
-- Source/WTF/wtf/Platform.h                      |  2 +-
-+ Source/WTF/wtf/PlatformHave.h                  |  2 +-
-  2 files changed, 6 insertions(+), 6 deletions(-)
- 
- diff --git a/Source/JavaScriptCore/runtime/MachineContext.h b/Source/JavaScriptCore/runtime/MachineContext.h
-@@ -63,8 +63,8 @@ index bf0bdc7a51a..78d2ec81838 100644
-  #if CPU(X86)
- diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
- index e2a3388993f..95fe7c593cf 100644
----- a/Source/WTF/wtf/Platform.h
--+++ b/Source/WTF/wtf/Platform.h
-+--- a/Source/WTF/wtf/PlatformHave.h
-++++ b/Source/WTF/wtf/PlatformHave.h
- @@ -683,7 +683,7 @@
-  #define HAVE_CFNETWORK_STORAGE_PARTITIONING 1
-  #endif
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index fd78264914..2e7016fe38 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+index 0a616a31cc..e138c06f2b 100644
+--- a/package/libwpe/libwpe.hash
++++ b/package/libwpe/libwpe.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.26.4.tar.xz.sums
--md5  4cd2883ec9da38a0ffe413bb75239874  wpewebkit-2.26.4.tar.xz
--sha1  337f78ee237fe98c7e6e728d8fc0508069b007be  wpewebkit-2.26.4.tar.xz
--sha256  0c292182864b63b725491f1a69b55c03e0e75f6db0875389caff31fe9c0d3ae9  wpewebkit-2.26.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.28.0.tar.xz.sums
-+md5  4298b9d38b4f05f92995422ea9979893  wpewebkit-2.28.0.tar.xz
-+sha1  9e791b6112cca8cda51ae7e991b545f4bf0bb46c  wpewebkit-2.28.0.tar.xz
-+sha256  a85cd3cb46206a4929a9562d53379a7e7e2ec1a3224b34e2dcf5da30bb906722  wpewebkit-2.28.0.tar.xz
+-# From https://wpewebkit.org/releases/libwpe-1.4.0.1.tar.xz.sums
+-md5 1d4d38413ee0d0043f74d0445cab906f libwpe-1.4.0.1.tar.xz
+-sha1 a41480a0a85cfa11b3f87f801b7c37bc3410e060 libwpe-1.4.0.1.tar.xz
+-sha256 09849dfb34877354f34f318e138971cf22e677b2179e1f0a8ea00ab0b7bd8e9b libwpe-1.4.0.1.tar.xz
++# From https://wpewebkit.org/releases/libwpe-1.6.0.tar.xz.sums
++md5  6e8a2c279dcc3617db5ec7ac4c03d628  libwpe-1.6.0.tar.xz
++sha1  e8424d5e29f35861d85acdc5962d8b59b53bb1ad  libwpe-1.6.0.tar.xz
++sha256  3587c6b8a807f4bb76b268ba74ca82c6b395b90235db41ad8252224456193c90  libwpe-1.6.0.tar.xz
  
  # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6591c7a0d8..9c969cae5a 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+-sha256 35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b COPYING
++sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+index 09518ce9b1..fd4f3d0cbd 100644
+--- a/package/libwpe/libwpe.mk
++++ b/package/libwpe/libwpe.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.26.4
-+WPEWEBKIT_VERSION = 2.28.0
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-LIBWPE_VERSION = 1.4.0.1
++LIBWPE_VERSION = 1.6.0
+ LIBWPE_SITE = https://wpewebkit.org/releases
+ LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+ LIBWPE_INSTALL_STAGING = YES
