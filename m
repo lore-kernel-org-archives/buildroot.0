@@ -1,25 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 21:58:49 +0200
-Subject: [Buildroot] [PATCH] package/rsyslog: bump to 8.2004.0
-In-Reply-To: <20200504123624.41821-1-matthew.weber@rockwellcollins.com>
-References: <20200504123624.41821-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200509215849.2f2a4cdd@windsurf.home>
+Date: Sat, 9 May 2020 22:01:03 +0200
+Subject: [Buildroot] [PATCH 1/2] uboot: add support for bundling OpenSBI
+ FW_DYNAMIC into U-Boot
+In-Reply-To: <20200506100845.4356-1-jagan@amarulasolutions.com>
+References: <20200506100845.4356-1-jagan@amarulasolutions.com>
+Message-ID: <20200509220103.380c57a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 May 2020 07:36:24 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+Hello Jagan,
 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+On Wed,  6 May 2020 15:38:44 +0530
+Jagan Teki <jagan@amarulasolutions.com> wrote:
+
+> Some RISC-V platforms (such as SiFive FU540) have a boot process
+> where U-Boot encapsulates the FW_DYNAMIC part of the ARM trusted
+> firmware. For such platforms, we need to build OpenSBI before U-Boot,
+> and pass a OPENSBI variable pointing to OpenSBI bl31.bin to the
+> U-Boot build process.
+> 
+> This commit introduces a BR2_TARGET_UBOOT_NEEDS_OPENSBI_FW_DYNAMIC
+> variable to achieve this.
+> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 > ---
->  package/rsyslog/rsyslog.hash | 2 +-
->  package/rsyslog/rsyslog.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  boot/uboot/Config.in | 15 +++++++++++++++
+>  boot/uboot/uboot.mk  |  5 +++++
+>  2 files changed, 20 insertions(+)
 
-Applied to next, thanks.
+Since you had comments from Alistair Francis on both patches, I mark
+these as Changes Requested in patchwork. Could you please take into
+account the feedback from Alistair, and send a new iteration?
+
+Thanks,
 
 Thomas
 -- 
