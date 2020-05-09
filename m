@@ -1,79 +1,76 @@
 From: Kunal Chauhan <atkunalchauhan@gmail.com>
-Date: Sat, 9 May 2020 23:36:06 +0530
-Subject: [Buildroot] Help: debug binary in build_root
-In-Reply-To: <3c88b9e7b58476542e54ae0e13f175b5@umbiko.net>
-References: <mailman.7.1589025603.138573.buildroot@busybox.net>
- <3c88b9e7b58476542e54ae0e13f175b5@umbiko.net>
-Message-ID: <CACEFAc09yq+y0W1anXNOfHuVbE3z0kTrz37YLu9=F-gwCckJaQ@mail.gmail.com>
+Date: Sat, 9 May 2020 23:44:25 +0530
+Subject: [Buildroot] Help: to understand build root
+In-Reply-To: <d1e5de0ccecc4ca2020f5efbe473cb2d@umbiko.net>
+References: <mailman.3803.1589018066.59095.buildroot@busybox.net>
+ <d1e5de0ccecc4ca2020f5efbe473cb2d@umbiko.net>
+Message-ID: <CACEFAc1yzctCtQ5ErMS_NR1R3TAMDU+8JddbisTLKakTeLGURg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi team ,
+Hi team,
 
-1. I have not done static code analysis before, no experience , would you
-give some hint.?
-2. If i have a log till where the program shows prints and after that logs
-is not come as binary carshes.  Will it will be help ful in static analysis
-and i can narrow down my debugging.?
+Please need some clarity on some points
 
-Thank
+1.  If as a developer can i compile a single binary and test it without
+running or compiling whole firware image.?
+
+2. How firmware image extracts all binaries to system or to target harware?
+
+Thanks
 Kunal
 
 
-
-
-On 9 May 2020 10:45 p.m., "Andreas Ziegler" <br015@umbiko.net> wrote:
+On 9 May 2020 9:02 p.m., "Andreas Ziegler" <br015@umbiko.net> wrote:
 
 > Hi Kunal,
 >
-> Message: 14
->> Date: Sat, 9 May 2020 16:33:47 +0530
+> Message: 1
+>> Date: Wed, 6 May 2020 12:24:57 +0530
 >> From: Kunal Chauhan <atkunalchauhan@gmail.com>
 >> To: buildroot at busybox.net
->> Subject: [Buildroot] Help: debug binary in build_root
+>> Subject: Re: [Buildroot] Help: to understand build root (Andreas
+>>         Ziegler)
 >>
 >
-> 1.Please help/hint if we have a some binaries in build-root and its is
->> crashing and also code  reside in LINUX folder of build-root. So how i can
->> find a crash in it or put valgrind if some chunk of code is crashing as
->> per
->> logs.?
+> 1.Team just gone through the url given but still I am confused what is the
+>> main purpose of making build_root directory, when we can compile our
+>> source
+>> in different way.
+>> 2. May be I am not understanding the concept as I am  new to
+>> firmware concept. but question is also how the code is built and test as a
+>> developer
 >>
 >
-> Are you looking at memory leaks and crashes inside a vendor specific
-> kernel? Linux has a framework for memory leak detection. I never used it
-> myself; the documentation is here:
+> As an embedded developer you would normally be seriously limited by the
+> production hardware (where the finished product is supposed to run): not
+> enough memory, no persistent storage, and just a serial console for talking
+> to the machine. This is why people use different hardware for development
+> and test/production.
 >
->   https://www.kernel.org/doc/html/latest/dev-tools/kmemleak.html
+> On your development machine you would write code, do development tests, if
+> necessary by using mock-ups for missing physical interfaces, and check in
+> after you are satisfied.
 >
-> You probably need to add this capability to code you patch into the kernel.
+> The integration step pulls the software from the repository, packages it
+> with other necessary binaries and generates a firmware image. This is where
+> Buildroot comes into the picture. Buildroot is not a development
+> environment, but an integration tool.
 >
-> In case of crashes, the first step is to look at the code. When deploying,
-> leave debug symbols intact and don't strip binaries. The kernel dump should
-> give you the location where a particular crash occurred. Sometimes the bug
-> is obvious and can be found via a code review.
+> After deploying your image for integration testing on the target hardware,
+> your options for debugging are limited. You could use, for example,
+> instrumentation of the code or gdb (supports remote debugging) for this
+> purpose.
 >
-> If that does not help, or you are referring to a program in user-space,
-> unpack gdb. You need to enable the package gdbserver in Buildroot and
-> compile for debugging. Check the documentation for details how to use
-> gdbserver /gdb client:
->
->   https://gcc.gnu.org/onlinedocs/gcc-4.6.4/gnat_ugn_unw/
-> Remote-Debugging-using-gdbserver.html
->
-> 2. As point 1. Without using or running binary on board can i check the
->> memory leaks at particular file ?
->>
->
-> If you have cross-compiled code, that may be impossible. Static code
-> analysis might locate some of the more obvious defects.
+> It might make things easier if you told us something of your intended use
+> case.
 >
 > Kind regards,
 > Andreas
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200509/e9f05e30/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200509/51a25355/attachment.html>
