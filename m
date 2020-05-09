@@ -1,113 +1,72 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  9 May 2020 18:21:17 +0200
-Subject: [Buildroot] [PATCH v1 4/4] exfatprogs: fix more 64-bit types printf
- compile failure
+Date: Sat,  9 May 2020 18:21:16 +0200
+Subject: [Buildroot] [PATCH v1 3/4] package/exfatprogs: fix compile failure
+ missing braces around initializer
 In-Reply-To: <20200509162117.8728-1-ps.report@gmx.net>
 References: <20200509162117.8728-1-ps.report@gmx.net>
-Message-ID: <20200509162117.8728-4-ps.report@gmx.net>
+Message-ID: <20200509162117.8728-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes test-pkg detected compile failures for the following toolchains:
+Add upstream commit to fix host package compile failure.
 
-  - br-mips64-n64-full
-  - br-mips64r6-el-hf-glibc
-  - br-powerpc64le-power8-glibc
-  - br-powerpc64-power7-glibc
-  - sourcery-mips64
+Fixes:
 
-Used test config:
+  http://autobuild.buildroot.net/results/d9c5d17de03f5d0316d5f54f9cd579b79d311d03
 
-  BR2_USE_WCHAR=y
-  BR2_PACKAGE_EXFATPROGS=y
+  fsck.c:1213:9: error: missing braces around initializer [-Werror=missing-braces]
+    struct fsck_user_input ui = {0,};
+           ^
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...PRIu64-PRIx64-to-printf-64-bit-types.patch | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 package/exfatprogs/0005-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
+ .../0004-fsck-Zero-init-using-memset.patch    | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
 
-diff --git a/package/exfatprogs/0005-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch b/package/exfatprogs/0005-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
+diff --git a/package/exfatprogs/0004-fsck-Zero-init-using-memset.patch b/package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
 new file mode 100644
-index 0000000000..d7e3e3c8dd
+index 0000000000..0ba15149c9
 --- /dev/null
-+++ b/package/exfatprogs/0005-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
-@@ -0,0 +1,75 @@
-+From e9acfd5f7e734952c22d2a5694bf7d99e9e5837f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 9 May 2020 18:06:52 +0200
-+Subject: [PATCH] fsck: use PRIu64/PRIx64 to printf 64-bit types
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
+@@ -0,0 +1,37 @@
++From 2a60e32258e6eb34a68d29202855d98661c78abb Mon Sep 17 00:00:00 2001
++From: Luca Stefani <luca.stefani.ge1@gmail.com>
++Date: Sun, 26 Apr 2020 15:28:21 +0200
++Subject: [PATCH] fsck: Zero-init using memset
 +
-+Fixes:
++* Clang 9.0 incorrectly issues the -Wmissing-braces warning
 +
-+  fsck.c:725:13: error: format ?%llu? expects argument of type ?long long unsigned int?, but argument 2 has type ?__u64 {aka long unsigned int}? [-Werror=format=]
-+     exfat_err("size %llu is greater than cluster heap: %s\n",
-+               ^
-+
-+  fsck.c:740:13: error: format ?%llu? expects argument of type ?long long unsigned int?, but argument 2 has type ?__u64 {aka long unsigned int}? [-Werror=format=]
-+     exfat_err("directory size %llu is not divisible by %d: %s\n",
-+               ^
-+
-+  fsck.c:853:13: error: format ?%llu? expects argument of type ?long long unsigned int?, but argument 3 has type ?__u64 {aka long unsigned int}? [-Werror=format=]
-+     exfat_err("valid size %" PRIu64 " greater than size %llu: %s\n",
-+               ^
-+
-+  fsck.c:1181:14: error: format ?%llx? expects argument of type ?long long unsigned int?, but argument 3 has type ?__u64 {aka long unsigned int}? [-Werror=format=]
-+    exfat_debug("root directory: start cluster[0x%x] size[0x%llx]\n",
-+                ^
-+
-+[Upstream: https://github.com/exfatprogs/exfatprogs/pull/91]
++[Upstream: https://github.com/exfatprogs/exfatprogs/commit/b0519f4fa7ce513d65d0f94c4d5a05be42730e7d.patch]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ fsck/fsck.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ fsck/fsck.c | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
 +
 +diff --git a/fsck/fsck.c b/fsck/fsck.c
-+index f0daa1d..5631dc3 100644
++index 6b48a17..67d7946 100644
 +--- a/fsck/fsck.c
 ++++ b/fsck/fsck.c
-+@@ -722,7 +722,7 @@ static bool check_inode(struct exfat *exfat, struct exfat_inode *parent,
-+ 	if (node->size > le32_to_cpu(exfat->bs->bsx.clu_count) *
-+ 				EXFAT_CLUSTER_SIZE(exfat->bs)) {
-+ 		resolve_path_parent(&path_resolve_ctx, parent, node);
-+-		exfat_err("size %llu is greater than cluster heap: %s\n",
-++		exfat_err("size %" PRIu64 " is greater than cluster heap: %s\n",
-+ 				node->size, path_resolve_ctx.local_path);
-+ 		ret = false;
-+ 	}
-+@@ -737,7 +737,7 @@ static bool check_inode(struct exfat *exfat, struct exfat_inode *parent,
-+ 	if ((node->attr & ATTR_SUBDIR) &&
-+ 			node->size % EXFAT_CLUSTER_SIZE(exfat->bs) != 0) {
-+ 		resolve_path_parent(&path_resolve_ctx, parent, node);
-+-		exfat_err("directory size %llu is not divisible by %d: %s\n",
-++		exfat_err("directory size %" PRIu64 " is not divisible by %d: %s\n",
-+ 				node->size, EXFAT_CLUSTER_SIZE(exfat->bs),
-+ 				path_resolve_ctx.local_path);
-+ 		ret = false;
-+@@ -850,7 +850,7 @@ static int read_file_dentries(struct exfat_de_iter *iter,
++@@ -1211,11 +1211,14 @@ void exfat_show_stat(void)
++ int main(int argc, char * const argv[])
++ {
++ 	int c, ret;
++-	struct fsck_user_input ui = {0,};
++-	struct exfat_blk_dev bd = {0,};
+++	struct fsck_user_input ui;
+++	struct exfat_blk_dev bd;
++ 	struct exfat *exfat = NULL;
++ 	bool version_only = false;
 + 
-+ 	if (le64_to_cpu(stream_de->stream_valid_size) > node->size) {
-+ 		resolve_path_parent(&path_resolve_ctx, iter->parent, node);
-+-		exfat_err("valid size %" PRIu64 " greater than size %llu: %s\n",
-++		exfat_err("valid size %" PRIu64 " greater than size %" PRIu64 ": %s\n",
-+ 			le64_to_cpu(stream_de->stream_valid_size), node->size,
-+ 			path_resolve_ctx.local_path);
-+ 		ret = -EINVAL;
-+@@ -1178,7 +1178,7 @@ static bool exfat_root_dir_check(struct exfat *exfat)
-+ 	root->size = clus_count * EXFAT_CLUSTER_SIZE(exfat->bs);
+++	memset(&ui, 0, sizeof(ui));
+++	memset(&bd, 0, sizeof(bd));
+++
++ 	print_level = EXFAT_ERROR;
 + 
-+ 	exfat->root = root;
-+-	exfat_debug("root directory: start cluster[0x%x] size[0x%llx]\n",
-++	exfat_debug("root directory: start cluster[0x%x] size[0x%" PRIx64 "]\n",
-+ 		root->first_clus, root->size);
-+ 	return true;
-+ err:
++ 	if (!setlocale(LC_CTYPE, ""))
 +-- 
 +2.26.2
 +
