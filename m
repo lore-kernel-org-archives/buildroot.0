@@ -1,55 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 May 2020 22:38:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-attrs: fix typo in hash
- file
-In-Reply-To: <20200509184324.1006590-1-asafka7@gmail.com>
-References: <20200509184324.1006590-1-asafka7@gmail.com>
-Message-ID: <20200509203806.GS12536@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 May 2020 22:41:44 +0200
+Subject: [Buildroot] [git commit] package/exfatprogs: fix compile failure
+ missing braces around initializer
+Message-ID: <20200509202604.BD8A891240@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=25c5aabdfe53050b30f40cbf41aafcbe00b33443
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-09 21:43 +0300, Asaf Kahlon spake thusly:
-> 'computer' -> 'computed'.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Add upstream commit to fix host package compile failure.
 
-Applied to master, thanks.
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.net/results/d9c5d17de03f5d0316d5f54f9cd579b79d311d03
 
-> ---
->  package/python-attrs/python-attrs.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-> index f8c38ee4ed..7fba53d535 100644
-> --- a/package/python-attrs/python-attrs.hash
-> +++ b/package/python-attrs/python-attrs.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/attrs/json
->  md5	5b2db50fcc31be34d32798183c9bd062  attrs-19.3.0.tar.gz
->  sha256	f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72  attrs-19.3.0.tar.gz
-> -# Locally computer sha256
-> +# Locally computed sha256
->  sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  fsck.c:1213:9: error: missing braces around initializer [-Werror=missing-braces]
+    struct fsck_user_input ui = {0,};
+           ^
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0004-fsck-Zero-init-using-memset.patch         | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/package/exfatprogs/0004-fsck-Zero-init-using-memset.patch b/package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
+new file mode 100644
+index 0000000000..0ba15149c9
+--- /dev/null
++++ b/package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
+@@ -0,0 +1,37 @@
++From 2a60e32258e6eb34a68d29202855d98661c78abb Mon Sep 17 00:00:00 2001
++From: Luca Stefani <luca.stefani.ge1@gmail.com>
++Date: Sun, 26 Apr 2020 15:28:21 +0200
++Subject: [PATCH] fsck: Zero-init using memset
++
++* Clang 9.0 incorrectly issues the -Wmissing-braces warning
++
++[Upstream: https://github.com/exfatprogs/exfatprogs/commit/b0519f4fa7ce513d65d0f94c4d5a05be42730e7d.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ fsck/fsck.c | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/fsck/fsck.c b/fsck/fsck.c
++index 6b48a17..67d7946 100644
++--- a/fsck/fsck.c
+++++ b/fsck/fsck.c
++@@ -1211,11 +1211,14 @@ void exfat_show_stat(void)
++ int main(int argc, char * const argv[])
++ {
++ 	int c, ret;
++-	struct fsck_user_input ui = {0,};
++-	struct exfat_blk_dev bd = {0,};
+++	struct fsck_user_input ui;
+++	struct exfat_blk_dev bd;
++ 	struct exfat *exfat = NULL;
++ 	bool version_only = false;
++ 
+++	memset(&ui, 0, sizeof(ui));
+++	memset(&bd, 0, sizeof(bd));
+++
++ 	print_level = EXFAT_ERROR;
++ 
++ 	if (!setlocale(LC_CTYPE, ""))
++-- 
++2.26.2
++
