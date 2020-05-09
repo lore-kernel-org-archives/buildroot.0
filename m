@@ -1,22 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 09 May 2020 09:23:05 +0200
-Subject: [Buildroot] [PATCH 1/2] package/tzdata: bump to version 2020a
-In-Reply-To: <20200427071144.30237-2-post@lespocky.de> (Alexander Dahl's
- message of "Mon, 27 Apr 2020 09:11:43 +0200")
-References: <20200427071144.30237-1-post@lespocky.de>
- <20200427071144.30237-2-post@lespocky.de>
-Message-ID: <87v9l5o9ly.fsf@dell.be.48ers.dk>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Sat, 9 May 2020 09:39:41 +0200
+Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.2.3
+In-Reply-To: <87h7wppotd.fsf@dell.be.48ers.dk>
+References: <20200423055104.lljafbjugkwzbzhm@einstein.dilieto.eu>
+ <87mu6isv6z.fsf@dell.be.48ers.dk>
+ <20200508163951.5hf2clb4cysufywb@einstein.dilieto.eu>
+ <87h7wppotd.fsf@dell.be.48ers.dk>
+Message-ID: <20200509073941.zywkrdaxse66zqyb@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
+On Sat, May 09, 2020 at 09:09:18AM +0200, Peter Korsgaard wrote:
+>
+> > Also note that I released 1.3 about one hour ago which has a few more
+> > small fixes and enhancements, see
+> > https://github.com/ndilieto/uacme/blob/master/NEWS
+>
+>Ok, thanks. Will you send a patch to bump the version in Buildroot?
 
- > Signed-off-by: Alexander Dahl <post@lespocky.de>
+I am preparing it right now. So maybe you want to wait until I post it 
+and also update 2020.02.x to it.
 
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Nicola
