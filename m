@@ -1,72 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 May 2020 22:15:18 +0200
-Subject: [Buildroot] [PATCH v1] package/gupnp: add libuuid to linking
- dependencies
-In-Reply-To: <20200510194344.13852-1-ps.report@gmx.net>
-References: <20200510194344.13852-1-ps.report@gmx.net>
-Message-ID: <20200510221518.78046552@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 May 2020 22:30:28 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump CIP kernel to version
+ 4.19.118-cip25
+In-Reply-To: <20200506204957.91252-1-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Wed, 6 May 2020 22:49:56 +0200")
+References: <20200506204957.91252-1-angelo@amarulasolutions.com>
+Message-ID: <87r1vrr0rf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 10 May 2020 21:43:44 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-> Fixes:
->
->   - http://autobuild.buildroot.net/results/cbb9ed09ba5c2cbee8c7c1eb8c781d8f05437e8c
->
->     CCLD     rygel
->   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: .../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgupnp-1.2.a(guul.c.o): in function `guul_get_uuid':
->   guul.c:(.text+0x20): undefined reference to `uuid_generate'
->   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: guul.c:(.text+0x2c): undefined reference to `uuid_unparse'
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...d-dependency-from-guul-fixes-static-.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/gupnp/0001-build-add-libuuid-dependency-from-guul-fixes-static-.patch
->
-> diff --git a/package/gupnp/0001-build-add-libuuid-dependency-from-guul-fixes-static-.patch b/package/gupnp/0001-build-add-libuuid-dependency-from-guul-fixes-static-.patch
-> new file mode 100644
-> index 0000000000..43684c7de8
-> --- /dev/null
-> +++ b/package/gupnp/0001-build-add-libuuid-dependency-from-guul-fixes-static-.patch
-> @@ -0,0 +1,30 @@
-> +From 0cd45d9c5c9a19a5336348151ce5d6bc233588cb Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Sun, 10 May 2020 21:30:38 +0200
-> +Subject: [PATCH] build: add libuuid dependency from guul (fixes static
-> + linking)
-> +
-> +Fixes:
-> +
-> +  /usr/lib/libgupnp-1.2.a(guul.c.o): in function `guul_get_uuid':
-> +  guul.c:(.text+0x20): undefined reference to `uuid_generate'
-> +
+ > This patch bumps Linux CIP version to v4.19.118-cip25.
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > ---
+ >  linux/Config.in | 4 ++--
+ >  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Upstream: https://gitlab.gnome.org/GNOME/gupnp/-/merge_requests/7
+ > diff --git a/linux/Config.in b/linux/Config.in
+ > index d7373ab25a..7bd51c3ffb 100644
+ > --- a/linux/Config.in
+ > +++ b/linux/Config.in
+ > @@ -30,7 +30,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ >  	bool "Latest version (5.6)"
+ 
+ >  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ > -	bool "Latest CIP SLTS version (4.19.98-cip19)"
+ > +	bool "Latest CIP SLTS version (4.19.118-cip25)"
+ >  	help
+ >  	  CIP launched in the spring of 2016 to address the needs of
+ >  	  organizations in industries such as power generation and
+ > @@ -129,7 +129,7 @@ endif
+ >  config BR2_LINUX_KERNEL_VERSION
+ >  	string
+ >  	default "5.6.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ > -	default "4.19.98-cip19" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ > +	default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ >  	default "4.19.98-cip19-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ >  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ >  		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 
-Regards,
-Peter
+What about the hash in linux.hash?
 
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + subprojects/guul/meson.build | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/subprojects/guul/meson.build b/subprojects/guul/meson.build
-> +index aea40c4..cc1a498 100644
-> +--- a/subprojects/guul/meson.build
-> ++++ b/subprojects/guul/meson.build
-> +@@ -29,5 +29,6 @@ guul_lib = static_library(
-> +
-> + guul = declare_dependency (
-> +     link_with : guul_lib,
-> ++    dependencies : dependencies,
-> +     include_directories: include_directories('.')
-> + )
-> +--
-> +2.26.2
-> +
+-- 
+Bye, Peter Korsgaard
