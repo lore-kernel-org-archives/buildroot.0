@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 22:02:11 +0200
-Subject: [Buildroot] [PATCH 1/2] package/util-linux: renumber patches
-In-Reply-To: <20200507224150.242211-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 8 May 2020 00:41:49 +0200")
+Date: Sun, 10 May 2020 22:04:22 +0200
+Subject: [Buildroot] [PATCH 2/2] package/util-linux: accept sector-size
+In-Reply-To: <20200507224150.242211-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 May 2020 00:41:50 +0200")
 References: <20200507224150.242211-1-fontaine.fabrice@gmail.com>
-Message-ID: <874ksnsgn0.fsf@dell.be.48ers.dk>
+ <20200507224150.242211-2-fontaine.fabrice@gmail.com>
+Message-ID: <87zhafr1yx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 3052da3eac8c80e7375341a48bca4cf0ee12e60b did not renumber
- > remaining patches, fix that
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=12841
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
