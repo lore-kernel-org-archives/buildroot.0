@@ -1,70 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:24:41 +0200
-Subject: [Buildroot] [git commit] package/qemu: disable curl for the
- host variant
-In-Reply-To: <20200502165251.1C56C90D37@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sat, 2 May 2020 19:07:49 +0200")
-References: <20200502165251.1C56C90D37@busybox.osuosl.org>
-Message-ID: <87blmvtwxy.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 21:25:08 +0200
+Subject: [Buildroot] [PATCH] package/exim: fix parallel build
+In-Reply-To: <20200502181504.28690-1-luca@lucaceresoli.net> (Luca Ceresoli's
+ message of "Sat, 2 May 2020 20:15:04 +0200")
+References: <20200502181504.28690-1-luca@lucaceresoli.net>
+Message-ID: <877dxjtwx7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=e30eaeb10e8b32d06b0244929bc2c4da2ecc325f
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > exim does build in parallel correctly, but has a concurrency bug in
+ > generating version info files which happens either in the build step or in
+ > the install step.
 
- > Under certain circumstances (host distribution, openssl version),
- > the qemu-system binary fail to start:
+ > Add a patch to fix the bug.
 
- > qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/ebf/ebfccad007e216564889645a07f5487747116331//
+ >   http://autobuild.buildroot.net/results/56a/56a8457efcb32579ad6da99a769b6438dd0db267//
+ >   http://autobuild.buildroot.net/results/6a1/6a1f8a352649baf767b094cb6bbe2a7397fa7fac//
+ >   http://autobuild.buildroot.net/results/5ed/5ed1c42b3d33198f32d1267e5cc2b1fa1211495a//
+ >   http://autobuild.buildroot.net/results/b30/b304569948fd481ce33ecd052a1036153c5d459e//
+ >   http://autobuild.buildroot.net/results/d2c/d2c7abfe08672e53ff890127f787f8d2e84860f4//
 
- > There is no problem when only host-qemu is built, but it's linked with /lib64/libcurl.so.4
- > $ make host-qemu
- > $ ldd output/host/bin/qemu-system-aarch64
- >         [...]
- > 	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007fb21cb57000)
- > 	libssh.so.4 => /lib64/libssh.so.4 (0x00007fb21c35d000)
- > 	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007fb21c34a000)
- > 	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007fb21c2b4000)
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
- > Note: /lib64/libcurl.so.4 is linked with libssh and libssl:
- > $ ldd /lib64/libcurl.so.4
- > 	[...]
- > 	libssh.so.4 => /lib64/libssh.so.4 (0x00007f90d8efd000)
- > 	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f90d8eea000)
- > 	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007f90d8e54000)
+ > ---
 
- > Continue the build.
- > $ make
-
- > We can notice that qemu_aarch64_virt_defconfig set
- > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-
- > So host-openssl package is built and this is the problem:
-
- > $ ldd output/host/bin/qemu-system-aarch64
- > 	[...]
- > 	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007f3adb444000)
- > 	libssh.so.4 => /lib64/libssh.so.4 (0x00007f3adac4a000)
- > 	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f3adac37000)
- > 	libssl.so.1.1 => /home/naourr/buildroot/test/qemu_aarch64_virt_defconfig-master/host/lib/libssl.so.1.1 (0x00007f3adaba8000)
-
- > qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-
- > This is due to the build system trying to find libcurl using
- > pkg-config or curl-config.
-
- > libcurl is used by the QEMU Block driver for CURL images and
- > elf2dmp tool which is not needed.
- > Instead of adding host-libcurl dependency, we can disable it
- > entierely.
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > I cannot test that this is really a fix since I never was able to reproduce
+ > the problem locally. However I could easily check that the reversion script
+ > is actually executed twice. The timing of these executions can cause errors
+ > like the one found by the autobuilders. Thus I'm reasonably sure this
+ > commit fixes a bug.
 
 Committed to 2020.02.x, thanks.
 
