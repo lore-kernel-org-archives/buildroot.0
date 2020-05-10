@@ -1,50 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:20:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qemu: disable vnc
- optional support for the host variant
-Message-ID: <20200510191329.150E99131F@busybox.osuosl.org>
+Date: Sun, 10 May 2020 21:22:21 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qemu: enable or1k
+ support in host-qemu
+Message-ID: <20200510191329.34AA19131F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1df0dd3cb01fb79c24617b66ffa36c986162a5c9
+commit: https://git.buildroot.net/buildroot/commit/?id=15b41bb80205a900bf31c986a515f07b8dec87e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The vnc support is enabled by default and the build system
-will try to detect automatically some external libraries
-installed on the host for vnc-png, vnc-jpeg and vnc-sasl.
+This change enables host qemu support for or1k which among other
+things allows to test this architecture in gitlab.
 
-$ ldd output/host/bin/qemu-system-aarch64
-	[...]
-	libpng16.so.16 => /lib64/libpng16.so.16
-or
-	libpng16.so.16 => output/host/lib/libpng16.so.16
-if host-libpng is built before host-qemu.
+The or1k support was named or32 until Qemu 2.9.0 and then renamed or1k
+in upstream commit [1]. Since we're already using Qemu 4.2.0, we use
+the or1k name.
 
-Disable explicitely thoses options to improve the build
-reproducibility.
+Tested using qemu_or1k_defconfig.
+
+[1] https://git.qemu.org/?p=qemu.git;a=commit;h=4a09d0bb34ab030e09e87173b2e3ec0fd7616cff
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ece36b9a46583315fe0d607099e16949ed6c2b0b)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a41fae16d64c34329b17fa1a21af71d62c3edf8b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/qemu/Config.in.host | 1 +
+ package/qemu/qemu.mk        | 1 +
+ 2 files changed, 2 insertions(+)
 
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index ea9281c5fb..5ed160159a 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_mips
+ 	default y if BR2_mipsel
+ 	default y if BR2_nios2
++	default y if BR2_or1k
+ 	default y if BR2_powerpc
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 3c3b098a5b..b8904ffe18 100644
+index 712491a208..e8b43d3b36 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -304,6 +304,9 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--extra-ldflags="$(HOST_LDFLAGS)" \
- 		--python=$(HOST_DIR)/bin/python3 \
- 		--disable-libssh \
-+		--disable-vnc-jpeg \
-+		--disable-vnc-png \
-+		--disable-vnc-sasl \
- 		$(HOST_QEMU_OPTS)
- endef
- 
+@@ -199,6 +199,7 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman host-p
+ #       mips64          mips64
+ #       mips64el        mips64el
+ #       nios2           nios2
++#       or1k            or1k
+ #       powerpc         ppc
+ #       powerpc64       ppc64
+ #       powerpc64le     ppc64 (system) / ppc64le (usermode)
