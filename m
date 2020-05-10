@@ -1,126 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:24:53 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/exim: fix
- parallel build
-Message-ID: <20200510191329.4B05B91343@busybox.osuosl.org>
+Date: Sun, 10 May 2020 21:16:36 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libfm-extra: fix
+ dependency comment
+Message-ID: <20200510191328.F2D3C91343@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4314359b28e8f040839ef41a887645283898199c
+commit: https://git.buildroot.net/buildroot/commit/?id=ad120f7335eacd2ebbd3048d4be59a4542393e73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-exim does build in parallel correctly, but has a concurrency bug in
-generating version info files which happens either in the build step or in
-the install step.
+According to the depends used the package does not need C++.
 
-Add a patch to fix the bug.
-
-Fixes:
-  http://autobuild.buildroot.net/results/ebf/ebfccad007e216564889645a07f5487747116331//
-  http://autobuild.buildroot.net/results/56a/56a8457efcb32579ad6da99a769b6438dd0db267//
-  http://autobuild.buildroot.net/results/6a1/6a1f8a352649baf767b094cb6bbe2a7397fa7fac//
-  http://autobuild.buildroot.net/results/5ed/5ed1c42b3d33198f32d1267e5cc2b1fa1211495a//
-  http://autobuild.buildroot.net/results/b30/b304569948fd481ce33ecd052a1036153c5d459e//
-  http://autobuild.buildroot.net/results/d2c/d2c7abfe08672e53ff890127f787f8d2e84860f4//
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8c75f95e0a3d2600015be5564ee9fe9393d95ebc)
+(cherry picked from commit 08935f2a8610abaf3104eb62bc504221e572871d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...se-fix-version.-h-sh-generation-with-para.patch | 84 ++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
+ package/libfm-extra/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/exim/0007-Makefile-Base-fix-version.-h-sh-generation-with-para.patch b/package/exim/0007-Makefile-Base-fix-version.-h-sh-generation-with-para.patch
-new file mode 100644
-index 0000000000..e97bd78a6a
---- /dev/null
-+++ b/package/exim/0007-Makefile-Base-fix-version.-h-sh-generation-with-para.patch
-@@ -0,0 +1,84 @@
-+From 19f6e36d3473ddba1a211e7af9352a10febb7270 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Fri, 1 May 2020 16:27:48 +0200
-+Subject: [PATCH] Makefile-Base: fix version.{h,sh} generation with parallel
-+ build
-+
-+When using parallel make (make -j<N>) the build sometimes fails either
-+during 'make' or during 'make install'.
-+
-+Error messages look either like:
-+
-+  make[1]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4'
-+  /bin/sh scripts/source_checks
-+  `Makefile' is up to date.
-+
-+  make[2]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4/build-br'
-+  /bin/sh ../scripts/Configure-os.c
-+  ../scripts/reversion: Your copy of Exim lacks any version information.
-+  Makefile:785: recipe for target 'version.sh' failed
-+
-+or like:
-+
-+  DESTDIR=/home/buildroot/autobuild/instance-2/output-1/target INSTALL_ARG="-no_chown -no_symlink" build=br /usr/bin/make -j4 -C /home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4  CFLAGS="-std=c99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  " install
-+  make[1]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4'
-+  /bin/sh scripts/source_checks
-+  `Makefile' is up to date.
-+
-+  make[2]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4/build-br'
-+  /home/buildroot/autobuild/instance-2/output-1/host/bin/i586-linux-gcc version.c
-+  version.c: In function 'version_init':
-+  version.c:32:1: error: expected expression before ';' token
-+   ;
-+   ^
-+
-+This is due to the rule:
-+
-+  version.h version.sh::
-+ 	@../scripts/reversion
-+
-+that executes reversion twice, once to satisfy the version.h target and
-+once for version.sh. This is unnecessary because reversion generates both
-+files anyway, but harmless without parallel build. When using parallel make
-+however reversion is sporadically run in a time sequence such that the
-+generated files are being used by other rules while they are being
-+rewritten by the second reversion instance.
-+
-+Fix by making only one of the two targets run reversion, and the other one
-+depend on it.
-+
-+Fixes builds found by the Buildroot autobuilders:
-+  http://autobuild.buildroot.net/results/ebf/ebfccad007e216564889645a07f5487747116331//
-+  http://autobuild.buildroot.net/results/56a/56a8457efcb32579ad6da99a769b6438dd0db267//
-+  http://autobuild.buildroot.net/results/6a1/6a1f8a352649baf767b094cb6bbe2a7397fa7fac//
-+  http://autobuild.buildroot.net/results/5ed/5ed1c42b3d33198f32d1267e5cc2b1fa1211495a//
-+  http://autobuild.buildroot.net/results/b30/b304569948fd481ce33ecd052a1036153c5d459e//
-+  http://autobuild.buildroot.net/results/d2c/d2c7abfe08672e53ff890127f787f8d2e84860f4//
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+Upstream-status: patch submitted (https://bugs.exim.org/show_bug.cgi?id=2566)
-+
-+---
-+ OS/Makefile-Base | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/OS/Makefile-Base b/OS/Makefile-Base
-+index b66678bee4de..4966c25b5359 100644
-+--- a/OS/Makefile-Base
-++++ b/OS/Makefile-Base
-+@@ -664,9 +664,11 @@ PHDRS = ../config.h \
-+ 
-+ # Update Exim's version information and build the version object.
-+ 
-+-version.h version.sh::
-++version.sh::
-+ 	@../scripts/reversion
-+ 
-++version.h: version.sh
-++
-+ cnumber.h: version.h
-+ 
-+ version.o: $(HDRS) cnumber.h version.h version.c
-+-- 
-+2.26.2
-+
+diff --git a/package/libfm-extra/Config.in b/package/libfm-extra/Config.in
+index eefc022c4e..60e6fda30f 100644
+--- a/package/libfm-extra/Config.in
++++ b/package/libfm-extra/Config.in
+@@ -10,6 +10,6 @@ config BR2_PACKAGE_LIBFM_EXTRA
+ 
+ 	  http://wiki.lxde.org/en/Libfm
+ 
+-comment "libfm-extra needs a toolchain w/ wchar, threads, C++"
++comment "libfm-extra needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
