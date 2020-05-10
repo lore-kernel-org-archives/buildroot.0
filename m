@@ -1,80 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:22:58 +0200
+Date: Sun, 10 May 2020 21:21:10 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x] package/qemu: disable
- curl for the host variant
-Message-ID: <20200510191329.3FA6391343@busybox.osuosl.org>
+ bzip2 for the host variant
+Message-ID: <20200510191329.1EFEF9131F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78296a0502d73e9742a647d030b0c2bfee59bc57
+commit: https://git.buildroot.net/buildroot/commit/?id=f2e2ac81e2b501b8968940d5252e114dffd1a20c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Under certain circumstances (host distribution, openssl version),
-the qemu-system binary fail to start:
+bzip2 support is needed for reading bzip2-compressed dmg images.
 
-qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-
-There is no problem when only host-qemu is built, but it's linked with /lib64/libcurl.so.4
-$ make host-qemu
-$ ldd output/host/bin/qemu-system-aarch64
-        [...]
-	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007fb21cb57000)
-	libssh.so.4 => /lib64/libssh.so.4 (0x00007fb21c35d000)
-	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007fb21c34a000)
-	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007fb21c2b4000)
-
-Note: /lib64/libcurl.so.4 is linked with libssh and libssl:
-$ ldd /lib64/libcurl.so.4
-	[...]
-	libssh.so.4 => /lib64/libssh.so.4 (0x00007f90d8efd000)
-	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f90d8eea000)
-	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007f90d8e54000)
-
-Continue the build.
-$ make
-
-We can notice that qemu_aarch64_virt_defconfig set
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-
-So host-openssl package is built and this is the problem:
+But the host-bzip2 is missing from host qemu package dependency,
+so the qemu build system will try to detect automatically the
+external libbzip2 libraries installed on the host.
 
 $ ldd output/host/bin/qemu-system-aarch64
 	[...]
-	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007f3adb444000)
-	libssh.so.4 => /lib64/libssh.so.4 (0x00007f3adac4a000)
-	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f3adac37000)
-	libssl.so.1.1 => /home/naourr/buildroot/test/qemu_aarch64_virt_defconfig-master/host/lib/libssl.so.1.1 (0x00007f3adaba8000)
+	libbz2.so.1 => /lib64/libbz2.so.1
+or
+	libbz2.so.1.0 => output/host/lib/libbz2.so.1.0
+if host-bzip2 is built before host-qemu.
 
-qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-
-This is due to the build system trying to find libcurl using
-pkg-config or curl-config.
-
-libcurl is used by the QEMU Block driver for CURL images and
-elf2dmp tool which is not needed.
-Instead of adding host-libcurl dependency, we can disable it
-entierely.
+Disable explicitely bzip2 options to improve the build
+reproducibility.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e30eaeb10e8b32d06b0244929bc2c4da2ecc325f)
+(cherry picked from commit 743fceb2ed05ab055c1e83e4f1a5ebc893160727)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/qemu/qemu.mk | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index e8b43d3b36..0bb29f9369 100644
+index b8904ffe18..06841a56d0 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -305,6 +305,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+@@ -303,6 +303,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
  		--extra-ldflags="$(HOST_LDFLAGS)" \
  		--python=$(HOST_DIR)/bin/python3 \
- 		--disable-bzip2 \
-+		--disable-curl \
++		--disable-bzip2 \
  		--disable-libssh \
- 		--disable-sdl \
  		--disable-vnc-jpeg \
+ 		--disable-vnc-png \
