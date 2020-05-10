@@ -1,61 +1,58 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 10 May 2020 22:32:33 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump CIP kernel to version
- 4.19.118-cip25
-In-Reply-To: <87r1vrr0rf.fsf@dell.be.48ers.dk>
-References: <20200506204957.91252-1-angelo@amarulasolutions.com>
- <87r1vrr0rf.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9V=89GMWetyeTP5-2g_p8nRCRwzb871ZH-hfgGk_TF1pRQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 May 2020 22:34:24 +0200
+Subject: [Buildroot] [git commit] package/irrlicht: disable bundled
+ libpng NEON support
+In-Reply-To: <20200509200913.A7A4491226@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 9 May 2020 22:23:18 +0200")
+References: <20200509200913.A7A4491226@busybox.osuosl.org>
+Message-ID: <87eerrr0kv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il giorno dom 10 mag 2020 alle ore 22:30 Peter Korsgaard
-<peter@korsgaard.com> ha scritto:
->
-> >>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
->  > This patch bumps Linux CIP version to v4.19.118-cip25.
->  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->  > ---
->  >  linux/Config.in | 4 ++--
->  >  1 file changed, 2 insertions(+), 2 deletions(-)
->
->  > diff --git a/linux/Config.in b/linux/Config.in
->  > index d7373ab25a..7bd51c3ffb 100644
->  > --- a/linux/Config.in
->  > +++ b/linux/Config.in
->  > @@ -30,7 +30,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
->  >      bool "Latest version (5.6)"
->
->  >  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->  > -    bool "Latest CIP SLTS version (4.19.98-cip19)"
->  > +    bool "Latest CIP SLTS version (4.19.118-cip25)"
->  >      help
->  >        CIP launched in the spring of 2016 to address the needs of
->  >        organizations in industries such as power generation and
->  > @@ -129,7 +129,7 @@ endif
->  >  config BR2_LINUX_KERNEL_VERSION
->  >      string
->  >      default "5.6.7" if BR2_LINUX_KERNEL_LATEST_VERSION
->  > -    default "4.19.98-cip19" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->  > +    default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->  >      default "4.19.98-cip19-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
->  >      default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
->  >              if BR2_LINUX_KERNEL_CUSTOM_VERSION
->
-> What about the hash in linux.hash?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-I spent a lot to downloading and calculate and then I forgot them ..
-I'll send them now.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=bf5f4f417a9e6e7eed5ea6a99c26583958890515
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->
-> --
-> Bye, Peter Korsgaard
+ > Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
+ > While linking an application with libIrrlicht.so, we get an undefined reference to
+ > png_init_filter_functions_neon.
+ > Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c [1],
+ > so disable NEON support completely.
 
+ > This can be reproduced by building minetest using this defconfig for aarch64:
+ > BR2_aarch64=y
+ > BR2_TOOLCHAIN_EXTERNAL=y
+ > BR2_PACKAGE_MINETEST=y
+ > BR2_PACKAGE_MINETEST_CLIENT=y
+ > BR2_PACKAGE_MINETEST_SERVER=y
+ > BR2_PACKAGE_MESA3D=y
+ > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+ > BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+ > BR2_PACKAGE_XORG7=y
 
+ > Or for ARM with NEON FPU support:
+ > BR2_arm=y
+ > BR2_cortex_a15=y
+ > BR2_ARM_FPU_NEON=y
+ > BR2_TOOLCHAIN_EXTERNAL=y
+ > BR2_PACKAGE_MINETEST=y
+ > BR2_PACKAGE_MINETEST_CLIENT=y
+ > BR2_PACKAGE_MINETEST_SERVER=y
+ > BR2_PACKAGE_MESA3D=y
+ > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+ > BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+ > BR2_PACKAGE_XORG7=y
+
+ > [1] https://github.com/glennrp/libpng/tree/v1.6.37/arm
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, thanks.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
