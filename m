@@ -1,46 +1,46 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 10 May 2020 16:14:23 -0500
-Subject: [Buildroot] [PATCH] package/uboot-tools: add option to build
- env bin
-In-Reply-To: <20200509115637.58834f1e@windsurf.home>
-References: <20200508181304.52228-1-matthew.weber@rockwellcollins.com>
- <20200509115637.58834f1e@windsurf.home>
-Message-ID: <CANQCQpbw4t_T95n8ppHAYczP38i5VGS9FG8x6nj4hxi2SkaKrg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 May 2020 23:37:46 +0200
+Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
+ 1.0.20200506
+Message-ID: <20200510213746.10349-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Synchronizes with upstream 5.7-rc5.  For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-May/005408.html
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sat, May 9, 2020 at 4:58 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Matt,
->
-> On Fri,  8 May 2020 13:13:04 -0500
-> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > Add an option to allow the creation of a u-boot environment binary
-> > from a set of provided source file(s) when the defconfig being built
-> > does not offer the option via the u-boot package.
->
-> I don't understand why we need this, when we already have
-> BR2_TARGET_UBOOT_ENVIMAGE and related options in U-Boot.
->
-> I don't see how the logic behind BR2_TARGET_UBOOT_ENVIMAGE depends on
-> the defconfig being built.
-
-The use case is when a defconfig doesn't select the u-boot package
-(thus there isn't any uboot cfg / source code and the
-BR2_TARGET_UBOOT_ENVIMAGE's dependencies on a uboot package build
-isn't met to allow creating the env file).   Maybe we should move the
-creation of this env file (BR2_TARGET_UBOOT_ENVIMAGE) to uboot-tools
-by default and when the uboot package is also built, evaluate if the
-source files list is empty to generate a image from the uboot
-package's compiled-in env defaults (ie. uses the uboot's
-scripts/get_default_envs.sh).
-
-Matt
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index d308f47a13..54af5af956 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005296.html
+-sha256  cf166348fbb67419528e73049ce001d29131aea367fa6aef9d3e223f7251e116  wireguard-linux-compat-1.0.20200413.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005408.html
++sha256  98a99f2b825a82d57a7213e666f1ee4f7cc02bddb09bf4908b4b09447a8f121e  wireguard-linux-compat-1.0.20200506.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 6d90245bd2..f1b117d258 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200413
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200506
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-- 
+2.20.1
