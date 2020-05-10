@@ -1,33 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 22:46:48 +0200
-Subject: [Buildroot] [PATCH v1] package/squashfs: fix host compile
- multiple definitions
-In-Reply-To: <20200509214252.23180-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 9 May 2020 23:42:52 +0200")
-References: <20200509214252.23180-1-ps.report@gmx.net>
-Message-ID: <87sgg7plfr.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 21:51:14 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/matchbox: add
+ missing expat dependency
+Message-ID: <20200510203114.312C7913C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d914cd2c6afda9b37521860ec2610647ce06d6f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Add upstream patch to fix squashfs-tools build failures because
- > of missing external declaration for fwriter_buffer and
- > bwriter_buffer.
+matchbox selects expat but does not add it to its dependency resulting
+in the following build failure:
 
- > Fixes:
+configure: error: cannot find expat library
+make: *** [/home/buildroot/autobuild/run/instance-2/output-1/build/matchbox-1.2/.stamp_configured] Error 1
 
- >   - http://autobuild.buildroot.net/results/6789b668898245926e0a3a3e7caf823dff515d71
+Fixes:
+ - http://autobuild.buildroot.org/results/37021f1d7fcfd890011068a28ce6181dc509e746
 
- >   /usr/bin/ld: read_fs.o:(.bss+0x0): multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
- >   /usr/bin/ld: read_fs.o:(.bss+0x8): multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3a784f49eb93cd75111f510a1d366f6ecaa2791f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/matchbox/matchbox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index c0a2778b67..4d30a42ca3 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -10,7 +10,7 @@ MATCHBOX_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-win
+ MATCHBOX_LICENSE = GPL-2.0+
+ MATCHBOX_LICENSE_FILES = COPYING
+ 
+-MATCHBOX_DEPENDENCIES = matchbox-lib
++MATCHBOX_DEPENDENCIES = expat matchbox-lib
+ MATCHBOX_CONF_OPTS = \
+ 	--enable-expat \
+ 	--disable-gconf \
