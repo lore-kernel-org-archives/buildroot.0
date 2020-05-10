@@ -1,88 +1,123 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 22:46:24 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/squashfs: fix
- host compile multiple definitions
-Message-ID: <20200510203114.B91FF913C6@busybox.osuosl.org>
+Date: Sun, 10 May 2020 22:43:54 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libv4l: fix
+ input_event related compile failure
+Message-ID: <20200510203114.AB4D1913C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e744db3d07d8d081ddc1a187d01e2fba4d943ec
+commit: https://git.buildroot.net/buildroot/commit/?id=1cc9fbe1f63bae6b8e2a273939608b7b1bb92de1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Add upstream patch to fix squashfs-tools build failures because
-of missing external declaration for fwriter_buffer and
-bwriter_buffer.
+Add two upstream patches fixing input_event time related
+compile failures.
 
 Fixes:
 
-  - http://autobuild.buildroot.net/results/6789b668898245926e0a3a3e7caf823dff515d71
+ - http://autobuild.buildroot.net/results/3883a948e30cfd235cfca1fb8646fe8032f5e18d
 
-  /usr/bin/ld: read_fs.o:(.bss+0x0): multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
-  /usr/bin/ld: read_fs.o:(.bss+0x8): multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
+  keytable.c: In function 'test_event':
+  keytable.c:1536:11: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+       ev[i].time.tv_sec, ev[i].time.tv_usec,
+             ^~~~
+             type
+  keytable.c:1536:30: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+       ev[i].time.tv_sec, ev[i].time.tv_usec,
+                                ^~~~
+                                type
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8d7b714027b451df6b202cee5d85ff6bbf3fe624)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit cd27ee0a58165b384cc81eb0bc337cf35f43a51e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fs-tools-fix-build-failure-against-gcc-10.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ .../0002-keytable-use-input_event-properly.patch   | 36 ++++++++++++++++++++++
+ ...ble-add-compatibility-for-input_event_sec.patch | 35 +++++++++++++++++++++
+ 2 files changed, 71 insertions(+)
 
-diff --git a/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+diff --git a/package/libv4l/0002-keytable-use-input_event-properly.patch b/package/libv4l/0002-keytable-use-input_event-properly.patch
 new file mode 100644
-index 0000000000..a5fc487aac
+index 0000000000..624bf082bc
 --- /dev/null
-+++ b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
-@@ -0,0 +1,49 @@
-+From e1cdcfd94172a0b1ba4c9df70f4d69a41c687404 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Sun, 26 Jan 2020 18:35:13 +0000
-+Subject: [PATCH] squashfs-tools: fix build failure against gcc-10
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libv4l/0002-keytable-use-input_event-properly.patch
+@@ -0,0 +1,36 @@
++From a84fc5d02ffd7119b3e38b72339f5760991d14da Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Mon, 30 Mar 2020 14:24:34 -0700
++Subject: [PATCH] keytable: use input_event properly
 +
-+On gcc-10 (and gcc-9 -fno-common) build fails as:
++It does not use time_t under musl when time_t is 64-bit. The struct has
++compatibility defines. Instead of using time_t directly, use those
++defines.
 +
-+```
-+cc ... -o mksquashfs
-+ld: read_fs.o:(.bss+0x0):
-+  multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
-+ld: read_fs.o:(.bss+0x8):
-+  multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
-+```
++Fixes compilation under musl 1.2.0 under 32-bit OSes.
 +
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++Signed-off-by: Sean Young <sean@mess.org>
 +
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+Reported-by: Toralf F??rster
-+Bug: https://bugs.gentoo.org/706456
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+
-+[Upstream: https://github.com/plougher/squashfs-tools/commit/fe2f5da4b0f8994169c53e84b7cb8a0feefc97b5.patch]
++[Upstream: https://git.linuxtv.org/v4l-utils.git/patch/?id=38f4ce74275ae4625463f7eec78764715a0b6246]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ squashfs-tools/mksquashfs.h | 2 +-
++ utils/keytable/keytable.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/squashfs-tools/mksquashfs.h b/squashfs-tools/mksquashfs.h
-+index 1beefef..b650306 100644
-+--- a/squashfs-tools/mksquashfs.h
-++++ b/squashfs-tools/mksquashfs.h
-+@@ -143,7 +143,7 @@ struct append_file {
-+ #endif
++diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
++index 6cb0217..318c064 100644
++--- a/utils/keytable/keytable.c
+++++ b/utils/keytable/keytable.c
++@@ -1533,7 +1533,7 @@ static void test_event(struct rc_device *rc_dev, int fd)
 + 
-+ extern struct cache *reader_buffer, *fragment_buffer, *reserve_cache;
-+-struct cache *bwriter_buffer, *fwriter_buffer;
-++extern struct cache *bwriter_buffer, *fwriter_buffer;
-+ extern struct queue *to_reader, *to_deflate, *to_writer, *from_writer,
-+ 	*to_frag, *locked_fragment, *to_process_frag;
-+ extern struct append_file **file_mapping;
++ 		for (i = 0; i < rd / sizeof(struct input_event); i++) {
++ 			printf(_("%ld.%06ld: event type %s(0x%02x)"),
++-				ev[i].time.tv_sec, ev[i].time.tv_usec,
+++				ev[i].input_event_sec, ev[i].input_event_usec,
++ 				get_event_name(events_type, ev[i].type), ev[i].type);
++ 
++ 			switch (ev[i].type) {
++-- 
++2.26.2
++
+diff --git a/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch b/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
+new file mode 100644
+index 0000000000..65126789a3
+--- /dev/null
++++ b/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
+@@ -0,0 +1,35 @@
++From 986345e5673b1e68db513a4f72e6e79c74512a3b Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Tue, 7 Apr 2020 18:13:44 -0700
++Subject: [PATCH] keytable: add compatibility for input_event_sec
++
++Linux 4.16 added support for this macro. When it is not available,
++define it back to the previous value.
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++Signed-off-by: Sean Young <sean@mess.org>
++
++[Upstream: https://git.linuxtv.org/v4l-utils.git/patch/?id=8b7e6ce9367fe09ca9398b5f3cc75bba2598b162]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ utils/keytable/keytable.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
++index 318c064..705867c 100644
++--- a/utils/keytable/keytable.c
+++++ b/utils/keytable/keytable.c
++@@ -62,6 +62,10 @@ struct input_keymap_entry_v2 {
++ 	u_int8_t  scancode[32];
++ };
++ 
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#define input_event_usec time.tv_usec
+++#endif
++ 
++ #define IR_PROTOCOLS_USER_DIR IR_KEYTABLE_USER_DIR "/protocols"
++ #define IR_PROTOCOLS_SYSTEM_DIR IR_KEYTABLE_SYSTEM_DIR "/protocols"
 +-- 
 +2.26.2
 +
