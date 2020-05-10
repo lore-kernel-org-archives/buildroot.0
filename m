@@ -1,20 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 20:26:13 +0200
-Subject: [Buildroot] [PATCH 1/5] board/odroidc2: remove unused files
-In-Reply-To: <20200418151020.17197-1-daggs@gmx.com> (Dagg Stompler's message
- of "Sat, 18 Apr 2020 18:10:16 +0300")
-References: <20200418151020.17197-1-daggs@gmx.com>
-Message-ID: <87d07bve7u.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 20:26:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libhtp: security bump to
+ version 0.5.33
+In-Reply-To: <20200430194246.2076437-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 30 Apr 2020 21:42:45 +0200")
+References: <20200430194246.2076437-1-fontaine.fabrice@gmail.com>
+Message-ID: <878shzve6v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dagg" == Dagg Stompler <daggs@gmx.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > remove all the odroidc2 board related files.
- > Signed-off-by: Dagg Stompler <daggs@gmx.com>
+ > - ChangeLog:
+ >   - compression bomb protection
+ >   - memory handling issue found by Oss-Fuzz
+ >   - improve handling of anomalies in traffic
+ > - Drop first patch (already in version)
+ > - Update indentation of hash file (two spaces)
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x, thanks.
 
