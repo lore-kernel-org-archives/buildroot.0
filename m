@@ -1,34 +1,57 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 10 May 2020 22:34:40 +0200
-Subject: [Buildroot] [PATCH] linux: bump CIP, CIP RT hashes
-Message-ID: <20200510203440.9155-1-angelo@amarulasolutions.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sun, 10 May 2020 22:35:08 +0200
+Subject: [Buildroot] [PATCH] package/fakeroot: fix for fchownat/fchmodat
+Message-ID: <20200510203509.7628-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping the hashes for CIP and CIP RT.
+fakeroot does mask out necessary flags, instead pass through
+the flags that are supported by fstatat
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- linux/linux.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...Fix-forwarding-fchownat-fchmod-flags.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 0449be680d..ba48943d38 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -8,8 +8,8 @@ sha256  6b17238cced3e1c2753d6d5b4f662bd347d4651f07c35506b849eb10aea7bc44  linux-
- sha256  bcae0956baaeb55dab5bad0401873fbc5baaa7fbe957ea6d27a5ab241cec5ca2  linux-4.14.176.tar.xz
- sha256  89749365f9dafa6c62cc5e920a7e532ed4aad9ab766fb436423b153ffbc08c96  linux-4.19.118.tar.xz
- # Locally computed
--sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
--sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
-+sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-cip-4.19.118-cip25.tar.gz
-+sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
- 
- # Licenses hashes
- sha256  ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
+diff --git a/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
+new file mode 100644
+index 0000000000..fc74543378
+--- /dev/null
++++ b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
+@@ -0,0 +1,28 @@
++Forward supported flags to fstatat, this fixes issues like
++using an empty path
++
++Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
++
++Signed-off-by: Norbert Lange <nolange79@gmail.com>
++
++diff -burN fakeroot-1.20.2.org/libfakeroot.c fakeroot-1.20.2/libfakeroot.c
++--- fakeroot-1.20.2.org/libfakeroot.c	2014-10-05 17:16:00.000000000 +0200
+++++ fakeroot-1.20.2/libfakeroot.c	2020-05-10 22:24:18.896625085 +0200
++@@ -880,7 +880,7 @@
++   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
++      be when we stat it. */
++   INT_STRUCT_STAT st;
++-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
+++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT)));
++
++   if(r)
++     return(r);
++@@ -1017,7 +1017,7 @@
++
++   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
++      be when we stat it. */
++-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
+++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT));
++
++   if(r)
++     return(r);
 -- 
-2.25.1
+2.26.2
