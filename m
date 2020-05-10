@@ -1,24 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:48:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: set WITH_LIBUSB
-In-Reply-To: <20200507223720.201764-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 8 May 2020 00:37:20 +0200")
-References: <20200507223720.201764-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnbbsh99.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 21:30:41 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/squid: security
+ bump to version 4.11
+Message-ID: <20200510193313.D6731913A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eec5fb64191a3ec1587f68264cf48684c7f62311
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Use WITH_LIBUSB which is available since version 4.9700 and
- > https://github.com/domoticz/domoticz/commit/f53817577a834ed0c3fc16458c374aea490be49e
+Fix CVE-2020-11945: An issue was discovered in Squid before 5.0.2. A
+remote attacker can replay a sniffed Digest Authentication nonce to gain
+access to resources that are otherwise forbidden. This occurs because
+the attacker can overflow the nonce reference counter (a short integer).
+Remote code execution may occur if the pooled token credentials are
+freed (instead of replayed as valid credentials).
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+http://www.squid-cache.org/Advisories/SQUID-2020_4.txt
 
-Committed to 2020.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b365c642369ca76cb138fd0b5be6457865a3d5ce)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 765e67cf3d..3c8ab64d35 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.10.tar.xz.asc
+-md5  af7ac6e70f9bd03ae4fcec0c9b99c38a  squid-4.10.tar.xz
+-sha1  b8b267771550bb8c7f2b2968b305118090e7217a  squid-4.10.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.11.tar.xz.asc
++md5  10f34e852153a9996aa4614670e2bda1  squid-4.11.tar.xz
++sha1  053277bf5497163ffc9261b9807abda5959bb6fc  squid-4.11.tar.xz
+ # Locally calculated
+-sha256  98f0100afd8a42ea5f6b81eb98b0e4b36d7a54beab1c73d2f1705ab49b025f1f  squid-4.10.tar.xz
++sha256  4ed947612410263f57ad0e39bfd087e60fb714f028d7d3b0e469943efd34287d  squid-4.11.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index aeaec425e4..d281eee3ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 4.10
++SQUID_VERSION = 4.11
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
