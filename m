@@ -1,29 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:31:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/squid: security bump to version
- 4.11
-In-Reply-To: <20200506201541.347759-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 6 May 2020 22:15:41 +0200")
-References: <20200506201541.347759-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2pzsi2u.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 21:35:14 +0200
+Subject: [Buildroot] [PATCH] release: don't include temp files
+In-Reply-To: <20200508083220.18927-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 8 May 2020 10:32:20 +0200")
+References: <20200508083220.18927-1-yann.morin.1998@free.fr>
+Message-ID: <87r1vrshvx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fix CVE-2020-11945: An issue was discovered in Squid before 5.0.2. A
- > remote attacker can replay a sniffed Digest Authentication nonce to gain
- > access to resources that are otherwise forbidden. This occurs because
- > the attacker can overflow the nonce reference counter (a short integer).
- > Remote code execution may occur if the pooled token credentials are
- > freed (instead of replayed as valid credentials).
+ > When we prepare the release, we generate the manual in various formats,
+ > so that it can be consulted locally without needing the miriads of tools
+ > needed to generate it.
 
- > http://www.squid-cache.org/Advisories/SQUID-2020_4.txt
+ > However, this creates the temporary .br2-external.* files in the output
+ > directory, and those end up in the release tarball.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > This is not a problem in practice, but is not clean.
+
+ > Run 'distclean' in the output directory, to get rid of everything but
+ > the generated documentation.
+
+ > Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x, thanks.
 
