@@ -1,76 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 20:24:06 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c: fix
- build on uclibc or musl
-Message-ID: <20200510191328.99DD09131F@busybox.osuosl.org>
+Date: Sun, 10 May 2020 20:23:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: security
+ bump version to 4.11.8
+Message-ID: <20200510191328.8F26891343@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c53538af04110ee1429c7a8e2f9eb7d73d35989d
+commit: https://git.buildroot.net/buildroot/commit/?id=2a9f241a831665c6bd33a1d9170493679c7daf09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
+Reformatted hash.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes CVE 2020-10700 & CVE 2020-10704.
+
+Release notes: https://www.samba.org/samba/history/samba-4.11.8.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 91beea442a6b0e2d339b0d6cfb4ca91cbf6b30d9)
+(cherry picked from commit 11bc27fd0d48351fbe419220a963d50283a12605)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...MakeLists.txt-fix-build-on-uclibc-or-musl.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ package/samba4/samba4.hash | 6 +++---
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-new file mode 100644
-index 0000000000..7989f045b9
---- /dev/null
-+++ b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-@@ -0,0 +1,45 @@
-+From 517e8659ab566b15cc409490a432e8935b164de8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 24 Apr 2020 11:55:41 +0200
-+Subject: [PATCH] src/CMakeLists.txt: fix build on uclibc or musl
-+
-+Build of version 1.3.2 with uclibc or musl fails on:
-+
-+[ 58%] Linking C shared library libpaho-mqtt3c.so
-+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lanl
-+collect2: error: ld returned 1 exit status
-+
-+This is due to commit 21ffebcb749fc8bd8578df85550f03f74e571620 which
-+added a link to anl which is not available on uclibc or musl.
-+
-+Fix this by checking if anl is found on the system before using it
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8]
-+---
-+ src/CMakeLists.txt | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index fb367b37..95fd43e7 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -60,7 +60,13 @@ IF (WIN32)
-+     SET(LIBS_SYSTEM ws2_32 crypt32 RpcRT4)
-+ ELSEIF (UNIX)
-+     IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-+-        SET(LIBS_SYSTEM c dl pthread anl rt)
-++        SET(LIBS_SYSTEM c dl pthread rt)
-++        # anl is only available with glibc so check if it is found before using
-++        # it or build will fail on uclibc or musl
-++        FIND_LIBRARY(LIB_ANL anl)
-++        IF(LIB_ANL)
-++            SET(LIBS_SYSTEM "${LIBS_SYSTEM} ${LIB_ANL}")
-++        ENDIF()
-+         ADD_DEFINITIONS(-D_GNU_SOURCE -fvisibility=hidden)
-+     ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
-+         SET(LIBS_SYSTEM c dl)
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 8948c41ea6..f2ae8b5b58 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.7.tar.asc
+-sha256 79b6f9ebc357373f885153e2d5d26dc6def9f4511ee4bcbe8a8e2622acc42143  samba-4.11.7.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++# https://download.samba.org/pub/samba/stable/samba-4.11.8.tar.asc
++sha256  bb140caa37d2bbbb1f15f849aa86b1d5f787729443099139936f0ea06a5100ca  samba-4.11.8.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 582b30bcd5..9ec4c1eabe 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.11.7
++SAMBA4_VERSION = 4.11.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
