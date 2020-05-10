@@ -1,39 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 22:35:23 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-attrs: fix
- typo in hash file
-Message-ID: <20200510203114.9567A913C6@busybox.osuosl.org>
+Date: Sun, 10 May 2020 22:46:24 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/squashfs: fix
+ host compile multiple definitions
+Message-ID: <20200510203114.B91FF913C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=730326aec2ae75a2080253f93c164dbf7e67d49b
+commit: https://git.buildroot.net/buildroot/commit/?id=3e744db3d07d8d081ddc1a187d01e2fba4d943ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-'computer' -> 'computed'.
+Add upstream patch to fix squashfs-tools build failures because
+of missing external declaration for fwriter_buffer and
+bwriter_buffer.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-[yann.morin.1998 at free.fr: two spaces in hash file]
+Fixes:
+
+  - http://autobuild.buildroot.net/results/6789b668898245926e0a3a3e7caf823dff515d71
+
+  /usr/bin/ld: read_fs.o:(.bss+0x0): multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
+  /usr/bin/ld: read_fs.o:(.bss+0x8): multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e86a6ab35a9d58440bede427d3f826c2020eabe6)
+(cherry picked from commit 8d7b714027b451df6b202cee5d85ff6bbf3fe624)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-attrs/python-attrs.hash | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...fs-tools-fix-build-failure-against-gcc-10.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/python-attrs/python-attrs.hash b/package/python-attrs/python-attrs.hash
-index f8c38ee4ed..3841595754 100644
---- a/package/python-attrs/python-attrs.hash
-+++ b/package/python-attrs/python-attrs.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/attrs/json
--md5	5b2db50fcc31be34d32798183c9bd062  attrs-19.3.0.tar.gz
--sha256	f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72  attrs-19.3.0.tar.gz
--# Locally computer sha256
--sha256	bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
-+md5  5b2db50fcc31be34d32798183c9bd062  attrs-19.3.0.tar.gz
-+sha256  f7b7ce16570fe9965acd6d30101a28f62fb4a7f9e926b3bbc9b61f8b04247e72  attrs-19.3.0.tar.gz
-+# Locally computed sha256
-+sha256  bf659a28b49240602f56bbdf490cbe2ec509b15b98f99d7b19a52c740e327863  LICENSE
+diff --git a/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+new file mode 100644
+index 0000000000..a5fc487aac
+--- /dev/null
++++ b/package/squashfs/0001-squashfs-tools-fix-build-failure-against-gcc-10.patch
+@@ -0,0 +1,49 @@
++From e1cdcfd94172a0b1ba4c9df70f4d69a41c687404 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Sun, 26 Jan 2020 18:35:13 +0000
++Subject: [PATCH] squashfs-tools: fix build failure against gcc-10
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++On gcc-10 (and gcc-9 -fno-common) build fails as:
++
++```
++cc ... -o mksquashfs
++ld: read_fs.o:(.bss+0x0):
++  multiple definition of `fwriter_buffer'; mksquashfs.o:(.bss+0x400c90): first defined here
++ld: read_fs.o:(.bss+0x8):
++  multiple definition of `bwriter_buffer'; mksquashfs.o:(.bss+0x400c98): first defined here
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Reported-by: Toralf F??rster
++Bug: https://bugs.gentoo.org/706456
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++
++[Upstream: https://github.com/plougher/squashfs-tools/commit/fe2f5da4b0f8994169c53e84b7cb8a0feefc97b5.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ squashfs-tools/mksquashfs.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/squashfs-tools/mksquashfs.h b/squashfs-tools/mksquashfs.h
++index 1beefef..b650306 100644
++--- a/squashfs-tools/mksquashfs.h
+++++ b/squashfs-tools/mksquashfs.h
++@@ -143,7 +143,7 @@ struct append_file {
++ #endif
++ 
++ extern struct cache *reader_buffer, *fragment_buffer, *reserve_cache;
++-struct cache *bwriter_buffer, *fwriter_buffer;
+++extern struct cache *bwriter_buffer, *fwriter_buffer;
++ extern struct queue *to_reader, *to_deflate, *to_writer, *from_writer,
++ 	*to_frag, *locked_fragment, *to_process_frag;
++ extern struct append_file **file_mapping;
++-- 
++2.26.2
++
