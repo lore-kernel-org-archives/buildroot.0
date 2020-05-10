@@ -1,58 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 22:34:24 +0200
-Subject: [Buildroot] [git commit] package/irrlicht: disable bundled
- libpng NEON support
-In-Reply-To: <20200509200913.A7A4491226@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 9 May 2020 22:23:18 +0200")
-References: <20200509200913.A7A4491226@busybox.osuosl.org>
-Message-ID: <87eerrr0kv.fsf@dell.be.48ers.dk>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 10 May 2020 22:34:40 +0200
+Subject: [Buildroot] [PATCH] linux: bump CIP, CIP RT hashes
+Message-ID: <20200510203440.9155-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Bumping the hashes for CIP and CIP RT.
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=bf5f4f417a9e6e7eed5ea6a99c26583958890515
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ linux/linux.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
- > While linking an application with libIrrlicht.so, we get an undefined reference to
- > png_init_filter_functions_neon.
- > Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c [1],
- > so disable NEON support completely.
-
- > This can be reproduced by building minetest using this defconfig for aarch64:
- > BR2_aarch64=y
- > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_PACKAGE_MINETEST=y
- > BR2_PACKAGE_MINETEST_CLIENT=y
- > BR2_PACKAGE_MINETEST_SERVER=y
- > BR2_PACKAGE_MESA3D=y
- > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
- > BR2_PACKAGE_MESA3D_OPENGL_GLX=y
- > BR2_PACKAGE_XORG7=y
-
- > Or for ARM with NEON FPU support:
- > BR2_arm=y
- > BR2_cortex_a15=y
- > BR2_ARM_FPU_NEON=y
- > BR2_TOOLCHAIN_EXTERNAL=y
- > BR2_PACKAGE_MINETEST=y
- > BR2_PACKAGE_MINETEST_CLIENT=y
- > BR2_PACKAGE_MINETEST_SERVER=y
- > BR2_PACKAGE_MESA3D=y
- > BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
- > BR2_PACKAGE_MESA3D_OPENGL_GLX=y
- > BR2_PACKAGE_XORG7=y
-
- > [1] https://github.com/glennrp/libpng/tree/v1.6.37/arm
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2020.02.x, thanks.
-
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0449be680d..ba48943d38 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -8,8 +8,8 @@ sha256  6b17238cced3e1c2753d6d5b4f662bd347d4651f07c35506b849eb10aea7bc44  linux-
+ sha256  bcae0956baaeb55dab5bad0401873fbc5baaa7fbe957ea6d27a5ab241cec5ca2  linux-4.14.176.tar.xz
+ sha256  89749365f9dafa6c62cc5e920a7e532ed4aad9ab766fb436423b153ffbc08c96  linux-4.19.118.tar.xz
+ # Locally computed
+-sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
+-sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
++sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-cip-4.19.118-cip25.tar.gz
++sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
+ 
+ # Licenses hashes
+ sha256  ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
 -- 
-Bye, Peter Korsgaard
+2.25.1
