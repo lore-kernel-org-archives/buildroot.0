@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 20:00:24 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: trim Carlos
- Santos' watch list
-Message-ID: <20200510174605.43EBB91136@busybox.osuosl.org>
+Date: Sun, 10 May 2020 20:01:19 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] docs:
+ adding-packages-python: don't mention distutilscross
+Message-ID: <20200510174605.4DB8F91321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04df6eba78f52de44a927edced244ec4da0742ca
+commit: https://git.buildroot.net/buildroot/commit/?id=50f20f639e83339676d9f176f0547692ed47b327
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- I fixed build problems on cups and cups-filters but don't use them.
+The package was removed a long time ago.
 
-- gtest, libpam-radius-auth, libpam-tacplus and perl-file-util were
-  used in my previous job. I don't have access to the packages that
-  use them neither to the corresponding test infrastructure anymore.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1c3ffaed577b40d4213abf681435e4240ec834c5)
+(cherry picked from commit 427697f29731fd83494d1e1e0e4a5d04b64f4592)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 6 ------
- 1 file changed, 6 deletions(-)
+ docs/manual/adding-packages-python.txt | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4fa1c14b52..f2097f11e9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -484,18 +484,12 @@ F:	package/sunxi-boards/
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index 74e2e78b29..0c100859be 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -98,10 +98,9 @@ Note that:
+    dependencies are automatically added as needed by the Python
+    package infrastructure.
  
- N:	Carlos Santos <unixmania@gmail.com>
- F:	package/busybox/
--F:	package/cups/
--F:	package/cups-filters/
--F:	package/gtest/
- F:	package/initscripts/
- F:	package/intel-microcode/
--F:	package/libpam-radius-auth/
--F:	package/libpam-tacplus/
- F:	package/liburiparser/
- F:	package/modem-manager/
- F:	package/pamtester/
- F:	package/pcm-tools/
--F:	package/perl-file-util/
- F:	package/skeleton-custom/
- F:	package/skeleton-init-common/
- F:	package/skeleton-init-none/
+- * Similarly, it is not needed to add +host-setuptools+ and/or
+-   +host-distutilscross+ dependencies to +PYTHON_FOO_DEPENDENCIES+ for
+-   setuptools-based packages, since these are automatically added by
+-   the Python infrastructure as needed.
++ * Similarly, it is not needed to add +host-setuptools+ to
++   +PYTHON_FOO_DEPENDENCIES+ for setuptools-based packages, since it's
++   automatically added by the Python infrastructure as needed.
+ 
+ One variable specific to the Python infrastructure is mandatory:
+ 
