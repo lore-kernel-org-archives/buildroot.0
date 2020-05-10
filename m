@@ -1,44 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:51:14 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/matchbox: add
- missing expat dependency
-Message-ID: <20200510203114.312C7913C5@busybox.osuosl.org>
+Date: Sun, 10 May 2020 21:55:47 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] support/gnuconfig:
+ reference the correct sha1 we're using
+Message-ID: <20200510203114.54F6E913C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d914cd2c6afda9b37521860ec2610647ce06d6f1
+commit: https://git.buildroot.net/buildroot/commit/?id=8b31a049b15cbefff86f5dd9b4a9ea9370ff3ec1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-matchbox selects expat but does not add it to its dependency resulting
-in the following build failure:
+In commit ff9f778c66f4 (support/gnuconfig: update to 2019-05-28), we
+forgot to update the README to reference the sha1 we're using, keeping
+the old one from 2016...
 
-configure: error: cannot find expat library
-make: *** [/home/buildroot/autobuild/run/instance-2/output-1/build/matchbox-1.2/.stamp_configured] Error 1
+Update it now.
 
-Fixes:
- - http://autobuild.buildroot.org/results/37021f1d7fcfd890011068a28ce6181dc509e746
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3a784f49eb93cd75111f510a1d366f6ecaa2791f)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3bf545da78b831339f5f717dfb4d120d46ecd929)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox/matchbox.mk | 2 +-
+ support/gnuconfig/README.buildroot | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index c0a2778b67..4d30a42ca3 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -10,7 +10,7 @@ MATCHBOX_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-win
- MATCHBOX_LICENSE = GPL-2.0+
- MATCHBOX_LICENSE_FILES = COPYING
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 7ba2a332a4..7e7d49830f 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -24,4 +24,4 @@ Currently no patches are needed, but they may be needed again in the
+ future.
  
--MATCHBOX_DEPENDENCIES = matchbox-lib
-+MATCHBOX_DEPENDENCIES = expat matchbox-lib
- MATCHBOX_CONF_OPTS = \
- 	--enable-expat \
- 	--disable-gconf \
+ The current Buildroot version is based on the Git commit
+-dafd8e767ec87b90aac62f0fcedd11944c84b50a of the config.git repository.
++104ee6463c4bfaac3f3029d9be9bdd6e93879323 of the config.git repository.
