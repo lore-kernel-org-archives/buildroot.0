@@ -1,28 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:57:33 +0200
-Subject: [Buildroot] [PATCH 1/3] support/gnuconfig: reference the
- correct sha1 we're using
-In-Reply-To: <83dc2de9afe3e5196ef6a2b033e19e44ae6154c4.1589022016.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 9 May 2020 13:00:37 +0200")
-References: <cover.1589022016.git.yann.morin.1998@free.fr>
- <83dc2de9afe3e5196ef6a2b033e19e44ae6154c4.1589022016.git.yann.morin.1998@free.fr>
-Message-ID: <878shzsguq.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 22:02:11 +0200
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: renumber patches
+In-Reply-To: <20200507224150.242211-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 May 2020 00:41:49 +0200")
+References: <20200507224150.242211-1-fontaine.fabrice@gmail.com>
+Message-ID: <874ksnsgn0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > In commit ff9f778c66f4 (support/gnuconfig: update to 2019-05-28), we
- > forgot to update the README to reference the sha1 we're using, keeping
- > the old one from 2016...
+ > Commit 3052da3eac8c80e7375341a48bca4cf0ee12e60b did not renumber
+ > remaining patches, fix that
 
- > Update it now.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x, thanks.
 
