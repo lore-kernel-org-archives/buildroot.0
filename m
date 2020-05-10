@@ -1,96 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 May 2020 22:52:20 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: fix compile for aarch64_be
-Message-ID: <20200510205220.16002-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 May 2020 22:59:12 +0200
+Subject: [Buildroot] [git commit] linux: bump CIP, CIP RT hashes
+Message-ID: <20200510204330.F17CC913C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix availability check for storeRGB32FromARGB32PM_neon(), only
-available for arm little-endian.
+commit: https://git.buildroot.net/buildroot/commit/?id=fb8186d53e32be4669c1026da8adcd5325e3ab4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Bumping the hashes for CIP and CIP RT.
 
-  - http://autobuild.buildroot.net/results/ab623253a6d988f4ee03d292ee85f3455de2ea25
-
-  .obj/qimage_conversions.o: In function `convert_generic(QImageData*, QImageData const*, QFlags<Qt::ImageConversionFlag>)':
-  qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-  qimage_conversions.cpp:(.text+0x259c): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-  .obj/qimage_conversions.o: In function `convert_generic_inplace(QImageData*, QImage::Format, QFlags<Qt::ImageConversionFlag>)':
-  qimage_conversions.cpp:(.text+0x28fc): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-  qimage_conversions.cpp:(.text+0x2900): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ns-arm-neon-draw-helper-only-availab.patch | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
+ linux/linux.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch b/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
-new file mode 100644
-index 0000000000..6c2080a669
---- /dev/null
-+++ b/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
-@@ -0,0 +1,58 @@
-+From 78d94321149f8e10e5270516082cb37a5b91e327 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 10 May 2020 22:26:43 +0200
-+Subject: [PATCH] qimage_conversions: arm neon draw helper only available for
-+ little endian
-+
-+Fixes:
-+
-+  qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/gui/image/qimage_conversions.cpp | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
-+index 97a5f89e..5fc5aba1 100644
-+--- a/src/gui/image/qimage_conversions.cpp
-++++ b/src/gui/image/qimage_conversions.cpp
-+@@ -119,7 +119,7 @@ void qGamma_correct_back_to_linear_cs(QImage *image)
-+  *****************************************************************************/
-+ 
-+ // The drawhelper conversions from/to RGB32 are passthroughs which is not always correct for general image conversion
-+-#if !defined(__ARM_NEON__)
-++#if !defined(__ARM_NEON__) || !(Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+ static void QT_FASTCALL storeRGB32FromARGB32PM(uchar *dest, const uint *src, int index, int count,
-+                                                const QVector<QRgb> *, QDitherInfo *)
-+ {
-+@@ -149,7 +149,7 @@ static const uint *QT_FASTCALL fetchRGB32ToARGB32PM(uint *buffer, const uchar *s
-+ #ifdef QT_COMPILER_SUPPORTS_SSE4_1
-+ extern void QT_FASTCALL storeRGB32FromARGB32PM_sse4(uchar *dest, const uint *src, int index, int count,
-+                                                     const QVector<QRgb> *, QDitherInfo *);
-+-#elif defined(__ARM_NEON__)
-++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+ extern void QT_FASTCALL storeRGB32FromARGB32PM_neon(uchar *dest, const uint *src, int index, int count,
-+                                                     const QVector<QRgb> *, QDitherInfo *);
-+ #endif
-+@@ -181,7 +181,7 @@ void convert_generic(QImageData *dest, const QImageData *src, Qt::ImageConversio
-+                 store = storeRGB32FromARGB32PM_sse4;
-+             else
-+                 store = storeRGB32FromARGB32PM;
-+-#elif defined(__ARM_NEON__)
-++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+             store = storeRGB32FromARGB32PM_neon;
-+ #else
-+             store = storeRGB32FromARGB32PM;
-+@@ -289,7 +289,7 @@ bool convert_generic_inplace(QImageData *data, QImage::Format dst_format, Qt::Im
-+                 store = storeRGB32FromARGB32PM_sse4;
-+             else
-+                 store = storeRGB32FromARGB32PM;
-+-#elif defined(__ARM_NEON__)
-++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+             store = storeRGB32FromARGB32PM_neon;
-+ #else
-+             store = storeRGB32FromARGB32PM;
-+-- 
-+2.26.2
-+
--- 
-2.26.2
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0449be680d..ba48943d38 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -8,8 +8,8 @@ sha256  6b17238cced3e1c2753d6d5b4f662bd347d4651f07c35506b849eb10aea7bc44  linux-
+ sha256  bcae0956baaeb55dab5bad0401873fbc5baaa7fbe957ea6d27a5ab241cec5ca2  linux-4.14.176.tar.xz
+ sha256  89749365f9dafa6c62cc5e920a7e532ed4aad9ab766fb436423b153ffbc08c96  linux-4.19.118.tar.xz
+ # Locally computed
+-sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
+-sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
++sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-cip-4.19.118-cip25.tar.gz
++sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
+ 
+ # Licenses hashes
+ sha256  ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
