@@ -1,30 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:55:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
- version 2.1.0
-In-Reply-To: <20200508122110.950135-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 8 May 2020 14:21:10 +0200")
-References: <20200508122110.950135-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d07bsgy9.fsf@dell.be.48ers.dk>
+Date: Sun, 10 May 2020 21:57:33 +0200
+Subject: [Buildroot] [PATCH 1/3] support/gnuconfig: reference the
+ correct sha1 we're using
+In-Reply-To: <83dc2de9afe3e5196ef6a2b033e19e44ae6154c4.1589022016.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 9 May 2020 13:00:37 +0200")
+References: <cover.1589022016.git.yann.morin.1998@free.fr>
+ <83dc2de9afe3e5196ef6a2b033e19e44ae6154c4.1589022016.git.yann.morin.1998@free.fr>
+Message-ID: <878shzsguq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > - Drop patch (already in version)
- > - Fix multiple CVEs: CVE-2020-11039, CVE-2020-11038, CVE-2020-11043,
- >   CVE-2020-11040, CVE-2020-11041, CVE-2020-11019, CVE-2020-11017,
- >   CVE-2020-11018
- > - Fix multiple leak and crash issues (#6129, #6128, #6127, #6110, #6081,
- >   #6077)
+ > In commit ff9f778c66f4 (support/gnuconfig: update to 2019-05-28), we
+ > forgot to update the README to reference the sha1 we're using, keeping
+ > the old one from 2016...
 
- > Extracted from:
- > https://github.com/FreeRDP/FreeRDP/commit/65d3ff44617c5a343f726985ed45e3a0a35dfaf3
+ > Update it now.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.02.x, thanks.
 
