@@ -1,48 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 21:20:39 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qemu: disable
- libssh for the host variant
-Message-ID: <20200510191329.0B3A991343@busybox.osuosl.org>
+Date: Sun, 10 May 2020 21:12:29 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qpdf: fix 'no
+ such file' exeption
+Message-ID: <20200510191328.DAF3191343@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e768acf2f6af9082d4113fe7bccbfeb08daa04
+commit: https://git.buildroot.net/buildroot/commit/?id=578f0936f2c2f36b585c24b4871d13958ffb47a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-There is no host-libssh in Buildroot, avoid qemu build system
-to find libssh from the host.
+Without a source for randomness, qpdf will crash with 'no such file'
+error. It's can me tested by command like 'qpd some_pdf.pdf -'.
+This problem breaks cups printing.
 
-Under certain circumstances (host distribution, openssl version), the
-qemu-system binary fail to start:
+This patch change configure options to '--with-random=/dev/urandom'
 
-host/bin/qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-
-$ ldd output/host/bin/qemu-system-aarch64
-	[...]
-	libssh.so.4 => /lib64/libssh.so.4
-
-Explicitely disable libssh for the host variant.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+[yann.morin.1998 at free.fr: reword commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0c4a80c7c406f2311f06c5d3eb250127c7cdb956)
+(cherry picked from commit 69dfbbd33b2afab0814c5674b0bc7f5464941fbc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/qpdf/qpdf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index b2249ed4ee..3c3b098a5b 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -303,6 +303,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
- 		--extra-ldflags="$(HOST_LDFLAGS)" \
- 		--python=$(HOST_DIR)/bin/python3 \
-+		--disable-libssh \
- 		$(HOST_QEMU_OPTS)
- endef
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index ac703d716e..fd31140b0c 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -11,7 +11,7 @@ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
+ QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
+ QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
  
+-QPDF_CONF_OPTS = --without-random
++QPDF_CONF_OPTS = --with-random=/dev/urandom
+ 
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ QPDF_CONF_OPTS += --enable-crypto-gnutls
