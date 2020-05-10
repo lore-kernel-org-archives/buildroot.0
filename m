@@ -1,47 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 May 2020 21:29:56 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libaacs: bump version to 0.10.0
-Message-ID: <20200510192956.2314478-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 10 May 2020 21:31:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/squid: security bump to version
+ 4.11
+In-Reply-To: <20200506201541.347759-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 6 May 2020 22:15:41 +0200")
+References: <20200506201541.347759-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2pzsi2u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://code.videolan.org/videolan/libaacs/-/blob/master/ChangeLog
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libaacs/libaacs.hash | 6 +++---
- package/libaacs/libaacs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Fix CVE-2020-11945: An issue was discovered in Squid before 5.0.2. A
+ > remote attacker can replay a sniffed Digest Authentication nonce to gain
+ > access to resources that are otherwise forbidden. This occurs because
+ > the attacker can overflow the nonce reference counter (a short integer).
+ > Remote code execution may occur if the pooled token credentials are
+ > freed (instead of replayed as valid credentials).
 
-diff --git a/package/libaacs/libaacs.hash b/package/libaacs/libaacs.hash
-index 22310295f8..82e8698616 100644
---- a/package/libaacs/libaacs.hash
-+++ b/package/libaacs/libaacs.hash
-@@ -1,5 +1,5 @@
--# From http://download.videolan.org/pub/videolan/libaacs/0.9.0/libaacs-0.9.0.tar.bz2.sha512
--sha512 b9c658db22a0966486070d3b762509a7c0120469ab29d1e57c1b624cad309701de8b92455ec649db4d731be4a5c29c38fb4f99bb7617dbb4254270284a1903f6  libaacs-0.9.0.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libaacs/0.10.0/libaacs-0.10.0.tar.bz2.sha512
-+sha512  4527749c3c78fd270012b3b36e916356a4aeb8f90169e781a00739f01f190121691042607209864e9b676ede9741f614c6003a7dfbb350dc020e1fa94cd6d66e  libaacs-0.10.0.tar.bz2
- 
- # Hash for license file:
--sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-+sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-diff --git a/package/libaacs/libaacs.mk b/package/libaacs/libaacs.mk
-index 143b0ff3d7..95f1cbdab8 100644
---- a/package/libaacs/libaacs.mk
-+++ b/package/libaacs/libaacs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBAACS_VERSION = 0.9.0
-+LIBAACS_VERSION = 0.10.0
- LIBAACS_SITE = http://download.videolan.org/pub/videolan/libaacs/$(LIBAACS_VERSION)
- LIBAACS_SOURCE = libaacs-$(LIBAACS_VERSION).tar.bz2
- LIBAACS_LICENSE = LGPL-2.1+
+ > http://www.squid-cache.org/Advisories/SQUID-2020_4.txt
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.02.x, thanks.
+
 -- 
-2.26.2
+Bye, Peter Korsgaard
