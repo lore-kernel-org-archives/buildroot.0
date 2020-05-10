@@ -1,72 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 10 May 2020 22:33:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/irrlicht: disable
- bundled libpng NEON support
-Message-ID: <20200510203114.8BD0A913C5@busybox.osuosl.org>
+Date: Sun, 10 May 2020 22:07:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/suricata: fix
+ build with lua
+Message-ID: <20200510203114.74195814A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e89604a8064cb7245473f9776a36d62be1682eae
+commit: https://git.buildroot.net/buildroot/commit/?id=e59503a9d8c45722d1a70c9caaa0462bffdae6a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
-While linking an application with libIrrlicht.so, we get an undefined reference to
-png_init_filter_functions_neon.
-Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c [1],
-so disable NEON support completely.
+Fixes:
+ - http://autobuild.buildroot.net/results/11bc7f4e1c54f074dd10a995233bee45c293e488
 
-This can be reproduced by building minetest using this defconfig for aarch64:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT=y
-BR2_PACKAGE_MINETEST_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
-
-Or for ARM with NEON FPU support:
-BR2_arm=y
-BR2_cortex_a15=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT=y
-BR2_PACKAGE_MINETEST_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
-
-[1] https://github.com/glennrp/libpng/tree/v1.6.37/arm
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bf5f4f417a9e6e7eed5ea6a99c26583958890515)
+(cherry picked from commit e0fbbdb6fc3b63b118bddc05b57169d8299a57ca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irrlicht/irrlicht.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...nfigure.ac-fix-cross-compilation-with-lua.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
-index a1e190d98d..bd82815cde 100644
---- a/package/irrlicht/irrlicht.mk
-+++ b/package/irrlicht/irrlicht.mk
-@@ -38,6 +38,13 @@ ifeq ($(BR2_STATIC_LIBS),)
- IRRLICHT_CONF_OPTS += sharedlib
- endif
- 
-+# Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
-+# While linking an application with libIrrlicht.so, we get an undefined reference to
-+# png_init_filter_functions_neon.
-+# Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
-+# so disable NEON support completely.
-+IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
+diff --git a/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch b/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+new file mode 100644
+index 0000000000..5c13ac7bec
+--- /dev/null
++++ b/package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+@@ -0,0 +1,33 @@
++From 8db38c21b525327305778fcaa232b2a797ffcb82 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 7 May 2020 19:05:23 +0200
++Subject: [PATCH] configure.ac: fix cross-compilation with lua
 +
- define IRRLICHT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV)
- 		$(MAKE) -C $(@D)/$(IRRLICHT_SUBDIR) $(IRRLICHT_CONF_OPTS)
++lua integer size is detected through AC_RUN_IFELSE since
++https://github.com/OISF/suricata/commit/2abcd5d27f29ca37ae31108cc0ea0143fa25d0a1
++
++This breaks cross-compilation and is needed only for rust so disable it
++if rust is not wanted
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not submitted yet]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 127848234..f5f33d42d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2225,7 +2225,7 @@ return 0;
++     AM_CONDITIONAL([HAVE_LUA], [test "x$enable_lua" != "xno"])
++ 
++     # If Lua is enabled, test the integer size.
++-    if test "x$enable_lua" = "xyes"; then
+++    if test "x$enable_lua" = "xyes" && test "x$enable_rust" = "xyes"; then
++         TMPLIBS="$LIBS"
++         LIBS=""
++ 
++-- 
++2.26.2
++
