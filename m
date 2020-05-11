@@ -1,61 +1,67 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Mon, 11 May 2020 17:26:02 +0300
-Subject: [Buildroot] [PATCH] package/tio: fix build with termio redefinition
-Message-ID: <20200511142602.46170-1-vadim4j@gmail.com>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Mon, 11 May 2020 16:35:10 +0200 (CEST)
+Subject: [Buildroot] Adding post image hook
+Message-ID: <ea-mime-5eb9629e-6492-6239a409@www-1.mailo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Include termbits.h from asm-generic/ which does not have termio
-definition which is already defined by sys/ioctl.h -> ioctl-types.h
+Hello,
 
-Same approach is also used by flashrom tool.
+I'm currently trying to improve my custom buildroot tree (that makes use of BR2_EXTERNAL), especially the final steps. For instance my external tree adds an extra steps through the BR2_ROOTFS_POST_IMAGE_SCRIPT to generate the firmware file. This step also retrieve the version of different softwares present in the final image.
 
-Fixes: http://autobuild.buildroot.net/results/076d5f166631450d25f25916381f0bfd6f1d58da
+However the post image script comes with a big limitation: we cannot take the advantage of reading variables defined in the Makefile. As stated in the doc, only few environment variables are available. The only way to do so is to use the BR2_ROOTFS_POST_SCRIPT_ARGS, but it is also cumbersome to create a getopt parser in the .sh script.
 
-Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
----
- ...01-setspeed2-fix-termio-redefinition.patch | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/tio/0001-setspeed2-fix-termio-redefinition.patch
+I would like to know if adding a post image hook in the makefile could help to have a cleaner tree with less .sh files, less getopt parsing, etc.
 
-diff --git a/package/tio/0001-setspeed2-fix-termio-redefinition.patch b/package/tio/0001-setspeed2-fix-termio-redefinition.patch
-new file mode 100644
-index 0000000000..89a555eceb
---- /dev/null
-+++ b/package/tio/0001-setspeed2-fix-termio-redefinition.patch
-@@ -0,0 +1,30 @@
-+From 02e13b011b9fee00cafaf3ed95cb04a414e0aa35 Mon Sep 17 00:00:00 2001
-+From: Vadym Kochan <vadim4j@gmail.com>
-+Date: Sun, 10 May 2020 01:49:30 +0300
-+Subject: [PATCH] setspeed2: fix termio redefinition
-+
-+Include termbits.h from asm-generic which does not defines 'struct
-+termio' which causes redefinition issue with already declared one from
-+the sys/ioctl.h -> ioctl-types.h by glibc.
-+
-+Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
-+---
-+ src/setspeed2.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/setspeed2.c b/src/setspeed2.c
-+index 0adf695..f80f0c2 100644
-+--- a/src/setspeed2.c
-++++ b/src/setspeed2.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #include <sys/ioctl.h>
-+ #include <asm/ioctls.h>
-+-#include <asm/termbits.h>
-++#include <asm-generic/termbits.h>
-+ 
-+ int setspeed2(int fd, int baudrate)
-+ {
-+-- 
-+2.26.2
-+
--- 
-2.26.2
+This would be like:
+
+define GENIMAGE_HOOK
+ # Call genimage and other stuf here
+endef 
+
+define SWUPDATE_HOOK
+ # Call genimage and other stuf here
+endef 
+
+
+BR2_POST_IMAGE_TARGET_HOOKS += GENIMAGE_HOOK
+BR2_POST_IMAGE_TARGET_HOOKS += SWUPDATE_HOOK
+
+Those could be defined in the external.mk for instance. I can do a PR if this feature makes sense.
+
+
+
+This is how I decided to handle the firmware image generation currently. I'm not sure it's the best way for handling such case, because I'm overriding the default "world" target. I'm opened to any suggestions.
+
+____________________________________________________
+# Export some useful variable that can be used in other scripts
+export BR2_CUSTOM_BOARDNAME := $(call qstrip,$(BR2_CUSTOM_BOARDNAME))
+export BR2_CUSTOM_BOARDVERSION := $(shell git -C $(BR2_EXTERNAL_CUSTOM_PATH) describe --tags --dirty=-dev)
+
+# Make an Firmware Update package.
+ifeq ($(BR2_CUSTOM_GENERATE_FIRMWARE),y)
+genfirmware: target-post-image
+	@$(call MESSAGE,"Compressing the filesystem...")
+	pigz -9 -c -n $(BINARIES_DIR)/rootfs.ext4 > $(BINARIES_DIR)/rootfs.ext4.gz
+
+	@$(call MESSAGE,"Generating UEFI partition for the bootloader...")
+	$(EXTRA_ENV) ./support/scripts/genimage.sh -c $(BR2_EXTERNAL_CUSTOM_PATH)/board/cstick/genimage_uefi.cfg
+
+	@$(call MESSAGE,"Generating firmware version $(BR2_CUSTOM_BOARDVERSION) for board $(BR2_CUSTOM_BOARDNAME) ")
+	(We can use bash script here with any makefile variables defined at this point, such as BR2_OPENCV_VERSION for instance)
+
+# Override the default world target.
+.PHONY: world
+world: genfirmware
+endif
+
+...
+____________________________________________________
+
+
+Thank you for your time,
+
+Louis-Paul CORDIER
