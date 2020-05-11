@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:23:34 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 6}.x series
-In-Reply-To: <87ftc7ort6.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 11 May 2020 09:26:45 +0200")
-References: <20200510211040.17102-1-peter@korsgaard.com>
- <87ftc7ort6.fsf@dell.be.48ers.dk>
-Message-ID: <87lflynumh.fsf@dell.be.48ers.dk>
+Date: Mon, 11 May 2020 21:23:53 +0200
+Subject: [Buildroot] [PATCH] packager/docker-cli: bump version to 19.03.7
+In-Reply-To: <20200511095318.13251-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 May 2020 11:53:18 +0200")
+References: <20200511095318.13251-1-peter@korsgaard.com>
+Message-ID: <87h7wmnuly.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +13,19 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > To match the docker-engine version.
+ > ./support/testing/run-tests tests.package.test_docker_compose.TestDockerCompose
+ > 09:54:39 TestDockerCompose                        Starting
+ > 09:54:40 TestDockerCompose                        Building
+ > 10:45:33 TestDockerCompose                        Building done
+ > 10:46:30 TestDockerCompose                        Cleaning up
+ > .
+ > ----------------------------------------------------------------------
+ > Ran 1 test in 3121.828s
+
+ > OK
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x, thanks.
 
