@@ -1,87 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:14:45 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libvncserver: fix
- CVE-2019-20788
-Message-ID: <20200511190851.407D08A53F@busybox.osuosl.org>
+Date: Mon, 11 May 2020 21:13:42 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] linux: bump CIP RT kernel
+ to version 4.19.115-cip24-rt9
+Message-ID: <20200511190851.276949147A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3d7d0371f8477d65b6d37a140eeb7af12f4355e
+commit: https://git.buildroot.net/buildroot/commit/?id=a99fe9928bb141f349efb79d632ca4549ec69feb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-libvncclient/cursor.c in LibVNCServer through 0.9.12 has a
-HandleCursorShape integer overflow and heap-based buffer overflow via a
-large height or width value. NOTE: this may overlap CVE-2019-15690.
+This patch bumps Linux CIP RT version to 4.19.115-cip24-rt9.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 705adbaf9a17ad7ada4af592491e56e3cbe618dd)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2452aa182dbf2fc7c1da9f5aa28709b8e431c58a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nt-cursor-limit-width-height-input-values.patch | 40 ++++++++++++++++++++++
- package/libvncserver/libvncserver.mk               |  3 ++
- 2 files changed, 43 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
-new file mode 100644
-index 0000000000..c389f2ecfb
---- /dev/null
-+++ b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
-@@ -0,0 +1,40 @@
-+From 54220248886b5001fbbb9fa73c4e1a2cb9413fed Mon Sep 17 00:00:00 2001
-+From: Christian Beier <dontmind@freeshell.org>
-+Date: Sun, 17 Nov 2019 17:18:35 +0100
-+Subject: [PATCH] libvncclient/cursor: limit width/height input values
-+
-+Avoids a possible heap overflow reported by Pavel Cheremushkin
-+<Pavel.Cheremushkin@kaspersky.com>.
-+
-+re #275
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/LibVNC/libvncserver/commit/54220248886b5001fbbb9fa73c4e1a2cb9413fed]
-+---
-+ libvncclient/cursor.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/libvncclient/cursor.c b/libvncclient/cursor.c
-+index 67f45726..40ffb3b0 100644
-+--- a/libvncclient/cursor.c
-++++ b/libvncclient/cursor.c
-+@@ -28,6 +28,8 @@
-+ #define OPER_SAVE     0
-+ #define OPER_RESTORE  1
-+ 
-++#define MAX_CURSOR_SIZE 1024
-++
-+ #define RGB24_TO_PIXEL(bpp,r,g,b)                                       \
-+    ((((uint##bpp##_t)(r) & 0xFF) * client->format.redMax + 127) / 255             \
-+     << client->format.redShift |                                              \
-+@@ -54,6 +56,9 @@ rfbBool HandleCursorShape(rfbClient* client,int xhot, int yhot, int width, int h
-+   if (width * height == 0)
-+     return TRUE;
-+ 
-++  if (width >= MAX_CURSOR_SIZE || height >= MAX_CURSOR_SIZE)
-++    return FALSE;
-++
-+   /* Allocate memory for pixel data and temporary mask data. */
-+   if(client->rcSource)
-+     free(client->rcSource);
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 5b8648fa6d..890672d04b 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -19,6 +19,9 @@ LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
- # 0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
- LIBVNCSERVER_IGNORE_CVES += CVE-2019-15681
+diff --git a/linux/Config.in b/linux/Config.in
+index 71e4382eb8..9e4d2ea427 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -49,7 +49,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	  https://www.cip-project.org
  
-+# 0006-libvncclient-cursor-limit-width-height-input-values.patch
-+LIBVNCSERVER_IGNORE_CVES += CVE-2019-20788
-+
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
- 	-DWITH_FFMPEG=OFF \
+ config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+-	bool "Latest CIP RT SLTS version (4.19.98-cip19-rt7)"
++	bool "Latest CIP RT SLTS version (4.19.115-cip24-rt9)"
+ 	help
+ 	  Same as the CIP version, but this is the PREEMPT_RT realtime
+ 	  variant.
+@@ -130,7 +130,7 @@ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.4.35" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	default "4.19.98-cip19-rt7" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
++	default "4.19.115-cip24-rt9" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
