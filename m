@@ -1,84 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 09:24:37 +0200
-Subject: [Buildroot] [git commit] package/libvncserver: fix CVE-2019-20788
-Message-ID: <20200511071114.9D4529142C@busybox.osuosl.org>
+Date: Mon, 11 May 2020 09:35:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix build on musl
+In-Reply-To: <20200502200444.3390908-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 2 May 2020 22:04:44 +0200")
+References: <20200502200444.3390908-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blmuq5zf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=705adbaf9a17ad7ada4af592491e56e3cbe618dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-libvncclient/cursor.c in LibVNCServer through 0.9.12 has a
-HandleCursorShape integer overflow and heap-based buffer overflow via a
-large height or width value. NOTE: this may overlap CVE-2019-15690.
+ > Set PAHO_HIGH_PERFORMANCE to disable free redefiniton as suggested by
+ > upstream in https://github.com/eclipse/paho.mqtt.c/issues/846.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...nt-cursor-limit-width-height-input-values.patch | 40 ++++++++++++++++++++++
- package/libvncserver/libvncserver.mk               |  3 ++
- 2 files changed, 43 insertions(+)
+ > This will avoid the following build failure on musl:
 
-diff --git a/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
-new file mode 100644
-index 0000000000..c389f2ecfb
---- /dev/null
-+++ b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
-@@ -0,0 +1,40 @@
-+From 54220248886b5001fbbb9fa73c4e1a2cb9413fed Mon Sep 17 00:00:00 2001
-+From: Christian Beier <dontmind@freeshell.org>
-+Date: Sun, 17 Nov 2019 17:18:35 +0100
-+Subject: [PATCH] libvncclient/cursor: limit width/height input values
-+
-+Avoids a possible heap overflow reported by Pavel Cheremushkin
-+<Pavel.Cheremushkin@kaspersky.com>.
-+
-+re #275
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/LibVNC/libvncserver/commit/54220248886b5001fbbb9fa73c4e1a2cb9413fed]
-+---
-+ libvncclient/cursor.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/libvncclient/cursor.c b/libvncclient/cursor.c
-+index 67f45726..40ffb3b0 100644
-+--- a/libvncclient/cursor.c
-++++ b/libvncclient/cursor.c
-+@@ -28,6 +28,8 @@
-+ #define OPER_SAVE     0
-+ #define OPER_RESTORE  1
-+ 
-++#define MAX_CURSOR_SIZE 1024
-++
-+ #define RGB24_TO_PIXEL(bpp,r,g,b)                                       \
-+    ((((uint##bpp##_t)(r) & 0xFF) * client->format.redMax + 127) / 255             \
-+     << client->format.redShift |                                              \
-+@@ -54,6 +56,9 @@ rfbBool HandleCursorShape(rfbClient* client,int xhot, int yhot, int width, int h
-+   if (width * height == 0)
-+     return TRUE;
-+ 
-++  if (width >= MAX_CURSOR_SIZE || height >= MAX_CURSOR_SIZE)
-++    return FALSE;
-++
-+   /* Allocate memory for pixel data and temporary mask data. */
-+   if(client->rcSource)
-+     free(client->rcSource);
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 5b8648fa6d..890672d04b 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -19,6 +19,9 @@ LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
- # 0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
- LIBVNCSERVER_IGNORE_CVES += CVE-2019-15681
- 
-+# 0006-libvncclient-cursor-limit-width-height-input-values.patch
-+LIBVNCSERVER_IGNORE_CVES += CVE-2019-20788
-+
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
- 	-DWITH_FFMPEG=OFF \
+ > /tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before string constant
+ >  void free(void *);
+ >                  ^
+ > /tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before numeric constant
+ >  void free(void *);
+ >                  ^
+ > [ 35%] Building C object src/CMakeFiles/common_obj.dir/Base64.c.o
+ > [ 36%] Building C object src/CMakeFiles/common_obj.dir/SHA1.c.o
+ > make[3]: *** [src/CMakeFiles/common_obj.dir/build.make:284: src/CMakeFiles/common_obj.dir/MQTTReasonCodes.c.o] Error 1
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results//fbe57a1602fed331ddff3ff3560dce02573816ff
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
