@@ -1,97 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 17:49:24 +0200
-Subject: [Buildroot] [git commit] package/qt5base: fix compile for aarch64_be
-Message-ID: <20200511153443.947DF9142F@busybox.osuosl.org>
+From: Louis Aussedat <aussedat.louis@gmail.com>
+Date: Mon, 11 May 2020 20:10:51 +0200
+Subject: [Buildroot] [PATCH 1/1] rtl8189es: new package
+Message-ID: <20200511181051.9347-1-aussedat.louis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88f6c946c70deb9bceaeacf8bdf8ee3e84a9ff95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This package adds the rtl8189es WiFi driver.
+   repo: https://github.com/jwrdegoede/rtl8189ES_linux.git
+   branch: master
 
-Add patch to fix availability check for storeRGB32FromARGB32PM_neon(), only
-available for arm little-endian.
+Driver is known to support Realtek RTL8189ES-VB-CG chip.
 
-Fixes:
-
-  - http://autobuild.buildroot.net/results/ab623253a6d988f4ee03d292ee85f3455de2ea25
-
-  .obj/qimage_conversions.o: In function `convert_generic(QImageData*, QImageData const*, QFlags<Qt::ImageConversionFlag>)':
-  qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-  qimage_conversions.cpp:(.text+0x259c): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-  .obj/qimage_conversions.o: In function `convert_generic_inplace(QImageData*, QImage::Format, QFlags<Qt::ImageConversionFlag>)':
-  qimage_conversions.cpp:(.text+0x28fc): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-  qimage_conversions.cpp:(.text+0x2900): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 ---
- ...ersions-arm-neon-draw-helper-only-availab.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/rtl8189es/Config.in      | 10 ++++++++++
+ package/rtl8189es/rtl8189es.hash |  2 ++
+ package/rtl8189es/rtl8189es.mk   | 17 +++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/rtl8189es/Config.in
+ create mode 100644 package/rtl8189es/rtl8189es.hash
+ create mode 100644 package/rtl8189es/rtl8189es.mk
 
-diff --git a/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch b/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e427ab15d4..83b47b77b6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1520,6 +1520,7 @@ F:	package/python-dnspython/
+ F:	package/python-future/
+ F:	package/python-huepy/
+ F:	package/python-tqdm/
++F:	package/rtl8189es/
+ 
+ N:	Louis-Paul Cordier <lpdev@cordier.org>
+ F:	package/intel-gmmlib/
+diff --git a/package/Config.in b/package/Config.in
+index c12676d859..32f4b21625 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -525,6 +525,7 @@ endmenu
+ 	source "package/rs485conf/Config.in"
+ 	source "package/rtc-tools/Config.in"
+ 	source "package/rtl8188eu/Config.in"
++	source "package/rtl8189es/Config.in"
+ 	source "package/rtl8189fs/Config.in"
+ 	source "package/rtl8723bs/Config.in"
+ 	source "package/rtl8723bu/Config.in"
+diff --git a/package/rtl8189es/Config.in b/package/rtl8189es/Config.in
 new file mode 100644
-index 0000000000..6c2080a669
+index 0000000000..2e3474e5e1
 --- /dev/null
-+++ b/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
-@@ -0,0 +1,58 @@
-+From 78d94321149f8e10e5270516082cb37a5b91e327 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 10 May 2020 22:26:43 +0200
-+Subject: [PATCH] qimage_conversions: arm neon draw helper only available for
-+ little endian
++++ b/package/rtl8189es/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_RTL8189ES
++	bool "rtl8189es"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Wireless driver rtl8189es.
 +
-+Fixes:
++	  https://github.com/jwrdegoede/rtl8189ES_linux.git
 +
-+  qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
++comment "rtl8189es needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+new file mode 100644
+index 0000000000..624c51ac0d
+--- /dev/null
++++ b/package/rtl8189es/rtl8189es.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  bf972b6494844c66885dc6846228994fac6075477cf9a7122ffd521e25ac791c  rtl8189es-2c8d44ae26485052f39d933a3a132b3ff395803a.tar.gz
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+new file mode 100644
+index 0000000000..9e4053ae83
+--- /dev/null
++++ b/package/rtl8189es/rtl8189es.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# rtl8189es
++#
++################################################################################
 +
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/gui/image/qimage_conversions.cpp | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++RTL8189ES_VERSION = 2c8d44ae26485052f39d933a3a132b3ff395803a
++RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
++RTL8189ES_LICENSE = GPL-2.0
 +
-+diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
-+index 97a5f89e..5fc5aba1 100644
-+--- a/src/gui/image/qimage_conversions.cpp
-++++ b/src/gui/image/qimage_conversions.cpp
-+@@ -119,7 +119,7 @@ void qGamma_correct_back_to_linear_cs(QImage *image)
-+  *****************************************************************************/
-+ 
-+ // The drawhelper conversions from/to RGB32 are passthroughs which is not always correct for general image conversion
-+-#if !defined(__ARM_NEON__)
-++#if !defined(__ARM_NEON__) || !(Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+ static void QT_FASTCALL storeRGB32FromARGB32PM(uchar *dest, const uint *src, int index, int count,
-+                                                const QVector<QRgb> *, QDitherInfo *)
-+ {
-+@@ -149,7 +149,7 @@ static const uint *QT_FASTCALL fetchRGB32ToARGB32PM(uint *buffer, const uchar *s
-+ #ifdef QT_COMPILER_SUPPORTS_SSE4_1
-+ extern void QT_FASTCALL storeRGB32FromARGB32PM_sse4(uchar *dest, const uint *src, int index, int count,
-+                                                     const QVector<QRgb> *, QDitherInfo *);
-+-#elif defined(__ARM_NEON__)
-++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+ extern void QT_FASTCALL storeRGB32FromARGB32PM_neon(uchar *dest, const uint *src, int index, int count,
-+                                                     const QVector<QRgb> *, QDitherInfo *);
-+ #endif
-+@@ -181,7 +181,7 @@ void convert_generic(QImageData *dest, const QImageData *src, Qt::ImageConversio
-+                 store = storeRGB32FromARGB32PM_sse4;
-+             else
-+                 store = storeRGB32FromARGB32PM;
-+-#elif defined(__ARM_NEON__)
-++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+             store = storeRGB32FromARGB32PM_neon;
-+ #else
-+             store = storeRGB32FromARGB32PM;
-+@@ -289,7 +289,7 @@ bool convert_generic_inplace(QImageData *data, QImage::Format dst_format, Qt::Im
-+                 store = storeRGB32FromARGB32PM_sse4;
-+             else
-+                 store = storeRGB32FromARGB32PM;
-+-#elif defined(__ARM_NEON__)
-++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
-+             store = storeRGB32FromARGB32PM_neon;
-+ #else
-+             store = storeRGB32FromARGB32PM;
-+-- 
-+2.26.2
++RTL8189ES_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8189ES=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	KSRC=$(LINUX_DIR)
 +
++$(eval $(kernel-module))
++$(eval $(generic-package))
+-- 
+2.26.2
