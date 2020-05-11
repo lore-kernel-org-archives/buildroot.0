@@ -1,31 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:23:53 +0200
-Subject: [Buildroot] [PATCH] packager/docker-cli: bump version to 19.03.7
-In-Reply-To: <20200511095318.13251-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 11 May 2020 11:53:18 +0200")
-References: <20200511095318.13251-1-peter@korsgaard.com>
-Message-ID: <87h7wmnuly.fsf@dell.be.48ers.dk>
+Date: Mon, 11 May 2020 21:24:32 +0200
+Subject: [Buildroot] [git commit] linux: bump CIP RT kernel to version
+ 4.19.115-cip24-rt9
+In-Reply-To: <20200509144610.2E996911C5@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 9 May 2020 16:58:41 +0200")
+References: <20200509144610.2E996911C5@busybox.osuosl.org>
+Message-ID: <87a72enukv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > To match the docker-engine version.
- > ./support/testing/run-tests tests.package.test_docker_compose.TestDockerCompose
- > 09:54:39 TestDockerCompose                        Starting
- > 09:54:40 TestDockerCompose                        Building
- > 10:45:33 TestDockerCompose                        Building done
- > 10:46:30 TestDockerCompose                        Cleaning up
- > .
- > ----------------------------------------------------------------------
- > Ran 1 test in 3121.828s
+ > commit: https://git.buildroot.net/buildroot/commit/?id=2452aa182dbf2fc7c1da9f5aa28709b8e431c58a
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > OK
+ > This patch bumps Linux CIP RT version to 4.19.115-cip24-rt9.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.02.x, thanks.
 
