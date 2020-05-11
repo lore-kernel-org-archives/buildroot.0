@@ -1,21 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 17:47:41 +0200
-Subject: [Buildroot] [git commit] packager/docker-cli: bump version to
- 19.03.7
-Message-ID: <20200511153443.8C6AE91450@busybox.osuosl.org>
+Date: Mon, 11 May 2020 17:49:24 +0200
+Subject: [Buildroot] [git commit] package/qt5base: fix compile for aarch64_be
+Message-ID: <20200511153443.947DF9142F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a0e3017d73a478b2c31e0384fbae0a012304724
+commit: https://git.buildroot.net/buildroot/commit/?id=88f6c946c70deb9bceaeacf8bdf8ee3e84a9ff95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To match the docker-engine version.
+Add patch to fix availability check for storeRGB32FromARGB32PM_neon(), only
+available for arm little-endian.
 
-./support/testing/run-tests tests.package.test_docker_compose.TestDockerCompose
-09:54:39 TestDockerCompose                        Starting
-09:54:40 TestDockerCompose                        Building
-10:45:33 TestDockerCompose                        Building done
-10:46:30 TestDockerCompose                        Cleaning up
+Fixes:
+
+  - http://autobuild.buildroot.net/results/ab623253a6d988f4ee03d292ee85f3455de2ea25
+
+  .obj/qimage_conversions.o: In function `convert_generic(QImageData*, QImageData const*, QFlags<Qt::ImageConversionFlag>)':
+  qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+  qimage_conversions.cpp:(.text+0x259c): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+  .obj/qimage_conversions.o: In function `convert_generic_inplace(QImageData*, QImage::Format, QFlags<Qt::ImageConversionFlag>)':
+  qimage_conversions.cpp:(.text+0x28fc): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+  qimage_conversions.cpp:(.text+0x2900): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ersions-arm-neon-draw-helper-only-availab.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+
+diff --git a/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch b/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
+new file mode 100644
+index 0000000000..6c2080a669
+--- /dev/null
++++ b/package/qt5/qt5base/0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
+@@ -0,0 +1,58 @@
++From 78d94321149f8e10e5270516082cb37a5b91e327 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 10 May 2020 22:26:43 +0200
++Subject: [PATCH] qimage_conversions: arm neon draw helper only available for
++ little endian
++
++Fixes:
++
++  qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/gui/image/qimage_conversions.cpp | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
++index 97a5f89e..5fc5aba1 100644
++--- a/src/gui/image/qimage_conversions.cpp
+++++ b/src/gui/image/qimage_conversions.cpp
++@@ -119,7 +119,7 @@ void qGamma_correct_back_to_linear_cs(QImage *image)
++  *****************************************************************************/
++ 
++ // The drawhelper conversions from/to RGB32 are passthroughs which is not always correct for general image conversion
++-#if !defined(__ARM_NEON__)
+++#if !defined(__ARM_NEON__) || !(Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
++ static void QT_FASTCALL storeRGB32FromARGB32PM(uchar *dest, const uint *src, int index, int count,
++                                                const QVector<QRgb> *, QDitherInfo *)
++ {
++@@ -149,7 +149,7 @@ static const uint *QT_FASTCALL fetchRGB32ToARGB32PM(uint *buffer, const uchar *s
++ #ifdef QT_COMPILER_SUPPORTS_SSE4_1
++ extern void QT_FASTCALL storeRGB32FromARGB32PM_sse4(uchar *dest, const uint *src, int index, int count,
++                                                     const QVector<QRgb> *, QDitherInfo *);
++-#elif defined(__ARM_NEON__)
+++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
++ extern void QT_FASTCALL storeRGB32FromARGB32PM_neon(uchar *dest, const uint *src, int index, int count,
++                                                     const QVector<QRgb> *, QDitherInfo *);
++ #endif
++@@ -181,7 +181,7 @@ void convert_generic(QImageData *dest, const QImageData *src, Qt::ImageConversio
++                 store = storeRGB32FromARGB32PM_sse4;
++             else
++                 store = storeRGB32FromARGB32PM;
++-#elif defined(__ARM_NEON__)
+++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
++             store = storeRGB32FromARGB32PM_neon;
++ #else
++             store = storeRGB32FromARGB32PM;
++@@ -289,7 +289,7 @@ bool convert_generic_inplace(QImageData *data, QImage::Format dst_format, Qt::Im
++                 store = storeRGB32FromARGB32PM_sse4;
++             else
++                 store = storeRGB32FromARGB32PM;
++-#elif defined(__ARM_NEON__)
+++#elif defined(__ARM_NEON__) && (Q_BYTE_ORDER == Q_LITTLE_ENDIAN)
++             store = storeRGB32FromARGB32PM_neon;
++ #else
++             store = storeRGB32FromARGB32PM;
++-- 
++2.26.2
++
