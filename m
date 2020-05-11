@@ -1,39 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:14:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] linux: bump CIP,
- CIP RT hashes
-Message-ID: <20200511190851.3127A9147B@busybox.osuosl.org>
+Date: Mon, 11 May 2020 21:14:45 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libvncserver: fix
+ CVE-2019-20788
+Message-ID: <20200511190851.407D08A53F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c74a3e3f08b2959afa694356f98155a26c78827
+commit: https://git.buildroot.net/buildroot/commit/?id=e3d7d0371f8477d65b6d37a140eeb7af12f4355e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Bumping the hashes for CIP and CIP RT.
+libvncclient/cursor.c in LibVNCServer through 0.9.12 has a
+HandleCursorShape integer overflow and heap-based buffer overflow via a
+large height or width value. NOTE: this may overlap CVE-2019-15690.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fb8186d53e32be4669c1026da8adcd5325e3ab4d)
+(cherry picked from commit 705adbaf9a17ad7ada4af592491e56e3cbe618dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...nt-cursor-limit-width-height-input-values.patch | 40 ++++++++++++++++++++++
+ package/libvncserver/libvncserver.mk               |  3 ++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 3226a2fafb..dcc623db91 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -6,8 +6,8 @@ sha256  6b17238cced3e1c2753d6d5b4f662bd347d4651f07c35506b849eb10aea7bc44  linux-
- sha256  bcae0956baaeb55dab5bad0401873fbc5baaa7fbe957ea6d27a5ab241cec5ca2  linux-4.14.176.tar.xz
- sha256  89749365f9dafa6c62cc5e920a7e532ed4aad9ab766fb436423b153ffbc08c96  linux-4.19.118.tar.xz
- # Locally computed
--sha256  18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2  linux-cip-4.19.98-cip19.tar.gz
--sha256  7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280  linux-cip-4.19.98-cip19-rt7.tar.gz
-+sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-cip-4.19.118-cip25.tar.gz
-+sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
+diff --git a/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
+new file mode 100644
+index 0000000000..c389f2ecfb
+--- /dev/null
++++ b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
+@@ -0,0 +1,40 @@
++From 54220248886b5001fbbb9fa73c4e1a2cb9413fed Mon Sep 17 00:00:00 2001
++From: Christian Beier <dontmind@freeshell.org>
++Date: Sun, 17 Nov 2019 17:18:35 +0100
++Subject: [PATCH] libvncclient/cursor: limit width/height input values
++
++Avoids a possible heap overflow reported by Pavel Cheremushkin
++<Pavel.Cheremushkin@kaspersky.com>.
++
++re #275
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/LibVNC/libvncserver/commit/54220248886b5001fbbb9fa73c4e1a2cb9413fed]
++---
++ libvncclient/cursor.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/libvncclient/cursor.c b/libvncclient/cursor.c
++index 67f45726..40ffb3b0 100644
++--- a/libvncclient/cursor.c
+++++ b/libvncclient/cursor.c
++@@ -28,6 +28,8 @@
++ #define OPER_SAVE     0
++ #define OPER_RESTORE  1
++ 
+++#define MAX_CURSOR_SIZE 1024
+++
++ #define RGB24_TO_PIXEL(bpp,r,g,b)                                       \
++    ((((uint##bpp##_t)(r) & 0xFF) * client->format.redMax + 127) / 255             \
++     << client->format.redShift |                                              \
++@@ -54,6 +56,9 @@ rfbBool HandleCursorShape(rfbClient* client,int xhot, int yhot, int width, int h
++   if (width * height == 0)
++     return TRUE;
++ 
+++  if (width >= MAX_CURSOR_SIZE || height >= MAX_CURSOR_SIZE)
+++    return FALSE;
+++
++   /* Allocate memory for pixel data and temporary mask data. */
++   if(client->rcSource)
++     free(client->rcSource);
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 5b8648fa6d..890672d04b 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -19,6 +19,9 @@ LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
+ # 0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
+ LIBVNCSERVER_IGNORE_CVES += CVE-2019-15681
  
- # Licenses hashes
- sha256  ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
++# 0006-libvncclient-cursor-limit-width-height-input-values.patch
++LIBVNCSERVER_IGNORE_CVES += CVE-2019-20788
++
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
