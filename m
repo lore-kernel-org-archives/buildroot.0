@@ -1,54 +1,135 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:20:47 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c: fix
- build on musl
-Message-ID: <20200511190851.553B5913C4@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 11 May 2020 21:22:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-markdown2: fix CVE-2020-11888
+Message-ID: <20200511192237.122291-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc6c98be0375aa1929da0f113c7eadfc229f6418
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-Set PAHO_HIGH_PERFORMANCE to disable free redefiniton as suggested by
-upstream in https://github.com/eclipse/paho.mqtt.c/issues/846.
-
-This will avoid the following build failure on musl:
-
-/tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before string constant
- void free(void *);
-                 ^
-/tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before numeric constant
- void free(void *);
-                 ^
-[ 35%] Building C object src/CMakeFiles/common_obj.dir/Base64.c.o
-[ 36%] Building C object src/CMakeFiles/common_obj.dir/SHA1.c.o
-make[3]: *** [src/CMakeFiles/common_obj.dir/build.make:284: src/CMakeFiles/common_obj.dir/MQTTReasonCodes.c.o] Error 1
-
-Fixes:
- - http://autobuild.buildroot.org/results//fbe57a1602fed331ddff3ff3560dce02573816ff
+python-markdown2 through 2.3.8 allows XSS because element names are
+mishandled unless a \w+ match succeeds. For example, an attack might use
+elementname@ or elementname- with an onclick attribute.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e446f5ac02313894014fdcd4e281961a4ab383c9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...gs-with-punctuation-after-as-part-of.patch | 53 +++++++++++++++++++
+ .../0002-Better-fix-for-issue-348.patch       | 32 +++++++++++
+ package/python-markdown2/python-markdown2.mk  |  4 ++
+ 3 files changed, 89 insertions(+)
+ create mode 100644 package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+ create mode 100644 package/python-markdown2/0002-Better-fix-for-issue-348.patch
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 6a6b5f3d64..c7ecf412cd 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -12,7 +12,8 @@ PAHO_MQTT_C_INSTALL_STAGING = YES
+diff --git a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+new file mode 100644
+index 0000000000..ee980e22e8
+--- /dev/null
++++ b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+@@ -0,0 +1,53 @@
++From 9144d0fc5d5249cc4d81287ee79091806e6dde52 Mon Sep 17 00:00:00 2001
++From: Gareth Simpson <gareth.simpson@zoodigital.com>
++Date: Fri, 1 May 2020 19:31:21 +0100
++Subject: [PATCH] Fix for issue 348 - incomplete tags with punctuation after as
++ part of the tag name are a source of XSS
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/trentm/python-markdown2/commit/9144d0fc5d5249cc4d81287ee79091806e6dde52]
++---
++ lib/markdown2.py                           | 2 +-
++ test/tm-cases/issue348_incomplete_tag.html | 1 +
++ test/tm-cases/issue348_incomplete_tag.opts | 1 +
++ test/tm-cases/issue348_incomplete_tag.text | 1 +
++ 4 files changed, 4 insertions(+), 1 deletion(-)
++ create mode 100644 test/tm-cases/issue348_incomplete_tag.html
++ create mode 100644 test/tm-cases/issue348_incomplete_tag.opts
++ create mode 100644 test/tm-cases/issue348_incomplete_tag.text
++
++diff --git a/lib/markdown2.py b/lib/markdown2.py
++index 3a5d5d9..636bf07 100755
++--- a/lib/markdown2.py
+++++ b/lib/markdown2.py
++@@ -2164,7 +2164,7 @@ def _encode_amps_and_angles(self, text):
++         text = self._naked_gt_re.sub('&gt;', text)
++         return text
++ 
++-    _incomplete_tags_re = re.compile("<(/?\w+[\s/]+?)")
+++    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
++ 
++     def _encode_incomplete_tags(self, text):
++         if self.safe_mode not in ("replace", "escape"):
++diff --git a/test/tm-cases/issue348_incomplete_tag.html b/test/tm-cases/issue348_incomplete_tag.html
++new file mode 100644
++index 0000000..46059cc
++--- /dev/null
+++++ b/test/tm-cases/issue348_incomplete_tag.html
++@@ -0,0 +1 @@
+++<p>&lt;lol@/ //id="pwn"//onclick="alert(1)"//<strong>abc</strong></p>
++diff --git a/test/tm-cases/issue348_incomplete_tag.opts b/test/tm-cases/issue348_incomplete_tag.opts
++new file mode 100644
++index 0000000..ad487c0
++--- /dev/null
+++++ b/test/tm-cases/issue348_incomplete_tag.opts
++@@ -0,0 +1 @@
+++{"safe_mode": "escape"}
++diff --git a/test/tm-cases/issue348_incomplete_tag.text b/test/tm-cases/issue348_incomplete_tag.text
++new file mode 100644
++index 0000000..bb4a0de
++--- /dev/null
+++++ b/test/tm-cases/issue348_incomplete_tag.text
++@@ -0,0 +1 @@
+++<lol@/ //id="pwn"//onclick="alert(1)"//**abc**
+diff --git a/package/python-markdown2/0002-Better-fix-for-issue-348.patch b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
+new file mode 100644
+index 0000000000..127bb51da2
+--- /dev/null
++++ b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
+@@ -0,0 +1,32 @@
++From 0c0543846fa54281e2269b0bff841a0b9ffe23fe Mon Sep 17 00:00:00 2001
++From: Gareth Simpson <gareth.simpson@zoodigital.com>
++Date: Sat, 2 May 2020 21:22:36 +0100
++Subject: [PATCH] Better fix for issue 348
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/trentm/python-markdown2/commit/0c0543846fa54281e2269b0bff841a0b9ffe23fe]
++---
++ lib/markdown2.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/lib/markdown2.py b/lib/markdown2.py
++index 636bf07..be86502 100755
++--- a/lib/markdown2.py
+++++ b/lib/markdown2.py
++@@ -2164,11 +2164,14 @@ def _encode_amps_and_angles(self, text):
++         text = self._naked_gt_re.sub('&gt;', text)
++         return text
++ 
++-    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
+++    _incomplete_tags_re = re.compile("<(/?\w+?(?!\w).+?[\s/]+?)")
++ 
++     def _encode_incomplete_tags(self, text):
++         if self.safe_mode not in ("replace", "escape"):
++             return text
+++            
+++        if text.endswith(">"):
+++            return text  # this is not an incomplete tag, this is a link in the form <http://x.y.z>
++ 
++         return self._incomplete_tags_re.sub("&lt;\\1", text)
++ 
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index d8b946e140..f508c17a20 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -11,4 +11,8 @@ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
  
- PAHO_MQTT_C_CONF_OPTS = \
- 	-DPAHO_ENABLE_TESTING=FALSE \
--	-DPAHO_ENABLE_CPACK=FALSE
-+	-DPAHO_ENABLE_CPACK=FALSE \
-+	-DPAHO_HIGH_PERFORMANCE=TRUE
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PAHO_MQTT_C_DEPENDENCIES += openssl
++# 0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
++# 0002-Better-fix-for-issue-348.patch
++PYTHON_MARKDOWN2_IGNORE_CVES += CVE-2020-11888
++
+ $(eval $(python-package))
+-- 
+2.26.2
