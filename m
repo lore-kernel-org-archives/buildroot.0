@@ -1,47 +1,72 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 11 May 2020 01:50:16 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-janus: bump to version 0.5.0
-Message-ID: <20200511075016.119439-1-james.hilliard1@gmail.com>
+Date: Mon, 11 May 2020 01:54:03 -0600
+Subject: [Buildroot] [PATCH 2/5] package/gssdp: add optional dependency
+ for gobject-introspection
+In-Reply-To: <CAPi7W83Vin+mO-jBozA4kisWGm9Op1dxSujDpkY8QuipvJL71g@mail.gmail.com>
+References: <20200315172459.881615-1-aduskett@gmail.com>
+ <20200315172459.881615-2-aduskett@gmail.com>
+ <20200511071910.74806b2a@windsurf.home>
+ <CAPi7W80ZVFdJrbvPtoSnbOxXBstdziKW5zcy51pSjSUgzE7hgg@mail.gmail.com>
+ <CAPi7W83Vin+mO-jBozA4kisWGm9Op1dxSujDpkY8QuipvJL71g@mail.gmail.com>
+Message-ID: <CADvTj4oHO5HnYxRU6VkdLRNCpsBJS0R5kWJd62Y3jDfA212EsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-janus/python-janus.hash | 6 +++---
- package/python-janus/python-janus.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-janus/python-janus.hash b/package/python-janus/python-janus.hash
-index 5098769901..9108db6325 100644
---- a/package/python-janus/python-janus.hash
-+++ b/package/python-janus/python-janus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/janus/json
--md5	26283b122439fbca4ae1db18ff839b7c  janus-0.4.0.tar.gz
--sha256	cfc221683160b91b35bae1917e2957b78dad10a2e634f4f8ed119ed72e2a88ef  janus-0.4.0.tar.gz
-+md5  577c3c8939ef945c5dc00319bd59484f  janus-0.5.0.tar.gz
-+sha256  0700f5537d076521851d19b7625545c5e76f6d5792ab17984f28230adcc3b34c  janus-0.5.0.tar.gz
- # Locally computed sha256 checksums
--sha256	8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-+sha256  8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-diff --git a/package/python-janus/python-janus.mk b/package/python-janus/python-janus.mk
-index f718d0c19d..b5fa44f727 100644
---- a/package/python-janus/python-janus.mk
-+++ b/package/python-janus/python-janus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_JANUS_VERSION = 0.4.0
-+PYTHON_JANUS_VERSION = 0.5.0
- PYTHON_JANUS_SOURCE = janus-$(PYTHON_JANUS_VERSION).tar.gz
--PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/e2/39/41fd545b99eac81d47fe346b8c78c09a3b187ce2fd9f3c9656dfe035e39a
-+PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/9a/76/fbb89aa5d3cb5f3fec6ce74d34cf980ccd475b015d1a59cb5a14fe4cd2c5
- PYTHON_JANUS_SETUP_TYPE = setuptools
- PYTHON_JANUS_LICENSE = Apache-2.0
- PYTHON_JANUS_LICENSE_FILES = LICENSE
--- 
-2.20.1
+On Mon, May 11, 2020 at 1:18 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Hi all,
+>
+> Le lun. 11 mai 2020 ? 09:02, Fabrice Fontaine
+> <fontaine.fabrice@gmail.com> a ?crit :
+> >
+> > Hi Thomas,
+> >
+> > Le lun. 11 mai 2020 ? 07:19, Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> a ?crit :
+> > >
+> > > Hello,
+> > >
+> > > On Sun, 15 Mar 2020 10:24:55 -0700
+> > > aduskett at gmail.com wrote:
+> > >
+> > > > From: Adam Duskett <Aduskett@gmail.com>
+> > > >
+> > > > If gobject-introspection is selected, explicitly set -Dintrospection=true in
+> > > > the configure options and add a dependency for gobject-introspection.
+> > > >
+> > > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > >
+> > > The build of gssdp is broken with introspection support:
+> > >
+> > >   /bin/sh: 1: /home/buildroot/autobuild/instance-2/output-1/host/bin/../nios2-buildroot-linux-gnu/sysroot/home/buildroot/autobuild/instance-2/output-1/host/bin/g-ir-scanner: not found
+> > >
+> > > Could you have a look ?
+> > >
+> > > I am wondering if this couldn't be a fallout of the recent changes in
+> > > the pkg-config Meson logic.
+> > James sent a patch that fix this build failure:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20200502060435.23004-1-james.hilliard1 at gmail.com.
+> > The patch sent by James is fixing atk as well as many other meson
+> > packages such as gssdp. However, it seems there was some debate on
+> > this patch.It seems that James suggested that a better solution would be to patch meson. This proposal was merged by meson a few days ago:
+> https://github.com/mesonbuild/meson/pull/7072/commits/0aa52b538fa678e2da1d0dedff800408e5e7afbb
+> James, could you provide a v2 of your patch?
+I was waiting on it to get included in a meson release since it doesn't apply
+to the latest release, seems the gnome module has been refactored quite
+a bit since 0.54.1.
+> > >
+> > > Thomas
+> > > --
+> > > Thomas Petazzoni, CTO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > Best Regards,
+> >
+> > Fabrice
+> Best Regards,
+>
+> Fabrice
