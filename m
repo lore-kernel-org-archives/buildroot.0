@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:24:32 +0200
-Subject: [Buildroot] [git commit] linux: bump CIP RT kernel to version
- 4.19.115-cip24-rt9
-In-Reply-To: <20200509144610.2E996911C5@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 9 May 2020 16:58:41 +0200")
-References: <20200509144610.2E996911C5@busybox.osuosl.org>
-Message-ID: <87a72enukv.fsf@dell.be.48ers.dk>
+Date: Mon, 11 May 2020 21:24:37 +0200
+Subject: [Buildroot] [git commit] linux: bump CIP kernel to version
+ 4.19.118-cip25
+In-Reply-To: <20200509144610.22F3F911C4@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 9 May 2020 16:58:37 +0200")
+References: <20200509144610.22F3F911C4@busybox.osuosl.org>
+Message-ID: <875zd2nukq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=2452aa182dbf2fc7c1da9f5aa28709b8e431c58a
+ > commit: https://git.buildroot.net/buildroot/commit/?id=1b53b94690014c6db6713b7a69ebe8e4da2d5f7f
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch bumps Linux CIP RT version to 4.19.115-cip24-rt9.
+ > This patch bumps Linux CIP version to v4.19.118-cip25.
 
  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
