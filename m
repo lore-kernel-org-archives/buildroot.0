@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 21:23:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix CVE-2019-20788
-In-Reply-To: <87k11jorvr.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 11 May 2020 09:25:12 +0200")
-References: <20200502200747.3438774-1-fontaine.fabrice@gmail.com>
- <87k11jorvr.fsf@dell.be.48ers.dk>
-Message-ID: <87tv0mnumw.fsf@dell.be.48ers.dk>
+Date: Mon, 11 May 2020 21:23:26 +0200
+Subject: [Buildroot] [git commit] package/paho-mqtt-c: fix build on musl
+In-Reply-To: <20200511071937.AFADD8A29D@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Mon, 11 May 2020 09:28:30 +0200")
+References: <20200511071937.AFADD8A29D@busybox.osuosl.org>
+Message-ID: <87pnbanump.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +13,29 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> libvncclient/cursor.c in LibVNCServer through 0.9.12 has a
- >> HandleCursorShape integer overflow and heap-based buffer overflow via a
- >> large height or width value. NOTE: this may overlap CVE-2019-15690.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=e446f5ac02313894014fdcd4e281961a4ab383c9
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Set PAHO_HIGH_PERFORMANCE to disable free redefiniton as suggested by
+ > upstream in https://github.com/eclipse/paho.mqtt.c/issues/846.
+
+ > This will avoid the following build failure on musl:
+
+ > /tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before string constant
+ >  void free(void *);
+ >                  ^
+ > /tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before numeric constant
+ >  void free(void *);
+ >                  ^
+ > [ 35%] Building C object src/CMakeFiles/common_obj.dir/Base64.c.o
+ > [ 36%] Building C object src/CMakeFiles/common_obj.dir/SHA1.c.o
+ > make[3]: *** [src/CMakeFiles/common_obj.dir/build.make:284: src/CMakeFiles/common_obj.dir/MQTTReasonCodes.c.o] Error 1
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results//fbe57a1602fed331ddff3ff3560dce02573816ff
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x, thanks.
 
