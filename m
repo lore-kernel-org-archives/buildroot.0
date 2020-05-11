@@ -1,94 +1,220 @@
-From: Erwan Gautron <erwan.gautron@bertin.fr>
-Date: Mon, 11 May 2020 15:02:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add option to
- enable some features
-In-Reply-To: <20200511144711.04ae03e0@windsurf.home>
-References: <20200511112840.634268-1-erwan.gautron@bertin.fr>
- <20200511112840.634268-2-erwan.gautron@bertin.fr>
- <20200511144711.04ae03e0@windsurf.home>
-Message-ID: <9274c787-c39e-1f27-114c-6a9debce36d3@bertin.fr>
+From: Erwan GAUTRON <erwan.gautron@bertin.fr>
+Date: Mon, 11 May 2020 15:21:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add option to enable
+ some features
+Message-ID: <20200511132133.738039-1-erwan.gautron@bertin.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+From: "GAUTRON, Erwan" <erwan.gautron@bertin.fr>
 
-?
+Openssl implements lot of algorithms that are not required in
+some emdedded devices and cyphers known as weak.
+Secure embedded systems shall disable unused algorithms (and weak algo)
+in order to be certified.
+This patch allows to select weak algorithms and mecanims to enable
+such as md5
+To ensure backward compatibility, all items are selected by default
 
+Signed-off-by: Erwan GAUTRON <erwan.gautron@bertin.fr>
+---
+ package/libopenssl/Config.in     | 147 +++++++++++++++++++++++++++++++
+ package/libopenssl/libopenssl.mk |  24 +++++
+ 2 files changed, 171 insertions(+)
 
-
-On 11/05/2020 14:47, Thomas Petazzoni wrote:
-> Hello Erwan,
-> 
-> On Mon, 11 May 2020 13:28:40 +0200
-> Erwan GAUTRON <erwan.gautron@bertin.fr> wrote:
-> 
->>  package/libopenssl/Config.in     | 151 +++++++++++++++++++++++++++++++
->>  package/libopenssl/libopenssl.mk |  25 +++++
->>  2 files changed, 176 insertions(+)
-> 
-> Thanks for this new iteration!
-welcome
-> 
->> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA
->> +	bool "enable openssl CHACHA "
->> +	default y
->> +	help
->> +	  Enable CHACHA cipher in libopenssl.
-> 
-> The "in openssl" part of each help text is not really useful, as these
-> are suboptions of libopenssl already.
-> 
-I'll update
->> +config BR2_PACKAGE_LIBOPENSSL_UNSECURE
->> +	bool "enable unit test, debug, backtrace"
->> +	default y
->> +	help
->> +	  Enable unit-test crypto-mdebug-backtrace crypto-mdebug autoerrinit mode in libopenssl.
-> 
-> This line is too long, "make check-package" most likely complains about
-> this.
-> 
-ok
->> +config BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
->> +	bool "enable openssl dynamic engine"
->> +	default y
->> +	help
->> +	  Enable dynamic engine in libopenssl.
->> +
->> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_IPV6
->> +	bool "enable openssl IPV6"
->> +	default y
->> +	help
->> +	  Enable IPV6 in libopenssl.
-> 
-> Is it really useful to make IPv6 optional? Is that necessary for your
-> certification? IPv6 used to be optional in Buildroot in general, and we
-> got rid of that several years ago, so reintroducing IPv6 options will
-> really need some good jusitification.
-> 
-I can understand. Anyway my certification needs to disable all Ipv6
-options. But I can do that by patching my local copy of buildroot in
-post build process. I'll remove the option
-
->> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP
->> +	bool "enable openssl compression"
->> +	default y
->> +	help
->> +	  Enable compression in libopenssl.
-> 
-> So you dropped the zlib option? Why?
-I remove it because I've found a case where this option causes some
-problems.
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
- I'll send the new patch soon
-
-Regards
-Erwan
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 881518d1cb..184a365a46 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -44,4 +44,151 @@ config BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	help
+ 	  Install additional encryption engine libraries.
+ 
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA
++	bool "enable CHACHA "
++	default y
++	help
++	  Enable CHACHA cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
++	bool "enable RC5"
++	default y
++	help
++	  Enable RC5 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2
++	bool "enable RC2"
++	default y
++	help
++	  Enable RC2 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4
++	bool "enable RC4"
++	default y
++	help
++	  Enable RC4 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2
++	bool "enable MD2"
++	default y
++	help
++	  Enable MD2 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
++	bool "enable MD4"
++	default y
++	help
++	  Enable MD4 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5
++	bool "enable MD5"
++	default y
++	help
++	  Enable MD5 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2
++	bool "enable MDC2"
++	default y
++	help
++	  Enable MDC2 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2
++	bool "enable BLAKE2"
++	default y
++	help
++	  Enable BLAKE2 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA
++	bool "enable IDEA"
++	default y
++	help
++	  Enable IDEA cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_SEED
++	bool "enable SEED"
++	default y
++	help
++	  Enable SEED cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
++	bool "enable DES"
++	default y
++	help
++	  Enable DES cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
++	bool "enable RMD160"
++	default y
++	help
++	  Enable RMD160 cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_WHIRLPOOL
++	bool "enable WHIRLPOOL"
++	default y
++	help
++	  Enable WHIRLPOOL cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
++	bool "enable BLOWFISH"
++	default y
++	help
++	  Enable BLOWFISH cipher.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL
++	bool "enable SSL"
++	default y
++	help
++	  Enable SSL mode.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL2
++	bool "enable SSL2"
++	default y
++	help
++	  Enable SSL2 mode.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3
++	bool "enable SSL3"
++	default y
++	help
++	  Enable SSL3 mode.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL
++	bool "enable WEAK_SSL"
++	default y
++	help
++	  Enable WEAK_SSL mode.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK
++	bool "enable mode PSK"
++	default y
++	help
++	  Enable PSK mode.
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST
++	bool "enable mode CAST"
++	default y
++	help
++	  Enable CAST mode.
++
++config BR2_PACKAGE_LIBOPENSSL_UNSECURE
++	bool "enable unit test, debug, backtrace"
++	default y
++	help
++	  Enable unit-test crypto-mdebug-backtrace
++	  crypto-mdebug autoerrinit mode.
++
++config BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
++	bool "enable dynamic engine"
++	default y
++	help
++	  Enable dynamic engine.
++
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP
++	bool "enable compression"
++	default y
++	help
++	  Enable compression.
++
++
+ endif # BR2_PACKAGE_LIBOPENSSL
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index a300458f85..ff9ae08d74 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -86,6 +86,30 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			no-tests \
+ 			no-fuzz-libfuzzer \
+ 			no-fuzz-afl \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5),,no-rc5) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2),,no-md2) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4),,no-md4) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MD5),,no-md5) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MDC2),,no-mdc2) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLAKE2),,no-blake2) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_IDEA),,no-idea) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_SEED),,no-seed) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_DES),,no-des) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160),,no-rmd160) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_WHIRLPOOL),,no-whirlpool) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH),,no-bf) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL),,no-ssl) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL2),,no-ssl2) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3),,no-ssl3) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL),,no-weak-ssl-ciphers) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK),,no-psk) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST),,no-cast) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_UNSECURE),,no-unit-test no-crypto-mdebug-backtrace no-crypto-mdebug no-autoerrinit) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE),,no-dynamic-engine ) \
++			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP),,no-comp) \
+ 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
+ 	)
+ 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
+-- 
+2.25.1
