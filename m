@@ -1,8 +1,10 @@
 From: Erwan GAUTRON <erwan.gautron@bertin.fr>
-Date: Mon, 11 May 2020 13:28:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add option to disable
- unwanted features
-Message-ID: <20200511112840.634268-1-erwan.gautron@bertin.fr>
+Date: Mon, 11 May 2020 13:28:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add option to enable
+ some features
+In-Reply-To: <20200511112840.634268-1-erwan.gautron@bertin.fr>
+References: <20200511112840.634268-1-erwan.gautron@bertin.fr>
+Message-ID: <20200511112840.634268-2-erwan.gautron@bertin.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +17,9 @@ Openssl implements lot of algorithms that are not required in
 some emdedded devices and cyphers known as weak.
 Secure embedded systems shall disable unused algorithms (and weak algo)
 in order to be certified.
-This patch allows to select algorithms and mecanims to disable
+This patch allows to select weak algorithms and mecanims to enable
 such as md5
+To ensure backward compatibility, all items are selected by default
 
 Signed-off-by: Erwan GAUTRON <erwan.gautron@bertin.fr>
 ---
