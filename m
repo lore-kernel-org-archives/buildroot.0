@@ -1,72 +1,53 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 11 May 2020 01:54:03 -0600
-Subject: [Buildroot] [PATCH 2/5] package/gssdp: add optional dependency
- for gobject-introspection
-In-Reply-To: <CAPi7W83Vin+mO-jBozA4kisWGm9Op1dxSujDpkY8QuipvJL71g@mail.gmail.com>
-References: <20200315172459.881615-1-aduskett@gmail.com>
- <20200315172459.881615-2-aduskett@gmail.com>
- <20200511071910.74806b2a@windsurf.home>
- <CAPi7W80ZVFdJrbvPtoSnbOxXBstdziKW5zcy51pSjSUgzE7hgg@mail.gmail.com>
- <CAPi7W83Vin+mO-jBozA4kisWGm9Op1dxSujDpkY8QuipvJL71g@mail.gmail.com>
-Message-ID: <CADvTj4oHO5HnYxRU6VkdLRNCpsBJS0R5kWJd62Y3jDfA212EsA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 May 2020 11:53:18 +0200
+Subject: [Buildroot] [PATCH] packager/docker-cli: bump version to 19.03.7
+Message-ID: <20200511095318.13251-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 11, 2020 at 1:18 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Hi all,
->
-> Le lun. 11 mai 2020 ? 09:02, Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> a ?crit :
-> >
-> > Hi Thomas,
-> >
-> > Le lun. 11 mai 2020 ? 07:19, Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> a ?crit :
-> > >
-> > > Hello,
-> > >
-> > > On Sun, 15 Mar 2020 10:24:55 -0700
-> > > aduskett at gmail.com wrote:
-> > >
-> > > > From: Adam Duskett <Aduskett@gmail.com>
-> > > >
-> > > > If gobject-introspection is selected, explicitly set -Dintrospection=true in
-> > > > the configure options and add a dependency for gobject-introspection.
-> > > >
-> > > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > >
-> > > The build of gssdp is broken with introspection support:
-> > >
-> > >   /bin/sh: 1: /home/buildroot/autobuild/instance-2/output-1/host/bin/../nios2-buildroot-linux-gnu/sysroot/home/buildroot/autobuild/instance-2/output-1/host/bin/g-ir-scanner: not found
-> > >
-> > > Could you have a look ?
-> > >
-> > > I am wondering if this couldn't be a fallout of the recent changes in
-> > > the pkg-config Meson logic.
-> > James sent a patch that fix this build failure:
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20200502060435.23004-1-james.hilliard1 at gmail.com.
-> > The patch sent by James is fixing atk as well as many other meson
-> > packages such as gssdp. However, it seems there was some debate on
-> > this patch.It seems that James suggested that a better solution would be to patch meson. This proposal was merged by meson a few days ago:
-> https://github.com/mesonbuild/meson/pull/7072/commits/0aa52b538fa678e2da1d0dedff800408e5e7afbb
-> James, could you provide a v2 of your patch?
-I was waiting on it to get included in a meson release since it doesn't apply
-to the latest release, seems the gnome module has been refactored quite
-a bit since 0.54.1.
-> > >
-> > > Thomas
-> > > --
-> > > Thomas Petazzoni, CTO, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
-> > Best Regards,
-> >
-> > Fabrice
-> Best Regards,
->
-> Fabrice
+To match the docker-engine version.
+
+./support/testing/run-tests tests.package.test_docker_compose.TestDockerCompose
+09:54:39 TestDockerCompose                        Starting
+09:54:40 TestDockerCompose                        Building
+10:45:33 TestDockerCompose                        Building done
+10:46:30 TestDockerCompose                        Cleaning up
+.
+----------------------------------------------------------------------
+Ran 1 test in 3121.828s
+
+OK
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 44f13c8bfc..6363461a6a 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	00d06baf4793794c0fd9ecad5b7e95aed6eb942f24c8b6e2d7c7f7564b9743ad  docker-cli-19.03.5.tar.gz
++sha256	0b5dc158c371b76588345733e164140f3db88c49cbcd7a5f41ea98807da6084b  docker-cli-19.03.7.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 4ad30e0278..b0a4aa9dd3 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CLI_VERSION = 19.03.5
++DOCKER_CLI_VERSION = 19.03.7
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
+ 
+-- 
+2.20.1
