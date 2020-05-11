@@ -1,33 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 May 2020 17:47:55 +0200
-Subject: [Buildroot] [PATCH] packager/docker-cli: bump version to 19.03.7
-In-Reply-To: <20200511095318.13251-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 11 May 2020 11:53:18 +0200")
-References: <20200511095318.13251-1-peter@korsgaard.com>
-Message-ID: <877dxipj6c.fsf@dell.be.48ers.dk>
+Date: Mon, 11 May 2020 17:50:21 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5base: fix compile for
+ aarch64_be
+In-Reply-To: <20200510205220.16002-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 10 May 2020 22:52:20 +0200")
+References: <20200510205220.16002-1-ps.report@gmx.net>
+Message-ID: <873686pj2a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > To match the docker-engine version.
- > ./support/testing/run-tests tests.package.test_docker_compose.TestDockerCompose
- > 09:54:39 TestDockerCompose                        Starting
- > 09:54:40 TestDockerCompose                        Building
- > 10:45:33 TestDockerCompose                        Building done
- > 10:46:30 TestDockerCompose                        Cleaning up
- > .
- > ----------------------------------------------------------------------
- > Ran 1 test in 3121.828s
+ > Add patch to fix availability check for storeRGB32FromARGB32PM_neon(), only
+ > available for arm little-endian.
 
- > OK
+ > Fixes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >   - http://autobuild.buildroot.net/results/ab623253a6d988f4ee03d292ee85f3455de2ea25
+
+ >   .obj/qimage_conversions.o: In function `convert_generic(QImageData*, QImageData const*, QFlags<Qt::ImageConversionFlag>)':
+ >   qimage_conversions.cpp:(.text+0x2598): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+ >   qimage_conversions.cpp:(.text+0x259c): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+ >   .obj/qimage_conversions.o: In function `convert_generic_inplace(QImageData*, QImage::Format, QFlags<Qt::ImageConversionFlag>)':
+ >   qimage_conversions.cpp:(.text+0x28fc): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+ >   qimage_conversions.cpp:(.text+0x2900): undefined reference to `storeRGB32FromARGB32PM_neon(unsigned char*, unsigned int const*, int, int, QVector<unsigned int> const*, QDitherInfo*)'
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
+
+Don't forget to submit the patch upstream.
 
 -- 
 Bye, Peter Korsgaard
