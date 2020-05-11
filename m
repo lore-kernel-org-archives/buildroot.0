@@ -1,48 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 May 2020 21:29:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/c-ares: security bump to version
- 1.16.1
-Message-ID: <20200511192935.123370-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 11 May 2020 12:54:02 -0700
+Subject: [Buildroot] [PATCH v1 1/2] package/docker-engine: bump version to
+ 19.03.8
+Message-ID: <20200511195403.557773-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prevent possible use-after-free and double-free in ares_getaddrinfo() if
-ares_destroy() is called prior to ares_getaddrinfo() completing.
-
-https://c-ares.haxx.se/changelog.html#1_16_1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/c-ares/c-ares.hash | 2 +-
- package/c-ares/c-ares.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index d4fe483ae6..04a87402e9 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  de058ad7c128156e2db6dc98b8a359924d6f210a1b99dd36ba15c8f839a83a89  c-ares-1.16.0.tar.gz
-+sha256  d08312d0ecc3bd48eee0a4cc0d2137c9f194e0a28de2028928c0f6cae85f86ce  c-ares-1.16.1.tar.gz
- 
- # Hash for license file
- sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index e8723bf784..f07a7e566f 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 4c031574af..c23eea90a8 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	6621da5b75cecd1f6f57389a4611d3dd00eeedd8765db63ae5538122fdac27da  docker-engine-19.03.7.tar.gz
++sha256	13ec45ad45091111bd566aca9d81989b3f05e0625dab68d33c3ad81ff924172f  docker-engine-19.03.8.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index df27cb17b5..78f6c1261c 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--C_ARES_VERSION = 1.16.0
-+C_ARES_VERSION = 1.16.1
- C_ARES_SITE = http://c-ares.haxx.se/download
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
+-DOCKER_ENGINE_VERSION = 19.03.7
++DOCKER_ENGINE_VERSION = 19.03.8
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
 2.26.2
