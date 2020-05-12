@@ -1,73 +1,42 @@
 From: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
-Date: Tue, 12 May 2020 15:28:57 +0200
-Subject: [Buildroot] [PATCH 4/6] package/mesa3d: make it aware of libglvnd
- and support it when present
+Date: Tue, 12 May 2020 15:28:58 +0200
+Subject: [Buildroot] [PATCH 5/6] package/x11r7/xserver_xorg-server: disable
+ GLAMOR support with NVIDIA drivers
 In-Reply-To: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
 References: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
-Message-ID: <20200512132859.15189-4-jskrzypnik@novomatic-tech.com>
+Message-ID: <20200512132859.15189-5-jskrzypnik@novomatic-tech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mesa is the first GLVND provider and supports it natively when being
-configured with -Dglvnd=true option.
+NVIDIA GLX extension doesn't support GLAMOR and won't let compile X11 server.
 
-To not break existing way of operation, its compatibility is enabled
-only when BR2_PACKAGE_LIBGLVND is selected.
+Even if there's libglvnd enabled and you have Mesa together with it, running
+X11 with GLAMOR enabled will crash on loading NVIDIA's own GLX extension.
 
 Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
 ---
- package/mesa3d/Config.in | 2 ++
- package/mesa3d/mesa3d.mk | 9 +++++++++
- 2 files changed, 11 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index dd512d9b76..9b3f1546c8 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -442,6 +442,7 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
- 
- endif # BR2_PACKAGE_MESA3D_DRIVER
- 
-+if !BR2_PACKAGE_LIBGLVND
- config BR2_PACKAGE_PROVIDES_LIBGL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX
- 
-@@ -450,6 +451,7 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
- 
- config BR2_PACKAGE_PROVIDES_LIBGLES
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8ccc04224d..44f93a99ed 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -191,7 +191,11 @@ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
+ XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
++ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_XORG),y)
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-glamor
++else
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
 +endif
- 
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 531dcf5b81..7ff96b0169 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -50,6 +50,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
- MESA3D_DEPENDENCIES += elfutils
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-glamor
  endif
- 
-+
-+
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
- # Disable-mangling not yet supported by meson build system.
- # glx:
-@@ -275,4 +277,11 @@ else
- MESA3D_CONF_OPTS += -Dzstd=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGLVND),y)
-+MESA3D_DEPENDENCIES += libglvnd
-+MESA3D_CONF_OPTS += -Dglvnd=true
-+MESA3D_WITH_GLVND_PROVIDES = $(filter-out libgl libegl libgles,$(MESA3D_PROVIDES))
-+MESA3D_PROVIDES := $(MESA3D_WITH_GLVND_PROVIDES)
-+endif
-+
- $(eval $(meson-package))
 -- 
 2.26.2
 
