@@ -1,23 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2020 12:27:47 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/localedef: bump version to
- stay in sync with glibc
-In-Reply-To: <20200512085324.22685-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 12 May 2020 10:53:24 +0200")
-References: <20200512085324.22685-1-peter@korsgaard.com>
- <20200512085324.22685-2-peter@korsgaard.com>
-Message-ID: <87blmtmorg.fsf@dell.be.48ers.dk>
+Date: Tue, 12 May 2020 12:27:19 +0200
+Subject: [Buildroot] [git commit] package/glibc: bump version for additional
+ post-2.30 security fixes
+Message-ID: <20200512101203.83DE6914ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6488684e2beeb22c732d211b58951b6e9eb5fc68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes the following security vulnerabilities:
 
-Committed, thanks.
+CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
+  corruption when they were passed a pseudo-zero argument.  Reported by Guido
+  Vranken / ForAllSecure Mayhem.
 
--- 
-Bye, Peter Korsgaard
+CVE-2020-1751: A defect in the PowerPC backtrace function could cause an
+  out-of-bounds write when executed in a signal frame context.
+
+CVE-2020-1752: A use-after-free vulnerability in the glob function when
+  expanding ~user has been fixed.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../glibc.hash                                                          | 2 +-
+ package/glibc/glibc.mk                                                  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash b/package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+similarity index 70%
+rename from package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
+rename to package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+index 4283ea04b4..6677d32db9 100644
+--- a/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
++++ b/package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  fe1ca8099bc2cda997d8a585f1a512e59df56c52c9c7363a4058da2725c8f4a9  glibc-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91.tar.gz
++sha256  4462f56696332efbc5b0c2f86d7aa75a2a02c3d44bc4345fa42b5bab1225de5c  glibc-2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 2ca73343b3..4621c9c2f9 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -17,7 +17,7 @@ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
++GLIBC_VERSION = 2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
