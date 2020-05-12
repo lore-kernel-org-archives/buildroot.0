@@ -1,126 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 May 2020 22:33:53 +0200
-Subject: [Buildroot] [PATCH] linux: forcibly disable use of gcc plugins
-Message-ID: <20200512203353.31470-1-yann.morin.1998@free.fr>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 12 May 2020 18:39:23 -0500
+Subject: [Buildroot] [Next] package/haveged: set write_wakeup_threshold to
+ 2048
+Message-ID: <20200512233923.20290-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The soon-to-be-released linux 5.7 has changed the way it detects the
-ability of gcc to use plugins, when it dropped support for gcc 4.7 or
-older [0].
+Adjust the low water mark to wake-up the haveged daemon at the
+same time that rngd would wake-up when a hardware RNG is present.
 
-To detect the ability to use gcc plugins, the kernel has to check whther
-the host gcc is capable enough to build them.
+This supports the theory that rngd then can't dominate the entropy
+pool. Instead haveged and rngd would complete to fill the pool.
+https://tails.boum.org/contribute/design/random/#index5h2
 
-When we call one of the configurator for the linux kernel, we explicitly
-pass a value of HOSTCC=$(HOSTCC_NOCCACHE), because there might be a
-discrepancy between the ncurses headers and libraries as found by the
-linux kconfig build [1] [2].
+If rngd isn't enabled or there isn't a hardware RNG, this change
+should not impact the behavior of the entropy pool other then
+the pool should be less likely to deplete and cause an entropy
+starve with haveged filling it earlier.
 
-But then, when we build the kernel, we pass another value to use [3]
-HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" which boils down to
-roughly: gcc -I.../host/include -L.../host/lib -Wl,-rpath,.../host/lib
-This is needed so that at build time, the kernel can build host tools
-that link with our openssl et al.
-
-So, the two HOSTCC we pass to the kernel may have different behaviours.
-For example, on a machine where gmp is missing in the system, it is
-available in $(O)/host/ when using an internal toolchain (and under a
-few other conditions).
-
-In that case, when configuring the kernel, it decides that the host
-compiler can't build plugins, so the dependencies of CONFIG_GCC_PLUGINS
-are not met, and that option is not present in the linux' .config file
-(neither as "=y" nor as "is not set"). But then, when we build the
-kernel, the host compiler suddenly becomes capable of building the
-plugins, and the internal syncconfig run by the kernel will notice that
-the dependencies of CONFIG_GCC_PLUGINS are now met, and that the user
-shall decide on its value. And this blocks a build on an interactive
-console (abbreviated):
-
-    * Restart config...
-    * GCC plugins
-    GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW) _
-
-But most problematic is the behaviour when run in a shell that is not
-interactiove (e.g. a CI job or such) (abbreviated):
-
-    * Restart config...
-    * GCC plugins
-    GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW)
-    Error in reading or end of file.
-      Generate some entropy during boot and runtime (GCC_PLUGIN_LATENT_ENTROPY) [N/y/?] (NEW)
-    Error in reading or end of file.
-      Randomize layout of sensitive kernel structures (GCC_PLUGIN_RANDSTRUCT) [N/y/?] (NEW)
-    Error in reading or end of file.
-    * Memory initialization
-    Initialize kernel stack variables at function entry
-    > 1. no automatic initialization (weakest) (INIT_STACK_NONE)
-      2. zero-init structs marked for userspace (weak) (GCC_PLUGIN_STRUCTLEAK_USER) (NEW)
-      3. zero-init structs passed by reference (strong) (GCC_PLUGIN_STRUCTLEAK_BYREF) (NEW)
-      4. zero-init anything passed by reference (very strong) (GCC_PLUGIN_STRUCTLEAK_BYREF_ALL) (NEW)
-    choice[1-4?]:
-    Error in reading or end of file.
-    Poison kernel stack before returning from syscalls (GCC_PLUGIN_STACKLEAK) [N/y/?] (NEW)
-    Error in reading or end of file.
-    Enable heap memory zeroing on allocation by default (INIT_ON_ALLOC_DEFAULT_ON) [N/y/?] n
-    Enable heap memory zeroing on free by default (INIT_ON_FREE_DEFAULT_ON) [N/y/?] n
-
-The most obvious and simple solution would be to unconditionally disable
-gcc plugins alltogether, in the KCONFIG_FIXUP hook. But that can't work
-either, because after applying the fixups, we call olddefconfig (or the
-likes) with the incapable HOSTCC, so the disabled option would be removed
-anyway, and we'd be back to square one.
-
-So, in addition to the above, we also forcibly hack the same call just
-before actually building the kernel.
-
-Note that the two are needed: the one in the fixups is needed for those
-that have a system that already allows building gcc plugins, and the
-second is needed in the other case, where the system does not allow it
-but would work with our additional headers and libs in $(O)/host/. The
-two ensure there is a very similar experience in the two situations.
-
-Forcibly disabling the use of gcc plugins is not a regression on our
-side: it has never been possible to do so so far. We're now making sure
-that can't work by accident.
-
-Reported-by: Ganesh <ganesh45in@gmail.com>,
-Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Michael Walle <michael.walle@kontron.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- linux/linux.mk | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 69bbad99e1..b9f2052ee7 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -363,6 +363,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_FB)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
- 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
- endef
- 
-@@ -423,7 +424,10 @@ endif
- # '$(LINUX_TARGET_NAME)' targets separately because calling them in
- # the same $(MAKE) invocation has shown to cause parallel build
- # issues.
-+# The call to disable gcc-plugins is a stop-gap measure:
-+#   http://lists.busybox.net/pipermail/buildroot/2020-May/282727.html
- define LINUX_BUILD_CMDS
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
- 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
- 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
- 	)
+Peter I believe this one also applys to 2020.02.x
+---
+ package/haveged/S21haveged | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/haveged/S21haveged b/package/haveged/S21haveged
+index 4b6e6ced4e..22b84e4f27 100644
+--- a/package/haveged/S21haveged
++++ b/package/haveged/S21haveged
+@@ -3,7 +3,7 @@
+ case "$1" in
+ 	start)
+ 		printf "Starting haveged: "
+-		start-stop-daemon -S -x /usr/sbin/haveged -- -w 1024 -r 0
++		start-stop-daemon -S -x /usr/sbin/haveged -- -w 2048 -r 0
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
 -- 
-2.20.1
+2.17.1
