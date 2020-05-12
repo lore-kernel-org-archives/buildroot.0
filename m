@@ -1,158 +1,122 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 12 May 2020 18:54:36 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/python-markdown2: bump to
- version 2.3.9
-Message-ID: <20200512165436.4104-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 12 May 2020 19:48:21 +0200
+Subject: [Buildroot] [PATCH 0/1] Fix GCC 9.3.0 failing to build because
+ of self tests
+In-Reply-To: <AM0PR10MB24174C00983B26728F12C9BDAABE0@AM0PR10MB2417.EURPRD10.PROD.OUTLOOK.COM>
+References: <AM0PR10MB241730612D4A254D0BBA4543AABE0@AM0PR10MB2417.EURPRD10.PROD.OUTLOOK.COM>
+ <35d7cfea-fdd0-8cdd-9227-4fed0f531cca@gmail.com>
+ <AM0PR10MB24174C00983B26728F12C9BDAABE0@AM0PR10MB2417.EURPRD10.PROD.OUTLOOK.COM>
+Message-ID: <ad21c75a-7dba-cf77-1a83-54266063a43d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patches (already in version)
-- Update indentation in hash file (two spaces)
+Ben,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...gs-with-punctuation-after-as-part-of.patch | 53 -------------------
- .../0002-Better-fix-for-issue-348.patch       | 32 -----------
- .../python-markdown2/python-markdown2.hash    |  6 +--
- package/python-markdown2/python-markdown2.mk  |  8 +--
- 4 files changed, 5 insertions(+), 94 deletions(-)
- delete mode 100644 package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
- delete mode 100644 package/python-markdown2/0002-Better-fix-for-issue-348.patch
+Le 12/05/2020 ? 16:32, Ben Dakin-Norris a ?crit?:
+> Romain,
+> 
+> I am currently using buildroot to create a toolchain that I then use in two other buildroot configurations.
+> 
+> When I take master or the last release and apply a simple GCC 9.3.0 toolchain build it errors about xgcc.
+> 
+> I will attach my configuration that causes the error. The patch appears to stop the error.
+> 
+> If you need any more information please just ask.
 
-diff --git a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-deleted file mode 100644
-index ee980e22e8..0000000000
---- a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 9144d0fc5d5249cc4d81287ee79091806e6dde52 Mon Sep 17 00:00:00 2001
--From: Gareth Simpson <gareth.simpson@zoodigital.com>
--Date: Fri, 1 May 2020 19:31:21 +0100
--Subject: [PATCH] Fix for issue 348 - incomplete tags with punctuation after as
-- part of the tag name are a source of XSS
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/trentm/python-markdown2/commit/9144d0fc5d5249cc4d81287ee79091806e6dde52]
-----
-- lib/markdown2.py                           | 2 +-
-- test/tm-cases/issue348_incomplete_tag.html | 1 +
-- test/tm-cases/issue348_incomplete_tag.opts | 1 +
-- test/tm-cases/issue348_incomplete_tag.text | 1 +
-- 4 files changed, 4 insertions(+), 1 deletion(-)
-- create mode 100644 test/tm-cases/issue348_incomplete_tag.html
-- create mode 100644 test/tm-cases/issue348_incomplete_tag.opts
-- create mode 100644 test/tm-cases/issue348_incomplete_tag.text
--
--diff --git a/lib/markdown2.py b/lib/markdown2.py
--index 3a5d5d9..636bf07 100755
----- a/lib/markdown2.py
--+++ b/lib/markdown2.py
--@@ -2164,7 +2164,7 @@ def _encode_amps_and_angles(self, text):
--         text = self._naked_gt_re.sub('&gt;', text)
--         return text
-- 
---    _incomplete_tags_re = re.compile("<(/?\w+[\s/]+?)")
--+    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
-- 
--     def _encode_incomplete_tags(self, text):
--         if self.safe_mode not in ("replace", "escape"):
--diff --git a/test/tm-cases/issue348_incomplete_tag.html b/test/tm-cases/issue348_incomplete_tag.html
--new file mode 100644
--index 0000000..46059cc
----- /dev/null
--+++ b/test/tm-cases/issue348_incomplete_tag.html
--@@ -0,0 +1 @@
--+<p>&lt;lol@/ //id="pwn"//onclick="alert(1)"//<strong>abc</strong></p>
--diff --git a/test/tm-cases/issue348_incomplete_tag.opts b/test/tm-cases/issue348_incomplete_tag.opts
--new file mode 100644
--index 0000000..ad487c0
----- /dev/null
--+++ b/test/tm-cases/issue348_incomplete_tag.opts
--@@ -0,0 +1 @@
--+{"safe_mode": "escape"}
--diff --git a/test/tm-cases/issue348_incomplete_tag.text b/test/tm-cases/issue348_incomplete_tag.text
--new file mode 100644
--index 0000000..bb4a0de
----- /dev/null
--+++ b/test/tm-cases/issue348_incomplete_tag.text
--@@ -0,0 +1 @@
--+<lol@/ //id="pwn"//onclick="alert(1)"//**abc**
-diff --git a/package/python-markdown2/0002-Better-fix-for-issue-348.patch b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
-deleted file mode 100644
-index 127bb51da2..0000000000
---- a/package/python-markdown2/0002-Better-fix-for-issue-348.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 0c0543846fa54281e2269b0bff841a0b9ffe23fe Mon Sep 17 00:00:00 2001
--From: Gareth Simpson <gareth.simpson@zoodigital.com>
--Date: Sat, 2 May 2020 21:22:36 +0100
--Subject: [PATCH] Better fix for issue 348
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/trentm/python-markdown2/commit/0c0543846fa54281e2269b0bff841a0b9ffe23fe]
-----
-- lib/markdown2.py | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/lib/markdown2.py b/lib/markdown2.py
--index 636bf07..be86502 100755
----- a/lib/markdown2.py
--+++ b/lib/markdown2.py
--@@ -2164,11 +2164,14 @@ def _encode_amps_and_angles(self, text):
--         text = self._naked_gt_re.sub('&gt;', text)
--         return text
-- 
---    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
--+    _incomplete_tags_re = re.compile("<(/?\w+?(?!\w).+?[\s/]+?)")
-- 
--     def _encode_incomplete_tags(self, text):
--         if self.safe_mode not in ("replace", "escape"):
--             return text
--+            
--+        if text.endswith(">"):
--+            return text  # this is not an incomplete tag, this is a link in the form <http://x.y.z>
-- 
--         return self._incomplete_tags_re.sub("&lt;\\1", text)
-- 
-diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
-index 2d72a78053..03315fd3ea 100644
---- a/package/python-markdown2/python-markdown2.hash
-+++ b/package/python-markdown2/python-markdown2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown2/json
--md5	a8dee88993d05a3e10765a57b1e1ea07  markdown2-2.3.8.tar.gz
--sha256	7ff88e00b396c02c8e1ecd8d176cfa418fb01fe81234dcea77803e7ce4f05dbe  markdown2-2.3.8.tar.gz
-+md5  5c1f9002060cf534bde0bdd584d6b70a  markdown2-2.3.9.tar.gz
-+sha256  89526090907ae5ece66d783c434b35c29ee500c1986309e306ce2346273ada6a  markdown2-2.3.9.tar.gz
- # Locally computed sha256 checksums
--sha256	f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-+sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index f508c17a20..c7858a3966 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
-@@ -4,15 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_MARKDOWN2_VERSION = 2.3.8
-+PYTHON_MARKDOWN2_VERSION = 2.3.9
- PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
--PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/e3/93/d37055743009d1a492b2670cc215831a388b3d6e4a28b7672fdf0f7854f5
-+PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/14/69/c542025f80916457ff4fe962404a27ab6417d43822fe54bf88ee2dd1b36f
- PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
- 
--# 0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
--# 0002-Better-fix-for-issue-348.patch
--PYTHON_MARKDOWN2_IGNORE_CVES += CVE-2020-11888
--
- $(eval $(python-package))
--- 
-2.26.2
+I started a build using your config file. I just disabled ccache because it can
+cause weird issues... Maybe you can try without ccache.
+
+So far the build succeeded here.
+
+Can you try with qemu_arm_vexpress_defconfig
+
+$ make qemu_arm_vexpress_defconfig
+$ make toolchain
+
+If something go wrong, then it's a problem on your host.
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> 
+> Ben
+> 
+> -----Original Message-----
+> From: Romain Naour <romain.naour@gmail.com> 
+> Sent: 12 May 2020 15:27
+> To: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>; buildroot at buildroot.org
+> Cc: thomas.petazzoni at bootlin.com
+> Subject: Re: [PATCH 0/1] Fix GCC 9.3.0 failing to build because of self tests
+> 
+> Hi Ben,
+> 
+> Le 12/05/2020 ? 14:46, Ben Dakin-Norris a ?crit?:
+>> Hi,
+>>
+>> ?
+>>
+>> This patch enables GCC 9.3.0 to build as a toolchain only
+>>
+>> ?
+>>
+>> The build will report an error xgcc: No such file or directory 
+>> otherwise
+> 
+> Sorry but I don't understand what's the issue you are trying to fix.
+> I've built some gcc 9.x toolchain without any issue.
+> Can you give some details please.
+> 
+> Best regards,
+> Romain
+> 
+> 
+>>
+>> ?
+>>
+>> Regards,
+>>
+>> ?
+>>
+>> Ben
+>>
+>> ?
+>>
+>> Benedict Dakin-Norris (1):
+>>
+>> ? Remove SELFTEST_TARGETS from GCC 9.3.0
+>>
+>> ?
+>>
+>> .../gcc/9.3.0/0004-gcc-remove-selftest-targets.patch? | 11 +++++++++++
+>>
+>> 1 file changed, 11 insertions(+)
+>>
+>> create mode 100644 
+>> package/gcc/9.3.0/0004-gcc-remove-selftest-targets.patch
+>>
+>> ?
+>>
+>> --
+>>
+>> 2.25.1
+>>
+>> Ben Dakin-Norris
+>> Software Engineer
+>> Navtech Radar Limited <https://www.navtechradar.com> Navtech Radar 
+>> Limited Home Farm, Ardington, Wantage, Oxfordshire, OX12 8PD, UK
+>> ??+44 (0)1235 832419
+>> ??ben.dakin-norris at navtechradar.com
+>> LinkedIn <https://www.linkedin.com/company/navtech-radar-ltd/> 	Twitter
+>> <https://twitter.com/Navtechradar> 	YouTube
+>> <https://www.youtube.com/user/NavtechRadar> 	Instagram
+>> <https://www.instagram.com/navtechradar/> 	Facebook
+>> <https://www.facebook.com/navtechradar>
+>>
+>> Navtech Radar Ltd registered in England & Wales No: 3699400. Vat No: 
+>> 742071067
+> 
