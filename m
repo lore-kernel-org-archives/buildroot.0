@@ -1,53 +1,67 @@
 From: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
-Date: Tue, 12 May 2020 15:28:55 +0200
-Subject: [Buildroot] [PATCH 2/6] package/mesa3d-headers: make it a provider
- for libgl-headers
-In-Reply-To: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
-References: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
-Message-ID: <20200512132859.15189-2-jskrzypnik@novomatic-tech.com>
+Date: Tue, 12 May 2020 15:28:54 +0200
+Subject: [Buildroot] [PATCH 1/6] package/libgl-headers: introduce as a new
+ virtual package for providers of OpenGL-compatible headers
+Message-ID: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the first - and most obvious - provider for GL API headers.
-Should work as usual, transparently for any package requirung it,
-used mostly where Mesa itself can't be installed.
+Currently, there can be more than one provider of OpenGL/EGL API headers (GL/gl.h, etc.)
+
+These are usually the same everywhere, as there are universal (as universal OpenGL is) but
+to avoid excessive patching and dependency mangling, a virtual package "libgl-headers" was
+born to provide these generic API headers.
+
+Not to confuse with private Mesa headers or other vendor-specific stuff, but these are
+always in different header files.
 
 Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
 ---
- package/mesa3d-headers/Config.in         | 7 +++++++
- package/mesa3d-headers/mesa3d-headers.mk | 1 +
- 2 files changed, 8 insertions(+)
+ package/opengl/Config.in                      | 1 +
+ package/opengl/libgl-headers/Config.in        | 6 ++++++
+ package/opengl/libgl-headers/libgl-headers.mk | 7 +++++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 package/opengl/libgl-headers/Config.in
+ create mode 100644 package/opengl/libgl-headers/libgl-headers.mk
 
-diff --git a/package/mesa3d-headers/Config.in b/package/mesa3d-headers/Config.in
-index c4efab673f..43916bb25b 100644
---- a/package/mesa3d-headers/Config.in
-+++ b/package/mesa3d-headers/Config.in
-@@ -7,3 +7,10 @@ config BR2_PACKAGE_MESA3D_HEADERS
- 	  This package only installs headers needed by other packages.
- 
- 	  http://mesa3d.org
-+
-+if BR2_PACKAGE_MESA3D_HEADERS
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index cbc001427d..7080fdb979 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -1,4 +1,5 @@
+ source "package/opengl/libgl/Config.in"
++source "package/opengl/libgl-headers/Config.in"
+ source "package/opengl/libegl/Config.in"
+ source "package/opengl/libgles/Config.in"
+ source "package/opengl/libopencl/Config.in"
+diff --git a/package/opengl/libgl-headers/Config.in b/package/opengl/libgl-headers/Config.in
+new file mode 100644
+index 0000000000..dfc3fb40fe
+--- /dev/null
++++ b/package/opengl/libgl-headers/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_LIBGL_HEADERS
++	bool
 +
 +config BR2_PACKAGE_PROVIDES_LIBGL_HEADERS
-+	default "mesa3d-headers"
++	string
++	depends on BR2_PACKAGE_HAS_LIBGL_HEADERS
+diff --git a/package/opengl/libgl-headers/libgl-headers.mk b/package/opengl/libgl-headers/libgl-headers.mk
+new file mode 100644
+index 0000000000..2155868b6d
+--- /dev/null
++++ b/package/opengl/libgl-headers/libgl-headers.mk
+@@ -0,0 +1,7 @@
++################################################################################
++#
++# libgl-headers
++#
++################################################################################
 +
-+endif
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index c1686aa6fd..14ce9cbfc0 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -18,6 +18,7 @@ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
- MESA3D_HEADERS_LICENSE_FILES = docs/license.html
-+MESA3D_HEADERS_PROVIDES = libgl-headers
- 
- # Only installs header files
- MESA3D_HEADERS_INSTALL_STAGING = YES
++$(eval $(virtual-package))
 -- 
 2.26.2
 
