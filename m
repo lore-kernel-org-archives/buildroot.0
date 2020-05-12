@@ -1,130 +1,158 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 May 2020 17:58:11 +0200
-Subject: [Buildroot] [PATCH 1/6] package/libgl-headers: introduce as a
- new virtual package for providers of OpenGL-compatible headers
-In-Reply-To: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
-References: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
-Message-ID: <20200512155811.GX12536@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 12 May 2020 18:54:36 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/python-markdown2: bump to
+ version 2.3.9
+Message-ID: <20200512165436.4104-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jakub, All,
+- Drop patches (already in version)
+- Update indentation in hash file (two spaces)
 
-On 2020-05-12 15:28 +0200, Jakub Skrzypnik spake thusly:
-> Currently, there can be more than one provider of OpenGL/EGL API headers (GL/gl.h, etc.)
-> 
-> These are usually the same everywhere, as there are universal (as universal OpenGL is) but
-> to avoid excessive patching and dependency mangling, a virtual package "libgl-headers" was
-> born to provide these generic API headers.
-> 
-> Not to confuse with private Mesa headers or other vendor-specific stuff, but these are
-> always in different header files.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...gs-with-punctuation-after-as-part-of.patch | 53 -------------------
+ .../0002-Better-fix-for-issue-348.patch       | 32 -----------
+ .../python-markdown2/python-markdown2.hash    |  6 +--
+ package/python-markdown2/python-markdown2.mk  |  8 +--
+ 4 files changed, 5 insertions(+), 94 deletions(-)
+ delete mode 100644 package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+ delete mode 100644 package/python-markdown2/0002-Better-fix-for-issue-348.patch
 
-I don't think we need this libgl-headers package.
-
-Instead, let's handle this like we handle the GL provider selection when
-libglvnd is enabled. For example, in nvidia-driver, you'd do something
-like:
-
-        select BR2_PACKAGE_MESA3D_HEADERS if !BR2_PACKAGE_LIBGLVND
-
-So, patches 1 and 2 in this series should be dropped, and the rest of
-the series adapted accoridngly.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
-> ---
->  package/opengl/Config.in                      | 1 +
->  package/opengl/libgl-headers/Config.in        | 6 ++++++
->  package/opengl/libgl-headers/libgl-headers.mk | 7 +++++++
->  3 files changed, 14 insertions(+)
->  create mode 100644 package/opengl/libgl-headers/Config.in
->  create mode 100644 package/opengl/libgl-headers/libgl-headers.mk
-> 
-> diff --git a/package/opengl/Config.in b/package/opengl/Config.in
-> index cbc001427d..7080fdb979 100644
-> --- a/package/opengl/Config.in
-> +++ b/package/opengl/Config.in
-> @@ -1,4 +1,5 @@
->  source "package/opengl/libgl/Config.in"
-> +source "package/opengl/libgl-headers/Config.in"
->  source "package/opengl/libegl/Config.in"
->  source "package/opengl/libgles/Config.in"
->  source "package/opengl/libopencl/Config.in"
-> diff --git a/package/opengl/libgl-headers/Config.in b/package/opengl/libgl-headers/Config.in
-> new file mode 100644
-> index 0000000000..dfc3fb40fe
-> --- /dev/null
-> +++ b/package/opengl/libgl-headers/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HAS_LIBGL_HEADERS
-> +	bool
-> +
-> +config BR2_PACKAGE_PROVIDES_LIBGL_HEADERS
-> +	string
-> +	depends on BR2_PACKAGE_HAS_LIBGL_HEADERS
-> diff --git a/package/opengl/libgl-headers/libgl-headers.mk b/package/opengl/libgl-headers/libgl-headers.mk
-> new file mode 100644
-> index 0000000000..2155868b6d
-> --- /dev/null
-> +++ b/package/opengl/libgl-headers/libgl-headers.mk
-> @@ -0,0 +1,7 @@
-> +################################################################################
-> +#
-> +# libgl-headers
-> +#
-> +################################################################################
-> +
-> +$(eval $(virtual-package))
-> -- 
-> 2.26.2
-> 
-> 
-> -- 
-> CONFIDENTIALITY NOTICE
-> ------------------------------------
-> This
->  E-mail is 
-> intended only to be read or used by the addressee.The 
-> information 
-> contained in this E-mail message may be confidential 
-> information. If you 
-> are not the intended recipient, any use, 
-> interference with, distribution, 
-> disclosure or copying of this material 
-> is unauthorized and prohibited. 
-> Confidentiality attached to this 
-> communication is not waived or lost by 
-> reason of the mistaken delivery 
-> to you.
-> If you have received this message 
-> in error, please delete
->  it and notify us by return E-mail or telephone 
-> NOVOMATIC Technologies 
-> Poland S.A. +48 12 258 00 50. Any E-mail attachment 
-> may contain software
->  viruses which could damage your own computer system. 
-> Whilst reasonable 
-> precaution has been taken to minimize this risk, we 
-> cannot accept 
-> liability for any damage which you sustain as a result of 
-> software 
-> viruses. You should therefore carry out your own virus checks 
-> before 
-> opening any attachments.
-> ------------------------------------
-> 
-> NOVOMATIC Technologies Poland S.A., Poland, Krakowska 368, 32-080 Zabierz?w
-
+diff --git a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+deleted file mode 100644
+index ee980e22e8..0000000000
+--- a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 9144d0fc5d5249cc4d81287ee79091806e6dde52 Mon Sep 17 00:00:00 2001
+-From: Gareth Simpson <gareth.simpson@zoodigital.com>
+-Date: Fri, 1 May 2020 19:31:21 +0100
+-Subject: [PATCH] Fix for issue 348 - incomplete tags with punctuation after as
+- part of the tag name are a source of XSS
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/trentm/python-markdown2/commit/9144d0fc5d5249cc4d81287ee79091806e6dde52]
+----
+- lib/markdown2.py                           | 2 +-
+- test/tm-cases/issue348_incomplete_tag.html | 1 +
+- test/tm-cases/issue348_incomplete_tag.opts | 1 +
+- test/tm-cases/issue348_incomplete_tag.text | 1 +
+- 4 files changed, 4 insertions(+), 1 deletion(-)
+- create mode 100644 test/tm-cases/issue348_incomplete_tag.html
+- create mode 100644 test/tm-cases/issue348_incomplete_tag.opts
+- create mode 100644 test/tm-cases/issue348_incomplete_tag.text
+-
+-diff --git a/lib/markdown2.py b/lib/markdown2.py
+-index 3a5d5d9..636bf07 100755
+---- a/lib/markdown2.py
+-+++ b/lib/markdown2.py
+-@@ -2164,7 +2164,7 @@ def _encode_amps_and_angles(self, text):
+-         text = self._naked_gt_re.sub('&gt;', text)
+-         return text
+- 
+--    _incomplete_tags_re = re.compile("<(/?\w+[\s/]+?)")
+-+    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
+- 
+-     def _encode_incomplete_tags(self, text):
+-         if self.safe_mode not in ("replace", "escape"):
+-diff --git a/test/tm-cases/issue348_incomplete_tag.html b/test/tm-cases/issue348_incomplete_tag.html
+-new file mode 100644
+-index 0000000..46059cc
+---- /dev/null
+-+++ b/test/tm-cases/issue348_incomplete_tag.html
+-@@ -0,0 +1 @@
+-+<p>&lt;lol@/ //id="pwn"//onclick="alert(1)"//<strong>abc</strong></p>
+-diff --git a/test/tm-cases/issue348_incomplete_tag.opts b/test/tm-cases/issue348_incomplete_tag.opts
+-new file mode 100644
+-index 0000000..ad487c0
+---- /dev/null
+-+++ b/test/tm-cases/issue348_incomplete_tag.opts
+-@@ -0,0 +1 @@
+-+{"safe_mode": "escape"}
+-diff --git a/test/tm-cases/issue348_incomplete_tag.text b/test/tm-cases/issue348_incomplete_tag.text
+-new file mode 100644
+-index 0000000..bb4a0de
+---- /dev/null
+-+++ b/test/tm-cases/issue348_incomplete_tag.text
+-@@ -0,0 +1 @@
+-+<lol@/ //id="pwn"//onclick="alert(1)"//**abc**
+diff --git a/package/python-markdown2/0002-Better-fix-for-issue-348.patch b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
+deleted file mode 100644
+index 127bb51da2..0000000000
+--- a/package/python-markdown2/0002-Better-fix-for-issue-348.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 0c0543846fa54281e2269b0bff841a0b9ffe23fe Mon Sep 17 00:00:00 2001
+-From: Gareth Simpson <gareth.simpson@zoodigital.com>
+-Date: Sat, 2 May 2020 21:22:36 +0100
+-Subject: [PATCH] Better fix for issue 348
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/trentm/python-markdown2/commit/0c0543846fa54281e2269b0bff841a0b9ffe23fe]
+----
+- lib/markdown2.py | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/markdown2.py b/lib/markdown2.py
+-index 636bf07..be86502 100755
+---- a/lib/markdown2.py
+-+++ b/lib/markdown2.py
+-@@ -2164,11 +2164,14 @@ def _encode_amps_and_angles(self, text):
+-         text = self._naked_gt_re.sub('&gt;', text)
+-         return text
+- 
+--    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
+-+    _incomplete_tags_re = re.compile("<(/?\w+?(?!\w).+?[\s/]+?)")
+- 
+-     def _encode_incomplete_tags(self, text):
+-         if self.safe_mode not in ("replace", "escape"):
+-             return text
+-+            
+-+        if text.endswith(">"):
+-+            return text  # this is not an incomplete tag, this is a link in the form <http://x.y.z>
+- 
+-         return self._incomplete_tags_re.sub("&lt;\\1", text)
+- 
+diff --git a/package/python-markdown2/python-markdown2.hash b/package/python-markdown2/python-markdown2.hash
+index 2d72a78053..03315fd3ea 100644
+--- a/package/python-markdown2/python-markdown2.hash
++++ b/package/python-markdown2/python-markdown2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown2/json
+-md5	a8dee88993d05a3e10765a57b1e1ea07  markdown2-2.3.8.tar.gz
+-sha256	7ff88e00b396c02c8e1ecd8d176cfa418fb01fe81234dcea77803e7ce4f05dbe  markdown2-2.3.8.tar.gz
++md5  5c1f9002060cf534bde0bdd584d6b70a  markdown2-2.3.9.tar.gz
++sha256  89526090907ae5ece66d783c434b35c29ee500c1986309e306ce2346273ada6a  markdown2-2.3.9.tar.gz
+ # Locally computed sha256 checksums
+-sha256	f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
++sha256  f8c7c4d554409cf621b8d653dbfffb719745fd36f5c49b8305258649b403ef9c  LICENSE.txt
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index f508c17a20..c7858a3966 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -4,15 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MARKDOWN2_VERSION = 2.3.8
++PYTHON_MARKDOWN2_VERSION = 2.3.9
+ PYTHON_MARKDOWN2_SOURCE = markdown2-$(PYTHON_MARKDOWN2_VERSION).tar.gz
+-PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/e3/93/d37055743009d1a492b2670cc215831a388b3d6e4a28b7672fdf0f7854f5
++PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/14/69/c542025f80916457ff4fe962404a27ab6417d43822fe54bf88ee2dd1b36f
+ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+ 
+-# 0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+-# 0002-Better-fix-for-issue-348.patch
+-PYTHON_MARKDOWN2_IGNORE_CVES += CVE-2020-11888
+-
+ $(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
