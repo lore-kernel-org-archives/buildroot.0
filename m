@@ -1,21 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 12 May 2020 11:55:40 +0000
-Subject: [Buildroot] [Bug 12891] QEMU , libvirt-bin,
- qemu-kvm Package Support required
-In-Reply-To: <bug-12891-163@https.bugs.busybox.net/>
-References: <bug-12891-163@https.bugs.busybox.net/>
-Message-ID: <bug-12891-163-fC98PIsCEw@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 May 2020 13:58:07 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/glibc: bump version for
+ additional post-2.30 security fixes
+In-Reply-To: <20200512085324.22685-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 12 May 2020 10:53:23 +0200")
+References: <20200512085324.22685-1-peter@korsgaard.com>
+Message-ID: <87lflxl60g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12891
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
---- Comment #3 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-Ameya, please contact me internally to Collins discuss this request.
+ > Fixes the following security vulnerabilities:
+ > CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
+ >   corruption when they were passed a pseudo-zero argument.  Reported by Guido
+ >   Vranken / ForAllSecure Mayhem.
+
+ > CVE-2020-1751: A defect in the PowerPC backtrace function could cause an
+ >   out-of-bounds write when executed in a signal frame context.
+
+ > CVE-2020-1752: A use-after-free vulnerability in the glob function when
+ >   expanding ~user has been fixed.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.02.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
