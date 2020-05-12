@@ -1,46 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2020 10:42:56 +0200
-Subject: [Buildroot] [git commit] package/docker-engine: bump version to
- 19.03.8
-Message-ID: <20200512082850.E93109002C@busybox.osuosl.org>
+Date: Tue, 12 May 2020 10:53:23 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/glibc: bump version for
+ additional post-2.30 security fixes
+Message-ID: <20200512085324.22685-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21e4b435446944f1d571fea70cd7505fa453d533
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes the following security vulnerabilities:
 
-From the release notes:
-- Improve mitigation for CVE-2019-14271 for some nscd configuration.
+CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
+  corruption when they were passed a pseudo-zero argument.  Reported by Guido
+  Vranken / ForAllSecure Mayhem.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+CVE-2020-1751: A defect in the PowerPC backtrace function could cause an
+  out-of-bounds write when executed in a signal frame context.
+
+CVE-2020-1752: A use-after-free vulnerability in the glob function when
+  expanding ~user has been fixed.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ .../glibc.hash                                                  | 2 +-
+ package/glibc/glibc.mk                                          | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/glibc/{2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91 => 2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427}/glibc.hash (70%)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 4c031574af..c23eea90a8 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	6621da5b75cecd1f6f57389a4611d3dd00eeedd8765db63ae5538122fdac27da  docker-engine-19.03.7.tar.gz
-+sha256	13ec45ad45091111bd566aca9d81989b3f05e0625dab68d33c3ad81ff924172f  docker-engine-19.03.8.tar.gz
- sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index df27cb17b5..78f6c1261c 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash b/package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+similarity index 70%
+rename from package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
+rename to package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+index 4283ea04b4..6677d32db9 100644
+--- a/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
++++ b/package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  fe1ca8099bc2cda997d8a585f1a512e59df56c52c9c7363a4058da2725c8f4a9  glibc-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91.tar.gz
++sha256  4462f56696332efbc5b0c2f86d7aa75a2a02c3d44bc4345fa42b5bab1225de5c  glibc-2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427.tar.gz
  
--DOCKER_ENGINE_VERSION = 19.03.7
-+DOCKER_ENGINE_VERSION = 19.03.8
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 2ca73343b3..4621c9c2f9 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -17,7 +17,7 @@ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
++GLIBC_VERSION = 2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+-- 
+2.20.1
