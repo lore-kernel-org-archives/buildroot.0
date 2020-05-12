@@ -1,80 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2020 12:58:21 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/c-ares: bump to
- version 1.16.0
-Message-ID: <20200512104437.8B4808E6E2@busybox.osuosl.org>
+Date: Tue, 12 May 2020 12:59:21 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/docker-engine:
+ bump version to 19.03.8
+Message-ID: <20200512104437.A0EEB91479@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dc7624f2eb3075e87730e827a44de2f1c09e94d
+commit: https://git.buildroot.net/buildroot/commit/?id=1094126981a1ca4ff0cd52d95a79d69090cd0ef7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- Remove patch (already in version)
-- Update indentation of hash file (two spaces)
+From the release notes:
+- Improve mitigation for CVE-2019-14271 for some nscd configuration.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6620250fc56057a2495bc0c222681bf36d4ee5ef)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 21e4b435446944f1d571fea70cd7505fa453d533)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-use_check_build_instead_of_check_user.patch    | 17 -----------------
- package/c-ares/c-ares.hash                              |  4 ++--
- package/c-ares/c-ares.mk                                |  4 +---
- 3 files changed, 3 insertions(+), 22 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/c-ares/0001-use_check_build_instead_of_check_user.patch b/package/c-ares/0001-use_check_build_instead_of_check_user.patch
-deleted file mode 100644
-index 8210ed673b..0000000000
---- a/package/c-ares/0001-use_check_build_instead_of_check_user.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Use XC_CHECK_BUILD_FLAGS instead of XC_CHECK_USER_FLAGS.
--Otherwise it complains of CPPFLAGS in CFLAGS.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura c-ares-1.10.0.orig/m4/xc-cc-check.m4 c-ares-1.10.0/m4/xc-cc-check.m4
----- c-ares-1.10.0.orig/m4/xc-cc-check.m4	2013-12-26 19:40:46.354195974 -0300
--+++ c-ares-1.10.0/m4/xc-cc-check.m4	2013-12-26 19:41:01.850718535 -0300
--@@ -59,7 +59,7 @@
-- 
-- AC_DEFUN([_XC_PROG_CC], [
--   AC_REQUIRE([_XC_PROG_CC_PREAMBLE])dnl
---  AC_REQUIRE([XC_CHECK_USER_FLAGS])dnl
--+  AC_REQUIRE([XC_CHECK_BUILD_FLAGS])dnl
--   AC_REQUIRE([AC_PROG_INSTALL])dnl
--   AC_REQUIRE([AC_PROG_CC])dnl
--   AC_REQUIRE([AM_PROG_CC_C_O])dnl
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index a3599aaa11..d4fe483ae6 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 6cdb97871f2930530c97deb7cf5c8fa4be5a0b02c7cea6e7c7667672a39d6852 c-ares-1.15.0.tar.gz
-+sha256  de058ad7c128156e2db6dc98b8a359924d6f210a1b99dd36ba15c8f839a83a89  c-ares-1.16.0.tar.gz
- 
- # Hash for license file
--sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
-+sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index f9e440d9b1..e8723bf784 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -4,12 +4,10 @@
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 4c031574af..c23eea90a8 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	6621da5b75cecd1f6f57389a4611d3dd00eeedd8765db63ae5538122fdac27da  docker-engine-19.03.7.tar.gz
++sha256	13ec45ad45091111bd566aca9d81989b3f05e0625dab68d33c3ad81ff924172f  docker-engine-19.03.8.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index df27cb17b5..78f6c1261c 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--C_ARES_VERSION = 1.15.0
-+C_ARES_VERSION = 1.16.0
- C_ARES_SITE = http://c-ares.haxx.se/download
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
--# Rebuild configure to avoid XC_CHECK_USER_CFLAGS
--C_ARES_AUTORECONF = YES
- C_ARES_LICENSE = MIT
- C_ARES_LICENSE_FILES = LICENSE.md
+-DOCKER_ENGINE_VERSION = 19.03.7
++DOCKER_ENGINE_VERSION = 19.03.8
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
  
+ DOCKER_ENGINE_LICENSE = Apache-2.0
