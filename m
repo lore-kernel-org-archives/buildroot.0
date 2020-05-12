@@ -1,61 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2020 13:57:45 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/glibc: bump
- version for additional post-2.30 security fixes
-Message-ID: <20200512114220.97A6A91526@busybox.osuosl.org>
+Date: Tue, 12 May 2020 14:58:50 +0200
+Subject: [Buildroot] Buildroot 2020.02.2 released
+Message-ID: <87d079l379.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a5e0c89dfa13310fbfb892be05c664bd8e0f804
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hi,
 
-Fixes the following security vulnerabilities:
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
-  corruption when they were passed a pseudo-zero argument.  Reported by Guido
-  Vranken / ForAllSecure Mayhem.
+Buildroot 2020.02.2 is released - Go download it at:
 
-CVE-2020-1751: A defect in the PowerPC backtrace function could cause an
-  out-of-bounds write when executed in a signal frame context.
+http://buildroot.org/downloads/buildroot-2020.02.2.tar.gz
 
-CVE-2020-1752: A use-after-free vulnerability in the glob function when
-  expanding ~user has been fixed.
+or
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6488684e2beeb22c732d211b58951b6e9eb5fc68)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+http://buildroot.org/downloads/buildroot-2020.02.2.tar.bz2
 
-diff --git a/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash b/package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
-similarity index 70%
-rename from package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
-rename to package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
-index 4283ea04b4..6677d32db9 100644
---- a/package/glibc/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/glibc.hash
-+++ b/package/glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  fe1ca8099bc2cda997d8a585f1a512e59df56c52c9c7363a4058da2725c8f4a9  glibc-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91.tar.gz
-+sha256  4462f56696332efbc5b0c2f86d7aa75a2a02c3d44bc4345fa42b5bab1225de5c  glibc-2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 2ca73343b3..4621c9c2f9 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -17,7 +17,7 @@ else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
-+GLIBC_VERSION = 2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.2 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.1 release. The 2020.02.x series is
+supported until April 2021.
+
+- Musl: Disallow on PPC64 cores without AltiVec support	(E.G. e5500).
+
+- fs/cpio: Correctly handle booting with 'console='
+
+- release: Ensure temporary .br2-external.* files are not
+  included in the release tarball
+
+- Defconfigs: Fix various mistyped config options, or config
+  options where the dependencies were no longer met.
+
+- Security fixes for apache, c-ares, docker-engine, ffmpeg, freerdp,
+  glibc, libhtp, libid3tag, libmad, libopenssl, libssh, libvncserver,
+  mbedtls, openvpn, p7zip, php, python-markdown2, samba4, squid,
+  suricata, vlc, webkitgtk, wireshark, wpewebkit
+
+- Fixes for download/compilation/runtime/license issues in apache,
+  azure-iot-sdk-c, binutils, boinc, cvs, docker-cli, docker-containerd,
+  docker-engine, domoticz, e2fsprogs, efl, evtest, exim, ffmpeg, gcc,
+  gflags, gnuconfig, haproxy, imx-gpu-g2d, irrlicht, kodi-pvr-vuplus,
+  libarchive, libcoap, libfm-extra, libglib2, libinput, libsepol,
+  libv4l, lvm2, mariadb, matchbox, mc, mesa3d-headers, meson, midori,
+  msgpack, netsnmp, nginx, ogre, openjdk, openldap, paho-mqtt-c, php,
+  polkit, python, python-attrs, python-crossbar, python-dpkt,
+  python-flask, python-future, python-iptables, python-jedi, python3,
+  qemu, qpdf, qt5, squashfs, tzdata, util-linux, vnstat, wget,
+  wireguard-linux-compat, zic
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.2
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02..
+
+-- 
+Bye, Peter Korsgaard
