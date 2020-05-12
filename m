@@ -1,100 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 May 2020 15:17:16 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.02.2
-Message-ID: <20200512130140.AF913914EB@busybox.osuosl.org>
+From: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
+Date: Tue, 12 May 2020 15:28:55 +0200
+Subject: [Buildroot] [PATCH 2/6] package/mesa3d-headers: make it a provider
+ for libgl-headers
+In-Reply-To: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
+References: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
+Message-ID: <20200512132859.15189-2-jskrzypnik@novomatic-tech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a7f1e97322c637fe7c76352c6003312f6aedde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is the first - and most obvious - provider for GL API headers.
+Should work as usual, transparently for any package requirung it,
+used mostly where Mesa itself can't be installed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/mesa3d-headers/Config.in         | 7 +++++++
+ package/mesa3d-headers/mesa3d-headers.mk | 1 +
+ 2 files changed, 8 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index edbe747f1c..ece7608f35 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/mesa3d-headers/Config.in b/package/mesa3d-headers/Config.in
+index c4efab673f..43916bb25b 100644
+--- a/package/mesa3d-headers/Config.in
++++ b/package/mesa3d-headers/Config.in
+@@ -7,3 +7,10 @@ config BR2_PACKAGE_MESA3D_HEADERS
+ 	  This package only installs headers needed by other packages.
  
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2020.02.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2020.02.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.02.1.tar.gz">buildroot-2020.02.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.2.tar.gz">buildroot-2020.02.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.02.1.tar.bz2">buildroot-2020.02.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.2.tar.bz2">buildroot-2020.02.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index ce6bcdbd96..7cdc8c1e9d 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.02.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 May 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.02.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.02.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-May/282748.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.02.2.tar.bz2">2020.02.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+ 	  http://mesa3d.org
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++if BR2_PACKAGE_MESA3D_HEADERS
++
++config BR2_PACKAGE_PROVIDES_LIBGL_HEADERS
++	default "mesa3d-headers"
++
++endif
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index c1686aa6fd..14ce9cbfc0 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -18,6 +18,7 @@ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+ MESA3D_HEADERS_LICENSE_FILES = docs/license.html
++MESA3D_HEADERS_PROVIDES = libgl-headers
+ 
+ # Only installs header files
+ MESA3D_HEADERS_INSTALL_STAGING = YES
+-- 
+2.26.2
+
+
+-- 
+CONFIDENTIALITY NOTICE
+------------------------------------
+This
+ E-mail is 
+intended only to be read or used by the addressee.The 
+information 
+contained in this E-mail message may be confidential 
+information. If you 
+are not the intended recipient, any use, 
+interference with, distribution, 
+disclosure or copying of this material 
+is unauthorized and prohibited. 
+Confidentiality attached to this 
+communication is not waived or lost by 
+reason of the mistaken delivery 
+to you.
+If you have received this message 
+in error, please delete
+ it and notify us by return E-mail or telephone 
+NOVOMATIC Technologies 
+Poland S.A. +48 12 258 00 50. Any E-mail attachment 
+may contain software
+ viruses which could damage your own computer system. 
+Whilst reasonable 
+precaution has been taken to minimize this risk, we 
+cannot accept 
+liability for any damage which you sustain as a result of 
+software 
+viruses. You should therefore carry out your own virus checks 
+before 
+opening any attachments.
+------------------------------------
+
+NOVOMATIC Technologies Poland S.A., Poland, Krakowska 368, 32-080 Zabierz?w
