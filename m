@@ -1,107 +1,79 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 13 May 2020 16:59:26 +0200
-Subject: [Buildroot] [PATCH] package/armadillo: allows to select between
- clapack or lapack as BLAS and LAPACK provider
-Message-ID: <20200513145926.1673064-1-gwenj@trabucayre.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
+Date: Wed, 13 May 2020 18:03:24 +0300
+Subject: [Buildroot] [PATCH] package/linux-tools: introduce spi linux tools
+Message-ID: <20200513150324.330435-1-eugen.hristev@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Add new linux tools package : spi. This is present in the Linux Kernel since
+4.5.
+It now includes spidev_test and spidev_fdx tools.
 
-armadillo can use clapack or lapack as BLAS and LAPACK provider.
-This patch
-- adds two hidden variable to check dependencies/requirement for each of them
-- a choice to select wich implementation to use, by default use on clapack
- when it's possible, else lapack
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 ---
- package/armadillo/Config.in    | 41 +++++++++++++++++++++++++++++++---
- package/armadillo/armadillo.mk |  7 +++++-
- 2 files changed, 44 insertions(+), 4 deletions(-)
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index b2b61a3233..964a380d5e 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -1,3 +1,12 @@
-+config BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
-+	bool
-+	default y if (!BR2_m68k_cf && (!BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC))
-+
-+config BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
-+	bool
-+	default y if BR2_TOOLCHAIN_HAS_FORTRAN && \
-+		!(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-+
- comment "armadillo needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_powerpc
-@@ -10,11 +19,37 @@ comment "armadillo needs a glibc toolchain w/ C++"
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
--	depends on !BR2_m68k_cf # clapack
--	select BR2_PACKAGE_CLAPACK
-+	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS || \
-+		BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
-+
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
- 	  Fast Prototyping and Computationally Intensive Experiments.
+Inspired by the linux-tools iio mk.in file.
+
+ package/linux-tools/Config.in            |  7 ++++++
+ package/linux-tools/linux-tool-spi.mk.in | 29 ++++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/linux-tools/linux-tool-spi.mk.in
+
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index ceb58c668a..60df99dc4a 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -108,6 +108,13 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dyna
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || BR2_STATIC_LIBS
  
- 	  http://arma.sourceforge.net/
-+
-+if BR2_PACKAGE_ARMADILLO
-+
-+choice
-+	prompt "blas library"
-+	default BR2_PACKAGE_ARMADILLO_CLAPACK if \
-+		BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
-+	default BR2_PACKAGE_ARMADILLO_LAPACK if \
-+		BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS && \
-+		!BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
++config BR2_PACKAGE_LINUX_TOOLS_SPI
++	bool "spi"
++	select BR2_PACKAGE_LINUX_TOOLS
 +	help
-+	  Selects blas library to use
++	  spi is a collection of tools to test and measure performances
++	  of SPI (Serial Peripheral Interface) bus devices.
 +
-+config BR2_PACKAGE_ARMADILLO_CLAPACK
-+	bool "clapack"
-+	depends on BR2_PACKAGE_ARMADILLO_CLAPACK_SUPPORTS
-+	select BR2_PACKAGE_CLAPACK
+ config BR2_PACKAGE_LINUX_TOOLS_TMON
+ 	bool "tmon"
+ 	select BR2_PACKAGE_LINUX_TOOLS
+diff --git a/package/linux-tools/linux-tool-spi.mk.in b/package/linux-tools/linux-tool-spi.mk.in
+new file mode 100644
+index 0000000000..f6c4298380
+--- /dev/null
++++ b/package/linux-tools/linux-tool-spi.mk.in
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# spi
++#
++################################################################################
 +
-+config BR2_PACKAGE_ARMADILLO_LAPACK
-+	bool "lapack"
-+	depends on BR2_PACKAGE_ARMADILLO_LAPACK_SUPPORTS
-+	select BR2_PACKAGE_LAPACK
++LINUX_TOOLS += spi
 +
-+endchoice
++SPI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
 +
-+endif
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index f693d8c946..03fd020267 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -7,11 +7,16 @@
- ARMADILLO_VERSION = 9.850.1
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
--ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
- ARMADILLO_LICENSE = Apache-2.0
- ARMADILLO_LICENSE_FILES = LICENSE.txt
- 
-+ifeq ($(BR2_PACKAGE_ARMADILLO_CLAPACK), y)
-+ARMADILLO_DEPENDENCIES = clapack
-+else
-+ARMADILLO_DEPENDENCIES = lapack
-+endif
++define SPI_BUILD_CMDS
++	$(Q)if ! grep install $(LINUX_DIR)/tools/spi/Makefile >/dev/null 2>&1 ; then \
++		echo "Your kernel version is too old and does not have install section in the spi tools." ; \
++		echo "At least kernel 4.5 must be used." ; \
++		exit 1 ; \
++	fi
 +
- ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
- 
- $(eval $(cmake-package))
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/spi \
++		$(SPI_MAKE_OPTS)
++endef
++
++# DESTDIR used since kernel version 4.14
++define SPI_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/spi \
++		$(SPI_MAKE_OPTS) \
++		INSTALL_ROOT=$(TARGET_DIR) \
++		DESTDIR=$(TARGET_DIR) \
++		install
++endef
 -- 
-2.26.2
+2.25.1
