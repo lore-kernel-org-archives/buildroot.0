@@ -1,35 +1,223 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 May 2020 13:44:06 +0200
-Subject: [Buildroot] Help: build root final out put/build root
- generation and compile
-In-Reply-To: <CACEFAc3Of_vgC1+T0GrdoF=vO3DWmaVYJEV017LVxH11zBsyAQ@mail.gmail.com>
-References: <CACEFAc1kb4jbJcfv8S9Huf7cEnLRh+a3HxSO8uWc5RvcGQzRPQ@mail.gmail.com>
- <CACEFAc1R_6VsoPtBmz2fZE=Js_7vOr0ZLNR8Ukh3mLv5j0-SbQ@mail.gmail.com>
- <CACEFAc3BvAtkoEN8Mea2Jc11LHkHT6iE5+OvvqMa1KS8v24B0Q@mail.gmail.com>
- <CACEFAc3Of_vgC1+T0GrdoF=vO3DWmaVYJEV017LVxH11zBsyAQ@mail.gmail.com>
-Message-ID: <20200513134406.6b683bf2@windsurf.home>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed, 13 May 2020 05:35:20 -0700
+Subject: [Buildroot] [PATCH] package/elf2flt: add support for
+ XTENSA_[PN]DIFF relocations
+Message-ID: <20200513123520.30832-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
+the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
+Add them to the list of ignored relocation types.
 
-On Wed, 13 May 2020 16:11:23 +0530
-Kunal Chauhan <atkunalchauhan@gmail.com> wrote:
+This fixes the following error when invoking elf2flt on xtensa binaries
+built with the recent binutils:
 
-> Generating the build root by ./build.sh
+  ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
 
-There is nothing such as ./build.sh in Buildroot. So you're now using
-Buildroot, or at least not using the upstream Buildroot. We cannot help
-you if you're using a derivative of Buildroot, which has modifications
-unknown to us.
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...-add-new-relocation-types-for-xtensa.patch | 188 ++++++++++++++++++
+ 1 file changed, 188 insertions(+)
+ create mode 100644 package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
 
-Best regards,
-
-Thomas
+diff --git a/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch b/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
+new file mode 100644
+index 000000000000..953bd79ccf98
+--- /dev/null
++++ b/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
+@@ -0,0 +1,188 @@
++From d7eb73163bcea31168c438fc132a0967ac172e3d Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 7 May 2020 21:11:43 -0700
++Subject: [PATCH] elf2flt.c: add new relocation types for xtensa
++
++Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
++the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
++Add them to the list of ignored relocation types.
++
++This fixes the following error when invoking elf2flt on xtensa binaries
++built with the recent binutils:
++
++  ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
++
++Reported-by: Romain Naour <romain.naour@gmail.com>
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Backported from: d7eb73163bcea31168c438fc132a0967ac172e3d
++---
++ Makefile.in  |  3 ++-
++ configure    | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++
++ configure.ac | 14 ++++++++++++
++ elf2flt.c    |  8 +++++++
++ 4 files changed, 88 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 52b3347d7f43..0529c7f0a25a 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -30,7 +30,8 @@ DEFS = @DEFS@ \
++ 	-DNO_GOT_CHECK=@got_check@ \
++ 	-DUSE_EMIT_RELOCS=@emit_relocs@ \
++ 	-DEMIT_CTOR_DTOR=@emit_ctor_dtor@ \
++-	-DALWAYS_RELOC_TEXT=@always_reloc_text@
+++	-DALWAYS_RELOC_TEXT=@always_reloc_text@ \
+++	-DHAVE_BFD_XTENSA_PDIFF_RELOCS=@HAVE_BFD_XTENSA_PDIFF_RELOCS@
++ EXEEXT = @EXEEXT@
++ OBJEXT = @OBJEXT@
++ 
++diff --git a/configure b/configure
++index bb8e33f9cb28..bca38c34247e 100755
++--- a/configure
+++++ b/configure
++@@ -621,6 +621,7 @@ ac_includes_default="\
++ 
++ ac_subst_vars='LTLIBOBJS
++ LIBOBJS
+++HAVE_BFD_XTENSA_PDIFF_RELOCS
++ SYMBOL_PREFIX
++ always_reloc_text
++ emit_ctor_dtor
++@@ -1729,6 +1730,52 @@ fi
++ 
++ } # ac_fn_c_try_link
++ 
+++# ac_fn_c_check_decl LINENO SYMBOL VAR INCLUDES
+++# ---------------------------------------------
+++# Tests whether SYMBOL is declared in INCLUDES, setting cache variable VAR
+++# accordingly.
+++ac_fn_c_check_decl ()
+++{
+++  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+++  as_decl_name=`echo $2|sed 's/ *(.*//'`
+++  as_decl_use=`echo $2|sed -e 's/(/((/' -e 's/)/) 0&/' -e 's/,/) 0& (/g'`
+++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $as_decl_name is declared" >&5
+++$as_echo_n "checking whether $as_decl_name is declared... " >&6; }
+++if eval \${$3+:} false; then :
+++  $as_echo_n "(cached) " >&6
+++else
+++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+++/* end confdefs.h.  */
+++$4
+++int
+++main ()
+++{
+++#ifndef $as_decl_name
+++#ifdef __cplusplus
+++  (void) $as_decl_use;
+++#else
+++  (void) $as_decl_name;
+++#endif
+++#endif
+++
+++  ;
+++  return 0;
+++}
+++_ACEOF
+++if ac_fn_c_try_compile "$LINENO"; then :
+++  eval "$3=yes"
+++else
+++  eval "$3=no"
+++fi
+++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+++fi
+++eval ac_res=\$$3
+++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+++$as_echo "$ac_res" >&6; }
+++  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+++
+++} # ac_fn_c_check_decl
+++
++ # ac_fn_c_check_func LINENO FUNC VAR
++ # ----------------------------------
++ # Tests whether FUNC exists, setting the cache variable VAR accordingly
++@@ -4272,6 +4319,22 @@ $as_echo "#define const /**/" >>confdefs.h
++ fi
++ 
++ 
+++HAVE_BFD_XTENSA_PDIFF_RELOCS=0
+++case $target in
+++	xtensa*)
+++		OLD_CPPFLAGS=$CPPFLAGS
+++		CPPFLAGS="-I$bfd_include_dir -I$binutils_include_dir $CPPFLAGS"
+++		ac_fn_c_check_decl "$LINENO" "R_XTENSA_PDIFF8" "ac_cv_have_decl_R_XTENSA_PDIFF8" "#include \"bfd.h\"
+++			       #include \"elf/xtensa.h\"
+++"
+++if test "x$ac_cv_have_decl_R_XTENSA_PDIFF8" = xyes; then :
+++  HAVE_BFD_XTENSA_PDIFF_RELOCS=1
+++fi
+++
+++		CPPFLAGS=$OLD_CPPFLAGS
+++		;;
+++esac
+++
++ for ac_func in vprintf
++ do :
++   ac_fn_c_check_func "$LINENO" "vprintf" "ac_cv_func_vprintf"
++@@ -4333,6 +4396,7 @@ fi
++ 
++ 
++ 
+++
++ ac_config_files="$ac_config_files ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld"
++ 
++ cat >confcache <<\_ACEOF
++diff --git a/configure.ac b/configure.ac
++index d6b4119eb18a..19969b1045f6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -202,6 +202,19 @@ AC_CHECK_HEADERS(fcntl.h unistd.h bfd.h)
++ dnl Checks for typedefs, structures, and compiler characteristics.
++ AC_C_CONST
++ 
+++HAVE_BFD_XTENSA_PDIFF_RELOCS=0
+++case $target in
+++	xtensa*)
+++		AS_VAR_COPY([OLD_CPPFLAGS], [CPPFLAGS])
+++		AS_VAR_SET([CPPFLAGS], ["-I$bfd_include_dir -I$binutils_include_dir $CPPFLAGS"])
+++		AC_CHECK_DECL([R_XTENSA_PDIFF8],
+++			      [HAVE_BFD_XTENSA_PDIFF_RELOCS=1],,
+++			      [#include "bfd.h"
+++			       #include "elf/xtensa.h"])
+++		AS_VAR_COPY([CPPFLAGS], [OLD_CPPFLAGS])
+++		;;
+++esac
+++
++ dnl Checks for library functions.
++ AC_FUNC_VPRINTF
++ 
++@@ -235,6 +248,7 @@ AC_SUBST(emit_relocs)
++ AC_SUBST(emit_ctor_dtor)
++ AC_SUBST(always_reloc_text)
++ AC_SUBST(SYMBOL_PREFIX)
+++AC_SUBST(HAVE_BFD_XTENSA_PDIFF_RELOCS)
++ 
++ AC_OUTPUT(ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld)
++ 
++diff --git a/elf2flt.c b/elf2flt.c
++index b7c4a490df02..961534973f56 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -776,6 +776,14 @@ output_relocs (
++ 				case R_XTENSA_DIFF8:
++ 				case R_XTENSA_DIFF16:
++ 				case R_XTENSA_DIFF32:
+++#if HAVE_BFD_XTENSA_PDIFF_RELOCS
+++				case R_XTENSA_PDIFF8:
+++				case R_XTENSA_PDIFF16:
+++				case R_XTENSA_PDIFF32:
+++				case R_XTENSA_NDIFF8:
+++				case R_XTENSA_NDIFF16:
+++				case R_XTENSA_NDIFF32:
+++#endif
++ 				case R_XTENSA_32_PCREL:
++ 					continue;
++ 				case R_XTENSA_32:
++-- 
++2.20.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
