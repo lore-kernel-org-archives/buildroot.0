@@ -1,64 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 May 2020 22:16:28 +0200
-Subject: [Buildroot] Adding post image hook
-In-Reply-To: <ea-mime-5ebc52f4-7a9b-60b07d84@www-1.mailo.com>
-References: <20200511175027.71ed1d22@windsurf.home>
- <ea-mime-5ebc52f4-7a9b-60b07d84@www-1.mailo.com>
-Message-ID: <20200513221628.42c07184@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 May 2020 22:12:02 +0200
+Subject: [Buildroot] [git commit] package/fakeroot: fix for fchownat/fchmodat
+Message-ID: <20200513200749.CAB819189D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Louis-Paul,
+commit: https://git.buildroot.net/buildroot/commit/?id=e642e179821728a90b1dce6efdc3bdb6718eb200
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-You should consider changing your e-mail client, or configure it
-better. Indeed, the plain text version of your e-mail is not properly
-quoted, i.e the text from me you are replying to was not quoted with
-">" signs.
+fakeroot does mask out necessary flags, instead pass through
+the flags that are supported by fstatat
 
-On Wed, 13 May 2020 22:05:08 +0200 (CEST)
-lpdev at cordier.org wrote:
+Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
 
-> You can actually do that, by running:
-> 
-> make VARS=<some-variable-name> printvars
-> 
-> from your post-image script.
-> 
-> If what you need to retrieve is the version of the different packages,
-> you can also run:
-> 
-> make show-info
-> 
-> from your post-image script, and parse the JSON output.
-> 
-> 
-> 
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...0004-Fix-forwarding-fchownat-fchmod-flags.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-> Thank you for the tip. However this method seems to be very slow
-> because of the makefile parsing (takes between 5 to 10sec on my PC).
-> I would not recommend that for retrieving values of a lot of
-> variables.
-
-You can do:
-
-  make VARS=FOO% printvars
-
-if the different variables you want to get match a wildcard.
-
-Or alternatively, you can do just:
-
-  make printvars
-
-pay the one-time price of dumping all variables, and then grab what you
-need from the output.
-
-But otherwise, I agree that indeed it is quite slow.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
+new file mode 100644
+index 0000000000..fc74543378
+--- /dev/null
++++ b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
+@@ -0,0 +1,28 @@
++Forward supported flags to fstatat, this fixes issues like
++using an empty path
++
++Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
++
++Signed-off-by: Norbert Lange <nolange79@gmail.com>
++
++diff -burN fakeroot-1.20.2.org/libfakeroot.c fakeroot-1.20.2/libfakeroot.c
++--- fakeroot-1.20.2.org/libfakeroot.c	2014-10-05 17:16:00.000000000 +0200
+++++ fakeroot-1.20.2/libfakeroot.c	2020-05-10 22:24:18.896625085 +0200
++@@ -880,7 +880,7 @@
++   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
++      be when we stat it. */
++   INT_STRUCT_STAT st;
++-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
+++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT)));
++
++   if(r)
++     return(r);
++@@ -1017,7 +1017,7 @@
++
++   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
++      be when we stat it. */
++-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
+++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT));
++
++   if(r)
++     return(r);
