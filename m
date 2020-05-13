@@ -1,110 +1,35 @@
-From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
-Date: Wed, 13 May 2020 15:59:41 +0000
-Subject: [Buildroot] [PATCH] package/linux-tools: introduce spi linux
- tools
-In-Reply-To: <87tv0j6etz.fsf@tarshish>
-References: <20200513150324.330435-1-eugen.hristev@microchip.com>
- <87tv0j6etz.fsf@tarshish>
-Message-ID: <c577cbdf-b84a-4af8-8d55-f2759e13c137@microchip.com>
+From: Lecopzer Chen <lecopzer@gmail.com>
+Date: Thu, 14 May 2020 01:02:33 +0800
+Subject: [Buildroot] [PATCH 1/1] package/binutils: install libopcodes for
+ perf
+Message-ID: <20200513170233.2983421-1-lecopzer@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13.05.2020 18:21, Baruch Siach wrote:
+After 5.6.x linux-tool perf installed, it can't be executed due
+to lack of libopcodes:
 
-> Hi Eugen,
-> 
-> On Wed, May 13 2020, Eugen Hristev wrote:
->> Add new linux tools package : spi. This is present in the Linux Kernel since
->> 4.5.
->> It now includes spidev_test and spidev_fdx tools.
-> 
-> We have a package for spidev_test already. Consider adding spidev_fdx to
-> that package instead.
-> 
+    perf: ...libopcodes-2.33.1.so: cannot open shared object file
 
-Hi Baruch,
+Signed-off-by: Lecopzer Chen <lecopzer@gmail.com>
+---
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-While I understand your point, you should also consider that all linux 
-tools have a specific way to build in buildroot, and this I think should 
-be consistent.
-And spi tools would be not just spidev_test and might include future 
-applications, which may or may not have their place in the same spot as 
-spidev_test .
-
-Eugen
-
-> baruch
-> 
->> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
->> ---
->>
->> Inspired by the linux-tools iio mk.in file.
->>
->>   package/linux-tools/Config.in            |  7 ++++++
->>   package/linux-tools/linux-tool-spi.mk.in | 29 ++++++++++++++++++++++++
->>   2 files changed, 36 insertions(+)
->>   create mode 100644 package/linux-tools/linux-tool-spi.mk.in
->>
->> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
->> index ceb58c668a..60df99dc4a 100644
->> --- a/package/linux-tools/Config.in
->> +++ b/package/linux-tools/Config.in
->> @@ -108,6 +108,13 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dyna
->>        depends on BR2_USE_MMU
->>        depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || BR2_STATIC_LIBS
->>
->> +config BR2_PACKAGE_LINUX_TOOLS_SPI
->> +     bool "spi"
->> +     select BR2_PACKAGE_LINUX_TOOLS
->> +     help
->> +       spi is a collection of tools to test and measure performances
->> +       of SPI (Serial Peripheral Interface) bus devices.
->> +
->>   config BR2_PACKAGE_LINUX_TOOLS_TMON
->>        bool "tmon"
->>        select BR2_PACKAGE_LINUX_TOOLS
->> diff --git a/package/linux-tools/linux-tool-spi.mk.in b/package/linux-tools/linux-tool-spi.mk.in
->> new file mode 100644
->> index 0000000000..f6c4298380
->> --- /dev/null
->> +++ b/package/linux-tools/linux-tool-spi.mk.in
->> @@ -0,0 +1,29 @@
->> +################################################################################
->> +#
->> +# spi
->> +#
->> +################################################################################
->> +
->> +LINUX_TOOLS += spi
->> +
->> +SPI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
->> +
->> +define SPI_BUILD_CMDS
->> +     $(Q)if ! grep install $(LINUX_DIR)/tools/spi/Makefile >/dev/null 2>&1 ; then \
->> +             echo "Your kernel version is too old and does not have install section in the spi tools." ; \
->> +             echo "At least kernel 4.5 must be used." ; \
->> +             exit 1 ; \
->> +     fi
->> +
->> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/spi \
->> +             $(SPI_MAKE_OPTS)
->> +endef
->> +
->> +# DESTDIR used since kernel version 4.14
->> +define SPI_INSTALL_TARGET_CMDS
->> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/spi \
->> +             $(SPI_MAKE_OPTS) \
->> +             INSTALL_ROOT=$(TARGET_DIR) \
->> +             DESTDIR=$(TARGET_DIR) \
->> +             install
->> +endef
-> 
-> 
-> --
->                                                       ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->     - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-> 
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 876c9c59f8..81308e2e81 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -112,6 +112,7 @@ endef
+ ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+ define BINUTILS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
+ endef
+ endif
+-- 
+2.25.1
