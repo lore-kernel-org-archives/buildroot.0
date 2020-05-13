@@ -1,86 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 May 2020 22:27:09 +0200
-Subject: [Buildroot] [PATCH] package/fakeroot: fix for fchownat/fchmodat
-In-Reply-To: <20200510203509.7628-1-nolange79@gmail.com>
-References: <20200510203509.7628-1-nolange79@gmail.com>
-Message-ID: <20200513202709.GB12536@scaer>
+Date: Wed, 13 May 2020 22:35:56 +0200
+Subject: [Buildroot] [git commit] package/cegui: remove tinyxml2 dependency
+Message-ID: <20200513201957.788D1918A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a07a9d32167c4cbec8ecffa06ed8bf859065c893
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-10 22:35 +0200, Norbert Lange spake thusly:
-> fakeroot does mask out necessary flags, instead pass through
-> the flags that are supported by fstatat
-> 
-> Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
+Remove tinyxml2 dependency as tinyxml2 is not a part of version 0.8.7.
 
-I think you might get better/quicker feedback by opening a merge-request
-on the gitlab repo;
+Indeed, tinyxml2 has been added in September 2016 with
+https://github.com/cegui/cegui/commit/49b3fd9d6f0d7555198379514b155bcd61daef67
+whereas version 0.8.7 has been released in April 2016
 
-    https://salsa.debian.org/clint/fakeroot/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/cegui/cegui.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...Fix-forwarding-fchownat-fchmod-flags.patch | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
-> 
-> diff --git a/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
-> new file mode 100644
-> index 0000000000..fc74543378
-> --- /dev/null
-> +++ b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
-> @@ -0,0 +1,28 @@
-> +Forward supported flags to fstatat, this fixes issues like
-> +using an empty path
-> +
-> +Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
-> +
-> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> +
-> +diff -burN fakeroot-1.20.2.org/libfakeroot.c fakeroot-1.20.2/libfakeroot.c
-> +--- fakeroot-1.20.2.org/libfakeroot.c	2014-10-05 17:16:00.000000000 +0200
-> ++++ fakeroot-1.20.2/libfakeroot.c	2020-05-10 22:24:18.896625085 +0200
-> +@@ -880,7 +880,7 @@
-> +   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
-> +      be when we stat it. */
-> +   INT_STRUCT_STAT st;
-> +-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
-> ++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT)));
-> +
-> +   if(r)
-> +     return(r);
-> +@@ -1017,7 +1017,7 @@
-> +
-> +   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
-> +      be when we stat it. */
-> +-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
-> ++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT));
-> +
-> +   if(r)
-> +     return(r);
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 9640a15116..6158ef129c 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -83,13 +83,6 @@ else
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_TINYXML2),y)
+-CEGUI_DEPENDENCIES += tinyxml2
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=ON
+-else
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBFREEIMAGE),y)
+ CEGUI_DEPENDENCIES += libfreeimage
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=ON
