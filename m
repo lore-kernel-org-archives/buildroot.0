@@ -1,98 +1,111 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue, 12 May 2020 17:08:29 -0700
-Subject: [Buildroot] mesa3d: builds with ES2 report no ES2 enabled EGL
- configs
-In-Reply-To: <20200511185953.33125-1-joseph.kogut@gmail.com>
-References: <20200511185953.33125-1-joseph.kogut@gmail.com>
-Message-ID: <CAMWSM7hm5HTZ==-SH1L0jKkEvjTWPuD1WwVK7ddJq3a80uGViQ@mail.gmail.com>
+Date: Tue, 12 May 2020 18:49:28 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: reorder platforms to fix EGL
+Message-ID: <20200513014928.1878147-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was able to reproduce this on a PC in a chroot using the radeonsi
-driver, as well as come up with a fix.
+Mesa chooses the first platform specified in -Dplatforms as the default
+EGL native platform. [0]
 
-Here's a minimal config that includes mesa3d-demos, and most of the
-drivers a PC would require:
+    Configure Options
 
+    -D platforms=...
+        List the platforms (window systems) to support. Its argument is
+        a comma separated string such as -D platforms=x11,drm. It
+        decides the platforms a driver may support. The first listed
+        platform is also used by the main library to decide the native
+        platform.
+
+This has the effect of breaking EGL applications running on X11 and
+possibly Wayland when the first platform specified isn't x11 or wayland,
+and EGL_PLATFORM isn't set.
+
+Reorder the specified platforms to use x11, wayland, and drm before
+surfaceless, as this is the order chosen by other common distributions,
+such as Arch Linux [1], Debian [2], and Fedora [3].
+
+Users preferring drm or surfaceless over x11 or wayland likely know how
+to override the native EGL platform, and likely have x11 and wayland
+disabled anyway.
+
+[0] https://www.mesa3d.org/egl.html
+[1] https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mesa#n45
+[2] https://salsa.debian.org/xorg-team/lib/mesa/-/blob/fb8c1efb57ea8106525ed01c41218164f8be7f3b/debian/rules#L38
+[3] https://src.fedoraproject.org/rpms/mesa/blob/master/f/mesa.spec#_337
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_KERNEL_HEADERS_4_19=y
-BR2_GCC_VERSION_9_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_MERGED_USR=y
-BR2_PACKAGE_MESA3D_DEMOS=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_LLVM=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBFS=y
-BR2_PACKAGE_XLIB_LIBXSCRNSAVER=y
-BR2_PACKAGE_XLIB_LIBXCOMPOSITE=y
-BR2_PACKAGE_XLIB_LIBXCURSOR=y
-BR2_PACKAGE_XLIB_LIBXFONT=y
-BR2_PACKAGE_XLIB_LIBXFONT2=y
-BR2_PACKAGE_XLIB_LIBXFT=y
-BR2_PACKAGE_XLIB_LIBXINERAMA=y
-BR2_PACKAGE_XLIB_LIBXRES=y
-BR2_PACKAGE_XLIB_LIBXTST=y
-BR2_PACKAGE_XLIB_LIBXVMC=y
-BR2_PACKAGE_XLIB_LIBXXF86DGA=y
-BR2_PACKAGE_XLIB_LIBDMX=y
-BR2_PACKAGE_XLIB_LIBXKBFILE=y
-BR2_PACKAGE_XTERM=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_E2FSPROGS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
 
+This is a follow up to a previous email I sent the mailing list [0] about
+broken EGL apps when using mesa3d with x11.
 
-After chrooting into the extracted rootfs, I was able to run glxgears
-(with an already running X server) like so:
+I discovered the cause of this issue is the ordering of platforms when
+building mesa3d, making surfaceless the default native platform.
 
-$ DISPLAY=:0 glxgears
+I suggested adding a config to specify the default native platform, but
+after further review, I believe that simply reordering the enabled
+platforms should be adequate.
 
-However, es2gears_x11 fails in the same way as on the RPi.
+[0] http://buildroot-busybox.2317881.n4.nabble.com/mesa3d-builds-with-ES2-report-no-ES2-enabled-EGL-configs-td255778.html
 
-When running the program with EGL_LOG_LEVEL=debug, it reports:
+ package/mesa3d/mesa3d.mk | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-libEGL debug: Native platform type: surfaceless (build-time configuration)
-<snip>
-libEGL warning: DRI2: failed to create dri screen
-libEGL debug: EGL user error 0x3001 (EGL_NOT_INITIALIZED) in
-eglInitialize: DRI2: failed to create screen
-
-As you can see, the platform libEGL is attempting to use is
-surfaceless, when this use case demands x11. According to Mesa's
-documentation of their libEGL [1], the native platform is decided at
-build time, and can be overridden with the EGL_PLATFORM environment
-variable. When I set EGL_PLATFORM=x11, es2_info and es2gears_x11 now
-work.
-
-Other distributions, such as Arch [2] and Debian [3], specify x11 as
-the first platform, followed by others such as  wayland, drm, and
-surfaceless.
-
-I would propose we sort by default in the same manner as other common
-distributions, and maybe add a config to override the native platform
-type. I can follow up with patches if this is a change that would be
-acceptable.
-
-Thoughts?
-
-[1] https://www.mesa3d.org/egl.html
-[2] https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mesa#n45
-[3] https://salsa.debian.org/xorg-team/lib/mesa/-/blob/debian-unstable/debian/rules#L38
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 531dcf5b81..394428c053 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -167,7 +167,22 @@ endef
+ MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_HEADERS
+ endif
+ 
+-MESA3D_PLATFORMS = surfaceless
++ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_X11),y)
++MESA3D_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXdamage \
++	xlib_libXfixes \
++	xlib_libXrandr \
++	xlib_libXxf86vm \
++	xorgproto \
++	libxcb
++MESA3D_PLATFORMS += x11
++endif
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++MESA3D_DEPENDENCIES += wayland wayland-protocols
++MESA3D_PLATFORMS += wayland
++endif
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+ MESA3D_PLATFORMS += drm
+ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D),y)
+@@ -189,22 +204,7 @@ MESA3D_PLATFORMS += drm
+ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
+ MESA3D_PLATFORMS += drm
+ endif
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-MESA3D_DEPENDENCIES += wayland wayland-protocols
+-MESA3D_PLATFORMS += wayland
+-endif
+-ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_X11),y)
+-MESA3D_DEPENDENCIES += \
+-	xlib_libX11 \
+-	xlib_libXext \
+-	xlib_libXdamage \
+-	xlib_libXfixes \
+-	xlib_libXrandr \
+-	xlib_libXxf86vm \
+-	xorgproto \
+-	libxcb
+-MESA3D_PLATFORMS += x11
+-endif
++MESA3D_PLATFORMS += surfaceless
+ 
+ MESA3D_CONF_OPTS += \
+ 	-Dplatforms=$(subst $(space),$(comma),$(MESA3D_PLATFORMS))
+-- 
+2.26.2
