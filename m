@@ -1,55 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 May 2020 21:55:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/binutils: install libopcodes
- for perf
-In-Reply-To: <20200513170233.2983421-1-lecopzer@gmail.com>
-References: <20200513170233.2983421-1-lecopzer@gmail.com>
-Message-ID: <20200513195524.GY12536@scaer>
+Date: Wed, 13 May 2020 21:58:40 +0200
+Subject: [Buildroot] [PATCH] package/linux-tools: introduce spi linux
+ tools
+In-Reply-To: <87r1vn6840.fsf@tarshish>
+References: <20200513150324.330435-1-eugen.hristev@microchip.com>
+ <87tv0j6etz.fsf@tarshish>
+ <c577cbdf-b84a-4af8-8d55-f2759e13c137@microchip.com>
+ <87r1vn6840.fsf@tarshish>
+Message-ID: <20200513195840.GZ12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lecopzer, All,
-
-On 2020-05-14 01:02 +0800, Lecopzer Chen spake thusly:
-> After 5.6.x linux-tool perf installed, it can't be executed due
-> to lack of libopcodes:
+On 2020-05-13 20:46 +0300, Baruch Siach spake thusly:
+> Hi Eugen,
 > 
->     perf: ...libopcodes-2.33.1.so: cannot open shared object file
-> 
-> Signed-off-by: Lecopzer Chen <lecopzer@gmail.com>
+> On Wed, May 13 2020, Eugen.Hristev at microchip.com wrote:
+> > On 13.05.2020 18:21, Baruch Siach wrote:
+> >> On Wed, May 13 2020, Eugen Hristev wrote:
+> >>> Add new linux tools package : spi. This is present in the Linux Kernel since
+> >>> 4.5.
+> >>> It now includes spidev_test and spidev_fdx tools.
+> >> We have a package for spidev_test already. Consider adding spidev_fdx to
+> >> that package instead.
+> > While I understand your point, you should also consider that all linux 
+> > tools have a specific way to build in buildroot, and this I think should 
+> > be consistent.
+> Agreed.
+> > And spi tools would be not just spidev_test and might include future 
+> > applications, which may or may not have their place in the same spot as 
+> > spidev_test .
+> In that case I think you should remove the spidev_test package.
 
-Applied to master, with an expanded commit log to reference the origianl
-commit adding libopcodes to staging. Thanks!
+Yes, I like it that we can drop spidev_test.
+
+But do it multi-step:
+
+  - intropduce spidev as a linux-tool
+  - drop the standalone spidev_test
+
+Do not forget to add legacy handling for it, though; see Config.in.legacy.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/binutils/binutils.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index 876c9c59f8..81308e2e81 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -112,6 +112,7 @@ endef
->  ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
->  define BINUTILS_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
->  endef
->  endif
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
