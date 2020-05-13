@@ -1,95 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 May 2020 22:01:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version
- to 0.102.3
-In-Reply-To: <20200512181352.285143-1-bernd.kuhls@t-online.de>
-References: <20200512181352.285143-1-bernd.kuhls@t-online.de>
-Message-ID: <20200513200134.GA12536@scaer>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Wed, 13 May 2020 22:05:08 +0200 (CEST)
+Subject: [Buildroot] Adding post image hook
+In-Reply-To: <20200511175027.71ed1d22@windsurf.home>
+Message-ID: <ea-mime-5ebc52f4-7a9b-60b07d84@www-1.mailo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
 
-On 2020-05-12 20:13 +0200, Bernd Kuhls spake thusly:
-> Fixes CVE-2020-3327 & CVE-2020-3341.
-> 
-> Release notes:
-> https://blog.clamav.net/2020/05/clamav-01023-security-patch-released.html
-> 
-> Reformatted hashes.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Applied to master, thanks.
+De : Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+? : lpdev at cordier.org
+Sujet : Re: [Buildroot] Adding post image hook
+Date : 11/05/2020 17:50:27 Europe/Paris
+Copie ? : buildroot at buildroot.org
 
-Regards,
-Yann E. MORIN.
+Hello,
 
-> ---
->  package/clamav/clamav.hash | 26 +++++++++++++-------------
->  package/clamav/clamav.mk   |  2 +-
->  2 files changed, 14 insertions(+), 14 deletions(-)
+On Mon, 11 May 2020 16:35:10 +0200 (CEST)
+lpdev at cordier.org wrote:
+
+> I'm currently trying to improve my custom buildroot tree (that makes
+> use of BR2_EXTERNAL), especially the final steps. For instance my
+> external tree adds an extra steps through the
+> BR2_ROOTFS_POST_IMAGE_SCRIPT to generate the firmware file. This step
+> also retrieve the version of different softwares present in the final
+> image.
 > 
-> diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-> index 613d9b4122..f98dc6b320 100644
-> --- a/package/clamav/clamav.hash
-> +++ b/package/clamav/clamav.hash
-> @@ -1,14 +1,14 @@
->  # Locally calculated
-> -sha256 89fcdcc0eba329ca84d270df09d2bb89ae55f5024b0c3bddb817512fb2c907d3  clamav-0.102.2.tar.gz
-> -sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
-> -sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
-> -sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-> -sha256 6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
-> -sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
-> -sha256 e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
-> -sha256 d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
-> -sha256 accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
-> -sha256 e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
-> -sha256 1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
-> -sha256 a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
-> -sha256 c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
-> +sha256  ed3050c4569989ee7ab54c7b87246b41ed808259632849be0706467442dc0693  clamav-0.102.3.tar.gz
-> +sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
-> +sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
-> +sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-> +sha256  6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
-> +sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
-> +sha256  e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
-> +sha256  d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
-> +sha256  accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
-> +sha256  e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
-> +sha256  1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
-> +sha256  a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
-> +sha256  c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
-> diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-> index b8d7de52fa..eec18fcc02 100644
-> --- a/package/clamav/clamav.mk
-> +++ b/package/clamav/clamav.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -CLAMAV_VERSION = 0.102.2
-> +CLAMAV_VERSION = 0.102.3
->  CLAMAV_SITE = https://www.clamav.net/downloads/production
->  CLAMAV_LICENSE = GPL-2.0
->  CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> However the post image script comes with a big limitation: we cannot
+> take the advantage of reading variables defined in the Makefile.
 
+You can actually do that, by running:
+
+make VARS=<some-variable-name> printvars
+
+from your post-image script.
+
+If what you need to retrieve is the version of the different packages,
+you can also run:
+
+make show-info
+
+from your post-image script, and parse the JSON output.
+
+
+
+Thank you for the tip. However this method seems to be very slow because of the makefile parsing (takes between 5 to 10sec on my PC). I would not recommend that for retrieving values of a lot of variables.
+
+
+
+
+
+> # Export some useful variable that can be used in other scripts
+> export BR2_CUSTOM_BOARDNAME := $(call qstrip,$(BR2_CUSTOM_BOARDNAME))
+> export BR2_CUSTOM_BOARDVERSION := $(shell git -C $(BR2_EXTERNAL_CUSTOM_PATH) describe --tags --dirty=-dev)
+> 
+> # Make an Firmware Update package.
+> ifeq ($(BR2_CUSTOM_GENERATE_FIRMWARE),y)
+> genfirmware: target-post-image
+> @$(call MESSAGE,"Compressing the filesystem...")
+> pigz -9 -c -n $(BINARIES_DIR)/rootfs.ext4 > $(BINARIES_DIR)/rootfs.ext4.gz
+> 
+> @$(call MESSAGE,"Generating UEFI partition for the bootloader...")
+> $(EXTRA_ENV) ./support/scripts/genimage.sh -c $(BR2_EXTERNAL_CUSTOM_PATH)/board/cstick/genimage_uefi.cfg
+> 
+> @$(call MESSAGE,"Generating firmware version $(BR2_CUSTOM_BOARDVERSION) for board $(BR2_CUSTOM_BOARDNAME) ")
+> (We can use bash script here with any makefile variables defined at this point, such as BR2_OPENCV_VERSION for instance)
+> 
+> # Override the default world target.
+> .PHONY: world
+> world: genfirmware
+> endif
+
+Otherwise, what you did here looks OK to me. It is a hack of course,
+but BR2_EXTERNAL is designed to allow hacks :-)
+
+
+
+Soooo cool, I just became an hacker then! :D Thank you for your time Thomas
+
+
+
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200513/1a266df7/attachment.html>
