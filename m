@@ -1,109 +1,74 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 May 2020 20:46:23 +0300
-Subject: [Buildroot] [PATCH] package/linux-tools: introduce spi linux
- tools
-In-Reply-To: <c577cbdf-b84a-4af8-8d55-f2759e13c137@microchip.com>
-References: <20200513150324.330435-1-eugen.hristev@microchip.com>
- <87tv0j6etz.fsf@tarshish>
- <c577cbdf-b84a-4af8-8d55-f2759e13c137@microchip.com>
-Message-ID: <87r1vn6840.fsf@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 May 2020 19:48:09 +0200
+Subject: [Buildroot] [PATCH] package/linux-headers: add support for CIP with
+ same-as-kernel
+Message-ID: <20200513174809.30110-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eugen,
+When the linux-headers are configured to use the same source as the
+kernel (BR2_KERNEL_HEADERS_AS_KERNEL), and the kernel is configured
+to be one of the two CIP version (BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+or BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION), the build fails if the
+kernel sources are not already downloaded:
 
-On Wed, May 13 2020, Eugen.Hristev at microchip.com wrote:
-> On 13.05.2020 18:21, Baruch Siach wrote:
->> On Wed, May 13 2020, Eugen Hristev wrote:
->>> Add new linux tools package : spi. This is present in the Linux Kernel since
->>> 4.5.
->>> It now includes spidev_test and spidev_fdx tools.
->> 
->> We have a package for spidev_test already. Consider adding spidev_fdx to
->> that package instead.
->
-> While I understand your point, you should also consider that all linux 
-> tools have a specific way to build in buildroot, and this I think should 
-> be consistent.
+    $ cat defconfig
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_LATEST_CIP_VERSION=y
+    $ make defconfig BR2_DEFCONFIG=$pwd)/defconfig
+    $ make linux-headers-source
 
-Agreed.
+    >>> linux-headers 4.19.118-cip25 Downloading
+    --2020-05-13 19:28:44--  https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.118-cip25.tar.xz
+    Resolving cdn.kernel.org (cdn.kernel.org)... 2a04:4e42:1d::432, 151.101.121.176
+    Connecting to cdn.kernel.org (cdn.kernel.org)|2a04:4e42:1d::432|:443... connected.
+    HTTP request sent, awaiting response... 404 Not Found
+    2020-05-13 19:28:45 ERROR 404: Not Found.
 
-> And spi tools would be not just spidev_test and might include future 
-> applications, which may or may not have their place in the same spot as 
-> spidev_test .
+    make[1]: *** [package/pkg-generic.mk:171: /home/ymorin/dev/buildroot/O/build/linux-headers-4.19.118-cip25/.stamp_downloaded] Error 1
+    make: *** [Makefile:23: _all] Error 2
 
-In that case I think you should remove the spidev_test package.
+We fix that by addingyet another duplication of information out of the
+linux.mk, to use the CIP-specific git tree where to get the archives as
+snapshots.
 
-baruch
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-headers/linux-headers.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
->>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
->>> ---
->>>
->>> Inspired by the linux-tools iio mk.in file.
->>>
->>>   package/linux-tools/Config.in            |  7 ++++++
->>>   package/linux-tools/linux-tool-spi.mk.in | 29 ++++++++++++++++++++++++
->>>   2 files changed, 36 insertions(+)
->>>   create mode 100644 package/linux-tools/linux-tool-spi.mk.in
->>>
->>> diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
->>> index ceb58c668a..60df99dc4a 100644
->>> --- a/package/linux-tools/Config.in
->>> +++ b/package/linux-tools/Config.in
->>> @@ -108,6 +108,13 @@ comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and a toolchain w/ dyna
->>>        depends on BR2_USE_MMU
->>>        depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS || BR2_STATIC_LIBS
->>>
->>> +config BR2_PACKAGE_LINUX_TOOLS_SPI
->>> +     bool "spi"
->>> +     select BR2_PACKAGE_LINUX_TOOLS
->>> +     help
->>> +       spi is a collection of tools to test and measure performances
->>> +       of SPI (Serial Peripheral Interface) bus devices.
->>> +
->>>   config BR2_PACKAGE_LINUX_TOOLS_TMON
->>>        bool "tmon"
->>>        select BR2_PACKAGE_LINUX_TOOLS
->>> diff --git a/package/linux-tools/linux-tool-spi.mk.in b/package/linux-tools/linux-tool-spi.mk.in
->>> new file mode 100644
->>> index 0000000000..f6c4298380
->>> --- /dev/null
->>> +++ b/package/linux-tools/linux-tool-spi.mk.in
->>> @@ -0,0 +1,29 @@
->>> +################################################################################
->>> +#
->>> +# spi
->>> +#
->>> +################################################################################
->>> +
->>> +LINUX_TOOLS += spi
->>> +
->>> +SPI_MAKE_OPTS = $(LINUX_MAKE_FLAGS)
->>> +
->>> +define SPI_BUILD_CMDS
->>> +     $(Q)if ! grep install $(LINUX_DIR)/tools/spi/Makefile >/dev/null 2>&1 ; then \
->>> +             echo "Your kernel version is too old and does not have install section in the spi tools." ; \
->>> +             echo "At least kernel 4.5 must be used." ; \
->>> +             exit 1 ; \
->>> +     fi
->>> +
->>> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/spi \
->>> +             $(SPI_MAKE_OPTS)
->>> +endef
->>> +
->>> +# DESTDIR used since kernel version 4.14
->>> +define SPI_INSTALL_TARGET_CMDS
->>> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/spi \
->>> +             $(SPI_MAKE_OPTS) \
->>> +             INSTALL_ROOT=$(TARGET_DIR) \
->>> +             DESTDIR=$(TARGET_DIR) \
->>> +             install
->>> +endef
-
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 80a077537b..4c3cb716b3 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -17,6 +17,7 @@ LINUX_HEADERS_CUSTOM_SVN = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_SVN))
+ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+ LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
++LINUX_HEADERS_CIP = $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION)
+ else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+ LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
+ LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
+@@ -25,6 +26,7 @@ LINUX_HEADERS_CUSTOM_SVN =
+ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+ LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
+ LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
++LINUX_HEADERS_CIP =
+ endif # BR2_KERNEL_HEADERS_AS_KERNEL
+ 
+ # Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
+@@ -43,6 +45,9 @@ else ifeq ($(LINUX_HEADERS_CUSTOM_SVN),y)
+ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
+ LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
+ LINUX_HEADERS_SITE_METHOD = svn
++else ifeq ($(LINUX_HEADERS_CIP),y)
++LINUX_HEADERS_SOURCE = linux-cip-$(LINUX_HEADERS_VERSION).tar.gz
++LINUX_HEADERS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
+ else ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
+ # Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
+ # older -rc kernels.
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.20.1
