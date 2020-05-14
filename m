@@ -1,81 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 May 2020 16:54:01 +0200
-Subject: [Buildroot] [PATCH 4/6] package/libodb-pgsql: new package
-In-Reply-To: <20200514143325.1009253-5-kamel.bouhara@bootlin.com>
+Date: Thu, 14 May 2020 16:55:19 +0200
+Subject: [Buildroot] [PATCH 5/6] package/libodb-mysql: new package
+In-Reply-To: <20200514143325.1009253-6-kamel.bouhara@bootlin.com>
 References: <20200514143325.1009253-1-kamel.bouhara@bootlin.com>
- <20200514143325.1009253-5-kamel.bouhara@bootlin.com>
-Message-ID: <20200514165401.005e0c97@windsurf.home>
+ <20200514143325.1009253-6-kamel.bouhara@bootlin.com>
+Message-ID: <20200514165519.542961ba@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 May 2020 16:33:23 +0200
+Hello,
+
+On Thu, 14 May 2020 16:33:24 +0200
 Kamel Bouhara <kamel.bouhara@bootlin.com> wrote:
 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4c7c157e07..abdee8541a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -44,6 +44,7 @@ F:	package/json-for-modern-cpp/
->  F:	package/libcpprestsdk/
->  F:	package/libcutl/
->  F:	package/libodb/
-> +F:	package/libodb-pgsql/
->  F:	package/libressl/
->  F:	package/libselinux/
->  F:	package/libsemanage/
-> diff --git a/package/Config.in b/package/Config.in
-> index 3891b36282..59e714fb6a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1319,6 +1319,7 @@ menu "Database"
->  	source "package/hiredis/Config.in"
->  	source "package/kompexsqlite/Config.in"
->  	source "package/leveldb/Config.in"
-> +	source "package/libodb-pgsql/Config.in"
->  	source "package/libgit2/Config.in"
->  	source "package/libpqxx/Config.in"
->  	source "package/mongodb/Config.in"
-> diff --git a/package/libodb-pgsql/Config.in b/package/libodb-pgsql/Config.in
+> diff --git a/package/libodb-mysql/Config.in b/package/libodb-mysql/Config.in
 > new file mode 100644
-> index 0000000000..daaf4717f9
+> index 0000000000..47daa27264
 > --- /dev/null
-> +++ b/package/libodb-pgsql/Config.in
+> +++ b/package/libodb-mysql/Config.in
 > @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_LIBODB_PGSQL
-> +	bool "libodb-pgsql"
+> +config BR2_PACKAGE_LIBODB_MYSQL
+> +	bool "libodb-mysql"
 > +	depends on BR2_TOOLCHAIN_HAS_THREADS
 > +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_POSTGRESQL
+> +	depends on BR2_PACKAGE_MYSQL
 > +	select BR2_PACKAGE_LIBODB
 > +	help
-> +	  This package contains the PostgreSQL ODB runtime library.
-> +	  Every application that includes code generated for the
-> +	  PostgreSQL database will need to link to this library.
+> +	  This package contains the MySQL ODB runtime library. Every application
+> +	  that includes code generated for the MySQL database will need to link
+> +	  to this library.
 > +
 > +	  https://www.codesynthesis.com/products/odb/
 > +
-> +comment "libodb-pgsql needs a toolchain w/ C++, threads"
+> +comment "libodb-mysql needs a toolchain w/ C++, threads"
 > +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 
-We need a:
+Here as well, we need a:
 
-	depends on BR2_PACKAGE_POSTGRESQL
+	depends on BR2_PACKAGE_MYSQL
 
-here so that the comment does not appear when postgresql is not enabled.
+> +LIBODB_MYSQL_VERSION_MAJOR = 2.4
+> +LIBODB_MYSQL_VERSION = $(LIBODB_MYSQL_VERSION_MAJOR).0
+> +LIBODB_MYSQL_SOURCE = libodb-mysql-$(LIBODB_MYSQL_VERSION).tar.bz2
+> +LIBODB_MYSQL_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_MYSQL_VERSION_MAJOR)
+> +LIBODB_MYSQL_INSTALL_STAGING = YES
+> +LIBODB_MYSQL_LICENSE = GPL-2.0
+> +LIBODB_MYSQL_LICENSE_FILES = LICENSE
+> +LIBODB_MYSQL_DEPENDENCIES = libodb mysql
 
-> +LIBODB_PGSQL_VERSION_MAJOR = 2.4
-> +LIBODB_PGSQL_VERSION = $(LIBODB_PGSQL_VERSION_MAJOR).0
-> +LIBODB_PGSQL_SOURCE = libodb-pgsql-$(LIBODB_PGSQL_VERSION).tar.bz2
-> +LIBODB_PGSQL_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_PGSQL_VERSION_MAJOR)
-> +LIBODB_PGSQL_LICENSE = GPL-2.0
-> +LIBODB_PGSQL_LICENSE_FILES = LICENSE
-> +LIBODB_PGSQL_INSTALL_STAGING = YES
-> +LIBODB_PGSQL_DEPENDENCIES += postgresql libodb
+Did you test this with both Buildroot packages that provide mysql, i.e
+oracle-mysql and mariadb ?
 
-The += sign can be just =
+Thanks!
 
 Thomas
 -- 
