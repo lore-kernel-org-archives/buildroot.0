@@ -1,49 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 May 2020 18:19:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.6
-Message-ID: <20200514161909.672761-1-bernd.kuhls@t-online.de>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Thu, 14 May 2020 19:56:44 +0200
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.05.0
+Message-ID: <20200514175644.515160-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.6
-
-Fixes CVE 2019-11048.
-
-Reformatted hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/php/php.hash | 4 ++--
- package/php/php.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index a0b8fd4688..0267375f6e 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256 d059fd7f55bdc4d2eada15a00a2976697010d3631ef6f83149cc5289e1f23c2c  php-7.4.5.tar.xz
-+sha256  d740322f84f63019622b9f369d64ea5ab676547d2bdcf12be77a5a4cffd06832  php-7.4.6.tar.xz
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 78fb26272b..e5ba8cd1cf 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- # License file
--sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-+sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4d2f1b8f63..73be57a8a1 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2020.03.0"
++	bool "2020.05.0"
  
--PHP_VERSION = 7.4.5
-+PHP_VERSION = 7.4.6
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2020.03.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2020.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 8a953847f7..8a33453249 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2020.03.0.tar.bz2.md5
+-md5  9e93df6dadb898d91d9f3811456a94bd  barebox-2020.03.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2020.05.0.tar.bz2.md5
++md5  31dee7b5715967fab882cabe4e406896  barebox-2020.05.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  625b031d1fe99bdd3bf95f79c8ecfcf67101bc2500ec4816e034bf989f16d1c2  barebox-2020.03.0.tar.bz2
++sha256  03e29c2864c3220c676a0cf768ffe2b8f1064eddb60463281c9944625e649b65  barebox-2020.05.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
 -- 
 2.26.2
