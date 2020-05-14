@@ -1,9 +1,9 @@
 From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Thu, 14 May 2020 16:33:20 +0200
-Subject: [Buildroot] [PATCH 1/6] package/libcutl: new package
+Date: Thu, 14 May 2020 16:33:23 +0200
+Subject: [Buildroot] [PATCH 4/6] package/libodb-pgsql: new package
 In-Reply-To: <20200514143325.1009253-1-kamel.bouhara@bootlin.com>
 References: <20200514143325.1009253-1-kamel.bouhara@bootlin.com>
-Message-ID: <20200514143325.1009253-2-kamel.bouhara@bootlin.com>
+Message-ID: <20200514143325.1009253-5-kamel.bouhara@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,102 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <aduskett@gmail.com>
 
-libcutl is distributed in source code and includes the standard autotools
-build system as well as the VC++ project files. It is a dependency for odb.
-
-Because ODB is a host-only package, and no other package depends on libcutl,
-this package will also be a host-only package.
+This package contains the PostgreSQL ODB runtime library.
+Every application that includes code generated for the PostgreSQL
+database will need to link to this library.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
+[Kamel: Fix incorrect license, Remove false dependency on host-odb]
 Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
 ---
- DEVELOPERS                   |  1 +
- package/libcutl/libcutl.hash |  6 ++++++
- package/libcutl/libcutl.mk   | 15 +++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/libcutl/libcutl.hash
- create mode 100644 package/libcutl/libcutl.mk
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/libodb-pgsql/Config.in         | 15 +++++++++++++++
+ package/libodb-pgsql/libodb-pgsql.hash |  6 ++++++
+ package/libodb-pgsql/libodb-pgsql.mk   | 16 ++++++++++++++++
+ 5 files changed, 39 insertions(+)
+ create mode 100644 package/libodb-pgsql/Config.in
+ create mode 100644 package/libodb-pgsql/libodb-pgsql.hash
+ create mode 100644 package/libodb-pgsql/libodb-pgsql.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index dd44331b85..e64b90a1aa 100644
+index 4c7c157e07..abdee8541a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -42,6 +42,7 @@ F:	package/imx-usb-loader/
- F:	package/janus-gateway/
- F:	package/json-for-modern-cpp/
+@@ -44,6 +44,7 @@ F:	package/json-for-modern-cpp/
  F:	package/libcpprestsdk/
-+F:	package/libcutl/
+ F:	package/libcutl/
+ F:	package/libodb/
++F:	package/libodb-pgsql/
  F:	package/libressl/
  F:	package/libselinux/
  F:	package/libsemanage/
-diff --git a/package/libcutl/libcutl.hash b/package/libcutl/libcutl.hash
+diff --git a/package/Config.in b/package/Config.in
+index 3891b36282..59e714fb6a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1319,6 +1319,7 @@ menu "Database"
+ 	source "package/hiredis/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
++	source "package/libodb-pgsql/Config.in"
+ 	source "package/libgit2/Config.in"
+ 	source "package/libpqxx/Config.in"
+ 	source "package/mongodb/Config.in"
+diff --git a/package/libodb-pgsql/Config.in b/package/libodb-pgsql/Config.in
 new file mode 100644
-index 0000000000..1e0baa7f6e
+index 0000000000..daaf4717f9
 --- /dev/null
-+++ b/package/libcutl/libcutl.hash
++++ b/package/libodb-pgsql/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBODB_PGSQL
++	bool "libodb-pgsql"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_POSTGRESQL
++	select BR2_PACKAGE_LIBODB
++	help
++	  This package contains the PostgreSQL ODB runtime library.
++	  Every application that includes code generated for the
++	  PostgreSQL database will need to link to this library.
++
++	  https://www.codesynthesis.com/products/odb/
++
++comment "libodb-pgsql needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libodb-pgsql/libodb-pgsql.hash b/package/libodb-pgsql/libodb-pgsql.hash
+new file mode 100644
+index 0000000000..5799f09236
+--- /dev/null
++++ b/package/libodb-pgsql/libodb-pgsql.hash
 @@ -0,0 +1,6 @@
-+# From https://www.codesynthesis.com/download/libcutl/1.10/libcutl-1.10.0.tar.bz2.sha1
-+sha1	2885b79529f8caeb13687d722f5c114186f56956	libcutl-1.10.0.tar.bz2
++# From https://www.codesynthesis.com/download/odb/2.4/libodb-pgsql-2.4.0.tar.bz2.sha1
++sha1	4628d5e296da01dbaf8658fd402b4f709f30ea2d	libodb-pgsql-2.4.0.tar.bz2
 +
 +# Locally Computed
-+sha256	125163c670e372b47d5626d54379ff8fbaded6ccd5db77ac0bf5912a4017121c	libcutl-1.10.0.tar.bz2
-+sha256	c7aa98c5af3b67174f16b12a1fed4332a51cd524b82c69e85baa4c2c412da239	LICENSE
-diff --git a/package/libcutl/libcutl.mk b/package/libcutl/libcutl.mk
++sha256	778a4d38bd1161e1f0b368815514c3335da20c7584e3d07613526dcce53523bc	libodb-pgsql-2.4.0.tar.bz2
++sha256	841105a470fc283851c63941510ffd403c726d1910b688f7df95914ab8b1b5a3	LICENSE
+diff --git a/package/libodb-pgsql/libodb-pgsql.mk b/package/libodb-pgsql/libodb-pgsql.mk
 new file mode 100644
-index 0000000000..49c05e6019
+index 0000000000..14e669153a
 --- /dev/null
-+++ b/package/libcutl/libcutl.mk
-@@ -0,0 +1,15 @@
++++ b/package/libodb-pgsql/libodb-pgsql.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# libcutl
++# libodb-pgsql
 +#
 +################################################################################
 +
-+LIBCUTL_VERSION_MAJOR = 1.10
-+LIBCUTL_VERSION = $(LIBCUTL_VERSION_MAJOR).0
-+LIBCUTL_SOURCE = libcutl-$(LIBCUTL_VERSION).tar.bz2
-+LIBCUTL_SITE = https://www.codesynthesis.com/download/libcutl/$(LIBCUTL_VERSION_MAJOR)
-+LIBCUTL_INSTALL_STAGING = YES
-+LIBCUTL_LICENSE = MIT
-+LIBCUTL_LICENSE_FILES = LICENSE
++LIBODB_PGSQL_VERSION_MAJOR = 2.4
++LIBODB_PGSQL_VERSION = $(LIBODB_PGSQL_VERSION_MAJOR).0
++LIBODB_PGSQL_SOURCE = libodb-pgsql-$(LIBODB_PGSQL_VERSION).tar.bz2
++LIBODB_PGSQL_SITE = https://www.codesynthesis.com/download/odb/$(LIBODB_PGSQL_VERSION_MAJOR)
++LIBODB_PGSQL_LICENSE = GPL-2.0
++LIBODB_PGSQL_LICENSE_FILES = LICENSE
++LIBODB_PGSQL_INSTALL_STAGING = YES
++LIBODB_PGSQL_DEPENDENCIES += postgresql libodb
 +
-+$(eval $(host-autotools-package))
++$(eval $(autotools-package))
 -- 
 2.25.0
