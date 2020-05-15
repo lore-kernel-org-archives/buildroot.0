@@ -1,24 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 23:04:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-janus: bump to version
- 0.5.0
-In-Reply-To: <20200511075016.119439-1-james.hilliard1@gmail.com>
-References: <20200511075016.119439-1-james.hilliard1@gmail.com>
-Message-ID: <20200515230411.61b5fea3@windsurf.home>
+Date: Fri, 15 May 2020 23:04:42 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libaacs: bump version to
+ 0.10.0
+In-Reply-To: <20200510192956.2314478-1-bernd.kuhls@t-online.de>
+References: <20200510192956.2314478-1-bernd.kuhls@t-online.de>
+Message-ID: <20200515230442.53f1eae7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 May 2020 01:50:16 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sun, 10 May 2020 21:29:56 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Changelog:
+> https://code.videolan.org/videolan/libaacs/-/blob/master/ChangeLog
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/python-janus/python-janus.hash | 6 +++---
->  package/python-janus/python-janus.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/libaacs/libaacs.hash | 6 +++---
+>  package/libaacs/libaacs.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to next, thanks.
 
