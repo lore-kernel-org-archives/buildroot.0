@@ -1,46 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 23:22:25 +0200
-Subject: [Buildroot] [PATCH] package/tio: fix build with termio
- redefinition
-In-Reply-To: <20200511142602.46170-1-vadim4j@gmail.com>
-References: <20200511142602.46170-1-vadim4j@gmail.com>
-Message-ID: <20200515232225.760def53@windsurf.home>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 15 May 2020 15:31:20 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use system
+ libargon2
+Message-ID: <20200515213120.1174774-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 May 2020 17:26:02 +0300
-Vadym Kochan <vadim4j@gmail.com> wrote:
+The python-argon2-cffi package can be used with the system libargon2,
+we should use that instead of the embedded version.
 
-> Include termbits.h from asm-generic/ which does not have termio
-> definition which is already defined by sys/ioctl.h -> ioctl-types.h
-> 
-> Same approach is also used by flashrom tool.
-> 
-> Fixes: http://autobuild.buildroot.net/results/076d5f166631450d25f25916381f0bfd6f1d58da
-> 
-> Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-argon2-cffi/Config.in             | 3 +++
+ package/python-argon2-cffi/python-argon2-cffi.mk | 7 ++++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-A similar change was already submitted upstream by Fabrice Fontaine:
-
-  https://github.com/tio/tio/pull/98/commits/7a84120f7bfbe698fa8050953b7a3e7a7dc63ca0
-
-And it was submitted to Buildroot, and it was already rejected. Indeed,
-including <asm-generic/...> headers from user-space is bad.
-
-See some discussion in the picocom source code at
-https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37 for
-more details about this issue.
-
-Unfortunately, it doesn't seem like there is an easy fix available,
-short of replicating what picocom did.
-
-Best regards,
-
-Thomas
+diff --git a/package/python-argon2-cffi/Config.in b/package/python-argon2-cffi/Config.in
+index c1adcbc77d..16bbe6c4e3 100644
+--- a/package/python-argon2-cffi/Config.in
++++ b/package/python-argon2-cffi/Config.in
+@@ -1,8 +1,11 @@
+ config BR2_PACKAGE_PYTHON_ARGON2_CFFI
+ 	bool "python-argon2-cffi"
++	depends on BR2_USE_MMU # libargon2
++	depends on !BR2_STATIC_LIBS # libargon2
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+ 	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_LIBARGON2
+ 	help
+ 	  The secure Argon2 password hashing algorithm.
+ 
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+index 0e3e1be3d6..674e089eb7 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.mk
++++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+@@ -10,12 +10,13 @@ PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/74/fd/d78e003a
+ PYTHON_ARGON2_CFFI_SETUP_TYPE = setuptools
+ PYTHON_ARGON2_CFFI_LICENSE = MIT
+ PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
+-PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
++PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi libargon2
++PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SYSTEM=1
+ 
+ ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
+-PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=1
++PYTHON_ARGON2_CFFI_ENV += ARGON2_CFFI_USE_SSE2=1
+ else
+-PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=0
++PYTHON_ARGON2_CFFI_ENV += ARGON2_CFFI_USE_SSE2=0
+ endif
+ 
+ $(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
