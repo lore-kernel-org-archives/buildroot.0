@@ -1,43 +1,43 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 15 May 2020 07:28:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.21.23
-Message-ID: <20200515052813.233605-1-joerg.krause@embedded.rocks>
+Date: Fri, 15 May 2020 07:32:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 1.4.9
+Message-ID: <20200515053258.268881-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.21.23/NEWS
-
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index bce2d7e919..fd045e0f5e 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  565687d1899b585350cd66b603e46e5b79affc0a0e36d96d8953c6ccc6f69ba2  mpd-0.21.22.tar.xz
-+sha256  439f522ca9800f375e4fb459ec31e61b3d824fc5c0580ff06dac48b5d21207a3  mpd-0.21.23.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a7adfc0406..474927749a 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index fe1d82202d..6eb6c7b9ea 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
+-sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.9.tar.gz.sha256:
++sha256  ace5a3166891109d2a874f21306986857ee2620230a77751ed6209f7b5cc9c58  upmpdcli-1.4.9.tar.gz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 67d805f0cc..ab4b8bfd3c 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).22
-+MPD_VERSION = $(MPD_VERSION_MAJOR).23
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-UPMPDCLI_VERSION = 1.4.6
++UPMPDCLI_VERSION = 1.4.9
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
 -- 
 2.26.2
