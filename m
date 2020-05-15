@@ -1,48 +1,150 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 23:18:28 +0200
-Subject: [Buildroot] [PATCH] package/openvpn: add option to use mbed TLS
- instead of OpenSSL
-In-Reply-To: <CACm0Nn0WyTPDnSyA+7bj10GddAstx0YkyUAuERcRSLSf0CyzRA@mail.gmail.com>
-References: <20200511223108.4184-1-edo.rus@gmail.com>
- <20200515221042.011b8d33@windsurf.home>
- <CACm0Nn30Fbv8Dftgy2uqQ4otZg5R7JHoi8CbkN7t1mbJn-FeeQ@mail.gmail.com>
- <20200515224742.251bed10@windsurf.home>
- <CACm0Nn0WyTPDnSyA+7bj10GddAstx0YkyUAuERcRSLSf0CyzRA@mail.gmail.com>
-Message-ID: <20200515231828.1657342a@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 15 May 2020 23:20:15 +0200
+Subject: [Buildroot] [PATCH] linux: forcibly disable use of gcc plugins
+In-Reply-To: <20200512203353.31470-1-yann.morin.1998@free.fr>
+References: <20200512203353.31470-1-yann.morin.1998@free.fr>
+Message-ID: <20200515212015.GI12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
 
-On Sat, 16 May 2020 00:03:10 +0300
-Ed Spiridonov <edo.rus@gmail.com> wrote:
+I just realised I forgot to provide the pointers for each references
+[n], so here they are:
 
-> > The idea of using select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
-> > was to keep the current behavior, i.e be backward compatible.  
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=77342a02ff6e14645916d85c8550dd1011c4f7d7
+[1] https://git.buildroot.org/buildroot/tree/linux/linux.mk#n287
+[2] https://git.buildroot.org/buildroot/commit/linux/linux.mk?id=6d3d09e23213e88c14f2ddc883700499315a41bc
+[3] https://git.buildroot.org/buildroot/tree/linux/linux.mk#n132
+
+Sorry for the noise...
+
+On 2020-05-12 22:33 +0200, Yann E. MORIN spake thusly:
+> The soon-to-be-released linux 5.7 has changed the way it detects the
+> ability of gcc to use plugins, when it dropped support for gcc 4.7 or
+> older [0].
 > 
-> Does it make sense?
-> If OpenSSL is selected, it will be used as a crypto backend. So any
-> build based on an existing .config remains the same.
+> To detect the ability to use gcc plugins, the kernel has to check whther
+> the host gcc is capable enough to build them.
+> 
+> When we call one of the configurator for the linux kernel, we explicitly
+> pass a value of HOSTCC=$(HOSTCC_NOCCACHE), because there might be a
+> discrepancy between the ncurses headers and libraries as found by the
+> linux kconfig build [1] [2].
+> 
+> But then, when we build the kernel, we pass another value to use [3]
+> HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" which boils down to
+> roughly: gcc -I.../host/include -L.../host/lib -Wl,-rpath,.../host/lib
+> This is needed so that at build time, the kernel can build host tools
+> that link with our openssl et al.
+> 
+> So, the two HOSTCC we pass to the kernel may have different behaviours.
+> For example, on a machine where gmp is missing in the system, it is
+> available in $(O)/host/ when using an internal toolchain (and under a
+> few other conditions).
+> 
+> In that case, when configuring the kernel, it decides that the host
+> compiler can't build plugins, so the dependencies of CONFIG_GCC_PLUGINS
+> are not met, and that option is not present in the linux' .config file
+> (neither as "=y" nor as "is not set"). But then, when we build the
+> kernel, the host compiler suddenly becomes capable of building the
+> plugins, and the internal syncconfig run by the kernel will notice that
+> the dependencies of CONFIG_GCC_PLUGINS are now met, and that the user
+> shall decide on its value. And this blocks a build on an interactive
+> console (abbreviated):
+> 
+>     * Restart config...
+>     * GCC plugins
+>     GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW) _
+> 
+> But most problematic is the behaviour when run in a shell that is not
+> interactiove (e.g. a CI job or such) (abbreviated):
+> 
+>     * Restart config...
+>     * GCC plugins
+>     GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW)
+>     Error in reading or end of file.
+>       Generate some entropy during boot and runtime (GCC_PLUGIN_LATENT_ENTROPY) [N/y/?] (NEW)
+>     Error in reading or end of file.
+>       Randomize layout of sensitive kernel structures (GCC_PLUGIN_RANDSTRUCT) [N/y/?] (NEW)
+>     Error in reading or end of file.
+>     * Memory initialization
+>     Initialize kernel stack variables at function entry
+>     > 1. no automatic initialization (weakest) (INIT_STACK_NONE)
+>       2. zero-init structs marked for userspace (weak) (GCC_PLUGIN_STRUCTLEAK_USER) (NEW)
+>       3. zero-init structs passed by reference (strong) (GCC_PLUGIN_STRUCTLEAK_BYREF) (NEW)
+>       4. zero-init anything passed by reference (very strong) (GCC_PLUGIN_STRUCTLEAK_BYREF_ALL) (NEW)
+>     choice[1-4?]:
+>     Error in reading or end of file.
+>     Poison kernel stack before returning from syscalls (GCC_PLUGIN_STACKLEAK) [N/y/?] (NEW)
+>     Error in reading or end of file.
+>     Enable heap memory zeroing on allocation by default (INIT_ON_ALLOC_DEFAULT_ON) [N/y/?] n
+>     Enable heap memory zeroing on free by default (INIT_ON_FREE_DEFAULT_ON) [N/y/?] n
+> 
+> The most obvious and simple solution would be to unconditionally disable
+> gcc plugins alltogether, in the KCONFIG_FIXUP hook. But that can't work
+> either, because after applying the fixups, we call olddefconfig (or the
+> likes) with the incapable HOSTCC, so the disabled option would be removed
+> anyway, and we'd be back to square one.
+> 
+> So, in addition to the above, we also forcibly hack the same call just
+> before actually building the kernel.
+> 
+> Note that the two are needed: the one in the fixups is needed for those
+> that have a system that already allows building gcc plugins, and the
+> second is needed in the other case, where the system does not allow it
+> but would work with our additional headers and libs in $(O)/host/. The
+> two ensure there is a very similar experience in the two situations.
+> 
+> Forcibly disabling the use of gcc plugins is not a regression on our
+> side: it has never been possible to do so so far. We're now making sure
+> that can't work by accident.
+> 
+> Reported-by: Ganesh <ganesh45in@gmail.com>,
+> Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Michael Walle <michael.walle@kontron.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  linux/linux.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 69bbad99e1..b9f2052ee7 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -363,6 +363,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_FB)
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+>  	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+>  endef
+>  
+> @@ -423,7 +424,10 @@ endif
+>  # '$(LINUX_TARGET_NAME)' targets separately because calling them in
+>  # the same $(MAKE) invocation has shown to cause parallel build
+>  # issues.
+> +# The call to disable gcc-plugins is a stop-gap measure:
+> +#   http://lists.busybox.net/pipermail/buildroot/2020-May/282727.html
+>  define LINUX_BUILD_CMDS
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+>  	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+>  		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+>  	)
+> -- 
+> 2.20.1
+> 
 
-What you say will work if:
-
- (1) Your .mk file tests BR2_PACKAGE_OPENSSL and uses openssl if set,
-     before using mbedtls
-
- (2) Users are using full .config and not defconfig files. Indeed, a
-     defconfig file today that has BR2_PACKAGE_OPENVPN=y will not have
-     BR2_PACKAGE_OPENSSL=y, because this is implied by
-     BR2_PACKAGE_OPENVPN=y. So such users would transition from using
-     OpenSSL as the crypto backend for openvpn to mbedtls.
-
-I don't have a very strong feeling on this. I agree that on the other
-hand, it's good to use a smaller crypto library by default if possible.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
