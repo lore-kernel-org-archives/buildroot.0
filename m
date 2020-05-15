@@ -1,28 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 22:38:00 +0200
-Subject: [Buildroot] [PATCH] package/python-redis: Bump to version 3.5.1
-In-Reply-To: <20200511180407.406533-1-grzegorz@blach.pl>
-References: <20200511180407.406533-1-grzegorz@blach.pl>
-Message-ID: <20200515223800.0f64a24b@windsurf.home>
+From: Ed Spiridonov <edo.rus@gmail.com>
+Date: Fri, 15 May 2020 23:39:09 +0300
+Subject: [Buildroot] [PATCH] package/openvpn: add option to use mbed TLS
+ instead of OpenSSL
+In-Reply-To: <20200515221042.011b8d33@windsurf.home>
+References: <20200511223108.4184-1-edo.rus@gmail.com>
+ <20200515221042.011b8d33@windsurf.home>
+Message-ID: <CACm0Nn30Fbv8Dftgy2uqQ4otZg5R7JHoi8CbkN7t1mbJn-FeeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 May 2020 20:04:04 +0200
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+On Fri, May 15, 2020 at 11:10 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Could you change this to:
+>
+>         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  package/python-redis/python-redis.hash | 4 ++--
->  package/python-redis/python-redis.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Ok. But I would rather use mbed TLS as the default option:
+        select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
 
-Applied to next, thanks.
+OpenVPN + mbed TLS combination is well tested (Android/iOS builds use mbed TLS).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> This way, we use mbedtls if available, otherwise we use OpenSSL.
+
+BTW, there is "--disable-crypto" build option, but I'm unsure if anyone use it.
+
+P.?S. What about other options? OpenWRT has lot of them
+https://github.com/openwrt/openwrt/blob/master/package/network/services/openvpn/Config-openssl.in
+This helps make the binary more compact.
