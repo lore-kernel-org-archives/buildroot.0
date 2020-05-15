@@ -1,30 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 21:32:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.4.6
-In-Reply-To: <20200514161909.672761-1-bernd.kuhls@t-online.de>
-References: <20200514161909.672761-1-bernd.kuhls@t-online.de>
-Message-ID: <20200515213238.033a973d@windsurf.home>
+Date: Fri, 15 May 2020 21:32:45 +0200
+Subject: [Buildroot] [PATCH] package/elf2flt: add support for
+ XTENSA_[PN]DIFF relocations
+In-Reply-To: <20200513123520.30832-1-jcmvbkbc@gmail.com>
+References: <20200513123520.30832-1-jcmvbkbc@gmail.com>
+Message-ID: <20200515213245.1919c55b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 May 2020 18:19:09 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Wed, 13 May 2020 05:35:20 -0700
+Max Filippov <jcmvbkbc@gmail.com> wrote:
 
-> Changelog: https://www.php.net/ChangeLog-7.php#7.4.6
+> Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
+> the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
+> Add them to the list of ignored relocation types.
 > 
-> Fixes CVE 2019-11048.
+> This fixes the following error when invoking elf2flt on xtensa binaries
+> built with the recent binutils:
 > 
-> Reformatted hashes.
+>   ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Reported-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 > ---
->  package/php/php.hash | 4 ++--
->  package/php/php.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...-add-new-relocation-types-for-xtensa.patch | 188 ++++++++++++++++++
+>  1 file changed, 188 insertions(+)
+>  create mode 100644 package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
 
 Applied to master, thanks.
 
