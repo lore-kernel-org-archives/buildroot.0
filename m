@@ -1,60 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 21:47:50 +0200
-Subject: [Buildroot] [git commit branch/next] arch/x86: adds
- BR2_X86_CPU_HAS_3DNOW flag
-Message-ID: <20200515193151.86F3B918DA@busybox.osuosl.org>
+Date: Fri, 15 May 2020 21:47:55 +0200
+Subject: [Buildroot] [git commit branch/next] package/sdl2: enable 3DNOW
+ only if it's supported by the target
+Message-ID: <20200515193151.94A6A918DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6cd56b9ce3587c3e56eaa5a8e5f44d777c41e60
+commit: https://git.buildroot.net/buildroot/commit/?id=fe29913fa96d2265ecf91e259f334dbdd67f92fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.x86 | 6 ++++++
+ package/sdl2/sdl2.mk | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index eb655adbca..7aae3cafb7 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -1,6 +1,8 @@
- # i386/x86_64 cpu features
- config BR2_X86_CPU_HAS_MMX
- 	bool
-+config BR2_X86_CPU_HAS_3DNOW
-+	bool
- config BR2_X86_CPU_HAS_SSE
- 	bool
- config BR2_X86_CPU_HAS_SSE2
-@@ -155,15 +157,18 @@ config BR2_x86_k6_2
- 	bool "k6-2"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_athlon
- 	bool "athlon"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_athlon_4
- 	bool "athlon-4"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_opteron
- 	bool "opteron"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -209,6 +214,7 @@ config BR2_x86_c3
- 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_c32
- 	bool "Via C3-2 (Nehemiah cores)"
- 	depends on !BR2_x86_64
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 4a287b66a3..830873c9e4 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -36,6 +36,12 @@ else
+ SDL2_CONF_OPTS += --disable-sse
+ endif
+ 
++ifeq ($(BR2_X86_CPU_HAS_3DNOW),y)
++SDL2_CONF_OPTS += --enable-3dnow
++else
++SDL2_CONF_OPTS += --disable-3dnow
++endif
++
+ ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
+ SDL2_DEPENDENCIES += directfb
+ SDL2_CONF_OPTS += --enable-video-directfb
