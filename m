@@ -1,44 +1,29 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 15 May 2020 14:03:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libressl: bump version to 3.1.1
-Message-ID: <20200515210359.1202341-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 May 2020 23:04:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-janus: bump to version
+ 0.5.0
+In-Reply-To: <20200511075016.119439-1-james.hilliard1@gmail.com>
+References: <20200511075016.119439-1-james.hilliard1@gmail.com>
+Message-ID: <20200515230411.61b5fea3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+On Mon, 11 May 2020 01:50:16 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/libressl/libressl.hash | 4 ++--
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-janus/python-janus.hash | 6 +++---
+>  package/python-janus/python-janus.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index fcecc2b434..e0eca8ce2b 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  libressl-3.0.2.tar.gz
-+sha256  bdc6ce5ebb3a2eafc4c475f7eeaa5f0a8e60d9bead01efb76e2e254242b6db00  libressl-3.1.1.tar.gz
- # Locally computed
--sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-+sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index c2491bb3a9..d970624dd8 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 3.0.2
-+LIBRESSL_VERSION = 3.1.1
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+Applied to next, thanks.
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
