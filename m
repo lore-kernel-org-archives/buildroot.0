@@ -1,79 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 May 2020 23:05:10 +0200
-Subject: [Buildroot] [PATCH 0/6] Support Python 3.x in U-Boot
-In-Reply-To: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
-References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200515210510.GH12536@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 May 2020 23:06:14 +0200
+Subject: [Buildroot] [PATCH v2] exfatprogs: fix more 64-bit types printf
+ compile failure
+In-Reply-To: <20200509213319.21792-1-ps.report@gmx.net>
+References: <20200509213319.21792-1-ps.report@gmx.net>
+Message-ID: <20200515230614.7986a2bf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sat,  9 May 2020 23:33:19 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-On 2020-05-02 23:28 +0200, Thomas Petazzoni spake thusly:
-> Hello,
+> Fixes test-pkg detected compile failures for the following toolchains:
 > 
-> Since 2020.01, U-Boot now uses python3 for its scripts, but our uboot
-> package only supports adding a dependency on host-python, which causes
-> a number of build failures of our defconfigs.
+>   - br-mips64-n64-full
+>   - br-mips64r6-el-hf-glibc
+>   - br-powerpc64le-power8-glibc
+>   - br-powerpc64-power7-glibc
+>   - sourcery-mips64
 > 
-> To fix this, this series introduces additional U-Boot options with
-> appropriate dependencies, and fixes the problematic defconfigs.
+> Used test config:
+> 
+>   BR2_USE_WCHAR=y
+>   BR2_PACKAGE_EXFATPROGS=y
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - reworked patch to don't break the other toolchains
+> ---
+>  ...PRIu64-PRIx64-to-printf-64-bit-types.patch | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 package/exfatprogs/0005-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
 
-Series applied, with a few changes:
+I think this patch was applied upstream, released as part of version
+1.0.3, which we now use in Buildroot master. So I've marked this patch
+as Not Applicable.
 
-  - I applied my proposal to handle the choice of host python version,
-    see the thread in patch 2
-
-  - I fixed the defconfig files as thus:
-    - for those that need pyelftools or pylibfdt, the NEEDS_PYTHON=y was
-      superfluous in the defconfig as it is selected by ither option,
-    - for the others that do not have pyelftools or pylibfdt, it has
-      become useless, because it no longer show/hides the choice anymore
+Of course, if I missed something, let me know!
 
 Thanks!
 
-Regards,
-Yann E. MORIN.
-
-> Thomas
-> 
-> Thomas Petazzoni (6):
->   package/python3-pyelftools: new package
->   boot/uboot: support building U-Boot with Python 3.x
->   configs/olimex_a20_olinuxino_lime{,2}: use Python 3.x
->   configs/beelink_gs1: use Python 3.x
->   configs/roc_pc_rk3399: fix U-Boot dependencies
->   configs/nanopi_neo4: fix U-Boot dependencies
-> 
->  boot/uboot/Config.in                          | 29 +++++++++++++++++++
->  boot/uboot/uboot.mk                           | 12 +++++++-
->  configs/beelink_gs1_defconfig                 |  2 ++
->  configs/nanopi_neo4_defconfig                 |  4 +--
->  configs/olimex_a20_olinuxino_lime2_defconfig  |  2 ++
->  configs/olimex_a20_olinuxino_lime_defconfig   |  2 ++
->  configs/roc_pc_rk3399_defconfig               |  4 +--
->  .../python-pyelftools/python-pyelftools.mk    |  1 +
->  .../python3-pyelftools.hash                   |  1 +
->  .../python3-pyelftools/python3-pyelftools.mk  | 17 +++++++++++
->  10 files changed, 69 insertions(+), 5 deletions(-)
->  create mode 120000 package/python3-pyelftools/python3-pyelftools.hash
->  create mode 100644 package/python3-pyelftools/python3-pyelftools.mk
-> 
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
