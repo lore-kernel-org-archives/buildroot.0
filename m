@@ -1,125 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 May 2020 22:59:21 +0200
-Subject: [Buildroot] [git commit] boot/uboot: support building U-Boot with
- Python 3.x
-Message-ID: <20200515204314.29EF69194F@busybox.osuosl.org>
+Date: Fri, 15 May 2020 23:00:06 +0200
+Subject: [Buildroot] [Next] package/kmod: modinfo support of signature
+ details
+In-Reply-To: <20200515201923.GF12536@scaer>
+References: <20200514182806.56592-1-matthew.weber@rockwellcollins.com>
+ <20200515201923.GF12536@scaer>
+Message-ID: <20200515210006.GG12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df3d1f81770060cca452d3419e214e701ac24bc8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Matt, All,
 
-U-Boot versions newer than 2020.01 use Python 3.x instead of Python
-2.x in various scripts.
+On 2020-05-15 22:19 +0200, Yann E. MORIN spake thusly:
+> On 2020-05-14 13:28 -0500, Matt Weber spake thusly:
+> > Add conditional support to allow the module tools to use openssl
+> > on target to inspect the signature of signed modules. If openssl
+> > is not enabled the modinfo will show a hash algo as unknown.
+> > 
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> 
+> Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> You tagged it for next, but I think we can see that as a fix, as it
+> at least ensures build order when enabled, and explicit disabling
+> otherwise.
 
-We already had the BR2_TARGET_UBOOT_NEEDS_PYLIBFDT and
-BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS options, but depending on the U-Boot
-version, we now need to indicate if Python 2.x or Python 3.x should be
-used.
+So I applied to master, thanks.
 
-In addition, it turns out that some U-Boot configurations need a
-Python interpreter, without needing pylibfdt or pyelftools. Some of
-our defconfigs were abusing the BR2_TARGET_UBOOT_NEEDS_PYLIBFDT option
-to make sure a Python interpreter was built.
+Regards,
+Yann E. MORIN.
 
-To solve this issue, we introduce a choice, that let the users specify
-what, if any, host python version is needed. The default is 'no', to
-preserve the previous behaviour, unless any of the pylibfdt or the
-pyelftools options is enabled, in which case we hide the 'no' option,
-and use python 2 by default. This dfault is guaranteed by the order of
-options in the choice.
+> Regards,
+> Yann E. MORIN.
+> 
+> > ---
+> > Prior to this patch the kmod series for compressed modules should
+> > be applied. No functionality dependency, I just identified them as
+> > patching conflicts.
+> > 
+> > http://patchwork.ozlabs.org/project/buildroot/list/?series=174301
+> > ---
+> >  package/kmod/kmod.mk | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+> > index 979c3e87e6..69615452cf 100644
+> > --- a/package/kmod/kmod.mk
+> > +++ b/package/kmod/kmod.mk
+> > @@ -46,6 +46,13 @@ else
+> >  KMOD_CONF_OPTS += --without-xz
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> > +KMOD_DEPENDENCIES += openssl
+> > +KMOD_CONF_OPTS += --with-openssl
+> > +else
+> > +KMOD_CONF_OPTS += --without-openssl
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+> >  KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
+> >  KMOD_CONF_OPTS += --enable-python
+> > -- 
+> > 2.17.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr:
-  - explicitly make the choice a bool
-  - make BR2_TARGET_UBOOT_NEEDS_PYTHON a blind option
-  - introduce the 'no' option in the choice
-  - reword the commit log accordingly
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- boot/uboot/Config.in | 31 +++++++++++++++++++++++++++++++
- boot/uboot/uboot.mk  | 12 +++++++++++-
- 2 files changed, 42 insertions(+), 1 deletion(-)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 7a6f5053fd..0414a216bd 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -147,14 +147,45 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
- 	  Select this option if your U-Boot board configuration
- 	  requires the Device Tree compiler to be available.
- 
-+config BR2_TARGET_UBOOT_NEEDS_PYTHON
-+	bool
-+
-+choice
-+	bool "U-Boot needs host Python"
-+
-+config BR2_TARGET_UBOOT_NEEDS_PYTHON_NONE
-+	bool "no"
-+	depends on !BR2_TARGET_UBOOT_NEEDS_PYTHON
-+	help
-+	  Select this option if U-Boot does not need any
-+	  host python to build.
-+
-+config BR2_TARGET_UBOOT_NEEDS_PYTHON2
-+	bool "python 2.x"
-+	help
-+	  Select this option if U-Boot needs a host Python 2.x
-+	  interpreter. This is the case for some U-Boot
-+	  configurations, prior to U-Boot 2020.01.
-+
-+config BR2_TARGET_UBOOT_NEEDS_PYTHON3
-+	bool "python 3.x"
-+	help
-+	  Select this option if U-Boot needs a host Python 3.x
-+	  interpreter. This is the case for some U-Boot
-+	  configurations, after U-Boot 2020.01.
-+
-+endchoice
-+
- config BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
- 	bool "U-Boot needs pylibfdt"
-+	select BR2_TARGET_UBOOT_NEEDS_PYTHON
- 	help
- 	  Select this option if your U-Boot board configuration
- 	  requires the Python libfdt library to be available.
- 
- config BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS
- 	bool "U-Boot needs pyelftools"
-+	select BR2_TARGET_UBOOT_NEEDS_PYTHON
- 	help
- 	  Select this option if your U-Boot board configuration
- 	  requires the Python pyelftools library to be available.
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 7bd9cbae52..1d50e72846 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -159,12 +159,22 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
-+UBOOT_DEPENDENCIES += host-python
-+else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
-+UBOOT_DEPENDENCIES += host-python3
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
--UBOOT_DEPENDENCIES += host-python host-swig
-+UBOOT_DEPENDENCIES += host-swig
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS),y)
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
- UBOOT_DEPENDENCIES += host-python-pyelftools
-+else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
-+UBOOT_DEPENDENCIES += host-python3-pyelftools
-+endif
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
