@@ -1,41 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 22:08:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exfatprogs: bump to version
- 1.0.3
-In-Reply-To: <20200513032859.18478-1-james.hilliard1@gmail.com>
-References: <20200513032859.18478-1-james.hilliard1@gmail.com>
-Message-ID: <20200515220825.7e6bfe73@windsurf.home>
+Date: Fri, 15 May 2020 22:10:42 +0200
+Subject: [Buildroot] [PATCH] package/openvpn: add option to use mbed TLS
+ instead of OpenSSL
+In-Reply-To: <20200511223108.4184-1-edo.rus@gmail.com>
+References: <20200511223108.4184-1-edo.rus@gmail.com>
+Message-ID: <20200515221042.011b8d33@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 May 2020 21:28:59 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello Ed,
 
-> Drop patches that are now upstream.
-> 
-> We don't need to autoreconf since we are using a release tarball.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...rogs-add-missing-include-sys-types.h.patch |  49 ------
->  ...PRIu64-PRIx64-to-printf-64-bit-types.patch | 144 ------------------
->  ...k-fix-node-may-be-used-uninitialized.patch |  63 --------
->  .../0004-fsck-Zero-init-using-memset.patch    |  37 -----
->  package/exfatprogs/exfatprogs.hash            |   2 +-
->  package/exfatprogs/exfatprogs.mk              |   5 +-
->  6 files changed, 3 insertions(+), 297 deletions(-)
->  delete mode 100644 package/exfatprogs/0001-exfatprogs-add-missing-include-sys-types.h.patch
->  delete mode 100644 package/exfatprogs/0002-mkfs-fsck-use-PRIu64-PRIx64-to-printf-64-bit-types.patch
->  delete mode 100644 package/exfatprogs/0003-fsck-fix-node-may-be-used-uninitialized.patch
->  delete mode 100644 package/exfatprogs/0004-fsck-Zero-init-using-memset.patch
+On Tue, 12 May 2020 01:31:07 +0300
+Ed Spiridonov <edo.rus@gmail.com> wrote:
 
-We normally don't take version bumps in master, but I looked through
-the changes between 1.0.2 and 1.0.3 and all of them are fixes, and this
-patch allows to drop a number of patches. So, I've applied to master.
-Thanks!
+> Since 2.4 version, OpenVPN can be built using mbeb TLS as it's
+> crypto backend, instead of OpenSSL.
+> 
+> About 2 Mb of uncompressed image size can be saved by replacing
+> OpenSSL with mbed TLS.
+> 
+> Signed-off-by: Ed Spiridonov <edo.rus@gmail.com>
+
+Thanks for your contribution! See below for some comments.
+
+> diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+> index 0a16755..254fe74 100644
+> --- a/package/openvpn/Config.in
+> +++ b/package/openvpn/Config.in
+> @@ -1,7 +1,6 @@
+>  config BR2_PACKAGE_OPENVPN
+>  	bool "openvpn"
+>  	depends on BR2_USE_MMU # fork()
+> -	select BR2_PACKAGE_OPENSSL
+
+Could you change this to:
+
+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+
+> +choice
+> +	prompt "crypto backend"
+> +	default BR2_PACKAGE_OPENVPN_OPENSSL
+> +	help
+> +	  Select crypto backend (OpenSSL/LibreSSL or mbed TLS)
+> +
+> +config BR2_PACKAGE_OPENVPN_OPENSSL
+> +	bool "openssl"
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  OpenSSL/LibreSSL is a default crypto backend
+> +
+> +config BR2_PACKAGE_OPENVPN_MBEDTLS
+> +	bool "mbedtls"
+> +	select BR2_PACKAGE_MBEDTLS
+> +	help
+> +	  mbed TLS is a compact crypto backend
+> +
+> +	  https://community.openvpn.net/openvpn/wiki/Using-mbedtls
+> +
+> +endchoice
+
+Drop this new choice.
+
+> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+> index 4234675..20cebf0 100644
+> --- a/package/openvpn/openvpn.mk
+> +++ b/package/openvpn/openvpn.mk
+> @@ -7,18 +7,31 @@
+>  OPENVPN_VERSION = 2.4.9
+>  OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+>  OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+> -OPENVPN_DEPENDENCIES = host-pkgconf openssl
+> +OPENVPN_DEPENDENCIES = host-pkgconf
+> +ifeq ($(BR2_PACKAGE_OPENVPN_MBEDTLS),y)
+> +OPENVPN_DEPENDENCIES += mbedtls
+> +else
+> +OPENVPN_DEPENDENCIES += openssl
+> +endif
+> +
+>  OPENVPN_LICENSE = GPL-2.0
+>  OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+>  OPENVPN_CONF_OPTS = \
+>  	--enable-iproute2 \
+> -	--with-crypto-library=openssl \
+>  	$(if $(BR2_STATIC_LIBS),--disable-plugins)
+>  OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
+>  	NETSTAT=/bin/netstat \
+>  	ROUTE=/sbin/route \
+>  	IPROUTE=/sbin/ip
+>  
+> +ifeq ($(BR2_PACKAGE_OPENVPN_MBEDTLS),y)
+
+Use BR2_PACKAGE_MBEDTLS here
+
+> +OPENVPN_CONF_OPTS += \
+> +	--with-crypto-library=mbedtls
+> +else
+> +OPENVPN_CONF_OPTS += \
+> +	--with-crypto-library=openssl
+> +endif
+
+This way, we use mbedtls if available, otherwise we use OpenSSL.
+
+Could you send an updated version that implements this?
+
+Thanks a lot!
 
 Thomas
 -- 
