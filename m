@@ -1,50 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 23:04:32 +0200
-Subject: [Buildroot] [git commit branch/next] package/libaacs: bump version
- to 0.10.0
-Message-ID: <20200515204850.B2CF3919E4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 15 May 2020 23:05:10 +0200
+Subject: [Buildroot] [PATCH 0/6] Support Python 3.x in U-Boot
+In-Reply-To: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
+References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200515210510.GH12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df7ffdcc81b3c9aafa5476ea03bf88fef8da6a26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Thomas, All,
 
-Changelog:
-https://code.videolan.org/videolan/libaacs/-/blob/master/ChangeLog
+On 2020-05-02 23:28 +0200, Thomas Petazzoni spake thusly:
+> Hello,
+> 
+> Since 2020.01, U-Boot now uses python3 for its scripts, but our uboot
+> package only supports adding a dependency on host-python, which causes
+> a number of build failures of our defconfigs.
+> 
+> To fix this, this series introduces additional U-Boot options with
+> appropriate dependencies, and fixes the problematic defconfigs.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libaacs/libaacs.hash | 6 +++---
- package/libaacs/libaacs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Series applied, with a few changes:
 
-diff --git a/package/libaacs/libaacs.hash b/package/libaacs/libaacs.hash
-index 22310295f8..82e8698616 100644
---- a/package/libaacs/libaacs.hash
-+++ b/package/libaacs/libaacs.hash
-@@ -1,5 +1,5 @@
--# From http://download.videolan.org/pub/videolan/libaacs/0.9.0/libaacs-0.9.0.tar.bz2.sha512
--sha512 b9c658db22a0966486070d3b762509a7c0120469ab29d1e57c1b624cad309701de8b92455ec649db4d731be4a5c29c38fb4f99bb7617dbb4254270284a1903f6  libaacs-0.9.0.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libaacs/0.10.0/libaacs-0.10.0.tar.bz2.sha512
-+sha512  4527749c3c78fd270012b3b36e916356a4aeb8f90169e781a00739f01f190121691042607209864e9b676ede9741f614c6003a7dfbb350dc020e1fa94cd6d66e  libaacs-0.10.0.tar.bz2
- 
- # Hash for license file:
--sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-+sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING
-diff --git a/package/libaacs/libaacs.mk b/package/libaacs/libaacs.mk
-index 143b0ff3d7..95f1cbdab8 100644
---- a/package/libaacs/libaacs.mk
-+++ b/package/libaacs/libaacs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBAACS_VERSION = 0.9.0
-+LIBAACS_VERSION = 0.10.0
- LIBAACS_SITE = http://download.videolan.org/pub/videolan/libaacs/$(LIBAACS_VERSION)
- LIBAACS_SOURCE = libaacs-$(LIBAACS_VERSION).tar.bz2
- LIBAACS_LICENSE = LGPL-2.1+
+  - I applied my proposal to handle the choice of host python version,
+    see the thread in patch 2
+
+  - I fixed the defconfig files as thus:
+    - for those that need pyelftools or pylibfdt, the NEEDS_PYTHON=y was
+      superfluous in the defconfig as it is selected by ither option,
+    - for the others that do not have pyelftools or pylibfdt, it has
+      become useless, because it no longer show/hides the choice anymore
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> Thomas
+> 
+> Thomas Petazzoni (6):
+>   package/python3-pyelftools: new package
+>   boot/uboot: support building U-Boot with Python 3.x
+>   configs/olimex_a20_olinuxino_lime{,2}: use Python 3.x
+>   configs/beelink_gs1: use Python 3.x
+>   configs/roc_pc_rk3399: fix U-Boot dependencies
+>   configs/nanopi_neo4: fix U-Boot dependencies
+> 
+>  boot/uboot/Config.in                          | 29 +++++++++++++++++++
+>  boot/uboot/uboot.mk                           | 12 +++++++-
+>  configs/beelink_gs1_defconfig                 |  2 ++
+>  configs/nanopi_neo4_defconfig                 |  4 +--
+>  configs/olimex_a20_olinuxino_lime2_defconfig  |  2 ++
+>  configs/olimex_a20_olinuxino_lime_defconfig   |  2 ++
+>  configs/roc_pc_rk3399_defconfig               |  4 +--
+>  .../python-pyelftools/python-pyelftools.mk    |  1 +
+>  .../python3-pyelftools.hash                   |  1 +
+>  .../python3-pyelftools/python3-pyelftools.mk  | 17 +++++++++++
+>  10 files changed, 69 insertions(+), 5 deletions(-)
+>  create mode 120000 package/python3-pyelftools/python3-pyelftools.hash
+>  create mode 100644 package/python3-pyelftools/python3-pyelftools.mk
+> 
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
