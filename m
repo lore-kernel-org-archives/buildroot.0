@@ -1,21 +1,39 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 15 May 2020 21:54:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump to version
- 20200515
-In-Reply-To: <20200515213616.31841d4c@windsurf.home>
-References: <20200515145344.13370-1-petr.vorel@gmail.com>
- <20200515213616.31841d4c@windsurf.home>
-Message-ID: <20200515195433.GA932063@x230>
+From: Nicolas Robin <nrosfs@gmail.com>
+Date: Fri, 15 May 2020 21:55:38 +0200
+Subject: [Buildroot] [PATCH 1/3] package/sdl2: enable SSE only if it's
+ supported by the target
+In-Reply-To: <20200515214840.7327bb1b@windsurf.home>
+References: <20200515175357.45954-1-nrosfs@gmail.com>
+ <20200515214840.7327bb1b@windsurf.home>
+Message-ID: <70CE52ED-932A-4109-89E1-910C2C447846@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+I do! Pentium MMX 233MHz, a beast!
 
-> Applied to next, thanks.
-Thanks for a quick merge!
+Regards,
+Nicolas
 
-Kind regards,
-Petr
+> Le 15 mai 2020 ? 21:48, Thomas Petazzoni <thomas.petazzoni@bootlin.com> a ?crit :
+> 
+> On Fri, 15 May 2020 19:53:55 +0200
+> Nicolas Robin <nrosfs@gmail.com> wrote:
+> 
+>> Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
+>> ---
+>> package/sdl2/sdl2.mk | 6 ++++++
+>> 1 file changed, 6 insertions(+)
+> 
+> Thanks, series applied to next. I'm curious: you're really using SDL2
+> on some old platform that has 3DNow support ?
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
