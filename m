@@ -1,49 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 22:47:42 +0200
-Subject: [Buildroot] [PATCH] package/openvpn: add option to use mbed TLS
- instead of OpenSSL
-In-Reply-To: <CACm0Nn30Fbv8Dftgy2uqQ4otZg5R7JHoi8CbkN7t1mbJn-FeeQ@mail.gmail.com>
-References: <20200511223108.4184-1-edo.rus@gmail.com>
- <20200515221042.011b8d33@windsurf.home>
- <CACm0Nn30Fbv8Dftgy2uqQ4otZg5R7JHoi8CbkN7t1mbJn-FeeQ@mail.gmail.com>
-Message-ID: <20200515224742.251bed10@windsurf.home>
+From: Nicolas Robin <nrosfs@gmail.com>
+Date: Fri, 15 May 2020 22:50:34 +0200
+Subject: [Buildroot] [PATCH 1/3] package/sdl2: enable SSE only if it's
+ supported by the target
+In-Reply-To: <20200515224416.7443c5b6@windsurf.home>
+References: <20200515175357.45954-1-nrosfs@gmail.com>
+ <20200515214840.7327bb1b@windsurf.home>
+ <70CE52ED-932A-4109-89E1-910C2C447846@gmail.com>
+ <20200515224416.7443c5b6@windsurf.home>
+Message-ID: <D08389EB-C413-42CA-A246-AD0A22E72F9D@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ed,
+SDL2 does have SSE and 3DNOW enabled by default, I have to disable these to avoid illegal instruction on the little Pentium.
+Buildroot works fine on it, and with the latest kernel :-) I don't know why I do that, I just do it.
 
-On Fri, 15 May 2020 23:39:09 +0300
-Ed Spiridonov <edo.rus@gmail.com> wrote:
-
-> On Fri, May 15, 2020 at 11:10 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > Could you change this to:
-> >
-> >         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS  
+> Le 15 mai 2020 ? 22:44, Thomas Petazzoni <thomas.petazzoni@bootlin.com> a ?crit :
 > 
-> Ok. But I would rather use mbed TLS as the default option:
->         select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
+> On Fri, 15 May 2020 21:55:38 +0200
+> Nicolas Robin <nrosfs@gmail.com> wrote:
 > 
-> OpenVPN + mbed TLS combination is well tested (Android/iOS builds use mbed TLS).
-
-The idea of using select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
-was to keep the current behavior, i.e be backward compatible.
-
-> > This way, we use mbedtls if available, otherwise we use OpenSSL.  
+>> I do! Pentium MMX 233MHz, a beast!
 > 
-> BTW, there is "--disable-crypto" build option, but I'm unsure if anyone use it.
+> But a Pentium MMX does not have 3DNow.
 > 
-> P.?S. What about other options? OpenWRT has lot of them
-> https://github.com/openwrt/openwrt/blob/master/package/network/services/openvpn/Config-openssl.in
-> This helps make the binary more compact.
-
-Feel free to add support for more options, patches welcome. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> And anyway, you're using Buildroot to build a system for a Pentium MMX
+> at 233 Mhz ? These machines are still running and alive ?
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
