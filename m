@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 21:48:58 +0200
-Subject: [Buildroot] [git commit branch/next] package/libyang: bump to
- version 1.0.167
-Message-ID: <20200515194050.F3CB291954@busybox.osuosl.org>
+Date: Fri, 15 May 2020 21:56:49 +0200
+Subject: [Buildroot] [git commit branch/next] package/sysrepo: bump version
+ to 1.4.58
+Message-ID: <20200515194051.1E03D91899@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2884cd6f8d3ae017e40dacba422c68b8949e419
+commit: https://git.buildroot.net/buildroot/commit/?id=2c3dc380a0417915cddab14c925e2892585e76dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libyang/libyang.hash | 2 +-
- package/libyang/libyang.mk   | 2 +-
+ package/sysrepo/sysrepo.hash | 2 +-
+ package/sysrepo/sysrepo.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
-index 9e1f60492e..52ce65516e 100644
---- a/package/libyang/libyang.hash
-+++ b/package/libyang/libyang.hash
+diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+index a759821614..ae72fc2b00 100644
+--- a/package/sysrepo/sysrepo.hash
++++ b/package/sysrepo/sysrepo.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  c9703079f10fbf7154882562322b4b01764bc7735345da555ca51201b02e536c  libyang-1.0.130.tar.gz
-+sha256  2431fa5c7cfbe6a6f2c0873547b976f018438967adfe268726911dd3d95eaa31  libyang-1.0.167.tar.gz
- sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
-diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-index 4e47c9f5fc..766c14fdcd 100644
---- a/package/libyang/libyang.mk
-+++ b/package/libyang/libyang.mk
+-sha256  d84d4f092feab83b0a39fef5d0d62bc6ed1f0f8aa274329f2cbf0a95a6528d8a  sysrepo-1.4.2.tar.gz
++sha256  9c134658a5b812cd86b9113c30fc01be5a094616f473e747032ccf614af9e4dd  sysrepo-1.4.58.tar.gz
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 67290dad4f..aee40fa274 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBYANG_VERSION = 1.0.130
-+LIBYANG_VERSION = 1.0.167
- LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
- LIBYANG_LICENSE = BSD-3-Clause
- LIBYANG_LICENSE_FILES = LICENSE
+-SYSREPO_VERSION = 1.4.2
++SYSREPO_VERSION = 1.4.58
+ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = Apache-2.0
