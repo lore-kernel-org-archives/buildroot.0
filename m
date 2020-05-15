@@ -1,50 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 23:03:57 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-janus: bump to
- version 0.5.0
-Message-ID: <20200515204751.0950C919E0@busybox.osuosl.org>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri, 15 May 2020 14:03:59 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libressl: bump version to 3.1.1
+Message-ID: <20200515210359.1202341-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4201027cbb3e033c84d5c95db1261e10e6ab641
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-janus/python-janus.hash | 6 +++---
- package/python-janus/python-janus.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libressl/libressl.hash | 4 ++--
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-janus/python-janus.hash b/package/python-janus/python-janus.hash
-index 5098769901..9108db6325 100644
---- a/package/python-janus/python-janus.hash
-+++ b/package/python-janus/python-janus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/janus/json
--md5	26283b122439fbca4ae1db18ff839b7c  janus-0.4.0.tar.gz
--sha256	cfc221683160b91b35bae1917e2957b78dad10a2e634f4f8ed119ed72e2a88ef  janus-0.4.0.tar.gz
-+md5  577c3c8939ef945c5dc00319bd59484f  janus-0.5.0.tar.gz
-+sha256  0700f5537d076521851d19b7625545c5e76f6d5792ab17984f28230adcc3b34c  janus-0.5.0.tar.gz
- # Locally computed sha256 checksums
--sha256	8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-+sha256  8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-diff --git a/package/python-janus/python-janus.mk b/package/python-janus/python-janus.mk
-index f718d0c19d..b5fa44f727 100644
---- a/package/python-janus/python-janus.mk
-+++ b/package/python-janus/python-janus.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index fcecc2b434..e0eca8ce2b 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256 df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  libressl-3.0.2.tar.gz
++sha256  bdc6ce5ebb3a2eafc4c475f7eeaa5f0a8e60d9bead01efb76e2e254242b6db00  libressl-3.1.1.tar.gz
+ # Locally computed
+-sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
++sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index c2491bb3a9..d970624dd8 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_JANUS_VERSION = 0.4.0
-+PYTHON_JANUS_VERSION = 0.5.0
- PYTHON_JANUS_SOURCE = janus-$(PYTHON_JANUS_VERSION).tar.gz
--PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/e2/39/41fd545b99eac81d47fe346b8c78c09a3b187ce2fd9f3c9656dfe035e39a
-+PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/9a/76/fbb89aa5d3cb5f3fec6ce74d34cf980ccd475b015d1a59cb5a14fe4cd2c5
- PYTHON_JANUS_SETUP_TYPE = setuptools
- PYTHON_JANUS_LICENSE = Apache-2.0
- PYTHON_JANUS_LICENSE_FILES = LICENSE
+-LIBRESSL_VERSION = 3.0.2
++LIBRESSL_VERSION = 3.1.1
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
+-- 
+2.26.2
