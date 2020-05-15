@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 May 2020 21:33:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/mpd: bump to version
- 0.21.23
-Message-ID: <20200515191937.7CA09918DE@busybox.osuosl.org>
+Date: Fri, 15 May 2020 21:33:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/luv: bump to version
+ 1.36.0-0
+Message-ID: <20200515191937.A168A918DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dda6a21937f13503efea13afbdc9db403d442bd7
+commit: https://git.buildroot.net/buildroot/commit/?id=2c3672edd234ea852ae61d62ada7448c2624d9c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Changelog:
-https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.21.23/NEWS
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
+ package/luv/luv.hash | 2 +-
+ package/luv/luv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index bce2d7e919..fd045e0f5e 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
+diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+index f41325c8c5..7e902bd081 100644
+--- a/package/luv/luv.hash
++++ b/package/luv/luv.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  565687d1899b585350cd66b603e46e5b79affc0a0e36d96d8953c6ccc6f69ba2  mpd-0.21.22.tar.xz
-+sha256  439f522ca9800f375e4fb459ec31e61b3d824fc5c0580ff06dac48b5d21207a3  mpd-0.21.23.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a7adfc0406..474927749a 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256 7aff212985527248522411c3830234fe7b5e98593a4cc439b962c17da46681d5  luv-1.34.2-2.tar.gz
++sha256 f2e7eb372574f25c6978c1dc74280d22efdcd7df2dda4a286c7fe7dceda26445  luv-1.36.0-0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index d028519fe7..a63baf3228 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).22
-+MPD_VERSION = $(MPD_VERSION_MAJOR).23
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-LUV_VERSION = 1.34.2-2
++LUV_VERSION = 1.36.0-0
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+ LUV_LICENSE_FILES = LICENSE.txt
