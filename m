@@ -1,62 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2020 10:39:13 +0000
-Subject: [Buildroot] [Bug 12906] New: qt PrefixPath is wrong on 2020.05-rc1
-Message-ID: <bug-12906-163@https.bugs.busybox.net/>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 16 May 2020 13:22:11 +0200
+Subject: [Buildroot] [PATCH v1] package/python-pyqt5: fix QTLocation module
+ dependency
+Message-ID: <20200516112211.8359-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12906
+The QT module location from qt5location depends on
+QT quick from qt5declarative.
 
-            Bug ID: 12906
-           Summary: qt PrefixPath is wrong on 2020.05-rc1
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jharjuma at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+From qt5location-5.14.2/src/src.pro:
 
-The PrefixPath is /. It should be /usr. For example QML modules are under
-/usr/qml not /qml.
+  qtHaveModule(quick) {
+      SUBDIRS += positioningquick location
+      ...
+  }
 
-Head of 'qtdiag --no-gl':
+Adjust pyqt5 QTLocation module dependency accordingly.
 
-Qt 5.14.2 (arm-little_endian-ilp32-eabi-hardfloat shared (dynamic) release
-build; by GCC 7.5.0) on "eglfs"
-OS: Buildroot 2020.05-rc1 [linux version 5.4.3]
+Fixes:
 
-Architecture: arm; features:
+  - http://autobuild.buildroot.net/results/122bb0a37d968cd79dc043b48f90f1ba4135491f
 
-Environment:
+  Reading .../build/python-pyqt5-5.7/QtLocation/QtLocation.pro
+  Project ERROR: Unknown module(s) in QT: location
 
-Features: QT_NO_EXCEPTIONS
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/python-pyqt5/python-pyqt5.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Library info:
-  PrefixPath: /
-  DocumentationPath: /doc
-  HeadersPath: /include/qt5
-  LibrariesPath: /lib
-  LibraryExecutablesPath: /libexec
-  BinariesPath: /bin
-  PluginsPath: /lib/qt/plugins
-  ImportsPath: /imports
-  Qml2ImportsPath: /qml
-  ArchDataPath: /
-  DataPath: /
-  TranslationsPath: /translations
-  ExamplesPath: /lib/qt/examples
-  TestsPath: /tests
-  SettingsPath: /etc/xdg
-
+diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+index 260a93af9c..9b5e9089fc 100644
+--- a/package/python-pyqt5/python-pyqt5.mk
++++ b/package/python-pyqt5/python-pyqt5.mk
+@@ -65,7 +65,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5LOCATION),y)
+ PYTHON_PYQT5_DEPENDENCIES += qt5location
+-PYTHON_PYQT5_MODULES += QtLocation QtPositioning
++PYTHON_PYQT5_MODULES += QtPositioning
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++PYTHON_PYQT5_MODULES += QtLocation
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5MULTIMEDIA),y)
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.2
