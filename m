@@ -1,25 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2020 15:56:23 +0000
-Subject: [Buildroot] [Bug 12826] nodejs-12.16.1: error: 'uv_sleep' was not
- declared in this scope
-In-Reply-To: <bug-12826-163@https.bugs.busybox.net/>
-References: <bug-12826-163@https.bugs.busybox.net/>
-Message-ID: <bug-12826-163-tAHoBDtmNu@https.bugs.busybox.net/>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 16 May 2020 12:11:40 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libssh2: fix autoreconf comment
+Message-ID: <20200516161140.21831-1-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12826
+The comment explaining the autoreconf says that we are building from a git
+clone - but we are not, currently.  However, the reconf is still needed due
+to patches modifying ac files.
 
---- Comment #5 from Peter Seiderer <ps.report@gmx.net> ---
-Add references to the libuv/uvw version bump
-(commit7d9ed0a19d8e88b56b389187c38b44563e33e5ab) mailing list discussion:
+This commit corrects the comment.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-April/281597.html
-[2] http://lists.busybox.net/pipermail/buildroot/2020-May/281746.html
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/libssh2/libssh2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 3819c1a..2d2599f 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -14,7 +14,7 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
+ # 0003-packet-c-improve-message-parsing.patch
+ LIBSSH2_IGNORE_CVES += CVE-2019-17498
+ 
+-# building from a git clone
++# patch touching configure.ac
+ LIBSSH2_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
