@@ -1,123 +1,70 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 16 May 2020 14:53:53 -0600
-Subject: [Buildroot] [PATCH 1/1] package/meson: use wrappers for
- g-ir-scanner and g-ir-compiler
-Message-ID: <20200516205353.719366-1-james.hilliard1@gmail.com>
+From: Linus Kaschulla <linus@cosmos-ink.net>
+Date: Sat, 16 May 2020 23:57:45 +0000
+Subject: [Buildroot] [PATCH] package/nodejs: expose capability to compile
+ host library
+Message-ID: <20200516235745.3551-1-linus@cosmos-ink.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to backport a commit to allow us to override the g-ir-scanner
-and g-ir-compiler binaries in the gnome module.
+To use nodejs on the host (independant of the actual system)
+to create some static files to place onto the target rootfs
+nodejs can be very helpful.
 
-By default since meson looks for these binaries as native: true
-dependencies it would use the host versions instead of the wrappers
-which are not useable for target package builds. Override this behavior
-by specifying the correct wrapper binaries in cross-compilation.conf.
+The provided nodejs package didn't show the possibility to
+create a host package. But upon further examination I noticed
+that the package does it in fact (in the .mk). It specifies
+dependencies for the package with the host prefix and also
+invokes $(host-generic-package) as well as $(generic-package)
+which is the only one assumed from the config.
 
-Fixes:
-http://autobuild.buildroot.net/results/f49/f49bb57a6ec2890f489fbd55ced9c9249d066334/build-end.log
+This commit adds a Config.in.host file that uses the
+dependencies given from HOST_NODEJS_DEPENDENCIES in the makefile.
+(It also add the host config to the package overview.)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+With this change other packages can require BR2_PACKAGE_HOST_NODEJS
+without any problems or the buildsystem not fully knowing about this.
+Seems that someone added the capability (as a step for the cross-
+compiled nodejs) and didn't notice that this is a handy package by itself.
+
+When installing global npm packages (with -g), the parameter
+`--prefix $(HOST_DIR)` can be used to ensure that nodejs doesn't try
+to install it onto the real host filesystem.
+
+I already used this change to create static web files from Angular
+and place onto a target that doesn't need nodejs itself.
+
+Signed-off-by: Linus Kaschulla <linus@cosmos-ink.net>
 ---
- ...-g-ir-scanner-and-g-ir-compiler-bina.patch | 73 +++++++++++++++++++
- package/meson/cross-compilation.conf.in       |  2 +
- 2 files changed, 75 insertions(+)
- create mode 100644 package/meson/0003-Allow-overriding-g-ir-scanner-and-g-ir-compiler-bina.patch
+ package/Config.in.host        | 1 +
+ package/nodejs/Config.in.host | 5 +++++
+ 2 files changed, 6 insertions(+)
+ create mode 100644 package/nodejs/Config.in.host
 
-diff --git a/package/meson/0003-Allow-overriding-g-ir-scanner-and-g-ir-compiler-bina.patch b/package/meson/0003-Allow-overriding-g-ir-scanner-and-g-ir-compiler-bina.patch
+diff --git a/package/Config.in.host b/package/Config.in.host
+index f1246c708f..510249a496 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -48,6 +48,7 @@ menu "Host utilities"
+ 	source "package/mtd/Config.in.host"
+ 	source "package/mtools/Config.in.host"
+ 	source "package/mxsldr/Config.in.host"
++	source "package/nodejs/Config.in.host"
+ 	source "package/omap-u-boot-utils/Config.in.host"
+ 	source "package/openocd/Config.in.host"
+ 	source "package/opkg-utils/Config.in.host"
+diff --git a/package/nodejs/Config.in.host b/package/nodejs/Config.in.host
 new file mode 100644
-index 0000000000..710bd9acd7
+index 0000000000..af8d7b4e44
 --- /dev/null
-+++ b/package/meson/0003-Allow-overriding-g-ir-scanner-and-g-ir-compiler-bina.patch
-@@ -0,0 +1,73 @@
-+From 49b1c8df7e4ff3a441d831f926d87920952025bf Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sat, 2 May 2020 20:43:36 -0600
-+Subject: [PATCH] Allow overriding g-ir-scanner and g-ir-compiler binaries.
-+
-+This is useful when one needs to force meson to use wrappers for cross
-+compilation.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+1e073c4c1bd7de06bc74d84e3807c9b210e57a22]
-+---
-+ mesonbuild/modules/gnome.py | 34 +++++++++++++++++++++-------------
-+ 1 file changed, 21 insertions(+), 13 deletions(-)
-+
-+diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
-+index a00005588..b6d7cc141 100644
-+--- a/mesonbuild/modules/gnome.py
-++++ b/mesonbuild/modules/gnome.py
-+@@ -32,7 +32,7 @@ from ..mesonlib import (
-+     MachineChoice, MesonException, OrderedSet, Popen_safe, extract_as_list,
-+     join_args, unholder,
-+ )
-+-from ..dependencies import Dependency, PkgConfigDependency, InternalDependency
-++from ..dependencies import Dependency, PkgConfigDependency, InternalDependency, ExternalProgram
-+ from ..interpreterbase import noKwargs, permittedKwargs, FeatureNew, FeatureNewKwargs
-+ 
-+ # gresource compilation is broken due to the way
-+@@ -735,21 +735,29 @@ class GnomeModule(ExtensionModule):
-+         # these utilities via pkg-config, so it would be best to use the
-+         # results from pkg-config when possible.
-+         gi_util_dirs_check = [state.environment.get_build_dir(), state.environment.get_source_dir()]
-+-        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
-+-        if giscanner.found():
-+-            giscanner_path = giscanner.get_command()[0]
-+-            if not any(x in giscanner_path for x in gi_util_dirs_check):
-+-                giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-++        giscanner_bin = state.environment.lookup_binary_entry(MachineChoice.HOST, 'g-ir-scanner')
-++        if giscanner_bin is not None:
-++            giscanner = ExternalProgram.from_entry('g-ir-scanner', giscanner_bin)
-+         else:
-+-            giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-++            giscanner = self.interpreter.find_program_impl('g-ir-scanner')
-++            if giscanner.found():
-++                giscanner_path = giscanner.get_command()[0]
-++                if not any(x in giscanner_path for x in gi_util_dirs_check):
-++                    giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-++            else:
-++                giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-+ 
-+-        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-+-        if gicompiler.found():
-+-            gicompiler_path = gicompiler.get_command()[0]
-+-            if not any(x in gicompiler_path for x in gi_util_dirs_check):
-+-                gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-++        gicompiler_bin = state.environment.lookup_binary_entry(MachineChoice.HOST, 'g-ir-compiler')
-++        if gicompiler_bin is not None:
-++            gicompiler = ExternalProgram.from_entry('g-ir-compiler', gicompiler_bin)
-+         else:
-+-            gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-++            gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-++            if gicompiler.found():
-++                gicompiler_path = gicompiler.get_command()[0]
-++                if not any(x in gicompiler_path for x in gi_util_dirs_check):
-++                    gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-++            else:
-++                gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-+ 
-+         ns = kwargs.pop('namespace')
-+         nsversion = kwargs.pop('nsversion')
-+-- 
-+2.25.1
-+
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index d80c472de6..e9344e2b2f 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -9,6 +9,8 @@ cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/bin/pkgconf'
-+g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
-+g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
- 
- [properties]
- needs_exe_wrapper = true
++++ b/package/nodejs/Config.in.host
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_HOST_NODEJS
++	bool "host nodejs"
++	select BR_PACKAGE_HOST_LIBOPENSSL
++    select BR_PACKAGE_HOST_PYTHON
++    select BR_PACKAGE_HOST_ZLIB
 -- 
-2.25.1
+2.20.1
