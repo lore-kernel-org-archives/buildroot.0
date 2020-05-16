@@ -1,35 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2020 09:40:34 +0000
-Subject: [Buildroot] [Bug 12901] GStreamer doesn't build on 2020-05 rc1 with
- GObject introspection enabled (wrong path for g-ir-scanner)
-In-Reply-To: <bug-12901-163@https.bugs.busybox.net/>
-References: <bug-12901-163@https.bugs.busybox.net/>
-Message-ID: <bug-12901-163-cUePAQ3GWl@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 16 May 2020 11:52:18 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-05-15
+In-Reply-To: <421a58a5-49b2-54fe-8331-f3f883961c9b@grinn-global.com>
+References: <20200516062654.AB72987E37@fraxinus.osuosl.org>
+ <421a58a5-49b2-54fe-8331-f3f883961c9b@grinn-global.com>
+Message-ID: <20200516115218.4780a26c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12901
+On Sat, 16 May 2020 11:20:26 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
---- Comment #2 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
-Hi,
+> /home/naourr/work/instance-1/output-1/build/cegui-0-8-7/cegui/src/falagard/XMLHandler.cpp:1926:1: fatal error: error writing to /tmp/ccuouM3W.s: No space left on device
+>   } // End of  CEGUI namespace section
+>   ^
+> 
+> it seems that the autobuilder needs more free space ;)
 
-Thanks for the bug report, this is a known issue, all meson packages fail to
-build with gobject-introspection.
+Yes, this has been fixed already.
 
-You can find a patch fixing this issue here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200502060435.23004-1-james.hilliard1 at gmail.com/. 
+Perhaps we need to detect this kind of issues, and discard the build
+results when that happens.
 
-However, this patch has not been merged and probably won't be. James waits for
-the next meson release before sending an updated version of this patch (see
-https://patchwork.ozlabs.org/project/buildroot/patch/20200315172459.881615-2-aduskett at gmail.com/)
-
-Best Regards,
-
-Fabrice
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
