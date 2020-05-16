@@ -1,38 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 May 2020 15:42:36 +0200
-Subject: [Buildroot] [PATCH] package/libunwind: enable on AArch64
-In-Reply-To: <20200503212640.189571-1-thomas.petazzoni@bootlin.com>
-References: <20200503212640.189571-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200516154236.7c52b169@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 16 May 2020 13:43:00 +0000
+Subject: [Buildroot] [Bug 12836] libunwind: package does not show up in
+ menuconfig for aarch64 target
+In-Reply-To: <bug-12836-163@https.bugs.busybox.net/>
+References: <bug-12836-163@https.bugs.busybox.net/>
+Message-ID: <bug-12836-163-TO7lC6IgrA@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 May 2020 23:26:39 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12836
 
-> Since version 1.2, libunwind has support for the AArch64 architecture.
-> 
-> It builds fine on glibc, needs a small patch on musl, but doesn't
-> build with uClibc (stack_t undefined).
-> 
-> Fixes:
-> 
->   https://bugs.busybox.net/show_bug.cgi?id=12836
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...t_t-instead-of-__sigset_t-on-AArch64.patch | 46 +++++++++++++++++++
->  package/libunwind/Config.in                   |  7 +--
->  2 files changed, 50 insertions(+), 3 deletions(-)
->  create mode 100644 package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to next, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Thomas
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?h=next&id=fcfdd8a80dffd1c7c4973d4e359c32372430c83f
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
