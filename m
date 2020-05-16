@@ -1,59 +1,49 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 15 May 2020 15:31:20 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use system
- libargon2
-Message-ID: <20200515213120.1174774-1-james.hilliard1@gmail.com>
+From: Sam Voss <sam.voss@gmail.com>
+Date: Fri, 15 May 2020 21:35:02 -0500
+Subject: [Buildroot] [PATCH] package/rustc: RUSTC_TARGET_NAME is needed
+ to build host-rust
+In-Reply-To: <20200508152739.1625844-1-romain.naour@gmail.com>
+References: <20200508152739.1625844-1-romain.naour@gmail.com>
+Message-ID: <CAK714xLFWo4YdRgz8XhO5BZDTbx4YSGxRHAdYxzV_Dk+WoB2Nw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The python-argon2-cffi package can be used with the system libargon2,
-we should use that instead of the embedded version.
+Romain,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-argon2-cffi/Config.in             | 3 +++
- package/python-argon2-cffi/python-argon2-cffi.mk | 7 ++++---
- 2 files changed, 7 insertions(+), 3 deletions(-)
+On Fri, May 8, 2020 at 10:27 AM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> As reported on bugzilla [1], the host-rust package fail when
+> the target architecture or the target libc is not supported.
+>
+> The error is the following:
+> failed to parse TOML configuration 'config.toml': expected a table key, found a right bracket at line 15
+>
+> In such case BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is
+> not set thus RUSTC_TARGET_NAME is also not set [2].
+>
+> But RUSTC_TARGET_NAME is needed to generate the file config.toml [3]
+>
+> Add BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS in the host-rust
+> dependency.
+>
+> The commit [4] that allowed to select host-rust when the target
+> architecture or the target libc is not supported, should have
+> allowed to select only host-rustc-bin.
 
-diff --git a/package/python-argon2-cffi/Config.in b/package/python-argon2-cffi/Config.in
-index c1adcbc77d..16bbe6c4e3 100644
---- a/package/python-argon2-cffi/Config.in
-+++ b/package/python-argon2-cffi/Config.in
-@@ -1,8 +1,11 @@
- config BR2_PACKAGE_PYTHON_ARGON2_CFFI
- 	bool "python-argon2-cffi"
-+	depends on BR2_USE_MMU # libargon2
-+	depends on !BR2_STATIC_LIBS # libargon2
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
- 	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_LIBARGON2
- 	help
- 	  The secure Argon2 password hashing algorithm.
- 
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
-index 0e3e1be3d6..674e089eb7 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.mk
-+++ b/package/python-argon2-cffi/python-argon2-cffi.mk
-@@ -10,12 +10,13 @@ PYTHON_ARGON2_CFFI_SITE = https://files.pythonhosted.org/packages/74/fd/d78e003a
- PYTHON_ARGON2_CFFI_SETUP_TYPE = setuptools
- PYTHON_ARGON2_CFFI_LICENSE = MIT
- PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
--PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
-+PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi libargon2
-+PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SYSTEM=1
- 
- ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
--PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=1
-+PYTHON_ARGON2_CFFI_ENV += ARGON2_CFFI_USE_SSE2=1
- else
--PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=0
-+PYTHON_ARGON2_CFFI_ENV += ARGON2_CFFI_USE_SSE2=0
- endif
- 
- $(eval $(python-package))
--- 
-2.25.1
+Thanks for fixing this, looks good to me.
+
+>
+> Fixes:
+> Bug #12691
+>
+> [1] https://bugs.busybox.net/show_bug.cgi?id=12691
+> [2] https://git.buildroot.net/buildroot/tree/package/rustc/rustc.mk?h=2020.05-rc1#n10
+> [3] https://git.buildroot.net/buildroot/tree/package/rust/rust.mk?h=2020.05-rc1#n41
+> [4] 025b863e6facb7b219b82ee6ee7a7916c2c3c47e
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Reviewed-by: Sam Voss <sam.voss@gmail.com>
