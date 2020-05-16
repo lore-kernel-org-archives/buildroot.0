@@ -1,13 +1,16 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 16 May 2020 13:26:08 +0200
-Subject: [Buildroot] [PATCH v2] package/python-pyqt5: fix QtLocation module
- dependency
-Message-ID: <20200516112608.8484-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 May 2020 13:44:46 +0200
+Subject: [Buildroot] [git commit] package/python-pyqt5: fix QtLocation
+ module dependency
+Message-ID: <20200516112910.635B98E71D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1d430ddcfd5e29f92136428a6de4edd19f1b6bac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The QT module location from qt5location depends on
 QT quick from qt5declarative.
@@ -29,9 +32,7 @@ Fixes:
   Project ERROR: Unknown module(s) in QT: location
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - fix python-pyqt5 QTLocation vs. QtLocation spelling
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/python-pyqt5/python-pyqt5.mk | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
@@ -52,5 +53,3 @@ index 260a93af9c..9b5e9089fc 100644
  endif
  
  ifeq ($(BR2_PACKAGE_QT5MULTIMEDIA),y)
--- 
-2.26.2
