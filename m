@@ -1,38 +1,38 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 16 May 2020 16:38:28 +0000
-Subject: [Buildroot] [Bug 12906] qt PrefixPath is wrong on 2020.05-rc1
-In-Reply-To: <bug-12906-163@https.bugs.busybox.net/>
-References: <bug-12906-163@https.bugs.busybox.net/>
-Message-ID: <bug-12906-163-DfksbfyoAh@https.bugs.busybox.net/>
+Date: Sat, 16 May 2020 16:40:10 +0000
+Subject: [Buildroot] [Bug 12911] New: usb_modeswitch installation race
+ condition
+Message-ID: <bug-12911-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12906
+https://bugs.busybox.net/show_bug.cgi?id=12911
 
---- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
-No custom changes (see provided defconfig)...
+            Bug ID: 12911
+           Summary: usb_modeswitch installation race condition
+           Product: buildroot
+           Version: 2020.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jharjuma at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-$ cat build/qt5base-5.14.2/config.summary 
-Building on: linux-g++ (x86_64, CPU features: mmx sse sse2)
-Building for: devices/linux-buildroot-g++ (arm, CPU features: neon crc32)
-Target compiler: gcc 8.4.0
-Configuration: cross_compile compile_examples enable_new_dtags largefile neon
-shared shared release c++11 c++14 c++1z concurrent reduce_exports release_tools
-stl
-Build options:
-  Mode ................................... release; optimized tools
-  Optimize release build for size ........ no
-  Building shared libraries .............. yes
-  Using C standard ....................... C11
-  Using C++ standard ..................... C++17
-  Using ccache ........................... no
-  Using new DTAGS ........................ yes
-  Relocatable ............................ yes
-  Using precompiled headers .............. no
-[...]
+In usb_modeswitch Makefile dispatcher-script, dispatcher-dynlink and
+dispatcher-statlink are .PHONY targets. The result is that sources are compiled
+also when install targets are called. USB_MODESWITCH_INSTALL_TARGET_CMDS calls
+$(MAKE) which is a call to parallel make eg. make -j9. So the install phase can
+install empty usb_modeswitch binary (happened once) if the compiler have just
+cleared the binary and install command installs it before compiler writes the
+binary. USB_MODESWITCH_INSTALL_TARGET_CMDS should call $(MAKE1).
 
 -- 
 You are receiving this mail because:
