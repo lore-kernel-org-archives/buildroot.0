@@ -1,8 +1,8 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 16 May 2020 13:22:11 +0200
-Subject: [Buildroot] [PATCH v1] package/python-pyqt5: fix QTLocation module
+Date: Sat, 16 May 2020 13:26:08 +0200
+Subject: [Buildroot] [PATCH v2] package/python-pyqt5: fix QtLocation module
  dependency
-Message-ID: <20200516112211.8359-1-ps.report@gmx.net>
+Message-ID: <20200516112608.8484-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,7 +19,7 @@ From qt5location-5.14.2/src/src.pro:
       ...
   }
 
-Adjust pyqt5 QTLocation module dependency accordingly.
+Adjust pyqt5 QtLocation module dependency accordingly.
 
 Fixes:
 
@@ -29,6 +29,9 @@ Fixes:
   Project ERROR: Unknown module(s) in QT: location
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - fix python-pyqt5 QTLocation vs. QtLocation spelling
 ---
  package/python-pyqt5/python-pyqt5.mk | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
