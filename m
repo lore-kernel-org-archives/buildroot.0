@@ -1,62 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 May 2020 18:26:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libssh2: fix autoreconf comment
-In-Reply-To: <20200516161140.21831-1-danomimanchego123@gmail.com>
-References: <20200516161140.21831-1-danomimanchego123@gmail.com>
-Message-ID: <20200516162624.GO12536@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 16 May 2020 16:38:28 +0000
+Subject: [Buildroot] [Bug 12906] qt PrefixPath is wrong on 2020.05-rc1
+In-Reply-To: <bug-12906-163@https.bugs.busybox.net/>
+References: <bug-12906-163@https.bugs.busybox.net/>
+Message-ID: <bug-12906-163-DfksbfyoAh@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+https://bugs.busybox.net/show_bug.cgi?id=12906
 
-On 2020-05-16 12:11 -0400, Danomi Manchego spake thusly:
-> The comment explaining the autoreconf says that we are building from a git
-> clone - but we are not, currently.  However, the reconf is still needed due
-> to patches modifying ac files.
-> 
-> This commit corrects the comment.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  package/libssh2/libssh2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-> index 3819c1a..2d2599f 100644
-> --- a/package/libssh2/libssh2.mk
-> +++ b/package/libssh2/libssh2.mk
-> @@ -14,7 +14,7 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
->  # 0003-packet-c-improve-message-parsing.patch
->  LIBSSH2_IGNORE_CVES += CVE-2019-17498
->  
-> -# building from a git clone
-> +# patch touching configure.ac
+--- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
+No custom changes (see provided defconfig)...
 
-... and acincludes.m4.
-
-Applied to master with that fixed. thanks!
-
-Regards,
-Yann E. MORIN.
-
->  LIBSSH2_AUTORECONF = YES
->  
->  ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+$ cat build/qt5base-5.14.2/config.summary 
+Building on: linux-g++ (x86_64, CPU features: mmx sse sse2)
+Building for: devices/linux-buildroot-g++ (arm, CPU features: neon crc32)
+Target compiler: gcc 8.4.0
+Configuration: cross_compile compile_examples enable_new_dtags largefile neon
+shared shared release c++11 c++14 c++1z concurrent reduce_exports release_tools
+stl
+Build options:
+  Mode ................................... release; optimized tools
+  Optimize release build for size ........ no
+  Building shared libraries .............. yes
+  Using C standard ....................... C11
+  Using C++ standard ..................... C++17
+  Using ccache ........................... no
+  Using new DTAGS ........................ yes
+  Relocatable ............................ yes
+  Using precompiled headers .............. no
+[...]
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
