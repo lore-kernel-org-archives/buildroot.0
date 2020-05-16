@@ -1,33 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 May 2020 11:52:18 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-05-15
-In-Reply-To: <421a58a5-49b2-54fe-8331-f3f883961c9b@grinn-global.com>
-References: <20200516062654.AB72987E37@fraxinus.osuosl.org>
- <421a58a5-49b2-54fe-8331-f3f883961c9b@grinn-global.com>
-Message-ID: <20200516115218.4780a26c@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 16 May 2020 10:39:13 +0000
+Subject: [Buildroot] [Bug 12906] New: qt PrefixPath is wrong on 2020.05-rc1
+Message-ID: <bug-12906-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 May 2020 11:20:26 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12906
 
-> /home/naourr/work/instance-1/output-1/build/cegui-0-8-7/cegui/src/falagard/XMLHandler.cpp:1926:1: fatal error: error writing to /tmp/ccuouM3W.s: No space left on device
->   } // End of  CEGUI namespace section
->   ^
-> 
-> it seems that the autobuilder needs more free space ;)
+            Bug ID: 12906
+           Summary: qt PrefixPath is wrong on 2020.05-rc1
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jharjuma at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Yes, this has been fixed already.
+The PrefixPath is /. It should be /usr. For example QML modules are under
+/usr/qml not /qml.
 
-Perhaps we need to detect this kind of issues, and discard the build
-results when that happens.
+Head of 'qtdiag --no-gl':
 
-Thomas
+Qt 5.14.2 (arm-little_endian-ilp32-eabi-hardfloat shared (dynamic) release
+build; by GCC 7.5.0) on "eglfs"
+OS: Buildroot 2020.05-rc1 [linux version 5.4.3]
+
+Architecture: arm; features:
+
+Environment:
+
+Features: QT_NO_EXCEPTIONS
+
+Library info:
+  PrefixPath: /
+  DocumentationPath: /doc
+  HeadersPath: /include/qt5
+  LibrariesPath: /lib
+  LibraryExecutablesPath: /libexec
+  BinariesPath: /bin
+  PluginsPath: /lib/qt/plugins
+  ImportsPath: /imports
+  Qml2ImportsPath: /qml
+  ArchDataPath: /
+  DataPath: /
+  TranslationsPath: /translations
+  ExamplesPath: /lib/qt/examples
+  TestsPath: /tests
+  SettingsPath: /etc/xdg
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
