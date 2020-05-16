@@ -1,36 +1,39 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 16 May 2020 12:12:42 -0400
-Subject: [Buildroot] [PATCH 1/1] package/openssh: add optional dependency on
- audit
-Message-ID: <20200516161242.21900-1-danomimanchego123@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 May 2020 18:24:59 +0200
+Subject: [Buildroot] [git commit] package/libssh2: fix autoreconf comment
+Message-ID: <20200516160915.7298984539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/openssh/openssh.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=7dccd3b24805dc39c014c7c9e86e10eca2147fff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index d505721..41dbe56 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -32,6 +32,13 @@ endif
+The comment explaining the autoreconf says that we are building from a git
+clone - but we are not, currently.  However, the reconf is still needed due
+to patches modifying ac files.
+
+This commit corrects the comment.
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+[yann.morin.1998 at free.fr: also mention acincludes.m4]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libssh2/libssh2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
+index 3819c1aa31..c03fe0db55 100644
+--- a/package/libssh2/libssh2.mk
++++ b/package/libssh2/libssh2.mk
+@@ -14,7 +14,7 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
+ # 0003-packet-c-improve-message-parsing.patch
+ LIBSSH2_IGNORE_CVES += CVE-2019-17498
  
- OPENSSH_DEPENDENCIES = host-pkgconf zlib openssl
+-# building from a git clone
++# patch touching configure.ac and acinclude.m4
+ LIBSSH2_AUTORECONF = YES
  
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+OPENSSH_DEPENDENCIES += audit
-+OPENSSH_CONF_OPTS += --with-audit=linux
-+else
-+OPENSSH_CONF_OPTS += --without-audit
-+endif
-+
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
- OPENSSH_DEPENDENCIES += cryptodev-linux
- OPENSSH_CONF_OPTS += --with-ssl-engine
--- 
-2.7.4
+ ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
