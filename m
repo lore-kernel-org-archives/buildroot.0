@@ -1,54 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 May 2020 22:16:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: fix build when
- time_t is 64 bits
-In-Reply-To: <CAPi7W82cDLUa+YyzB6BYHrXwqm8OK00B-HBVrRLJm47Q7_7EQw@mail.gmail.com>
-References: <20200517170507.2796394-1-fontaine.fabrice@gmail.com>
- <20200517212712.6e3b0f13@windsurf.home>
- <CAPi7W82cDLUa+YyzB6BYHrXwqm8OK00B-HBVrRLJm47Q7_7EQw@mail.gmail.com>
-Message-ID: <20200517221644.0d27f444@windsurf.home>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 17 May 2020 22:18:34 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cegui: select libglu when libgl
+ is detected
+In-Reply-To: <8eb56c70-1c83-f1b3-f474-7178b5db7dcb@grinn-global.com>
+References: <20200428195844.48124-1-b.bilas@grinn-global.com>
+ <20200428195844.48124-2-b.bilas@grinn-global.com>
+ <ssa3ogxjat.ln2@ID-313208.user.individual.net>
+ <8eb56c70-1c83-f1b3-f474-7178b5db7dcb@grinn-global.com>
+Message-ID: <2d150895-80f4-d53c-d8c3-fc9fc0411c69@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 May 2020 21:57:33 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi Thomas,
 
-> > > +diff --git a/tacc.c b/tacc.c
-> > > +index ef9d081..9260373 100644
-> > > +--- a/tacc.c
-> > > ++++ b/tacc.c
-> > > +@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
-> > > +         /* start accounting */
-> > > +         struct tac_attrib *attr = NULL;
-> > > +
-> > > +-        sprintf(buf, "%lu", time(0));
-> > > ++        sprintf(buf, "%llu", time(0));  
-> >
-> > But isn't this going to introduce another warning when time_t is 32-bit ?  
-> Yes, indeed, thanks for spotting my mistake. What would be a proper fix?
-> Disable -Werror? Cast time_t into (unsigned long) as already done by
-> upstream in pam_tacplus.c?
-
-I'm far from being an expert with the POSIX time API, which is a bit
-atrocious. But I believe that perhaps interpreting time_t directly is
-wrong, and instead this should be done:
-
-	time_t t;
-	struct tm *tm;
-
-	t = time(NULL);
-	tm = gmtime(&t);
-	strftime(buf, sizeof(buf), "%s", tm);
-
-Again, I'm not sure, so more research would be useful.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On 09.05.2020 10:28, Bartosz Bilas wrote:
+> Hi guys,
+>
+> On 03.05.2020 19:16, Bernd Kuhls wrote:
+>> Am Tue, 28 Apr 2020 21:58:44 +0200 schrieb Bartosz Bilas:
+>>
+>>> Fixes:
+>>> ?? include/GL/glew.h:1205:14: fatal error: GL/glu.h: No such file or
+>>> ?? directory
+>> Cegui directly includes GL/glu.h:
+>>
+>> https://github.com/cegui/cegui/blob/master/cegui/include/CEGUI/
+>> RendererModules/OpenGL/GL.h#L49
+>>
+>> which makes libglu a hard dependency for this package even when
+>> -DGLEW_NO_GLU was added to CXXFLAGS.
+>>
+>> Reviewed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Thomas could you give some feedback with that patch then?
+gently ping due to the fact that the issue is still there and causing 
+autobuilders failure.
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> Best
+> Bartek
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+Best
+Bartek
