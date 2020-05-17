@@ -1,83 +1,86 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 17 May 2020 23:34:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/erlang: fix -fno-common build
- failure
-Message-ID: <20200517213426.12315-1-heiko.thiery@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 May 2020 23:41:37 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] support/docker: add new dockers (branch
+ yem/dockers)
+Message-ID: <cover.1589751688.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added upstream patch for fixing build failure when using GCC10 as a host
-compiler (-fno-common is now default).
+Hello All!
 
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- ...d-ODR-violation-of-ei_default_socket.patch | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
+Enhance our docker support, update the existing image, add a new one.
 
-diff --git a/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
-new file mode 100644
-index 0000000000..69b6fae81f
---- /dev/null
-+++ b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
-@@ -0,0 +1,54 @@
-+From de870d7f9f36b3e68f280057851a4585a67ab219 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Tue, 14 Jan 2020 23:15:01 +0000
-+Subject: [PATCH] ei_portio.h: avoid ODR violation of
-+ 'ei_default_socket_callbacks'
-+
-+Noticed as a build failure against fresh gcc-master:
-+
-+```
-+LD otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call
-+ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(eirecv.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
-+ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
-+ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send_reg.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
-+ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(epmd_port.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
-+ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_portio.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
-+collect2: error: ld returned 1 exit status
-+make[3]: *** [x86_64-unknown-linux-gnu/Makefile:669: otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call] Error 1
-+```
-+
-+The failure looks legitimate: `ei_default_socket_callbacks` is a
-+struct defined in 'ei_portio.h' and in 'ei_portio.c'.
-+
-+The change flips 'ei_portio.h' definition to declaration.
-+
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
-+
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+
-+Patch taken from upstream: https://github.com/erlang/otp/commit/de870d7f9f36b3e68f280057851a4585a67ab219
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ lib/erl_interface/src/misc/ei_portio.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/erl_interface/src/misc/ei_portio.h b/lib/erl_interface/src/misc/ei_portio.h
-+index 84ebc5039a..5172d085b4 100644
-+
-+--- a/lib/erl_interface/src/misc/ei_portio.h
-++++ b/lib/erl_interface/src/misc/ei_portio.h
-+@@ -47,7 +47,7 @@ int ei_writev_fill_ctx_t__(ei_socket_callbacks *cbs, void *ctx, const struct iov
-+ int ei_socket_callbacks_have_writev__(ei_socket_callbacks *cbs);
-+ #endif
-+ 
-+-ei_socket_callbacks ei_default_socket_callbacks;
-++extern ei_socket_callbacks ei_default_socket_callbacks;
-+ 
-+ #define EI_FD_AS_CTX__(FD)                                              \
-+     ((void *) (long) (FD))
-+-- 
-+2.20.1
-+
+This will help:
+
+  - users, to get a build environment known to work,
+
+  - developpers, to more easily reproduce build failures reported by
+    users.
+
+A basic set of a few, very various distros have been chosen, to cover
+a range of diversity:
+
+  - the existing, rock-solid Debian Stretch, pinned to a known state,
+    that we use for the Gitlab-CI testing;
+
+  - Fedora-F32, a bleeding-edge mainstream distro, pinned to the state
+    it was at release time;
+
+More variants can be added later, depending on the demand.
+
+Note: when this series is applied (if it is), I'll generate the images
+and push them to the Buildroot repo on the Docker hub.
+
+Changes v1 -> v2:
+  - reorder patches to ensure bisectability  (Ricardo)
+  - drop the Makefile rule in favour of a script
+  - drop Arch and Alpine for now...
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 53158e41fdd4bcc1272bbf4e61b68f58bf9c1527
+
+  package/openocd: fix -fno-common build failure (2020-05-17 21:50:04 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 48c45cb866a160ce4cc05b03fdf15237eb346b66
+
+  support/docker: add a Fedore-32 based image (2020-05-17 23:31:36 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/docker: rename the Dockerfile and its accompanying file
+      support/docker: add script to generate docker iamges
+      support/docker: allow the br-user to becone root
+      support/docker: add a Fedore-32 based image
+
+ support/docker/Dockerfile.base                     |  1 +
+ .../{Dockerfile => Dockerfile.debian-stretch}      | 12 ++++--
+ support/docker/Dockerfile.fedora-32                | 48 ++++++++++++++++++++++
+ support/docker/build-all                           | 17 ++++++++
+ ...ources.list => debian-stretch.apt-sources.list} |  0
+ 5 files changed, 75 insertions(+), 3 deletions(-)
+ create mode 120000 support/docker/Dockerfile.base
+ rename support/docker/{Dockerfile => Dockerfile.debian-stretch} (80%)
+ create mode 100644 support/docker/Dockerfile.fedora-32
+ create mode 100755 support/docker/build-all
+ rename support/docker/{apt-sources.list => debian-stretch.apt-sources.list} (100%)
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
