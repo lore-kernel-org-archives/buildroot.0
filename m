@@ -1,47 +1,46 @@
 From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Sun, 17 May 2020 13:53:31 +0200
-Subject: [Buildroot] [PATCH 05/15] board/olpc: move GPIO_SYSFS to common
- config
+Date: Sun, 17 May 2020 13:53:32 +0200
+Subject: [Buildroot] [PATCH 06/15] board/olpc: move LIS3_SPI to XO-1.75
 In-Reply-To: <20200517115341.1677382-1-lkundrak@v3.sk>
 References: <20200517115341.1677382-1-lkundrak@v3.sk>
-Message-ID: <20200517115341.1677382-6-lkundrak@v3.sk>
+Message-ID: <20200517115341.1677382-7-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's not specific to XO-1.
+It's only present on ARM OLPC laptops.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- board/olpc/linux.config      | 1 +
- board/olpc/xo-1/linux.config | 1 -
+ board/olpc/xo-1.75/linux.config | 1 +
+ board/olpc/xo-1/linux.config    | 1 -
  2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/olpc/linux.config b/board/olpc/linux.config
-index 4ba157cf0b..01de870730 100644
---- a/board/olpc/linux.config
-+++ b/board/olpc/linux.config
-@@ -21,6 +21,7 @@ CONFIG_BLK_DEV_SR=y
- CONFIG_CHR_DEV_SG=y
- CONFIG_MTD=y
- CONFIG_MTD_BLOCK=y
-+CONFIG_GPIO_SYSFS=y
- CONFIG_NETDEVICES=y
- CONFIG_LIBERTAS=m
- CONFIG_INPUT_MOUSEDEV=y
+diff --git a/board/olpc/xo-1.75/linux.config b/board/olpc/xo-1.75/linux.config
+index b686950799..30e43a8860 100644
+--- a/board/olpc/xo-1.75/linux.config
++++ b/board/olpc/xo-1.75/linux.config
+@@ -12,6 +12,7 @@ CONFIG_ARM_APPENDED_DTB=y
+ CONFIG_ARM_ATAG_DTB_COMPAT=y
+ CONFIG_VFP=y
+ CONFIG_NEON=y
++CONFIG_SENSORS_LIS3_SPI=y
+ CONFIG_SERIO_OLPC_APSP=y
+ CONFIG_REGULATOR_88PG86X=m
+ CONFIG_VIDEO_MMP_CAMERA=y
 diff --git a/board/olpc/xo-1/linux.config b/board/olpc/xo-1/linux.config
-index 8ed10ff62b..0680e073cb 100644
+index 0680e073cb..9f6731a5a5 100644
 --- a/board/olpc/xo-1/linux.config
 +++ b/board/olpc/xo-1/linux.config
-@@ -44,7 +44,6 @@ CONFIG_NVRAM=y
- CONFIG_SCx200_ACB=y
- CONFIG_PINCTRL=y
- CONFIG_PINCTRL_SINGLE=y
--CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_CS5535=y
- CONFIG_THERMAL=y
- CONFIG_WATCHDOG=y
+@@ -29,7 +29,6 @@ CONFIG_MTD_NAND_CAFE=y
+ CONFIG_MTD_UBI=y
+ CONFIG_CS5535_MFGPT=y
+ CONFIG_CS5535_CLOCK_EVENT_SRC=y
+-CONFIG_SENSORS_LIS3_SPI=y
+ CONFIG_MOUSE_PS2_OLPC=y
+ CONFIG_SERIAL_8250_NR_UARTS=1
+ CONFIG_SERIAL_8250_RUNTIME_UARTS=1
 -- 
 2.26.2
