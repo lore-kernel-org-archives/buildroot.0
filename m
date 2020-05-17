@@ -1,100 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 May 2020 23:12:42 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/x11r7/xserver_xorg-server:
- disable GLAMOR support with NVIDIA drivers
-In-Reply-To: <20200517204003.2187318-4-jskrzypnik@novomatic-tech.com>
-References: <20200512132859.15189-1-jskrzypnik@novomatic-tech.com>
- <20200517204003.2187318-1-jskrzypnik@novomatic-tech.com>
- <20200517204003.2187318-4-jskrzypnik@novomatic-tech.com>
-Message-ID: <20200517211242.GY12536@scaer>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 17 May 2020 23:34:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/erlang: fix -fno-common build
+ failure
+Message-ID: <20200517213426.12315-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jakub, Bernd, All,
+Added upstream patch for fixing build failure when using GCC10 as a host
+compiler (-fno-common is now default).
 
-On 2020-05-17 22:40 +0200, Jakub Skrzypnik spake thusly:
-> Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ ...d-ODR-violation-of-ei_default_socket.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
 
-Jakub: this patch needs a commit message that explains why we need to
-disable glamor.
-
-Bernd: you've hacked the Xorg stack quite extensively; do you have an
-opinion on this?
-
-Note that his change is totally decorelated from the libglvnd efforts in
-this series (I guess Jakub has the issue while working on the nvidia
-driver, the reason why this patch is here...)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 8ccc04224d..44f93a99ed 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -191,7 +191,11 @@ XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
->  ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_LIBEPOXY),yyy)
->  XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
-> +ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_XORG),y)
-> +XSERVER_XORG_SERVER_CONF_OPTS += --disable-glamor
-> +else
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
-> +endif
->  else
->  XSERVER_XORG_SERVER_CONF_OPTS += --disable-glamor
->  endif
-> -- 
-> 2.26.2
-> 
-> 
-> -- 
-> CONFIDENTIALITY NOTICE
-> ------------------------------------
-> This
->  E-mail is 
-> intended only to be read or used by the addressee.The 
-> information 
-> contained in this E-mail message may be confidential 
-> information. If you 
-> are not the intended recipient, any use, 
-> interference with, distribution, 
-> disclosure or copying of this material 
-> is unauthorized and prohibited. 
-> Confidentiality attached to this 
-> communication is not waived or lost by 
-> reason of the mistaken delivery 
-> to you.
-> If you have received this message 
-> in error, please delete
->  it and notify us by return E-mail or telephone 
-> NOVOMATIC Technologies 
-> Poland S.A. +48 12 258 00 50. Any E-mail attachment 
-> may contain software
->  viruses which could damage your own computer system. 
-> Whilst reasonable 
-> precaution has been taken to minimize this risk, we 
-> cannot accept 
-> liability for any damage which you sustain as a result of 
-> software 
-> viruses. You should therefore carry out your own virus checks 
-> before 
-> opening any attachments.
-> ------------------------------------
-> 
-> NOVOMATIC Technologies Poland S.A., Poland, Krakowska 368, 32-080 Zabierz?w
-
+diff --git a/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
+new file mode 100644
+index 0000000000..69b6fae81f
+--- /dev/null
++++ b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
+@@ -0,0 +1,54 @@
++From de870d7f9f36b3e68f280057851a4585a67ab219 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Tue, 14 Jan 2020 23:15:01 +0000
++Subject: [PATCH] ei_portio.h: avoid ODR violation of
++ 'ei_default_socket_callbacks'
++
++Noticed as a build failure against fresh gcc-master:
++
++```
++LD otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(eirecv.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send_reg.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(epmd_port.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_portio.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++collect2: error: ld returned 1 exit status
++make[3]: *** [x86_64-unknown-linux-gnu/Makefile:669: otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call] Error 1
++```
++
++The failure looks legitimate: `ei_default_socket_callbacks` is a
++struct defined in 'ei_portio.h' and in 'ei_portio.c'.
++
++The change flips 'ei_portio.h' definition to declaration.
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++
++Patch taken from upstream: https://github.com/erlang/otp/commit/de870d7f9f36b3e68f280057851a4585a67ab219
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ lib/erl_interface/src/misc/ei_portio.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/erl_interface/src/misc/ei_portio.h b/lib/erl_interface/src/misc/ei_portio.h
++index 84ebc5039a..5172d085b4 100644
++
++--- a/lib/erl_interface/src/misc/ei_portio.h
+++++ b/lib/erl_interface/src/misc/ei_portio.h
++@@ -47,7 +47,7 @@ int ei_writev_fill_ctx_t__(ei_socket_callbacks *cbs, void *ctx, const struct iov
++ int ei_socket_callbacks_have_writev__(ei_socket_callbacks *cbs);
++ #endif
++ 
++-ei_socket_callbacks ei_default_socket_callbacks;
+++extern ei_socket_callbacks ei_default_socket_callbacks;
++ 
++ #define EI_FD_AS_CTX__(FD)                                              \
++     ((void *) (long) (FD))
++-- 
++2.20.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
