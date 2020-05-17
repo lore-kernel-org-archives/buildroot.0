@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 May 2020 11:50:11 +0200
-Subject: [Buildroot] [PATCH 38/38] package/stella: needs gcc >= 6
-Message-ID: <20200517095011.1759451-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 May 2020 11:51:16 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/stella: needs gcc >= 6
+Message-ID: <20200517095116.1759552-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,6 +29,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix patch number in title
+
  package/stella/Config.in | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
