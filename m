@@ -1,54 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 May 2020 23:41:39 +0200
-Subject: [Buildroot] [PATCH 3/4 v2] support/docker: allow the br-user to
- becone root
+Date: Sun, 17 May 2020 23:41:40 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] support/docker: add a Fedore-32 based
+ image
 In-Reply-To: <cover.1589751688.git.yann.morin.1998@free.fr>
 References: <cover.1589751688.git.yann.morin.1998@free.fr>
-Message-ID: <c0ad050e8feddfcabfe5711eec297a71d2923da0.1589751688.git.yann.morin.1998@free.fr>
+Message-ID: <48c45cb866a160ce4cc05b03fdf15237eb346b66.1589751688.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When our Dockerfiles (and images) get reused by users, they might need
-to locally add new packages or tweak the iamge to heir local needs.
+Hopefully, this image is reproducible, since we are not using any update
+repository, and from the looks of it, the repository of the release is
+never touched.
 
-As such, register the br-user to become root by running (exactly!):
-    $ sudo su -
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-This will allow acutally becoing root without prompting for a password,
-but no other command will be accepted, and no other paramter will be
-accepted either.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc; Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/docker/Dockerfile.debian-stretch | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Changes v1 -> v2:
+  - fix ordering of packages list  (Ricardo)
+---
+ support/docker/Dockerfile.fedora-32 | 48 +++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 support/docker/Dockerfile.fedora-32
 
-diff --git a/support/docker/Dockerfile.debian-stretch b/support/docker/Dockerfile.debian-stretch
-index 0d2ce2aa79..7ce9f406c6 100644
---- a/support/docker/Dockerfile.debian-stretch
-+++ b/support/docker/Dockerfile.debian-stretch
-@@ -49,6 +49,7 @@ RUN apt-get install -y --no-install-recommends \
-         qemu-system-x86 \
-         rsync \
-         subversion \
-+        sudo \
-         unzip \
-         wget \
-         && \
-@@ -60,7 +61,9 @@ RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-     /usr/sbin/locale-gen
- 
- RUN useradd -ms /bin/bash br-user && \
--    chown -R br-user:br-user /home/br-user
+diff --git a/support/docker/Dockerfile.fedora-32 b/support/docker/Dockerfile.fedora-32
+new file mode 100644
+index 0000000000..85e5c4ba9c
+--- /dev/null
++++ b/support/docker/Dockerfile.fedora-32
+@@ -0,0 +1,48 @@
++# vi: ft=dockerfile
++# Note: this dockerfile is not reproducible, because the repository
++# where we fetch packages from is not pinned to a specific point in
++# time; i.e. we'll get whatever is current at the moment we build.
++
++FROM fedora:32
++
++LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
++      vendor="Buildroot" \
++      description="Container based on Fedora 32, with everything needed to run Buildroot already installed"
++
++# Remove the repository with updates, so we only
++# get packages as they were at time of release.
++RUN rm -f /etc/yum.repos.d/fedora-updates*.repo && \
++    dnf -y install \
++        @development-tools \
++        bc \
++        bzip2 \
++        bzr \
++        cpio \
++        cvs \
++        file \
++        gcc-c++ \
++        git \
++        mercurial \
++        ncurses-devel \
++        perl-ExtUtils-MakeMaker \
++        perl-Thread-Queue \
++        python-nose2 \
++        python-pexpect \
++        qemu-system-arm \
++        qemu-system-x86 \
++        rsync \
++        subversion \
++        unzip \
++        wget \
++        which \
++    && dnf -y clean all
++
++RUN useradd -ms /bin/bash br-user && \
 +    chown -R br-user:br-user /home/br-user && \
-+    printf 'br-user ALL=NOPASSWD: /bin/su -\n' >/etc/sudoers.d/br-user && \
++    printf 'br-user ALL=NOPASSWD: /usr/bin/su -\n' >/etc/sudoers.d/br-user && \
 +    chmod 0440 /etc/sudoers.d/br-user
- 
- USER br-user
- WORKDIR /home/br-user
++
++USER br-user
++WORKDIR /home/br-user
++ENV HOME /home/br-user
++ENV LC_ALL C.utf8
 -- 
 2.20.1
