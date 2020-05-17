@@ -1,76 +1,102 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 May 2020 19:05:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: fix build when
- time_t is 64 bits
-Message-ID: <20200517170507.2796394-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date: Sun, 17 May 2020 19:43:14 +0200
+Subject: [Buildroot] [PATCH 0/6] Support Python 3.x in U-Boot
+In-Reply-To: <20200515210510.GH12536@scaer>
+References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
+ <20200515210510.GH12536@scaer>
+Message-ID: <CAJiuCcey1XUUWdyMgGHzU=X-eDWz1MwP-scRMzK2Gjp_FsSwVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/874433d8cb30d21332f23024081a8b6d7b3254ae
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...build-failure-when-time_t-is-64-bits.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/libpam-tacplus/0004-tacc-c-fix-build-failure-when-time_t-is-64-bits.patch
+Can this serie be backported to 2020.01?
 
-diff --git a/package/libpam-tacplus/0004-tacc-c-fix-build-failure-when-time_t-is-64-bits.patch b/package/libpam-tacplus/0004-tacc-c-fix-build-failure-when-time_t-is-64-bits.patch
-new file mode 100644
-index 0000000000..327cc82b4e
---- /dev/null
-+++ b/package/libpam-tacplus/0004-tacc-c-fix-build-failure-when-time_t-is-64-bits.patch
-@@ -0,0 +1,48 @@
-+From f3913777ea8373c58981061a01a7eda187ffc9d9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 17 May 2020 14:41:47 +0200
-+Subject: [PATCH] tacc.c: fix build failure when time_t is 64 bits
-+
-+Build can fail if time_t is 64 bits and not 32 bits because of the
-+following warning (which results in a build failure due to -Werror):
-+
-+tacc.c: In function 'main':
-+tacc.c:346:25: error: format '%lu' expects argument of type 'long unsigned int', but argument 3 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+         sprintf(buf, "%lu", time(0));
-+                       ~~^   ~~~~~~~
-+                       %llu
-+
-+So replace %lu by %llu
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/874433d8cb30d21332f23024081a8b6d7b3254ae
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/kravietz/pam_tacplus/commit/f3913777ea8373c58981061a01a7eda187ffc9d9]
-+---
-+ tacc.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/tacc.c b/tacc.c
-+index ef9d081..9260373 100644
-+--- a/tacc.c
-++++ b/tacc.c
-+@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
-+         /* start accounting */
-+         struct tac_attrib *attr = NULL;
-+ 
-+-        sprintf(buf, "%lu", time(0));
-++        sprintf(buf, "%llu", time(0));
-+         tac_add_attrib(&attr, "start_time", buf);
-+ 
-+         // this is not crypto but merely an identifier
-+@@ -452,7 +452,7 @@ int main(int argc, char **argv) {
-+     if (do_account) {
-+         /* stop accounting */
-+         struct tac_attrib *attr = NULL;
-+-        sprintf(buf, "%lu", time(0));
-++        sprintf(buf, "%llu", time(0));
-+         tac_add_attrib(&attr, "stop_time", buf);
-+         sprintf(buf, "%hu", task_id);
-+         tac_add_attrib(&attr, "task_id", buf);
--- 
-2.26.2
+I still receive some failures
+ https://gitlab.com/buildroot.org/buildroot/-/jobs/554829971
+
+Or a least these patches:
+  boot/uboot: support building U-Boot with Python 3.x
+  configs/olimex_a20_olinuxino_lime{,2}: use Python 3.x
+  configs/beelink_gs1: use Python 3.x
+
+Thanks
+Clement
+
+
+On Fri, 15 May 2020 at 23:06, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Thomas, All,
+>
+> On 2020-05-02 23:28 +0200, Thomas Petazzoni spake thusly:
+> > Hello,
+> >
+> > Since 2020.01, U-Boot now uses python3 for its scripts, but our uboot
+> > package only supports adding a dependency on host-python, which causes
+> > a number of build failures of our defconfigs.
+> >
+> > To fix this, this series introduces additional U-Boot options with
+> > appropriate dependencies, and fixes the problematic defconfigs.
+>
+> Series applied, with a few changes:
+>
+>   - I applied my proposal to handle the choice of host python version,
+>     see the thread in patch 2
+>
+>   - I fixed the defconfig files as thus:
+>     - for those that need pyelftools or pylibfdt, the NEEDS_PYTHON=y was
+>       superfluous in the defconfig as it is selected by ither option,
+>     - for the others that do not have pyelftools or pylibfdt, it has
+>       become useless, because it no longer show/hides the choice anymore
+>
+> Thanks!
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > Thomas
+> >
+> > Thomas Petazzoni (6):
+> >   package/python3-pyelftools: new package
+> >   boot/uboot: support building U-Boot with Python 3.x
+> >   configs/olimex_a20_olinuxino_lime{,2}: use Python 3.x
+> >   configs/beelink_gs1: use Python 3.x
+> >   configs/roc_pc_rk3399: fix U-Boot dependencies
+> >   configs/nanopi_neo4: fix U-Boot dependencies
+> >
+> >  boot/uboot/Config.in                          | 29 +++++++++++++++++++
+> >  boot/uboot/uboot.mk                           | 12 +++++++-
+> >  configs/beelink_gs1_defconfig                 |  2 ++
+> >  configs/nanopi_neo4_defconfig                 |  4 +--
+> >  configs/olimex_a20_olinuxino_lime2_defconfig  |  2 ++
+> >  configs/olimex_a20_olinuxino_lime_defconfig   |  2 ++
+> >  configs/roc_pc_rk3399_defconfig               |  4 +--
+> >  .../python-pyelftools/python-pyelftools.mk    |  1 +
+> >  .../python3-pyelftools.hash                   |  1 +
+> >  .../python3-pyelftools/python3-pyelftools.mk  | 17 +++++++++++
+> >  10 files changed, 69 insertions(+), 5 deletions(-)
+> >  create mode 120000 package/python3-pyelftools/python3-pyelftools.hash
+> >  create mode 100644 package/python3-pyelftools/python3-pyelftools.mk
+> >
+> > --
+> > 2.26.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
