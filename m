@@ -1,48 +1,30 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 May 2020 20:20:34 +0000
-Subject: [Buildroot] [Bug 12686] recipe for target 'install_dev' failed
- (libcrypto.so: file format not recognized)
-In-Reply-To: <bug-12686-163@https.bugs.busybox.net/>
-References: <bug-12686-163@https.bugs.busybox.net/>
-Message-ID: <bug-12686-163-tJG1VqvfFj@https.bugs.busybox.net/>
+Date: Sun, 17 May 2020 20:39:03 +0000
+Subject: [Buildroot] [Bug 12681] Mongodb fails to build from sources
+In-Reply-To: <bug-12681-163@https.bugs.busybox.net/>
+References: <bug-12681-163@https.bugs.busybox.net/>
+Message-ID: <bug-12681-163-DtCUM0WET6@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12686
+https://bugs.busybox.net/show_bug.cgi?id=12681
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+So, this issue has been fixed by the bump of Mongodb to 4.2.4 in commit
+fdd30c7daaf384eb31a767f691b0acbbe84f3d49, which will be part of Buildroot
+2020.05. However, it is not great to have this failing on 2020.02.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WORKSFORME
+However, MongoDB 4.2.4 still doesn't have the include <cxxabi.h>, and the build
+no longer fails.
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-The issue you are pointing to seems to be known in OpenSSL upstream:
- - https://github.com/openssl/openssl/issues/6641
- - https://github.com/openssl/openssl/issues/9086
+The yaml-cpp issue has been fixed in master with commit
+4f2ba910b519a195622ccc56a8fe6c04995524e7.
 
-So, I setup a Docker container with CentOS 7, checked out Buildroot 2020.02 and
-built OpenSSL 1.1.1d, without any problem.
-
-The first issue mentioned above indicates that the problem came from a perl
-module called Text::Template, which I do not have installed in my Docker
-container:
-
-# perl -e 'use Text::Template; print $Text::Template::VERSION,"\n";'
-Can't locate Text/Template.pm in @INC (@INC contains: /usr/local/lib64/perl5
-/usr/local/share/perl5 /usr/lib64/perl5/vendor_perl
-/usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at -e line 1.
-BEGIN failed--compilation aborted at -e line 1.
-
-Since you mentioned you had some Perl-related environment variables defined,
-perhaps there is an issue with this ?
-
-Since we're not able to reproduce, we won't be able to help a lot here. Could
-you work on some way of reproducing this?
+Interestingly, mongodb seems to no longer fails on the 2020.02.x branch since
+April 24.
 
 -- 
 You are receiving this mail because:
