@@ -1,84 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 May 2020 21:39:37 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/stella: needs gcc >= 6
-In-Reply-To: <20200517095116.1759552-1-fontaine.fabrice@gmail.com>
-References: <20200517095116.1759552-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200517193937.GV12536@scaer>
+Date: Sun, 17 May 2020 21:48:39 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: expose capability to
+ compile host library
+In-Reply-To: <072a45c0-b60d-4bc9-cc67-60b2cdffb691@cosmos-ink.net>
+References: <20200516235745.3551-1-linus@cosmos-ink.net>
+ <20200517093524.66886802@gmx.net>
+ <072a45c0-b60d-4bc9-cc67-60b2cdffb691@cosmos-ink.net>
+Message-ID: <20200517194839.GW12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Linux, All,
 
-On 2020-05-17 11:51 +0200, Fabrice Fontaine spake thusly:
-> stella converted most of its C-Style arrays to std::array since version
-> 6.1:
-> https://github.com/stella-emu/stella/commit/0c0f732e5f50b08cfcbdc5ad96c4e18ad230c04b
+On 2020-05-17 13:31 +0200, Linus spake thusly:
+> Hi Peter,
 > 
-> However, gcc 5.x does not accept a = {} initialization for std::array:
+> > Indent should use tabs (instead of spaces)...
 > 
-> In file included from src/emucore/ConsoleIO.hxx:18:0,
->                  from src/emucore/Console.hxx:34,
->                  from src/gui/AudioDialog.cxx:22:
-> src/emucore/Control.hxx:331:71: error: array must be initialized with a brace-enclosed initializer
->      std::array<bool, 5> myDigitalPinState{true, true, true, true, true};
->                                                                        ^
-> 
-> So add a dependency on gcc >= 6 instead of trying to patch the numerous
-> array initializations to make them compliant with C++11
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/dfd9b901fabf310ed9033b8a012466c565d58684
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> I'm sorry for that. I've overlooked that change (ported it
+> from the repository I'm working with).
+> I git fixuped it. The fixed patch is below.
 
-Applied to master, thanks.
+Please use git send-email to send patches; the way you sent this new
+iteration is not a proper patch, and did not get picked up by patchwork:
+    https://patchwork.ozlabs.org/project/buildroot/list/
+
+Besides, there are still issues, see below...
+
+[--SNIP--]
+> diff --git a/package/nodejs/Config.in.host b/package/nodejs/Config.in.host
+> new file mode 100644
+> index 0000000000..2169762b1b
+> --- /dev/null
+> +++ b/package/nodejs/Config.in.host
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_HOST_NODEJS
+> +??? bool "host nodejs"
+> +??? select BR_PACKAGE_HOST_LIBOPENSSL
+> +??? select BR_PACKAGE_HOST_PYTHON
+> +??? select BR_PACKAGE_HOST_ZLIB
+
+You used 4 spaces here, when Peter explicitly stated that TABs should be
+used. Run "make check-pacakge" to check for these kind of issues.
+
+Also, those three options, BR_PACKAGE_HOST_LIBOPENSSL, BR_PACKAGE_HOST_ZLIB,
+and BR_PACKAGE_HOST_PYTHON, do not exist. For host packages, the options
+do not exist, unless they have to be visible in the menuconfig, which is
+not the case for those three.
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->  - Fix patch number in title
-> 
->  package/stella/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/stella/Config.in b/package/stella/Config.in
-> index 709da98159..c14f48572b 100644
-> --- a/package/stella/Config.in
-> +++ b/package/stella/Config.in
-> @@ -3,7 +3,7 @@ config BR2_PACKAGE_STELLA
->  	depends on !BR2_STATIC_LIBS # sdl2
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
->  	select BR2_PACKAGE_SDL2
->  	select BR2_PACKAGE_LIBPNG
-> @@ -13,10 +13,10 @@ config BR2_PACKAGE_STELLA
->  
->  	  https://stella-emu.github.io/
->  
-> -comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 5"
-> +comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 6"
->  	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
->  		!BR2_TOOLCHAIN_HAS_THREADS || \
-> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  
->  comment "stella needs a toolchain not affected by GCC bug 64735"
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
