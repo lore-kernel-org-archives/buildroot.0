@@ -1,142 +1,40 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 17 May 2020 14:37:26 +0200
-Subject: [Buildroot] [PATCH/next] package/hawktracer: new package
-Message-ID: <20200517123726.81405-1-gilles.talis@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 May 2020 16:05:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apitrace: force Release mode
+Message-ID: <20200517140515.2665046-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HawkTracer is a highly portable, low-overhead, configurable profiling tool
+Force Release mode otherwise the toolchain workarounds added by commit
+6f5fcb43296ffc54b2b67d0b3723405b56d8d439 will be ignored when debug is
+enabled as CMAKE_C_FLAGS_RELWITHDEBINFO is appended to CFLAGS:
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+output/build/apitrace-9.0/thirdparty/brotli/CMakeFiles/brotli_dec.dir/flags.make:C_FLAGS = -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g2  -O0 -fvisibility=hidden -Wall -Wno-sign-compare -fno-strict-aliasing -fmessage-length=0 -fno-omit-frame-pointer -O2 -g -DNDEBUG -fPIC
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2e31abd7b115d4c29117ca82007fd4f87f853ff7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/hawktracer/Config.in       | 20 ++++++++++++
- package/hawktracer/hawktracer.hash |  3 ++
- package/hawktracer/hawktracer.mk   | 51 ++++++++++++++++++++++++++++++
- 5 files changed, 76 insertions(+)
- create mode 100644 package/hawktracer/Config.in
- create mode 100644 package/hawktracer/hawktracer.hash
- create mode 100644 package/hawktracer/hawktracer.mk
+ package/apitrace/apitrace.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..7775768a6f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1024,6 +1024,7 @@ F:	board/freescale/imx8mmevk/
- F:	configs/freescale_imx8mmevk_defconfig
- F:	package/cctz/
- F:	package/fdk-aac/
-+F:	package/hawktracer/
- F:	package/httping/
- F:	package/iozone/
- F:	package/leptonica/
-diff --git a/package/Config.in b/package/Config.in
-index c245abbc42..b061805da0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1594,6 +1594,7 @@ endmenu
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index e4e6c41fed..71a3929fe0 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
+@@ -34,7 +34,9 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ APITRACE_CXXFLAGS += -O0
+ endif
  
- menu "Logging"
- 	source "package/glog/Config.in"
-+	source "package/hawktracer/Config.in"
- 	source "package/liblog4c-localtime/Config.in"
- 	source "package/liblogging/Config.in"
- 	source "package/log4cplus/Config.in"
-diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
-new file mode 100644
-index 0000000000..7a80f31413
---- /dev/null
-+++ b/package/hawktracer/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_HAWKTRACER
-+	bool "hawktracer"
-+	help
-+	  HawkTracer is a highly portable, low-overhead, configurable
-+	  profiling tool built in Amazon Video for getting performance
-+	  metrics from low-end devices.
-+
-+	  https://www.hawktracer.org/
-+
-+if BR2_PACKAGE_HAWKTRACER
-+
-+config BR2_PACKAGE_HAWKTRACER_TCP_LISTENER
-+	bool "Enable hawktracer TCP listener"
-+	default y
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "Hawktracer TCP listener feature needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+endif
-diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
-new file mode 100644
-index 0000000000..e444a881b8
---- /dev/null
-+++ b/package/hawktracer/hawktracer.hash
-@@ -0,0 +1,3 @@
-+# Computed locally
-+sha256  68b5c95fd98aaf255b51c1dbf676950701cbcb67398f4266f083e91396345f75  hawktracer-4beb43d110b7718a1a07fc7ce69550dfd102a0e7.tar.gz
-+sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
-diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
-new file mode 100644
-index 0000000000..a9530aa713
---- /dev/null
-+++ b/package/hawktracer/hawktracer.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# hawktracer
-+#
-+################################################################################
-+
-+HAWKTRACER_VERSION = 4beb43d110b7718a1a07fc7ce69550dfd102a0e7
-+HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
-+HAWKTRACER_LICENSE = MIT
-+HAWKTRACER_LICENSE_FILES = LICENSE
-+HAWKTRACER_INSTALL_STAGING = YES
-+
-+HAWKTRACER_CONF_OPTS = \
-+	-DENABLE_ASAN=OFF \
-+	-DENABLE_TESTS=OFF \
-+	-DENABLE_CODE_COVERAGE=OFF \
-+	-DENABLE_BENCHMARKS=OFF \
-+	-DENABLE_DOC=OFF \
-+	-DENABLE_PYTHON_BINDINGS=OFF \
-+	-DENABLE_MAINTAINER_MODE=OFF \
-+	-DENABLE_RELEASE_MODE=OFF \
-+	-DENABLE_CLIENT=OFF \
-+	-DENABLE_EXAMPLES=OFF
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=ON
-+else
-+HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAWKTRACER_TCP_LISTENER),y)
-+HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=ON
-+else
-+HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=OFF
-+endif
-+
-+# Enable C++ compilation if supported by toolchain (requires C++11)
-+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy)
-+HAWKTRACER_CONF_OPTS += -DFORCE_C_COMPILATION=OFF
-+else
-+HAWKTRACER_CONF_OPTS += -DFORCE_C_COMPILATION=ON
-+endif
-+
-+# Enable threads support if supported by toolchain
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=ON
-+else
-+HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=OFF
-+endif
-+
-+$(eval $(cmake-package))
++# Force Release mode otherwise the above workarounds will be ignored
+ APITRACE_CONF_OPTS += \
++	-DCMAKE_BUILD_TYPE=Release \
+ 	-DCMAKE_C_FLAGS="$(APITRACE_CFLAGS)" \
+ 	-DCMAKE_CXX_FLAGS="$(APITRACE_CXXFLAGS)"
+ 
 -- 
-2.25.1
+2.26.2
