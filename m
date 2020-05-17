@@ -1,86 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun, 17 May 2020 23:41:37 +0200
-Subject: [Buildroot] [PATCH 0/4 v2] support/docker: add new dockers (branch
- yem/dockers)
-Message-ID: <cover.1589751688.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4 v2] support/docker: rename the Dockerfile
+ and its accompanying file
+In-Reply-To: <cover.1589751688.git.yann.morin.1998@free.fr>
+References: <cover.1589751688.git.yann.morin.1998@free.fr>
+Message-ID: <88b63f759c190f6f3bfd4716b76d608284a5291f.1589751688.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, we only generate one docker image, for use by the gitlab-ci
+infra.
 
-Enhance our docker support, update the existing image, add a new one.
+However, users have expressed an interest in using that image for other
+uses, like:
 
-This will help:
+  - reproducing build failures as reported by the gitlab-ci jobs;
 
-  - users, to get a build environment known to work,
+  - having a ready-to-use base image to use as-is, or as a template for
+    further customisations.
 
-  - developpers, to more easily reproduce build failures reported by
-    users.
+Additionally, some users have reported the need for similar base images,
+but based off different distros, with the same goals as above, plus:
 
-A basic set of a few, very various distros have been chosen, to cover
-a range of diversity:
+  - reproducing build failures reported by users on other distros.
 
-  - the existing, rock-solid Debian Stretch, pinned to a known state,
-    that we use for the Gitlab-CI testing;
+As a first step toward providing such images, rename our Dockerfile to
+include the name and version of the distro it is based off.
 
-  - Fedora-F32, a bleeding-edge mainstream distro, pinned to the state
-    it was at release time;
+We add a symlink so that we still have a 'base' image that we can
+reference from the gitlab-ci infra.
 
-More variants can be added later, depending on the demand.
-
-Note: when this series is applied (if it is), I'll generate the images
-and push them to the Buildroot repo on the Docker hub.
-
-Changes v1 -> v2:
-  - reorder patches to ensure bisectability  (Ricardo)
-  - drop the Makefile rule in favour of a script
-  - drop Arch and Alpine for now...
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 53158e41fdd4bcc1272bbf4e61b68f58bf9c1527
-
-  package/openocd: fix -fno-common build failure (2020-05-17 21:50:04 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 48c45cb866a160ce4cc05b03fdf15237eb346b66
-
-  support/docker: add a Fedore-32 based image (2020-05-17 23:31:36 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      support/docker: rename the Dockerfile and its accompanying file
-      support/docker: add script to generate docker iamges
-      support/docker: allow the br-user to becone root
-      support/docker: add a Fedore-32 based image
-
- support/docker/Dockerfile.base                     |  1 +
- .../{Dockerfile => Dockerfile.debian-stretch}      | 12 ++++--
- support/docker/Dockerfile.fedora-32                | 48 ++++++++++++++++++++++
- support/docker/build-all                           | 17 ++++++++
- ...ources.list => debian-stretch.apt-sources.list} |  0
- 5 files changed, 75 insertions(+), 3 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/docker/Dockerfile.base                             | 1 +
+ support/docker/{Dockerfile => Dockerfile.debian-stretch}   | 7 +++++--
+ .../{apt-sources.list => debian-stretch.apt-sources.list}  | 0
+ 3 files changed, 6 insertions(+), 2 deletions(-)
  create mode 120000 support/docker/Dockerfile.base
- rename support/docker/{Dockerfile => Dockerfile.debian-stretch} (80%)
- create mode 100644 support/docker/Dockerfile.fedora-32
- create mode 100755 support/docker/build-all
+ rename support/docker/{Dockerfile => Dockerfile.debian-stretch} (88%)
  rename support/docker/{apt-sources.list => debian-stretch.apt-sources.list} (100%)
 
+diff --git a/support/docker/Dockerfile.base b/support/docker/Dockerfile.base
+new file mode 120000
+index 0000000000..06a988b45e
+--- /dev/null
++++ b/support/docker/Dockerfile.base
+@@ -0,0 +1 @@
++Dockerfile.debian-stretch
+\ No newline at end of file
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile.debian-stretch
+similarity index 88%
+rename from support/docker/Dockerfile
+rename to support/docker/Dockerfile.debian-stretch
+index 03acde85d2..0d2ce2aa79 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile.debian-stretch
+@@ -1,6 +1,9 @@
++# vi: ft=dockerfile
+ # This Dockerfile generates the docker image that gets used by Gitlab CI
+ # To build it (YYYYMMDD.HHMM is the current date and time in UTC):
+-#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM support/docker
++#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM \
++#                     -f support/docker/Dockerfile.debian-stretch \
++#                     support/docker
+ #   sudo docker push buildroot/base:YYYYMMDD.HHMM
+ 
+ # We use a specific tag for the base image *and* the corresponding date
+@@ -16,7 +19,7 @@ description="Container with everything needed to run Buildroot"
+ ENV DEBIAN_FRONTEND noninteractive
+ 
+ # This repository can be a bit slow at times. Don't panic...
+-COPY apt-sources.list /etc/apt/sources.list
++COPY debian-stretch.apt-sources.list /etc/apt/sources.list
+ 
+ # The container has no package lists, so need to update first
+ RUN dpkg --add-architecture i386 && \
+diff --git a/support/docker/apt-sources.list b/support/docker/debian-stretch.apt-sources.list
+similarity index 100%
+rename from support/docker/apt-sources.list
+rename to support/docker/debian-stretch.apt-sources.list
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
