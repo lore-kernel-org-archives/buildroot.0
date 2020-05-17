@@ -1,65 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 May 2020 11:51:16 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/stella: needs gcc >= 6
-Message-ID: <20200517095116.1759552-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 17 May 2020 12:28:23 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5base: disable feature-relocatable
+Message-ID: <20200517102823.15132-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-stella converted most of its C-Style arrays to std::array since version
-6.1:
-https://github.com/stella-emu/stella/commit/0c0f732e5f50b08cfcbdc5ad96c4e18ad230c04b
+Disable feature-relocatable to avoid a path mismatch while searching qml
+files and buildroot BR2_ROOTFS_MERGED_USR feature enabled.
 
-However, gcc 5.x does not accept a = {} initialization for std::array:
-
-In file included from src/emucore/ConsoleIO.hxx:18:0,
-                 from src/emucore/Console.hxx:34,
-                 from src/gui/AudioDialog.cxx:22:
-src/emucore/Control.hxx:331:71: error: array must be initialized with a brace-enclosed initializer
-     std::array<bool, 5> myDigitalPinState{true, true, true, true, true};
-                                                                       ^
-
-So add a dependency on gcc >= 6 instead of trying to patch the numerous
-array initializations to make them compliant with C++11
+As described in [1] with feature-relocatable Qt determines the search
+pathes relative to the location of libQt5Core.so, with BR2_ROOTFS_MERGED_USR
+enabled found first under the symlink path '/lib' instead of the install
+path '/usr/lib' and searches sequentially for qml files under '/qml' instead
+of the correct '/usr/qml'.
 
 Fixes:
- - http://autobuild.buildroot.org/results/dfd9b901fabf310ed9033b8a012466c565d58684
+  - https://bugs.busybox.net/show_bug.cgi?id=12906
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4ac872639ed0dd3ae6627e05bdda821f7d128500
+
+Reported-by: Joonas Harjum?ki <jharjuma@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 -> v2:
- - Fix patch number in title
+ package/qt5/qt5base/qt5base.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- package/stella/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/stella/Config.in b/package/stella/Config.in
-index 709da98159..c14f48572b 100644
---- a/package/stella/Config.in
-+++ b/package/stella/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_STELLA
- 	depends on !BR2_STATIC_LIBS # sdl2
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_LIBPNG
-@@ -13,10 +13,10 @@ config BR2_PACKAGE_STELLA
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 97315496b9..374285a825 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -18,6 +18,9 @@ QT5BASE_INSTALL_STAGING = YES
+ #     want to use the Buildroot packaged zlib
+ #  * -system-pcre because pcre is mandatory to build Qt, and we
+ #    want to use the one packaged in Buildroot
++#  * -no-feature-relocatable to work around path mismatch
++#     while searching qml files and buildroot BR2_ROOTFS_MERGED_USR
++#     feature enabled 
+ QT5BASE_CONFIGURE_OPTS += \
+ 	-optimized-qmake \
+ 	-no-cups \
+@@ -25,7 +28,8 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-system-zlib \
+ 	-system-pcre \
+ 	-no-pch \
+-	-shared
++	-shared \
++	-no-feature-relocatable
  
- 	  https://stella-emu.github.io/
- 
--comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 5"
-+comment "stella needs a toolchain w/ dynamic library, C++, threads, gcc >= 6"
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
- comment "stella needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ # starting from version 5.9.0, -optimize-debug is enabled by default
+ # for debug builds and it overrides -O* with -Og which is not what we
 -- 
 2.26.2
