@@ -1,37 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 17 May 2020 07:28:59 +0000
-Subject: [Buildroot] [Bug 12901] GStreamer doesn't build on 2020-05 rc1 with
- GObject introspection enabled (wrong path for g-ir-scanner)
-In-Reply-To: <bug-12901-163@https.bugs.busybox.net/>
-References: <bug-12901-163@https.bugs.busybox.net/>
-Message-ID: <bug-12901-163-S20eijcA9m@https.bugs.busybox.net/>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 17 May 2020 09:33:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openocd: fix -fno-common build
+ failure
+Message-ID: <20200517073338.27034-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12901
+Added upstream patch for fixing build failure when using GCC10 as a host
+compiler (-fno-common is now default)
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Fixes:
+http://autobuild.buildroot.org/results/0fc/0fcb11a40bcff78e8084335114af390d2fac31e1
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ .../0003-bitbang-Fix-FTBFS-with-GCC-10.patch  | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch
 
---- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Hi,
-
-This is now supposedly fixed with commit b5cd3142963. Care to test again,
-please?
-
-Thanks for the report.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch b/package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch
+new file mode 100644
+index 0000000000..cf83515247
+--- /dev/null
++++ b/package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch
+@@ -0,0 +1,37 @@
++From c60252ac2b636c4d99b766a574b9df0966151696 Mon Sep 17 00:00:00 2001
++From: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Date: Fri, 17 Apr 2020 13:49:28 +0200
++Subject: [PATCH] bitbang: Fix FTBFS with GCC 10
++
++GCC 10 defaults to -fno-common which breaks the sharing of bitbang_swd
++struct between bitbang drivers due to a missing extern.
++
++Change-Id: I2b4122f7939cec91a72284006748f99a23548324
++Signed-off-by: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Reviewed-on: http://openocd.zylin.com/5592
++Tested-by: jenkins
++Reviewed-by: Antonio Borneo <borneo.antonio@gmail.com>
++Reviewed-by: Jonathan McDowell <noodles-openocd@earth.li>
++
++Patch taken from upstream: https://github.com/ntfreak/openocd/commit/c60252ac2b636c4d99b766a574b9df0966151696
++Signed-off-by: Heiko Thiery <heiko.thiery@gmailcom>
++---
++ src/jtag/drivers/bitbang.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/jtag/drivers/bitbang.h b/src/jtag/drivers/bitbang.h
++index edb779ca..bbbc693d 100644
++--- a/src/jtag/drivers/bitbang.h
+++++ b/src/jtag/drivers/bitbang.h
++@@ -56,7 +56,7 @@ struct bitbang_interface {
++ 	void (*swdio_drive)(bool on);
++ };
++ 
++-const struct swd_driver bitbang_swd;
+++extern const struct swd_driver bitbang_swd;
++ 
++ extern bool swd_mode;
++ 
++-- 
++2.20.1
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
