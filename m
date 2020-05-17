@@ -1,57 +1,142 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 May 2020 14:27:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: QtSvg needs QtWidgets
-Message-ID: <20200517122738.2207020-1-fontaine.fabrice@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 17 May 2020 14:37:26 +0200
+Subject: [Buildroot] [PATCH/next] package/hawktracer: new package
+Message-ID: <20200517123726.81405-1-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building QtSvg without QtWidgets results in the following build failure:
+HawkTracer is a highly portable, low-overhead, configurable profiling tool
 
-/tmp/instance-0/output-1/host/bin/powerpc64le-linux-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/tmp/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot -fno-exceptions -Wall -Wextra -D_REENTRANT -fPIC -DSIP_PROTECTED_IS_PUBLIC -Dprotected=public -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SVG_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -I. -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/python3.8 -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5 -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtSvg -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtGui -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtCore -I. -I../../../host/mkspecs/devices/linux-buildroot-g++ -o sipQtSvgcmodule.o sipQtSvgcmodule.cpp
-sip/QtWidgets/qwidget.sip:28:10: fatal error: qwidget.h: No such file or directory
-compilation terminated.
-sip/QtWidgets/qgraphicsitem.sip:26:10: fatal error: qgraphicsitem.h: No such file or directory
-compilation terminated.
-
-Fixes:
- - http://autobuild.buildroot.org/results/26f55a1fa9f6520ce449b98b40d98f984cec07b3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/python-pyqt5/python-pyqt5.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/hawktracer/Config.in       | 20 ++++++++++++
+ package/hawktracer/hawktracer.hash |  3 ++
+ package/hawktracer/hawktracer.mk   | 51 ++++++++++++++++++++++++++++++
+ 5 files changed, 76 insertions(+)
+ create mode 100644 package/hawktracer/Config.in
+ create mode 100644 package/hawktracer/hawktracer.hash
+ create mode 100644 package/hawktracer/hawktracer.mk
 
-diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-index 9b5e9089fc..9285b6497c 100644
---- a/package/python-pyqt5/python-pyqt5.mk
-+++ b/package/python-pyqt5/python-pyqt5.mk
-@@ -39,6 +39,12 @@ endif
- ifeq ($(BR2_PACKAGE_QT5BASE_TEST),y)
- PYTHON_PYQT5_MODULES += QtTest
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e427ab15d4..7775768a6f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1024,6 +1024,7 @@ F:	board/freescale/imx8mmevk/
+ F:	configs/freescale_imx8mmevk_defconfig
+ F:	package/cctz/
+ F:	package/fdk-aac/
++F:	package/hawktracer/
+ F:	package/httping/
+ F:	package/iozone/
+ F:	package/leptonica/
+diff --git a/package/Config.in b/package/Config.in
+index c245abbc42..b061805da0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1594,6 +1594,7 @@ endmenu
+ 
+ menu "Logging"
+ 	source "package/glog/Config.in"
++	source "package/hawktracer/Config.in"
+ 	source "package/liblog4c-localtime/Config.in"
+ 	source "package/liblogging/Config.in"
+ 	source "package/log4cplus/Config.in"
+diff --git a/package/hawktracer/Config.in b/package/hawktracer/Config.in
+new file mode 100644
+index 0000000000..7a80f31413
+--- /dev/null
++++ b/package/hawktracer/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_HAWKTRACER
++	bool "hawktracer"
++	help
++	  HawkTracer is a highly portable, low-overhead, configurable
++	  profiling tool built in Amazon Video for getting performance
++	  metrics from low-end devices.
 +
-+# QtSvg needs QtWidgets
-+ifeq ($(BR2_PACKAGE_QT5SVG),y)
-+PYTHON_PYQT5_DEPENDENCIES += qt5svg
-+PYTHON_PYQT5_MODULES += QtSvg
++	  https://www.hawktracer.org/
++
++if BR2_PACKAGE_HAWKTRACER
++
++config BR2_PACKAGE_HAWKTRACER_TCP_LISTENER
++	bool "Enable hawktracer TCP listener"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++
++comment "Hawktracer TCP listener feature needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
 +endif
- endif
- 
- ifeq ($(BR2_PACKAGE_QT5CONNECTIVITY),y)
-@@ -88,11 +94,6 @@ PYTHON_PYQT5_DEPENDENCIES += qt5serialport
- PYTHON_PYQT5_MODULES += QtSerialPort
- endif
- 
--ifeq ($(BR2_PACKAGE_QT5SVG),y)
--PYTHON_PYQT5_DEPENDENCIES += qt5svg
--PYTHON_PYQT5_MODULES += QtSvg
--endif
--
- ifeq ($(BR2_PACKAGE_QT5WEBCHANNEL),y)
- PYTHON_PYQT5_DEPENDENCIES += qt5webchannel
- PYTHON_PYQT5_MODULES += QtWebChannel
+diff --git a/package/hawktracer/hawktracer.hash b/package/hawktracer/hawktracer.hash
+new file mode 100644
+index 0000000000..e444a881b8
+--- /dev/null
++++ b/package/hawktracer/hawktracer.hash
+@@ -0,0 +1,3 @@
++# Computed locally
++sha256  68b5c95fd98aaf255b51c1dbf676950701cbcb67398f4266f083e91396345f75  hawktracer-4beb43d110b7718a1a07fc7ce69550dfd102a0e7.tar.gz
++sha256  2f377333e64ad08ad3afec8ed6c2c96ced2a6d7d67443eb2784a931bb7b3fd59  LICENSE
+diff --git a/package/hawktracer/hawktracer.mk b/package/hawktracer/hawktracer.mk
+new file mode 100644
+index 0000000000..a9530aa713
+--- /dev/null
++++ b/package/hawktracer/hawktracer.mk
+@@ -0,0 +1,51 @@
++################################################################################
++#
++# hawktracer
++#
++################################################################################
++
++HAWKTRACER_VERSION = 4beb43d110b7718a1a07fc7ce69550dfd102a0e7
++HAWKTRACER_SITE = $(call github,amzn,hawktracer,$(HAWKTRACER_VERSION))
++HAWKTRACER_LICENSE = MIT
++HAWKTRACER_LICENSE_FILES = LICENSE
++HAWKTRACER_INSTALL_STAGING = YES
++
++HAWKTRACER_CONF_OPTS = \
++	-DENABLE_ASAN=OFF \
++	-DENABLE_TESTS=OFF \
++	-DENABLE_CODE_COVERAGE=OFF \
++	-DENABLE_BENCHMARKS=OFF \
++	-DENABLE_DOC=OFF \
++	-DENABLE_PYTHON_BINDINGS=OFF \
++	-DENABLE_MAINTAINER_MODE=OFF \
++	-DENABLE_RELEASE_MODE=OFF \
++	-DENABLE_CLIENT=OFF \
++	-DENABLE_EXAMPLES=OFF
++
++ifeq ($(BR2_STATIC_LIBS),y)
++HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=ON
++else
++HAWKTRACER_CONF_OPTS += -DBUILD_STATIC_LIB=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_HAWKTRACER_TCP_LISTENER),y)
++HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=ON
++else
++HAWKTRACER_CONF_OPTS += -DENABLE_TCP_LISTENER=OFF
++endif
++
++# Enable C++ compilation if supported by toolchain (requires C++11)
++ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),yy)
++HAWKTRACER_CONF_OPTS += -DFORCE_C_COMPILATION=OFF
++else
++HAWKTRACER_CONF_OPTS += -DFORCE_C_COMPILATION=ON
++endif
++
++# Enable threads support if supported by toolchain
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=ON
++else
++HAWKTRACER_CONF_OPTS += -DENABLE_THREADS=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
-2.26.2
+2.25.1
