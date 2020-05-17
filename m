@@ -1,45 +1,36 @@
 From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Sun, 17 May 2020 13:53:37 +0200
-Subject: [Buildroot] [PATCH 11/15] board/olpc/xo-1: drop garbage from kernel
- config
+Date: Sun, 17 May 2020 13:53:39 +0200
+Subject: [Buildroot] [PATCH 13/15] configs/olpc_xo1: enable JFFS2 image
 In-Reply-To: <20200517115341.1677382-1-lkundrak@v3.sk>
 References: <20200517115341.1677382-1-lkundrak@v3.sk>
-Message-ID: <20200517115341.1677382-12-lkundrak@v3.sk>
+Message-ID: <20200517115341.1677382-14-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These are unnecessary in a defconfig.
+The machine has a NAND flash device and firmware capable of loading the
+OS from a JFFS2 file system on it. Enable creation of JFFS2 image that
+can be written to said flash device.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- board/olpc/xo-1/linux.config | 4 ----
- 1 file changed, 4 deletions(-)
+ configs/olpc_xo1_defconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/board/olpc/xo-1/linux.config b/board/olpc/xo-1/linux.config
-index 2541a310a5..12919471a2 100644
---- a/board/olpc/xo-1/linux.config
-+++ b/board/olpc/xo-1/linux.config
-@@ -4,7 +4,6 @@ CONFIG_MGEODE_LX=y
- CONFIG_X86_MSR=y
- CONFIG_HZ_100=y
- CONFIG_KEXEC=y
--CONFIG_PHYSICAL_START=0x400000
- CONFIG_CMDLINE_BOOL=y
- CONFIG_ACPI=y
- CONFIG_CPU_IDLE=y
-@@ -13,10 +12,7 @@ CONFIG_OLPC=y
- CONFIG_OLPC_XO1_PM=y
- CONFIG_OLPC_XO1_RTC=y
- CONFIG_OLPC_XO1_SCI=y
--# CONFIG_FIRMWARE_MEMMAP is not set
- # CONFIG_VIRTUALIZATION is not set
--CONFIG_ARCH_MMAP_RND_BITS=16
--CONFIG_REFCOUNT_FULL=y
- CONFIG_SPARSEMEM_MANUAL=y
- CONFIG_CMA=y
- CONFIG_MTD_CMDLINE_PARTS=y
+diff --git a/configs/olpc_xo1_defconfig b/configs/olpc_xo1_defconfig
+index 5919f6ab36..36ac051ffb 100644
+--- a/configs/olpc_xo1_defconfig
++++ b/configs/olpc_xo1_defconfig
+@@ -21,4 +21,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_LABEL="XO1"
+ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O dir_index,^huge_file,^64bit,^extent"
++BR2_TARGET_ROOTFS_JFFS2=y
++BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
++BR2_TARGET_ROOTFS_JFFS2_PAD=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTD=y
 -- 
 2.26.2
