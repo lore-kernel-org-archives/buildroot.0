@@ -1,87 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 May 2020 21:26:18 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: disable
- feature-relocatable
-In-Reply-To: <20200517102823.15132-1-ps.report@gmx.net>
-References: <20200517102823.15132-1-ps.report@gmx.net>
-Message-ID: <20200517192618.GU12536@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 17 May 2020 21:27:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: fix build when
+ time_t is 64 bits
+In-Reply-To: <20200517170507.2796394-1-fontaine.fabrice@gmail.com>
+References: <20200517170507.2796394-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200517212712.6e3b0f13@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On Sun, 17 May 2020 19:05:07 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On 2020-05-17 12:28 +0200, Peter Seiderer spake thusly:
-> Disable feature-relocatable to avoid a path mismatch while searching qml
-> files and buildroot BR2_ROOTFS_MERGED_USR feature enabled.
-> 
-> As described in [1] with feature-relocatable Qt determines the search
-> pathes relative to the location of libQt5Core.so, with BR2_ROOTFS_MERGED_USR
-> enabled found first under the symlink path '/lib' instead of the install
-> path '/usr/lib' and searches sequentially for qml files under '/qml' instead
-> of the correct '/usr/qml'.
-> 
-> Fixes:
->   - https://bugs.busybox.net/show_bug.cgi?id=12906
-> 
-> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4ac872639ed0dd3ae6627e05bdda821f7d128500
-> 
-> Reported-by: Joonas Harjum?ki <jharjuma@gmail.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/874433d8cb30d21332f23024081a8b6d7b3254ae
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/kravietz/pam_tacplus/commit/f3913777ea8373c58981061a01a7eda187ffc9d9]
+> +---
+> + tacc.c | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/tacc.c b/tacc.c
+> +index ef9d081..9260373 100644
+> +--- a/tacc.c
+> ++++ b/tacc.c
+> +@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
+> +         /* start accounting */
+> +         struct tac_attrib *attr = NULL;
+> + 
+> +-        sprintf(buf, "%lu", time(0));
+> ++        sprintf(buf, "%llu", time(0));
 
-Applied to master, thanks. See a minor nit, below...
+But isn't this going to introduce another warning when time_t is 32-bit ?
 
-> ---
->  package/qt5/qt5base/qt5base.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 97315496b9..374285a825 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -18,6 +18,9 @@ QT5BASE_INSTALL_STAGING = YES
->  #     want to use the Buildroot packaged zlib
->  #  * -system-pcre because pcre is mandatory to build Qt, and we
->  #    want to use the one packaged in Buildroot
-> +#  * -no-feature-relocatable to work around path mismatch
-> +#     while searching qml files and buildroot BR2_ROOTFS_MERGED_USR
-> +#     feature enabled 
-
-    $ make check-package
-    package/qt5/qt5base/qt5base.mk:23: line contains trailing whitespace
-
-Fixed, and applied to master.
-
-Regards,
-Yann E. MORIN.
-
->  QT5BASE_CONFIGURE_OPTS += \
->  	-optimized-qmake \
->  	-no-cups \
-> @@ -25,7 +28,8 @@ QT5BASE_CONFIGURE_OPTS += \
->  	-system-zlib \
->  	-system-pcre \
->  	-no-pch \
-> -	-shared
-> +	-shared \
-> +	-no-feature-relocatable
->  
->  # starting from version 5.9.0, -optimize-debug is enabled by default
->  # for debug builds and it overrides -O* with -Og which is not what we
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
