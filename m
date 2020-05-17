@@ -1,66 +1,143 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 May 2020 09:12:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.54.2
-In-Reply-To: <20200515211347.190758-1-james.hilliard1@gmail.com>
-References: <20200515211347.190758-1-james.hilliard1@gmail.com>
-Message-ID: <20200517071221.GS12536@scaer>
+Date: Sun, 17 May 2020 09:24:44 +0200
+Subject: [Buildroot] [git commit] package/ezxml: remove package
+Message-ID: <20200517070910.30E2891A3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=94cb0cc77246075ad7fff7dcc8aa38726cecb38b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-15 15:13 -0600, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ezXML is affected by several CVEs and is not maintained anymore (no
+release since 2006) so remove it.
 
-Since this is just a bug-fix release, applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy                                 |  7 +++++
+ package/Config.in                                |  1 -
+ package/ezxml/0001-allow-compiler-override.patch | 17 ------------
+ package/ezxml/Config.in                          |  7 -----
+ package/ezxml/ezxml.hash                         |  3 --
+ package/ezxml/ezxml.mk                           | 35 ------------------------
+ 6 files changed, 7 insertions(+), 63 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/meson/meson.hash | 4 ++--
->  package/meson/meson.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> index 1fb902742d..b1d230938a 100644
-> --- a/package/meson/meson.hash
-> +++ b/package/meson/meson.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -# https://github.com/mesonbuild/meson/releases/download/0.54.1/meson-0.54.1.tar.gz.asc
-> -sha256  2f76fb4572762be13ee479292610091b4509af5788bcceb391fe222bcd0296dc  meson-0.54.1.tar.gz
-> +# https://github.com/mesonbuild/meson/releases/download/0.54.2/meson-0.54.2.tar.gz.asc
-> +sha256  a7716eeae8f8dff002e4147642589ab6496ff839e4376a5aed761f83c1fa0455  meson-0.54.2.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index fea2807d9f..d5b1e86811 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MESON_VERSION = 0.54.1
-> +MESON_VERSION = 0.54.2
->  MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
->  MESON_LICENSE = Apache-2.0
->  MESON_LICENSE_FILES = COPYING
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c92023310d..5605ba1fad 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2020.05"
+ 
++config BR2_PACKAGE_EZXML
++	bool "ezxml package removed"
++	select BR2_LEGACY
++	help
++	  The ezXML package was removed as it is affected by several
++	  CVEs and is not maintained anymore (no release since 2006).
++
+ config BR2_PACKAGE_COLLECTD_LVM
+ 	bool "lvm support in collectd was removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index c12676d859..c245abbc42 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1562,7 +1562,6 @@ menu "JSON/XML"
+ 	source "package/benejson/Config.in"
+ 	source "package/cjson/Config.in"
+ 	source "package/expat/Config.in"
+-	source "package/ezxml/Config.in"
+ 	source "package/jansson/Config.in"
+ 	source "package/jose/Config.in"
+ 	source "package/jsmn/Config.in"
+diff --git a/package/ezxml/0001-allow-compiler-override.patch b/package/ezxml/0001-allow-compiler-override.patch
+deleted file mode 100644
+index 827872b714..0000000000
+--- a/package/ezxml/0001-allow-compiler-override.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-diff -urpN ezxml/GNUmakefile ezxml.patched/GNUmakefile
+---- ezxml/GNUmakefile	2006-03-25 18:44:04.000000000 +0100
+-+++ ezxml.patched/GNUmakefile	2008-02-24 13:57:37.000000000 +0100
+-@@ -21,10 +21,10 @@
+- # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+- # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- 
+--CC = gcc
+--AR = ar
+-+CC ?= gcc
+-+AR ?= ar
+- RM = rm -f
+--CFLAGS = -Wall -O2
+-+CFLAGS ?= -Wall -O2
+- DEBUG_CFLAGS = -O0 -g
+- OBJS = ezxml.o
+- LIB = libezxml.a
+diff --git a/package/ezxml/Config.in b/package/ezxml/Config.in
+deleted file mode 100644
+index 8a1643b118..0000000000
+--- a/package/ezxml/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_EZXML
+-	bool "ezxml"
+-	help
+-	  ezXML is a XML parser C library that is simple and easy to
+-	  use.
+-
+-	  http://ezxml.sf.net
+diff --git a/package/ezxml/ezxml.hash b/package/ezxml/ezxml.hash
+deleted file mode 100644
+index bf04b0e00e..0000000000
+--- a/package/ezxml/ezxml.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  a68d52257dcb0ff2ad3d71c8c64311edb8030254bb8b581e229aeaba6231cdf9  ezxml-0.8.6.tar.gz
+-sha256  e82e49402f6b21176c65eead46dbd39d8f7a3c28b052589d8b307dfc8f78a03f  license.txt
+diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
+deleted file mode 100644
+index f1e18aa680..0000000000
+--- a/package/ezxml/ezxml.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-################################################################################
+-#
+-# ezxml
+-#
+-################################################################################
+-
+-EZXML_VERSION = 0.8.6
+-EZXML_SITE = http://downloads.sourceforge.net/project/ezxml/ezXML/ezXML%20$(EZXML_VERSION)
+-EZXML_INSTALL_STAGING = YES
+-EZXML_LICENSE = MIT
+-EZXML_LICENSE_FILES = license.txt
+-
+-EZXML_CFLAGS = $(TARGET_CFLAGS)
+-
+-# mmap code uses madvise which isn't available on nommu uClibc
+-ifeq ($(BR2_USE_MMU),)
+-EZXML_CFLAGS += -D EZXML_NOMMAP
+-endif
+-
+-define EZXML_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f GNUmakefile \
+-		CC="$(TARGET_CC)" CFLAGS="$(EZXML_CFLAGS)" AR=$(TARGET_AR)
+-endef
+-
+-define EZXML_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/ezxml.h $(STAGING_DIR)/usr/include/ezxml.h
+-	$(INSTALL) -D -m 0644 $(@D)/libezxml.a $(STAGING_DIR)/usr/lib/libezxml.a
+-endef
+-
+-define EZXML_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/ezxml.h $(TARGET_DIR)/usr/include/ezxml.h
+-	$(INSTALL) -D -m 0644 $(@D)/libezxml.a $(TARGET_DIR)/usr/lib/libezxml.a
+-endef
+-
+-$(eval $(generic-package))
