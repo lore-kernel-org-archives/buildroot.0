@@ -1,103 +1,51 @@
-From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Mon, 18 May 2020 12:51:54 +0200
-Subject: [Buildroot] [PATCH v3 01/10] package/rustc: install cargo
- config as toolchain post-install hook
-In-Reply-To: <20200207180829.165689-2-arnout@mind.be>
-References: <20200207180829.165689-1-arnout@mind.be>
- <20200207180829.165689-2-arnout@mind.be>
-Message-ID: <bc72eeb2-c149-1ffc-97e9-b26dc342cf2e@essensium.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 18 May 2020 13:00:38 +0200
+Subject: [Buildroot] [PATCH 1/1] Check if two spaces between fields in
+ hash file
+In-Reply-To: <qagxdWV55NSsOiPMpXTP3jHIEfqwaUmTL_EAlKzZD1EUoCg_dqyTA6GpJVG705r_Wavn8HP2hZEDvT5FbSBRTHBU1rKtIhb6WZejUcKSwSE=@protonmail.com>
+References: <qagxdWV55NSsOiPMpXTP3jHIEfqwaUmTL_EAlKzZD1EUoCg_dqyTA6GpJVG705r_Wavn8HP2hZEDvT5FbSBRTHBU1rKtIhb6WZejUcKSwSE=@protonmail.com>
+Message-ID: <CAEyMn7aBZO0pbfOxLH0zDkp7k5G_+969c27px9YrPN7OFYqYLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi Yair and all,
 
-What about merging this patch series and then the 2nd improvement 
-http://patchwork.ozlabs.org/project/buildroot/list/?series=159771 (for 
-an unknown reason the 02/10 has not been picked up by patchwork)
-?
+Am Mo., 18. Mai 2020 um 09:39 Uhr schrieb Yair Ben-Avraham <
+yairba@protonmail.com>:
 
-There has been some remarks that in some cases the proposed patch series 
-is not sufficient, however I think these are some edge cases and could 
-be improved later once those patches are applied.
-
-I'm also seeing some issues being fixed recently on the old version of 
-rust, and I fear it will lead to duplicate efforts the more we wait for 
-merging those 2 patch series (as a bugfix should be done in the context 
-of the new version, or it might even not be needed, with a bit of luck).
-
-Unless there are some blocking issues that I missed..
-
-
-Regards,
-
-Patrick H.
-
-
-On 2020-02-07 19:08, Arnout Vandecappelle (Essensium/Mind) wrote:
-> The cargo config file is much like the cmake and meson configuration
-> files, something that tells the cargo build system how the
-> cross-toolchain is configured. It can be used not only with our own
-> host-cargo package, but also with a pre-installed cargo.
-> 
-> Therefore, install the cargo config file as a toolchain post-install
-> hook, just like we do for cmake and meson. However, we don't have a
-> pkg-cargo infrastructure (yet) so we can't put it there. The cargo
-> package itself will be removed soon, so that's not appropriate either.
-> Therefore, put it in the rustc package - any cargo package will need
-> rustc.
-> 
-> Remove the config handling from the cargo package.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
 > ---
->   package/cargo/cargo.mk                             |  6 ------
->   package/{cargo/config.in => rustc/cargo-config.in} |  0
->   package/rustc/rustc.mk                             | 12 ++++++++++++
->   3 files changed, 12 insertions(+), 6 deletions(-)
->   rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
-> 
-> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
-> index a387281b4c..3f6646d027 100644
-> --- a/package/cargo/cargo.mk
-> +++ b/package/cargo/cargo.mk
-> @@ -80,12 +80,6 @@ endef
->   
->   define HOST_CARGO_INSTALL_CMDS
->   	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
-> -	$(INSTALL) -D package/cargo/config.in \
-> -		$(HOST_DIR)/share/cargo/config
-> -	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
-> -		$(HOST_DIR)/share/cargo/config
-> -	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
-> -		$(HOST_DIR)/share/cargo/config
->   endef
->   
->   $(eval $(host-generic-package))
-> diff --git a/package/cargo/config.in b/package/rustc/cargo-config.in
-> similarity index 100%
-> rename from package/cargo/config.in
-> rename to package/rustc/cargo-config.in
-> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
-> index 6eea9b4fc5..35ffc36106 100644
-> --- a/package/rustc/rustc.mk
-> +++ b/package/rustc/rustc.mk
-> @@ -20,3 +20,15 @@ endif
->   RUSTC_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
->   
->   $(eval $(host-virtual-package))
+>  utils/checkpackagelib/lib_hash.py | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/utils/checkpackagelib/lib_hash.py
+> b/utils/checkpackagelib/lib_hash.py
+> index 3e381119a5..064d8cb37f 100644
+> --- a/utils/checkpackagelib/lib_hash.py
+> +++ b/utils/checkpackagelib/lib_hash.py
+> @@ -27,6 +27,11 @@ class HashNumberOfFields(_CheckFunction):
+>                      .format(self.filename, lineno, self.url_to_manual),
+>                      text]
+>
+> +        if (2 != text.rpartition('  ')[0].count(' ') or
+> +            2 != text.partition('  ')[-1].count(' ')):
+> +            return ["{}:{} expected two spaces between fields"
+> +                    .format(self.filename, lineno), text]
 > +
-> +ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
-> +define RUSTC_INSTALL_CARGO_CONFIG
-> +	mkdir -p $(HOST_DIR)/share/cargo
-> +	sed -e 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
-> +		-e 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
-> +		package/rustc/cargo-config.in \
-> +		> $(HOST_DIR)/share/cargo/config
-> +endef
-> +# check-package disable TypoInPackageVariable - TOOLCHAIN intended
-> +TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += RUSTC_INSTALL_CARGO_CONFIG
-> +endif
-> 
+>
+>  class HashType(_CheckFunction):
+>      len_of_hash = {"md5": 32, "sha1": 40, "sha224": 56, "sha256": 64,
+>
+>
+There is already a similar patch available:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200205212211.29720-1-heiko.thiery at gmail.com/
+
+
+-- 
+Heiko
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200518/e706026d/attachment.html>
