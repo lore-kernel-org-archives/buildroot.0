@@ -1,81 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 May 2020 07:19:40 +0200
-Subject: [Buildroot] [PATCH 1/1] gloox: new package
-In-Reply-To: <87mu652623.fsf@tarshish>
-References: <G4_UACKbOFKjHR50_oA8x38rKahD3d3KT7v9YY7fcByR5rBGJhwFZfRO9mUhQhPDAsGdwahC-DSbPnuOW0keUGQYX4lIKuc3d3LGAG-Auqo=@protonmail.com>
- <87mu652623.fsf@tarshish>
-Message-ID: <20200518071940.04c47501@windsurf.home>
+Date: Mon, 18 May 2020 07:22:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/leveldb: turn snappy into an
+ optional dependency
+Message-ID: <20200518052203.1667697-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+snappy is not a mandatory dependency to build leveldb. Back when it
+was introduced in Buildroot, as of version 1.18, the build logic
+already made snappy an optional dependency.
 
-On Mon, 18 May 2020 07:57:56 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/leveldb/Config.in  | 1 -
+ package/leveldb/leveldb.mk | 5 ++++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-> > +GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
-> > +
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-> > +GLOOX_CXXFLAGS += -O0
-> > +endif
-> > +
-> > +GLOOX_CONF_ENV = CXXFLAGS="$(GLOOX_CXXFLAGS)"
-> > +
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > +GLOOX_CONF_ENV += LIBS=-latomic
-> > +endif
-> > +
-> > +GLOOX_INSTALL_STAGING = YES
-
-This is usually closer to the top of the file, next the
-license/autoreconf variables.
-
-> > +ifeq ($(BR2_PACKAGE_ZLIB),y)
-> > +GLOOX_DEPENDENCIES += zlib
-> > +endif
-> > +
-> > +HOST_GLOOX_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS)"
-
-This is this needed.
-
-> > +
-> > +GLOOX_CONF_OPTS = \
-> > +		 --with-pic \
-
-Please indent with one tab. Also --with-pic should probably only be
-added when BR2_STATIC_LIBS is false.
-
-> > +		 --with-zlib \  
-> 
-> This should be conditional on BR2_PACKAGE_ZLIB.
-> 
-> > +		 --with-libidn=no \
-
-Please use --without-libidn
-
-> > +		 --enable-getaddrinfo \
-> > +		 --with-gnutls=no \  
-> 
-> It would be nice to add conditional support for GnuTLS.
-
-And please use --with-gnutls / --without-gnutls
-
-> 
-> > +		 --with-openssl=yes  
-> 
-> This should be conditional on OpenSSL. You also need to add it to
-> DEPENDENCIES to make sure it builds before gloox.
-
-And use --with-openssl / --without-openssl, instead of
---with-openssl=yes / --with-openssl=no.
-
-Thanks!
-
-Thomas
+diff --git a/package/leveldb/Config.in b/package/leveldb/Config.in
+index c767b88645..c4279fcb64 100644
+--- a/package/leveldb/Config.in
++++ b/package/leveldb/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_LEVELDB
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_SNAPPY
+ 	help
+ 	  LevelDB is a fast key-value storage library written at Google
+ 	  that provides an ordered mapping from string keys to string
+diff --git a/package/leveldb/leveldb.mk b/package/leveldb/leveldb.mk
+index cf3c096f5d..684b618679 100644
+--- a/package/leveldb/leveldb.mk
++++ b/package/leveldb/leveldb.mk
+@@ -9,9 +9,12 @@ LEVELDB_SITE = $(call github,google,leveldb,$(LEVELDB_VERSION))
+ LEVELDB_LICENSE = BSD-3-Clause
+ LEVELDB_LICENSE_FILES = LICENSE
+ LEVELDB_INSTALL_STAGING = YES
+-LEVELDB_DEPENDENCIES = snappy
+ LEVELDB_CONF_OPTS = \
+ 	-DLEVELDB_BUILD_BENCHMARKS=OFF \
+ 	-DLEVELDB_BUILD_TESTS=OFF
+ 
++ifeq ($(BR2_PACKAGE_SNAPPY),y)
++LEVELDB_DEPENDENCIES += snappy
++endif
++
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
