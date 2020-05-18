@@ -1,240 +1,103 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Mon, 18 May 2020 11:47:55 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/mtdev2tuio: remove package
-Message-ID: <20200518094755.11571-1-sho@relinux.de>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Mon, 18 May 2020 12:51:54 +0200
+Subject: [Buildroot] [PATCH v3 01/10] package/rustc: install cargo
+ config as toolchain post-install hook
+In-Reply-To: <20200207180829.165689-2-arnout@mind.be>
+References: <20200207180829.165689-1-arnout@mind.be>
+ <20200207180829.165689-2-arnout@mind.be>
+Message-ID: <bc72eeb2-c149-1ffc-97e9-b26dc342cf2e@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mtdev2tuio breaks the builds every now and then and is not
-maintained upstream. It does not seem to be useful any more.
+Hello all,
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+What about merging this patch series and then the 2nd improvement 
+http://patchwork.ozlabs.org/project/buildroot/list/?series=159771 (for 
+an unknown reason the 02/10 has not been picked up by patchwork)
+?
 
----
-Changes v1 -> v2:
- - Add missing Config.in.legacy entry
+There has been some remarks that in some cases the proposed patch series 
+is not sufficient, however I think these are some edge cases and could 
+be improved later once those patches are applied.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
- Config.in.legacy                              |  7 +++
- DEVELOPERS                                    |  1 -
- package/Config.in                             |  1 -
- .../0001-Fix-build-with-musl-libc.patch       | 30 ----------
- ...dev2tuio.c-fix-build-with-musl-1.2.0.patch | 57 -------------------
- package/mtdev2tuio/Config.in                  | 13 -----
- package/mtdev2tuio/mtdev2tuio.hash            |  3 -
- package/mtdev2tuio/mtdev2tuio.mk              | 27 ---------
- 8 files changed, 7 insertions(+), 132 deletions(-)
- delete mode 100644 package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch
- delete mode 100644 package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
- delete mode 100644 package/mtdev2tuio/Config.in
- delete mode 100644 package/mtdev2tuio/mtdev2tuio.hash
- delete mode 100644 package/mtdev2tuio/mtdev2tuio.mk
+I'm also seeing some issues being fixed recently on the old version of 
+rust, and I fear it will lead to duplicate efforts the more we wait for 
+merging those 2 patch series (as a bugfix should be done in the context 
+of the new version, or it might even not be needed, with a bit of luck).
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 5605ba1fad..e5ab38783c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2020.05"
- 
-+config BR2_PACKAGE_MTDEV2TUIO
-+	bool "mtdev2tuio package removed"
-+	select BR2_LEGACY
-+	help
-+	  The mtdev2tuio package was removed as it breaks the builds
-+	  every now and then and is not maintained upstream.
-+
- config BR2_PACKAGE_EZXML
- 	bool "ezxml package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0f1574c930..35098210fc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2397,7 +2397,6 @@ N:	Stephan Hoffmann <sho@relinux.de>
- F:	package/cache-calibrator/
- F:	package/gtest/
- F:	package/mtdev/
--F:	package/mtdev2tuio/
- 
- N:	Steve Calfee <stevecalfee@gmail.com>
- F:	package/python-pymysql/
-diff --git a/package/Config.in b/package/Config.in
-index c245abbc42..c4e0a4d12c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1877,7 +1877,6 @@ endif
- 	source "package/mpfr/Config.in"
- 	source "package/mpir/Config.in"
- 	source "package/msgpack/Config.in"
--	source "package/mtdev2tuio/Config.in"
- 	source "package/musl-compat-headers/Config.in"
- 	source "package/musl-fts/Config.in"
- 	source "package/openblas/Config.in"
-diff --git a/package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch b/package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 810b66c61b..0000000000
---- a/package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From f974bb1f92603973711bea36a7869dfa8358aae0 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sun, 31 Jan 2016 09:04:46 +0100
--Subject: [PATCH 1/1] Fix build with musl libc
--
--Include missing header to prevent build error detected by buildroot:
--http://autobuild.buildroot.net/results/aee/aee411047265bf205f8990a3d0d2310decb5fd19/build-end.log
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
--Patch sent upstream: https://github.com/olivopaolo/mtdev2tuio/pull/2
--
-- mtdev2tuio.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/mtdev2tuio.c b/mtdev2tuio.c
--index 3a9174f..f2c98d5 100644
----- a/mtdev2tuio.c
--+++ b/mtdev2tuio.c
--@@ -41,6 +41,7 @@
-- #include <getopt.h>
-- #include <signal.h>
-- #include <sys/utsname.h>
--+#include <sys/file.h>
-- 
-- #define NSEC_PER_USEC   1000L
-- #define NSEC_PER_SEC    1000000000L
---- 
--2.7.0.rc3
--
-diff --git a/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch b/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
-deleted file mode 100644
-index 24ceff52ee..0000000000
---- a/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 6fb492ba72b4ecbe5ebba44647e838fb998ee061 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 25 Apr 2020 12:19:32 +0200
--Subject: [PATCH] mtdev2tuio.c: fix build with musl 1.2.0
--
--time element is deprecated on new input_event structure in kernel's
--input.h [1]
--
--[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/olivopaolo/mtdev2tuio/pull/6]
-----
-- mtdev2tuio.c | 13 +++++++++----
-- 1 file changed, 9 insertions(+), 4 deletions(-)
--
--diff --git a/mtdev2tuio.c b/mtdev2tuio.c
--index 3a9174f..fced70c 100644
----- a/mtdev2tuio.c
--+++ b/mtdev2tuio.c
--@@ -47,8 +47,13 @@
-- 
-- typedef __u64 nstime;
-- 
---static inline __u64 timeval_to_ns(const struct timeval *tv) {
---  return ((__u64) tv->tv_sec * NSEC_PER_SEC) + tv->tv_usec * NSEC_PER_USEC ;
--+#ifndef input_event_sec
--+#define input_event_sec time.tv_sec
--+#define input_event_usec time.tv_usec
--+#endif
--+
--+static inline __u64 timeval_to_ns(const struct input_event *ev) {
--+  return ((__u64) ev->input_event_sec * NSEC_PER_SEC) + ev->input_event_usec * NSEC_PER_USEC ;
-- }
-- 
-- static float calc_speed(float s, float s_1, nstime t, nstime t_1) {
--@@ -159,7 +164,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
--       case ABS_MT_POSITION_X:
-- 	s->slot[s->cs].x_1 = s->slot[s->cs].x ;
-- 	s->slot[s->cs].x = (ev->value - d->x_ofs) * d->x_scale ;
---	time = timeval_to_ns(&ev->time) ;
--+	time = timeval_to_ns(ev) ;
-- 	s->slot[s->cs].X = calc_speed(s->slot[s->cs].x, s->slot[s->cs].x_1, time, s->slot[s->cs].t_x) ;
-- 	s->slot[s->cs].t_x = time ;
-- 	// this slot has been changed
--@@ -168,7 +173,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
--       case ABS_MT_POSITION_Y :
-- 	s->slot[s->cs].y_1 = s->slot[s->cs].y ;
-- 	s->slot[s->cs].y = (ev->value - d->y_ofs) * d->y_scale ;
---	time = timeval_to_ns(&ev->time) ;
--+	time = timeval_to_ns(ev) ;
-- 	s->slot[s->cs].Y = calc_speed(s->slot[s->cs].y, s->slot[s->cs].y_1, time, s->slot[s->cs].t_y) ;
-- 	s->slot[s->cs].t_y = time ;
-- 	// this slot has been changed
---- 
--2.25.1
--
-diff --git a/package/mtdev2tuio/Config.in b/package/mtdev2tuio/Config.in
-deleted file mode 100644
-index 3e88d21845..0000000000
---- a/package/mtdev2tuio/Config.in
-+++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_MTDEV2TUIO
--	bool "mtdev2tuio"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # liblo
--	select BR2_PACKAGE_LIBLO
--	select BR2_PACKAGE_MTDEV
--	help
--	  mtdev2tuio is a simple application for converting touch
--	  events captured from libmtdev to TUIO 1.1
--
--	  https://github.com/olivopaolo/mtdev2tuio
--
--comment "mtdev2tuio needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mtdev2tuio/mtdev2tuio.hash b/package/mtdev2tuio/mtdev2tuio.hash
-deleted file mode 100644
-index 9932e9e180..0000000000
---- a/package/mtdev2tuio/mtdev2tuio.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  4a6aa319c44478dceaf01a24603690767e56c029a1f0380da0f31eac5a02e10f  mtdev2tuio-e1e7378d86abe751158e743586133022f32fa4d1.tar.gz
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/mtdev2tuio/mtdev2tuio.mk b/package/mtdev2tuio/mtdev2tuio.mk
-deleted file mode 100644
-index e9085b007e..0000000000
---- a/package/mtdev2tuio/mtdev2tuio.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# mtdev2tuio
--#
--################################################################################
--
--MTDEV2TUIO_VERSION = e1e7378d86abe751158e743586133022f32fa4d1
--MTDEV2TUIO_SITE = $(call github,olivopaolo,mtdev2tuio,$(MTDEV2TUIO_VERSION))
--MTDEV2TUIO_DEPENDENCIES = mtdev liblo
--MTDEV2TUIO_LICENSE = GPL-3.0+
--MTDEV2TUIO_LICENSE_FILES = COPYING
--
--# mtdev2tuio Makefile misuses $(LD) as gcc, so we need to override LD
--# here. Liblo uses log(3), so we need to link with -lm
--define MTDEV2TUIO_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) \
--		$(TARGET_CONFIGURE_OPTS) \
--		LD="$(TARGET_CC)" \
--		LIBS="-lmtdev -llo -lm" \
--		-C $(@D)
--endef
--
--define MTDEV2TUIO_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/mtdev2tuio $(TARGET_DIR)/usr/bin/mtdev2tuio
--endef
--
--$(eval $(generic-package))
--- 
-2.20.1
+Unless there are some blocking issues that I missed..
+
+
+Regards,
+
+Patrick H.
+
+
+On 2020-02-07 19:08, Arnout Vandecappelle (Essensium/Mind) wrote:
+> The cargo config file is much like the cmake and meson configuration
+> files, something that tells the cargo build system how the
+> cross-toolchain is configured. It can be used not only with our own
+> host-cargo package, but also with a pre-installed cargo.
+> 
+> Therefore, install the cargo config file as a toolchain post-install
+> hook, just like we do for cmake and meson. However, we don't have a
+> pkg-cargo infrastructure (yet) so we can't put it there. The cargo
+> package itself will be removed soon, so that's not appropriate either.
+> Therefore, put it in the rustc package - any cargo package will need
+> rustc.
+> 
+> Remove the config handling from the cargo package.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>   package/cargo/cargo.mk                             |  6 ------
+>   package/{cargo/config.in => rustc/cargo-config.in} |  0
+>   package/rustc/rustc.mk                             | 12 ++++++++++++
+>   3 files changed, 12 insertions(+), 6 deletions(-)
+>   rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
+> 
+> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
+> index a387281b4c..3f6646d027 100644
+> --- a/package/cargo/cargo.mk
+> +++ b/package/cargo/cargo.mk
+> @@ -80,12 +80,6 @@ endef
+>   
+>   define HOST_CARGO_INSTALL_CMDS
+>   	$(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
+> -	$(INSTALL) -D package/cargo/config.in \
+> -		$(HOST_DIR)/share/cargo/config
+> -	$(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
+> -		$(HOST_DIR)/share/cargo/config
+> -	$(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
+> -		$(HOST_DIR)/share/cargo/config
+>   endef
+>   
+>   $(eval $(host-generic-package))
+> diff --git a/package/cargo/config.in b/package/rustc/cargo-config.in
+> similarity index 100%
+> rename from package/cargo/config.in
+> rename to package/rustc/cargo-config.in
+> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+> index 6eea9b4fc5..35ffc36106 100644
+> --- a/package/rustc/rustc.mk
+> +++ b/package/rustc/rustc.mk
+> @@ -20,3 +20,15 @@ endif
+>   RUSTC_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
+>   
+>   $(eval $(host-virtual-package))
+> +
+> +ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+> +define RUSTC_INSTALL_CARGO_CONFIG
+> +	mkdir -p $(HOST_DIR)/share/cargo
+> +	sed -e 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
+> +		-e 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
+> +		package/rustc/cargo-config.in \
+> +		> $(HOST_DIR)/share/cargo/config
+> +endef
+> +# check-package disable TypoInPackageVariable - TOOLCHAIN intended
+> +TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += RUSTC_INSTALL_CARGO_CONFIG
+> +endif
+> 
