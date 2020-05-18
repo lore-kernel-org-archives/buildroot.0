@@ -1,34 +1,45 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Mon, 18 May 2020 07:39:08 +0000
-Subject: [Buildroot] [PATCH 1/1] Check if two spaces between fields in hash
- file
-Message-ID: <qagxdWV55NSsOiPMpXTP3jHIEfqwaUmTL_EAlKzZD1EUoCg_dqyTA6GpJVG705r_Wavn8HP2hZEDvT5FbSBRTHBU1rKtIhb6WZejUcKSwSE=@protonmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 18 May 2020 01:46:07 -0600
+Subject: [Buildroot] [PATCH 1/1] package/ser2net: bump to version 4.1.8
+Message-ID: <20200518074607.2060484-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- utils/checkpackagelib/lib_hash.py | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/ser2net/ser2net.hash | 6 +++---
+ package/ser2net/ser2net.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-index 3e381119a5..064d8cb37f 100644
---- a/utils/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -27,6 +27,11 @@ class HashNumberOfFields(_CheckFunction):
-                     .format(self.filename, lineno, self.url_to_manual),
-                     text]
-
-+        if (2 != text.rpartition('  ')[0].count(' ') or
-+            2 != text.partition('  ')[-1].count(' ')):
-+            return ["{}:{} expected two spaces between fields"
-+                    .format(self.filename, lineno), text]
-+
-
- class HashType(_CheckFunction):
-     len_of_hash = {"md5": 32, "sha1": 40, "sha224": 56, "sha256": 64,
---
-2.20.1
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index 91d97e74fc..359ab98ed3 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  504345864f6110d5b6b63ad1f2ba3ed9  ser2net-4.1.7.tar.gz
+-sha1  8268c2f7937152a7bbbac6d2f289c257d11deb69  ser2net-4.1.7.tar.gz
++md5  eb08bf2822d5c4293f798d9d8f3c1b66  ser2net-4.1.8.tar.gz
++sha1  e3538f37b99f33a417c34e7b98eb9423262ff19a  ser2net-4.1.8.tar.gz
+ # Locally computed:
+-sha256  55bbeeed58eda7514ba7a52d14a930e57e1e5c6fd785a84ca0dd7c3b5615e0a5  ser2net-4.1.7.tar.gz
++sha256  cffb5147021202b064eb0a9389d0db63d1bb2dcde5a896f7785f97b1b5f51a72  ser2net-4.1.8.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 1f29e2950e..861f954f76 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SER2NET_VERSION = 4.1.7
++SER2NET_VERSION = 4.1.8
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPL-2.0+
+ SER2NET_LICENSE_FILES = COPYING
+-- 
+2.25.1
