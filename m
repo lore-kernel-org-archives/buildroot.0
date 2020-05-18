@@ -1,58 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 May 2020 07:15:08 +0200
-Subject: [Buildroot] [PATCH] package/openvpn: add option to use mbed TLS
- instead of OpenSSL
-In-Reply-To: <CACm0Nn2ZFPuHKQoCh5pdakeHh80q-4nzt1umH0A5Rbon_ktgZw@mail.gmail.com>
-References: <20200511223108.4184-1-edo.rus@gmail.com>
- <20200515221042.011b8d33@windsurf.home>
- <CACm0Nn2ZFPuHKQoCh5pdakeHh80q-4nzt1umH0A5Rbon_ktgZw@mail.gmail.com>
-Message-ID: <20200518071508.5c8f134c@windsurf.home>
+Date: Mon, 18 May 2020 07:19:40 +0200
+Subject: [Buildroot] [PATCH 1/1] gloox: new package
+In-Reply-To: <87mu652623.fsf@tarshish>
+References: <G4_UACKbOFKjHR50_oA8x38rKahD3d3KT7v9YY7fcByR5rBGJhwFZfRO9mUhQhPDAsGdwahC-DSbPnuOW0keUGQYX4lIKuc3d3LGAG-Auqo=@protonmail.com>
+ <87mu652623.fsf@tarshish>
+Message-ID: <20200518071940.04c47501@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ed,
+Hello,
 
-On Mon, 18 May 2020 04:45:35 +0300
-Ed Spiridonov <edo.rus@gmail.com> wrote:
+On Mon, 18 May 2020 07:57:56 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> In the case proposed by you, OpenSSL is selected automagically without
-> ability to unselect (until mbed?TLS is selected manually).
-> How can the user find out that mbed?TLS could be used instead of OpenSSL?
-> Press help on OpenVPN item? Kconfig shows dependencies here, but not a
-> condition (if !BR2_PACKAGE_MBEDTLS).
-> Look into package/openvpn/Config.in?
-> Of course, detailed explanation could be added into OpenVPN help. But
-> nobody reads help for *all* selected items.
+> > +GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+> > +GLOOX_CXXFLAGS += -O0
+> > +endif
+> > +
+> > +GLOOX_CONF_ENV = CXXFLAGS="$(GLOOX_CXXFLAGS)"
+> > +
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> > +GLOOX_CONF_ENV += LIBS=-latomic
+> > +endif
+> > +
+> > +GLOOX_INSTALL_STAGING = YES
 
-All what you're saying here is valid for a huge number of packages
-where Buildroot automatically makes use of optional dependencies if
-they are available.
+This is usually closer to the top of the file, next the
+license/autoreconf variables.
 
-For example:
+> > +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> > +GLOOX_DEPENDENCIES += zlib
+> > +endif
+> > +
+> > +HOST_GLOOX_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS)"
 
-ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-LIBGTK3_CONF_OPTS += --enable-xrandr
-LIBGTK3_DEPENDENCIES += xlib_libXrandr
-else
-LIBGTK3_CONF_OPTS += --disable-xrandr
-endif
+This is this needed.
 
-libgtk3 will automatically have xrandr support when
-BR2_PACKAGE_XLIB_LIBXRANDR is enabled. The user has no way to "know"
-about it, except by reading libgtk3.mk.
+> > +
+> > +GLOOX_CONF_OPTS = \
+> > +		 --with-pic \
 
-But this allows to limit the number of Config.in options we have. We
-already have thousands of them, and if we were to add such options for
-each optional dependency of all packages, we would have tens of
-thousands of Config.in options.
+Please indent with one tab. Also --with-pic should probably only be
+added when BR2_STATIC_LIBS is false.
 
-There are however some packages where we add explicit sub-options, for
-various reasons, but that is not the general case.
+> > +		 --with-zlib \  
+> 
+> This should be conditional on BR2_PACKAGE_ZLIB.
+> 
+> > +		 --with-libidn=no \
 
-Best regards,
+Please use --without-libidn
+
+> > +		 --enable-getaddrinfo \
+> > +		 --with-gnutls=no \  
+> 
+> It would be nice to add conditional support for GnuTLS.
+
+And please use --with-gnutls / --without-gnutls
+
+> 
+> > +		 --with-openssl=yes  
+> 
+> This should be conditional on OpenSSL. You also need to add it to
+> DEPENDENCIES to make sure it builds before gloox.
+
+And use --with-openssl / --without-openssl, instead of
+--with-openssl=yes / --with-openssl=no.
+
+Thanks!
 
 Thomas
 -- 
