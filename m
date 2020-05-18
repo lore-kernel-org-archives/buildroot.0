@@ -1,34 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 18 May 2020 07:34:22 +0000
-Subject: [Buildroot] [Bug 12586] avahi failure
-In-Reply-To: <bug-12586-163@https.bugs.busybox.net/>
-References: <bug-12586-163@https.bugs.busybox.net/>
-Message-ID: <bug-12586-163-c2lixdnBaq@https.bugs.busybox.net/>
+Date: Mon, 18 May 2020 07:37:15 +0000
+Subject: [Buildroot] [Bug 12521] RISCV RV32IA selected, RV64GC output
+In-Reply-To: <bug-12521-163@https.bugs.busybox.net/>
+References: <bug-12521-163@https.bugs.busybox.net/>
+Message-ID: <bug-12521-163-JIJQ6tuxMz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12586
+https://bugs.busybox.net/show_bug.cgi?id=12521
 
 Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-         Resolution|---                         |WONTFIX
-             Status|NEW                         |RESOLVED
+             Status|REOPENED                    |RESOLVED
+         Resolution|---                         |INVALID
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Hello Sam. You can write your own filesystem image logic in Buildroot, so that
-you can re-use everything Buildroot does under "fakeroot", such as creating
-users, adjusting permissions and ownerships, etc. I  believe you can even add
-your own filesystem format in your separate BR2_EXTERNAL tree, if you're using
-that.
-
-In any case, there's nothing to fix in Buildroot here: we explicitly state that
-the contents of output/target is not the final root filesystem, and this cannot
-be changed as Buildroot does not run as root.
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+We still don't have any way of reproducing the issue, and both Mark and I
+believe there is in fact no issue: whether the kernel is 64 bit or 32 bit is
+not directly Buildroot's fault: it is up to having a correct Linux kernel
+configuration.
 
 -- 
 You are receiving this mail because:
