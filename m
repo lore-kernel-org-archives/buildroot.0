@@ -1,55 +1,41 @@
-From: stefan at astylos.dk <stefan@astylos.dk>
-Date: Tue, 19 May 2020 15:27:21 +0200
-Subject: [Buildroot] [PATCH] package/openldap: security bump to version
- 2.4.50
-Message-ID: <20200519132721.3068717-1-stefan.sorensen@spectralink.com>
+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan@astylos.dk>
+Date: Tue, 19 May 2020 15:33:09 +0200
+Subject: [Buildroot] [PATCH] package/libpwquality: bump version to 1.4.2
+Message-ID: <20200519133309.3069731-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stefan S?rensen <stefan.sorensen@spectralink.com>
-
-Security fixes:
- CVE-2020-12243: Fixed slapd to limit depth of nested filters
-
 Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- package/openldap/openldap.hash | 12 ++++++------
- package/openldap/openldap.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/libpwquality/libpwquality.hash | 4 ++--
+ package/libpwquality/libpwquality.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index 7f159cb6d0..074caf9fb2 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,7 +1,7 @@
--# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.md5
--md5 2a47a6bb4319357ea7b032c45283e79e  openldap-2.4.49.tgz
--# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.sha1
--sha1 f0caeca122e6f90e6ac5cc8ba36fe9cec13826da  openldap-2.4.49.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.md5
-+md5  f9ed44ef373abed04c9e4c8586260f9e  openldap-2.4.50.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.sha1
-+sha1 82f576e0d0d334e9e798d9de8936683546247bb9  openldap-2.4.50.tgz
- # Locally computed
--sha256 e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e  openldap-2.4.49.tgz
--sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-+sha256  5cb57d958bf5c55a678c6a0f06821e0e5504d5a92e6a33240841fbca1db586b8  openldap-2.4.50.tgz
-+sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index a5f6067494..a9e71be595 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
+diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
+index b63501fa16..07c50ed24e 100644
+--- a/package/libpwquality/libpwquality.hash
++++ b/package/libpwquality/libpwquality.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	a97d72b5c56b7e279c6e86dad70c1493ea5796f00a596fb9f3173b96f9bf5e46	libpwquality-1.4.1.tar.bz2
+-sha256	aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee	COPYING
++sha256  5263e09ee62269c092f790ac159112aed3e66826a795e3afec85fdeac4281c8e  libpwquality-1.4.2.tar.bz2
++sha256  aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee  COPYING
+diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
+index bddafd59ca..a2fb00415f 100644
+--- a/package/libpwquality/libpwquality.mk
++++ b/package/libpwquality/libpwquality.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLDAP_VERSION = 2.4.49
-+OPENLDAP_VERSION = 2.4.50
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
+-LIBPWQUALITY_VERSION = 1.4.1
++LIBPWQUALITY_VERSION = 1.4.2
+ LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
+ LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
+ LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
 -- 
 2.25.4
