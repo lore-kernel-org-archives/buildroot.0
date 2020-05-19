@@ -1,7 +1,7 @@
 From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan@astylos.dk>
-Date: Tue, 19 May 2020 15:33:09 +0200
-Subject: [Buildroot] [PATCH] package/libpwquality: bump version to 1.4.2
-Message-ID: <20200519133309.3069731-1-stefan.sorensen@spectralink.com>
+Date: Tue, 19 May 2020 15:35:23 +0200
+Subject: [Buildroot] [PATCH] package/p7zip: fix build with gcc 10
+Message-ID: <20200519133523.3069943-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
- package/libpwquality/libpwquality.hash | 4 ++--
- package/libpwquality/libpwquality.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../p7zip/0004-Fix-build-with-gcc-10.patch    | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/p7zip/0004-Fix-build-with-gcc-10.patch
 
-diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
-index b63501fa16..07c50ed24e 100644
---- a/package/libpwquality/libpwquality.hash
-+++ b/package/libpwquality/libpwquality.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	a97d72b5c56b7e279c6e86dad70c1493ea5796f00a596fb9f3173b96f9bf5e46	libpwquality-1.4.1.tar.bz2
--sha256	aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee	COPYING
-+sha256  5263e09ee62269c092f790ac159112aed3e66826a795e3afec85fdeac4281c8e  libpwquality-1.4.2.tar.bz2
-+sha256  aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee  COPYING
-diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
-index bddafd59ca..a2fb00415f 100644
---- a/package/libpwquality/libpwquality.mk
-+++ b/package/libpwquality/libpwquality.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPWQUALITY_VERSION = 1.4.1
-+LIBPWQUALITY_VERSION = 1.4.2
- LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
- LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
- LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
+diff --git a/package/p7zip/0004-Fix-build-with-gcc-10.patch b/package/p7zip/0004-Fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..b01833db29
+--- /dev/null
++++ b/package/p7zip/0004-Fix-build-with-gcc-10.patch
+@@ -0,0 +1,32 @@
++From 78b760eae21d7b340c69e8abab8ca706e1e00adc Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
++Date: Mon, 4 May 2020 09:19:46 +0200
++Subject: [PATCH] Fix build with gcc 10.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Add cast to code that mixes HRESULT (aka long) and DWORD (aka unsigned
++int) which causes an narrowing error with gcc 10.
++
++Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
++---
++ CPP/Windows/ErrorMsg.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CPP/Windows/ErrorMsg.cpp b/CPP/Windows/ErrorMsg.cpp
++index 99684ae..ab48352 100644
++--- a/CPP/Windows/ErrorMsg.cpp
+++++ b/CPP/Windows/ErrorMsg.cpp
++@@ -13,7 +13,7 @@ UString MyFormatMessage(DWORD errorCode)
++   const char * txt = 0;
++   AString msg;
++ 
++-  switch(errorCode) {
+++  switch((HRESULT)errorCode) {
++     case ERROR_NO_MORE_FILES   : txt = "No more files"; break ;
++     case E_NOTIMPL             : txt = "E_NOTIMPL"; break ;
++     case E_NOINTERFACE         : txt = "E_NOINTERFACE"; break ;
++-- 
++2.26.2
++
 -- 
 2.25.4
