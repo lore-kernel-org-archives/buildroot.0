@@ -1,32 +1,55 @@
-From: usul27 <daniel@hifiberry.com>
-Date: Tue, 19 May 2020 08:16:20 -0500 (CDT)
-Subject: [Buildroot] COG crashes on Pi4 (wpe_webkit)
-Message-ID: <1589894180081-0.post@n4.nabble.com>
+From: stefan at astylos.dk <stefan@astylos.dk>
+Date: Tue, 19 May 2020 15:27:21 +0200
+Subject: [Buildroot] [PATCH] package/openldap: security bump to version
+ 2.4.50
+Message-ID: <20200519132721.3068717-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using the latest release candidate on the Raspberry Pi 3 and 4. While the
-Pi3 version works well, the wpe_webkit browser crashes. I don't have a
-version with debug symbols running, but maybe somebody have seen this
-already and has some hint:
+From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
-(gdb) backtrace
-#0  0x00000000 in ?? ()
-#1  0xb26382cc in ?? () from /lib/libffi.so.7
-#2  0xb2637c94 in ?? () from /lib/libffi.so.7
-#3  0xb2637f24 in ffi_call () from /lib/libffi.so.7
-#4  0xb2380c30 in ?? () from /lib/libwayland-server.so.0
-Backtrace stopped: previous frame identical to this frame (corrupt stack?)
+Security fixes:
+ CVE-2020-12243: Fixed slapd to limit depth of nested filters
 
-Weston is using the DRM backend:
-/usr/bin/weston --backend=drm-backend.so --modules=systemd-notify.so
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ package/openldap/openldap.hash | 12 ++++++------
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 7f159cb6d0..074caf9fb2 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.md5
+-md5 2a47a6bb4319357ea7b032c45283e79e  openldap-2.4.49.tgz
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.sha1
+-sha1 f0caeca122e6f90e6ac5cc8ba36fe9cec13826da  openldap-2.4.49.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.md5
++md5  f9ed44ef373abed04c9e4c8586260f9e  openldap-2.4.50.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.sha1
++sha1 82f576e0d0d334e9e798d9de8936683546247bb9  openldap-2.4.50.tgz
+ # Locally computed
+-sha256 e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e  openldap-2.4.49.tgz
+-sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
++sha256  5cb57d958bf5c55a678c6a0f06821e0e5504d5a92e6a33240841fbca1db586b8  openldap-2.4.50.tgz
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index a5f6067494..a9e71be595 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLDAP_VERSION = 2.4.49
++OPENLDAP_VERSION = 2.4.50
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+-- 
+2.25.4
