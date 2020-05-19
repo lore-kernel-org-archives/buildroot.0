@@ -1,39 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 May 2020 19:07:40 +0000
-Subject: [Buildroot] [Bug 12876] putilimp.h **error**: missing binary
- operator before token "(" #elif __has_builtin(__c11_atomic_load) && \
-In-Reply-To: <bug-12876-163@https.bugs.busybox.net/>
-References: <bug-12876-163@https.bugs.busybox.net/>
-Message-ID: <bug-12876-163-hQk9QdpgeB@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 19 May 2020 21:08:11 +0200
+Subject: [Buildroot] [git commit] Revert "package/cracklib: add python3
+ support"
+Message-ID: <20200519185404.6221291AAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12876
+commit: https://git.buildroot.net/buildroot/commit/?id=39ae8290aadf8c3b29388a9ebe0b32a7f6dd8e7e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #5 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to yogesh kumar sharma from comment #4)
+This reverts commit f584595424137399dd06f73c6f04c759e04b879e.
+It in fact depends on a previous patch to python that was not applied
+[0], as upstream believes it is dangerous [1], and is still debating the
+proper solution [2].
 
-    $ wget https://buildroot.org/downloads/buildroot-2020.02.2.tar.bz2
-    $ wget -O
-v5-1-1-package-nodejs-Use-zlib-headers-from-HOST_ZLIB_SRCDIR-for-host-nodejs.patch
-https://patchwork.ozlabs.org/project/buildroot/patch/20200218031521.32988-1-james.hilliard1 at gmail.com/mbox/
-    $ tar -xvjf buildroot-2020.02.2.tar.bz2
-    $ cd buildroot-2020.02.2
-    $ patch -p 1 <
-../v5-1-1-package-nodejs-Use-zlib-headers-from-HOST_ZLIB_SRCDIR-for-host-nodejs.patch
+[0] https://patchwork.ozlabs.org/project/buildroot/patch/20200202205306.1785085-1-fontaine.fabrice at gmail.com/
+[1] https://bugs.python.org/issue39026#msg369309
+[2] https://bugs.python.org/issue39026
 
-Do not forget to do an complete re-build of@least the host-nodejs package,
-best by removing the existing host-nodejs build directory, e.g.:
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/cracklib/cracklib.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    $ rm -rf output/build/host-nodejs-12.16.1
-
-or a global re-build
-
-     $ make clean && make
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
+index be1b50f138..91d510ff34 100644
+--- a/package/cracklib/cracklib.mk
++++ b/package/cracklib/cracklib.mk
+@@ -19,9 +19,9 @@ else
+ CRACKLIB_CONF_OPTS += --without-zlib
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++ifeq ($(BR2_PACKAGE_PYTHON),y)
+ CRACKLIB_CONF_OPTS += --with-python
+-CRACKLIB_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
++CRACKLIB_DEPENDENCIES += python
+ else
+ CRACKLIB_CONF_OPTS += --without-python
+ endif
