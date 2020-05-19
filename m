@@ -1,29 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 May 2020 21:45:44 +0000
-Subject: [Buildroot] [Bug 12256] package tar is outdated (1.29 is 3 years
- old)
-In-Reply-To: <bug-12256-163@https.bugs.busybox.net/>
-References: <bug-12256-163@https.bugs.busybox.net/>
-Message-ID: <bug-12256-163-0ae1O0Bfkv@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 May 2020 23:54:53 +0200
+Subject: [Buildroot] Clone from HTTPS URL gave error 403
+In-Reply-To: <20200519233717.3c67061e@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 19 May 2020 23:37:17 +0200")
+References: <BYAPR11MB2552D7A18E88F73937B9C79CFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
+ <20200519232150.29ce6381@windsurf.home>
+ <BYAPR11MB25521F0F00DD12650720FE9BFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
+ <20200519233717.3c67061e@windsurf.home>
+Message-ID: <87blmjmvyq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12256
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+ > On Tue, 19 May 2020 21:34:48 +0000
+ > "Hsiao, Michael" <michael.hsiao@intel.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+ >> Hello Thomas,
+ >> 
+ >> Here's the URL I used: https://git.busybox.net/buildroot
+ >> 
+ >> This is the error from Git Bash on Friday:
+ >> $ git clone https://git.busybox.net/buildroot
+ >> Cloning into 'buildroot'...
+ >> fatal: unable to access 'https://git.busybox.net/buildroot/': The requested URL returned error: 403
 
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-We are now using tar 1.32 for the target. We had to keep tar 1.29 for the host,
-though.
+ > I know there's been recently some sysadmin work done on the server that
+ > hosts our Git server, that might explain it.
+
+ > As I said, you can also use https://github.com/buildroot/buildroot.
+
+This was unfortunately an issue introduced when smart mirroring over
+HTTP was added. It should be fixed again now.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
