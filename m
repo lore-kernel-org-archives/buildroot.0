@@ -1,90 +1,128 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 May 2020 21:12:23 +0200
-Subject: [Buildroot] [PATCH 2/2] package/cracklib: add python3 support
-In-Reply-To: <20200519190436.GG27030@scaer>
-References: <20200202205306.1785085-1-fontaine.fabrice@gmail.com>
- <20200202205306.1785085-2-fontaine.fabrice@gmail.com>
- <20200519190436.GG27030@scaer>
-Message-ID: <20200519191223.GH27030@scaer>
+Date: Tue, 19 May 2020 21:22:59 +0200
+Subject: [Buildroot] [git commit] package/bison: make installation
+ relocatable
+Message-ID: <20200519190809.5CCB991AAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=78e78071128ccf2dba8cf76b00b1beb0c5f3e538
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-19 21:04 +0200, Yann E. MORIN spake thusly:
-> On 2020-02-02 21:53 +0100, Fabrice Fontaine spake thusly:
-> > python bindings supports python3 since version 2.8.19 and
-> > https://github.com/cracklib/cracklib/commit/219de98766b9f1e4c8c5b174de770158ffda3a93
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Applied to master, thanks.
-> (but I forgot to add a reference to a recent build failure...)
+Our current host-bison installation is not relocatable, so if you
+generate the SDK, and install it in a different location, bison will
+no longer work with failures such as:
 
-I eventually had to revert it, as the preparatory patch against python
-was not applied, as upstream believes it is dangerous, and are still
-debating the proper way:
-    https://bugs.python.org/issue39026#msg369309
+bison: /home/user/buildroot/output/host/share/bison/m4sugar/m4sugar.m4: cannot open: No such file or directory
 
-Hint: they believe removing the include is the best course of action.
+This particular issue is already resolved upstream by the addition of
+"relocatable" support, which we enable using --enable-relocatable.
 
-Can you have anotherlook, please?
+Once this issue is fixed, a second one pops up: the path to the m4
+program itself is also hardcoded. So we add a patch to fix that as
+well. The patch has been submitted upstream, which have requested for
+further refinements not applicable to the Buildroot context; in the
+meantime, we carry that patch.
 
-Thanks, and sorry for the long delay.,..
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  https://bugs.busybox.net/show_bug.cgi?id=12656
 
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  package/cracklib/cracklib.mk | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
-> > index 91d510ff34..be1b50f138 100644
-> > --- a/package/cracklib/cracklib.mk
-> > +++ b/package/cracklib/cracklib.mk
-> > @@ -19,9 +19,9 @@ else
-> >  CRACKLIB_CONF_OPTS += --without-zlib
-> >  endif
-> >  
-> > -ifeq ($(BR2_PACKAGE_PYTHON),y)
-> > +ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-> >  CRACKLIB_CONF_OPTS += --with-python
-> > -CRACKLIB_DEPENDENCIES += python
-> > +CRACKLIB_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-> >  else
-> >  CRACKLIB_CONF_OPTS += --without-python
-> >  endif
-> > -- 
-> > 2.24.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: add reference to the upstream submission]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-src-make-path-to-m4-relocatable.patch     | 70 ++++++++++++++++++++++
+ package/bison/bison.mk                             |  1 +
+ 2 files changed, 71 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/bison/0001-src-make-path-to-m4-relocatable.patch b/package/bison/0001-src-make-path-to-m4-relocatable.patch
+new file mode 100644
+index 0000000000..f40c39c558
+--- /dev/null
++++ b/package/bison/0001-src-make-path-to-m4-relocatable.patch
+@@ -0,0 +1,70 @@
++From 50c8a3af1661c3950b9743d673fd46872860aa08 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 18 May 2020 07:53:20 +0200
++Subject: [PATCH] src: make path to m4 relocatable
++
++Commit a4ede8f85b0c9a254fcb01e5888cee1983095669 ("package: make bison
++a relocatable package") made Bison relocatable, but in fact it still
++contains one absolute reference: the M4 variable, which points to the
++M4 program. Let's fix that by using relocate().
++
++We don't use relocate2() to store the temporary buffer and re-use it,
++because m4path() is only called once.
++
++Upstream: submitted to the bison-patches at gnu.org mailing list
++https://lists.gnu.org/archive/html/bison-patches/2020-05/msg00078.html
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/files.c  | 7 +++++++
++ src/files.h  | 3 +++
++ src/output.c | 2 +-
++ 3 files changed, 11 insertions(+), 1 deletion(-)
++
++diff --git a/src/files.c b/src/files.c
++index 71c10e34..b8b43230 100644
++--- a/src/files.c
+++++ b/src/files.c
++@@ -421,6 +421,13 @@ pkgdatadir (void)
++     }
++ }
++ 
+++char const *
+++m4path (void)
+++{
+++  char const *m4 = getenv("M4");
+++  return m4 ? m4 : relocate(M4);
+++}
+++
++ void
++ output_file_names_free (void)
++ {
++diff --git a/src/files.h b/src/files.h
++index 00814ad0..64b6f8b5 100644
++--- a/src/files.h
+++++ b/src/files.h
++@@ -64,6 +64,9 @@ extern char *all_but_ext;
++ /* Where our data files are installed.  */
++ char const *pkgdatadir (void);
++ 
+++/* Where the m4 program is installed.  */
+++char const *m4path (void);
+++
++ void compute_output_file_names (void);
++ void output_file_names_free (void);
++ 
++diff --git a/src/output.c b/src/output.c
++index 1871fd75..ebe75095 100644
++--- a/src/output.c
+++++ b/src/output.c
++@@ -682,7 +682,7 @@ static void
++ output_skeleton (void)
++ {
++   /* Compute the names of the package data dir and skeleton files.  */
++-  char const *m4 = (m4 = getenv ("M4")) ? m4 : M4;
+++  char const *m4 = m4path ();
++   char const *datadir = pkgdatadir ();
++   char *skeldir = xpath_join (datadir, "skeletons");
++   char *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
++-- 
++2.26.2
++
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 2174a9061c..4cc635c445 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -12,5 +12,6 @@ BISON_LICENSE_FILES = COPYING
+ # parallel build issue in examples/c/reccalc/
+ BISON_MAKE = $(MAKE1)
+ HOST_BISON_DEPENDENCIES = host-m4
++HOST_BISON_CONF_OPTS = --enable-relocatable
+ 
+ $(eval $(host-autotools-package))
