@@ -1,29 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 May 2020 23:21:50 +0200
-Subject: [Buildroot] Clone from HTTPS URL gave error 403
-In-Reply-To: <BYAPR11MB2552D7A18E88F73937B9C79CFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
-References: <BYAPR11MB2552D7A18E88F73937B9C79CFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
-Message-ID: <20200519232150.29ce6381@windsurf.home>
+Date: Tue, 19 May 2020 23:23:39 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/mfgtools: bump to version
+ 1.3.154
+In-Reply-To: <20200519230845.447c80c6@windsurf.home>
+References: <20200413214249.206017-1-joerg.krause@embedded.rocks>
+ <20200519230845.447c80c6@windsurf.home>
+Message-ID: <20200519232339.7ceb0228@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+On Tue, 19 May 2020 23:08:45 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Tue, 19 May 2020 21:07:53 +0000
-"Hsiao, Michael" <michael.hsiao@intel.com> wrote:
+> This is missing host-bzip2, otherwise the build fails with:
+> 
+> CMake Error at /home/br-user/output/host/share/cmake-3.15/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>   Could NOT find BZip2 (missing: BZIP2_LIBRARIES BZIP2_INCLUDE_DIR)
+> Call Stack (most recent call first):
+>   /home/br-user/output/host/share/cmake-3.15/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>   /home/br-user/output/host/share/cmake-3.15/Modules/FindBZip2.cmake:63 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>   libuuu/CMakeLists.txt:6 (find_package)
+> 
+> It also fails to build without host-openssl:
+> 
+> -- Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR (missing: OPENSSL_CRYPTO_LIBRARY OPENSSL_INCLUDE_DIR) 
+> CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+> Please set them or make sure they are set and tested correctly in the CMake files:
+> OPENSSL_CRYPTO_LIBRARY (ADVANCED)
+>     linked by target "uuu" in directory /home/br-user/output/build/host-mfgtools-1.3.154/uuu
+> OPENSSL_SSL_LIBRARY (ADVANCED)
+>     linked by target "uuu" in directory /home/br-user/output/build/host-mfgtools-1.3.154/uuu
+> 
+> But looking more at the source code, uuu/CMakeLists.txt is checking for
+> openssl, but the code in uuu/ does not use it. libuuu/ is using it, and
+> makes it conditional.
+> 
+> This all seems to be pretty broken :-/
 
-> I was getting an error 403 when I tried to git clone from the
-> recommended HTTPS URL last week, but now it seems to be working
-> again. What's the best way to get notified or check if there is
-> downtime?
+Another issue is that mfgtools overwrites CMAKE_CXX_FLAGS:
 
-Could you indicate which URL specifically you've tried?
+libuuu/CMakeLists.txt:set(CMAKE_CXX_FLAGS "-O2 ${UUUSSL}")
 
-In any case, keep in mind that we have a mirror on Github, which is
-updated from the official repository every 10 minutes.
+due to this, we lose the CMAKE_CXX_FLAGS passed on the command line by
+Buildroot, which includes -I$(HOST_DIR)/include, and the build of
+host-mfgtools does not find the libraries installed in $(HOST_DIR).
+
+I would recommend you to build in a more minimal environment to detect
+such issues. Indeed, you have not noticed any of the issue I have
+reported because you have bzip2 and openssl installed system-wide.
+
+Best regards,
 
 Thomas
 -- 
