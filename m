@@ -1,42 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 May 2020 21:26:53 +0000
-Subject: [Buildroot] [Bug 12391] CMake-based host package fails to include
- output/host/include
-In-Reply-To: <bug-12391-163@https.bugs.busybox.net/>
-References: <bug-12391-163@https.bugs.busybox.net/>
-Message-ID: <bug-12391-163-dBDrxC8sim@https.bugs.busybox.net/>
+From: Hsiao, Michael <michael.hsiao@intel.com>
+Date: Tue, 19 May 2020 21:34:48 +0000
+Subject: [Buildroot] Clone from HTTPS URL gave error 403
+In-Reply-To: <20200519232150.29ce6381@windsurf.home>
+References: <BYAPR11MB2552D7A18E88F73937B9C79CFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
+ <20200519232150.29ce6381@windsurf.home>
+Message-ID: <BYAPR11MB25521F0F00DD12650720FE9BFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12391
+Hello Thomas,
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+Here's the URL I used: https://git.busybox.net/buildroot
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WONTFIX
+This is the error from Git Bash on Friday:
+$ git clone https://git.busybox.net/buildroot
+Cloning into 'buildroot'...
+fatal: unable to access 'https://git.busybox.net/buildroot/': The requested URL returned error: 403
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Thanks for your bug report.
+Thanks,
+Michael
 
-However, it is really the mfgtools code that is broken: in
-libuuu/CMakeLists.txt it overwrites CMAKE_CXX_FLAGS, which means it ignores the
-value Buildroot is passing, which contains -I$(HOST_DIR)/include.
+-----Original Message-----
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
+Sent: Tuesday, May 19, 2020 2:22 PM
+To: Hsiao, Michael <michael.hsiao@intel.com>
+Cc: buildroot at buildroot.org
+Subject: Re: [Buildroot] Clone from HTTPS URL gave error 403
 
-If you change:
+Hello Michael,
 
-libuuu/CMakeLists.txt:set(CMAKE_CXX_FLAGS "-O2 ${UUUSSL}")
+On Tue, 19 May 2020 21:07:53 +0000
+"Hsiao, Michael" <michael.hsiao@intel.com> wrote:
 
-to:
+> I was getting an error 403 when I tried to git clone from the 
+> recommended HTTPS URL last week, but now it seems to be working again. 
+> What's the best way to get notified or check if there is downtime?
 
-libuuu/CMakeLists.txt:set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 ${UUUSSL}")
+Could you indicate which URL specifically you've tried?
 
-suddenly, it will work.
+In any case, keep in mind that we have a mirror on Github, which is updated from the official repository every 10 minutes.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas
+--
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
