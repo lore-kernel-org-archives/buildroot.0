@@ -1,18 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 19 May 2020 17:08:23 -0500
-Subject: [Buildroot] [PATCH] package/rng-tools: make jitterentropy
- conditional
-In-Reply-To: <20200518094817.3996c1b1@windsurf.home>
-References: <20200205182608.22695-1-matthew.weber@rockwellcollins.com>
- <20200205203257.48877881@windsurf>
- <CANQCQparBzmSPD9epjQw8t6jyMejP0E1X0GjTUkXHpjXTi8Svg@mail.gmail.com>
- <CANQCQpZ9Hs6DA6XJpBnMLxqnnJj8N3TYQLsDSp_YR3xqR8G-bQ@mail.gmail.com>
- <87wo8wuc3z.fsf@dell.be.48ers.dk>
- <CANQCQpb8YvhCXireoGM_cwnJnp2T8uGLunPj_3ARyuKgQO+Adw@mail.gmail.com>
- <CAGm1_ksUDVmG3-b6H8FRSBzb9=0GahR7Q5Uh3YKM4uAysvkZZg@mail.gmail.com>
- <CANQCQpatBqo1S1Pn9usEPzLOPusqK1LQOBcoos8uObZ+skFgxg@mail.gmail.com>
- <20200518094817.3996c1b1@windsurf.home>
-Message-ID: <CANQCQpbW=XDMeDSf44gJNBC8XiNULBZp5-QnHLUN3uTqwrrhhQ@mail.gmail.com>
+Date: Tue, 19 May 2020 17:10:31 -0500
+Subject: [Buildroot] [Next] package/haveged: set write_wakeup_threshold
+ to 2048
+In-Reply-To: <20200512233923.20290-1-matthew.weber@rockwellcollins.com>
+References: <20200512233923.20290-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpbtviLRMm+c8bRPMefRObTygAD-XzWbO7Y1y4Di545mYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,57 +13,82 @@ To: buildroot@busybox.net
 
 Thomas,
 
+On Tue, May 12, 2020 at 6:39 PM Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Adjust the low water mark to wake-up the haveged daemon at the
+> same time that rngd would wake-up when a hardware RNG is present.
+>
+> This supports the theory that rngd then can't dominate the entropy
+> pool. Instead haveged and rngd would complete to fill the pool.
+> https://tails.boum.org/contribute/design/random/#index5h2
+>
+> If rngd isn't enabled or there isn't a hardware RNG, this change
+> should not impact the behavior of the entropy pool other then
+> the pool should be less likely to deplete and cause an entropy
+> starve with haveged filling it earlier
 
-On Mon, May 18, 2020 at 2:49 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+I marked this as a Next item but I guess it really is sort of a bug
+that should be merged before release as I believe it should apply to
+LTS as well.
+.
 >
-> Hello Matt,
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
 >
-> On Thu, 13 Feb 2020 11:07:36 -0600
-> Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
+> Peter I believe this one also applys to 2020.02.x
+> ---
+>  package/haveged/S21haveged | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> > > We had similar issue today with am335x (kernel 5.4.x). Bumping
-> > > rng-tools to v6.9 helped.
-> >
-> > Thank you for that feedback, I'll make this patch is superseded as the
-> > bump resolved the bug.  I'll add a note with this patchwork thread in
-> > the bug report as well.
->
-> As I was going through open bug reports, I looked again at
-> https://bugs.busybox.net/show_bug.cgi?id=12511, and I disagree with the
-> conclusion of discarding this patch "package/rng-tools: make
-> jitterentropy conditional".
->
-> If I understand correctly:
->
->  - If you have a hardware RNG, the jitterentropy library is not
->    necessary.
+> diff --git a/package/haveged/S21haveged b/package/haveged/S21haveged
+> index 4b6e6ced4e..22b84e4f27 100644
+> --- a/package/haveged/S21haveged
+> +++ b/package/haveged/S21haveged
+> @@ -3,7 +3,7 @@
+>  case "$1" in
+>         start)
+>                 printf "Starting haveged: "
+> -               start-stop-daemon -S -x /usr/sbin/haveged -- -w 1024 -r 0
+> +               start-stop-daemon -S -x /usr/sbin/haveged -- -w 2048 -r 0
+>                 [ $? = 0 ] && echo "OK" || echo "FAIL"
+>                 ;;
+>         stop)
+> --
+> 2.17.1
 >
 
-Right,  jitterentropy  is a fall back if there isn't a hardware RNG
-setup.  The performance impacts of having it enabled when there is a
-hardware RNG were improved between versions and that was the
-motivation to drop this patch as it didn't seem to still be a bug
-(having it enabled when it isn't really needed).
 
->  - If you don't have a hardware RNG, rng-tools will error out, unless
->    jitterentropy support is enabled.
+-- 
 
-Correct.
+Matthew Weber | Associate Director Software Engineer | Commercial Avionics
 
->
-> So, we really want to make the jitterentropy support in rng-tools
-> optional, and leave it up to the user to enable it if (s)he has no
-> hardware RNG available. And if there's no hardware RNG and no
-> jitterentropy support, rng-tools will error out, the service will fail
-> to start, and that's good. So the trick with the special 66 return code
-> is not necessary.
->
-> Do you agree ?
+COLLINS AEROSPACE
 
-I agree, we should drop that rngd.service change but still keep the
-option where a user could add the jitterentropy library if they need
-it.
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
 
-Regards,
-Matt
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
+
+
+ALPHA BRAVO COLLINS | Aerospace Redefined
+
+         __ l __
+
+ \- - - -o-(_)-o- - - -/
