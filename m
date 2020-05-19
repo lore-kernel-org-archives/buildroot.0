@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 May 2020 21:03:03 +0200
-Subject: [Buildroot] [PATCH] package/p7zip: fix build with gcc 10
-In-Reply-To: <20200519133523.3069943-1-stefan.sorensen@spectralink.com>
-References: <20200519133523.3069943-1-stefan.sorensen@spectralink.com>
-Message-ID: <20200519190303.GE27030@scaer>
+Date: Tue, 19 May 2020 21:03:36 +0200
+Subject: [Buildroot] [PATCH] package/openldap: security bump to version
+ 2.4.50
+In-Reply-To: <20200519132721.3068717-1-stefan.sorensen@spectralink.com>
+References: <20200519132721.3068717-1-stefan.sorensen@spectralink.com>
+Message-ID: <20200519190336.GF27030@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,60 +13,55 @@ To: buildroot@busybox.net
 
 Stefan, All,
 
-On 2020-05-19 15:35 +0200, Stefan S?rensen spake thusly:
+On 2020-05-19 15:27 +0200, stefan at astylos.dk spake thusly:
+> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> 
+> Security fixes:
+>  CVE-2020-12243: Fixed slapd to limit depth of nested filters
+> 
 > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
 Applied to master, thanks.
-
-I was going to say "do not forget to send upstream", but upstream seems
-to dead, or stuck in some mess...
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  .../p7zip/0004-Fix-build-with-gcc-10.patch    | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/p7zip/0004-Fix-build-with-gcc-10.patch
+>  package/openldap/openldap.hash | 12 ++++++------
+>  package/openldap/openldap.mk   |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/p7zip/0004-Fix-build-with-gcc-10.patch b/package/p7zip/0004-Fix-build-with-gcc-10.patch
-> new file mode 100644
-> index 0000000000..b01833db29
-> --- /dev/null
-> +++ b/package/p7zip/0004-Fix-build-with-gcc-10.patch
-> @@ -0,0 +1,32 @@
-> +From 78b760eae21d7b340c69e8abab8ca706e1e00adc Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-> +Date: Mon, 4 May 2020 09:19:46 +0200
-> +Subject: [PATCH] Fix build with gcc 10.
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Add cast to code that mixes HRESULT (aka long) and DWORD (aka unsigned
-> +int) which causes an narrowing error with gcc 10.
-> +
-> +Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> +---
-> + CPP/Windows/ErrorMsg.cpp | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/CPP/Windows/ErrorMsg.cpp b/CPP/Windows/ErrorMsg.cpp
-> +index 99684ae..ab48352 100644
-> +--- a/CPP/Windows/ErrorMsg.cpp
-> ++++ b/CPP/Windows/ErrorMsg.cpp
-> +@@ -13,7 +13,7 @@ UString MyFormatMessage(DWORD errorCode)
-> +   const char * txt = 0;
-> +   AString msg;
-> + 
-> +-  switch(errorCode) {
-> ++  switch((HRESULT)errorCode) {
-> +     case ERROR_NO_MORE_FILES   : txt = "No more files"; break ;
-> +     case E_NOTIMPL             : txt = "E_NOTIMPL"; break ;
-> +     case E_NOINTERFACE         : txt = "E_NOINTERFACE"; break ;
-> +-- 
-> +2.26.2
-> +
+> diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+> index 7f159cb6d0..074caf9fb2 100644
+> --- a/package/openldap/openldap.hash
+> +++ b/package/openldap/openldap.hash
+> @@ -1,7 +1,7 @@
+> -# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.md5
+> -md5 2a47a6bb4319357ea7b032c45283e79e  openldap-2.4.49.tgz
+> -# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.sha1
+> -sha1 f0caeca122e6f90e6ac5cc8ba36fe9cec13826da  openldap-2.4.49.tgz
+> +# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.md5
+> +md5  f9ed44ef373abed04c9e4c8586260f9e  openldap-2.4.50.tgz
+> +# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.sha1
+> +sha1 82f576e0d0d334e9e798d9de8936683546247bb9  openldap-2.4.50.tgz
+>  # Locally computed
+> -sha256 e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e  openldap-2.4.49.tgz
+> -sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+> +sha256  5cb57d958bf5c55a678c6a0f06821e0e5504d5a92e6a33240841fbca1db586b8  openldap-2.4.50.tgz
+> +sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+> diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+> index a5f6067494..a9e71be595 100644
+> --- a/package/openldap/openldap.mk
+> +++ b/package/openldap/openldap.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -OPENLDAP_VERSION = 2.4.49
+> +OPENLDAP_VERSION = 2.4.50
+>  OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+>  OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+>  OPENLDAP_LICENSE = OpenLDAP Public License
 > -- 
 > 2.25.4
 > 
