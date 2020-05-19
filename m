@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 May 2020 23:37:17 +0200
-Subject: [Buildroot] Clone from HTTPS URL gave error 403
-In-Reply-To: <BYAPR11MB25521F0F00DD12650720FE9BFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
-References: <BYAPR11MB2552D7A18E88F73937B9C79CFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
- <20200519232150.29ce6381@windsurf.home>
- <BYAPR11MB25521F0F00DD12650720FE9BFAB90@BYAPR11MB2552.namprd11.prod.outlook.com>
-Message-ID: <20200519233717.3c67061e@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 May 2020 21:39:26 +0000
+Subject: [Buildroot] [Bug 12786] Systemd spawns two getty processes when the
+ getty port is set to console
+In-Reply-To: <bug-12786-163@https.bugs.busybox.net/>
+References: <bug-12786-163@https.bugs.busybox.net/>
+Message-ID: <bug-12786-163-vUtTq2V7QM@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 May 2020 21:34:48 +0000
-"Hsiao, Michael" <michael.hsiao@intel.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12786
 
-> Hello Thomas,
-> 
-> Here's the URL I used: https://git.busybox.net/buildroot
-> 
-> This is the error from Git Bash on Friday:
-> $ git clone https://git.busybox.net/buildroot
-> Cloning into 'buildroot'...
-> fatal: unable to access 'https://git.busybox.net/buildroot/': The requested URL returned error: 403
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
-I know there's been recently some sysadmin work done on the server that
-hosts our Git server, that might explain it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |DUPLICATE
 
-As I said, you can also use https://github.com/buildroot/buildroot.
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
 
-Best regards,
 
-Thomas
+*** This bug has been marked as a duplicate of bug 12361 ***
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
