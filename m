@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 May 2020 19:17:41 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-filmon: bump version
- to 2.4.6-Leia
-Message-ID: <20200520171741.6669-1-bernd.kuhls@t-online.de>
+Date: Wed, 20 May 2020 19:18:28 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-mythtv: bump version
+ to 5.10.16-Leia
+Message-ID: <20200520171828.6837-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +11,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-filmon/kodi-pvr-filmon.hash | 2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk   | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-index 947c81d2e6..8f181a2420 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index c70e032289..4faeb1f04d 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 763500fb4a7210569f05dba8307d400e532dd0e72b24f1a1d2cd516695145190  kodi-pvr-filmon-2.4.4-Leia.tar.gz
-+sha256 90988e4833c0f84ab08e08be3cd08b84e4ba2baf2ebc1545c62e5dbd6708d749  kodi-pvr-filmon-2.4.6-Leia.tar.gz
- sha256 081907693b03f27cb1b17e0a440ae05fd8c8b4631be6fe6fdba4e18a5d40fdc5  debian/copyright
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-index 0ee910db9f..078eae176a 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+-sha256 36d9142e0e19b904e1c4a6d8cd67063d291e63971f80a98a6f24b7f4554bb2e3  kodi-pvr-mythtv-5.10.15-Leia.tar.gz
++sha256 fef27e73009f095a22e4843e48455a343a4fe095ae9692b9fa96ffac7fb0844c  kodi-pvr-mythtv-5.10.16-Leia.tar.gz
+ sha256 0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index b89db3a455..ca1d533a57 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_FILMON_VERSION = 2.4.4-Leia
-+KODI_PVR_FILMON_VERSION = 2.4.6-Leia
- KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
- KODI_PVR_FILMON_LICENSE = GPL-2.0+
- KODI_PVR_FILMON_LICENSE_FILES = debian/copyright
+-KODI_PVR_MYTHTV_VERSION = 5.10.15-Leia
++KODI_PVR_MYTHTV_VERSION = 5.10.16-Leia
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
 -- 
 2.26.2
