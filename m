@@ -1,13 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 20 May 2020 09:24:47 +0200
-Subject: [Buildroot] [PATCH 1/4] package/freescale-imx/firmware-imx: add
- choice for DDR training binaries
-In-Reply-To: <DB8PR04MB57559936B1EB9FD7E8FC3BE7A7B90@DB8PR04MB5755.eurprd04.prod.outlook.com>
-References: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
- <1588059233-11467-2-git-send-email-stephane.viau@oss.nxp.com>
- <20200428082111.GA183066@p1g2>
- <DB8PR04MB57559936B1EB9FD7E8FC3BE7A7B90@DB8PR04MB5755.eurprd04.prod.outlook.com>
-Message-ID: <20200520072447.GA1349614@p1g2>
+Date: Wed, 20 May 2020 09:58:06 +0200
+Subject: [Buildroot] [PATCH v2 1/5] package/freescale-imx: Add option
+ for DDR FW need
+In-Reply-To: <1588151545-9346-2-git-send-email-stephane.viau@oss.nxp.com>
+References: <1588151545-9346-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1588151545-9346-2-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <20200520075806.GB1349614@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +14,50 @@ To: buildroot@busybox.net
 
 Hi Stephane,
 
-On Tue, May 19, 2020 at 04:01:21PM +0000, Stephane Viau (OSS) wrote:
-> >Hi Stephane,
-> >
-> >Thanks for this patch, it would indeed be nice to support several DDR
-> >options. However I have a few remarks, see below.
-> >
+On Wed, Apr 29, 2020 at 11:12:21AM +0200, Stephane Viau wrote:
+> Only some i.MX8 need a DDR training firmware (8M, 8MM, 8MN). Some other
+> i.MX8 (QuadMax, QuadXPlus) rely on system controller for that task.
 > 
-> Hi Gary, 
+> Suggested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+> ---
+> v2:
+>   - introduce BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW to extend the DDR
+>     firmware selection to the whole i.MX 8M family (suggested by Gary)
 > 
-> Did you get a chance to review the v2 patch set I sent a few weeks ago?
-> (https://patchwork.ozlabs.org/project/buildroot/list/?series=173449) 
+> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+> ---
+>  package/freescale-imx/Config.in | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index b0c7de8..6b10d2c 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -96,6 +96,13 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+> +	bool
+> +	default y if \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
 
-I haven't got a chance to look at it no. But I'm doing so this morning.
-Mainly I only one remark on the first patch, I'll reply to it.
-All the other patches look good.
+I'm not against this approach but if I recall correctly Thomas is not a
+fan of those. Clearly it's useful and we'll soon add one more SoC to
+that macro (IMX8MP).
+
+As Yann mentioned on IRC:
+"Usually, when we introduce such option, it does not 'default y' based
+on some other options. Instead, the other options 'select' it."
+
+Let's try to use that approach this time, although I know the rest of
+the file is doing it wrong :-/ (my bad)
+
+But I'll answer to next patch as well, I don't think this is necessary
+to have that variable as it might be confusing for firmware-imx.
 
 Regards,
 Gary
