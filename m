@@ -1,30 +1,52 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Wed, 20 May 2020 18:18:43 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 20 May 2020 19:09:57 +0200
 Subject: [Buildroot] Console warning using the package aircrack-ng
-Message-ID: <CALtfCQYSupq9++U=Ua74Y3aT5Z7pxzHcEmERW-D-je3ZPGZG3w@mail.gmail.com>
+In-Reply-To: <CALtfCQYSupq9++U=Ua74Y3aT5Z7pxzHcEmERW-D-je3ZPGZG3w@mail.gmail.com>
+References: <CALtfCQYSupq9++U=Ua74Y3aT5Z7pxzHcEmERW-D-je3ZPGZG3w@mail.gmail.com>
+Message-ID: <20200520190957.115bcdfb@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Hello Oscar,
 
+On Wed, 20 May 2020 18:18:43 +0200, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
 
-I am using a raspberry pi 3B with an usb WiFi dongle with the chipset rtl8192c.
+> Hi everyone,
+>
+>
+> I am using a raspberry pi 3B with an usb WiFi dongle with the chipset rtl8192c.
+>
+> I have buildroot 2020.02 with the package aircrack-ng (ver1.6). I am
+> using the USB dongle in monitor mode. When I execute this command:
+>
+> # /usr/sbin/airodump-ng wlan0mon --output-format csv --write /tmp/wifi_results
+>
+> I've got this warning:
+>
+> Warning: Detected you are using a non-UNICODE terminal character encoding.
+>
+> And it seems to be that airodump-ng doesn't work properly.
+>
+> Does anyone know how to fix this warning?
 
-I have buildroot 2020.02 with the package aircrack-ng (ver1.6). I am
-using the USB dongle in monitor mode. When I execute this command:
+Run your command with:
 
-# /usr/sbin/airodump-ng wlan0mon --output-format csv --write /tmp/wifi_results
+	LANG=en_US.utf8 /usr/sbin/airodump-ng wlan0mon ...
 
-I've got this warning:
+in case en_US.utf8 is enabled in your buildroot config, otherwise rebuild with:
 
-Warning: Detected you are using a non-UNICODE terminal character encoding.
+	BR2_GENERATE_LOCALE="en_US"
 
-And it seems to be that airodump-ng doesn't work properly.
+Regards,
+Peter
 
-Does anyone know how to fix this warning?
-
-
-Oscar Gomez Fuente
+>
+>
+> Oscar Gomez Fuente
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
