@@ -1,83 +1,51 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 20 May 2020 17:28:50 -0500
-Subject: [Buildroot] [NEXT v3] package/xerces: add enable network option
-Message-ID: <20200520222850.55150-1-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 20 May 2020 17:30:34 -0500
+Subject: [Buildroot] [PATCH v2 1/1] package/xerces: add enable network
+ option
+In-Reply-To: <20200509220251.0d1cd423@windsurf.home>
+References: <20200504202558.24654-1-jared.bents@rockwellcollins.com>
+ <20200509220251.0d1cd423@windsurf.home>
+Message-ID: <CANQCQpYqrvdSgyqqYZUJHc5s7xU1gf-shnQdTeybt9b0HFJcqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jared Bents <jared.bents@rockwellcollins.com>
+Thomas,
 
-Update to add the option to compile xerces with network
-enabled by default so it can be unselected to compile
-without network support.
 
-When network support is enabled the Network Accessor feature
-will decode schema urls and if they don't appear as localhost
-or local files, it will open a stream (socket) session with
-the remote server. In an embedded setting having the option to
-disable this allows:
- * cleaner audit logging
- * smaller security attack surface
- * less library dependencies
- * no behind the scenes failed session attempts
+On Sat, May 9, 2020 at 3:05 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Mon,  4 May 2020 15:25:58 -0500
+> Jared Bents <jared.bents@rockwellcollins.com> wrote:
+>
+> > Update to add the option to compile xerces with network
+> > enabled by default so it can be unselected to compile
+> > without network support.
+> >
+> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+>
+> Could you expand the commit log with an explantion of the *why* we want
+> to add this new option? Size impact? If so, what is the size impact?
+> Some other reason?
+>
+> > +ifeq ($(BR2_PACKAGE_XERCES_ENABLE_NETWORK),y)
+> >  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> >  XERCES_CONF_OPTS += -Dnetwork-accessor=curl
+> >  XERCES_DEPENDENCIES += libcurl
+> >  else
+> >  XERCES_CONF_OPTS += -Dnetwork-accessor=socket
+> >  endif
+> > +else
+> > +XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
+>
+> We don't use this :BOOL type specification anywhere in CMake packages
+> in Buildroot, could you keep it consistent with the rest of the package?
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+v3
+http://patchwork.ozlabs.org/project/buildroot/patch/20200520222850.55150-1-matthew.weber at rockwellcollins.com/
 
----
-Changes
-v2 -> v3
- - updated description of what an option like this is needed
- - dropped the bool syntax for setting the value to off after
-   testing that it isn't required
----
- package/xerces/Config.in | 10 ++++++++++
- package/xerces/xerces.mk |  4 ++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-index 2edc4346b5..a9b102bd5e 100644
---- a/package/xerces/Config.in
-+++ b/package/xerces/Config.in
-@@ -6,5 +6,15 @@ config BR2_PACKAGE_XERCES
- 
- 	  http://xerces.apache.org/xerces-c/
- 
-+if BR2_PACKAGE_XERCES
-+
-+config BR2_PACKAGE_XERCES_ENABLE_NETWORK
-+	bool "Enable network support"
-+	default y
-+	help
-+	  Enable network support in xerces
-+
-+endif
-+
- comment "xerces-c++ needs a toolchain w/ C++, wchar"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index c75a8b0d35..ae42b1e62f 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -31,12 +31,16 @@ XERCES_CONF_ENV += LIBS=-liconv
- XERCES_DEPENDENCIES += libiconv
- endif
- 
-+ifeq ($(BR2_PACKAGE_XERCES_ENABLE_NETWORK),y)
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- XERCES_CONF_OPTS += -Dnetwork-accessor=curl
- XERCES_DEPENDENCIES += libcurl
- else
- XERCES_CONF_OPTS += -Dnetwork-accessor=socket
- endif
-+else
-+XERCES_CONF_OPTS += -Dnetwork=OFF
-+endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- XERCES_CONF_OPTS += -Dthreads=ON
--- 
-2.17.1
+Best Regards,
+Matt
