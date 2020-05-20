@@ -1,21 +1,24 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 20 May 2020 13:47:09 +0000
-Subject: [Buildroot] [Bug 12391] CMake-based host package fails to include
- output/host/include
-In-Reply-To: <bug-12391-163@https.bugs.busybox.net/>
-References: <bug-12391-163@https.bugs.busybox.net/>
-Message-ID: <bug-12391-163-voRNaAk64n@https.bugs.busybox.net/>
+Date: Wed, 20 May 2020 14:38:40 +0000
+Subject: [Buildroot] [Bug 12196] Illegal instruction in "duma" when built
+ with -O2
+In-Reply-To: <bug-12196-163@https.bugs.busybox.net/>
+References: <bug-12196-163@https.bugs.busybox.net/>
+Message-ID: <bug-12196-163-Qvl8Ih8cPk@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12391
+https://bugs.busybox.net/show_bug.cgi?id=12196
 
---- Comment #2 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
-FYI, I sent the fix suggested by Thomas and it was merged upstream:
-https://github.com/NXPmicro/mfgtools/commit/ea8eb862ce2445c17bb8dd55587d6a2581d20b68
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|duma package                |Illegal instruction in
+                   |                            |"duma" when built with -O2
 
 -- 
 You are receiving this mail because:
