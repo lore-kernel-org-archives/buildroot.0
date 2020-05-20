@@ -1,51 +1,135 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 20 May 2020 17:30:34 -0500
-Subject: [Buildroot] [PATCH v2 1/1] package/xerces: add enable network
- option
-In-Reply-To: <20200509220251.0d1cd423@windsurf.home>
-References: <20200504202558.24654-1-jared.bents@rockwellcollins.com>
- <20200509220251.0d1cd423@windsurf.home>
-Message-ID: <CANQCQpYqrvdSgyqqYZUJHc5s7xU1gf-shnQdTeybt9b0HFJcqw@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 21 May 2020 00:45:43 +0200
+Subject: [Buildroot] [PATCHv2] package/gcc/9.3.0: fix host-gcc-final when
+ ccache is used
+Message-ID: <20200520224543.2345022-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+As remported by several Buildroot users [1][2][3], the gcc build
+fail while running selftests makefile target.
 
+The problem only occurs when ccache is used with gcc 9 and 10,
+probably due to a race condition.
 
-On Sat, May 9, 2020 at 3:05 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon,  4 May 2020 15:25:58 -0500
-> Jared Bents <jared.bents@rockwellcollins.com> wrote:
->
-> > Update to add the option to compile xerces with network
-> > enabled by default so it can be unselected to compile
-> > without network support.
-> >
-> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
->
-> Could you expand the commit log with an explantion of the *why* we want
-> to add this new option? Size impact? If so, what is the size impact?
-> Some other reason?
->
-> > +ifeq ($(BR2_PACKAGE_XERCES_ENABLE_NETWORK),y)
-> >  ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> >  XERCES_CONF_OPTS += -Dnetwork-accessor=curl
-> >  XERCES_DEPENDENCIES += libcurl
-> >  else
-> >  XERCES_CONF_OPTS += -Dnetwork-accessor=socket
-> >  endif
-> > +else
-> > +XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
->
-> We don't use this :BOOL type specification anywhere in CMake packages
-> in Buildroot, could you keep it consistent with the rest of the package?
+While debuging with "make -p" we can notice that s-selftest-c target
+contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
 
-v3
-http://patchwork.ozlabs.org/project/buildroot/patch/20200520222850.55150-1-matthew.weber at rockwellcollins.com/
+  s-selftest-c: cc1
 
-Best Regards,
-Matt
+While the build is failing, the s-selftest-c dependencies recipe is
+still running and reported as a bug by make.
+
+  "Dependencies recipe running (THIS IS A BUG)."
+
+A change [5] in gcc 9 seems to introduce the problem since we can't
+reproduce this problem with gcc 8.
+
+For now add explicitely xgcc dependency to s-selftest-c and
+s-selftest-c++. It not clear why SELFTEST_DEPS is lost.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
+[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
+[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
+[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
+[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+This is probably not the definitive fix, but it's a step forward to
+understand the issue.
+
+v2: fix typo in gcc/c/Make-lang.in
+add xgcc$(exeext) in C_SELFTEST_DEPS not in C_SELFTEST_FLAGS
+---
+ ...gcc-c-cp-add-missing-xgcc-dependency.patch | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/gcc/9.3.0/0004-gcc-c-cp-add-missing-xgcc-dependency.patch
+
+diff --git a/package/gcc/9.3.0/0004-gcc-c-cp-add-missing-xgcc-dependency.patch b/package/gcc/9.3.0/0004-gcc-c-cp-add-missing-xgcc-dependency.patch
+new file mode 100644
+index 0000000000..172cff9ab9
+--- /dev/null
++++ b/package/gcc/9.3.0/0004-gcc-c-cp-add-missing-xgcc-dependency.patch
+@@ -0,0 +1,72 @@
++From 06aa7c5b5495aa1470e6cda5ebcae0a8bdbef182 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 20 May 2020 22:55:38 +0200
++Subject: [PATCH] gcc/{c,cp}: add missing xgcc dependency
++
++As remported by several Buildroot users [1][2][3], the gcc build
++fail while running selftests makefile target.
++
++The problem only occurs when ccache is used with gcc 9 and 10,
++probably due to a race condition.
++
++While debuging with "make -p" we can notice that s-selftest-c target
++contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
++
++  s-selftest-c: cc1
++
++While the build is failing, the s-selftest-c dependencies recipe is
++still running and reported as a bug by make.
++
++  "Dependencies recipe running (THIS IS A BUG)."
++
++A change [5] in gcc 9 seems to introduce the problem since we can't
++reproduce this problem with gcc 8.
++
++For now add explicitely xgcc dependency to s-selftest-c and
++s-selftest-c++. It not clear why SELFTEST_DEPS is lost.
++
++[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
++[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
++[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
++[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
++[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
++Cc: Maxim Kochetkov <fido_max@inbox.ru>
++Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Cc: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ gcc/c/Make-lang.in  | 2 +-
++ gcc/cp/Make-lang.in | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/c/Make-lang.in b/gcc/c/Make-lang.in
++index 1422be6e013..42f8a538f1a 100644
++--- a/gcc/c/Make-lang.in
+++++ b/gcc/c/Make-lang.in
++@@ -117,7 +117,7 @@ c.srcman:
++ selftest-c: s-selftest-c
++ 
++ C_SELFTEST_FLAGS = -xc $(SELFTEST_FLAGS)
++-C_SELFTEST_DEPS = cc1$(exeext) $(SELFTEST_DEPS)
+++C_SELFTEST_DEPS = cc1$(exeext) xgcc$(exeext) $(SELFTEST_DEPS)
++ 
++ # Run the C selftests:
++ s-selftest-c: $(C_SELFTEST_DEPS)
++diff --git a/gcc/cp/Make-lang.in b/gcc/cp/Make-lang.in
++index 8fc1570659e..b2412544756 100644
++--- a/gcc/cp/Make-lang.in
+++++ b/gcc/cp/Make-lang.in
++@@ -170,7 +170,7 @@ c++.srcman: doc/g++.1
++ # at each stage of the build:
++ selftest-c++: s-selftest-c++
++ 
++-CPP_SELFTEST_DEPS = cc1plus$(exeext) $(SELFTEST_DEPS)
+++CPP_SELFTEST_DEPS = cc1plus$(exeext) xgcc$(exeext) $(SELFTEST_DEPS)
++ CPP_SELFTEST_FLAGS = -xc++ $(SELFTEST_FLAGS)
++ 
++ # Run the C++ selftests
++-- 
++2.25.4
++
+-- 
+2.25.4
