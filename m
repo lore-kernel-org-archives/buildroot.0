@@ -1,41 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 20 May 2020 19:20:12 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-wmc: bump version to
- 2.4.6-Leia
-Message-ID: <20200520172012.7127-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 20 May 2020 21:30:45 +0200
+Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh: manage
+ uncompression
+Message-ID: <20200520193045.92597-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-wmc/kodi-pvr-wmc.hash | 2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Extract from bug report:
 
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-index e72e8d20a9..21e7414d0e 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 4cb81f29cba23172d042e50bbab00cd64cd5670ad7350fd9d25301f63178e5f7  kodi-pvr-wmc-2.4.5-Leia.tar.gz
-+sha256 7fb150ba3b8b41cf164425b56ae5dda3a5fb2f64cdea7229900113965d492fee  kodi-pvr-wmc-2.4.6-Leia.tar.gz
- sha256 6d97c3d608a5d59565b567313bd3e53a1d0066ed59f4ae8e474c895d0c20e746  debian/copyright
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-index d669768e7e..c280f89df4 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_WMC_VERSION = 2.4.5-Leia
-+KODI_PVR_WMC_VERSION = 2.4.6-Leia
- KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
- KODI_PVR_WMC_LICENSE = GPL-2.0+
- KODI_PVR_WMC_LICENSE_FILES = debian/copyright
+"Code line 120 to line 128 is to check whether the patch containing
+"rename from" and "rename to". But it directly use grep to find,
+ignoring the patch may be a tar file or else. It can only work on patch
+of textfile form."
+
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=11931
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ support/scripts/apply-patches.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 66fef262ee..80e2264497 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -113,8 +113,8 @@ function apply_patch {
+         echo "  to be applied  : ${path}/${patch}"
+         exit 1
+     fi
+-    if grep -q "^rename from" ${path}/${patch} && \
+-       grep -q "^rename to" ${path}/${patch} ; then
++    if ${uncomp} "${path}/$patch" | grep -q "^rename from" && \
++       ${uncomp} "${path}/$patch" | grep -q "^rename to" ; then
+         echo "Error: patch contains some renames, not supported by old patch versions"
+         exit 1
+     fi
 -- 
 2.26.2
