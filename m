@@ -1,52 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 20 May 2020 19:09:57 +0200
-Subject: [Buildroot] Console warning using the package aircrack-ng
-In-Reply-To: <CALtfCQYSupq9++U=Ua74Y3aT5Z7pxzHcEmERW-D-je3ZPGZG3w@mail.gmail.com>
-References: <CALtfCQYSupq9++U=Ua74Y3aT5Z7pxzHcEmERW-D-je3ZPGZG3w@mail.gmail.com>
-Message-ID: <20200520190957.115bcdfb@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 20 May 2020 19:14:55 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi-inputstream-adaptive:
+ bump version to 2.4.5
+Message-ID: <20200520171455.6307-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Oscar,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 20 May 2020 18:18:43 +0200, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
-
-> Hi everyone,
->
->
-> I am using a raspberry pi 3B with an usb WiFi dongle with the chipset rtl8192c.
->
-> I have buildroot 2020.02 with the package aircrack-ng (ver1.6). I am
-> using the USB dongle in monitor mode. When I execute this command:
->
-> # /usr/sbin/airodump-ng wlan0mon --output-format csv --write /tmp/wifi_results
->
-> I've got this warning:
->
-> Warning: Detected you are using a non-UNICODE terminal character encoding.
->
-> And it seems to be that airodump-ng doesn't work properly.
->
-> Does anyone know how to fix this warning?
-
-Run your command with:
-
-	LANG=en_US.utf8 /usr/sbin/airodump-ng wlan0mon ...
-
-in case en_US.utf8 is enabled in your buildroot config, otherwise rebuild with:
-
-	BR2_GENERATE_LOCALE="en_US"
-
-Regards,
-Peter
-
->
->
-> Oscar Gomez Fuente
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index ff520781ac..561d94f37c 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ec2264aa620faa547e589b705c0393dbbfe4a8f866215d9a9f3d5b3ceea6560e  kodi-inputstream-adaptive-2.4.4-Leia.tar.gz
++sha256 14389878598f34c9eb931ee9c7b431ddd4ee19df7368fc718c34b8bf4b56b0a1  kodi-inputstream-adaptive-2.4.5-Leia.tar.gz
+ sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index cd34047db4..643d608640 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.4-Leia
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.5-Leia
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+-- 
+2.26.2
