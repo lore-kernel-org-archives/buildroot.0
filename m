@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:37:15 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
- 5.10.16-Leia
-Message-ID: <20200602200121.83F92812A0@busybox.osuosl.org>
+Date: Thu, 21 May 2020 15:16:59 +0200
+Subject: [Buildroot] [git commit] package/python-crontab: bump to version
+ 2.5.1
+Message-ID: <20200602200121.178348256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac53acc640ecd4777e94e3add1b1d5120fd2a335
+commit: https://git.buildroot.net/buildroot/commit/?id=10b1abfcb523889c1725c5860f77f7bff29f4a0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-crontab/python-crontab.hash | 4 ++--
+ package/python-crontab/python-crontab.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index c70e032289..4faeb1f04d 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 36d9142e0e19b904e1c4a6d8cd67063d291e63971f80a98a6f24b7f4554bb2e3  kodi-pvr-mythtv-5.10.15-Leia.tar.gz
-+sha256 fef27e73009f095a22e4843e48455a343a4fe095ae9692b9fa96ffac7fb0844c  kodi-pvr-mythtv-5.10.16-Leia.tar.gz
- sha256 0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index b89db3a455..ca1d533a57 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
+index d0e5725708..2247cf3d3d 100644
+--- a/package/python-crontab/python-crontab.hash
++++ b/package/python-crontab/python-crontab.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-crontab/json
+-md5  65fe16d44568de2671d334a637e64a3b  python-crontab-2.4.2.tar.gz
+-sha256  ed9583cff430715d9560cbad28309429ac13f3fdb13051ac2288050e05abc392  python-crontab-2.4.2.tar.gz
++md5  7731a2253e853abfb6eceb8045368f22  python-crontab-2.5.1.tar.gz
++sha256  4bbe7e720753a132ca4ca9d4094915f40e9d9dc8a807a4564007651018ce8c31  python-crontab-2.5.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
+index 0c6109dd7f..ddb1067db2 100644
+--- a/package/python-crontab/python-crontab.mk
++++ b/package/python-crontab/python-crontab.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_PVR_MYTHTV_VERSION = 5.10.15-Leia
-+KODI_PVR_MYTHTV_VERSION = 5.10.16-Leia
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
+-PYTHON_CRONTAB_VERSION = 2.4.2
+-PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/d1/c2/e92e801a0c504e62899d574a6d281d6e598861797c6798a664556d2bca8c
++PYTHON_CRONTAB_VERSION = 2.5.1
++PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/1b/7e/fb78b96de58a49b8ef807c321870ef4de3de5928fd71a40a400aed714310
+ PYTHON_CRONTAB_SETUP_TYPE = setuptools
+ PYTHON_CRONTAB_LICENSE = LGPL-3.0+
+ PYTHON_CRONTAB_LICENSE_FILES = COPYING
