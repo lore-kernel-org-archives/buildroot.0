@@ -1,132 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:45:47 +0200
-Subject: [Buildroot] [git commit] package/crda: replace pycrypto by
- pycryptodomex
-Message-ID: <20200521133209.456A691BD3@busybox.osuosl.org>
+Date: Thu, 21 May 2020 15:49:25 +0200
+Subject: [Buildroot] [git commit] package/vboot-utils: fix -fno-common build
+ failure
+Message-ID: <20200521133248.5E8F291BD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d05237b6018d5389e4381b38d874f447137f987
+commit: https://git.buildroot.net/buildroot/commit/?id=19f726b9888f1bc4bb6284f2bcc417f5598c7723
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From [1]:
-"PyCryptodome is a fork of PyCrypto, which is not maintained any more
-(the last release dates back to 2013 [2]). It exposes almost the same
-API, but there are a few incompatibilities [3]."
+Added upstream patch for fixing build failure when using GCC10 as a host
+compiler (-fno-common is now default).
 
-[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
-[2] https://pypi.org/project/pycrypto/#history
-[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
+Fixes:
+http://autobuild.buildroot.net/results/aca662d9fd7052f3b361b731cd266edb3b6c41b0
+http://autobuild.buildroot.net/results/6546b284cf306a2fde3c69d67daf9aacffa9e143
+http://autobuild.buildroot.net/results/db20bb3c11a1a9558a5d8021015c6915f99097c8
 
-Update the patch 0001-crda-support-python-3-in-utils-key2pub.py.patch
-since it add pycrypto.
-
-From [4]
-"CRDA is no longer needed as of kernel v4.15 since commit 007f6c5e6eb45
-("cfg80211: support loading regulatory database as firmware file") added
-support to use the kernel's firmware request API which looks for the
-firmware on /lib/firmware. Because of this CRDA is legacy software for
-older kernels. It will continue to be maintained."
-
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/tree/README?id=9856751feaf7b102547cea678a5da6c94252d83d#n8
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...crda-support-python-3-in-utils-key2pub.py.patch | 32 ++++++++++++++--------
- package/crda/crda.mk                               |  2 +-
- 2 files changed, 22 insertions(+), 12 deletions(-)
+ .../0007-Make-vboot_version-extern-in-header.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-index fb46d58ed2..f2b9cca2d6 100644
---- a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-+++ b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-@@ -1,11 +1,11 @@
--From 4c346aa9e816bddfedc8ac99809fd1ed91bfc8ee Mon Sep 17 00:00:00 2001
-+From 8228c484a1533ff904b276c342adcb6310abe272 Mon Sep 17 00:00:00 2001
- From: Taahir Ahmed <ahmed.taahir@gmail.com>
- Date: Wed, 30 Mar 2016 11:23:54 -0300
- Subject: [PATCH] crda: support python 3 in utils/key2pub.py
- 
- utils/key2pub.py can now be run under either python 2.7 or python 3.x.
- This required some minor syntactical changes as well as switching from
--M2Crypto to pycrypto, since M2Crypto doesn't support python 3.x.
-+M2Crypto to pycryptodomex, since M2Crypto doesn't support python 3.x.
- 
- In addition, some errors in the generated source file keys-ssl.h are
- fixed:
-@@ -17,12 +17,22 @@ fixed:
- 
- [Gustavo: don't call /utils/key2pub.py since that doesn't compute]
- 
-+Use pycryptodomex insdead of pycrypto
+diff --git a/package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch b/package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch
+new file mode 100644
+index 0000000000..6a3929f3c0
+--- /dev/null
++++ b/package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch
+@@ -0,0 +1,50 @@
++From df4d2000a22db673a788b8e57e8e7c0cc3cee777 Mon Sep 17 00:00:00 2001
++From: Leonard Chan <leonardchan@google.com>
++Date: Thu, 3 Oct 2019 18:53:04 -0700
++Subject: [PATCH] Make vboot_version extern in header
 +
-+From [1]:
-+"PyCryptodome is a fork of PyCrypto, which is not maintained any more
-+(the last release dates back to 2013 [2]). It exposes almost the same
-+API, but there are a few incompatibilities [3]."
++When enabling `-fno-common` in Fuchsia, we get a bunch of linker errors
++when linking futility:
 +
-+[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
-+[2] https://pypi.org/project/pycrypto/#history
-+[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
++```
++ld.lld: error: duplicate symbol: vboot_version
++>>> defined at futility.h:43 (../../third_party/vboot_reference/futility/futility.h:43)
++>>>            host_x63-asan_no_detect_leaks/obj/third_party/vboot_reference/futility/futility.cmd_bdb.c.o:(vboot_version)
++>>> defined at futility.h:43 (../../third_party/vboot_reference/futility/futility.h:43)
++>>>            host_x64-asan_no_detect_leaks/obj/third_party/vboot_reference/futility/futility.cmd_create.c.o:(.bss.vboot_version+0x0)
++```
 +
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Rebased against crda-4.14]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
--Status: submitted upstream by author but not (yet) accepted
--URL: http://www.spinics.net/lists/linux-wireless/msg138936.html
-+[Romain: Use pycryptodomex]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  Makefile         |   2 +-
-  utils/key2pub.py | 146 ++++++++++++++++++++++++-----------------------
-@@ -42,7 +52,7 @@ index a3ead30..8da38d0 100644
-  $(LIBREG): regdb.h reglib.h reglib.c
-  	$(NQ) '  CC  ' $@
- diff --git a/utils/key2pub.py b/utils/key2pub.py
--index 9bb04cd..9f92ebd 100755
-+index 9bb04cd..8a0ba2a 100755
- --- a/utils/key2pub.py
- +++ b/utils/key2pub.py
- @@ -1,126 +1,128 @@
-@@ -57,11 +67,11 @@ index 9bb04cd..9f92ebd 100755
- -       sys.stderr.write('Please install the "M2Crypto" Python module.\n')
- -       sys.stderr.write('On Debian GNU/Linux the package is called "python-m2crypto".\n')
- -       sys.exit(1)
--+    from Crypto.PublicKey import RSA
-++    from Cryptodome.PublicKey import RSA
- +except ImportError as e:
--+    sys.stderr.write('ERROR: Failed to import the "Crypto.PublicKey" module: %s\n' % e.message)
--+    sys.stderr.write('Please install the "Crypto.PublicKey" Python module.\n')
--+    sys.stderr.write('On Debian GNU/Linux the package is called "python-crypto".\n')
-++    sys.stderr.write('ERROR: Failed to import the "Cryptodome.PublicKey" module: %s\n' % e.message)
-++    sys.stderr.write('Please install the "Cryptodome.PublicKey" Python module.\n')
-++    sys.stderr.write('On Debian GNU/Linux the package is called "python-cryptodomex".\n')
- +    sys.exit(1)
- +
- +def bitwise_collect(value, radix_bits):
-@@ -269,5 +279,5 @@ index 9bb04cd..9f92ebd 100755
-  
-  modes[mode][1](output, idx - 1)
- -- 
--2.18.0
-+2.25.3
- 
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index eb43a7d772..c5880797be 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
-@@ -6,7 +6,7 @@
- 
- CRDA_VERSION = 4.14
- CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
--CRDA_DEPENDENCIES = host-pkgconf host-python-pycrypto libnl libgcrypt
-+CRDA_DEPENDENCIES = host-pkgconf host-python-pycryptodomex libnl libgcrypt
- CRDA_LICENSE = ISC
- CRDA_LICENSE_FILES = LICENSE
- 
++and think this is because -fno-common places vboot_version for
++unitialized global variables in the BSS section of each object file.
++Making it extern instead resolves each reference to its definition in
++futility/misc.c.
++
++Change-Id: I591f07abd1f975a8a9d078bb4366e2e0861390b4
++Reviewed-on: https://chromium-review.googlesource.com/c/chromiumos/platform/vboot_reference/+/1839207
++Reviewed-by: Julius Werner <jwerner@chromium.org>
++Reviewed-by: Joel Kitching <kitching@chromium.org>
++Commit-Queue: Julius Werner <jwerner@chromium.org>
++Tested-by: Julius Werner <jwerner@chromium.org>
++
++Patch taken from upstream: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/df4d2000a22db673a788b8e57e8e7c0cc3cee777
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ futility/futility.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/futility/futility.h b/futility/futility.h
++index 3bce1106..5dc426dd 100644
++--- a/futility/futility.h
+++++ b/futility/futility.h
++@@ -41,7 +41,7 @@ enum vboot_version  {
++ };
++ 
++ /* What's our preferred API & data format? */
++-enum vboot_version vboot_version;
+++extern enum vboot_version vboot_version;
++ 
++ /* Here's a structure to define the commands that futility implements. */
++ struct futil_cmd_t {
++-- 
++2.20.1
++
