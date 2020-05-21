@@ -1,72 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 21 May 2020 19:18:29 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi: bump version to 18.7-Leia
-Message-ID: <20200521171829.3893-1-bernd.kuhls@t-online.de>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 21 May 2020 20:29:07 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-six: bump to version 1.15.0
+Message-ID: <20200521172907.45248-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: http://www.kodi.tv/article/kodi-leia-187-release
+And use two spaces indentation in the hash file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
- package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
- package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-six/python-six.hash | 6 +++---
+ package/python-six/python-six.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index 934392e916..f1889f3195 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 18.6-Leia
-+KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index dc5984cedc..ec8ffeae43 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 18.6-Leia
-+KODI_TEXTUREPACKER_VERSION = 18.7-Leia
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 357cd55c7b..be2659d385 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
+diff --git a/package/python-six/python-six.hash b/package/python-six/python-six.hash
+index 0d1e75fe9e..9945ffd1d7 100644
+--- a/package/python-six/python-six.hash
++++ b/package/python-six/python-six.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256 47e6d7d4e01dbda92ff83a3e141ac43003e918133e78b3a4b79faff65184711c  kodi-18.6-Leia.tar.gz
-+sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
- sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
- sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
- sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 8012324954..b62f4d92a9 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,7 +6,7 @@
+ # md5, sha256 from https://pypi.org/pypi/six/json
+-md5	21674588a57e649d1a6d977ec3122140  six-1.14.0.tar.gz
+-sha256	236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a  six-1.14.0.tar.gz
++md5  9f90a0eaa0ea7747fda01ca79d21ebcb  six-1.15.0.tar.gz
++sha256  30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259  six-1.15.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	8bb850c565aa389fdc16f3a46965ad23d82adff60f2393fc2762b63185e8e6c9  LICENSE
++sha256  8bb850c565aa389fdc16f3a46965ad23d82adff60f2393fc2762b63185e8e6c9  LICENSE
+diff --git a/package/python-six/python-six.mk b/package/python-six/python-six.mk
+index 8acc739f2e..e7621f5ecb 100644
+--- a/package/python-six/python-six.mk
++++ b/package/python-six/python-six.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 18.6-Leia
-+KODI_VERSION = 18.7-Leia
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
+-PYTHON_SIX_VERSION = 1.14.0
++PYTHON_SIX_VERSION = 1.15.0
+ PYTHON_SIX_SOURCE = six-$(PYTHON_SIX_VERSION).tar.gz
+-PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/21/9f/b251f7f8a76dec1d6651be194dfba8fb8d7781d10ab3987190de8391d08e
++PYTHON_SIX_SITE = https://files.pythonhosted.org/packages/6b/34/415834bfdafca3c5f451532e8a8d9ba89a21c9743a0c59fbd0205c7f9426
+ PYTHON_SIX_SETUP_TYPE = setuptools
+ PYTHON_SIX_LICENSE = MIT
+ PYTHON_SIX_LICENSE_FILES = LICENSE
 -- 
 2.26.2
