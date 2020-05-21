@@ -1,51 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 23:38:01 +0200
-Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump to version 3.9.2
-Message-ID: <20200602200122.064CB82B66@busybox.osuosl.org>
+Date: Thu, 21 May 2020 15:16:42 +0200
+Subject: [Buildroot] [git commit] package/feh: bump to version 3.4
+Message-ID: <20200602200121.0AC508256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f379e75dcd808a06e5d6494de6243f56fdda4477
+commit: https://git.buildroot.net/buildroot/commit/?id=5ebed9c9667f6d54504d65bf3b1881ce5298e6e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index faab7635da..ccbb531833 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.9.0"
-+	bool "3.9.2"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -51,7 +51,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.9.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 9f6c95ab08..5741b829f5 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index 2bfe5e48a8..c39abd0ee7 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256	e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71  at91bootstrap3-v3.9.0.tar.gz
-+sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
- sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
+ # Locally calculated after checking pgp signature
+-sha256 8f9741399b4b184ba28698c0fd7722638e79abac8e6c27eb526cc52b11ee0a1c  feh-3.2.1.tar.bz2
++sha256 18545ca5c7537268810bec564db9cd3ad1ca98c2a2f23ec243d3bac56cfc0365  feh-3.4.tar.bz2
+ sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 973eed60b0..90f8ff6579 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FEH_VERSION = 3.2.1
++FEH_VERSION = 3.4
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
