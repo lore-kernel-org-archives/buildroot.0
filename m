@@ -1,33 +1,32 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Thu, 21 May 2020 10:50:29 +0200
-Subject: [Buildroot] Console warning using the package aircrack-ng
-In-Reply-To: <20200521095344.264f72dc@gmx.net>
-References: <CALtfCQYSupq9++U=Ua74Y3aT5Z7pxzHcEmERW-D-je3ZPGZG3w@mail.gmail.com>
- <20200520190957.115bcdfb@gmx.net>
- <CALtfCQbha192QTuWxfQESzsfFAsJu=q7bKESB7roG53E4awssA@mail.gmail.com>
- <20200521095344.264f72dc@gmx.net>
-Message-ID: <CALtfCQb96X+zfDrxT+K3HECy=fGgmUJjOpWoEMec1OqM89r-7w@mail.gmail.com>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Thu, 21 May 2020 14:09:28 +0200
+Subject: [Buildroot] libstc++ library duplicate
+Message-ID: <CABMiYf-NwX6FsSif7yDbp3JLMFMfmiFEAaqU-A_Yv3apun3TGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-> For the installed system (and per login account):
->
->         $  echo "export LANG=en_US.utf8" > ~/.profile
->
-> or /etc/profile for all accounts...
->
-> For the next build take a look at the BR2_ROOTFS_OVERLAY option ([1])...
->
-> Regards,
-> Peter
->
-> [1] http://nightly.buildroot.org/manual.html#rootfs-custom
+I'm trying to decrease size of my root filesystem and noticed that
+libstdc++ library is installed twice. One in /lib and the same one in
+/usr/lib.
 
-Super easy, it worked perfectly. Thanks.
+They are installed by external-toolchain
 
-Oscar Gomez Fuente
+toolchain-external-arm-arm,./lib/libstdc++.so.6
+toolchain-external-arm-arm,./lib/libstdc++.so.6.0.28
+toolchain-external-arm-arm,./lib/libstdc++.so.6.0.28-gdb.py
+toolchain-external-arm-arm,./usr/lib/libstdc++.so.6
+toolchain-external-arm-arm,./usr/lib/libstdc++.so.6.0.28
+toolchain-external-arm-arm,./usr/lib/libstdc++.so.6.0.28-gdb.py
+
+Is that correct? Can I drop one?
+
+thanks
+Jan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200521/183fa38a/attachment.html>
