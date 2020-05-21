@@ -1,137 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 22:26:31 +0200
-Subject: [Buildroot] [git commit] package/gloox: new package
-Message-ID: <20200602200121.E32B4812A0@busybox.osuosl.org>
+Date: Thu, 21 May 2020 15:17:45 +0200
+Subject: [Buildroot] [git commit] package/python-redis: bump to version 3.5.2
+Message-ID: <20200602200121.2507F8256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=626be1a4184953b5e5862b4e7d218609e1566398
+commit: https://git.buildroot.net/buildroot/commit/?id=c195b88479e7be7586472b9e1e88fd06704d09a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gloox is a rock-solid, full-featured Jabber/XMPP client library,
-written in clean ANSI C++. It makes writing spec-compliant clients
-easy and allows for hassle-free integration of Jabber/XMPP
-functionality into existing applications. gloox is released under the
-GNU GPLv3. Commercial licensing and support are available.
-
-Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/gloox/Config.in  | 16 ++++++++++++++++
- package/gloox/gloox.hash |  3 +++
- package/gloox/gloox.mk   | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 68 insertions(+)
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..1320944186 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2633,6 +2633,9 @@ F:	package/python-pyusb/
- N:	Wojciech Nizi??ski <niziak@spox.org>
- F:	package/fwup/
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index 3f0c2d4d2c..b7a62ca297 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5  a005acb0f05c7929c8b5961d216a0220  redis-3.5.1.tar.gz
+-sha256  6e9d2722a95d10ddf854596e66516d316d99c6a483e5db3b35c34e1158b2bfa1  redis-3.5.1.tar.gz
++md5  e3155d2b7a7577ce61e572b4e3535545  redis-3.5.2.tar.gz
++sha256  6d65e84bc58091140081ee9d9c187aab0480097750fac44239307a3bdf0b1251  redis-3.5.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index ffd18a00b8..e09e3d8426 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+N:	Yair Ben Avraham <yairba@protonmail.com>
-+F:	package/gloox/
-+
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
- F:	board/friendlyarm/nanopi-neo/
- F:	configs/nanopi_neo_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index c12676d859..e81f2f6bdb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2040,6 +2040,7 @@ menu "Networking applications"
- 	source "package/freeswitch-mod-bcg729/Config.in"
- 	source "package/gerbera/Config.in"
- 	source "package/gesftpserver/Config.in"
-+	source "package/gloox/Config.in"
- 	source "package/glorytun/Config.in"
- 	source "package/gupnp-tools/Config.in"
- 	source "package/gutenprint/Config.in"
-diff --git a/package/gloox/Config.in b/package/gloox/Config.in
-new file mode 100644
-index 0000000000..91e9f06e34
---- /dev/null
-+++ b/package/gloox/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_GLOOX
-+	bool "gloox"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_MPC
-+	help
-+	  gloox is a portable high-level Jabber/XMPP library for C++. It
-+	  is fully compliant with the XMPP RFCs, supports all of the
-+	  XMPP features (including SRV lookups, TLS, SASL, roster
-+	  management, and privacy lists), and implements several XEPs
-+	  that make it ideal for writing any kind of Jabber/XMPP client
-+	  or component.
-+
-+	  https://camaya.net/gloox/
-+
-+comment "gloox needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
-new file mode 100644
-index 0000000000..ee42c079b2
---- /dev/null
-+++ b/package/gloox/gloox.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  97cb6a0c07e320ffa4a7c66e8ab06b2361086271dc87ed2398befef4e8435f8a  gloox-1.0.23.tar.bz2
-+sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
-diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
-new file mode 100644
-index 0000000000..46fe4d6a15
---- /dev/null
-+++ b/package/gloox/gloox.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# gloox
-+#
-+################################################################################
-+
-+GLOOX_VERSION = 1.0.23
-+GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
-+GLOOX_SITE = https://camaya.net/download
-+GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
-+GLOOX_LICENSE_FILES = LICENSE
-+GLOOX_INSTALL_STAGING = YES
-+GLOOX_DEPENDENCIES = mpc
-+GLOOX_CONF_OPTS = \
-+	--without-libidn \
-+	--enable-getaddrinfo
-+
-+GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+GLOOX_CXXFLAGS += -O0
-+endif
-+GLOOX_CONF_ENV += CXXFLAGS="$(GLOOX_CXXFLAGS)"
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GLOOX_CONF_ENV += LIBS=-latomic
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+GLOOX_CONF_OPTS += --with-zlib
-+GLOOX_DEPENDENCIES += zlib
-+else
-+GLOOX_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+GLOOX_CONF_OPTS += --with-openssl --without-gnutls
-+GLOOX_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+GLOOX_CONF_OPTS += --with-gnutls --without-openssl
-+GLOOX_DEPENDENCIES += gnutls
-+else
-+GLOOX_CONF_OPTS += --without-gnutls --without-openssl
-+endif
-+
-+$(eval $(autotools-package))
+-PYTHON_REDIS_VERSION = 3.5.1
++PYTHON_REDIS_VERSION = 3.5.2
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/1c/74/4d3250366bd783f9907d8ed32140bf4beef11000200d7edf8245800e6c4c
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/08/ca/549a324a6a40611ac6d6192586ca562e79db86dd25fa59c3877ce69ce910
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
