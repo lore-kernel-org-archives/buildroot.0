@@ -1,44 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:18:41 +0200
-Subject: [Buildroot] [git commit branch/next] package/libpwquality: bump
- version to 1.4.2
-Message-ID: <20200521130224.13B3B84890@busybox.osuosl.org>
+Date: Thu, 21 May 2020 15:19:00 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-sentry-sdk:
+ bump to version 0.14.4
+Message-ID: <20200521130224.2CEF084890@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c16bf544953004f8a534ae447189ed90161e1cd
+commit: https://git.buildroot.net/buildroot/commit/?id=70eab17ee245a939041d8e058ca4cc8e81182e76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpwquality/libpwquality.hash | 4 ++--
- package/libpwquality/libpwquality.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-sentry-sdk/python-sentry-sdk.hash | 8 ++++----
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
-index b63501fa16..07c50ed24e 100644
---- a/package/libpwquality/libpwquality.hash
-+++ b/package/libpwquality/libpwquality.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	a97d72b5c56b7e279c6e86dad70c1493ea5796f00a596fb9f3173b96f9bf5e46	libpwquality-1.4.1.tar.bz2
--sha256	aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee	COPYING
-+sha256  5263e09ee62269c092f790ac159112aed3e66826a795e3afec85fdeac4281c8e  libpwquality-1.4.2.tar.bz2
-+sha256  aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee  COPYING
-diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
-index bddafd59ca..a2fb00415f 100644
---- a/package/libpwquality/libpwquality.mk
-+++ b/package/libpwquality/libpwquality.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index e9dc465592..a2c739e262 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5	1b22a7cb91e1f9b83acbd61709d5e71d  sentry-sdk-0.13.1.tar.gz
+-sha256	f6e850f304382d87c5c52c01db8c0004d2ced6a0b073df2f2257168cf31b31aa  sentry-sdk-0.13.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/sentry_sdk/json
++md5  21ec2fefe3561a12b4ee1efef3748400  sentry-sdk-0.14.4.tar.gz
++sha256  0e5e947d0f7a969314aa23669a94a9712be5a688ff069ff7b9fc36c66adc160c  sentry-sdk-0.14.4.tar.gz
+ # Locally computed sha256 checksums
+-sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
++sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index dd47e7c0c3..13495047b9 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBPWQUALITY_VERSION = 1.4.1
-+LIBPWQUALITY_VERSION = 1.4.2
- LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
- LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
- LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
+-PYTHON_SENTRY_SDK_VERSION = 0.13.1
++PYTHON_SENTRY_SDK_VERSION = 0.14.4
+ PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/e2/5f/1f5881e98746c16464d46ae9d6ccdd6ce3c01c7e13093ea8a7d917642ee7
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/ab/67/b653a44ce124a2b700a7fc349ca129282c5fec4fdc9197f558178a9e32ae
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
