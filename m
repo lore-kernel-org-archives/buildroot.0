@@ -1,144 +1,72 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 21 May 2020 18:53:45 +0200
-Subject: [Buildroot] [PATCHv3] package/gcc/9.3.0: fix host-gcc-final when
- ccache is used
-Message-ID: <20200521165345.2866046-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 May 2020 19:18:29 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/kodi: bump version to 18.7-Leia
+Message-ID: <20200521171829.3893-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by several Buildroot users [1][2][3], the gcc build
-may fail while running selftests makefile target.
+Release notes: http://www.kodi.tv/article/kodi-leia-187-release
 
-The problem only occurs when ccache is used with gcc 9 and 10,
-probably due to a race condition.
-
-While debuging with "make -p" we can notice that s-selftest-c target
-contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
-
-  s-selftest-c: cc1
-
-While the build is failing, the s-selftest-c dependencies recipe is
-still running and reported as a bug by make.
-
-  "Dependencies recipe running (THIS IS A BUG)."
-
-A change [5] in gcc 9 seems to introduce the problem since we can't
-reproduce this problem with gcc 8.
-
-As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
-including language makefile fragments.
-
-With the fix applied, the s-seltest-c dependency contains
-SELFTEST_DEPS value.
-
-  s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
-
-[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
-[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
-[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
-[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
-[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
-[6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...move-SELFTEST_DEPS-before-including-.patch | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch b/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
-new file mode 100644
-index 0000000000..227d35a7f0
---- /dev/null
-+++ b/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
-@@ -0,0 +1,81 @@
-+From 811c8d628045c3d248144fc560a4bf80209ca16e Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 21 May 2020 15:58:02 +0200
-+Subject: [PATCH] gcc/Makefile.in: move SELFTEST_DEPS before including language
-+ makefile fragments
-+
-+As reported by several Buildroot users [1][2][3], the gcc build
-+may fail while running selftests makefile target.
-+
-+The problem only occurs when ccache is used with gcc 9 and 10,
-+probably due to a race condition.
-+
-+While debuging with "make -p" we can notice that s-selftest-c target
-+contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
-+
-+  s-selftest-c: cc1
-+
-+While the build is failing, the s-selftest-c dependencies recipe is
-+still running and reported as a bug by make.
-+
-+  "Dependencies recipe running (THIS IS A BUG)."
-+
-+A change [5] in gcc 9 seems to introduce the problem since we can't
-+reproduce this problem with gcc 8.
-+
-+As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
-+including language makefile fragments.
-+
-+With the fix applied, the s-seltest-c dependency contains
-+SELFTEST_DEPS value.
-+
-+  s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
-+
-+[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
-+[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
-+[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
-+[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
-+[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
-+[6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
-+
-+Upstream status: https://gcc.gnu.org/pipermail/gcc-patches/2020-May/546248.html
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
-+Cc: Maxim Kochetkov <fido_max@inbox.ru>
-+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-+Cc: Cc: David Malcolm <dmalcolm@gcc.gnu.org>
-+---
-+This patch should be backported to gcc 10 and gcc 9.
-+---
-+ gcc/Makefile.in | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/Makefile.in b/gcc/Makefile.in
-+index abae872cd63..e2ef3c46afc 100644
-+--- a/gcc/Makefile.in
-++++ b/gcc/Makefile.in
-+@@ -1686,6 +1686,10 @@ $(FULL_DRIVER_NAME): ./xgcc
-+ 	rm -f $@
-+ 	$(LN_S) $< $@
-+ 
-++# SELFTEST_DEPS need to be set before including language makefile fragments.
-++# Otherwise $(SELFTEST_DEPS) is empty when used from various <LANG>/Make-lang.in.
-++SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
-++
-+ #
-+ # Language makefile fragments.
-+ 
-+@@ -1950,8 +1954,6 @@ DEVNULL=$(if $(findstring mingw,$(build)),nul,/dev/null)
-+ SELFTEST_FLAGS = -nostdinc $(DEVNULL) -S -o $(DEVNULL) \
-+ 	-fself-test=$(srcdir)/testsuite/selftests
-+ 
-+-SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
-+-
-+ # Run the selftests during the build once we have a driver and the frontend,
-+ # so that self-test failures are caught as early as possible.
-+ # Use "s-selftest-FE" to ensure that we only run the selftests if the
-+-- 
-+2.25.4
-+
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 934392e916..f1889f3195 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 18.6-Leia
++KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index dc5984cedc..ec8ffeae43 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 18.6-Leia
++KODI_TEXTUREPACKER_VERSION = 18.7-Leia
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 357cd55c7b..be2659d385 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 47e6d7d4e01dbda92ff83a3e141ac43003e918133e78b3a4b79faff65184711c  kodi-18.6-Leia.tar.gz
++sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
+ sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
+ sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 8012324954..b62f4d92a9 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 18.6-Leia
++KODI_VERSION = 18.7-Leia
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.md
 -- 
-2.25.4
+2.26.2
