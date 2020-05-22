@@ -1,57 +1,58 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 22 May 2020 23:51:41 +0200
-Subject: [Buildroot] [PATCHv2 1/2] board/qemu/post-image.sh: start from a
- shell
-Message-ID: <20200522215142.2907439-1-romain.naour@gmail.com>
+Date: Fri, 22 May 2020 23:51:42 +0200
+Subject: [Buildroot] [PATCHv2 2/2] configs/qemu_arm_vexpress_tz_defconfig:
+ build start-qemu.sh
+In-Reply-To: <20200522215142.2907439-1-romain.naour@gmail.com>
+References: <20200522215142.2907439-1-romain.naour@gmail.com>
+Message-ID: <20200522215142.2907439-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Usually the qemu command line start directly with "qemu-system-<arch> ...".
-But the command line for qemu_arm_vexpress_tz_defconfig start by doing
-"cd output/images && ../host/bin/qemu-system-arm". This is necessary
-since boot binaries, except BL1, are primarily loaded via semi-hosting
-so all binaries has to reside in the same directory as QEMU is started
-from [1].
+When tags was added by commit 011206b2bffd509b29365bc1eaa761414ee13726
+to detect the qemu command line, the qemu_arm_vexpress_tz_defconfig
+was ignored due to a build issue.
 
-The start-qemu.sh script fail to start qemu since it use exec on the
-"cd" command. To work around this issue, use "exec sh -c":
-exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
-
-[1] https://github.com/ARM-software/arm-trusted-firmware/blob/4ebbea9592ab37fc62217d0ac62fa13a3e063527/docs/plat/qemu.rst
+This build issue has been fixed by previous patches, so we can
+enable the runtime testing by adding the tag in the readme.txt
+and the post-image script in the defconfig.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v2: escape double quote for -append
----
- board/qemu/post-image.sh | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ board/qemu/arm-vexpress-tz/readme.txt  | 2 +-
+ configs/qemu_arm_vexpress_tz_defconfig | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
-index 9a4d216274..07ce9c0d09 100755
---- a/board/qemu/post-image.sh
-+++ b/board/qemu/post-image.sh
-@@ -27,6 +27,9 @@ QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${IMAGE_DIR\}}"
- DEFAULT_ARGS="$(sed -r -e '/-serial stdio/!d; s/.*(-serial stdio).*/\1/' <<<"${QEMU_CMD_LINE}")"
- QEMU_CMD_LINE="${QEMU_CMD_LINE//-serial stdio/}"
+diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
+index b235ba5cd7..abce750291 100644
+--- a/board/qemu/arm-vexpress-tz/readme.txt
++++ b/board/qemu/arm-vexpress-tz/readme.txt
+@@ -18,7 +18,7 @@ secure and non-secure worlds.
+ 	-serial stdio \
+ 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
+ 	-semihosting-config enable,target=native \
+-	-bios bl1.bin
++	-bios bl1.bin # qemu_arm_vexpress_tz_defconfig
  
-+# Escape -append double quotes
-+QEMU_CMD_LINE=$(echo ${QEMU_CMD_LINE} | sed "s%\"%\\\\\"%g")
+ The boot stage traces (if any) followed by the login prompt will appear
+ in the terminal that started QEMU.
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index b4a6e72635..a829e1376b 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -47,6 +47,10 @@ BR2_PACKAGE_HOST_PYTHON3=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PACKAGE_PYTHON3=y
+ 
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
 +
- # Disable graphical output and redirect serial I/Os to console
- case ${DEFCONFIG_NAME} in
-   (qemu_sh4eb_r2d_defconfig|qemu_sh4_r2d_defconfig)
-@@ -49,7 +52,7 @@ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
- 	fi
- 
- 	export PATH="${HOST_DIR}/bin:\${PATH}"
--	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
-+	exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
- _EOF_
- 
- chmod +x "${START_QEMU_SCRIPT}"
+ # U-boot for booting the dear Linux kernel
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -- 
 2.25.4
