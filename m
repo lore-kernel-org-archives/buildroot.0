@@ -1,65 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 11:57:34 +0200
-Subject: [Buildroot] Buildroot 2020.05-rc2 released
-Message-ID: <87a720l2b5.fsf@dell.be.48ers.dk>
+From: Patzlaff, Marcel <m.patzlaff@pilz.de>
+Date: Fri, 22 May 2020 08:48:19 +0000
+Subject: [Buildroot] Merge window
+In-Reply-To: <C2X3WUENL8J0.LDI01N83RW9L@luthien>
+References: <C2X3WUENL8J0.LDI01N83RW9L@luthien>
+Message-ID: <AM0P194MB06443C48911EED2C623102A28BB40@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Joachim,
+
+it's not required (unless requested by the maintainers) to resend patches. They happily wait for their time to be merged [1].
+
+Kind regards,
+Marcel
+
+[1]: https://patchwork.ozlabs.org/project/buildroot/list/
+
+-----Urspr?ngliche Nachricht-----
+Von: buildroot <buildroot-bounces@busybox.net> Im Auftrag von Joachim Nilsson
+Gesendet: Freitag, 22. Mai 2020 10:15
+An: Buildroot <buildroot@buildroot.org>
+Betreff: [Buildroot] Merge window
+
 Hi,
 
-Buildroot 2020.05-rc2 is released - Go download it at:
+I'm new to the Buildroot community and am curious to learn more about the development process, in particular if there is any merge window to consider when submitting patches?  I've combed through the (fantastic) documentation, but not found any mention of this.  Seeing as there are a few brave souls who seem to do much of the legwork in this project, I worry about the timing of patches and questions as to not wear down or disturb at the wrong time.
 
-http://buildroot.net/downloads/buildroot-2020.05-rc2.tar.gz
+I recently submitted my first patch to add support for the EspressoBin which has not yet gotten any response.  So I'm thinking my timing was bad, considering you seem to be preparing a new release, or maybe I missed Cc:ing someone.  Should I resend the patch at a better time?
 
-or
+Best regards
+ /Joachim
 
-http://buildroot.net/downloads/buildroot-2020.05-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week (or actually almost 2 weeks), another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2020.05-rc1..
-
-    27  Fabrice Fontaine
-    10  Thomas Petazzoni
-     9  Peter Seiderer
-     9  Romain Naour
-     7  Peter Korsgaard
-     5  Adam Duskett
-     5  James Hilliard
-     4  Angelo Compagnucci
-     3  Bernd Kuhls
-     3  Yann E. MORIN
-     2  Christian Stewart
-     2  Heiko Thiery
-     2  Matt Weber
-     2  Stefan S?rensen
-     2  Stephan Hoffmann
-     1  Asaf Kahlon
-     1  Danomi Manchego
-     1  Joseph Kogut
-     1  Lecopzer Chen
-     1  Louis Aussedat
-     1  Louis-Paul Cordier
-     1  Max Filippov
-     1  Nicola Di Lieto
-     1  Norbert Lange
-     1  Ryan Coe
-     1  Vadym Kochan
-     1  Waldemar Brodkorb
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05-rc2
-
--- 
-Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+https://eur03.safelinks.protection.outlook.com/?url=http%3A%2F%2Flists.busybox.net%2Fmailman%2Flistinfo%2Fbuildroot&amp;data=02%7C01%7C%7Ced82e827596a476716e508d7fe2b1415%7C92bd06fd7d0b494a8f770e63d2bf3a3e%7C0%7C0%7C637257333294015051&amp;sdata=wQeACUs7UfG4mLF7YwAIGph4kF4KK2GHphzVJojUN7g%3D&amp;reserved=0
