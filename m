@@ -1,32 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 09:47:36 +0200
-Subject: [Buildroot] [PATCH] package/elf2flt: add support for
- XTENSA_[PN]DIFF relocations
-In-Reply-To: <20200513123520.30832-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Wed, 13 May 2020 05:35:20 -0700")
-References: <20200513123520.30832-1-jcmvbkbc@gmail.com>
-Message-ID: <87pnawl8br.fsf@dell.be.48ers.dk>
+Date: Fri, 22 May 2020 09:41:05 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/binutils: install
+ libopcodes to target/
+Message-ID: <20200522073222.8F1BE91C25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0d2a3c95ddab512dd9a7f0bac1120f20a9da156b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
- > the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
- > Add them to the list of ignored relocation types.
+libopcodes was installed in staging/ in commit 6a508d93610 (binutils:
+Also install libopcodes in staging), but was not installed in target/
 
- > This fixes the following error when invoking elf2flt on xtensa binaries
- > built with the recent binutils:
+Starting with linux-5.6, perf (linux-tools) will link to libopcodes when
+it is present. Since it is available in staging, the build succeeds.
+However, libopcodes missing in target, perf fails at runtime:
 
- >   ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
+    perf: ...libopcodes-2.33.1.so: cannot open shared object file
 
- > Reported-by: Romain Naour <romain.naour@gmail.com>
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Install libopcodes to target as well.
 
-Committed to 2020.02.x, thanks.
+Signed-off-by: Lecopzer Chen <lecopzer@gmail.com>
+[yann.morin.1998 at free.fr: reword commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit afceb76e43c3d573ebbaceda791ce970d536bebf)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 876c9c59f8..81308e2e81 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -112,6 +112,7 @@ endef
+ ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+ define BINUTILS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
+ endef
+ endif
