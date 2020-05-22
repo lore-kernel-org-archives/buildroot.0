@@ -1,75 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 14:07:08 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi: bump version to
- 18.7-Leia
-Message-ID: <20200522115050.177A391B42@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 May 2020 15:58:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: drop first patch
+Message-ID: <20200522135808.312867-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af325be5db1144b6f0ffd8d87df85fe96e03b7e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+First patch is not needed since version 2.3.0 and
+https://github.com/dovecot/core/commit/08259c1f206026ca9b9f4b4e97603943c6093def
 
-Release notes: http://www.kodi.tv/article/kodi-leia-187-release
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
- package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
- package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-byteorder.h-fix-uclibc-build.patch   | 32 -------------------
+ ...Do-not-build-static-test-iostream-s.patch} |  0
+ package/dovecot/dovecot.mk                    |  2 +-
+ 3 files changed, 1 insertion(+), 33 deletions(-)
+ delete mode 100644 package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+ rename package/dovecot/{0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch => 0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch} (100%)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index 934392e916..f1889f3195 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 18.6-Leia
-+KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index dc5984cedc..ec8ffeae43 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 18.6-Leia
-+KODI_TEXTUREPACKER_VERSION = 18.7-Leia
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 357cd55c7b..be2659d385 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 47e6d7d4e01dbda92ff83a3e141ac43003e918133e78b3a4b79faff65184711c  kodi-18.6-Leia.tar.gz
-+sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
- sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
- sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
- sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 0c4704ea84..180e3b9d10 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 18.6-Leia
-+KODI_VERSION = 18.7-Leia
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
+diff --git a/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch b/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
+deleted file mode 100644
+index b6d3ed3ec0..0000000000
+--- a/package/dovecot/0001-byteorder.h-fix-uclibc-build.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 902917880ca29f1007750a70cf46e7246b2d0a2a Mon Sep 17 00:00:00 2001
+-From: Josef 'Jeff' Sipek <jeff.sipek@dovecot.fi>
+-Date: Tue, 14 Nov 2017 06:01:21 +0100
+-Subject: [PATCH] byteorder.h: fix uclibc build
+-
+-Patch suggested on upstream mailinglist:
+-https://www.dovecot.org/pipermail/dovecot/2017-November/110019.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/lib/byteorder.h | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/src/lib/byteorder.h b/src/lib/byteorder.h
+-index 2f5dc7c17..4ffe8da21 100644
+---- a/src/lib/byteorder.h
+-+++ b/src/lib/byteorder.h
+-@@ -23,6 +23,11 @@
+- #ifndef BYTEORDER_H
+- #define BYTEORDER_H
+- 
+-+#undef bswap_8
+-+#undef bswap_16
+-+#undef bswap_32
+-+#undef bswap_64
+-+
+- /*
+-  * These prototypes exist to catch bugs in the code generating macros below.
+-  */
+--- 
+-2.11.0
+-
+diff --git a/package/dovecot/0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch b/package/dovecot/0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
+similarity index 100%
+rename from package/dovecot/0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
+rename to package/dovecot/0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 9f89ce6354..86e101d80a 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -14,7 +14,7 @@ DOVECOT_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	openssl
+-# 0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
++# 0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
+ DOVECOT_AUTORECONF = YES
+ # add host-gettext for AM_ICONV macro
+ DOVECOT_DEPENDENCIES += host-gettext
+-- 
+2.26.2
