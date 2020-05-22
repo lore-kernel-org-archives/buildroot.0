@@ -1,61 +1,226 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 09:43:32 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/fakeroot: fix for
- fchownat/fchmodat
-Message-ID: <20200522073222.B27AE91C25@busybox.osuosl.org>
+Date: Fri, 22 May 2020 09:47:17 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/elf2flt: add
+ support for XTENSA_[PN]DIFF relocations
+Message-ID: <20200522073222.CE08791C25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48cb6ed5b88fed7871be646af422925bb98ffc77
+commit: https://git.buildroot.net/buildroot/commit/?id=e298a0a8b42578114d7f6bf17f08ac04f7bcf8f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-fakeroot does mask out necessary flags, instead pass through
-the flags that are supported by fstatat
+Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
+the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
+Add them to the list of ignored relocation types.
 
-Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
+This fixes the following error when invoking elf2flt on xtensa binaries
+built with the recent binutils:
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e642e179821728a90b1dce6efdc3bdb6718eb200)
+  ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c99a3950d8ac63f51ff0a3f8199ddab6885e2f05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0004-Fix-forwarding-fchownat-fchmod-flags.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ ...flt.c-add-new-relocation-types-for-xtensa.patch | 188 +++++++++++++++++++++
+ 1 file changed, 188 insertions(+)
 
-diff --git a/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
+diff --git a/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch b/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
 new file mode 100644
-index 0000000000..fc74543378
+index 0000000000..953bd79ccf
 --- /dev/null
-+++ b/package/fakeroot/0004-Fix-forwarding-fchownat-fchmod-flags.patch
-@@ -0,0 +1,28 @@
-+Forward supported flags to fstatat, this fixes issues like
-+using an empty path
++++ b/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
+@@ -0,0 +1,188 @@
++From d7eb73163bcea31168c438fc132a0967ac172e3d Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 7 May 2020 21:11:43 -0700
++Subject: [PATCH] elf2flt.c: add new relocation types for xtensa
 +
-+Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
++Xtensa have added new relocation types R_XTENSA_[NP]DIFF{8,16,32} with
++the same properties as the existing types R_XTENSA_DIFF{8,16,32}.
++Add them to the list of ignored relocation types.
 +
-+Signed-off-by: Norbert Lange <nolange79@gmail.com>
++This fixes the following error when invoking elf2flt on xtensa binaries
++built with the recent binutils:
 +
-+diff -burN fakeroot-1.20.2.org/libfakeroot.c fakeroot-1.20.2/libfakeroot.c
-+--- fakeroot-1.20.2.org/libfakeroot.c	2014-10-05 17:16:00.000000000 +0200
-++++ fakeroot-1.20.2/libfakeroot.c	2020-05-10 22:24:18.896625085 +0200
-+@@ -880,7 +880,7 @@
-+   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
-+      be when we stat it. */
-+   INT_STRUCT_STAT st;
-+-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & AT_SYMLINK_NOFOLLOW));
-++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, (flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT)));
++  ERROR: reloc type R_XTENSA_PDIFF32 unsupported in this context
 +
-+   if(r)
-+     return(r);
-+@@ -1017,7 +1017,7 @@
++Reported-by: Romain Naour <romain.naour@gmail.com>
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Backported from: d7eb73163bcea31168c438fc132a0967ac172e3d
++---
++ Makefile.in  |  3 ++-
++ configure    | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++
++ configure.ac | 14 ++++++++++++
++ elf2flt.c    |  8 +++++++
++ 4 files changed, 88 insertions(+), 1 deletion(-)
 +
-+   /* If AT_SYMLINK_NOFOLLOW is set in the fchownat call it should
-+      be when we stat it. */
-+-  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & AT_SYMLINK_NOFOLLOW);
-++  r=INT_NEXT_FSTATAT(dir_fd, path, &st, flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_NO_AUTOMOUNT));
++diff --git a/Makefile.in b/Makefile.in
++index 52b3347d7f43..0529c7f0a25a 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -30,7 +30,8 @@ DEFS = @DEFS@ \
++ 	-DNO_GOT_CHECK=@got_check@ \
++ 	-DUSE_EMIT_RELOCS=@emit_relocs@ \
++ 	-DEMIT_CTOR_DTOR=@emit_ctor_dtor@ \
++-	-DALWAYS_RELOC_TEXT=@always_reloc_text@
+++	-DALWAYS_RELOC_TEXT=@always_reloc_text@ \
+++	-DHAVE_BFD_XTENSA_PDIFF_RELOCS=@HAVE_BFD_XTENSA_PDIFF_RELOCS@
++ EXEEXT = @EXEEXT@
++ OBJEXT = @OBJEXT@
++ 
++diff --git a/configure b/configure
++index bb8e33f9cb28..bca38c34247e 100755
++--- a/configure
+++++ b/configure
++@@ -621,6 +621,7 @@ ac_includes_default="\
++ 
++ ac_subst_vars='LTLIBOBJS
++ LIBOBJS
+++HAVE_BFD_XTENSA_PDIFF_RELOCS
++ SYMBOL_PREFIX
++ always_reloc_text
++ emit_ctor_dtor
++@@ -1729,6 +1730,52 @@ fi
++ 
++ } # ac_fn_c_try_link
++ 
+++# ac_fn_c_check_decl LINENO SYMBOL VAR INCLUDES
+++# ---------------------------------------------
+++# Tests whether SYMBOL is declared in INCLUDES, setting cache variable VAR
+++# accordingly.
+++ac_fn_c_check_decl ()
+++{
+++  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+++  as_decl_name=`echo $2|sed 's/ *(.*//'`
+++  as_decl_use=`echo $2|sed -e 's/(/((/' -e 's/)/) 0&/' -e 's/,/) 0& (/g'`
+++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $as_decl_name is declared" >&5
+++$as_echo_n "checking whether $as_decl_name is declared... " >&6; }
+++if eval \${$3+:} false; then :
+++  $as_echo_n "(cached) " >&6
+++else
+++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+++/* end confdefs.h.  */
+++$4
+++int
+++main ()
+++{
+++#ifndef $as_decl_name
+++#ifdef __cplusplus
+++  (void) $as_decl_use;
+++#else
+++  (void) $as_decl_name;
+++#endif
+++#endif
+++
+++  ;
+++  return 0;
+++}
+++_ACEOF
+++if ac_fn_c_try_compile "$LINENO"; then :
+++  eval "$3=yes"
+++else
+++  eval "$3=no"
+++fi
+++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+++fi
+++eval ac_res=\$$3
+++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+++$as_echo "$ac_res" >&6; }
+++  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+++
+++} # ac_fn_c_check_decl
+++
++ # ac_fn_c_check_func LINENO FUNC VAR
++ # ----------------------------------
++ # Tests whether FUNC exists, setting the cache variable VAR accordingly
++@@ -4272,6 +4319,22 @@ $as_echo "#define const /**/" >>confdefs.h
++ fi
++ 
++ 
+++HAVE_BFD_XTENSA_PDIFF_RELOCS=0
+++case $target in
+++	xtensa*)
+++		OLD_CPPFLAGS=$CPPFLAGS
+++		CPPFLAGS="-I$bfd_include_dir -I$binutils_include_dir $CPPFLAGS"
+++		ac_fn_c_check_decl "$LINENO" "R_XTENSA_PDIFF8" "ac_cv_have_decl_R_XTENSA_PDIFF8" "#include \"bfd.h\"
+++			       #include \"elf/xtensa.h\"
+++"
+++if test "x$ac_cv_have_decl_R_XTENSA_PDIFF8" = xyes; then :
+++  HAVE_BFD_XTENSA_PDIFF_RELOCS=1
+++fi
+++
+++		CPPFLAGS=$OLD_CPPFLAGS
+++		;;
+++esac
+++
++ for ac_func in vprintf
++ do :
++   ac_fn_c_check_func "$LINENO" "vprintf" "ac_cv_func_vprintf"
++@@ -4333,6 +4396,7 @@ fi
++ 
++ 
++ 
+++
++ ac_config_files="$ac_config_files ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld"
++ 
++ cat >confcache <<\_ACEOF
++diff --git a/configure.ac b/configure.ac
++index d6b4119eb18a..19969b1045f6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -202,6 +202,19 @@ AC_CHECK_HEADERS(fcntl.h unistd.h bfd.h)
++ dnl Checks for typedefs, structures, and compiler characteristics.
++ AC_C_CONST
++ 
+++HAVE_BFD_XTENSA_PDIFF_RELOCS=0
+++case $target in
+++	xtensa*)
+++		AS_VAR_COPY([OLD_CPPFLAGS], [CPPFLAGS])
+++		AS_VAR_SET([CPPFLAGS], ["-I$bfd_include_dir -I$binutils_include_dir $CPPFLAGS"])
+++		AC_CHECK_DECL([R_XTENSA_PDIFF8],
+++			      [HAVE_BFD_XTENSA_PDIFF_RELOCS=1],,
+++			      [#include "bfd.h"
+++			       #include "elf/xtensa.h"])
+++		AS_VAR_COPY([CPPFLAGS], [OLD_CPPFLAGS])
+++		;;
+++esac
+++
++ dnl Checks for library functions.
++ AC_FUNC_VPRINTF
++ 
++@@ -235,6 +248,7 @@ AC_SUBST(emit_relocs)
++ AC_SUBST(emit_ctor_dtor)
++ AC_SUBST(always_reloc_text)
++ AC_SUBST(SYMBOL_PREFIX)
+++AC_SUBST(HAVE_BFD_XTENSA_PDIFF_RELOCS)
++ 
++ AC_OUTPUT(ld-elf2flt.sh:ld-elf2flt.in Makefile elf2flt.ld)
++ 
++diff --git a/elf2flt.c b/elf2flt.c
++index b7c4a490df02..961534973f56 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -776,6 +776,14 @@ output_relocs (
++ 				case R_XTENSA_DIFF8:
++ 				case R_XTENSA_DIFF16:
++ 				case R_XTENSA_DIFF32:
+++#if HAVE_BFD_XTENSA_PDIFF_RELOCS
+++				case R_XTENSA_PDIFF8:
+++				case R_XTENSA_PDIFF16:
+++				case R_XTENSA_PDIFF32:
+++				case R_XTENSA_NDIFF8:
+++				case R_XTENSA_NDIFF16:
+++				case R_XTENSA_NDIFF32:
+++#endif
++ 				case R_XTENSA_32_PCREL:
++ 					continue;
++ 				case R_XTENSA_32:
++-- 
++2.20.1
 +
-+   if(r)
-+     return(r);
