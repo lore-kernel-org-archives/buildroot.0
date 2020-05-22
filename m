@@ -1,53 +1,49 @@
-From: Michael Walle <michael@walle.cc>
-Date: Thu, 21 May 2020 23:21:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: remove hardcoded
- interface from config to args
-In-Reply-To: <20200521153619.5466d4e6@windsurf.home>
-References: <20200520051647.18530-1-heiko.thiery@gmail.com>
- <20200521153619.5466d4e6@windsurf.home>
-Message-ID: <244d4bb9817b608fa5f994a05c8c70c5@walle.cc>
+From: Stefan Ott <stefan@ott.net>
+Date: Fri, 22 May 2020 03:40:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/unbound: bump version to 1.10.1 for
+ security fixes
+Message-ID: <20200522014026.15038-1-stefan@ott.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes the following security vulnerabilities:
 
-Am 2020-05-21 15:36, schrieb Thomas Petazzoni:
-> Hello Heiko,
-> 
-> On Wed, 20 May 2020 07:16:48 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> 
->> Interface configuration is hard coded in the config file. This will
->> throw an error when this interace (eth0) is not present.
->> 
->> This patch removes the interface to be used from the config and 
->> appends it
->> to the PTP4L_ARGS. With this the custom arguments can be set via
->> /etc/defaults/ptp4l.
-> 
-> Well, you can also just as well provide your custom linuxptp.cfg in a
-> rootfs overlay, no?
+CVE-2020-12662: Unbound can be tricked into amplifying an incoming query
+  into a large number of queries directed to a target.
 
-You can, but then you'd have to copy the configuration on each and every
-board which has another interface name than "eth0". That being said, I'd
-also prefer it to have the normal default config, shipped with linuxptp.
-Like at least debian does too.
+CVE-2020-12663: Malformed answers from upstream name servers can be used
+  to make Unbound unresponsive.
 
--michael
+Signed-off-by: Stefan Ott <stefan@ott.net>
+---
+ package/unbound/unbound.hash | 2 +-
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> Also, your change to linuxptp.cfg kind of breaks what is explained in
-> linuxptp.cfg:
-> 
-> # By default synchronize time in slave-only mode using UDP and hardware 
-> time
-> # stamps on eth0. If the difference to master is >1.0 second correct by
-> # stepping the clock instead of adjusting the frequency.
-> 
-> Thomas
-
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 11626d0b6f..52d78e1678 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 152f486578242fe5c36e89995d0440b78d64c05123990aae16246b7f776ce955  unbound-1.10.0.tar.gz
++sha256 b73677c21a71cf92f15cc8cfe76a3d875e40f65b6150081c39620b286582d536  unbound-1.10.1.tar.gz
+ sha256 8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 59543438fd..0917db1def 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNBOUND_VERSION = 1.10.0
++UNBOUND_VERSION = 1.10.1
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
 -- 
--michael
+2.26.2
