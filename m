@@ -1,326 +1,187 @@
-From: Michael Walle <michael@walle.cc>
-Date: Fri, 22 May 2020 11:37:06 +0200
-Subject: [Buildroot] [PATCH for-next v3] board: Add Kontron SMARC-sAL28
- support
-Message-ID: <20200522093707.15193-1-michael@walle.cc>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 May 2020 11:53:24 +0200
+Subject: [Buildroot] [git commit] Update for 2020.05-rc2
+Message-ID: <20200522093713.15AC591C4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that upstream supports this board add buildroot support for it, too.
+commit: https://git.buildroot.net/buildroot/commit/?id=497e3dff7e13d0651b1e9db7b232b13da37f0108
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This supports:
- - upstream linux kernel, 5.7-rc6 for now. Once 5.7 is released and
-   buildroot will switch to this kernel
-     BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-   can be removed. Since the support for this board and its SoC is still in
-   active development, we want to follow the upstream kernel releases for
-   now.
- - building an image which can be installed to eMMC, SD card or USB
-   thumb drive.
- - upstream u-boot patches are pending, therefore no support for
-   building a bootloader for now.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Please note that this board already uses the new config option introduced
-in the following pending patch:
-  https://patchwork.ozlabs.org/project/buildroot/patch/20200519202235.13764-1-michael at walle.cc/
-(which btw misses the "for-next" tag)
+ CHANGES                    | 59 ++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 18 +++++++-------
+ docs/website/news.html     | 21 +++++++++++++++++
+ 4 files changed, 91 insertions(+), 11 deletions(-)
 
-Changes since v2:
- - added udev rules 71-smarc-networking.rules, to rename the network
-   interfaces according to the SMARC specification.
- - removed arm-smmu.disable_bypass=n kernel paramter, since the real fix is
-   now upstream and will be included in 5.7
- - use full path in PARTUUID="$($HOST_DIR/bin/uuidgen)" to be sure we are
-   using our own uuidgen
- - mention fdtfile in readme.txt
- - fixed typo in readme.txt
- - mention non-working network with vendor's bootloader in readme.txt
- - set BR2_KERNEL_DTB_KEEP_DIRNAME=y
-
-Changes since v1:
- - added readme.txt
- - changed from u-boot boot script to extlinux.conf booting
- - enable eudev and added udev rules to properly name network interfaces
- - removed CONFIG_FSL_ENETC_HW_TIMESTAMPING=y
- - added CONFIG_NET_SCH_CBS, CONFIG_NET_SCH_ETF, CONFIG_NET_SCH_TAPRIO,
-   CONFIG_FSL_ENETC_QOS and iproute2, as this it the main feature of this
-   board
- - added var2 device tree
- - generate PARTUUID in post-build.sh to be able to use the resulting image
-   on any block device which the board supports for booting
- - (keep post-build.sh for consistency reasons)
-
- DEVELOPERS                                    |  2 +
- board/kontron/smarc-sal28/extlinux.conf       |  4 +
- board/kontron/smarc-sal28/genimage.cfg        | 11 +++
- board/kontron/smarc-sal28/linux.fragment      | 18 +++++
- board/kontron/smarc-sal28/post-build.sh       |  7 ++
- board/kontron/smarc-sal28/readme.txt          | 80 +++++++++++++++++++
- .../udev/rules.d/70-enetc-networking.rules    |  8 ++
- .../udev/rules.d/70-felix-networking.rules    |  6 ++
- .../udev/rules.d/71-smarc-networking.rules    | 19 +++++
- configs/kontron_smarc_sal28_defconfig         | 24 ++++++
- 10 files changed, 179 insertions(+)
- create mode 100644 board/kontron/smarc-sal28/extlinux.conf
- create mode 100644 board/kontron/smarc-sal28/genimage.cfg
- create mode 100644 board/kontron/smarc-sal28/linux.fragment
- create mode 100755 board/kontron/smarc-sal28/post-build.sh
- create mode 100644 board/kontron/smarc-sal28/readme.txt
- create mode 100644 board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-enetc-networking.rules
- create mode 100644 board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-felix-networking.rules
- create mode 100644 board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/71-smarc-networking.rules
- create mode 100644 configs/kontron_smarc_sal28_defconfig
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..c3f4ce8133 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1837,6 +1837,8 @@ F:	package/jasper/
- F:	package/libstrophe/
+diff --git a/CHANGES b/CHANGES
+index db27e4138c..4310a11fc5 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,62 @@
++2020.05-rc2, released May 22nd 2020
++
++	Fixes all over the tree.
++
++	U-Boot: Support building with Python 3.x instead of Python
++	2.x. Since U-Boot 2020.01, various U-Boot build scripts use
++	Python 3.x instead of Python 2.x, so add an option to pull in
++	host-python3 rather than host-python. Also fix a number of
++	defconfigs to use this new option.
++
++	Updated/fixed packages: apparmor, binutils, bison, brltty,
++	c-icap, cegui, checkpolicy, clamav, crda, cvs, docker-cli,
++	docker-engine, domoticz, elf2flt, exfatprogs, fakeroot,
++	ffmpeg, freerdp, gcc, glibc, gnuconfig, irrlicht, kmod,
++	libexif, libpam-tacplus, libssh2, libv4l, libvncserver,
++	localedef, lrzip, mariadb, matchbox, mbuffer, mesa3d,
++	mesa3d-headers, meson, netsniff-ng, openldap, openocd,
++	optee-os, p7zip, paho-mqtt-c, php, piglit, pigz,
++	python-argon2-cffi, python-attrs, python-future,
++	python-markdown, python-pycryptodomex, python-pyqt5, qt5base,
++	rpi-firmware, rustc, squashfs, squid, stella, suricata,
++	systemd, uacme, uclibc, util-linux, vboot-utils
++
++	New packages: python3-pyelftools
++
++	Removed packages: ezxml, mtdev2tuio, python-pycrypto
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10551: PowerPC SPE and Musl
++	#12256: package tar is outdated (1.29 is 3 years old)
++	#12271: python-iptables runtime dependencies
++	#12321: host-generic-package: PKG_DL_OPTS not used for host package
++	#12391: CMake-based host package fails to include output/host/include
++	#12431: ethernet no detected on nanopi neo 2
++	#12521: RISCV RV32IA selected, RV64GC output
++	#12586: avahi failure
++	#12596: host-e2fsprogs: tune2fs incompatibility on older glibc..
++	#12611: ntp hash is not matching with upstream 4.2.8p13
++	#12626: PHP missing header files within 2020.02
++	#12631: glibc support Power-PC SPE
++	#12656: bison fails to relocate with relocate-sdk.sh
++	#12661: cups problems in buildroot
++	#12686: recipe for target 'install_dev' failed (libcrypto.so:..
++	#12691: host-rust build fails
++	#12761: Buildroot fails when building GCNano binaries for the STM..
++	#12786: Systemd spawns two getty processes when the getty port..
++	#12806: There are multiple issues in buildroot that faults cups..
++	#12826: nodejs-12.16.1: error: 'uv_sleep' was not declared in..
++	#12831: RPI-firmware package: DTB-overlay dependency
++	#12836: libunwind: package does not show up in menuconfig for..
++	#12841: util-linux/sfdisk 2.35.1 fails on sector-size header
++	#12866: should we be disabling bash executable path caching?
++	#12886: GMP built in wrong order (?)
++	#12891: QEMU, libvirt-bin, qemu-kvm Package Support required
++	#12901: GStreamer doesn't build on 2020-05 rc1 with GObject..
++	#12906: qt PrefixPath is wrong on 2020.05-rc1
++	#12921: nodejs-12.16.1: error: overriding 'virtual icu_65::..
++
+ 2020.05-rc1, released May 7th 2020
  
- N:	Michael Walle <michael@walle.cc>
-+F:	board/kontron/smarc-sal28/
-+F:	configs/kontron_smarc_sal28_defconfig
- F:	package/libavl/
+ 	Addition of support for gobject-introspection: both the
+diff --git a/Makefile b/Makefile
+index 2da34b5305..cb15428406 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- N:	Micha? ?yszczek <michal.lyszczek@bofc.pl>
-diff --git a/board/kontron/smarc-sal28/extlinux.conf b/board/kontron/smarc-sal28/extlinux.conf
-new file mode 100644
-index 0000000000..bf60bc3798
---- /dev/null
-+++ b/board/kontron/smarc-sal28/extlinux.conf
-@@ -0,0 +1,4 @@
-+label buildroot
-+  kernel /boot/Image
-+  devicetreedir /boot
-+  append root=PARTUUID=%PARTUUID% rootwait
-diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
-new file mode 100644
-index 0000000000..9ef37de757
---- /dev/null
-+++ b/board/kontron/smarc-sal28/genimage.cfg
-@@ -0,0 +1,11 @@
-+image sdcard-emmc.img {
-+	hdimage {
-+		gpt = true
-+	}
+ # Set and export the version string
+-export BR2_VERSION := 2020.05-rc1
++export BR2_VERSION := 2020.05-rc2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1588882900
++BR2_VERSION_EPOCH = 1590140000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index ece7608f35..a2e14a4a5b 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -76,37 +76,37 @@
+ 	</div>
+       </div>
+ -->
+-      <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc1</b></h3>
++      <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc2</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.05-rc1.tar.gz">buildroot-2020.05-rc1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.05-rc1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.05-rc2.tar.gz">buildroot-2020.05-rc2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.05-rc2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.05-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.05-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.05-rc1.tar.bz2">buildroot-2020.05-rc1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.05-rc1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.05-rc2.tar.bz2">buildroot-2020.05-rc2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.05-rc2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 7cdc8c1e9d..ec49017fd2 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.05-rc2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 May 2020</small></p>
++      </div>
++      <div class="timeline-body">
++        <p>Another week, another release candidate with more cleanups and build fixes. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05-rc2">CHANGES</a>
++	  file for details.</p>
 +
-+	partition rootfs {
-+		offset = 2M
-+		image = rootfs.ext4
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/kontron/smarc-sal28/linux.fragment b/board/kontron/smarc-sal28/linux.fragment
-new file mode 100644
-index 0000000000..00bbcc0923
---- /dev/null
-+++ b/board/kontron/smarc-sal28/linux.fragment
-@@ -0,0 +1,18 @@
-+CONFIG_NET_DSA=m
-+CONFIG_NET_DSA_TAG_OCELOT=m
-+CONFIG_NET_DSA_MSCC_FELIX=m
-+CONFIG_NET_SCHED=y
-+CONFIG_NET_SCH_CBS=m
-+CONFIG_NET_SCH_ETF=m
-+CONFIG_NET_SCH_TAPRIO=m
-+CONFIG_CAN_FLEXCAN=m
-+CONFIG_FSL_ENETC=y
-+CONFIG_FSL_ENETC_VF=m
-+CONFIG_FSL_ENETC_QOS=y
-+CONFIG_MSCC_OCELOT_SWITCH=m
-+CONFIG_PCIE_DW_PLAT_HOST=y
-+CONFIG_GPIO_MPC8XXX=y
-+CONFIG_SND_SOC_FSL_SAI=m
-+CONFIG_SND_SOC_WM8904=m
-+CONFIG_RTC_DRV_RV8803=y
-+CONFIG_COMMON_CLK_FSL_SAI=y
-diff --git a/board/kontron/smarc-sal28/post-build.sh b/board/kontron/smarc-sal28/post-build.sh
-new file mode 100755
-index 0000000000..bf8861f6a9
---- /dev/null
-+++ b/board/kontron/smarc-sal28/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname $0)"
-+PARTUUID="$($HOST_DIR/bin/uuidgen)"
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.05-rc2.tar.bz2">2020.05-rc2
++	  release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
 +
-+install -d "$TARGET_DIR/boot/extlinux/"
-+sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/extlinux.conf" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/genimage.cfg" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
-new file mode 100644
-index 0000000000..231c751b66
---- /dev/null
-+++ b/board/kontron/smarc-sal28/readme.txt
-@@ -0,0 +1,80 @@
-+Kontron SMARC-sAL28
-+===================
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+  $ make kontron_smarc_sal28_defconfig
-+
-+Change settings to fit your needs (optional):
-+
-+  $ make menuconfig
-+
-+Compile everything and build the rootfs image:
-+
-+  $ make
-+
-+Copying the image to a storage device
-+=====================================
-+
-+Buildroot builds an image which can be written to the internal eMMC
-+storage, a SD card or an USB thumb drive. You can use the following
-+command on your host:
-+
-+  $ sudo dd if=output/images/sdcard-emmc.img of=/dev/sdx bs=1M
-+
-+Where /dev/sdx is the corresponding block device of your SD card or USB
-+thumb drive. To flash it on your internal eMMC use the following command on
-+the board:
-+
-+  # dd if=sdcard-emmc.img of=/dev/mmcblk1 bs=1M
-+
-+Be sure you have not booted from the internal eMMC in this case!
-+
-+Booting the board
-+=================
-+
-+By default the bootloader will search for the first valid image, starting
-+with the internal eMMC. Consult the vendor documentation on how to use the
-+DIP switches to select specific boot devices. To use the bootloader
-+environment set the boot_targets correspondingly. E.g.:
-+
-+  # setenv boot_targets usb0
-+
-+To boot from an USB thumb drive.
-+
-+The device tree is loaded according to the filename in fdtfile. The
-+following command will set the default device tree, which works on almost
-+all variants (with less features of course):
-+
-+  # setenv fdtfile freescale/fsl-ls1028a-kontron-sl28.dtb
-+
-+Set this to a device tree which fits your board variant.
-+
-+Connect your serial cable to SER1 and open your favorite terminal emulation
-+program (baudrate 115200, 8n1). E.g.:
-+
-+  $ picocom -b 115200 /dev/ttyUSB0
-+
-+You will get a warning reported by fdisk when you examine the SD card.
-+This is because the genimage.cfg file doesn't specify the SD card size
-+(as people will naturally have different sized cards), so the
-+secondary GPT header is placed after the rootfs rather than at the end
-+of the disk where it is expected to be.
-+
-+You will see something like this at boot time:
-+
-+[    4.552797] GPT:Primary header thinks Alt. header is not at the end of the disk.
-+[    4.560237] GPT:266272 != 7864319
-+[    4.563565] GPT:Alternate GPT header not at the end of the disk.
-+[    4.569596] GPT:266272 != 7864319
-+[    4.572925] GPT: Use GNU Parted to correct GPT errors.
-+
-+What does not work
-+==================
-+
-+For reasons unknown, the network card doesn't work if you use the original
-+vendor bootloader. Board support patches for upstream u-boot are currently
-+pending. Stay tuned.
-diff --git a/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-enetc-networking.rules b/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-enetc-networking.rules
-new file mode 100644
-index 0000000000..8774bc5581
---- /dev/null
-+++ b/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-enetc-networking.rules
-@@ -0,0 +1,8 @@
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0", DRIVERS=="fsl_enetc", NAME="eno0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1", DRIVERS=="fsl_enetc", NAME="eno1"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.2", DRIVERS=="fsl_enetc", NAME="eno2"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.6", DRIVERS=="fsl_enetc", NAME="eno3"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.0", DRIVERS=="fsl_enetc_vf", NAME="eno0vf0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.1", DRIVERS=="fsl_enetc_vf", NAME="eno0vf1"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.2", DRIVERS=="fsl_enetc_vf", NAME="eno1vf0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:01.3", DRIVERS=="fsl_enetc_vf", NAME="eno1vf1"
-diff --git a/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-felix-networking.rules b/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-felix-networking.rules
-new file mode 100644
-index 0000000000..917c0244ab
---- /dev/null
-+++ b/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/70-felix-networking.rules
-@@ -0,0 +1,6 @@
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p0", NAME="swp0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p1", NAME="swp1"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p2", NAME="swp2"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p3", NAME="swp3"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p4", NAME="swp4"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p5", NAME="swp5"
-diff --git a/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/71-smarc-networking.rules b/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/71-smarc-networking.rules
-new file mode 100644
-index 0000000000..8c946b05fe
---- /dev/null
-+++ b/board/kontron/smarc-sal28/rootfs_overlay/etc/udev/rules.d/71-smarc-networking.rules
-@@ -0,0 +1,19 @@
-+# Map the GBE0 and GBE1 names from the SMARC standard to the network
-+# interfaces. This depends on the variant of the board.
-+
-+# get the variant compatible string
-+PROGRAM=="/bin/grep '^kontron,sl28-var[1-4]$' /sys/firmware/devicetree/base/compatible", ENV{sl28_compatible}="%c"
-+
-+# variant 1
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1", DRIVERS=="fsl_enetc", ENV{sl28_compatible}=="kontron,sl28-var1", NAME="gbe0"
-+
-+# variant 2
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p0", ENV{sl28_compatible}=="kontron,sl28-var2", NAME="gbe0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.5", DRIVERS=="mscc_felix", ATTR{phys_port_name}=="p1", ENV{sl28_compatible}=="kontron,sl28-var2", NAME="gbe1"
-+
-+# variant 3
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0", DRIVERS=="fsl_enetc", ENV{sl28_compatible}=="kontron,sl28-var3", NAME="gbe0"
-+
-+# variant 4
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.0", DRIVERS=="fsl_enetc", ENV{sl28_compatible}=="kontron,sl28-var4", NAME="gbe0"
-+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:00:00.1", DRIVERS=="fsl_enetc", ENV{sl28_compatible}=="kontron,sl28-var4", NAME="gbe1"
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-new file mode 100644
-index 0000000000..a6f3c6f5fb
---- /dev/null
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -0,0 +1,24 @@
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="v5.7-rc6"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/kontron/smarc-sal28/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
-+BR2_KERNEL_DTB_KEEP_DIRNAME=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.20.1
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
