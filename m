@@ -1,24 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 09:44:56 +0200
-Subject: [Buildroot] [PATCH] package/fakeroot: fix for fchownat/fchmodat
-In-Reply-To: <20200510203509.7628-1-nolange79@gmail.com> (Norbert Lange's
- message of "Sun, 10 May 2020 22:35:08 +0200")
-References: <20200510203509.7628-1-nolange79@gmail.com>
-Message-ID: <87y2pkl8g7.fsf@dell.be.48ers.dk>
+Date: Fri, 22 May 2020 09:45:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 7.4.6
+In-Reply-To: <20200514161909.672761-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 14 May 2020 18:19:09 +0200")
+References: <20200514161909.672761-1-bernd.kuhls@t-online.de>
+Message-ID: <87tv08l8ei.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > fakeroot does mask out necessary flags, instead pass through
- > the flags that are supported by fstatat
+ > Changelog: https://www.php.net/ChangeLog-7.php#7.4.6
+ > Fixes CVE 2019-11048.
 
- > Upstream BR: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=959876
+ > Reformatted hashes.
 
- > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2020.02.x, thanks.
 
