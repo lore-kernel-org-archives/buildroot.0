@@ -1,46 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 09:41:05 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/binutils: install
- libopcodes to target/
-Message-ID: <20200522073222.8F1BE91C25@busybox.osuosl.org>
+Date: Fri, 22 May 2020 09:41:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/clamav: security
+ bump version to 0.102.3
+Message-ID: <20200522073222.A243491C25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d2a3c95ddab512dd9a7f0bac1120f20a9da156b
+commit: https://git.buildroot.net/buildroot/commit/?id=615422470efa6af4f00d360e190fee910079a19d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-libopcodes was installed in staging/ in commit 6a508d93610 (binutils:
-Also install libopcodes in staging), but was not installed in target/
+Fixes CVE-2020-3327 & CVE-2020-3341.
 
-Starting with linux-5.6, perf (linux-tools) will link to libopcodes when
-it is present. Since it is available in staging, the build succeeds.
-However, libopcodes missing in target, perf fails at runtime:
+Release notes:
+https://blog.clamav.net/2020/05/clamav-01023-security-patch-released.html
 
-    perf: ...libopcodes-2.33.1.so: cannot open shared object file
+Reformatted hashes.
 
-Install libopcodes to target as well.
-
-Signed-off-by: Lecopzer Chen <lecopzer@gmail.com>
-[yann.morin.1998 at free.fr: reword commit log]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit afceb76e43c3d573ebbaceda791ce970d536bebf)
+(cherry picked from commit 3f617ac6ca408e1026bff273095df6a401e13943)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/binutils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/clamav/clamav.hash | 26 +++++++++++++-------------
+ package/clamav/clamav.mk   |  2 +-
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 876c9c59f8..81308e2e81 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -112,6 +112,7 @@ endef
- ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
- define BINUTILS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
- endef
- endif
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 613d9b4122..f98dc6b320 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,14 +1,14 @@
+ # Locally calculated
+-sha256 89fcdcc0eba329ca84d270df09d2bb89ae55f5024b0c3bddb817512fb2c907d3  clamav-0.102.2.tar.gz
+-sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+-sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+-sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+-sha256 6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
+-sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
+-sha256 e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
+-sha256 d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
+-sha256 accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
+-sha256 e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
+-sha256 1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
+-sha256 a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
+-sha256 c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
++sha256  ed3050c4569989ee7ab54c7b87246b41ed808259632849be0706467442dc0693  clamav-0.102.3.tar.gz
++sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
++sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
++sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
++sha256  6dce638b76399e7521ad8e182d3e33e4496c85b3b69b6ff434b53017101e82ad  COPYING.getopt
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LGPL
++sha256  e3a9b913515a42f8ff3ef1551c3a2cdba383c39ed959729e0e2911219496ad74  COPYING.llvm
++sha256  d96d71b66aa32c4a2d1619b9ca3347dafa9460bcf0fb5ac2408916067ad31dfc  COPYING.lzma
++sha256  accdcf2455c07b99abea59016b3663eaef926a92092d103bfaa25fed27cf6b24  COPYING.pcre
++sha256  e2c1395a3d9fea6d5d25847c9d783db6e2cc8b085b4025861f459139c5dfd90b  COPYING.regex
++sha256  1faccc6b5c7b958fb807a3f573d5be9bf7889fe898f7e0617c544b05a81bfd00  COPYING.unrar
++sha256  a20d6317c5384e8d4c05f9c31097878675d9429ec46090656166039cc10bc957  COPYING.YARA
++sha256  c2f77553f8d870c5635b0dace0519253233f172b33ce1fdf6578610706294eee  COPYING.zlib
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index b8d7de52fa..eec18fcc02 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 0.102.2
++CLAMAV_VERSION = 0.102.3
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
