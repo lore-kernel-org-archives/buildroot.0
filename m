@@ -1,7 +1,7 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 22 May 2020 18:19:26 +0200
-Subject: [Buildroot] [PATCH v2: for-next] package/gitlab-runner: new package
-Message-ID: <20200522161926.19649-1-romain.naour@smile.fr>
+Date: Fri, 22 May 2020 18:35:11 +0200
+Subject: [Buildroot] [PATCH v3: for-next] package/gitlab-runner: new package
+Message-ID: <20200522163511.20487-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Cc: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
+v3: Change daemon process to gitlab-runner user.
+    see as example: https://git.buildroot.net/buildroot/tree/package/tpm2-abrmd/S80tpm2-abrmd?h=2020.05-rc2#n31
+
 [Romain: Tested only using systemd init on aarch64 target emulated by Qemu]
 v2: add service file, config file, gitlab user.
     add bash as runtime dependency.
@@ -109,7 +112,7 @@ index 0000000000..72c2742562
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/gitlab-runner/S95gitlab-runner b/package/gitlab-runner/S95gitlab-runner
 new file mode 100644
-index 0000000000..4525c0e794
+index 0000000000..69dcb28cce
 --- /dev/null
 +++ b/package/gitlab-runner/S95gitlab-runner
 @@ -0,0 +1,64 @@
@@ -126,7 +129,7 @@ index 0000000000..4525c0e794
 +start() {
 +	printf 'Starting %s: ' "$DAEMON"
 +	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -m -b -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
++	start-stop-daemon -S -q -m -b -p "$PIDFILE" -c "$DAEMON:$DAEMON" -x "/usr/bin/$DAEMON" \
 +		-- $GITLAB_RUNNER_ARGS
 +	status=$?
 +	if [ "$status" -eq 0 ]; then
@@ -139,7 +142,7 @@ index 0000000000..4525c0e794
 +
 +stop() {
 +	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
++	start-stop-daemon -K -q -p "$PIDFILE" -u "$DAEMON"
 +	status=$?
 +	if [ "$status" -eq 0 ]; then
 +		echo "OK"
@@ -157,7 +160,7 @@ index 0000000000..4525c0e794
 +
 +reload() {
 +	printf 'Reloading %s: ' "$DAEMON"
-+	start-stop-daemon -K -s HUP -q -p "$PIDFILE"
++	start-stop-daemon -K -s HUP -q -p "$PIDFILE" -u "$DAEMON"
 +	status=$?
 +	if [ "$status" -eq 0 ]; then
 +		echo "OK"
