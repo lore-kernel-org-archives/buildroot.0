@@ -1,98 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 22 May 2020 22:37:36 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to 4.2.3
-Message-ID: <20200522203736.419360-1-bernd.kuhls@t-online.de>
+Date: Fri, 22 May 2020 22:41:50 +0200
+Subject: [Buildroot] [PATCH/next 1/1] kodi-pvr-nextpvr: bump version to
+ 3.3.20-Leia
+Message-ID: <20200522204150.421734-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch included in upstream release, reformatted hashes.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...vcodec-cbs_jpeg-Check-length-for-SOS.patch | 33 -------------------
- package/ffmpeg/ffmpeg.hash                    |  8 ++---
- package/ffmpeg/ffmpeg.mk                      |  5 +--
- 3 files changed, 5 insertions(+), 41 deletions(-)
- delete mode 100644 package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch b/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
-deleted file mode 100644
-index 343d496002..0000000000
---- a/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 1812352d767ccf5431aa440123e2e260a4db2726 Mon Sep 17 00:00:00 2001
--From: Michael Niedermayer <michael@niedermayer.cc>
--Date: Sat, 7 Mar 2020 15:42:58 +0100
--Subject: [PATCH] avcodec/cbs_jpeg: Check length for SOS
--
--Fixes: out of array access
--Fixes: 19734/clusterfuzz-testcase-minimized-ffmpeg_BSF_TRACE_HEADERS_fuzzer-5673507031875584
--Fixes: 19353/clusterfuzz-testcase-minimized-ffmpeg_BSF_TRACE_HEADERS_fuzzer-5703944462663680
--
--Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
--Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/FFmpeg/FFmpeg/commit/1812352d767ccf5431aa440123e2e260a4db2726]
-----
-- libavcodec/cbs_jpeg.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/libavcodec/cbs_jpeg.c b/libavcodec/cbs_jpeg.c
--index 6bbce5f89b7..89512a26bbf 100644
----- a/libavcodec/cbs_jpeg.c
--+++ b/libavcodec/cbs_jpeg.c
--@@ -197,6 +197,9 @@ static int cbs_jpeg_split_fragment(CodedBitstreamContext *ctx,
--         if (marker == JPEG_MARKER_SOS) {
--             length = AV_RB16(frag->data + start);
-- 
--+            if (length > end - start)
--+                return AVERROR_INVALIDDATA;
--+
--             data_ref = NULL;
--             data     = av_malloc(end - start +
--                                  AV_INPUT_BUFFER_PADDING_SIZE);
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 1f68943fc7..35bd681326 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c  ffmpeg-4.2.2.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
--sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
--sha256 cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-+sha256  9df6c90aed1337634c1fb026fb01c154c29c82a64ea71291ff2da9aacb9aad31  ffmpeg-4.2.3.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
-+sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
-+sha256  cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index d01a9620da..736aa5b4ba 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index 4d730deb85..70911a6fcc 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 5f1b7fa00d7248fa840a0e7574bb7714867bff4ad81ceb8ed33cb3aa6d5ccbe9  kodi-pvr-nextpvr-3.3.19-Leia.tar.gz
++sha256 9f3ce65ece65af05a07ad00a0b8649be0ca1e07d1b1ea964888540c1826852d4  kodi-pvr-nextpvr-3.3.20-Leia.tar.gz
+ sha256 0bd576badce05c6b4315c415dabd77d80c871e72026c399f7a7bb8582e0911fe  debian/copyright
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 94461f61d1..59fc274583 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 4.2.2
-+FFMPEG_VERSION = 4.2.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -16,9 +16,6 @@ FFMPEG_LICENSE += and GPL-2.0+
- FFMPEG_LICENSE_FILES += COPYING.GPLv2
- endif
- 
--# 0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
--FFMPEG_IGNORE_CVES += CVE-2020-12284
--
- FFMPEG_CONF_OPTS = \
- 	--prefix=/usr \
- 	--enable-avfilter \
+-KODI_PVR_NEXTPVR_VERSION = 3.3.19-Leia
++KODI_PVR_NEXTPVR_VERSION = 3.3.20-Leia
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = debian/copyright
 -- 
 2.26.2
