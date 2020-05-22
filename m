@@ -1,108 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 20:54:49 +0200
-Subject: [Buildroot] [git commit] package/dovecot: security bump to version
- 2.3.10.1
-Message-ID: <20200522184539.39FA68C6DD@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 May 2020 22:10:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.2.4
+Message-ID: <20200522201041.962767-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03fbb81b8bab7bad135b59267533be7688babe39
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Fix CVE-2020-10957: In Dovecot before 2.3.10.1, unauthenticated
-  sending of malformed parameters to a NOOP command causes a NULL
-  Pointer Dereference and crash in submission-login, submission, or
-  lmtp.
-- Fix CVE-2020-10958: In Dovecot before 2.3.10.1, a crafted SMTP/LMTP
-  message triggers an unauthenticated use-after-free bug in
-  submission-login, submission, or lmtp, and can lead to a crash under
-  circumstances involving many newlines after a command.
-- Fix CVE-2020-10967: In Dovecot before 2.3.10.1, remote
-  unauthenticated attackers can crash the lmtp or submission process by
-  sending mail with an empty localpart.
-- Drop first patch (already in version) and so autoreconf
-- Update indentation in hash file (two spaces)
+Fix CVE-2020-13164: In Wireshark 3.2.0 to 3.2.3, 3.0.0 to 3.0.10, and
+2.6.0 to 2.6.16, the NFS dissector could crash. This was addressed in
+epan/dissectors/packet-nfs.c by preventing excessive recursion, such as
+for a cycle in the directory graph on a filesystem.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tream-Do-not-build-static-test-iostream-s.patch | 30 ----------------------
- package/dovecot/dovecot.hash                       |  8 +++---
- package/dovecot/dovecot.mk                         |  4 +--
- 3 files changed, 5 insertions(+), 37 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dovecot/0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch b/package/dovecot/0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
-deleted file mode 100644
-index 686ed7383b..0000000000
---- a/package/dovecot/0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 40851dc3471809cabe8cc3f9b71980f8d82344ae Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 4 Jan 2020 14:39:39 +0100
--Subject: [PATCH] lib-ssl-iostream: Do not build static test-iostream-ssl
--
--Fixes broken static build:
--https://dovecot.org/pipermail/dovecot/2019-October/117326.html
--
--Patch sent upstream: https://github.com/dovecot/core/pull/111
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/lib-ssl-iostream/Makefile.am | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/lib-ssl-iostream/Makefile.am b/src/lib-ssl-iostream/Makefile.am
--index 94ead5cec..5aaea5d51 100644
----- a/src/lib-ssl-iostream/Makefile.am
--+++ b/src/lib-ssl-iostream/Makefile.am
--@@ -46,7 +46,6 @@ test_libs = \
-- 	../lib/liblib.la
-- 
-- test_iostream_ssl_SOURCES = test-iostream-ssl.c
---test_iostream_ssl_LDFLAGS = -static
-- test_iostream_ssl_LDADD = $(test_libs) $(SSL_LIBS) $(DLLIB)
-- test_iostream_ssl_DEPENDENCIES = $(test_libs)
-- 
---- 
--2.20.1
--
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e61937495a..09295816d3 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 f89fb69423fc5bdc05955c8fc0607eab9e33511f9a643b721763db6156c49651  dovecot-2.3.9.3.tar.gz
--sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-+sha256  6642e62f23b1b23cfac235007ca6e21cb67460cca834689fad450724456eb10c  dovecot-2.3.10.1.tar.gz
-+sha256  a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 86e101d80a..59b52a3f84 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index d4d0c9e48f..57b496282f 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.3.txt
+-sha1  4656856a40b294f183900ba47651b0fc8e3950fd  wireshark-3.2.3.tar.xz
+-sha256  f007e4b88c86d95e33af03e057ecc03635f54466d02371bc26489eabb274faba  wireshark-3.2.3.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.4.txt
++sha1  bb4157b57c1bcdbac948a1282dafad027d57be9b  wireshark-3.2.4.tar.xz
++sha256  d17d461e849e2d0b033431c45f71d8ee8ec3c8faa232a6ad63069a47927db8aa  wireshark-3.2.4.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index c262891dcd..0d72f9dd91 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.3
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).10.1
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
-@@ -14,8 +14,6 @@ DOVECOT_DEPENDENCIES = \
- 	host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	openssl
--# 0001-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
--DOVECOT_AUTORECONF = YES
- # add host-gettext for AM_ICONV macro
- DOVECOT_DEPENDENCIES += host-gettext
- 
+-WIRESHARK_VERSION = 3.2.3
++WIRESHARK_VERSION = 3.2.4
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+-- 
+2.26.2
