@@ -1,225 +1,98 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 22 May 2020 22:36:12 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/transmission: bump version to
- 3.00
-Message-ID: <20200522203612.419241-1-bernd.kuhls@t-online.de>
+Date: Fri, 22 May 2020 22:37:36 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to 4.2.3
+Message-ID: <20200522203736.419360-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patched applied upstream, reformatted hashes.
-
-Updated license hash due to copyright update to 2020:
-https://github.com/transmission/transmission/commit/2d940e5cafe01a6ea9285b7d39ccada6e90afab1
+Removed patch included in upstream release, reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...1.0.18-has-sys-quota.h-synced-with-G.patch |  29 ----
- package/transmission/0005-libsystemd.patch    | 133 ------------------
- package/transmission/transmission.hash        |   4 +-
- package/transmission/transmission.mk          |   2 +-
- 4 files changed, 3 insertions(+), 165 deletions(-)
- delete mode 100644 package/transmission/0004-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
- delete mode 100644 package/transmission/0005-libsystemd.patch
+ ...vcodec-cbs_jpeg-Check-length-for-SOS.patch | 33 -------------------
+ package/ffmpeg/ffmpeg.hash                    |  8 ++---
+ package/ffmpeg/ffmpeg.mk                      |  5 +--
+ 3 files changed, 5 insertions(+), 41 deletions(-)
+ delete mode 100644 package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
 
-diff --git a/package/transmission/0004-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch b/package/transmission/0004-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
+diff --git a/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch b/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
 deleted file mode 100644
-index 91a962a6d8..0000000000
---- a/package/transmission/0004-uClibc-ng-since-1.0.18-has-sys-quota.h-synced-with-G.patch
+index 343d496002..0000000000
+--- a/package/ffmpeg/0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--From 8682fe1bad44acc06154003ca9c9163b917bf4e3 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Thu, 29 Sep 2016 19:52:49 +0200
--Subject: [PATCH] uClibc-ng since 1.0.18 has sys/quota.h synced with GNU libc
+@@ -1,33 +0,0 @@
+-From 1812352d767ccf5431aa440123e2e260a4db2726 Mon Sep 17 00:00:00 2001
+-From: Michael Niedermayer <michael@niedermayer.cc>
+-Date: Sat, 7 Mar 2020 15:42:58 +0100
+-Subject: [PATCH] avcodec/cbs_jpeg: Check length for SOS
 -
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Fixes: out of array access
+-Fixes: 19734/clusterfuzz-testcase-minimized-ffmpeg_BSF_TRACE_HEADERS_fuzzer-5673507031875584
+-Fixes: 19353/clusterfuzz-testcase-minimized-ffmpeg_BSF_TRACE_HEADERS_fuzzer-5703944462663680
 -
--Pull Request:
--https://github.com/transmission/transmission/pull/42
+-Found-by: continuous fuzzing process https://github.com/google/oss-fuzz/tree/master/projects/ffmpeg
+-Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/FFmpeg/FFmpeg/commit/1812352d767ccf5431aa440123e2e260a4db2726]
 ----
-- libtransmission/platform-quota.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- libavcodec/cbs_jpeg.c | 3 +++
+- 1 file changed, 3 insertions(+)
 -
--diff --git a/libtransmission/platform-quota.c b/libtransmission/platform-quota.c
--index 58c518a..57377ef 100644
----- a/libtransmission/platform-quota.c
--+++ b/libtransmission/platform-quota.c
--@@ -284,7 +284,7 @@ getquota (const char * device)
--       spaceused = (int64_t) dq.dqb_curblocks >> 1;
-- #elif defined(__APPLE__)
--       spaceused = (int64_t) dq.dqb_curbytes;
---#elif defined(__UCLIBC__)
--+#elif defined(__UCLIBC__) && (__UCLIBC_MAJOR__ == 0 || (__UCLIBC_MAJOR__ == 1 && __UCLIBC_SUBLEVEL__ <= 17))
--       spaceused = (int64_t) btodb(dq.dqb_curblocks);
-- #elif defined(__sun) || (defined(_LINUX_QUOTA_VERSION) && _LINUX_QUOTA_VERSION < 2)
--       spaceused = (int64_t) dq.dqb_curblocks >> 1;
---- 
--2.1.4
--
-diff --git a/package/transmission/0005-libsystemd.patch b/package/transmission/0005-libsystemd.patch
-deleted file mode 100644
-index b32aff211d..0000000000
---- a/package/transmission/0005-libsystemd.patch
-+++ /dev/null
-@@ -1,133 +0,0 @@
--From 0862099d0bf5a3ec8b2e9d538458d612897741a2 Mon Sep 17 00:00:00 2001
--From: Mike Gelfand <mikedld@mikedld.com>
--Date: Sat, 23 Apr 2016 16:13:25 +0000
--Subject: [PATCH] #5921: Use libsystemd instead of libsystemd-daemon (original
-- patches by Sandro Tosi and Mike Gilbert)
--
--In systemd v209, released over two years ago, the various libsystemd-*
--libraries (libsystemd-journal.so, libsystemd-login.so, libsystem-daemon.so,
--libsystemd-id128.so) were merged into a single libsystemd.so library to
--reduce code duplication and avoid cyclic dependencies.
--
--Downloaded from upstream commit:
--https://github.com/transmission/transmission/commit/0862099d0bf5a3ec8b2e9d538458d612897741a2
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- CMakeLists.txt        |  4 ++--
-- configure.ac          | 16 ++++++++--------
-- daemon/CMakeLists.txt |  8 ++++----
-- daemon/Makefile.am    |  4 ++--
-- daemon/daemon.c       |  2 +-
-- 5 files changed, 17 insertions(+), 17 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 8b324dc..356fc2f 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -398,9 +398,9 @@ endif()
-- if(WITH_SYSTEMD)
--     tr_get_required_flag(WITH_SYSTEMD SYSTEMD_IS_REQUIRED)
+-diff --git a/libavcodec/cbs_jpeg.c b/libavcodec/cbs_jpeg.c
+-index 6bbce5f89b7..89512a26bbf 100644
+---- a/libavcodec/cbs_jpeg.c
+-+++ b/libavcodec/cbs_jpeg.c
+-@@ -197,6 +197,9 @@ static int cbs_jpeg_split_fragment(CodedBitstreamContext *ctx,
+-         if (marker == JPEG_MARKER_SOS) {
+-             length = AV_RB16(frag->data + start);
 - 
---    pkg_check_modules(SYSTEMD_DAEMON ${SYSTEMD_IS_REQUIRED} libsystemd-daemon)
--+    pkg_check_modules(SYSTEMD ${SYSTEMD_IS_REQUIRED} libsystemd)
-- 
---    tr_fixup_auto_option(WITH_SYSTEMD SYSTEMD_DAEMON_FOUND SYSTEMD_IS_REQUIRED)
--+    tr_fixup_auto_option(WITH_SYSTEMD SYSTEMD_FOUND SYSTEMD_IS_REQUIRED)
-- endif()
-- 
-- include_directories(${CMAKE_BINARY_DIR})
--diff --git a/configure.ac b/configure.ac
--index 92e4372..b64f2a3 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -240,15 +240,15 @@ dnl
-- dnl file monitoring for the daemon
-- 
-- # Check whether to enable systemd startup notification.
---# This requires libsystemd-daemon.
---AC_ARG_WITH([systemd-daemon], AS_HELP_STRING([--with-systemd-daemon],
--+# This requires libsystemd.
--+AC_ARG_WITH([systemd], AS_HELP_STRING([--with-systemd],
--             [Add support for systemd startup notification (default is autodetected)]),
---            [USE_SYSTEMD_DAEMON=$withval], [USE_SYSTEMD_DAEMON=auto])
---AS_IF([test "x$USE_SYSTEMD_DAEMON" != "xno"], [
---    PKG_CHECK_MODULES([SYSTEMD_DAEMON], [libsystemd-daemon],
---        [AC_DEFINE(USE_SYSTEMD_DAEMON,1,[Use systemd startup notification])],
---        [AS_IF([test "x$USE_SYSTEMD_DAEMON" = "xyes"],
---            [AC_MSG_ERROR([systemd startup notification support requested, but libsystemd-daemon not found.])]
--+            [USE_SYSTEMD=$withval], [USE_SYSTEMD=auto])
--+AS_IF([test "x$USE_SYSTEMD" != "xno"], [
--+    PKG_CHECK_MODULES([SYSTEMD], [libsystemd],
--+        [AC_DEFINE(USE_SYSTEMD,1,[Use systemd startup notification])],
--+        [AS_IF([test "x$USE_SYSTEMD" = "xyes"],
--+            [AC_MSG_ERROR([systemd startup notification support requested, but libsystemd not found.])]
--         )]
--     )
-- ])
--diff --git a/daemon/CMakeLists.txt b/daemon/CMakeLists.txt
--index e8f8b34..8ec3b95 100644
----- a/daemon/CMakeLists.txt
--+++ b/daemon/CMakeLists.txt
--@@ -1,7 +1,7 @@
-- project(trdaemon)
-- 
-- if(WITH_SYSTEMD)
---    add_definitions(-DUSE_SYSTEMD_DAEMON)
--+    add_definitions(-DUSE_SYSTEMD)
-- endif()
-- 
-- include_directories(
--@@ -37,14 +37,14 @@ add_executable(${TR_NAME}-daemon
--     ${${PROJECT_NAME}_WIN32_RC_FILE})
-- 
-- set_target_properties(${TR_NAME}-daemon PROPERTIES
---    COMPILE_FLAGS "${SYSTEMD_DAEMON_CFLAGS}"
---    LINK_FLAGS "${SYSTEMD_DAEMON_LDFLAGS}"
--+    COMPILE_FLAGS "${SYSTEMD_CFLAGS}"
--+    LINK_FLAGS "${SYSTEMD_LDFLAGS}"
-- )
-- 
-- target_link_libraries(${TR_NAME}-daemon
--     ${TR_NAME}
--     ${EVENT2_LIBRARIES}
---    ${SYSTEMD_DAEMON_LIBRARIES}
--+    ${SYSTEMD_LIBRARIES}
-- )
-- 
-- tr_win32_app_info(${PROJECT_NAME}_remote_WIN32_RC_FILE
--diff --git a/daemon/Makefile.am b/daemon/Makefile.am
--index 677f765..34d7076 100644
----- a/daemon/Makefile.am
--+++ b/daemon/Makefile.am
--@@ -3,7 +3,7 @@ AM_CPPFLAGS = -I at top_srcdir@ -DEMBEDDED
-- AM_CFLAGS = \
--     @LIBEVENT_CFLAGS@ \
--     @LIBCURL_CFLAGS@ \
---    @SYSTEMD_DAEMON_CFLAGS@ \
--+    @SYSTEMD_CFLAGS@ \
--     @ZLIB_CFLAGS@ \
--     @PTHREAD_CFLAGS@
-- 
--@@ -29,7 +29,7 @@ LDADD = \
--     @LIBCURL_LIBS@ \
--     @CRYPTO_LIBS@ \
--     @INTLLIBS@ \
---    @SYSTEMD_DAEMON_LIBS@ \
--+    @SYSTEMD_LIBS@ \
--     @ZLIB_LIBS@ \
--     @PTHREAD_LIBS@ \
--     ${LIBM}
--diff --git a/daemon/daemon.c b/daemon/daemon.c
--index 40ac5a6..62ac715 100644
----- a/daemon/daemon.c
--+++ b/daemon/daemon.c
--@@ -33,7 +33,7 @@
-- #include <libtransmission/version.h>
-- #include <libtransmission/watchdir.h>
-- 
---#ifdef USE_SYSTEMD_DAEMON
--+#ifdef USE_SYSTEMD
--  #include <systemd/sd-daemon.h>
-- #else
--  static void sd_notify (int status UNUSED, const char * str UNUSED) { }
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 0d2af32f4f..13cbc969d3 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
-@@ -1,3 +1,3 @@
+-+            if (length > end - start)
+-+                return AVERROR_INVALIDDATA;
+-+
+-             data_ref = NULL;
+-             data     = av_malloc(end - start +
+-                                  AV_INPUT_BUFFER_PADDING_SIZE);
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 1f68943fc7..35bd681326 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256 35442cc849f91f8df982c3d0d479d650c6ca19310a994eccdaa79a4af3916b7d  transmission-2.94.tar.xz
--sha256 20801783bf59e27d03ed6aab625b32a34e221ae95bf801db87827c8023398495  COPYING
-+sha256  9144652fe742f7f7dd6657716e378da60b751aaeda8bef8344b3eefc4db255f2  transmission-3.00.tar.xz
-+sha256  2b16da5bd02790d1e4d332cfd42b9dfd7d1b0ed3a16a75dc7e76b6ed239fdba9  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 8fbda5eea3..ff3b41c328 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
+-sha256 cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c  ffmpeg-4.2.2.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+-sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+-sha256 cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
++sha256  9df6c90aed1337634c1fb026fb01c154c29c82a64ea71291ff2da9aacb9aad31  ffmpeg-4.2.3.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
++sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
++sha256  cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index d01a9620da..736aa5b4ba 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRANSMISSION_VERSION = 2.94
-+TRANSMISSION_VERSION = 3.00
- TRANSMISSION_SITE = https://github.com/transmission/transmission-releases/raw/master
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_DEPENDENCIES = \
+-FFMPEG_VERSION = 4.2.2
++FFMPEG_VERSION = 4.2.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -16,9 +16,6 @@ FFMPEG_LICENSE += and GPL-2.0+
+ FFMPEG_LICENSE_FILES += COPYING.GPLv2
+ endif
+ 
+-# 0001-avcodec-cbs_jpeg-Check-length-for-SOS.patch
+-FFMPEG_IGNORE_CVES += CVE-2020-12284
+-
+ FFMPEG_CONF_OPTS = \
+ 	--prefix=/usr \
+ 	--enable-avfilter \
 -- 
 2.26.2
