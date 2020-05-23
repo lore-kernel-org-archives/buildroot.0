@@ -1,7 +1,8 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 23 May 2020 03:14:37 -0600
-Subject: [Buildroot] [PATCH 1/1] package/luajit: depend on !BR2_PACKAGE_LUA
-Message-ID: <20200523091437.1890881-1-james.hilliard1@gmail.com>
+Date: Sat, 23 May 2020 03:44:52 -0600
+Subject: [Buildroot] [PATCH v2 1/1] package/luajit: depend on
+ !BR2_PACKAGE_LUA
+Message-ID: <20200523094452.3821621-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +14,9 @@ The luajit package is incomaptible with lua so luajit should depend on
 luajit.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - depend on !BR2_PACKAGE_LUA_5_3 instead of !BR2_PACKAGE_LUA for solarus
 ---
  package/efl/Config.in      | 1 +
  package/luajit/Config.in   | 1 +
@@ -58,14 +62,14 @@ index 085525534d..880122ea84 100644
  	select BR2_PACKAGE_GMP
  	select BR2_PACKAGE_JSONCPP
 diff --git a/package/solarus/Config.in b/package/solarus/Config.in
-index 5d15342f3a..f18f5a7963 100644
+index 5d15342f3a..8a53f14d1f 100644
 --- a/package/solarus/Config.in
 +++ b/package/solarus/Config.in
 @@ -2,6 +2,7 @@ config BR2_PACKAGE_SOLARUS
  	bool "solarus"
  	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_LUA # luajit
++	depends on !BR2_PACKAGE_LUA_5_3 # luajit
  	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
