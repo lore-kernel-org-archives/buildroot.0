@@ -1,74 +1,60 @@
-From: Joachim Nilsson <troglobit@gmail.com>
-Date: Sat, 23 May 2020 16:05:03 +0200
-Subject: [Buildroot] [PATCH] docs/manual: new chapter on release engineering
-Message-ID: <20200523140503.2149568-1-troglobit@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 23 May 2020 19:20:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fio: fix build on sh4
+Message-ID: <20200523172036.1006199-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Describe release engineering and development phases of the project.
+Fixes:
+ - http://autobuild.buildroot.org/results/6dc82572ae1369aa5c9954b6e61777766c5aa3b4
 
-Signed-off-by: Joachim Nilsson <troglobit@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/manual.txt              |  2 ++
- docs/manual/release-engineering.txt | 34 +++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
- create mode 100644 docs/manual/release-engineering.txt
+ ...akefile-fix-build-of-io_uring-on-sh4.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
 
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index b76ab40d40..48de65ee10 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -66,6 +66,8 @@ include::contribute.txt[]
- 
- include::developers.txt[]
- 
-+include::release-engineering.txt[]
-+
- = Appendix
- 
- include::appendix.txt[]
-diff --git a/docs/manual/release-engineering.txt b/docs/manual/release-engineering.txt
+diff --git a/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch b/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
 new file mode 100644
-index 0000000000..0cf38183f9
+index 0000000000..69bda93d37
 --- /dev/null
-+++ b/docs/manual/release-engineering.txt
-@@ -0,0 +1,34 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
+@@ -0,0 +1,33 @@
++From e1985f9097f37748efdc29239eb3fb6a00b12f27 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 23 May 2020 19:07:40 +0200
++Subject: [PATCH] Makefile: fix build of io_uring on sh4
 +
-+[[RELENG]]
-+== Release Engineering
-+=== Releases
++SuperH compile currently fails with:
 +
-+The Buildroot project makes quarterly releases with monthly bugfix
-+releases.  The first release of each year is a long term support
-+release, LTS.
++/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/8.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: t/io_uring.o: in function `submitter_fn':
++/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/fio-3.19/t/io_uring.c:131: undefined reference to `arch_flags'
++/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/8.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/fio-3.19/t/io_uring.c:367: undefined reference to `arch_flags'
++collect2: error: ld returned 1 exit status
 +
-+ - Quarterly releases: 2020.02, 2020.05, 2020.08, and 2020.11
-+ - Bugfix releases: 2020.02.1, 2020.02.2, ...
-+ - LTS releases: 2020.02, 2021.02, ...
++Fix that by ensuring we have a stub arch.o with the necessary arch flags
 +
-+Releases are supported until the first bugfix release of the next
-+release, e.g., 2020.05.x is EOL when 2020.08.1 is released.
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/axboe/fio/commit/e1985f9097f37748efdc29239eb3fb6a00b12f27]
++---
++ Makefile | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+LTS releases are supported until the first bugfix release of the next
-+LTS, e.g., 2020.02.x is supported until 2021.02.1 is released.
-+
-+=== Development
-+
-+Each release cycle consist of two months of development on the +master+
-+branch and one month stabilization before the release is made.  During
-+this phase no new features are added to +master+, only bugfixes.
-+
-+The stabilization phase starts with tagging +-rc1+, and every week until
-+the release, another release candidate is tagged.
-+
-+To handle new features and version bumps during the stabilization phase,
-+a +next+ branch may be created for these features.  Once the current
-+release has been made, the +next+ branch is merged into +master+ and
-+the development cycle for the next release continues there.
++diff --git a/Makefile b/Makefile
++index f1e984f5f..e39621954 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -283,6 +283,7 @@ T_PIPE_ASYNC_OBJS = t/read-to-pipe-async.o
++ T_PIPE_ASYNC_PROGS = t/read-to-pipe-async
++ 
++ T_IOU_RING_OBJS = t/io_uring.o
+++T_IOU_RING_OBJS += t/arch.o
++ T_IOU_RING_PROGS = t/io_uring
++ 
++ T_MEMLOCK_OBJS = t/memlock.o
 -- 
-2.25.1
+2.26.2
