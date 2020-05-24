@@ -1,203 +1,98 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 24 May 2020 14:43:12 +0200
-Subject: [Buildroot] COG crashes on Pi4 (wpe_webkit)
-In-Reply-To: <em13dfa41d-2620-4973-a5d2-6af5c473897e@power16>
-References: <1589894180081-0.post@n4.nabble.com>
- <20200519194400.3edad316@gmx.net>
- <1589958433571-0.post@n4.nabble.com>
- <1590157038870-0.post@n4.nabble.com>
- <20200523222948.009d9706@gmx.net>
- <em117da5c2-26eb-4d92-a84e-b17878209d76@power16>
- <20200524114231.380a7420@gmx.net>
- <em13dfa41d-2620-4973-a5d2-6af5c473897e@power16>
-Message-ID: <20200524144312.291190eb@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 24 May 2020 17:58:18 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: don't link with
+ libstdc++.a on the host
+Message-ID: <20200524155818.126961-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+While cross-compiling, qt5webengine is building a host tool but
+want to link the libstdc++ statically. This requires to install
+libstdc++-static package on the host (Fedora package name).
 
-On Sun, 24 May 2020 09:43:36 +0000, "Daniel HiFiBerry" <daniel@hifiberry.com> wrote:
+Otherwise the link fail with:
 
-> I have this integrated (it's just not on Github).
+  [185/185] LINK gn
+  FAILED: gn
+  /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
+  /usr/bin/ld?: unable to find -lstdc++
+  [...]
+  Project ERROR: GN build error!
 
-Does this mean it works for you? Or do you have
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y integrated
-and it does not work for you (take care to not mix it with
-BR2_PACKAGE_MESA3D_GALLIUM_KMSRO)?
+Add --no-static-libstdc++ argument to gn.pro to link to
+libstdc++.so.6 instead of libstdc++.a.
 
-I have a hifiberry-os running with the local gui on hdmi:
+--no-static-libstdc++ has been added by [1] but it force
+linking statically by default.
 
-	$ ps aux
-[...]
-root       962  0.5  2.5  32780 23444 tty7     Ss+  12:38   0:01 /usr/bin/weston --backend=drm-backend.so --modules=systemd-notify.so
-root       963  0.0  0.8  13972  8192 tty7     S+   12:38   0:00 /usr/libexec/weston-keyboard
-root       964  0.0  0.6  12356  5964 tty7     S+   12:38   0:00 /usr/libexec/weston-desktop-shell
-root       969  0.3  3.1 209332 29236 ?        Ssl  12:38   0:01 /usr/bin/cog -P fdo http://localhost:80/#now-playing
-root       975 40.6 13.3 355752 122804 ?       SLl  12:38   2:18 /usr/libexec/wpe-webkit-1.0/WPEWebProcess 7 16
-root       976  0.2  3.3 259100 31016 ?        SLl  12:38   0:01 /usr/libexec/wpe-webkit-1.0/WPENetworkProcess 8 16
-[...]
+[1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
 
-The only thing I have to hack was the resize-partitions for the extra large image ;-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Ga?l Portay <gael.portay@collabora.com>
+---
+ ...ro-don-t-link-statically-with-libstc.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
 
-Regards,
-Peter
-
->
-> ------ Originalnachricht ------
-> Von: "Peter Seiderer" <ps.report@gmx.net>
-> An: "Daniel HiFiBerry" <daniel@hifiberry.com>
-> Cc: buildroot at busybox.net
-> Gesendet: 5/24/2020 11:42:31 AM
-> Betreff: Re: [Buildroot] COG crashes on Pi4 (wpe_webkit)
->
-> >Hello Daniel,
-> >
-> >On Sun, 24 May 2020 08:59:53 +0000, "Daniel HiFiBerry" <daniel@hifiberry.com> wrote:
-> >
-> >>  Hi Peter,
-> >>
-> >>  While I didn't test with a minimal configuration, using the
-> >>  "--backend=drm-backend.so" doesn't make a difference in my full-blown
-> >>  build.
-> >>  I'm using this already. I will do some more experiments...
-> >
-> >The trick for hifiberry-os should do (untested) the missing
-> >
-> >	BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
-> >
-> >in your configuration (see the 'hidden' hint in package/mesa3d/Config.in
-> >([1])...
-> >
-> >Regards,
-> >Peter
-> >
-> >[1] https://git.buildroot.net/buildroot/tree/package/mesa3d/Config.in#n265
-> >
-> >>
-> >>  Best regards,
-> >>  Daniel
-> >>
-> >>  ------ Originalnachricht ------
-> >>  Von: "Peter Seiderer" <ps.report@gmx.net>
-> >>  An: "usul27" <daniel@hifiberry.com>
-> >>  Cc: buildroot at busybox.net
-> >>  Gesendet: 5/23/2020 10:29:48 PM
-> >>  Betreff: Re: [Buildroot] COG crashes on Pi4 (wpe_webkit)
-> >>
-> >>  >Hello Daniel,
-> >>  >
-> >>  >On Fri, 22 May 2020 09:17:18 -0500 (CDT), usul27 <daniel@hifiberry.com> wrote:
-> >>  >
-> >>  >>  Ok, finally got a build with debug symbols:
-> >>  >>
-> >>  >>  Thread 1 "cog" received signal SIGSEGV, Segmentation fault.
-> >>  >>  0x00000000 in ?? ()
-> >>  >>  (gdb) backtrace
-> >>  >>  #0  0x00000000 in ?? ()
-> >>  >>  #1  0xb1799f84 in ffi_call_SYSV () from /lib/libffi.so.7
-> >>  >>  #2  0xb17993fc in ffi_call_int () from /lib/libffi.so.7
-> >>  >>  #3  0xb1799b1c in ffi_call () from /lib/libffi.so.7
-> >>  >>  #4  0xb149b28c in wl_closure_invoke (closure=closure at entry=0xadb03a00,
-> >>  >>  flags=flags at entry=2, target=<optimized out>, opcode=3025639260,
-> >>  >>  data=<optimized out>, data at entry=0x74c60) at src/connection.c:1014
-> >>  >>  #5  0xb1497db0 in wl_client_connection_data (fd=<optimized out>,
-> >>  >>  mask=<optimized out>, data=0x74c60) at src/wayland-server.c:429
-> >>  >>  #6  0xb1499608 in wl_event_loop_dispatch (loop=0x5bfc8, timeout=<optimized
-> >>  >>  out>) at src/event-loop.c:640
-> >>  >>  #7  0xb0c59400 in WS::ServerSource::{lambda(_GSource*, int (*)(void*),
-> >>  >>  void*)#3}::_FUN(_GSource*, int (*)(void*), void*) () from
-> >>  >>  /lib/libWPEBackend-fdo-1.0.so.1
-> >>  >>  Backtrace stopped: previous frame identical to this frame (corrupt stack?)
-> >>  >>
-> >>  >>  Somebody has any idea?
-> >>  >
-> >>  >Did some test on RPi4 with the following defconfig:
-> >>  >
-> >>  >BR2_arm=y
-> >>  >BR2_cortex_a72=y
-> >>  >BR2_ARM_FPU_NEON_VFPV4=y
-> >>  >BR2_ENABLE_DEBUG=y
-> >>  >BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> >>  >BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> >>  >BR2_BINUTILS_VERSION_2_31_X=y
-> >>  >BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >>  >BR2_PACKAGE_HOST_GDB=y
-> >>  >BR2_GDB_VERSION_8_3=y
-> >>  >BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> >>  >BR2_SYSTEM_DHCP="eth0"
-> >>  >BR2_GENERATE_LOCALE="en_US"
-> >>  >BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
-> >>  >BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
-> >>  >BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-> >>  >BR2_LINUX_KERNEL=y
-> >>  >BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> >>  >BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
-> >>  >BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-> >>  >BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> >>  >BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2711-rpi-4-b"
-> >>  >BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> >>  >BR2_PACKAGE_STRACE=y
-> >>  >BR2_PACKAGE_DEJAVU=y
-> >>  >BR2_PACKAGE_COG=y
-> >>  >BR2_PACKAGE_MESA3D=y
-> >>  >BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
-> >>  >BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
-> >>  >BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
-> >>  >BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> >>  >BR2_PACKAGE_WESTON=y
-> >>  >BR2_PACKAGE_WESTON_DRM=y
-> >>  >BR2_PACKAGE_WESTON_DEMO_CLIENTS=y
-> >>  >BR2_PACKAGE_RPI_FIRMWARE=y
-> >>  >BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-> >>  >BR2_PACKAGE_WPEWEBKIT=y
-> >>  >BR2_PACKAGE_OPENSSH=y
-> >>  >BR2_TARGET_ROOTFS_EXT2=y
-> >>  >BR2_TARGET_ROOTFS_EXT2_4=y
-> >>  >BR2_TARGET_ROOTFS_EXT2_LABEL=""
-> >>  >BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-> >>  ># BR2_TARGET_ROOTFS_TAR is not set
-> >>  >BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> >>  >BR2_PACKAGE_HOST_GENIMAGE=y
-> >>  >BR2_PACKAGE_HOST_MTOOLS=y
-> >>  >
-> >>  >Running:
-> >>  >
-> >>  >	$ export XDG_RUNTIME_DIR=/tmp
-> >>  >	$ weston --tty 1 &
-> >>  >	$ cog --platform=fdo
-> >>  >
-> >>  >leads to the 'Segmentation fault' as you described...
-> >>  >
-> >>  >Running:
-> >>  >
-> >>  >	$ export XDG_RUNTIME_DIR=/tmp
-> >>  >	$ weston --tty 1 --backend=drm-backend.so &
-> >>  >	$ cog --platform=fdo
-> >>  >
-> >>  >works...
-> >>  >
-> >>  >Regards,
-> >>  >Peter
-> >>  >
-> >>  >
-> >>  >>
-> >>  >>
-> >>  >>
-> >>  >>
-> >>  >>  --
-> >>  >>  Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> >>  >>  _______________________________________________
-> >>  >>  buildroot mailing list
-> >>  >>buildroot at busybox.net
-> >>  >>http://lists.busybox.net/mailman/listinfo/buildroot
-> >>  >
-> >>
-> >>  _______________________________________________
-> >>  buildroot mailing list
-> >>buildroot at busybox.net
-> >>http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
+diff --git a/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+new file mode 100644
+index 0000000000..dff3e6c849
+--- /dev/null
++++ b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+@@ -0,0 +1,51 @@
++From 7ae73da23ad998bd1e63ad213cf7a02e61191951 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 23 May 2020 19:01:19 +0200
++Subject: [PATCH] gn.pro: don't link statically with libstc++
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++While cross-compiling, qt5webengine is building a host tool but
++want to link the libstdc++ statically. This requires to install
++libstdc++-static package on the host (Fedora package name).
++
++Otherwise the link fail with:
++
++  [185/185] LINK gn
++  FAILED: gn
++  /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
++  /usr/bin/ld?: unable to find -lstdc++
++  [...]
++  Project ERROR: GN build error!
++
++Add --no-static-libstdc++ argument to gn.pro to link to
++libstdc++.so.6 instead of libstdc++.a.
++
++--no-static-libstdc++ has been added by [1] but it force
++linking statically by default.
++
++[1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/buildtools/gn.pro | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/buildtools/gn.pro b/src/buildtools/gn.pro
++index 033202e6..5dd8e241 100644
++--- a/src/buildtools/gn.pro
+++++ b/src/buildtools/gn.pro
++@@ -20,7 +20,8 @@ build_pass|!debug_and_release {
++ 
++             gn_gen_args = --no-last-commit-position --out-path $$out_path \
++                           --cc \"$$which($$QMAKE_CC)\" --cxx \"$$which($$QMAKE_CXX)\" \
++-                          --ld \"$$which($$QMAKE_LINK)\"
+++                          --ld \"$$which($$QMAKE_LINK)\" \
+++                          --no-static-libstdc++
++ 
++             msvc:!clang_cl: gn_gen_args += --use-lto
++ 
++-- 
++2.25.4
++
+-- 
+2.25.4
