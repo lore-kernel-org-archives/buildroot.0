@@ -1,48 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 May 2020 22:39:25 +0200
-Subject: [Buildroot] [PATCH] package/ltrace: directly use s.b.o to fetch the
- archive
-Message-ID: <20200524203925.27369-1-yann.morin.1998@free.fr>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 24 May 2020 23:28:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: enable hash checks
+ for svn tarbals
+Message-ID: <20200524212831.25032-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the migration from alioth to gitlab, the git repository for ltrace
-was not migrated. There is a repository on gitlab.com, own by the debian
-maintainer, but that repository does not contain the sha1 we know of:
-    https://gitlab.com/cespedes/ltrace
+With commit 89f5e989323ace815a32fced27eaefee2f4666de support for
+reproducible archives was added. Thus archives generated from svn do no
+longer needs to be added to BR_NO_CHECK_HASH_FOR.
 
-s.b.o. is the only known location so far to host the archive, so switch
-to it.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/ltrace/ltrace.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index b71215e43b..2eb60fe450 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -5,7 +5,14 @@
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 946dc6d561..f9385177ac 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -577,7 +577,7 @@ ifndef $(2)_DL_OPTS
+  endif
+ endif
  
- LTRACE_VERSION = c22d359433b333937ee3d803450dc41998115685
--LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
-+#LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
-+
-+# Upstream is dead: the git reporistory for ltrace did not follow during the
-+# migration from alioth to gitlab, and there is no longer any official
-+# upstream repository with the expected sha1, except for the tarball cached on
-+# s.b.o., so we go fetch it there.
-+LTRACE_SITE = http://sources.buildroot.org/ltrace
-+
- LTRACE_DEPENDENCIES = elfutils
- LTRACE_CONF_OPTS = --disable-werror
- LTRACE_LICENSE = GPL-2.0
+-ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
++ifneq ($$(filter bzr cvs hg,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
+ 
 -- 
 2.20.1
