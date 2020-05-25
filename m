@@ -1,23 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 May 2020 14:46:57 +0000
-Subject: [Buildroot] [Bug 12946] Grub: Decompressor is too big.
-In-Reply-To: <bug-12946-163@https.bugs.busybox.net/>
-References: <bug-12946-163@https.bugs.busybox.net/>
-Message-ID: <bug-12946-163-JLrgXZUARL@https.bugs.busybox.net/>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Mon, 25 May 2020 18:02:05 +0200
+Subject: [Buildroot] [PATCH v2 0/5] imx: add i.MX8M Nano EVK board support
+Message-ID: <1590422530-4788-1-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12946
+This series adds support for the NXP i.MX8M Nano EVK board.
 
-Stefan Walter <stefan.walter@iml.fraunhofer.de> changed:
+Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+half of the series introduce the DDR training selection for the whole i.MX8 M
+SoC family.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|---                         |2020.02
+The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+reference boards.
+
+Stephane Viau (5):
+  package/freescale-imx: Add option for DDR FW need
+  package/freescale-imx/firmware-imx: add choice for DDR training
+    binaries
+  board/freescale/common/imx: use generic ddr_fw.bin name
+  board/freescale/common/imx: add support for i.MX8M Nano
+  configs/freescale_imx8mnevk: new defconfig
+
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  4 ++
+ .../common/imx/imx8-bootloader-prepare.sh          |  6 +-
+ board/freescale/common/imx/post-image.sh           |  2 +
+ board/freescale/imx8mnevk/readme.txt               | 73 ++++++++++++++++++++++
+ configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
+ package/freescale-imx/Config.in                    |  6 ++
+ package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 47 +++++++++++++-
+ 9 files changed, 200 insertions(+), 6 deletions(-)
+ create mode 100644 board/freescale/imx8mnevk/readme.txt
+ create mode 100644 configs/freescale_imx8mnevk_defconfig
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
