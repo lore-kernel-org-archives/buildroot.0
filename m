@@ -1,55 +1,48 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 25 May 2020 11:10:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: remove hardcoded
- interface from config to args
-In-Reply-To: <20200525094005.750c46e3@windsurf.home>
-References: <20200520051647.18530-1-heiko.thiery@gmail.com>
- <20200521153619.5466d4e6@windsurf.home>
- <CAEyMn7ZfS7oj9iWXngWnYK6iCbj0dEgNys+tw-ZohxKQjiWH=A@mail.gmail.com>
- <20200525094005.750c46e3@windsurf.home>
-Message-ID: <CAEyMn7YrKcbE3b4=c7TnX87Mo2SL4KzdjmMf8_d_Vi94tmK6ug@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 May 2020 14:46:11 +0000
+Subject: [Buildroot] [Bug 12946] New: Grub: Decompressor is too big.
+Message-ID: <bug-12946-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=12946
 
-Am Mo., 25. Mai 2020 um 09:40 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello,
->
-> On Thu, 21 May 2020 22:52:07 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > > Well, you can also just as well provide your custom linuxptp.cfg in a
-> > > rootfs overlay, no?
-> >
-> > Yes this is for sure a valid solution. You mean it doesn't matter
-> > adding a custom linuxptp.cfg or a /etc/defaults/ptp4l to change the
-> > interface to be used because both ways need to add a file to the
-> > rootfs overlay?
->
-> Exactly what I meant indeed.
+            Bug ID: 12946
+           Summary: Grub: Decompressor is too big.
+           Product: buildroot
+           Version: 2020.02.2
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: stefan.walter at iml.fraunhofer.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Ok. But then the user needs to sync the config when changes are made
-in the default of ptp4l/linuxptp unlike only changing the used
-interface.
+I'm using grub-mkimage from a Buildroot SDK built with "make sdk" to create a
+boot loader image that is later combined with a home partition image (using
+genimage). After updating (from 2018.02.12) to 2020.02.2, when running
 
-> > > Also, your change to linuxptp.cfg kind of breaks what is explained in
-> > > linuxptp.cfg:
-> >
-> > I think it does not break the functionality. The patch only changes
-> > the location of the interface to be used. ptp4l can set the interface
-> > either in the config or in the arguments.
->
-> No, it does not break the functionality, but the explanation in the
-> comment becomes a bit weird, as the fact that eth0 is used is no longer
-> configured through that config file.
+grub-mkimage --config="$grub_early.cfg" --directory="$GRUB_DIR" -o
+"$OUTPUT_PATH"/grub_core.img --format=i386-pc --prefix==/boot/grub
+${GRUB_MODULES}
 
-When submitting a new patch version I will change the comment.
+I'm now seeing this:
+
+grub-mkimage: error: Decompressor is too big.
+
+I'm building on Ubuntu 19.10 with GCC 9.2.1. The problem itself seems to be
+known with the Grub developers:
+https://lists.gnu.org/archive/html/grub-devel/2020-03/msg00217.html
+
+Is it possible to integrate the fix mentioned there for 2020.02.3?
 
 -- 
-Heiko
+You are receiving this mail because:
+You are on the CC list for the bug.
