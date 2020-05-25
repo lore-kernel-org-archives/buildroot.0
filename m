@@ -1,46 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 May 2020 09:40:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: remove hardcoded
- interface from config to args
-In-Reply-To: <CAEyMn7ZfS7oj9iWXngWnYK6iCbj0dEgNys+tw-ZohxKQjiWH=A@mail.gmail.com>
-References: <20200520051647.18530-1-heiko.thiery@gmail.com>
- <20200521153619.5466d4e6@windsurf.home>
- <CAEyMn7ZfS7oj9iWXngWnYK6iCbj0dEgNys+tw-ZohxKQjiWH=A@mail.gmail.com>
-Message-ID: <20200525094005.750c46e3@windsurf.home>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 25 May 2020 02:05:01 -0600
+Subject: [Buildroot] [PATCH v3 3/9] package/collectd: depend on
+ luainterpreter for lua support
+In-Reply-To: <20200525091050.26175643@windsurf.home>
+References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
+ <20200525004845.3019642-3-james.hilliard1@gmail.com>
+ <20200525091050.26175643@windsurf.home>
+Message-ID: <CADvTj4q7L+9ztSdLDJKmDDEN=FpvmCJpWAsr1iLVDt11Aqeusg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Thu, 21 May 2020 22:52:07 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
-
-> > Well, you can also just as well provide your custom linuxptp.cfg in a
-> > rootfs overlay, no?
-> 
-> Yes this is for sure a valid solution. You mean it doesn't matter
-> adding a custom linuxptp.cfg or a /etc/defaults/ptp4l to change the
-> interface to be used because both ways need to add a file to the
-> rootfs overlay?
-
-Exactly what I meant indeed.
-
-> > Also, your change to linuxptp.cfg kind of breaks what is explained in
-> > linuxptp.cfg:
-> 
-> I think it does not break the functionality. The patch only changes
-> the location of the interface to be used. ptp4l can set the interface
-> either in the config or in the arguments.
-
-No, it does not break the functionality, but the explanation in the
-comment becomes a bit weird, as the fact that eth0 is used is no longer
-configured through that config file.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Mon, May 25, 2020 at 1:10 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sun, 24 May 2020 18:48:39 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> >  config BR2_PACKAGE_COLLECTD_LUA
+> >       bool "lua"
+> > -     select BR2_PACKAGE_LUA
+> > +     depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> >       help
+> >         Embeds a Lua interpreter into collectd and provides an
+> >         interface to collectd's plugin system.
+> >
+> > +comment "lua needs a Lua interpreter"
+> > +     depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
+>
+> I believe this comment is not needed, it is obvious a Lua interpreter
+> is needed for Lua support.
+I had that there so that it was clear that collectd has a lua option
+when there is not
+lua interpreter selected.
+>
+> > -     $(if $(BR2_PACKAGE_COLLECTD_LUA),lua) \
+> > +     $(if $(BR2_PACKAGE_COLLECTD_LUA),$(if $(BR2_PACKAGE_LUA),lua,luajit)) \
+>
+> Use the luainterpreter virtual package as a dependency here.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
