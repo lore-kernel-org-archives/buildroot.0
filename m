@@ -1,61 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 May 2020 22:04:35 +0200
-Subject: [Buildroot] [git commit] package/fio: fix build on sh4
-Message-ID: <20200525194748.76F5B91AE6@busybox.osuosl.org>
+Date: Mon, 25 May 2020 21:58:27 +0200
+Subject: [Buildroot] [git commit] package/ltrace: directly use s.b.o to
+ fetch the archive
+Message-ID: <20200525194748.6378F91AE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e0beffb74efd6a0a1bd4fd1e631b5a757d7c61b
+commit: https://git.buildroot.net/buildroot/commit/?id=982728364141c4369003b1dbdc24e51428be6b39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/6dc82572ae1369aa5c9954b6e61777766c5aa3b4
+During the migration from alioth to gitlab, the git repository for ltrace
+was not migrated. There is a repository on gitlab.com, owned by the debian
+maintainer, but that repository does not contain the sha1 we know of:
+    https://gitlab.com/cespedes/ltrace
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+s.b.o. is the only known location so far to host the archive, so switch
+to it.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...002-Makefile-fix-build-of-io_uring-on-sh4.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/ltrace/ltrace.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch b/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
-new file mode 100644
-index 0000000000..69bda93d37
---- /dev/null
-+++ b/package/fio/0002-Makefile-fix-build-of-io_uring-on-sh4.patch
-@@ -0,0 +1,33 @@
-+From e1985f9097f37748efdc29239eb3fb6a00b12f27 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 23 May 2020 19:07:40 +0200
-+Subject: [PATCH] Makefile: fix build of io_uring on sh4
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index b71215e43b..2eb60fe450 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -5,7 +5,14 @@
+ ################################################################################
+ 
+ LTRACE_VERSION = c22d359433b333937ee3d803450dc41998115685
+-LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
++#LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
 +
-+SuperH compile currently fails with:
++# Upstream is dead: the git reporistory for ltrace did not follow during the
++# migration from alioth to gitlab, and there is no longer any official
++# upstream repository with the expected sha1, except for the tarball cached on
++# s.b.o., so we go fetch it there.
++LTRACE_SITE = http://sources.buildroot.org/ltrace
 +
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/8.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: t/io_uring.o: in function `submitter_fn':
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/fio-3.19/t/io_uring.c:131: undefined reference to `arch_flags'
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sh4-buildroot-linux-uclibc/8.3.0/../../../../sh4-buildroot-linux-uclibc/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/fio-3.19/t/io_uring.c:367: undefined reference to `arch_flags'
-+collect2: error: ld returned 1 exit status
-+
-+Fix that by ensuring we have a stub arch.o with the necessary arch flags
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/axboe/fio/commit/e1985f9097f37748efdc29239eb3fb6a00b12f27]
-+---
-+ Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile b/Makefile
-+index f1e984f5f..e39621954 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -283,6 +283,7 @@ T_PIPE_ASYNC_OBJS = t/read-to-pipe-async.o
-+ T_PIPE_ASYNC_PROGS = t/read-to-pipe-async
-+ 
-+ T_IOU_RING_OBJS = t/io_uring.o
-++T_IOU_RING_OBJS += t/arch.o
-+ T_IOU_RING_PROGS = t/io_uring
-+ 
-+ T_MEMLOCK_OBJS = t/memlock.o
+ LTRACE_DEPENDENCIES = elfutils
+ LTRACE_CONF_OPTS = --disable-werror
+ LTRACE_LICENSE = GPL-2.0
