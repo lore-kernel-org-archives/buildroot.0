@@ -1,49 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 May 2020 22:55:18 +0200
-Subject: [Buildroot] [git commit] package/lrzip: bump to
- 7f3bf46203bf45ea115d8bd9f310ea219be88af4
-Message-ID: <20200525203845.0217C8EB18@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 25 May 2020 23:17:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/uboot-tools:
+ tools/env/fw_env.h: remove env.h
+In-Reply-To: <20200511214744.2749796-1-romain.naour@gmail.com>
+References: <20200511214744.2749796-1-romain.naour@gmail.com>
+Message-ID: <73372aff-471d-bb9a-38aa-be4afddd3c85@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18079e20a712c4a7d539ead52b0a0c725ec7f7e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This bump contains only one commit that fix a build failure with asm:
-https://github.com/ckolivas/lrzip/commit/844b8c057c8c7372ca41ad2efdbf849f45c24506
+Le 11/05/2020 ? 23:47, Romain Naour a ?crit?:
+> As reported by Nicolas Carrier on the Buildroot mailing list [1],
+> there is a new build issue while building a program which interacts with
+> the u-boot environment. This program uses the headers of the ubootenv
+> library provided by uboot-tools.
+> 
+> This is an upstream change from uboot [2] adding "#include <env.h>" to
+> fw_env.h. Adding env.h require a board configuration to build.
+> 
+> But only fw_env.h header is installed in the staging directory by
+> uboot-tools package, but since it now include env.h the build is broken
+> because env.h is missing from the staging directory.
+> 
+> It's seems an upstream bug since env_set() is not used in fw_env tool.
+> Nicolas removed env.h from fw_env tool and fixed it's build issue.
+> 
+> This problem is present since uboot v2019.10, so the uboot version
+> present in Buildroot 2020.02 is affected.
+> 
+> It's probably not a problem for upstream uboot but it's a problem
+> for uboot-tools package that build uboot tools without a board
+> configuration for the target.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
+> [2] https://gitlab.denx.de/u-boot/u-boot/-/commit/9fb625ce05539fe6876a59ce1dcadb76b33c6f6e
+> 
+> Reported-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/800d8a97966ef75dbf20e85ec8a02766ba02cc76
+The patch is now upstream:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lrzip/lrzip.hash | 2 +-
- package/lrzip/lrzip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://gitlab.denx.de/u-boot/u-boot/-/commit/2aca8804d8d5f84d2d661e76e8d232c5c12445b5
 
-diff --git a/package/lrzip/lrzip.hash b/package/lrzip/lrzip.hash
-index f3d5742620..447cf94ccc 100644
---- a/package/lrzip/lrzip.hash
-+++ b/package/lrzip/lrzip.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7f886b248c996ef9d327e0a8ede4eb7e067186185cad7b37084607098d35c75a  lrzip-8781292dd5833c04eeead51d4a5bd02dc6432dc7.tar.gz
-+sha256  7f886b248c996ef9d327e0a8ede4eb7e067186185cad7b37084607098d35c75a  lrzip-7f3bf46203bf45ea115d8bd9f310ea219be88af4.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
-index 32388b8e20..7419bb1ed9 100644
---- a/package/lrzip/lrzip.mk
-+++ b/package/lrzip/lrzip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LRZIP_VERSION = 8781292dd5833c04eeead51d4a5bd02dc6432dc7
-+LRZIP_VERSION = 7f3bf46203bf45ea115d8bd9f310ea219be88af4
- LRZIP_SITE = $(call github,ckolivas,lrzip,$(LRZIP_VERSION))
- LRZIP_AUTORECONF = YES
- LRZIP_LICENSE = GPL-2.0+
+Best regards,
+Romain
+
+
+> ---
+>  ...0004-tools-env-fw_env.h-remove-env.h.patch | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch
+> 
+> diff --git a/package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch b/package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch
+> new file mode 100644
+> index 0000000000..8175ae139f
+> --- /dev/null
+> +++ b/package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch
+> @@ -0,0 +1,51 @@
+> +From 664ef61e19d6261d8984493b5f22127ec2ad44fc Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@gmail.com>
+> +Date: Sun, 10 May 2020 23:15:32 +0200
+> +Subject: [PATCH] tools/env/fw_env.h: remove env.h
+> +
+> +As reported by Nicolas Carrier on the Buildroot mailing list [1],
+> +there is a new build issue while building a program which interacts with
+> +the u-boot environment. This program uses the headers of the ubootenv
+> +library provided by uboot-tools.
+> +
+> +This is an upstream change from uboot [2] adding "#include <env.h>" to
+> +fw_env.h. Adding env.h require a board configuration to build.
+> +
+> +But only fw_env.h header is installed in the staging directory by
+> +uboot-tools package, but since it now include env.h the build is broken
+> +because env.h is missing from the staging directory.
+> +
+> +It's seems an upstream bug since env_set() is not used in fw_env tool.
+> +
+> +Adding env.h is an error since it also include compiler.h (and others
+> +uboot internal includes).
+> +
+> +Nicolas removed env.h from fw_env tool and fixed it's build issue.
+> +
+> +This problem is present since uboot v2019.10, so the uboot version
+> +present in Buildroot 2020.02 is affected.
+> +
+> +[1] http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
+> +[2] https://gitlab.denx.de/u-boot/u-boot/-/commit/9fb625ce05539fe6876a59ce1dcadb76b33c6f6e
+> +
+> +Reported-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +---
+> + tools/env/fw_env.h | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/tools/env/fw_env.h b/tools/env/fw_env.h
+> +index b60fbfc8f8..78c803c944 100644
+> +--- a/tools/env/fw_env.h
+> ++++ b/tools/env/fw_env.h
+> +@@ -4,7 +4,6 @@
+> +  * Wolfgang Denk, DENX Software Engineering, wd at denx.de.
+> +  */
+> + 
+> +-#include <env.h>
+> + #include <stdint.h>
+> + 
+> + /*
+> +-- 
+> +2.25.4
+> +
+> 
