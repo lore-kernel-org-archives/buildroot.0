@@ -1,55 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 May 2020 22:29:50 +0200
-Subject: [Buildroot] [git commit] package: don't use BR2_KERNEL_MIRROR for
- git downloads
-Message-ID: <20200525202841.786F98A540@busybox.osuosl.org>
+Date: Mon, 25 May 2020 22:30:23 +0200
+Subject: [Buildroot] [git commit] package/speexdsp+tremor: switch to new git
+ repository
+Message-ID: <20200525202841.812D68A540@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb57a54cf8d56fb9a32a3d632346c58eb58177b4
+commit: https://git.buildroot.net/buildroot/commit/?id=97551eb176cd75419e3520ea94f184e3220980cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The git repositories are not served on the kernel.org CDN:
-
-    fatal: repository 'https://cdn.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/' not found
-
-Switch to explicitly use the git.kernel.org server.
+The original git server on git.xiph.org died, and the Xiph project has
+now moved on to host their repositories on gitlab.comn instead.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Cyril Bur <cyrilbur@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kvm-unit-tests/kvm-unit-tests.mk | 2 +-
- package/kvmtool/kvmtool.mk               | 2 +-
+ package/speexdsp/speexdsp.mk | 2 +-
+ package/tremor/tremor.mk     | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index d83d31d2ee..a972602fb9 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+diff --git a/package/speexdsp/speexdsp.mk b/package/speexdsp/speexdsp.mk
+index 901f22b9e6..35c06dd833 100644
+--- a/package/speexdsp/speexdsp.mk
++++ b/package/speexdsp/speexdsp.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- KVM_UNIT_TESTS_VERSION = kvm-unit-tests-20171020
--KVM_UNIT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/scm/virt/kvm/kvm-unit-tests.git
-+KVM_UNIT_TESTS_SITE = https://git.kernel.org/pub/scm/virt/kvm/kvm-unit-tests.git
- KVM_UNIT_TESTS_SITE_METHOD = git
- KVM_UNIT_TESTS_LICENSE = LGPL-2.0
- KVM_UNIT_TESTS_LICENSE_FILES = COPYRIGHT
-diff --git a/package/kvmtool/kvmtool.mk b/package/kvmtool/kvmtool.mk
-index 5894e4771d..2984817c7e 100644
---- a/package/kvmtool/kvmtool.mk
-+++ b/package/kvmtool/kvmtool.mk
+ SPEEXDSP_VERSION = SpeexDSP-1.2.0
+-SPEEXDSP_SITE = https://git.xiph.org/speexdsp.git
++SPEEXDSP_SITE = https://gitlab.xiph.org/xiph/speexdsp.git
+ SPEEXDSP_SITE_METHOD = git
+ SPEEXDSP_LICENSE = BSD-3-Clause
+ SPEEXDSP_LICENSE_FILES = COPYING
+diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
+index 835fe36172..a865e681df 100644
+--- a/package/tremor/tremor.mk
++++ b/package/tremor/tremor.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- KVMTOOL_VERSION = f77d646ba01d04be5aad9449ac00719c043fe36e
--KVMTOOL_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/will/kvmtool.git
-+KVMTOOL_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git
- KVMTOOL_SITE_METHOD = git
- KVMTOOL_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
+ TREMOR_VERSION = 7c30a66346199f3f09017a09567c6c8a3a0eedc8
+-TREMOR_SITE = https://git.xiph.org/tremor.git
++TREMOR_SITE = https://gitlab.xiph.org/xiph/tremor.git
+ TREMOR_SITE_METHOD = git
+ TREMOR_LICENSE = BSD-3-Clause
+ TREMOR_LICENSE_FILES = COPYING
