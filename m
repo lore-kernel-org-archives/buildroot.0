@@ -1,35 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 May 2020 22:50:19 +0200
-Subject: [Buildroot] [PATCH] package/wiringpi: remove
-In-Reply-To: <20200524202651.20373-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 24 May 2020 22:26:51 +0200")
-References: <20200524202651.20373-1-yann.morin.1998@free.fr>
-Message-ID: <87d06rivsk.fsf@dell.be.48ers.dk>
+Date: Mon, 25 May 2020 22:54:00 +0200
+Subject: [Buildroot] [PATCH] package/qemu: remove csky fork
+In-Reply-To: <20200522232212.2909156-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 23 May 2020 01:22:12 +0200")
+References: <20200522232212.2909156-1-romain.naour@gmail.com>
+Message-ID: <878shfivmf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > The author has completely ripped off the git tree, so the sources
- > are no longer available, with that message:
- >     "Please look for alternatives for wiringPi"
+ > We have a qemu fork for csky cpus [1] but since qemu version
+ > bump to 4.2.0 [2] and libssh2/libssh change the csky build is
+ > broken.
 
- > And indeed there is a better alternative, using the kernel GPIO
- > subsystem and drivers.
+ > The csky fork is based on Qemu 3.0.0 but unlike autotools packages
+ > any unknown option is handled as error.
 
- > Note that queezelite looses that functionality now, but upstream
- > squeezelite has done changes to do without wiringpi (hint for an
- > upgrade?).
+ > Since we don't want to support all options from previous qemu
+ > release and the github repository has been removed [3] and the
+ > only remaining archive is located on http://sources.buildroot.net,
+ > remove the qemu csky fork as suggested by [4].
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Peter Seiderer <ps.report@gmx.net>
- > Cc: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+ > [1] https://git.buildroot.net/buildroot/commit/?id=f816e5b276f1ef15840bec6667f1e8219717ab7d
+ > [2] https://git.buildroot.net/buildroot/commit/?id=0ea17054ce7dfc54efca5634133cef786445e7b1
+ > [3] https://github.com/c-sky/qemu
+ > [4] http://lists.busybox.net/pipermail/buildroot/2020-May/281885.html
 
-check-package complained about the line length of Config.in.legacy
-entry. Committed after fixing that up, thanks.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Guo Ren <ren_guo@c-sky.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks. I also moved the patches out of the (now unneeded)
+4.2.0 subdir.
+
+Guo, please resubmit c-sky support for qemu when it is included upstream
+- Thanks.
 
 -- 
 Bye, Peter Korsgaard
