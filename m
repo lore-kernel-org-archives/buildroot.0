@@ -1,68 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 May 2020 23:48:54 +0200
-Subject: [Buildroot] [PATCH] package/fmc+fmlib: directly use s.b.o to fetch
- the archive
-Message-ID: <20200525214854.14591-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 May 2020 23:48:52 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tpm2-abrmd: bump version to 2.3.2
+Message-ID: <20200525214853.14277-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that Freescale has been wholly swallowed into NXP, the public-facing
-git repositories that were hosting those two packages are no longer
-available, which leaves our archives on s.b.o the only known locations
-where we can grab the sources, so switch to using it.
+Fixes various initialization / systemd issues. From the changelog:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+- Provide meaningful exit codes on initialization failures.
+- Prevent systemd from starting the daemon before udev changes ownership of
+  the TPM device node.
+- Prevent systemd from starting the daemon if there is no TPM device node.
+- Prevent systemd from restarting the daemon if it fails.
+- Add SELinux policy to allow daemon to resolve names.
+- Add SELinux policy boolean (disabled by default) to allow daemon to
+  connect to all unreserved ports.
 
+Also adjust .hash file white space to match new agreements.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Matt: I happen to actually have the git trees in the state they were on
-2020-02-03T13:07+0200 if you would happen to know what to do with those.
-Just tell me, I can ship them to you (960K+736K resp.)
----
- package/fmc/fmc.mk     | 8 +++++++-
- package/fmlib/fmlib.mk | 8 +++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/tpm2-abrmd/tpm2-abrmd.hash | 4 ++--
+ package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
-index 2a95fec0b7..35c5d2434a 100644
---- a/package/fmc/fmc.mk
-+++ b/package/fmc/fmc.mk
-@@ -5,7 +5,13 @@
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
+index cff3266bc8..f69cd369bf 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.hash
++++ b/package/tpm2-abrmd/tpm2-abrmd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 63cb59be1fd21e6ae233c37a0aa4a59883a4885a7bfd2c7e69979c5048518d50  tpm2-abrmd-2.3.0.tar.gz
+-sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
++sha256  df02c18882116e19b56aa8c701687c0c0987dd334e6fc002b340cedf6e000d10  tpm2-abrmd-2.3.2.tar.gz
++sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+index e92fda252a..9d22219f67 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.mk
++++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FMC_VERSION = fsl-sdk-v2.0
--FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-+#FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-+
-+# Upstream git repository is no longer accessible now that Freescale has been
-+# wholy absorbed into NXP. The only known location with the sources that we
-+# know of is our backup mirror, s.b.o, so directly use that.
-+FMC_SITE = http://sources.buildroot.org/fmc
-+
- FMC_LICENSE = MIT
- FMC_LICENSE_FILES = COPYING
- FMC_DEPENDENCIES = libxml2 tclap fmlib
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index e67ab1e5de..0f6321393c 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -5,7 +5,13 @@
- ################################################################################
- 
- FMLIB_VERSION = fsl-sdk-v2.0
--FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
-+#FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
-+
-+# Upstream git repository is no longer accessible now that Freescale has been
-+# wholy absorbed into NXP. The only known location with the sources that we
-+# know of is our backup mirror, s.b.o, so directly use that.
-+FMLIB_SITE = http://sources.buildroot.org/fmlib
-+
- FMLIB_LICENSE = BSD-3-Clause, GPL-2.0+
- FMLIB_LICENSE_FILES = COPYING
- FMLIB_DEPENDENCIES = linux
+-TPM2_ABRMD_VERSION = 2.3.0
++TPM2_ABRMD_VERSION = 2.3.2
+ TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
+ TPM2_ABRMD_LICENSE = BSD-2-Clause
+ TPM2_ABRMD_LICENSE_FILES = LICENSE
 -- 
 2.20.1
