@@ -1,244 +1,128 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 26 May 2020 23:11:46 +0200
-Subject: [Buildroot] [PATCH v3] package/qt5/qt5declarative: fix parallel
- install
-In-Reply-To: <20200526210443.29088-1-ps.report@gmx.net>
-References: <20200526210443.29088-1-ps.report@gmx.net>
-Message-ID: <b2e263fb-eed0-5be4-1b60-18ade435d3e8@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 26 May 2020 23:13:30 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: don't link with
+ libstdc++.a on the host
+In-Reply-To: <e01d85ae-b6ae-816b-b094-84a13862e721@gmail.com>
+References: <20200524155818.126961-1-romain.naour@gmail.com>
+ <e01d85ae-b6ae-816b-b094-84a13862e721@gmail.com>
+Message-ID: <20200526231330.61fedf4d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Romain,
 
-Le 26/05/2020 ? 23:04, Peter Seiderer a ?crit?:
-> From: Romain Naour <romain.naour@gmail.com>
-> 
-> Installing qt5declarative examples on fast/fast/multicore machines sometimes
-> failes with a variation of the following error messages:
-> 
->  - Cannot touch [...]/chapter5-listproperties/app.qml: No such file or directory
->  - Error copying [...]/chapter2-methods/app.qml: Destination file exists
-> 
-> Fix it by using OTHER_FILES instead of a seperate qml files install target
-> to fix the race between install_target, install_qml and install_sources.
+On Tue, 26 May 2020 23:02:14 +0200, Romain Naour <romain.naour@gmail.com> wrote:
 
-Thanks, I missed the install_sources in my previous attempt.
+> Hi Peter,
+> 
+> Le 24/05/2020 ? 17:58, Romain Naour a ?crit?:
+> > While cross-compiling, qt5webengine is building a host tool but
+> > want to link the libstdc++ statically. This requires to install
+> > libstdc++-static package on the host (Fedora package name).
+> > 
+> > Otherwise the link fail with:
+> > 
+> >   [185/185] LINK gn
+> >   FAILED: gn
+> >   /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
+> >   /usr/bin/ld?: unable to find -lstdc++
+> >   [...]
+> >   Project ERROR: GN build error!
+> > 
+> > Add --no-static-libstdc++ argument to gn.pro to link to
+> > libstdc++.so.6 instead of libstdc++.a.
+> > 
+> > --no-static-libstdc++ has been added by [1] but it force
+> > linking statically by default.
+> > 
+> > [1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615  
+> 
+> Did you noticed this issue while building for qt5declarative issue?
+> On my pc, the static glibc wasn't installed.
 
-I guess it pass you stress test :)
+I think the problem is qt5webengine specific as it is the only package compiling
+a host build tool GN....
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Never observed the problem with qt5webengine, maybe because on OpenSUSE there is
+a static libstdc++ provided with the 'normal' libstdc++ devel package, eg.
+	$ rpm -qf /usr/lib64/gcc/x86_64-suse-linux/9/libstdc++.a
+	libstdc++6-devel-gcc9-9.3.1+git1296-1.7.x86_64
 
-Best regards,
-Romain
+Regards,
+Peter
 
 > 
-> Fixes:
+> What do you think?
 > 
->  - https://gitlab.com/buildroot.org/buildroot/-/jobs/565470221
+> Best regards,
+> Romain
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> [Reworked patch and commit log]
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v2 -> v3:
->  - reworked patch (OTHER_FILES instead of additional dep) and commit log
-> ---
->  .../0002-examples-fix-parallel-install.patch  | 185 ++++++++++++++++++
->  1 file changed, 185 insertions(+)
->  create mode 100644 package/qt5/qt5declarative/0002-examples-fix-parallel-install.patch
-> 
-> diff --git a/package/qt5/qt5declarative/0002-examples-fix-parallel-install.patch b/package/qt5/qt5declarative/0002-examples-fix-parallel-install.patch
-> new file mode 100644
-> index 0000000000..43e8bc68e9
-> --- /dev/null
-> +++ b/package/qt5/qt5declarative/0002-examples-fix-parallel-install.patch
-> @@ -0,0 +1,185 @@
-> +From bf4ee955cde7a27a8fd988a7985064f19d2a10fe Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Tue, 26 May 2020 20:16:44 +0200
-> +Subject: [PATCH] examples: fix parallel install
-> +
-> +Installing qt5declarative examples on fast/multicore machines sometimes
-> +failes with a variation of the following error messages:
-> +
-> +  - Cannot touch [...]/chapter5-listproperties/app.qml: No such file or directory
-> +  - Error copying [...]/chapter2-methods/app.qml: Destination file exists
-> +
-> +Fix it by using OTHER_FILES instead of a seperate qml files install target.
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + .../extending-qml/chapter1-basics/chapter1-basics.pro     | 8 +++-----
-> + .../extending-qml/chapter2-methods/chapter2-methods.pro   | 8 +++-----
-> + .../extending-qml/chapter3-bindings/chapter3-bindings.pro | 8 +++-----
-> + .../chapter4-customPropertyTypes.pro                      | 8 +++-----
-> + .../chapter5-listproperties/chapter5-listproperties.pro   | 8 +++-----
-> + examples/qmltest/qmltest/qmltest.pro                      | 7 ++++---
-> + examples/quick/imageprovider/imageprovider.pro            | 7 ++++---
-> + .../quick/imageresponseprovider/imageresponseprovider.pro | 7 ++++---
-> + .../quick/scenegraph/simplematerial/simplematerial.pro    | 6 +++---
-> + 9 files changed, 30 insertions(+), 37 deletions(-)
-> +
-> +diff --git a/examples/qml/tutorials/extending-qml/chapter1-basics/chapter1-basics.pro b/examples/qml/tutorials/extending-qml/chapter1-basics/chapter1-basics.pro
-> +index 9911e024..127d4092 100644
-> +--- a/examples/qml/tutorials/extending-qml/chapter1-basics/chapter1-basics.pro
-> ++++ b/examples/qml/tutorials/extending-qml/chapter1-basics/chapter1-basics.pro
-> +@@ -6,10 +6,8 @@ SOURCES += piechart.cpp \
-> + 
-> + RESOURCES += chapter1-basics.qrc
-> + 
-> +-DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter1-basics
-> +-target.path = $$DESTPATH
-> ++target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter1-basics
-> + 
-> +-qml.files = *.qml
-> +-qml.path = $$DESTPATH
-> ++OTHER_FILES += *.qml
-> + 
-> +-INSTALLS += target qml
-> ++INSTALLS += target
-> +diff --git a/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro b/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
-> +index 7fd850ce..cba5c39b 100644
-> +--- a/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
-> ++++ b/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
-> +@@ -6,10 +6,8 @@ SOURCES += piechart.cpp \
-> + 
-> + RESOURCES += chapter2-methods.qrc
-> + 
-> +-DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter2-methods
-> +-target.path = $$DESTPATH
-> ++target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter2-methods
-> + 
-> +-qml.files = *.qml
-> +-qml.path = $$DESTPATH
-> ++OTHER_FILES += *.qml
-> + 
-> +-INSTALLS += target qml
-> ++INSTALLS += target
-> +diff --git a/examples/qml/tutorials/extending-qml/chapter3-bindings/chapter3-bindings.pro b/examples/qml/tutorials/extending-qml/chapter3-bindings/chapter3-bindings.pro
-> +index 1ae83f71..7d959e3f 100644
-> +--- a/examples/qml/tutorials/extending-qml/chapter3-bindings/chapter3-bindings.pro
-> ++++ b/examples/qml/tutorials/extending-qml/chapter3-bindings/chapter3-bindings.pro
-> +@@ -6,10 +6,8 @@ SOURCES += piechart.cpp \
-> + 
-> + RESOURCES += chapter3-bindings.qrc
-> + 
-> +-DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter3-bindings
-> +-target.path = $$DESTPATH
-> ++target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter3-bindings
-> + 
-> +-qml.files = *.qml
-> +-qml.path = $$DESTPATH
-> ++OTHER_FILES += *.qml
-> + 
-> +-INSTALLS += target qml
-> ++INSTALLS += target
-> +diff --git a/examples/qml/tutorials/extending-qml/chapter4-customPropertyTypes/chapter4-customPropertyTypes.pro b/examples/qml/tutorials/extending-qml/chapter4-customPropertyTypes/chapter4-customPropertyTypes.pro
-> +index 12dfbd62..e17a59be 100644
-> +--- a/examples/qml/tutorials/extending-qml/chapter4-customPropertyTypes/chapter4-customPropertyTypes.pro
-> ++++ b/examples/qml/tutorials/extending-qml/chapter4-customPropertyTypes/chapter4-customPropertyTypes.pro
-> +@@ -8,10 +8,8 @@ SOURCES += piechart.cpp \
-> + 
-> + RESOURCES += chapter4-customPropertyTypes.qrc
-> + 
-> +-DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter4-customPropertyTypes
-> +-target.path = $$DESTPATH
-> ++target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter4-customPropertyTypes
-> + 
-> +-qml.files = *.qml
-> +-qml.path = $$DESTPATH
-> ++OTHER_FILES += *.qml
-> + 
-> +-INSTALLS += target qml
-> ++INSTALLS += target
-> +diff --git a/examples/qml/tutorials/extending-qml/chapter5-listproperties/chapter5-listproperties.pro b/examples/qml/tutorials/extending-qml/chapter5-listproperties/chapter5-listproperties.pro
-> +index 67d1cd35..dd0f11d8 100644
-> +--- a/examples/qml/tutorials/extending-qml/chapter5-listproperties/chapter5-listproperties.pro
-> ++++ b/examples/qml/tutorials/extending-qml/chapter5-listproperties/chapter5-listproperties.pro
-> +@@ -8,10 +8,8 @@ SOURCES += piechart.cpp \
-> + 
-> + RESOURCES += chapter5-listproperties.qrc
-> + 
-> +-DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter5-listproperties
-> +-target.path = $$DESTPATH
-> ++target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter5-listproperties
-> + 
-> +-qml.files = *.qml
-> +-qml.path = $$DESTPATH
-> ++OTHER_FILES += *.qml
-> + 
-> +-INSTALLS += target qml
-> ++INSTALLS += target
-> +diff --git a/examples/qmltest/qmltest/qmltest.pro b/examples/qmltest/qmltest/qmltest.pro
-> +index b5893c5a..bade497d 100644
-> +--- a/examples/qmltest/qmltest/qmltest.pro
-> ++++ b/examples/qmltest/qmltest/qmltest.pro
-> +@@ -19,8 +19,9 @@ QT += qml qmltest
-> + macx: CONFIG -= app_bundle
-> + 
-> + target.path = $$[QT_INSTALL_EXAMPLES]/qmltest/qmltest
-> +-qml.files = tst_basic.qml tst_item.qml
-> +-qml.path = $$[QT_INSTALL_EXAMPLES]/qmltest/qmltest
-> +-INSTALLS += target qml
-> ++
-> ++OTHER_FILES += tst_basic.qml tst_item.qml
-> ++
-> ++INSTALLS += target
-> + 
-> + }
-> +diff --git a/examples/quick/imageprovider/imageprovider.pro b/examples/quick/imageprovider/imageprovider.pro
-> +index e54469b0..05938079 100644
-> +--- a/examples/quick/imageprovider/imageprovider.pro
-> ++++ b/examples/quick/imageprovider/imageprovider.pro
-> +@@ -10,8 +10,9 @@ SOURCES += imageprovider.cpp
-> + EXAMPLE_FILES = imageprovider-example.qml
-> + 
-> + target.path = $$[QT_INSTALL_EXAMPLES]/quick/imageprovider/ImageProviderCore
-> +-qml.files = ImageProviderCore/qmldir
-> +-qml.path = $$[QT_INSTALL_EXAMPLES]/quick/imageprovider/ImageProviderCore
-> +-INSTALLS = target qml
-> ++
-> ++OTHER_FILES += ImageProviderCore/qmldir
-> ++
-> ++INSTALLS = target
-> + 
-> + CONFIG += install_ok  # Do not cargo-cult this!
-> +diff --git a/examples/quick/imageresponseprovider/imageresponseprovider.pro b/examples/quick/imageresponseprovider/imageresponseprovider.pro
-> +index 8be4dbb6..678a6756 100644
-> +--- a/examples/quick/imageresponseprovider/imageresponseprovider.pro
-> ++++ b/examples/quick/imageresponseprovider/imageresponseprovider.pro
-> +@@ -10,8 +10,9 @@ SOURCES += imageresponseprovider.cpp
-> + EXAMPLE_FILES = imageresponseprovider-example.qml
-> + 
-> + target.path = $$[QT_INSTALL_EXAMPLES]/quick/imageresponseprovider/ImageResponseProviderCore
-> +-qml.files = ImageResponseProviderCore/qmldir
-> +-qml.path = $$[QT_INSTALL_EXAMPLES]/quick/imageresponseprovider/ImageResponseProviderCore
-> +-INSTALLS = target qml
-> ++
-> ++OTHER_FILES += ImageResponseProviderCore/qmldir
-> ++
-> ++INSTALLS = target
-> + 
-> + CONFIG += install_ok  # Do not cargo-cult this!
-> +diff --git a/examples/quick/scenegraph/simplematerial/simplematerial.pro b/examples/quick/scenegraph/simplematerial/simplematerial.pro
-> +index 6ae935f3..23a3b61f 100644
-> +--- a/examples/quick/scenegraph/simplematerial/simplematerial.pro
-> ++++ b/examples/quick/scenegraph/simplematerial/simplematerial.pro
-> +@@ -6,7 +6,7 @@ SOURCES += \
-> + RESOURCES += simplematerial.qrc
-> + 
-> + target.path = $$[QT_INSTALL_EXAMPLES]/quick/scenegraph/simplematerial
-> +-qml.files = main.qml
-> +-qml.path = $$[QT_INSTALL_EXAMPLES]/quick/scenegraph/simplematerial
-> + 
-> +-INSTALLS += target qml
-> ++OTHER_FILES += main.qml
-> ++
-> ++INSTALLS += target
-> +-- 
-> +2.26.2
-> +
+> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > Cc: Ga?l Portay <gael.portay@collabora.com>
+> > ---
+> >  ...ro-don-t-link-statically-with-libstc.patch | 51 +++++++++++++++++++
+> >  1 file changed, 51 insertions(+)
+> >  create mode 100644 package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+> > 
+> > diff --git a/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+> > new file mode 100644
+> > index 0000000000..dff3e6c849
+> > --- /dev/null
+> > +++ b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+> > @@ -0,0 +1,51 @@
+> > +From 7ae73da23ad998bd1e63ad213cf7a02e61191951 Mon Sep 17 00:00:00 2001
+> > +From: Romain Naour <romain.naour@gmail.com>
+> > +Date: Sat, 23 May 2020 19:01:19 +0200
+> > +Subject: [PATCH] gn.pro: don't link statically with libstc++
+> > +MIME-Version: 1.0
+> > +Content-Type: text/plain; charset=UTF-8
+> > +Content-Transfer-Encoding: 8bit
+> > +
+> > +While cross-compiling, qt5webengine is building a host tool but
+> > +want to link the libstdc++ statically. This requires to install
+> > +libstdc++-static package on the host (Fedora package name).
+> > +
+> > +Otherwise the link fail with:
+> > +
+> > +  [185/185] LINK gn
+> > +  FAILED: gn
+> > +  /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
+> > +  /usr/bin/ld?: unable to find -lstdc++
+> > +  [...]
+> > +  Project ERROR: GN build error!
+> > +
+> > +Add --no-static-libstdc++ argument to gn.pro to link to
+> > +libstdc++.so.6 instead of libstdc++.a.
+> > +
+> > +--no-static-libstdc++ has been added by [1] but it force
+> > +linking statically by default.
+> > +
+> > +[1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
+> > +
+> > +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > +---
+> > + src/buildtools/gn.pro | 3 ++-
+> > + 1 file changed, 2 insertions(+), 1 deletion(-)
+> > +
+> > +diff --git a/src/buildtools/gn.pro b/src/buildtools/gn.pro
+> > +index 033202e6..5dd8e241 100644
+> > +--- a/src/buildtools/gn.pro
+> > ++++ b/src/buildtools/gn.pro
+> > +@@ -20,7 +20,8 @@ build_pass|!debug_and_release {
+> > + 
+> > +             gn_gen_args = --no-last-commit-position --out-path $$out_path \
+> > +                           --cc \"$$which($$QMAKE_CC)\" --cxx \"$$which($$QMAKE_CXX)\" \
+> > +-                          --ld \"$$which($$QMAKE_LINK)\"
+> > ++                          --ld \"$$which($$QMAKE_LINK)\" \
+> > ++                          --no-static-libstdc++
+> > + 
+> > +             msvc:!clang_cl: gn_gen_args += --use-lto
+> > + 
+> > +-- 
+> > +2.25.4
+> > +
+> >   
 > 
