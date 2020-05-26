@@ -1,120 +1,93 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 26 May 2020 20:20:37 +0200
-Subject: [Buildroot] [for-next] package/rust: allow using python3 interpreter
-Message-ID: <20200526182037.592824-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 May 2020 20:29:37 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] boot/grub2: Fix GRUB i386-pc build with Ubuntu gcc
+Message-ID: <20200526182937.2246421-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
-by removing python2 tests from configure script [2].
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=12946
 
-Using python3 will help to remove python2 in a near future.
-
-[1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
-[2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Patrick Havelange <patrick.havelange@essensium.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...igure-use-default-python-interpreter.patch | 37 +++++++++++++++++++
- package/rust/rust.mk                          | 17 ++++++---
- 2 files changed, 49 insertions(+), 5 deletions(-)
- create mode 100644 package/rust/0002-configure-use-default-python-interpreter.patch
+Changes v1 -> v2:
+ - Add autoreconf
 
-diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
+ ...x-GRUB-i386-pc-build-with-Ubuntu-gcc.patch | 48 +++++++++++++++++++
+ boot/grub2/grub2.mk                           |  2 +
+ 2 files changed, 50 insertions(+)
+ create mode 100644 boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
+
+diff --git a/boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch b/boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
 new file mode 100644
-index 0000000000..34d97bb4cf
+index 0000000000..d8acbc5621
 --- /dev/null
-+++ b/package/rust/0002-configure-use-default-python-interpreter.patch
-@@ -0,0 +1,37 @@
-+From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 26 May 2020 18:24:25 +0200
-+Subject: [PATCH] configure: use default python interpreter
++++ b/boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
+@@ -0,0 +1,48 @@
++From 6643507ce30f775008e093580f0c9499dfb2c485 Mon Sep 17 00:00:00 2001
++From: Simon Hardy <simon.hardy@itdev.co.uk>
++Date: Tue, 24 Mar 2020 13:29:12 +0000
++Subject: build: Fix GRUB i386-pc build with Ubuntu gcc
 +
-+Don't try to use python2 if available, use the python interpreter available
-+in ouput/host/bin/python whateverer the python version is.
++With recent versions of gcc on Ubuntu a very large lzma_decompress.img file is
++output. (e.g. 134479600 bytes instead of 2864.) This causes grub-mkimage to
++fail with: "error: Decompressor is too big."
 +
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
++This seems to be caused by a section .note.gnu.property that is placed at an
++offset such that objcopy needs to pad the img file with zeros.
++
++This issue is present on:
++Ubuntu 19.10 with gcc (Ubuntu 8.3.0-26ubuntu1~19.10) 8.3.0
++Ubuntu 19.10 with gcc (Ubuntu 9.2.1-9ubuntu2) 9.2.1 20191008
++
++This issue is not present on:
++Ubuntu 19.10 with gcc (Ubuntu 7.5.0-3ubuntu1~19.10) 7.5.0
++RHEL 8.0 with gcc 8.3.1 20190507 (Red Hat 8.3.1-4)
++
++The issue can be fixed by removing the section using objcopy as shown in
++this patch.
++
++Signed-off-by: Simon Hardy <simon.hardy@itdev.co.uk>
++Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
++[Retrieved from:
++http://git.savannah.gnu.org/cgit/grub.git/commit/?id=6643507ce30f775008e093580f0c9499dfb2c485]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ configure | 12 ------------
-+ 1 file changed, 12 deletions(-)
++ gentpl.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure b/configure
-+index eeb8d081d34..6014a982f47 100755
-+--- a/configure
-++++ b/configure
-+@@ -2,16 +2,4 @@
++diff --git a/gentpl.py b/gentpl.py
++index 387588c05..c86550d4f 100644
++--- a/gentpl.py
+++++ b/gentpl.py
++@@ -766,7 +766,7 @@ def image(defn, platform):
++ if test x$(TARGET_APPLE_LINKER) = x1; then \
++   $(MACHO2IMG) $< $@; \
++ else \
++-  $(TARGET_OBJCOPY) $(""" + cname(defn) + """_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; \
+++  $(TARGET_OBJCOPY) $(""" + cname(defn) + """_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; \
++ fi
++ """)
 + 
-+ script="$(dirname $0)"/src/bootstrap/configure.py
-+ 
-+-try() {
-+-    cmd=$1
-+-    shift
-+-    T=$($cmd --version 2>/dev/null)
-+-    if [ $? -eq 0 ]; then
-+-        exec $cmd "$script" "$@"
-+-    fi
-+-}
-+-
-+-try python2.7 "$@"
-+-try python27 "$@"
-+-try python2 "$@"
-+ exec python $script "$@"
 +-- 
-+2.25.4
++cgit v1.2.1
 +
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 5d14fc6682..25153966f2 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -17,9 +17,16 @@ HOST_RUST_DEPENDENCIES = \
- 	host-rust-bin \
- 	host-cargo-bin \
- 	host-openssl \
--	host-python \
- 	$(BR2_CMAKE_HOST_DEPENDENCY)
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index a202525d71..9063ab8f19 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -12,6 +12,8 @@ GRUB2_LICENSE_FILES = COPYING
+ GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
+ HOST_GRUB2_DEPENDENCIES = host-bison host-flex
+ GRUB2_INSTALL_IMAGES = YES
++# 0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
++GRUB2_AUTORECONF = YES
  
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
-+HOST_RUST_DEPENDENCIES += host-python3
-+else
-+HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
-+HOST_RUST_DEPENDENCIES += host-python
-+endif
-+
- HOST_RUST_VERBOSITY = $(if $(VERBOSE),2,0)
- 
- # Some vendor crates contain Cargo.toml.orig files. The associated
-@@ -44,7 +51,7 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
- 		echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
- 		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
--		echo 'python = "$(HOST_DIR)/bin/python2"'; \
-+		echo 'python = "$(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION)"'; \
- 		echo 'submodules = false'; \
- 		echo 'vendor = true'; \
- 		echo 'compiler-docs = false'; \
-@@ -61,12 +68,12 @@ define HOST_RUST_CONFIGURE_CMDS
- endef
- 
- define HOST_RUST_BUILD_CMDS
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py build
- endef
- 
- define HOST_RUST_INSTALL_CMDS
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py dist
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py install
- endef
- 
- $(eval $(host-generic-package))
+ ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
+ GRUB2_INSTALL_TARGET = YES
 -- 
-2.25.4
+2.26.2
