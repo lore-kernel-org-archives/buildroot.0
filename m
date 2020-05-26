@@ -1,84 +1,105 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 May 2020 22:52:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/audit: fix -fno-common build
- failure
-In-Reply-To: <20200518054331.5106-1-heiko.thiery@gmail.com>
-References: <20200518054331.5106-1-heiko.thiery@gmail.com>
-Message-ID: <20200526205207.GG8737@scaer>
+Date: Tue, 26 May 2020 22:54:38 +0200
+Subject: [Buildroot] [git commit] package/uboot-tools: tools/env/fw_env.h:
+ remove env.h
+Message-ID: <20200526203754.0C2B291D37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=10454598a0c14054e4d52fafacdff5864db76cef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-18 07:43 +0200, Heiko Thiery spake thusly:
-> Added upstream patch for fixing build failure when using GCC10 as a host
-> compiler (-fno-common is now default).
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c4b/c4bba80e9fc476247c7ba28850831c6a8edd559f/build-end.log
-> 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+As reported by Nicolas Carrier on the Buildroot mailing list [1],
+there is a new build issue while building a program which interacts with
+the u-boot environment. This program uses the headers of the ubootenv
+library provided by uboot-tools.
 
-Applied to master, thanks.
+This is an upstream change from uboot [2] adding "#include <env.h>" to
+fw_env.h. Adding env.h require a board configuration to build.
 
-Regards,
-Yann E. MORIN.
+But only fw_env.h header is installed in the staging directory by
+uboot-tools package, but since it now include env.h the build is broken
+because env.h is missing from the staging directory.
 
-> ---
->  ...ns-need-to-be-external-when-building.patch | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
-> 
-> diff --git a/package/audit/0003-Header-definitions-need-to-be-external-when-building.patch b/package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
-> new file mode 100644
-> index 0000000000..9a546261df
-> --- /dev/null
-> +++ b/package/audit/0003-Header-definitions-need-to-be-external-when-building.patch
-> @@ -0,0 +1,28 @@
-> +From 017e6c6ab95df55f34e339d2139def83e5dada1f Mon Sep 17 00:00:00 2001
-> +From: Steve Grubb <sgrubb@redhat.com>
-> +Date: Fri, 10 Jan 2020 21:13:50 -0500
-> +Subject: [PATCH] Header definitions need to be external when building with
-> + -fno-common (which is default in GCC 10) - Tony Jones
-> +
-> +Patch taken from upstream: https://github.com/linux-audit/audit-userspace/commit/017e6c6ab95df55f34e339d2139def83e5dada1f
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + src/ausearch-common.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/ausearch-common.h b/src/ausearch-common.h
-> +index 6669203..3040547 100644
-> +--- a/src/ausearch-common.h
-> ++++ b/src/ausearch-common.h
-> +@@ -50,7 +50,7 @@ extern pid_t event_pid;
-> + extern int event_exact_match;
-> + extern uid_t event_uid, event_euid, event_loginuid;
-> + extern const char *event_tuid, *event_teuid, *event_tauid;
-> +-slist *event_node_list;
-> ++extern slist *event_node_list;
-> + extern const char *event_comm;
-> + extern const char *event_filename;
-> + extern const char *event_hostname;
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+It's seems an upstream bug since env_set() is not used in fw_env tool.
+Nicolas removed env.h from fw_env tool and fixed it's build issue.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+This problem is present since uboot v2019.10, so the uboot version
+present in Buildroot 2020.02 is affected.
+
+It's probably not a problem for upstream uboot but it's a problem
+for uboot-tools package that build uboot tools without a board
+configuration for the target.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
+[2] https://gitlab.denx.de/u-boot/u-boot/-/commit/9fb625ce05539fe6876a59ce1dcadb76b33c6f6e
+
+Reported-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[yann.morin.1998 at free.fr: add URL to upstream commit]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0004-tools-env-fw_env.h-remove-env.h.patch     | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+
+diff --git a/package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch b/package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch
+new file mode 100644
+index 0000000000..f5d9c2b2ca
+--- /dev/null
++++ b/package/uboot-tools/0004-tools-env-fw_env.h-remove-env.h.patch
+@@ -0,0 +1,52 @@
++From 664ef61e19d6261d8984493b5f22127ec2ad44fc Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 10 May 2020 23:15:32 +0200
++Subject: [PATCH] tools/env/fw_env.h: remove env.h
++
++As reported by Nicolas Carrier on the Buildroot mailing list [1],
++there is a new build issue while building a program which interacts with
++the u-boot environment. This program uses the headers of the ubootenv
++library provided by uboot-tools.
++
++This is an upstream change from uboot [2] adding "#include <env.h>" to
++fw_env.h. Adding env.h require a board configuration to build.
++
++But only fw_env.h header is installed in the staging directory by
++uboot-tools package, but since it now include env.h the build is broken
++because env.h is missing from the staging directory.
++
++It's seems an upstream bug since env_set() is not used in fw_env tool.
++
++Adding env.h is an error since it also include compiler.h (and others
++uboot internal includes).
++
++Nicolas removed env.h from fw_env tool and fixed it's build issue.
++
++This problem is present since uboot v2019.10, so the uboot version
++present in Buildroot 2020.02 is affected.
++
++[1] http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
++[2] https://gitlab.denx.de/u-boot/u-boot/-/commit/9fb625ce05539fe6876a59ce1dcadb76b33c6f6e
++
++Reported-by: Nicolas Carrier <nicolas.carrier@orolia.com>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Upstream: https://gitlab.denx.de/u-boot/u-boot/-/commit/2aca8804d8d5f84d2d661e76e8d232c5c12445b5
++---
++ tools/env/fw_env.h | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/tools/env/fw_env.h b/tools/env/fw_env.h
++index b60fbfc8f8..78c803c944 100644
++--- a/tools/env/fw_env.h
+++++ b/tools/env/fw_env.h
++@@ -4,7 +4,6 @@
++  * Wolfgang Denk, DENX Software Engineering, wd at denx.de.
++  */
++ 
++-#include <env.h>
++ #include <stdint.h>
++ 
++ /*
++-- 
++2.25.4
++
