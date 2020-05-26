@@ -1,78 +1,174 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 May 2020 23:18:13 +0200
-Subject: [Buildroot] [PATCH] board/freescale: increase the vfat size
-In-Reply-To: <20200526210119.6143-1-festevam@gmail.com>
-References: <20200526210119.6143-1-festevam@gmail.com>
-Message-ID: <20200526211813.GJ8737@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 26 May 2020 23:19:36 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: test_uboot_tools: Add
+ a test building a binary that include fw_env.h
+In-Reply-To: <20200526205904.GI8737@scaer>
+References: <20200511214744.2749796-1-romain.naour@gmail.com>
+ <20200511214744.2749796-2-romain.naour@gmail.com>
+ <20200526205904.GI8737@scaer>
+Message-ID: <fbbf8a40-e276-c967-f0e1-37550479a0a9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Hi Yann,
 
-On 2020-05-26 18:01 -0300, Fabio Estevam spake thusly:
-> i.MX8 targets typically use the standard ARM64 defconfig, which builds
-> lots of ARM64 platforms leading to super large kernels that can easily
-> not fit within the current 32MB size for vfat.
+Le 26/05/2020 ? 22:59, Yann E. MORIN a ?crit?:
+> Romain, Nicolas,
 > 
-> Increase the vfat size to better accomodate such large kernels.
-
-The genimage config files we have do accomodate the needs for the
-defconfigs they are used in. So, if all the in-tree defconfigs still
-build with the current size,t this is OK.
-
-That a user then tweaks it locally for their use-case, is not a reason
-IMHO to carry such a change.
-
-So, question: does this fix an actual build failure of any of the i.MX8
-defconfig that we have in-tree in Buildroot? If so, then this should be
-explcictly stated in the commit log.
-
-Otherwise, there is no reason to catter for out-of-tree use-cases,
-otherwise there will always be someone that come next and state "This
-package makes sense for my use-case, but it does not fit in the default
-size, so increase it". This is not tenable.
-
-Still, 32M is quite low for today's standards, and we want users to be
-relatively at ease to experiment on the default image anyway.
-
-So: applied to master, with a slightly tweaked commit log. Thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  board/freescale/common/imx/genimage.cfg.template_imx8 | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 2020-05-11 23:47 +0200, Romain Naour spake thusly:
+>> From: Nicolas Carrier <nicolas.carrier@orolia.com>
+>>
+>> Nicolas Carrier proposed a package to reproduce the uboot-tools issue
+>> he reported [1] with uboot 2020.01 packaged in the Buildroot 2020.02
+>> release.
+>>
+>> Add this package to the Buildroot testsuite in order to ckeck in gitlab
+>> if fw_env.h doesn't contain any header that require building uboot
+>> with a board configuration for the target.
 > 
-> diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-> index 84a812f986..5689205083 100644
-> --- a/board/freescale/common/imx/genimage.cfg.template_imx8
-> +++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-> @@ -14,7 +14,7 @@ image boot.vfat {
->        %FILES%
->      }
->    }
-> -  size = 32M
-> +  size = 64M
->  }
->  
->  image sdcard.img {
-> -- 
-> 2.17.1
+> Thanks for this test.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> However, our runtime infra is there to test that the integration of a
+> package in Buildroot is working as expected, not as a build-test or
+> regression test-suite ofr the upstream packages.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Is this patch (or similar) useful for you as maintainer to review/test the issue
+fixed by the previous patch ?
+
+Maybe it's too much for this small one.
+
+Best regards,
+Romain
+
+> 
+> So I've marked that patch as rejected.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> [1] http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Nicolas Carrier <nicolas.carrier@orolia.com>
+>> ---
+>>  .../tests/boot/br2-external/uboot-tools/Config.in |  1 +
+>>  .../boot/br2-external/uboot-tools/external.desc   |  1 +
+>>  .../boot/br2-external/uboot-tools/external.mk     |  1 +
+>>  .../package/uboot-tools-test/Config.in            |  6 ++++++
+>>  .../package/uboot-tools-test/uboot-env-test.c     | 14 ++++++++++++++
+>>  .../package/uboot-tools-test/uboot-tools-test.mk  | 14 ++++++++++++++
+>>  support/testing/tests/boot/test_uboot_tools.py    | 15 +++++++++++++++
+>>  7 files changed, 52 insertions(+)
+>>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/Config.in
+>>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/external.desc
+>>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/external.mk
+>>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in
+>>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c
+>>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk
+>>  create mode 100644 support/testing/tests/boot/test_uboot_tools.py
+>>
+>> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/Config.in b/support/testing/tests/boot/br2-external/uboot-tools/Config.in
+>> new file mode 100644
+>> index 0000000000..3cd7c06bb8
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/br2-external/uboot-tools/Config.in
+>> @@ -0,0 +1 @@
+>> +source "$BR2_EXTERNAL_UBOOT_TOOLS_TEST_PATH/package/uboot-tools-test/Config.in"
+>> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/external.desc b/support/testing/tests/boot/br2-external/uboot-tools/external.desc
+>> new file mode 100644
+>> index 0000000000..2f8477edaf
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/br2-external/uboot-tools/external.desc
+>> @@ -0,0 +1 @@
+>> +name: UBOOT_TOOLS_TEST
+>> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/external.mk b/support/testing/tests/boot/br2-external/uboot-tools/external.mk
+>> new file mode 100644
+>> index 0000000000..61cfd5878f
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/br2-external/uboot-tools/external.mk
+>> @@ -0,0 +1 @@
+>> +include $(sort $(wildcard $(BR2_EXTERNAL_UBOOT_TOOLS_TEST_PATH)/package/*/*.mk))
+>> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in
+>> new file mode 100644
+>> index 0000000000..1bdc09a731
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_UBOOT_TOOLS_TEST
+>> +	bool "uboot-tools-test"
+>> +	select BR2_PACKAGE_UBOOT_TOOLS
+>> +	help
+>> +	  Test code for fw_env.h inclusion.
+>> +
+>> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c
+>> new file mode 100644
+>> index 0000000000..0bd7c9993f
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c
+>> @@ -0,0 +1,14 @@
+>> +/*
+>> + * Based on http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
+>> + */
+>> +
+>> +#include <stdlib.h>
+>> +#include <fw_env.h>
+>> +#include <stdio.h>
+>> +
+>> +int main(void)
+>> +{
+>> +	puts("Hello world!");
+>> +
+>> +	return EXIT_SUCCESS;
+>> +}
+>> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk
+>> new file mode 100644
+>> index 0000000000..93937aa879
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk
+>> @@ -0,0 +1,14 @@
+>> +################################################################################
+>> +#
+>> +# uboot-tools-test
+>> +#
+>> +################################################################################
+>> +
+>> +UBOOT_TOOLS_TEST_DEPENDENCIES = uboot-tools
+>> +
+>> +define UBOOT_TOOLS_TEST_BUILD_CMDS
+>> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lubootenv \
+>> +		$(UBOOT_TOOLS_TEST_PKGDIR)/uboot-env-test.c -o $(@D)/uboot-env-test
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> diff --git a/support/testing/tests/boot/test_uboot_tools.py b/support/testing/tests/boot/test_uboot_tools.py
+>> new file mode 100644
+>> index 0000000000..55a5fba3c6
+>> --- /dev/null
+>> +++ b/support/testing/tests/boot/test_uboot_tools.py
+>> @@ -0,0 +1,15 @@
+>> +
+>> +import infra.basetest
+>> +
+>> +
+>> +class TestUbootToolsEnv(infra.basetest.BRTest):
+>> +    br2_external = [infra.filepath("tests/boot/br2-external/uboot-tools")]
+>> +    config = \
+>> +        """
+>> +        BR2_aarch64=y
+>> +        BR2_TOOLCHAIN_EXTERNAL=y
+>> +        BR2_PACKAGE_UBOOT_TOOLS_TEST=y
+>> +        """
+>> +
+>> +    def test_run(self):
+>> +        pass
+>> -- 
+>> 2.25.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
