@@ -1,42 +1,38 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 26 May 2020 14:24:37 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: propagate missing
- libdrm-freedreno deps
-Message-ID: <20200526202437.4126010-1-james.hilliard1@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 May 2020 22:28:36 +0200
+Subject: [Buildroot] [git commit] package/prosody: use correct bit32 package
+Message-ID: <20200526201133.AF2C6852D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libdrm freedreno depends on BR2_arm || BR2_aarch64 || BR2_aarch64_be
-as such we need to propagate those dependencies to mesa's gallium
-freedreno driver.
+commit: https://git.buildroot.net/buildroot/commit/?id=fa84c176c2148a60103e850204180f86aa5baa73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+According to https://prosody.im/doc/depends#bitop the correct bitop
+package to use with prosody for Lua 5.1 is:
+https://luarocks.org/modules/siffiejoe/bit32
+
+As such replace BR2_PACKAGE_LUABITOP with BR2_PACKAGE_LUA_BIT32
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2:
-  - add note about LIBDRM_HAS_ATOMIC dependency
----
- package/mesa3d/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/prosody/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index dd512d9b76..11d04b7a3f 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -111,6 +111,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	bool "Gallium freedreno driver"
-+	depends on BR2_arm || BR2_aarch64 || BR2_aarch64_be # libdrm-freedreno
-+	# libdrm's freedreno option depends on LIBDRM_HAS_ATOMIC. Propagating
-+	# that dependency here causes a circular dependency that Kconfig
-+	# can't see is just spurious. However, that dependency is about
-+	# the toolchain having sync4 primitives, which is always a given
-+	# for arm/aarch64.
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_FREEDRENO
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
--- 
-2.25.1
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index c32ca20e23..0b01547103 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_PROSODY
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on !BR2_PACKAGE_LUA_5_3
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+-	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
++	select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
