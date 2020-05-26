@@ -1,78 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 May 2020 21:53:15 +0200
-Subject: [Buildroot] [git commit] docs/website/sponsors.html: show 2020
- sponsors
-Message-ID: <20200526193646.5CBC891A97@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 26 May 2020 22:15:03 +0200
+Subject: [Buildroot] [PATCHv2] package/qt5/qt5declarative: fix parallel
+ install
+In-Reply-To: <20200526210342.4ce812f1@gmx.net>
+References: <20200526160724.431212-1-romain.naour@gmail.com>
+ <20200526210342.4ce812f1@gmx.net>
+Message-ID: <0be38b00-4b79-4cda-539d-9b2201397676@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e6e67a82569093a9f2c59a3a94e874bba93fea6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-So far in 2020, Logilin and Tap2Open made some financial donations to
-the Buildroot Association, so let's thank them on our sponsors page.
+Le 26/05/2020 ? 21:03, Peter Seiderer a ?crit?:
+> Hello Romain,
+> 
+> On Tue, 26 May 2020 18:07:24 +0200, Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> While installing qt5declarative	examples on fast machine, example destination
+>> directory will be installed twice, so it can break a parallel install, whereby
+>> two make jobs may run concurrently, trying to install the same files or creating
+>> the same directory.
+>>
+>> Cannot touch [...]chapter5-listproperties/app.qml: No such file or directory
+>> Error copying [...]chapter2-methods/app.qml: Destination file exists
+>>
+>> This is due to "target" and "qml" target creating the same directory in the
+>> generated Makefile:
+>>
+>>   install_target: first FORCE
+>>           @test -d $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods || \
+>>           mkdir -p $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods
+>>
+>>   install_qml: first FORCE
+>>           @test -d $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods || \
+>>           mkdir -p $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods
+>>
+>> Add "target" in "qml" dependency to fixes the issue:
+>>
+>>   install_qml: first install_target FORCE
+> 
+> 
+> Still failing, e.g.:
+> 
+> Error copying /home/seiderer/Work/Buildroot/build_rpi4_update_001/build/qt5declarative-5.14.2/examples/qml/tutorials/extending-qml/chapter2-methods/app.qml to /home/seiderer/Work/Buildroot/build_rpi4_update_001/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods/app.qml: Cannot create /home/seiderer/Work/Buildroot/build_rpi4_update_001/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods/app.qml for output
+> make[7]: *** [Makefile:691: install_qml] Error 3
+> make[7]: *** Waiting for unfinished jobs....
+> make[6]: *** [Makefile:89: sub-chapter2-methods-install_subtargets] Error 2
+> make[6]: *** Waiting for unfinished jobs....
+> make[5]: *** [Makefile:59: sub-extending-qml-install_subtargets] Error 2
+> make[4]: *** [Makefile:164: sub-tutorials-install_subtargets] Error 2
+> make[3]: *** [Makefile:86: sub-qml-install_subtargets] Error 2
+> make[3]: *** Waiting for unfinished jobs....
+> make[2]: *** [Makefile:113: sub-examples-install_subtargets] Error 2
+> make[1]: *** [package/pkg-generic.mk:310: /home/seiderer/Work/Buildroot/build_rpi4_update_001/build/qt5declarative-5.14.2/.stamp_staging_installed] Error 2
+> make: *** [Makefile:23: _all] Error 2
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/website/images/tap2open-logo.png | Bin 0 -> 9064 bytes
- docs/website/sponsors.html            |  40 ++++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+Just to check, did you clean the qt5decalrative package before testing ?
+You can check if the patch has been taken into account by looking at install_qml
+makefile target:
 
-diff --git a/docs/website/images/tap2open-logo.png b/docs/website/images/tap2open-logo.png
-new file mode 100644
-index 0000000000..136019b621
-Binary files /dev/null and b/docs/website/images/tap2open-logo.png differ
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 4cbfc5a34b..2f3f6309ae 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -4,6 +4,46 @@
- <div class="row nh"><!-- current sponsor row -->
- <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
- 
-+    <div class="panel panel-primary">
-+    <div class="panel-heading">Current sponsors</div>
-+    <div class="panel-body">
-+
-+      <div class="row">
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="https://www.tap2open.com">
-+		  <img class="img-responsive center-block" src="images/tap2open-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12" style="height: 150px;">
-+	        <a href="https://www.tap2open.com">Tap2Open</a>
-+	        financially sponsored the <a href="/association.html">Buildroot Association</a>
-+	        in 2020.</div>
-+	    </div>
-+	  </div>
-+	</div>
-+
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="http://www.logilin.fr">
-+		  <img class="img-responsive center-block" src="images/logilin-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="http://www.logilin.fr">Logilin</a>
-+		financially sponsored the <a href="/association.html">Buildroot Association</a>
-+		in 2020.</div>
-+	    </div>
-+	  </div>
-+	</div>
-+      </div>
-+    </div>
-+    </div>
-+
-   <div class="panel panel-primary">
-     <div class="panel-heading">Sponsor of the Buildroot.org domain</div>
-     <div class="panel-body">
+   install_qml: first install_target FORCE
+
+> 
+> 
+> Did try another solution, instead of adding an extra dependency converted qml
+> install targets into 'OTHER_FILES', e.g.:
+> 
+> diff --git a/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro b/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
+> index 7fd850ce..cba5c39b 100644
+> --- a/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
+> +++ b/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
+> @@ -6,10 +6,8 @@ SOURCES += piechart.cpp \
+> 
+>  RESOURCES += chapter2-methods.qrc
+> 
+> -DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter2-methods
+> -target.path = $$DESTPATH
+> +target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter2-methods
+> 
+> -qml.files = *.qml
+> -qml.path = $$DESTPATH
+> +OTHER_FILES += *.qml
+> 
+> -INSTALLS += target qml
+> +INSTALLS += target
+> 
+> 
+> Looks promising (survived 40 loops of the install test)...
+> 
+> Should I send a v3 (hijacking your patch) or send it as an new one?
+
+Since it looks promising then feel free to send a new one that supersede my patch :)
+Maybe add a link in the commit log to our initial investigations :)
+
+Thanks for the help!
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> Peter
+> 
+>>
+>> Fixes:
+>> https://gitlab.com/buildroot.org/buildroot/-/jobs/565470221
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Ga?l Portay <gael.portay@collabora.com>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> Cc: Peter Seiderer <ps.report@gmx.net>
+>> ---
+>> v2: Apply this fix each time where several install target are used in .po file:
+>>       INSTALLS += target [qml] [...]
+>>     (Peter)
+>> ---
