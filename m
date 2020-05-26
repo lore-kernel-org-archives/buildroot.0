@@ -1,146 +1,168 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 26 May 2020 22:56:15 +0200
-Subject: [Buildroot] [PATCHv2] package/qt5/qt5declarative: fix parallel
- install
-In-Reply-To: <0be38b00-4b79-4cda-539d-9b2201397676@gmail.com>
-References: <20200526160724.431212-1-romain.naour@gmail.com>
- <20200526210342.4ce812f1@gmx.net>
- <0be38b00-4b79-4cda-539d-9b2201397676@gmail.com>
-Message-ID: <20200526225615.166a281e@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 May 2020 22:59:04 +0200
+Subject: [Buildroot] [PATCH 2/2] support/testing: test_uboot_tools: Add
+ a test building a binary that include fw_env.h
+In-Reply-To: <20200511214744.2749796-2-romain.naour@gmail.com>
+References: <20200511214744.2749796-1-romain.naour@gmail.com>
+ <20200511214744.2749796-2-romain.naour@gmail.com>
+Message-ID: <20200526205904.GI8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
+Romain, Nicolas,
 
-On Tue, 26 May 2020 22:15:03 +0200, Romain Naour <romain.naour@gmail.com> wrote:
-
-> Hi Peter,
+On 2020-05-11 23:47 +0200, Romain Naour spake thusly:
+> From: Nicolas Carrier <nicolas.carrier@orolia.com>
 > 
-> Le 26/05/2020 ? 21:03, Peter Seiderer a ?crit?:
-> > Hello Romain,
-> > 
-> > On Tue, 26 May 2020 18:07:24 +0200, Romain Naour <romain.naour@gmail.com> wrote:
-> >   
-> >> While installing qt5declarative	examples on fast machine, example destination
-> >> directory will be installed twice, so it can break a parallel install, whereby
-> >> two make jobs may run concurrently, trying to install the same files or creating
-> >> the same directory.
-> >>
-> >> Cannot touch [...]chapter5-listproperties/app.qml: No such file or directory
-> >> Error copying [...]chapter2-methods/app.qml: Destination file exists
-> >>
-> >> This is due to "target" and "qml" target creating the same directory in the
-> >> generated Makefile:
-> >>
-> >>   install_target: first FORCE
-> >>           @test -d $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods || \
-> >>           mkdir -p $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods
-> >>
-> >>   install_qml: first FORCE
-> >>           @test -d $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods || \
-> >>           mkdir -p $(INSTALL_ROOT)/[...]/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods
-> >>
-> >> Add "target" in "qml" dependency to fixes the issue:
-> >>
-> >>   install_qml: first install_target FORCE  
-> > 
-> > 
-> > Still failing, e.g.:
-> > 
-> > Error copying /home/seiderer/Work/Buildroot/build_rpi4_update_001/build/qt5declarative-5.14.2/examples/qml/tutorials/extending-qml/chapter2-methods/app.qml to /home/seiderer/Work/Buildroot/build_rpi4_update_001/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods/app.qml: Cannot create /home/seiderer/Work/Buildroot/build_rpi4_update_001/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/examples/qml/tutorials/extending-qml/chapter2-methods/app.qml for output
-> > make[7]: *** [Makefile:691: install_qml] Error 3
-> > make[7]: *** Waiting for unfinished jobs....
-> > make[6]: *** [Makefile:89: sub-chapter2-methods-install_subtargets] Error 2
-> > make[6]: *** Waiting for unfinished jobs....
-> > make[5]: *** [Makefile:59: sub-extending-qml-install_subtargets] Error 2
-> > make[4]: *** [Makefile:164: sub-tutorials-install_subtargets] Error 2
-> > make[3]: *** [Makefile:86: sub-qml-install_subtargets] Error 2
-> > make[3]: *** Waiting for unfinished jobs....
-> > make[2]: *** [Makefile:113: sub-examples-install_subtargets] Error 2
-> > make[1]: *** [package/pkg-generic.mk:310: /home/seiderer/Work/Buildroot/build_rpi4_update_001/build/qt5declarative-5.14.2/.stamp_staging_installed] Error 2
-> > make: *** [Makefile:23: _all] Error 2  
+> Nicolas Carrier proposed a package to reproduce the uboot-tools issue
+> he reported [1] with uboot 2020.01 packaged in the Buildroot 2020.02
+> release.
 > 
-> Just to check, did you clean the qt5decalrative package before testing ?
+> Add this package to the Buildroot testsuite in order to ckeck in gitlab
+> if fw_env.h doesn't contain any header that require building uboot
+> with a board configuration for the target.
 
-Yes, qt5declarative re-build via 'rm -rf build/qt5declarative-5.14.2'...
+Thanks for this test.
 
-> You can check if the patch has been taken into account by looking at install_qml
-> makefile target:
-> 
->    install_qml: first install_target FORCE
-> 
+However, our runtime infra is there to test that the integration of a
+package in Buildroot is working as expected, not as a build-test or
+regression test-suite ofr the upstream packages.
 
-	$  grep "^install_qml:" build/qt5declarative-5.14.2/examples/qml/tutorials/extending-qml/chapter2-methods/Makefile 
-	install_qml: first install_target FORCE
-
-But in the case of app.qml it is not (only) the install_target dependency but
-although the install_source dependency (the second place where app.qml is mentioned
-in the Makefile)...
-
-> > 
-> > 
-> > Did try another solution, instead of adding an extra dependency converted qml
-> > install targets into 'OTHER_FILES', e.g.:
-> > 
-> > diff --git a/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro b/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
-> > index 7fd850ce..cba5c39b 100644
-> > --- a/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
-> > +++ b/examples/qml/tutorials/extending-qml/chapter2-methods/chapter2-methods.pro
-> > @@ -6,10 +6,8 @@ SOURCES += piechart.cpp \
-> > 
-> >  RESOURCES += chapter2-methods.qrc
-> > 
-> > -DESTPATH = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter2-methods
-> > -target.path = $$DESTPATH
-> > +target.path = $$[QT_INSTALL_EXAMPLES]/qml/tutorials/extending-qml/chapter2-methods
-> > 
-> > -qml.files = *.qml
-> > -qml.path = $$DESTPATH
-> > +OTHER_FILES += *.qml
-> > 
-> > -INSTALLS += target qml
-> > +INSTALLS += target
-> > 
-> > 
-> > Looks promising (survived 40 loops of the install test)...
-> > 
-> > Should I send a v3 (hijacking your patch) or send it as an new one?  
-> 
-> Since it looks promising then feel free to send a new one that supersede my patch :)
-> Maybe add a link in the commit log to our initial investigations :)
-
-Will do...
+So I've marked that patch as rejected.
 
 Regards,
-Peter
+Yann E. MORIN.
 
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
 > 
-> Thanks for the help!
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Nicolas Carrier <nicolas.carrier@orolia.com>
+> ---
+>  .../tests/boot/br2-external/uboot-tools/Config.in |  1 +
+>  .../boot/br2-external/uboot-tools/external.desc   |  1 +
+>  .../boot/br2-external/uboot-tools/external.mk     |  1 +
+>  .../package/uboot-tools-test/Config.in            |  6 ++++++
+>  .../package/uboot-tools-test/uboot-env-test.c     | 14 ++++++++++++++
+>  .../package/uboot-tools-test/uboot-tools-test.mk  | 14 ++++++++++++++
+>  support/testing/tests/boot/test_uboot_tools.py    | 15 +++++++++++++++
+>  7 files changed, 52 insertions(+)
+>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/Config.in
+>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/external.desc
+>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/external.mk
+>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in
+>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c
+>  create mode 100644 support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk
+>  create mode 100644 support/testing/tests/boot/test_uboot_tools.py
 > 
-> Best regards,
-> Romain
+> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/Config.in b/support/testing/tests/boot/br2-external/uboot-tools/Config.in
+> new file mode 100644
+> index 0000000000..3cd7c06bb8
+> --- /dev/null
+> +++ b/support/testing/tests/boot/br2-external/uboot-tools/Config.in
+> @@ -0,0 +1 @@
+> +source "$BR2_EXTERNAL_UBOOT_TOOLS_TEST_PATH/package/uboot-tools-test/Config.in"
+> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/external.desc b/support/testing/tests/boot/br2-external/uboot-tools/external.desc
+> new file mode 100644
+> index 0000000000..2f8477edaf
+> --- /dev/null
+> +++ b/support/testing/tests/boot/br2-external/uboot-tools/external.desc
+> @@ -0,0 +1 @@
+> +name: UBOOT_TOOLS_TEST
+> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/external.mk b/support/testing/tests/boot/br2-external/uboot-tools/external.mk
+> new file mode 100644
+> index 0000000000..61cfd5878f
+> --- /dev/null
+> +++ b/support/testing/tests/boot/br2-external/uboot-tools/external.mk
+> @@ -0,0 +1 @@
+> +include $(sort $(wildcard $(BR2_EXTERNAL_UBOOT_TOOLS_TEST_PATH)/package/*/*.mk))
+> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in
+> new file mode 100644
+> index 0000000000..1bdc09a731
+> --- /dev/null
+> +++ b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_UBOOT_TOOLS_TEST
+> +	bool "uboot-tools-test"
+> +	select BR2_PACKAGE_UBOOT_TOOLS
+> +	help
+> +	  Test code for fw_env.h inclusion.
+> +
+> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c
+> new file mode 100644
+> index 0000000000..0bd7c9993f
+> --- /dev/null
+> +++ b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-env-test.c
+> @@ -0,0 +1,14 @@
+> +/*
+> + * Based on http://lists.busybox.net/pipermail/buildroot/2020-April/280307.html
+> + */
+> +
+> +#include <stdlib.h>
+> +#include <fw_env.h>
+> +#include <stdio.h>
+> +
+> +int main(void)
+> +{
+> +	puts("Hello world!");
+> +
+> +	return EXIT_SUCCESS;
+> +}
+> diff --git a/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk
+> new file mode 100644
+> index 0000000000..93937aa879
+> --- /dev/null
+> +++ b/support/testing/tests/boot/br2-external/uboot-tools/package/uboot-tools-test/uboot-tools-test.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# uboot-tools-test
+> +#
+> +################################################################################
+> +
+> +UBOOT_TOOLS_TEST_DEPENDENCIES = uboot-tools
+> +
+> +define UBOOT_TOOLS_TEST_BUILD_CMDS
+> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lubootenv \
+> +		$(UBOOT_TOOLS_TEST_PKGDIR)/uboot-env-test.c -o $(@D)/uboot-env-test
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/support/testing/tests/boot/test_uboot_tools.py b/support/testing/tests/boot/test_uboot_tools.py
+> new file mode 100644
+> index 0000000000..55a5fba3c6
+> --- /dev/null
+> +++ b/support/testing/tests/boot/test_uboot_tools.py
+> @@ -0,0 +1,15 @@
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestUbootToolsEnv(infra.basetest.BRTest):
+> +    br2_external = [infra.filepath("tests/boot/br2-external/uboot-tools")]
+> +    config = \
+> +        """
+> +        BR2_aarch64=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_PACKAGE_UBOOT_TOOLS_TEST=y
+> +        """
+> +
+> +    def test_run(self):
+> +        pass
+> -- 
+> 2.25.4
 > 
-> > 
-> > Regards,
-> > Peter
-> >   
-> >>
-> >> Fixes:
-> >> https://gitlab.com/buildroot.org/buildroot/-/jobs/565470221
-> >>
-> >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> >> Cc: Ga?l Portay <gael.portay@collabora.com>
-> >> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> >> Cc: Peter Seiderer <ps.report@gmx.net>
-> >> ---
-> >> v2: Apply this fix each time where several install target are used in .po file:
-> >>       INSTALLS += target [qml] [...]
-> >>     (Peter)
-> >> ---  
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
