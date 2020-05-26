@@ -1,105 +1,142 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 May 2020 08:57:25 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mesa3d: reorder
- platforms to fix EGL
-Message-ID: <20200526090744.DB1D291D18@busybox.osuosl.org>
+Date: Tue, 26 May 2020 11:22:16 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/lrzip: security
+ bump to 8781292dd5833c04eeead51d4a5bd02dc6432dc7
+Message-ID: <20200526090744.F3F3F91D03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a46bdd8cfdf5fb4bbd112f2f4aca738a913e667
+commit: https://git.buildroot.net/buildroot/commit/?id=ec17cfab3dc8672acce43dfd57c276d850c19c13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Mesa chooses the first platform specified in -Dplatforms as the default
-EGL native platform. [0]
+Bump to latest upstream commit as it fixes a huge number of CVEs. Some
+of them can't be linked to a given commit (e.g.
+https://github.com/ckolivas/lrzip/issues/67). Moreover, upstream does
+not plan to tag a new release any time soon:
+https://github.com/ckolivas/lrzip/issues/99
 
-    Configure Options
+- Fix CVE-2017-8842: The bufRead::get() function in libzpaq/libzpaq.h in
+  liblrzip.so in lrzip 0.631 allows remote attackers to cause a denial
+  of service (divide-by-zero error and application crash) via a crafted
+  archive.
+- Fix CVE-2017-8843: The join_pthread function in stream.c in
+  liblrzip.so in lrzip 0.631 allows remote attackers to cause a denial
+  of service (NULL pointer dereference and application crash) via a
+  crafted archive.
+- Fix CVE-2017-8844: The read_1g function in stream.c in liblrzip.so in
+  lrzip 0.631 allows remote attackers to cause a denial of service
+  (heap-based buffer overflow and application crash) or possibly have
+  unspecified other impact via a crafted archive.
+- Fix CVE-2017-8845: The lzo1x_decompress function in lzo1x_d.ch in LZO
+  2.08, as used in lrzip 0.631, allows remote attackers to cause a
+  denial of service (invalid memory read and application crash) via a
+  crafted archive.
+- Fix CVE-2017-8846: The read_stream function in stream.c in
+  liblrzip.so in lrzip 0.631 allows remote attackers to cause a denial
+  of service (use-after-free and application crash) via a crafted
+  archive.
+- Fix CVE-2017-8847: The bufRead::get() function in libzpaq/libzpaq.h in
+  liblrzip.so in lrzip 0.631 allows remote attackers to cause a denial
+  of service (NULL pointer dereference and application crash) via a
+  crafted archive.
+- Fix CVE-2017-9928: In lrzip 0.631, a stack buffer overflow was found
+  in the function get_fileinfo in lrzip.c:979, which allows attackers to
+  cause a denial of service via a crafted file.
+- Fix CVE-2017-9929: In lrzip 0.631, a stack buffer overflow was found
+  in the function get_fileinfo in lrzip.c:1074, which allows attackers
+  to cause a denial of service via a crafted file.
+- Fix CVE-2018-5747: In Long Range Zip (aka lrzip) 0.631, there is a
+  use-after-free in the ucompthread function (stream.c). Remote
+  attackers could leverage this vulnerability to cause a denial of
+  service via a crafted lrz file.
+- Fix CVE-2018-11496: In Long Range Zip (aka lrzip) 0.631, there is a
+  use-after-free in read_stream in stream.c, because decompress_file in
+  lrzip.c lacks certain size validation.
 
-    -D platforms=...
-        List the platforms (window systems) to support. Its argument is
-        a comma separated string such as -D platforms=x11,drm. It
-        decides the platforms a driver may support. The first listed
-        platform is also used by the main library to decide the native
-        platform.
+Also:
+ - update indentation of hash file (two spaces)
+ - drop patch (already in version)
+ - manage host-nasm dependency which is enabled by default and has been
+   fixed by:
+   https://github.com/ckolivas/lrzip/commit/9f16f65705e2f1e11c41647405adcce6a12d286c
 
-This has the effect of breaking EGL applications running on X11 and
-possibly Wayland when the first platform specified isn't x11 or wayland,
-and EGL_PLATFORM isn't set.
-
-Reorder the specified platforms to use x11, wayland, and drm before
-surfaceless, as this is the order chosen by other common distributions,
-such as Arch Linux [1], Debian [2], and Fedora [3].
-
-Users preferring drm or surfaceless over x11 or wayland likely know how
-to override the native EGL platform, and likely have x11 and wayland
-disabled anyway.
-
-[0] https://www.mesa3d.org/egl.html
-[1] https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mesa#n45
-[2] https://salsa.debian.org/xorg-team/lib/mesa/-/blob/fb8c1efb57ea8106525ed01c41218164f8be7f3b/debian/rules#L38
-[3] https://src.fedoraproject.org/rpms/mesa/blob/master/f/mesa.spec#_337
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8e79f543239672e2c8cf41d300511a4bec0f0e11)
+(cherry picked from commit 0f783ba66e702a7636e4e3d29e8d3cf0bca9a4db)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/mesa3d.mk | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ package/lrzip/0001-missing-stdarg.patch | 26 --------------------------
+ package/lrzip/lrzip.hash                |  4 ++--
+ package/lrzip/lrzip.mk                  | 11 +++++++++--
+ 3 files changed, 11 insertions(+), 30 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index e742c4982b..000ec1c1ef 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -168,7 +168,23 @@ endef
- MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_HEADERS
- endif
+diff --git a/package/lrzip/0001-missing-stdarg.patch b/package/lrzip/0001-missing-stdarg.patch
+deleted file mode 100644
+index 9ce0117a3c..0000000000
+--- a/package/lrzip/0001-missing-stdarg.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 5ae1754025315d85fac11cb4eb2474789ee6475e Mon Sep 17 00:00:00 2001
+-From: Sam Lancia <sam@gpsm.co.uk>
+-Date: Sat, 7 Sep 2019 20:54:29 +0100
+-Subject: [PATCH] Lrzip.h: add missing header for va_list on some platforms
+-
+-Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+----
+- Lrzip.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Lrzip.h b/Lrzip.h
+-index 29bc2a9..8934c59 100644
+---- a/Lrzip.h
+-+++ b/Lrzip.h
+-@@ -20,6 +20,7 @@
+- #ifndef LIBLRZIP_H
+- #define LIBLRZIP_H
+- 
+-+#include <stdarg.h>
+- #include <stdbool.h>
+- #include <stdio.h>
+- #ifdef _WIN32
+--- 
+-2.17.1
+-
+-
+diff --git a/package/lrzip/lrzip.hash b/package/lrzip/lrzip.hash
+index bdf63f0ed8..f3d5742620 100644
+--- a/package/lrzip/lrzip.hash
++++ b/package/lrzip/lrzip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 10315c20d5a47590e7220c210735ba169677824d5672509266682eccec84d952  lrzip-0.631.tar.gz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  7f886b248c996ef9d327e0a8ede4eb7e067186185cad7b37084607098d35c75a  lrzip-8781292dd5833c04eeead51d4a5bd02dc6432dc7.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/lrzip/lrzip.mk b/package/lrzip/lrzip.mk
+index 24edc847d3..32388b8e20 100644
+--- a/package/lrzip/lrzip.mk
++++ b/package/lrzip/lrzip.mk
+@@ -4,11 +4,18 @@
+ #
+ ################################################################################
  
--MESA3D_PLATFORMS = surfaceless
-+ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_X11),y)
-+MESA3D_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXext \
-+	xlib_libXdamage \
-+	xlib_libXfixes \
-+	xlib_libXrandr \
-+	xlib_libXxf86vm \
-+	xorgproto \
-+	libxcb
-+MESA3D_PLATFORMS += x11
-+endif
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+MESA3D_DEPENDENCIES += wayland wayland-protocols
-+MESA3D_PLATFORMS += wayland
-+MESA3D_CONF_OPTS += -Dwayland-scanner-path=$(HOST_DIR)/bin/wayland-scanner
-+endif
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
- MESA3D_PLATFORMS += drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D),y)
-@@ -190,23 +206,7 @@ MESA3D_PLATFORMS += drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
- MESA3D_PLATFORMS += drm
- endif
--ifeq ($(BR2_PACKAGE_WAYLAND),y)
--MESA3D_DEPENDENCIES += wayland wayland-protocols
--MESA3D_PLATFORMS += wayland
--MESA3D_CONF_OPTS += -Dwayland-scanner-path=$(HOST_DIR)/bin/wayland-scanner
--endif
--ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_X11),y)
--MESA3D_DEPENDENCIES += \
--	xlib_libX11 \
--	xlib_libXext \
--	xlib_libXdamage \
--	xlib_libXfixes \
--	xlib_libXrandr \
--	xlib_libXxf86vm \
--	xorgproto \
--	libxcb
--MESA3D_PLATFORMS += x11
--endif
-+MESA3D_PLATFORMS += surfaceless
+-LRZIP_VERSION = 0.631
+-LRZIP_SITE = $(call github,ckolivas,lrzip,v$(LRZIP_VERSION))
++LRZIP_VERSION = 8781292dd5833c04eeead51d4a5bd02dc6432dc7
++LRZIP_SITE = $(call github,ckolivas,lrzip,$(LRZIP_VERSION))
+ LRZIP_AUTORECONF = YES
+ LRZIP_LICENSE = GPL-2.0+
+ LRZIP_LICENSE_FILES = COPYING
+ LRZIP_DEPENDENCIES = zlib lzo bzip2
  
- MESA3D_CONF_OPTS += \
- 	-Dplatforms=$(subst $(space),$(comma),$(MESA3D_PLATFORMS))
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++LRZIP_DEPENDENCIES += host-nasm
++LRZIP_CONF_OPTS += --enable-asm
++else
++LRZIP_CONF_OPTS += --disable-asm
++endif
++
+ $(eval $(autotools-package))
