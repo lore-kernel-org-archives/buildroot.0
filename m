@@ -1,42 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 May 2020 11:24:16 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh2: fix
- autoreconf comment
-Message-ID: <20200526090745.0B3D691D1C@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 26 May 2020 09:25:36 +0000
+Subject: [Buildroot] [Bug 12416] qt5webengine should not use WEBENGINE_CONFIG
+In-Reply-To: <bug-12416-163@https.bugs.busybox.net/>
+References: <bug-12416-163@https.bugs.busybox.net/>
+Message-ID: <bug-12416-163-jN1iaK44uH@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cd35fef079beaa5b9b7a13ca0571ef51ac91969
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+https://bugs.busybox.net/show_bug.cgi?id=12416
 
-The comment explaining the autoreconf says that we are building from a git
-clone - but we are not, currently.  However, the reconf is still needed due
-to patches modifying ac files.
+--- Comment #3 from JeffyCN <jeffy.chen@rock-chips.com> ---
+Hi guys,
 
-This commit corrects the comment.
+the qt packages are using pkg-qmake.mk now, and the pending patch seems to be
+wrong..:
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-[yann.morin.1998 at free.fr: also mention acincludes.m4]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7dccd3b24805dc39c014c7c9e86e10eca2147fff)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libssh2/libssh2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+$(QT5WEBENGINE_QMAKEFLAGS) -- $(QT5WEBENGINE_CONFIG))
 
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 3819c1aa31..c03fe0db55 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -14,7 +14,7 @@ LIBSSH2_CONF_OPTS = --disable-examples-build
- # 0003-packet-c-improve-message-parsing.patch
- LIBSSH2_IGNORE_CVES += CVE-2019-17498
- 
--# building from a git clone
-+# patch touching configure.ac and acinclude.m4
- LIBSSH2_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
+needs a '--' between webengine config and other qmake flags.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
