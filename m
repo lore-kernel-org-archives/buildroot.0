@@ -1,27 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 26 May 2020 09:25:36 +0000
-Subject: [Buildroot] [Bug 12416] qt5webengine should not use WEBENGINE_CONFIG
-In-Reply-To: <bug-12416-163@https.bugs.busybox.net/>
-References: <bug-12416-163@https.bugs.busybox.net/>
-Message-ID: <bug-12416-163-jN1iaK44uH@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 May 2020 12:00:52 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{4, 6}.x series
+In-Reply-To: <20200525162632.23886-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 25 May 2020 18:26:31 +0200")
+References: <20200525162632.23886-1-peter@korsgaard.com>
+Message-ID: <87imgjggmj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12416
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
---- Comment #3 from JeffyCN <jeffy.chen@rock-chips.com> ---
-Hi guys,
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-the qt packages are using pkg-qmake.mk now, and the pending patch seems to be
-wrong..:
-
-$(QT5WEBENGINE_QMAKEFLAGS) -- $(QT5WEBENGINE_CONFIG))
-
-needs a '--' between webengine config and other qmake flags.
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
