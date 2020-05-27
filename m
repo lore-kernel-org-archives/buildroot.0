@@ -1,44 +1,67 @@
 From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Wed, 27 May 2020 07:07:43 +0200
-Subject: [Buildroot] [PATCH v4 0/5] imx: add i.MX8M Nano EVK board support
-Message-ID: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
+Date: Wed, 27 May 2020 07:07:44 +0200
+Subject: [Buildroot] [PATCH v4 1/5] package/freescale-imx: Add option for
+ DDR FW need
+In-Reply-To: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <1590556068-7043-2-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds support for the NXP i.MX8M Nano EVK board.
+Only some i.MX8 needs a DDR training firmware (8M, 8MM, 8MN). Some other
+i.MX8 (QuadMax, QuadXPlus) rely on system controller for that task.
 
-Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
-type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
-half of the series introduce the DDR training selection for the whole i.MX8 M
-SoC family, as well as a separation of the DDR and HDMI FW copy.
+Suggested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+v4:
+  - add Gary's reviewed-by
+v3:
+  - let the others 'select' this newly introduced option instead of
+    'default y' it. I believe this option is still required since we
+    only want to choose a DDR binary for the i.MX 8M platforms. (Yann/Gary)
+v2:
+  - introduce BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW to extend the DDR
+    firmware selection to the whole i.MX 8M family (suggested by Gary)
 
-The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
-U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
-reference boards.
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+---
+ package/freescale-imx/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Stephane Viau (5):
-  package/freescale-imx: Add option for DDR FW need
-  package/freescale-imx/firmware-imx: add choice for DDR training
-    binaries
-  board/freescale/common/imx: use generic ddr_fw.bin name
-  board/freescale/common/imx: add support for i.MX8M Nano
-  configs/freescale_imx8mnevk: new defconfig
-
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  4 ++
- .../common/imx/imx8-bootloader-prepare.sh          |  6 +-
- board/freescale/common/imx/post-image.sh           |  2 +
- board/freescale/imx8mnevk/readme.txt               | 73 ++++++++++++++++++++++
- configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
- package/freescale-imx/Config.in                    |  6 ++
- package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
- package/freescale-imx/firmware-imx/firmware-imx.mk | 43 ++++++++++++-
- 9 files changed, 197 insertions(+), 5 deletions(-)
- create mode 100644 board/freescale/imx8mnevk/readme.txt
- create mode 100644 configs/freescale_imx8mnevk_defconfig
-
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b0c7de8..0be37ce 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -45,12 +45,15 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+ 	bool "imx8m"
++	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+ 	bool "imx8mm"
++	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+ 	bool "imx8mn"
++	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 	bool "imx8x"
+@@ -96,6 +99,9 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 
++config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
++	bool
++
+ source "package/freescale-imx/imx-alsa-plugins/Config.in"
+ source "package/freescale-imx/imx-codec/Config.in"
+ source "package/freescale-imx/imx-kobs/Config.in"
 -- 
 2.7.4
