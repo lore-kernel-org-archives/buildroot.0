@@ -1,67 +1,44 @@
 From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Wed, 27 May 2020 07:07:46 +0200
-Subject: [Buildroot] [PATCH v4 3/5] board/freescale/common/imx: use generic
- ddr_fw.bin name
-In-Reply-To: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <1590556068-7043-4-git-send-email-stephane.viau@oss.nxp.com>
+Date: Wed, 27 May 2020 07:07:43 +0200
+Subject: [Buildroot] [PATCH v4 0/5] imx: add i.MX8M Nano EVK board support
+Message-ID: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some SoCs (i.e.: i.MX8M Nano for now), the DDR training firmware
-in the boot image depends on the type of memory installed on a board
-(LPDDR4, DDR4, etc...). The previous patch makes this firmware name
-agnostic of the DDR type and uses ddr_fw.bin as a generic name. This
-patch makes imx8-bootloader-prepare.sh use this generic name,
-independently of the kind board DDR type.
+This series adds support for the NXP i.MX8M Nano EVK board.
 
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
-v4:
-  - add Gary's reviewed-by
-v2:
-  - generic ddr_fw.bin name is now used also for 8M and 8MM, along with
-    8MN (suggested by Gary)
+Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+half of the series introduce the DDR training selection for the whole i.MX8 M
+SoC family, as well as a separation of the DDR and HDMI FW copy.
 
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
----
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+reference boards.
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index abf2e43..cb7c37b 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -9,21 +9,21 @@ main ()
- 	fi
- 
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00960000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
+Stephane Viau (5):
+  package/freescale-imx: Add option for DDR FW need
+  package/freescale-imx/firmware-imx: add choice for DDR training
+    binaries
+  board/freescale/common/imx: use generic ddr_fw.bin name
+  board/freescale/common/imx: add support for i.MX8M Nano
+  configs/freescale_imx8mnevk: new defconfig
+
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  4 ++
+ .../common/imx/imx8-bootloader-prepare.sh          |  6 +-
+ board/freescale/common/imx/post-image.sh           |  2 +
+ board/freescale/imx8mnevk/readme.txt               | 73 ++++++++++++++++++++++
+ configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
+ package/freescale-imx/Config.in                    |  6 ++
+ package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 43 ++++++++++++-
+ 9 files changed, 197 insertions(+), 5 deletions(-)
+ create mode 100644 board/freescale/imx8mnevk/readme.txt
+ create mode 100644 configs/freescale_imx8mnevk_defconfig
+
 -- 
 2.7.4
