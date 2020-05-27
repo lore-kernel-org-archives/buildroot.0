@@ -1,34 +1,84 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 May 2020 20:20:27 +0000
-Subject: [Buildroot] [Bug 12946] Grub: Decompressor is too big.
-In-Reply-To: <bug-12946-163@https.bugs.busybox.net/>
-References: <bug-12946-163@https.bugs.busybox.net/>
-Message-ID: <bug-12946-163-HFjEIiRbsB@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 27 May 2020 22:21:41 +0200
+Subject: [Buildroot] [git commit] package/erlang: fix -fno-common build
+ failure
+Message-ID: <20200527200932.9835A8F953@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12946
+commit: https://git.buildroot.net/buildroot/commit/?id=73f4ad304f8a654dd3359e73f33ed463389218fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Added upstream patch for fixing build failure when using GCC10 as a host
+compiler (-fno-common is now default).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-avoid-ODR-violation-of-ei_default_socket.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Stefan, All,
-
-Could you please provide a minimalistic defconfig that reproduces the issue,
-please?
-
-I have Ubutun 19.10, but I could not reproduce your issue...
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
+new file mode 100644
+index 0000000000..69b6fae81f
+--- /dev/null
++++ b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
+@@ -0,0 +1,54 @@
++From de870d7f9f36b3e68f280057851a4585a67ab219 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Tue, 14 Jan 2020 23:15:01 +0000
++Subject: [PATCH] ei_portio.h: avoid ODR violation of
++ 'ei_default_socket_callbacks'
++
++Noticed as a build failure against fresh gcc-master:
++
++```
++LD otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(eirecv.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send_reg.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(epmd_port.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_portio.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++collect2: error: ld returned 1 exit status
++make[3]: *** [x86_64-unknown-linux-gnu/Makefile:669: otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call] Error 1
++```
++
++The failure looks legitimate: `ei_default_socket_callbacks` is a
++struct defined in 'ei_portio.h' and in 'ei_portio.c'.
++
++The change flips 'ei_portio.h' definition to declaration.
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++
++Patch taken from upstream: https://github.com/erlang/otp/commit/de870d7f9f36b3e68f280057851a4585a67ab219
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ lib/erl_interface/src/misc/ei_portio.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/erl_interface/src/misc/ei_portio.h b/lib/erl_interface/src/misc/ei_portio.h
++index 84ebc5039a..5172d085b4 100644
++
++--- a/lib/erl_interface/src/misc/ei_portio.h
+++++ b/lib/erl_interface/src/misc/ei_portio.h
++@@ -47,7 +47,7 @@ int ei_writev_fill_ctx_t__(ei_socket_callbacks *cbs, void *ctx, const struct iov
++ int ei_socket_callbacks_have_writev__(ei_socket_callbacks *cbs);
++ #endif
++ 
++-ei_socket_callbacks ei_default_socket_callbacks;
+++extern ei_socket_callbacks ei_default_socket_callbacks;
++ 
++ #define EI_FD_AS_CTX__(FD)                                              \
++     ((void *) (long) (FD))
++-- 
++2.20.1
++
