@@ -1,34 +1,77 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 27 May 2020 11:49:11 +0200
-Subject: [Buildroot] [PATCH] linux: fix COPYING file hash
-Message-ID: <20200527094911.29739-1-yegorslists@googlemail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 27 May 2020 11:50:58 +0200
+Subject: [Buildroot] [PATCH] Revert "package/parted: disable on uclibc"
+Message-ID: <20200527095058.wdnaekjl46vzmrny@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+This reverts commit 25b1dc4613326b1b2674ab07484993991ab90886.
 
-In version 5.6 a minor change was made to this file and hence
-the checksum has changed.
+This is fixed in uClibc-ng 1.0.34.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- linux/linux.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/parted/Config.in          | 6 ++----
+ package/python-pyparted/Config.in | 6 ++----
+ package/udisks/Config.in          | 2 +-
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index b70c8a8173..88edd2f400 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -12,6 +12,6 @@ sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-
- sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
+diff --git a/package/parted/Config.in b/package/parted/Config.in
+index a35b30662f..f48b365a2d 100644
+--- a/package/parted/Config.in
++++ b/package/parted/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PARTED
+ 	bool "parted"
+ 	depends on BR2_ENABLE_LOCALE
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+@@ -10,6 +9,5 @@ config BR2_PACKAGE_PARTED
  
- # Licenses hashes
--sha256  ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff  COPYING
-+sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
- sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
+ 	  http://www.gnu.org/software/parted/
+ 
+-comment "parted needs a glibc or musl toolchain w/ locale, wchar"
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
+-		!BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
++comment "parted needs a toolchain w/ locale, wchar"
++	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
+diff --git a/package/python-pyparted/Config.in b/package/python-pyparted/Config.in
+index 6e3bde2030..60f54a5484 100644
+--- a/package/python-pyparted/Config.in
++++ b/package/python-pyparted/Config.in
+@@ -2,13 +2,11 @@ config BR2_PACKAGE_PYTHON_PYPARTED
+ 	bool "python-pyparted"
+ 	depends on BR2_ENABLE_LOCALE # parted
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # parted
+ 	select BR2_PACKAGE_PARTED
+ 	help
+ 	  Python bindings for GNU parted (libparted).
+ 
+ 	  https://github.com/rhinstaller/pyparted
+ 
+-comment "pyparted needs a glibc or musl toolchain w/ locale, wchar"
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
+-		!BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
++comment "pyparted needs a toolchain w/ locale, wchar"
++	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index 04a632dd8d..f4044b0d0d 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_UDISKS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # polkit
+ 	depends on BR2_USE_MMU # lvm2
+ 	depends on BR2_USE_WCHAR # dbus-glib -> glib2
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # polkit, lvm2, parted
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # polkit, lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2, spidermonkey
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
 -- 
-2.17.0
+2.11.0
