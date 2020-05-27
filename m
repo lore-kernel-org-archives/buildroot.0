@@ -1,278 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 May 2020 22:33:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: fix -fno-common build
- failure
-In-Reply-To: <20200518064321.28523-1-heiko.thiery@gmail.com>
-References: <20200518064321.28523-1-heiko.thiery@gmail.com>
-Message-ID: <20200527203358.GO8737@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 27 May 2020 22:46:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-05-26
+In-Reply-To: <20200527062707.DEB5386AB3@fraxinus.osuosl.org>
+References: <20200527062707.DEB5386AB3@fraxinus.osuosl.org>
+Message-ID: <20200527224629.43e5a24b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+Hello *,
 
-On 2020-05-18 08:43 +0200, Heiko Thiery spake thusly:
-> Added upstream patch for fixing build failure when using GCC10 as a host
-> compiler (-fno-common is now default).
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/47f/47fcf9bceba029accdcf159236addea3cb03f12f/
-> 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+On Wed, 27 May 2020 06:27:01 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Applied to master, thanks.
+> Hello,
+>
+> Autobuild statistics for 2020-05-26
+> ===============================
+[...]
+> Results for branch 'master'
+> ===========================
+[...]
+>     arc      |          rygel-0.38.3          | NOK | http://autobuild.buildroot.net/results/629649a81fef2be611edf227b059c0d3dc389e99 |
+>     arm      |          rygel-0.38.3          | NOK | http://autobuild.buildroot.net/results/e6ac4bf3fe6c9b96bb50c94b1139c05a46c3ec67 |
+
+Can be fixed by [1] (is in state 'accepted' but I can not find the patch in git master/next)...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
->  ...cc-10-which-has-fno-common-enabled-b.patch | 222 ++++++++++++++++++
->  1 file changed, 222 insertions(+)
->  create mode 100644 package/efl/0002-Fix-build-with-gcc-10-which-has-fno-common-enabled-b.patch
-> 
-> diff --git a/package/efl/0002-Fix-build-with-gcc-10-which-has-fno-common-enabled-b.patch b/package/efl/0002-Fix-build-with-gcc-10-which-has-fno-common-enabled-b.patch
-> new file mode 100644
-> index 0000000000..1b54bfdf0a
-> --- /dev/null
-> +++ b/package/efl/0002-Fix-build-with-gcc-10-which-has-fno-common-enabled-b.patch
-> @@ -0,0 +1,222 @@
-> +From c245b576aad09ac5faeb800de7f7c4fef87c6363 Mon Sep 17 00:00:00 2001
-> +From: Tom Callaway <spot@fedoraproject.org>
-> +Date: Fri, 31 Jan 2020 12:40:45 +0000
-> +Subject: [PATCH] Fix build with gcc 10 (which has -fno-common enabled by
-> + default).
-> +
-> +EFL failed to build from source in Fedora Rawhide as a result of the update to GCC 10. GCC 10 enables -fno-common by default, and this found three issues in EFL:
-> +
-> +  # The eina benchmark code defined int key_size in a header that was included in multiple places.
-> +  #/usr/bin/ld: bin/elementary/elementary_test-test_ui_clock.o:(.bss.dt1+0x0): multiple definition of `dt1'; bin/elementary/elementary_test-test_datetime.o:(.bss.dt1+0x0): first defined here
-> + The elementary test code defines the "dt1", "dt2", "dt3" vars in two code files which are compiled together (but these variables do not appear to be used globally)
-> +  # The eio test code defines the "ee" var in two code files which are compiled together (but this variable does not appear to be used globally)
-> +
-> +I've fixed these issues and confirmed locally that the code builds again in Fedora.
-> +
-> +Reviewed-by: Marcel Hollerbach <mail@marcel-hollerbach.de>
-> +Differential Revision: https://phab.enlightenment.org/D11259
-> +
-> +Patch taken from upstream: https://github.com/Enlightenment/efl/commit/c245b576aad09ac5faeb800de7f7c4fef87c6363
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + src/benchmarks/eina/eina_bench.h          |  2 +-
-> + src/benchmarks/eina/eina_bench_crc_hash.c |  1 +
-> + src/bin/elementary/test_ui_clock.c        | 90 +++++++++++------------
-> + src/tests/eio/eio_test_map.c              | 10 +--
-> + 4 files changed, 52 insertions(+), 51 deletions(-)
-> +
-> +diff --git a/src/benchmarks/eina/eina_bench.h b/src/benchmarks/eina/eina_bench.h
-> +index a38d70433e..747ac6f39f 100644
-> +--- a/src/benchmarks/eina/eina_bench.h
-> ++++ b/src/benchmarks/eina/eina_bench.h
-> +@@ -21,7 +21,7 @@
-> + 
-> + #include "eina_benchmark.h"
-> + 
-> +-int key_size;
-> ++extern int key_size;
-> + 
-> + void eina_bench_hash(Eina_Benchmark *bench);
-> + void eina_bench_crc_hash_short(Eina_Benchmark *bench);
-> +diff --git a/src/benchmarks/eina/eina_bench_crc_hash.c b/src/benchmarks/eina/eina_bench_crc_hash.c
-> +index b6734489a3..7750233ed4 100644
-> +--- a/src/benchmarks/eina/eina_bench_crc_hash.c
-> ++++ b/src/benchmarks/eina/eina_bench_crc_hash.c
-> +@@ -26,6 +26,7 @@
-> + uint64_t CityHash64(const char *buf, size_t len);
-> + #endif
-> + 
-> ++int key_size;
-> + char *key_str=NULL;
-> + 
-> + void repchar(int n)
-> +diff --git a/src/bin/elementary/test_ui_clock.c b/src/bin/elementary/test_ui_clock.c
-> +index 79e9074ead..9973b25cd3 100644
-> +--- a/src/bin/elementary/test_ui_clock.c
-> ++++ b/src/bin/elementary/test_ui_clock.c
-> +@@ -6,7 +6,7 @@
-> + 
-> + /* A simple test, just displaying clock in its default format */
-> + 
-> +-Evas_Object *dt1, *dt2, *dt3, *dt4;
-> ++Evas_Object *uicdt1, *uicdt2, *uicdt3, *uicdt4;
-> + 
-> + static void
-> + _changed_cb(void *data EINA_UNUSED, const Efl_Event *ev EINA_UNUSED)
-> +@@ -28,19 +28,19 @@ _bt_clicked(void *data EINA_UNUSED, const Efl_Event *ev)
-> +    new_time.tm_mday = 26;
-> +    new_time.tm_hour = 9;
-> +    new_time.tm_min = 0;
-> +-   efl_ui_clock_field_visible_set(dt1, EFL_UI_CLOCK_TYPE_HOUR, EINA_TRUE);
-> +-   efl_ui_clock_field_visible_set(dt1, EFL_UI_CLOCK_TYPE_MINUTE, EINA_TRUE);
-> +-   efl_ui_clock_field_visible_set(dt1, EFL_UI_CLOCK_TYPE_AMPM, EINA_TRUE);
-> +-   efl_ui_clock_field_visible_set(dt1, EFL_UI_CLOCK_TYPE_SECOND, EINA_TRUE);
-> +-   efl_ui_clock_field_visible_set(dt1, EFL_UI_CLOCK_TYPE_DAY, EINA_TRUE);
-> +-   efl_ui_clock_time_set(dt1, new_time);
-> +-
-> +-   elm_object_disabled_set(dt1, EINA_TRUE);
-> ++   efl_ui_clock_field_visible_set(uicdt1, EFL_UI_CLOCK_TYPE_HOUR, EINA_TRUE);
-> ++   efl_ui_clock_field_visible_set(uicdt1, EFL_UI_CLOCK_TYPE_MINUTE, EINA_TRUE);
-> ++   efl_ui_clock_field_visible_set(uicdt1, EFL_UI_CLOCK_TYPE_AMPM, EINA_TRUE);
-> ++   efl_ui_clock_field_visible_set(uicdt1, EFL_UI_CLOCK_TYPE_SECOND, EINA_TRUE);
-> ++   efl_ui_clock_field_visible_set(uicdt1, EFL_UI_CLOCK_TYPE_DAY, EINA_TRUE);
-> ++   efl_ui_clock_time_set(uicdt1, new_time);
-> ++
-> ++   elm_object_disabled_set(uicdt1, EINA_TRUE);
-> +    elm_object_disabled_set(ev->object, EINA_TRUE);
-> + 
-> +-   efl_del(dt2);
-> +-   efl_del(dt3);
-> +-   dt2 = dt3 = NULL;
-> ++   efl_del(uicdt2);
-> ++   efl_del(uicdt3);
-> ++   uicdt2 = uicdt3 = NULL;
-> + }
-> + 
-> + void
-> +@@ -56,33 +56,33 @@ test_ui_clock(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
-> +                 efl_content_set(win, efl_added),
-> +                 efl_gfx_hint_size_min_set(efl_added, EINA_SIZE2D(360, 240)));
-> + 
-> +-   dt1 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> +-                 efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> +-                 efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_HOUR, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_MINUTE, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_AMPM, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_SECOND, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_DAY, EINA_FALSE),
-> +-                 efl_ui_clock_pause_set(efl_added, EINA_TRUE),
-> +-                 efl_event_callback_add(efl_added, EFL_UI_CLOCK_EVENT_CHANGED, _changed_cb, NULL),
-> +-                 efl_pack(bx, efl_added));
-> +-
-> +-   dt2 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> +-                 efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> +-                 efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_YEAR, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_MONTH, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_DATE, EINA_FALSE),
-> +-                 efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_SECOND, EINA_FALSE),
-> +-                 efl_ui_clock_pause_set(efl_added, EINA_TRUE),
-> +-                 efl_pack(bx, efl_added));
-> +-   elm_object_disabled_set(dt2, EINA_TRUE);
-> +-
-> +-   dt3 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> +-                 efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> +-                 efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> +-                 efl_pack(bx, efl_added));
-> ++   uicdt1 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> ++                    efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> ++                    efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_HOUR, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_MINUTE, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_AMPM, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_SECOND, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_DAY, EINA_FALSE),
-> ++                    efl_ui_clock_pause_set(efl_added, EINA_TRUE),
-> ++                    efl_event_callback_add(efl_added, EFL_UI_CLOCK_EVENT_CHANGED, _changed_cb, NULL),
-> ++                    efl_pack(bx, efl_added));
-> ++
-> ++   uicdt2 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> ++                    efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> ++                    efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_YEAR, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_MONTH, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_DATE, EINA_FALSE),
-> ++                    efl_ui_clock_field_visible_set(efl_added, EFL_UI_CLOCK_TYPE_SECOND, EINA_FALSE),
-> ++                    efl_ui_clock_pause_set(efl_added, EINA_TRUE),
-> ++                    efl_pack(bx, efl_added));
-> ++   elm_object_disabled_set(uicdt2, EINA_TRUE);
-> ++
-> ++   uicdt3 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> ++                    efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> ++                    efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> ++                    efl_pack(bx, efl_added));
-> + 
-> +    efl_add(EFL_UI_TEXTBOX_CLASS, bx,
-> +            efl_text_set(efl_added, "Editable Clock:"),
-> +@@ -92,12 +92,12 @@ test_ui_clock(void *data EINA_UNUSED, Evas_Object *obj EINA_UNUSED, void *event_
-> +            efl_gfx_hint_size_min_set(efl_added, EINA_SIZE2D(100, 25)),
-> +            efl_pack(bx, efl_added));
-> + 
-> +-   dt4 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> +-                 efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> +-                 efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> +-                 efl_ui_clock_edit_mode_set(efl_added, EINA_TRUE),
-> +-                 efl_ui_clock_pause_set(efl_added, EINA_TRUE),
-> +-                 efl_pack(bx, efl_added));
-> ++   uicdt4 = efl_add(EFL_UI_CLOCK_CLASS, bx,
-> ++                    efl_gfx_hint_weight_set(efl_added, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND),
-> ++                    efl_gfx_hint_fill_set(efl_added, EINA_TRUE, EINA_FALSE),
-> ++                    efl_ui_clock_edit_mode_set(efl_added, EINA_TRUE),
-> ++                    efl_ui_clock_pause_set(efl_added, EINA_TRUE),
-> ++                    efl_pack(bx, efl_added));
-> + 
-> +    efl_add(EFL_UI_BUTTON_CLASS, win,
-> +            efl_text_set(efl_added, "Back to the future..."),
-> +diff --git a/src/tests/eio/eio_test_map.c b/src/tests/eio/eio_test_map.c
-> +index fdb0631a9d..f794f73d73 100644
-> +--- a/src/tests/eio/eio_test_map.c
-> ++++ b/src/tests/eio/eio_test_map.c
-> +@@ -14,7 +14,7 @@
-> + 
-> + #include "eio_suite.h"
-> + 
-> +-Eina_File *ee;
-> ++Eina_File *eie;
-> + 
-> + static void
-> + _done_cb(void *data EINA_UNUSED, Eio_File *handler EINA_UNUSED)
-> +@@ -25,7 +25,7 @@ _done_cb(void *data EINA_UNUSED, Eio_File *handler EINA_UNUSED)
-> + static void
-> + _open_cb(void *data EINA_UNUSED, Eio_File *handler EINA_UNUSED, Eina_File *ef)
-> + {
-> +-   ee = ef;
-> ++   eie = ef;
-> +    ecore_main_loop_quit();
-> + }
-> + 
-> +@@ -70,17 +70,17 @@ EFL_START_TEST(eio_test_map_simple)
-> +    ecore_main_loop_begin();
-> +    fail_if(!ef);
-> + 
-> +-   ef = eio_file_map_all(ee, EINA_FILE_POPULATE, _filter_cb, _map_cb,
-> ++   ef = eio_file_map_all(eie, EINA_FILE_POPULATE, _filter_cb, _map_cb,
-> +                     _error_cb, data);
-> +    ecore_main_loop_begin();
-> +    fail_if(!ef);
-> + 
-> +-   ef = eio_file_map_new(ee, EINA_FILE_WILLNEED, 0, strlen(data), _filter_cb,
-> ++   ef = eio_file_map_new(eie, EINA_FILE_WILLNEED, 0, strlen(data), _filter_cb,
-> +                          _map_cb, _error_cb, data);
-> +    ecore_main_loop_begin();
-> +    fail_if(!ef);
-> + 
-> +-   ef = eio_file_close(ee, _done_cb, _error_cb, NULL);
-> ++   ef = eio_file_close(eie, _done_cb, _error_cb, NULL);
-> +    ecore_main_loop_begin();
-> +    fail_if(!ef);
-> + 
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20200510194344.13852-1-ps.report at gmx.net/
