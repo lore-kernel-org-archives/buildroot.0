@@ -1,41 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 May 2020 10:03:13 +0000
-Subject: [Buildroot] [Bug 12686] recipe for target 'install_dev' failed
- (libcrypto.so: file format not recognized)
-In-Reply-To: <bug-12686-163@https.bugs.busybox.net/>
-References: <bug-12686-163@https.bugs.busybox.net/>
-Message-ID: <bug-12686-163-qVTcdRt521@https.bugs.busybox.net/>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed, 27 May 2020 12:27:17 +0200
+Subject: [Buildroot] [for-next] package/rust: allow using python3
+ interpreter
+In-Reply-To: <20200526182037.592824-1-romain.naour@gmail.com>
+References: <20200526182037.592824-1-romain.naour@gmail.com>
+Message-ID: <3cc18038-f599-3ebe-13cc-09140296513d@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12686
+Hello Romain and all,
+On 26/05/20 20:20, Romain Naour wrote:
+> Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
+> by removing python2 tests from configure script [2].
+> 
+> Using python3 will help to remove python2 in a near future.
+> 
+> [1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
+> [2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Titouan Christophe <titouan.christophe@railnova.eu>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Patrick Havelange <patrick.havelange@essensium.com>
 
---- Comment #9 from Juan <jrmcorreo-linux@yahoo.es> ---
-Hello Thomas,
+Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-I'm sorry to answer too late, but due to the COVID-19 I have been compelled to
-spend my time on other matters.
-
-Today I've uninstalled the perl module and its dependencies and now I'm
-compiling again buildroot 2020.02 without experiencing any error from
-libopenssl.
-
-Prior to post the bug I've searched a lot looking for the error, but i've got
-no result about perl-Text-Template issues.
-
-Let me to say your commitment with this issue exceeded the one that could be
-expected. You had the possibility to answer saying it is an external issue to
-buildroot and only related with libopenssl. Your answer could have been
-shorter, but you made a test and provided the solution.
-
-
-Thanks a lot
-
-Juan
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> ---
+>   ...igure-use-default-python-interpreter.patch | 37 +++++++++++++++++++
+>   package/rust/rust.mk                          | 17 ++++++---
+>   2 files changed, 49 insertions(+), 5 deletions(-)
+>   create mode 100644 package/rust/0002-configure-use-default-python-interpreter.patch
+> 
