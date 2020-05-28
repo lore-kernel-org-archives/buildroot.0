@@ -1,63 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:08:40 +0200
-Subject: [Buildroot] [git commit] package/python-modbus-tk: bump to version
- 1.1.1
-Message-ID: <20200602200122.6DA03812A0@busybox.osuosl.org>
+Date: Thu, 28 May 2020 22:26:31 +0200
+Subject: [Buildroot] [git commit] package/gloox: new package
+Message-ID: <20200602200121.E32B4812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9789f56ee3221c181b10abccd23e74969783b479
+commit: https://git.buildroot.net/buildroot/commit/?id=626be1a4184953b5e5862b4e7d218609e1566398
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This includes the following changes:
+gloox is a rock-solid, full-featured Jabber/XMPP client library,
+written in clean ANSI C++. It makes writing spec-compliant clients
+easy and allows for hassle-free integration of Jabber/XMPP
+functionality into existing applications. gloox is released under the
+GNU GPLv3. Commercial licensing and support are available.
 
-5732f86 1.1.1
-d8e9b32 pep8
-4795bc7 Add Jackson Matheson to contributors
-26db934 Merge branch 'master' of https://github.com/ljean/modbus-tk
-837a12b Merge pull request #125 from jacksonmatheson/master
-07b06f8 Fixed READ_WRITE_MULTIPLE_REGISTERS, added write_starting_address_FC23
-
-Also update hash file formatting (2 spaces).
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-modbus-tk/python-modbus-tk.hash | 8 ++++----
- package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ DEVELOPERS               |  3 +++
+ package/Config.in        |  1 +
+ package/gloox/Config.in  | 16 ++++++++++++++++
+ package/gloox/gloox.hash |  3 +++
+ package/gloox/gloox.mk   | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 68 insertions(+)
 
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-index fc9899366b..c4fde683c3 100644
---- a/package/python-modbus-tk/python-modbus-tk.hash
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/modbus-tk/json
--md5	65e0a1b12bd6650bdc4f7d823669ab6f  modbus_tk-1.1.0.tar.gz
--sha256	8e31db8f148871006b569931c31ef17692363acf90a0d0bafd2d868f51b70772  modbus_tk-1.1.0.tar.gz
-+md5  e52d5de22cc9d97f2c1086d9b11f0f1e  modbus_tk-1.1.1.tar.gz
-+sha256  c6dd004bc6bbff6d9fa93e61654c30a26c817c6632036c656383c9ecadca6639  modbus_tk-1.1.1.tar.gz
- # Locally computed sha256 checksums
--sha256	3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
--sha256	aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-+sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
-+sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-index a2a0cd0e6c..37927575ae 100644
---- a/package/python-modbus-tk/python-modbus-tk.mk
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e427ab15d4..1320944186 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2633,6 +2633,9 @@ F:	package/python-pyusb/
+ N:	Wojciech Nizi??ski <niziak@spox.org>
+ F:	package/fwup/
  
--PYTHON_MODBUS_TK_VERSION = 1.1.0
-+PYTHON_MODBUS_TK_VERSION = 1.1.1
- PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
--PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/49/aa/97e40e2da1b9904a78466b4d759091ef015f6946a423f1675bfcab7950c8
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/63/2e/991c8965fd45db4c38fefe1fa70356825e847e1bbb1f14e127aa2b4d37aa
- PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
- PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
- PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
++N:	Yair Ben Avraham <yairba@protonmail.com>
++F:	package/gloox/
++
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
+ F:	board/friendlyarm/nanopi-neo/
+ F:	configs/nanopi_neo_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index c12676d859..e81f2f6bdb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2040,6 +2040,7 @@ menu "Networking applications"
+ 	source "package/freeswitch-mod-bcg729/Config.in"
+ 	source "package/gerbera/Config.in"
+ 	source "package/gesftpserver/Config.in"
++	source "package/gloox/Config.in"
+ 	source "package/glorytun/Config.in"
+ 	source "package/gupnp-tools/Config.in"
+ 	source "package/gutenprint/Config.in"
+diff --git a/package/gloox/Config.in b/package/gloox/Config.in
+new file mode 100644
+index 0000000000..91e9f06e34
+--- /dev/null
++++ b/package/gloox/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_GLOOX
++	bool "gloox"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_MPC
++	help
++	  gloox is a portable high-level Jabber/XMPP library for C++. It
++	  is fully compliant with the XMPP RFCs, supports all of the
++	  XMPP features (including SRV lookups, TLS, SASL, roster
++	  management, and privacy lists), and implements several XEPs
++	  that make it ideal for writing any kind of Jabber/XMPP client
++	  or component.
++
++	  https://camaya.net/gloox/
++
++comment "gloox needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
+new file mode 100644
+index 0000000000..ee42c079b2
+--- /dev/null
++++ b/package/gloox/gloox.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  97cb6a0c07e320ffa4a7c66e8ab06b2361086271dc87ed2398befef4e8435f8a  gloox-1.0.23.tar.bz2
++sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
+diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
+new file mode 100644
+index 0000000000..46fe4d6a15
+--- /dev/null
++++ b/package/gloox/gloox.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# gloox
++#
++################################################################################
++
++GLOOX_VERSION = 1.0.23
++GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
++GLOOX_SITE = https://camaya.net/download
++GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
++GLOOX_LICENSE_FILES = LICENSE
++GLOOX_INSTALL_STAGING = YES
++GLOOX_DEPENDENCIES = mpc
++GLOOX_CONF_OPTS = \
++	--without-libidn \
++	--enable-getaddrinfo
++
++GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++GLOOX_CXXFLAGS += -O0
++endif
++GLOOX_CONF_ENV += CXXFLAGS="$(GLOOX_CXXFLAGS)"
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++GLOOX_CONF_ENV += LIBS=-latomic
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++GLOOX_CONF_OPTS += --with-zlib
++GLOOX_DEPENDENCIES += zlib
++else
++GLOOX_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++GLOOX_CONF_OPTS += --with-openssl --without-gnutls
++GLOOX_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++GLOOX_CONF_OPTS += --with-gnutls --without-openssl
++GLOOX_DEPENDENCIES += gnutls
++else
++GLOOX_CONF_OPTS += --without-gnutls --without-openssl
++endif
++
++$(eval $(autotools-package))
