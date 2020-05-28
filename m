@@ -1,43 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 22:43:35 +0200
-Subject: [Buildroot] [PATCH v1] package/cvs: fix mktime related compile
- failure
-In-Reply-To: <20200528203204.18142-1-ps.report@gmx.net>
-References: <20200528203204.18142-1-ps.report@gmx.net>
-Message-ID: <20200528224335.2bb72177@windsurf.home>
+Date: Thu, 28 May 2020 22:45:00 +0200
+Subject: [Buildroot] make graph-size on Ubuntu 20.04,
+ buildroot 2020.05-rc2
+In-Reply-To: <CADJjDh9gqQzv_owicJduiXkRJqCsgjRP6DjwnLPZK6A4Gd-YOA@mail.gmail.com>
+References: <CADJjDh9gqQzv_owicJduiXkRJqCsgjRP6DjwnLPZK6A4Gd-YOA@mail.gmail.com>
+Message-ID: <20200528224500.595b5ffc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 May 2020 22:32:04 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Thu, 28 May 2020 16:12:48 -0400
+Todd Sampson <sampsonats@gmail.com> wrote:
 
-> Use ac_cv_func_working_mktime=yes to force the use of a provided
-> mktime implementation instead of compiling the failing own one.
+> /m9k2/buildroot$ make graph-size
+> You need python-matplotlib to generate the size graph
+> make[1]: *** [Makefile:904: graph-size] Error 1
+> make: *** [Makefile:84: _all] Error 2
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/5bcd8f4235002da682cc900f866116d2fe87f1c8
-> 
->   mktime.c: In function 'ydhms_diff':
->   mktime.c:106:52: error: size of array 'a' is negative
->    #define verify(name, assertion) struct name { char a[(assertion) ? 1 : -1]; }
->                                                       ^
->   mktime.c:170:3: note: in expansion of macro 'verify'
->      verify (long_int_year_and_yday_are_wide_enough,
->      ^~~~~~
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> python-matplotlib doesn't seem to be available on Ubuntu 20.04.  Maybe it's
+> because 20.04 is trying to pressure everyone to use python 3.
 
-Why is this suddenly failing? We have had this package for ages, it
-hasn't been changed recently.
+It should work with Python 3, so just install matplotlib for Python 3.
 
-So instead of just fixing the issue, we always want to understand *why*
-we started having an issue.
-
-Do you have some details of this ?
+Best regards,
 
 Thomas
 -- 
