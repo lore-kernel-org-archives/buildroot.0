@@ -1,86 +1,49 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 28 May 2020 12:52:04 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-ipdb: new package
-Message-ID: <20200528095204.540452-1-asafka7@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu, 28 May 2020 12:00:56 +0200
+Subject: [Buildroot] [PATCH/next] boot/at91bootstrap3: bump to version 3.9.2
+Message-ID: <1590660057-11642-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-IPython-enabled pdb.
-
-This package can be very helpful when someone wants to debug
-a Python application on the board itself.
-
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/Config.in                    |  1 +
- package/python-ipdb/Config.in        |  9 +++++++++
- package/python-ipdb/python-ipdb.hash |  5 +++++
- package/python-ipdb/python-ipdb.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-ipdb/Config.in
- create mode 100644 package/python-ipdb/python-ipdb.hash
- create mode 100644 package/python-ipdb/python-ipdb.mk
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 85d7326361..be3571fe13 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -989,6 +989,7 @@ menu "External python modules"
- 	source "package/python-iowait/Config.in"
- 	source "package/python-ipaddr/Config.in"
- 	source "package/python-ipaddress/Config.in"
-+	source "package/python-ipdb/Config.in"
- 	source "package/python-iptables/Config.in"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
-diff --git a/package/python-ipdb/Config.in b/package/python-ipdb/Config.in
-new file mode 100644
-index 0000000000..4a89bf75de
---- /dev/null
-+++ b/package/python-ipdb/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_IPDB
-+	bool "python-ipdb"
-+	depends on BR2_PACKAGE_PYTHON3 # python-ipython
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_IPYTHON # runtime
-+	help
-+	  IPython-enabled pdb.
-+
-+	  https://github.com/gotcha/ipdb
-diff --git a/package/python-ipdb/python-ipdb.hash b/package/python-ipdb/python-ipdb.hash
-new file mode 100644
-index 0000000000..c7cd93225d
---- /dev/null
-+++ b/package/python-ipdb/python-ipdb.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/ipdb/json
-+md5  7db72771b279924ac4e5905d7eee184e  ipdb-0.13.2.tar.gz
-+sha256  77fb1c2a6fccdfee0136078c9ed6fe547ab00db00bebff181f1e8c9e13418d49  ipdb-0.13.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  4eeb49de04f4894f8ea1f69a04f500799041b750b3d554c06de5ca877258e734  COPYING.txt
-diff --git a/package/python-ipdb/python-ipdb.mk b/package/python-ipdb/python-ipdb.mk
-new file mode 100644
-index 0000000000..c98f9700b2
---- /dev/null
-+++ b/package/python-ipdb/python-ipdb.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-ipdb
-+#
-+################################################################################
-+
-+PYTHON_IPDB_VERSION = 0.13.2
-+PYTHON_IPDB_SOURCE = ipdb-$(PYTHON_IPDB_VERSION).tar.gz
-+PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/2c/bb/a3e1a441719ebd75c6dac8170d3ddba884b7ee8a5c0f9aefa7297386627a
-+PYTHON_IPDB_SETUP_TYPE = setuptools
-+PYTHON_IPDB_LICENSE = BSD-3-Clause
-+PYTHON_IPDB_LICENSE_FILES = COPYING.txt
-+
-+$(eval $(python-package))
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index faab763..ccbb531 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.9.0"
++	bool "3.9.2"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -51,7 +51,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.9.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 9f6c95a..5741b82 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71  at91bootstrap3-v3.9.0.tar.gz
++sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
+ sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
 -- 
-2.26.2
+2.7.4
