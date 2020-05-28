@@ -1,51 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 22:17:03 +0200
-Subject: [Buildroot] [PATCH v3] package/qt5/qt5declarative: fix parallel
- install
-In-Reply-To: <20200526210443.29088-1-ps.report@gmx.net>
-References: <20200526210443.29088-1-ps.report@gmx.net>
-Message-ID: <20200528221703.009f2612@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 28 May 2020 20:21:30 +0000
+Subject: [Buildroot] [Bug 12946] Grub: Decompressor is too big.
+In-Reply-To: <bug-12946-163@https.bugs.busybox.net/>
+References: <bug-12946-163@https.bugs.busybox.net/>
+Message-ID: <bug-12946-163-Cp08qk0uZO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 May 2020 23:04:43 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12946
 
-> From: Romain Naour <romain.naour@gmail.com>
-> 
-> Installing qt5declarative examples on fast/fast/multicore machines sometimes
-> failes with a variation of the following error messages:
-> 
->  - Cannot touch [...]/chapter5-listproperties/app.qml: No such file or directory
->  - Error copying [...]/chapter2-methods/app.qml: Destination file exists
-> 
-> Fix it by using OTHER_FILES instead of a seperate qml files install target
-> to fix the race between install_target, install_qml and install_sources.
-> 
-> Fixes:
-> 
->  - https://gitlab.com/buildroot.org/buildroot/-/jobs/565470221
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> [Reworked patch and commit log]
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v2 -> v3:
->  - reworked patch (OTHER_FILES instead of additional dep) and commit log
-> ---
->  .../0002-examples-fix-parallel-install.patch  | 185 ++++++++++++++++++
->  1 file changed, 185 insertions(+)
->  create mode 100644 package/qt5/qt5declarative/0002-examples-fix-parallel-install.patch
+--- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Stefan,
 
-Applied to master, thanks. Did you submit this upstream ? :-)
+> which part is it that you cannot reproduce on your system - the build failure related to automake, or the original issue, i.e. the error thrown by grub-mkimage?
 
-Thanks!
+Obviously it is your original issue I am speaking about, and that I can't
+reproduce.
 
-Thomas
+> The original issue seems to depend on the environment's compiler used, not the one selected in Buildroot. According to https://lists.gnu.org/archive/html/grub-devel/2020-03/msg00217.html, it only occurs at least with GCC 8.3.0 and GCC 9.2.1 (which I am using), but not with GCC 7.5.0.
+
+As I said, I am also on Ubuntu 19.10, so using gcc 9.2.1.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
