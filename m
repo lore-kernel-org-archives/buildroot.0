@@ -1,137 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 22:26:31 +0200
-Subject: [Buildroot] [git commit branch/next] package/gloox: new package
-Message-ID: <20200528201022.D22DF8F144@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 28 May 2020 22:32:04 +0200
+Subject: [Buildroot] [PATCH v1] package/cvs: fix mktime related compile
+ failure
+Message-ID: <20200528203204.18142-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=626be1a4184953b5e5862b4e7d218609e1566398
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Use ac_cv_func_working_mktime=yes to force the use of a provided
+mktime implementation instead of compiling the failing own one.
 
-gloox is a rock-solid, full-featured Jabber/XMPP client library,
-written in clean ANSI C++. It makes writing spec-compliant clients
-easy and allows for hassle-free integration of Jabber/XMPP
-functionality into existing applications. gloox is released under the
-GNU GPLv3. Commercial licensing and support are available.
+Fixes:
 
-Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  http://autobuild.buildroot.net/results/5bcd8f4235002da682cc900f866116d2fe87f1c8
+
+  mktime.c: In function 'ydhms_diff':
+  mktime.c:106:52: error: size of array 'a' is negative
+   #define verify(name, assertion) struct name { char a[(assertion) ? 1 : -1]; }
+                                                      ^
+  mktime.c:170:3: note: in expansion of macro 'verify'
+     verify (long_int_year_and_yday_are_wide_enough,
+     ^~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/gloox/Config.in  | 16 ++++++++++++++++
- package/gloox/gloox.hash |  3 +++
- package/gloox/gloox.mk   | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 68 insertions(+)
+ package/cvs/cvs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..1320944186 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2633,6 +2633,9 @@ F:	package/python-pyusb/
- N:	Wojciech Nizi??ski <niziak@spox.org>
- F:	package/fwup/
+diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+index 563802cc9d..6f83ca6408 100644
+--- a/package/cvs/cvs.mk
++++ b/package/cvs/cvs.mk
+@@ -12,7 +12,9 @@ CVS_LICENSE = GPL-1.0+, LGPL-2.0+, LGPL-2.1+ (glob)
+ CVS_LICENSE_FILES = COPYING COPYING.LIB lib/glob-libc.h
+ CVS_DEPENDENCIES = ncurses
  
-+N:	Yair Ben Avraham <yairba@protonmail.com>
-+F:	package/gloox/
-+
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
- F:	board/friendlyarm/nanopi-neo/
- F:	configs/nanopi_neo_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index c12676d859..e81f2f6bdb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2040,6 +2040,7 @@ menu "Networking applications"
- 	source "package/freeswitch-mod-bcg729/Config.in"
- 	source "package/gerbera/Config.in"
- 	source "package/gesftpserver/Config.in"
-+	source "package/gloox/Config.in"
- 	source "package/glorytun/Config.in"
- 	source "package/gupnp-tools/Config.in"
- 	source "package/gutenprint/Config.in"
-diff --git a/package/gloox/Config.in b/package/gloox/Config.in
-new file mode 100644
-index 0000000000..91e9f06e34
---- /dev/null
-+++ b/package/gloox/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_GLOOX
-+	bool "gloox"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_MPC
-+	help
-+	  gloox is a portable high-level Jabber/XMPP library for C++. It
-+	  is fully compliant with the XMPP RFCs, supports all of the
-+	  XMPP features (including SRV lookups, TLS, SASL, roster
-+	  management, and privacy lists), and implements several XEPs
-+	  that make it ideal for writing any kind of Jabber/XMPP client
-+	  or component.
-+
-+	  https://camaya.net/gloox/
-+
-+comment "gloox needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
-new file mode 100644
-index 0000000000..ee42c079b2
---- /dev/null
-+++ b/package/gloox/gloox.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  97cb6a0c07e320ffa4a7c66e8ab06b2361086271dc87ed2398befef4e8435f8a  gloox-1.0.23.tar.bz2
-+sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
-diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
-new file mode 100644
-index 0000000000..46fe4d6a15
---- /dev/null
-+++ b/package/gloox/gloox.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# gloox
-+#
-+################################################################################
-+
-+GLOOX_VERSION = 1.0.23
-+GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
-+GLOOX_SITE = https://camaya.net/download
-+GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
-+GLOOX_LICENSE_FILES = LICENSE
-+GLOOX_INSTALL_STAGING = YES
-+GLOOX_DEPENDENCIES = mpc
-+GLOOX_CONF_OPTS = \
-+	--without-libidn \
-+	--enable-getaddrinfo
-+
-+GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+GLOOX_CXXFLAGS += -O0
-+endif
-+GLOOX_CONF_ENV += CXXFLAGS="$(GLOOX_CXXFLAGS)"
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GLOOX_CONF_ENV += LIBS=-latomic
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+GLOOX_CONF_OPTS += --with-zlib
-+GLOOX_DEPENDENCIES += zlib
-+else
-+GLOOX_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+GLOOX_CONF_OPTS += --with-openssl --without-gnutls
-+GLOOX_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+GLOOX_CONF_OPTS += --with-gnutls --without-openssl
-+GLOOX_DEPENDENCIES += gnutls
-+else
-+GLOOX_CONF_OPTS += --without-gnutls --without-openssl
-+endif
-+
-+$(eval $(autotools-package))
+-CVS_CONF_ENV = cvs_cv_func_printf_ptr=yes
++CVS_CONF_ENV = \
++	ac_cv_func_working_mktime=yes \
++	cvs_cv_func_printf_ptr=yes
+ 
+ CVS_CONFIGURE_ARGS = --disable-old-info-format-support
+ ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
+-- 
+2.26.2
