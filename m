@@ -1,112 +1,51 @@
-From: Mario Mintel <mariomintel@gmail.com>
-Date: Thu, 28 May 2020 16:43:33 +0200
-Subject: [Buildroot] [PATCH 2/2] package/jailhouse: add option to choose
- custom repo/branch
-In-Reply-To: <20200528144333.49268-1-mariomintel@gmail.com>
-References: <20200528144333.49268-1-mariomintel@gmail.com>
-Message-ID: <20200528144333.49268-3-mariomintel@gmail.com>
+From: fld2865 at gmail.com <fld2865@gmail.com>
+Date: Thu, 28 May 2020 17:02:36 +0000 (UTC)
+Subject: [Buildroot] Issue with Asus Tinkerboard Buildroot OS build
+References: <1272084788.2015886.1590685356172.ref@mail.yahoo.com>
+Message-ID: <1272084788.2015886.1590685356172@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition to official releases of Jailhouse, allow to specify a custom
-Git URI + branches. This adds more flexibility for custom
-configurations.
+Hello Busybox.net,I'm attempting the development of a custom Linux distribution for the Asus Tinkerboard,using Buildroot 2020.02.2.I successfully obtained a booting OS image, which does communicate via serial and SSH,but doesn't output ANYTHING on the HDMI video output.I added all the packages I know of, including X11 stack and OpenGLES libs, but I'm not sureabout which video driver to use. I tried with xf86-video-fbdev and xf86-video-vesa, but withoutsuccess.
+The net result is that when I try to load the Xserver through startx, I get the following result:
+/home# startx
+xauth:? file //.serverauth.255 does not exist
+xauth:? file //.Xauthority does not exist
 
-Signed-off-by: Mario Mintel <mariomintel@gmail.com>
----
- package/jailhouse/Config.in    | 36 ++++++++++++++++++++++++++++++++--
- package/jailhouse/jailhouse.mk | 17 ++++++++++++++--
- 2 files changed, 49 insertions(+), 4 deletions(-)
 
-diff --git a/package/jailhouse/Config.in b/package/jailhouse/Config.in
-index 596b4951db..47523747f9 100644
---- a/package/jailhouse/Config.in
-+++ b/package/jailhouse/Config.in
-@@ -3,18 +3,50 @@ config BR2_PACKAGE_JAILHOUSE
- 	depends on BR2_aarch64 || BR2_x86_64
- 	depends on BR2_LINUX_KERNEL
- 	help
--	  The Jailhouse partitioning Hypervisor based on Linux.
-+	  The Jailhouse Linux-based partitioning hypervisor.
- 
- 	  https://github.com/siemens/jailhouse
- 
- if BR2_PACKAGE_JAILHOUSE
- 
-+choice
-+	prompt "Jailhouse Version"
-+
-+config BR2_PACKAGE_JAILHOUSE_LATEST_VERSION
-+	bool "Version 0.12"
-+
-+config BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	help
-+	  This option allows Buildroot to get the Jailhouse source code
-+	  from a custom Git repository.
-+
-+endchoice
-+
-+if BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT
-+
-+config BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT_URI
-+	string "URI of custom repository"
-+	default "https://github.com/siemens/jailhouse.git"
-+
-+config BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT_BRANCH
-+	string "Name of Git branch"
-+	default "master"
-+
-+endif
-+
-+config BR2_PACKAGE_JAILHOUSE_VERSION
-+	string
-+	default "0.12" if BR2_PACKAGE_JAILHOUSE_LATEST_VERSION
-+	default BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT_BRANCH \
-+		if BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT
-+
- config BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS
- 	bool "helper scripts"
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON_MAKO # runtime
- 	help
--	  Python-based helpers for the Jailhouse Hypervisor.
-+	  Python-based helpers for the Jailhouse hypervisor.
- 
- 	  https://github.com/siemens/jailhouse
- 
-diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
-index 6356c5a7aa..d134b3d1b4 100644
---- a/package/jailhouse/jailhouse.mk
-+++ b/package/jailhouse/jailhouse.mk
-@@ -4,10 +4,23 @@
- #
- ################################################################################
- 
--JAILHOUSE_VERSION = 0.12
--JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
-+JAILHOUSE_VERSION = $(call qstrip,$(BR2_PACKAGE_JAILHOUSE_VERSION))
- JAILHOUSE_LICENSE = GPL-2.0
-+ifeq ($(BR2_PACKAGE_JAILHOUSE_LATEST_VERSION),y)
- JAILHOUSE_LICENSE_FILES = COPYING
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT),y)
-+JAILHOUSE_SITE = $(call qstrip,$(BR2_PACKAGE_JAILHOUSE_CUSTOM_GIT_URI))
-+JAILHOUSE_SITE_METHOD = git
-+else
-+JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JAILHOUSE)$(BR2_PACKAGE_JAILHOUSE_CUSTIM_GIT),y)
-+BR_NO_CHECK_HASH_FOR += $(JAILHOUSE_SOURCE)
-+endif
-+
- JAILHOUSE_DEPENDENCIES = \
- 	linux
- 
--- 
-2.26.1
+X.Org X Server 1.20.8
+X Protocol Version 11, Revision 0
+Build Operating System: Linux 5.4.0-31-generic x86_64
+Current Operating System: Linux Tinker 5.0.0 #1 SMP Thu May 28 16:06:04 CEST 2020 armv7l
+Kernel command line: console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
+Build Date: 28 May 2020? 03:26:17PM
+
+Current version of pixman: 0.38.4
+??????? Before reporting problems, check http://wiki.x.org
+??????? to make sure that you have the latest version.
+Markers: (--) probed, (**) from config file, (==) default setting,
+??????? (++) from command line, (!!) notice, (II) informational,
+??????? (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+(==) Log file: "/var/log/Xorg.0.log", Time: Thu Jan? 1 01:10:01 1970
+(==) Using default built-in configuration (21 lines)
+(EE)
+Fatal server error:
+(EE) no screens found(EE)
+(EE)
+Please consult the The X.Org Foundation support
+???????? at http://wiki.x.org
+?for help.
+(EE) Please also check the log file at "/var/log/Xorg.0.log" for additional information.
+(EE)
+(EE) Server terminated with error (1). Closing log file.
+
+
+/var/log/Xorg.0.log basically says that there's no /dev/fb pseudo file, which is true, so I thinkI'm using the wrong video driver.Any hint about how could I address this issue?
+Thanks & best regards,
+Francesco LANDE
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/8a76e024/attachment.html>
