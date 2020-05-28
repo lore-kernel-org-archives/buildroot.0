@@ -1,61 +1,86 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Thu, 28 May 2020 11:48:53 +0200
-Subject: [Buildroot] [PATCH/next] package/python-modbus-tk: bump to version
- 1.1.1
-Message-ID: <1590659333-10284-1-git-send-email-pjtexier@koncepto.io>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 28 May 2020 12:52:04 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-ipdb: new package
+Message-ID: <20200528095204.540452-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
+IPython-enabled pdb.
 
-5732f86 1.1.1
-d8e9b32 pep8
-4795bc7 Add Jackson Matheson to contributors
-26db934 Merge branch 'master' of https://github.com/ljean/modbus-tk
-837a12b Merge pull request #125 from jacksonmatheson/master
-07b06f8 Fixed READ_WRITE_MULTIPLE_REGISTERS, added write_starting_address_FC23
+This package can be very helpful when someone wants to debug
+a Python application on the board itself.
 
-Also update hash file formatting (2 spaces).
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-modbus-tk/python-modbus-tk.hash | 8 ++++----
- package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/Config.in                    |  1 +
+ package/python-ipdb/Config.in        |  9 +++++++++
+ package/python-ipdb/python-ipdb.hash |  5 +++++
+ package/python-ipdb/python-ipdb.mk   | 14 ++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/python-ipdb/Config.in
+ create mode 100644 package/python-ipdb/python-ipdb.hash
+ create mode 100644 package/python-ipdb/python-ipdb.mk
 
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-index fc98993..c4fde68 100644
---- a/package/python-modbus-tk/python-modbus-tk.hash
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/modbus-tk/json
--md5	65e0a1b12bd6650bdc4f7d823669ab6f  modbus_tk-1.1.0.tar.gz
--sha256	8e31db8f148871006b569931c31ef17692363acf90a0d0bafd2d868f51b70772  modbus_tk-1.1.0.tar.gz
-+md5  e52d5de22cc9d97f2c1086d9b11f0f1e  modbus_tk-1.1.1.tar.gz
-+sha256  c6dd004bc6bbff6d9fa93e61654c30a26c817c6632036c656383c9ecadca6639  modbus_tk-1.1.1.tar.gz
- # Locally computed sha256 checksums
--sha256	3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
--sha256	aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-+sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
-+sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-index a2a0cd0..3792757 100644
---- a/package/python-modbus-tk/python-modbus-tk.mk
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MODBUS_TK_VERSION = 1.1.0
-+PYTHON_MODBUS_TK_VERSION = 1.1.1
- PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
--PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/49/aa/97e40e2da1b9904a78466b4d759091ef015f6946a423f1675bfcab7950c8
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/63/2e/991c8965fd45db4c38fefe1fa70356825e847e1bbb1f14e127aa2b4d37aa
- PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
- PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
- PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+diff --git a/package/Config.in b/package/Config.in
+index 85d7326361..be3571fe13 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -989,6 +989,7 @@ menu "External python modules"
+ 	source "package/python-iowait/Config.in"
+ 	source "package/python-ipaddr/Config.in"
+ 	source "package/python-ipaddress/Config.in"
++	source "package/python-ipdb/Config.in"
+ 	source "package/python-iptables/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-ipython/Config.in"
+diff --git a/package/python-ipdb/Config.in b/package/python-ipdb/Config.in
+new file mode 100644
+index 0000000000..4a89bf75de
+--- /dev/null
++++ b/package/python-ipdb/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_IPDB
++	bool "python-ipdb"
++	depends on BR2_PACKAGE_PYTHON3 # python-ipython
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_IPYTHON # runtime
++	help
++	  IPython-enabled pdb.
++
++	  https://github.com/gotcha/ipdb
+diff --git a/package/python-ipdb/python-ipdb.hash b/package/python-ipdb/python-ipdb.hash
+new file mode 100644
+index 0000000000..c7cd93225d
+--- /dev/null
++++ b/package/python-ipdb/python-ipdb.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/ipdb/json
++md5  7db72771b279924ac4e5905d7eee184e  ipdb-0.13.2.tar.gz
++sha256  77fb1c2a6fccdfee0136078c9ed6fe547ab00db00bebff181f1e8c9e13418d49  ipdb-0.13.2.tar.gz
++# Locally computed sha256 checksums
++sha256  4eeb49de04f4894f8ea1f69a04f500799041b750b3d554c06de5ca877258e734  COPYING.txt
+diff --git a/package/python-ipdb/python-ipdb.mk b/package/python-ipdb/python-ipdb.mk
+new file mode 100644
+index 0000000000..c98f9700b2
+--- /dev/null
++++ b/package/python-ipdb/python-ipdb.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-ipdb
++#
++################################################################################
++
++PYTHON_IPDB_VERSION = 0.13.2
++PYTHON_IPDB_SOURCE = ipdb-$(PYTHON_IPDB_VERSION).tar.gz
++PYTHON_IPDB_SITE = https://files.pythonhosted.org/packages/2c/bb/a3e1a441719ebd75c6dac8170d3ddba884b7ee8a5c0f9aefa7297386627a
++PYTHON_IPDB_SETUP_TYPE = setuptools
++PYTHON_IPDB_LICENSE = BSD-3-Clause
++PYTHON_IPDB_LICENSE_FILES = COPYING.txt
++
++$(eval $(python-package))
 -- 
-2.7.4
+2.26.2
