@@ -1,58 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 29 May 2020 00:21:20 +0200
-Subject: [Buildroot] [PATCH v3] package/qt5/qt5declarative: fix parallel
- install
-In-Reply-To: <20200528221703.009f2612@windsurf.home>
-References: <20200526210443.29088-1-ps.report@gmx.net>
- <20200528221703.009f2612@windsurf.home>
-Message-ID: <20200529002120.5fcf4b25@gmx.net>
+From: Todd Sampson <sampsonats@gmail.com>
+Date: Thu, 28 May 2020 18:42:49 -0400
+Subject: [Buildroot] Cross-compile mariadb-connector-c
+In-Reply-To: <CADJjDh_dv_HUS67aZUDHrD=1Liv9bWjXY3gVOvjat0zX1swLOA@mail.gmail.com>
+References: <CADJjDh8R+_9Br-O9Dgy3Pp=WU7duOnOYEajGX3NJg324AaBx6Q@mail.gmail.com>
+ <20200528233045.561f2808@windsurf.home>
+ <CADJjDh_dv_HUS67aZUDHrD=1Liv9bWjXY3gVOvjat0zX1swLOA@mail.gmail.com>
+Message-ID: <CADJjDh9BfqbmQxqhZMGGu2rOQJ8WQy6NSHwd0RV7NJHJRskNAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+mariadb server is still in the target.
 
-On Thu, 28 May 2020 22:17:03 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Thu, May 28, 2020 at 5:35 PM Todd Sampson <sampsonats@gmail.com> wrote:
 
-> On Tue, 26 May 2020 23:04:43 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
+> No.  I'll do a make clean all just to make sure.
+> [image: tmp.PNG]
+> [image: mariadb-server.PNG]
 >
-> > From: Romain Naour <romain.naour@gmail.com>
-> >
-> > Installing qt5declarative examples on fast/fast/multicore machines sometimes
-> > failes with a variation of the following error messages:
-> >
-> >  - Cannot touch [...]/chapter5-listproperties/app.qml: No such file or directory
-> >  - Error copying [...]/chapter2-methods/app.qml: Destination file exists
-> >
-> > Fix it by using OTHER_FILES instead of a seperate qml files install target
-> > to fix the race between install_target, install_qml and install_sources.
-> >
-> > Fixes:
-> >
-> >  - https://gitlab.com/buildroot.org/buildroot/-/jobs/565470221
-> >
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > [Reworked patch and commit log]
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v2 -> v3:
-> >  - reworked patch (OTHER_FILES instead of additional dep) and commit log
-> > ---
-> >  .../0002-examples-fix-parallel-install.patch  | 185 ++++++++++++++++++
-> >  1 file changed, 185 insertions(+)
-> >  create mode 100644 package/qt5/qt5declarative/0002-examples-fix-parallel-install.patch
+> On Thu, May 28, 2020 at 5:30 PM Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> wrote:
 >
-> Applied to master, thanks. Did you submit this upstream ? :-)
-
-Not yet..., but it is on my ToDo list...
-
-Regards,
-Peter
-
+>> On Thu, 28 May 2020 16:51:27 -0400
+>> Todd Sampson <sampsonats@gmail.com> wrote:
+>>
+>> > I'm trying to cross-compile mariadb-connector-c version 3.1.8.  When I
+>> > select mysqlsupport and mariadb, it seems like the mariadb server gets
+>> put
+>> > in my target too, which makes it very big.
+>>
+>> Have you enabled BR2_PACKAGE_MARIADB_SERVER ? If
+>> BR2_PACKAGE_MARIADB_SERVER is disabled, the server should not be
+>> installed.
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+>>
 >
-> Thanks!
->
-> Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/9471ec36/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: tmp.PNG
+Type: image/png
+Size: 9919 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/9471ec36/attachment-0002.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mariadb-server.PNG
+Type: image/png
+Size: 60753 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/9471ec36/attachment-0003.png>
