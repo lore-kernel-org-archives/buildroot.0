@@ -1,94 +1,116 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Thu, 28 May 2020 12:00:57 +0200
-Subject: [Buildroot] [PATCH/next] configs/atmel_sama5d27_som1: bump to
- linux4sam-2020.04
-In-Reply-To: <1590660057-11642-1-git-send-email-pjtexier@koncepto.io>
-References: <1590660057-11642-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <1590660057-11642-2-git-send-email-pjtexier@koncepto.io>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Thu, 28 May 2020 12:27:54 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/reaver: bump to v1.6.6
+In-Reply-To: <CAPi7W82evHYV9vAO2GGPR-m-wBh3EfFBVqO_x74P5CevJvir6Q@mail.gmail.com>
+References: <CAPi7W82evHYV9vAO2GGPR-m-wBh3EfFBVqO_x74P5CevJvir6Q@mail.gmail.com>
+Message-ID: <20200528102753.9145-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit:
-  - bump Linux & U-Boot to linux4sam-2020.04
-  - bump at91bootstrap to v3.9.2
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
+Changes v1 -> v2:
+	- add comment on BR2_TOOLCHAIN_HAS_THREADS dependency
+	to help user (suggested by Fabrice)
 
-Logs:
+Changes v0 -> v1:
+        - correct patch title for package upgrade
+        - add white space to reaver.hash
+        - add depends on BR2_TOOLCHAIN_HAS_THREADS (suggested by Fabrice)
 
-AT91Bootstrap 3.9.2 (mardi 26 mai 2020, 19:28:37 (UTC+0200))
+v0: upgrade to 1.6.6 (latest) release
+I removed the patch because it is not needed anymore.
+Tested on RPi0w.
 
-SDHC: fix in place for SAMA5D2 SoM VDDSDMMC over-consumption errata
-SD/MMC: Image: Read file u-boot.bin to 0x23f00000
-MMC: ADMA supported
-SD: Card Capacity: High or Extended
-SD: Specification Version 3.0X
-SD/MMC: Done to load image
-<debug_uart> 
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/reaver/0001-fix-271.patch | 32 -------------------------------
+ package/reaver/Config.in          |  4 ++++
+ package/reaver/reaver.hash        |  4 ++--
+ package/reaver/reaver.mk          |  2 +-
+ 4 files changed, 7 insertions(+), 35 deletions(-)
+ delete mode 100644 package/reaver/0001-fix-271.patch
 
-U-Boot 2020.01-linux4sam-2020.04 (May 26 2020 - 19:28:48 +0200)
-
-CPU: SAMA5D27 1G bits DDR2 SDRAM
-Crystal frequency:       24 MHz
-CPU clock        :      492 MHz
-Master clock     :      164 MHz
-DRAM:  128 MiB
-MMC:   sdio-host at a0000000: 0, sdio-host at b0000000: 1
-Loading Environment from FAT... OK
-<...>
-
-Starting kernel ...
-
-Booting Linux on physical CPU 0x0
-Linux version 5.4.41-linux4sam-2020.04
-<...>
-Starting sshd: OK
-
-Welcome to Buildroot
-
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index 6b5def3..b608bac 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -3,7 +3,7 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_PTHREAD_DEBUG=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
-@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-at91-linux4sam-2020.04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
-@@ -71,12 +71,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.2)/at91bootstrap3-v3.9.2.tar.gz"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.04)/u-boot-at91-linux4sam-2020.04.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/reaver/0001-fix-271.patch b/package/reaver/0001-fix-271.patch
+deleted file mode 100644
+index 9f6b395120..0000000000
+--- a/package/reaver/0001-fix-271.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From c7040da3a9ff98cd8063b9d5b5a7721374186391 Mon Sep 17 00:00:00 2001
+-From: rofl0r <retnyg@gmx.net>
+-Date: Fri, 22 Feb 2019 17:38:24 +0000
+-Subject: [PATCH] fix #271
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/t6x/reaver-wps-fork-t6x/commit/c7040da3a9ff98cd8063b9d5b5a7721374186391]
+----
+- src/wps/wps_attr_parse.c | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/wps/wps_attr_parse.c b/src/wps/wps_attr_parse.c
+-index 30b0e79..d681b70 100644
+---- a/src/wps/wps_attr_parse.c
+-+++ b/src/wps/wps_attr_parse.c
+-@@ -443,12 +443,12 @@ int wps_parse_msg(const struct wpabuf *msg, struct wps_parse_attr *attr)
+- 			 * Mac OS X 10.6 seems to be adding 0x00 padding to the
+- 			 * end of M1. Skip those to avoid interop issues.
+- 			 */
+--			int i;
+--			for (i = 0; i < end - pos; i++) {
+-+			uintptr_t i, left = end - pos;
+-+			for (i = 0; i < left; i++) {
+- 				if (pos[i])
+- 					break;
+- 			}
+--			if (i == end - pos) {
+-+			if (i == left) {
+- 				wpa_printf(MSG_DEBUG, "WPS: Workaround - skip "
+- 					   "unexpected message padding");
+- 				break;
+diff --git a/package/reaver/Config.in b/package/reaver/Config.in
+index 0fd8ab7c6e..c286fa8d34 100644
+--- a/package/reaver/Config.in
++++ b/package/reaver/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_REAVER
+ 	bool "reaver"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBPCAP
+ 	help
+ 	  Reaver is a tool to audit networks against brute WPS pins
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_REAVER
+ 
+ 	  https://code.google.com/archive/p/reaver-wps/wikis/README.wiki
+ 	  https://github.com/t6x/reaver-wps-fork-t6x
++
++comment "reaver needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/reaver/reaver.hash b/package/reaver/reaver.hash
+index fad81fe326..780e6ac86d 100644
+--- a/package/reaver/reaver.hash
++++ b/package/reaver/reaver.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 e6761d2d4ef9cb2b45fe0a60d6b94048ce4442e4ac209904fe89506ff1e94c44 reaver-1.6.5.tar.gz
+-sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a docs/LICENSE
++sha256 73189782b208d12b8dddc4f29d32e1f72b1f3609e573c9ea9510deebec394583  reaver-1.6.6.tar.gz
++sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a  docs/LICENSE
+diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
+index 093ac935af..2b5f82960b 100644
+--- a/package/reaver/reaver.mk
++++ b/package/reaver/reaver.mk
+@@ -6,7 +6,7 @@
+ 
+ # Older repos for this project will not cross-compile easily
+ # while this one works right away
+-REAVER_VERSION = 1.6.5
++REAVER_VERSION = 1.6.6
+ REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,v$(REAVER_VERSION))
+ REAVER_LICENSE = GPL-2.0+
+ REAVER_LICENSE_FILES = docs/LICENSE
 -- 
-2.7.4
+2.20.1
