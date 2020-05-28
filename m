@@ -1,28 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 May 2020 13:15:13 +0000
-Subject: [Buildroot] [Bug 12941] Python GObject fails to build when using
- BR2_PER_PACKAGE_DIRECTORIES
-In-Reply-To: <bug-12941-163@https.bugs.busybox.net/>
-References: <bug-12941-163@https.bugs.busybox.net/>
-Message-ID: <bug-12941-163-iEAtRfw27v@https.bugs.busybox.net/>
+From: Mario Mintel <mariomintel@gmail.com>
+Date: Thu, 28 May 2020 16:43:31 +0200
+Subject: [Buildroot] [PATCH 0/2] Extend Jailhouse package with custom repo
+ option
+Message-ID: <20200528144333.49268-1-mariomintel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12941
+Sorry for resending but this email wasn't subscribed to the buildroot
+mailing list hence the last one was automatically rejected.
+This Patch extends the Jailhouse package with the option to specify a
+custom repository. This adds more flexibility for customs
+configurations. While at it I also bumped the version from 0.11 to 0.12.
 
---- Comment #1 from Asaf Kahlon <asafka7@gmail.com> ---
-This failure happens because the evaluation of PKG_PYTHON_SYSCONFIGDATA_NAME at
-python-gobject.mk is done on the configure step, but because we haven't rsynced
-the dependencies yet there's nothing on the per-package directory.
-You can also see that if you do "make python-gobject" twice: on the first time
-it will fail, but on the second time everything will be fine because all the
-dependencies have been rsynced to the per-package dir.
+Mario Mintel (2):
+  package/jailhouse: bump version to 0.12
+  package/jailhouse: add option to choose custom repo/branch
 
-I'm not sure how to solve this problem, but at least we know why it happens.
+ package/jailhouse/Config.in      | 36 ++++++++++++++++++++++++++++++--
+ package/jailhouse/jailhouse.hash |  2 +-
+ package/jailhouse/jailhouse.mk   | 17 +++++++++++++--
+ 3 files changed, 50 insertions(+), 5 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.1
