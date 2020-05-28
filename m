@@ -1,50 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 22:54:38 +0200
-Subject: [Buildroot] make graph-size on Ubuntu 20.04,
- buildroot 2020.05-rc2
-In-Reply-To: <CADJjDh8P5ACNk4FA6sQAgpovvfp-2suWtXmV_ZLCXVreAC4v0A@mail.gmail.com>
-References: <CADJjDh9gqQzv_owicJduiXkRJqCsgjRP6DjwnLPZK6A4Gd-YOA@mail.gmail.com>
- <20200528224500.595b5ffc@windsurf.home>
- <CADJjDh8P5ACNk4FA6sQAgpovvfp-2suWtXmV_ZLCXVreAC4v0A@mail.gmail.com>
-Message-ID: <20200528225438.4ffbf1c8@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 28 May 2020 23:16:49 +0200
+Subject: [Buildroot] [PATCH v1] package/cvs: fix mktime related compile
+ failure
+In-Reply-To: <20200528224335.2bb72177@windsurf.home>
+References: <20200528203204.18142-1-ps.report@gmx.net>
+ <20200528224335.2bb72177@windsurf.home>
+Message-ID: <20200528231649.0d34fed1@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-Please use Reply-All when replying, to keep the mailing list in Cc,
-thanks.
+On Thu, 28 May 2020 22:43:35 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Thu, 28 May 2020 16:49:11 -0400
-Todd Sampson <sampsonats@gmail.com> wrote:
+> On Thu, 28 May 2020 22:32:04 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Use ac_cv_func_working_mktime=yes to force the use of a provided
+> > mktime implementation instead of compiling the failing own one.
+> >
+> > Fixes:
+> >
+> >   http://autobuild.buildroot.net/results/5bcd8f4235002da682cc900f866116d2fe87f1c8
+> >
+> >   mktime.c: In function 'ydhms_diff':
+> >   mktime.c:106:52: error: size of array 'a' is negative
+> >    #define verify(name, assertion) struct name { char a[(assertion) ? 1 : -1]; }
+> >                                                       ^
+> >   mktime.c:170:3: note: in expansion of macro 'verify'
+> >      verify (long_int_year_and_yday_are_wide_enough,
+> >      ^~~~~~
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> Why is this suddenly failing? We have had this package for ages, it
+> hasn't been changed recently.
+>
+> So instead of just fixing the issue, we always want to understand *why*
+> we started having an issue.
+>
+> Do you have some details of this ?
 
-> dfr at cmake:~/m9k2/buildroot$ sudo apt install python3-matplotlib
-> [sudo] password for dfr:
-> Reading package lists... Done
-> Building dependency tree
-> Reading state information... Done
-> python3-matplotlib is already the newest version (3.1.2-1ubuntu4).
-> 0 upgraded, 0 newly installed, 0 to remove and 84 not upgraded.
-> dfr at cmake:~/m9k2/buildroot$ make graph-size
-> *You need python-matplotlib to generate the size graph*
-> make[1]: *** [Makefile:904: graph-size] Error 1
-> make: *** [Makefile:84: _all] Error 2
+Sorry for being (too) short in the commit log, the failure/assert comes from the lines:
 
-Then this means that your /usr/bin/python is pointing to
-/usr/bin/python2. The script being "make graph-size",
-support/scripts/size-stats, simply uses "/usr/bin/env python", which it
-assumes is your default interpreter, which should have matplotlib
-installed.
+  verify (long_int_year_and_yday_are_wide_enough,
+          INT_MAX <= LONG_MAX / 2 || TIME_T_MAX <= UINT_MAX);
 
-Is is the standard Ubuntu 20.04 behavior to have python point to
-python2, but no longer provide python-matplotlib. This looks odd. Have
-you changed your /usr/bin/python perhaps ?
+And happens with musl libc, I believe another fail out from the y2038
+time_t conversion from 32bit to 64bit...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Peter
+
+>
+> Thomas
