@@ -1,38 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 May 2020 22:22:41 +0200
-Subject: [Buildroot] [PATCH] package/gnupg: fix build with gcc 10
-In-Reply-To: <20200526212754.112805-1-thomas.petazzoni@bootlin.com>
-References: <20200526212754.112805-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200528222241.5ebe2e39@windsurf.home>
+Date: Thu, 28 May 2020 22:26:31 +0200
+Subject: [Buildroot] [git commit branch/next] package/gloox: new package
+Message-ID: <20200528201022.D22DF8F144@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 26 May 2020 23:27:54 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=626be1a4184953b5e5862b4e7d218609e1566398
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> This commit backports an upstream patch made for gnupg2 into gnupg, in
-> order to fix build failures with gcc 10 due to the use of
-> -fno-common. Due to the code differences between upstream gnupg2 and
-> the old gnupg 1.x, the backport is in fact more a rewrite than an
-> actual backport.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/496a18833505dc589f7ae58f2c7e5fe80fe9af79/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...se-EXTERN_UNLESS_MAIN_MODULE-pattern.patch | 156 ++++++++++++++++++
->  1 file changed, 156 insertions(+)
->  create mode 100644 package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch
+gloox is a rock-solid, full-featured Jabber/XMPP client library,
+written in clean ANSI C++. It makes writing spec-compliant clients
+easy and allows for hassle-free integration of Jabber/XMPP
+functionality into existing applications. gloox is released under the
+GNU GPLv3. Commercial licensing and support are available.
 
-Applied to master, thanks.
+Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS               |  3 +++
+ package/Config.in        |  1 +
+ package/gloox/Config.in  | 16 ++++++++++++++++
+ package/gloox/gloox.hash |  3 +++
+ package/gloox/gloox.mk   | 45 +++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 68 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e427ab15d4..1320944186 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2633,6 +2633,9 @@ F:	package/python-pyusb/
+ N:	Wojciech Nizi??ski <niziak@spox.org>
+ F:	package/fwup/
+ 
++N:	Yair Ben Avraham <yairba@protonmail.com>
++F:	package/gloox/
++
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
+ F:	board/friendlyarm/nanopi-neo/
+ F:	configs/nanopi_neo_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index c12676d859..e81f2f6bdb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2040,6 +2040,7 @@ menu "Networking applications"
+ 	source "package/freeswitch-mod-bcg729/Config.in"
+ 	source "package/gerbera/Config.in"
+ 	source "package/gesftpserver/Config.in"
++	source "package/gloox/Config.in"
+ 	source "package/glorytun/Config.in"
+ 	source "package/gupnp-tools/Config.in"
+ 	source "package/gutenprint/Config.in"
+diff --git a/package/gloox/Config.in b/package/gloox/Config.in
+new file mode 100644
+index 0000000000..91e9f06e34
+--- /dev/null
++++ b/package/gloox/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_GLOOX
++	bool "gloox"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_MPC
++	help
++	  gloox is a portable high-level Jabber/XMPP library for C++. It
++	  is fully compliant with the XMPP RFCs, supports all of the
++	  XMPP features (including SRV lookups, TLS, SASL, roster
++	  management, and privacy lists), and implements several XEPs
++	  that make it ideal for writing any kind of Jabber/XMPP client
++	  or component.
++
++	  https://camaya.net/gloox/
++
++comment "gloox needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
+new file mode 100644
+index 0000000000..ee42c079b2
+--- /dev/null
++++ b/package/gloox/gloox.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  97cb6a0c07e320ffa4a7c66e8ab06b2361086271dc87ed2398befef4e8435f8a  gloox-1.0.23.tar.bz2
++sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
+diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
+new file mode 100644
+index 0000000000..46fe4d6a15
+--- /dev/null
++++ b/package/gloox/gloox.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# gloox
++#
++################################################################################
++
++GLOOX_VERSION = 1.0.23
++GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
++GLOOX_SITE = https://camaya.net/download
++GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
++GLOOX_LICENSE_FILES = LICENSE
++GLOOX_INSTALL_STAGING = YES
++GLOOX_DEPENDENCIES = mpc
++GLOOX_CONF_OPTS = \
++	--without-libidn \
++	--enable-getaddrinfo
++
++GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++GLOOX_CXXFLAGS += -O0
++endif
++GLOOX_CONF_ENV += CXXFLAGS="$(GLOOX_CXXFLAGS)"
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++GLOOX_CONF_ENV += LIBS=-latomic
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++GLOOX_CONF_OPTS += --with-zlib
++GLOOX_DEPENDENCIES += zlib
++else
++GLOOX_CONF_OPTS += --without-zlib
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++GLOOX_CONF_OPTS += --with-openssl --without-gnutls
++GLOOX_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_GNUTLS),y)
++GLOOX_CONF_OPTS += --with-gnutls --without-openssl
++GLOOX_DEPENDENCIES += gnutls
++else
++GLOOX_CONF_OPTS += --without-gnutls --without-openssl
++endif
++
++$(eval $(autotools-package))
