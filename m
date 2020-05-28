@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:16:59 +0200
-Subject: [Buildroot] [git commit] package/python-crontab: bump to version
- 2.5.1
-Message-ID: <20200602200121.178348256A@busybox.osuosl.org>
+Date: Thu, 28 May 2020 23:38:01 +0200
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump to version 3.9.2
+Message-ID: <20200602200122.064CB82B66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10b1abfcb523889c1725c5860f77f7bff29f4a0a
+commit: https://git.buildroot.net/buildroot/commit/?id=f379e75dcd808a06e5d6494de6243f56fdda4477
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-crontab/python-crontab.hash | 4 ++--
- package/python-crontab/python-crontab.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
-index d0e5725708..2247cf3d3d 100644
---- a/package/python-crontab/python-crontab.hash
-+++ b/package/python-crontab/python-crontab.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-crontab/json
--md5  65fe16d44568de2671d334a637e64a3b  python-crontab-2.4.2.tar.gz
--sha256  ed9583cff430715d9560cbad28309429ac13f3fdb13051ac2288050e05abc392  python-crontab-2.4.2.tar.gz
-+md5  7731a2253e853abfb6eceb8045368f22  python-crontab-2.5.1.tar.gz
-+sha256  4bbe7e720753a132ca4ca9d4094915f40e9d9dc8a807a4564007651018ce8c31  python-crontab-2.5.1.tar.gz
- # Locally computed sha256 checksums
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
-index 0c6109dd7f..ddb1067db2 100644
---- a/package/python-crontab/python-crontab.mk
-+++ b/package/python-crontab/python-crontab.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index faab7635da..ccbb531833 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
  
--PYTHON_CRONTAB_VERSION = 2.4.2
--PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/d1/c2/e92e801a0c504e62899d574a6d281d6e598861797c6798a664556d2bca8c
-+PYTHON_CRONTAB_VERSION = 2.5.1
-+PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/1b/7e/fb78b96de58a49b8ef807c321870ef4de3de5928fd71a40a400aed714310
- PYTHON_CRONTAB_SETUP_TYPE = setuptools
- PYTHON_CRONTAB_LICENSE = LGPL-3.0+
- PYTHON_CRONTAB_LICENSE_FILES = COPYING
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.9.0"
++	bool "3.9.2"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -51,7 +51,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.9.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 9f6c95ab08..5741b829f5 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71  at91bootstrap3-v3.9.0.tar.gz
++sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
+ sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
