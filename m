@@ -1,119 +1,61 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 May 2020 11:31:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/reaver: bump to v1.6.6
-In-Reply-To: <20200528090317.19519-1-guillaume.bressaix@gmail.com>
-References: <CAPi7W83miFTVGtKmns26ne-24H-jHHKf56MXToAXN-vMN7byxQ@mail.gmail.com>
- <20200528090317.19519-1-guillaume.bressaix@gmail.com>
-Message-ID: <CAPi7W82evHYV9vAO2GGPR-m-wBh3EfFBVqO_x74P5CevJvir6Q@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu, 28 May 2020 11:48:53 +0200
+Subject: [Buildroot] [PATCH/next] package/python-modbus-tk: bump to version
+ 1.1.1
+Message-ID: <1590659333-10284-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guillaume,
+This includes the following changes:
 
-Le jeu. 28 mai 2020 ? 11:03, Guillaume W. Bres
-<guillaume.bressaix@gmail.com> a ?crit :
->
-> ---
-> Changes v0 -> v1:
->         - correct patch title for package upgrade
->         - add white space to reaver.hash
->         - add depends on BR2_TOOLCHAIN_HAS_THREADS (suggested by Fabrice)
->
-> v0: upgrade to 1.6.6 (latest) release
-> I removed the patch because it is not needed anymore.
-> Tested on RPi0w.
->
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/reaver/0001-fix-271.patch | 32 -------------------------------
->  package/reaver/Config.in          |  1 +
->  package/reaver/reaver.hash        |  4 ++--
->  package/reaver/reaver.mk          |  2 +-
->  4 files changed, 4 insertions(+), 35 deletions(-)
->  delete mode 100644 package/reaver/0001-fix-271.patch
->
-> diff --git a/package/reaver/0001-fix-271.patch b/package/reaver/0001-fix-271.patch
-> deleted file mode 100644
-> index 9f6b395120..0000000000
-> --- a/package/reaver/0001-fix-271.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From c7040da3a9ff98cd8063b9d5b5a7721374186391 Mon Sep 17 00:00:00 2001
-> -From: rofl0r <retnyg@gmx.net>
-> -Date: Fri, 22 Feb 2019 17:38:24 +0000
-> -Subject: [PATCH] fix #271
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Retrieved from:
-> -https://github.com/t6x/reaver-wps-fork-t6x/commit/c7040da3a9ff98cd8063b9d5b5a7721374186391]
-> ----
-> - src/wps/wps_attr_parse.c | 6 +++---
-> - 1 file changed, 3 insertions(+), 3 deletions(-)
-> -
-> -diff --git a/src/wps/wps_attr_parse.c b/src/wps/wps_attr_parse.c
-> -index 30b0e79..d681b70 100644
-> ---- a/src/wps/wps_attr_parse.c
-> -+++ b/src/wps/wps_attr_parse.c
-> -@@ -443,12 +443,12 @@ int wps_parse_msg(const struct wpabuf *msg, struct wps_parse_attr *attr)
-> -                        * Mac OS X 10.6 seems to be adding 0x00 padding to the
-> -                        * end of M1. Skip those to avoid interop issues.
-> -                        */
-> --                      int i;
-> --                      for (i = 0; i < end - pos; i++) {
-> -+                      uintptr_t i, left = end - pos;
-> -+                      for (i = 0; i < left; i++) {
-> -                               if (pos[i])
-> -                                       break;
-> -                       }
-> --                      if (i == end - pos) {
-> -+                      if (i == left) {
-> -                               wpa_printf(MSG_DEBUG, "WPS: Workaround - skip "
-> -                                          "unexpected message padding");
-> -                               break;
-> diff --git a/package/reaver/Config.in b/package/reaver/Config.in
-> index 0fd8ab7c6e..30c070aca4 100644
-> --- a/package/reaver/Config.in
-> +++ b/package/reaver/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_REAVER
->         bool "reaver"
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
->         select BR2_PACKAGE_LIBPCAP
->         help
->           Reaver is a tool to audit networks against brute WPS pins
-Thanks for this new version, you must also add a comment to warn the
-user about this dependency:
-comment "reaver needs a toolchain w/ threads"
-        depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/reaver/reaver.hash b/package/reaver/reaver.hash
-> index fad81fe326..780e6ac86d 100644
-> --- a/package/reaver/reaver.hash
-> +++ b/package/reaver/reaver.hash
-> @@ -1,3 +1,3 @@
->  # locally computed
-> -sha256 e6761d2d4ef9cb2b45fe0a60d6b94048ce4442e4ac209904fe89506ff1e94c44 reaver-1.6.5.tar.gz
-> -sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a docs/LICENSE
-> +sha256 73189782b208d12b8dddc4f29d32e1f72b1f3609e573c9ea9510deebec394583  reaver-1.6.6.tar.gz
-> +sha256 bb40cfd5e9ca6e8465ea3c236f3f2293e8300af1bfe87e72fabe482ae6cc995a  docs/LICENSE
-> diff --git a/package/reaver/reaver.mk b/package/reaver/reaver.mk
-> index 093ac935af..2b5f82960b 100644
-> --- a/package/reaver/reaver.mk
-> +++ b/package/reaver/reaver.mk
-> @@ -6,7 +6,7 @@
->
->  # Older repos for this project will not cross-compile easily
->  # while this one works right away
-> -REAVER_VERSION = 1.6.5
-> +REAVER_VERSION = 1.6.6
->  REAVER_SITE = $(call github,t6x,reaver-wps-fork-t6x,v$(REAVER_VERSION))
->  REAVER_LICENSE = GPL-2.0+
->  REAVER_LICENSE_FILES = docs/LICENSE
-> --
-> 2.20.1
->
-Best Regards,
+5732f86 1.1.1
+d8e9b32 pep8
+4795bc7 Add Jackson Matheson to contributors
+26db934 Merge branch 'master' of https://github.com/ljean/modbus-tk
+837a12b Merge pull request #125 from jacksonmatheson/master
+07b06f8 Fixed READ_WRITE_MULTIPLE_REGISTERS, added write_starting_address_FC23
 
-Fabrice
+Also update hash file formatting (2 spaces).
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/python-modbus-tk/python-modbus-tk.hash | 8 ++++----
+ package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+index fc98993..c4fde68 100644
+--- a/package/python-modbus-tk/python-modbus-tk.hash
++++ b/package/python-modbus-tk/python-modbus-tk.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+-md5	65e0a1b12bd6650bdc4f7d823669ab6f  modbus_tk-1.1.0.tar.gz
+-sha256	8e31db8f148871006b569931c31ef17692363acf90a0d0bafd2d868f51b70772  modbus_tk-1.1.0.tar.gz
++md5  e52d5de22cc9d97f2c1086d9b11f0f1e  modbus_tk-1.1.1.tar.gz
++sha256  c6dd004bc6bbff6d9fa93e61654c30a26c817c6632036c656383c9ecadca6639  modbus_tk-1.1.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+-sha256	aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
++sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
++sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+index a2a0cd0..3792757 100644
+--- a/package/python-modbus-tk/python-modbus-tk.mk
++++ b/package/python-modbus-tk/python-modbus-tk.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MODBUS_TK_VERSION = 1.1.0
++PYTHON_MODBUS_TK_VERSION = 1.1.1
+ PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+-PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/49/aa/97e40e2da1b9904a78466b4d759091ef015f6946a423f1675bfcab7950c8
++PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/63/2e/991c8965fd45db4c38fefe1fa70356825e847e1bbb1f14e127aa2b4d37aa
+ PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+ PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
+ PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+-- 
+2.7.4
