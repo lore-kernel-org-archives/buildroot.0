@@ -1,54 +1,52 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri, 29 May 2020 17:32:04 -0300
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Carlos Santos
-Message-ID: <20200529203204.433746-1-unixmania@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 May 2020 23:38:01 +0200
+Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: bump to
+ version 3.9.2
+Message-ID: <20200529202454.5E64B8EB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=f379e75dcd808a06e5d6494de6243f56fdda4477
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Goodbye!
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 22 ----------------------
- 1 file changed, 22 deletions(-)
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 99f47c3a37..88050349db 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -504,28 +504,6 @@ N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/jailhouse/
- F:	package/sunxi-boards/
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index faab7635da..ccbb531833 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
  
--N:	Carlos Santos <unixmania@gmail.com>
--F:	package/busybox/
--F:	package/initscripts/
--F:	package/intel-microcode/
--F:	package/liburiparser/
--F:	package/modem-manager/
--F:	package/pamtester/
--F:	package/pcm-tools/
--F:	package/skeleton-custom/
--F:	package/skeleton-init-common/
--F:	package/skeleton-init-none/
--F:	package/skeleton-init-systemd/
--F:	package/skeleton-init-sysv/
--F:	package/skeleton/
--F:	package/sysvinit/
--F:	package/udev-gentoo-scripts/
--F:	package/util-linux/
--F:	package/tpm2-abrmd/
--F:	package/tpm2-tools/
--F:	package/tpm2-totp/
--F:	package/tpm2-tss/
--
- N:	Carsten Schoenert <c.schoenert@gmail.com>
- F:	package/dvbsnoop/
- F:	package/libdvbsi/
--- 
-2.18.4
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.9.0"
++	bool "3.9.2"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -51,7 +51,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.9.0" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 9f6c95ab08..5741b829f5 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	e23e6df23b79ca81e412cb73a1f48bd95df8d46c7d52a1d073c2ed9d4f3a1a71  at91bootstrap3-v3.9.0.tar.gz
++sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
+ sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
