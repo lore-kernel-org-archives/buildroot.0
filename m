@@ -1,137 +1,130 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 May 2020 23:30:53 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mariadb: security
- bump to 10.3.23
-Message-ID: <20200529211404.B750291DF7@busybox.osuosl.org>
+Date: Fri, 29 May 2020 23:28:42 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/bison: make
+ installation relocatable
+Message-ID: <20200529211404.9CDD991DF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eefa4a2b651c185eb18bf4551ad84619e9a5f8a2
+commit: https://git.buildroot.net/buildroot/commit/?id=ccae0a759e5c0b182cb8844c8e9f2c373e2d1c99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Add two spaces in hash file.
+Our current host-bison installation is not relocatable, so if you
+generate the SDK, and install it in a different location, bison will
+no longer work with failures such as:
 
-Remove patch 0002 as it has been applied upstream.
+bison: /home/user/buildroot/output/host/share/bison/m4sugar/m4sugar.m4: cannot open: No such file or directory
 
-Release notes:
-https://mariadb.com/kb/en/library/mariadb-10323-release-notes/
+This particular issue is already resolved upstream by the addition of
+"relocatable" support, which we enable using --enable-relocatable.
 
-Changelog:
-https://mariadb.com/kb/en/library/mariadb-10323-changelog/
+Once this issue is fixed, a second one pops up: the path to the m4
+program itself is also hardcoded. So we add a patch to fix that as
+well. The patch has been submitted upstream, which have requested for
+further refinements not applicable to the Buildroot context; in the
+meantime, we carry that patch.
 
-Fixes the following security vulnerabilities:
-CVE-2020-2752 - Vulnerability in the MySQL Client product of Oracle MySQL
-(component: C API). Supported versions that are affected are 5.6.47 and
-prior, 5.7.27 and prior and 8.0.17 and prior. Difficult to exploit
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Client. Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Client.
+Fixes:
 
-CVE-2020-2812 - Vulnerability in the MySQL Server product of Oracle MySQL
-(component: Server: Stored Procedure). Supported versions that are affected
-are 5.6.47 and prior, 5.7.29 and prior and 8.0.19 and prior. Easily
-exploitable vulnerability allows high privileged attacker with network
-access via multiple protocols to compromise MySQL Server. Successful attacks
-of this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
+  https://bugs.busybox.net/show_bug.cgi?id=12656
 
-CVE-2020-2814 - Vulnerability in the MySQL Server product of Oracle MySQL
-(component: InnoDB). Supported versions that are affected are 5.6.47 and
-prior, 5.7.28 and prior and 8.0.18 and prior. Easily exploitable
-vulnerability allows high privileged attacker with network access via
-multiple protocols to compromise MySQL Server. Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2020-2760 - Vulnerability in the MySQL Server product of Oracle MySQL
-(component: InnoDB). Supported versions that are affected are 5.7.29 and
-prior and 8.0.19 and prior. Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server. Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server as well as unauthorized update, insert or
-delete access to some of MySQL Server accessible data.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 285986ae5970d13090a27aba6b88743efd696158)
+[yann.morin.1998 at free.fr: add reference to the upstream submission]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 78e78071128ccf2dba8cf76b00b1beb0c5f3e538)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-add-sysroot-path-to-mariadb_config.patch  | 29 ----------------------
- package/mariadb/mariadb.hash                       | 14 +++++------
- package/mariadb/mariadb.mk                         |  2 +-
- 3 files changed, 8 insertions(+), 37 deletions(-)
+ .../0001-src-make-path-to-m4-relocatable.patch     | 70 ++++++++++++++++++++++
+ package/bison/bison.mk                             |  1 +
+ 2 files changed, 71 insertions(+)
 
-diff --git a/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch b/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
-deleted file mode 100644
-index d19947f09a..0000000000
---- a/package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 7e1b6aafeb9fe6558da7506b304c0efb5ea82281 Mon Sep 17 00:00:00 2001
--From: Ryan Coe <bluemrp9@gmail.com>
--Date: Fri, 13 Dec 2019 17:13:26 -0800
--Subject: [PATCH] add sysroot path to mariadb_config
--
--Upstream: https://github.com/mariadb-corporation/mariadb-connector-c/commit/b787c0d69cc00af98cd4ee5bc205e1c7ddaf427a
--Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-----
-- libmariadb/mariadb_config/mariadb_config.c.in | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/libmariadb/mariadb_config/mariadb_config.c.in b/libmariadb/mariadb_config/mariadb_config.c.in
--index 703c9466a1d9214a85f3638d2e3b4ecfef0c7bd6..f5513333e670373f060a3c2574d1d42facfd0337 100644
----- a/libmariadb/mariadb_config/mariadb_config.c.in
--+++ b/libmariadb/mariadb_config/mariadb_config.c.in
--@@ -5,8 +5,8 @@
-- 
-- static char *mariadb_progname;
-- 
---#define INCLUDE "-I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
---#define LIBS    "-L at CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
--+#define INCLUDE "-I at CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I at CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
--+#define LIBS    "-L at CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
-- #define LIBS_SYS "@extra_dynamic_LDFLAGS@"
-- #define CFLAGS  INCLUDE
-- #define VERSION "@MARIADB_CLIENT_VERSION@"
---- 
--2.24.1
--
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 679643887f..9de97360a4 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,9 +1,9 @@
--# From https://downloads.mariadb.org/mariadb/10.3.22
--md5 f712a5e6fde038d0c9c6d2a2cd88b84e  mariadb-10.3.22.tar.gz
--sha1 f92f517fc2ea893ffb3d599ade219bf0a0045265  mariadb-10.3.22.tar.gz
--sha256 3200055dbdc27746981b3bb4bc182e2cb79dcf28ea88014b641a5b81280ccec7  mariadb-10.3.22.tar.gz
--sha512 57a6551b8939f54742963202d50a537e69e8ab9b2dca42ce3d2a09c0f7af368fded71f36af26f6cbd956d54fe43853981ba8fe28b7a3ba97c7d52ea4a0d233f6  mariadb-10.3.22.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.23
-+md5  473950893d29805d9384ec0ed5d7c276  mariadb-10.3.23.tar.gz
-+sha1  c95b6d4cff5e6d63eed05da20561802b9c83e717  mariadb-10.3.23.tar.gz
-+sha256  fc405022457d8eec5991b870cc1c9a07b83b551d6165c414c4d8f31523aa86ae  mariadb-10.3.23.tar.gz
-+sha512  535cd2ce80a95b6c0a1aa559cc3275dfcd559c3a4f958fab3382923190a16e6bc5b4ad79acaa518244512ff618568c239c0edef8a701d958362ede19a29c2986  mariadb-10.3.23.tar.gz
+diff --git a/package/bison/0001-src-make-path-to-m4-relocatable.patch b/package/bison/0001-src-make-path-to-m4-relocatable.patch
+new file mode 100644
+index 0000000000..f40c39c558
+--- /dev/null
++++ b/package/bison/0001-src-make-path-to-m4-relocatable.patch
+@@ -0,0 +1,70 @@
++From 50c8a3af1661c3950b9743d673fd46872860aa08 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 18 May 2020 07:53:20 +0200
++Subject: [PATCH] src: make path to m4 relocatable
++
++Commit a4ede8f85b0c9a254fcb01e5888cee1983095669 ("package: make bison
++a relocatable package") made Bison relocatable, but in fact it still
++contains one absolute reference: the M4 variable, which points to the
++M4 program. Let's fix that by using relocate().
++
++We don't use relocate2() to store the temporary buffer and re-use it,
++because m4path() is only called once.
++
++Upstream: submitted to the bison-patches at gnu.org mailing list
++https://lists.gnu.org/archive/html/bison-patches/2020-05/msg00078.html
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/files.c  | 7 +++++++
++ src/files.h  | 3 +++
++ src/output.c | 2 +-
++ 3 files changed, 11 insertions(+), 1 deletion(-)
++
++diff --git a/src/files.c b/src/files.c
++index 71c10e34..b8b43230 100644
++--- a/src/files.c
+++++ b/src/files.c
++@@ -421,6 +421,13 @@ pkgdatadir (void)
++     }
++ }
++ 
+++char const *
+++m4path (void)
+++{
+++  char const *m4 = getenv("M4");
+++  return m4 ? m4 : relocate(M4);
+++}
+++
++ void
++ output_file_names_free (void)
++ {
++diff --git a/src/files.h b/src/files.h
++index 00814ad0..64b6f8b5 100644
++--- a/src/files.h
+++++ b/src/files.h
++@@ -64,6 +64,9 @@ extern char *all_but_ext;
++ /* Where our data files are installed.  */
++ char const *pkgdatadir (void);
++ 
+++/* Where the m4 program is installed.  */
+++char const *m4path (void);
+++
++ void compute_output_file_names (void);
++ void output_file_names_free (void);
++ 
++diff --git a/src/output.c b/src/output.c
++index 1871fd75..ebe75095 100644
++--- a/src/output.c
+++++ b/src/output.c
++@@ -682,7 +682,7 @@ static void
++ output_skeleton (void)
++ {
++   /* Compute the names of the package data dir and skeleton files.  */
++-  char const *m4 = (m4 = getenv ("M4")) ? m4 : M4;
+++  char const *m4 = m4path ();
++   char const *datadir = pkgdatadir ();
++   char *skeldir = xpath_join (datadir, "skeletons");
++   char *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
++-- 
++2.26.2
++
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 2174a9061c..4cc635c445 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -12,5 +12,6 @@ BISON_LICENSE_FILES = COPYING
+ # parallel build issue in examples/c/reccalc/
+ BISON_MAKE = $(MAKE1)
+ HOST_BISON_DEPENDENCIES = host-m4
++HOST_BISON_CONF_OPTS = --enable-relocatable
  
- # Hash for license files
--sha256 a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
--sha256 240a15a1d0f34d3abca462cdb7e5fb89470967563f16b0e71169e51c1e74cf2b  COPYING
-+sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-+sha256  240a15a1d0f34d3abca462cdb7e5fb89470967563f16b0e71169e51c1e74cf2b  COPYING
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index d5f4ef6bb5..1d0be060df 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.3.22
-+MARIADB_VERSION = 10.3.23
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+ $(eval $(host-autotools-package))
