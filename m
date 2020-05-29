@@ -1,51 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:19:00 +0200
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
- 0.14.4
-Message-ID: <20200602200121.40BBD8256A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 May 2020 23:38:22 +0200
+Subject: [Buildroot] [git commit] board/freescale/common/imx: use generic
+ ddr_fw.bin name
+Message-ID: <20200602200122.DF246812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70eab17ee245a939041d8e058ca4cc8e81182e76
+commit: https://git.buildroot.net/buildroot/commit/?id=798853245b24825cd523ee5c43e3323ed42e687c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-sentry-sdk/python-sentry-sdk.hash | 8 ++++----
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+For some SoCs (i.e.: i.MX8M Nano for now), the DDR training firmware
+in the boot image depends on the type of memory installed on a board
+(LPDDR4, DDR4, etc...). The previous patch makes this firmware name
+agnostic of the DDR type and uses ddr_fw.bin as a generic name. This
+patch makes imx8-bootloader-prepare.sh use this generic name,
+independently of the kind board DDR type.
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index e9dc465592..a2c739e262 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5	1b22a7cb91e1f9b83acbd61709d5e71d  sentry-sdk-0.13.1.tar.gz
--sha256	f6e850f304382d87c5c52c01db8c0004d2ced6a0b073df2f2257168cf31b31aa  sentry-sdk-0.13.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/sentry_sdk/json
-+md5  21ec2fefe3561a12b4ee1efef3748400  sentry-sdk-0.14.4.tar.gz
-+sha256  0e5e947d0f7a969314aa23669a94a9712be5a688ff069ff7b9fc36c66adc160c  sentry-sdk-0.14.4.tar.gz
- # Locally computed sha256 checksums
--sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-+sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index dd47e7c0c3..13495047b9 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index abf2e43de8..cb7c37bfcd 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -9,21 +9,21 @@ main ()
+ 	fi
  
--PYTHON_SENTRY_SDK_VERSION = 0.13.1
-+PYTHON_SENTRY_SDK_VERSION = 0.14.4
- PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/e2/5f/1f5881e98746c16464d46ae9d6ccdd6ce3c01c7e13093ea8a7d917642ee7
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/ab/67/b653a44ce124a2b700a7fc349ca129282c5fec4fdc9197f558178a9e32ae
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+-		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
++		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+ 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00910000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
+-		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
++		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+ 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
+ 
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y$" ${BR2_CONFIG}; then
+-		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
++		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+ 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00960000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 		rm -f ${BINARIES_DIR}/u-boot.its
