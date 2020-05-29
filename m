@@ -1,61 +1,120 @@
-From: Todd Sampson <sampsonats@gmail.com>
-Date: Thu, 28 May 2020 18:42:49 -0400
-Subject: [Buildroot] Cross-compile mariadb-connector-c
-In-Reply-To: <CADJjDh_dv_HUS67aZUDHrD=1Liv9bWjXY3gVOvjat0zX1swLOA@mail.gmail.com>
-References: <CADJjDh8R+_9Br-O9Dgy3Pp=WU7duOnOYEajGX3NJg324AaBx6Q@mail.gmail.com>
- <20200528233045.561f2808@windsurf.home>
- <CADJjDh_dv_HUS67aZUDHrD=1Liv9bWjXY3gVOvjat0zX1swLOA@mail.gmail.com>
-Message-ID: <CADJjDh9BfqbmQxqhZMGGu2rOQJ8WQy6NSHwd0RV7NJHJRskNAg@mail.gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 28 May 2020 18:54:02 -0700
+Subject: [Buildroot] [PATCH 1/1] package/earlyoom: new package
+Message-ID: <20200529015402.2646343-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mariadb server is still in the target.
+EarlyOOM daemon for triggering Linux OOM killer before running out of
+memory, avoiding situations where the machine becomes unresponsive from
+out of control swapping.
 
-On Thu, May 28, 2020 at 5:35 PM Todd Sampson <sampsonats@gmail.com> wrote:
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/earlyoom/Config.in     |  9 +++++++++
+ package/earlyoom/earlyoom.hash |  4 ++++
+ package/earlyoom/earlyoom.mk   | 37 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 package/earlyoom/Config.in
+ create mode 100644 package/earlyoom/earlyoom.hash
+ create mode 100644 package/earlyoom/earlyoom.mk
 
-> No.  I'll do a make clean all just to make sure.
-> [image: tmp.PNG]
-> [image: mariadb-server.PNG]
->
-> On Thu, May 28, 2020 at 5:30 PM Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> wrote:
->
->> On Thu, 28 May 2020 16:51:27 -0400
->> Todd Sampson <sampsonats@gmail.com> wrote:
->>
->> > I'm trying to cross-compile mariadb-connector-c version 3.1.8.  When I
->> > select mysqlsupport and mariadb, it seems like the mariadb server gets
->> put
->> > in my target too, which makes it very big.
->>
->> Have you enabled BR2_PACKAGE_MARIADB_SERVER ? If
->> BR2_PACKAGE_MARIADB_SERVER is disabled, the server should not be
->> installed.
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/9471ec36/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: tmp.PNG
-Type: image/png
-Size: 9919 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/9471ec36/attachment-0002.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: mariadb-server.PNG
-Type: image/png
-Size: 60753 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200528/9471ec36/attachment-0003.png>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0f1574c930..3e749e764b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1388,6 +1388,7 @@ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+ F:	package/clang/
++F:	package/earlyoom/
+ F:	package/gconf/
+ F:	package/libnss/
+ F:	package/lld/
+diff --git a/package/Config.in b/package/Config.in
+index c245abbc42..0f1da74e0f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2338,6 +2338,7 @@ menu "System tools"
+ 	source "package/docker-containerd/Config.in"
+ 	source "package/docker-engine/Config.in"
+ 	source "package/docker-proxy/Config.in"
++	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+ 	source "package/emlog/Config.in"
+diff --git a/package/earlyoom/Config.in b/package/earlyoom/Config.in
+new file mode 100644
+index 0000000000..abb720437c
+--- /dev/null
++++ b/package/earlyoom/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_EARLYOOM
++	bool "earlyoom"
++	help
++	  Early OOM daemon for Linux.
++
++	  User space daemon for triggering Linux OOM killer
++	  before running out of memory, avoiding situations
++	  where the machine becomes unresponsive from out of
++	  control swapping.
+diff --git a/package/earlyoom/earlyoom.hash b/package/earlyoom/earlyoom.hash
+new file mode 100644
+index 0000000000..4cafe50bc3
+--- /dev/null
++++ b/package/earlyoom/earlyoom.hash
+@@ -0,0 +1,4 @@
++# locally calculated
++sha256 b81804fc4470f996014d52252a87a1cf3b43d3d8754140035b10dcee349302b8  earlyoom-1.6.tar.gz
++# License files, locally calculated
++sha256 e730b3ec729de46d987ae73f30ed337e4cbe832f09205330acfa71848c6e0087  LICENSE
+diff --git a/package/earlyoom/earlyoom.mk b/package/earlyoom/earlyoom.mk
+new file mode 100644
+index 0000000000..bea59bd416
+--- /dev/null
++++ b/package/earlyoom/earlyoom.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# earlyoom
++#
++################################################################################
++
++EARLYOOM_VERSION = 1.6
++EARLYOOM_SITE = $(call github,rfjakob,earlyoom,v$(EARLYOOM_VERSION))
++EARLYOOM_LICENSE = MIT
++EARLYOOM_LICENSE_FILES = LICENSE
++
++EARLYOOM_MAKE_OPTS = \
++	CC=$(TARGET_CC) \
++	DESTDIR=$(TARGET_DIR) \
++	VERSION=$(EARLYOOM_VERSION) \
++	PREFIX=/usr \
++	SYSTEMDUNITDIR=/usr/lib/systemd/system
++
++define EARLYOOM_CONFIGURE_CMDS
++	$(SED) "/systemctl/d" $(EARLYOOM_DIR)/Makefile
++	$(SED) "/chcon/d" $(EARLYOOM_DIR)/Makefile
++	$(SED) "/update-rc.d/d" $(EARLYOOM_DIR)/Makefile
++endef
++
++define EARLYOOM_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) earlyoom $(EARLYOOM_MAKE_OPTS)
++endef
++
++define EARLYOOM_INSTALL_INIT_SYSV
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-initscript $(EARLYOOM_MAKE_OPTS)
++endef
++
++define EARLYOOM_INSTALL_INIT_SYSTEMD
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(EARLYOOM_MAKE_OPTS)
++endef
++
++$(eval $(generic-package))
+-- 
+2.26.2
