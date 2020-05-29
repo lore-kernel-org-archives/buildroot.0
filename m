@@ -1,66 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:06:25 +0200
-Subject: [Buildroot] [PATCH V2 1/2] package/c-periphery: bump version to
- 2.2.0
-In-Reply-To: <20200529142012.3869-1-offougajoris@gmail.com>
-References: <20200529142012.3869-1-offougajoris@gmail.com>
-Message-ID: <20200529230625.0a02d705@windsurf.home>
+Date: Fri, 29 May 2020 23:08:03 +0200
+Subject: [Buildroot] [git commit branch/next] configs/atmel_sama5d27_som1:
+ bump to linux4sam-2020.04
+Message-ID: <20200529205052.22A2291EAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joris,
+commit: https://git.buildroot.net/buildroot/commit/?id=61b606541a392a02bfb42e4ced152ca08cfc53a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 29 May 2020 16:20:12 +0200
-Joris Offouga <offougajoris@gmail.com> wrote:
+This commit:
+  - bump Linux & U-Boot to linux4sam-2020.04
+  - bump at91bootstrap to v3.9.2
 
-> Since commit "cmake: add cmake build support"
-> (https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
-> c-periphery implement cmake build, so change generic-package instead of cmake-package
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-It's the opposite you're using: you' replacing generic-package by
-cmake-package, so the wording here is confusing.
-
-> + #include <unistd.h>
-> + #include <fcntl.h>
-> ++
-> ++#define __USE_XOPEN
-
-Defining a __<something> define from <features.h> is almost always
-wrong.
-
-According to man poll(2):
-
-       When  compiling with _XOPEN_SOURCE defined, one also has the following,
-       which convey no further information beyond the bits listed above:
-
-       POLLRDNORM
-              Equivalent to POLLIN.
-
-
-So, you need to #define _XOPEN_SOURCE instead.
-
-> -C_PERIPHERY_VERSION = 2.1.0
-> +C_PERIPHERY_VERSION = 2.2.0
->  C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
->  C_PERIPHERY_INSTALL_STAGING = YES
->  # only a static library
-> @@ -12,16 +12,4 @@ C_PERIPHERY_INSTALL_TARGET = NO
-
-This is not longer true: with the CMake build system, a shared library
-is built and installed. So with your change the package is broken: any
-application that links against c-periphery will be linked against the
-shared library, but the shared library is not installed in
-$(TARGET_DIR).
-
-Could you adjust this and send a new version ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index 6b5def3c64..b608bac0c6 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-at91-linux4sam-2020.04.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
+@@ -71,12 +71,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.2)/at91bootstrap3-v3.9.2.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.04)/u-boot-at91-linux4sam-2020.04.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
