@@ -1,123 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:11:02 +0200
-Subject: [Buildroot] [git commit] package/rust: allow using python3
- interpreter
-Message-ID: <20200602200122.7AB54812A0@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 May 2020 23:38:22 +0200
+Subject: [Buildroot] [git commit] package/freescale-imx: Add option for DDR
+ FW need
+Message-ID: <20200602200122.C7B55812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02703108eca8353ff45c0842d9b882a0dc37c04b
+commit: https://git.buildroot.net/buildroot/commit/?id=6bb7f3b81092e7005470c7d689a566dbc1d059c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
-by removing python2 tests from configure script [2].
+Only some i.MX8 needs a DDR training firmware (8M, 8MM, 8MN). Some other
+i.MX8 (QuadMax, QuadXPlus) rely on system controller for that task.
 
-Using python3 will help to remove python2 in a near future.
-
-[1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
-[2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Patrick Havelange <patrick.havelange@essensium.com>
-Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Suggested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+[yann.morin.1998 at free.fr:
+  - use the new variable to drive the firmware installation
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-configure-use-default-python-interpreter.patch | 37 ++++++++++++++++++++++
- package/rust/rust.mk                               | 17 +++++++---
- 2 files changed, 49 insertions(+), 5 deletions(-)
+ package/freescale-imx/Config.in                    | 6 ++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
-new file mode 100644
-index 0000000000..0ae9fab786
---- /dev/null
-+++ b/package/rust/0002-configure-use-default-python-interpreter.patch
-@@ -0,0 +1,37 @@
-+From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 26 May 2020 18:24:25 +0200
-+Subject: [PATCH] configure: use default python interpreter
-+
-+Don't try to use python2 if available, use the python interpreter available
-+in ouput/host/bin/python whatever the python version is.
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure | 12 ------------
-+ 1 file changed, 12 deletions(-)
-+
-+diff --git a/configure b/configure
-+index eeb8d081d34..6014a982f47 100755
-+--- a/configure
-++++ b/configure
-+@@ -2,16 +2,4 @@
-+ 
-+ script="$(dirname $0)"/src/bootstrap/configure.py
-+ 
-+-try() {
-+-    cmd=$1
-+-    shift
-+-    T=$($cmd --version 2>/dev/null)
-+-    if [ $? -eq 0 ]; then
-+-        exec $cmd "$script" "$@"
-+-    fi
-+-}
-+-
-+-try python2.7 "$@"
-+-try python27 "$@"
-+-try python2 "$@"
-+ exec python $script "$@"
-+-- 
-+2.25.4
-+
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 5d14fc6682..25153966f2 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -17,9 +17,16 @@ HOST_RUST_DEPENDENCIES = \
- 	host-rust-bin \
- 	host-cargo-bin \
- 	host-openssl \
--	host-python \
- 	$(BR2_CMAKE_HOST_DEPENDENCY)
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index b0c7de8436..0be37ce956 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -45,12 +45,15 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
  
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
-+HOST_RUST_DEPENDENCIES += host-python3
-+else
-+HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
-+HOST_RUST_DEPENDENCIES += host-python
-+endif
-+
- HOST_RUST_VERBOSITY = $(if $(VERBOSE),2,0)
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+ 	bool "imx8m"
++	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
  
- # Some vendor crates contain Cargo.toml.orig files. The associated
-@@ -44,7 +51,7 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
- 		echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
- 		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
--		echo 'python = "$(HOST_DIR)/bin/python2"'; \
-+		echo 'python = "$(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION)"'; \
- 		echo 'submodules = false'; \
- 		echo 'vendor = true'; \
- 		echo 'compiler-docs = false'; \
-@@ -61,12 +68,12 @@ define HOST_RUST_CONFIGURE_CMDS
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+ 	bool "imx8mm"
++	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+ 	bool "imx8mn"
++	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 	bool "imx8x"
+@@ -96,6 +99,9 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 
++config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
++	bool
++
+ source "package/freescale-imx/imx-alsa-plugins/Config.in"
+ source "package/freescale-imx/imx-codec/Config.in"
+ source "package/freescale-imx/imx-kobs/Config.in"
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index cd0dafb3de..7309d21b7a 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -18,7 +18,7 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
  endef
  
- define HOST_RUST_BUILD_CMDS
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py build
- endef
- 
- define HOST_RUST_INSTALL_CMDS
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
--	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py dist
-+	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py install
- endef
- 
- $(eval $(host-generic-package))
+-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW),y)
+ FIRMWARE_IMX_INSTALL_IMAGES = YES
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ define FIRMWARE_IMX_PREPARE_LPDDR4_FW
