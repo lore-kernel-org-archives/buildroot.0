@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:37:53 +0200
-Subject: [Buildroot] [git commit] package/dav1d: bump version to 0.7.0
-Message-ID: <20200602200122.BBDA3812A0@busybox.osuosl.org>
+Date: Fri, 29 May 2020 23:32:47 +0200
+Subject: [Buildroot] [git commit] package/libubootenv: bump to version
+ c91dcca
+Message-ID: <20200602200122.A1E57812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20a9f7b92181d1abc930b328ab7f387758fa323b
+commit: https://git.buildroot.net/buildroot/commit/?id=7a3be87d55735798407aa92d66c2ea302c1ee028
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://code.videolan.org/videolan/dav1d/-/releases/0.7.0
+c91dcca ubi, write: fix invalid envsize ptr to UBI_IOCVOLUP
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index b91ae0710a..812b4fb13b 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index d7d71fc717..753f8f54b9 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7fcfb4d2e43681f99faaad29d2a81c0ecc42d6e2b94eb4d1fded4e9dcb3661f1  dav1d-0.6.0.tar.bz2
-+sha256  8057149f5f08c5ca47e1344fba9046ff84ac85ca409d7adbec8268c707ec5c19  dav1d-0.7.0.tar.bz2
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 4dc1e46826..9243267e97 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
+ # Locally calculated
+-sha256  1afd4e70242a8196bf25622a4558d0baf9db5652d37d217156c08f6e37fd8e80  libubootenv-f4b9cde3815abe84a98079cedd515283ea08c16b.tar.gz
++sha256  9a905431113db379900e862e8175575ecda21b3c63a87389ffc4a65122dfec9e  libubootenv-c91dccab34294b5ea9c6502d01bfdaa49639fd90.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 2a7c0e7415..1b6f116678 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 0.6.0
-+DAV1D_VERSION = 0.7.0
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-LIBUBOOTENV_VERSION = f4b9cde3815abe84a98079cedd515283ea08c16b
++LIBUBOOTENV_VERSION = c91dccab34294b5ea9c6502d01bfdaa49639fd90
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
