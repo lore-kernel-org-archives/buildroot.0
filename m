@@ -1,71 +1,129 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 May 2020 23:41:46 +0200
-Subject: [Buildroot] [PATCH v4 0/5] imx: add i.MX8M Nano EVK board
- support
-In-Reply-To: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <20200529214146.GS8737@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 29 May 2020 23:45:23 +0200
+Subject: [Buildroot] [for-next] package/rust: allow using python3
+ interpreter
+In-Reply-To: <20200529231401.4c66c5d9@windsurf.home>
+References: <20200526182037.592824-1-romain.naour@gmail.com>
+ <20200529231401.4c66c5d9@windsurf.home>
+Message-ID: <49ffaaec-73fe-0cd0-9a4d-ff920f5c2562@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-St?phane, All,
+Hi Thomas,
 
-On 2020-05-27 07:07 +0200, Stephane Viau spake thusly:
-> This series adds support for the NXP i.MX8M Nano EVK board.
+Le 29/05/2020 ? 23:14, Thomas Petazzoni a ?crit?:
+> Hello Romain,
 > 
-> Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
-> type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
-> half of the series introduce the DDR training selection for the whole i.MX8 M
-> SoC family, as well as a separation of the DDR and HDMI FW copy.
+> On Tue, 26 May 2020 20:20:37 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
 > 
-> The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
-> U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
-> reference boards.
+>> Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
+>> by removing python2 tests from configure script [2].
+>>
+>> Using python3 will help to remove python2 in a near future.
+>>
+>> [1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
+>> [2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Titouan Christophe <titouan.christophe@railnova.eu>
+>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>> Cc: Patrick Havelange <patrick.havelange@essensium.com>
 > 
-> Stephane Viau (5):
->   package/freescale-imx: Add option for DDR FW need
-
-I'll reply separately to that one.
-
->   package/freescale-imx/firmware-imx: add choice for DDR training
->     binaries
->   board/freescale/common/imx: use generic ddr_fw.bin name
->   board/freescale/common/imx: add support for i.MX8M Nano
->   configs/freescale_imx8mnevk: new defconfig
-
-Whole series applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  .gitlab-ci.yml                                     |  1 +
->  DEVELOPERS                                         |  4 ++
->  .../common/imx/imx8-bootloader-prepare.sh          |  6 +-
->  board/freescale/common/imx/post-image.sh           |  2 +
->  board/freescale/imx8mnevk/readme.txt               | 73 ++++++++++++++++++++++
->  configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
->  package/freescale-imx/Config.in                    |  6 ++
->  package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 43 ++++++++++++-
->  9 files changed, 197 insertions(+), 5 deletions(-)
->  create mode 100644 board/freescale/imx8mnevk/readme.txt
->  create mode 100644 configs/freescale_imx8mnevk_defconfig
+> Thanks, I have applied to next, but I have a few comments/questions,
+> see below.
 > 
-> -- 
-> 2.7.4
+>> diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
+>> new file mode 100644
+>> index 0000000000..34d97bb4cf
+>> --- /dev/null
+>> +++ b/package/rust/0002-configure-use-default-python-interpreter.patch
+>> @@ -0,0 +1,37 @@
+>> +From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
+>> +From: Romain Naour <romain.naour@gmail.com>
+>> +Date: Tue, 26 May 2020 18:24:25 +0200
+>> +Subject: [PATCH] configure: use default python interpreter
+>> +
+>> +Don't try to use python2 if available, use the python interpreter available
+>> +in ouput/host/bin/python whateverer the python version is.
+>> +
+>> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> +---
+>> + configure | 12 ------------
+>> + 1 file changed, 12 deletions(-)
+>> +
+>> +diff --git a/configure b/configure
+>> +index eeb8d081d34..6014a982f47 100755
+>> +--- a/configure
+>> ++++ b/configure
+>> +@@ -2,16 +2,4 @@
+>> + 
+>> + script="$(dirname $0)"/src/bootstrap/configure.py
+>> + 
+>> +-try() {
+>> +-    cmd=$1
+>> +-    shift
+>> +-    T=$($cmd --version 2>/dev/null)
+>> +-    if [ $? -eq 0 ]; then
+>> +-        exec $cmd "$script" "$@"
+>> +-    fi
+>> +-}
+>> +-
+>> +-try python2.7 "$@"
+>> +-try python27 "$@"
+>> +-try python2 "$@"
+>> + exec python $script "$@"
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Shouldn't we try to find an upstreamable solution here, such as perhaps
+> a PYTHON environment variable, or an argument to configure that allows
+> to specify the path to the Python interpreter ?
+> 
+> But in fact, this path to the Python interpreter is already in the
+> config.toml file that we generate, why isn't this path used ?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+humm, It seems that this configure script is not used at all by rust package
+since we use directly x.py...
+So we can just drop this patch.
+
+> 
+>> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+>> index 5d14fc6682..25153966f2 100644
+>> --- a/package/rust/rust.mk
+>> +++ b/package/rust/rust.mk
+>> @@ -17,9 +17,16 @@ HOST_RUST_DEPENDENCIES = \
+>>  	host-rust-bin \
+>>  	host-cargo-bin \
+>>  	host-openssl \
+>> -	host-python \
+>>  	$(BR2_CMAKE_HOST_DEPENDENCY)
+>>  
+>> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>> +HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+>> +HOST_RUST_DEPENDENCIES += host-python3
+>> +else
+>> +HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+>> +HOST_RUST_DEPENDENCIES += host-python
+>> +endif
+> 
+> I think we should start inverting this logic, i.e use host-python3 by
+> default if there is no python interpreter selected for the target. We
+> should do that not only here, but in all packages that have a logic
+> like that: python3 should become our default, and python2 should become
+> the exception.
+
+Yes, with this change we can remove python3-<module> added to provide python3
+modules. I hope packages that still use python2 will only require the python2
+interpreter without any additional modules.
+
+Best regards,
+Romain
+
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
