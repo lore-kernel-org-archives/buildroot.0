@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:32:52 +0200
-Subject: [Buildroot] [git commit branch/next] package/mongoose: bump to to
- version 6.18
-Message-ID: <20200529211535.D62C191EAF@busybox.osuosl.org>
+Date: Fri, 29 May 2020 23:32:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/libubootenv: bump to
+ version c91dcca
+Message-ID: <20200529211535.CAC538E849@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=517bae2087032f36b04639ccc8aec00638e1be1f
+commit: https://git.buildroot.net/buildroot/commit/?id=7a3be87d55735798407aa92d66c2ea302c1ee028
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See https://github.com/cesanta/mongoose/releases/tag/6.18
+c91dcca ubi, write: fix invalid envsize ptr to UBI_IOCVOLUP
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mongoose/mongoose.hash | 2 +-
- package/mongoose/mongoose.mk   | 2 +-
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index c5de11bec2..b8be69be0b 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index d7d71fc717..753f8f54b9 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5bff3cc70bb2248cf87d06a3543f120f3b29b9368d25a7715443cb10612987cc  mongoose-6.17.tar.gz
-+sha256  f5c10346abc9c72f7cac7885d853ca064fb09aad57580433941a8fd7a3543769  mongoose-6.18.tar.gz
- sha256  fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 7944f5e534..87f56d7894 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
+ # Locally calculated
+-sha256  1afd4e70242a8196bf25622a4558d0baf9db5652d37d217156c08f6e37fd8e80  libubootenv-f4b9cde3815abe84a98079cedd515283ea08c16b.tar.gz
++sha256  9a905431113db379900e862e8175575ecda21b3c63a87389ffc4a65122dfec9e  libubootenv-c91dccab34294b5ea9c6502d01bfdaa49639fd90.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 2a7c0e7415..1b6f116678 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONGOOSE_VERSION = 6.17
-+MONGOOSE_VERSION = 6.18
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+-LIBUBOOTENV_VERSION = f4b9cde3815abe84a98079cedd515283ea08c16b
++LIBUBOOTENV_VERSION = c91dccab34294b5ea9c6502d01bfdaa49639fd90
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
