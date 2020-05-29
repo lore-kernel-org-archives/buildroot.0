@@ -1,141 +1,115 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 29 May 2020 07:09:26 -0500
-Subject: [Buildroot] [PATCH 1/1] package/earlyoom: new package
-In-Reply-To: <20200529015402.2646343-1-joseph.kogut@gmail.com>
-References: <20200529015402.2646343-1-joseph.kogut@gmail.com>
-Message-ID: <CANQCQpbK-smTZ8Yv12XJxn06V8J1jOqwq4dbGMjTDzS0j3uECg@mail.gmail.com>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Fri, 29 May 2020 15:49:27 +0200
+Subject: [Buildroot] [PATCH 1/2] package/c-periphery: bump version to 2.2.0
+Message-ID: <20200529134928.1407-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joseph,
+Since commit "cmake: add cmake build support"
+(https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
+c-periphery implement cmake build, so change generic-package instead of cmake-package
 
-On Thu, May 28, 2020 at 8:58 PM Joseph Kogut <joseph.kogut@gmail.com> wrote:
->
-> EarlyOOM daemon for triggering Linux OOM killer before running out of
-> memory, avoiding situations where the machine becomes unresponsive from
-> out of control swapping.
->
+The hash of the license file is updated due to an update in the
+copyright year:
 
-Could add a few references to where other distros are adding this in
-by default.  I see Fedora has a pretty good scenario captured
-https://fedoraproject.org/wiki/Changes/EnableEarlyoom
+  - Copyright (c) 2014-2019 vsergeev / Ivan (Vanya) A. Sergeev
+  + Copyright (c) 2014-2029 vsergeev / Ivan (Vanya) A. Sergeev
 
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+---
+ .../0001-gpio.c-add-__USE_XOPEN-define.patch  | 38 +++++++++++++++++++
+ package/c-periphery/c-periphery.hash          |  4 +-
+ package/c-periphery/c-periphery.mk            | 16 +-------
+ 3 files changed, 42 insertions(+), 16 deletions(-)
+ create mode 100644 package/c-periphery/0001-gpio.c-add-__USE_XOPEN-define.patch
 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/earlyoom/Config.in     |  9 +++++++++
->  package/earlyoom/earlyoom.hash |  4 ++++
->  package/earlyoom/earlyoom.mk   | 37 ++++++++++++++++++++++++++++++++++
->  5 files changed, 52 insertions(+)
->  create mode 100644 package/earlyoom/Config.in
->  create mode 100644 package/earlyoom/earlyoom.hash
->  create mode 100644 package/earlyoom/earlyoom.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0f1574c930..3e749e764b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1388,6 +1388,7 @@ N:        Joseph Kogut <joseph.kogut@gmail.com>
->  F:     package/at-spi2-atk/
->  F:     package/at-spi2-core/
->  F:     package/clang/
-> +F:     package/earlyoom/
->  F:     package/gconf/
->  F:     package/libnss/
->  F:     package/lld/
-> diff --git a/package/Config.in b/package/Config.in
-> index c245abbc42..0f1da74e0f 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2338,6 +2338,7 @@ menu "System tools"
->         source "package/docker-containerd/Config.in"
->         source "package/docker-engine/Config.in"
->         source "package/docker-proxy/Config.in"
-> +       source "package/earlyoom/Config.in"
->         source "package/efibootmgr/Config.in"
->         source "package/efivar/Config.in"
->         source "package/emlog/Config.in"
-> diff --git a/package/earlyoom/Config.in b/package/earlyoom/Config.in
-> new file mode 100644
-> index 0000000000..abb720437c
-> --- /dev/null
-> +++ b/package/earlyoom/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_EARLYOOM
-> +       bool "earlyoom"
-> +       help
-> +         Early OOM daemon for Linux.
-> +
-> +         User space daemon for triggering Linux OOM killer
-> +         before running out of memory, avoiding situations
-> +         where the machine becomes unresponsive from out of
-> +         control swapping.
-
-Add the github url
-
-> diff --git a/package/earlyoom/earlyoom.hash b/package/earlyoom/earlyoom.hash
-> new file mode 100644
-> index 0000000000..4cafe50bc3
-> --- /dev/null
-> +++ b/package/earlyoom/earlyoom.hash
-> @@ -0,0 +1,4 @@
-> +# locally calculated
-> +sha256 b81804fc4470f996014d52252a87a1cf3b43d3d8754140035b10dcee349302b8  earlyoom-1.6.tar.gz
-> +# License files, locally calculated
-> +sha256 e730b3ec729de46d987ae73f30ed337e4cbe832f09205330acfa71848c6e0087  LICENSE
-> diff --git a/package/earlyoom/earlyoom.mk b/package/earlyoom/earlyoom.mk
-> new file mode 100644
-> index 0000000000..bea59bd416
-> --- /dev/null
-> +++ b/package/earlyoom/earlyoom.mk
-> @@ -0,0 +1,37 @@
-> +################################################################################
-> +#
-> +# earlyoom
-> +#
-> +################################################################################
-> +
-> +EARLYOOM_VERSION = 1.6
-> +EARLYOOM_SITE = $(call github,rfjakob,earlyoom,v$(EARLYOOM_VERSION))
-> +EARLYOOM_LICENSE = MIT
-> +EARLYOOM_LICENSE_FILES = LICENSE
-> +
-> +EARLYOOM_MAKE_OPTS = \
-> +       CC=$(TARGET_CC) \
-> +       DESTDIR=$(TARGET_DIR) \
-> +       VERSION=$(EARLYOOM_VERSION) \
-> +       PREFIX=/usr \
-> +       SYSTEMDUNITDIR=/usr/lib/systemd/system
-> +
-> +define EARLYOOM_CONFIGURE_CMDS
-> +       $(SED) "/systemctl/d" $(EARLYOOM_DIR)/Makefile
-> +       $(SED) "/chcon/d" $(EARLYOOM_DIR)/Makefile
-> +       $(SED) "/update-rc.d/d" $(EARLYOOM_DIR)/Makefile
-> +endef
-> +
-> +define EARLYOOM_BUILD_CMDS
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) earlyoom $(EARLYOOM_MAKE_OPTS)
-> +endef
-> +
-> +define EARLYOOM_INSTALL_INIT_SYSV
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-initscript $(EARLYOOM_MAKE_OPTS)
-
-Do we need to do anything to adjust the name of the installed script
-(currently installs as /etc/init.d/earlyoom)?  Maybe a S01 or S02?
-
-> +endef
-> +
-> +define EARLYOOM_INSTALL_INIT_SYSTEMD
-> +       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(EARLYOOM_MAKE_OPTS)
-
-I noticed the earlyoom.default was setting EARLYOOM_ARGS="-r 3600".
-Do we need to 'make install-default' in both INSTALL_INIT steps?
-
-Regards,
-Matt
+diff --git a/package/c-periphery/0001-gpio.c-add-__USE_XOPEN-define.patch b/package/c-periphery/0001-gpio.c-add-__USE_XOPEN-define.patch
+new file mode 100644
+index 0000000000..953165f6bd
+--- /dev/null
++++ b/package/c-periphery/0001-gpio.c-add-__USE_XOPEN-define.patch
+@@ -0,0 +1,38 @@
++From 7864e15c95c4500fbd8f64fcd543c707202dc09e Mon Sep 17 00:00:00 2001
++From: Joris Offouga <offougajoris@gmail.com>
++Date: Fri, 29 May 2020 13:48:58 +0200
++Subject: [PATCH] gpio.c: add __USE_XOPEN define
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The code needs __USE_XOPEN for some poll() flags.
++
++Fix build with uclibc:
++src/gpio.c: In function gpio_poll_multiple?:
++src/gpio.c:242:61: error: ?POLLRDNORM? undeclared (first use in this function)
++(POLLPRI | POLLERR) : (POLLIN | POLLRDNORM);
++                                ^
++
++Signed-off-by: Joris Offouga <offougajoris@gmail.com>
++[Upstream Status: https://github.com/vsergeev/c-periphery/pull/24]
++---
++ src/gpio.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/gpio.c b/src/gpio.c
++index b4039f1..5c48855 100644
++--- a/src/gpio.c
+++++ b/src/gpio.c
++@@ -13,6 +13,8 @@
++ 
++ #include <unistd.h>
++ #include <fcntl.h>
+++
+++#define __USE_XOPEN
++ #include <poll.h>
++ #include <sys/stat.h>
++ #include <errno.h>
++-- 
++2.20.1
++
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index 244f8f60f1..208ab5de97 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654  c-periphery-2.1.0.tar.gz
+-sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3  LICENSE
++sha256 2c1714962f8e4a29ded69f3fc990f4e039162ac9d213a21062a4df9e105b83a4  c-periphery-2.2.0.tar.gz
++sha256 7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index bb50434efa..67e637cfc7 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_PERIPHERY_VERSION = 2.1.0
++C_PERIPHERY_VERSION = 2.2.0
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+ # only a static library
+@@ -12,16 +12,4 @@ C_PERIPHERY_INSTALL_TARGET = NO
+ C_PERIPHERY_LICENSE = MIT
+ C_PERIPHERY_LICENSE_FILES = LICENSE
+ 
+-define C_PERIPHERY_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
+-
+-# There is no 'install' rule in the Makefile, so we handle things
+-# manually.
+-define C_PERIPHERY_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
+-	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
+-	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
+-- 
+2.20.1
