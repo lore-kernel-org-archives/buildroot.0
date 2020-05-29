@@ -1,49 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 May 2020 23:14:38 +0200
-Subject: [Buildroot] [PATCH] package/rustc: RUSTC_TARGET_NAME is needed
- to build host-rust
-In-Reply-To: <20200508152739.1625844-1-romain.naour@gmail.com> (Romain Naour's
- message of "Fri, 8 May 2020 17:27:39 +0200")
-References: <20200508152739.1625844-1-romain.naour@gmail.com>
-Message-ID: <87k10umojl.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 May 2020 23:15:02 +0200
+Subject: [Buildroot] [git commit branch/next] configs/imx28evk: bump U-Boot
+ and kernel versions
+Message-ID: <20200529205747.302E791D15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2ed441f95c8f6b3db48cc214f57d3bf35bfd5419
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > As reported on bugzilla [1], the host-rust package fail when
- > the target architecture or the target libc is not supported.
+Bump U-Boot to 2020.04 and kernel to 5.4.42 versions.
 
- > The error is the following:
- > failed to parse TOML configuration 'config.toml': expected a table key, found a right bracket at line 15
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/freescale_imx28evk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > In such case BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is
- > not set thus RUSTC_TARGET_NAME is also not set [2].
-
- > But RUSTC_TARGET_NAME is needed to generate the file config.toml [3]
-
- > Add BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS in the host-rust
- > dependency.
-
- > The commit [4] that allowed to select host-rust when the target
- > architecture or the target libc is not supported, should have
- > allowed to select only host-rustc-bin.
-
- > Fixes:
- > Bug #12691
-
- > [1] https://bugs.busybox.net/show_bug.cgi?id=12691
- > [2] https://git.buildroot.net/buildroot/tree/package/rustc/rustc.mk?h=2020.05-rc1#n10
- > [3] https://git.buildroot.net/buildroot/tree/package/rust/rust.mk?h=2020.05-rc1#n41
- > [4] 025b863e6facb7b219b82ee6ee7a7916c2c3c47e
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Sam Voss <sam.voss@gmail.com>
-
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+index 520c63f673..bd5b007ed1 100644
+--- a/configs/freescale_imx28evk_defconfig
++++ b/configs/freescale_imx28evk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_arm926t=y
+ 
+-# Linux headers same as kernel, a 5.3 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+@@ -11,7 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx28evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
+ 
+ # Filesystem
