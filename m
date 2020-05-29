@@ -1,114 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:14:01 +0200
-Subject: [Buildroot] [for-next] package/rust: allow using python3
- interpreter
-In-Reply-To: <20200526182037.592824-1-romain.naour@gmail.com>
-References: <20200526182037.592824-1-romain.naour@gmail.com>
-Message-ID: <20200529231401.4c66c5d9@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 May 2020 23:14:38 +0200
+Subject: [Buildroot] [PATCH] package/rustc: RUSTC_TARGET_NAME is needed
+ to build host-rust
+In-Reply-To: <20200508152739.1625844-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Fri, 8 May 2020 17:27:39 +0200")
+References: <20200508152739.1625844-1-romain.naour@gmail.com>
+Message-ID: <87k10umojl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On Tue, 26 May 2020 20:20:37 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+ > As reported on bugzilla [1], the host-rust package fail when
+ > the target architecture or the target libc is not supported.
 
-> Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
-> by removing python2 tests from configure script [2].
-> 
-> Using python3 will help to remove python2 in a near future.
-> 
-> [1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
-> [2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Patrick Havelange <patrick.havelange@essensium.com>
+ > The error is the following:
+ > failed to parse TOML configuration 'config.toml': expected a table key, found a right bracket at line 15
 
-Thanks, I have applied to next, but I have a few comments/questions,
-see below.
+ > In such case BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is
+ > not set thus RUSTC_TARGET_NAME is also not set [2].
 
-> diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
-> new file mode 100644
-> index 0000000000..34d97bb4cf
-> --- /dev/null
-> +++ b/package/rust/0002-configure-use-default-python-interpreter.patch
-> @@ -0,0 +1,37 @@
-> +From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@gmail.com>
-> +Date: Tue, 26 May 2020 18:24:25 +0200
-> +Subject: [PATCH] configure: use default python interpreter
-> +
-> +Don't try to use python2 if available, use the python interpreter available
-> +in ouput/host/bin/python whateverer the python version is.
-> +
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +---
-> + configure | 12 ------------
-> + 1 file changed, 12 deletions(-)
-> +
-> +diff --git a/configure b/configure
-> +index eeb8d081d34..6014a982f47 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -2,16 +2,4 @@
-> + 
-> + script="$(dirname $0)"/src/bootstrap/configure.py
-> + 
-> +-try() {
-> +-    cmd=$1
-> +-    shift
-> +-    T=$($cmd --version 2>/dev/null)
-> +-    if [ $? -eq 0 ]; then
-> +-        exec $cmd "$script" "$@"
-> +-    fi
-> +-}
-> +-
-> +-try python2.7 "$@"
-> +-try python27 "$@"
-> +-try python2 "$@"
-> + exec python $script "$@"
+ > But RUSTC_TARGET_NAME is needed to generate the file config.toml [3]
 
-Shouldn't we try to find an upstreamable solution here, such as perhaps
-a PYTHON environment variable, or an argument to configure that allows
-to specify the path to the Python interpreter ?
+ > Add BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS in the host-rust
+ > dependency.
 
-But in fact, this path to the Python interpreter is already in the
-config.toml file that we generate, why isn't this path used ?
+ > The commit [4] that allowed to select host-rust when the target
+ > architecture or the target libc is not supported, should have
+ > allowed to select only host-rustc-bin.
 
-> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> index 5d14fc6682..25153966f2 100644
-> --- a/package/rust/rust.mk
-> +++ b/package/rust/rust.mk
-> @@ -17,9 +17,16 @@ HOST_RUST_DEPENDENCIES = \
->  	host-rust-bin \
->  	host-cargo-bin \
->  	host-openssl \
-> -	host-python \
->  	$(BR2_CMAKE_HOST_DEPENDENCY)
->  
-> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> +HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
-> +HOST_RUST_DEPENDENCIES += host-python3
-> +else
-> +HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
-> +HOST_RUST_DEPENDENCIES += host-python
-> +endif
+ > Fixes:
+ > Bug #12691
 
-I think we should start inverting this logic, i.e use host-python3 by
-default if there is no python interpreter selected for the target. We
-should do that not only here, but in all packages that have a logic
-like that: python3 should become our default, and python2 should become
-the exception.
+ > [1] https://bugs.busybox.net/show_bug.cgi?id=12691
+ > [2] https://git.buildroot.net/buildroot/tree/package/rustc/rustc.mk?h=2020.05-rc1#n10
+ > [3] https://git.buildroot.net/buildroot/tree/package/rust/rust.mk?h=2020.05-rc1#n41
+ > [4] 025b863e6facb7b219b82ee6ee7a7916c2c3c47e
 
-Thanks!
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Sam Voss <sam.voss@gmail.com>
 
-Thomas
+Committed to 2020.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
