@@ -1,46 +1,52 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 29 May 2020 23:56:17 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: disable
- feature-relocatable
-In-Reply-To: <87ftbimo2x.fsf@dell.be.48ers.dk>
-References: <20200517102823.15132-1-ps.report@gmx.net>
- <87ftbimo2x.fsf@dell.be.48ers.dk>
-Message-ID: <20200529235617.45b7a4ff@gmx.net>
+Date: Sat, 30 May 2020 00:21:10 +0200
+Subject: [Buildroot] [PATCH v2] package/cvs: fix mktime related compile
+ failure
+In-Reply-To: <20200529210705.0f1f9efe@windsurf.home>
+References: <20200528215912.30258-1-ps.report@gmx.net>
+ <20200529080948.0476a536@windsurf.home>
+ <20200529204343.4b3c92bb@gmx.net>
+ <20200529210705.0f1f9efe@windsurf.home>
+Message-ID: <20200530002110.4e6fb1ee@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Thomas,
 
-On Fri, 29 May 2020 23:24:38 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+On Fri, 29 May 2020 21:07:05 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:  
-> 
->  > Disable feature-relocatable to avoid a path mismatch while searching qml
->  > files and buildroot BR2_ROOTFS_MERGED_USR feature enabled.  
-> 
->  > As described in [1] with feature-relocatable Qt determines the search
->  > pathes relative to the location of libQt5Core.so, with BR2_ROOTFS_MERGED_USR
->  > enabled found first under the symlink path '/lib' instead of the install
->  > path '/usr/lib' and searches sequentially for qml files under '/qml' instead
->  > of the correct '/usr/qml'.  
-> 
->  > Fixes:
->  >   - https://bugs.busybox.net/show_bug.cgi?id=12906  
-> 
->  > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4ac872639ed0dd3ae6627e05bdda821f7d128500  
-> 
->  > Reported-by: Joonas Harjum?ki <jharjuma@gmail.com>
->  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> This is only for Qt 5.14 (E.G. master and not 2020.02.x), right? From a
-> quick look I don't see this option in the 5.12.8 version we have on the
-> LTS branch.
-> 
+> On Fri, 29 May 2020 20:43:43 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > > With the time_t conversion to 64bit, time_t *is* larger than an
+> > > unsigned int.
+> > >
+> > > So aren't you papering over the problem, and in fact potentially
+> > > causing some issues in CVS, which seems to assume the time_t fits in
+> > > 32-bit ?
+> >
+> > ....it is only the internal assumption of the local mktime implementation,
+> > as far as I see all cvs callers of mktime use time_t to store the return
+> > value....
+>
+> Hm, ok. But does it make sense to use the AlpineLinux patch instead ?
 
-Yes...
+Did a short test (as the alpine linux patch patches configure directly):
+
+	$ wget https://git.alpinelinux.org/aports/plain/main/cvs/mktime-configure.patch
+	$ make cvs-patch
+	$ cd build/cvs-1.12.13/
+	$ patch -p 1 < mktime-configure.patch
+	$ cd ../..
+	$ make cvs
+...still fails (as expected as the mktime check is a runtime check (?) which
+is unfixable for cross-compile)...
 
 Regards,
 Peter
+
+>
+> Thomas
