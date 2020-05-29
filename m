@@ -1,120 +1,79 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 28 May 2020 18:54:02 -0700
-Subject: [Buildroot] [PATCH 1/1] package/earlyoom: new package
-Message-ID: <20200529015402.2646343-1-joseph.kogut@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 29 May 2020 07:31:03 +0200
+Subject: [Buildroot] make graph-size on Ubuntu 20.04,
+ buildroot 2020.05-rc2
+In-Reply-To: <CADJjDh9Ra-mLLY8JiRg84FyXbyg3zJmz52hyzgcfEx4tcBG7XA@mail.gmail.com>
+References: <CADJjDh9gqQzv_owicJduiXkRJqCsgjRP6DjwnLPZK6A4Gd-YOA@mail.gmail.com>
+ <20200528224500.595b5ffc@windsurf.home>
+ <CADJjDh8P5ACNk4FA6sQAgpovvfp-2suWtXmV_ZLCXVreAC4v0A@mail.gmail.com>
+ <20200528225438.4ffbf1c8@windsurf.home>
+ <CADJjDh9Ra-mLLY8JiRg84FyXbyg3zJmz52hyzgcfEx4tcBG7XA@mail.gmail.com>
+Message-ID: <CAB0FRsscsRqahxLRAPd7O5U0R_=mCbbKApt=ijGP-3kc9kAxUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-EarlyOOM daemon for triggering Linux OOM killer before running out of
-memory, avoiding situations where the machine becomes unresponsive from
-out of control swapping.
+Le jeu. 28 mai 2020 ? 23:31, Todd Sampson <sampsonats@gmail.com> a ?crit :
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/earlyoom/Config.in     |  9 +++++++++
- package/earlyoom/earlyoom.hash |  4 ++++
- package/earlyoom/earlyoom.mk   | 37 ++++++++++++++++++++++++++++++++++
- 5 files changed, 52 insertions(+)
- create mode 100644 package/earlyoom/Config.in
- create mode 100644 package/earlyoom/earlyoom.hash
- create mode 100644 package/earlyoom/earlyoom.mk
+> dfr at cmake:~/m9k2/buildroot$ ll /usr/bin/python
+> lrwxrwxrwx 1 root root 7 Apr 15 06:45 /usr/bin/python -> python2*
+>
+> I set the link back to python3 and now it works!
+>
+>
+On Ubuntu 20.04, the packet `python-is-python3` does this job.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0f1574c930..3e749e764b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1388,6 +1388,7 @@ N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
- F:	package/clang/
-+F:	package/earlyoom/
- F:	package/gconf/
- F:	package/libnss/
- F:	package/lld/
-diff --git a/package/Config.in b/package/Config.in
-index c245abbc42..0f1da74e0f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2338,6 +2338,7 @@ menu "System tools"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
- 	source "package/docker-proxy/Config.in"
-+	source "package/earlyoom/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
-diff --git a/package/earlyoom/Config.in b/package/earlyoom/Config.in
-new file mode 100644
-index 0000000000..abb720437c
---- /dev/null
-+++ b/package/earlyoom/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_EARLYOOM
-+	bool "earlyoom"
-+	help
-+	  Early OOM daemon for Linux.
-+
-+	  User space daemon for triggering Linux OOM killer
-+	  before running out of memory, avoiding situations
-+	  where the machine becomes unresponsive from out of
-+	  control swapping.
-diff --git a/package/earlyoom/earlyoom.hash b/package/earlyoom/earlyoom.hash
-new file mode 100644
-index 0000000000..4cafe50bc3
---- /dev/null
-+++ b/package/earlyoom/earlyoom.hash
-@@ -0,0 +1,4 @@
-+# locally calculated
-+sha256 b81804fc4470f996014d52252a87a1cf3b43d3d8754140035b10dcee349302b8  earlyoom-1.6.tar.gz
-+# License files, locally calculated
-+sha256 e730b3ec729de46d987ae73f30ed337e4cbe832f09205330acfa71848c6e0087  LICENSE
-diff --git a/package/earlyoom/earlyoom.mk b/package/earlyoom/earlyoom.mk
-new file mode 100644
-index 0000000000..bea59bd416
---- /dev/null
-+++ b/package/earlyoom/earlyoom.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# earlyoom
-+#
-+################################################################################
-+
-+EARLYOOM_VERSION = 1.6
-+EARLYOOM_SITE = $(call github,rfjakob,earlyoom,v$(EARLYOOM_VERSION))
-+EARLYOOM_LICENSE = MIT
-+EARLYOOM_LICENSE_FILES = LICENSE
-+
-+EARLYOOM_MAKE_OPTS = \
-+	CC=$(TARGET_CC) \
-+	DESTDIR=$(TARGET_DIR) \
-+	VERSION=$(EARLYOOM_VERSION) \
-+	PREFIX=/usr \
-+	SYSTEMDUNITDIR=/usr/lib/systemd/system
-+
-+define EARLYOOM_CONFIGURE_CMDS
-+	$(SED) "/systemctl/d" $(EARLYOOM_DIR)/Makefile
-+	$(SED) "/chcon/d" $(EARLYOOM_DIR)/Makefile
-+	$(SED) "/update-rc.d/d" $(EARLYOOM_DIR)/Makefile
-+endef
-+
-+define EARLYOOM_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) earlyoom $(EARLYOOM_MAKE_OPTS)
-+endef
-+
-+define EARLYOOM_INSTALL_INIT_SYSV
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-initscript $(EARLYOOM_MAKE_OPTS)
-+endef
-+
-+define EARLYOOM_INSTALL_INIT_SYSTEMD
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(EARLYOOM_MAKE_OPTS)
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.26.2
+Fran?ois
+
+
+> Thanks!!
+>
+> On Thu, May 28, 2020 at 4:54 PM Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> wrote:
+>
+>> Hello,
+>>
+>> Please use Reply-All when replying, to keep the mailing list in Cc,
+>> thanks.
+>>
+>> On Thu, 28 May 2020 16:49:11 -0400
+>> Todd Sampson <sampsonats@gmail.com> wrote:
+>>
+>> > dfr at cmake:~/m9k2/buildroot$ sudo apt install python3-matplotlib
+>> > [sudo] password for dfr:
+>> > Reading package lists... Done
+>> > Building dependency tree
+>> > Reading state information... Done
+>> > python3-matplotlib is already the newest version (3.1.2-1ubuntu4).
+>> > 0 upgraded, 0 newly installed, 0 to remove and 84 not upgraded.
+>> > dfr at cmake:~/m9k2/buildroot$ make graph-size
+>> > *You need python-matplotlib to generate the size graph*
+>> > make[1]: *** [Makefile:904: graph-size] Error 1
+>> > make: *** [Makefile:84: _all] Error 2
+>>
+>> Then this means that your /usr/bin/python is pointing to
+>> /usr/bin/python2. The script being "make graph-size",
+>> support/scripts/size-stats, simply uses "/usr/bin/env python", which it
+>> assumes is your default interpreter, which should have matplotlib
+>> installed.
+>>
+>> Is is the standard Ubuntu 20.04 behavior to have python point to
+>> python2, but no longer provide python-matplotlib. This looks odd. Have
+>> you changed your /usr/bin/python perhaps ?
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200529/2e9de752/attachment.html>
