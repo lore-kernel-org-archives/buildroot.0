@@ -1,43 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:37:10 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-filmon: bump version to
- 2.4.6-Leia
-Message-ID: <20200602200121.76D67812A0@busybox.osuosl.org>
+Date: Fri, 29 May 2020 23:11:02 +0200
+Subject: [Buildroot] [git commit] package/rust: allow using python3
+ interpreter
+Message-ID: <20200602200122.7AB54812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=678d52b09934f9c4ecd67b98f777d659e2e70abe
+commit: https://git.buildroot.net/buildroot/commit/?id=02703108eca8353ff45c0842d9b882a0dc37c04b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
+by removing python2 tests from configure script [2].
+
+Using python3 will help to remove python2 in a near future.
+
+[1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
+[2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Titouan Christophe <titouan.christophe@railnova.eu>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Patrick Havelange <patrick.havelange@essensium.com>
+Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-filmon/kodi-pvr-filmon.hash | 2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-configure-use-default-python-interpreter.patch | 37 ++++++++++++++++++++++
+ package/rust/rust.mk                               | 17 +++++++---
+ 2 files changed, 49 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-index 947c81d2e6..8f181a2420 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 763500fb4a7210569f05dba8307d400e532dd0e72b24f1a1d2cd516695145190  kodi-pvr-filmon-2.4.4-Leia.tar.gz
-+sha256 90988e4833c0f84ab08e08be3cd08b84e4ba2baf2ebc1545c62e5dbd6708d749  kodi-pvr-filmon-2.4.6-Leia.tar.gz
- sha256 081907693b03f27cb1b17e0a440ae05fd8c8b4631be6fe6fdba4e18a5d40fdc5  debian/copyright
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-index 0ee910db9f..078eae176a 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
+new file mode 100644
+index 0000000000..0ae9fab786
+--- /dev/null
++++ b/package/rust/0002-configure-use-default-python-interpreter.patch
+@@ -0,0 +1,37 @@
++From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 26 May 2020 18:24:25 +0200
++Subject: [PATCH] configure: use default python interpreter
++
++Don't try to use python2 if available, use the python interpreter available
++in ouput/host/bin/python whatever the python version is.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure | 12 ------------
++ 1 file changed, 12 deletions(-)
++
++diff --git a/configure b/configure
++index eeb8d081d34..6014a982f47 100755
++--- a/configure
+++++ b/configure
++@@ -2,16 +2,4 @@
++ 
++ script="$(dirname $0)"/src/bootstrap/configure.py
++ 
++-try() {
++-    cmd=$1
++-    shift
++-    T=$($cmd --version 2>/dev/null)
++-    if [ $? -eq 0 ]; then
++-        exec $cmd "$script" "$@"
++-    fi
++-}
++-
++-try python2.7 "$@"
++-try python27 "$@"
++-try python2 "$@"
++ exec python $script "$@"
++-- 
++2.25.4
++
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 5d14fc6682..25153966f2 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -17,9 +17,16 @@ HOST_RUST_DEPENDENCIES = \
+ 	host-rust-bin \
+ 	host-cargo-bin \
+ 	host-openssl \
+-	host-python \
+ 	$(BR2_CMAKE_HOST_DEPENDENCY)
  
--KODI_PVR_FILMON_VERSION = 2.4.4-Leia
-+KODI_PVR_FILMON_VERSION = 2.4.6-Leia
- KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
- KODI_PVR_FILMON_LICENSE = GPL-2.0+
- KODI_PVR_FILMON_LICENSE_FILES = debian/copyright
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
++HOST_RUST_DEPENDENCIES += host-python3
++else
++HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
++HOST_RUST_DEPENDENCIES += host-python
++endif
++
+ HOST_RUST_VERBOSITY = $(if $(VERBOSE),2,0)
+ 
+ # Some vendor crates contain Cargo.toml.orig files. The associated
+@@ -44,7 +51,7 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
+ 		echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
+ 		echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
+-		echo 'python = "$(HOST_DIR)/bin/python2"'; \
++		echo 'python = "$(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION)"'; \
+ 		echo 'submodules = false'; \
+ 		echo 'vendor = true'; \
+ 		echo 'compiler-docs = false'; \
+@@ -61,12 +68,12 @@ define HOST_RUST_CONFIGURE_CMDS
+ endef
+ 
+ define HOST_RUST_BUILD_CMDS
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py build
++	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py build
+ endef
+ 
+ define HOST_RUST_INSTALL_CMDS
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py dist
+-	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python2 x.py install
++	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py dist
++	cd $(@D); $(HOST_MAKE_ENV) $(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION) x.py install
+ endef
+ 
+ $(eval $(host-generic-package))
