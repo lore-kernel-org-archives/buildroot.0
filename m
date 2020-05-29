@@ -1,42 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 29 May 2020 23:48:09 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: don't link with
- libstdc++.a on the host
-In-Reply-To: <20200529233458.2dbace04@windsurf.home>
-References: <20200524155818.126961-1-romain.naour@gmail.com>
- <20200529233458.2dbace04@windsurf.home>
-Message-ID: <aa6f5047-3c91-e286-7bbe-29d26353b2c1@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 29 May 2020 23:56:17 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5base: disable
+ feature-relocatable
+In-Reply-To: <87ftbimo2x.fsf@dell.be.48ers.dk>
+References: <20200517102823.15132-1-ps.report@gmx.net>
+ <87ftbimo2x.fsf@dell.be.48ers.dk>
+Message-ID: <20200529235617.45b7a4ff@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Peter,
 
-Le 29/05/2020 ? 23:34, Thomas Petazzoni a ?crit?:
-> On Sun, 24 May 2020 17:58:18 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
+On Fri, 29 May 2020 23:24:38 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:  
 > 
->> +             gn_gen_args = --no-last-commit-position --out-path $$out_path \
->> +                           --cc \"$$which($$QMAKE_CC)\" --cxx \"$$which($$QMAKE_CXX)\" \
->> +-                          --ld \"$$which($$QMAKE_LINK)\"
->> ++                          --ld \"$$which($$QMAKE_LINK)\" \
->> ++                          --no-static-libstdc++
+>  > Disable feature-relocatable to avoid a path mismatch while searching qml
+>  > files and buildroot BR2_ROOTFS_MERGED_USR feature enabled.  
 > 
-> If we have to pass this, doesn't it mean that the host tools are built
-> statically ? Why are they built statically ? They really shouldn't be
-> built statically at all. I believe this is what should be fixed, rather
-> than just avoiding specifically from linking statically with libstdc++.
-
-Without this option host tools are built statically because this option is
-enabled by default.
-
-Adding --no-static-libstdc++ allow to link dynamically with libc.so.6.
-
-Best regards,
-Romain
-
+>  > As described in [1] with feature-relocatable Qt determines the search
+>  > pathes relative to the location of libQt5Core.so, with BR2_ROOTFS_MERGED_USR
+>  > enabled found first under the symlink path '/lib' instead of the install
+>  > path '/usr/lib' and searches sequentially for qml files under '/qml' instead
+>  > of the correct '/usr/qml'.  
 > 
-> Thomas
+>  > Fixes:
+>  >   - https://bugs.busybox.net/show_bug.cgi?id=12906  
 > 
+>  > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=4ac872639ed0dd3ae6627e05bdda821f7d128500  
+> 
+>  > Reported-by: Joonas Harjum?ki <jharjuma@gmail.com>
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> 
+> This is only for Qt 5.14 (E.G. master and not 2020.02.x), right? From a
+> quick look I don't see this option in the 5.12.8 version we have on the
+> LTS branch.
+> 
+
+Yes...
+
+Regards,
+Peter
