@@ -1,53 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 May 2020 22:56:15 +0200
-Subject: [Buildroot] Buildroot 2020.05-rc3 released
-Message-ID: <87wo4umpe8.fsf@dell.be.48ers.dk>
+Date: Fri, 29 May 2020 22:59:39 +0200
+Subject: [Buildroot] [PATCH 1/2] package/rpi-firmware: select
+ BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT when needed
+In-Reply-To: <20200516140221.1464063-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 16 May 2020 16:02:20 +0200")
+References: <20200516140221.1464063-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87sgfimp8k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Buildroot 2020.05-rc3 is released - Go download it at:
+ > When BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is enabled, and the
+ > DTBs are built by Linux (i.e BR2_LINUX_KERNEL_DTS_SUPPORT is enabled),
+ > these DTBs should be built with the -@ Device Tree compiler option, so
+ > that they can be used together with DTB overlays. So let's select
+ > BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT in this situation.
 
-http://buildroot.net/downloads/buildroot-2020.05-rc3.tar.gz
+ > Fixes:
 
-or
+ >   https://bugs.busybox.net/show_bug.cgi?id=12831
 
-http://buildroot.net/downloads/buildroot-2020.05-rc3.tar.bz2
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2020.05-rc2..
-
-     9  Fabrice Fontaine
-     4  Heiko Thiery
-     4  Thomas Petazzoni
-     4  Yann E. MORIN
-     3  Peter Korsgaard
-     3  Romain Naour
-     2  James Hilliard
-     1  Bernd Kuhls
-     1  Fabio Estevam
-     1  Joachim Nilsson
-     1  J?r?my Rosen
-     1  Stefan Ott
-     1  Yegor Yefremov
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05-rc3
-
-Expect the final 2020.05 release early next week.
+Committed to 2020.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
