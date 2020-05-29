@@ -1,129 +1,94 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 29 May 2020 23:45:23 +0200
-Subject: [Buildroot] [for-next] package/rust: allow using python3
- interpreter
-In-Reply-To: <20200529231401.4c66c5d9@windsurf.home>
-References: <20200526182037.592824-1-romain.naour@gmail.com>
- <20200529231401.4c66c5d9@windsurf.home>
-Message-ID: <49ffaaec-73fe-0cd0-9a4d-ff920f5c2562@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 May 2020 23:46:38 +0200
+Subject: [Buildroot] [PATCH v4 1/5] package/freescale-imx: Add option
+ for DDR FW need
+In-Reply-To: <1590556068-7043-2-git-send-email-stephane.viau@oss.nxp.com>
+References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1590556068-7043-2-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <20200529214638.GT8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Stephane, All
 
-Le 29/05/2020 ? 23:14, Thomas Petazzoni a ?crit?:
-> Hello Romain,
+On 2020-05-27 07:07 +0200, Stephane Viau spake thusly:
+> Only some i.MX8 needs a DDR training firmware (8M, 8MM, 8MN). Some other
+> i.MX8 (QuadMax, QuadXPlus) rely on system controller for that task.
 > 
-> On Tue, 26 May 2020 20:20:37 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
+> Suggested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> v4:
+>   - add Gary's reviewed-by
+> v3:
+>   - let the others 'select' this newly introduced option instead of
+>     'default y' it. I believe this option is still required since we
+>     only want to choose a DDR binary for the i.MX 8M platforms. (Yann/Gary)
+> v2:
+>   - introduce BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW to extend the DDR
+>     firmware selection to the whole i.MX 8M family (suggested by Gary)
 > 
->> Fedora packaging use python3 as python interpreter since rust 1.24.0 [1]
->> by removing python2 tests from configure script [2].
->>
->> Using python3 will help to remove python2 in a near future.
->>
->> [1] https://src.fedoraproject.org/rpms/rust/c/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2
->> [2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Titouan Christophe <titouan.christophe@railnova.eu>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> Cc: Patrick Havelange <patrick.havelange@essensium.com>
+> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+> ---
+>  package/freescale-imx/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Thanks, I have applied to next, but I have a few comments/questions,
-> see below.
-> 
->> diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
->> new file mode 100644
->> index 0000000000..34d97bb4cf
->> --- /dev/null
->> +++ b/package/rust/0002-configure-use-default-python-interpreter.patch
->> @@ -0,0 +1,37 @@
->> +From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
->> +From: Romain Naour <romain.naour@gmail.com>
->> +Date: Tue, 26 May 2020 18:24:25 +0200
->> +Subject: [PATCH] configure: use default python interpreter
->> +
->> +Don't try to use python2 if available, use the python interpreter available
->> +in ouput/host/bin/python whateverer the python version is.
->> +
->> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> +---
->> + configure | 12 ------------
->> + 1 file changed, 12 deletions(-)
->> +
->> +diff --git a/configure b/configure
->> +index eeb8d081d34..6014a982f47 100755
->> +--- a/configure
->> ++++ b/configure
->> +@@ -2,16 +2,4 @@
->> + 
->> + script="$(dirname $0)"/src/bootstrap/configure.py
->> + 
->> +-try() {
->> +-    cmd=$1
->> +-    shift
->> +-    T=$($cmd --version 2>/dev/null)
->> +-    if [ $? -eq 0 ]; then
->> +-        exec $cmd "$script" "$@"
->> +-    fi
->> +-}
->> +-
->> +-try python2.7 "$@"
->> +-try python27 "$@"
->> +-try python2 "$@"
->> + exec python $script "$@"
-> 
-> Shouldn't we try to find an upstreamable solution here, such as perhaps
-> a PYTHON environment variable, or an argument to configure that allows
-> to specify the path to the Python interpreter ?
-> 
-> But in fact, this path to the Python interpreter is already in the
-> config.toml file that we generate, why isn't this path used ?
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index b0c7de8..0be37ce 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -45,12 +45,15 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+>  	bool "imx8m"
+> +	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+>  	bool "imx8mm"
+> +	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+>  	bool "imx8mn"
+> +	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+>  	bool "imx8x"
+> @@ -96,6 +99,9 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+> +	bool
 
-humm, It seems that this configure script is not used at all by rust package
-since we use directly x.py...
-So we can just drop this patch.
+Now that this variable exists, I've made use of it to drive the actual
+insrallation of the DDR trainging files, instead of the concatenation
+of the corresponding platforms.
 
-> 
->> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
->> index 5d14fc6682..25153966f2 100644
->> --- a/package/rust/rust.mk
->> +++ b/package/rust/rust.mk
->> @@ -17,9 +17,16 @@ HOST_RUST_DEPENDENCIES = \
->>  	host-rust-bin \
->>  	host-cargo-bin \
->>  	host-openssl \
->> -	host-python \
->>  	$(BR2_CMAKE_HOST_DEPENDENCY)
->>  
->> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> +HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
->> +HOST_RUST_DEPENDENCIES += host-python3
->> +else
->> +HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
->> +HOST_RUST_DEPENDENCIES += host-python
->> +endif
-> 
-> I think we should start inverting this logic, i.e use host-python3 by
-> default if there is no python interpreter selected for the target. We
-> should do that not only here, but in all packages that have a logic
-> like that: python3 should become our default, and python2 should become
-> the exception.
+Pelase review the commit to check I haven't totally borked the thing:
 
-Yes, with this change we can remove python3-<module> added to provide python3
-modules. I hope packages that still use python2 will only require the python2
-interpreter without any additional modules.
+    https://git.buildroot.org/buildroot/commit/?id=6bb7f3b81092e7005470c7d689a566dbc1d059c6
 
-Best regards,
-Romain
+Thanks.
 
+>  source "package/freescale-imx/imx-alsa-plugins/Config.in"
+>  source "package/freescale-imx/imx-codec/Config.in"
+>  source "package/freescale-imx/imx-kobs/Config.in"
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
