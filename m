@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 May 2020 15:16:42 +0200
-Subject: [Buildroot] [git commit] package/feh: bump to version 3.4
-Message-ID: <20200602200121.0AC508256A@busybox.osuosl.org>
+Date: Fri, 29 May 2020 22:49:15 +0200
+Subject: [Buildroot] [git commit] package/hiawatha: reorder CONF_OPTS in the
+ .mk file
+Message-ID: <20200602200122.53A6C812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ebed9c9667f6d54504d65bf3b1881ce5298e6e7
+commit: https://git.buildroot.net/buildroot/commit/?id=b35df346a61c1b4d8835679dc5416734dfc07419
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Move the unconditional CONF_OPTS assignment toward the beginning of
+the file, before the conditionals on optional dependencies. And use =
+for this unconditional assignment instead of +=. No functional
+changes, just to align with the coding style used in most other
+packages.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/feh/feh.hash | 2 +-
- package/feh/feh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hiawatha/hiawatha.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index 2bfe5e48a8..c39abd0ee7 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 8f9741399b4b184ba28698c0fd7722638e79abac8e6c27eb526cc52b11ee0a1c  feh-3.2.1.tar.bz2
-+sha256 18545ca5c7537268810bec564db9cd3ad1ca98c2a2f23ec243d3bac56cfc0365  feh-3.4.tar.bz2
- sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 973eed60b0..90f8ff6579 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 28fd286ea8..01b9292035 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -10,6 +10,14 @@ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
+ HIAWATHA_LICENSE_FILES = LICENSE
  
--FEH_VERSION = 3.2.1
-+FEH_VERSION = 3.4
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
++HIAWATHA_CONF_OPTS = \
++	-DENABLE_TOOLKIT=OFF \
++	-DCONFIG_DIR=/etc/hiawatha \
++	-DLOG_DIR=/var/log \
++	-DPID_DIR=/var/run \
++	-DWEBROOT_DIR=/var/www/hiawatha \
++	-DWORK_DIR=/var/lib/hiawatha
++
+ ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
+ HIAWATHA_CONF_OPTS += -DUSE_SYSTEM_MBEDTLS=ON
+ HIAWATHA_DEPENDENCIES += mbedtls
+@@ -24,12 +32,4 @@ else
+ HIAWATHA_CONF_OPTS += -DENABLE_XSLT=OFF
+ endif
+ 
+-HIAWATHA_CONF_OPTS += \
+-	-DENABLE_TOOLKIT=OFF \
+-	-DCONFIG_DIR=/etc/hiawatha \
+-	-DLOG_DIR=/var/log \
+-	-DPID_DIR=/var/run \
+-	-DWEBROOT_DIR=/var/www/hiawatha \
+-	-DWORK_DIR=/var/lib/hiawatha
+-
+ $(eval $(cmake-package))
