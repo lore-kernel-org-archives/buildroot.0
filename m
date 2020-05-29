@@ -1,74 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 May 2020 14:07:08 +0200
-Subject: [Buildroot] [git commit] package/kodi: bump version to 18.7-Leia
-Message-ID: <20200602200121.D04E5812A0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 May 2020 23:08:03 +0200
+Subject: [Buildroot] [git commit] configs/atmel_sama5d27_som1: bump to
+ linux4sam-2020.04
+Message-ID: <20200602200122.609BA812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af325be5db1144b6f0ffd8d87df85fe96e03b7e4
+commit: https://git.buildroot.net/buildroot/commit/?id=61b606541a392a02bfb42e4ced152ca08cfc53a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: http://www.kodi.tv/article/kodi-leia-187-release
+This commit:
+  - bump Linux & U-Boot to linux4sam-2020.04
+  - bump at91bootstrap to v3.9.2
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
- package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
- package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index 934392e916..f1889f3195 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 18.6-Leia
-+KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index dc5984cedc..ec8ffeae43 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 18.6-Leia
-+KODI_TEXTUREPACKER_VERSION = 18.7-Leia
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 357cd55c7b..be2659d385 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 47e6d7d4e01dbda92ff83a3e141ac43003e918133e78b3a4b79faff65184711c  kodi-18.6-Leia.tar.gz
-+sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
- sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
- sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
- sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 0c4704ea84..180e3b9d10 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 18.6-Leia
-+KODI_VERSION = 18.7-Leia
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index 6b5def3c64..b608bac0c6 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.2)/linux-linux4sam_6.2.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-at91-linux4sam-2020.04.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
+@@ -71,12 +71,12 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.0)/at91bootstrap3-v3.9.0.tar.gz"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.2)/at91bootstrap3-v3.9.2.tar.gz"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam_6.2)/u-boot-at91-linux4sam_6.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.04)/u-boot-at91-linux4sam-2020.04.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
