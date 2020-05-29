@@ -1,135 +1,190 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Fri, 29 May 2020 23:38:22 +0200
-Subject: [Buildroot] [git commit branch/next]
- package/freescale-imx/firmware-imx: add choice for DDR training binaries
-Message-ID: <20200529212301.9BED583FE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/freescale_imx8mnevk:
+ new defconfig
+Message-ID: <20200529212301.BD8D791D24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d981a3227e4341c9c4639f070e8aae46e40c91bd
+commit: https://git.buildroot.net/buildroot/commit/?id=2c01eeece96ce449163e066566c787bfc2a10651
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Several i.MX8 (e.g.: 8M, 8MM, 8MN) support many DDR types (LPDDR4, DDR4,
-etc.), for which the DDR training is performed in the bootloader.
-Some boards have LPDDR4 (e.g.: nitrogen8mn) and some others have the DDR4
-(e.g.: NXP's reference board EVK). This patch allows the selection of either
-of the binaries used to train the DDR.
+This patch adds support for the i.MX8M Nano EVK Board [1].
 
-Note that DDR and HDMI FW copies are now separated, which makes latter
-being properly copied only for the relevant SoC (i.MX8MQ).
-Suggested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+The final boot image is created from uboot and firmware binaries in post
+image script board/freescale/common/imx/imx8-bootloader-prepare.sh
+
+Note that this config is based on 4.19.35_1.1.0 ; hence, the kernel
+configuration needs host-openssl to build.
+
+[1] https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-8m-nano-applications-processor:8MNANOD4-EVK
 
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
 Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freescale-imx/firmware-imx/Config.in       | 24 +++++++++++++
- package/freescale-imx/firmware-imx/firmware-imx.mk | 41 +++++++++++++++++++++-
- 2 files changed, 64 insertions(+), 1 deletion(-)
+ .gitlab-ci.yml                        |  1 +
+ DEVELOPERS                            |  4 ++
+ board/freescale/imx8mnevk/readme.txt  | 73 +++++++++++++++++++++++++++++++++++
+ configs/freescale_imx8mnevk_defconfig | 43 +++++++++++++++++++++
+ 4 files changed, 121 insertions(+)
 
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 56d5b80741..4962992346 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -8,3 +8,27 @@ config BR2_PACKAGE_FIRMWARE_IMX
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index fa8e077a07..0bf8a73b36 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -190,6 +190,7 @@ freescale_imx8mmevk_defconfig: { extends: .defconfig }
+ freescale_imx8mqevk_defconfig: { extends: .defconfig }
+ freescale_imx8qmmek_defconfig: { extends: .defconfig }
+ freescale_imx8qxpmek_defconfig: { extends: .defconfig }
++freescale_imx8mnevk_defconfig: { extends: .defconfig }
+ freescale_p1025twr_defconfig: { extends: .defconfig }
+ freescale_t1040d4rdb_defconfig: { extends: .defconfig }
+ freescale_t2080_qds_rdb_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1320944186..04811b6288 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2402,6 +2402,10 @@ F:	package/mtdev2tuio/
+ N:	Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+ F:	package/libhttpserver/
  
- 	  This library is provided by Freescale as-is and doesn't have
- 	  an upstream.
++N:	Stephane Viau <stephane.viau@oss.nxp.com>
++F:	board/freescale/imx8mnevk/
++F:	configs/freescale_imx8mnevk_defconfig
 +
-+if BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+ N:	Steve Calfee <stevecalfee@gmail.com>
+ F:	package/python-pymysql/
+ F:	package/python-pyratemp/
+diff --git a/board/freescale/imx8mnevk/readme.txt b/board/freescale/imx8mnevk/readme.txt
+new file mode 100644
+index 0000000000..d7700568fa
+--- /dev/null
++++ b/board/freescale/imx8mnevk/readme.txt
+@@ -0,0 +1,73 @@
++***************************
++Freescale i.MX8MN EVK board
++***************************
 +
-+choice
-+	bool "DDR training binaries"
-+	default BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
-+	help
-+	  Choose the DDR training binaries to be used depending on the
-+	  kind of memory that is available on the target board (DDR4,
-+	  LPDDR4, etc...).
++This file documents the Buildroot support for the i.MX8M Nano EVK board.
 +
-+config BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
-+	bool "lpddr4"
-+	help
-+	  Use LPDDR4 binaries (i.e.: lpddr4_pmu_train_*.bin)
++Build
++=====
 +
-+config BR2_PACKAGE_FIRMWARE_DDRFW_DDR4
-+	bool "DDR4"
-+	help
-+	  Use DDR4 binaries (i.e.: ddr4_*_201810.bin).
++First, configure Buildroot for the i.MX8MN EVK board:
 +
-+endchoice # DDR training FW
++  make freescale_imx8mnevk_defconfig
 +
-+endif
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 7309d21b7a..9fd1c54b48 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -20,6 +20,8 @@ endef
- 
- ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW),y)
- FIRMWARE_IMX_INSTALL_IMAGES = YES
++Build all components:
 +
-+ifeq ($(BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4),y)
- FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
- define FIRMWARE_IMX_PREPARE_LPDDR4_FW
- 	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
-@@ -33,7 +35,7 @@ define FIRMWARE_IMX_PREPARE_LPDDR4_FW
- 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_fw.bin
- endef
- 
--define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
-+define FIRMWARE_IMX_PREPARE_DDR_FW
- 	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
- 	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
- 	# which is done in post-image script.
-@@ -42,9 +44,46 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
- 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
- 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
- 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
-+	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+endef
-+else ifeq ($(BR2_PACKAGE_FIRMWARE_DDRFW_DDR4),y)
-+FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
-+define FIRMWARE_IMX_PREPARE_DDR4_FW
-+	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810.bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin
-+	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810.bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin
-+	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin > \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_$(1)_201810_fw.bin
-+endef
++  make
 +
-+define FIRMWARE_IMX_PREPARE_DDR_FW
-+	# Create padded versions of ddr4_* and generate ddr4_fw.bin.
-+	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
-+	# which is done in post-image script.
-+	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,1d)
-+	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,2d)
-+	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
-+		$(BINARIES_DIR)/ddr4_201810_fw.bin
-+	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+endef
-+endif
++You will find in output/images/ the following files:
++  - bl31.bin
++  - boot.vfat
++  - ddr4_201810_fw.bin
++  - ddr_fw.bin
++  - fsl-imx8mn-ddr4-evk.dtb
++  - Image
++  - imx8-boot-sd.bin
++  - rootfs.ext2
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - u-boot.bin
++  - u-boot.imx
++  - u-boot.itb
++  - u-boot-nodtb.bin
++  - u-boot-spl.bin
++  - u-boot-spl-ddr.bin
 +
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
-+define FIRMWARE_IMX_PREPARE_HDMI_FW
- 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
- 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
- endef
-+endif
++Create a bootable SD card
++=========================
 +
-+define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
-+	$(FIRMWARE_IMX_PREPARE_DDR_FW)
-+	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
-+endef
- else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
- define FIRMWARE_IMX_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/common/imx/genimage.cfg.template_imx8.
++
++Boot the i.MX8MN EVK board
++==========================
++
++To boot your newly created system (refer to the i.MX8MNano EVK Quick Start Guide
++[1] for guidance):
++- insert the SD card in the SD slot of the board;
++- Configure the switches as follows (X = "don't care"):
++SW1101:	1100XXXXXX [D1-D10]
++SW1102:	XXXXXXXXXX [D1-D10]
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
++
++References
++==========
++[1] https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-8m-nano-applications-processor:8MNANOD4-EVK
+diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
+new file mode 100644
+index 0000000000..a859d1c743
+--- /dev/null
++++ b/configs/freescale_imx8mnevk_defconfig
+@@ -0,0 +1,43 @@
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mn-ddr4-evk.dtb"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mn-ddr4-evk"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++BR2_PACKAGE_FIRMWARE_DDRFW_DDR4=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_ddr4_evk"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_SPL=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
