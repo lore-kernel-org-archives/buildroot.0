@@ -1,42 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:32:15 +0200
-Subject: [Buildroot] [PATCHv2] package/fmc+fmlib: change repository
- location
-In-Reply-To: <20200527154734.11381-1-yann.morin.1998@free.fr>
-References: <20200527154734.11381-1-yann.morin.1998@free.fr>
-Message-ID: <20200529233215.014d37d2@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 May 2020 23:32:42 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Stephan Hoffmann for
+ libhttpserver
+In-Reply-To: <20200521131631.8520D91B04@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 21 May 2020 15:33:00 +0200")
+References: <20200521131631.8520D91B04@busybox.osuosl.org>
+Message-ID: <87lflal951.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 27 May 2020 17:47:34 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> Now that Freescale has been wholly swallowed into NXP, the public-facing
-> git repositories that were hosting those two packages are no longer
-> available.
-> 
-> Fortunately, they had been mirrored on Code Aurora forge (a Linux
-> Foundation project, so relatively stable and trustworthy), which has the
-> tags we need, and that generates the exact same archives.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - use CodeAurora's git tree, rather than archives on s.b.o.  (Matt)
-> ---
->  package/fmc/fmc.mk     | 3 ++-
->  package/fmlib/fmlib.mk | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=6cff75415781deda1414fe22827400a7c334de6c
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+ > I added this package while working for Grandcentrix but
+ > am willing to maintain it further.
 
-Thomas
+ > Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
