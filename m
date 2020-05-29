@@ -1,42 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 May 2020 23:25:35 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: drop Stephan
- Hoffmann
-Message-ID: <20200529210848.0AA938E7FE@busybox.osuosl.org>
+Date: Fri, 29 May 2020 23:25:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openocd: fix
+ -fno-common build failure
+Message-ID: <20200529210848.0118691952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fed5969f58bc5a37d4c08e54d56b3088fb61bc43
+commit: https://git.buildroot.net/buildroot/commit/?id=661fbd0a8d957d5825309f2fd4a3356ff78a8635
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-His e-mail is no longer working:
+Added upstream patch for fixing build failure when using GCC10 as a host
+compiler (-fno-common is now default)
 
-<stephan.hoffmann@ext.grandcentrix.net>: host aspmx.l.google.com[74.125.133.26]
-    said: 550-5.2.1 The email account that you tried to reach is disabled.
-    Learn more at 550 5.2.1  https://support.google.com/mail/?p=DisabledUser
-    o3si10331209wre.302 - gsmtp (in reply to RCPT TO command)
+Fixes:
+http://autobuild.buildroot.org/results/0fc/0fcb11a40bcff78e8084335114af390d2fac31e1
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit aa13c9667c06b2f3c21589ddbad4ecfffb9c566c)
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 53158e41fdd4bcc1272bbf4e61b68f58bf9c1527)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ .../0003-bitbang-Fix-FTBFS-with-GCC-10.patch       | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b623d17c89..aaf967abc3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2316,9 +2316,6 @@ F:	package/gtest/
- F:	package/mtdev/
- F:	package/mtdev2tuio/
- 
--N:	Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
--F:	package/libhttpserver/
--
- N:	Steve Calfee <stevecalfee@gmail.com>
- F:	package/python-pymysql/
- F:	package/python-pyratemp/
+diff --git a/package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch b/package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch
+new file mode 100644
+index 0000000000..cf83515247
+--- /dev/null
++++ b/package/openocd/0003-bitbang-Fix-FTBFS-with-GCC-10.patch
+@@ -0,0 +1,37 @@
++From c60252ac2b636c4d99b766a574b9df0966151696 Mon Sep 17 00:00:00 2001
++From: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Date: Fri, 17 Apr 2020 13:49:28 +0200
++Subject: [PATCH] bitbang: Fix FTBFS with GCC 10
++
++GCC 10 defaults to -fno-common which breaks the sharing of bitbang_swd
++struct between bitbang drivers due to a missing extern.
++
++Change-Id: I2b4122f7939cec91a72284006748f99a23548324
++Signed-off-by: Andreas Fritiofson <andreas.fritiofson@gmail.com>
++Reviewed-on: http://openocd.zylin.com/5592
++Tested-by: jenkins
++Reviewed-by: Antonio Borneo <borneo.antonio@gmail.com>
++Reviewed-by: Jonathan McDowell <noodles-openocd@earth.li>
++
++Patch taken from upstream: https://github.com/ntfreak/openocd/commit/c60252ac2b636c4d99b766a574b9df0966151696
++Signed-off-by: Heiko Thiery <heiko.thiery@gmailcom>
++---
++ src/jtag/drivers/bitbang.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/jtag/drivers/bitbang.h b/src/jtag/drivers/bitbang.h
++index edb779ca..bbbc693d 100644
++--- a/src/jtag/drivers/bitbang.h
+++++ b/src/jtag/drivers/bitbang.h
++@@ -56,7 +56,7 @@ struct bitbang_interface {
++ 	void (*swdio_drive)(bool on);
++ };
++ 
++-const struct swd_driver bitbang_swd;
+++extern const struct swd_driver bitbang_swd;
++ 
++ extern bool swd_mode;
++ 
++-- 
++2.20.1
++
