@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 29 May 2020 23:32:09 +0200
-Subject: [Buildroot] [PATCH] toolchain: update ARC tools to
- arc-2020.03-release
-In-Reply-To: <20200525201524.34237-1-Evgeniy.Didin@synopsys.com>
-References: <20200525201524.34237-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20200529233209.11a2cf5d@windsurf.home>
+Date: Fri, 29 May 2020 23:32:15 +0200
+Subject: [Buildroot] [PATCHv2] package/fmc+fmlib: change repository
+ location
+In-Reply-To: <20200527154734.11381-1-yann.morin.1998@free.fr>
+References: <20200527154734.11381-1-yann.morin.1998@free.fr>
+Message-ID: <20200529233215.014d37d2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 May 2020 23:15:23 +0300
-Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+On Wed, 27 May 2020 17:47:34 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> This commit bumps ARC toolchain to arc-2020.03-release.
+> Now that Freescale has been wholly swallowed into NXP, the public-facing
+> git repositories that were hosting those two packages are no longer
+> available.
 > 
-> ARC GNU tools of version arc-2020.03-release bring some quite significant
-> changes like:
-> * Binutils 2.34 with additional ARC patches
-> * GCC 9.3 with additional ARC patches
-> * glibc 2.30 with additional ARC patches
-> * GDB 10-prerelease with additional ARC patches
+> Fortunately, they had been mirrored on Code Aurora forge (a Linux
+> Foundation project, so relatively stable and trustworthy), which has the
+> tags we need, and that generates the exact same archives.
 > 
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> 
 > ---
-> This commit is a replacement of previous patch:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200417190341.22404-1-Evgeniy.Didin at synopsys.com/
+> Changes v1 -> v2:
+>   - use CodeAurora's git tree, rather than archives on s.b.o.  (Matt)
+> ---
+>  package/fmc/fmc.mk     | 3 ++-
+>  package/fmlib/fmlib.mk | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
