@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 30 May 2020 14:47:30 +0200
-Subject: [Buildroot] [PATCH v2 2/7] board/guest: documentation and sample
- files
+Date: Sat, 30 May 2020 14:47:35 +0200
+Subject: [Buildroot] [PATCH v2 7/7] configs/guest_*: use
+ BR2_PACKAGE_SYSTEMD_GUEST
 In-Reply-To: <20200530124735.1384078-1-francois.perrad@gadz.org>
 References: <20200530124735.1384078-1-francois.perrad@gadz.org>
-Message-ID: <20200530124735.1384078-3-francois.perrad@gadz.org>
+Message-ID: <20200530124735.1384078-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,92 +13,82 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS             |  1 +
- board/guest/Dockerfile |  3 +++
- board/guest/readme.txt | 53 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 57 insertions(+)
- create mode 100644 board/guest/Dockerfile
- create mode 100644 board/guest/readme.txt
+ configs/guest_arm_a7_defconfig | 13 +++++++++++++
+ configs/guest_arm_a9_defconfig | 13 +++++++++++++
+ configs/guest_x86_64_defconfig | 13 +++++++++++++
+ 3 files changed, 39 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e930c011b..a9cff405c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -932,6 +932,7 @@ N:	Francisco Gonzalez <gzmorell@gmail.com>
- F:	package/ser2net/
+diff --git a/configs/guest_arm_a7_defconfig b/configs/guest_arm_a7_defconfig
+index efe9a1369..2a9081edf 100644
+--- a/configs/guest_arm_a7_defconfig
++++ b/configs/guest_arm_a7_defconfig
+@@ -11,6 +11,19 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ # System
+ BR2_INIT_SYSTEMD=y
+ # BR2_TARGET_GENERIC_GETTY is not set
++# BR2_TARGET_TZ_INFO is not set
  
- N:	Francois Perrad <francois.perrad@gadz.org>
-+F:	board/guest/
- F:	board/olimex/a20_olinuxino
- F:	board/olimex/imx233_olinuxino/
- F:	configs/guest_*
-diff --git a/board/guest/Dockerfile b/board/guest/Dockerfile
-new file mode 100644
-index 000000000..712a134c9
---- /dev/null
-+++ b/board/guest/Dockerfile
-@@ -0,0 +1,3 @@
-+FROM scratch
-+ADD rootfs.tar /
-+CMD ["/bin/ash"]
-diff --git a/board/guest/readme.txt b/board/guest/readme.txt
-new file mode 100644
-index 000000000..40664dc99
---- /dev/null
-+++ b/board/guest/readme.txt
-@@ -0,0 +1,53 @@
-+Container - Guest
+ # Filesystem
+ BR2_TARGET_ROOTFS_TAR=y
 +
-+Intro
-+=====
++# Packages
++# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
++# BR2_PACKAGE_KMOD is not set
++BR2_PACKAGE_SYSTEMD_GUEST=y
++# BR2_PACKAGE_SYSTEMD_PSTORE is not set
++# BR2_PACKAGE_SYSTEMD_HOSTNAMED is not set
++# BR2_PACKAGE_SYSTEMD_HWDB is not set
++# BR2_PACKAGE_SYSTEMD_MYHOSTNAME is not set
++# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
++# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
++# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
+diff --git a/configs/guest_arm_a9_defconfig b/configs/guest_arm_a9_defconfig
+index 02c3d302d..2d19a31cd 100644
+--- a/configs/guest_arm_a9_defconfig
++++ b/configs/guest_arm_a9_defconfig
+@@ -13,6 +13,19 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ # System
+ BR2_INIT_SYSTEMD=y
+ # BR2_TARGET_GENERIC_GETTY is not set
++# BR2_TARGET_TZ_INFO is not set
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_TAR=y
 +
-+Buildroot supports some OS-level virtualization tools: Docker, LXC, systemd-nspawn.
-+These tools are built on an host image.
++# Packages
++# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
++# BR2_PACKAGE_KMOD is not set
++BR2_PACKAGE_SYSTEMD_GUEST=y
++# BR2_PACKAGE_SYSTEMD_PSTORE is not set
++# BR2_PACKAGE_SYSTEMD_HOSTNAMED is not set
++# BR2_PACKAGE_SYSTEMD_HWDB is not set
++# BR2_PACKAGE_SYSTEMD_MYHOSTNAME is not set
++# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
++# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
++# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
+diff --git a/configs/guest_x86_64_defconfig b/configs/guest_x86_64_defconfig
+index 42d1d659a..4e19d23e5 100644
+--- a/configs/guest_x86_64_defconfig
++++ b/configs/guest_x86_64_defconfig
+@@ -10,6 +10,19 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+ # System
+ BR2_INIT_SYSTEMD=y
+ # BR2_TARGET_GENERIC_GETTY is not set
++# BR2_TARGET_TZ_INFO is not set
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_TAR=y
 +
-+A container could be created from a rootfs (guest image) built by Buildroot with a guest_*_defconfig
-+
-+The following defconfig are available:
-+    - guest_arm_a7_defconfig
-+    - guest_arm_a9_defconfig
-+    - guest_x86_64_defconfig
-+
-+The artifact produced by these defconfig is the file output/images/rootfs.tar.
-+The guest has no bootloader, no kernel.
-+
-+How to with Docker
-+==================
-+
-+A Docker image could created with a Dockerfile and few commands are needed:
-+
-+    # dockerd &
-+
-+    $ cat Dockerfile
-+    FROM scratch
-+    ADD rootfs.tar /
-+    CMD ["/bin/ash"]
-+    $ docker build --tag br:guest .
-+    $ docker images
-+    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-+    br                  guest               0c54c85a3452        42 seconds ago      1.75MB
-+
-+The Docker image could be exported and imported with the commands `docker save` and `docker load`.
-+
-+And the Docker image could be launched:
-+
-+    $ docker run -it br:guest
-+        / # ls -l /bin/sh
-+        lrwxrwxrwx    1 root     root             7 Mar 11 15:46 /bin/sh -> busybox
-+        / # exit
-+
-+How to with systemd-nspawn
-+==========================
-+
-+Extract rootfs.tar in a directory container.
-+
-+    # systemd-nspawn -D container
-+        # ls -l /bin/sh
-+        lrwxrwxrwx    1 1002     1002             7 Mar 11 15:46 /bin/sh -> busybox
-+        # exit
-+
++# Packages
++# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
++# BR2_PACKAGE_KMOD is not set
++BR2_PACKAGE_SYSTEMD_GUEST=y
++# BR2_PACKAGE_SYSTEMD_PSTORE is not set
++# BR2_PACKAGE_SYSTEMD_HOSTNAMED is not set
++# BR2_PACKAGE_SYSTEMD_HWDB is not set
++# BR2_PACKAGE_SYSTEMD_MYHOSTNAME is not set
++# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
++# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
++# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
 -- 
 2.25.1
