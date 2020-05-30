@@ -1,36 +1,40 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Sat, 30 May 2020 14:11:13 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-05-29
-In-Reply-To: <20200530062653.DB2A78748B@fraxinus.osuosl.org>
-References: <20200530062653.DB2A78748B@fraxinus.osuosl.org>
-Message-ID: <b4081b7e-1328-809f-075a-a1559c9220ad@xes-inc.com>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Sat, 30 May 2020 22:49:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uacme: bump version to 1.4.1
+Message-ID: <20200530204900.4zrz7fkedh3ni23w@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 5/30/20 1:26 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Autobuild statistics for 2020-05-29
-> ===============================
-> >
-> 
-> Detail of failures
-> ------------------
->    riscv64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/38948944fe1564eb67619accf2372ddd149b7745 |
->    riscv64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/7dd8fec13c4d0ccde77dc02193cc2a7faf1f6b20 |
-> 
-Should be addressed by: 
-http://patchwork.ozlabs.org/project/buildroot/patch/20200430194421.5530-1-vfazio at xes-inc.com/
-
-
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index b3ec7ed6f2..d0277c7322 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
++sha256  3f3de5f456907558c4aa0db5654c618becb1b3e057ad217e180c8f72360e7841  uacme-1.4.1.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index be2aa60811..975a965dd0 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.2.4
++UACME_VERSION = 1.4.1
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 -- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+2.11.0
