@@ -1,40 +1,69 @@
-From: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Date: Sat, 30 May 2020 22:49:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uacme: bump version to 1.4.1
-Message-ID: <20200530204900.4zrz7fkedh3ni23w@einstein.dilieto.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 May 2020 23:08:31 +0200
+Subject: [Buildroot] [PATCH] suport/download: fix git wrapper with
+ submodules on older git versions
+In-Reply-To: <20200529234149.7437a5b4@windsurf.home>
+References: <20200524114718.21707-1-yann.morin.1998@free.fr>
+ <20200529234149.7437a5b4@windsurf.home>
+Message-ID: <20200530210831.GU8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
----
- package/uacme/uacme.hash | 2 +-
- package/uacme/uacme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas, All,
 
-diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-index b3ec7ed6f2..d0277c7322 100644
---- a/package/uacme/uacme.hash
-+++ b/package/uacme/uacme.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
-+sha256  3f3de5f456907558c4aa0db5654c618becb1b3e057ad217e180c8f72360e7841  uacme-1.4.1.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index be2aa60811..975a965dd0 100644
---- a/package/uacme/uacme.mk
-+++ b/package/uacme/uacme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UACME_VERSION = 1.2.4
-+UACME_VERSION = 1.4.1
- # Released versions are on branch upstream/latest, tagged as
- # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
- # include .tarball-version
+On 2020-05-29 23:41 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 24 May 2020 13:47:18 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > +    # Older versions of git will store the absolute path of the git tree
+> > +    # in the .git of submodules, while newer versions just use relative
+> > +    # paths. Detect and fix the older variants to use relative paths, so
+> > +    # that the archives are reproducible across a wider range of git
+> > +    # versions. However, we can't do that if git is too old and uses
+> > +    # full repositories for submodules.
+> 
+> If I understand correctly, there are three "eras":
+> 
+>  - Really old Git versions, where full repositories are used for
+>    submodules, where we can't do anything.
+> 
+>  - Old Git versions, that stored absolute paths.
+> 
+>  - Recent Git versions, that store relative paths.
+
+Spot-on.
+
+> Would it be possible to identify which versions we're talking about
+> here? I'm sure you've done that research, and I think it makes sense to
+> capture that, as we will certainly wonder what we mean by "older
+> versions", "old version", "new version.
+> 
+> What is new, old, or older today, will feel quite different 5 years
+> from now.
+
+Sorry, you presumed too much: I haven't dug the nitty-gritty details on
+when git transitioned from one area to another...
+
+I just stumbled on this issue while working on the conversion of the
+archives generated from a git tree, which got me scratch my head for
+quite some time... I should have noted the conditions back then, true,
+but I forgot...
+
+Regards,
+Yann E. MORIN.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
