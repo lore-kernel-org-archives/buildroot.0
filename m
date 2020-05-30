@@ -1,94 +1,76 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 30 May 2020 14:47:35 +0200
-Subject: [Buildroot] [PATCH v2 7/7] configs/guest_*: use
- BR2_PACKAGE_SYSTEMD_GUEST
-In-Reply-To: <20200530124735.1384078-1-francois.perrad@gadz.org>
-References: <20200530124735.1384078-1-francois.perrad@gadz.org>
-Message-ID: <20200530124735.1384078-8-francois.perrad@gadz.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 30 May 2020 15:43:44 +0200
+Subject: [Buildroot] [PATCH,for-next] package/rust: remove unneded patch
+Message-ID: <20200530134344.24976-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/guest_arm_a7_defconfig | 13 +++++++++++++
- configs/guest_arm_a9_defconfig | 13 +++++++++++++
- configs/guest_x86_64_defconfig | 13 +++++++++++++
- 3 files changed, 39 insertions(+)
+The previous commit [1] added a patch to remove python2 from the configure script.
+While this script is used by the Fedora rust package [2], it is not used by rust.mk.
 
-diff --git a/configs/guest_arm_a7_defconfig b/configs/guest_arm_a7_defconfig
-index efe9a1369..2a9081edf 100644
---- a/configs/guest_arm_a7_defconfig
-+++ b/configs/guest_arm_a7_defconfig
-@@ -11,6 +11,19 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
- # System
- BR2_INIT_SYSTEMD=y
- # BR2_TARGET_GENERIC_GETTY is not set
-+# BR2_TARGET_TZ_INFO is not set
- 
- # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
-+
-+# Packages
-+# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
-+# BR2_PACKAGE_KMOD is not set
-+BR2_PACKAGE_SYSTEMD_GUEST=y
-+# BR2_PACKAGE_SYSTEMD_PSTORE is not set
-+# BR2_PACKAGE_SYSTEMD_HOSTNAMED is not set
-+# BR2_PACKAGE_SYSTEMD_HWDB is not set
-+# BR2_PACKAGE_SYSTEMD_MYHOSTNAME is not set
-+# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
-+# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
-+# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
-diff --git a/configs/guest_arm_a9_defconfig b/configs/guest_arm_a9_defconfig
-index 02c3d302d..2d19a31cd 100644
---- a/configs/guest_arm_a9_defconfig
-+++ b/configs/guest_arm_a9_defconfig
-@@ -13,6 +13,19 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
- # System
- BR2_INIT_SYSTEMD=y
- # BR2_TARGET_GENERIC_GETTY is not set
-+# BR2_TARGET_TZ_INFO is not set
- 
- # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
-+
-+# Packages
-+# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
-+# BR2_PACKAGE_KMOD is not set
-+BR2_PACKAGE_SYSTEMD_GUEST=y
-+# BR2_PACKAGE_SYSTEMD_PSTORE is not set
-+# BR2_PACKAGE_SYSTEMD_HOSTNAMED is not set
-+# BR2_PACKAGE_SYSTEMD_HWDB is not set
-+# BR2_PACKAGE_SYSTEMD_MYHOSTNAME is not set
-+# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
-+# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
-+# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
-diff --git a/configs/guest_x86_64_defconfig b/configs/guest_x86_64_defconfig
-index 42d1d659a..4e19d23e5 100644
---- a/configs/guest_x86_64_defconfig
-+++ b/configs/guest_x86_64_defconfig
-@@ -10,6 +10,19 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
- # System
- BR2_INIT_SYSTEMD=y
- # BR2_TARGET_GENERIC_GETTY is not set
-+# BR2_TARGET_TZ_INFO is not set
- 
- # Filesystem
- BR2_TARGET_ROOTFS_TAR=y
-+
-+# Packages
-+# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
-+# BR2_PACKAGE_KMOD is not set
-+BR2_PACKAGE_SYSTEMD_GUEST=y
-+# BR2_PACKAGE_SYSTEMD_PSTORE is not set
-+# BR2_PACKAGE_SYSTEMD_HOSTNAMED is not set
-+# BR2_PACKAGE_SYSTEMD_HWDB is not set
-+# BR2_PACKAGE_SYSTEMD_MYHOSTNAME is not set
-+# BR2_PACKAGE_SYSTEMD_NETWORKD is not set
-+# BR2_PACKAGE_SYSTEMD_TIMEDATED is not set
-+# BR2_PACKAGE_SYSTEMD_TIMESYNCD is not set
+The configure script is an alternative build system provided by upstream, and
+finally calls x.py [3].
+
+Thanks to Thomas for noticing the mistake [4].
+
+[1] 02703108eca8353ff45c0842d9b882a0dc37c04b
+[2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
+[3] https://github.com/rust-lang/rust/blob/1.33.0/README.md#configure-and-make
+[4] http://lists.busybox.net/pipermail/buildroot/2020-May/283610.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Titouan Christophe <titouan.christophe@railnova.eu>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...igure-use-default-python-interpreter.patch | 37 -------------------
+ 1 file changed, 37 deletions(-)
+ delete mode 100644 package/rust/0002-configure-use-default-python-interpreter.patch
+
+diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
+deleted file mode 100644
+index 34d97bb4cf..0000000000
+--- a/package/rust/0002-configure-use-default-python-interpreter.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Tue, 26 May 2020 18:24:25 +0200
+-Subject: [PATCH] configure: use default python interpreter
+-
+-Don't try to use python2 if available, use the python interpreter available
+-in ouput/host/bin/python whateverer the python version is.
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- configure | 12 ------------
+- 1 file changed, 12 deletions(-)
+-
+-diff --git a/configure b/configure
+-index eeb8d081d34..6014a982f47 100755
+---- a/configure
+-+++ b/configure
+-@@ -2,16 +2,4 @@
+- 
+- script="$(dirname $0)"/src/bootstrap/configure.py
+- 
+--try() {
+--    cmd=$1
+--    shift
+--    T=$($cmd --version 2>/dev/null)
+--    if [ $? -eq 0 ]; then
+--        exec $cmd "$script" "$@"
+--    fi
+--}
+--
+--try python2.7 "$@"
+--try python27 "$@"
+--try python2 "$@"
+- exec python $script "$@"
+--- 
+-2.25.4
+-
 -- 
-2.25.1
+2.25.4
