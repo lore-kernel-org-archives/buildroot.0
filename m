@@ -1,104 +1,98 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 30 May 2020 14:47:29 +0200
-Subject: [Buildroot] [PATCH v2 1/7] configs/guest_*: some new defconfig
+Date: Sat, 30 May 2020 14:47:31 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/docker-engine: needs some kernel
+ options
 In-Reply-To: <20200530124735.1384078-1-francois.perrad@gadz.org>
 References: <20200530124735.1384078-1-francois.perrad@gadz.org>
-Message-ID: <20200530124735.1384078-2-francois.perrad@gadz.org>
+Message-ID: <20200530124735.1384078-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+according to https://wiki.gentoo.org/wiki/Docker#Kernel
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- DEVELOPERS                     |  1 +
- configs/guest_arm_a7_defconfig | 16 ++++++++++++++++
- configs/guest_arm_a9_defconfig | 18 ++++++++++++++++++
- configs/guest_x86_64_defconfig | 15 +++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 configs/guest_arm_a7_defconfig
- create mode 100644 configs/guest_arm_a9_defconfig
- create mode 100644 configs/guest_x86_64_defconfig
+ package/docker-engine/docker-engine.mk | 67 ++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 99f47c3a3..e930c011b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -934,6 +934,7 @@ F:	package/ser2net/
- N:	Francois Perrad <francois.perrad@gadz.org>
- F:	board/olimex/a20_olinuxino
- F:	board/olimex/imx233_olinuxino/
-+F:	configs/guest_*
- F:	configs/olimex_a20_olinuxino_*
- F:	configs/olimex_imx233_olinuxino_defconfig
- F:	package/4th/
-diff --git a/configs/guest_arm_a7_defconfig b/configs/guest_arm_a7_defconfig
-new file mode 100644
-index 000000000..efe9a1369
---- /dev/null
-+++ b/configs/guest_arm_a7_defconfig
-@@ -0,0 +1,16 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 78f6c1261..41600486c 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -79,4 +79,71 @@ define DOCKER_ENGINE_USERS
+ 	- - docker -1 * - - - Docker Application Container Framework
+ endef
+ 
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
++define DOCKER_ENGINE_DRIVER_BTRFS_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BTRFS_FS)
++endef
++endif
 +
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.15"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG_SWAP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FAIR_GROUP_SCHED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CFS_BANDWIDTH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_RT_GROUP_SCHED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CPUSETS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_PID_CPUSET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PERF)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USER_NS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BLOCK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_THROTTLING)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCHED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_CGROUP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_L3_MASTER_DEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_NET_PRIO)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_NETCLASSID)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MD)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_DM)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MD_THIN_PROVISIONING)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IPVLAN)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PERSISTENT_KEYRINGS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_ENCRYPTED_KEYS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_KEY_DH_OPERATIONS)
++	$(DOCKER_ENGINE_DRIVER_BTRFS_LINUX_CONFIG_FIXUPS)
++endef
 +
-+# System
-+BR2_INIT_SYSTEMD=y
-+# BR2_TARGET_GENERIC_GETTY is not set
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_TAR=y
-diff --git a/configs/guest_arm_a9_defconfig b/configs/guest_arm_a9_defconfig
-new file mode 100644
-index 000000000..02c3d302d
---- /dev/null
-+++ b/configs/guest_arm_a9_defconfig
-@@ -0,0 +1,18 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.15"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+
-+# System
-+BR2_INIT_SYSTEMD=y
-+# BR2_TARGET_GENERIC_GETTY is not set
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_TAR=y
-diff --git a/configs/guest_x86_64_defconfig b/configs/guest_x86_64_defconfig
-new file mode 100644
-index 000000000..42d1d659a
---- /dev/null
-+++ b/configs/guest_x86_64_defconfig
-@@ -0,0 +1,15 @@
-+# Architecture
-+BR2_x86_64=y
-+
-+# Toolchain
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.15"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+
-+# System
-+BR2_INIT_SYSTEMD=y
-+# BR2_TARGET_GENERIC_GETTY is not set
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_TAR=y
+ $(eval $(golang-package))
 -- 
 2.25.1
