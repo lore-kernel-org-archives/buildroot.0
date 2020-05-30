@@ -1,76 +1,124 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 30 May 2020 15:43:44 +0200
-Subject: [Buildroot] [PATCH,for-next] package/rust: remove unneded patch
-Message-ID: <20200530134344.24976-1-romain.naour@gmail.com>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Sat, 30 May 2020 17:39:57 +0200
+Subject: [Buildroot] [PATCH V3] package/c-periphery: bump version to 2.2.0
+Message-ID: <20200530153957.17149-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The previous commit [1] added a patch to remove python2 from the configure script.
-While this script is used by the Fedora rust package [2], it is not used by rust.mk.
+Since commit "cmake: add cmake build support"
+(https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
+c-periphery implement cmake build, so use cmake-package instead of generic-package
 
-The configure script is an alternative build system provided by upstream, and
-finally calls x.py [3].
+The hash of the license file is updated due to an update in the
+copyright year:
 
-Thanks to Thomas for noticing the mistake [4].
+  - Copyright (c) 2014-2019 vsergeev / Ivan (Vanya) A. Sergeev
+  + Copyright (c) 2014-2020 vsergeev / Ivan (Vanya) A. Sergeev
 
-[1] 02703108eca8353ff45c0842d9b882a0dc37c04b
-[2] https://src.fedoraproject.org/rpms/rust/blob/216b2d27716bf1031c526dbd0e01a1fa8e6d5aa2/f/rust.spec#_314
-[3] https://github.com/rust-lang/rust/blob/1.33.0/README.md#configure-and-make
-[4] http://lists.busybox.net/pipermail/buildroot/2020-May/283610.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 ---
- ...igure-use-default-python-interpreter.patch | 37 -------------------
- 1 file changed, 37 deletions(-)
- delete mode 100644 package/rust/0002-configure-use-default-python-interpreter.patch
+  change v2->v3
+    - Fix commit log
+    - use _XOPEN_SOURCE instead of __USE_XOPEN according to man poll. Suggested-by Thomas Petazzoni
+    - Install library to $(TARGET_DIR)
 
-diff --git a/package/rust/0002-configure-use-default-python-interpreter.patch b/package/rust/0002-configure-use-default-python-interpreter.patch
-deleted file mode 100644
-index 34d97bb4cf..0000000000
---- a/package/rust/0002-configure-use-default-python-interpreter.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From aca7abb537f5caf1c9f027cf65dd0f53fb664e73 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Tue, 26 May 2020 18:24:25 +0200
--Subject: [PATCH] configure: use default python interpreter
+  change v1->v2:
+    - fix correct copyright year 2020
+
+ ...0001-gpio.c-add-_XOPEN_SOURCE-define.patch | 38 +++++++++++++++++++
+ package/c-periphery/c-periphery.hash          |  4 +-
+ package/c-periphery/c-periphery.mk            | 19 ++--------
+ 3 files changed, 43 insertions(+), 18 deletions(-)
+ create mode 100644 package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch
+
+diff --git a/package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch b/package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch
+new file mode 100644
+index 0000000000..815fa9541d
+--- /dev/null
++++ b/package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch
+@@ -0,0 +1,38 @@
++From 9b0e96bad4a50b5c95c88e0b6c526ed44f00382a Mon Sep 17 00:00:00 2001
++From: Joris Offouga <offougajoris@gmail.com>
++Date: Fri, 29 May 2020 13:48:58 +0200
++Subject: [PATCH] gpio.c: add _XOPEN_SOURCE define
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The code needs _XOPEN_SOURCE for some poll() flags.
++
++Fix build with uclibc:
++src/gpio.c: In function gpio_poll_multiple?:
++src/gpio.c:242:61: error: ?POLLRDNORM? undeclared (first use in this function)
++(POLLPRI | POLLERR) : (POLLIN | POLLRDNORM);
++                                ^
++
++Signed-off-by: Joris Offouga <offougajoris@gmail.com>
++[Upstream Status: https://github.com/vsergeev/c-periphery/pull/24]
++---
++ src/gpio.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/gpio.c b/src/gpio.c
++index b4039f1..58b5c16 100644
++--- a/src/gpio.c
+++++ b/src/gpio.c
++@@ -4,6 +4,8 @@
++  * License: MIT
++  */
++ 
+++#define _XOPEN_SOURCE
+++
++ #include <stddef.h>
++ #include <stdbool.h>
++ #include <stdarg.h>
++-- 
++2.20.1
++
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index 244f8f60f1..208ab5de97 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654  c-periphery-2.1.0.tar.gz
+-sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3  LICENSE
++sha256 2c1714962f8e4a29ded69f3fc990f4e039162ac9d213a21062a4df9e105b83a4  c-periphery-2.2.0.tar.gz
++sha256 7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index bb50434efa..54b286f3b1 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
+@@ -4,24 +4,11 @@
+ #
+ ################################################################################
+ 
+-C_PERIPHERY_VERSION = 2.1.0
++C_PERIPHERY_VERSION = 2.2.0
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+-# only a static library
+-C_PERIPHERY_INSTALL_TARGET = NO
++C_PERIPHERY_INSTALL_TARGET = YES
+ C_PERIPHERY_LICENSE = MIT
+ C_PERIPHERY_LICENSE_FILES = LICENSE
+ 
+-define C_PERIPHERY_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
 -
--Don't try to use python2 if available, use the python interpreter available
--in ouput/host/bin/python whateverer the python version is.
+-# There is no 'install' rule in the Makefile, so we handle things
+-# manually.
+-define C_PERIPHERY_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
+-	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
+-	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
+-endef
 -
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- configure | 12 ------------
-- 1 file changed, 12 deletions(-)
--
--diff --git a/configure b/configure
--index eeb8d081d34..6014a982f47 100755
----- a/configure
--+++ b/configure
--@@ -2,16 +2,4 @@
-- 
-- script="$(dirname $0)"/src/bootstrap/configure.py
-- 
---try() {
---    cmd=$1
---    shift
---    T=$($cmd --version 2>/dev/null)
---    if [ $? -eq 0 ]; then
---        exec $cmd "$script" "$@"
---    fi
---}
---
---try python2.7 "$@"
---try python27 "$@"
---try python2 "$@"
-- exec python $script "$@"
---- 
--2.25.4
--
+-$(eval $(generic-package))
++$(eval $(cmake-package))
 -- 
-2.25.4
+2.20.1
