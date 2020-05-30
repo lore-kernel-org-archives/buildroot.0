@@ -1,100 +1,104 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 May 2020 14:25:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xen: security bump to version 4.13.1
-Message-ID: <20200530122532.3477185-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 30 May 2020 14:47:29 +0200
+Subject: [Buildroot] [PATCH v2 1/7] configs/guest_*: some new defconfig
+In-Reply-To: <20200530124735.1384078-1-francois.perrad@gadz.org>
+References: <20200530124735.1384078-1-francois.perrad@gadz.org>
+Message-ID: <20200530124735.1384078-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-11739: An issue was discovered in Xen through 4.13.x,
-allowing guest OS users to cause a denial of service or possibly gain
-privileges because of missing memory barriers in read-write unlock
-paths. The read-write unlock paths don't contain a memory barrier. On
-Arm, this means a processor is allowed to re-order the memory access
-with the preceding ones. In other words, the unlock may be seen by
-another processor before all the memory accesses within the "critical"
-section. As a consequence, it may be possible to have a writer executing
-a critical section at the same time as readers or another writer. In
-other words, many of the assumptions (e.g., a variable cannot be
-modified after a check) in the critical sections are not safe anymore.
-The read-write locks are used in hypercalls (such as grant-table ones),
-so a malicious guest could exploit the race. For instance, there is a
-small window where Xen can leak memory if XENMAPSPACE_grant_table is
-used concurrently. A malicious guest may be able to leak memory, or
-cause a hypervisor crash resulting in a Denial of Service (DoS).
-Information leak and privilege escalation cannot be excluded.
-
-- Fix CVE-2020-11740: An issue was discovered in xenoprof in Xen through
-4.13.x, allowing guest OS users (without active profiling) to obtain
-sensitive information about other guests. Unprivileged guests can
-request to map xenoprof buffers, even if profiling has not been enabled
-for those guests. These buffers were not scrubbed.
-
-- Fix CVE-2020-11741: An issue was discovered in xenoprof in Xen through
-4.13.x, allowing guest OS users (with active profiling) to obtain
-sensitive information about other guests, cause a denial of service, or
-possibly gain privileges. For guests for which "active" profiling was
-enabled by the administrator, the xenoprof code uses the standard Xen
-shared ring structure. Unfortunately, this code did not treat the guest
-as a potential adversary: it trusts the guest not to modify buffer size
-information or modify head / tail pointers in unexpected ways. This can
-crash the host (DoS). Privilege escalation cannot be ruled out.
-
-- Fix CVE-2020-11742: An issue was discovered in Xen through 4.13.x,
-allowing guest OS users to cause a denial of service because of bad
-continuation handling in GNTTABOP_copy. Grant table operations are
-expected to return 0 for success, and a negative number for errors. The
-fix for CVE-2017-12135 introduced a path through grant copy handling
-where success may be returned to the caller without any action taken. In
-particular, the status fields of individual operations are left
-uninitialised, and may result in errant behaviour in the caller of
-GNTTABOP_copy. A buggy or malicious guest can construct its grant table
-in such a way that, when a backend domain tries to copy a grant, it hits
-the incorrect exit path. This returns success to the caller without
-doing anything, which may cause crashes or other incorrect behaviour.
-
-- Fix CVE-2020-11743: An issue was discovered in Xen through 4.13.x,
-allowing guest OS users to cause a denial of service because of a bad
-error path in GNTTABOP_map_grant. Grant table operations are expected to
-return 0 for success, and a negative number for errors. Some misplaced
-brackets cause one error path to return 1 instead of a negative value.
-The grant table code in Linux treats this condition as success, and
-proceeds with incorrectly initialised state. A buggy or malicious guest
-can construct its grant table in such a way that, when a backend domain
-tries to map a grant, it hits the incorrect error path. This will crash
-a Linux based dom0 or backend domain.
-
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-13-series/xen-project-4-13-1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                     |  1 +
+ configs/guest_arm_a7_defconfig | 16 ++++++++++++++++
+ configs/guest_arm_a9_defconfig | 18 ++++++++++++++++++
+ configs/guest_x86_64_defconfig | 15 +++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 configs/guest_arm_a7_defconfig
+ create mode 100644 configs/guest_arm_a9_defconfig
+ create mode 100644 configs/guest_x86_64_defconfig
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 4224924652..ab5f9d9083 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c69ae21b2ddeaf25532a81a448fcc6a218bc56f93c8907b2d416b2d4339c0afe  xen-4.13.0.tar.gz
-+sha256  b97ce363e55b12c992063f4466c43cba0a6386ceb7a747b4dc670311f337ef01  xen-4.13.1.tar.gz
- sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index fa49f5996b..15742b5127 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.13.0
-+XEN_VERSION = 4.13.1
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 99f47c3a3..e930c011b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -934,6 +934,7 @@ F:	package/ser2net/
+ N:	Francois Perrad <francois.perrad@gadz.org>
+ F:	board/olimex/a20_olinuxino
+ F:	board/olimex/imx233_olinuxino/
++F:	configs/guest_*
+ F:	configs/olimex_a20_olinuxino_*
+ F:	configs/olimex_imx233_olinuxino_defconfig
+ F:	package/4th/
+diff --git a/configs/guest_arm_a7_defconfig b/configs/guest_arm_a7_defconfig
+new file mode 100644
+index 000000000..efe9a1369
+--- /dev/null
++++ b/configs/guest_arm_a7_defconfig
+@@ -0,0 +1,16 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.15"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# System
++BR2_INIT_SYSTEMD=y
++# BR2_TARGET_GENERIC_GETTY is not set
++
++# Filesystem
++BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/guest_arm_a9_defconfig b/configs/guest_arm_a9_defconfig
+new file mode 100644
+index 000000000..02c3d302d
+--- /dev/null
++++ b/configs/guest_arm_a9_defconfig
+@@ -0,0 +1,18 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.15"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# System
++BR2_INIT_SYSTEMD=y
++# BR2_TARGET_GENERIC_GETTY is not set
++
++# Filesystem
++BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/guest_x86_64_defconfig b/configs/guest_x86_64_defconfig
+new file mode 100644
+index 000000000..42d1d659a
+--- /dev/null
++++ b/configs/guest_x86_64_defconfig
+@@ -0,0 +1,15 @@
++# Architecture
++BR2_x86_64=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.15"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# System
++BR2_INIT_SYSTEMD=y
++# BR2_TARGET_GENERIC_GETTY is not set
++
++# Filesystem
++BR2_TARGET_ROOTFS_TAR=y
 -- 
-2.26.2
+2.25.1
