@@ -1,124 +1,33 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Sat, 30 May 2020 17:39:57 +0200
-Subject: [Buildroot] [PATCH V3] package/c-periphery: bump version to 2.2.0
-Message-ID: <20200530153957.17149-1-offougajoris@gmail.com>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sat, 30 May 2020 18:08:29 +0200
+Subject: [Buildroot] make sdk - relocate - ccache not working as expected
+Message-ID: <2b30abbf-41ab-253e-0c91-6bb6cf5e36a5@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit "cmake: add cmake build support"
-(https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
-c-periphery implement cmake build, so use cmake-package instead of generic-package
+Hello all,
 
-The hash of the license file is updated due to an update in the
-copyright year:
 
-  - Copyright (c) 2014-2019 vsergeev / Ivan (Vanya) A. Sergeev
-  + Copyright (c) 2014-2020 vsergeev / Ivan (Vanya) A. Sergeev
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
----
-  change v2->v3
-    - Fix commit log
-    - use _XOPEN_SOURCE instead of __USE_XOPEN according to man poll. Suggested-by Thomas Petazzoni
-    - Install library to $(TARGET_DIR)
+I am using a Buildroot generated (make sdk; 2020.02) toolchain which I use on different
+computers and I run into a problem where ccache keeps using the orignal temporary location
+for the ccache cache, despite having ran sdk-relocate.sh:
 
-  change v1->v2:
-    - fix correct copyright year 2020
 
- ...0001-gpio.c-add-_XOPEN_SOURCE-define.patch | 38 +++++++++++++++++++
- package/c-periphery/c-periphery.hash          |  4 +-
- package/c-periphery/c-periphery.mk            | 19 ++--------
- 3 files changed, 43 insertions(+), 18 deletions(-)
- create mode 100644 package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch
+Relocating the buildroot SDK from
+/data/work/jcz/git/jidiot/clients/demo_rpi/buildroot_initramfs/output/host to
+/var/lib/jenkins/workspace/argets_Demo_rpi_feature_rpi_zero/toolchain/ext ...
+...
+ccache: error: Failed to create directory
+/data/work/jcz/git/jidiot/clients/demo_rpi/.cache/cc/tmp: Permission denied
 
-diff --git a/package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch b/package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch
-new file mode 100644
-index 0000000000..815fa9541d
---- /dev/null
-+++ b/package/c-periphery/0001-gpio.c-add-_XOPEN_SOURCE-define.patch
-@@ -0,0 +1,38 @@
-+From 9b0e96bad4a50b5c95c88e0b6c526ed44f00382a Mon Sep 17 00:00:00 2001
-+From: Joris Offouga <offougajoris@gmail.com>
-+Date: Fri, 29 May 2020 13:48:58 +0200
-+Subject: [PATCH] gpio.c: add _XOPEN_SOURCE define
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The code needs _XOPEN_SOURCE for some poll() flags.
-+
-+Fix build with uclibc:
-+src/gpio.c: In function gpio_poll_multiple?:
-+src/gpio.c:242:61: error: ?POLLRDNORM? undeclared (first use in this function)
-+(POLLPRI | POLLERR) : (POLLIN | POLLRDNORM);
-+                                ^
-+
-+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-+[Upstream Status: https://github.com/vsergeev/c-periphery/pull/24]
-+---
-+ src/gpio.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/gpio.c b/src/gpio.c
-+index b4039f1..58b5c16 100644
-+--- a/src/gpio.c
-++++ b/src/gpio.c
-+@@ -4,6 +4,8 @@
-+  * License: MIT
-+  */
-+ 
-++#define _XOPEN_SOURCE
-++
-+ #include <stddef.h>
-+ #include <stdbool.h>
-+ #include <stdarg.h>
-+-- 
-+2.20.1
-+
-diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
-index 244f8f60f1..208ab5de97 100644
---- a/package/c-periphery/c-periphery.hash
-+++ b/package/c-periphery/c-periphery.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654  c-periphery-2.1.0.tar.gz
--sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3  LICENSE
-+sha256 2c1714962f8e4a29ded69f3fc990f4e039162ac9d213a21062a4df9e105b83a4  c-periphery-2.2.0.tar.gz
-+sha256 7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
-diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
-index bb50434efa..54b286f3b1 100644
---- a/package/c-periphery/c-periphery.mk
-+++ b/package/c-periphery/c-periphery.mk
-@@ -4,24 +4,11 @@
- #
- ################################################################################
- 
--C_PERIPHERY_VERSION = 2.1.0
-+C_PERIPHERY_VERSION = 2.2.0
- C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
- C_PERIPHERY_INSTALL_STAGING = YES
--# only a static library
--C_PERIPHERY_INSTALL_TARGET = NO
-+C_PERIPHERY_INSTALL_TARGET = YES
- C_PERIPHERY_LICENSE = MIT
- C_PERIPHERY_LICENSE_FILES = LICENSE
- 
--define C_PERIPHERY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
--endef
--
--# There is no 'install' rule in the Makefile, so we handle things
--# manually.
--define C_PERIPHERY_INSTALL_STAGING_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
--	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
--	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
--- 
-2.20.1
+
+Is this a known problem? If not, how to proceed?
+
+regards,
+
+
+Jaap Crezee
