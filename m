@@ -1,43 +1,76 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 30 May 2020 14:47:33 +0200
-Subject: [Buildroot] [PATCH v2 5/7] package/systemd: needs kernel options
+Date: Sat, 30 May 2020 14:47:34 +0200
+Subject: [Buildroot] [PATCH v2 6/7] package/systemd: add an option
+ BR2_PACKAGE_SYSTEMD_GUEST
 In-Reply-To: <20200530124735.1384078-1-francois.perrad@gadz.org>
 References: <20200530124735.1384078-1-francois.perrad@gadz.org>
-Message-ID: <20200530124735.1384078-6-francois.perrad@gadz.org>
+Message-ID: <20200530124735.1384078-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-according to https://wiki.gentoo.org/wiki/Systemd#Kernel
+this option allows a systemd tailored for a guest/container
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/systemd/systemd.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/systemd/Config.in  | 14 ++++++++++----
+ package/systemd/systemd.mk |  6 +++++-
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index dd3b8c534..a8595dce8 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -35,10 +35,10 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+ 	select BR2_PACKAGE_UTIL_LINUX_FSCK
+-	select BR2_PACKAGE_KMOD
+-	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+-	select BR2_PACKAGE_KMOD_TOOLS
+-	select BR2_TARGET_TZ_INFO
++	select BR2_PACKAGE_KMOD if !BR2_PACKAGE_SYSTEMD_GUEST
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if !BR2_PACKAGE_SYSTEMD_GUEST # kmod-tools
++	select BR2_PACKAGE_KMOD_TOOLS if !BR2_PACKAGE_SYSTEMD_GUEST
++	select BR2_TARGET_TZ_INFO if !BR2_PACKAGE_SYSTEMD_GUEST
+ 	select BR2_NEEDS_HOST_UTF8_LOCALE
+ 	select BR2_PACKAGE_HOST_SYSTEMD # for systemctl preset-all, during target-finalize
+ 	help
+@@ -90,6 +90,12 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
+ 
++config BR2_PACKAGE_SYSTEMD_GUEST
++	bool "systemd-guest"
++	default n
++	help
++	  this option allows a systemd tailored for a guest/container.
++
+ config BR2_PACKAGE_SYSTEMD_BOOT
+ 	bool "systemd-boot"
+ 	depends on BR2_i386 || BR2_x86_64
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 92de54072..c34671071 100644
+index c34671071..87b1824de 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -568,8 +568,16 @@ SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+@@ -13,11 +13,15 @@ SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+ 	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
+ 	host-gperf \
+-	kmod \
+ 	libcap \
+ 	util-linux \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
- define SYSTEMD_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
--	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_BPF)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_EPOLL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SIGNALFD)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_TIMERFD)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SYSFS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR)
++ifneq ($(BR2_PACKAGE_SYSTEMD_GUEST),y)
++	SYSTEMD_DEPENDENCIES += kmod
++endif
++
++
+ SYSTEMD_PROVIDES = udev
+ 
+ SYSTEMD_CONF_OPTS += \
 -- 
 2.25.1
