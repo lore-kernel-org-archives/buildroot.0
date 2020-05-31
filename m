@@ -1,43 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 May 2020 23:07:47 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools/perf: bear the kernel
- options munging
-In-Reply-To: <20200501162216.9048-1-yann.morin.1998@free.fr>
-References: <20200501162216.9048-1-yann.morin.1998@free.fr>
-Message-ID: <20200531230747.74bbb26d@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 May 2020 23:10:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to
+ version 2.1.1
+In-Reply-To: <20200521143957.73835-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 21 May 2020 16:39:57 +0200")
+References: <20200521143957.73835-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1uzkdyj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  1 May 2020 18:22:16 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> perf by itself is not a standalone package; instead, it is part of a
-> bigger package, linux-tools.
-> 
-> Even though perf is the only one to need kernel .config fixups, we still
-> do it in a generic way, as it blends nicely in the existing variables,
-> which all use a loop over all the tools.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - really call PERF_LINUX_CONFIG_FIXUPS  (Thomas)
->   - expand commit log accordingly
-> ---
->  linux/linux.mk                            | 2 --
->  package/linux-tools/linux-tool-perf.mk.in | 4 ++++
->  package/linux-tools/linux-tools.mk        | 7 +++++++
->  3 files changed, 11 insertions(+), 2 deletions(-)
+ > From ChangeLog:
+ > - CVE: GHSL-2020-100 OOB Read in ntlm_read_ChallengeMessage
+ > - CVE: GHSL-2020-101 OOB Read in security_fips_decrypt due to
+ >   uninitialized value
+ > - CVE: GHSL-2020-102 OOB Write in crypto_rsa_common
+ > - Enforce synchronous legacy RDP encryption count (#6156)
+ > - Fixed some leaks and crashes missed in 2.1.0
+ > - Removed dynamic channel listener limits
+ > - Lots of resource cleanup fixes (clang sanitizers)
 
-Applied to next, thanks.
+ > https://github.com/FreeRDP/FreeRDP/blob/2.1.1/ChangeLog
 
-Thomas
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.02.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
