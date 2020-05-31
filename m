@@ -1,80 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 May 2020 10:18:26 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Carlos Santos
-In-Reply-To: <20200529203204.433746-1-unixmania@gmail.com>
-References: <20200529203204.433746-1-unixmania@gmail.com>
-Message-ID: <20200531081826.GY8737@scaer>
+Date: Sun, 31 May 2020 10:27:01 +0200
+Subject: [Buildroot] [git commit] package/sysrepo: fix SysV init script
+Message-ID: <20200531081039.5FA1485D87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1a14a838eaa88ae683bf8c0cb0ae6cc7e1d10d49
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-29 17:32 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Goodbye!
+The current script (S51sysrepo-plugind) is not able to stop the daemon.
 
-So long, and thanks for all the fish!
+Possible options to fix the problem:
 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+A) By adding the "-m -p $PIDFILE" option to start the pid file will be
+   created but it will not contain the correct PID used by the daemon.
+   This is obviously because the daemon forks.
+B) By not starting the daemon in background (sysrepo-plugind -d) and
+   let do it by start-stop-daemon with "-b" option. But then the log
+   messages of the daemon will not longer ends in the syslog but to stderr.
+C) Start the daemon without a pidfile and stop the daemon with the
+   "-x" option.
 
-Applied to master, thanks.
+The only valid option is C to fix that.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr: introduce EXECUTABLE]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sysrepo/S51sysrepo-plugind | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->  DEVELOPERS | 22 ----------------------
->  1 file changed, 22 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 99f47c3a37..88050349db 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -504,28 +504,6 @@ N:	Carlo Caione <carlo.caione@gmail.com>
->  F:	package/jailhouse/
->  F:	package/sunxi-boards/
->  
-> -N:	Carlos Santos <unixmania@gmail.com>
-> -F:	package/busybox/
-> -F:	package/initscripts/
-> -F:	package/intel-microcode/
-> -F:	package/liburiparser/
-> -F:	package/modem-manager/
-> -F:	package/pamtester/
-> -F:	package/pcm-tools/
-> -F:	package/skeleton-custom/
-> -F:	package/skeleton-init-common/
-> -F:	package/skeleton-init-none/
-> -F:	package/skeleton-init-systemd/
-> -F:	package/skeleton-init-sysv/
-> -F:	package/skeleton/
-> -F:	package/sysvinit/
-> -F:	package/udev-gentoo-scripts/
-> -F:	package/util-linux/
-> -F:	package/tpm2-abrmd/
-> -F:	package/tpm2-tools/
-> -F:	package/tpm2-totp/
-> -F:	package/tpm2-tss/
-> -
->  N:	Carsten Schoenert <c.schoenert@gmail.com>
->  F:	package/dvbsnoop/
->  F:	package/libdvbsi/
-> -- 
-> 2.18.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sysrepo/S51sysrepo-plugind b/package/sysrepo/S51sysrepo-plugind
+index 74b68396bf..60ea3ba7a9 100644
+--- a/package/sysrepo/S51sysrepo-plugind
++++ b/package/sysrepo/S51sysrepo-plugind
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ 
+ DAEMON="sysrepo-plugind"
+-PIDFILE="/var/run/$DAEMON.pid"
++EXECUTABLE="/usr/bin/$DAEMON"
+ 
+ SYSREPO_PLUGIND_ARGS=""
+ 
+@@ -10,7 +10,7 @@ SYSREPO_PLUGIND_ARGS=""
+ 
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+-	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
++	start-stop-daemon -S -q -x "$EXECUTABLE" \
+ 		-- $SYSREPO_PLUGIND_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+@@ -23,7 +23,7 @@ start() {
+ 
+ stop() {
+ 	printf 'Stopping %s: ' "$DAEMON"
+-	start-stop-daemon -K -q -p $PIDFILE
++	start-stop-daemon -K -q -x "$EXECUTABLE"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
