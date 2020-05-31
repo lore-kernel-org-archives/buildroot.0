@@ -1,44 +1,85 @@
-From: =?UTF-8?q?Gon=C3=A7alo=20Salazar?= <glbsalazar@gmail.com>
-Date: Sun, 31 May 2020 13:11:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xr819-xradio: bumped to version
- 6bf0e2e2
-Message-ID: <20200531121125.1985843-1-glbsalazar@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 May 2020 14:28:09 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/check-package: add a check for
+ the new spacing convention
+In-Reply-To: <20200205212211.29720-1-heiko.thiery@gmail.com>
+References: <20200205212211.29720-1-heiko.thiery@gmail.com>
+Message-ID: <20200531122809.GB8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumped xr819-xradio package to the latest version to fix some compilation issues when using kernel 5.6 for the orangepi-zero 
+Heiko, All,
 
-Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
----
- package/xr819-xradio/xr819-xradio.hash | 2 +-
- package/xr819-xradio/xr819-xradio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2020-02-05 22:22 +0100, Heiko Thiery spake thusly:
+> The seperation of the fields in the hash file should be 2 spaces for
+> consistency.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-diff --git a/package/xr819-xradio/xr819-xradio.hash b/package/xr819-xradio/xr819-xradio.hash
-index 393780fb30..efff92ab7d 100644
---- a/package/xr819-xradio/xr819-xradio.hash
-+++ b/package/xr819-xradio/xr819-xradio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 2f61f2db78d46440819af2d8191f9b5ed2bb3e5404b739f68fb0af7917d0d222 xr819-xradio-aa01ba77b9360dd734b50f5b937960a50c5a0825.tar.gz
-+sha256 5900821a777b9008d7cf9b8128e0cb75a4623ecb608b45438e17c7a056cde1bf xr819-xradio-6bf0e2e21c80456e2a3d4ad1267caecde7165871.tar.gz
- # Locally computed
- sha256 db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73 LICENSE
-diff --git a/package/xr819-xradio/xr819-xradio.mk b/package/xr819-xradio/xr819-xradio.mk
-index ae3e4fbd34..c1fe3295b6 100644
---- a/package/xr819-xradio/xr819-xradio.mk
-+++ b/package/xr819-xradio/xr819-xradio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XR819_XRADIO_VERSION = aa01ba77b9360dd734b50f5b937960a50c5a0825
-+XR819_XRADIO_VERSION = 6bf0e2e21c80456e2a3d4ad1267caecde7165871
- XR819_XRADIO_SITE = $(call github,fifteenhex,xradio,$(XR819_XRADIO_VERSION))
- XR819_XRADIO_LICENSE = GPL-2.0
- XR819_XRADIO_LICENSE_FILES = LICENSE
+I was thinking about this one recently, but we still have too many
+issues with it:
+
+    $ make check-package 2>&1 |grep warnings\ generated
+    2166 warnings generated
+    1692 warnings generated
+    2538 warnings generated
+    1551 warnings generated
+    796 warnings generated
+
+So, we need to either wiat for all the hash filers to be fixed one by
+one, or we need a mass conversion effort...
+
+I did that conversion way back then, and it is trivial I think:
+
+    $ find . -type f -name '*.hash' -print0 \
+    |xargs -0 sed -r -i -e 's/^(md5|sha(1|224|256|384|512))[[:space:]]+([^[:space:]]+)[[:space:]]+(.+)$/\1  \3  \4/'
+
+    $ git diff --stat
+    [...]
+     1793 files changed, 6298 insertions(+), 6298 deletions(-)
+
+So I'm keeping your patch on the side for now...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  utils/checkpackagelib/lib_hash.py | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
+> index 3e381119a5..87cc58a1bb 100644
+> --- a/utils/checkpackagelib/lib_hash.py
+> +++ b/utils/checkpackagelib/lib_hash.py
+> @@ -40,7 +40,7 @@ class HashType(_CheckFunction):
+>          if len(fields) < 2:
+>              return
+>  
+> -        htype, hexa = fields[:2]
+> +        htype, hexa, filename = fields[:3]
+>          if htype == "none":
+>              return
+>          if htype not in self.len_of_hash.keys():
+> @@ -53,3 +53,8 @@ class HashType(_CheckFunction):
+>                      .format(self.filename, lineno, self.url_to_manual),
+>                      text,
+>                      "expected {} hex digits".format(self.len_of_hash[htype])]
+> +        if not re.match(re.escape("^{}  {}  {}.*$".format(
+> +                htype, hexa, filename)), text):
+> +            return ["{}:{}: separation does not match expectation "
+> +                    "({}#adding-packages-hash)"
+> +                    .format(self.filename, lineno, self.url_to_manual), text]
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
