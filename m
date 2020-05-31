@@ -1,73 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 May 2020 23:08:44 +0200
-Subject: [Buildroot] [git commit] package/linux-tools/perf: bear the kernel
- options munging
-Message-ID: <20200602200123.0FF057FD63@busybox.osuosl.org>
+Date: Sun, 31 May 2020 23:12:34 +0200
+Subject: [Buildroot] [git commit] package/qemu: remove csky fork
+Message-ID: <20200602200123.27AE07FD63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5587f366cde8fb6b8393c7ce3670f548dc8e5fad
+commit: https://git.buildroot.net/buildroot/commit/?id=20f45029cc76ba41e7087041f87bba314336a6d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-perf by itself is not a standalone package; instead, it is part of a
-bigger package, linux-tools.
+We have a qemu fork for csky cpus [1] but since qemu version
+bump to 4.2.0 [2] and libssh2/libssh change the csky build is
+broken.
 
-Even though perf is the only one to need kernel .config fixups, we still
-do it in a generic way, as it blends nicely in the existing variables,
-which all use a loop over all the tools.
+The csky fork is based on Qemu 3.0.0 but unlike autotools packages
+any unknown option is handled as error.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Since we don't want to support all options from previous qemu
+release and the github repository has been removed [3] and the
+only remaining archive is located on http://sources.buildroot.net,
+remove the qemu csky fork as suggested by [4].
+
+[1] https://git.buildroot.net/buildroot/commit/?id=f816e5b276f1ef15840bec6667f1e8219717ab7d
+[2] https://git.buildroot.net/buildroot/commit/?id=0ea17054ce7dfc54efca5634133cef786445e7b1
+[3] https://github.com/c-sky/qemu
+[4] http://lists.busybox.net/pipermail/buildroot/2020-May/281885.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Guo Ren <ren_guo@c-sky.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+[Peter: move patches out of 4.2.0 subdir]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk                            | 2 --
- package/linux-tools/linux-tool-perf.mk.in | 4 ++++
- package/linux-tools/linux-tools.mk        | 7 +++++++
- 3 files changed, 11 insertions(+), 2 deletions(-)
+ ...ser-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch |  0
+ ...util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch |  0
+ ...arget-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch |  0
+ package/qemu/Config.in.host                                  |  1 -
+ package/qemu/qemu.hash                                       |  3 ---
+ package/qemu/qemu.mk                                         | 12 ------------
+ 6 files changed, 16 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 69bbad99e1..60dc343efa 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -355,8 +355,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
--	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB))
- 	$(if $(LINUX_KERNEL_CUSTOM_LOGO_PATH),
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index 7106b622cb..53b7c5b9cd 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -158,3 +158,7 @@ define PERF_INSTALL_TARGET_CMDS
- 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
- 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
- endef
-+
-+define PERF_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
-+endef
-diff --git a/package/linux-tools/linux-tools.mk b/package/linux-tools/linux-tools.mk
-index 65d9e850e0..81b1fbc176 100644
---- a/package/linux-tools/linux-tools.mk
-+++ b/package/linux-tools/linux-tools.mk
-@@ -42,6 +42,13 @@ LINUX_TOOLS_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
- 		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
+diff --git a/package/qemu/4.2.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+similarity index 100%
+rename from package/qemu/4.2.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+rename to package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+diff --git a/package/qemu/4.2.0/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch b/package/qemu/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+similarity index 100%
+rename from package/qemu/4.2.0/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+rename to package/qemu/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+diff --git a/package/qemu/4.2.0/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch b/package/qemu/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch
+similarity index 100%
+rename from package/qemu/4.2.0/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch
+rename to package/qemu/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 5ed160159a..7ccf768d15 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_arm
+ 	default y if BR2_armeb
+ 	default y if BR2_aarch64
+-	default y if BR2_csky
+ 	default y if BR2_i386
+ 	default y if BR2_m68k
+ 	default y if BR2_microblazeel
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index dae11cb3fe..322b4fdf16 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -2,6 +2,3 @@
+ sha256 d3481d4108ce211a053ef15be69af1bdd9dde1510fda80d92be0f6c3e98768f0  qemu-4.2.0.tar.xz
+ sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-
+-# Locally computed
+-sha256 61091767ffd16002e77f005155d096208094e69dee35e6d5ddcaa6c8a13b5e26  qemu-b517e1dc3125a57555d67a8deed9eac7b42288e2.tar.gz
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 0bb29f9369..7fe64e3605 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,14 +4,9 @@
+ #
+ ################################################################################
  
-+define LINUX_TOOLS_LINUX_CONFIG_FIXUPS
-+	$(foreach tool,$(LINUX_TOOLS),\
-+		$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+			$($(call UPPERCASE,$(tool))_LINUX_CONFIG_FIXUPS))
-+	)
-+endef
-+
- define LINUX_TOOLS_INSTALL_INIT_SYSTEMD
- 	$(foreach tool,$(LINUX_TOOLS),\
- 		$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
+-ifeq ($(BR2_csky),y)
+-QEMU_VERSION = b517e1dc3125a57555d67a8deed9eac7b42288e2
+-QEMU_SITE = $(call github,c-sky,qemu,$(QEMU_VERSION))
+-else
+ QEMU_VERSION = 4.2.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+-endif
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ # NOTE: there is no top-level license file for non-(L)GPL licenses;
+@@ -238,13 +233,6 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),sh4aeb)
+ HOST_QEMU_ARCH = sh4eb
+ endif
+-ifeq ($(HOST_QEMU_ARCH),csky)
+-ifeq ($(BR2_ck610),y)
+-HOST_QEMU_ARCH = cskyv1
+-else
+-HOST_QEMU_ARCH = cskyv2
+-endif
+-endif
+ HOST_QEMU_SYS_ARCH ?= $(HOST_QEMU_ARCH)
+ 
+ HOST_QEMU_CFLAGS = $(HOST_CFLAGS)
