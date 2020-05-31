@@ -1,78 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2020 23:15:35 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: new chapter
- on release engineering
-Message-ID: <20200531211722.1B28085F2D@busybox.osuosl.org>
+Date: Sun, 31 May 2020 23:15:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ltrace: directly
+ use s.b.o to fetch the archive
+Message-ID: <20200531211722.0255185F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d46d576ca75d0b20d8ac95332bc29eb6a1f982e
+commit: https://git.buildroot.net/buildroot/commit/?id=2a8c2571110a17b62bccdaa5648ef2f427803818
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Describe release engineering and development phases of the project.
+During the migration from alioth to gitlab, the git repository for ltrace
+was not migrated. There is a repository on gitlab.com, owned by the debian
+maintainer, but that repository does not contain the sha1 we know of:
+    https://gitlab.com/cespedes/ltrace
 
-Signed-off-by: Joachim Nilsson <troglobit@gmail.com>
+s.b.o. is the only known location so far to host the archive, so switch
+to it.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit de2b78143c4316c6a6a07d44d74298d307609dd2)
+(cherry picked from commit 982728364141c4369003b1dbdc24e51428be6b39)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.txt              |  2 ++
- docs/manual/release-engineering.txt | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ package/ltrace/ltrace.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index b76ab40d40..48de65ee10 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -66,6 +66,8 @@ include::contribute.txt[]
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index b71215e43b..2eb60fe450 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -5,7 +5,14 @@
+ ################################################################################
  
- include::developers.txt[]
- 
-+include::release-engineering.txt[]
+ LTRACE_VERSION = c22d359433b333937ee3d803450dc41998115685
+-LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
++#LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
 +
- = Appendix
- 
- include::appendix.txt[]
-diff --git a/docs/manual/release-engineering.txt b/docs/manual/release-engineering.txt
-new file mode 100644
-index 0000000000..0cf38183f9
---- /dev/null
-+++ b/docs/manual/release-engineering.txt
-@@ -0,0 +1,34 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++# Upstream is dead: the git reporistory for ltrace did not follow during the
++# migration from alioth to gitlab, and there is no longer any official
++# upstream repository with the expected sha1, except for the tarball cached on
++# s.b.o., so we go fetch it there.
++LTRACE_SITE = http://sources.buildroot.org/ltrace
 +
-+[[RELENG]]
-+== Release Engineering
-+=== Releases
-+
-+The Buildroot project makes quarterly releases with monthly bugfix
-+releases.  The first release of each year is a long term support
-+release, LTS.
-+
-+ - Quarterly releases: 2020.02, 2020.05, 2020.08, and 2020.11
-+ - Bugfix releases: 2020.02.1, 2020.02.2, ...
-+ - LTS releases: 2020.02, 2021.02, ...
-+
-+Releases are supported until the first bugfix release of the next
-+release, e.g., 2020.05.x is EOL when 2020.08.1 is released.
-+
-+LTS releases are supported until the first bugfix release of the next
-+LTS, e.g., 2020.02.x is supported until 2021.02.1 is released.
-+
-+=== Development
-+
-+Each release cycle consist of two months of development on the +master+
-+branch and one month stabilization before the release is made.  During
-+this phase no new features are added to +master+, only bugfixes.
-+
-+The stabilization phase starts with tagging +-rc1+, and every week until
-+the release, another release candidate is tagged.
-+
-+To handle new features and version bumps during the stabilization phase,
-+a +next+ branch may be created for these features.  Once the current
-+release has been made, the +next+ branch is merged into +master+ and
-+the development cycle for the next release continues there.
+ LTRACE_DEPENDENCIES = elfutils
+ LTRACE_CONF_OPTS = --disable-werror
+ LTRACE_LICENSE = GPL-2.0
