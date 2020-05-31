@@ -1,35 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2020 22:40:26 +0200
-Subject: [Buildroot] [PATCH 4/6] package/python-pycrypto: remove package
-In-Reply-To: <20200426223325.1468127-4-romain.naour@gmail.com> (Romain Naour's
- message of "Mon, 27 Apr 2020 00:33:23 +0200")
-References: <20200426223325.1468127-1-romain.naour@gmail.com>
- <20200426223325.1468127-4-romain.naour@gmail.com>
-Message-ID: <874krvltxh.fsf@dell.be.48ers.dk>
+Date: Sun, 31 May 2020 21:42:48 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/python-pycryptodomex: add host variant
+Message-ID: <20200531204023.2C4D385EFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c904fd033c0d7d974a951d714ccf6fb83689374e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > This package doesn't work with Python 3.8 since the code contains
- > time.clock() that was deprecated in Python 3.3 and removed in Python 3.8.
+Adding a host variant will allow to replace host-python-pycrypto by
+host-python-pycryptodomex for the crda and optee-os packages.
 
- > Instead of applying non upstream patches from Fedora [1], python-pycrypto
- > was replaced by python-pycryptodomex for crda and optee-os package.
- > Now we can remove safely this package.
+From [1]:
+"PyCryptodome is a fork of PyCrypto, which is not maintained any more
+(the last release dates back to 2013 [2]). It exposes almost the same
+API, but there are a few incompatibilities [3]."
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2020-April/280683.html
+[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
+[2] https://pypi.org/project/pycrypto/#history
+[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3db1e5fbcbde9f78f9cac99614fefc243545094e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-pycryptodomex/python-pycryptodomex.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: James Hilliard <james.hilliard1@gmail.com>
-
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
+index 3d3b97ca48..05239e10e5 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.mk
++++ b/package/python-pycryptodomex/python-pycryptodomex.mk
+@@ -15,3 +15,4 @@ PYTHON_PYCRYPTODOMEX_LICENSE = \
+ PYTHON_PYCRYPTODOMEX_LICENSE_FILES = LICENSE.rst Doc/LEGAL/COPYRIGHT.pycrypto
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
