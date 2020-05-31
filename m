@@ -1,123 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 May 2020 22:30:43 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: don't link with
- libstdc++.a on the host
-In-Reply-To: <20200524155818.126961-1-romain.naour@gmail.com>
-References: <20200524155818.126961-1-romain.naour@gmail.com>
-Message-ID: <20200531203043.GE8737@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 May 2020 22:39:08 +0200
+Subject: [Buildroot] [PATCH 1/6] package/python-pycryptodomex: add host
+ variant
+In-Reply-To: <20200426223325.1468127-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Mon, 27 Apr 2020 00:33:20 +0200")
+References: <20200426223325.1468127-1-romain.naour@gmail.com>
+Message-ID: <87d06jltzn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On 2020-05-24 17:58 +0200, Romain Naour spake thusly:
-> While cross-compiling, qt5webengine is building a host tool but
-> want to link the libstdc++ statically. This requires to install
-> libstdc++-static package on the host (Fedora package name).
-> 
-> Otherwise the link fail with:
-> 
->   [185/185] LINK gn
->   FAILED: gn
->   /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
->   /usr/bin/ld?: unable to find -lstdc++
->   [...]
->   Project ERROR: GN build error!
-> 
-> Add --no-static-libstdc++ argument to gn.pro to link to
-> libstdc++.so.6 instead of libstdc++.a.
-> 
-> --no-static-libstdc++ has been added by [1] but it force
-> linking statically by default.
-> 
-> [1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Ga?l Portay <gael.portay@collabora.com>
+ > Adding a host variant allow to replace host-python-pycrypto
+ > by host-python-pycryptodomex for crda and optee-os packages.
 
-Applied to master, after rewriting the commit log with the extra details
-and explanations you provided as replies in the thread. Thanks! :-)
+ > From [1]:
+ > "PyCryptodome is a fork of PyCrypto, which is not maintained any more
+ > (the last release dates back to 2013 [2]). It exposes almost the same
+ > API, but there are a few incompatibilities [3]."
 
-Regards,
-Yann E. MORIN.
+ > [1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
+ > [2] https://pypi.org/project/pycrypto/#history
+ > [3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
 
-> ---
->  ...ro-don-t-link-statically-with-libstc.patch | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
-> 
-> diff --git a/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
-> new file mode 100644
-> index 0000000000..dff3e6c849
-> --- /dev/null
-> +++ b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
-> @@ -0,0 +1,51 @@
-> +From 7ae73da23ad998bd1e63ad213cf7a02e61191951 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@gmail.com>
-> +Date: Sat, 23 May 2020 19:01:19 +0200
-> +Subject: [PATCH] gn.pro: don't link statically with libstc++
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +While cross-compiling, qt5webengine is building a host tool but
-> +want to link the libstdc++ statically. This requires to install
-> +libstdc++-static package on the host (Fedora package name).
-> +
-> +Otherwise the link fail with:
-> +
-> +  [185/185] LINK gn
-> +  FAILED: gn
-> +  /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
-> +  /usr/bin/ld?: unable to find -lstdc++
-> +  [...]
-> +  Project ERROR: GN build error!
-> +
-> +Add --no-static-libstdc++ argument to gn.pro to link to
-> +libstdc++.so.6 instead of libstdc++.a.
-> +
-> +--no-static-libstdc++ has been added by [1] but it force
-> +linking statically by default.
-> +
-> +[1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
-> +
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +---
-> + src/buildtools/gn.pro | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/buildtools/gn.pro b/src/buildtools/gn.pro
-> +index 033202e6..5dd8e241 100644
-> +--- a/src/buildtools/gn.pro
-> ++++ b/src/buildtools/gn.pro
-> +@@ -20,7 +20,8 @@ build_pass|!debug_and_release {
-> + 
-> +             gn_gen_args = --no-last-commit-position --out-path $$out_path \
-> +                           --cc \"$$which($$QMAKE_CC)\" --cxx \"$$which($$QMAKE_CXX)\" \
-> +-                          --ld \"$$which($$QMAKE_LINK)\"
-> ++                          --ld \"$$which($$QMAKE_LINK)\" \
-> ++                          --no-static-libstdc++
-> + 
-> +             msvc:!clang_cl: gn_gen_args += --use-lto
-> + 
-> +-- 
-> +2.25.4
-> +
-> -- 
-> 2.25.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: James Hilliard <james.hilliard1@gmail.com>
+ > ---
+ > For master and 2020.02.x.
+
+Committed to 2020.02.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
