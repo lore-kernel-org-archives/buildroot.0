@@ -1,134 +1,179 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2020 21:43:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/crda: replace
- pycrypto by pycryptodomex
-Message-ID: <20200531204023.35E2685AFF@busybox.osuosl.org>
+Date: Sun, 31 May 2020 22:36:03 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pycrypto:
+ remove package
+Message-ID: <20200531204023.4493C85EFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d43382d51f285a1fdc0ce4f52c5896755a586e4
+commit: https://git.buildroot.net/buildroot/commit/?id=f2b80cd2969339f642bb879c4259029e932d2fd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-From [1]:
-"PyCryptodome is a fork of PyCrypto, which is not maintained any more
-(the last release dates back to 2013 [2]). It exposes almost the same
-API, but there are a few incompatibilities [3]."
+This package doesn't work with Python 3.8 since the code contains
+time.clock() that was deprecated in Python 3.3 and removed in Python 3.8.
 
-[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
-[2] https://pypi.org/project/pycrypto/#history
-[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
+Instead of applying non upstream patches from Fedora [1], python-pycrypto
+was replaced by python-pycryptodomex for crda and optee-os package.
+Now we can remove safely this package.
 
-Update the patch 0001-crda-support-python-3-in-utils-key2pub.py.patch
-since it add pycrypto.
+[1] http://lists.busybox.net/pipermail/buildroot/2020-April/280683.html
 
-From [4]
-"CRDA is no longer needed as of kernel v4.15 since commit 007f6c5e6eb45
-("cfg80211: support loading regulatory database as firmware file") added
-support to use the kernel's firmware request API which looks for the
-firmware on /lib/firmware. Because of this CRDA is legacy software for
-older kernels. It will continue to be maintained."
-
-[4] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/tree/README?id=9856751feaf7b102547cea678a5da6c94252d83d#n8
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8d05237b6018d5389e4381b38d874f447137f987)
+(cherry picked from commit 7ef76ed32fcd447391e26d33a555ff5dab6dc48e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...crda-support-python-3-in-utils-key2pub.py.patch | 32 ++++++++++++++--------
- package/crda/crda.mk                               |  2 +-
- 2 files changed, 22 insertions(+), 12 deletions(-)
+ Config.in.legacy                                   |  7 ++++
+ package/Config.in                                  |  1 -
+ .../0001-remove-incorrect-header-path.patch        | 21 ----------
+ package/python-pycrypto/Config.in                  |  8 ----
+ package/python-pycrypto/python-pycrypto.hash       |  7 ----
+ package/python-pycrypto/python-pycrypto.mk         | 49 ----------------------
+ 6 files changed, 7 insertions(+), 86 deletions(-)
 
-diff --git a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-index fb46d58ed2..f2b9cca2d6 100644
---- a/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-+++ b/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-@@ -1,11 +1,11 @@
--From 4c346aa9e816bddfedc8ac99809fd1ed91bfc8ee Mon Sep 17 00:00:00 2001
-+From 8228c484a1533ff904b276c342adcb6310abe272 Mon Sep 17 00:00:00 2001
- From: Taahir Ahmed <ahmed.taahir@gmail.com>
- Date: Wed, 30 Mar 2016 11:23:54 -0300
- Subject: [PATCH] crda: support python 3 in utils/key2pub.py
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b925e563d3..e04853aea4 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
- utils/key2pub.py can now be run under either python 2.7 or python 3.x.
- This required some minor syntactical changes as well as switching from
--M2Crypto to pycrypto, since M2Crypto doesn't support python 3.x.
-+M2Crypto to pycryptodomex, since M2Crypto doesn't support python 3.x.
+ comment "Legacy options removed in 2020.02"
  
- In addition, some errors in the generated source file keys-ssl.h are
- fixed:
-@@ -17,12 +17,22 @@ fixed:
- 
- [Gustavo: don't call /utils/key2pub.py since that doesn't compute]
- 
-+Use pycryptodomex insdead of pycrypto
++config BR2_PACKAGE_PYTHON_PYCRYPTO
++	bool "python-pycrypto package removed"
++	select BR2_LEGACY
++	help
++	  This package has been removed, use python-pycryptodomex
++	  instead.
 +
-+From [1]:
-+"PyCryptodome is a fork of PyCrypto, which is not maintained any more
-+(the last release dates back to 2013 [2]). It exposes almost the same
-+API, but there are a few incompatibilities [3]."
-+
-+[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
-+[2] https://pypi.org/project/pycrypto/#history
-+[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
-+
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Rebased against crda-4.14]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
--Status: submitted upstream by author but not (yet) accepted
--URL: http://www.spinics.net/lists/linux-wireless/msg138936.html
-+[Romain: Use pycryptodomex]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  Makefile         |   2 +-
-  utils/key2pub.py | 146 ++++++++++++++++++++++++-----------------------
-@@ -42,7 +52,7 @@ index a3ead30..8da38d0 100644
-  $(LIBREG): regdb.h reglib.h reglib.c
-  	$(NQ) '  CC  ' $@
- diff --git a/utils/key2pub.py b/utils/key2pub.py
--index 9bb04cd..9f92ebd 100755
-+index 9bb04cd..8a0ba2a 100755
- --- a/utils/key2pub.py
- +++ b/utils/key2pub.py
- @@ -1,126 +1,128 @@
-@@ -57,11 +67,11 @@ index 9bb04cd..9f92ebd 100755
- -       sys.stderr.write('Please install the "M2Crypto" Python module.\n')
- -       sys.stderr.write('On Debian GNU/Linux the package is called "python-m2crypto".\n')
- -       sys.exit(1)
--+    from Crypto.PublicKey import RSA
-++    from Cryptodome.PublicKey import RSA
- +except ImportError as e:
--+    sys.stderr.write('ERROR: Failed to import the "Crypto.PublicKey" module: %s\n' % e.message)
--+    sys.stderr.write('Please install the "Crypto.PublicKey" Python module.\n')
--+    sys.stderr.write('On Debian GNU/Linux the package is called "python-crypto".\n')
-++    sys.stderr.write('ERROR: Failed to import the "Cryptodome.PublicKey" module: %s\n' % e.message)
-++    sys.stderr.write('Please install the "Cryptodome.PublicKey" Python module.\n')
-++    sys.stderr.write('On Debian GNU/Linux the package is called "python-cryptodomex".\n')
- +    sys.exit(1)
- +
- +def bitwise_collect(value, radix_bits):
-@@ -269,5 +279,5 @@ index 9bb04cd..9f92ebd 100755
-  
-  modes[mode][1](output, idx - 1)
- -- 
--2.18.0
-+2.25.3
- 
-diff --git a/package/crda/crda.mk b/package/crda/crda.mk
-index eb43a7d772..c5880797be 100644
---- a/package/crda/crda.mk
-+++ b/package/crda/crda.mk
-@@ -6,7 +6,7 @@
- 
- CRDA_VERSION = 4.14
- CRDA_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot
--CRDA_DEPENDENCIES = host-pkgconf host-python-pycrypto libnl libgcrypt
-+CRDA_DEPENDENCIES = host-pkgconf host-python-pycryptodomex libnl libgcrypt
- CRDA_LICENSE = ISC
- CRDA_LICENSE_FILES = LICENSE
- 
+ config BR2_PACKAGE_JAMVM
+ 	bool "jamvm removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index edf7687ab7..c328d9f153 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1053,7 +1053,6 @@ menu "External python modules"
+ 	source "package/python-pycares/Config.in"
+ 	source "package/python-pycli/Config.in"
+ 	source "package/python-pycparser/Config.in"
+-	source "package/python-pycrypto/Config.in"
+ 	source "package/python-pycryptodomex/Config.in"
+ 	source "package/python-pydal/Config.in"
+ 	source "package/python-pydantic/Config.in"
+diff --git a/package/python-pycrypto/0001-remove-incorrect-header-path.patch b/package/python-pycrypto/0001-remove-incorrect-header-path.patch
+deleted file mode 100644
+index 9268d311d5..0000000000
+--- a/package/python-pycrypto/0001-remove-incorrect-header-path.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Do not use /usr/include for headers
+-
+-Using /usr/include is wrong when doing cross-compilation, so get rid
+-of it, and rely on the compiler to use the appropriate default paths
+-for headers.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/setup.py
+-===================================================================
+---- a/setup.py
+-+++ b/setup.py
+-@@ -370,7 +370,7 @@
+-       'ext_modules': plat_ext + [
+-             # _fastmath (uses GNU mp library)
+-             Extension("Crypto.PublicKey._fastmath",
+--                      include_dirs=['src/','/usr/include/'],
+-+                      include_dirs=['src/'],
+-                       libraries=['gmp'],
+-                       sources=["src/_fastmath.c"]),
+- 
+diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
+deleted file mode 100644
+index e998ecf89c..0000000000
+--- a/package/python-pycrypto/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_PYTHON_PYCRYPTO
+-	bool "python-pycrypto"
+-	select BR2_PACKAGE_GMP
+-	help
+-	  PyCrypto is a collection of cryptographic algorithms and
+-	  protocols, implemented for use from Python.
+-
+-	  http://www.pycrypto.org/
+diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
+deleted file mode 100644
+index a16a446084..0000000000
+--- a/package/python-pycrypto/python-pycrypto.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# Locally calculated after checking pgp signature
+-sha256  f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c  pycrypto-2.6.1.tar.gz
+-# Locally computed
+-sha256  15925a98d05c6d086c30943e4eacdbd361bcf76daa109b6e6dfc9d0c4ad9ed64  COPYRIGHT
+-sha256  10c41e1aaf84bd3546d1ff7ef89454817744fd2c18cdd80a137e802095448016  LEGAL/copy/LICENSE.libtom
+-sha256  253a271c681cd4b3f9503659fe754ee305efe68ebb6e8733b7f436d73845a32c  LEGAL/copy/LICENSE.python-2.2
+-sha256  96f9a25274a59843715a26986e4a2427c312a1d86b9207f26fcafcea47a417fe  LEGAL/copy/LICENSE.original
+diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
+deleted file mode 100644
+index 927ba918ae..0000000000
+--- a/package/python-pycrypto/python-pycrypto.mk
++++ /dev/null
+@@ -1,49 +0,0 @@
+-################################################################################
+-#
+-# python-pycrypto
+-#
+-################################################################################
+-
+-PYTHON_PYCRYPTO_VERSION = 2.6.1
+-PYTHON_PYCRYPTO_SOURCE = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
+-PYTHON_PYCRYPTO_SITE = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
+-PYTHON_PYCRYPTO_SETUP_TYPE = distutils
+-
+-PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
+-PYTHON_PYCRYPTO_LICENSE_FILES = \
+-	COPYRIGHT LEGAL/copy/LICENSE.libtom \
+-	LEGAL/copy/LICENSE.python-2.2
+-
+-# The pycrypto package contains a LICENSE.orig file, but our patching
+-# infrastrucure removes all .orig file, so we must rename that license
+-# file prior to patching, so it is still available to the legal-info
+-# infrastructure
+-define PYTHON_PYCRYPTO_RENAME_LICENSE
+-	mv $(@D)/LEGAL/copy/LICENSE.orig $(@D)/LEGAL/copy/LICENSE.original
+-endef
+-PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
+-HOST_PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
+-PYTHON_PYCRYPTO_LICENSE_FILES += LEGAL/copy/LICENSE.original
+-
+-PYTHON_PYCRYPTO_DEPENDENCIES = gmp
+-HOST_PYTHON_PYCRYPTO_DEPENDENCIES = host-gmp
+-
+-# The configure step needs to be run outside of the setup.py since it isn't
+-# run correctly for cross-compiling
+-define PYTHON_PYCRYPTO_CONFIGURE_CMDS
+-	(cd $(@D) && \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	$(TARGET_CONFIGURE_ARGS) \
+-	./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--sysconfdir=/etc \
+-		--program-prefix="" \
+-	)
+-endef
+-
+-$(eval $(python-package))
+-$(eval $(host-python-package))
