@@ -1,49 +1,87 @@
-From: =?UTF-8?q?Gon=C3=A7alo=20Salazar?= <glbsalazar@gmail.com>
-Date: Sun, 31 May 2020 17:36:45 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/orangepi-zero: bumped kernel uboot
- versions
-Message-ID: <20200531163645.2522167-1-glbsalazar@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 May 2020 21:19:31 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/liburiparser: bump to version
+ 0.9.4
+Message-ID: <20200531191931.315129-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumped kernel to version 5.6 and uboot to version 2020.04 for
-orangepi-zero configuration
+- Drop patch (already in version)
+- Update hash of COPYING (BSD-3 license fixed with
+  https://github.com/uriparser/uriparser/commit/a3e81383591de85c65918a42e68fbe736832f7c1)
 
-Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/orangepi_zero_defconfig | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ ...1-CMakeLists.txt-fix-build-without-C.patch | 33 -------------------
+ package/liburiparser/liburiparser.hash        |  4 +--
+ package/liburiparser/liburiparser.mk          |  2 +-
+ 3 files changed, 3 insertions(+), 36 deletions(-)
+ delete mode 100644 package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
 
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 354e3bfdba..ab4fb474ee 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -3,13 +3,12 @@ BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
- BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
- BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
-@@ -21,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+deleted file mode 100644
+index 9f5e88989a..0000000000
+--- a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 0e385a6b747e967b6724ef3ded944c7da3b16f79 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 1 May 2019 11:18:29 +0200
+-Subject: [PATCH] CMakeLists.txt: fix build without C++
+-
+-Specify that uriparser is a C project (C++ is needed only for the test
+-runner) otherwise build will fail if no C++ compiler is found by cmake
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/uriparser/uriparser/pull/69]
+----
+- CMakeLists.txt | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index ceb79e0..40d3b20 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -39,6 +39,8 @@ cmake_minimum_required(VERSION 3.3)
+- project(uriparser
+-     VERSION
+-         0.9.3
+-+    LANGUAGES
+-+        C
+- )
+- 
+- # See https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+--- 
+-2.20.1
+-
+diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+index 4216f1f17f..feb5945849 100644
+--- a/package/liburiparser/liburiparser.hash
++++ b/package/liburiparser/liburiparser.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  28af4adb05e811192ab5f04566bebc5ebf1c30d9ec19138f944963d52419e28f  uriparser-0.9.3.tar.bz2
+-sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
++sha256  b7cdabe5611408fc2c3a10f8beecb881a0c7e93ff669c578cd9e3e6d64b8f87b  uriparser-0.9.4.tar.bz2
++sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
+diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+index 4a68814e00..e333354ecc 100644
+--- a/package/liburiparser/liburiparser.mk
++++ b/package/liburiparser/liburiparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURIPARSER_VERSION = 0.9.3
++LIBURIPARSER_VERSION = 0.9.4
+ LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
+ LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+ LIBURIPARSER_LICENSE = BSD-3-Clause
 -- 
 2.26.2
