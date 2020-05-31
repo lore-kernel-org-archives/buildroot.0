@@ -1,54 +1,46 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 31 May 2020 10:53:27 -0300
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-good:
- Optionally select GUDEV
-Message-ID: <20200531135327.12234-1-ezequiel@collabora.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 May 2020 16:24:40 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.7
+Message-ID: <20200531142440.194565-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+https://github.com/arvidn/libtorrent/releases/tag/libtorrent_1_2_7
 
-Using udev for probes (such as Video4Linux2 devices probes)
-and device monitor greatly improves load time and monitoring performance.
-
-It also enables hotplug monitoring for cameras.
-
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in            | 1 +
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 20aebc473e89..be77f5a82e3d 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 	bool "v4l2"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-+	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
- 	help
- 	  elements for Video 4 Linux
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index b8fd5e2c80..2246d89947 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8f69befe449f7211afc665726d24fde62f019800b060b5c6c9804793929a4407  libtorrent-rasterbar-1.2.6.tar.gz
++sha256  bc00069e65c0825cbe1eee5cdd26f94fcd9a621c4e7f791810b12fab64192f00  libtorrent-rasterbar-1.2.7.tar.gz
+ sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index 2e0fc23edd..973fa47aaa 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 223af9850897..6878ce6ae85b 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -40,6 +40,10 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += -Djack=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
- GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.6
+-LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
++LIBTORRENT_RASTERBAR_VERSION = 1.2.7
++LIBTORRENT_RASTERBAR_SITE = \
++	https://github.com/arvidn/libtorrent/releases/download/libtorrent_$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+ LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+ LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost openssl
 -- 
-2.26.0.rc2
+2.26.2
