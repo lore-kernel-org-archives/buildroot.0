@@ -1,39 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2020 23:15:04 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.19
-In-Reply-To: <20200525061528.18998-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 25 May 2020 08:15:28 +0200")
-References: <20200525061528.18998-1-peter@korsgaard.com>
-Message-ID: <875zcbkdrb.fsf@dell.be.48ers.dk>
+Date: Sun, 31 May 2020 23:15:47 +0200
+Subject: [Buildroot] [PATCH] package/ltrace: directly use s.b.o to fetch
+ the archive
+In-Reply-To: <20200524203925.27369-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 24 May 2020 22:39:25 +0200")
+References: <20200524203925.27369-1-yann.morin.1998@free.fr>
+Message-ID: <871rmzkdq4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes the following security issues:
- > - (9.11.18) DNS rebinding protection was ineffective when BIND 9 is
- >   configured as a forwarding DNS server.  Found and responsibly reported by
- >   Tobias Klein.  [GL #1574]
+ > During the migration from alioth to gitlab, the git repository for ltrace
+ > was not migrated. There is a repository on gitlab.com, own by the debian
+ > maintainer, but that repository does not contain the sha1 we know of:
+ >     https://gitlab.com/cespedes/ltrace
 
- > - (9.11.19) To prevent exhaustion of server resources by a maliciously
- >   configured domain, the number of recursive queries that can be triggered
- >   by a request before aborting recursion has been further limited.  Root and
- >   top-level domain servers are no longer exempt from the
- >   max-recursion-queries limit.  Fetches for missing name server address
- >   records are limited to 4 for any domain.  This issue was disclosed in
- >   CVE-2020-8616.  [GL #1388]
+ > s.b.o. is the only known location so far to host the archive, so switch
+ > to it.
 
- > - (9.11.19) Replaying a TSIG BADTIME response as a request could trigger an
- >   assertion failure.  This was disclosed in CVE-2020-8617.  [GL #1703]
-
- > Also update the COPYRIGHT hash for a change of copyright year and adjust the
- > spacing for the new agreements.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x, thanks.
 
