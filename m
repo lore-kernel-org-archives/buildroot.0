@@ -1,87 +1,120 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 31 May 2020 21:19:31 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/liburiparser: bump to version
- 0.9.4
-Message-ID: <20200531191931.315129-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 May 2020 22:22:25 +0200
+Subject: [Buildroot] [git commit] package/qt5/qt5webengine: don't link with
+ libstdc++.a on the host
+Message-ID: <20200531202834.3CF1585EF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version)
-- Update hash of COPYING (BSD-3 license fixed with
-  https://github.com/uriparser/uriparser/commit/a3e81383591de85c65918a42e68fbe736832f7c1)
+commit: https://git.buildroot.net/buildroot/commit/?id=f9548114d861289e7490594a704fff32f65559b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+While cross-compiling, qt5webengine is building a host tool, 'gn', and
+by default wants to link it statically with libstdc++, when the tool is
+otherwise dynamically linked with other libraries:
+
+    $ ldd 3rdparty/gn/out/Release/gn
+        linux-vdso.so.1 (0x00007ffc1c999000)
+        libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007f48a3c06000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f48a3be4000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f48a3a1b000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f48a3c53000)
+
+Not all ditributions have the static libraries installed by default; for
+example, on Fedora, libstdc++-static is not installed on a fresh system,
+leading to build issues:
+
+  [185/185] LINK gn
+  FAILED: gn
+  /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
+  /usr/bin/ld : unable to find -lstdc++
+  [...]
+  Project ERROR: GN build error!
+
+The root cause is the addition in [0] of a command line option to the
+build of gn, that requests static linking with libstdc++ by default.
+
+Explicitly pass that option now, to avoid static linking with libstdc++
+and get a fully dynamicallty linked executable:
+
+    $ ldd 3rdparty/gn/out/Release/gn
+        linux-vdso.so.1 (0x00007ffd3f160000)
+        libstdc++.so.6 => /lib64/libstdc++.so.6 (0x00007f68138e7000)
+        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f68138c5000)
+        libc.so.6 => /lib64/libc.so.6 (0x00007f68136fc000)
+        libm.so.6 => /lib64/libm.so.6 (0x00007f68135b6000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f6813b13000)
+        libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007f681359c000)
+
+[0] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Ga??l Portay <gael.portay@collabora.com>
+[yann.morin.1998 at free.fr:
+  - rewrite the commit log with extra details and explanations
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...1-CMakeLists.txt-fix-build-without-C.patch | 33 -------------------
- package/liburiparser/liburiparser.hash        |  4 +--
- package/liburiparser/liburiparser.mk          |  2 +-
- 3 files changed, 3 insertions(+), 36 deletions(-)
- delete mode 100644 package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+ ...-gn.pro-don-t-link-statically-with-libstc.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
-deleted file mode 100644
-index 9f5e88989a..0000000000
---- a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 0e385a6b747e967b6724ef3ded944c7da3b16f79 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 1 May 2019 11:18:29 +0200
--Subject: [PATCH] CMakeLists.txt: fix build without C++
--
--Specify that uriparser is a C project (C++ is needed only for the test
--runner) otherwise build will fail if no C++ compiler is found by cmake
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/uriparser/uriparser/pull/69]
-----
-- CMakeLists.txt | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index ceb79e0..40d3b20 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -39,6 +39,8 @@ cmake_minimum_required(VERSION 3.3)
-- project(uriparser
--     VERSION
--         0.9.3
--+    LANGUAGES
--+        C
-- )
-- 
-- # See https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
---- 
--2.20.1
--
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index 4216f1f17f..feb5945849 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  28af4adb05e811192ab5f04566bebc5ebf1c30d9ec19138f944963d52419e28f  uriparser-0.9.3.tar.bz2
--sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
-+sha256  b7cdabe5611408fc2c3a10f8beecb881a0c7e93ff669c578cd9e3e6d64b8f87b  uriparser-0.9.4.tar.bz2
-+sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index 4a68814e00..e333354ecc 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURIPARSER_VERSION = 0.9.3
-+LIBURIPARSER_VERSION = 0.9.4
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
--- 
-2.26.2
+diff --git a/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+new file mode 100644
+index 0000000000..dff3e6c849
+--- /dev/null
++++ b/package/qt5/qt5webengine/0001-gn.pro-don-t-link-statically-with-libstc.patch
+@@ -0,0 +1,51 @@
++From 7ae73da23ad998bd1e63ad213cf7a02e61191951 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 23 May 2020 19:01:19 +0200
++Subject: [PATCH] gn.pro: don't link statically with libstc++
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++While cross-compiling, qt5webengine is building a host tool but
++want to link the libstdc++ statically. This requires to install
++libstdc++-static package on the host (Fedora package name).
++
++Otherwise the link fail with:
++
++  [185/185] LINK gn
++  FAILED: gn
++  /usr/bin/g++ -O3 -fdata-sections -ffunction-sections -Wl,--gc-sections -Wl,-strip-all -Wl,--as-needed -static-libstdc++ -pthread -o gn -Wl,--start-group tools/gn/gn_main.o base.a gn_lib.a -Wl,--end-group -ldl
++  /usr/bin/ld??: unable to find -lstdc++
++  [...]
++  Project ERROR: GN build error!
++
++Add --no-static-libstdc++ argument to gn.pro to link to
++libstdc++.so.6 instead of libstdc++.a.
++
++--no-static-libstdc++ has been added by [1] but it force
++linking statically by default.
++
++[1] https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/buildtools/gn.pro | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/buildtools/gn.pro b/src/buildtools/gn.pro
++index 033202e6..5dd8e241 100644
++--- a/src/buildtools/gn.pro
+++++ b/src/buildtools/gn.pro
++@@ -20,7 +20,8 @@ build_pass|!debug_and_release {
++ 
++             gn_gen_args = --no-last-commit-position --out-path $$out_path \
++                           --cc \"$$which($$QMAKE_CC)\" --cxx \"$$which($$QMAKE_CXX)\" \
++-                          --ld \"$$which($$QMAKE_LINK)\"
+++                          --ld \"$$which($$QMAKE_LINK)\" \
+++                          --no-static-libstdc++
++ 
++             msvc:!clang_cl: gn_gen_args += --use-lto
++ 
++-- 
++2.25.4
++
