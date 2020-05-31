@@ -1,54 +1,88 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 31 May 2020 10:54:43 -0300
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-good:
- Optionally select GUDEV
-Message-ID: <20200531135443.12302-1-ezequiel@vanguardiasur.com.ar>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 31 May 2020 16:12:37 +0200
+Subject: [Buildroot] [for-next] package/rust: allow using python3
+ interpreter
+In-Reply-To: <20200531151020.3f1fae20@windsurf.home>
+References: <20200526182037.592824-1-romain.naour@gmail.com>
+ <20200529231401.4c66c5d9@windsurf.home>
+ <49ffaaec-73fe-0cd0-9a4d-ff920f5c2562@gmail.com>
+ <20200531151020.3f1fae20@windsurf.home>
+Message-ID: <5a3e64c6-78fc-cf17-771b-1c95b8662981@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Hello Thomas,
 
-Using udev for probes (such as Video4Linux2 devices probes)
-and device monitor greatly improves load time and monitoring performance.
+Le 31/05/2020 ? 15:10, Thomas Petazzoni a ?crit?:
+> On Fri, 29 May 2020 23:45:23 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>>> Shouldn't we try to find an upstreamable solution here, such as perhaps
+>>> a PYTHON environment variable, or an argument to configure that allows
+>>> to specify the path to the Python interpreter ?
+>>>
+>>> But in fact, this path to the Python interpreter is already in the
+>>> config.toml file that we generate, why isn't this path used ?  
+>>
+>> humm, It seems that this configure script is not used at all by rust package
+>> since we use directly x.py...
+>> So we can just drop this patch.
+> 
+> Could you send a follow-up patch ?
 
-It also enables hotplug monitoring for cameras.
+http://patchwork.ozlabs.org/project/buildroot/patch/20200530134344.24976-1-romain.naour at gmail.com/
 
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- package/gstreamer1/gst1-plugins-good/Config.in            | 1 +
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+> 
+>>>> +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>>>> +HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+>>>> +HOST_RUST_DEPENDENCIES += host-python3
+>>>> +else
+>>>> +HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+>>>> +HOST_RUST_DEPENDENCIES += host-python
+>>>> +endif  
+>>>
+>>> I think we should start inverting this logic, i.e use host-python3 by
+>>> default if there is no python interpreter selected for the target. We
+>>> should do that not only here, but in all packages that have a logic
+>>> like that: python3 should become our default, and python2 should become
+>>> the exception.  
+>>
+>> Yes, with this change we can remove python3-<module> added to provide python3
+>> modules. I hope packages that still use python2 will only require the python2
+>> interpreter without any additional modules.
+> 
+> That is not what I meant. What I meant was to change:
+> 
+> ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+> HOST_RUST_DEPENDENCIES += host-python3
+> else
+> HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+> HOST_RUST_DEPENDENCIES += host-python
+> endif  
+> 
+> to:
+> 
+> ifeq ($(BR2_PACKAGE_PYTHON),y)
+> HOST_RUST_PYTHON_VERSION = $(PYTHON_VERSION_MAJOR)
+> HOST_RUST_DEPENDENCIES += host-python
+> else
+> HOST_RUST_PYTHON_VERSION = $(PYTHON3_VERSION_MAJOR)
+> HOST_RUST_DEPENDENCIES += host-python3
+> endif  
+> 
+> i.e: our default becomes python3.
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 20aebc473e89..be77f5a82e3d 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 	bool "v4l2"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-+	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
- 	help
- 	  elements for Video 4 Linux
- 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 223af9850897..6878ce6ae85b 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -40,6 +40,10 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += -Djack=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
- GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
--- 
-2.26.0.rc2
+Ok, I guess this can be done in a patch series that also use host-python3 by
+default for python packages.
+
+Best regards,
+Romain
+
+
+> 
+> Thomas
+> 
