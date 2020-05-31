@@ -1,46 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 May 2020 14:41:49 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/check-package: add a check for
- the new spacing convention
-In-Reply-To: <20200531122809.GB8737@scaer>
-References: <20200205212211.29720-1-heiko.thiery@gmail.com>
- <20200531122809.GB8737@scaer>
-Message-ID: <20200531124149.GC8737@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 May 2020 15:08:37 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: don't link with
+ libstdc++.a on the host
+In-Reply-To: <aa6f5047-3c91-e286-7bbe-29d26353b2c1@gmail.com>
+References: <20200524155818.126961-1-romain.naour@gmail.com>
+ <20200529233458.2dbace04@windsurf.home>
+ <aa6f5047-3c91-e286-7bbe-29d26353b2c1@gmail.com>
+Message-ID: <20200531150837.67abf9f9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+On Fri, 29 May 2020 23:48:09 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-On 2020-05-31 14:28 +0200, Yann E. MORIN spake thusly:
-> On 2020-02-05 22:22 +0100, Heiko Thiery spake thusly:
-> > The seperation of the fields in the hash file should be 2 spaces for
-> > consistency.
-> > 
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > If we have to pass this, doesn't it mean that the host tools are built
+> > statically ? Why are they built statically ? They really shouldn't be
+> > built statically at all. I believe this is what should be fixed, rather
+> > than just avoiding specifically from linking statically with libstdc++.  
 > 
-> I was thinking about this one recently, but we still have too many
-> issues with it:
-[--SNIP--]
+> Without this option host tools are built statically because this option is
+> enabled by default.
 
-Besides, it does not work for me:
+Can't we remove this, and instead link dynamically the host tools ?
 
-    $ cat boot/afboot-stm32/afboot-stm32.hash
-    # Locally calculated
-    sha256  9b37b661bd3091ceb5d8dc5a56a2dfc02ae9ebc0c63dad3c4289c9d6b3d3ec89  afboot-stm32-0.2.tar.gz
+> Adding --no-static-libstdc++ allow to link dynamically with libc.so.6.
 
-    $ make check-package
-    boot/afboot-stm32/afboot-stm32.hash:2: separation does not match expectation (http://nightly.buildroot.org/#adding-packages-hash)
+--no-static-libstdc++ changes how we link against libc.so.6 ? Shouldn't
+it only affect how we link against libstdc++.so ?
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
