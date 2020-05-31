@@ -1,52 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 May 2020 23:19:10 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/speexdsp+tremor:
- switch to new git repository
-Message-ID: <20200531211914.BA28585F56@busybox.osuosl.org>
+Date: Sun, 31 May 2020 23:20:44 +0200
+Subject: [Buildroot] [PATCH] package/qemu: remove csky fork
+In-Reply-To: <20200522232212.2909156-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 23 May 2020 01:22:12 +0200")
+References: <20200522232212.2909156-1-romain.naour@gmail.com>
+Message-ID: <878sh7iyxf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0dcf77e88179952a6d9a0951552bf2f0d2c5095
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-The original git server on git.xiph.org died, and the Xiph project has
-now moved on to host their repositories on gitlab.comn instead.
+ > We have a qemu fork for csky cpus [1] but since qemu version
+ > bump to 4.2.0 [2] and libssh2/libssh change the csky build is
+ > broken.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 97551eb176cd75419e3520ea94f184e3220980cd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/speexdsp/speexdsp.mk | 2 +-
- package/tremor/tremor.mk     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > The csky fork is based on Qemu 3.0.0 but unlike autotools packages
+ > any unknown option is handled as error.
 
-diff --git a/package/speexdsp/speexdsp.mk b/package/speexdsp/speexdsp.mk
-index 901f22b9e6..35c06dd833 100644
---- a/package/speexdsp/speexdsp.mk
-+++ b/package/speexdsp/speexdsp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SPEEXDSP_VERSION = SpeexDSP-1.2.0
--SPEEXDSP_SITE = https://git.xiph.org/speexdsp.git
-+SPEEXDSP_SITE = https://gitlab.xiph.org/xiph/speexdsp.git
- SPEEXDSP_SITE_METHOD = git
- SPEEXDSP_LICENSE = BSD-3-Clause
- SPEEXDSP_LICENSE_FILES = COPYING
-diff --git a/package/tremor/tremor.mk b/package/tremor/tremor.mk
-index 835fe36172..a865e681df 100644
---- a/package/tremor/tremor.mk
-+++ b/package/tremor/tremor.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- TREMOR_VERSION = 7c30a66346199f3f09017a09567c6c8a3a0eedc8
--TREMOR_SITE = https://git.xiph.org/tremor.git
-+TREMOR_SITE = https://gitlab.xiph.org/xiph/tremor.git
- TREMOR_SITE_METHOD = git
- TREMOR_LICENSE = BSD-3-Clause
- TREMOR_LICENSE_FILES = COPYING
+ > Since we don't want to support all options from previous qemu
+ > release and the github repository has been removed [3] and the
+ > only remaining archive is located on http://sources.buildroot.net,
+ > remove the qemu csky fork as suggested by [4].
+
+ > [1] https://git.buildroot.net/buildroot/commit/?id=f816e5b276f1ef15840bec6667f1e8219717ab7d
+ > [2] https://git.buildroot.net/buildroot/commit/?id=0ea17054ce7dfc54efca5634133cef786445e7b1
+ > [3] https://github.com/c-sky/qemu
+ > [4] http://lists.busybox.net/pipermail/buildroot/2020-May/281885.html
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Guo Ren <ren_guo@c-sky.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > The upcoming Qemu 5.0.0 switched libcap to libcap-ng, so the qemu
+ > csky would be broken with BR2_PACKAGE_HOST_QEMU_VIRTFS set.
+
+Committed to 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
