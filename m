@@ -1,113 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 May 2020 22:48:01 +0200
-Subject: [Buildroot] [PATCH] linux: forcibly disable use of gcc plugins
-In-Reply-To: <20200512203353.31470-1-yann.morin.1998@free.fr>
-References: <20200512203353.31470-1-yann.morin.1998@free.fr>
-Message-ID: <20200531224801.73179958@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 May 2020 22:49:02 +0200
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-good:
+ Optionally select GUDEV
+In-Reply-To: <20200531135327.12234-1-ezequiel@collabora.com>
+References: <20200531135327.12234-1-ezequiel@collabora.com>
+Message-ID: <20200531204902.GF8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 May 2020 22:33:53 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Ezequiel, Nicolas, All,
 
-> The soon-to-be-released linux 5.7 has changed the way it detects the
-> ability of gcc to use plugins, when it dropped support for gcc 4.7 or
-> older [0].
+On 2020-05-31 10:53 -0300, Ezequiel Garcia spake thusly:
+> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 > 
-> To detect the ability to use gcc plugins, the kernel has to check whther
-> the host gcc is capable enough to build them.
+> Using udev for probes (such as Video4Linux2 devices probes)
+> and device monitor greatly improves load time and monitoring performance.
 > 
-> When we call one of the configurator for the linux kernel, we explicitly
-> pass a value of HOSTCC=$(HOSTCC_NOCCACHE), because there might be a
-> discrepancy between the ncurses headers and libraries as found by the
-> linux kconfig build [1] [2].
+> It also enables hotplug monitoring for cameras.
 > 
-> But then, when we build the kernel, we pass another value to use [3]
-> HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" which boils down to
-> roughly: gcc -I.../host/include -L.../host/lib -Wl,-rpath,.../host/lib
-> This is needed so that at build time, the kernel can build host tools
-> that link with our openssl et al.
-> 
-> So, the two HOSTCC we pass to the kernel may have different behaviours.
-> For example, on a machine where gmp is missing in the system, it is
-> available in $(O)/host/ when using an internal toolchain (and under a
-> few other conditions).
-> 
-> In that case, when configuring the kernel, it decides that the host
-> compiler can't build plugins, so the dependencies of CONFIG_GCC_PLUGINS
-> are not met, and that option is not present in the linux' .config file
-> (neither as "=y" nor as "is not set"). But then, when we build the
-> kernel, the host compiler suddenly becomes capable of building the
-> plugins, and the internal syncconfig run by the kernel will notice that
-> the dependencies of CONFIG_GCC_PLUGINS are now met, and that the user
-> shall decide on its value. And this blocks a build on an interactive
-> console (abbreviated):
-> 
->     * Restart config...
->     * GCC plugins
->     GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW) _
-> 
-> But most problematic is the behaviour when run in a shell that is not
-> interactiove (e.g. a CI job or such) (abbreviated):
-> 
->     * Restart config...
->     * GCC plugins
->     GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW)
->     Error in reading or end of file.
->       Generate some entropy during boot and runtime (GCC_PLUGIN_LATENT_ENTROPY) [N/y/?] (NEW)
->     Error in reading or end of file.
->       Randomize layout of sensitive kernel structures (GCC_PLUGIN_RANDSTRUCT) [N/y/?] (NEW)
->     Error in reading or end of file.
->     * Memory initialization
->     Initialize kernel stack variables at function entry
->     > 1. no automatic initialization (weakest) (INIT_STACK_NONE)  
->       2. zero-init structs marked for userspace (weak) (GCC_PLUGIN_STRUCTLEAK_USER) (NEW)
->       3. zero-init structs passed by reference (strong) (GCC_PLUGIN_STRUCTLEAK_BYREF) (NEW)
->       4. zero-init anything passed by reference (very strong) (GCC_PLUGIN_STRUCTLEAK_BYREF_ALL) (NEW)
->     choice[1-4?]:
->     Error in reading or end of file.
->     Poison kernel stack before returning from syscalls (GCC_PLUGIN_STACKLEAK) [N/y/?] (NEW)
->     Error in reading or end of file.
->     Enable heap memory zeroing on allocation by default (INIT_ON_ALLOC_DEFAULT_ON) [N/y/?] n
->     Enable heap memory zeroing on free by default (INIT_ON_FREE_DEFAULT_ON) [N/y/?] n
-> 
-> The most obvious and simple solution would be to unconditionally disable
-> gcc plugins alltogether, in the KCONFIG_FIXUP hook. But that can't work
-> either, because after applying the fixups, we call olddefconfig (or the
-> likes) with the incapable HOSTCC, so the disabled option would be removed
-> anyway, and we'd be back to square one.
-> 
-> So, in addition to the above, we also forcibly hack the same call just
-> before actually building the kernel.
-> 
-> Note that the two are needed: the one in the fixups is needed for those
-> that have a system that already allows building gcc plugins, and the
-> second is needed in the other case, where the system does not allow it
-> but would work with our additional headers and libs in $(O)/host/. The
-> two ensure there is a very similar experience in the two situations.
-> 
-> Forcibly disabling the use of gcc plugins is not a regression on our
-> side: it has never been possible to do so so far. We're now making sure
-> that can't work by accident.
-> 
-> Reported-by: Ganesh <ganesh45in@gmail.com>,
-> Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Michael Walle <michael.walle@kontron.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 > ---
->  linux/linux.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/gstreamer1/gst1-plugins-good/Config.in            | 1 +
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index 20aebc473e89..be77f5a82e3d 100644
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>  	bool "v4l2"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
 
-Applied to master with minor typos fixed in the commit log, thanks.
+The title is a bit misleading: gudev is not optional; instead, it is
+forcibly selected when udev is enabled.
 
-Thomas
+>  	help
+>  	  elements for Video 4 Linux
+>  
+> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> index 223af9850897..6878ce6ae85b 100644
+> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> @@ -40,6 +40,10 @@ else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += -Djack=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
+
+I think we would also need to add:
+
+    GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=enabled
+
+and the converse when ghudev is not enabled:
+
+    GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=disabled
+
+Care to check that, and respin please?
+
+Regards,
+Yann E. MORIN.
+
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBV4L),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
+>  GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+> -- 
+> 2.26.0.rc2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
