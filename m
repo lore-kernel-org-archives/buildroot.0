@@ -1,87 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 May 2020 10:29:30 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/syrepo: fix SysV init script
-In-Reply-To: <20200527071113.15121-1-heiko.thiery@gmail.com>
-References: <20200527071113.15121-1-heiko.thiery@gmail.com>
-Message-ID: <20200531082930.GZ8737@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 May 2020 10:49:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glib-networking: security bump to
+ version 2.64.3
+Message-ID: <20200531084902.3909694-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+- Fix CVE-2020-13645: In GNOME glib-networking through 2.64.2, the
+  implementation of GTlsClientConnection skips hostname verification of
+  the server's TLS certificate if the application fails to specify the
+  expected server identity. This is in contrast to its intended
+  documented behavior, to fail the certificate verification.
+  Applications that fail to provide the server identity, including Balsa
+  before 2.5.11 and 2.6.x before 2.6.1, accept a TLS certificate if the
+  certificate is valid for any host.
+- Update indentation in hash file (two spaces)
 
-On 2020-05-27 09:11 +0200, Heiko Thiery spake thusly:
-> The current script (S51sysrepo-plugind) is not able to stop the daemon.
-> 
-> Possible options to fix the problem:
-> 
-> A) By adding the "-m -p $PIDFILE" option to start the pid file will be
->    created but it will not contain the correct PID used by the daemon.
->    This is obviously because the daemon forks.
-> B) By not starting the daemon in background (sysrepo-plugind -d) and
->    let do it by start-stop-daemon with "-b" option. But then the log
->    messages of the daemon will not longer ends in the syslog but to stderr.
-> C) Start the daemon without a pidfile and stop the daemon with the
->    "-x" option.
-> 
-> The only valid option is C to fix that.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/glib-networking/glib-networking.hash | 6 +++---
+ package/glib-networking/glib-networking.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied to master, after fixing the typo in the title, and see below...
-
-> ---
-> changes v1 -> v2:
-> 	Add a proper commit message.
-> 
-> ---
->  package/sysrepo/S51sysrepo-plugind | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/sysrepo/S51sysrepo-plugind b/package/sysrepo/S51sysrepo-plugind
-> index 74b68396bf..9e15da59f9 100644
-> --- a/package/sysrepo/S51sysrepo-plugind
-> +++ b/package/sysrepo/S51sysrepo-plugind
-> @@ -1,7 +1,6 @@
->  #!/bin/sh
->  
->  DAEMON="sysrepo-plugind"
-> -PIDFILE="/var/run/$DAEMON.pid"
->  
->  SYSREPO_PLUGIND_ARGS=""
->  
-> @@ -23,7 +22,7 @@ start() {
->  
->  stop() {
->  	printf 'Stopping %s: ' "$DAEMON"
-> -	start-stop-daemon -K -q -p $PIDFILE
-> +	start-stop-daemon -K -q -x "/usr/bin/$DAEMON"
-
-I've introduced EXECUTABLE to hold that path, and used it consistently
-in the start() and stop().
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  	status=$?
->  	if [ "$status" -eq 0 ]; then
->  		echo "OK"
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 061b7af695..336e0aa07b 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,3 +1,3 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.61/glib-networking-2.61.1.sha256sum
+-sha256  a3acbe8953ba80e408bdc4a3e8c240fd9447181c7e800a175c3105604c38bad5 glib-networking-2.61.1.tar.xz
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.64/glib-networking-2.64.3.sha256sum
++sha256  937a06b124052813bfc0b0b86bff42016ff01067582e1aca65bb6dbe0845a168  glib-networking-2.64.3.tar.xz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 39133371f5..295c7516cc 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GLIB_NETWORKING_VERSION_MAJOR = 2.61
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
++GLIB_NETWORKING_VERSION_MAJOR = 2.64
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).3
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
