@@ -1,56 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 31 May 2020 15:20:26 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: don't link with
- libstdc++.a on the host
-In-Reply-To: <20200531150837.67abf9f9@windsurf.home>
-References: <20200524155818.126961-1-romain.naour@gmail.com>
- <20200529233458.2dbace04@windsurf.home>
- <aa6f5047-3c91-e286-7bbe-29d26353b2c1@gmail.com>
- <20200531150837.67abf9f9@windsurf.home>
-Message-ID: <010809c3-a1cd-3b81-eff6-de2a7b1a968c@gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sun, 31 May 2020 10:54:43 -0300
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-good:
+ Optionally select GUDEV
+Message-ID: <20200531135443.12302-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Le 31/05/2020 ? 15:08, Thomas Petazzoni a ?crit?:
-> On Fri, 29 May 2020 23:48:09 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->>> If we have to pass this, doesn't it mean that the host tools are built
->>> statically ? Why are they built statically ? They really shouldn't be
->>> built statically at all. I believe this is what should be fixed, rather
->>> than just avoiding specifically from linking statically with libstdc++.  
->>
->> Without this option host tools are built statically because this option is
->> enabled by default.
-> 
-> Can't we remove this, and instead link dynamically the host tools ?
+Using udev for probes (such as Video4Linux2 devices probes)
+and device monitor greatly improves load time and monitoring performance.
 
-Sorry, I don't understand.
+It also enables hotplug monitoring for cameras.
 
-When --no-static-libstdc++ was added [1], it's default value was "false".
-It means link statically libstdc++ if --no-static-libstdc++ is not provided on
-the command line.
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ package/gstreamer1/gst1-plugins-good/Config.in            | 1 +
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-[1]
-https://github.com/qt/qtwebengine-chromium/commit/cfab9198a9917f42cf08b1caf84ab9b71aac1911#diff-905c8f054808213577c0a92d1b704615
-
-> 
->> Adding --no-static-libstdc++ allow to link dynamically with libc.so.6.
-> 
-> --no-static-libstdc++ changes how we link against libc.so.6 ? Shouldn't
-> it only affect how we link against libstdc++.so ?
-
-Sorry, I meant libstdc++.so here... not libc.so.6.
-
-Best regards,
-Romain
-
-
-> 
-> Thomas
-> 
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 20aebc473e89..be77f5a82e3d 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+ 	bool "v4l2"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
++	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
+ 	help
+ 	  elements for Video 4 Linux
+ 
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 223af9850897..6878ce6ae85b 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -40,6 +40,10 @@ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Djack=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
++GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBV4L),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
+ GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+-- 
+2.26.0.rc2
