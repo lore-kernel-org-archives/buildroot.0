@@ -1,145 +1,165 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 May 2020 13:58:48 +0200
-Subject: [Buildroot] [git commit] package/gcc/9.3.0: fix host-gcc-final when
- ccache is used
-Message-ID: <20200531114125.9CBD2855EE@busybox.osuosl.org>
+Date: Sun, 31 May 2020 14:04:45 +0200
+Subject: [Buildroot] [PATCHv3] package/gcc/9.3.0: fix host-gcc-final
+ when ccache is used
+In-Reply-To: <20200521165345.2866046-1-romain.naour@gmail.com>
+References: <20200521165345.2866046-1-romain.naour@gmail.com>
+Message-ID: <20200531120445.GA8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58ecbbc3ef18c43ae1c02a5c4bf30aa7ef2d8092
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, All,
 
-As reported by several Buildroot users [1][2][3], the gcc build
-may fail while running selftests makefile target.
+On 2020-05-21 18:53 +0200, Romain Naour spake thusly:
+> As reported by several Buildroot users [1][2][3], the gcc build
+> may fail while running selftests makefile target.
+> 
+> The problem only occurs when ccache is used with gcc 9 and 10,
+> probably due to a race condition.
+> 
+> While debuging with "make -p" we can notice that s-selftest-c target
+> contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
+> 
+>   s-selftest-c: cc1
+> 
+> While the build is failing, the s-selftest-c dependencies recipe is
+> still running and reported as a bug by make.
+> 
+>   "Dependencies recipe running (THIS IS A BUG)."
+> 
+> A change [5] in gcc 9 seems to introduce the problem since we can't
+> reproduce this problem with gcc 8.
+> 
+> As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
+> including language makefile fragments.
+> 
+> With the fix applied, the s-seltest-c dependency contains
+> SELFTEST_DEPS value.
+> 
+>   s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
+> [3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
+> [4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
+> [5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
+> [6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
+> Cc: Maxim Kochetkov <fido_max@inbox.ru>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
-The problem only occurs when ccache is used with gcc 9 and 10,
-probably due to a race condition.
+Applied to master, thanks.
 
-While debuging with "make -p" we can notice that s-selftest-c target
-contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
+Regards,
+Yann E. MORIN.
 
-  s-selftest-c: cc1
+> ---
+>  ...move-SELFTEST_DEPS-before-including-.patch | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
+> 
+> diff --git a/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch b/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
+> new file mode 100644
+> index 0000000000..227d35a7f0
+> --- /dev/null
+> +++ b/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
+> @@ -0,0 +1,81 @@
+> +From 811c8d628045c3d248144fc560a4bf80209ca16e Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@gmail.com>
+> +Date: Thu, 21 May 2020 15:58:02 +0200
+> +Subject: [PATCH] gcc/Makefile.in: move SELFTEST_DEPS before including language
+> + makefile fragments
+> +
+> +As reported by several Buildroot users [1][2][3], the gcc build
+> +may fail while running selftests makefile target.
+> +
+> +The problem only occurs when ccache is used with gcc 9 and 10,
+> +probably due to a race condition.
+> +
+> +While debuging with "make -p" we can notice that s-selftest-c target
+> +contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
+> +
+> +  s-selftest-c: cc1
+> +
+> +While the build is failing, the s-selftest-c dependencies recipe is
+> +still running and reported as a bug by make.
+> +
+> +  "Dependencies recipe running (THIS IS A BUG)."
+> +
+> +A change [5] in gcc 9 seems to introduce the problem since we can't
+> +reproduce this problem with gcc 8.
+> +
+> +As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
+> +including language makefile fragments.
+> +
+> +With the fix applied, the s-seltest-c dependency contains
+> +SELFTEST_DEPS value.
+> +
+> +  s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
+> +
+> +[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
+> +[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
+> +[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
+> +[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
+> +[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
+> +[6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
+> +
+> +Upstream status: https://gcc.gnu.org/pipermail/gcc-patches/2020-May/546248.html
+> +
+> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> +Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
+> +Cc: Maxim Kochetkov <fido_max@inbox.ru>
+> +Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> +Cc: Cc: David Malcolm <dmalcolm@gcc.gnu.org>
+> +---
+> +This patch should be backported to gcc 10 and gcc 9.
+> +---
+> + gcc/Makefile.in | 6 ++++--
+> + 1 file changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/gcc/Makefile.in b/gcc/Makefile.in
+> +index abae872cd63..e2ef3c46afc 100644
+> +--- a/gcc/Makefile.in
+> ++++ b/gcc/Makefile.in
+> +@@ -1686,6 +1686,10 @@ $(FULL_DRIVER_NAME): ./xgcc
+> + 	rm -f $@
+> + 	$(LN_S) $< $@
+> + 
+> ++# SELFTEST_DEPS need to be set before including language makefile fragments.
+> ++# Otherwise $(SELFTEST_DEPS) is empty when used from various <LANG>/Make-lang.in.
+> ++SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
+> ++
+> + #
 
-While the build is failing, the s-selftest-c dependencies recipe is
-still running and reported as a bug by make.
+> + # Language makefile fragments.
+> + 
+> +@@ -1950,8 +1954,6 @@ DEVNULL=$(if $(findstring mingw,$(build)),nul,/dev/null)
+> + SELFTEST_FLAGS = -nostdinc $(DEVNULL) -S -o $(DEVNULL) \
+> + 	-fself-test=$(srcdir)/testsuite/selftests
+> + 
+> +-SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
+> +-
+> + # Run the selftests during the build once we have a driver and the frontend,
+> + # so that self-test failures are caught as early as possible.
+> + # Use "s-selftest-FE" to ensure that we only run the selftests if the
+> +-- 
+> +2.25.4
+> +
+> -- 
+> 2.25.4
+> 
 
-  "Dependencies recipe running (THIS IS A BUG)."
-
-A change [5] in gcc 9 seems to introduce the problem since we can't
-reproduce this problem with gcc 8.
-
-As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
-including language makefile fragments.
-
-With the fix applied, the s-seltest-c dependency contains
-SELFTEST_DEPS value.
-
-  s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
-
-[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
-[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
-[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
-[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
-[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
-[6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...e.in-move-SELFTEST_DEPS-before-including-.patch | 81 ++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
-
-diff --git a/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch b/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
-new file mode 100644
-index 0000000000..227d35a7f0
---- /dev/null
-+++ b/package/gcc/9.3.0/0004-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
-@@ -0,0 +1,81 @@
-+From 811c8d628045c3d248144fc560a4bf80209ca16e Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 21 May 2020 15:58:02 +0200
-+Subject: [PATCH] gcc/Makefile.in: move SELFTEST_DEPS before including language
-+ makefile fragments
-+
-+As reported by several Buildroot users [1][2][3], the gcc build
-+may fail while running selftests makefile target.
-+
-+The problem only occurs when ccache is used with gcc 9 and 10,
-+probably due to a race condition.
-+
-+While debuging with "make -p" we can notice that s-selftest-c target
-+contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
-+
-+  s-selftest-c: cc1
-+
-+While the build is failing, the s-selftest-c dependencies recipe is
-+still running and reported as a bug by make.
-+
-+  "Dependencies recipe running (THIS IS A BUG)."
-+
-+A change [5] in gcc 9 seems to introduce the problem since we can't
-+reproduce this problem with gcc 8.
-+
-+As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
-+including language makefile fragments.
-+
-+With the fix applied, the s-seltest-c dependency contains
-+SELFTEST_DEPS value.
-+
-+  s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
-+
-+[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
-+[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
-+[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
-+[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
-+[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
-+[6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
-+
-+Upstream status: https://gcc.gnu.org/pipermail/gcc-patches/2020-May/546248.html
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
-+Cc: Maxim Kochetkov <fido_max@inbox.ru>
-+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-+Cc: Cc: David Malcolm <dmalcolm@gcc.gnu.org>
-+---
-+This patch should be backported to gcc 10 and gcc 9.
-+---
-+ gcc/Makefile.in | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/Makefile.in b/gcc/Makefile.in
-+index abae872cd63..e2ef3c46afc 100644
-+--- a/gcc/Makefile.in
-++++ b/gcc/Makefile.in
-+@@ -1686,6 +1686,10 @@ $(FULL_DRIVER_NAME): ./xgcc
-+ 	rm -f $@
-+ 	$(LN_S) $< $@
-+ 
-++# SELFTEST_DEPS need to be set before including language makefile fragments.
-++# Otherwise $(SELFTEST_DEPS) is empty when used from various <LANG>/Make-lang.in.
-++SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
-++
-+ #
-+ # Language makefile fragments.
-+ 
-+@@ -1950,8 +1954,6 @@ DEVNULL=$(if $(findstring mingw,$(build)),nul,/dev/null)
-+ SELFTEST_FLAGS = -nostdinc $(DEVNULL) -S -o $(DEVNULL) \
-+ 	-fself-test=$(srcdir)/testsuite/selftests
-+ 
-+-SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
-+-
-+ # Run the selftests during the build once we have a driver and the frontend,
-+ # so that self-test failures are caught as early as possible.
-+ # Use "s-selftest-FE" to ensure that we only run the selftests if the
-+-- 
-+2.25.4
-+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
