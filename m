@@ -1,104 +1,269 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 1 Jun 2020 23:19:02 +0200
-Subject: [Buildroot] [PATCH 2/2] package/jailhouse: add option to choose
- custom repo/branch
-In-Reply-To: <CAH3JsOrGo0k4S=VKfaXFbgkOv2jYvCB6nff0f+TihKz-1ok4JQ@mail.gmail.com>
-References: <20200528144333.49268-1-mariomintel@gmail.com>
- <20200528144333.49268-3-mariomintel@gmail.com>
- <20200529204844.GR8737@scaer>
- <3806f122-f6b0-efba-e94a-64a3729fbe8a@oth-regensburg.de>
- <CAH3JsOrK+8F4xXhxm8ytEawBQ63jswzBG8PW2naq40M6MAyZQA@mail.gmail.com>
- <CAH3JsOrGo0k4S=VKfaXFbgkOv2jYvCB6nff0f+TihKz-1ok4JQ@mail.gmail.com>
-Message-ID: <20200601211902.GI8737@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Jun 2020 23:30:40 +0200
+Subject: [Buildroot] Buildroot 2020.05 released
+Message-ID: <87367efp8f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mario, Ralf, All,
+Hi,
 
-On 2020-06-01 18:23 +0200, Mario Mintel spake thusly:
-> Am Sa., 30. Mai 2020 um 19:28?Uhr schrieb Mario Mintel < [1]mariomintel@gmail.com>:
->   Am Fr., 29. Mai 2020 um 23:40?Uhr schrieb Ralf Ramsauer < [2]ralf.ramsauer@oth-regensburg.de>:
->   On 5/29/20 10:48 PM, Yann E. MORIN wrote:
->   > Mario, All,
->   > On 2020-05-28 16:43 +0200, Mario Mintel spake thusly:
->   >> In addition to official releases of Jailhouse, allow to specify a custom
->   >> Git URI + branches. This adds more flexibility for custom
->   >> configurations.
->   > The overwhelming majority of packages do not allow selecting an
->   > alternate location. Why would jailhouse be different?
-> 
->   Jailhouse requires system-specific configurations. Those configurations
->   are compiled from C source files to binaries during the build process.
->   While upstream Jailhouse comes with a lot of samples for supported
->   systems, you will need a lot of fine tuning to for a specific use case.
+Buildroot 2020.05 is released - Go download it at:
 
-I am not sure I entirely followed... Note that I am totally ignorant to
-how jailhouse works (and I barely know what it is). So I had a quick
-look into the github repo, and I noticed this:
+http://buildroot.net/downloads/buildroot-2020.05.tar.gz
 
-    A system configuration can be created on an x86 target system by
-    running the following command:
+or
 
-        jailhouse config create sysconfig.c
+http://buildroot.net/downloads/buildroot-2020.05.tar.bz2
 
-    In order to translate this into the required binary form, place
-    this file in the configs/x86/ directory. The build system will pick
-    up every .c file from there and generate a corresponding .cell file.
+Or get it from Git:
 
-Is this what you were trying to explain?
+git://git.buildroot.net/buildroot
 
-If so, then I think we need a way for people to indeed provide their
-cells descriptions files, so that they do get compiled by jailhouse,
-without resorting to using an OVERRDIE_SRCDIR.
+Please give it a spin and report any problems to the mailing list or
+bug tracker.
 
-So I see a few options:
+This was another big development cycle with more than 1400 changes all
+over the tree and 125 unique contributors! I'm once again very happy to
+see so many "new" people next to the "oldtimers".
 
- 1- let people provide those .c files as a patch against jailhouse. This
-    requires no infra in Buildroot, but this is not very convenient;
+Of noteworthy new features/changes we have:
 
- 2- add a configuration option in jailhouse/Config.in, which people
-    could set as a path to a directory with .c files; those would be
-    copied into the jailhouse build directory before the actual build,
-    so the documented way (see above) will be used; those files would
-    have to be in a br2-external tree or whatever, but not in a package
-    (because we'd have no way to ensure that package be extracted before
-    jailhouse gets built).
+ - Addition of support for gobject-introspection: both the
+   gobject-introspection package itself, but also introspection
+   support was enabled in a number of other packages.
 
- 3- let people write their own package(s) (e.g. in a br2-external tree)
-    that only builds the cell files. That package would depend on
-    jailhouse (or rather, the to-be-introduced host-jailhouse). And
-    packages could also provide their own cell definitions, too...
+ - Support for Qt 5.6 was dropped as its support was dropped
+   upstream, only one version of Qt is supported at the moment:
+   Qt 5.14.2.
 
-I think option 3 is the best solution, as it is the most flexible and
-most generic one. However, it will depend on the possibility to
-introduce a host-jailhoue package that can just install the 'jailhouse
-cell cross compiler'. As far as I see, this is just a bunch of objcopy,
-but this is quite tightly integrated into the kernel Kbiuld process, so
-might not so simple to come up with.
+ - Addition of support for the apparmor Linux security module, by
+   adding the necessary user-space packages.
 
-Option 2 is probably a good compromise if option 3 turns out to be too
-difficult to come up with...
+ - Addition of a qmake package infrastructure, now used by most
+   Qt-related packages.
 
-[--SNIP--]
-> It does work as proposed by Yann. I wasn't aware of that option. I
-> guess that makes this patch redundant.
+ - The Luarocks package infrastructure has been extended to
+   support build host packages.
 
-Using a completely separate tree? Yes, I think this is not an option.
+ - The package infrastructure was improved to allow each package
+   to indicate the Linux kernel configuration options it needs.
 
-However, given the above, maybe we still need a way for people to
-provide their cells descriptions and have them somehow copied at build
-(or configure) time...
+ - Addition of support for generating filesystem images using the
+   EROFS filesystem.
 
-Regards,
-Yann E. MORIN.
+ - The logic that calculates the list of files installed by each
+   package was reworked to be compatible with the top-level
+   parallel build functionality.
+
+ - Addition of a package for a pre-compiled ARM32 bare-metal
+   toolchain, which can be used to build ARM32 code in ARM64
+   configurations, such as firmware/bootloader code.
+
+ - The Qemu defconfigs are now boot-tested in Qemu as part of the
+   Gitlab continuous integration.
+
+ - Toolchain: gcc 9.x bumped to 9.3.0, gcc 8.x bumped to 8.4.0,
+   gdb bumped to 8.3.1.
+
+ - New packages: apcupsd, apparmor, arm-gnu-a-toolchain, bearssl,
+   belle-sip, belr, cage, chartjs, erofs-utils, exfatprogs,
+   gobject-introspection, ibm-sw-tpm2, imx-seco, jbig2dec, libapparmor,
+   libiberty, libfuse3, libtextstyle, libudfread, libuhttpd, libuwsc,
+   lua-lyaml, matio, mbuffer, netdata, openfpgaloader, perl-i18n,
+   perl-locale-maketext-lexicon, perl-lwp-protocol-https,
+   perl-mojolicious-plugin-authorization,
+   perl-mojolicious-plugin-cspheader, perl-mojolicious-plugin-i18n,
+   perl-mojolicious-plugin-securityheader, perl-mozilla-ca,
+   perl-path-class, pistache, pkcs11-helper, prelink-cross,
+   python-argon2-cffi, python-canopen, python-cbor2, python-filelock,
+   python-flatbuffers, python-greenlet, python-modbus-tk, python-pyalsa,
+   python-pysftp, python-regex, python-snappy, python3-pyelftools, rtty,
+   tinyproxy, udev-gentoo-scripts, unbound, vuejs, wlroots.
+
+ - Removed packages: ezxml, mtdev2tuio, python-pycrypto, wiringpi
+
+ - New defconfigs: freescale_imx6ullevk, freescale_imx8qmmek,
+   nanopi_neo4, nanopi_r1, nitrogen8mm, nitrogen8mn, olpc_xo1,
+   olpc_xo175, roc_rk3399_pc, stm32mp157a_dk1, zynq_qmtech
+
+And the usual package version updates and bug fixes. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2020.02..
+
+   235	Fabrice Fontaine
+   141	Bernd Kuhls
+   134	James Hilliard
+    90	Adam Duskett
+    76	Thomas Petazzoni
+    71	Peter Korsgaard
+    62	Romain Naour
+    58	Yann E. MORIN
+    51	Peter Seiderer
+    36	Francois Perrad
+    27	Heiko Thiery
+    22	Carlos Santos
+    18	Bartosz Bilas
+    16	Asaf Kahlon
+    16	Gary Bisson
+    16	Matt Weber
+    15	Ryan Barnett
+    14	Andreas Naumann
+    14	Fabio Estevam
+    13	J?rg Krause
+    12	Angelo Compagnucci
+    12	Baruch Siach
+    12	Thomas De Schampheleire
+    11	Pierre-Jean Texier
+    10	Julien Olivain
+    10	Titouan Christophe
+    10	Yegor Yefremov
+     9	Jianhui Zhao
+     8	Marcin Niestroj
+     7	Gilles Talis
+     7	Giulio Benetti
+     7	Joeri Barbarien
+     7	Maeva Manuel
+     7	Ryan Coe
+     6	Grzegorz Blach
+     6	Lubomir Rintel
+     6	Petr Vorel
+     5	Adrian Perez de Castro
+     5	Andr? Hentschel
+     5	Cl?ment P?ron
+     5	Frank Vanbever
+     5	Gwenhael Goavec-Merou
+     5	Nicola Di Lieto
+     5	Pascal de Bruijn
+     4	Alexander Dahl
+     4	Christian Stewart
+     4	Gao Xiang
+     4	Stephan Hoffmann
+     3	Alexander Mukhin
+     3	Alexey Lukyanchuk
+     3	Antoine Tenart
+     3	Charlie Turner
+     3	Chris Packham
+     3	Jared Bents
+     3	John Keeping
+     3	Joseph Kogut
+     3	Louis Aussedat
+     3	Louis-Paul CORDIER
+     3	Max Filippov
+     3	Michael Fischer
+     3	Sergio Prado
+     3	Stefan S?rensen
+     3	Suniel Mahesh
+     3	S?bastien Szymanski
+     3	Timo Ketola
+     3	Vincent Fazio
+     2	Adrien Gallou?t
+     2	Danomi Manchego
+     2	Davide Viti
+     2	Eugen Hristev
+     2	Evgeniy Didin
+     2	Geoff Levand
+     2	Gleb Mazovetskiy
+     2	Jagan Teki
+     2	Joao Marcos Costa
+     2	Jugurtha BELKALEM
+     2	Laurent GAUTHIER
+     2	Laurent Hartanerot
+     2	Louis-Paul Cordier
+     2	Luca Ceresoli
+     2	Sergey Matyukevich
+     2	Stefan Ott
+     1	Aleksander Morgado
+     1	Alexander Sverdlin
+     1	Anatoly Borodin
+     1	Attila Wagner
+     1	Bin Meng
+     1	Cody Guldner
+     1	Dagg Stompler
+     1	Fabrice Goucem
+     1	Graham Rhodes
+     1	Heiko Stuebner
+     1	Ismael Luceno
+     1	Jean Burgat
+     1	Joachim Nilsson
+     1	Johan Oudinet
+     1	Julien Boibessot
+     1	Julien Grossholtz
+     1	J?r?my Rosen
+     1	K?vin L'h?pital
+     1	Lecopzer Chen
+     1	Marcus Folkesson
+     1	Marek Belisko
+     1	Mark Corbin
+     1	Merlin B?ge
+     1	Michele Comignano
+     1	Mircea Gliga
+     1	Nayna Jain
+     1	Naz?m Gediz AYDINDO?MU?
+     1	Nicolas Carrier
+     1	Nicolas Cavallari
+     1	Norbert Lange
+     1	Philippe Reynes
+     1	Ramon Fried
+     1	Rapha?l M?lotte
+     1	Refik Tuzakli
+     1	Robert Hancock
+     1	Ryan Steffens
+     1	Sam Voss
+     1	Thomas Claveirole
+     1	Thomas Ruschival
+     1	Vadym Kochan
+     1	Waldemar Brodkorb
+     1	Yaroslav Syrytsia
+     1	Zoltan Gyarmati
+
+And a special thanks to our patch reviewers (we would need more!):
+
+git log 2020.02.. | grep -Ei '(reviewed|acked)-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     12 Romain Naour <romain.naour@gmail.com>
+      7 Peter Seiderer <ps.report@gmx.net>
+      5 Julien Olivain <julien.olivain@oss.nxp.com>
+      4 Yegor Yefremov <yegorslists@googlemail.com>
+      3 S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+      3 Ryan Barnett <ryan.barnett@rockwellcollins.com>
+      3 Petr Vorel <petr.vorel@gmail.com>
+      2 Matt Weber <matthew.weber@rockwellcollins.com>
+      2 Fabio Estevam <festevam@gmail.com>
+      2 Asaf Kahlon <asafka7@gmail.com>
+      2 Adrian Perez de Castro <aperez@igalia.com>
+      2 Adam Duskett <aduskett@gmail.com>
+      1 Yann E. MORIN <yann.morin.1998@free.fr>
+      1 Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+      1 Sam Voss <sam.voss@gmail.com>
+      1 Matthew Weber <matthew.weber@rockwellcollins.com>
+      1 Maeva Manuel <maeva.manuel@oss.nxp.com>
+      1 John Faith <jfaith@impinj.com>
+      1 Giulio Benetti <giulio.benetti@benettiengineering.com>
+      1 Gilles Talis <gilles.talis@gmail.com>
+      1 Gary Bisson <gary.bisson@boundarydevices.com>
+      1 David Pierret <david.pierret@smile.fr>
+      1 Cl?ment P?ron <peron.clem@gmail.com>
+      1 Chris Packham <judge.packham@gmail.com>
+      1 Carlos Santos <unixmania@gmail.com>
+      1 Antoine Tenart <antoine.tenart@bootlin.com>
+      1 Alistair Francis <alistair.francis@wdc.com>
+
+The next release will be 2020.08. Expect the first release candidate at
+the beginning of August and the final release at the end of the month.
+
+This release will be supported with security and other important fixes
+until 2020.08 is out. If you need longer support then consider using our
+long term support release (2020.02.x) instead which will be supported
+until March 2021.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
