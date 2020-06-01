@@ -1,39 +1,22 @@
-From: =?UTF-8?Q?Gon=C3=A7alo_Salazar?= <glbsalazar@gmail.com>
-Date: Mon, 1 Jun 2020 21:51:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xr819-xradio: bumped to version
- 6bf0e2e2
-In-Reply-To: <20200601204035.GA22289@curiosity>
-References: <20200531121125.1985843-1-glbsalazar@gmail.com>
- <20200601204035.GA22289@curiosity>
-Message-ID: <CAPJzBTr9FYHEDraEDvjvRmJDcz6A6ZxFb56Cs1J_38Kovc_J=Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Jun 2020 23:05:39 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{4, 6}.x series
+In-Reply-To: <20200601204157.29994-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 1 Jun 2020 22:41:56 +0200")
+References: <20200601204157.29994-1-peter@korsgaard.com>
+Message-ID: <877dwqfqe4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You are welcome.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-I did some initial testing and was able to connect to WIFI without any issues,
-other than that I still haven't used extensively to get an idea. But
-it seems to work fine.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Best regards,
-Gon?alo Salazar
+Committed, thanks.
 
-Sergey Matyukevich <geomatsi@gmail.com> escreveu no dia segunda,
-1/06/2020 ?(s) 21:35:
->
-> On Sun, May 31, 2020 at 01:11:25PM +0100, Gon?alo Salazar wrote:
-> > Bumped xr819-xradio package to the latest version to fix some compilation issues when using kernel 5.6 for the orangepi-zero
-> >
-> > Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
->
-> Thanks !
->
-> This new version includes quite a few fixes for the out-of-tree xradio
-> driver. Could you please share your experience if you had a chance to
-> test stability of the new xradio version ?
->
-> Regards,
-> Sergey
+-- 
+Bye, Peter Korsgaard
