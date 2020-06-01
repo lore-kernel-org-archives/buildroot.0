@@ -1,88 +1,45 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  1 Jun 2020 07:30:36 -0500
-Subject: [Buildroot] [PATCH] DEVELOPERS: cleanup rockwellcollins.com
- maintainers
-Message-ID: <20200601123036.49413-1-matthew.weber@rockwellcollins.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon,  1 Jun 2020 15:14:25 +0200
+Subject: [Buildroot] [PATCH/next] package/libarchive: bump to version 3.4.3
+Message-ID: <1591017265-30248-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- DEVELOPERS | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+Libarchive 3.4.3 is a feature and bugfix release.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 88050349db..efb97c739c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -487,9 +487,6 @@ N:	Biagio Montaruli <biagio.hkr@gmail.com>
- F:	board/acmesystems/
- F:	configs/acmesystems_*
+See https://github.com/libarchive/libarchive/releases/tag/v3.4.3
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/libarchive/libarchive.hash | 2 +-
+ package/libarchive/libarchive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index 9da4eb3..0660378 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
++sha256  ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39  libarchive-3.4.3.tar.gz
+ # Locally computed:
+ sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 4aabbea..708ce63 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Bimal Jacob <bimal.jacob@rockwellcollins.com>
--F:	package/nginx-upload/
--
- N:	Bogdan Radulescu <bogdan@nimblex.net>
- F:	package/iftop/
- F:	package/ncdu/
-@@ -661,9 +658,6 @@ F:	package/openldap/
- N:	David du Colombier <0intro@gmail.com>
- F:	package/x264/
- 
--N:	David Graziano <david.graziano@rockwellcollins.com>
--F:	package/libcsv/
--
- N:	David Lechner <david@lechnology.com>
- F:	board/lego/ev3/
- F:	configs/lego_ev3_defconfig
-@@ -1224,11 +1218,6 @@ F:	package/python-pexpect/
- F:	package/python-ptyprocess/
- F:	package/zynq-boot-bin/
- 
--N:	Jared Bents <jared.bents@rockwellcollins.com>
--F:	package/davici/
--F:	package/python-filelock/
--F:	package/python-pysftp/
--
- N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
- 
-@@ -1659,6 +1648,7 @@ F:	package/cgroupfs-mount/
- F:	package/crda/
- F:	package/cunit/
- F:	package/dacapo/
-+F:	package/davici/
- F:	package/dnsmasq/
- F:	package/dosfstools/
- F:	package/eigen/
-@@ -1708,6 +1698,7 @@ F:	package/protobuf-c/
- F:	package/protobuf/
- F:	package/python-bunch/
- F:	package/python-colorama/
-+F:	package/python-filelock/
- F:	package/python-flask-cors/
- F:	package/python-iptables/
- F:	package/python-ipy/
-@@ -1715,6 +1706,7 @@ F:	package/python-posix-ipc/
- F:	package/python-pycairo/
- F:	package/python-pypcap/
- F:	package/python-pyrex/
-+F:	package/python-pysftp/
- F:	package/python-tinyrpc/
- F:	package/python-txdbus/
- F:	package/raptor/
-@@ -1925,9 +1917,6 @@ F:	package/openjpeg/
- N:	Olivier Singla <olivier.singla@gmail.com>
- F:	package/shellinabox/
- 
--N:	Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
--F:	package/checksec/
--
- N:	Parnell Springmeyer <parnell@digitalmentat.com>
- F:	package/scrypt/
- 
+-LIBARCHIVE_VERSION = 3.4.2
++LIBARCHIVE_VERSION = 3.4.3
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
 -- 
-2.17.1
+2.7.4
