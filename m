@@ -1,65 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  1 Jun 2020 11:54:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wampcc fix build with musl 1.2.0
-Message-ID: <20200601095432.1108102-1-fontaine.fabrice@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon,  1 Jun 2020 12:15:19 +0200
+Subject: [Buildroot] [PATCH/next] package/python-periphery: bump to version
+ 2.1.0
+Message-ID: <1591006519-11554-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/da996e189220499b85efbdb541a891ac18db38c6
+See changelog https://github.com/vsergeev/python-periphery/blob/master/CHANGELOG.md
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update the license hash for a change in copyright years:
+-Copyright (c) 2015-2019 vsergeev / Ivan (Vanya) A. Sergeev
++Copyright (c) 2015-2020 vsergeev / Ivan (Vanya) A. Sergeev
+
+Also switch to the new 2 spaces convention for the hash file
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- ...platform.h-fix-build-with-musl-1.2.0.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch
+ package/python-periphery/python-periphery.hash | 4 ++--
+ package/python-periphery/python-periphery.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch b/package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch
-new file mode 100644
-index 0000000000..c7b8c78602
---- /dev/null
-+++ b/package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch
-@@ -0,0 +1,38 @@
-+From 9c2559434b752df3dc8460ee242d321670a40847 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 1 Jun 2020 11:41:54 +0200
-+Subject: [PATCH] include/wampcc/platform.h: fix build with musl 1.2.0
-+
-+Fix the following build failure on musl 1.2.0 due to time_t being on 64
-+bits:
-+
-+/home/naourr/work/instance-0/output-1/build/wampcc-1.6/libs/wampcc/utils.cc: In function 'std::__cxx11::string wampcc::local_timestamp()':
-+/home/naourr/work/instance-0/output-1/build/wampcc-1.6/libs/wampcc/utils.cc:205:15: error: cannot convert 'wampcc::time_val::type_type*' {aka 'long int*'} to 'const time_t*' {aka 'const long long int*'}
-+   localtime_r(&now.sec, &parts);
-+               ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/da996e189220499b85efbdb541a891ac18db38c6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/darrenjs/wampcc/pull/62]
-+---
-+ include/wampcc/platform.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/wampcc/platform.h b/include/wampcc/platform.h
-+index 24d0868..aebf950 100644
-+--- a/include/wampcc/platform.h
-++++ b/include/wampcc/platform.h
-+@@ -27,7 +27,7 @@ namespace wampcc
-+   struct time_val
-+   {
-+ #ifndef _WIN32
-+-    typedef long type_type;
-++    typedef time_t type_type;
-+ #else
-+     typedef __time64_t type_type;
-+ #endif
-+-- 
-+2.26.2
-+
+diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
+index e9c3869..13636d1 100644
+--- a/package/python-periphery/python-periphery.hash
++++ b/package/python-periphery/python-periphery.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e6da8dcf8f639d1c3be3f19d27cbd472ef904db204c5453b250f87ab9bca2025  python-periphery-2.0.1.tar.gz
+-sha256 bf032b9319cfd918368219450a9917529f131925e698cbab1b63f42b629ff505  LICENSE
++sha256  2c2482d026afc974ba5a966cd2c3a724ecf55e253223a9ea80fc98f77a3ca414  python-periphery-2.1.0.tar.gz
++sha256  4a2ed465d05c7ec58bb5a8cd7d2475a2d423bb73cb9bc3e3565500c222d03dc8  LICENSE
+diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
+index 97cb52e..c322ded 100644
+--- a/package/python-periphery/python-periphery.mk
++++ b/package/python-periphery/python-periphery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PERIPHERY_VERSION = 2.0.1
++PYTHON_PERIPHERY_VERSION = 2.1.0
+ PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
+ PYTHON_PERIPHERY_LICENSE = MIT
+ PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
 -- 
-2.26.2
+2.7.4
