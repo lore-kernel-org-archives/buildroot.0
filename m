@@ -1,28 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Jun 2020 22:04:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/leveldb: fix detection of the
- snappy library
-In-Reply-To: <20200518052203.1667697-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 18 May 2020 07:22:02 +0200")
-References: <20200518052203.1667697-1-thomas.petazzoni@bootlin.com>
- <20200518052203.1667697-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87eeqyh7rv.fsf@dell.be.48ers.dk>
+Date: Mon, 01 Jun 2020 22:05:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/audit: fix -fno-common build
+ failure
+In-Reply-To: <20200518054331.5106-1-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Mon, 18 May 2020 07:43:32 +0200")
+References: <20200518054331.5106-1-heiko.thiery@gmail.com>
+Message-ID: <87a71mh7qr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
- > Pull a patch pending in an upstream pull request to fix the detection
- > of the snappy library when we are in static linking configurations.
+ > Added upstream patch for fixing build failure when using GCC10 as a host
+ > compiler (-fno-common is now default).
 
  > Fixes:
+ > http://autobuild.buildroot.net/results/c4b/c4bba80e9fc476247c7ba28850831c6a8edd559f/build-end.log
 
- >   https://bugs.busybox.net/show_bug.cgi?id=12671
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
 Committed to 2020.02.x, thanks.
 
