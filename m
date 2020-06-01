@@ -1,45 +1,133 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jun 2020 22:06:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] board/freescale: increase
- the vfat size
-Message-ID: <20200601201603.3306786010@busybox.osuosl.org>
+Date: Mon, 1 Jun 2020 22:04:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/leveldb: fix
+ detection of the snappy library
+Message-ID: <20200601201603.177708600A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94bb56719db58d0ec64f5f4cdeef6e43372086ec
+commit: https://git.buildroot.net/buildroot/commit/?id=c4b8b2aa4945eb28082042d1bf12469e277922f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The default iamge size is 32MiB, which is quite low by today's standards.
-Besides, the AArch64 kernels are relatively big, which leaves not much
-room, if at all, for users to experiment on the default image.
+Pull a patch pending in an upstream pull request to fix the detection
+of the snappy library when we are in static linking configurations.
 
-Increase the vfat size to a more reasonable 64MiB.
+Fixes:
 
-Note that users who derive an in-tree defconfig for their own case will
-allways hit any arbitarary size we put here, so they will anyway have to
-also derive this template for their own use-cases.
+  https://bugs.busybox.net/show_bug.cgi?id=12671
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7d804aba66fbed7df6cf0caa845b6c52f7ff1f7e)
+(cherry picked from commit a26d6338fb47765de6e20fdead044ed6e69cc7ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/freescale/common/imx/genimage.cfg.template_imx8 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...004-cmake-Use-find_package-to-find-Snappy.patch | 98 ++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index bd5f6cdc73..75f182be66 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -13,7 +13,7 @@ image boot.vfat {
-       %FILES%
-     }
-   }
--  size = 32M
-+  size = 64M
- }
- 
- image sdcard.img {
+diff --git a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+new file mode 100644
+index 0000000000..2626e88652
+--- /dev/null
++++ b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+@@ -0,0 +1,98 @@
++From 450c1d88b3e1af34614294830b4dc0612d198d26 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Pawe=C5=82=20Bylica?= <chfast@gmail.com>
++Date: Wed, 8 May 2019 10:42:03 +0200
++Subject: [PATCH] cmake: Use find_package() to find Snappy
++
++Upstream: https://github.com/google/leveldb/pull/686/commits/3e73a396a082efc76e065ae974fe18c3bb27219d
++[Thomas: this commit allows to fix the detection of the snappy library
++in static link configurations]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ CMakeLists.txt         | 12 ++++++++----
++ cmake/FindSnappy.cmake | 31 +++++++++++++++++++++++++++++++
++ 2 files changed, 39 insertions(+), 4 deletions(-)
++ create mode 100644 cmake/FindSnappy.cmake
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 78fead6..2efccda 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.9)
++ # Keep the version below in sync with the one in db.h
++ project(leveldb VERSION 1.22.0 LANGUAGES C CXX)
++ 
+++# Include local CMake modules.
+++list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+++
++ # This project can use C11, but will gracefully decay down to C89.
++ set(CMAKE_C_STANDARD 11)
++ set(CMAKE_C_STANDARD_REQUIRED OFF)
++@@ -31,13 +34,14 @@ option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
++ include(TestBigEndian)
++ test_big_endian(LEVELDB_IS_BIG_ENDIAN)
++ 
+++find_package(Snappy)
+++
++ include(CheckIncludeFile)
++ check_include_file("unistd.h" HAVE_UNISTD_H)
++ 
++ include(CheckLibraryExists)
++ check_library_exists(atomic __atomic_fetch_add_4 "" HAVE_ATOMIC)
++ check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
++-check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)
++ check_library_exists(tcmalloc malloc "" HAVE_TCMALLOC)
++ 
++ include(CheckCXXSymbolExists)
++@@ -276,9 +280,9 @@ endif(HAVE_ATOMIC)
++ if(HAVE_CRC32C)
++   target_link_libraries(leveldb crc32c)
++ endif(HAVE_CRC32C)
++-if(HAVE_SNAPPY)
++-  target_link_libraries(leveldb snappy)
++-endif(HAVE_SNAPPY)
+++if(TARGET Snappy::snappy)
+++  target_link_libraries(leveldb Snappy::snappy)
+++endif()
++ if(HAVE_TCMALLOC)
++   target_link_libraries(leveldb tcmalloc)
++ endif(HAVE_TCMALLOC)
++diff --git a/cmake/FindSnappy.cmake b/cmake/FindSnappy.cmake
++new file mode 100644
++index 0000000..88c1de9
++--- /dev/null
+++++ b/cmake/FindSnappy.cmake
++@@ -0,0 +1,31 @@
+++# Copyright 2019 The LevelDB Authors. All rights reserved.
+++# Use of this source code is governed by a BSD-style license that can be
+++# found in the LICENSE file. See the AUTHORS file for names of contributors.
+++
+++find_library(SNAPPY_LIBRARY
+++    NAMES snappy
+++    HINTS ${SNAPPY_ROOT_DIR}/lib
+++)
+++
+++find_path(SNAPPY_INCLUDE_DIR
+++    NAMES snappy.h
+++    HINTS ${SNAPPY_ROOT_DIR}/include
+++)
+++
+++include(FindPackageHandleStandardArgs)
+++find_package_handle_standard_args(Snappy DEFAULT_MSG SNAPPY_LIBRARY SNAPPY_INCLUDE_DIR)
+++
+++mark_as_advanced(SNAPPY_LIBRARY SNAPPY_INCLUDE_DIR)
+++
+++if(SNAPPY_FOUND)
+++  set(HAVE_SNAPPY TRUE) # For compatibity with generating port_config.h.
+++
+++  # Add imported targets.
+++  # Follow the package naming convetion 'Snappy::' from
+++  # https://github.com/google/snappy/blob/master/CMakeLists.txt#L211.
+++  add_library(Snappy::snappy UNKNOWN IMPORTED)
+++  set_target_properties(Snappy::snappy PROPERTIES
+++      IMPORTED_LOCATION ${SNAPPY_LIBRARY}
+++      INTERFACE_INCLUDE_DIRECTORIES ${SNAPPY_INCLUDE_DIR}
+++  )
+++endif()
++-- 
++2.26.2
++
