@@ -1,157 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jun 2020 23:11:33 +0200
-Subject: [Buildroot] [git commit] Update for 2020.05
-Message-ID: <20200601211529.AEFE381EC4@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Jun 2020 23:19:02 +0200
+Subject: [Buildroot] [PATCH 2/2] package/jailhouse: add option to choose
+ custom repo/branch
+In-Reply-To: <CAH3JsOrGo0k4S=VKfaXFbgkOv2jYvCB6nff0f+TihKz-1ok4JQ@mail.gmail.com>
+References: <20200528144333.49268-1-mariomintel@gmail.com>
+ <20200528144333.49268-3-mariomintel@gmail.com>
+ <20200529204844.GR8737@scaer>
+ <3806f122-f6b0-efba-e94a-64a3729fbe8a@oth-regensburg.de>
+ <CAH3JsOrK+8F4xXhxm8ytEawBQ63jswzBG8PW2naq40M6MAyZQA@mail.gmail.com>
+ <CAH3JsOrGo0k4S=VKfaXFbgkOv2jYvCB6nff0f+TihKz-1ok4JQ@mail.gmail.com>
+Message-ID: <20200601211902.GI8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6306cf35c5936184c09fa1f5678c3381e330fe2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Mario, Ralf, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    |  8 ++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 26 +++++++++++++-------------
- docs/website/news.html     | 18 ++++++++++++++++++
- 4 files changed, 41 insertions(+), 15 deletions(-)
+On 2020-06-01 18:23 +0200, Mario Mintel spake thusly:
+> Am Sa., 30. Mai 2020 um 19:28?Uhr schrieb Mario Mintel < [1]mariomintel@gmail.com>:
+>   Am Fr., 29. Mai 2020 um 23:40?Uhr schrieb Ralf Ramsauer < [2]ralf.ramsauer@oth-regensburg.de>:
+>   On 5/29/20 10:48 PM, Yann E. MORIN wrote:
+>   > Mario, All,
+>   > On 2020-05-28 16:43 +0200, Mario Mintel spake thusly:
+>   >> In addition to official releases of Jailhouse, allow to specify a custom
+>   >> Git URI + branches. This adds more flexibility for custom
+>   >> configurations.
+>   > The overwhelming majority of packages do not allow selecting an
+>   > alternate location. Why would jailhouse be different?
+> 
+>   Jailhouse requires system-specific configurations. Those configurations
+>   are compiled from C source files to binaries during the build process.
+>   While upstream Jailhouse comes with a lot of samples for supported
+>   systems, you will need a lot of fine tuning to for a specific use case.
 
-diff --git a/CHANGES b/CHANGES
-index 85e9828cbf..3cda0af8df 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,11 @@
-+2020.05, released June 1st, 2020
-+
-+	Various fixes.
-+
-+	Updated/fixed packages: arm-trusted-firmware, gcc, mp4v2, fmc,
-+	fmlib, glib-networking, libusb-compat, linux, qt5webengine,
-+	sysrepo, wampcc, xen
-+
- 2020.05-rc3, released May 29th, 2020
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 374ddb068f..b2afe5bcfb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.05-rc3
-+export BR2_VERSION := 2020.05
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1590784000
-+BR2_VERSION_EPOCH = 1591045000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 60308d9e56..0f8efbd577 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,7 +8,7 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2020.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -41,41 +41,41 @@
- 	  <p><a href="/downloads/buildroot-2020.02.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest stable release: <b>2019.11.1</b></h3>
-+
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.05</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.11.1.tar.gz">buildroot-2019.11.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.11.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05.tar.gz">buildroot-2020.05.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.11.1.tar.bz2">buildroot-2019.11.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.11.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05.tar.bz2">buildroot-2020.05.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+<!--
-       <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc3</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
-@@ -109,7 +109,7 @@
- 	  <p><a href="/downloads/buildroot-2020.05-rc3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
-+-->
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 908a3f4536..f8ccb4eac0 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,24 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.05 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 June 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The stable 2020.05 release is out - Thanks to everyone
-+	  contributing and testing the release candidates. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05">CHANGES</a>
-+	  file for more details
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.05.tar.bz2">2020.05 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+I am not sure I entirely followed... Note that I am totally ignorant to
+how jailhouse works (and I barely know what it is). So I had a quick
+look into the github repo, and I noticed this:
+
+    A system configuration can be created on an x86 target system by
+    running the following command:
+
+        jailhouse config create sysconfig.c
+
+    In order to translate this into the required binary form, place
+    this file in the configs/x86/ directory. The build system will pick
+    up every .c file from there and generate a corresponding .cell file.
+
+Is this what you were trying to explain?
+
+If so, then I think we need a way for people to indeed provide their
+cells descriptions files, so that they do get compiled by jailhouse,
+without resorting to using an OVERRDIE_SRCDIR.
+
+So I see a few options:
+
+ 1- let people provide those .c files as a patch against jailhouse. This
+    requires no infra in Buildroot, but this is not very convenient;
+
+ 2- add a configuration option in jailhouse/Config.in, which people
+    could set as a path to a directory with .c files; those would be
+    copied into the jailhouse build directory before the actual build,
+    so the documented way (see above) will be used; those files would
+    have to be in a br2-external tree or whatever, but not in a package
+    (because we'd have no way to ensure that package be extracted before
+    jailhouse gets built).
+
+ 3- let people write their own package(s) (e.g. in a br2-external tree)
+    that only builds the cell files. That package would depend on
+    jailhouse (or rather, the to-be-introduced host-jailhouse). And
+    packages could also provide their own cell definitions, too...
+
+I think option 3 is the best solution, as it is the most flexible and
+most generic one. However, it will depend on the possibility to
+introduce a host-jailhoue package that can just install the 'jailhouse
+cell cross compiler'. As far as I see, this is just a bunch of objcopy,
+but this is quite tightly integrated into the kernel Kbiuld process, so
+might not so simple to come up with.
+
+Option 2 is probably a good compromise if option 3 turns out to be too
+difficult to come up with...
+
+[--SNIP--]
+> It does work as proposed by Yann. I wasn't aware of that option. I
+> guess that makes this patch redundant.
+
+Using a completely separate tree? Yes, I think this is not an option.
+
+However, given the above, maybe we still need a way for people to
+provide their cells descriptions and have them somehow copied at build
+(or configure) time...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
