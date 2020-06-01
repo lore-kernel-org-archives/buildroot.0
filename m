@@ -1,7 +1,7 @@
 From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon,  1 Jun 2020 09:28:16 +0200
-Subject: [Buildroot] [PATCH V4] package/c-periphery: bump version to 2.2.1
-Message-ID: <20200601072816.4785-1-offougajoris@gmail.com>
+Date: Mon,  1 Jun 2020 09:48:40 +0200
+Subject: [Buildroot] [PATCH V5] package/c-periphery: bump version to 2.2.1
+Message-ID: <20200601074841.6325-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,6 +20,17 @@ copyright year:
 
 Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 ---
+  changes v4-v5:
+    - add missing changelog
+  changes v3-v4
+    - update package to 2.2.1, this version integrate _XOPEN_SOURCE feature
+  change v2->v3
+    - fix commit log
+    - use _XOPEN_SOURCE instead of __USE_XOPEN according to man poll. Suggested-by Thomas Petazzoni
+    - Install library to $(TARGET_DIR)
+  change v1->v2:
+    - fix correct copyright year 2020
+
  package/c-periphery/c-periphery.hash |  4 ++--
  package/c-periphery/c-periphery.mk   | 19 +++----------------
  2 files changed, 5 insertions(+), 18 deletions(-)
