@@ -1,133 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jun 2020 22:04:27 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/leveldb: fix
- detection of the snappy library
-Message-ID: <20200601201603.177708600A@busybox.osuosl.org>
+Date: Mon, 1 Jun 2020 22:15:23 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/erlang: fix
+ -fno-common build failure
+Message-ID: <20200601201603.40F5485F5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4b8b2aa4945eb28082042d1bf12469e277922f7
+commit: https://git.buildroot.net/buildroot/commit/?id=17cf3fdb5ad685c38df834894a086e6c87871ddc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Pull a patch pending in an upstream pull request to fix the detection
-of the snappy library when we are in static linking configurations.
+Added upstream patch for fixing build failure when using GCC10 as a host
+compiler (-fno-common is now default).
 
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12671
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a26d6338fb47765de6e20fdead044ed6e69cc7ae)
+(cherry picked from commit 73f4ad304f8a654dd3359e73f33ed463389218fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...004-cmake-Use-find_package-to-find-Snappy.patch | 98 ++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+ ...-avoid-ODR-violation-of-ei_default_socket.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
+diff --git a/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
 new file mode 100644
-index 0000000000..2626e88652
+index 0000000000..69b6fae81f
 --- /dev/null
-+++ b/package/leveldb/0004-cmake-Use-find_package-to-find-Snappy.patch
-@@ -0,0 +1,98 @@
-+From 450c1d88b3e1af34614294830b4dc0612d198d26 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Pawe=C5=82=20Bylica?= <chfast@gmail.com>
-+Date: Wed, 8 May 2019 10:42:03 +0200
-+Subject: [PATCH] cmake: Use find_package() to find Snappy
++++ b/package/erlang/0003-ei_portio.h-avoid-ODR-violation-of-ei_default_socket.patch
+@@ -0,0 +1,54 @@
++From de870d7f9f36b3e68f280057851a4585a67ab219 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Tue, 14 Jan 2020 23:15:01 +0000
++Subject: [PATCH] ei_portio.h: avoid ODR violation of
++ 'ei_default_socket_callbacks'
 +
-+Upstream: https://github.com/google/leveldb/pull/686/commits/3e73a396a082efc76e065ae974fe18c3bb27219d
-+[Thomas: this commit allows to fix the detection of the snappy library
-+in static link configurations]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Noticed as a build failure against fresh gcc-master:
++
++```
++LD otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(eirecv.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(send_reg.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(epmd_port.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++ld: otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_portio.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: multiple definition of `ei_default_socket_callbacks'; otp/lib/erl_interface/obj/x86_64-unknown-linux-gnu/libei.a(ei_connect.o):otp/lib/erl_interface/src/misc/ei_portio.h:50: first defined here
++collect2: error: ld returned 1 exit status
++make[3]: *** [x86_64-unknown-linux-gnu/Makefile:669: otp/lib/erl_interface/bin/x86_64-unknown-linux-gnu/erl_call] Error 1
++```
++
++The failure looks legitimate: `ei_default_socket_callbacks` is a
++struct defined in 'ei_portio.h' and in 'ei_portio.c'.
++
++The change flips 'ei_portio.h' definition to declaration.
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++
++Patch taken from upstream: https://github.com/erlang/otp/commit/de870d7f9f36b3e68f280057851a4585a67ab219
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 +---
-+ CMakeLists.txt         | 12 ++++++++----
-+ cmake/FindSnappy.cmake | 31 +++++++++++++++++++++++++++++++
-+ 2 files changed, 39 insertions(+), 4 deletions(-)
-+ create mode 100644 cmake/FindSnappy.cmake
++ lib/erl_interface/src/misc/ei_portio.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 78fead6..2efccda 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -6,6 +6,9 @@ cmake_minimum_required(VERSION 3.9)
-+ # Keep the version below in sync with the one in db.h
-+ project(leveldb VERSION 1.22.0 LANGUAGES C CXX)
++diff --git a/lib/erl_interface/src/misc/ei_portio.h b/lib/erl_interface/src/misc/ei_portio.h
++index 84ebc5039a..5172d085b4 100644
++
++--- a/lib/erl_interface/src/misc/ei_portio.h
+++++ b/lib/erl_interface/src/misc/ei_portio.h
++@@ -47,7 +47,7 @@ int ei_writev_fill_ctx_t__(ei_socket_callbacks *cbs, void *ctx, const struct iov
++ int ei_socket_callbacks_have_writev__(ei_socket_callbacks *cbs);
++ #endif
 + 
-++# Include local CMake modules.
-++list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-++
-+ # This project can use C11, but will gracefully decay down to C89.
-+ set(CMAKE_C_STANDARD 11)
-+ set(CMAKE_C_STANDARD_REQUIRED OFF)
-+@@ -31,13 +34,14 @@ option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
-+ include(TestBigEndian)
-+ test_big_endian(LEVELDB_IS_BIG_ENDIAN)
++-ei_socket_callbacks ei_default_socket_callbacks;
+++extern ei_socket_callbacks ei_default_socket_callbacks;
 + 
-++find_package(Snappy)
-++
-+ include(CheckIncludeFile)
-+ check_include_file("unistd.h" HAVE_UNISTD_H)
-+ 
-+ include(CheckLibraryExists)
-+ check_library_exists(atomic __atomic_fetch_add_4 "" HAVE_ATOMIC)
-+ check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
-+-check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)
-+ check_library_exists(tcmalloc malloc "" HAVE_TCMALLOC)
-+ 
-+ include(CheckCXXSymbolExists)
-+@@ -276,9 +280,9 @@ endif(HAVE_ATOMIC)
-+ if(HAVE_CRC32C)
-+   target_link_libraries(leveldb crc32c)
-+ endif(HAVE_CRC32C)
-+-if(HAVE_SNAPPY)
-+-  target_link_libraries(leveldb snappy)
-+-endif(HAVE_SNAPPY)
-++if(TARGET Snappy::snappy)
-++  target_link_libraries(leveldb Snappy::snappy)
-++endif()
-+ if(HAVE_TCMALLOC)
-+   target_link_libraries(leveldb tcmalloc)
-+ endif(HAVE_TCMALLOC)
-+diff --git a/cmake/FindSnappy.cmake b/cmake/FindSnappy.cmake
-+new file mode 100644
-+index 0000000..88c1de9
-+--- /dev/null
-++++ b/cmake/FindSnappy.cmake
-+@@ -0,0 +1,31 @@
-++# Copyright 2019 The LevelDB Authors. All rights reserved.
-++# Use of this source code is governed by a BSD-style license that can be
-++# found in the LICENSE file. See the AUTHORS file for names of contributors.
-++
-++find_library(SNAPPY_LIBRARY
-++    NAMES snappy
-++    HINTS ${SNAPPY_ROOT_DIR}/lib
-++)
-++
-++find_path(SNAPPY_INCLUDE_DIR
-++    NAMES snappy.h
-++    HINTS ${SNAPPY_ROOT_DIR}/include
-++)
-++
-++include(FindPackageHandleStandardArgs)
-++find_package_handle_standard_args(Snappy DEFAULT_MSG SNAPPY_LIBRARY SNAPPY_INCLUDE_DIR)
-++
-++mark_as_advanced(SNAPPY_LIBRARY SNAPPY_INCLUDE_DIR)
-++
-++if(SNAPPY_FOUND)
-++  set(HAVE_SNAPPY TRUE) # For compatibity with generating port_config.h.
-++
-++  # Add imported targets.
-++  # Follow the package naming convetion 'Snappy::' from
-++  # https://github.com/google/snappy/blob/master/CMakeLists.txt#L211.
-++  add_library(Snappy::snappy UNKNOWN IMPORTED)
-++  set_target_properties(Snappy::snappy PROPERTIES
-++      IMPORTED_LOCATION ${SNAPPY_LIBRARY}
-++      INTERFACE_INCLUDE_DIRECTORIES ${SNAPPY_INCLUDE_DIR}
-++  )
-++endif()
++ #define EI_FD_AS_CTX__(FD)                                              \
++     ((void *) (long) (FD))
 +-- 
-+2.26.2
++2.20.1
 +
