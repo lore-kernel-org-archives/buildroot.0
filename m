@@ -1,81 +1,101 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon,  1 Jun 2020 09:48:40 +0200
-Subject: [Buildroot] [PATCH V5] package/c-periphery: bump version to 2.2.1
-Message-ID: <20200601074841.6325-1-offougajoris@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Jun 2020 10:01:59 +0200
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-good:
+ Optionally select GUDEV
+In-Reply-To: <cecdfdbdb777ecdda021d6891da01e9be2f5df44.camel@collabora.com>
+References: <20200531135327.12234-1-ezequiel@collabora.com>
+ <20200531204902.GF8737@scaer>
+ <cecdfdbdb777ecdda021d6891da01e9be2f5df44.camel@collabora.com>
+Message-ID: <20200601080159.GG8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit "cmake: add cmake build support"
-(https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
-c-periphery implement cmake build, so use cmake-package instead of generic-package
+Ezequiel, Nicolas, All,
 
-The hash of the license file is updated due to an update in the
-copyright year:
+On 2020-05-31 21:05 -0300, Ezequiel Garcia spake thusly:
+> On Sun, 2020-05-31 at 22:49 +0200, Yann E. MORIN wrote:
+> > On 2020-05-31 10:53 -0300, Ezequiel Garcia spake thusly:
+> > > From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+[--SNIP--]
+> > > +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
+> > The title is a bit misleading: gudev is not optional; instead, it is
+> > forcibly selected when udev is enabled.
+> 
+> How about "package/gstreamer1/gst1-plugins-good: Select GUDEV if available"
 
-  - Copyright (c) 2014-2019 vsergeev / Ivan (Vanya) A. Sergeev
-  + Copyright (c) 2014-2020 vsergeev / Ivan (Vanya) A. Sergeev
+As I see it, gudev is optional, and brings the whole libglib2 stack
+behind it. Do we really need to forcibly select it?
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
----
-  changes v4-v5:
-    - add missing changelog
-  changes v3-v4
-    - update package to 2.2.1, this version integrate _XOPEN_SOURCE feature
-  change v2->v3
-    - fix commit log
-    - use _XOPEN_SOURCE instead of __USE_XOPEN according to man poll. Suggested-by Thomas Petazzoni
-    - Install library to $(TARGET_DIR)
-  change v1->v2:
-    - fix correct copyright year 2020
+I mean: can't we just keep the part in the .mk, to guarantee the build
+ordre when libgudev is enabled?
 
- package/c-periphery/c-periphery.hash |  4 ++--
- package/c-periphery/c-periphery.mk   | 19 +++----------------
- 2 files changed, 5 insertions(+), 18 deletions(-)
+> > > +ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> > > +GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
 
-diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
-index 244f8f60f1..a1842612b9 100644
---- a/package/c-periphery/c-periphery.hash
-+++ b/package/c-periphery/c-periphery.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654  c-periphery-2.1.0.tar.gz
--sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3  LICENSE
-+sha256 7afa2a18e0bf0ccb09b832017c61a411a94cff648a9a57f9f9068bcf14a5d972  c-periphery-2.2.1.tar.gz
-+sha256 7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
-diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
-index bb50434efa..6687dced6f 100644
---- a/package/c-periphery/c-periphery.mk
-+++ b/package/c-periphery/c-periphery.mk
-@@ -4,24 +4,11 @@
- #
- ################################################################################
- 
--C_PERIPHERY_VERSION = 2.1.0
-+C_PERIPHERY_VERSION = 2.2.1
- C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
- C_PERIPHERY_INSTALL_STAGING = YES
--# only a static library
--C_PERIPHERY_INSTALL_TARGET = NO
-+C_PERIPHERY_INSTALL_TARGET = YES
- C_PERIPHERY_LICENSE = MIT
- C_PERIPHERY_LICENSE_FILES = LICENSE
- 
--define C_PERIPHERY_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
--endef
--
--# There is no 'install' rule in the Makefile, so we handle things
--# manually.
--define C_PERIPHERY_INSTALL_STAGING_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
--	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
--	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+I.e. we just keep that part.
+
+> > I think we would also need to add:
+> >     GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=enabled
+> > and the converse when ghudev is not enabled:
+> >     GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=disabled
+> You made me dig on this a bit closer :-)
+
+That was my intention. ;-)
+
+> v4l2-gudev is a meson feature, auto-detected by default,
+> so the above is not required to enable it on the build.
+> 
+> The same applies to v4l2-libv4l2, so it seems to me
+> enabling/disabling is not needed.
+
+We want explcit enableing/disabling of optional features when there is
+an option for that: this ensures that the buildsystem of the package
+does not accidentally picks up the headers or libs from the host by
+chance (e.g. a build on an x86 host for an x86 target).
+
+By the look of it, that val2-gudev option is exactly about controlling
+use of gudev:
+
+    option('v4l2-gudev', type : 'feature', value : 'auto',
+            description : 'Use libgudev for probing v4l2 devices')
+
+So, is this correct, that this option controls use of gudev?
+
+> If the library is present, the only thing needed is 
+> the xxx_DEPENDENCIES change, to enforce a build order.
+> 
+> The story is different for the v4l2 option. It's also
+> an auto-detected feature, but we are interested
+> in controlling its enable/disable state.
+
+Regards,
+Yann E. MORIN.
+
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> > > +endif
+> > > +
+> > >  ifeq ($(BR2_PACKAGE_LIBV4L),y)
+> > >  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
+> > >  GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+> > > -- 
+> > > 2.26.0.rc2
+> > > 
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
