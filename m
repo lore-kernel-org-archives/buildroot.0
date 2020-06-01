@@ -1,45 +1,61 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  1 Jun 2020 15:14:25 +0200
-Subject: [Buildroot] [PATCH/next] package/libarchive: bump to version 3.4.3
-Message-ID: <1591017265-30248-1-git-send-email-pjtexier@koncepto.io>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 01 Jun 2020 13:47:13 +0000
+Subject: [Buildroot] [Bug 12971] New: qt5webengine: graph-depends seems
+ producing incorrect output
+Message-ID: <bug-12971-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libarchive 3.4.3 is a feature and bugfix release.
+https://bugs.busybox.net/show_bug.cgi?id=12971
 
-See https://github.com/libarchive/libarchive/releases/tag/v3.4.3
+            Bug ID: 12971
+           Summary: qt5webengine: graph-depends seems producing incorrect
+                    output
+           Product: buildroot
+           Version: 2020.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: seems.deviant at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Created attachment 8486
+  --> https://bugs.busybox.net/attachment.cgi?id=8486&action=edit
+The graph-depends of the provided config
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 9da4eb3..0660378 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
-+sha256  ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39  libarchive-3.4.3.tar.gz
- # Locally computed:
- sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 4aabbea..708ce63 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.4.2
-+LIBARCHIVE_VERSION = 3.4.3
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+This is happening on current master: 3a9261ddd9 (HEAD -> master, origin/master,
+origin/HEAD) package/libusb-compat: set LIBUSB_1_0_SONAME
+
+Create a following .config:
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5WEBENGINE=y
+
+Then call:
+$ make graph-depends
+
+And you'll see that qt5quickcontrols and qt5quickcontrols2 packages are not
+marked as dependant on the qt5webengine package, although the qt5webengine has
+selected both of them.
+
+I would expect the dependency graph to be "ALL -> qt5webengine ->
+{qt5quickcontrols,qt5quickcontrols2}" rather than "ALL ->
+{qt5webengine,qt5quickcontrols,qt5quickcontrols2}"
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
