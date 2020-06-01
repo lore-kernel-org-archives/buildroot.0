@@ -1,20 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Jun 2020 22:44:41 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: cleanup rockwellcollins.com
- maintainers
-In-Reply-To: <20200601123036.49413-1-matthew.weber@rockwellcollins.com> (Matt
- Weber's message of "Mon, 1 Jun 2020 07:30:36 -0500")
-References: <20200601123036.49413-1-matthew.weber@rockwellcollins.com>
-Message-ID: <87ftbefrd2.fsf@dell.be.48ers.dk>
+Date: Mon, 01 Jun 2020 22:47:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wampcc fix build with musl 1.2.0
+In-Reply-To: <20200601095432.1108102-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 1 Jun 2020 11:54:32 +0200")
+References: <20200601095432.1108102-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blm2fr7k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/da996e189220499b85efbdb541a891ac18db38c6
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
