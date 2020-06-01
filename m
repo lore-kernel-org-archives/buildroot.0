@@ -1,66 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Jun 2020 22:47:47 +0200
-Subject: [Buildroot] [git commit] package/wampcc fix build with musl 1.2.0
-Message-ID: <20200601204825.158C58135D@busybox.osuosl.org>
+Date: Mon, 1 Jun 2020 22:43:27 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: cleanup rockwellcollins.com
+ maintainers
+Message-ID: <20200601204825.080A781F02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=050abf7677a015bbb0b382d79b4a64aff02f7df6
+commit: https://git.buildroot.net/buildroot/commit/?id=9740b9bcdd9167195498393098e89915ee564691
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/da996e189220499b85efbdb541a891ac18db38c6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...mpcc-platform.h-fix-build-with-musl-1.2.0.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ DEVELOPERS | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch b/package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch
-new file mode 100644
-index 0000000000..c7b8c78602
---- /dev/null
-+++ b/package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch
-@@ -0,0 +1,38 @@
-+From 9c2559434b752df3dc8460ee242d321670a40847 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 1 Jun 2020 11:41:54 +0200
-+Subject: [PATCH] include/wampcc/platform.h: fix build with musl 1.2.0
-+
-+Fix the following build failure on musl 1.2.0 due to time_t being on 64
-+bits:
-+
-+/home/naourr/work/instance-0/output-1/build/wampcc-1.6/libs/wampcc/utils.cc: In function 'std::__cxx11::string wampcc::local_timestamp()':
-+/home/naourr/work/instance-0/output-1/build/wampcc-1.6/libs/wampcc/utils.cc:205:15: error: cannot convert 'wampcc::time_val::type_type*' {aka 'long int*'} to 'const time_t*' {aka 'const long long int*'}
-+   localtime_r(&now.sec, &parts);
-+               ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/da996e189220499b85efbdb541a891ac18db38c6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/darrenjs/wampcc/pull/62]
-+---
-+ include/wampcc/platform.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/wampcc/platform.h b/include/wampcc/platform.h
-+index 24d0868..aebf950 100644
-+--- a/include/wampcc/platform.h
-++++ b/include/wampcc/platform.h
-+@@ -27,7 +27,7 @@ namespace wampcc
-+   struct time_val
-+   {
-+ #ifndef _WIN32
-+-    typedef long type_type;
-++    typedef time_t type_type;
-+ #else
-+     typedef __time64_t type_type;
-+ #endif
-+-- 
-+2.26.2
-+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 88050349db..efb97c739c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -487,9 +487,6 @@ N:	Biagio Montaruli <biagio.hkr@gmail.com>
+ F:	board/acmesystems/
+ F:	configs/acmesystems_*
+ 
+-N:	Bimal Jacob <bimal.jacob@rockwellcollins.com>
+-F:	package/nginx-upload/
+-
+ N:	Bogdan Radulescu <bogdan@nimblex.net>
+ F:	package/iftop/
+ F:	package/ncdu/
+@@ -661,9 +658,6 @@ F:	package/openldap/
+ N:	David du Colombier <0intro@gmail.com>
+ F:	package/x264/
+ 
+-N:	David Graziano <david.graziano@rockwellcollins.com>
+-F:	package/libcsv/
+-
+ N:	David Lechner <david@lechnology.com>
+ F:	board/lego/ev3/
+ F:	configs/lego_ev3_defconfig
+@@ -1224,11 +1218,6 @@ F:	package/python-pexpect/
+ F:	package/python-ptyprocess/
+ F:	package/zynq-boot-bin/
+ 
+-N:	Jared Bents <jared.bents@rockwellcollins.com>
+-F:	package/davici/
+-F:	package/python-filelock/
+-F:	package/python-pysftp/
+-
+ N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+ F:	package/quota/
+ 
+@@ -1659,6 +1648,7 @@ F:	package/cgroupfs-mount/
+ F:	package/crda/
+ F:	package/cunit/
+ F:	package/dacapo/
++F:	package/davici/
+ F:	package/dnsmasq/
+ F:	package/dosfstools/
+ F:	package/eigen/
+@@ -1708,6 +1698,7 @@ F:	package/protobuf-c/
+ F:	package/protobuf/
+ F:	package/python-bunch/
+ F:	package/python-colorama/
++F:	package/python-filelock/
+ F:	package/python-flask-cors/
+ F:	package/python-iptables/
+ F:	package/python-ipy/
+@@ -1715,6 +1706,7 @@ F:	package/python-posix-ipc/
+ F:	package/python-pycairo/
+ F:	package/python-pypcap/
+ F:	package/python-pyrex/
++F:	package/python-pysftp/
+ F:	package/python-tinyrpc/
+ F:	package/python-txdbus/
+ F:	package/raptor/
+@@ -1925,9 +1917,6 @@ F:	package/openjpeg/
+ N:	Olivier Singla <olivier.singla@gmail.com>
+ F:	package/shellinabox/
+ 
+-N:	Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+-F:	package/checksec/
+-
+ N:	Parnell Springmeyer <parnell@digitalmentat.com>
+ F:	package/scrypt/
+ 
