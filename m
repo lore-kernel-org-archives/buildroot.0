@@ -1,43 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:48 -0000
-Subject: [Buildroot] [git commit] package/libnftnl: bump version to 1.1.6
-Message-ID: <20200602200118.8FA5281499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minetest: bump to version 5.2.0
+Message-ID: <20200602200119.47A1581499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a935654c964dd33c9ac8649b6d634d1a6e302ee2
+commit: https://git.buildroot.net/buildroot/commit/?id=cff47c3887363295b645978ed51240d492a371b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Update indentation of hash file (two spaces)
+
+See:
+https://dev.minetest.net/Changelog#5.1.0_.E2.86.92_5.2.0
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnftnl/libnftnl.hash | 4 ++--
- package/libnftnl/libnftnl.mk   | 2 +-
+ package/minetest/minetest.hash | 4 ++--
+ package/minetest/minetest.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index 4d2eb0ef08..0114619089 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
-@@ -1,3 +1,3 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
--sha256	66de4d05227c0a1a731c369b193010d18a05b1185c2735211e0ecf658eeb14f3	libnftnl-1.1.5.tar.bz2
--sha256	98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24	COPYING
-+sha256  c1eb5a696fc1d4b3b412770586017bc01af93da3ddd25233d34a62979dee1eca  libnftnl-1.1.6.tar.bz2
-+sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index ac780bd8d3..f624474196 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
+diff --git a/package/minetest/minetest.hash b/package/minetest/minetest.hash
+index bedc7633c6..626f56a31c 100644
+--- a/package/minetest/minetest.hash
++++ b/package/minetest/minetest.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 ca53975eecf6a39383040658f41d697c8d7f8d5fe9176460f564979c73b53906  minetest-5.1.0.tar.gz
++sha256  4996c7c50a6600d0c7140680d4bd995cb9aae910f216b46373953b49d6b13a5d  minetest-5.2.0.tar.gz
+ 
+-sha256 03ec12b2ba71d5e31c37bcf2700af2f278141df62e5a2ac0ce056c53bf266e44  LICENSE.txt
++sha256  03ec12b2ba71d5e31c37bcf2700af2f278141df62e5a2ac0ce056c53bf266e44  LICENSE.txt
+diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
+index 3264792137..e8fe5b45ce 100644
+--- a/package/minetest/minetest.mk
++++ b/package/minetest/minetest.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNFTNL_VERSION = 1.1.5
-+LIBNFTNL_VERSION = 1.1.6
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPL-2.0+
+-MINETEST_VERSION = 5.1.0
++MINETEST_VERSION = 5.2.0
+ MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
+ MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
+ MINETEST_LICENSE_FILES = LICENSE.txt
