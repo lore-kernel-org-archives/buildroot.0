@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 02 Jun 2020 20:01:47 -0000
-Subject: [Buildroot] [git commit] package/python-gobject: bump version to
- 3.36.1
-Message-ID: <20200602200119.282BB81499@busybox.osuosl.org>
+Date: Tue, 02 Jun 2020 20:01:48 -0000
+Subject: [Buildroot] [git commit] package/libnftnl: bump version to 1.1.6
+Message-ID: <20200602200118.8FA5281499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3832536115d9d48fe393202f5758a1eb1a26a4e6
+commit: https://git.buildroot.net/buildroot/commit/?id=a935654c964dd33c9ac8649b6d634d1a6e302ee2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-gobject/python-gobject.hash | 4 ++--
- package/python-gobject/python-gobject.mk   | 2 +-
+ package/libnftnl/libnftnl.hash | 4 ++--
+ package/libnftnl/libnftnl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
-index 5ae7553abb..fd2235f201 100644
---- a/package/python-gobject/python-gobject.hash
-+++ b/package/python-gobject/python-gobject.hash
+diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
+index 4d2eb0ef08..0114619089 100644
+--- a/package/libnftnl/libnftnl.hash
++++ b/package/libnftnl/libnftnl.hash
 @@ -1,3 +1,3 @@
--# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.0.sha256sum
--sha256  8683d2dfb5baa9e501a9a64eeba5c2c1117eadb781ab1cd7a9d255834af6daef  pygobject-3.36.0.tar.xz
-+# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.1.sha256sum
-+sha256  d1bf42802d1cec113b5adaa0e7bf7f3745b44521dc2163588d276d5cd61d718f  pygobject-3.36.1.tar.xz
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
-index c93140fc66..0cada82fb7 100644
---- a/package/python-gobject/python-gobject.mk
-+++ b/package/python-gobject/python-gobject.mk
-@@ -5,7 +5,7 @@
+ # From http://www.netfilter.org/projects/libnftnl/downloads.html
+-sha256	66de4d05227c0a1a731c369b193010d18a05b1185c2735211e0ecf658eeb14f3	libnftnl-1.1.5.tar.bz2
+-sha256	98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24	COPYING
++sha256  c1eb5a696fc1d4b3b412770586017bc01af93da3ddd25233d34a62979dee1eca  libnftnl-1.1.6.tar.bz2
++sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
+diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
+index ac780bd8d3..f624474196 100644
+--- a/package/libnftnl/libnftnl.mk
++++ b/package/libnftnl/libnftnl.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON_GOBJECT_VERSION_MAJOR = 3.36
--PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
-+PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).1
- PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
- PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
- PYTHON_GOBJECT_LICENSE = LGPL-2.1+
+-LIBNFTNL_VERSION = 1.1.5
++LIBNFTNL_VERSION = 1.1.6
+ LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
+ LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
+ LIBNFTNL_LICENSE = GPL-2.0+
