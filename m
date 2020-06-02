@@ -1,134 +1,61 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Tue, 2 Jun 2020 09:57:46 +0200
-Subject: [Buildroot] Issue with Asus Tinkerboard Buildroot OS build
-In-Reply-To: <884234841.71560.1591084477543@mail.yahoo.com>
-References: <1272084788.2015886.1590685356172.ref@mail.yahoo.com>
- <1272084788.2015886.1590685356172@mail.yahoo.com>
- <20200528205236.3c1c0d40@gmx.net>
- <1644632225.187471.1590836736105@mail.yahoo.com>
- <20200601211208.65edc396@gmx.net>
- <884234841.71560.1591084477543@mail.yahoo.com>
-Message-ID: <CAOf5uwmNJDp33BwOFNREdYmwFx-c+TzwYRN=F9zUpRyHFbh_3w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 Jun 2020 11:32:53 +0200
+Subject: [Buildroot] [PATCH] package/linux-headers: add support for CIP
+ with same-as-kernel
+In-Reply-To: <20200531225713.26992f0d@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 31 May 2020 22:57:13 +0200")
+References: <20200513174809.30110-1-yann.morin.1998@free.fr>
+ <20200531225713.26992f0d@windsurf.home>
+Message-ID: <87wo4pdd8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Tue, Jun 2, 2020 at 9:54 AM fld2865 at gmail.com <fld2865@gmail.com> wrote:
->
-> Hi Peter,
-> thanks anyway for you reply.
-> Moerover, I'm not familiar at all how to interact with the community, so thanks also for pointing me to
-> buildroot at busybox.net.
->
-> I have the feeling that the community is useful only if you already know how to interact with it, and I
-> could find nowhere describing how to start as a newbie in this area.
+ > On Wed, 13 May 2020 19:48:09 +0200
+ > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Right now I have a tinker board. Please share your defconfig
+ >> When the linux-headers are configured to use the same source as the
+ >> kernel (BR2_KERNEL_HEADERS_AS_KERNEL), and the kernel is configured
+ >> to be one of the two CIP version (BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ >> or BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION), the build fails if the
+ >> kernel sources are not already downloaded:
+ >> 
+ >> $ cat defconfig
+ >> BR2_LINUX_KERNEL=y
+ >> BR2_LINUX_KERNEL_LATEST_CIP_VERSION=y
+ >> $ make defconfig BR2_DEFCONFIG=$pwd)/defconfig
+ >> $ make linux-headers-source
+ >> 
+ >> >>> linux-headers 4.19.118-cip25 Downloading  
+ >> --2020-05-13 19:28:44--  https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.118-cip25.tar.xz
+ >> Resolving cdn.kernel.org (cdn.kernel.org)... 2a04:4e42:1d::432, 151.101.121.176
+ >> Connecting to cdn.kernel.org (cdn.kernel.org)|2a04:4e42:1d::432|:443... connected.
+ >> HTTP request sent, awaiting response... 404 Not Found
+ >> 2020-05-13 19:28:45 ERROR 404: Not Found.
+ >> 
+ >> make[1]: *** [package/pkg-generic.mk:171: /home/ymorin/dev/buildroot/O/build/linux-headers-4.19.118-cip25/.stamp_downloaded] Error 1
+ >> make: *** [Makefile:23: _all] Error 2
+ >> 
+ >> We fix that by addingyet another duplication of information out of the
+ >> linux.mk, to use the CIP-specific git tree where to get the archives as
+ >> snapshots.
+ >> 
+ >> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >> ---
+ >> package/linux-headers/linux-headers.mk | 5 +++++
+ >> 1 file changed, 5 insertions(+)
 
-Michael
+ > I've applied to master after fixing small typos in the commit log.
+ > However, this linux-headers/linux duplication is really getting out of
+ > control...
 
->
-> Best regards,
->
-> Francesco LANDE
->
-> Il luned? 1 giugno 2020, 21:12:11 CEST, Peter Seiderer <ps.report@gmx.net> ha scritto:
->
->
-> Hello Francesco,
->
-> re-added CC: buildroot at busybox.net
->
-> On Sat, 30 May 2020 11:05:35 +0000 (UTC), "fld2865 at gmail.com" <fld2865@gmail.com> wrote:
->
-> >  Hi Peter,thanks for your prompt reply, first of all.I did try to follow your suggestions, but without luck, unfortunately.More specifically:1. I upgraded the kernel to v. 5.4.40:
-> > ~# uname -a
-> > Linux Tinker 5.4.40 #1 SMP Sat May 30 11:28:51 CEST 2020 armv7l GNU/Linux
-> > 2. I verified that in this kernel the CONFIG_DRM_PANFROST option was selected;3. I added both the KMSRO and Panfrost drivers and clean rebuilt all;
-> > 4. The OS builddoes boot, but again NO "/dev/fb0" device, and xinit does not start!!!
-> > Really out of mind.
-> > If you would like to check my "dmesg", "Xorg.0.log" and "*_defconfig" files for your reference.
->
-> Sorry, no more help from my side possible (because I own no Tinkerboard and no deeper
-> knowledge on the Tinkerboard graphic stack behind the quick google survey with
-> the results below)...
->
-> Regards,
->
-> Peter
->
-> > Thanking in advance, my best regards,
-> > Francesco LANDE
-> >
-> > Il gioved? 28 maggio 2020, 20:52:38 CEST, Peter Seiderer <ps.report@gmx.net> ha scritto:
-> >
-> >  Hello Francesco,
-> >
-> > On Thu, 28 May 2020 17:02:36 +0000 (UTC), "fld2865 at gmail.com" <fld2865@gmail.com> wrote:
-> >
-> > > Hello Busybox.net,I'm attempting the development of a custom Linux distribution for the Asus Tinkerboard,using Buildroot 2020.02.2.I successfully obtained a booting OS image, which does communicate via serial and SSH,but doesn't output ANYTHING on the HDMI video output.I added all the packages I know of, including X11 stack and OpenGLES libs, but I'm not sureabout which video driver to use. I tried with xf86-video-fbdev and xf86-video-vesa, but withoutsuccess.
-> > > The net result is that when I try to load the Xserver through startx, I get the following result:
-> > > /home# startx
-> > > xauth:  file //.serverauth.255 does not exist
-> > > xauth:  file //.Xauthority does not exist
-> > >
-> > >
-> > > X.Org X Server 1.20.8
-> > > X Protocol Version 11, Revision 0
-> > > Build Operating System: Linux 5.4.0-31-generic x86_64
-> > > Current Operating System: Linux Tinker 5.0.0 #1 SMP Thu May 28 16:06:04 CEST 2020 armv7l
-> > > Kernel command line: console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
-> > > Build Date: 28 May 2020  03:26:17PM
-> > >
-> > > Current version of pixman: 0.38.4
-> > >         Before reporting problems, check http://wiki.x.org
-> > >         to make sure that you have the latest version.
-> > > Markers: (--) probed, (**) from config file, (==) default setting,
-> > >         (++) from command line, (!!) notice, (II) informational,
-> > >         (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
-> > > (==) Log file: "/var/log/Xorg.0.log", Time: Thu Jan  1 01:10:01 1970
-> > > (==) Using default built-in configuration (21 lines)
-> > > (EE)
-> > > Fatal server error:
-> > > (EE) no screens found(EE)
-> > > (EE)
-> > > Please consult the The X.Org Foundation support
-> > >          at http://wiki.x.org
-> > >  for help.
-> > > (EE) Please also check the log file at "/var/log/Xorg.0.log" for additional information.
-> > > (EE)
-> > > (EE) Server terminated with error (1). Closing log file.
-> > >
-> > >
-> > > /var/log/Xorg.0.log basically says that there's no /dev/fb pseudo file, which is true, so I thinkI'm using the wrong video driver.Any hint about how could I address this issue?
-> >
-> > Most probably no graphic enabled in the kernel config, tinkerboard uses an Mali-T760 GPU ([1]),
-> > there is a official mixed open/closed source graphic stack available I think, or the complete
-> > open source graphic stack 'panfrost' ([2]), see  [3] for a starting point...
-> >
-> > Regards,
-> > Peter
-> >
-> > [1] https://en.wikipedia.org/wiki/Asus_Tinker_Board
-> > [2] https://panfrost.freedesktop.org/
-> > [3] https://panfrost.freedesktop.org/building-panfrost-mesa.html
-> >
-> > > Thanks & best regards,
-> > > Francesco LANDE
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Indeed :/
 
-
+Committed to 2020.02.x, thanks.
 
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+Bye, Peter Korsgaard
