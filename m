@@ -1,61 +1,41 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  2 Jun 2020 22:49:41 +0200
-Subject: [Buildroot] [PATCH v1] package/bcm2835: bump version to 1.65
-Message-ID: <20200602204941.21984-1-ps.report@gmx.net>
+Date: Tue,  2 Jun 2020 22:51:43 +0200
+Subject: [Buildroot] [PATCH v1] package/doxygen: bump version to 1.18.18
+Message-ID: <20200602205143.22391-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- disable doxygen documentation gneration using ac_cv_prog_DOXYGEN
-- add optional libcap dependency and enable BCM2835_HAVE_LIBCAP
-  feature
-
-Changes since 1.63:
- - 1.64 2020-04-11 Fixed error in definitions of BCM2835_AUX_SPI_STAT_TX_LVL
-   and BCM2835_AUX_SPI_STAT_RX_LVL
- - 1.65, 1.66 2020-04-16 Added support for use of capability cap_sys_rawio
-   to determine if access to /dev/mem is available for non-root users
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/bcm2835/bcm2835.hash |  2 +-
- package/bcm2835/bcm2835.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ package/doxygen/doxygen.hash | 4 ++--
+ package/doxygen/doxygen.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
-index c722a97456..8317e10256 100644
---- a/package/bcm2835/bcm2835.hash
-+++ b/package/bcm2835/bcm2835.hash
+diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
+index 90d4e978bc..ff2fac7b9c 100644
+--- a/package/doxygen/doxygen.hash
++++ b/package/doxygen/doxygen.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  aec4b33ed9ecda4a1c4c12b8ed2abdd13cf87f352f0d27a24be726d11f1fbf54  bcm2835-1.63.tar.gz
-+sha256  62955cc8506cc6506d729da3138442beb9763f1ffd536e925aeb0dc223492874  bcm2835-1.65.tar.gz
- sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  COPYING
-diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-index d43dd7e574..c3c684f6e4 100644
---- a/package/bcm2835/bcm2835.mk
-+++ b/package/bcm2835/bcm2835.mk
-@@ -4,10 +4,18 @@
+ # Computed locally
+-sha256 2cba988af2d495541cbbe5541b3bee0ee11144dcb23a81eada19f5501fd8b599  doxygen-1.8.17.src.tar.gz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
++sha256  18173d9edc46d2d116c1f92a95d683ec76b6b4b45b817ac4f245bb1073d00656  doxygen-1.8.18.src.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 52e96f3807..6d8727208a 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BCM2835_VERSION = 1.63
-+BCM2835_VERSION = 1.65
- BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
- BCM2835_LICENSE = GPL-3.0
- BCM2835_LICENSE_FILES = COPYING
- BCM2835_INSTALL_STAGING = YES
- 
-+# disable doxygen doc generation
-+BCM2835_CONF_ENV = ac_cv_prog_DOXYGEN=/bin/true
-+
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+BCM2835_DEPENDENCIES = libcap
-+BCM2835_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DBCM2835_HAVE_LIBCAP"
-+endif
-+
- $(eval $(autotools-package))
+-DOXYGEN_VERSION = 1.8.17
++DOXYGEN_VERSION = 1.8.18
+ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = http://doxygen.nl/files
+ DOXYGEN_LICENSE = GPL-2.0
 -- 
 2.26.2
