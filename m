@@ -1,75 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2020 15:13:14 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/perl: bump to
- version 5.30.2
-Message-ID: <20200602131758.14FA481595@busybox.osuosl.org>
+From: Todd Sampson <sampsonats@gmail.com>
+Date: Tue, 2 Jun 2020 15:47:34 -0400
+Subject: [Buildroot] Cross-compile mariadb-connector-c for MySQL use
+Message-ID: <CADJjDh_2Uhs7bTefPUhvEZedWnXyekZ1dR5Z5DOVtvfoLfqK_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87ca1d5f6d7ab9f29f9998b467d978e758a789f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+I want to cross-compile mariadb-connector-c to link with the Poco library
+to create a MySQL client.
 
-Fixes the build issue with gcc-10:
-http://autobuild.buildroot.net/results/412/4128b1add1edd8fdf6e8f29e659873de26eaead1/
+Everything was working with mariadb-connector-c version 2.3.7.  I need to
+update to 3.1.8 for compatibility with MySQL version 8.  When I changed the
+mariadb-connector-c  buildroot target to 3.1.8, the build failed because
+mariadb-connector-c had more dependencies.
 
-As mentioned in the changelog:
+It seems like mariadb-connector-c depends on the mariadb server to be
+built.  If I build the server, mariadb-connector-c is happy.  The problem
+is, the mariadb server is installed on the target and there is no room for
+it.
 
-- Configuration and Compilation
-  GCC 10 is now supported by Configure.
+I tried putting:
 
-https://perldoc.pl/perl5302delta
+> MARIADB_INSTALL_TARGET = NO
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d5c7c9dabb94d64855b8c0383e77d01b890f85c3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+in the mariadb server .mk file but it still was installed.
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 161a4fd615..74791c0b05 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,10 +1,10 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.1.tar.xz.{md5,sha1,sha256}.txt
--md5    f399f3aaee90ddcff5eadd3bccdaacc0                                 perl-5.30.1.tar.xz
--sha1   4bc190b6ac368f573e6a028f91430f831d40d30a                         perl-5.30.1.tar.xz
--sha256 7336cd3ed0535eb61b76a71350effcfa7c88b44faf37d64d70952ced5d38cd35 perl-5.30.1.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.2.tar.xz.{md5,sha1,sha256}.txt
-+md5    4bfa12b528522a50de0470b8b70b9b3b                                 perl-5.30.2.tar.xz
-+sha1   d82cdaa610a3e749e821fc77004b1b4bfd5ebd28                         perl-5.30.2.tar.xz
-+sha256 a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259 perl-5.30.2.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.1/perl-cross-1.3.1.hash
--sha256	edce0b0c2f725e2db3f203d6d8e9f3f7161256f5d1590551e40694f21200141d perl-cross-1.3.1.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.2/perl-cross-1.3.2.hash
-+sha256	defa12f0ad7be0b6c48b4f76e2fb5b37c1b37fbeb6e9ebe938279cd539a0c20c  perl-cross-1.3.2.tar.gz
- 
- # Locally calculated
- sha256 dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2 Artistic
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0ab81ddb34..c865fc7681 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,14 +6,14 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 30
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.3.1
-+PERL_CROSS_VERSION = 1.3.2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+If I don't select mariadb server, I get these errors and lots more similar:
+
+home/dfr/m9k2/buildroot/output/host/lib/gcc/powerpc-buildroot-linux-gnu/8.4.0/../../../../powerpc-buildroot-linux-gnu/bin/ld:
+> /home/dfr/m9k2/buildroot/output/host/powerpc-buildroot-linux-gnu/sysroot/usr/lib/mariadb/libmariadbclient.a(openssl.c.o):
+> in function `ma_tls_set_error':
+> openssl.c:(.text+0x28): undefined reference to `ERR_get_error'
+> /home/dfr/m9k2/buildroot/output/host/lib/gcc/powerpc-buildroot-linux-gnu/8.4.0/../../../../powerpc-buildroot-linux-gnu/bin/ld:
+> openssl.c:(.text+0x64): undefined reference to `ERR_reason_error_string'
+
+
+*buildroot version 2020.05*
+*QUESTIONS*
+1. Is there a better way to approach this?
+2. How do I let mariadb server be built but *not *installed in the target?
+3. Should I be able to use the Poco library built into buildroot? It seems
+like there should be an option in Poco to build the mariadb-connector-c
+library and just work.
+4. Is anyone else in the world besides me trying to do this?
+
+I've been working on this for over two weeks now.  I sure would appreciate
+any help!
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200602/fd1ac2aa/attachment.html>
