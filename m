@@ -1,35 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 2 Jun 2020 23:20:51 +0200
-Subject: [Buildroot] [PATCH V5] package/c-periphery: bump version to
- 2.2.1
-In-Reply-To: <20200601074841.6325-1-offougajoris@gmail.com>
-References: <20200601074841.6325-1-offougajoris@gmail.com>
-Message-ID: <20200602232051.6cec350c@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 2 Jun 2020 23:21:38 +0200
+Subject: [Buildroot] [PATCH] board/qemu/sh4-r2d: fix sh4 kernel bug with
+ Binutils 2.33
+In-Reply-To: <cf6fa0c0-d004-bd68-fe0b-f3ae8a5ac35e@gmail.com>
+References: <20191230133640.9702-1-romain.naour@gmail.com>
+ <20191230145324.4eb78299@windsurf>
+ <417a5a05-f317-fc27-c183-0682b0e3320c@gmail.com>
+ <cf6fa0c0-d004-bd68-fe0b-f3ae8a5ac35e@gmail.com>
+Message-ID: <e4d41ecf-3a41-1713-1c7e-560b602a2065@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  1 Jun 2020 09:48:40 +0200
-Joris Offouga <offougajoris@gmail.com> wrote:
+Hello Thomas, All,
 
-> Since commit "cmake: add cmake build support"
-> (https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
-> c-periphery implement cmake build, so use cmake-package instead of generic-package
+Le 15/03/2020 ? 21:46, Romain Naour a ?crit?:
+> Hello Thomas,
+> 
+> Le 30/12/2019 ? 15:16, Romain Naour a ?crit?:
+>> Hello Thomas,
+>>
+>> Le 30/12/2019 ? 14:53, Thomas Petazzoni a ?crit?:
+>>> Hello Romain,
+>>>
+>>> On Mon, 30 Dec 2019 14:36:40 +0100
+>>> Romain Naour <romain.naour@gmail.com> wrote:
+>>>
+>>>> Remove the Binutils patch reverting [1] that trigger a sh4 kernel bug
+>>>> with Binutils >= 2.33.
+>>>> Add two kernel patch provided by Alan Modra [2] that fix alignment of rodata.
+>>>>
+>>>> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=ebd2263ba9a9124d93bbc0ece63d7e0fae89b40e
+>>>> [2] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
+>>>>
+>>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>>
+>>> Thanks a lot for those fixes. Have the kernel patches been submitted
+>>> upstream, and accepted?
+>>
+>> Not yet, I replied to Alan Modra to do so [1].
+> 
+> I just posted theses two patches to the linux-sh mailing list:
+> 
+> https://patchwork.kernel.org/project/linux-sh/list/?series=256703
+> 
+> We need to move forward to add binutils 2.34.
 
-You should have also explained that it now builds a shared library and
-therefore INSTALL_TARGET = NO is no longer appropriate. I fixed that.
+Those patches are going to be merged for kernel 5.8 after being acked by kernel
+maintainers:
 
-> +C_PERIPHERY_INSTALL_TARGET = YES
+https://patchwork.kernel.org/project/linux-sh/list/?series=256703
 
-This raises a check-package warning, because this is the default value.
-So I simply dropped this line when applying.
+Best regards,
+Romain
 
-Applied to master. Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> Best regards,
+> Romain
+> 
+>>
+>>>
+>>> One issue with your change is of course that now the fix only works
+>>> when building the specific qemu_sh4 defconfigs. When not using one of
+>>> those defconfigs, but simply building the regular Linux kernel for SH4,
+>>> will lead to a kernel that no longer boots.
+>>
+>> Indeed but I don't think is great to keep the non-upstream patch I've made
+>> reverting [2] for Binutils >= 2.33 for all architectures just to workaround a
+>> sh4 kernel bug. At the time I didn't know that was a sh4 kernel bug...
+>>
+>> The two sh4 kernel patches are probably easy to backport as soon as a sh4
+>> toolchain using Binutils >= 2.33 is used.
+>>
+>> [1] https://www.sourceware.org/ml/binutils/2019-12/msg00386.html
+>> [2]
+>> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=ebd2263ba9a9124d93bbc0ece63d7e0fae89b40e
+>>
+>> Best regards,
+>> Romain
+>>
+>>>
+>>> Thomas
+>>>
+>>
+> 
