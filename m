@@ -1,88 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2020 11:33:36 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libusb-compat:
- set LIBUSB_1_0_SONAME
-Message-ID: <20200602093949.25F888179A@busybox.osuosl.org>
+Date: Tue, 2 Jun 2020 11:34:36 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/glib-networking:
+ security bump to version 2.62.4
+Message-ID: <20200602093949.336EF8179A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=964d4f2faafaf9233ed9b6c0bc2762f29f23c013
+commit: https://git.buildroot.net/buildroot/commit/?id=c128c6384b7540619f4e4f54159403b5de6a5321
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-LIBUSB_1_0_SONAME is detected since version 0.1.6 and
-https://github.com/libusb/libusb-compat-0.1/commit/b6f5a2fe12ca19d658d7180e106254b31cf1f8f5
-
-The detection mechanism is based on sed, here are the more relevant
-parts:
-
- shrext_regexp=`echo "$shrext_cmds" | sed 's/\./\\\\./'`
-[...]
- [AS_VAR_SET([ac_Lib_SONAME], [`ldd conftest$ac_exeext | grep 'lib[$2]'$shrext_regexp | sed 's/^@<:@ \t@:>@*lib[$2]'$shrext_regexp'/lib[$2]'$shrext_regexp'/;s/@<:@ \t@:>@.*$//'`])])
-
-However, this mechanism is broken with sed 4.7 and will return the
-following 'silent' error:
-
-checking for SONAME of libusb-1.0... sed: -e expression #1, char 40: Invalid back reference
-unknown
-
-Moreover, it also raises the following build failure on one of the
-autobuilder because an empty line is added to LIBUSB_1_0_SONAME:
-
-checking for SONAME of libusb-1.0... checking
-libusb-1.0.so.0
-checking for GNU extensions of errno.h... no
-configure: WARNING: cache variable au_cv_lib_soname_LIBUSB_1_0 contains a newline
-checking that generated files are newer than configure... done
-configure: creating ./config.status
-config.status: creating libusb.pc
-config.status: creating libusb-config
-config.status: creating Makefile
-config.status: creating libusb/Makefile
-config.status: creating examples/Makefile
-config.status: creating config.h
-config.status: executing depfiles commands
-config.status: executing libtool commands
-config.status: executing default commands
-configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls
-configure: WARNING: cache variable au_cv_lib_soname_LIBUSB_1_0 contains a newline
-[7m>>> libusb-compat 0.1.7 Building[27m
-PATH="/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin:/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/sbin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1
- /usr/local/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"  /usr/bin/make -j8  -C /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/libusb-compat-0.1.7/
-make[1]: Entering directory `/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/libusb-compat-0.1.7'
-Makefile:284: *** missing separator.  Stop.
-
-We could patch patch m4/au_check_lib_soname.m4 to fix the mechanism
-however this is difficult without reproducing the autobuilder failure
-and upstream seems dead so just set LIBUSB_1_0_SONAME
-
-Fixes:
- - http://autobuild.buildroot.org/results/12d771d85d30594929cfe3e1c783fc70857e7f5f
+- Fix CVE-2020-13645: In GNOME glib-networking through 2.64.2, the
+  implementation of GTlsClientConnection skips hostname verification of
+  the server's TLS certificate if the application fails to specify the
+  expected server identity. This is in contrast to its intended
+  documented behavior, to fail the certificate verification.
+  Applications that fail to provide the server identity, including Balsa
+  before 2.5.11 and 2.6.x before 2.6.1, accept a TLS certificate if the
+  certificate is valid for any host.
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: extract the actual SONAME from the library]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3a9261ddd917007e19b56b4bfe48ccc0861dd716)
+[Peter: bump to 2.62.4 rather than 2.64.3]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8f3d361f5ccbb43270f9e69bf6ac472698d3722e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libusb-compat/libusb-compat.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/glib-networking/glib-networking.hash | 6 +++---
+ package/glib-networking/glib-networking.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-index 61d4c203e7..0ad6c6cbd6 100644
---- a/package/libusb-compat/libusb-compat.mk
-+++ b/package/libusb-compat/libusb-compat.mk
-@@ -15,5 +15,11 @@ LIBUSB_COMPAT_CONFIG_SCRIPTS = libusb-config
- LIBUSB_COMPAT_LICENSE = LGPL-2.1+
- LIBUSB_COMPAT_LICENSE_FILES = COPYING
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 061b7af695..88649d842f 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,3 +1,3 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.61/glib-networking-2.61.1.sha256sum
+-sha256  a3acbe8953ba80e408bdc4a3e8c240fd9447181c7e800a175c3105604c38bad5 glib-networking-2.61.1.tar.xz
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.62/glib-networking-2.62.4.sha256sum
++sha256  c18f289eec480fdce12044c0a06f77521edf9f460d16ad4213de61f2a3b294cf  glib-networking-2.62.4.tar.xz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 39133371f5..e1d4823adc 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_STATIC_LIBS),)
-+LIBUSB_COMPAT_CONF_ENV += \
-+	LIBUSB_1_0_SONAME=`LC_ALL=C readelf -d $(STAGING_DIR)/usr/lib/libusb-1.0.so \
-+			   |sed -r -e '/\(SONAME\)/!d; s/.*\[(.+)\]$$/\1/'`
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-GLIB_NETWORKING_VERSION_MAJOR = 2.61
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
++GLIB_NETWORKING_VERSION_MAJOR = 2.62
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).4
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
