@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:48 -0000
-Subject: [Buildroot] [git commit] package/network-manager: don't explicitly
- select QMI/MBIM support
-Message-ID: <20200602200118.F1D32805F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcurl: bump to 7.70.0
+Message-ID: <20200602200119.0C9F681499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=911f718df590224d1843efa1157356ba26f16bc2
+commit: https://git.buildroot.net/buildroot/commit/?id=88aebf5fcbcad32e006c04322be499a8e5b29ef6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When NetworkManager is built with ModemManager support, it should only
-require the generic ModemManager dependency; it shouldn't configure
-which features ModemManager provides.
-
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index e6a3f5f04f..7d44768460 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -40,8 +40,6 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
- config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
- 	bool "modem-manager support"
- 	select BR2_PACKAGE_MODEM_MANAGER
--	select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
--	select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
- 	help
- 	  This option enables support for ModemManager
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 69cf7b5398..2157f3d2d2 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
+-sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
++sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
++sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 7a29634c68..cc2ca0aa65 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LIBCURL_VERSION = 7.69.1
++LIBCURL_VERSION = 7.70.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
