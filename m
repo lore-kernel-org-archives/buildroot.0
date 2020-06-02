@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:48 -0000
-Subject: [Buildroot] [git commit] package/libcurl: bump to 7.70.0
-Message-ID: <20200602200119.0C9F681499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/umtprd: bump to version 1.3.6
+Message-ID: <20200602200119.818C881499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88aebf5fcbcad32e006c04322be499a8e5b29ef6
+commit: https://git.buildroot.net/buildroot/commit/?id=c5cfe66a963c81311fdada123e54323406365bcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/umtprd/umtprd.hash | 2 +-
+ package/umtprd/umtprd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 69cf7b5398..2157f3d2d2 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+index 168b19e951..b6520c04e7 100644
+--- a/package/umtprd/umtprd.hash
++++ b/package/umtprd/umtprd.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
--sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-+sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-+sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 7a29634c68..cc2ca0aa65 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+ # Locally computed
+-sha256	e1301bdd89170cc2c679446c1cc5873feaacd061bf0ab547fc0a11670bae9163	umtprd-1.0.0.tar.gz
++sha256	5f6f9f2882597cd3767b12b0814fdfa27c0cb18ce32e3082176f9658be167a27	umtprd-1.3.6.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	LICENSE
+diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+index 63faae43b3..944d1a621b 100644
+--- a/package/umtprd/umtprd.mk
++++ b/package/umtprd/umtprd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.69.1
-+LIBCURL_VERSION = 7.70.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-UMTPRD_VERSION = 1.0.0
++UMTPRD_VERSION = 1.3.6
+ UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
+ UMTPRD_LICENSE = GPL-3.0+
+ UMTPRD_LICENSE_FILES = LICENSE
