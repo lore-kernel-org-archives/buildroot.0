@@ -1,46 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:49 -0000
-Subject: [Buildroot] [git commit] package/modem-manager: bump version to
- 1.12.10
-Message-ID: <20200602200118.D415E805F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/barebox: bump version to 2020.05.0
+Message-ID: <20200602200119.DF9248256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=930e631264b08b17714ca120906adcee06852792
+commit: https://git.buildroot.net/buildroot/commit/?id=75c5de34ee595a391585e3a056365b85f04ec2cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.freedesktop.org/archives/modemmanager-devel/2020-May/007828.html
-
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 2fb10368c8..bf8f965812 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  68b53d0615ba0d3e2bbf386ed029dfe644a6a30a79ab8d85523527bb4e713aff  ModemManager-1.12.8.tar.xz
-+sha256  b2b3058bbb72adf98b24707fdbebe58e590644a38145e30d574f685f154bf8aa  ModemManager-1.12.10.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 78cffe1f9c..e69f6f0f3d 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 78fb26272b..e5ba8cd1cf 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--MODEM_MANAGER_VERSION = 1.12.8
-+MODEM_MANAGER_VERSION = 1.12.10
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2020.03.0"
++	bool "2020.05.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2020.03.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2020.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 8a953847f7..8a33453249 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2020.03.0.tar.bz2.md5
+-md5  9e93df6dadb898d91d9f3811456a94bd  barebox-2020.03.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2020.05.0.tar.bz2.md5
++md5  31dee7b5715967fab882cabe4e406896  barebox-2020.05.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  625b031d1fe99bdd3bf95f79c8ecfcf67101bc2500ec4816e034bf989f16d1c2  barebox-2020.03.0.tar.bz2
++sha256  03e29c2864c3220c676a0cf768ffe2b8f1064eddb60463281c9944625e649b65  barebox-2020.05.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
