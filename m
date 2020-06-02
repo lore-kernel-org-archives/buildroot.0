@@ -1,59 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2020 11:32:53 +0200
-Subject: [Buildroot] [PATCH] package/linux-headers: add support for CIP
- with same-as-kernel
-In-Reply-To: <20200531225713.26992f0d@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 31 May 2020 22:57:13 +0200")
-References: <20200513174809.30110-1-yann.morin.1998@free.fr>
- <20200531225713.26992f0d@windsurf.home>
-Message-ID: <87wo4pdd8a.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Jun 2020 11:34:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libusb-compat: set
+ LIBUSB_1_0_SONAME
+In-Reply-To: <20200531141623.28171-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 31 May 2020 16:16:23 +0200")
+References: <20200531141623.28171-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sgfddd5s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > On Wed, 13 May 2020 19:48:09 +0200
- > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ > LIBUSB_1_0_SONAME is detected since version 0.1.6 and
+ > https://github.com/libusb/libusb-compat-0.1/commit/b6f5a2fe12ca19d658d7180e106254b31cf1f8f5
 
- >> When the linux-headers are configured to use the same source as the
- >> kernel (BR2_KERNEL_HEADERS_AS_KERNEL), and the kernel is configured
- >> to be one of the two CIP version (BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- >> or BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION), the build fails if the
- >> kernel sources are not already downloaded:
- >> 
- >> $ cat defconfig
- >> BR2_LINUX_KERNEL=y
- >> BR2_LINUX_KERNEL_LATEST_CIP_VERSION=y
- >> $ make defconfig BR2_DEFCONFIG=$pwd)/defconfig
- >> $ make linux-headers-source
- >> 
- >> >>> linux-headers 4.19.118-cip25 Downloading  
- >> --2020-05-13 19:28:44--  https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.118-cip25.tar.xz
- >> Resolving cdn.kernel.org (cdn.kernel.org)... 2a04:4e42:1d::432, 151.101.121.176
- >> Connecting to cdn.kernel.org (cdn.kernel.org)|2a04:4e42:1d::432|:443... connected.
- >> HTTP request sent, awaiting response... 404 Not Found
- >> 2020-05-13 19:28:45 ERROR 404: Not Found.
- >> 
- >> make[1]: *** [package/pkg-generic.mk:171: /home/ymorin/dev/buildroot/O/build/linux-headers-4.19.118-cip25/.stamp_downloaded] Error 1
- >> make: *** [Makefile:23: _all] Error 2
- >> 
- >> We fix that by addingyet another duplication of information out of the
- >> linux.mk, to use the CIP-specific git tree where to get the archives as
- >> snapshots.
- >> 
- >> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- >> ---
- >> package/linux-headers/linux-headers.mk | 5 +++++
- >> 1 file changed, 5 insertions(+)
+ > The detection mechanism is based on sed, here are the more relevant
+ > parts:
 
- > I've applied to master after fixing small typos in the commit log.
- > However, this linux-headers/linux duplication is really getting out of
- > control...
+ >  shrext_regexp=`echo "$shrext_cmds" | sed 's/\./\\\\./'`
+ > [...]
+ >  [AS_VAR_SET([ac_Lib_SONAME], [`ldd conftest$ac_exeext | grep
+ > 'lib[$2]'$shrext_regexp | sed 's/^@<:@
+ > \t@:>@*lib[$2]'$shrext_regexp'/lib[$2]'$shrext_regexp'/;s/@<:@
+ > \t@:>@.*$//'`])])
 
-Indeed :/
+ > However, this mechanism is broken with sed 4.7 and will return the
+ > following 'silent' error:
+
+ > checking for SONAME of libusb-1.0... sed: -e expression #1, char 40: Invalid back reference
+ > unknown
+
+ > Moreover, it also raises the following build failure on one of the
+ > autobuilder because an empty line is added to LIBUSB_1_0_SONAME:
+
+ > checking for SONAME of libusb-1.0... checking
+ > libusb-1.0.so.0
+ > checking for GNU extensions of errno.h... no
+ > configure: WARNING: cache variable au_cv_lib_soname_LIBUSB_1_0 contains a newline
+ > checking that generated files are newer than configure... done
+ > configure: creating ./config.status
+ > config.status: creating libusb.pc
+ > config.status: creating libusb-config
+ > config.status: creating Makefile
+ > config.status: creating libusb/Makefile
+ > config.status: creating examples/Makefile
+ > config.status: creating config.h
+ > config.status: executing depfiles commands
+ > config.status: executing libtool commands
+ > config.status: executing default commands
+ > configure: WARNING: unrecognized options: --disable-gtk-doc,
+ > --disable-gtk-doc-html, --disable-doc, --disable-docs,
+ > --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
+ > --disable-nls
+ > configure: WARNING: cache variable au_cv_lib_soname_LIBUSB_1_0 contains a newline
+ > [7m>>> libusb-compat 0.1.7 Building[27m
+ > PATH="/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin:/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/sbin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweb
+ er1
+ >  /usr/local/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
+ > /usr/bin/make -j8 -C
+ > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/libusb-compat-0.1.7/
+ > make[1]: Entering directory `/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/libusb-compat-0.1.7'
+ > Makefile:284: *** missing separator.  Stop.
+
+ > We could patch patch m4/au_check_lib_soname.m4 to fix the mechanism
+ > however this is difficult without reproducing the autobuilder failure
+ > and upstream seems dead so just set LIBUSB_1_0_SONAME
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/12d771d85d30594929cfe3e1c783fc70857e7f5f
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x, thanks.
 
