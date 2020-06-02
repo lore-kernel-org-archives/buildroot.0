@@ -1,51 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  2 Jun 2020 23:00:53 +0200
-Subject: [Buildroot] [PATCH v1] package/edid-decode: bump version to 1889504
-Message-ID: <20200602210053.24091-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 2 Jun 2020 23:12:39 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/lcms2: bump to version 2.10
+In-Reply-To: <20200601200141.1127530-1-fontaine.fabrice@gmail.com>
+References: <20200601200141.1127530-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200602231239.279bd4a3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- edid-decode changed from C to C++, adjust make command
-  accordingly
+On Mon,  1 Jun 2020 22:01:41 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/edid-decode/edid-decode.hash | 2 +-
- package/edid-decode/edid-decode.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> -LCMS2_VERSION = 2.9
+> +LCMS2_VERSION = 2.10
+>  LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+> -LCMS2_LICENSE = MIT
+> -LCMS2_LICENSE_FILES = COPYING
+> +LCMS2_LICENSE = MIT (core), GPL-3.0+ (fast_float plugin)
 
-diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
-index e0a9c18523..f843aa68fd 100644
---- a/package/edid-decode/edid-decode.hash
-+++ b/package/edid-decode/edid-decode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36  edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
-+sha256  327fe14531ddebe74a730efc30209e68efbd86c11375b5576cbe23af3d691150  edid-decode-188950472c19492547e298b27f9da0d72cf826df.tar.gz
- sha256  4b4a7e6d7c358bb5b982eaa84d228cd9e99b75a5fefd3af01272957bf2016b5b  edid-decode.c
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index c43f1ae7da..e15cb70f84 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--EDID_DECODE_VERSION = 6def7bc83dfb0338632e06a8b14c93faa6af8879
-+EDID_DECODE_VERSION = 188950472c19492547e298b27f9da0d72cf826df
- EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
- 
- define EDID_DECODE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
-+		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
- endef
- 
- define EDID_DECODE_INSTALL_TARGET_CMDS
+It is always a bit annoying to add some GPL-3.0+ code unconditionally
+into a package.
+
+But I did a test build of lcms2, and here this plugin is not built:
+
+make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/lcms2-2.10/plugins/fast_float'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/lcms2-2.10/plugins/fast_float'
+
+Indeed, the top level Makefile.am only recurses into
+plugins/fast_float/, which contains a Makefile that does nothing.
+plugins/fast_float/src/Makefile.am really does something, but I don't
+see it invoked from the top-level build system.
+
+Am I missing something ? Is this fast_float plugin really
+built/installed ? If it is, we should make it conditional to not have
+GPL-3.0 code added unconditionally along with a MIT-licensed library.
+
+Could you have a look into this ?
+
+Thanks!
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
