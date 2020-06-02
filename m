@@ -1,48 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 2 Jun 2020 23:18:34 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/orangepi-zero: bumped kernel
- uboot versions
-In-Reply-To: <20200531163645.2522167-1-glbsalazar@gmail.com>
-References: <20200531163645.2522167-1-glbsalazar@gmail.com>
-Message-ID: <20200602231834.6acb2e9e@windsurf.home>
+Date: Tue, 2 Jun 2020 23:19:00 +0200
+Subject: [Buildroot] [PATCH/next] package/python-periphery: bump to
+ version 2.1.0
+In-Reply-To: <1591006519-11554-1-git-send-email-pjtexier@koncepto.io>
+References: <1591006519-11554-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20200602231900.4fd4d168@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon,  1 Jun 2020 12:15:19 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-On Sun, 31 May 2020 17:36:45 +0100
-Gon?alo Salazar <glbsalazar@gmail.com> wrote:
-
-> Bumped kernel to version 5.6 and uboot to version 2020.04 for
-> orangepi-zero configuration
+> See changelog https://github.com/vsergeev/python-periphery/blob/master/CHANGELOG.md
 > 
-> Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+> Update the license hash for a change in copyright years:
+> -Copyright (c) 2015-2019 vsergeev / Ivan (Vanya) A. Sergeev
+> +Copyright (c) 2015-2020 vsergeev / Ivan (Vanya) A. Sergeev
+> 
+> Also switch to the new 2 spaces convention for the hash file
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+>  package/python-periphery/python-periphery.hash | 4 ++--
+>  package/python-periphery/python-periphery.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've applied your patch to master, thanks! However, there were a few
-issues. First, your commit title and commit log were formulated using
-the past tense ("bumped") while it should use the present, i.e "bump".
-
-> diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-> index 354e3bfdba..ab4fb474ee 100644
-> --- a/configs/orangepi_zero_defconfig
-> +++ b/configs/orangepi_zero_defconfig
-> @@ -3,13 +3,12 @@ BR2_cortex_a7=y
->  BR2_ARM_FPU_VFPV4=y
->  BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
->  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-
-This should have been kept, as follows:
-
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-
-Indeed, while this is currently the default, it will soon no longer be
-the default, once we move to 5.7 as the default kernel headers.
-
-Applied with those fixes. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
