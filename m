@@ -1,39 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2020 08:23:27 +0200
-Subject: [Buildroot] [git commit] package/sysrepo: fix SysV init script
-In-Reply-To: <20200531081039.5FA1485D87@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 31 May 2020 10:27:01 +0200")
-References: <20200531081039.5FA1485D87@busybox.osuosl.org>
-Message-ID: <87d06idm00.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Jun 2020 08:24:58 +0200
+Subject: [Buildroot] [PATCHv3] package/gcc/9.3.0: fix host-gcc-final
+ when ccache is used
+In-Reply-To: <20200521165345.2866046-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 21 May 2020 18:53:45 +0200")
+References: <20200521165345.2866046-1-romain.naour@gmail.com>
+Message-ID: <878sh6dlxh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=1a14a838eaa88ae683bf8c0cb0ae6cc7e1d10d49
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > As reported by several Buildroot users [1][2][3], the gcc build
+ > may fail while running selftests makefile target.
 
- > The current script (S51sysrepo-plugind) is not able to stop the daemon.
+ > The problem only occurs when ccache is used with gcc 9 and 10,
+ > probably due to a race condition.
 
- > Possible options to fix the problem:
+ > While debuging with "make -p" we can notice that s-selftest-c target
+ > contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
 
- > A) By adding the "-m -p $PIDFILE" option to start the pid file will be
- >    created but it will not contain the correct PID used by the daemon.
- >    This is obviously because the daemon forks.
- > B) By not starting the daemon in background (sysrepo-plugind -d) and
- >    let do it by start-stop-daemon with "-b" option. But then the log
- >    messages of the daemon will not longer ends in the syslog but to stderr.
- > C) Start the daemon without a pidfile and stop the daemon with the
- >    "-x" option.
+ >   s-selftest-c: cc1
 
- > The only valid option is C to fix that.
+ > While the build is failing, the s-selftest-c dependencies recipe is
+ > still running and reported as a bug by make.
 
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
- > [yann.morin.1998 at free.fr: introduce EXECUTABLE]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ >   "Dependencies recipe running (THIS IS A BUG)."
+
+ > A change [5] in gcc 9 seems to introduce the problem since we can't
+ > reproduce this problem with gcc 8.
+
+ > As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
+ > including language makefile fragments.
+
+ > With the fix applied, the s-seltest-c dependency contains
+ > SELFTEST_DEPS value.
+
+ >   s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
+
+ > [1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
+ > [2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
+ > [3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
+ > [4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
+ > [5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
+ > [6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
+ > Cc: Maxim Kochetkov <fido_max@inbox.ru>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2020.02.x, thanks.
 
