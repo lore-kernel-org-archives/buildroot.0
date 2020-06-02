@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2020 08:12:36 +0200
-Subject: [Buildroot] [PATCHv2] package/fmc+fmlib: change repository
- location
-In-Reply-To: <20200527154734.11381-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Wed, 27 May 2020 17:47:34 +0200")
-References: <20200527154734.11381-1-yann.morin.1998@free.fr>
-Message-ID: <87tuzudmi3.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Jun 2020 08:13:39 +0200
+Subject: [Buildroot] [PATCH for-master] boot/arm-trusted-firmware:
+ ignore licencing check for user defined official version
+In-Reply-To: <20200530170705.562604-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 30 May 2020 19:07:05 +0200")
+References: <20200530170705.562604-1-romain.naour@gmail.com>
+Message-ID: <87pnaidmgc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Now that Freescale has been wholly swallowed into NXP, the public-facing
- > git repositories that were hosting those two packages are no longer
- > available.
+ > The commit [1] "licensing info is only valid for v1.4" fixed the legal-info
+ > issues when a custom ATF tarball or a version from git is used.
+ > But we need to ignore licencing for a used defined official ATF version.
 
- > Fortunately, they had been mirrored on Code Aurora forge (a Linux
- > Foundation project, so relatively stable and trustworthy), which has the
- > tags we need, and that generates the exact same archives.
+ > Althougt the ATF version are licensed under BSD-3-Clause, the license
+ > file can be updated between version (for example between v1.4 and v2.0).
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Ignore the licencing check if the user provide a custom official version.
 
- > ---
- > Changes v1 -> v2:
- >   - use CodeAurora's git tree, rather than archives on s.b.o.  (Matt)
+ > [1] d1a61703f728340ec894c367398d2a3a394a3360
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2020.02.x, thanks.
 
