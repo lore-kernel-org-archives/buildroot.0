@@ -1,102 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 02 Jun 2020 20:01:55 -0000
-Subject: [Buildroot] [git commit] package/libunwind: enable on AArch64
-Message-ID: <20200602200120.F11738256A@busybox.osuosl.org>
+Date: Tue, 02 Jun 2020 20:01:56 -0000
+Subject: [Buildroot] [git commit] package/python-markdown2: fix
+ CVE-2020-11888
+Message-ID: <20200602200120.9E0668256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcfdd8a80dffd1c7c4973d4e359c32372430c83f
+commit: https://git.buildroot.net/buildroot/commit/?id=604fe088060c1c3b348f007459c40f51ed23cb0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 1.2, libunwind has support for the AArch64 architecture.
+python-markdown2 through 2.3.8 allows XSS because element names are
+mishandled unless a \w+ match succeeds. For example, an attack might use
+elementname@ or elementname- with an onclick attribute.
 
-It builds fine on glibc, needs a small patch on musl, but doesn't
-build with uClibc (stack_t undefined).
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12836
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sigset_t-instead-of-__sigset_t-on-AArch64.patch | 46 ++++++++++++++++++++++
- package/libunwind/Config.in                        |  7 ++--
- 2 files changed, 50 insertions(+), 3 deletions(-)
+ ...te-tags-with-punctuation-after-as-part-of.patch | 53 ++++++++++++++++++++++
+ .../0002-Better-fix-for-issue-348.patch            | 32 +++++++++++++
+ package/python-markdown2/python-markdown2.mk       |  4 ++
+ 3 files changed, 89 insertions(+)
 
-diff --git a/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
+diff --git a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
 new file mode 100644
-index 0000000000..035bdae803
+index 0000000000..ee980e22e8
 --- /dev/null
-+++ b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
-@@ -0,0 +1,46 @@
-+From b9627ed74ab1f58be0de075be68d5cd2e96b8750 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 3 May 2020 23:08:54 +0200
-+Subject: [PATCH] Use sigset_t instead of __sigset_t on AArch64
++++ b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
+@@ -0,0 +1,53 @@
++From 9144d0fc5d5249cc4d81287ee79091806e6dde52 Mon Sep 17 00:00:00 2001
++From: Gareth Simpson <gareth.simpson@zoodigital.com>
++Date: Fri, 1 May 2020 19:31:21 +0100
++Subject: [PATCH] Fix for issue 348 - incomplete tags with punctuation after as
++ part of the tag name are a source of XSS
 +
-+This fixes the build with the musl C library. sigset_t is the
-+documented type exposed by <signal.h>.
-+
-+This fix comes from Alpine Linux:
-+
-+  https://git.alpinelinux.org/aports/plain/main/libunwind/fix-aarch64-sigset_t.patch
-+
-+It was authored by Leo <thinkabit.ukim@gmail.com>.
-+
-+The issue has been reported upstream at
-+https://github.com/libunwind/libunwind/issues/176.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/trentm/python-markdown2/commit/9144d0fc5d5249cc4d81287ee79091806e6dde52]
 +---
-+ include/libunwind-aarch64.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ lib/markdown2.py                           | 2 +-
++ test/tm-cases/issue348_incomplete_tag.html | 1 +
++ test/tm-cases/issue348_incomplete_tag.opts | 1 +
++ test/tm-cases/issue348_incomplete_tag.text | 1 +
++ 4 files changed, 4 insertions(+), 1 deletion(-)
++ create mode 100644 test/tm-cases/issue348_incomplete_tag.html
++ create mode 100644 test/tm-cases/issue348_incomplete_tag.opts
++ create mode 100644 test/tm-cases/issue348_incomplete_tag.text
 +
-+diff --git a/include/libunwind-aarch64.h b/include/libunwind-aarch64.h
-+index 778b4362..926fbbc0 100644
-+--- a/include/libunwind-aarch64.h
-++++ b/include/libunwind-aarch64.h
-+@@ -34,6 +34,7 @@ extern "C" {
-+ #include <inttypes.h>
-+ #include <stddef.h>
-+ #include <ucontext.h>
-++#include <signal.h>
++diff --git a/lib/markdown2.py b/lib/markdown2.py
++index 3a5d5d9..636bf07 100755
++--- a/lib/markdown2.py
+++++ b/lib/markdown2.py
++@@ -2164,7 +2164,7 @@ def _encode_amps_and_angles(self, text):
++         text = self._naked_gt_re.sub('&gt;', text)
++         return text
 + 
-+ #define UNW_TARGET      aarch64
-+ #define UNW_TARGET_AARCH64      1
-+@@ -192,7 +193,7 @@ typedef struct
-+ 	unsigned long uc_flags;
-+ 	struct ucontext *uc_link;
-+ 	stack_t uc_stack;
-+-	__sigset_t uc_sigmask;
-++	sigset_t uc_sigmask;
-+ 	struct unw_sigcontext uc_mcontext;
-+   } unw_tdep_context_t;
++-    _incomplete_tags_re = re.compile("<(/?\w+[\s/]+?)")
+++    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
 + 
-+-- 
-+2.26.2
++     def _encode_incomplete_tags(self, text):
++         if self.safe_mode not in ("replace", "escape"):
++diff --git a/test/tm-cases/issue348_incomplete_tag.html b/test/tm-cases/issue348_incomplete_tag.html
++new file mode 100644
++index 0000000..46059cc
++--- /dev/null
+++++ b/test/tm-cases/issue348_incomplete_tag.html
++@@ -0,0 +1 @@
+++<p>&lt;lol@/ //id="pwn"//onclick="alert(1)"//<strong>abc</strong></p>
++diff --git a/test/tm-cases/issue348_incomplete_tag.opts b/test/tm-cases/issue348_incomplete_tag.opts
++new file mode 100644
++index 0000000..ad487c0
++--- /dev/null
+++++ b/test/tm-cases/issue348_incomplete_tag.opts
++@@ -0,0 +1 @@
+++{"safe_mode": "escape"}
++diff --git a/test/tm-cases/issue348_incomplete_tag.text b/test/tm-cases/issue348_incomplete_tag.text
++new file mode 100644
++index 0000000..bb4a0de
++--- /dev/null
+++++ b/test/tm-cases/issue348_incomplete_tag.text
++@@ -0,0 +1 @@
+++<lol@/ //id="pwn"//onclick="alert(1)"//**abc**
+diff --git a/package/python-markdown2/0002-Better-fix-for-issue-348.patch b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
+new file mode 100644
+index 0000000000..127bb51da2
+--- /dev/null
++++ b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
+@@ -0,0 +1,32 @@
++From 0c0543846fa54281e2269b0bff841a0b9ffe23fe Mon Sep 17 00:00:00 2001
++From: Gareth Simpson <gareth.simpson@zoodigital.com>
++Date: Sat, 2 May 2020 21:22:36 +0100
++Subject: [PATCH] Better fix for issue 348
 +
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index be576d13c4..5284b5864c 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -10,13 +10,14 @@
- config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
--		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || BR2_mips64 || \
--		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
-+		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_mips || BR2_mipsel || \
-+		 BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_sh || \
-+		 BR2_i386 || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
- 		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
--		(BR2_ARM_CPU_HAS_ARM || BR2_x86_64)
-+		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_x86_64)
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/trentm/python-markdown2/commit/0c0543846fa54281e2269b0bff841a0b9ffe23fe]
++---
++ lib/markdown2.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/lib/markdown2.py b/lib/markdown2.py
++index 636bf07..be86502 100755
++--- a/lib/markdown2.py
+++++ b/lib/markdown2.py
++@@ -2164,11 +2164,14 @@ def _encode_amps_and_angles(self, text):
++         text = self._naked_gt_re.sub('&gt;', text)
++         return text
++ 
++-    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
+++    _incomplete_tags_re = re.compile("<(/?\w+?(?!\w).+?[\s/]+?)")
++ 
++     def _encode_incomplete_tags(self, text):
++         if self.safe_mode not in ("replace", "escape"):
++             return text
+++            
+++        if text.endswith(">"):
+++            return text  # this is not an incomplete tag, this is a link in the form <http://x.y.z>
++ 
++         return self._incomplete_tags_re.sub("&lt;\\1", text)
++ 
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index d8b946e140..f508c17a20 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -11,4 +11,8 @@ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
  
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
++# 0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
++# 0002-Better-fix-for-issue-348.patch
++PYTHON_MARKDOWN2_IGNORE_CVES += CVE-2020-11888
++
+ $(eval $(python-package))
