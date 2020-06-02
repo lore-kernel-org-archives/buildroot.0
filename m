@@ -1,52 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 2 Jun 2020 23:18:49 +0200
-Subject: [Buildroot] [git commit] package/python-periphery: bump to version
- 2.1.0
-Message-ID: <20200602211933.35C0082AF5@busybox.osuosl.org>
+Date: Tue, 2 Jun 2020 23:19:29 +0200
+Subject: [Buildroot] [git commit] package/c-periphery: bump version to 2.2.1
+Message-ID: <20200602211933.4481582AF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96972e73eda01c657d762612b8190161302568bd
+commit: https://git.buildroot.net/buildroot/commit/?id=cc5b8a9c954d2c54d1b5bb1f47fc08304692e4e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See changelog https://github.com/vsergeev/python-periphery/blob/master/CHANGELOG.md
+Since commit "cmake: add cmake build support"
+(https://github.com/vsergeev/c-periphery/commit/952e1e906a5d65b78932128af24b7dbb8cce2e9dvsergeev/c-periphery at d0a973c),
+c-periphery implement cmake build, so use cmake-package instead of
+generic-package. Due to this, it now builds a shared library, so we
+drop the INSTALL_TARGET = NO.
 
-Update the license hash for a change in copyright years:
--Copyright (c) 2015-2019 vsergeev / Ivan (Vanya) A. Sergeev
-+Copyright (c) 2015-2020 vsergeev / Ivan (Vanya) A. Sergeev
+The hash of the license file is updated due to an update in the
+copyright year:
 
-Also switch to the new 2 spaces convention for the hash file
+  - Copyright (c) 2014-2019 vsergeev / Ivan (Vanya) A. Sergeev
+  + Copyright (c) 2014-2020 vsergeev / Ivan (Vanya) A. Sergeev
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-periphery/python-periphery.hash | 4 ++--
- package/python-periphery/python-periphery.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/c-periphery/c-periphery.hash |  4 ++--
+ package/c-periphery/c-periphery.mk   | 18 ++----------------
+ 2 files changed, 4 insertions(+), 18 deletions(-)
 
-diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
-index e9c3869eb7..13636d17ad 100644
---- a/package/python-periphery/python-periphery.hash
-+++ b/package/python-periphery/python-periphery.hash
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index 244f8f60f1..a1842612b9 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 e6da8dcf8f639d1c3be3f19d27cbd472ef904db204c5453b250f87ab9bca2025  python-periphery-2.0.1.tar.gz
--sha256 bf032b9319cfd918368219450a9917529f131925e698cbab1b63f42b629ff505  LICENSE
-+sha256  2c2482d026afc974ba5a966cd2c3a724ecf55e253223a9ea80fc98f77a3ca414  python-periphery-2.1.0.tar.gz
-+sha256  4a2ed465d05c7ec58bb5a8cd7d2475a2d423bb73cb9bc3e3565500c222d03dc8  LICENSE
-diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
-index 97cb52e58b..c322ded3b5 100644
---- a/package/python-periphery/python-periphery.mk
-+++ b/package/python-periphery/python-periphery.mk
-@@ -4,7 +4,7 @@
+-sha256 1c455c42b26818d199ac227cd19714f265623e15d363fdfdf47a2416a4165654  c-periphery-2.1.0.tar.gz
+-sha256 e7b9464cb8511f19ddb40f9cf52fe86b3dfe38b2faed9d7bbc3d5707677ffbe3  LICENSE
++sha256 7afa2a18e0bf0ccb09b832017c61a411a94cff648a9a57f9f9068bcf14a5d972  c-periphery-2.2.1.tar.gz
++sha256 7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index bb50434efa..3869fc1111 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
+@@ -4,24 +4,10 @@
  #
  ################################################################################
  
--PYTHON_PERIPHERY_VERSION = 2.0.1
-+PYTHON_PERIPHERY_VERSION = 2.1.0
- PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
- PYTHON_PERIPHERY_LICENSE = MIT
- PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
+-C_PERIPHERY_VERSION = 2.1.0
++C_PERIPHERY_VERSION = 2.2.1
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+-# only a static library
+-C_PERIPHERY_INSTALL_TARGET = NO
+ C_PERIPHERY_LICENSE = MIT
+ C_PERIPHERY_LICENSE_FILES = LICENSE
+ 
+-define C_PERIPHERY_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
+-
+-# There is no 'install' rule in the Makefile, so we handle things
+-# manually.
+-define C_PERIPHERY_INSTALL_STAGING_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
+-	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
+-	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
