@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:51 -0000
-Subject: [Buildroot] [git commit] package/sdl2: enable 3DNOW only if it's
- supported by the target
-Message-ID: <20200602200120.638C68256A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysrepo: bump version to 1.4.58
+Message-ID: <20200602200120.8F2318256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe29913fa96d2265ecf91e259f334dbdd67f92fb
+commit: https://git.buildroot.net/buildroot/commit/?id=2c3dc380a0417915cddab14c925e2892585e76dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sdl2/sdl2.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/sysrepo/sysrepo.hash | 2 +-
+ package/sysrepo/sysrepo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 4a287b66a3..830873c9e4 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -36,6 +36,12 @@ else
- SDL2_CONF_OPTS += --disable-sse
- endif
+diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+index a759821614..ae72fc2b00 100644
+--- a/package/sysrepo/sysrepo.hash
++++ b/package/sysrepo/sysrepo.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d84d4f092feab83b0a39fef5d0d62bc6ed1f0f8aa274329f2cbf0a95a6528d8a  sysrepo-1.4.2.tar.gz
++sha256  9c134658a5b812cd86b9113c30fc01be5a094616f473e747032ccf614af9e4dd  sysrepo-1.4.58.tar.gz
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 67290dad4f..aee40fa274 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_X86_CPU_HAS_3DNOW),y)
-+SDL2_CONF_OPTS += --enable-3dnow
-+else
-+SDL2_CONF_OPTS += --disable-3dnow
-+endif
-+
- ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
- SDL2_DEPENDENCIES += directfb
- SDL2_CONF_OPTS += --enable-video-directfb
+-SYSREPO_VERSION = 1.4.2
++SYSREPO_VERSION = 1.4.58
+ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = Apache-2.0
