@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:48 -0000
-Subject: [Buildroot] [git commit] package/libpng: enable neon support for
- aarch64
-Message-ID: <20200602200119.64E538256A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/modem-manager: bump version to
+ 1.12.8
+Message-ID: <20200602200118.32BDD82ABB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0da84d32fa0ce1b819ace42b70d6acf980adc62
+commit: https://git.buildroot.net/buildroot/commit/?id=4be485fab964dcecd3cfc18b3b346610ea4bb849
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NEON support is enabled by default on aarch64, so we
-can enable it unconditionaly.
+https://lists.freedesktop.org/archives/modemmanager-devel/2020-March/007729.html
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpng/libpng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 5c30a4f9ad..1a83c7e712 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -15,7 +15,7 @@ LIBPNG_DEPENDENCIES = host-pkgconf zlib
- HOST_LIBPNG_DEPENDENCIES = host-pkgconf host-zlib
- LIBPNG_CONFIG_SCRIPTS = libpng$(LIBPNG_SERIES)-config libpng-config
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index f9d790cd0c..2fb10368c8 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2eb3353ee5518005c51d429308695c69d8c38cf2fd9102b04f785c03a0cc624c  ModemManager-1.12.6.tar.xz
++sha256  68b53d0615ba0d3e2bbf386ed029dfe644a6a30a79ab8d85523527bb4e713aff  ModemManager-1.12.8.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 75fc5811db..78cffe1f9c 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_aarch64),y)
- LIBPNG_CONF_OPTS += --enable-arm-neon
- else
- LIBPNG_CONF_OPTS += --disable-arm-neon
+-MODEM_MANAGER_VERSION = 1.12.6
++MODEM_MANAGER_VERSION = 1.12.8
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
