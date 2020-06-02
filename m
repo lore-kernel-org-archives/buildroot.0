@@ -1,31 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2020 09:05:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.6.0
-In-Reply-To: <20200419154300.203136-1-juju@cotds.org> (Julien Olivain's
- message of "Sun, 19 Apr 2020 17:43:00 +0200")
-References: <20200419154300.203136-1-juju@cotds.org>
-Message-ID: <871rmydk2l.fsf@dell.be.48ers.dk>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Tue, 2 Jun 2020 07:31:38 +0000
+Subject: [Buildroot] [PATCH v4 0/5] imx: add i.MX8M Nano EVK board
+ support
+In-Reply-To: <20200529214146.GS8737@scaer>
+References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>,
+ <20200529214146.GS8737@scaer>
+Message-ID: <DB8PR04MB5755F8E5A0C3CF703FB1B816A78B0@DB8PR04MB5755.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Olivain <juju@cotds.org> writes:
+>
+>St??phane, All,
 
- > When host compiler is gcc 10 (for example on Fedora 32), dtc 1.5.1
- > fail to build with the error:
- > /usr/bin/ld: dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; dtc-lexer.lex.o:(.bss+0x0): first defined here
- > collect2: error: ld returned 1 exit status
+Hello Yann, 
 
- > dtc 1.6.0 fixes this issue in the commit:
- > https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=0e9225eb0dfec51def612b928d2f1836b092bc7e
+>
+>On 2020-05-27 07:07 +0200, Stephane Viau spake thusly:
+>> This series adds support for the NXP i.MX8M Nano EVK board.
+>>
+>> Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+>> type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+>> half of the series introduce the DDR training selection for the whole i.MX8 M
+>> SoC family, as well as a separation of the DDR and HDMI FW copy.
+>>
+>> The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+>> U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+>> reference boards.
+>>
+>> Stephane Viau (5):
+>>   package/freescale-imx: Add option for DDR FW need
+>
+>I'll reply separately to that one.
 
- > Also adopt new spacing convention in .hash files (two spaces).
+Please check my comment in the same thread.
 
- > Signed-off-by: Julien Olivain <juju@cotds.org>
+>
+>>   package/freescale-imx/firmware-imx: add choice for DDR training
+>>     binaries
+>>   board/freescale/common/imx: use generic ddr_fw.bin name
+>>   board/freescale/common/imx: add support for i.MX8M Nano
+>>   configs/freescale_imx8mnevk: new defconfig
+>
+>Whole series applied to next, thanks.
 
-Committed to 2020.02.x, thanks.
+Thank you.
 
--- 
-Bye, Peter Korsgaard
+BR, 
+Stephane.
+
+>
+>Regards,
+>Yann E. MORIN.
+>
+>>  .gitlab-ci.yml                                     |  1 +
+>>  DEVELOPERS                                         |  4 ++
+>>  .../common/imx/imx8-bootloader-prepare.sh          |  6 +-
+>>  board/freescale/common/imx/post-image.sh           |  2 +
+>>  board/freescale/imx8mnevk/readme.txt               | 73 ++++++++++++++++++++++
+>>  configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
+>>  package/freescale-imx/Config.in                    |  6 ++
+>>  package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
+>>  package/freescale-imx/firmware-imx/firmware-imx.mk | 43 ++++++++++++-
+>>  9 files changed, 197 insertions(+), 5 deletions(-)
+>>  create mode 100644 board/freescale/imx8mnevk/readme.txt
+>>  create mode 100644 configs/freescale_imx8mnevk_defconfig
+>>
+>> --
+>> 2.7.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>--
+>.-----------------.--------------------.------------------.--------------------.
+>|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>'------------------------------^-------^------------------^--------------------'
+>
