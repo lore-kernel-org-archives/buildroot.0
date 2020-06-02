@@ -1,78 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2020 11:39:51 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 6}.x series
-Message-ID: <20200602093949.503DF8179A@busybox.osuosl.org>
+Date: Tue, 2 Jun 2020 11:37:30 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: cleanup
+ rockwellcollins.com maintainers
+Message-ID: <20200602093949.4279D8179A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=519bb61c5e2bdf0162018bc43ea112abdd49a908
+commit: https://git.buildroot.net/buildroot/commit/?id=a20a8842db83ddf2197ae02a07c6fa1a789ac307
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e0f5cc8f66c44088cc858ab97e460e7f4d06faf3)
-[Peter: drop 5.5.x / 5.6.x bump]
+(cherry picked from commit 9740b9bcdd9167195498393098e89915ee564691)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ DEVELOPERS | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7c0bdf1a98..4d18038e92 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d465da3d7..efe4b0781d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -465,9 +465,6 @@ N:	Biagio Montaruli <biagio.hkr@gmail.com>
+ F:	board/acmesystems/
+ F:	configs/acmesystems_*
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.42" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.43" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.115-cip24-rt9" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index de04b8a026..8c0a7a813b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  4e431b7c0266a07b76fdb77f8917ad681f0fa34ffba0eb8a172b67f7ef57bc31  linux-5.4.42.tar.xz
-+sha256  2667b90a42d42557aca9e3d37bba1b4e71809b9523958e6870ada311c4790744  linux-5.4.43.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  ef76687254eea1a379fbbf0b2b7fdde9450608e6402822d73873a352ecf568d1  linux-4.4.224.tar.xz
--sha256  df6d07e99513f9afadd7d44c471f44c56fccc9e4c984a1ba4b988f053a13c949  linux-4.9.224.tar.xz
--sha256  ab9bea577cfe59fb2f502ce4d6130bfb49163ef969364adc3d36a65721d64a4d  linux-4.14.181.tar.xz
--sha256  d5d9001879d7a77309dca203656490326d26b068b7b0b9d8003548dba8fdad00  linux-4.19.124.tar.xz
-+sha256  49474956a6149c16cbcba862d1f4db54835a32d336063c75094f669f1c34c65e  linux-4.4.225.tar.xz
-+sha256  e547748c548b0f55f665bc78cfec322e7b96f41527b5e4b5d79430fdaa57c3e8  linux-4.9.225.tar.xz
-+sha256  671d1f1d5ad0ae74fb21ee70a5544400e7d6270098d3f8b134484ded2c3e5b90  linux-4.14.182.tar.xz
-+sha256  9843f40efb37491770688810d153d0779daed8eb097773a0de5abf2cb0d1bd7e  linux-4.19.125.tar.xz
- # Locally computed
- sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-cip-4.19.118-cip25.tar.gz
- sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 44bd13f0e4..901e626eb2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -318,11 +318,11 @@ endchoice
+-N:	Bimal Jacob <bimal.jacob@rockwellcollins.com>
+-F:	package/nginx-upload/
+-
+ N:	Bogdan Radulescu <bogdan@nimblex.net>
+ F:	package/iftop/
+ F:	package/ncdu/
+@@ -639,9 +636,6 @@ F:	package/openldap/
+ N:	David du Colombier <0intro@gmail.com>
+ F:	package/x264/
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.224"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.224"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.181"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.124"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.42"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.225"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.225"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.182"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.125"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.43"	if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-N:	David Graziano <david.graziano@rockwellcollins.com>
+-F:	package/libcsv/
+-
+ N:	David Lechner <david@lechnology.com>
+ F:	board/lego/ev3/
+ F:	configs/lego_ev3_defconfig
+@@ -1182,9 +1176,6 @@ F:	package/python-pexpect/
+ F:	package/python-ptyprocess/
+ F:	package/zynq-boot-bin/
+ 
+-N:	Jared Bents <jared.bents@rockwellcollins.com>
+-F:	package/davici/
+-
+ N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+ F:	package/quota/
+ 
+@@ -1589,6 +1580,7 @@ F:	package/cgroupfs-mount/
+ F:	package/crda/
+ F:	package/cunit/
+ F:	package/dacapo/
++F:	package/davici/
+ F:	package/dnsmasq/
+ F:	package/dosfstools/
+ F:	package/eigen/
+@@ -1852,9 +1844,6 @@ F:	package/openjpeg/
+ N:	Olivier Singla <olivier.singla@gmail.com>
+ F:	package/shellinabox/
+ 
+-N:	Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+-F:	package/checksec/
+-
+ N:	Parnell Springmeyer <parnell@digitalmentat.com>
+ F:	package/scrypt/
+ 
