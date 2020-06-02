@@ -1,78 +1,61 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 2 Jun 2020 22:33:28 +0200
-Subject: [Buildroot] Cross-compile mariadb-connector-c for MySQL use
-In-Reply-To: <CADJjDh_2Uhs7bTefPUhvEZedWnXyekZ1dR5Z5DOVtvfoLfqK_g@mail.gmail.com>
-References: <CADJjDh_2Uhs7bTefPUhvEZedWnXyekZ1dR5Z5DOVtvfoLfqK_g@mail.gmail.com>
-Message-ID: <20200602223328.26e660f6@gmx.net>
+Date: Tue,  2 Jun 2020 22:49:41 +0200
+Subject: [Buildroot] [PATCH v1] package/bcm2835: bump version to 1.65
+Message-ID: <20200602204941.21984-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Todd,
+- disable doxygen documentation gneration using ac_cv_prog_DOXYGEN
+- add optional libcap dependency and enable BCM2835_HAVE_LIBCAP
+  feature
 
-On Tue, 2 Jun 2020 15:47:34 -0400, Todd Sampson <sampsonats@gmail.com> wrote:
+Changes since 1.63:
+ - 1.64 2020-04-11 Fixed error in definitions of BCM2835_AUX_SPI_STAT_TX_LVL
+   and BCM2835_AUX_SPI_STAT_RX_LVL
+ - 1.65, 1.66 2020-04-16 Added support for use of capability cap_sys_rawio
+   to determine if access to /dev/mem is available for non-root users
 
-> I want to cross-compile mariadb-connector-c to link with the Poco library
-> to create a MySQL client.
->
-> Everything was working with mariadb-connector-c version 2.3.7.  I need to
-> update to 3.1.8 for compatibility with MySQL version 8.  When I changed the
-> mariadb-connector-c  buildroot target to 3.1.8, the build failed because
-> mariadb-connector-c had more dependencies.
->
-> It seems like mariadb-connector-c depends on the mariadb server to be
-> built.  If I build the server, mariadb-connector-c is happy.  The problem
-> is, the mariadb server is installed on the target and there is no room for
-> it.
->
-> I tried putting:
->
-> > MARIADB_INSTALL_TARGET = NO
->
-> in the mariadb server .mk file but it still was installed.
->
-> If I don't select mariadb server, I get these errors and lots more similar:
->
-> home/dfr/m9k2/buildroot/output/host/lib/gcc/powerpc-buildroot-linux-gnu/8.4.0/../../../../powerpc-buildroot-linux-gnu/bin/ld:
-> > /home/dfr/m9k2/buildroot/output/host/powerpc-buildroot-linux-gnu/sysroot/usr/lib/mariadb/libmariadbclient.a(openssl.c.o):
-> > in function `ma_tls_set_error':
-> > openssl.c:(.text+0x28): undefined reference to `ERR_get_error'
-> > /home/dfr/m9k2/buildroot/output/host/lib/gcc/powerpc-buildroot-linux-gnu/8.4.0/../../../../powerpc-buildroot-linux-gnu/bin/ld:
-> > openssl.c:(.text+0x64): undefined reference to `ERR_reason_error_string'
->
->
-> *buildroot version 2020.05*
-> *QUESTIONS*
-> 1. Is there a better way to approach this?
-> 2. How do I let mariadb server be built but *not *installed in the target?
-> 3. Should I be able to use the Poco library built into buildroot? It seems
-> like there should be an option in Poco to build the mariadb-connector-c
-> library and just work.
-> 4. Is anyone else in the world besides me trying to do this?
->
-> I've been working on this for over two weeks now.  I sure would appreciate
-> any help!
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/bcm2835/bcm2835.hash |  2 +-
+ package/bcm2835/bcm2835.mk   | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-First thing to do is support the buildroot people by providing your config (or defconfig)
-file which produces your problem (against a vanilla buildroot release or git tree, so
-other people can try to re-produce your problem)...
-
-Try to reproduce your problem with an complete re-build (make clean && make), see [1]
-
-As far as I can see in the builroot-2020.05 source mariadb is at version 10.3.23,
-where does your 2.3.7, 3.1.8 and MySQL version 8 come from?
-
-According to [2] mariadb-connector-c is included in mariadb-10.3.23 and
-the buildroot package poco mysql component (BR2_PACKAGE_POCO_DATA_MYSQL) simple
-selects BR2_PACKAGE_MYSQL....do your try to build some packages outside of
-buildroot? If yes...why?
-
-Regards,
-Peter
-
-[1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
-[2] https://mariadb.com/kb/en/mariadb-connector-c-318-release-notes/
-
-> Thanks
+diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
+index c722a97456..8317e10256 100644
+--- a/package/bcm2835/bcm2835.hash
++++ b/package/bcm2835/bcm2835.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  aec4b33ed9ecda4a1c4c12b8ed2abdd13cf87f352f0d27a24be726d11f1fbf54  bcm2835-1.63.tar.gz
++sha256  62955cc8506cc6506d729da3138442beb9763f1ffd536e925aeb0dc223492874  bcm2835-1.65.tar.gz
+ sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  COPYING
+diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
+index d43dd7e574..c3c684f6e4 100644
+--- a/package/bcm2835/bcm2835.mk
++++ b/package/bcm2835/bcm2835.mk
+@@ -4,10 +4,18 @@
+ #
+ ################################################################################
+ 
+-BCM2835_VERSION = 1.63
++BCM2835_VERSION = 1.65
+ BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
+ BCM2835_LICENSE = GPL-3.0
+ BCM2835_LICENSE_FILES = COPYING
+ BCM2835_INSTALL_STAGING = YES
+ 
++# disable doxygen doc generation
++BCM2835_CONF_ENV = ac_cv_prog_DOXYGEN=/bin/true
++
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++BCM2835_DEPENDENCIES = libcap
++BCM2835_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DBCM2835_HAVE_LIBCAP"
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.26.2
