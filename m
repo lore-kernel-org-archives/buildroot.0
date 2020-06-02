@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:47 -0000
-Subject: [Buildroot] [git commit] package/genimage: bump to version 13
-Message-ID: <20200602200118.5459D805F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gobject: bump version to
+ 3.36.1
+Message-ID: <20200602200119.282BB81499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=677b0d9f574e2860cd22cb36022e5c059b4e6af5
+commit: https://git.buildroot.net/buildroot/commit/?id=3832536115d9d48fe393202f5758a1eb1a26a4e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update hash file formatting (2 spaces)
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/genimage/genimage.hash | 4 ++--
- package/genimage/genimage.mk   | 2 +-
+ package/python-gobject/python-gobject.hash | 4 ++--
+ package/python-gobject/python-gobject.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
-index fb5d235508..fbec5ce57b 100644
---- a/package/genimage/genimage.hash
-+++ b/package/genimage/genimage.hash
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+index 5ae7553abb..fd2235f201 100644
+--- a/package/python-gobject/python-gobject.hash
++++ b/package/python-gobject/python-gobject.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256	2e9b43d1288f4e216d6c79de2a0c53ce1bd41f93cec750d8ab057aa2d0b0ee4a	genimage-12.tar.xz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  4206e253226a384386c01591251f2ed1ea3485ef63f1e696db03600e1213db79  genimage-13.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 8960393904..dde8f8b9e0 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
+-# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.0.sha256sum
+-sha256  8683d2dfb5baa9e501a9a64eeba5c2c1117eadb781ab1cd7a9d255834af6daef  pygobject-3.36.0.tar.xz
++# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.36/pygobject-3.36.1.sha256sum
++sha256  d1bf42802d1cec113b5adaa0e7bf7f3745b44521dc2163588d276d5cd61d718f  pygobject-3.36.1.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+index c93140fc66..0cada82fb7 100644
+--- a/package/python-gobject/python-gobject.mk
++++ b/package/python-gobject/python-gobject.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GENIMAGE_VERSION = 12
-+GENIMAGE_VERSION = 13
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+ PYTHON_GOBJECT_VERSION_MAJOR = 3.36
+-PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).1
+ PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
+ PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
+ PYTHON_GOBJECT_LICENSE = LGPL-2.1+
