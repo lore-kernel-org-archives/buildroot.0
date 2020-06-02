@@ -1,62 +1,41 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  2 Jun 2020 07:03:36 -0500
-Subject: [Buildroot] [PATCH] package/ethtool: bump to 5.6
-Message-ID: <20200602120336.19091-1-matthew.weber@rockwellcollins.com>
+Date: Tue,  2 Jun 2020 07:08:06 -0500
+Subject: [Buildroot] [PATCH] package/checksec: bump to 2.2.2
+Message-ID: <20200602120806.44983-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- * New dependency was added on libmnl (netlink library)
- * Now requires an updated pkg-config
-
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/ethtool/Config.in    | 1 +
- package/ethtool/ethtool.hash | 6 +++---
- package/ethtool/ethtool.mk   | 3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/checksec/checksec.hash | 4 ++--
+ package/checksec/checksec.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ethtool/Config.in b/package/ethtool/Config.in
-index 48173bfe2e..264b7b99c0 100644
---- a/package/ethtool/Config.in
-+++ b/package/ethtool/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ETHTOOL
- 	bool "ethtool"
-+	select BR2_PACKAGE_LIBMNL
- 	help
- 	  ethtool is a small utility for examining and tuning your
- 	  ethernet-based network interface.
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 86c71d7380..67fe263315 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	22f81e4927d6eb6a13a259d705248a96005fce2005e15257f639f5a1c8c52b6b	ethtool-5.4.tar.xz
-+sha256  ca0f1b526dad5153f0aa0f1eb3c17c31770c75a74f70af622b1a83ae38043995  ethtool-5.6.tar.xz
+diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
+index 4543f62a36..397cfe381e 100644
+--- a/package/checksec/checksec.hash
++++ b/package/checksec/checksec.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
--sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index ce4f2d862d..70471d8ad6 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,9 +4,10 @@
+-sha256 e50a92a2bb22d40d1aa297cd011209ab5ad0b620236dfb9a7afe4c29744260a9 checksec-2.1.0.tar.gz
+-sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d LICENSE.txt
++sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d  LICENSE.txt
++sha256 d3c8e80bdd1cee0c2f0e60cb7a8a9482b82f651ea069e3a4453ae9a44072a632  checksec-2.2.2.tar.gz
+diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
+index ffa249663c..e46e858437 100644
+--- a/package/checksec/checksec.mk
++++ b/package/checksec/checksec.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 5.4
-+ETHTOOL_VERSION = 5.6
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
-+ETHTOOL_DEPENDENCIES = host-pkgconf libmnl
- ETHTOOL_LICENSE = GPL-2.0
- ETHTOOL_LICENSE_FILES = LICENSE COPYING
- ETHTOOL_CONF_OPTS = \
+-CHECKSEC_VERSION = 2.1.0
++CHECKSEC_VERSION = 2.2.2
+ CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
+ CHECKSEC_LICENSE = BSD-3-Clause
+ CHECKSEC_LICENSE_FILES = LICENSE.txt
 -- 
 2.17.1
