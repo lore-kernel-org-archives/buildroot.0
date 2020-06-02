@@ -1,40 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Jun 2020 08:17:20 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: remove Carlos Santos
-In-Reply-To: <20200531225603.55b69a62@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 31 May 2020 22:56:03 +0200")
-References: <20200529203204.433746-1-unixmania@gmail.com>
- <20200531081826.GY8737@scaer> <20200531225603.55b69a62@windsurf.home>
-Message-ID: <87h7vudma7.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Jun 2020 08:23:27 +0200
+Subject: [Buildroot] [git commit] package/sysrepo: fix SysV init script
+In-Reply-To: <20200531081039.5FA1485D87@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 31 May 2020 10:27:01 +0200")
+References: <20200531081039.5FA1485D87@busybox.osuosl.org>
+Message-ID: <87d06idm00.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hello Carlos,
- > On Sun, 31 May 2020 10:18:26 +0200
- > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=1a14a838eaa88ae683bf8c0cb0ae6cc7e1d10d49
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Carlos, All,
- >> 
- >> On 2020-05-29 17:32 -0300, unixmania at gmail.com spake thusly:
- >> > From: Carlos Santos <unixmania@gmail.com>
- >> > 
- >> > Goodbye!  
- >> 
- >> So long, and thanks for all the fish!
+ > The current script (S51sysrepo-plugind) is not able to stop the daemon.
 
- > Carlos, I also wanted to thank you for your great contributions to
- > Buildroot over the past years. Your contributions have been numerous
- > and of high quality, and they have greatly improved various aspects of
- > the project.
+ > Possible options to fix the problem:
 
- > Many thanks, and hope to see you in other open-source projects!
+ > A) By adding the "-m -p $PIDFILE" option to start the pid file will be
+ >    created but it will not contain the correct PID used by the daemon.
+ >    This is obviously because the daemon forks.
+ > B) By not starting the daemon in background (sysrepo-plugind -d) and
+ >    let do it by start-stop-daemon with "-b" option. But then the log
+ >    messages of the daemon will not longer ends in the syslog but to stderr.
+ > C) Start the daemon without a pidfile and stop the daemon with the
+ >    "-x" option.
 
-Indeed, best wishes for the future and thanks!
+ > The only valid option is C to fix that.
+
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > [yann.morin.1998 at free.fr: introduce EXECUTABLE]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2020.02.x, thanks.
 
