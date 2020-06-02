@@ -1,41 +1,71 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 2 Jun 2020 23:30:54 +0200
-Subject: [Buildroot] [PATCH] configs/rock64_defconfig: remove defconfig
-In-Reply-To: <20200602231457.50033f15@windsurf.home>
-References: <20200531143452.575717-1-romain.naour@gmail.com>
- <05f4af44-8cf5-989e-df94-df39b6d6bd8e@gmail.com>
- <20200602231457.50033f15@windsurf.home>
-Message-ID: <b3f125f4-a529-5cb7-35d6-c2080ec27cbb@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 2 Jun 2020 23:33:38 +0200
+Subject: [Buildroot] [PATCH v1] package/bcm2835: bump version to 1.65
+In-Reply-To: <20200602204941.21984-1-ps.report@gmx.net>
+References: <20200602204941.21984-1-ps.report@gmx.net>
+Message-ID: <20200602233338.05744983@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Peter,
 
-Le 02/06/2020 ? 23:14, Thomas Petazzoni a ?crit?:
-> On Mon, 1 Jun 2020 15:55:42 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> Actually this issue is not related to the uboot fork but the official 2017.09
->> (and maybe previous releases)
-> 
-> So it feels like the solution is not really to remove that defconfig,
-> correct? Because any other defconfig using 2017.09 and libpyfdt (and
-> possibly some other nearby U-Boot versions) would also be affected,
-> correct ?
+On Tue,  2 Jun 2020 22:49:41 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Indeed, every defconfig using uboot 2017.09 with TPL support enabled will fail
-to build due to this issue.
+> - disable doxygen documentation gneration using ac_cv_prog_DOXYGEN
 
-I spent some time to take a look at the issue but I don't have a solution.
-It seems we really need commit c0e032e0090d6541549b19cc47e06ccd1f302893 to build
-correctly.
+Is this related to the version bump? Or would the existing 1.63 version
+be potentially affected by a doxygen build issue? If that's the case,
+we want a separate patch which fixes this, so that we can backport.
 
-Best regards,
-Romain
+> +ifeq ($(BR2_PACKAGE_LIBCAP),y)
+> +BCM2835_DEPENDENCIES = libcap
+> +BCM2835_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DBCM2835_HAVE_LIBCAP"
 
-> 
-> Thomas
-> 
+So, this again illustrates how wonderful the RPi ecosystem is.
+
+ (1) They don't use configure.ac to check for libcap, even though they
+     already have all the autotools machinery in place to do that.
+
+ (2) They ask to define BCM2835_HAVE_LIBCAP manually, but then look at
+     the code:
+
+#ifdef BCM2835_HAVE_LIBCAP
+#include <sys/capability.h>
+static int bcm2835_has_capability(cap_value_t capability)
+{
+    int ok = 0;
+    cap_t cap = cap_get_proc();
+    if (cap)
+    {
+        cap_flag_value_t value;
+        if (cap_get_flag(cap,capability,CAP_EFFECTIVE,&value) == 0 && value == CAP_SET)
+            ok = 1;
+       cap_free(cap);
+    }
+    return ok;
+}
+#endif
+
+So far, so good: if BCM2835_HAVE_LIBCAP is defined, a new function
+bcm2835_has_capability() is implemented.
+
+Then, let's continue to the only place where this function is used:
+
+#ifdef BCM2835_HAVE_LIBCAP2
+        || bcm2835_has_capability(CAP_SYS_RAWIO)
+#endif
+
+It is under a different BCM2835_HAVE_LIBCAP2 define. I don't even see
+how this can work. Has someone really tested this?
+
+I'm sorry, but this new libcap dependency feels like a joke :-)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
