@@ -1,83 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:52 -0000
-Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.10.3
-Message-ID: <20200602200120.B9DD78256A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-redis: Bump to version 3.5.1
+Message-ID: <20200602200120.C81C18256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3ad18e8d2ef83ee8c45363d33bdae91575838cd
+commit: https://git.buildroot.net/buildroot/commit/?id=41d80c72c67e1016875b16e98f38a1bc3f5b25e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://mailchi.mp/freeswitch.com/freeswitch-v1103-has-just-been-released
-
-Changelog:
-https://github.com/signalwire/freeswitch/releases/tag/v1.10.3
-
-Reformatted hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeswitch/freeswitch.hash | 36 ++++++++++++++++++------------------
- package/freeswitch/freeswitch.mk   |  2 +-
- 2 files changed, 19 insertions(+), 19 deletions(-)
+ package/python-redis/python-redis.hash | 4 ++--
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index f300e69bf4..de6cb6462c 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,19 +1,19 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.2.tar.xz.md5
--md5 89d66f87f0f6c2471aa95aee48f55fdc freeswitch-1.10.2.-release.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.2.tar.xz.sha1
--sha1 90dac82cb4fb8fc11e399fd4bdac7163fb40259b freeswitch-1.10.2.-release.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.2.tar.xz.sha256
--sha256 1fd46dee82ecc52ac90ebab6bd454e34c64950fae7d6dc0589c8daa14bfc7d34 freeswitch-1.10.2.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.3.-release.tar.xz.md5
-+md5  c7d570da3a6fc66c1a286a105680dabf freeswitch-1.10.3.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.3.-release.tar.xz.sha1
-+sha1  98139cda8054ec840611c6fc3a585a5c5565ae4d freeswitch-1.10.3.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.3.-release.tar.xz.sha256
-+sha256  2d7db07a64ee2f19f9b6e3a4ce76fa42e0fe46c29d95edf1b690a3df3729f307 freeswitch-1.10.3.-release.tar.xz
- # Locally computed
--sha256 75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
--sha256 c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
--sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
--sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
--sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
--sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
--sha256 7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
--sha256 e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  libs/sofia-sip/COPYING
--sha256 b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  libs/sofia-sip/COPYRIGHTS
--sha256 366576cb0b869cd9e95a4882878607314650488ac635e5df0692180382e9666a  libs/spandsp/COPYING
--sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
--sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
-+sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
-+sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
-+sha256  e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
-+sha256  1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
-+sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
-+sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
-+sha256  7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
-+sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  libs/sofia-sip/COPYING
-+sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  libs/sofia-sip/COPYRIGHTS
-+sha256  366576cb0b869cd9e95a4882878607314650488ac635e5df0692180382e9666a  libs/spandsp/COPYING
-+sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  libs/srtp/LICENSE
-+sha256  ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/mod/codecs/mod_isac/LICENSE
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 5985df4a6e..79467ed618 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index b30942311b..3f0c2d4d2c 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5  5b432eff77163a353c520737d057e494  redis-3.5.0.tar.gz
+-sha256  7378105cd8ea20c4edc49f028581e830c01ad5f00be851def0f4bc616a83cd89  redis-3.5.0.tar.gz
++md5  a005acb0f05c7929c8b5961d216a0220  redis-3.5.1.tar.gz
++sha256  6e9d2722a95d10ddf854596e66516d316d99c6a483e5db3b35c34e1158b2bfa1  redis-3.5.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index 273f55748b..ffd18a00b8 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.10.2
-+FREESWITCH_VERSION = 1.10.3
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
- FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
+-PYTHON_REDIS_VERSION = 3.5.0
++PYTHON_REDIS_VERSION = 3.5.1
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/05/5e/5e9a329ba600244f2d37f86131ccec19936d41cba0887240086b44cf4f54
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/1c/74/4d3250366bd783f9907d8ed32140bf4beef11000200d7edf8245800e6c4c
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
