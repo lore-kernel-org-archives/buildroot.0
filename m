@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:47 -0000
-Subject: [Buildroot] [git commit] package/uacme: bump version to 1.3
-Message-ID: <20200602200118.42FB582ABB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/gnuconfig: reference the correct
+ sha1 we're using
+Message-ID: <20200602200118.5F89181499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=682a3882f2da0d83a0339a5b36ab6338b1d8c174
+commit: https://git.buildroot.net/buildroot/commit/?id=f45dc7083397480682a32f87b91fc07e43634a90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+In commit ff9f778c66f4 (support/gnuconfig: update to 2019-05-28), we
+forgot to update the README to reference the sha1 we're using, keeping
+the old one from 2016...
+
+Update it now.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uacme/uacme.hash | 2 +-
- package/uacme/uacme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/gnuconfig/README.buildroot | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-index b3ec7ed6f2..866cf86dbf 100644
---- a/package/uacme/uacme.hash
-+++ b/package/uacme/uacme.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
-+sha256  b219484f9f018dffb4a57c4c37e0e4b6aa15bb00705ad71b6f7b8dd94baf0380  uacme-1.3.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index 7e544fce79..63d3a752c3 100644
---- a/package/uacme/uacme.mk
-+++ b/package/uacme/uacme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 7ba2a332a4..7e7d49830f 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -24,4 +24,4 @@ Currently no patches are needed, but they may be needed again in the
+ future.
  
--UACME_VERSION = 1.2.4
-+UACME_VERSION = 1.3
- # Released versions are on branch upstream/latest, tagged as
- # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
- # include .tarball-version
+ The current Buildroot version is based on the Git commit
+-dafd8e767ec87b90aac62f0fcedd11944c84b50a of the config.git repository.
++104ee6463c4bfaac3f3029d9be9bdd6e93879323 of the config.git repository.
