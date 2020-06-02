@@ -1,74 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2020 11:37:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: cleanup
- rockwellcollins.com maintainers
-Message-ID: <20200602093949.4279D8179A@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue,  2 Jun 2020 12:40:07 +0200
+Subject: [Buildroot] [PATCH v2 0/4] package/redis: bump to Redis 6
+Message-ID: <20200602104011.837-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a20a8842db83ddf2197ae02a07c6fa1a789ac307
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+This series bumps Redis to the new major version 6.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9740b9bcdd9167195498393098e89915ee564691)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Redis 6 introduces new data types and commands, support for clients ACL, TLS 
+connections, client-side caching, threaded I/O, and many other improvements.
+See the full announcement on: http://antirez.com/news/132
+See the changelog:
+    https://raw.githubusercontent.com/antirez/redis/6.0/00-RELEASENOTES
+
+
+In addition to the version bump, this series also adds a runtime test for
+Redis, and enables support for TLS and Systemd integration.
 ---
- DEVELOPERS | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+Changes v1 -> v2:
+* Bump to Redis 6.0.4 instead of 6.0.1
+* Drop patch which has been applied upstream
+---
+Titouan Christophe (4):
+  package/redis: bump to version 6.0.4
+  support/testing: add runtime test for Redis
+  package/redis: add optional support for TLS connections
+  package/redis: add optional support for systemd
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9d465da3d7..efe4b0781d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -465,9 +465,6 @@ N:	Biagio Montaruli <biagio.hkr@gmail.com>
- F:	board/acmesystems/
- F:	configs/acmesystems_*
- 
--N:	Bimal Jacob <bimal.jacob@rockwellcollins.com>
--F:	package/nginx-upload/
--
- N:	Bogdan Radulescu <bogdan@nimblex.net>
- F:	package/iftop/
- F:	package/ncdu/
-@@ -639,9 +636,6 @@ F:	package/openldap/
- N:	David du Colombier <0intro@gmail.com>
- F:	package/x264/
- 
--N:	David Graziano <david.graziano@rockwellcollins.com>
--F:	package/libcsv/
--
- N:	David Lechner <david@lechnology.com>
- F:	board/lego/ev3/
- F:	configs/lego_ev3_defconfig
-@@ -1182,9 +1176,6 @@ F:	package/python-pexpect/
- F:	package/python-ptyprocess/
- F:	package/zynq-boot-bin/
- 
--N:	Jared Bents <jared.bents@rockwellcollins.com>
--F:	package/davici/
--
- N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
- 
-@@ -1589,6 +1580,7 @@ F:	package/cgroupfs-mount/
- F:	package/crda/
- F:	package/cunit/
- F:	package/dacapo/
-+F:	package/davici/
- F:	package/dnsmasq/
- F:	package/dosfstools/
- F:	package/eigen/
-@@ -1852,9 +1844,6 @@ F:	package/openjpeg/
- N:	Olivier Singla <olivier.singla@gmail.com>
- F:	package/shellinabox/
- 
--N:	Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
--F:	package/checksec/
--
- N:	Parnell Springmeyer <parnell@digitalmentat.com>
- F:	package/scrypt/
- 
+ .gitlab-ci.yml                              |  1 +
+ DEVELOPERS                                  |  1 +
+ package/redis/Config.in                     | 15 +++++++------
+ package/redis/redis.hash                    |  4 ++--
+ package/redis/redis.mk                      | 11 +++++++++-
+ package/redis/redis.service                 | 10 +++++----
+ support/testing/tests/package/test_redis.py | 24 +++++++++++++++++++++
+ 7 files changed, 53 insertions(+), 13 deletions(-)
+ create mode 100644 support/testing/tests/package/test_redis.py
+
+-- 
+2.25.3
