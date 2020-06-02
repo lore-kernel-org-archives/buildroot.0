@@ -1,114 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:49 -0000
-Subject: [Buildroot] [git commit] package/minetest_game: bump to version
- 5.2.0
-Message-ID: <20200602200119.571EE81499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/at-spi2-atk: bump to version 2.34.2
+Message-ID: <20200602200119.B385781499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=404cf023200ed7ab1a7554a280652c488570eda8
+commit: https://git.buildroot.net/buildroot/commit/?id=7b135c81e3f2514e1dc35389a953b0cfc7188786
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update mods/player_api/license.txt hash due to [1][2].
+- Remove double space in AT_SPI2_ATK_SITE
+- Add link to upstream sha256 file
+- License is LPGL-2.1+ since
+  https://gitlab.gnome.org/GNOME/at-spi2-atk/-/commit/468b527d8ad73e934dd03a2de6745995d8304435
+- Switch to meson-package
+- Add a patch to disable tests to avoid adding libxml2 dependency
+- Update indentation of hash file (two spaces)
 
-Update indentation of hash file (two spaces)
-
-[1] https://github.com/minetest/minetest_game/commit/7caa5d36f26de6ac84592216899ab10152b5aa99
-[2] https://github.com/minetest/minetest_game/commit/258332578a2b8d117f83c0a87f0c658f2e51c227
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/minetest-game/minetest-game.hash | 66 ++++++++++++++++----------------
- package/minetest-game/minetest-game.mk   |  2 +-
- 2 files changed, 34 insertions(+), 34 deletions(-)
+ .../at-spi2-atk/0001-meson-add-tests-option.patch  | 43 ++++++++++++++++++++++
+ package/at-spi2-atk/at-spi2-atk.hash               |  6 ++-
+ package/at-spi2-atk/at-spi2-atk.mk                 | 10 +++--
+ 3 files changed, 53 insertions(+), 6 deletions(-)
 
-diff --git a/package/minetest-game/minetest-game.hash b/package/minetest-game/minetest-game.hash
-index a618f32d11..5bf65bc510 100644
---- a/package/minetest-game/minetest-game.hash
-+++ b/package/minetest-game/minetest-game.hash
-@@ -1,35 +1,35 @@
- # Locally calculated
--sha256 f165fac0081bf4797cf9094282cc25034b2347b3ea94e6bb8d9329c5ee63f41b minetest-game-5.1.0.tar.gz
-+sha256  0c49fd6e310de1aba2e8cb8ae72efe0e06bb6bc8d7c5efea23bc201b6a80ce94  minetest-game-5.2.0.tar.gz
- 
--sha256 f8a254e8d5f6b3ca3873f990986e86c864f943aa5dc9bf56808c5f4bfa509db0 LICENSE.txt
--sha256 ed2afed388c470e08edc1104e4ff6d12b68a32a76b8c52d760a99d4d2d7716f3 mods/beds/license.txt
--sha256 559749ba0d269b768e1b85bdac0f8b7a0cf100ecb3edd0df8529fe57cd4bfc0d mods/binoculars/license.txt
--sha256 9e9dbe5236ba70d0337f9879b988c19c6a7b0c902eed202f775200b8bee6980d mods/boats/license.txt
--sha256 e642798b595fb41901ae695326da9a167b0bd6b4055edec2396672f5f01bb16c mods/bones/license.txt
--sha256 baf438bc48b7da1b8fc03d37d134473e1c1f33ffe2e926fa650e6d0c64872785 mods/bucket/license.txt
--sha256 01370a00e7b2157a07ee21fa4dac9cc108c7449442f612a3e55cfe18b5b03c2b mods/butterflies/license.txt
--sha256 6196d390ee0b6331766219aa82f31613fffb62476c03cf960190ab8c232b8822 mods/carts/license.txt
--sha256 b6c3aca8da2f6c272fe431740dda0a349cff419f1f72e55c6de677379fc04169 mods/creative/license.txt
--sha256 66f93a58a7418b86f2ca54e8de931f5c38d9f3e07d407c2c095b632fcda72956 mods/default/license.txt
--sha256 c0c652890fc80af8eefedbcfe1cd0d16b13b14cd1c7105c9c2bc9abe8cf1620c mods/doors/license.txt
--sha256 33d0b8726dd27c8f0c96d6dfd611e0e980bbdbb8075fac7476d055518319ec1c mods/dungeon_loot/license.txt
--sha256 011ebc82e96df3b825777e7531cb5d34cfce1f6ca27b7d3c80793c033d7c4f4e mods/dye/license.txt
--sha256 29a05b102726b9a3115f7ec06d5188dac7b1c005d8cf1c4d6dc2d5544405a45c mods/env_sounds/license.txt
--sha256 163ad77a427a21a900a8fe2333dfc82d115e8e799b7e13ca71f6bd47dcf0ec13 mods/farming/license.txt
--sha256 61f826be9adee70ef0e37f3bf4891fecc4b027a21637b32981b98220723d6f37 mods/fire/license.txt
--sha256 01370a00e7b2157a07ee21fa4dac9cc108c7449442f612a3e55cfe18b5b03c2b mods/fireflies/license.txt
--sha256 d92ac36a0235f4c02f8cfe2137d7d632bd53374c44ead97f20c152dddf475837 mods/flowers/license.txt
--sha256 ffbac006d197fcb8e36e9cdda638053ac80eef4e6446bbe36cb94bd28f54ba0b mods/game_commands/license.txt
--sha256 857f64cd62c13e27f25363584342fe049885b16c6b2392f1ebd7c3a7fb6ca436 mods/give_initial_stuff/license.txt
--sha256 dcbab8d7dc4137789958d19471807b37447fd303bced310d7d76d901eefca8ff mods/map/license.txt
--sha256 8acd4a18781a508f641b9364a0b491fccb0affd4c638b74b215238d0b0ee7b76 mods/player_api/license.txt
--sha256 0066e63d682d54a014ad3359794365a1abb87562d2b1e5e32093976d88c295b4 mods/screwdriver/license.txt
--sha256 b903866d052774e4127952690ce62ca26aa5bc4c2ddd48fceae501fa0d24ed74 mods/sethome/license.txt
--sha256 478b9944a446b4d88496d10736ddcd8ad5a3ca52f8b75f747315583d4012cb3c mods/sfinv/license.txt
--sha256 e361fc900d9203859391d35c38c3284c91600d23c1617076c641ff7e9fe10b15 mods/spawn/license.txt
--sha256 eab4c0cb318bb83c13362047a5a0fc5cb650a4e561ceb5a9124e5a1253cbc21a mods/stairs/license.txt
--sha256 e8593deed04ed4199ce9303db900f32276e0b629fd7f0089074d13370c12d00a mods/tnt/license.txt
--sha256 a0814bccd28157a160049efeac03864ff4c4dd6a34bc9cfcd3cc62de66fb156a mods/vessels/license.txt
--sha256 e9ebf1b4b170e64a0ea6e246edd03689aeb859d6560b8372a8081c004b30cb65 mods/walls/license.txt
--sha256 551b19e2c8b18c143301e090a1ceb5dc5d4ca243cad846de179d693439910816 mods/wool/license.txt
--sha256 c71155c9a68a5242223c5f814c1b9b1270492729b0ff0add770b6418bccf17c9 mods/xpanes/license.txt
-+sha256  f8a254e8d5f6b3ca3873f990986e86c864f943aa5dc9bf56808c5f4bfa509db0  LICENSE.txt
-+sha256  ed2afed388c470e08edc1104e4ff6d12b68a32a76b8c52d760a99d4d2d7716f3  mods/beds/license.txt
-+sha256  559749ba0d269b768e1b85bdac0f8b7a0cf100ecb3edd0df8529fe57cd4bfc0d  mods/binoculars/license.txt
-+sha256  9e9dbe5236ba70d0337f9879b988c19c6a7b0c902eed202f775200b8bee6980d  mods/boats/license.txt
-+sha256  e642798b595fb41901ae695326da9a167b0bd6b4055edec2396672f5f01bb16c  mods/bones/license.txt
-+sha256  baf438bc48b7da1b8fc03d37d134473e1c1f33ffe2e926fa650e6d0c64872785  mods/bucket/license.txt
-+sha256  01370a00e7b2157a07ee21fa4dac9cc108c7449442f612a3e55cfe18b5b03c2b  mods/butterflies/license.txt
-+sha256  6196d390ee0b6331766219aa82f31613fffb62476c03cf960190ab8c232b8822  mods/carts/license.txt
-+sha256  b6c3aca8da2f6c272fe431740dda0a349cff419f1f72e55c6de677379fc04169  mods/creative/license.txt
-+sha256  66f93a58a7418b86f2ca54e8de931f5c38d9f3e07d407c2c095b632fcda72956  mods/default/license.txt
-+sha256  c0c652890fc80af8eefedbcfe1cd0d16b13b14cd1c7105c9c2bc9abe8cf1620c  mods/doors/license.txt
-+sha256  33d0b8726dd27c8f0c96d6dfd611e0e980bbdbb8075fac7476d055518319ec1c  mods/dungeon_loot/license.txt
-+sha256  011ebc82e96df3b825777e7531cb5d34cfce1f6ca27b7d3c80793c033d7c4f4e  mods/dye/license.txt
-+sha256  29a05b102726b9a3115f7ec06d5188dac7b1c005d8cf1c4d6dc2d5544405a45c  mods/env_sounds/license.txt
-+sha256  163ad77a427a21a900a8fe2333dfc82d115e8e799b7e13ca71f6bd47dcf0ec13  mods/farming/license.txt
-+sha256  61f826be9adee70ef0e37f3bf4891fecc4b027a21637b32981b98220723d6f37  mods/fire/license.txt
-+sha256  01370a00e7b2157a07ee21fa4dac9cc108c7449442f612a3e55cfe18b5b03c2b  mods/fireflies/license.txt
-+sha256  d92ac36a0235f4c02f8cfe2137d7d632bd53374c44ead97f20c152dddf475837  mods/flowers/license.txt
-+sha256  ffbac006d197fcb8e36e9cdda638053ac80eef4e6446bbe36cb94bd28f54ba0b  mods/game_commands/license.txt
-+sha256  857f64cd62c13e27f25363584342fe049885b16c6b2392f1ebd7c3a7fb6ca436  mods/give_initial_stuff/license.txt
-+sha256  dcbab8d7dc4137789958d19471807b37447fd303bced310d7d76d901eefca8ff  mods/map/license.txt
-+sha256  65133ccf7fb7bf8ffe5e9bc148b193af7362bba925b15ab507da28494156297a  mods/player_api/license.txt
-+sha256  0066e63d682d54a014ad3359794365a1abb87562d2b1e5e32093976d88c295b4  mods/screwdriver/license.txt
-+sha256  b903866d052774e4127952690ce62ca26aa5bc4c2ddd48fceae501fa0d24ed74  mods/sethome/license.txt
-+sha256  478b9944a446b4d88496d10736ddcd8ad5a3ca52f8b75f747315583d4012cb3c  mods/sfinv/license.txt
-+sha256  e361fc900d9203859391d35c38c3284c91600d23c1617076c641ff7e9fe10b15  mods/spawn/license.txt
-+sha256  eab4c0cb318bb83c13362047a5a0fc5cb650a4e561ceb5a9124e5a1253cbc21a  mods/stairs/license.txt
-+sha256  e8593deed04ed4199ce9303db900f32276e0b629fd7f0089074d13370c12d00a  mods/tnt/license.txt
-+sha256  a0814bccd28157a160049efeac03864ff4c4dd6a34bc9cfcd3cc62de66fb156a  mods/vessels/license.txt
-+sha256  e9ebf1b4b170e64a0ea6e246edd03689aeb859d6560b8372a8081c004b30cb65  mods/walls/license.txt
-+sha256  551b19e2c8b18c143301e090a1ceb5dc5d4ca243cad846de179d693439910816  mods/wool/license.txt
-+sha256  c71155c9a68a5242223c5f814c1b9b1270492729b0ff0add770b6418bccf17c9  mods/xpanes/license.txt
-diff --git a/package/minetest-game/minetest-game.mk b/package/minetest-game/minetest-game.mk
-index 1e6bb4d0c4..38f46a398a 100644
---- a/package/minetest-game/minetest-game.mk
-+++ b/package/minetest-game/minetest-game.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/at-spi2-atk/0001-meson-add-tests-option.patch b/package/at-spi2-atk/0001-meson-add-tests-option.patch
+new file mode 100644
+index 0000000000..3a2aefa090
+--- /dev/null
++++ b/package/at-spi2-atk/0001-meson-add-tests-option.patch
+@@ -0,0 +1,43 @@
++From 466d04a57b32417dbf2d5e818af1b7593af5f802 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 3 May 2020 10:29:36 +0200
++Subject: [PATCH] meson: add tests option
++
++Add tests option to allow the user to build at-spi2-atk without tests,
++it is especially useful as one of the test requires libxml-2.0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/at-spi2-atk/-/merge_requests/22]
++---
++ meson.build       | 4 +++-
++ meson_options.txt | 4 ++++
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 9fce5d6..61bc93d 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -61,4 +61,6 @@ install_data('at-spi2-atk.desktop',
++ 
++ subdir('droute')
++ subdir('atk-adaptor')
++-subdir('tests')
+++if get_option('tests')
+++  subdir('tests')
+++endif
++diff --git a/meson_options.txt b/meson_options.txt
++index 24c9228..a4abdc2 100644
++--- a/meson_options.txt
+++++ b/meson_options.txt
++@@ -2,3 +2,7 @@ option('disable_p2p',
++        description: 'Disable peer-to-peer DBus connections',
++        type: 'boolean',
++        value: false)
+++option('tests',
+++       description: 'Whether to build tests',
+++       type: 'boolean',
+++       value: true)
++-- 
++2.26.2
++
+diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
+index 77c8f68e47..9c564c32af 100644
+--- a/package/at-spi2-atk/at-spi2-atk.hash
++++ b/package/at-spi2-atk/at-spi2-atk.hash
+@@ -1,3 +1,5 @@
++# From http://ftp.acc.umu.se/pub/gnome/sources/at-spi2-atk/2.34/at-spi2-atk-2.34.2.sha256sum
++sha256  901323cee0eef05c01ec4dee06c701aeeca81a314a7d60216fa363005e27f4f0  at-spi2-atk-2.34.2.tar.xz
++
+ # locally calculated
+-sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
+-sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
+index 4ef681b3b1..69d11f66bd 100644
+--- a/package/at-spi2-atk/at-spi2-atk.mk
++++ b/package/at-spi2-atk/at-spi2-atk.mk
+@@ -4,13 +4,15 @@
  #
  ################################################################################
  
--MINETEST_GAME_VERSION = 5.1.0
-+MINETEST_GAME_VERSION = 5.2.0
- MINETEST_GAME_SITE = $(call github,minetest,minetest_game,$(MINETEST_GAME_VERSION))
- MINETEST_GAME_LICENSE = LGPL-2.1+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, \
- 	CC-BY-SA-4.0, MIT, CC0 1.0, CC-BY-2.0 (mods)
+-AT_SPI2_ATK_VERSION_MAJOR = 2.26
++AT_SPI2_ATK_VERSION_MAJOR = 2.34
+ AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
+ AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
+-AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
+-AT_SPI2_ATK_LICENSE = LGPL-2.0+
++AT_SPI2_ATK_SITE = \
++	http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
++AT_SPI2_ATK_LICENSE = LGPL-2.1+
+ AT_SPI2_ATK_LICENSE_FILES = COPYING
+ AT_SPI2_ATK_INSTALL_STAGING = YES
+ AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
++AT_SPI2_ATK_CONF_OPTS = -Dtests=false
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
