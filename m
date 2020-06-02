@@ -1,37 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:50 -0000
-Subject: [Buildroot] [git commit] package/sdl2: enable SSE only if it's
- supported by the target
-Message-ID: <20200602200120.4896A805F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/x86: adds BR2_X86_CPU_HAS_3DNOW flag
+Message-ID: <20200602200120.554398256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a14a9629837a4de32a7a06a2f7b0e88958948ce5
+commit: https://git.buildroot.net/buildroot/commit/?id=f6cd56b9ce3587c3e56eaa5a8e5f44d777c41e60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sdl2/sdl2.mk | 6 ++++++
+ arch/Config.in.x86 | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 501bb4699d..4a287b66a3 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -30,6 +30,12 @@ else
- SDL2_CONF_OPTS += --disable-libudev
- endif
- 
-+ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-+SDL2_CONF_OPTS += --enable-sse
-+else
-+SDL2_CONF_OPTS += --disable-sse
-+endif
-+
- ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
- SDL2_DEPENDENCIES += directfb
- SDL2_CONF_OPTS += --enable-video-directfb
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index eb655adbca..7aae3cafb7 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -1,6 +1,8 @@
+ # i386/x86_64 cpu features
+ config BR2_X86_CPU_HAS_MMX
+ 	bool
++config BR2_X86_CPU_HAS_3DNOW
++	bool
+ config BR2_X86_CPU_HAS_SSE
+ 	bool
+ config BR2_X86_CPU_HAS_SSE2
+@@ -155,15 +157,18 @@ config BR2_x86_k6_2
+ 	bool "k6-2"
+ 	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_athlon
+ 	bool "athlon"
+ 	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_athlon_4
+ 	bool "athlon-4"
+ 	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
+ 	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_opteron
+ 	bool "opteron"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -209,6 +214,7 @@ config BR2_x86_c3
+ 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
+ 	depends on !BR2_x86_64
+ 	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_c32
+ 	bool "Via C3-2 (Nehemiah cores)"
+ 	depends on !BR2_x86_64
