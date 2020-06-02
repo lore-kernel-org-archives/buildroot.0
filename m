@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:48 -0000
-Subject: [Buildroot] [git commit] package/modem-manager: bump version to
- 1.12.8
-Message-ID: <20200602200118.32BDD82ABB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nftables: bump version to 0.9.4
+Message-ID: <20200602200118.A447D81499@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4be485fab964dcecd3cfc18b3b346610ea4bb849
+commit: https://git.buildroot.net/buildroot/commit/?id=62c1304445b10b015bc07eb6f8496fc841d2fd9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.freedesktop.org/archives/modemmanager-devel/2020-March/007729.html
-
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nftables/nftables.hash | 4 ++--
+ package/nftables/nftables.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index f9d790cd0c..2fb10368c8 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  2eb3353ee5518005c51d429308695c69d8c38cf2fd9102b04f785c03a0cc624c  ModemManager-1.12.6.tar.xz
-+sha256  68b53d0615ba0d3e2bbf386ed029dfe644a6a30a79ab8d85523527bb4e713aff  ModemManager-1.12.8.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 75fc5811db..78cffe1f9c 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index 93c816edc7..afe16ddfaf 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
+@@ -1,3 +1,3 @@
+ # From https://netfilter.org/projects/nftables/downloads.html
+-sha256	956b915ce2a7aeaff123e49006be7a0690a0964e96c062703181a36e2e5edb78	nftables-0.9.3.tar.bz2
+-sha256	c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e	COPYING
++sha256  08b8683a9db5fba980bc092b75288af98d218bbe8ab446daf2338570d0730f9a  nftables-0.9.4.tar.bz2
++sha256  c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e  COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 1eef43586c..7f797797db 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MODEM_MANAGER_VERSION = 1.12.6
-+MODEM_MANAGER_VERSION = 1.12.8
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-NFTABLES_VERSION = 0.9.3
++NFTABLES_VERSION = 0.9.4
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
