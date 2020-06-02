@@ -1,61 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2020 08:10:13 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/{fmc,
- fmlib}: change repository location
-Message-ID: <20200602062448.302F082AA9@busybox.osuosl.org>
+Date: Tue, 2 Jun 2020 08:18:12 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/sysrepo: fix SysV
+ init script
+Message-ID: <20200602062448.765B082AA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab168b72c6c4b4f1bcc2537c6e91e1b14f64363c
+commit: https://git.buildroot.net/buildroot/commit/?id=1f0116e44890257ca280e5420cb9f92a0e81d33d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Now that Freescale has been wholly swallowed into NXP, the public-facing
-git repositories that were hosting those two packages are no longer
-available.
+The current script (S51sysrepo-plugind) is not able to stop the daemon.
 
-Fortunately, they had been mirrored on Code Aurora forge (a Linux
-Foundation project, so relatively stable and trustworthy), which has the
-tags we need, and that generates the exact same archives.
+Possible options to fix the problem:
 
+A) By adding the "-m -p $PIDFILE" option to start the pid file will be
+   created but it will not contain the correct PID used by the daemon.
+   This is obviously because the daemon forks.
+B) By not starting the daemon in background (sysrepo-plugind -d) and
+   let do it by start-stop-daemon with "-b" option. But then the log
+   messages of the daemon will not longer ends in the syslog but to stderr.
+C) Start the daemon without a pidfile and stop the daemon with the
+   "-x" option.
+
+The only valid option is C to fix that.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr: introduce EXECUTABLE]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3bfe849189881d4872b5949739f91b1ed01b6622)
+(cherry picked from commit 1a14a838eaa88ae683bf8c0cb0ae6cc7e1d10d49)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fmc/fmc.mk     | 3 ++-
- package/fmlib/fmlib.mk | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/sysrepo/S51sysrepo-plugind | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
-index 2a95fec0b7..b385730138 100644
---- a/package/fmc/fmc.mk
-+++ b/package/fmc/fmc.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+diff --git a/package/sysrepo/S51sysrepo-plugind b/package/sysrepo/S51sysrepo-plugind
+index 74b68396bf..60ea3ba7a9 100644
+--- a/package/sysrepo/S51sysrepo-plugind
++++ b/package/sysrepo/S51sysrepo-plugind
+@@ -1,7 +1,7 @@
+ #!/bin/sh
  
- FMC_VERSION = fsl-sdk-v2.0
--FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-+FMC_SITE = https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmc
-+FMC_SITE_METHOD = git
- FMC_LICENSE = MIT
- FMC_LICENSE_FILES = COPYING
- FMC_DEPENDENCIES = libxml2 tclap fmlib
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index e67ab1e5de..8cb779201d 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+ DAEMON="sysrepo-plugind"
+-PIDFILE="/var/run/$DAEMON.pid"
++EXECUTABLE="/usr/bin/$DAEMON"
  
- FMLIB_VERSION = fsl-sdk-v2.0
--FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
-+FMLIB_SITE = https://source.codeaurora.org/external/qoriq/qoriq-yocto-sdk/fmlib
-+FMLIB_SITE_METHOD = git
- FMLIB_LICENSE = BSD-3-Clause, GPL-2.0+
- FMLIB_LICENSE_FILES = COPYING
- FMLIB_DEPENDENCIES = linux
+ SYSREPO_PLUGIND_ARGS=""
+ 
+@@ -10,7 +10,7 @@ SYSREPO_PLUGIND_ARGS=""
+ 
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+-	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
++	start-stop-daemon -S -q -x "$EXECUTABLE" \
+ 		-- $SYSREPO_PLUGIND_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+@@ -23,7 +23,7 @@ start() {
+ 
+ stop() {
+ 	printf 'Stopping %s: ' "$DAEMON"
+-	start-stop-daemon -K -q -p $PIDFILE
++	start-stop-daemon -K -q -x "$EXECUTABLE"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
