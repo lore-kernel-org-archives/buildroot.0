@@ -1,23 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 2 Jun 2020 23:27:33 +0200
-Subject: [Buildroot] [PATCH v1] package/fetchmail: bump version to 6.4.6
-In-Reply-To: <20200602205458.22841-1-ps.report@gmx.net>
-References: <20200602205458.22841-1-ps.report@gmx.net>
-Message-ID: <20200602232733.274aef2a@windsurf.home>
+Date: Tue, 2 Jun 2020 23:27:37 +0200
+Subject: [Buildroot] [PATCH v1] package/hwdata: bump version to 0.335
+In-Reply-To: <20200602205618.23280-1-ps.report@gmx.net>
+References: <20200602205618.23280-1-ps.report@gmx.net>
+Message-ID: <20200602232737.4fabd85f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  2 Jun 2020 22:54:58 +0200
+On Tue,  2 Jun 2020 22:56:18 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/fetchmail/fetchmail.hash | 8 ++++----
->  package/fetchmail/fetchmail.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/hwdata/hwdata.hash | 6 +++---
+>  package/hwdata/hwdata.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
