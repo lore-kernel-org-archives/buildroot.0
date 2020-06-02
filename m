@@ -1,47 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 02 Jun 2020 20:01:49 -0000
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 1.0.20200506
-Message-ID: <20200602200119.C464181499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libqmi: bump to version 1.24.12
+Message-ID: <20200602200118.C514A805F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3564bc165994cb72fbedfa6cf178c08273d56a82
+commit: https://git.buildroot.net/buildroot/commit/?id=056920f66970be77d13e7bcfa1c6c13791817986
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Synchronizes with upstream 5.7-rc5.  For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-May/005408.html
+https://lists.freedesktop.org/archives/libqmi-devel/2020-May/003296.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index d308f47a13..54af5af956 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 197ea1c007..6341bce8ea 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
 @@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005296.html
--sha256  cf166348fbb67419528e73049ce001d29131aea367fa6aef9d3e223f7251e116  wireguard-linux-compat-1.0.20200413.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005408.html
-+sha256  98a99f2b825a82d57a7213e666f1ee4f7cc02bddb09bf4908b4b09447a8f121e  wireguard-linux-compat-1.0.20200506.tar.xz
- # Locally calculated
+ # Locally computed:
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 6d90245bd2..f1b117d258 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  c2121243b5da8bcffc8f6f5ca0d7217498f94fffd115883763282c68f255fde7  libqmi-1.24.10.tar.xz
++sha256  2d3b91a2b8a882b17b16403c9ef7bdce522db4f0ceaa3e4dff76033885428b69  libqmi-1.24.12.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index cd7fafa42a..260dcd1f66 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200413
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200506
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-LIBQMI_VERSION = 1.24.10
++LIBQMI_VERSION = 1.24.12
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
