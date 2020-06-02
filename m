@@ -1,41 +1,69 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  2 Jun 2020 07:08:06 -0500
-Subject: [Buildroot] [PATCH] package/checksec: bump to 2.2.2
-Message-ID: <20200602120806.44983-1-matthew.weber@rockwellcollins.com>
+Date: Tue,  2 Jun 2020 07:21:46 -0500
+Subject: [Buildroot] [PATCH] package/libqmi: bump to 1.25.900
+Message-ID: <20200602122146.9480-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+During the configure of the updated version there was a dependency
+found on zlib and it tried to retrieve the archive.
+
+ Library z found: NO
+ Downloading zlib source from https://zlib.net/fossils/zlib-1.2.11.tar.gz
+ output/build/libglib2-2.64.2/meson.build:1885:4: ERROR: could not get
+
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/checksec/checksec.hash | 4 ++--
- package/checksec/checksec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libqmi/Config.in   | 1 +
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
-index 4543f62a36..397cfe381e 100644
---- a/package/checksec/checksec.hash
-+++ b/package/checksec/checksec.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 e50a92a2bb22d40d1aa297cd011209ab5ad0b620236dfb9a7afe4c29744260a9 checksec-2.1.0.tar.gz
--sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d LICENSE.txt
-+sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d  LICENSE.txt
-+sha256 d3c8e80bdd1cee0c2f0e60cb7a8a9482b82f651ea069e3a4453ae9a44072a632  checksec-2.2.2.tar.gz
-diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
-index ffa249663c..e46e858437 100644
---- a/package/checksec/checksec.mk
-+++ b/package/checksec/checksec.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libqmi/Config.in b/package/libqmi/Config.in
+index f1d111b7c9..95fcef32c2 100644
+--- a/package/libqmi/Config.in
++++ b/package/libqmi/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBQMI
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  libqmi is a glib-based library for talking to WWAN modems and
+ 	  devices which speak the Qualcomm MSM Interface (QMI) protocol.
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 197ea1c007..4c0c6975cc 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  c2121243b5da8bcffc8f6f5ca0d7217498f94fffd115883763282c68f255fde7  libqmi-1.24.10.tar.xz
++sha256  c7f51d2e94c05d48a1fa6647fdcffcf85abdabc81169fcf9d7c4e3b314712629  libqmi-1.25.900.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index cd7fafa42a..8a1ad5d270 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--CHECKSEC_VERSION = 2.1.0
-+CHECKSEC_VERSION = 2.2.2
- CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
- CHECKSEC_LICENSE = BSD-3-Clause
- CHECKSEC_LICENSE_FILES = LICENSE.txt
+-LIBQMI_VERSION = 1.24.10
++LIBQMI_VERSION = 1.25.900
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+ LIBQMI_LICENSE_FILES = COPYING COPYING.LIB
+ LIBQMI_INSTALL_STAGING = YES
+ 
+-LIBQMI_DEPENDENCIES = libglib2
++LIBQMI_DEPENDENCIES = libglib2 zlib
+ 
+ # we don't want -Werror
+ LIBQMI_CONF_OPTS = --enable-more-warnings=no
 -- 
 2.17.1
