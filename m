@@ -1,29 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 2 Jun 2020 23:14:57 +0200
-Subject: [Buildroot] [PATCH] configs/rock64_defconfig: remove defconfig
-In-Reply-To: <05f4af44-8cf5-989e-df94-df39b6d6bd8e@gmail.com>
-References: <20200531143452.575717-1-romain.naour@gmail.com>
- <05f4af44-8cf5-989e-df94-df39b6d6bd8e@gmail.com>
-Message-ID: <20200602231457.50033f15@windsurf.home>
+Date: Tue, 2 Jun 2020 23:15:42 +0200
+Subject: [Buildroot] [git commit] configs/orangepi_zero: bump kernel and
+ uboot versions
+Message-ID: <20200602211522.D07B882B31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 1 Jun 2020 15:55:42 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9e2bfccf4da8c47a62dccae581f0365becfdf528
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Actually this issue is not related to the uboot fork but the official 2017.09
-> (and maybe previous releases)
+Bump kernel to version 5.6 and uboot to version 2020.04 for
+orangepi-zero configuration
 
-So it feels like the solution is not really to remove that defconfig,
-correct? Because any other defconfig using 2017.09 and libpyfdt (and
-possibly some other nearby U-Boot versions) would also be affected,
-correct ?
+Signed-off-by: Gon??alo Salazar <glbsalazar@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/orangepi_zero_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
+index 354e3bfdba..2ec71dbd71 100644
+--- a/configs/orangepi_zero_defconfig
++++ b/configs/orangepi_zero_defconfig
+@@ -3,13 +3,13 @@ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
+@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
