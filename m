@@ -1,49 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 02 Jun 2020 20:01:53 -0000
-Subject: [Buildroot] [git commit] package/python-janus: bump to version 0.5.0
-Message-ID: <20200602200120.D55BA8256A@busybox.osuosl.org>
+Date: Tue, 02 Jun 2020 20:01:55 -0000
+Subject: [Buildroot] [git commit] package/libunwind: enable on AArch64
+Message-ID: <20200602200120.F11738256A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4201027cbb3e033c84d5c95db1261e10e6ab641
+commit: https://git.buildroot.net/buildroot/commit/?id=fcfdd8a80dffd1c7c4973d4e359c32372430c83f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Since version 1.2, libunwind has support for the AArch64 architecture.
+
+It builds fine on glibc, needs a small patch on musl, but doesn't
+build with uClibc (stack_t undefined).
+
+Fixes:
+
+  https://bugs.busybox.net/show_bug.cgi?id=12836
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-janus/python-janus.hash | 6 +++---
- package/python-janus/python-janus.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...sigset_t-instead-of-__sigset_t-on-AArch64.patch | 46 ++++++++++++++++++++++
+ package/libunwind/Config.in                        |  7 ++--
+ 2 files changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-janus/python-janus.hash b/package/python-janus/python-janus.hash
-index 5098769901..9108db6325 100644
---- a/package/python-janus/python-janus.hash
-+++ b/package/python-janus/python-janus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/janus/json
--md5	26283b122439fbca4ae1db18ff839b7c  janus-0.4.0.tar.gz
--sha256	cfc221683160b91b35bae1917e2957b78dad10a2e634f4f8ed119ed72e2a88ef  janus-0.4.0.tar.gz
-+md5  577c3c8939ef945c5dc00319bd59484f  janus-0.5.0.tar.gz
-+sha256  0700f5537d076521851d19b7625545c5e76f6d5792ab17984f28230adcc3b34c  janus-0.5.0.tar.gz
- # Locally computed sha256 checksums
--sha256	8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-+sha256  8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-diff --git a/package/python-janus/python-janus.mk b/package/python-janus/python-janus.mk
-index f718d0c19d..b5fa44f727 100644
---- a/package/python-janus/python-janus.mk
-+++ b/package/python-janus/python-janus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
+new file mode 100644
+index 0000000000..035bdae803
+--- /dev/null
++++ b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
+@@ -0,0 +1,46 @@
++From b9627ed74ab1f58be0de075be68d5cd2e96b8750 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 3 May 2020 23:08:54 +0200
++Subject: [PATCH] Use sigset_t instead of __sigset_t on AArch64
++
++This fixes the build with the musl C library. sigset_t is the
++documented type exposed by <signal.h>.
++
++This fix comes from Alpine Linux:
++
++  https://git.alpinelinux.org/aports/plain/main/libunwind/fix-aarch64-sigset_t.patch
++
++It was authored by Leo <thinkabit.ukim@gmail.com>.
++
++The issue has been reported upstream at
++https://github.com/libunwind/libunwind/issues/176.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/libunwind-aarch64.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/include/libunwind-aarch64.h b/include/libunwind-aarch64.h
++index 778b4362..926fbbc0 100644
++--- a/include/libunwind-aarch64.h
+++++ b/include/libunwind-aarch64.h
++@@ -34,6 +34,7 @@ extern "C" {
++ #include <inttypes.h>
++ #include <stddef.h>
++ #include <ucontext.h>
+++#include <signal.h>
++ 
++ #define UNW_TARGET      aarch64
++ #define UNW_TARGET_AARCH64      1
++@@ -192,7 +193,7 @@ typedef struct
++ 	unsigned long uc_flags;
++ 	struct ucontext *uc_link;
++ 	stack_t uc_stack;
++-	__sigset_t uc_sigmask;
+++	sigset_t uc_sigmask;
++ 	struct unw_sigcontext uc_mcontext;
++   } unw_tdep_context_t;
++ 
++-- 
++2.26.2
++
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index be576d13c4..5284b5864c 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -10,13 +10,14 @@
+ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
+-		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
++		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_mips || BR2_mipsel || \
++		 BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_sh || \
++		 BR2_i386 || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+ 		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
+ 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_MUSL && \
+-		(BR2_ARM_CPU_HAS_ARM || BR2_x86_64)
++		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_x86_64)
  
--PYTHON_JANUS_VERSION = 0.4.0
-+PYTHON_JANUS_VERSION = 0.5.0
- PYTHON_JANUS_SOURCE = janus-$(PYTHON_JANUS_VERSION).tar.gz
--PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/e2/39/41fd545b99eac81d47fe346b8c78c09a3b187ce2fd9f3c9656dfe035e39a
-+PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/9a/76/fbb89aa5d3cb5f3fec6ce74d34cf980ccd475b015d1a59cb5a14fe4cd2c5
- PYTHON_JANUS_SETUP_TYPE = setuptools
- PYTHON_JANUS_LICENSE = Apache-2.0
- PYTHON_JANUS_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_LIBUNWIND
+ 	bool "libunwind"
