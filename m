@@ -1,127 +1,107 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Tue, 2 Jun 2020 07:32:20 +0000
-Subject: [Buildroot] [PATCH v4 1/5] package/freescale-imx: Add option
- for DDR FW need
-In-Reply-To: <20200529214638.GT8737@scaer>
-References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
- <1590556068-7043-2-git-send-email-stephane.viau@oss.nxp.com>,
- <20200529214638.GT8737@scaer>
-Message-ID: <DB8PR04MB575538B11EC2AEC5D10413F5A78B0@DB8PR04MB5755.eurprd04.prod.outlook.com>
+From: fld2865 at gmail.com <fld2865@gmail.com>
+Date: Tue, 2 Jun 2020 07:54:37 +0000 (UTC)
+Subject: [Buildroot] Issue with Asus Tinkerboard Buildroot OS build
+In-Reply-To: <20200601211208.65edc396@gmx.net>
+References: <1272084788.2015886.1590685356172.ref@mail.yahoo.com>
+ <1272084788.2015886.1590685356172@mail.yahoo.com>
+ <20200528205236.3c1c0d40@gmx.net>
+ <1644632225.187471.1590836736105@mail.yahoo.com>
+ <20200601211208.65edc396@gmx.net>
+Message-ID: <884234841.71560.1591084477543@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->Stephane, All
+ Hi Peter,thanks anyway for you reply.Moerover, I'm not familiar at all how to interact with the community, so thanks also for pointing me tobuildroot at busybox.net.
+I have the feeling that the community is useful only if you already know how to interact with it, and Icould find nowhere describing how to start as a newbie in this area.
+Best regards,
+Francesco LANDE
 
-Hello Yann,
+    Il luned? 1 giugno 2020, 21:12:11 CEST, Peter Seiderer <ps.report@gmx.net> ha scritto:  
+ 
+ Hello Francesco,
 
->
->On 2020-05-27 07:07 +0200, Stephane Viau spake thusly:
->> Only some i.MX8 needs a DDR training firmware (8M, 8MM, 8MN). Some other
->> i.MX8 (QuadMax, QuadXPlus) rely on system controller for that task.
->>
->> Suggested-by: Julien Olivain <julien.olivain@oss.nxp.com>
->> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
->> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
->> ---
->> v4:
->>   - add Gary's reviewed-by
->> v3:
->>   - let the others 'select' this newly introduced option instead of
->>     'default y' it. I believe this option is still required since we
->>     only want to choose a DDR binary for the i.MX 8M platforms. (Yann/Gary)
->> v2:
->>   - introduce BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW to extend the DDR
->>     firmware selection to the whole i.MX 8M family (suggested by Gary)
->>
->> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
->> ---
->>  package/freescale-imx/Config.in | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
->> index b0c7de8..0be37ce 100644
->> --- a/package/freescale-imx/Config.in
->> +++ b/package/freescale-imx/Config.in
->> @@ -45,12 +45,15 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
->>
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
->>       bool "imx8m"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->>
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
->>       bool "imx8mm"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->>
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
->>       bool "imx8mn"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->>
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
->>       bool "imx8x"
->> @@ -96,6 +99,9 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
->>               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
->>               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
->>
->> +config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->> +     bool
->
->Now that this variable exists, I've made use of it to drive the actual
->insrallation of the DDR trainging files, instead of the concatenation
->of the corresponding platforms.
->
+re-added CC: buildroot at busybox.net
 
-Quite tempting, indeed.
-I have actually proposed this in my v2 series, in which Gary made these comments:
-[1]:
-	"
-	And here is why I'm worried the name of the previous variable might be
-	misleading. You don't only copy the DDR FW training under that
-	BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4 macro, you also copy the HDMI FW.
-	Note that the DP FW should be added as well.
-	"
-and [2]:
-	"
-	I would still keep the 'if IMX8M' around the whole block that is only
-	for iMX8M.
-	"
-... which I did agree with and reverted back to using the whole SoC list instead.
+On Sat, 30 May 2020 11:05:35 +0000 (UTC), "fld2865 at gmail.com" <fld2865@gmail.com> wrote:
 
-Also, the _ifeq_ part of this _if_ statement mentions another SoC
-(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X): it makes thus more sense to
-use the i.MX 8M SoC list in the former part, doesn't it?
+>? Hi Peter,thanks for your prompt reply, first of all.I did try to follow your suggestions, but without luck, unfortunately.More specifically:1. I upgraded the kernel to v. 5.4.40:
+> ~# uname -a
+> Linux Tinker 5.4.40 #1 SMP Sat May 30 11:28:51 CEST 2020 armv7l GNU/Linux
+> 2. I verified that in this kernel the CONFIG_DRM_PANFROST option was selected;3. I added both the KMSRO and Panfrost drivers and clean rebuilt all;
+> 4. The OS builddoes boot, but again NO "/dev/fb0" device, and xinit does not start!!!
+> Really out of mind.
+> If you would like to check my "dmesg", "Xorg.0.log" and "*_defconfig" files for your reference.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-May/283181.html
-[2] http://lists.busybox.net/pipermail/buildroot/2020-May/283442.html
+Sorry, no more help from my side possible (because I own no Tinkerboard and no deeper
+knowledge on the Tinkerboard graphic stack behind the quick google survey with
+the results below)...
 
-Thanks,
-Stephane.
+Regards,
+Peter
 
->Pelase review the commit to check I haven't totally borked the thing:
->
->    https://git.buildroot.org/buildroot/commit/?id=6bb7f3b81092e7005470c7d689a566dbc1d059c6
->
->Thanks.
->
->>  source "package/freescale-imx/imx-alsa-plugins/Config.in"
->>  source "package/freescale-imx/imx-codec/Config.in"
->>  source "package/freescale-imx/imx-kobs/Config.in"
->> --
->> 2.7.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->--
->.-----------------.--------------------.------------------.--------------------.
->|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->'------------------------------^-------^------------------^--------------------'
->
+> Thanking in advance, my best regards,
+> Francesco LANDE
+> 
+> Il gioved? 28 maggio 2020, 20:52:38 CEST, Peter Seiderer <ps.report@gmx.net> ha scritto:? 
+>? 
+>? Hello Francesco,
+> 
+> On Thu, 28 May 2020 17:02:36 +0000 (UTC), "fld2865 at gmail.com" <fld2865@gmail.com> wrote:
+> 
+> > Hello Busybox.net,I'm attempting the development of a custom Linux distribution for the Asus Tinkerboard,using Buildroot 2020.02.2.I successfully obtained a booting OS image, which does communicate via serial and SSH,but doesn't output ANYTHING on the HDMI video output.I added all the packages I know of, including X11 stack and OpenGLES libs, but I'm not sureabout which video driver to use. I tried with xf86-video-fbdev and xf86-video-vesa, but withoutsuccess.
+> > The net result is that when I try to load the Xserver through startx, I get the following result:
+> > /home# startx
+> > xauth:? file //.serverauth.255 does not exist
+> > xauth:? file //.Xauthority does not exist
+> > 
+> > 
+> > X.Org X Server 1.20.8
+> > X Protocol Version 11, Revision 0
+> > Build Operating System: Linux 5.4.0-31-generic x86_64
+> > Current Operating System: Linux Tinker 5.0.0 #1 SMP Thu May 28 16:06:04 CEST 2020 armv7l
+> > Kernel command line: console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
+> > Build Date: 28 May 2020? 03:26:17PM
+> > 
+> > Current version of pixman: 0.38.4
+> > ??????? Before reporting problems, check http://wiki.x.org
+> > ??????? to make sure that you have the latest version.
+> > Markers: (--) probed, (**) from config file, (==) default setting,
+> > ??????? (++) from command line, (!!) notice, (II) informational,
+> > ??????? (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
+> > (==) Log file: "/var/log/Xorg.0.log", Time: Thu Jan? 1 01:10:01 1970
+> > (==) Using default built-in configuration (21 lines)
+> > (EE)
+> > Fatal server error:
+> > (EE) no screens found(EE)
+> > (EE)
+> > Please consult the The X.Org Foundation support
+> > ???????? at http://wiki.x.org
+> > ?for help.
+> > (EE) Please also check the log file at "/var/log/Xorg.0.log" for additional information.
+> > (EE)
+> > (EE) Server terminated with error (1). Closing log file.
+> > 
+> > 
+> > /var/log/Xorg.0.log basically says that there's no /dev/fb pseudo file, which is true, so I thinkI'm using the wrong video driver.Any hint about how could I address this issue?? 
+> 
+> Most probably no graphic enabled in the kernel config, tinkerboard uses an Mali-T760 GPU ([1]),
+> there is a official mixed open/closed source graphic stack available I think, or the complete
+> open source graphic stack 'panfrost' ([2]), see? [3] for a starting point...
+> 
+> Regards,
+> Peter
+> 
+> [1] https://en.wikipedia.org/wiki/Asus_Tinker_Board
+> [2] https://panfrost.freedesktop.org/
+> [3] https://panfrost.freedesktop.org/building-panfrost-mesa.html
+> 
+> > Thanks & best regards,
+> > Francesco LANDE? 
+>? 
+  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200602/d4325d46/attachment.html>
