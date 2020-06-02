@@ -1,78 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Jun 2020 11:32:28 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/linux-headers:
- add support for CIP kernel versions with same-as-kernel
-Message-ID: <20200602093949.16220822B4@busybox.osuosl.org>
+Date: Tue, 2 Jun 2020 11:33:36 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libusb-compat:
+ set LIBUSB_1_0_SONAME
+Message-ID: <20200602093949.25F888179A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e57562c7a20d2cdaa6795857ace7f0d841873f6
+commit: https://git.buildroot.net/buildroot/commit/?id=964d4f2faafaf9233ed9b6c0bc2762f29f23c013
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-When the linux-headers are configured to use the same source as the
-kernel (BR2_KERNEL_HEADERS_AS_KERNEL), and the kernel is configured
-to be one of the two CIP versions (BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-or BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION), the build fails if the
-kernel sources are not already downloaded:
+LIBUSB_1_0_SONAME is detected since version 0.1.6 and
+https://github.com/libusb/libusb-compat-0.1/commit/b6f5a2fe12ca19d658d7180e106254b31cf1f8f5
 
-    $ cat defconfig
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_LATEST_CIP_VERSION=y
-    $ make defconfig BR2_DEFCONFIG=$pwd)/defconfig
-    $ make linux-headers-source
+The detection mechanism is based on sed, here are the more relevant
+parts:
 
-    >>> linux-headers 4.19.118-cip25 Downloading
-    --2020-05-13 19:28:44--  https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.19.118-cip25.tar.xz
-    Resolving cdn.kernel.org (cdn.kernel.org)... 2a04:4e42:1d::432, 151.101.121.176
-    Connecting to cdn.kernel.org (cdn.kernel.org)|2a04:4e42:1d::432|:443... connected.
-    HTTP request sent, awaiting response... 404 Not Found
-    2020-05-13 19:28:45 ERROR 404: Not Found.
+ shrext_regexp=`echo "$shrext_cmds" | sed 's/\./\\\\./'`
+[...]
+ [AS_VAR_SET([ac_Lib_SONAME], [`ldd conftest$ac_exeext | grep 'lib[$2]'$shrext_regexp | sed 's/^@<:@ \t@:>@*lib[$2]'$shrext_regexp'/lib[$2]'$shrext_regexp'/;s/@<:@ \t@:>@.*$//'`])])
 
-    make[1]: *** [package/pkg-generic.mk:171: /home/ymorin/dev/buildroot/O/build/linux-headers-4.19.118-cip25/.stamp_downloaded] Error 1
-    make: *** [Makefile:23: _all] Error 2
+However, this mechanism is broken with sed 4.7 and will return the
+following 'silent' error:
 
-We fix that by adding yet another duplication of information out of
-the linux.mk, to use the CIP-specific git tree where to get the
-archives as snapshots.
+checking for SONAME of libusb-1.0... sed: -e expression #1, char 40: Invalid back reference
+unknown
 
+Moreover, it also raises the following build failure on one of the
+autobuilder because an empty line is added to LIBUSB_1_0_SONAME:
+
+checking for SONAME of libusb-1.0... checking
+libusb-1.0.so.0
+checking for GNU extensions of errno.h... no
+configure: WARNING: cache variable au_cv_lib_soname_LIBUSB_1_0 contains a newline
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating libusb.pc
+config.status: creating libusb-config
+config.status: creating Makefile
+config.status: creating libusb/Makefile
+config.status: creating examples/Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing default commands
+configure: WARNING: unrecognized options: --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6, --disable-nls
+configure: WARNING: cache variable au_cv_lib_soname_LIBUSB_1_0 contains a newline
+[7m>>> libusb-compat 0.1.7 Building[27m
+PATH="/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin:/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/sbin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1/usr/local/bin:/accts/mlweber1/bin:/accts/mlweber1/libexec/git-core:/accts/mlweber1/usr/bin:/accts/mlweber1
+ /usr/local/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"  /usr/bin/make -j8  -C /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/libusb-compat-0.1.7/
+make[1]: Entering directory `/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/build/libusb-compat-0.1.7'
+Makefile:284: *** missing separator.  Stop.
+
+We could patch patch m4/au_check_lib_soname.m4 to fix the mechanism
+however this is difficult without reproducing the autobuilder failure
+and upstream seems dead so just set LIBUSB_1_0_SONAME
+
+Fixes:
+ - http://autobuild.buildroot.org/results/12d771d85d30594929cfe3e1c783fc70857e7f5f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: extract the actual SONAME from the library]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d25a5724c02a79049b9cf17a24c5f5c0ff010b2a)
+(cherry picked from commit 3a9261ddd917007e19b56b4bfe48ccc0861dd716)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/linux-headers.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libusb-compat/libusb-compat.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 80a077537b..4c3cb716b3 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -17,6 +17,7 @@ LINUX_HEADERS_CUSTOM_SVN = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_SVN))
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
- LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_HEADERS_CIP = $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION)
- else # ! BR2_KERNEL_HEADERS_AS_KERNEL
- LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
- LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
-@@ -25,6 +26,7 @@ LINUX_HEADERS_CUSTOM_SVN =
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
- LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
-+LINUX_HEADERS_CIP =
- endif # BR2_KERNEL_HEADERS_AS_KERNEL
+diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
+index 61d4c203e7..0ad6c6cbd6 100644
+--- a/package/libusb-compat/libusb-compat.mk
++++ b/package/libusb-compat/libusb-compat.mk
+@@ -15,5 +15,11 @@ LIBUSB_COMPAT_CONFIG_SCRIPTS = libusb-config
+ LIBUSB_COMPAT_LICENSE = LGPL-2.1+
+ LIBUSB_COMPAT_LICENSE_FILES = COPYING
  
- # Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
-@@ -43,6 +45,9 @@ else ifeq ($(LINUX_HEADERS_CUSTOM_SVN),y)
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
- LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
- LINUX_HEADERS_SITE_METHOD = svn
-+else ifeq ($(LINUX_HEADERS_CIP),y)
-+LINUX_HEADERS_SOURCE = linux-cip-$(LINUX_HEADERS_VERSION).tar.gz
-+LINUX_HEADERS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/cip/linux-cip.git/snapshot
- else ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
- # Since 4.12-rc1, -rc kernels are generated from cgit. This also works for
- # older -rc kernels.
++ifeq ($(BR2_STATIC_LIBS),)
++LIBUSB_COMPAT_CONF_ENV += \
++	LIBUSB_1_0_SONAME=`LC_ALL=C readelf -d $(STAGING_DIR)/usr/lib/libusb-1.0.so \
++			   |sed -r -e '/\(SONAME\)/!d; s/.*\[(.+)\]$$/\1/'`
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
