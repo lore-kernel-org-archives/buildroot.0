@@ -1,136 +1,210 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 02 Jun 2020 20:01:56 -0000
-Subject: [Buildroot] [git commit] package/python-markdown2: fix
- CVE-2020-11888
-Message-ID: <20200602200120.9E0668256A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 2 Jun 2020 22:03:47 +0200
+Subject: [Buildroot] [PATCH v4 1/5] package/freescale-imx: Add option
+ for DDR FW need
+In-Reply-To: <DB8PR04MB575538B11EC2AEC5D10413F5A78B0@DB8PR04MB5755.eurprd04.prod.outlook.com>
+References: <1590556068-7043-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1590556068-7043-2-git-send-email-stephane.viau@oss.nxp.com>
+ <20200529214638.GT8737@scaer>
+ <DB8PR04MB575538B11EC2AEC5D10413F5A78B0@DB8PR04MB5755.eurprd04.prod.outlook.com>
+Message-ID: <20200602200347.GJ8737@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=604fe088060c1c3b348f007459c40f51ed23cb0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Stephane, All,
 
-python-markdown2 through 2.3.8 allows XSS because element names are
-mishandled unless a \w+ match succeeds. For example, an attack might use
-elementname@ or elementname- with an onclick attribute.
+On 2020-06-02 07:32 +0000, Stephane Viau (OSS) spake thusly:
+> >On 2020-05-27 07:07 +0200, Stephane Viau spake thusly:
+> >> Only some i.MX8 needs a DDR training firmware (8M, 8MM, 8MN). Some other
+> >> i.MX8 (QuadMax, QuadXPlus) rely on system controller for that task.
+[--SNIP--]
+> >>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+> >>       bool "imx8m"
+> >> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+> >>
+> >>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+> >>       bool "imx8mm"
+> >> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+> >>
+> >>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+> >>       bool "imx8mn"
+> >> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+> >>
+> >>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+> >>       bool "imx8x"
+> >> @@ -96,6 +99,9 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+> >>               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+> >>               BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+> >>
+> >> +config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
+> >> +     bool
+> >
+> >Now that this variable exists, I've made use of it to drive the actual
+> >insrallation of the DDR trainging files, instead of the concatenation
+> >of the corresponding platforms.
+> Quite tempting, indeed.
+> I have actually proposed this in my v2 series, in which Gary made these comments:
+> [1]:
+> 	"
+> 	And here is why I'm worried the name of the previous variable might be
+> 	misleading. You don't only copy the DDR FW training under that
+> 	BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4 macro, you also copy the HDMI FW.
+> 	Note that the DP FW should be added as well.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...te-tags-with-punctuation-after-as-part-of.patch | 53 ++++++++++++++++++++++
- .../0002-Better-fix-for-issue-348.patch            | 32 +++++++++++++
- package/python-markdown2/python-markdown2.mk       |  4 ++
- 3 files changed, 89 insertions(+)
+The macro copying the HDMI FW can indeed be moved out of the conditional
+block, indeed. But this commit 6bb7f3b8109 I amended when applying does
+not change the behaviour at all.
 
-diff --git a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-new file mode 100644
-index 0000000000..ee980e22e8
---- /dev/null
-+++ b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-@@ -0,0 +1,53 @@
-+From 9144d0fc5d5249cc4d81287ee79091806e6dde52 Mon Sep 17 00:00:00 2001
-+From: Gareth Simpson <gareth.simpson@zoodigital.com>
-+Date: Fri, 1 May 2020 19:31:21 +0100
-+Subject: [PATCH] Fix for issue 348 - incomplete tags with punctuation after as
-+ part of the tag name are a source of XSS
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/trentm/python-markdown2/commit/9144d0fc5d5249cc4d81287ee79091806e6dde52]
-+---
-+ lib/markdown2.py                           | 2 +-
-+ test/tm-cases/issue348_incomplete_tag.html | 1 +
-+ test/tm-cases/issue348_incomplete_tag.opts | 1 +
-+ test/tm-cases/issue348_incomplete_tag.text | 1 +
-+ 4 files changed, 4 insertions(+), 1 deletion(-)
-+ create mode 100644 test/tm-cases/issue348_incomplete_tag.html
-+ create mode 100644 test/tm-cases/issue348_incomplete_tag.opts
-+ create mode 100644 test/tm-cases/issue348_incomplete_tag.text
-+
-+diff --git a/lib/markdown2.py b/lib/markdown2.py
-+index 3a5d5d9..636bf07 100755
-+--- a/lib/markdown2.py
-++++ b/lib/markdown2.py
-+@@ -2164,7 +2164,7 @@ def _encode_amps_and_angles(self, text):
-+         text = self._naked_gt_re.sub('&gt;', text)
-+         return text
-+ 
-+-    _incomplete_tags_re = re.compile("<(/?\w+[\s/]+?)")
-++    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
-+ 
-+     def _encode_incomplete_tags(self, text):
-+         if self.safe_mode not in ("replace", "escape"):
-+diff --git a/test/tm-cases/issue348_incomplete_tag.html b/test/tm-cases/issue348_incomplete_tag.html
-+new file mode 100644
-+index 0000000..46059cc
-+--- /dev/null
-++++ b/test/tm-cases/issue348_incomplete_tag.html
-+@@ -0,0 +1 @@
-++<p>&lt;lol@/ //id="pwn"//onclick="alert(1)"//<strong>abc</strong></p>
-+diff --git a/test/tm-cases/issue348_incomplete_tag.opts b/test/tm-cases/issue348_incomplete_tag.opts
-+new file mode 100644
-+index 0000000..ad487c0
-+--- /dev/null
-++++ b/test/tm-cases/issue348_incomplete_tag.opts
-+@@ -0,0 +1 @@
-++{"safe_mode": "escape"}
-+diff --git a/test/tm-cases/issue348_incomplete_tag.text b/test/tm-cases/issue348_incomplete_tag.text
-+new file mode 100644
-+index 0000000..bb4a0de
-+--- /dev/null
-++++ b/test/tm-cases/issue348_incomplete_tag.text
-+@@ -0,0 +1 @@
-++<lol@/ //id="pwn"//onclick="alert(1)"//**abc**
-diff --git a/package/python-markdown2/0002-Better-fix-for-issue-348.patch b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
-new file mode 100644
-index 0000000000..127bb51da2
---- /dev/null
-+++ b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
-@@ -0,0 +1,32 @@
-+From 0c0543846fa54281e2269b0bff841a0b9ffe23fe Mon Sep 17 00:00:00 2001
-+From: Gareth Simpson <gareth.simpson@zoodigital.com>
-+Date: Sat, 2 May 2020 21:22:36 +0100
-+Subject: [PATCH] Better fix for issue 348
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/trentm/python-markdown2/commit/0c0543846fa54281e2269b0bff841a0b9ffe23fe]
-+---
-+ lib/markdown2.py | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/markdown2.py b/lib/markdown2.py
-+index 636bf07..be86502 100755
-+--- a/lib/markdown2.py
-++++ b/lib/markdown2.py
-+@@ -2164,11 +2164,14 @@ def _encode_amps_and_angles(self, text):
-+         text = self._naked_gt_re.sub('&gt;', text)
-+         return text
-+ 
-+-    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
-++    _incomplete_tags_re = re.compile("<(/?\w+?(?!\w).+?[\s/]+?)")
-+ 
-+     def _encode_incomplete_tags(self, text):
-+         if self.safe_mode not in ("replace", "escape"):
-+             return text
-++            
-++        if text.endswith(">"):
-++            return text  # this is not an incomplete tag, this is a link in the form <http://x.y.z>
-+ 
-+         return self._incomplete_tags_re.sub("&lt;\\1", text)
-+ 
-diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-index d8b946e140..f508c17a20 100644
---- a/package/python-markdown2/python-markdown2.mk
-+++ b/package/python-markdown2/python-markdown2.mk
-@@ -11,4 +11,8 @@ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
- PYTHON_MARKDOWN2_LICENSE = MIT
- PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
- 
-+# 0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-+# 0002-Better-fix-for-issue-348.patch
-+PYTHON_MARKDOWN2_IGNORE_CVES += CVE-2020-11888
-+
- $(eval $(python-package))
+> and [2]:
+> 	"
+> 	I would still keep the 'if IMX8M' around the whole block that is only
+> 	for iMX8M.
+> 	"
+> ... which I did agree with and reverted back to using the whole SoC list instead.
+
+Ah, but that's not what I discussed with Gary on IRC the other day when
+he asked for my input. I suggested exactly to switch to using the new
+variable.
+
+> Also, the _ifeq_ part of this _if_ statement mentions another SoC
+> (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X): it makes thus more sense to
+> use the i.MX 8M SoC list in the former part, doesn't it?
+
+Oh, I see what you mean. I also had a mixed feelings about it, but this
+is not so much an issue. Semantically, that is OK (IMHO) to have
+succeeding conditionals that test various things...
+
+But looking at the big picture again, I see potential for a further
+simple (semantic) cleanup:
+
+    diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+    index 9fd1c54b48..3239e432da 100644
+    --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+    +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+    @@ -18,7 +18,16 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+     	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+     endef
+     
+    +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+    +FIRMWARE_IMX_INSTALL_IMAGES = YES
+    +define FIRMWARE_IMX_PREPARE_HDMI_FW
+    +	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+    +		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+    +endef
+    +endif # PLATFORM_IMX8M
+    +
+     ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW),y)
+    +FIRMWARE_IMX_INSTALL_TARGET = NO
+     FIRMWARE_IMX_INSTALL_IMAGES = YES
+     
+     ifeq ($(BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4),y)
+    @@ -46,6 +55,8 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+     		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+     	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+     endef
+    +
+    +# else DRFW_LPDDR4
+     else ifeq ($(BR2_PACKAGE_FIRMWARE_DDRFW_DDR4),y)
+     FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+     define FIRMWARE_IMX_PREPARE_DDR4_FW
+    @@ -71,28 +82,19 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+     		$(BINARIES_DIR)/ddr4_201810_fw.bin
+     	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+     endef
+    -endif
+    +endif # DDRFW_LPDDR4 || DDRFW_DDR4
+     
+    -ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+    -define FIRMWARE_IMX_PREPARE_HDMI_FW
+    -	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+    -		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+    -endef
+    -endif
+    -
+    -define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+    -	$(FIRMWARE_IMX_PREPARE_DDR_FW)
+    -	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
+    -endef
+    +# else NEED_DDR_FW
+     else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+    -define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+    +define FIRMWARE_IMX_INSTALL_TARGET_CMDS_IMX8X
+     	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
+     		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_dec.bin
+     	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_enc.bin \
+     		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_enc.bin
+     endef
+    -else
+    -define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+    +
+    +else # NEED_DDR_FW || PLATFORM_IMX8X
+    +define FIRMWARE_IMX_INSTALL_TARGET_CMDS_GENERIC
+     	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+     	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+     		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
+    @@ -101,6 +103,16 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+     	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+     		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+     endef
+    -endif
+    +endif # NEED_DDR_FW || PLATFORM_IMX8X || the rest
+    +
+    +define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+    +	$(FIRMWARE_IMX_INSTALL_TARGET_CMDS_IM	X8X)
+    +	$(FIRMWARE_IMX_INSTALL_TARGET_CMDS_GENERIC)
+    +endef
+    +
+    +define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+    +	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
+    +	$(FIRMWARE_IMX_PREPARE_DDR_FW)
+    +endef
+     
+     $(eval $(generic-package))
+
+Care to look at that?
+
+Regards,
+Yann E. MORIN.
+
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-May/283181.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-May/283442.html
+> 
+> Thanks,
+> Stephane.
+> 
+> >Pelase review the commit to check I haven't totally borked the thing:
+> >
+> >    https://git.buildroot.org/buildroot/commit/?id=6bb7f3b81092e7005470c7d689a566dbc1d059c6
+> >
+> >Thanks.
+> >
+> >>  source "package/freescale-imx/imx-alsa-plugins/Config.in"
+> >>  source "package/freescale-imx/imx-codec/Config.in"
+> >>  source "package/freescale-imx/imx-kobs/Config.in"
+> >> --
+> >> 2.7.4
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >--
+> >.-----------------.--------------------.------------------.--------------------.
+> >|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> >| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> >| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> >| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> >'------------------------------^-------^------------------^--------------------'
+> >
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
