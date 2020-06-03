@@ -1,7 +1,8 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  3 Jun 2020 13:13:06 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.64.3
-Message-ID: <20200603201306.1298317-1-aduskett@gmail.com>
+Date: Wed,  3 Jun 2020 13:15:44 -0700
+Subject: [Buildroot] [PATCH 1/1] package/qemu: remove uneeded upstream
+ patches
+Message-ID: <20200603201544.1299103-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +11,150 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
+These patches are already applied in version 5.0
+
+Fixes:
+http://autobuild.buildroot.net/results/0adfb031c243709b0bac71599ed419b64cc514a4
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 6 +++---
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...fix-crash-when-compiling-with-uClibc.patch | 43 ----------
+ ...emi-fix-SYS_OPEN-to-return-nonzero-f.patch | 78 -------------------
+ 2 files changed, 121 deletions(-)
+ delete mode 100644 package/qemu/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+ delete mode 100644 package/qemu/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch
 
-diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
-index 6d267e464e..4f06ad588d 100644
---- a/package/libglib2/0003-remove-cpp-requirement.patch
-+++ b/package/libglib2/0003-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.64.2',
-+   version : '2.64.3',
-    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-    meson_version : '>= 0.49.2',
- @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index c275f1f86b..4e9b25165e 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.64/glib-2.64.2.sha256sum
--sha256  9a2f21ed8f13b9303399de13a0252b7cbcede593d26971378ec6cb90e87f2277  glib-2.64.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.64/glib-2.64.3.sha256sum
-+sha256  fe9cbc97925d14c804935f067a3ad77ef55c0bbe9befe68962318f5a767ceb22  glib-2.64.3.tar.xz
- # License files, locally calculated
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 7106124d72..d1c75d8a43 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGLIB2_VERSION_MAJOR = 2.64
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+diff --git a/package/qemu/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch b/package/qemu/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
+deleted file mode 100644
+index d1b9e35709..0000000000
+--- a/package/qemu/0002-util-cacheinfo-fix-crash-when-compiling-with-uClibc.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From d82b8540ecaf3cb09a033e4971d8645d3343211e Mon Sep 17 00:00:00 2001
+-From: Carlos Santos <casantos@redhat.com>
+-Date: Wed, 16 Oct 2019 22:27:30 -0300
+-Subject: [PATCH] util/cacheinfo: fix crash when compiling with uClibc
+-
+-uClibc defines _SC_LEVEL1_ICACHE_LINESIZE and _SC_LEVEL1_DCACHE_LINESIZE
+-but the corresponding sysconf calls returns -1, which is a valid result,
+-meaning that the limit is indeterminate.
+-
+-Handle this situation using the fallback values instead of crashing due
+-to an assertion failure.
+-
+-Signed-off-by: Carlos Santos <casantos@redhat.com>
+----
+- util/cacheinfo.c | 10 ++++++++--
+- 1 file changed, 8 insertions(+), 2 deletions(-)
+-
+-diff --git a/util/cacheinfo.c b/util/cacheinfo.c
+-index ea6f3e99bf..d94dc6adc8 100644
+---- a/util/cacheinfo.c
+-+++ b/util/cacheinfo.c
+-@@ -93,10 +93,16 @@ static void sys_cache_info(int *isize, int *dsize)
+- static void sys_cache_info(int *isize, int *dsize)
+- {
+- # ifdef _SC_LEVEL1_ICACHE_LINESIZE
+--    *isize = sysconf(_SC_LEVEL1_ICACHE_LINESIZE);
+-+    int tmp_isize = (int) sysconf(_SC_LEVEL1_ICACHE_LINESIZE);
+-+    if (tmp_isize > 0) {
+-+        *isize = tmp_isize;
+-+    }
+- # endif
+- # ifdef _SC_LEVEL1_DCACHE_LINESIZE
+--    *dsize = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+-+    int tmp_dsize = (int) sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+-+    if (tmp_dsize > 0) {
+-+        *dsize = tmp_dsize;
+-+    }
+- # endif
+- }
+- #endif /* sys_cache_info */
+--- 
+-2.18.1
+-
+diff --git a/package/qemu/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch b/package/qemu/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch
+deleted file mode 100644
+index 46652d8298..0000000000
+--- a/package/qemu/0003-target-arm-arm-semi-fix-SYS_OPEN-to-return-nonzero-f.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 318f83f387678a3c0a2a729b506613011c6830b2 Mon Sep 17 00:00:00 2001
+-From: Masahiro Yamada <masahiroy@kernel.org>
+-Date: Fri, 17 Jan 2020 14:09:30 +0000
+-Subject: [PATCH] target/arm/arm-semi: fix SYS_OPEN to return nonzero
+- filehandle
+-
+-According to the specification "Semihosting for AArch32 and Aarch64",
+-the SYS_OPEN operation should return:
+-
+- - A nonzero handle if the call is successful
+- - -1 if the call is not successful
+-
+-So, it should never return 0.
+-
+-Prior to commit 35e9a0a8ce4b ("target/arm/arm-semi: Make semihosting
+-code hand out its own file descriptors"), the guest fd matched to the
+-host fd. It returned a nonzero handle on success since the fd 0 is
+-already used for stdin.
+-
+-Now that the guest fd is the index of guestfd_array, it starts from 0.
+-
+-I noticed this issue particularly because Trusted Firmware-A built with
+-PLAT=qemu is no longer working. Its io_semihosting driver only handles
+-a positive return value as a valid filehandle.
+-
+-Basically, there are two ways to fix this:
+-
+-  - Use (guestfd - 1) as the index of guestfs_arrary. We need to insert
+-    increment/decrement to convert the guestfd and the array index back
+-    and forth.
+-
+-  - Keep using guestfd as the index of guestfs_array. The first entry
+-    of guestfs_array is left unused.
+-
+-I thought the latter is simpler. We end up with wasting a small piece
+-of memory for the unused first entry of guestfd_array, but this is
+-probably not a big deal.
+-
+-Fixes: 35e9a0a8ce4b ("target/arm/arm-semi: Make semihosting code hand out its own file descriptors")
+-Cc: qemu-stable at nongnu.org
+-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+-Reviewed-by: Richard Henderson <richard.henderson@linaro.org>
+-Message-id: 20200109041228.10131-1-masahiroy at kernel.org
+-Signed-off-by: Peter Maydell <peter.maydell@linaro.org>
+-
+-(cherry picked from commit 21bf9b06cb6d07c6cc437dfd47b47b28c2bb79db)
+-Signed-off-by: Adrien Grassein <adrien.grassein@smile.fr>
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- target/arm/arm-semi.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/target/arm/arm-semi.c b/target/arm/arm-semi.c
+-index 6f7b6d801b..4275dfc345 100644
+---- a/target/arm/arm-semi.c
+-+++ b/target/arm/arm-semi.c
+-@@ -144,7 +144,8 @@ static int alloc_guestfd(void)
+-         guestfd_array = g_array_new(FALSE, TRUE, sizeof(GuestFD));
+-     }
+- 
+--    for (i = 0; i < guestfd_array->len; i++) {
+-+    /* SYS_OPEN should return nonzero handle on success. Start guestfd from 1 */
+-+    for (i = 1; i < guestfd_array->len; i++) {
+-         GuestFD *gf = &g_array_index(guestfd_array, GuestFD, i);
+- 
+-         if (gf->type == GuestFDUnused) {
+-@@ -168,7 +169,7 @@ static GuestFD *do_get_guestfd(int guestfd)
+-         return NULL;
+-     }
+- 
+--    if (guestfd < 0 || guestfd >= guestfd_array->len) {
+-+    if (guestfd <= 0 || guestfd >= guestfd_array->len) {
+-         return NULL;
+-     }
+- 
+--- 
+-2.24.1
+-
 -- 
 2.26.2
