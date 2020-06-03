@@ -1,235 +1,348 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Jun 2020 21:55:05 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/lcms2: bump to version 2.10
-Message-ID: <20200603195505.1151112-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Jun 2020 21:44:12 +0200
+Subject: [Buildroot] [git commit] package/erofs-utils: bump version to 1.1
+Message-ID: <20200603195816.942648263E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version)
-- Update indentation in hash file (two spaces)
-- Update hash of COPYING (update in year:
-  https://github.com/mm2/Little-CMS/commit/4ba97f4b686c9988b7632638f915ead64fb6cd69)
+commit: https://git.buildroot.net/buildroot/commit/?id=4563ddc011d16da6d460d2ce7a88df9d07523d3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- removed 0001-erofs-utils-fix-configure.ac.patch [1];
+- removed 0002-erofs-utils-avoid-_LARGEFILE64_SOURCE-and-_GNU_SOURC.patch [2];
+- removed 0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch [3];
+- removed 0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch [4];
+- add host-pkgconf, util-linux dependencies for uuid support.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=eefd95b37e1042992cb07bec1ac3f6dbe199d8f0
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=d4a161552becafeb1ebb98ec7e28675cb25fc548
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=989947348dddf03a8292b5e32bca538f0a325cd9
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/patch/?id=bdbabe54112d04c05819ebebf4e6f88ae863d436
+
+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Drop GPL-3.0+ for fast floating plug-in as it is not built
+ .../0001-erofs-utils-fix-configure.ac.patch        | 33 ----------
+ ...-avoid-_LARGEFILE64_SOURCE-and-_GNU_SOURC.patch | 58 -----------------
+ ...s-avoid-using-old-compatibility-type-uint.patch | 75 ----------------------
+ ...-erofs-utils-avoid-PAGE_SIZE-redefinition.patch | 57 ----------------
+ package/erofs-utils/Config.in                      |  2 +
+ package/erofs-utils/Config.in.host                 |  1 +
+ package/erofs-utils/erofs-utils.hash               |  2 +-
+ package/erofs-utils/erofs-utils.mk                 |  7 +-
+ 8 files changed, 8 insertions(+), 227 deletions(-)
 
- ...0001-Upgrade-Visual-studio-2017-15.8.patch | 174 ------------------
- package/lcms2/lcms2.hash                      |   8 +-
- package/lcms2/lcms2.mk                        |   2 +-
- 3 files changed, 5 insertions(+), 179 deletions(-)
- delete mode 100644 package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch
-
-diff --git a/package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch b/package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch
+diff --git a/package/erofs-utils/0001-erofs-utils-fix-configure.ac.patch b/package/erofs-utils/0001-erofs-utils-fix-configure.ac.patch
 deleted file mode 100644
-index c43d934342..0000000000
---- a/package/lcms2/0001-Upgrade-Visual-studio-2017-15.8.patch
+index 7ced565995..0000000000
+--- a/package/erofs-utils/0001-erofs-utils-fix-configure.ac.patch
 +++ /dev/null
-@@ -1,174 +0,0 @@
--From 768f70ca405cd3159d990e962d54456773bb8cf8 Mon Sep 17 00:00:00 2001
--From: Marti Maria <info@littlecms.com>
--Date: Wed, 15 Aug 2018 20:07:56 +0200
--Subject: [PATCH] Upgrade Visual studio 2017 15.8
+@@ -1,33 +0,0 @@
+-From eefd95b37e1042992cb07bec1ac3f6dbe199d8f0 Mon Sep 17 00:00:00 2001
+-From: Haruue Icymoon <i@haruue.moe>
+-Date: Fri, 22 Nov 2019 16:58:59 +0800
+-Subject: [PATCH] erofs-utils: fix configure.ac
 -
--- Upgrade to 15.8
--- Add check on CGATS memory allocation (thanks to Quang Nguyen for
--pointing out this)
+-./configure will fail when --with-lz4-libdir is not set, since
+-$with_lz4_libdir will be an empty string and generate an empty -L
+-into LDFLAGS. This patch fixes it.
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Link: https://lore.kernel.org/r/20191122085859.GA2414688 at usamimi.host.haruue.net
+-Signed-off-by: Haruue Icymoon <i@haruue.moe>
+-Fixes: d51c2d043773 ("erofs-utils: introduce lz4/lz4hc compression algorithm")
+-Signed-off-by: Gao Xiang <gaoxiang25@huawei.com>
 ----
-- Projects/VC2017/jpegicc/jpegicc.vcxproj           |  1 +
-- Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj       |  2 +-
-- Projects/VC2017/lcms2_static/lcms2_static.vcxproj |  2 +-
-- Projects/VC2017/linkicc/linkicc.vcxproj           |  2 +-
-- Projects/VC2017/psicc/psicc.vcxproj               |  2 +-
-- Projects/VC2017/testbed/testbed.vcxproj           |  2 +-
-- Projects/VC2017/tiffdiff/tiffdiff.vcxproj         |  2 +-
-- Projects/VC2017/tifficc/tifficc.vcxproj           |  2 +-
-- Projects/VC2017/transicc/transicc.vcxproj         |  1 +
-- src/cmscgats.c                                    | 14 ++++++++++----
-- 10 files changed, 19 insertions(+), 11 deletions(-)
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/Projects/VC2017/jpegicc/jpegicc.vcxproj b/Projects/VC2017/jpegicc/jpegicc.vcxproj
--index ab26a53..39cfd00 100644
----- a/Projects/VC2017/jpegicc/jpegicc.vcxproj
--+++ b/Projects/VC2017/jpegicc/jpegicc.vcxproj
--@@ -22,6 +22,7 @@
--     <ProjectGuid>{62812507-F926-4968-96A9-17678460AD90}</ProjectGuid>
--     <RootNamespace>jpegicc</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj b/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj
--index 4c8aa3f..d1bf3eb 100644
----- a/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj
--+++ b/Projects/VC2017/lcms2_DLL/lcms2_DLL.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{8C51BE48-ADB8-4089-A9EC-F6BF993A0548}</ProjectGuid>
--     <RootNamespace>lcms2_DLL</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/lcms2_static/lcms2_static.vcxproj b/Projects/VC2017/lcms2_static/lcms2_static.vcxproj
--index 2a9988a..9fc05ce 100644
----- a/Projects/VC2017/lcms2_static/lcms2_static.vcxproj
--+++ b/Projects/VC2017/lcms2_static/lcms2_static.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{71DEDE59-3F1E-486B-A899-4283000F76B5}</ProjectGuid>
--     <RootNamespace>lcms2_static</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/linkicc/linkicc.vcxproj b/Projects/VC2017/linkicc/linkicc.vcxproj
--index 30c2b4e..51586dd 100644
----- a/Projects/VC2017/linkicc/linkicc.vcxproj
--+++ b/Projects/VC2017/linkicc/linkicc.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{FBFBE1DC-DB84-4BA1-9552-B4780F457849}</ProjectGuid>
--     <RootNamespace>linkicc</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/psicc/psicc.vcxproj b/Projects/VC2017/psicc/psicc.vcxproj
--index 9dcf89a..8f26e12 100644
----- a/Projects/VC2017/psicc/psicc.vcxproj
--+++ b/Projects/VC2017/psicc/psicc.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{EF6A8851-65FE-46F5-B9EF-14F0B671F693}</ProjectGuid>
--     <RootNamespace>psicc</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/testbed/testbed.vcxproj b/Projects/VC2017/testbed/testbed.vcxproj
--index 0af3762..3f6aea3 100644
----- a/Projects/VC2017/testbed/testbed.vcxproj
--+++ b/Projects/VC2017/testbed/testbed.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{928A3A2B-46EF-4279-959C-513B3652FF0E}</ProjectGuid>
--     <RootNamespace>testbed</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/tiffdiff/tiffdiff.vcxproj b/Projects/VC2017/tiffdiff/tiffdiff.vcxproj
--index 7edfe28..3a6d837 100644
----- a/Projects/VC2017/tiffdiff/tiffdiff.vcxproj
--+++ b/Projects/VC2017/tiffdiff/tiffdiff.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{75B91835-CCD7-48BE-A606-A9C997D5DBEE}</ProjectGuid>
--     <RootNamespace>tiffdiff</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/tifficc/tifficc.vcxproj b/Projects/VC2017/tifficc/tifficc.vcxproj
--index cd9f04c..5ef954f 100644
----- a/Projects/VC2017/tifficc/tifficc.vcxproj
--+++ b/Projects/VC2017/tifficc/tifficc.vcxproj
--@@ -22,7 +22,7 @@
--     <ProjectGuid>{2256DE16-ED92-4A6F-9C54-F65BB61E64A2}</ProjectGuid>
--     <RootNamespace>tifficc</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
---    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/Projects/VC2017/transicc/transicc.vcxproj b/Projects/VC2017/transicc/transicc.vcxproj
--index d9b77c6..b3173d8 100644
----- a/Projects/VC2017/transicc/transicc.vcxproj
--+++ b/Projects/VC2017/transicc/transicc.vcxproj
--@@ -22,6 +22,7 @@
--     <ProjectGuid>{9EE22D66-C849-474C-9ED5-C3E141DAB160}</ProjectGuid>
--     <RootNamespace>transicc</RootNamespace>
--     <Keyword>Win32Proj</Keyword>
--+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
--   </PropertyGroup>
--   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
--   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
--diff --git a/src/cmscgats.c b/src/cmscgats.c
--index 1a87613..8c3e96d 100644
----- a/src/cmscgats.c
--+++ b/src/cmscgats.c
--@@ -1,7 +1,7 @@
-- //---------------------------------------------------------------------------------
-- //
-- //  Little Color Management System
---//  Copyright (c) 1998-2017 Marti Maria Saguer
--+//  Copyright (c) 1998-2018 Marti Maria Saguer
-- //
-- // Permission is hereby granted, free of charge, to any person obtaining
-- // a copy of this software and associated documentation files (the "Software"),
--@@ -1506,10 +1506,16 @@ void AllocateDataSet(cmsIT8* it8)
--     t-> nSamples   = atoi(cmsIT8GetProperty(it8, "NUMBER_OF_FIELDS"));
--     t-> nPatches   = atoi(cmsIT8GetProperty(it8, "NUMBER_OF_SETS"));
+-diff --git a/configure.ac b/configure.ac
+-index f925358..870dfb9 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -174,7 +174,7 @@ if test "x$enable_lz4" = "xyes"; then
 - 
---    t-> Data = (char**)AllocChunk (it8, ((cmsUInt32Number) t->nSamples + 1) * ((cmsUInt32Number) t->nPatches + 1) *sizeof (char*));
---    if (t->Data == NULL) {
--+    if (t -> nSamples < 0 || t->nSamples > 0x7ffe || t->nPatches < 0 || t->nPatches > 0x7ffe)
--+    {
--+        SynError(it8, "AllocateDataSet: too much data");
--+    }
--+    else {
--+        t->Data = (char**)AllocChunk(it8, ((cmsUInt32Number)t->nSamples + 1) * ((cmsUInt32Number)t->nPatches + 1) * sizeof(char*));
--+        if (t->Data == NULL) {
-- 
---        SynError(it8, "AllocateDataSet: Unable to allocate data array");
--+            SynError(it8, "AllocateDataSet: Unable to allocate data array");
--+        }
--     }
-- 
-- }
+-   if test "x${have_lz4h}" = "xyes" ; then
+-     saved_LDFLAGS=${LDFLAGS}
+--    LDFLAGS="-L$with_lz4_libdir ${LDFLAGS}"
+-+    test -z "${with_lz4_libdir}" || LDFLAGS="-L$with_lz4_libdir ${LDFLAGS}"
+-     AC_CHECK_LIB(lz4, LZ4_compress_destSize, [
+-       have_lz4="yes"
+-       have_lz4hc="yes"
 --- 
--2.11.0
+-2.20.1
 -
-diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
-index 248a08cf87..1d83fcb2ba 100644
---- a/package/lcms2/lcms2.hash
-+++ b/package/lcms2/lcms2.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/lcms/files/lcms/2.9
--sha1 60bea9875e017dd1c466e988c2ad98f8766e4e55 lcms2-2.9.tar.gz
-+# From https://sourceforge.net/projects/lcms/files/lcms/2.10
-+sha1  59bcebaf15c1c4b21815708cb68498b9b5d40db3  lcms2-2.10.tar.gz
- # Locally computed:
--sha256 48c6fdf98396fa245ed86e622028caf49b96fa22f3e5734f853f806fbc8e7d20 lcms2-2.9.tar.gz
--sha256 c725daac91a9259ce5e195683c0eeb797d345035c36ac5ba114c9fa80e11639a COPYING
-+sha256  e11bc4e538587ec1530f9fef25f77261b94d5886c5ea81d8bb171a802df970ad  lcms2-2.10.tar.gz
-+sha256  53ad5ca11b8f4079e9c9bfa61575927a33f53526d6d414287149ec3ab61e8e4d  COPYING
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index b6c292b762..6929825f69 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/erofs-utils/0002-erofs-utils-avoid-_LARGEFILE64_SOURCE-and-_GNU_SOURC.patch b/package/erofs-utils/0002-erofs-utils-avoid-_LARGEFILE64_SOURCE-and-_GNU_SOURC.patch
+deleted file mode 100644
+index 0b6ecab71b..0000000000
+--- a/package/erofs-utils/0002-erofs-utils-avoid-_LARGEFILE64_SOURCE-and-_GNU_SOURC.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 41d6c984699f30c11e8c92550239bbe5a3e5ada1 Mon Sep 17 00:00:00 2001
+-From: Gao Xiang <gaoxiang25@huawei.com>
+-Date: Sat, 14 Mar 2020 17:05:37 +0800
+-Subject: [PATCH] erofs-utils: avoid _LARGEFILE64_SOURCE and _GNU_SOURCE
+- redefinition
+-
+-This patch can be used to resolve the following build errors:
+-
+-compress.c:10: error: "_LARGEFILE64_SOURCE" redefined [-Werror]
+- #define _LARGEFILE64_SOURCE
+-
+-<command-line>: note: this is the location of the previous definition
+-
+-io.c:9: error: "_LARGEFILE64_SOURCE" redefined [-Werror]
+- #define _LARGEFILE64_SOURCE
+-
+-<command-line>: note: this is the location of the previous definition
+-
+-Signed-off-by: Gao Xiang <gaoxiang25@huawei.com>
+----
+- lib/compress.c | 2 ++
+- lib/io.c       | 4 ++++
+- 2 files changed, 6 insertions(+)
+-
+-diff --git a/lib/compress.c b/lib/compress.c
+-index 8337487..b14ff17 100644
+---- a/lib/compress.c
+-+++ b/lib/compress.c
+-@@ -7,7 +7,9 @@
+-  * Created by Miao Xie <miaoxie@huawei.com>
+-  * with heavy changes by Gao Xiang <gaoxiang25@huawei.com>
+-  */
+-+#ifndef _LARGEFILE64_SOURCE
+- #define _LARGEFILE64_SOURCE
+-+#endif
+- #include <string.h>
+- #include <stdlib.h>
+- #include <unistd.h>
+-diff --git a/lib/io.c b/lib/io.c
+-index 52f9424..5b998d8 100644
+---- a/lib/io.c
+-+++ b/lib/io.c
+-@@ -6,8 +6,12 @@
+-  *             http://www.huawei.com/
+-  * Created by Li Guifu <bluce.liguifu@huawei.com>
+-  */
+-+#ifndef _LARGEFILE64_SOURCE
+- #define _LARGEFILE64_SOURCE
+-+#endif
+-+#ifndef _GNU_SOURCE
+- #define _GNU_SOURCE
+-+#endif
+- #include <sys/stat.h>
+- #include <sys/ioctl.h>
+- #include "erofs/io.h"
+--- 
+-2.20.1
+-
+diff --git a/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
+deleted file mode 100644
+index cef1256975..0000000000
+--- a/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 873c932b1119531355df23bacc3cf6824231804b Mon Sep 17 00:00:00 2001
+-From: Gao Xiang <hsiangkao@aol.com>
+-Date: Tue, 24 Mar 2020 16:19:49 +0800
+-Subject: [PATCH] erofs-utils: avoid using old compatibility type uint
+-
+-This should fix the following buildroot autobuild issues
+-with some configration on ARM platform [1]:
+-
+-compress.c: In function 'vle_compress_one':
+-compress.c:209:10: error: unknown type name 'uint'
+-    const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
+-          ^~~~
+-compress.c:210:10: error: unknown type name 'uint'
+-    const uint qh_after = ctx->head - qh_aligned;
+-          ^~~~
+-compress.c: In function 'z_erofs_convert_to_compacted_format':
+-compress.c:313:8: error: unknown type name 'uint'
+-  const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
+-        ^~~~
+-compress.c:316:8: error: unknown type name 'uint'
+-  const uint totalidx = (legacymetasize -
+-        ^~~~
+-
+-[1] http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
+-Link: https://lore.kernel.org/r/20200324081949.26355-1-hsiangkao at aol.com
+-Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+----
+- lib/compress.c | 17 +++++++++--------
+- 1 file changed, 9 insertions(+), 8 deletions(-)
+-
+-diff --git a/lib/compress.c b/lib/compress.c
+-index b14ff17..6cc68ed 100644
+---- a/lib/compress.c
+-+++ b/lib/compress.c
+-@@ -204,8 +204,9 @@ nocompression:
+- 		len -= count;
+- 
+- 		if (!final && ctx->head >= EROFS_CONFIG_COMPR_MAX_SZ) {
+--			const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
+--			const uint qh_after = ctx->head - qh_aligned;
+-+			const unsigned int qh_aligned =
+-+				round_down(ctx->head, EROFS_BLKSIZ);
+-+			const unsigned int qh_after = ctx->head - qh_aligned;
+- 
+- 			memmove(ctx->queue, ctx->queue + qh_aligned,
+- 				len + qh_after);
+-@@ -308,11 +309,11 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
+- 					unsigned int legacymetasize,
+- 					unsigned int logical_clusterbits)
+- {
+--	const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
+--							inode->xattr_isize) +
+--			       sizeof(struct z_erofs_map_header);
+--	const uint totalidx = (legacymetasize -
+--			       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
+-+	const unsigned int mpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
+-+							   inode->xattr_isize) +
+-+				  sizeof(struct z_erofs_map_header);
+-+	const unsigned int totalidx = (legacymetasize -
+-+				       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
+- 	u8 *out, *in;
+- 	struct z_erofs_compressindex_vec cv[16];
+- 	/* # of 8-byte units so that it can be aligned with 32 bytes */
+-@@ -324,7 +325,7 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
+- 	if (logical_clusterbits > 14)	/* currently not supported */
+- 		return -ENOTSUP;
+- 	if (logical_clusterbits == 12) {
+--		compacted_4b_initial = (32 - headerpos % 32) / 4;
+-+		compacted_4b_initial = (32 - mpos % 32) / 4;
+- 		if (compacted_4b_initial == 32 / 4)
+- 			compacted_4b_initial = 0;
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
+deleted file mode 100644
+index 2441a841ba..0000000000
+--- a/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From 6c087a91c968197b5a95578fc645617947c943ad Mon Sep 17 00:00:00 2001
+-From: Gao Xiang <hsiangkao@aol.com>
+-Date: Wed, 25 Mar 2020 15:42:22 +0800
+-Subject: [PATCH] erofs-utils: avoid PAGE_SIZE redefinition
+-
+-Buildroot autobuild reported a PAGE_SIZE redefinition with some
+-configrations on i586 toolchain [1] (I didn't notice such report
+-from erofs-utils travis CI or distribution builds before.)
+-
+-In file included from config.c:11:
+-../include/erofs/internal.h:27: error: "PAGE_SIZE" redefined [-Werror]
+- #define PAGE_SIZE  (1U << PAGE_SHIFT)
+-
+-In file included from ../include/erofs/defs.h:17,
+-                 from ../include/erofs/config.h:12,
+-                 from ../include/erofs/print.h:12,
+-                 from config.c:10:
+-.../sysroot/usr/include/limits.h:89: note: this is the location of the previous definition
+- #define PAGE_SIZE PAGESIZE
+-
+-cc1: all warnings being treated as errors
+-
+-Fix it now.
+-
+-[1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
+-Link: https://lore.kernel.org/r/20200325082930.2025-1-hsiangkao at aol.com
+-Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+----
+- include/erofs/internal.h | 10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-diff --git a/include/erofs/internal.h b/include/erofs/internal.h
+-index e7d5a64..41da189 100644
+---- a/include/erofs/internal.h
+-+++ b/include/erofs/internal.h
+-@@ -23,8 +23,18 @@ typedef unsigned short umode_t;
+- #define PATH_MAX        4096    /* # chars in a path name including nul */
+- #endif
+- 
+-+#ifndef PAGE_SHIFT
+- #define PAGE_SHIFT		(12)
+-+#endif
+-+
+-+#ifndef PAGE_SIZE
+- #define PAGE_SIZE		(1U << PAGE_SHIFT)
+-+#endif
+-+
+-+/* no obvious reason to support explicit PAGE_SIZE != 4096 for now */
+-+#if PAGE_SIZE != 4096
+-+#error incompatible PAGE_SIZE is already defined
+-+#endif
+- 
+- #define LOG_BLOCK_SIZE          (12)
+- #define EROFS_BLKSIZ            (1U << LOG_BLOCK_SIZE)
+--- 
+-2.20.1
+-
+diff --git a/package/erofs-utils/Config.in b/package/erofs-utils/Config.in
+index 75bcbdaae2..ffb2a891d8 100644
+--- a/package/erofs-utils/Config.in
++++ b/package/erofs-utils/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_EROFS_UTILS
+ 	bool "erofs-utils"
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Userspace utilities for EROFS filesystem
+ 
+diff --git a/package/erofs-utils/Config.in.host b/package/erofs-utils/Config.in.host
+index 31ea6eb2ea..c6fbc38887 100644
+--- a/package/erofs-utils/Config.in.host
++++ b/package/erofs-utils/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_EROFS_UTILS
+ 	bool "host erofs-utils"
++	select BR2_PACKAGE_HOST_UTIL_LINUX
+ 	help
+ 	  Userspace utilities for EROFS filesystem
+ 
+diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+index 45d4883a01..31624b1817 100644
+--- a/package/erofs-utils/erofs-utils.hash
++++ b/package/erofs-utils/erofs-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 508ee818dc6a02cf986647e37cb991b76f7b3e7ea303ffc9e980772de68f3b10  erofs-utils-1.0.tar.gz
++sha256 a14a30d0d941f6642cad130fbba70a2493fabbe7baa09a8ce7d20745ea3385d6  erofs-utils-1.1.tar.gz
+ sha256 feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  COPYING
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index 562e3a427a..edc5288b1b 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
+@@ -4,15 +4,16 @@
  #
  ################################################################################
  
--LCMS2_VERSION = 2.9
-+LCMS2_VERSION = 2.10
- LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
--- 
-2.26.2
+-EROFS_UTILS_VERSION = 1.0
++EROFS_UTILS_VERSION = 1.1
+ EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+ EROFS_UTILS_LICENSE = GPL-2.0+
+ EROFS_UTILS_LICENSE_FILES = COPYING
+ 
+ # From a git tree: no generated autotools files
+-# Also: 0001-erofs-utils-fix-configure.ac.patch
+ EROFS_UTILS_AUTORECONF = YES
+ 
++EROFS_UTILS_DEPENDENCIES = host-pkgconf util-linux
++
+ ifeq ($(BR2_PACKAGE_EROFS_UTILS_LZ4),y)
+ EROFS_UTILS_DEPENDENCIES += lz4
+ EROFS_UTILS_CONF_OPTS += --enable-lz4
+@@ -20,7 +21,7 @@ else
+ EROFS_UTILS_CONF_OPTS += --disable-lz4
+ endif
+ 
+-HOST_EROFS_UTILS_DEPENDENCIES = host-lz4
++HOST_EROFS_UTILS_DEPENDENCIES = host-pkgconf host-util-linux host-lz4
+ HOST_EROFS_UTILS_CONF_OPTS += --enable-lz4
+ 
+ $(eval $(autotools-package))
