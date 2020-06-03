@@ -1,85 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Jun 2020 17:14:24 +0200
-Subject: [Buildroot] Buildroot 2020.02.3 released
-Message-ID: <87zh9kb2r3.fsf@dell.be.48ers.dk>
+From: Julien Olivain <juju@cotds.org>
+Date: Wed,  3 Jun 2020 19:13:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.1.3
+Message-ID: <20200603171335.13493-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Changes since v2.1.2:
+https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.3
+- fix a cross-compilation failure from Win32 to WinARM
+- fix issues while fluid_player is seeking
+- fix a NULL pointer dereference if synth.dynamic-sample-loading is enabled
+- fix a NULL pointer dereference in delete_rvoice_mixer_threads()
+- fix a NULL pointer dereference in the soundfont loader
+- fix dsound driver playing garbage when terminating fluidsynth
+- avoid memory leaks when using libinstpatch
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+./utils/test-pkg --package fluidsynth
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
 
-Buildroot 2020.02.3 is released - Go download it at:
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-http://buildroot.org/downloads/buildroot-2020.02.3.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2020.02.3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2020.02.3 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2020.02.2 release. The 2020.02.x series is
-supported until April 2021.
-
-- Fix various build issues of host packages on hosts using GCC 10
-
-- Security fixes for bind, clamav, dovecot, freerdp, git,
-  glib-networking, libexif, lrzip, mariadb, mp4v2, openldap, php,
-  wireshark, xen
-
-- Fixes for download/compilation/runtime/license issues in
-  arm-trusted-firmware, audit, binutils, bison, crda, dtc, elf2flt, efl,
-  erlang, fakeroot, ffmpeg, fmc, fmlib, gcc, gnupg, leveldb,
-  libusb-compat, linux-headers, ltrace, mesa3d, openocd, perl, prosody,
-  python-pyqt5, rpi-firmware, qemu, rustc, speexdsp, sysrepo, systemd,
-  tremor, vboot-utils,
-
-- Remove python-pycrypto (unmaintained, security issues, consider
-  python-pycryptodomex instead)
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.3
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2020.02.2..
-
-    15  Fabrice Fontaine
-     7  Romain Naour
-     7  Thomas Petazzoni
-     6  Heiko Thiery
-     5  Peter Korsgaard
-     5  Yann E. MORIN
-     3  Bernd Kuhls
-     2  James Hilliard
-     1  Carlos Santos
-     1  Danomi Manchego
-     1  Fabio Estevam
-     1  Francois Perrad
-     1  Joachim Nilsson
-     1  Joseph Kogut
-     1  Julien Olivain
-     1  J?r?my Rosen
-     1  Lecopzer Chen
-     1  Matt Weber
-     1  Max Filippov
-     1  Norbert Lange
-     1  Peter Seiderer
-     1  Ryan Coe
-     1  Stefan S?rensen
-     1  Stephan Hoffmann
-
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index f7b1b6696a..70bbebf63c 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9206d83b8d2f7e1ec259ee01e943071de67e419aabe142b51312f8edb39c5503  fluidsynth-2.1.2.tar.gz
++sha256  645fbfd7c04543c6d3bf415eab8250527813b8dc8e6d6972dbcc8cb525e1d409  fluidsynth-2.1.3.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 2bd792dbaf..452ab7e497 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUIDSYNTH_VERSION = 2.1.2
++FLUIDSYNTH_VERSION = 2.1.3
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.26.2
