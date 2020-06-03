@@ -1,60 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  3 Jun 2020 00:28:11 +0200
-Subject: [Buildroot] [PATCH] package/perl: security bump to version 5.30.3
-Message-ID: <20200602222811.22719-1-francois.perrad@gadz.org>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Tue, 2 Jun 2020 17:02:06 -0700
+Subject: [Buildroot] procps-ng: disable for musl libc
+Message-ID: <CAGt4E5sHuMNr38r_adE4Tj2+VmWevAYwyAN9_PSENem4prK0Jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Hi all,
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 21704a8bb..ba3a39d43 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,10 +1,10 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.2.tar.xz.{md5,sha1,sha256}.txt
--md5  4bfa12b528522a50de0470b8b70b9b3b  perl-5.30.2.tar.xz
--sha1  d82cdaa610a3e749e821fc77004b1b4bfd5ebd28  perl-5.30.2.tar.xz
--sha256  a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259  perl-5.30.2.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.3.tar.xz.{md5,sha1,sha256}.txt
-+md5  0af2ab0f01ec13e37cc13a27de930936  perl-5.30.3.tar.xz
-+sha1  1003c6aa71d8966501038178459a9fa4e9aba747  perl-5.30.3.tar.xz
-+sha256  6967595f2e3f3a94544c35152f9a25e0cb8ea24ae45f4bf1882f2e33f4a400f4  perl-5.30.3.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.3/perl-cross-1.3.3.hash
--sha256  3cea71d443cd28c6aa3c3c79d6db38267303cfac8e54b8a6d7ef8d448deefb25  perl-cross-1.3.3.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.4/perl-cross-1.3.4.hash
-+sha256  755aa0ca8141a942188a269564f86c3c82349f82c346ed5c992495d7f35138ba  perl-cross-1.3.4.tar.gz
- 
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 64d453cad..2f82e1d6d 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,14 +6,14 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 30
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.3.3
-+PERL_CROSS_VERSION = 1.3.4
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
--- 
-2.17.1
+There is a patch called "procps-ng: disable for musl libc" that was
+applied to 2018.02.x:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/3f2a94307e6c380842726b8158e8ec2e9d24372a.1530616293.git.baruch at tkos.co.il/
+
+This patch does not seem to be in any of the following releases nor is
+it in master.
+
+$ for i in 2018 2019 2020; do for j in 02 05 08 11;do echo "$i/$j";
+git log origin/$i.$j.x | grep 'procps-ng: disable for musl libc';
+done;done
+2018/02
+    procps-ng: disable for musl libc
+2018/05
+2018/08
+2018/11
+2019/02
+2019/05
+2019/08
+2019/11
+2020/02
+
+Is this on purpose or should this patch be applied to all releases
+going forward?
+
+Thanks,
+-Markus
