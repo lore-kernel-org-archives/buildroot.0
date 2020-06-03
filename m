@@ -1,78 +1,75 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  3 Jun 2020 12:47:13 +0200
-Subject: [Buildroot] [PATCH v3] package/edid-decode: bump version to 1889504
-Message-ID: <20200603104713.21191-1-ps.report@gmx.net>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed,  3 Jun 2020 06:04:58 -0500
+Subject: [Buildroot] [PATCH v2] package/ethtool: bump to 5.6
+Message-ID: <20200603110458.18125-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- edid-decode changed from C to C++, adjust make command
-  accordingly and add BR2_INSTALL_LIBSTDCPP dependency
+- Now by default ethtool depends on libmnl so make this optional
 
-- now shipping a LICENSE file, change from (gone) edid-decode.c to this one
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes v1 -> v2:
-  - add BR2_INSTALL_LIBSTDCPP dependency (suggestd by Thomas Petazzoni)
+Changes
+v1 -> v2
+[Thomas
+ - Noted that the libmnl is conditional and the pkgconfig dependency
+   is part of the libmnl being enabled
 
-Changes v2 -> v3:
-  - use dedicated LICENSE file instead of (gone) edid-decode.c source
-    file (Baruch Siach)
+ AC_ARG_ENABLE(netlink,
+              [  --enable-netlink         enable netlink interface (enabled by default)],
+              ,
+              enable_netlink=yes)
+if test x$enable_netlink = xyes; then
+    PKG_PROG_PKG_CONFIG
+    PKG_CHECK_MODULES([MNL], [libmnl])
+    AC_DEFINE(ETHTOOL_ENABLE_NETLINK, 1,
+              Define this to support netlink interface to talk to kernel.)
+fi
 ---
- package/edid-decode/Config.in        | 4 ++++
- package/edid-decode/edid-decode.hash | 4 ++--
- package/edid-decode/edid-decode.mk   | 6 +++---
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ package/ethtool/ethtool.hash | 6 +++---
+ package/ethtool/ethtool.mk   | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-index 701c70031f..d2d21288de 100644
---- a/package/edid-decode/Config.in
-+++ b/package/edid-decode/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_EDID_DECODE
- 	bool "edid-decode"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Decode EDID data in human-readable format.
- 
- 	  https://git.linuxtv.org/edid-decode.git/
-+
-+comment "edid-decode needs a toolchain w/ C++"
-+	depends on !!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
-index e0a9c18523..3d7e945406 100644
---- a/package/edid-decode/edid-decode.hash
-+++ b/package/edid-decode/edid-decode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36  edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
--sha256  4b4a7e6d7c358bb5b982eaa84d228cd9e99b75a5fefd3af01272957bf2016b5b  edid-decode.c
-+sha256  327fe14531ddebe74a730efc30209e68efbd86c11375b5576cbe23af3d691150  edid-decode-188950472c19492547e298b27f9da0d72cf826df.tar.gz
-+sha256  9bc7ab961e9a07dc84eaa0210af388def56d024357e79671fb89fe27d073eed7  LICENSE
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index c43f1ae7da..8fe1e2712a 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -4,14 +4,14 @@
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 86c71d7380..67fe263315 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	22f81e4927d6eb6a13a259d705248a96005fce2005e15257f639f5a1c8c52b6b	ethtool-5.4.tar.xz
++sha256  ca0f1b526dad5153f0aa0f1eb3c17c31770c75a74f70af622b1a83ae38043995  ethtool-5.6.tar.xz
+ # Locally calculated
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+-sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index ce4f2d862d..c36268544f 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EDID_DECODE_VERSION = 6def7bc83dfb0338632e06a8b14c93faa6af8879
-+EDID_DECODE_VERSION = 188950472c19492547e298b27f9da0d72cf826df
- EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
--EDID_DECODE_LICENSE_FILES = edid-decode.c
-+EDID_DECODE_LICENSE_FILES = LICENSE
+-ETHTOOL_VERSION = 5.4
++ETHTOOL_VERSION = 5.6
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
+@@ -12,4 +12,11 @@ ETHTOOL_LICENSE_FILES = LICENSE COPYING
+ ETHTOOL_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_ETHTOOL_PRETTY_PRINT),--enable-pretty-dump,--disable-pretty-dump)
  
- define EDID_DECODE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
-+		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
- endef
- 
- define EDID_DECODE_INSTALL_TARGET_CMDS
++ifeq ($(BR2_PACKAGE_LIBMNL),y)
++ETHTOOL_DEPENDENCIES += host-pkgconf libmnl
++ETHTOOL_CONF_OPTS += --enable-netlink
++else
++ETHTOOL_CONF_OPTS += --disable-netlink
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.26.2
+2.17.1
