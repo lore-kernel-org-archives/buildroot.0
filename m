@@ -1,75 +1,51 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  3 Jun 2020 06:04:58 -0500
-Subject: [Buildroot] [PATCH v2] package/ethtool: bump to 5.6
-Message-ID: <20200603110458.18125-1-matthew.weber@rockwellcollins.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 3 Jun 2020 06:19:47 -0500
+Subject: [Buildroot] [PATCH] package/libqmi: bump to 1.25.900
+In-Reply-To: <20200602222429.220a7e29@windsurf.home>
+References: <20200602122146.9480-1-matthew.weber@rockwellcollins.com>
+ <20200602222429.220a7e29@windsurf.home>
+Message-ID: <CANQCQpa-PE4jh8yARd3Oxc3r7OTRwfExYM6ROfdSPEp5DbAs=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Now by default ethtool depends on libmnl so make this optional
+Thomas,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v1 -> v2
-[Thomas
- - Noted that the libmnl is conditional and the pkgconfig dependency
-   is part of the libmnl being enabled
+On Tue, Jun 2, 2020 at 3:25 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Tue,  2 Jun 2020 07:21:46 -0500
+> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> > During the configure of the updated version there was a dependency
+> > found on zlib and it tried to retrieve the archive.
+> >
+> >  Library z found: NO
+> >  Downloading zlib source from https://zlib.net/fossils/zlib-1.2.11.tar.gz
+> >  output/build/libglib2-2.64.2/meson.build:1885:4: ERROR: could not get
+>
+> I don't see anything in the libqmi configure.ac script that suggests a
+> dependency on zlib. And these messages come from the Meson logic in
+> libglib2... while libqmi uses autotools. This definitely needs more
+> research to see what is going on, we can't blindly add a new dependency.
+>
 
- AC_ARG_ENABLE(netlink,
-              [  --enable-netlink         enable netlink interface (enabled by default)],
-              ,
-              enable_netlink=yes)
-if test x$enable_netlink = xyes; then
-    PKG_PROG_PKG_CONFIG
-    PKG_CHECK_MODULES([MNL], [libmnl])
-    AC_DEFINE(ETHTOOL_ENABLE_NETLINK, 1,
-              Define this to support netlink interface to talk to kernel.)
-fi
----
- package/ethtool/ethtool.hash | 6 +++---
- package/ethtool/ethtool.mk   | 9 ++++++++-
- 2 files changed, 11 insertions(+), 4 deletions(-)
+Oops this is because I just did "make libqmi" to build test without it
+selected in kconfig which would have setup all the dependencies.  I
+didn't notice libglib2 was the one with the zlib missing but that
+makes sense if it was trying to build all of libqmi's dependencies
+from scratch and the kconfig dependencies were never evaluated.
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 86c71d7380..67fe263315 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	22f81e4927d6eb6a13a259d705248a96005fce2005e15257f639f5a1c8c52b6b	ethtool-5.4.tar.xz
-+sha256  ca0f1b526dad5153f0aa0f1eb3c17c31770c75a74f70af622b1a83ae38043995  ethtool-5.6.tar.xz
- # Locally calculated
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
--sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1	LICENSE
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index ce4f2d862d..c36268544f 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 5.4
-+ETHTOOL_VERSION = 5.6
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
-@@ -12,4 +12,11 @@ ETHTOOL_LICENSE_FILES = LICENSE COPYING
- ETHTOOL_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_ETHTOOL_PRETTY_PRINT),--enable-pretty-dump,--disable-pretty-dump)
- 
-+ifeq ($(BR2_PACKAGE_LIBMNL),y)
-+ETHTOOL_DEPENDENCIES += host-pkgconf libmnl
-+ETHTOOL_CONF_OPTS += --enable-netlink
-+else
-+ETHTOOL_CONF_OPTS += --disable-netlink
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.17.1
+> > -LIBQMI_VERSION = 1.24.10
+> > +LIBQMI_VERSION = 1.25.900
+>
+> This version is in fact 1.26-rc1, I'm not sure we want to package
+> release candidate versions.
+
+Good call, I'll adjust to 1.24.14 as it is the latest stable and
+doesn't add any new features.
+
+Regards,
+Matt
