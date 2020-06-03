@@ -1,51 +1,60 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  3 Jun 2020 12:38:48 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/bcm2835: bump version to 1.65
-In-Reply-To: <20200603103849.20415-1-ps.report@gmx.net>
-References: <20200603103849.20415-1-ps.report@gmx.net>
-Message-ID: <20200603103849.20415-2-ps.report@gmx.net>
+From: =?UTF-8?Q?Gon=C3=A7alo_Salazar?= <glbsalazar@gmail.com>
+Date: Wed, 3 Jun 2020 11:39:37 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/orangepi-zero: bumped kernel
+ uboot versions
+In-Reply-To: <20200602231834.6acb2e9e@windsurf.home>
+References: <20200531163645.2522167-1-glbsalazar@gmail.com>
+ <20200602231834.6acb2e9e@windsurf.home>
+Message-ID: <CAPJzBTp=CBUseNd-0fKWAGQSV+5iDGmr47fQXe_pnFiqE15D7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since 1.63:
- - 1.64 2020-04-11 Fixed error in definitions of BCM2835_AUX_SPI_STAT_TX_LVL
-   and BCM2835_AUX_SPI_STAT_RX_LVL
- - 1.65, 1.66 2020-04-16 Added support for use of capability cap_sys_rawio
-   to determine if access to /dev/mem is available for non-root users
+Thank you!
+I'll keep that in mind in future commits.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - split original patch into three independent ones
----
- package/bcm2835/bcm2835.hash | 2 +-
- package/bcm2835/bcm2835.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Gon?alo Salazar
 
-diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
-index c722a97456..8317e10256 100644
---- a/package/bcm2835/bcm2835.hash
-+++ b/package/bcm2835/bcm2835.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  aec4b33ed9ecda4a1c4c12b8ed2abdd13cf87f352f0d27a24be726d11f1fbf54  bcm2835-1.63.tar.gz
-+sha256  62955cc8506cc6506d729da3138442beb9763f1ffd536e925aeb0dc223492874  bcm2835-1.65.tar.gz
- sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  COPYING
-diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-index f75b2fc69e..2ef6d94b38 100644
---- a/package/bcm2835/bcm2835.mk
-+++ b/package/bcm2835/bcm2835.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BCM2835_VERSION = 1.63
-+BCM2835_VERSION = 1.65
- BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
- BCM2835_LICENSE = GPL-3.0
- BCM2835_LICENSE_FILES = COPYING
--- 
-2.26.2
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> escreveu no dia ter?a,
+2/06/2020 ?(s) 22:18:
+>
+> Hello,
+>
+> On Sun, 31 May 2020 17:36:45 +0100
+> Gon?alo Salazar <glbsalazar@gmail.com> wrote:
+>
+> > Bumped kernel to version 5.6 and uboot to version 2020.04 for
+> > orangepi-zero configuration
+> >
+> > Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+>
+> I've applied your patch to master, thanks! However, there were a few
+> issues. First, your commit title and commit log were formulated using
+> the past tense ("bumped") while it should use the present, i.e "bump".
+>
+> > diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
+> > index 354e3bfdba..ab4fb474ee 100644
+> > --- a/configs/orangepi_zero_defconfig
+> > +++ b/configs/orangepi_zero_defconfig
+> > @@ -3,13 +3,12 @@ BR2_cortex_a7=y
+> >  BR2_ARM_FPU_VFPV4=y
+> >  BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
+> >  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+>
+> This should have been kept, as follows:
+>
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+>
+> Indeed, while this is currently the default, it will soon no longer be
+> the default, once we move to 5.7 as the default kernel headers.
+>
+> Applied with those fixes. Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
