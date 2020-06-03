@@ -1,57 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Jun 2020 23:25:58 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/bcm2835: disable doxygen doc
- generation
-In-Reply-To: <20200603103849.20415-1-ps.report@gmx.net>
-References: <20200603103849.20415-1-ps.report@gmx.net>
-Message-ID: <20200603212558.GG13972@scaer>
+From: Ismael Luceno <ismael@iodev.co.uk>
+Date: Wed,  3 Jun 2020 23:28:33 +0200
+Subject: [Buildroot] [PATCH] package/axel: bump version to 2.17.9
+Message-ID: <20200603212833.18513-1-ismael@iodev.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+---
+ package/axel/axel.hash | 2 +-
+ package/axel/axel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-06-03 12:38 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - split of from original patch (suggested by Thomas Petazzoni)
-> ---
->  package/bcm2835/bcm2835.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-> index d43dd7e574..f75b2fc69e 100644
-> --- a/package/bcm2835/bcm2835.mk
-> +++ b/package/bcm2835/bcm2835.mk
-> @@ -10,4 +10,7 @@ BCM2835_LICENSE = GPL-3.0
->  BCM2835_LICENSE_FILES = COPYING
->  BCM2835_INSTALL_STAGING = YES
->  
-> +# disable doxygen doc generation
-> +BCM2835_CONF_ENV = ac_cv_prog_DOXYGEN=/bin/true
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/axel/axel.hash b/package/axel/axel.hash
+index 955b5eab59d3..66d56b658177 100644
+--- a/package/axel/axel.hash
++++ b/package/axel/axel.hash
+@@ -1,2 +1,2 @@
+-sha256  19c82a095e3ea84f1e24fe6fd6018ee06af73ee03ca8ecf31b34dcc57ef4351e  axel-2.17.8.tar.xz
++sha256  f1364d9b55d435efc6d32218097a50a63be7b1300138e698133cf19ad3aa3a54  axel-2.17.9.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 5c7e99894efa..0d5fc2a3c6b6 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AXEL_VERSION = 2.17.8
++AXEL_VERSION = 2.17.9
+ AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
+ AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
+ AXEL_LICENSE = GPL-2.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
