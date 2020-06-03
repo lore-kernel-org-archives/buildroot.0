@@ -1,64 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Jun 2020 21:36:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to 245.6
-In-Reply-To: <20200603192347.519915-1-aduskett@gmail.com>
-References: <20200603192347.519915-1-aduskett@gmail.com>
-Message-ID: <20200603193656.GA13972@scaer>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed,  3 Jun 2020 20:31:51 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nodejs: security bump to 12.18.0
+In-Reply-To: <20200603193151.502850-1-martin@barkynet.com>
+References: <20200603193151.502850-1-martin@barkynet.com>
+Message-ID: <20200603193151.502850-2-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+This is a security release.
 
-On 2020-06-03 12:23 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Vulnerabilities fixed:
 
-Applied to master, thanks.
+CVE-2020-8172: TLS session reuse can lead to host certificate verification bypass (High).
+CVE-2020-11080: HTTP/2 Large Settings Frame DoS (Low).
+CVE-2020-8174: napi_get_value_string_*() allows various kinds of memory corruption (High).
 
-Regards,
-Yann E. MORIN.
+See https://nodejs.org/en/blog/release/v12.18.0/
 
-> ---
->  package/systemd/systemd.hash | 2 +-
->  package/systemd/systemd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> index ea67a0ef7f..94af910866 100644
-> --- a/package/systemd/systemd.hash
-> +++ b/package/systemd/systemd.hash
-> @@ -1,5 +1,5 @@
->  # sha256 locally computed
-> -sha256	b754d75617665a53bd0a1e8f5ec526b383f17e1cc06d1056399e5859e0b6fe06	systemd-245.5.tar.gz
-> +sha256	f58424fd2d105503f836ff7d099d762901fb40347de993fce7373d65ff640f5b	systemd-245.6.tar.gz
->  sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
->  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
->  sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 92de540725..6ccf9d6e37 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSTEMD_VERSION = 245.5
-> +SYSTEMD_VERSION = 245.6
->  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
->  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
->  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-> -- 
-> 2.26.2
-> 
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.hash | 6 +++---
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 411b4d52b9..60d69a8638 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.16.3/SHASUMS256.txt
+-sha256  f0559b0829c7f2ac10bf5b3e157e498227e95e26cdb6af814969c49f367359a3  node-v12.16.3.tar.xz
++# From https://nodejs.org/dist/v12.18.0/SHASUMS256.txt
++sha256  d4688636a378367f5157f02bd5c13902f5c193356f8f7a35c99dfa383b03b13f  node-v12.18.0.tar.xz
+ 
+ # Hash for license file
+-sha256  3f5749f7a58edaadd77843057a90063a18067f472d8b26c0a76905cafa1063e3  LICENSE
++sha256  cd2e5817a25d7d28efba927b01056cae04a616b673014159f9eafeb008a0e747  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index c46dc0e224..37d7877226 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 12.16.3
++NODEJS_VERSION = 12.18.0
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
