@@ -1,60 +1,99 @@
-From: =?UTF-8?Q?Gon=C3=A7alo_Salazar?= <glbsalazar@gmail.com>
-Date: Wed, 3 Jun 2020 11:39:37 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/orangepi-zero: bumped kernel
- uboot versions
-In-Reply-To: <20200602231834.6acb2e9e@windsurf.home>
-References: <20200531163645.2522167-1-glbsalazar@gmail.com>
- <20200602231834.6acb2e9e@windsurf.home>
-Message-ID: <CAPJzBTp=CBUseNd-0fKWAGQSV+5iDGmr47fQXe_pnFiqE15D7A@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 3 Jun 2020 12:40:37 +0200
+Subject: [Buildroot] [PATCH v2] package/edid-decode: bump version to
+ 1889504
+In-Reply-To: <20200603101945.zu3uwm23vsweqzhm@sapphire.tkos.co.il>
+References: <20200603101446.7589-1-ps.report@gmx.net>
+ <20200603101945.zu3uwm23vsweqzhm@sapphire.tkos.co.il>
+Message-ID: <20200603124037.7916fddc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you!
-I'll keep that in mind in future commits.
+Hello Baruch,
 
-Gon?alo Salazar
+On Wed, 3 Jun 2020 13:19:45 +0300, Baruch Siach <baruch@tkos.co.il> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> escreveu no dia ter?a,
-2/06/2020 ?(s) 22:18:
+> Hi Peter,
 >
-> Hello,
->
-> On Sun, 31 May 2020 17:36:45 +0100
-> Gon?alo Salazar <glbsalazar@gmail.com> wrote:
->
-> > Bumped kernel to version 5.6 and uboot to version 2020.04 for
-> > orangepi-zero configuration
+> On Wed, Jun 03, 2020 at 12:14:46PM +0200, Peter Seiderer wrote:
+> > - edid-decode changed from C to C++, adjust make command
+> >   accordingly and add BR2_INSTALL_LIBSTDCPP dependency
 > >
-> > Signed-off-by: Gon?alo Salazar <glbsalazar@gmail.com>
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - add BR2_INSTALL_LIBSTDCPP dependency (suggestd by Thomas Petazzoni)
+> > ---
+> >  package/edid-decode/Config.in        | 4 ++++
+> >  package/edid-decode/edid-decode.hash | 2 +-
+> >  package/edid-decode/edid-decode.mk   | 4 ++--
+> >  3 files changed, 7 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
+> > index 701c70031f..d2d21288de 100644
+> > --- a/package/edid-decode/Config.in
+> > +++ b/package/edid-decode/Config.in
+> > @@ -1,6 +1,10 @@
+> >  config BR2_PACKAGE_EDID_DECODE
+> >  	bool "edid-decode"
+> > +	depends on BR2_INSTALL_LIBSTDCPP
+> >  	help
+> >  	  Decode EDID data in human-readable format.
+> >
+> >  	  https://git.linuxtv.org/edid-decode.git/
+> > +
+> > +comment "edid-decode needs a toolchain w/ C++"
+> > +	depends on !!BR2_INSTALL_LIBSTDCPP
+> > diff --git a/package/edid-decode/edid-decode.hash b/package/edid-decode/edid-decode.hash
+> > index e0a9c18523..f843aa68fd 100644
+> > --- a/package/edid-decode/edid-decode.hash
+> > +++ b/package/edid-decode/edid-decode.hash
+> > @@ -1,3 +1,3 @@
+> >  # Locally computed
+> > -sha256  27fcf4c8693ec6fe020b18c78c70ddba9a8b3ea8c55fcfad2a38103128ec5e36  edid-decode-6def7bc83dfb0338632e06a8b14c93faa6af8879.tar.gz
+> > +sha256  327fe14531ddebe74a730efc30209e68efbd86c11375b5576cbe23af3d691150  edid-decode-188950472c19492547e298b27f9da0d72cf826df.tar.gz
+> >  sha256  4b4a7e6d7c358bb5b982eaa84d228cd9e99b75a5fefd3af01272957bf2016b5b  edid-decode.c
 >
-> I've applied your patch to master, thanks! However, there were a few
-> issues. First, your commit title and commit log were formulated using
-> the past tense ("bumped") while it should use the present, i.e "bump".
+> This file is gone in the revision you bump to. There is now a LICENSE file
+> that we should be using instead.
+
+Your are right, v3 follows...thanks for review...
+
+Regards,
+Peter
+
 >
-> > diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-> > index 354e3bfdba..ab4fb474ee 100644
-> > --- a/configs/orangepi_zero_defconfig
-> > +++ b/configs/orangepi_zero_defconfig
-> > @@ -3,13 +3,12 @@ BR2_cortex_a7=y
-> >  BR2_ARM_FPU_VFPV4=y
-> >  BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
-> >  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+> baruch
 >
-> This should have been kept, as follows:
+> > diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+> > index c43f1ae7da..e15cb70f84 100644
+> > --- a/package/edid-decode/edid-decode.mk
+> > +++ b/package/edid-decode/edid-decode.mk
+> > @@ -4,14 +4,14 @@
+> >  #
+> >  ################################################################################
+> >
+> > -EDID_DECODE_VERSION = 6def7bc83dfb0338632e06a8b14c93faa6af8879
+> > +EDID_DECODE_VERSION = 188950472c19492547e298b27f9da0d72cf826df
+> >  EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
+> >  EDID_DECODE_LICENSE = MIT
+> >  EDID_DECODE_LICENSE_FILES = edid-decode.c
+> >
+> >  define EDID_DECODE_BUILD_CMDS
+> >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > -		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
+> > +		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
+> >  endef
+> >
+> >  define EDID_DECODE_INSTALL_TARGET_CMDS
+> > --
+> > 2.26.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
->
-> Indeed, while this is currently the default, it will soon no longer be
-> the default, once we move to 5.7 as the default kernel headers.
->
-> Applied with those fixes. Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
