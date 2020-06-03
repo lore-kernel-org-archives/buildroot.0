@@ -1,305 +1,234 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 3 Jun 2020 13:49:37 +0200
-Subject: [Buildroot] Cross-compile mariadb-connector-c for MySQL use
-In-Reply-To: <CADJjDh8aS9LK2GT6z1wXipURHrPtm1jF7av4WCgdm8Q5pLerzg@mail.gmail.com>
-References: <CADJjDh_2Uhs7bTefPUhvEZedWnXyekZ1dR5Z5DOVtvfoLfqK_g@mail.gmail.com>
- <20200602223328.26e660f6@gmx.net>
- <CADJjDh8aS9LK2GT6z1wXipURHrPtm1jF7av4WCgdm8Q5pLerzg@mail.gmail.com>
-Message-ID: <20200603134937.52dfe2ab@gmx.net>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed,  3 Jun 2020 07:09:31 -0500
+Subject: [Buildroot] [PATCH v9 2/2] testing/tests: CLANG compiler-rt runtime
+ test
+In-Reply-To: <20200603120931.20551-1-matthew.weber@rockwellcollins.com>
+References: <20200603120931.20551-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200603120931.20551-2-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Todd,
+This patch adds a test case that
+ 1) Builds the complete LLVM and CLANG set of host tools
+ 2) Cross-compiles the compiler-rt runtime using CLANG
+ 3) Builds a cross-compiled application using CLANG and the libfuzzer
+    compiler-rt library.
+ 4) Executes the fuzz application (part of the libfuzzer package) on
+    target and checks expected output for a heap-buffer-overflow.
 
-On Tue, 2 Jun 2020 18:12:07 -0400, Todd Sampson <sampsonats@gmail.com> wrote:
+Depends on the following Clang cross-compiler series to be applied
+first.
+http://patchwork.ozlabs.org/project/buildroot/list/?series=129565
 
-> Thanks for your quick reply.  Another person set up the environment.  I'm
-> trying to update the mariadb-connector-c.  It uses an out of buildroot
-> source tree as below:  Towards the bottom, you'll see packages that have
-> been added.  mariadb-connector-c was added because the connector wasn't
-> part of mariadb.  m9k-poco was added.  I don't know why the built-in poco
-> wasn't used.  m9kservd is our app that uses poco to connect to MySQL
-> server.  Buildroot is started with:
-> 
-> export MCU=~/m9k2/MCU/firmware/m9000/buildroot
-> > make BR2_EXTERNAL='$(MCU)/' m9000_defconfig  
-> 
-> 
-> I've done *make clean all*.  Hopefully that's the same as: *make clean &&
-> make*
-> 
-> mariadb-connector-c comes from:
-> 
-> MARIADB_CONNECTOR_C_VERSION = 3.1.8
-> > #MARIADB_CONNECTOR_C_SITE =
-> > https://downloads.mariadb.org/interstitial/connector-c-$(MARIADB_CONNECTOR_C_VERSION)
-> > <--- 2.3.7
-> > MARIADB_CONNECTOR_C_SITE =
-> > https://downloads.mariadb.com/Connectors/c/connector-c-$(MARIADB_CONNECTOR_C_VERSION)
-> > <--- 3.1.8
-> > MARIADB_CONNECTOR_C_SOURCE =
-> > mariadb-connector-c-$(MARIADB_CONNECTOR_C_VERSION)-src.tar.gz
-> > MARIADB_CONNECTOR_C_LICENSE = LGPL-2.0
-> > MARIADB_CONNECTOR_C_LICENSE_FILES = README COPYING.LIB
-> > MARIADB_CONNECTOR_C_INSTALL_STAGING = YES  
-> 
-> 
-> MySQL 8 is not involved in the target.  It is run in another linux host.
-> MySQL 8 comes from: sudo apt install mysql-server
-> 
-> So, it looks like I need to build mariadb for the connector, *but I don't
-> want it to be installed in the target*.
-> 
-> The project is somewhat complex.  I'm not sure how I could send you a
-> complete project to try.  Do you have a suggestion?  Maybe I can pare it
-> down to the minimum.
-> 
-> Can you tell me how I should proceed?  Should I abandon the add-on m9kpoco
-> and mariadb-connector-c packages and:
-> 1. Use the built-in poco
-> 2. Somehow get poco to use the connector in mariadb
-> 3. Somehow get mariadb to be available for poco to link to but not be
-> installed in the target
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Romain Naour <romain.naour@smile.fr>
 
-Thanks for your defconfig, as expected only the client tools/libs from mariadb
-are build and installed, e.g.:
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+[with the entire series applied on next branch:
+ https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
+ NOTE: this test case takes longer than test_rust, ~2 hours in my host
+ machine with all tarballs previously downloaded]
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+Changes
+v1 -> v2
+[Ricardo
+ - updated yml with test case
+ - moved emulator launch cmd to test case from infra
+ - defconfig in the order provided by savedefconfig
+ - indent defconfig
+ - add full package for test code to the test br2-external
+ - consolidated to one class only
 
-	$ find target/usr/bin -name "mysql*"
-target/usr/bin/mysqltest
-target/usr/bin/mysql
-target/usr/bin/mysqlcheck
-target/usr/bin/mysqldump
-target/usr/bin/mysqlimport
-target/usr/bin/mysqlshow
-target/usr/bin/mysql_plugin
-target/usr/bin/mysqlbinlog
-target/usr/bin/mysqladmin
-target/usr/bin/mysqlslap
-target/usr/bin/mysql_waitpid
-target/usr/bin/mysqlaccess
-target/usr/bin/mysql_find_rows
+v2 -> v3
+ - Added Review/tested by
 
-Thirteen binaries, each one ca. 3.5-4.0M of size...
+v4
+ - None
 
-If I understand your use case right the mysql libraries (or a selection of it
-for maridb-connector-c/poco) would be enough? You an trim down your
-target with a post-build script...
+v5
+ - Rebased post 2018.11 on master
 
-Yes, I would try the buildroot-poco (BR2_PACKAGE_POCO=y, BR2_PACKAGE_POCO_DATA_MYSQL=y)
-in the best case your application builds/runs without further problems with the
-provided versions ;-)
+v6
+ - Testing of LLVM/Clang bump
 
-Regards,
-Peter
+v7
+ - Rebase on master and testing of LLVM/Clang bump to 8.0
+ - Updated hashes for archive and legal info (legal info changed
+   because of spelling cleanup)
 
+v8
+ - Cleaned up wording the 4th item of the message above.
 
-> 
-> Thanks.  Very much appreciated.
-> 
-> > dfr at cmake:~/m9k2/MCU/firmware/m9000/buildroot$ tree
-> > .
-> > ??? board
-> > ?   ??? usi
-> > ?       ??? m9000
-> > ?       ?   ??? configs
-> > ?       ?   ?   ??? busybox.config
-> > ?       ?   ?   ??? linux.config
-> > ?       ?   ?   ??? uboot.config
-> > ?       ?   ?   ??? user_table.txt
-> > ?       ?   ??? debian_package
-> > ?       ?   ?   ??? DEBIAN
-> > ?       ?   ?   ?   ??? config
-> > ?       ?   ?   ?   ??? control
-> > ?       ?   ?   ?   ??? postinst
-> > ?       ?   ?   ?   ??? preinst
-> > ?       ?   ?   ??? var
-> > ?       ?   ?       ??? tmp
-> > ?       ?   ?           ??? m9kfirmware
-> > ?       ?   ?               ??? update.sh
-> > ?       ?   ??? images
-> > ?       ?   ?   ??? boot.its
-> > ?       ?   ?   ??? m9000.dts
-> > ?       ?   ?   ??? override.env
-> > ?       ?   ?   ??? preboot.scr
-> > ?       ?   ?   ??? update.its
-> > ?       ?   ??? m9000.mk
-> > ?       ?   ??? patches
-> > ?       ?   ?   ??? dropbear
-> > ?       ?   ?   ?   ??? 0001-dropbear-allow-legacy-key-exchange.patch
-> > ?       ?   ?   ??? e2fsprogs
-> > ?       ?   ?   ?   ??? 0002-e2fsprogs-nodiscard-default.patch
-> > ?       ?   ?   ??? linux
-> > ?       ?   ?   ?   ??? 001-add-m9000.patch
-> > ?       ?   ?   ??? uboot
-> > ?       ?   ?   ?   ??? 0001-uboot-m9000-modify.patch
-> > ?       ?   ?   ?   ??? 0002-uboot-m9000-add.patch
-> > ?       ?   ?   ?   ??? 0003-uboot-disable-tools.patch
-> > ?       ?   ?   ?   ??? 0004-uboot-fix-gcc-inline.patch
-> > ?       ?   ?   ?   ??? 0005-uboot-add-update-to-kconfig.patch
-> > ?       ?   ?   ?   ??? 0006-uboot-fix-fit-update.patch
-> > ?       ?   ?   ??? uboot-tools
-> > ?       ?   ?       ???
-> > 0001-uboot-tools-fw_printenv-dont-use-gnu-sscanf-m.patch
-> > ?       ?   ?       ??? 0002-uboot-tools-m9000-defaults.patch
-> > ?       ?   ??? rootfs_overlay
-> > ?       ?   ?   ??? etc
-> > ?       ?   ?   ?   ??? default
-> > ?       ?   ?   ?   ?   ??? dropbear
-> > ?       ?   ?   ?   ?   ??? ntpd
-> > ?       ?   ?   ?   ??? dropbear
-> > ?       ?   ?   ?   ?   ??? dropbear_rsa_host_key
-> > ?       ?   ?   ?   ??? fw_env.config
-> > ?       ?   ?   ?   ??? init.d
-> > ?       ?   ?   ?   ?   ??? S49ntp
-> > ?       ?   ?   ?   ?   ??? S50dropbear
-> > ?       ?   ?   ?   ?   ??? S70modules
-> > ?       ?   ?   ?   ?   ??? S90m9000
-> > ?       ?   ?   ?   ??? profile
-> > ?       ?   ?   ??? fl
-> > ?       ?   ?   ?   ??? app
-> > ?       ?   ?   ?   ?   ??? init.sh
-> > ?       ?   ?   ?   ??? config
-> > ?       ?   ?   ?       ??? config.xml
-> > ?       ?   ?   ?       ??? default.xml
-> > ?       ?   ?   ?       ??? verbose.txt
-> > ?       ?   ?   ??? hd
-> > ?       ?   ?   ?   ??? dat
-> > ?       ?   ?   ??? sbin
-> > ?       ?   ?       ??? watchdog
-> > ?       ?   ??? scripts
-> > ?       ?       ??? post_build.sh
-> > ?       ?       ??? post_image.sh
-> > ?       ??? usi.mk
-> > ??? Config.in
-> > ??? configs
-> > ?   ??? m9000_defconfig
-> > ??? external.desc
-> > ??? external.mk
-> > ??? local.mk
-> > ??? package
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> >
-> > *?   ??? usi?       ??? Config.in?       ??? m9kbootstrap?       ?   ???
-> > Config.in?       ?   ??? m9kbootstrap.mk <http://m9kbootstrap.mk>?
-> > ??? m9kdriver?       ?   ??? Config.in?       ?   ??? m9kdriver.mk
-> > <http://m9kdriver.mk>?       ??? m9kfpga?       ?   ??? Config.in?
-> > ?   ??? m9kfpga.mk <http://m9kfpga.mk>?       ??? m9k-poco?       ?   ???
-> > Config.in?       ?   ??? m9k-poco.mk <http://m9k-poco.mk>?       ???
-> > m9kservd?       ?   ??? Config.in?       ?   ??? m9kservd.mk
-> > <http://m9kservd.mk>?       ??? mariadb-connector-c?       ?   ???
-> > Config.in?       ?   ??? mariadb-connector-c.mk
-> > <http://mariadb-connector-c.mk>**?       ??? usi.mk <http://usi.mk>*
-> > ??? version
-> > ??? version.txt  
-> 
-> 
-> 
-> 
-> 
-> On Tue, Jun 2, 2020 at 4:33 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> 
-> > Hello Todd,
-> >
-> > On Tue, 2 Jun 2020 15:47:34 -0400, Todd Sampson <sampsonats@gmail.com>
-> > wrote:
-> >  
-> > > I want to cross-compile mariadb-connector-c to link with the Poco library
-> > > to create a MySQL client.
-> > >
-> > > Everything was working with mariadb-connector-c version 2.3.7.  I need to
-> > > update to 3.1.8 for compatibility with MySQL version 8.  When I changed  
-> > the  
-> > > mariadb-connector-c  buildroot target to 3.1.8, the build failed because
-> > > mariadb-connector-c had more dependencies.
-> > >
-> > > It seems like mariadb-connector-c depends on the mariadb server to be
-> > > built.  If I build the server, mariadb-connector-c is happy.  The problem
-> > > is, the mariadb server is installed on the target and there is no room  
-> > for  
-> > > it.
-> > >
-> > > I tried putting:
-> > >  
-> > > > MARIADB_INSTALL_TARGET = NO  
-> > >
-> > > in the mariadb server .mk file but it still was installed.
-> > >
-> > > If I don't select mariadb server, I get these errors and lots more  
-> > similar:  
-> > >
-> > >  
-> > home/dfr/m9k2/buildroot/output/host/lib/gcc/powerpc-buildroot-linux-gnu/8.4.0/../../../../powerpc-buildroot-linux-gnu/bin/ld:  
-> > > >  
-> > /home/dfr/m9k2/buildroot/output/host/powerpc-buildroot-linux-gnu/sysroot/usr/lib/mariadb/libmariadbclient.a(openssl.c.o):  
-> > > > in function `ma_tls_set_error':
-> > > > openssl.c:(.text+0x28): undefined reference to `ERR_get_error'
-> > > >  
-> > /home/dfr/m9k2/buildroot/output/host/lib/gcc/powerpc-buildroot-linux-gnu/8.4.0/../../../../powerpc-buildroot-linux-gnu/bin/ld:  
-> > > > openssl.c:(.text+0x64): undefined reference to  
-> > `ERR_reason_error_string'  
-> > >
-> > >
-> > > *buildroot version 2020.05*
-> > > *QUESTIONS*
-> > > 1. Is there a better way to approach this?
-> > > 2. How do I let mariadb server be built but *not *installed in the  
-> > target?  
-> > > 3. Should I be able to use the Poco library built into buildroot? It  
-> > seems  
-> > > like there should be an option in Poco to build the mariadb-connector-c
-> > > library and just work.
-> > > 4. Is anyone else in the world besides me trying to do this?
-> > >
-> > > I've been working on this for over two weeks now.  I sure would  
-> > appreciate  
-> > > any help!  
-> >
-> > First thing to do is support the buildroot people by providing your config
-> > (or defconfig)
-> > file which produces your problem (against a vanilla buildroot release or
-> > git tree, so
-> > other people can try to re-produce your problem)...
-> >
-> > Try to reproduce your problem with an complete re-build (make clean &&
-> > make), see [1]
-> >
-> > As far as I can see in the builroot-2020.05 source mariadb is at version
-> > 10.3.23,
-> > where does your 2.3.7, 3.1.8 and MySQL version 8 come from?
-> >
-> > According to [2] mariadb-connector-c is included in mariadb-10.3.23 and
-> > the buildroot package poco mysql component (BR2_PACKAGE_POCO_DATA_MYSQL)
-> > simple
-> > selects BR2_PACKAGE_MYSQL....do your try to build some packages outside of
-> > buildroot? If yes...why?
-> >
-> > Regards,
-> > Peter
-> >
-> > [1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
-> > [2] https://mariadb.com/kb/en/mariadb-connector-c-318-release-notes/
-> >  
-> > > Thanks  
-> >
-> >  
+[Romain
+ - Removes a hardcoded toolchain/sysroot path "b option" for libfuzzer
+   pkg build, however requires this series applied.
+   http://patchwork.ozlabs.org/project/buildroot/list/?series=129565
+ - updated test case to check for heap overflow string to keep arch
+   generic
+ - Removed the fixed mcpu arg from clang++ build and dropped --sysroot
+   as cross compiler wrapper now provides this for libfuzzer build
+
+v9
+ - Rebased post 2020.05
+
+---
+ .gitlab-ci.yml                                |  1 +
+ .../br2-external/clang-compiler-rt/Config.in  |  1 +
+ .../clang-compiler-rt/external.desc           |  1 +
+ .../clang-compiler-rt/external.mk             |  1 +
+ .../package/libfuzzer/Config.in               |  7 +++
+ .../package/libfuzzer/libfuzzer.hash          |  2 +
+ .../package/libfuzzer/libfuzzer.mk            | 24 ++++++++++
+ support/testing/tests/package/test_clang.py   | 46 +++++++++++++++++++
+ 8 files changed, 83 insertions(+)
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+ create mode 100644 support/testing/tests/package/test_clang.py
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 0bf8a73b36..96a8638717 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -399,6 +399,7 @@ tests.init.test_systemd.TestInitSystemSystemdRwFull: { extends: .runtime_test }
+ tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: { extends: .runtime_test }
+ tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: { extends: .runtime_test }
+ tests.package.test_atop.TestAtop: { extends: .runtime_test }
++tests.package.test_clang.TestClangCompilerRT: { extends: .runtime_test }
+ tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
+ tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
+ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in b/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
+new file mode 100644
+index 0000000000..e1f9f8c598
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_CLANG_COMPILER_RT_PATH/package/libfuzzer/Config.in"
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc b/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+new file mode 100644
+index 0000000000..92df85911d
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+@@ -0,0 +1 @@
++name: CLANG_COMPILER_RT
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+new file mode 100644
+index 0000000000..6fa55c1211
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_CLANG_COMPILER_RT_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+new file mode 100644
+index 0000000000..5af5d1b6b9
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBFUZZER
++	bool "libfuzzer"
++	help
++	  This is a set of tests (benchmarks) for fuzzing
++	  engines (fuzzers).
++
++	  https://github.com/google/fuzzer-test-suite
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+new file mode 100644
+index 0000000000..6baf5763cf
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+@@ -0,0 +1,2 @@
++sha256 c0addb4d7f0447fc9fd7c80e5721fafe4c137f29a8ebd94c5fef7e1d6a2c944c  libfuzzer-64e4d9aa19a8d33b61882154addbf8419d7416e1.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+new file mode 100644
+index 0000000000..1b6f9b8fee
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# libfuzzer
++#
++################################################################################
++
++LIBFUZZER_VERSION = 64e4d9aa19a8d33b61882154addbf8419d7416e1
++LIBFUZZER_SITE = $(call github,google,fuzzer-test-suite,$(LIBFUZZER_VERSION))
++LIBFUZZER_LICENSE = Apache-2.0
++LIBFUZZER_LICENSE_FILES = LICENSE
++LIBFUZZER_DEPENDENCIES = compiler-rt
++
++define LIBFUZZER_BUILD_CMDS
++	$(HOST_DIR)/bin/clang++ \
++		-fsanitize=address,fuzzer \
++		$(@D)/tutorial/fuzz_me.cc \
++		-o $(@D)/fuzz_me
++endef
++
++define LIBFUZZER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/fuzz_me $(TARGET_DIR)/usr/bin/fuzz_me
++endef
++
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
+new file mode 100644
+index 0000000000..df3990c6be
+--- /dev/null
++++ b/support/testing/tests/package/test_clang.py
+@@ -0,0 +1,46 @@
++import os
++
++import infra.basetest
++
++FUZZ_TIMEOUT = 120
++
++
++class TestClangCompilerRT(infra.basetest.BRTest):
++    br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_COMPILER_RT=y
++        BR2_PACKAGE_LLVM=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_LIBFUZZER=y
++        """
++
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        # Sanitizers overallocate memory and the minimum that seemed to work was 512MB
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
++        self.emulator.login()
++
++    def test_run(self):
++        self.login()
++
++        # The test case verifies the application executes and that
++        # the symbolizer is working to decode the stack trace.
++        cmd = "fuzz_me 2>&1 | grep heap-buffer-overflow"
++        _, exit_code = self.emulator.run(cmd, FUZZ_TIMEOUT)
++        self.assertEqual(exit_code, 0)
+-- 
+2.17.1
