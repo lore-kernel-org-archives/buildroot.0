@@ -1,32 +1,40 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  3 Jun 2020 12:38:47 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/bcm2835: disable doxygen doc
- generation
-Message-ID: <20200603103849.20415-1-ps.report@gmx.net>
+Date: Wed,  3 Jun 2020 12:38:49 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/bcm2835: add cap_sys_rawio
+ capability support
+In-Reply-To: <20200603103849.20415-1-ps.report@gmx.net>
+References: <20200603103849.20415-1-ps.report@gmx.net>
+Message-ID: <20200603103849.20415-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add cap_sys_rawio capability support in case libcap is available.
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
-  - split of from original patch (suggested by Thomas Petazzoni)
+  - split of from original patch and fixed for
+    BCM2835_HAVE_LIBCAP/BCM2835_HAVE_LIBCAP2 typo
 ---
- package/bcm2835/bcm2835.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/bcm2835/bcm2835.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-index d43dd7e574..f75b2fc69e 100644
+index 2ef6d94b38..1cabd72e5d 100644
 --- a/package/bcm2835/bcm2835.mk
 +++ b/package/bcm2835/bcm2835.mk
-@@ -10,4 +10,7 @@ BCM2835_LICENSE = GPL-3.0
- BCM2835_LICENSE_FILES = COPYING
- BCM2835_INSTALL_STAGING = YES
+@@ -13,4 +13,10 @@ BCM2835_INSTALL_STAGING = YES
+ # disable doxygen doc generation
+ BCM2835_CONF_ENV = ac_cv_prog_DOXYGEN=/bin/true
  
-+# disable doxygen doc generation
-+BCM2835_CONF_ENV = ac_cv_prog_DOXYGEN=/bin/true
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++BCM2835_DEPENDENCIES = libcap
++# workaround typo in src/bcm2835.c and use both defines
++BCM2835_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DBCM2835_HAVE_LIBCAP -DBCM2835_HAVE_LIBCAP2"
++endif
 +
  $(eval $(autotools-package))
 -- 
