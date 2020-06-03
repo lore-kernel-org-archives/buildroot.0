@@ -1,43 +1,50 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  3 Jun 2020 12:34:41 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libresslL: bump version to 3.1.2
-Message-ID: <20200603193441.801467-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Jun 2020 21:35:55 +0200
+Subject: [Buildroot] [git commit] package/systemd: bump version to 245.6
+Message-ID: <20200603193549.2AAE8813FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=3d54d99c6ea58339785770f34d6bda8c60aa1956
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr: two sapces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/systemd.hash | 10 +++++-----
+ package/systemd/systemd.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index fcecc2b434..6b53d54e45 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  libressl-3.0.2.tar.gz
-+sha256  f88a2f7ea617149a34e40c022d9912963f00eaa6109af421317525e6c978d892  libressl-3.1.2.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index c2491bb3a9..c703076268 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index ea67a0ef7f..64ba6405b0 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,6 +1,6 @@
+ # sha256 locally computed
+-sha256	b754d75617665a53bd0a1e8f5ec526b383f17e1cc06d1056399e5859e0b6fe06	systemd-245.5.tar.gz
+-sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+-sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
+-sha256	83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275	tools/chromiumos/LICENSE
++sha256  f58424fd2d105503f836ff7d099d762901fb40347de993fce7373d65ff640f5b  systemd-245.6.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
++sha256  f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92  README
++sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 92de540725..6ccf9d6e37 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRESSL_VERSION = 3.0.2
-+LIBRESSL_VERSION = 3.1.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
--- 
-2.26.2
+-SYSTEMD_VERSION = 245.5
++SYSTEMD_VERSION = 245.6
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
