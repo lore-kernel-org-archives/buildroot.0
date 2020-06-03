@@ -1,71 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Jun 2020 16:55:41 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.3
-Message-ID: <20200603145530.7673E82ABB@busybox.osuosl.org>
+Date: Wed, 03 Jun 2020 17:14:24 +0200
+Subject: [Buildroot] Buildroot 2020.02.3 released
+Message-ID: <87zh9kb2r3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d42f3adaae24a6aa3abc2de4f39fa8023f971d31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 28 ++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 30 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index 7dda1c47ec..cd7c130cd7 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,31 @@
-+2020.02.3, released June 3rd, 2020
-+
-+	Important / security related fixes.
-+
-+	Fix various build issues of host packages on hosts using GCC
-+	10.
-+
-+	Updated/fixed packages: arm-trusted-firmware, audit, bind,
-+	binutils, bison, clamav, crda, dovecot, dtc, efl, elf2flt,
-+	erlang, fakeroot, ffmpeg, fmc, fmlib, freerdp, gcc, git,
-+	glib-networking, gnupg, leveldb, libexif, libssh2,
-+	libusb-compat, linux-headers, lrzip, ltrace, mariadb, mesa3d,
-+	mp4v2, openldap, openocd, perl, php, prosody,
-+	python-pycryptodomex, python-pyqt5, qemu, rpi-firmware, rustc,
-+	speexdsp, sysrepo, systemd, tremor, vboot-utils, wireshark,
-+	xen
-+
-+	Removed packages: python-pycrypto
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12361: Init system (systemd) kills login on Raspberry Pi Zero
-+	#12656: bison fails to relocate with relocate-sdk.sh
-+	#12671: leveldb won't detect that snappy is present (static..
-+	#12691: host-rust build fails
-+	#12831: RPI-firmware package: DTB-overlay dependency
-+
-+
- 2020.02.2, released May 12th, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index cd6d66908f..2ed4551653 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02.2
-+export BR2_VERSION := 2020.02.3
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1589285000
-+BR2_VERSION_EPOCH = 1591196000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2020.02.3 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2020.02.3.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2020.02.3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.3 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.2 release. The 2020.02.x series is
+supported until April 2021.
+
+- Fix various build issues of host packages on hosts using GCC 10
+
+- Security fixes for bind, clamav, dovecot, freerdp, git,
+  glib-networking, libexif, lrzip, mariadb, mp4v2, openldap, php,
+  wireshark, xen
+
+- Fixes for download/compilation/runtime/license issues in
+  arm-trusted-firmware, audit, binutils, bison, crda, dtc, elf2flt, efl,
+  erlang, fakeroot, ffmpeg, fmc, fmlib, gcc, gnupg, leveldb,
+  libusb-compat, linux-headers, ltrace, mesa3d, openocd, perl, prosody,
+  python-pyqt5, rpi-firmware, qemu, rustc, speexdsp, sysrepo, systemd,
+  tremor, vboot-utils,
+
+- Remove python-pycrypto (unmaintained, security issues, consider
+  python-pycryptodomex instead)
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.3
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02.2..
+
+    15  Fabrice Fontaine
+     7  Romain Naour
+     7  Thomas Petazzoni
+     6  Heiko Thiery
+     5  Peter Korsgaard
+     5  Yann E. MORIN
+     3  Bernd Kuhls
+     2  James Hilliard
+     1  Carlos Santos
+     1  Danomi Manchego
+     1  Fabio Estevam
+     1  Francois Perrad
+     1  Joachim Nilsson
+     1  Joseph Kogut
+     1  Julien Olivain
+     1  J?r?my Rosen
+     1  Lecopzer Chen
+     1  Matt Weber
+     1  Max Filippov
+     1  Norbert Lange
+     1  Peter Seiderer
+     1  Ryan Coe
+     1  Stefan S?rensen
+     1  Stephan Hoffmann
+
+-- 
+Bye, Peter Korsgaard
