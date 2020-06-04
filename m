@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 22:59:22 +0200
-Subject: [Buildroot] [PATCH] package/python-django: security bump to
- version 3.0.7
-In-Reply-To: <20200604123926.18731-1-peter@korsgaard.com>
-References: <20200604123926.18731-1-peter@korsgaard.com>
-Message-ID: <20200604225922.2ccd77a1@windsurf>
+Date: Thu, 4 Jun 2020 23:02:16 +0200
+Subject: [Buildroot] [PATCH] strace: bump to version 5.7
+In-Reply-To: <4f8ce0c199f730641f988fbc2841c3145b9fa759.1591267219.git.baruch@tkos.co.il>
+References: <4f8ce0c199f730641f988fbc2841c3145b9fa759.1591267219.git.baruch@tkos.co.il>
+Message-ID: <20200604230216.02dc458a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  4 Jun 2020 14:39:26 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Thu,  4 Jun 2020 13:40:19 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> Fixes the following security issues:
+> Drop upstream patch.
 > 
-> - CVE-2020-13254: Potential data leakage via malformed memcached keys
+> Fixes:
+> http://autobuild.buildroot.net/results/ca298d6543c07efbf77f2adeb4832bbac00ae73f/
+> http://autobuild.buildroot.net/results/f26a4f2bb5a9b25739e55be5e5ded2b83a0937ac/
+> http://autobuild.buildroot.net/results/53d6dac4047742ae2acd682a0dd97d986ba611bb/
 > 
->   In cases where a memcached backend does not perform key validation,
->   passing malformed cache keys could result in a key collision, and
->   potential data leakage.  In order to avoid this vulnerability, key
->   validation is added to the memcached cache backends.
-> 
-> - CVE-2020-13596: Possible XSS via admin ForeignKeyRawIdWidget
-> 
->   Query parameters for the admin ForeignKeyRawIdWidget were not properly URL
->   encoded, posing an XSS attack vector.  ForeignKeyRawIdWidget now ensures
->   query parameters are correctly URL encoded.
-> 
-> For details, see the announcement:
-> https://docs.djangoproject.com/en/dev/releases/3.0.7/
-> 
-> Additionally, 3.0.5..3.0.7 contains a number of non-security related
-> bugfixes.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/python-django/python-django.hash | 4 ++--
->  package/python-django/python-django.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> The build issue affects 2020.05 as well.
+
+And 2020.02 ?
+
+> ---
+>  ...yscall_info.c-fix-build-without-fork.patch | 56 -------------------
+>  package/strace/strace.hash                    |  4 +-
+>  package/strace/strace.mk                      |  2 +-
+>  3 files changed, 3 insertions(+), 59 deletions(-)
+>  delete mode 100644 package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
 
 Applied to master, thanks.
 
