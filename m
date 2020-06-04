@@ -1,18 +1,23 @@
-From: Joachim Nilsson <troglobit@gmail.com>
-Date: Thu,  4 Jun 2020 20:55:48 +0200
-Subject: [Buildroot] [PATCH v2 1/1] boot/uboot: Change from FTP to HTTPS for
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 4 Jun 2020 22:47:10 +0200
+Subject: [Buildroot] [git commit] boot/uboot: change from FTP to HTTPS for
  official releases
-Message-ID: <20200604185548.92373-1-troglobit@gmail.com>
+Message-ID: <20200604204645.6B3C482293@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The HTTPS URL seems to be more reliable and quicker for download than FTP.
-FTP may also be a blocked protocol on some sites and in CI/CD setups.
+commit: https://git.buildroot.net/buildroot/commit/?id=2bfc379c50e7c7bc532bed8dc648025c4db14358
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The HTTPS URL seems to be more reliable and quicker for download than
+FTP.  FTP may also be a blocked protocol on some sites and in CI/CD
+setups.
 
 Signed-off-by: Joachim Nilsson <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  boot/uboot/uboot.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -30,5 +35,3 @@ index 1d50e72846..71689207e3 100644
  UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
  endif
  
--- 
-2.25.1
