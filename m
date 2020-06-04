@@ -1,42 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:02:32 +0200
-Subject: [Buildroot] [git commit] package/libnetconf2: bump to version 1.1.26
-Message-ID: <20200604210212.C0FAA81229@busybox.osuosl.org>
+Date: Thu, 4 Jun 2020 23:02:29 +0200
+Subject: [Buildroot] [git commit] package/strace: bump to version 5.7
+Message-ID: <20200604210212.ADBF1825FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e1f3f881ce94f5cac240698dc927075a9315884
+commit: https://git.buildroot.net/buildroot/commit/?id=9ed07fb8053f3bb46147c7d4a2698af640753126
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Drop upstream patch.
+
+Fixes:
+http://autobuild.buildroot.net/results/ca298d6543c07efbf77f2adeb4832bbac00ae73f/
+http://autobuild.buildroot.net/results/f26a4f2bb5a9b25739e55be5e5ded2b83a0937ac/
+http://autobuild.buildroot.net/results/53d6dac4047742ae2acd682a0dd97d986ba611bb/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnetconf2/libnetconf2.hash | 2 +-
- package/libnetconf2/libnetconf2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ace_syscall_info.c-fix-build-without-fork.patch | 56 ----------------------
+ package/strace/strace.hash                         |  4 +-
+ package/strace/strace.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 59 deletions(-)
 
-diff --git a/package/libnetconf2/libnetconf2.hash b/package/libnetconf2/libnetconf2.hash
-index f49972e957..489188daf1 100644
---- a/package/libnetconf2/libnetconf2.hash
-+++ b/package/libnetconf2/libnetconf2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1a69db028bf970f0dab15ed508b58e0cf0806a7e4492828404b75c97ec8ab306  libnetconf2-1.1.24.tar.gz
-+sha256  2ce2b819f3544fd46a3a4c8ba6dd0a3798cab2a63aa347bc1eb5275a2c89b7bd  libnetconf2-1.1.26.tar.gz
- sha256  bd962ab457c8a8cb8faaaa36c11484680f3c9a47dbc336507817ae8935384064  LICENSE
-diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
-index 4ef3d85b17..1b692550dc 100644
---- a/package/libnetconf2/libnetconf2.mk
-+++ b/package/libnetconf2/libnetconf2.mk
+diff --git a/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch b/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
+deleted file mode 100644
+index 596524e4f4..0000000000
+--- a/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From ba0d1193b31e8822744ae250d8e984dad32e7e49 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 14 Apr 2020 13:45:29 +0200
+-Subject: [PATCH] ptrace_syscall_info.c: fix build without fork
+-
+-Build without fork fails on:
+-
+-ptrace_syscall_info.c:33:27: error: 'expected_entry_size' defined but not used [-Werror=unused-const-variable=]
+- static const unsigned int expected_entry_size =
+-                           ^~~~~~~~~~~~~~~~~~~
+-ptrace_syscall_info.c:31:27: error: 'expected_none_size' defined but not used [-Werror=unused-const-variable=]
+- static const unsigned int expected_none_size =
+-                           ^~~~~~~~~~~~~~~~~~
+-ptrace_syscall_info.c:24:1: error: 'kill_tracee' defined but not used [-Werror=unused-function]
+- kill_tracee(pid_t pid)
+- ^~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/ffc81d3798379a9c34c7a708ebbdea27409f755d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream: https://github.com/strace/strace/commit/897f3d053305ae2fb8e99371b4effb9b3f5c0000]
+----
+- ptrace_syscall_info.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/ptrace_syscall_info.c b/ptrace_syscall_info.c
+-index acea27ec..0bfd91c5 100644
+---- a/ptrace_syscall_info.c
+-+++ b/ptrace_syscall_info.c
+-@@ -20,18 +20,20 @@
+- 
+- bool ptrace_get_syscall_info_supported;
+- 
+-+#define FAIL	do { ptrace_stop = -1U; goto done; } while (0)
+-+
+-+#ifdef HAVE_FORK
+- static int
+- kill_tracee(pid_t pid)
+- {
+- 	return kill_save_errno(pid, SIGKILL);
+- }
+- 
+--#define FAIL	do { ptrace_stop = -1U; goto done; } while (0)
+--
+- static const unsigned int expected_none_size =
+- 	offsetof(struct_ptrace_syscall_info, entry);
+- static const unsigned int expected_entry_size =
+- 	offsetofend(struct_ptrace_syscall_info, entry.args);
+-+#endif /* HAVE_FORK */
+- static const unsigned int expected_exit_size =
+- 	offsetofend(struct_ptrace_syscall_info, exit.is_error);
+- static const unsigned int expected_seccomp_size =
+--- 
+-2.25.1
+-
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 720f358c5b..0337558244 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.6/strace-5.6.tar.xz.asc
+-sha256  189968eeae06ed9e20166ec55a830943c84374676a457c9fe010edc7541f1b01  strace-5.6.tar.xz
++# https://strace.io/files/5.7/strace-5.7.tar.xz.asc
++sha256  b284b59f9bcd95b9728cea5bd5c0edc5ebe360af73dc76fbf6334f11c777ccd8  strace-5.7.tar.xz
+ sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 5c101419f4..ec88690f24 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNETCONF2_VERSION = 1.1.24
-+LIBNETCONF2_VERSION = 1.1.26
- LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,v$(LIBNETCONF2_VERSION))
- LIBNETCONF2_INSTALL_STAGING = YES
- LIBNETCONF2_LICENSE = BSD-3-Clause
+-STRACE_VERSION = 5.6
++STRACE_VERSION = 5.7
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
