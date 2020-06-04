@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:19:53 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/ell: bump version to 0.31
-In-Reply-To: <20200602221745.3209-1-ps.report@gmx.net>
-References: <20200602221745.3209-1-ps.report@gmx.net>
-Message-ID: <20200604231953.2913bd26@windsurf>
+Date: Thu, 4 Jun 2020 23:19:36 +0200
+Subject: [Buildroot] [git commit] package/iwd: bump version to 1.7
+Message-ID: <20200604212152.0B0CF7F9B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  3 Jun 2020 00:17:44 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=96f0f7b80be5404ed10f28854a05921c0a6c4bed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - removed 0001-ell-ecc.h-fix-build-with-uclibc.patch
->   (upstream applied [1])
-> 
-> - update 0002-ell-rtnl-fix-compile-with-older-toolchains.patch
->  (add upstream link)
-> 
-> [1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=aa30f1884cf72d590fdca1db11d4fb2c2d526141
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - add missing sob line
-> ---
->  ...0001-ell-ecc.h-fix-build-with-uclibc.patch | 31 -------------------
->  ...nl-fix-compile-with-older-toolchains.patch |  1 +
->  package/ell/ell.hash                          |  2 +-
->  package/ell/ell.mk                            |  2 +-
->  4 files changed, 3 insertions(+), 33 deletions(-)
->  delete mode 100644 package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 26ce712660..9c6b9c3ea4 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  10b53cee9c38c9c60f83d4e16a446b27551b6187a2bd09d724f2238c99877f3f  iwd-1.6.tar.gz
++sha256  1707397235c972a2760c5e8865360759ac1feb6c06ac954799dff765feb240ca  iwd-1.7.tar.gz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index f3776fbfd4..32ff175933 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 1.6
++IWD_VERSION = 1.7
+ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
