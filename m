@@ -1,113 +1,146 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Thu, 4 Jun 2020 07:00:47 +0200
-Subject: [Buildroot] [PATCH] Revert "package/prosody: use correct bit32
- package"
-In-Reply-To: <281890da-6c1a-fcb5-0436-7d8cb8c1affa@gmail.com>
-References: <20200603215904.98199-1-romain.naour@gmail.com>
- <CADvTj4qMYKh1CCqjeZaXcGvguHZbDFao8AXinQtr8LyFjFKmOA@mail.gmail.com>
- <281890da-6c1a-fcb5-0436-7d8cb8c1affa@gmail.com>
-Message-ID: <CAB0FRssoZHBnO329q0vvX-8Yr8MBPMzZrhs7UGLytVn1eo++Dg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 04 Jun 2020 06:27:58 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-06-03
+Message-ID: <20200604062805.96615887A1@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-1) don't trust documentation, trust tests (by running them)
+Hello,
 
-2) with BR, it's easy to run a test (even locally, before a commit), but it
-isn't easy to know that a test exists.
-In my point of view, the right place of test_prosody.py is in the directory
-package/prosody, not in support/testing/tests/package,
-support/testing is the right place only for testing infrastructure.
+Autobuild statistics for 2020-06-03
+===============================
 
-Fran?ois
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 13  |  2  |  0  | 15  |
+    master   | 80  | 67  |  0  | 147 |
 
-Le jeu. 4 juin 2020 ? 00:42, Romain Naour <romain.naour@gmail.com> a ?crit :
+Results for branch 'master'
+===========================
 
-> Hi James,
->
-> Le 04/06/2020 ? 00:30, James Hilliard a ?crit :
-> > On Wed, Jun 3, 2020 at 3:59 PM Romain Naour <romain.naour@gmail.com>
-> wrote:
-> >>
-> >> This reverts commit fa84c176c2148a60103e850204180f86aa5baa73 that
-> >> replace luabitop by lua_bit32 package when lua 5.1 is used.
-> >>
-> >> Since this change the prosody test in gitlab is fail due to
-> >> missing lua-bitops [1]:
-> >>
-> >> Starting prosody:
-> >> **************************
-> >> Prosody was unable to find lua-bitops
-> >> This package can be obtained in the following ways:
-> >>
-> >>     Source:           http://bitop.luajit.org/
-> >>     Debian/Ubuntu:    sudo apt-get install lua-bitop
-> >>     luarocks:         luarocks install luabitop
-> >>
-> >> WebSocket support will not be available
-> >> More help can be found on our website, at
-> https://prosody.im/doc/depends
-> >> **************************
-> >>
-> >> The upstream documentation [2] is misleading (or not uptodate)
-> >> about lua-bit32 dependency.
-> >>
-> >> Since bitop is builtin since lua5.2, we probably need to select
-> >> luabitop package only when lua 5.1 is used as lua interpreter.
-> >>
-> >> Tested with run-tests:
-> >> ./support/testing/run-tests tests.package.test_prosody.TestProsodyLua51
-> >>
-> >> [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/576271975
-> > Isn't this job failure just due to this faulty test?
-> > self.module_test('bit') # luabitop
-> > Which should be replaced with:
-> > self.module_test('bit32') # luabit32
-> > or something along those lines?
->
-> I'm not speaking about the test itself but the prosody log when it's
-> started
-> "Prosody was unable to find lua-bitops"
->
-> Also the test is shared with luajit and the TestProsodyLuajit test is fine.
->
-> Best regards,
-> Romain
->
-> >> [2] https://prosody.im/doc/depends#bitop
-> >>
-> >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> >> Cc: James Hilliard <james.hilliard1@gmail.com>
-> >> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> >> ---
-> >>  package/prosody/Config.in | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/package/prosody/Config.in b/package/prosody/Config.in
-> >> index 0b01547103..c32ca20e23 100644
-> >> --- a/package/prosody/Config.in
-> >> +++ b/package/prosody/Config.in
-> >> @@ -4,7 +4,7 @@ config BR2_PACKAGE_PROSODY
-> >>         depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-> >>         depends on !BR2_PACKAGE_LUA_5_3
-> >>         depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket,
-> luafilesystem
-> >> -       select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 # runtime
-> >> +       select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
-> >>         select BR2_PACKAGE_LUAEXPAT # runtime
-> >>         select BR2_PACKAGE_LUASEC # runtime
-> >>         select BR2_PACKAGE_LUASOCKET # runtime
-> >> --
-> >> 2.25.4
-> >>
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200604/147c256f/attachment.html>
+Classification of failures by reason
+------------------------------------
+
+               host-qemu-5.0.0 | 17
+                qt5base-5.14.2 | 9 
+                  assimp-5.0.1 | 5 
+           host-wayland-1.18.0 | 5 
+        python-markdown2-2.3.9 | 5 
+                  gloox-1.0.23 | 3 
+              ibm-sw-tpm2-1563 | 3 
+               belle-sip-4.3.1 | 2 
+              host-grpc-1.25.0 | 2 
+               libupnpp-0.17.2 | 2 
+                    qemu-5.0.0 | 2 
+               apcupsd-3.14.14 | 1 
+               apparmor-2.13.4 | 1 
+               collectd-5.11.0 | 1 
+             freeswitch-1.10.3 | 1 
+   gdb-arc-2020.03-release-gdb | 1 
+                 gnutls-3.6.13 | 1 
+          gstreamer1-mm-1.10.0 | 1 
+                libdrm-2.4.102 | 1 
+                    mpv-0.29.1 | 1 
+             qt5wayland-5.14.2 | 1 
+                 rsh-redone-85 | 1 
+                wayland-1.18.0 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/af93bf6eadd64476e8f1055feb83bd2c89323402 |     
+    arm      |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/1d4469ac6354ce0caa20fd458788ab782c4e63d6 |     
+  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/a8033a8b65d90cbd8aee426a8bbe6aad440b9dd9 |     
+  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/7e444db2b445c9cc2e50c470d0514e1966f8bfb5 |     
+    m68k     |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/2cddf31dd448e046b28998f42e05ff430d87b516 |     
+  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/26d747f5b498079bc33956ab8b1faacf36223ad6 |     
+  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/b162ff1decf55f42f2981ff0bca0b18b92cf111b |     
+   xtensa    |        belle-sip-4.3.1         | NOK | http://autobuild.buildroot.net/results/5dfbf798a82c67a711b22b62390f1477edfcbcf8 |     
+   nios2     |        belle-sip-4.3.1         | NOK | http://autobuild.buildroot.net/results/a4a48f2d3988b46a7b5853359857889244d45169 |     
+    i586     |        collectd-5.11.0         | NOK | http://autobuild.buildroot.net/results/85eb9b201be75d20f9eef4fe7df7ac0e77f937bf |     
+    m68k     |       freeswitch-1.10.3        | NOK | http://autobuild.buildroot.net/results/e7e32cf2c5dc245fbc3364a705932ca30e1c4afa |     
+    arc      |  gdb-arc-2020.03-release-gdb   | NOK | http://autobuild.buildroot.net/results/9897edbe90bfc6b1fc827b2733492a432e81cfc2 | ORPH
+    arm      |          gloox-1.0.23          | NOK | http://autobuild.buildroot.net/results/911b962b149cc99dfca78b67ff446d8e2aa3e7b3 |     
+    m68k     |          gloox-1.0.23          | NOK | http://autobuild.buildroot.net/results/91385a34c80c5043519e96395e203eef662ac18d |     
+    m68k     |          gloox-1.0.23          | NOK | http://autobuild.buildroot.net/results/5c86bdd5ef34377a5ba06fef830539a72d83395d |     
+    or1k     |         gnutls-3.6.13          | NOK | http://autobuild.buildroot.net/results/b3cfecb8514008d41d7f0e6fe830f1614154e7fb |     
+  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/8083a94a4956d25fdcf7fe6e6979d89f9091a063 |     
+   mipsel    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/04b632581ba6dba47590ebf1ad37d2d8db3ebf57 |     
+  powerpc    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/718de2533fd6d19d1f36adfcd654d0ae690867af |     
+ powerpc64   |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/30aa40014e0743670bf28ec7a4bfd84d2de9f01f | ORPH
+  mips64el   |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/1a19ea698d45e138185b23597ec28442ea2f7bed | ORPH
+  aarch64    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/4eaa03d35c0499eda7ec4690a0956e8b215840a1 | ORPH
+   mipsel    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/080cd386311f86877ddd88cd7265a72332868091 | ORPH
+  riscv32    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/e12158a424b1bc73871d87e45aa13d1f2cd52671 | ORPH
+   mipsel    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/dbfcc213ed2d124949edfba64ac02ab7df4f4fb3 | ORPH
+   nios2     |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/ca6d3540d67d59fb955db725ecc3bd789aeee199 | ORPH
+  riscv32    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/1b00e84add5d956a2362e64154173e31dd681248 | ORPH
+    arm      |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/5ce8bcf7ac1508d90fb8b503925408019d73ea97 | ORPH
+    arm      |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/4bb6187d1faecc4ccb71b99d0db2a5b90a5b9360 | ORPH
+  mips64el   |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/aa0e908182ba28c648b51a89889c1d43054e9d0e | ORPH
+   x86_64    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/d9b2af327aabf76c5e1ab241ee5b8f54a43cc462 | ORPH
+  aarch64    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/c203a97b4c8365dc39b61dd33beea83c1767ae1c | ORPH
+  powerpc    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/de40af3ee3c7b13a5c0e9fd02f24916cd33b953b | ORPH
+  aarch64    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/a6cbf3c1838aec5c3826d2852687b9e6b4e0b6e4 | ORPH
+   xtensa    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/7b0e2800e5a6b346abf548ede6ba76c5a834a7a3 | ORPH
+  aarch64    |        host-qemu-5.0.0         | NOK | http://autobuild.buildroot.net/results/a093b1928882f9c94668ce8830b1e3492fb81894 | ORPH
+   x86_64    |      host-wayland-1.18.0       | NOK | http://autobuild.buildroot.net/results/ae3e21ba37a7836c44408b30d33472cc0fcbbc14 |     
+microblazeel |      host-wayland-1.18.0       | NOK | http://autobuild.buildroot.net/results/41754ddc16937919c9d6408d6ab98bc5343b4cb3 |     
+   x86_64    |      host-wayland-1.18.0       | NOK | http://autobuild.buildroot.net/results/50e9e7604217dd06316667fffafd7a7bdd105a04 |     
+   x86_64    |      host-wayland-1.18.0       | NOK | http://autobuild.buildroot.net/results/f2e59f4faf24ac129743db1d94cfc959eab9e274 |     
+   xtensa    |      host-wayland-1.18.0       | NOK | http://autobuild.buildroot.net/results/34c1bcf2e885841b4dad171ddf9cb98a59140ac8 |     
+    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/64479a70245e2f033de9553cd5f2b3062ef1a4d4 |     
+    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/ee3c65b16bd15d190bd4caec24695e4d8e110e8b |     
+  riscv64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/dd82125e509bcd1ba52053bd43de3fe0befcfb54 |     
+    arm      |         libdrm-2.4.102         | NOK | http://autobuild.buildroot.net/results/0e9e8578af8ad9eea8dd0efb66fedd957ced152c |     
+    arc      |        libupnpp-0.17.2         | NOK | http://autobuild.buildroot.net/results/b142fe37087cdff8a8eed98145e8633b468c27d7 |     
+    arc      |        libupnpp-0.17.2         | NOK | http://autobuild.buildroot.net/results/e4455caa33a618ea0b8f723ef70a694c276d45cf |     
+  riscv64    |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/6f8f056c5d82e078478c83fd343f070c2b01a4e2 |     
+  mips64el   |     python-markdown2-2.3.9     | NOK | http://autobuild.buildroot.net/results/2051fc74f9809de0e39fff155fd88b71b9578a2e |     
+   mipsel    |     python-markdown2-2.3.9     | NOK | http://autobuild.buildroot.net/results/f64af62b733493dfd49565ee6f1c277acf86073a |     
+    m68k     |     python-markdown2-2.3.9     | NOK | http://autobuild.buildroot.net/results/e6fe7f82551c324640fcf7cc7c2eaa1490e58db6 |     
+    sh4      |     python-markdown2-2.3.9     | NOK | http://autobuild.buildroot.net/results/1c93a375a80026780f346c7b0fc9a9c1a24030c3 |     
+    m68k     |     python-markdown2-2.3.9     | NOK | http://autobuild.buildroot.net/results/298ed7d12ed4a14ed76748629fe8c6715dc6e73c |     
+    arm      |           qemu-5.0.0           | NOK | http://autobuild.buildroot.net/results/0adfb031c243709b0bac71599ed419b64cc514a4 | ORPH
+powerpc64le  |           qemu-5.0.0           | NOK | http://autobuild.buildroot.net/results/2f5186088324d31adfcc4039a901c8ad15324310 | ORPH
+    sh4      |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/9a10c716bbeb11ea3fd82a9d494007bbfbaca9dd |     
+   x86_64    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/2d765ea047922c6f5e225bb9a721e165ba2793de |     
+   x86_64    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/dc1216554703f581084f7b49604ebb096c403052 |     
+   xtensa    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/aa6c984dfba1dec45bb8c607d910e9ea0caa54bc |     
+  riscv64    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/63d416b415d1aa875ed1a810115d8d9a77e81fb3 |     
+powerpc64le  |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/6e282daec9b765e9ec77896f52765a78d3c5e999 |     
+   mipsel    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/be6c544fcd3a5e865c54733821088cd74efd8e47 |     
+    mips     |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/7dab3bd5491b9e8c774acedb91ffe0cf1c4d09b6 |     
+   mipsel    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/3ce0448f704d5fbb722a92305c60603a164b18f2 |     
+  aarch64    |       qt5wayland-5.14.2        | NOK | http://autobuild.buildroot.net/results/ca182b96d495fce09b2025eb580babb9cce6ef05 |     
+    i586     |         rsh-redone-85          | NOK | http://autobuild.buildroot.net/results/859c1ee6abaac76bfd2ee45e023da2a6683f2bd4 | ORPH
+microblazeel |         wayland-1.18.0         | NOK | http://autobuild.buildroot.net/results/117d8aa1ae8a9349f666b79d8ea771a711fabda4 |     
+
+
+Results for branch '2020.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+          host-checkpolicy-2.9 | 1 
+               mongodb-r4.0.12 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |      host-checkpolicy-2.9      | NOK | http://autobuild.buildroot.net/results/7c0666b53e2b41d794eefb7d0970e4e1fb71dc7c |     
+  aarch64    |        mongodb-r4.0.12         | NOK | http://autobuild.buildroot.net/results/23677e709549ce6e10c937adc6b8d70fa3bfec3b |     
+
+
+
+-- 
+http://autobuild.buildroot.net
