@@ -1,52 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:25:25 +0200
-Subject: [Buildroot] [git commit] package/mosquitto: bump to v1.6.10
-Message-ID: <20200604212709.663F3839E5@busybox.osuosl.org>
+Date: Thu, 4 Jun 2020 23:26:10 +0200
+Subject: [Buildroot] [git commit] package/libglib2: bump version to 2.64.3
+Message-ID: <20200604212709.8F15B839E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=466bce9c9b2f369bf4d87321d390951236161baf
+commit: https://git.buildroot.net/buildroot/commit/?id=e0f7af4daa2e3ca4e54338ed938139598891872a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release fix some bugs in the broker and client libraries,
-as well as building with below C99 suport.
-
-Read the whole announcement on:
-https://mosquitto.org/blog/2020/05/version-1-6-8-released/
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 6 +++---
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index ab3f7aeb26..482962490e 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-1.6.9.tar.gz.asc
--sha256  412979b2db0a0020bd02fa64f0a0de9e7000b84462586e32b67f29bb1f6c1685  mosquitto-1.6.9.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-1.6.10.tar.gz.asc
-+sha256  92d1807717f0f6d57d1ac1207ffdb952e8377e916c7b0bb4718f745239774232  mosquitto-1.6.10.tar.gz
- 
- # License files
- sha256  cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index ea57d76933..2a9b504eb8 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 6d267e464e..4f06ad588d 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.64.2',
++   version : '2.64.3',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index c275f1f86b..4e9b25165e 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.64/glib-2.64.2.sha256sum
+-sha256  9a2f21ed8f13b9303399de13a0252b7cbcede593d26971378ec6cb90e87f2277  glib-2.64.2.tar.xz
++# https://download.gnome.org/sources/glib/2.64/glib-2.64.3.sha256sum
++sha256  fe9cbc97925d14c804935f067a3ad77ef55c0bbe9befe68962318f5a767ceb22  glib-2.64.3.tar.xz
+ # License files, locally calculated
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 7106124d72..d1c75d8a43 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MOSQUITTO_VERSION = 1.6.9
-+MOSQUITTO_VERSION = 1.6.10
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+ LIBGLIB2_VERSION_MAJOR = 2.64
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
