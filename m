@@ -1,34 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 22:59:11 +0200
-Subject: [Buildroot] [PATCH] package/pciutils: bump to version 3.7.0
-In-Reply-To: <c067915b3f68fb2632c6b54c3cbcd64e29acf810.1591296216.git.baruch@tkos.co.il>
-References: <c067915b3f68fb2632c6b54c3cbcd64e29acf810.1591296216.git.baruch@tkos.co.il>
-Message-ID: <20200604225911.1fcbd6a0@windsurf>
+Date: Thu, 4 Jun 2020 22:59:15 +0200
+Subject: [Buildroot] [PATCH v2 1/1] boot/uboot: Change from FTP to HTTPS
+ for official releases
+In-Reply-To: <20200604185548.92373-1-troglobit@gmail.com>
+References: <20200604185548.92373-1-troglobit@gmail.com>
+Message-ID: <20200604225915.67fb6ef0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  4 Jun 2020 21:43:36 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+On Thu,  4 Jun 2020 20:55:48 +0200
+Joachim Nilsson <troglobit@gmail.com> wrote:
 
-> Use CROSS_COMPILE for toolchain prefix. Makefile derives CC, AR, and
-> RANLIB from that.
+> The HTTPS URL seems to be more reliable and quicker for download than FTP.
+> FTP may also be a blocked protocol on some sites and in CI/CD setups.
 > 
-> Remove sed manipulation of the lib/configure script. Host uname is not
-> used when the HOST variable is set as we do.
-> 
-> Remove sed manipulation of Makefile. Set STRIP to an empty string
-> instead.
-> 
-> Format hash file with two space separators.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Joachim Nilsson <troglobit@gmail.com>
 > ---
->  package/pciutils/pciutils.hash |  4 ++--
->  package/pciutils/pciutils.mk   | 13 ++++---------
->  2 files changed, 6 insertions(+), 11 deletions(-)
+>  boot/uboot/uboot.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
