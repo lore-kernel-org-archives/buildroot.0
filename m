@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:25:35 +0200
-Subject: [Buildroot] [git commit] package/doxygen: bump version to 1.18.18
-Message-ID: <20200604212709.760C2839E5@busybox.osuosl.org>
+Date: Thu, 4 Jun 2020 23:27:43 +0200
+Subject: [Buildroot] [git commit] package/gloox: disable tests and examples
+Message-ID: <20200604212709.CA3AA839E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12ddc5c33d9dafbc297c5d9015e4a174ebdd8073
+commit: https://git.buildroot.net/buildroot/commit/?id=5e16c37ae16ee0cc52c0e26cd889b1400d74cfc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+http://autobuild.buildroot.net/results/91385a34c80c5043519e96395e203eef662ac18d/
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/doxygen/doxygen.hash | 4 ++--
- package/doxygen/doxygen.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gloox/gloox.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/doxygen/doxygen.hash b/package/doxygen/doxygen.hash
-index 90d4e978bc..ff2fac7b9c 100644
---- a/package/doxygen/doxygen.hash
-+++ b/package/doxygen/doxygen.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256 2cba988af2d495541cbbe5541b3bee0ee11144dcb23a81eada19f5501fd8b599  doxygen-1.8.17.src.tar.gz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  18173d9edc46d2d116c1f92a95d683ec76b6b4b45b817ac4f245bb1073d00656  doxygen-1.8.18.src.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-index 52e96f3807..6d8727208a 100644
---- a/package/doxygen/doxygen.mk
-+++ b/package/doxygen/doxygen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
+index 46fe4d6a15..f643118198 100644
+--- a/package/gloox/gloox.mk
++++ b/package/gloox/gloox.mk
+@@ -13,7 +13,9 @@ GLOOX_INSTALL_STAGING = YES
+ GLOOX_DEPENDENCIES = mpc
+ GLOOX_CONF_OPTS = \
+ 	--without-libidn \
+-	--enable-getaddrinfo
++	--enable-getaddrinfo \
++	--without-examples \
++	--without-tests
  
--DOXYGEN_VERSION = 1.8.17
-+DOXYGEN_VERSION = 1.8.18
- DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
- DOXYGEN_SITE = http://doxygen.nl/files
- DOXYGEN_LICENSE = GPL-2.0
+ GLOOX_CXXFLAGS = $(TARGET_CXXFLAGS)
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
