@@ -1,81 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 22:48:04 +0200
-Subject: [Buildroot] [git commit] package/pciutils: bump to version 3.7.0
-Message-ID: <20200604204735.06D548379E@busybox.osuosl.org>
+Date: Thu, 4 Jun 2020 22:48:29 +0200
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ version 3.0.7
+Message-ID: <20200604204814.52A15839D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bc5df8cb158fdb877f4935b29946f1bc69981da
+commit: https://git.buildroot.net/buildroot/commit/?id=36d78abceb79ad8b8ea73054cd2e6fcfcc835c4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use CROSS_COMPILE for toolchain prefix. Makefile derives CC, AR, and
-RANLIB from that.
+Fixes the following security issues:
 
-Remove sed manipulation of the lib/configure script. Host uname is not
-used when the HOST variable is set as we do.
+- CVE-2020-13254: Potential data leakage via malformed memcached keys
 
-Remove sed manipulation of Makefile. Set STRIP to an empty string
-instead.
+  In cases where a memcached backend does not perform key validation,
+  passing malformed cache keys could result in a key collision, and
+  potential data leakage.  In order to avoid this vulnerability, key
+  validation is added to the memcached cache backends.
 
-Format hash file with two space separators.
+- CVE-2020-13596: Possible XSS via admin ForeignKeyRawIdWidget
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  Query parameters for the admin ForeignKeyRawIdWidget were not properly URL
+  encoded, posing an XSS attack vector.  ForeignKeyRawIdWidget now ensures
+  query parameters are correctly URL encoded.
+
+For details, see the announcement:
+https://docs.djangoproject.com/en/dev/releases/3.0.7/
+
+Additionally, 3.0.5..3.0.7 contains a number of non-security related
+bugfixes.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pciutils/pciutils.hash |  4 ++--
- package/pciutils/pciutils.mk   | 13 ++++---------
- 2 files changed, 6 insertions(+), 11 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
-index da0358cacd..4b13c7484e 100644
---- a/package/pciutils/pciutils.hash
-+++ b/package/pciutils/pciutils.hash
-@@ -1,3 +1,3 @@
- # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
--sha256	1d62f8fa192f90e61c35a6fc15ff3cb9a7a792f782407acc42ef67817c5939f5	pciutils-3.5.5.tar.xz
--sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	COPYING
-+sha256  9d40b97be8b6a2cdf96aead5a61881d1f7e4e0da9544a9bac4fba1ae9dcd40eb  pciutils-3.7.0.tar.xz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 30d429e75a..9b83b62b55 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -4,20 +4,19 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index af5e4bb6e0..9690401043 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	0b0299419770eaff86ff3a4af519cd6a  Django-3.0.4.tar.gz
+-sha256	50b781f6cbeb98f673aa76ed8e572a019a45e52bdd4ad09001072dfd91ab07c8  Django-3.0.4.tar.gz
++md5	c3ac98d5503c671d316cf78ded3c9809  Django-3.0.7.tar.gz
++sha256	5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2  Django-3.0.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 0cc5749a9b..d76f6101e9 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PCIUTILS_VERSION = 3.5.5
-+PCIUTILS_VERSION = 3.7.0
- PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
- PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
- PCIUTILS_LICENSE = GPL-2.0+
- PCIUTILS_LICENSE_FILES = COPYING
- PCIUTILS_MAKE_OPTS = \
--	CC="$(TARGET_CC)" \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	HOST="$(KERNEL_ARCH)-linux" \
- 	OPT="$(TARGET_CFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
--	RANLIB=$(TARGET_RANLIB) \
--	AR=$(TARGET_AR) \
--	DNS=no
-+	DNS=no \
-+	STRIP=
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- PCIUTILS_DEPENDENCIES += udev
-@@ -48,10 +47,6 @@ endif
- 
- define PCIUTILS_CONFIGURE_CMDS
- 	$(SED) 's/wget --no-timestamping/wget/' $(PCIUTILS_DIR)/update-pciids.sh
--	$(SED) 's/uname -s/echo Linux/' \
--		-e 's/uname -r/echo $(LINUX_HEADERS_VERSION)/' \
--		$(PCIUTILS_DIR)/lib/configure
--	$(SED) 's/^STRIP/#STRIP/' $(PCIUTILS_DIR)/Makefile
- endef
- 
- define PCIUTILS_BUILD_CMDS
+-PYTHON_DJANGO_VERSION = 3.0.4
++PYTHON_DJANGO_VERSION = 3.0.7
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1d/38/89ea18b5aeb9b56fff7430388946e8e9dfd7a451f3e6ddb8a9b637f442c1
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/74/ad/8a1bc5e0f8b740792c99c7bef5ecc043018e2b605a2fe1e2513fde586b72
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
