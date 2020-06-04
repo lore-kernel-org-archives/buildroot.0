@@ -1,205 +1,104 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  4 Jun 2020 16:54:08 +0300
-Subject: [Buildroot] [PATCH 2/2] package/rt-tests: bump to version 1.8
-In-Reply-To: <7bacd6259e057a8bb62f0b7654842b43da630aec.1591278848.git.baruch@tkos.co.il>
-References: <7bacd6259e057a8bb62f0b7654842b43da630aec.1591278848.git.baruch@tkos.co.il>
-Message-ID: <845009b0378d6f3117f361661fe59a40540fe419.1591278848.git.baruch@tkos.co.il>
+From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
+Date: Thu, 4 Jun 2020 14:27:07 +0000
+Subject: [Buildroot] [PATCH] package/linux-tools: introduce spi linux
+ tools
+In-Reply-To: <20200513195840.GZ12536@scaer>
+References: <20200513150324.330435-1-eugen.hristev@microchip.com>
+ <87tv0j6etz.fsf@tarshish>
+ <c577cbdf-b84a-4af8-8d55-f2759e13c137@microchip.com>
+ <87r1vn6840.fsf@tarshish> <20200513195840.GZ12536@scaer>
+Message-ID: <a974d76c-ae7f-e0fc-4946-67dc66531383@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch #1. libnuma is now a mandatory dependency. The ostype and
-machinetype variables are not used for the Linux target.
+On 13.05.2020 22:58, Yann E. MORIN wrote:
+> On 2020-05-13 20:46 +0300, Baruch Siach spake thusly:
+>> Hi Eugen,
+>>
+>> On Wed, May 13 2020, Eugen.Hristev at microchip.com wrote:
+>>> On 13.05.2020 18:21, Baruch Siach wrote:
+>>>> On Wed, May 13 2020, Eugen Hristev wrote:
+>>>>> Add new linux tools package : spi. This is present in the Linux Kernel since
+>>>>> 4.5.
+>>>>> It now includes spidev_test and spidev_fdx tools.
+>>>> We have a package for spidev_test already. Consider adding spidev_fdx to
+>>>> that package instead.
+>>> While I understand your point, you should also consider that all linux
+>>> tools have a specific way to build in buildroot, and this I think should
+>>> be consistent.
+>> Agreed.
+>>> And spi tools would be not just spidev_test and might include future
+>>> applications, which may or may not have their place in the same spot as
+>>> spidev_test .
+>> In that case I think you should remove the spidev_test package.
+> 
+> Yes, I like it that we can drop spidev_test.
+> 
+> But do it multi-step:
+> 
+>    - intropduce spidev as a linux-tool
+>    - drop the standalone spidev_test
+> 
+> Do not forget to add legacy handling for it, though; see Config.in.legacy.
 
-Drop patch #3. SH is not a supported target architecture anymore.
+Hi Yann and Baruch,
 
-Add mandatory dependency on libnuma (numactl). Propagate numactl
-architecture dependency.
+Coming back to this, I noticed that the spidev_test package in buildroot 
+is different than the spidev_test from kernel tools.
 
-Update homepage link. The kernel wiki is dead.
+ From spidev_test package:
 
-Drop Python build time dependency. Python is an optional run-time
-dependency.
 
-Add reference to upstream provided tarball hash.
+Usage: spidev_test [-DsbdlHOLC3]
+   -D --device   device to use (default /dev/spidev1.1)
+   -s --speed    max speed (Hz)
+   -d --delay    delay (usec)
+   -b --bpw      bits per word
+   -i --input    input data from a file (e.g. "test.bin")
+   -o --output   output data to a file (e.g. "results.bin")
+   -l --loop     loopback
+   -H --cpha     clock phase
+   -O --cpol     clock polarity
+   -L --lsb      least significant bit first
+   -C --cs-high  chip select active high
+   -3 --3wire    SI/SO signals shared
+   -v --verbose  Verbose (show tx buffer)
+   -p            Send data (e.g. "1234\xde\xad")
+   -N --no-cs    no chip select
+   -R --ready    slave pulls low to pause
+   -2 --dual     dual transfer
+   -4 --quad     quad transfer
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...01-Fix-a-build-issue-with-uClibc-ng.patch} |  0
- ...or-issues-with-rt-tests-build-system.patch | 55 -------------------
- ...-number-for-sched_-gs-etattr-for-SH4.patch | 34 ------------
- package/rt-tests/Config.in                    |  5 +-
- package/rt-tests/rt-tests.hash                |  3 +-
- package/rt-tests/rt-tests.mk                  |  7 +--
- 6 files changed, 8 insertions(+), 96 deletions(-)
- rename package/rt-tests/{0002-Fix-a-build-issue-with-uClibc-ng.patch => 0001-Fix-a-build-issue-with-uClibc-ng.patch} (100%)
- delete mode 100644 package/rt-tests/0001-Fix-various-minor-issues-with-rt-tests-build-system.patch
- delete mode 100644 package/rt-tests/0003-Add-syscall-number-for-sched_-gs-etattr-for-SH4.patch
+#
 
-diff --git a/package/rt-tests/0002-Fix-a-build-issue-with-uClibc-ng.patch b/package/rt-tests/0001-Fix-a-build-issue-with-uClibc-ng.patch
-similarity index 100%
-rename from package/rt-tests/0002-Fix-a-build-issue-with-uClibc-ng.patch
-rename to package/rt-tests/0001-Fix-a-build-issue-with-uClibc-ng.patch
-diff --git a/package/rt-tests/0001-Fix-various-minor-issues-with-rt-tests-build-system.patch b/package/rt-tests/0001-Fix-various-minor-issues-with-rt-tests-build-system.patch
-deleted file mode 100644
-index 157514a8e3e9..000000000000
---- a/package/rt-tests/0001-Fix-various-minor-issues-with-rt-tests-build-system.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From eb47c07e9d20e0b1a6cc4b0df26f24f22f024f1c Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <abrodkin@synopsys.com>
--Date: Mon, 10 Nov 2014 11:44:55 +0300
--Subject: [PATCH] Fix various minor issues with rt-tests build system
--
--The issues fixed are :
--
-- * Remove the automatic NUMA detection from the host
--   architecture. This is broken when doing cross-compilation. One can
--   still set NUMA=1 if NUMA support is desired.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
--Cc: Peter Korsgaard <peter@korsgaard.com>
--[Romain:
--    rebase on v1.0
--    Remove HASPYTHON since PYLIB can be overriden from the environment]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- Makefile | 19 -------------------
-- 1 file changed, 19 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index a54d82b..0946f93 100644
----- a/Makefile
--+++ b/Makefile
--@@ -38,25 +38,6 @@ else
-- 	CFLAGS	+= -O0 -g
-- endif
-- 
---# We make some gueses on how to compile rt-tests based on the machine type
---# and the ostype. These can often be overridden.
---dumpmachine := $(shell $(CC) -dumpmachine)
---
---# The ostype is typically something like linux or android
---ostype := $(lastword $(subst -, ,$(dumpmachine)))
---
---machinetype := $(shell echo $(dumpmachine)| \
---    sed -e 's/-.*//' -e 's/i.86/i386/' -e 's/mips.*/mips/' -e 's/ppc.*/powerpc/')
---
---# The default is to assume you have libnuma installed, which is fine to do
---# even on non-numa machines. If you don't want to install the numa libs, for
---# example, they might not be available in an embedded environment, then
---# compile with
---# make NUMA=0
---ifneq ($(filter x86_64 i386 ia64 mips powerpc,$(machinetype)),)
---NUMA 	:= 1
---endif
---
-- # The default is to assume that you have numa_parse_cpustring_all
-- # If you have an older version of libnuma that only has numa_parse_cpustring
-- # then compile with
---- 
--2.5.5
--
-diff --git a/package/rt-tests/0003-Add-syscall-number-for-sched_-gs-etattr-for-SH4.patch b/package/rt-tests/0003-Add-syscall-number-for-sched_-gs-etattr-for-SH4.patch
-deleted file mode 100644
-index 9d606a4dfdff..000000000000
---- a/package/rt-tests/0003-Add-syscall-number-for-sched_-gs-etattr-for-SH4.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 53c7e8bc75f0f27752309ddae49e8d3b867a7681 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Mon, 15 Aug 2016 18:20:47 +0200
--Subject: [PATCH] Add syscall-number for sched_(gs)etattr() for SH4
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/include/rt-sched.h | 10 ++++++++++
-- 1 file changed, 10 insertions(+)
--
--diff --git a/src/include/rt-sched.h b/src/include/rt-sched.h
--index 679c4bd..83394c6 100644
----- a/src/include/rt-sched.h
--+++ b/src/include/rt-sched.h
--@@ -51,6 +51,16 @@
-- #endif
-- #endif
-- 
--+/* SCHED_DEADLINE available on sh4 since kernel 4.8 */
--+#ifdef __SH4__
--+#ifndef __NR_sched_setattr
--+#define __NR_sched_setattr		370
--+#endif
--+#ifndef __NR_sched_getattr
--+#define __NR_sched_getattr		369
--+#endif
--+#endif
--+
-- #ifdef __tilegx__
-- #define __NR_sched_setattr		274
-- #define __NR_sched_getattr		275
---- 
--2.5.5
--
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 23e911b9fd28..cc9b14dccb31 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_RT_TESTS
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
-+	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-+	select BR2_PACKAGE_NUMACTL
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
- 	  Linux system.
-@@ -21,7 +23,7 @@ config BR2_PACKAGE_RT_TESTS
- 	  case with uClibc toolchains, since the thread implementation
- 	  is configurable).
- 
--	  http://rt.wiki.kernel.org
-+	  https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/rt-tests
- 
- comment "rt-tests may not work on MIPS with an external uClibc toolchain"
- 	depends on BR2_PACKAGE_RT_TESTS
-@@ -32,3 +34,4 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
- 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index 7da6ed2c303c..808041580279 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,3 +1,4 @@
-+# From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
-+sha256 bda8f08e13d1022e7de6faf8762b4e831afc4e85f79bdf9c9101f84225b23f53  rt-tests-1.8.tar.xz
- # locally computed hash
--sha256 bcb94448324116f29c248b14a6051c7ab72a0135234e714685a2a3a3e7d531f8  rt-tests-1.6.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index abc32f4fb22a..c17b7fe9823c 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -6,13 +6,10 @@
- 
- RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 1.6
-+RT_TESTS_VERSION = 1.8
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
--RT_TESTS_DEPENDENCIES = python3
--endif
-+RT_TESTS_DEPENDENCIES = numactl
- 
- define RT_TESTS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--- 
-2.26.2
+
+ From kernel tools:
+
+https://elixir.bootlin.com/linux/v5.7/source/tools/spi/spidev_test.c#L198
+
+Looks it's a different program, or I am missing something ?
+
+In that case, I would think we cannot supersede the existing spidev_test 
+package with the kernel tools.
+
+I would think both should be in the distribution, but how to 
+differentiate them ?
+
+Thanks,
+Eugen
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> 
