@@ -1,74 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:21:33 +0200
-Subject: [Buildroot] [git commit] package/perl: security bump to version
- 5.30.3
-Message-ID: <20200604212152.17B367F9B7@busybox.osuosl.org>
+Date: Thu, 4 Jun 2020 23:19:33 +0200
+Subject: [Buildroot] [git commit] package/ell: bump version to 0.31
+Message-ID: <20200604212151.F2BF982964@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13ceb980a236eff32661cef2e54e4828f598dc80
+commit: https://git.buildroot.net/buildroot/commit/?id=b13e1a18d6ed0d24af069de205e761eeac7ee17f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+- removed 0001-ell-ecc.h-fix-build-with-uclibc.patch
+  (upstream applied [1])
 
-[CVE-2020-10543] Buffer overflow caused by a crafted regular
-                 expression
+- update 0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+ (add upstream link)
 
-[CVE-2020-10878] Integer overflow via malformed bytecode produced by a
-                 crafted regular expression
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=aa30f1884cf72d590fdca1db11d4fb2c2d526141
 
-[CVE-2020-12723] Buffer overflow caused by a crafted regular
-                 expression
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ .../ell/0001-ell-ecc.h-fix-build-with-uclibc.patch | 31 ----------------------
+ ...ll-rtnl-fix-compile-with-older-toolchains.patch |  1 +
+ package/ell/ell.hash                               |  2 +-
+ package/ell/ell.mk                                 |  2 +-
+ 4 files changed, 3 insertions(+), 33 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 21704a8bb4..ba3a39d433 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,10 +1,10 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.2.tar.xz.{md5,sha1,sha256}.txt
--md5  4bfa12b528522a50de0470b8b70b9b3b  perl-5.30.2.tar.xz
--sha1  d82cdaa610a3e749e821fc77004b1b4bfd5ebd28  perl-5.30.2.tar.xz
--sha256  a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259  perl-5.30.2.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.3.tar.xz.{md5,sha1,sha256}.txt
-+md5  0af2ab0f01ec13e37cc13a27de930936  perl-5.30.3.tar.xz
-+sha1  1003c6aa71d8966501038178459a9fa4e9aba747  perl-5.30.3.tar.xz
-+sha256  6967595f2e3f3a94544c35152f9a25e0cb8ea24ae45f4bf1882f2e33f4a400f4  perl-5.30.3.tar.xz
+diff --git a/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch b/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
+deleted file mode 100644
+index f64e3d9a87..0000000000
+--- a/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 3ca3044859f40d7c595daf0a93393352e4999fb7 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 30 May 2019 23:46:27 +0200
+-Subject: [PATCH] ell/ecc.h: fix build with uclibc
+-
+-ssize_t is defined in sys/types.h
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/444c9deb728fb041e560d940145f96cc4f455080
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- ell/ecc.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/ell/ecc.h b/ell/ecc.h
+-index 26a5889..65c49e8 100644
+---- a/ell/ecc.h
+-+++ b/ell/ecc.h
+-@@ -27,6 +27,8 @@
+- extern "C" {
+- #endif
+- 
+-+#include <sys/types.h> // for ssize_t
+-+
+- #define L_ECC_MAX_DIGITS 6
+- #define L_ECC_SCALAR_MAX_BYTES		L_ECC_MAX_DIGITS * 8
+- #define L_ECC_POINT_MAX_BYTES		L_ECC_SCALAR_MAX_BYTES * 2
+--- 
+-2.20.1
+-
+diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+index a9828f1904..ba6cafa7a8 100644
+--- a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
++++ b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+@@ -17,6 +17,7 @@ Fixes:
+   ell/rtnl.c: In function 'l_rtnl_route_extract':
+   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
  
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.3/perl-cross-1.3.3.hash
--sha256  3cea71d443cd28c6aa3c3c79d6db38267303cfac8e54b8a6d7ef8d448deefb25  perl-cross-1.3.3.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.4/perl-cross-1.3.4.hash
-+sha256  755aa0ca8141a942188a269564f86c3c82349f82c346ed5c992495d7f35138ba  perl-cross-1.3.4.tar.gz
++[Upstream: https://lists.ofono.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+  configure.ac | 2 ++
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 58e624baed..526417bf33 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  15abb7eff187002ce36a27f6752cd4ec815da0ab658608b1cd36a63f7a84237e  ell-0.30.tar.gz
++sha256  5933faff0b94455bc05c9885d138ca295f5e9cc6e2eecdf203e4dba45d08fd80  ell-0.31.tar.gz
  
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 64d453cada..2f82e1d6d5 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,14 +6,14 @@
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 45d3df34ed..da39ccc823 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 30
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.3.3
-+PERL_CROSS_VERSION = 1.3.4
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+-ELL_VERSION = 0.30
++ELL_VERSION = 0.31
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
