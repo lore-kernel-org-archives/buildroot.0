@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:28:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v1.6.10
-In-Reply-To: <20200602104432.7636-1-titouan.christophe@railnova.eu>
-References: <20200602104432.7636-1-titouan.christophe@railnova.eu>
-Message-ID: <20200604232856.0a7a8d16@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  4 Jun 2020 23:35:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libhttpserver: disable examples
+Message-ID: <20200604213522.12291-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  2 Jun 2020 12:44:32 +0200
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+examples are enabled by default since version 0.17.5 and
+https://github.com/etr/libhttpserver/commit/012d014a7c52ef91a35c521d5d4f83ee11de5068
 
-> This release fix some bugs in the broker and client libraries,
-> as well as building with below C99 suport.
-> 
-> Read the whole announcement on:
-> https://mosquitto.org/blog/2020/05/version-1-6-8-released/
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
-> (Yes, the URL is weird, but points to the 1.6.10 release)
-> ---
->  package/mosquitto/mosquitto.hash | 4 ++--
->  package/mosquitto/mosquitto.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libhttpserver/libhttpserver.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
+index 1fd76519f4..2c536cf012 100644
+--- a/package/libhttpserver/libhttpserver.mk
++++ b/package/libhttpserver/libhttpserver.mk
+@@ -9,7 +9,9 @@ LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
+ LIBHTTPSERVER_LICENSE = LGPL-2.1+
+ LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
+ LIBHTTPSERVER_INSTALL_STAGING = YES
+-LIBHTTPSERVER_CONF_OPTS = --enable-same-directory-build
++LIBHTTPSERVER_CONF_OPTS = \
++	--disable-examples \
++	--enable-same-directory-build
+ LIBHTTPSERVER_AUTORECONF = YES
+ LIBHTTPSERVER_DEPENDENCIES = libmicrohttpd
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
