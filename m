@@ -1,30 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:28:21 +0200
-Subject: [Buildroot] [PATCH v1] package/valgrind: bump version to 3.16.0
-In-Reply-To: <20200603212134.18303-1-ps.report@gmx.net>
-References: <20200603212134.18303-1-ps.report@gmx.net>
-Message-ID: <20200604232821.17521e7f@windsurf>
+Date: Thu, 4 Jun 2020 23:28:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version
+ 2.1.3
+In-Reply-To: <20200603171335.13493-1-juju@cotds.org>
+References: <20200603171335.13493-1-juju@cotds.org>
+Message-ID: <20200604232833.003dfc39@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  3 Jun 2020 23:21:34 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Wed,  3 Jun 2020 19:13:35 +0200
+Julien Olivain <juju@cotds.org> wrote:
 
-> - removed 0003-mips-fix-mips32r6-and-mips64r6-compilation-issue.patch
->   (backport from upstream commit [1])
+> Changes since v2.1.2:
+> https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.3
+> - fix a cross-compilation failure from Win32 to WinARM
+> - fix issues while fluid_player is seeking
+> - fix a NULL pointer dereference if synth.dynamic-sample-loading is enabled
+> - fix a NULL pointer dereference in delete_rvoice_mixer_threads()
+> - fix a NULL pointer dereference in the soundfont loader
+> - fix dsound driver playing garbage when terminating fluidsynth
+> - avoid memory leaks when using libinstpatch
 > 
-> [1] https://sourceware.org/git/?p=valgrind.git;a=commit;h=50dd9600ab1ad8933704ee85289191d9c65ba444
+> ./utils/test-pkg --package fluidsynth
+> 6 builds, 1 skipped, 0 build failed, 0 legal-info failed
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Julien Olivain <juju@cotds.org>
 > ---
->  ...s32r6-and-mips64r6-compilation-issue.patch | 51 -------------------
->  package/valgrind/valgrind.hash                |  6 +--
->  package/valgrind/valgrind.mk                  |  2 +-
->  3 files changed, 4 insertions(+), 55 deletions(-)
->  delete mode 100644 package/valgrind/0003-mips-fix-mips32r6-and-mips64r6-compilation-issue.patch
+>  package/fluidsynth/fluidsynth.hash | 2 +-
+>  package/fluidsynth/fluidsynth.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
