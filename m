@@ -1,96 +1,409 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Jun 2020 23:59:41 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools: introduce spi linux
- tools
-In-Reply-To: <87v9k66dyi.fsf@tarshish>
-References: <20200513150324.330435-1-eugen.hristev@microchip.com>
- <87tv0j6etz.fsf@tarshish>
- <c577cbdf-b84a-4af8-8d55-f2759e13c137@microchip.com>
- <87r1vn6840.fsf@tarshish> <20200513195840.GZ12536@scaer>
- <a974d76c-ae7f-e0fc-4946-67dc66531383@microchip.com>
- <87v9k66dyi.fsf@tarshish>
-Message-ID: <20200604215941.GL13972@scaer>
+Date: Fri, 5 Jun 2020 00:03:30 +0200
+Subject: [Buildroot] [git commit] boot/grub2: Fix GRUB i386-pc build with
+ Ubuntu gcc
+Message-ID: <20200604220319.E57CA82937@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eugen, Baruch, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e64a050fbd9add07ed84d48054ffee1b659d079
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-04 18:35 +0300, Baruch Siach spake thusly:
-> On Thu, Jun 04 2020, Eugen.Hristev at microchip.com wrote:
-[--SNIP--]
-> > Coming back to this, I noticed that the spidev_test package in buildroot 
-> > is different than the spidev_test from kernel tools.
-> The file you link to is a newer version. You can find the version that
-> buildroot uses here:
->   https://elixir.bootlin.com/linux/v4.10/source/tools/spi/spidev_test.c
-> 
-> Note SPIDEV_TEST_VERSION.
-> 
-> In my opinion, we can update to the latest version like any other
-> upstream package.
+Backport a patch from upstream to fix the build on certain versions of
+gsc, notably:
 
-This is not so clear-cut. As first approximation, I would have agreed.
-And that is what I also initially suggested earlied in the thread.
+    Ubuntu 19.10 with gcc (Ubuntu 8.3.0-26ubuntu1~19.10) 8.3.0
+    Ubuntu 19.10 with gcc (Ubuntu 9.2.1-9ubuntu2) 9.2.1 20191008
 
-However, that would be a regression to remove spidev_test in favour of
-the one in linux-tools.
+The upstream patch is simply a change in the gentpl.py script, which is
+used to generate parts of the automake machinery, so if we just backport
+the upstream patch, we need to call the script to regenerate those files.
 
-Indeed, it is today possible to build spidev_test even without building
-a kernel. By moving it as a linux-tools, that would no longer be
-possible.
+However, the modified script is a python script, so we would need to add
+a dependency on host-python (2 or 3), which is not so nice.
 
-And second, depending on the kernel version being used, there could be a
-dependency on the jkernel headers version. If kernel >= 3.15,
-spidev_tool would require a toolchain with headers >= 3.15 too.
+Furthermore, calling the script is not enough: it needs a specific set
+of optionss for each file it is to generate. That set of options is not
+static; it is constructed in the convoluted autogen.sh. Calling
+autogen.sh is usally not so good an idea in the Buildroot context, and
+indeed this fails becasue it calls to autoreconf, but without our
+carefuly crafted options and environment variables.
 
-But moving it as a linux-tools also makes it on-par with the other ones,
-so this is acceptable too.
+There was a little light in the tunnel, in that autogen.sh can be told
+not to run autoreconf, by setting the environemnt variable
+FROM_BOOTSTRAP to an non-=empty string, but this is fraught with various
+other side-effects, as in that cause, autogen.sh expects to be valled by
+an upper sciopt, bootstrap, which is not provided in the tarball
+distribution...
 
-So, we have a few options (in my order of preference, but we can discuss
-it):
+So, between all those issues, autogen, bootstrap, and a host-python (2
+or 3) dependency, we choose another route: path the script *and* the one
+generated file affected by the change. Since that patched file is a .am
+file, we also patch the corresponding .in file
 
- 1. introduce spidev_test as a linux-tools, drop the old one, and handle
-    legacy;
+However, we're faced with another issue: the other generated file is
+now older than the script, so the automake machinery will now want to
+re-run autoconf et al during the build step, which is still not a good
+idea for us. So we touch the other generated file so it is mopre recent
+than the script.
 
- 2. introduce spidev_test as a lijnux-tools, keep the old one for when a
-    kernel is not being built.
+This is still not sufficient, because the patched file also has a
+dependency on the generated file, so we need to touch as well.
 
- 3. introduce spidev_test as a lijnux-tools, keep the old one for when
-    the new linux-tools version is not enabled.
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=12946
 
-Option (1) makes it totally like any other linux-tools, and I am OK with
-the regression of not being able to build it without a kernel. But I
-understand that this is a regression.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - keep the hunk about patching gentpl.py
+  - make it a git-formatted patch
+  - add the touch
+  - drastically expand the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ld-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch | 313 +++++++++++++++++++++
+ boot/grub2/grub2.mk                                |   8 +
+ 2 files changed, 321 insertions(+)
 
-Option (2) is my close-to-first second prefered option, as it does not
-provide a rgression, at the expense of a bit of possible confusion for
-users.
-
-Option (3) I do not like much, because it is even more confusing.
-
-In either case, care must be taken to account for the kernel headers
-version in the toolchain (which might be a prebuilt one older than the
-selected kernel):
-
-  - if the kernel is 3.15 or later, spidev_test requires a toolchain
-    with headers at least 3.15
-
-However, we do not have a way to know that situation... So either we
-bite the bullet, and consider 3.15 are madnatory for spidev_test in
-linux-tools, or we do a test at build time, whether spidev_test uses
-SPI_TX_QUAD/SPI_RX_QUAD or not, and bail with an explicit error if thios
-is the case and the toolchain uses older kernel headers...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch b/boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
+new file mode 100644
+index 0000000000..357c825f3c
+--- /dev/null
++++ b/boot/grub2/0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
+@@ -0,0 +1,313 @@
++From 6643507ce30f775008e093580f0c9499dfb2c485 Mon Sep 17 00:00:00 2001
++From: Simon Hardy <simon.hardy@itdev.co.uk>
++Date: Tue, 24 Mar 2020 13:29:12 +0000
++Subject: build: Fix GRUB i386-pc build with Ubuntu gcc
++
++With recent versions of gcc on Ubuntu a very large lzma_decompress.img file is
++output. (e.g. 134479600 bytes instead of 2864.) This causes grub-mkimage to
++fail with: "error: Decompressor is too big."
++
++This seems to be caused by a section .note.gnu.property that is placed at an
++offset such that objcopy needs to pad the img file with zeros.
++
++This issue is present on:
++Ubuntu 19.10 with gcc (Ubuntu 8.3.0-26ubuntu1~19.10) 8.3.0
++Ubuntu 19.10 with gcc (Ubuntu 9.2.1-9ubuntu2) 9.2.1 20191008
++
++This issue is not present on:
++Ubuntu 19.10 with gcc (Ubuntu 7.5.0-3ubuntu1~19.10) 7.5.0
++RHEL 8.0 with gcc 8.3.1 20190507 (Red Hat 8.3.1-4)
++
++The issue can be fixed by removing the section using objcopy as shown in
++this patch.
++
++Signed-off-by: Simon Hardy <simon.hardy@itdev.co.uk>
++Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
++[Retrieved (and updated to directly patch Makefile.in instead of
++gentpl.py to avoid adding a dependency on python) from:
++http://git.savannah.gnu.org/cgit/grub.git/commit/?id=6643507ce30f775008e093580f0c9499dfb2c485]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[yann.morin.1998 at free.fr:
++  - keep the part patching gentpl.py
++  - restore it as a git-formatted patch
++  - introduce the hunk about the generated .am file
++]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ gentpl.py             |    2     1     1     0 +-
++ grub-core/Makefile.in |   38    19    19     0 +++++++++++++++++++-------------------
++ 2 files changed, 20 insertions(+), 20 deletions(-)
++
++diff --git a/gentpl.py b/gentpl.py
++index 387588c05..c86550d4f 100644
++--- a/gentpl.py
+++++ b/gentpl.py
++@@ -766,7 +766,7 @@ def image(defn, platform):
++ if test x$(TARGET_APPLE_LINKER) = x1; then \
++   $(MACHO2IMG) $< $@; \
++ else \
++-  $(TARGET_OBJCOPY) $(""" + cname(defn) + """_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; \
+++  $(TARGET_OBJCOPY) $(""" + cname(defn) + """_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; \
++ fi
++ """)
++ 
++diff --git a/grub-core/Makefile.core.am b/grub-core/Makefile.core.am
++index 387588c05..c86550d4f 100644
++--- a/grub-core/Makefile.core.am
+++++ 2/grub-core/Makefile.core.am
++@@ -22897,7 +22897,7 @@
++ CLEANFILES += boot.img
++ 
++ boot.img: boot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -22918,7 +22918,7 @@
++ CLEANFILES += boot.img
++ 
++ boot.img: boot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -22939,7 +22939,7 @@
++ CLEANFILES += boot.img
++ 
++ boot.img: boot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -22960,7 +22960,7 @@
++ CLEANFILES += boot_hybrid.img
++ 
++ boot_hybrid.img: boot_hybrid.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_hybrid_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_hybrid_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -22981,7 +22981,7 @@
++ CLEANFILES += cdboot.img
++ 
++ cdboot.img: cdboot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23002,7 +23002,7 @@
++ CLEANFILES += cdboot.img
++ 
++ cdboot.img: cdboot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23023,7 +23023,7 @@
++ CLEANFILES += pxeboot.img
++ 
++ pxeboot.img: pxeboot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(pxeboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(pxeboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23044,7 +23044,7 @@
++ CLEANFILES += diskboot.img
++ 
++ diskboot.img: diskboot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23065,7 +23065,7 @@
++ CLEANFILES += diskboot.img
++ 
++ diskboot.img: diskboot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23086,7 +23086,7 @@
++ CLEANFILES += lnxboot.img
++ 
++ lnxboot.img: lnxboot.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lnxboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lnxboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23107,7 +23107,7 @@
++ CLEANFILES += xz_decompress.img
++ 
++ xz_decompress.img: xz_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23128,7 +23128,7 @@
++ CLEANFILES += xz_decompress.img
++ 
++ xz_decompress.img: xz_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23149,7 +23149,7 @@
++ CLEANFILES += xz_decompress.img
++ 
++ xz_decompress.img: xz_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23170,7 +23170,7 @@
++ CLEANFILES += none_decompress.img
++ 
++ none_decompress.img: none_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23191,7 +23191,7 @@
++ CLEANFILES += none_decompress.img
++ 
++ none_decompress.img: none_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23212,7 +23212,7 @@
++ CLEANFILES += none_decompress.img
++ 
++ none_decompress.img: none_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23233,7 +23233,7 @@
++ CLEANFILES += lzma_decompress.img
++ 
++ lzma_decompress.img: lzma_decompress.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lzma_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lzma_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23254,7 +23254,7 @@
++ CLEANFILES += fwstart.img
++ 
++ fwstart.img: fwstart.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++@@ -23275,7 +23275,7 @@
++ CLEANFILES += fwstart_fuloong2f.img
++ 
++ fwstart_fuloong2f.img: fwstart_fuloong2f.image$(EXEEXT)
++-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_fuloong2f_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_fuloong2f_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 	
++ endif
++ 
++diff --git a/grub-core/Makefile.in b/grub-core/Makefile.in
++index 387588c05..c86550d4f 100644
++--- a/grub-core/Makefile.in
+++++ b/grub-core/Makefile.in
++@@ -46531,61 +46531,61 @@
++ @COND_riscv64_efi_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
++ 
++ @COND_i386_pc_TRUE at boot.img: boot.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_qemu_TRUE at boot.img: boot.image$(EXEEXT)
++- at COND_i386_qemu_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_qemu_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_sparc64_ieee1275_TRUE at boot.img: boot.image$(EXEEXT)
++- at COND_sparc64_ieee1275_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_sparc64_ieee1275_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_pc_TRUE at boot_hybrid.img: boot_hybrid.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_hybrid_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_hybrid_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_pc_TRUE at cdboot.img: cdboot.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_sparc64_ieee1275_TRUE at cdboot.img: cdboot.image$(EXEEXT)
++- at COND_sparc64_ieee1275_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_sparc64_ieee1275_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_pc_TRUE at pxeboot.img: pxeboot.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(pxeboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(pxeboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_pc_TRUE at diskboot.img: diskboot.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_sparc64_ieee1275_TRUE at diskboot.img: diskboot.image$(EXEEXT)
++- at COND_sparc64_ieee1275_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_sparc64_ieee1275_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_pc_TRUE at lnxboot.img: lnxboot.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lnxboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lnxboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_loongson_TRUE at xz_decompress.img: xz_decompress.image$(EXEEXT)
++- at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_arc_TRUE at xz_decompress.img: xz_decompress.image$(EXEEXT)
++- at COND_mips_arc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_arc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_qemu_mips_TRUE at xz_decompress.img: xz_decompress.image$(EXEEXT)
++- at COND_mips_qemu_mips_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_qemu_mips_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_loongson_TRUE at none_decompress.img: none_decompress.image$(EXEEXT)
++- at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_arc_TRUE at none_decompress.img: none_decompress.image$(EXEEXT)
++- at COND_mips_arc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_arc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_qemu_mips_TRUE at none_decompress.img: none_decompress.image$(EXEEXT)
++- at COND_mips_qemu_mips_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_qemu_mips_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_i386_pc_TRUE at lzma_decompress.img: lzma_decompress.image$(EXEEXT)
++- at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lzma_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_i386_pc_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lzma_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_loongson_TRUE at fwstart.img: fwstart.image$(EXEEXT)
++- at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_mips_loongson_TRUE at fwstart_fuloong2f.img: fwstart_fuloong2f.image$(EXEEXT)
++- at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_fuloong2f_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
+++ at COND_mips_loongson_TRUE@	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_fuloong2f_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .note.gnu.property -R .ARM.exidx $< $@; fi
++ 
++ @COND_MAN_PAGES_TRUE@@COND_emu_TRUE@grub-emu.1: grub-emu 
++ @COND_MAN_PAGES_TRUE@@COND_emu_TRUE@	chmod a+x grub-emu
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index a202525d71..f77dc0f9d7 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -13,6 +13,14 @@ GRUB2_DEPENDENCIES = host-bison host-flex host-grub2
+ HOST_GRUB2_DEPENDENCIES = host-bison host-flex
+ GRUB2_INSTALL_IMAGES = YES
+ 
++# 0001-build-Fix-GRUB-i386-pc-build-with-Ubuntu-gcc.patch
++define GRUB2_AVOID_AUTORECONF
++	$(Q)touch $(@D)/Makefile.util.am
++	$(Q)touch $(@D)/Makefile.in
++endef
++GRUB2_POST_PATCH_HOOKS += GRUB2_AVOID_AUTORECONF
++HOST_GRUB2_POST_PATCH_HOOKS += GRUB2_AVOID_AUTORECONF
++
+ ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
+ GRUB2_INSTALL_TARGET = YES
+ else
