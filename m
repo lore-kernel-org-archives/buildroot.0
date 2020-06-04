@@ -1,59 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jun 2020 11:10:45 +0200
-Subject: [Buildroot] [git commit] Update for 2020.02.3
-Message-ID: <20200604091346.6FF6C837A0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 4 Jun 2020 11:21:44 +0200
+Subject: [Buildroot] [PATCH] Revert "package/prosody: use correct bit32
+ package"
+In-Reply-To: <CAB0FRssoZHBnO329q0vvX-8Yr8MBPMzZrhs7UGLytVn1eo++Dg@mail.gmail.com>
+References: <20200603215904.98199-1-romain.naour@gmail.com>
+ <CADvTj4qMYKh1CCqjeZaXcGvguHZbDFao8AXinQtr8LyFjFKmOA@mail.gmail.com>
+ <281890da-6c1a-fcb5-0436-7d8cb8c1affa@gmail.com>
+ <CAB0FRssoZHBnO329q0vvX-8Yr8MBPMzZrhs7UGLytVn1eo++Dg@mail.gmail.com>
+Message-ID: <20200604112144.61489c05@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7f14106c7457412e52fac0b57eb1ac33ffa74e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 4 Jun 2020 07:00:47 +0200
+Fran?ois Perrad <francois.perrad@gadz.org> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d42f3adaae24a6aa3abc2de4f39fa8023f971d31)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+> 2) with BR, it's easy to run a test (even locally, before a commit), but it
+> isn't easy to know that a test exists.
+> In my point of view, the right place of test_prosody.py is in the directory
+> package/prosody, not in support/testing/tests/package,
+> support/testing is the right place only for testing infrastructure.
 
-diff --git a/CHANGES b/CHANGES
-index 3cda0af8df..e4557ea3d8 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -166,6 +166,33 @@
- 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
- 	#12811: bootstrap stuck and no login prompt
- 
-+2020.02.3, released June 3rd, 2020
-+
-+	Important / security related fixes.
-+
-+	Fix various build issues of host packages on hosts using GCC
-+	10.
-+
-+	Updated/fixed packages: arm-trusted-firmware, audit, bind,
-+	binutils, bison, clamav, crda, dovecot, dtc, efl, elf2flt,
-+	erlang, fakeroot, ffmpeg, fmc, fmlib, freerdp, gcc, git,
-+	glib-networking, gnupg, leveldb, libexif, libssh2,
-+	libusb-compat, linux-headers, lrzip, ltrace, mariadb, mesa3d,
-+	mp4v2, openldap, openocd, perl, php, prosody,
-+	python-pycryptodomex, python-pyqt5, qemu, rpi-firmware, rustc,
-+	speexdsp, sysrepo, systemd, tremor, vboot-utils, wireshark,
-+	xen
-+
-+	Removed packages: python-pycrypto
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12361: Init system (systemd) kills login on Raspberry Pi Zero
-+	#12656: bison fails to relocate with relocate-sdk.sh
-+	#12671: leveldb won't detect that snappy is present (static..
-+	#12691: host-rust build fails
-+	#12831: RPI-firmware package: DTB-overlay dependency
-+
- 2020.02.2, released May 12th, 2020
- 
- 	Important / security related fixes.
+We indeed though about putting tests near packages. However, one issue
+is that not all tests are related to packages: some are related to the
+core infrastructure, and we wouldn't know where to put those tests. And
+it would be even more confusing to have some tests in support/testing/
+and some tests in package/. So for now, we have simply kept all tests
+in support/testing/, until someone comes up with a better idea :-)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
