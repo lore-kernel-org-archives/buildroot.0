@@ -1,103 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 4 Jun 2020 23:19:33 +0200
-Subject: [Buildroot] [git commit] package/ell: bump version to 0.31
-Message-ID: <20200604212151.F2BF982964@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Jun 2020 23:23:00 +0200
+Subject: [Buildroot] [PATCH v2] package/gstreamer1/gst1-plugins-good:
+ Select GUDEV if available
+In-Reply-To: <20200601164321.12806-1-ezequiel@vanguardiasur.com.ar>
+References: <20200601164321.12806-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20200604212300.GJ13972@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b13e1a18d6ed0d24af069de205e761eeac7ee17f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ezequiel, Nicolas, All,
 
-- removed 0001-ell-ecc.h-fix-build-with-uclibc.patch
-  (upstream applied [1])
+On 2020-06-01 13:43 -0300, Ezequiel Garcia spake thusly:
+> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> 
+> Using udev for probes (such as Video4Linux2 devices probes)
+> and device monitor greatly improves load time and monitoring performance.
+> 
+> It also enables hotplug monitoring for cameras.
+> 
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+> v2:
+> * Enable/disable v4l2-gudev explicitly
+> 
+>  package/gstreamer1/gst1-plugins-good/Config.in           | 1 +
+>  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 9 +++++++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index 20aebc473e89..be77f5a82e3d 100644
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>  	bool "v4l2"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
 
-- update 0002-ell-rtnl-fix-compile-with-older-toolchains.patch
- (add upstream link)
+So there is still something that evades my understanding: gudev is
+selected only when V4L2 is enabled.
 
-[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=aa30f1884cf72d590fdca1db11d4fb2c2d526141
+However...
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../ell/0001-ell-ecc.h-fix-build-with-uclibc.patch | 31 ----------------------
- ...ll-rtnl-fix-compile-with-older-toolchains.patch |  1 +
- package/ell/ell.hash                               |  2 +-
- package/ell/ell.mk                                 |  2 +-
- 4 files changed, 3 insertions(+), 33 deletions(-)
+>  	help
+>  	  elements for Video 4 Linux
+>  
+> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> index 223af9850897..bd4bdcbc1ff1 100644
+> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> @@ -40,6 +40,10 @@ else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += -Djack=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
+> +endif
 
-diff --git a/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch b/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
-deleted file mode 100644
-index f64e3d9a87..0000000000
---- a/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 3ca3044859f40d7c595daf0a93393352e4999fb7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 30 May 2019 23:46:27 +0200
--Subject: [PATCH] ell/ecc.h: fix build with uclibc
--
--ssize_t is defined in sys/types.h
--
--Fixes:
-- - http://autobuild.buildroot.org/results/444c9deb728fb041e560d940145f96cc4f455080
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- ell/ecc.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/ell/ecc.h b/ell/ecc.h
--index 26a5889..65c49e8 100644
----- a/ell/ecc.h
--+++ b/ell/ecc.h
--@@ -27,6 +27,8 @@
-- extern "C" {
-- #endif
-- 
--+#include <sys/types.h> // for ssize_t
--+
-- #define L_ECC_MAX_DIGITS 6
-- #define L_ECC_SCALAR_MAX_BYTES		L_ECC_MAX_DIGITS * 8
-- #define L_ECC_POINT_MAX_BYTES		L_ECC_SCALAR_MAX_BYTES * 2
---- 
--2.20.1
--
-diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-index a9828f1904..ba6cafa7a8 100644
---- a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-+++ b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-@@ -17,6 +17,7 @@ Fixes:
-   ell/rtnl.c: In function 'l_rtnl_route_extract':
-   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
- 
-+[Upstream: https://lists.ofono.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  configure.ac | 2 ++
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 58e624baed..526417bf33 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  15abb7eff187002ce36a27f6752cd4ec815da0ab658608b1cd36a63f7a84237e  ell-0.30.tar.gz
-+sha256  5933faff0b94455bc05c9885d138ca295f5e9cc6e2eecdf203e4dba45d08fd80  ell-0.31.tar.gz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 45d3df34ed..da39ccc823 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELL_VERSION = 0.30
-+ELL_VERSION = 0.31
- ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
- ELL_SITE_METHOD = git
- ELL_LICENSE = LGPL-2.1+
+The dependency is added glbally.
+
+So we end up with this truth table:
+
+      gudev | v4l2 plugin | dependency
+    --------+-------------+------------
+        n   |      n      |     n
+        Y   |      n      |     Y
+        Y   |      Y      |     Y
+
+(the fourth case is not possible, as the v4l2 plugin select gudev)
+
+Is that what you expect?
+
+From the commit log, it looks like v4l2 is only one case amongst many:
+"Using udev for probes (such as Video4Linux2 devices probes)".
+
+So, I would have expected the select to be on the main
+gst1-plugins0-good symbol:
+
+    menuconfig BR2_PACKAGE_GST1_PLUGINS_GOOD
+        bool "gst1-plugins-good"
+        select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
+
+Regards,
+Yann E. MORIN.
+
+>  ifeq ($(BR2_PACKAGE_LIBV4L),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
+>  GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+> @@ -355,6 +359,11 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2=enabled
+> +ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> +GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=enabled
+> +else
+> +GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=disabled
+> +endif
+>  else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2=disabled
+>  endif
+> -- 
+> 2.26.0.rc2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
