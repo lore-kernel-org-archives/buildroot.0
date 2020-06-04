@@ -1,42 +1,69 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu,  4 Jun 2020 14:33:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: bump version to 1.4.66
-In-Reply-To: <20200604123333.24099-1-heiko.thiery@gmail.com>
-References: <20200604123333.24099-1-heiko.thiery@gmail.com>
-Message-ID: <20200604123333.24099-3-heiko.thiery@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  4 Jun 2020 14:39:26 +0200
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 3.0.7
+Message-ID: <20200604123926.18731-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- package/sysrepo/sysrepo.hash | 2 +-
- package/sysrepo/sysrepo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes the following security issues:
 
-diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
-index ae72fc2b00..894f26380f 100644
---- a/package/sysrepo/sysrepo.hash
-+++ b/package/sysrepo/sysrepo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9c134658a5b812cd86b9113c30fc01be5a094616f473e747032ccf614af9e4dd  sysrepo-1.4.58.tar.gz
-+sha256  4dbb916c32e0229238a06bfa929e5615af89e9f79d225b558df99efe6ac84c03  sysrepo-1.4.66.tar.gz
- sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index aee40fa274..eb7fdb0e8d 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -4,7 +4,7 @@
+- CVE-2020-13254: Potential data leakage via malformed memcached keys
+
+  In cases where a memcached backend does not perform key validation,
+  passing malformed cache keys could result in a key collision, and
+  potential data leakage.  In order to avoid this vulnerability, key
+  validation is added to the memcached cache backends.
+
+- CVE-2020-13596: Possible XSS via admin ForeignKeyRawIdWidget
+
+  Query parameters for the admin ForeignKeyRawIdWidget were not properly URL
+  encoded, posing an XSS attack vector.  ForeignKeyRawIdWidget now ensures
+  query parameters are correctly URL encoded.
+
+For details, see the announcement:
+https://docs.djangoproject.com/en/dev/releases/3.0.7/
+
+Additionally, 3.0.5..3.0.7 contains a number of non-security related
+bugfixes.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index af5e4bb6e0..9690401043 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	0b0299419770eaff86ff3a4af519cd6a  Django-3.0.4.tar.gz
+-sha256	50b781f6cbeb98f673aa76ed8e572a019a45e52bdd4ad09001072dfd91ab07c8  Django-3.0.4.tar.gz
++md5	c3ac98d5503c671d316cf78ded3c9809  Django-3.0.7.tar.gz
++sha256	5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2  Django-3.0.7.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 0cc5749a9b..d76f6101e9 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--SYSREPO_VERSION = 1.4.58
-+SYSREPO_VERSION = 1.4.66
- SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = Apache-2.0
+-PYTHON_DJANGO_VERSION = 3.0.4
++PYTHON_DJANGO_VERSION = 3.0.7
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1d/38/89ea18b5aeb9b56fff7430388946e8e9dfd7a451f3e6ddb8a9b637f442c1
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/74/ad/8a1bc5e0f8b740792c99c7bef5ecc043018e2b605a2fe1e2513fde586b72
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
 2.20.1
