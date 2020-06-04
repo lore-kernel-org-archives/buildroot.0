@@ -1,24 +1,35 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 3 Jun 2020 18:18:39 -0600
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Thu, 4 Jun 2020 07:00:47 +0200
 Subject: [Buildroot] [PATCH] Revert "package/prosody: use correct bit32
  package"
 In-Reply-To: <281890da-6c1a-fcb5-0436-7d8cb8c1affa@gmail.com>
 References: <20200603215904.98199-1-romain.naour@gmail.com>
  <CADvTj4qMYKh1CCqjeZaXcGvguHZbDFao8AXinQtr8LyFjFKmOA@mail.gmail.com>
  <281890da-6c1a-fcb5-0436-7d8cb8c1affa@gmail.com>
-Message-ID: <CADvTj4ou61nKOoTdqhmwjimOMm7dxmryfeue-i=evzx=FwZigw@mail.gmail.com>
+Message-ID: <CAB0FRssoZHBnO329q0vvX-8Yr8MBPMzZrhs7UGLytVn1eo++Dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 3, 2020 at 4:42 PM Romain Naour <romain.naour@gmail.com> wrote:
->
+1) don't trust documentation, trust tests (by running them)
+
+2) with BR, it's easy to run a test (even locally, before a commit), but it
+isn't easy to know that a test exists.
+In my point of view, the right place of test_prosody.py is in the directory
+package/prosody, not in support/testing/tests/package,
+support/testing is the right place only for testing infrastructure.
+
+Fran?ois
+
+Le jeu. 4 juin 2020 ? 00:42, Romain Naour <romain.naour@gmail.com> a ?crit :
+
 > Hi James,
 >
 > Le 04/06/2020 ? 00:30, James Hilliard a ?crit :
-> > On Wed, Jun 3, 2020 at 3:59 PM Romain Naour <romain.naour@gmail.com> wrote:
+> > On Wed, Jun 3, 2020 at 3:59 PM Romain Naour <romain.naour@gmail.com>
+> wrote:
 > >>
 > >> This reverts commit fa84c176c2148a60103e850204180f86aa5baa73 that
 > >> replace luabitop by lua_bit32 package when lua 5.1 is used.
@@ -36,7 +47,8 @@ On Wed, Jun 3, 2020 at 4:42 PM Romain Naour <romain.naour@gmail.com> wrote:
 > >>     luarocks:         luarocks install luabitop
 > >>
 > >> WebSocket support will not be available
-> >> More help can be found on our website, at https://prosody.im/doc/depends
+> >> More help can be found on our website, at
+> https://prosody.im/doc/depends
 > >> **************************
 > >>
 > >> The upstream documentation [2] is misleading (or not uptodate)
@@ -55,11 +67,9 @@ On Wed, Jun 3, 2020 at 4:42 PM Romain Naour <romain.naour@gmail.com> wrote:
 > > self.module_test('bit32') # luabit32
 > > or something along those lines?
 >
-> I'm not speaking about the test itself but the prosody log when it's started
+> I'm not speaking about the test itself but the prosody log when it's
+> started
 > "Prosody was unable to find lua-bitops"
-Oh, might need to backport https://hg.prosody.im/trunk/rev/48f7cda4174d
-git version:
-https://github.com/bjc/prosody/commit/aedca363c093007542941749578caf1badf1674e
 >
 > Also the test is shared with luajit and the TestProsodyLuajit test is fine.
 >
@@ -82,7 +92,8 @@ https://github.com/bjc/prosody/commit/aedca363c093007542941749578caf1badf1674e
 > >> @@ -4,7 +4,7 @@ config BR2_PACKAGE_PROSODY
 > >>         depends on BR2_PACKAGE_HAS_LUAINTERPRETER
 > >>         depends on !BR2_PACKAGE_LUA_5_3
-> >>         depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+> >>         depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket,
+> luafilesystem
 > >> -       select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 # runtime
 > >> +       select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
 > >>         select BR2_PACKAGE_LUAEXPAT # runtime
@@ -92,3 +103,11 @@ https://github.com/bjc/prosody/commit/aedca363c093007542941749578caf1badf1674e
 > >> 2.25.4
 > >>
 >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200604/147c256f/attachment.html>
