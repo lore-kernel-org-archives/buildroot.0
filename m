@@ -1,48 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2020 22:37:21 +0200
-Subject: [Buildroot] [git commit] package/perl-path-tiny: bump to version
- 0.114
-Message-ID: <20200605203650.D636D80E57@busybox.osuosl.org>
+Date: Fri, 5 Jun 2020 22:34:13 +0200
+Subject: [Buildroot] [git commit] package/perl-exporter-tiny: bump to
+ version 1.002002
+Message-ID: <20200605203650.947C480E57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f217501112abefa60160068fef465fe317dfea77
+commit: https://git.buildroot.net/buildroot/commit/?id=9e84e3d08f73ecfbe47dbc637c9e8d1d75d2ff8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+LICENSE diff:
+- This software is copyright (c) 2018 by Toby Inkster.
++ This software is copyright (c) 2020 by Toby Inkster.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-path-tiny/perl-path-tiny.hash | 6 +++---
- package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-exporter-tiny/perl-exporter-tiny.hash | 8 ++++----
+ package/perl-exporter-tiny/perl-exporter-tiny.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
-index 17f7f42f8c..5138f401b5 100644
---- a/package/perl-path-tiny/perl-path-tiny.hash
-+++ b/package/perl-path-tiny/perl-path-tiny.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.hash b/package/perl-exporter-tiny/perl-exporter-tiny.hash
+index 1d36c63a10..c714ef902e 100644
+--- a/package/perl-exporter-tiny/perl-exporter-tiny.hash
++++ b/package/perl-exporter-tiny/perl-exporter-tiny.hash
+@@ -1,7 +1,7 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    bf2a021d653d7252a39c0d31b41a7c6e Path-Tiny-0.112.tar.gz
--sha256 813df2d140c65f795daefd8eca18e61194ecac7050c5406a069db86dea31cc3a Path-Tiny-0.112.tar.gz
-+md5  dd6092293f8766fb87d003dceebe4263  Path-Tiny-0.114.tar.gz
-+sha256  cd0f88f37a58fc3667ec065767fe01e73ee6efa18a112bfd3508cf6579ca00e1  Path-Tiny-0.114.tar.gz
+-md5    e33f25f7556f5f5264a92cb9870d0eac Exporter-Tiny-1.002001.tar.gz
+-sha256 a82c334c02ce4b0f9ea77c67bf77738f76a9b8aa4bae5c7209d1c76453d3c48d Exporter-Tiny-1.002001.tar.gz
++md5  485897322a2514b4d6ca90b2daacb7cd  Exporter-Tiny-1.002002.tar.gz
++sha256  00f0b95716b18157132c6c118ded8ba31392563d19e490433e9a65382e707101  Exporter-Tiny-1.002002.tar.gz
  
  # computed by scancpan
--sha256 a999b03d2b80e5c7f987289ac835fa2d88cafa9f0df24adf8a1fd21e175acd79 LICENSE
-+sha256  a999b03d2b80e5c7f987289ac835fa2d88cafa9f0df24adf8a1fd21e175acd79  LICENSE
-diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
-index 7e82af4c23..579f3f5886 100644
---- a/package/perl-path-tiny/perl-path-tiny.mk
-+++ b/package/perl-path-tiny/perl-path-tiny.mk
+-sha256 a109768ea1493cc7555d4381d6178d3cfc1fe52adc5d63d3831a2697d9fc90e6 COPYRIGHT
+-sha256 c614dadb36b02257ab492e3d4341e52f3f03fe8147cafd2b7da03b3b5c0361e9 LICENSE
++sha256  f4cb223c8ac37d6ccd0e78b2892ca54a48a6adbe6a271c3c17c0226646297e66  COPYRIGHT
++sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
+diff --git a/package/perl-exporter-tiny/perl-exporter-tiny.mk b/package/perl-exporter-tiny/perl-exporter-tiny.mk
+index 1ba1a5ac70..c7abfbae2d 100644
+--- a/package/perl-exporter-tiny/perl-exporter-tiny.mk
++++ b/package/perl-exporter-tiny/perl-exporter-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PATH_TINY_VERSION = 0.112
-+PERL_PATH_TINY_VERSION = 0.114
- PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
- PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
- PERL_PATH_TINY_LICENSE = Apache-2.0
+-PERL_EXPORTER_TINY_VERSION = 1.002001
++PERL_EXPORTER_TINY_VERSION = 1.002002
+ PERL_EXPORTER_TINY_SOURCE = Exporter-Tiny-$(PERL_EXPORTER_TINY_VERSION).tar.gz
+ PERL_EXPORTER_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
+ PERL_EXPORTER_TINY_LICENSE = Artistic or GPL-1.0+
