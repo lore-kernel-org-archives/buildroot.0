@@ -1,78 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2020 22:39:08 +0200
-Subject: [Buildroot] [PATCH 10/10] package/perl-type-tiny: bump to
- version 1.010002
-In-Reply-To: <20200605180423.1991841-10-francois.perrad@gadz.org>
-References: <20200605180423.1991841-1-francois.perrad@gadz.org>
- <20200605180423.1991841-10-francois.perrad@gadz.org>
-Message-ID: <20200605203908.GO13972@scaer>
+Date: Fri, 5 Jun 2020 22:40:29 +0200
+Subject: [Buildroot] [git commit] package/msmtp: bump to version 1.8.11
+Message-ID: <20200605204004.9134B82983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=31afaaf870fd8c1781281522abb29427daf1fdf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-05 20:04 +0200, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Format hash file with two spaces delimiters.
 
-I've applied the whole series to master, but this patch, see below...
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/msmtp/msmtp.hash | 7 ++++---
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> ---
->  package/perl-type-tiny/perl-type-tiny.hash | 6 +++---
->  package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-> index 20974d2f0..e9d84b4f9 100644
-> --- a/package/perl-type-tiny/perl-type-tiny.hash
-> +++ b/package/perl-type-tiny/perl-type-tiny.hash
-> @@ -1,7 +1,7 @@
->  # retrieved by scancpan from http://cpan.metacpan.org/
-> -md5  9d2d5ab2c5d6d2f98138ab14c5f529e3  Type-Tiny-1.010001.tar.gz
-> -sha256  f378663f62aaa7cf87f47b90f0951356d26a08468027da26962387998a6b1aae  Type-Tiny-1.010001.tar.gz
-> +md5  e6f95814ebff168f747775e7bf320342  Type-Tiny-1.010002.tar.gz
-> +sha256  2ea6ea2d8b2b3bb1b94f0309fa5064d57e7734c8bb14e99218e655dc1647073a  Type-Tiny-1.010002.tar.gz
->  
->  # computed by scancpan
-> -sha256  8c466d4e49afea63822407988a7b7c77be0178bc398fe088fadffb5202c44a4a  COPYRIGHT
-> +sha256  f46e9e2cf16c0d7dd0939066cb0764e87b34c5f29cc3ab715ad363161c71a66a  COPYRIGHT
-
-You properly reported on the license change for perl-exporter-tiny
-(thanks!), but forgot to do so here.
-
-Care to respin with that fixed, please?
-
-Regards,
-Yann E. MORIN.
-
->  sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-> diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-> index 9c89eb5da..119d6a81b 100644
-> --- a/package/perl-type-tiny/perl-type-tiny.mk
-> +++ b/package/perl-type-tiny/perl-type-tiny.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PERL_TYPE_TINY_VERSION = 1.010001
-> +PERL_TYPE_TINY_VERSION = 1.010002
->  PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
->  PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
->  PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index b2aa47cd8f..8fc674bfa5 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking signature
+-# https://marlam.de/msmtp/releases/msmtp-1.8.7.tar.xz.sig
+-sha256	9a53bcdc244ec5b1a806934ecc7746d9d09db581f587bedf597e9da2f48c51f1	msmtp-1.8.7.tar.xz
++# https://marlam.de/msmtp/releases/msmtp-1.8.11.tar.xz.sig
++# with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
++sha256  f25f0fa177ce9e0ad65c127e790a37f35fb64fee9e33d90345844c5c86780e60  msmtp-1.8.11.tar.xz
+ 
+ # Hash for license file:
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 8c260471e6..43a9ed1e93 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.8.7
++MSMTP_VERSION = 1.8.11
+ MSMTP_SITE = https://marlam.de/msmtp/releases
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
