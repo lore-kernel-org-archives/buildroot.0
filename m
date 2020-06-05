@@ -1,12 +1,15 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Jun 2020 21:48:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ell: needs headers >= 4.12
-Message-ID: <20200605194825.70189-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 5 Jun 2020 22:09:21 +0200
+Subject: [Buildroot] [git commit] package/ell: needs headers >= 4.12
+Message-ID: <20200605202035.1C136839E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7b3ac6d24db08b241df4687f22f757837ddcb5ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 ell needs headers >= 4.12 since version 0.31 and
 https://git.kernel.org/pub/scm/libs/ell/ell.git/commit?id=fa950995a48bbcd8f0d3dfbbe9a7f768aba5c50f
@@ -21,6 +24,7 @@ Fixes:
  - http://autobuild.buildroot.org/results/bafc0ee2a3bcb2418a3612da38eb9dcd586b57d4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/bluez5_utils/Config.in | 4 ++++
  package/connman/Config.in      | 4 ++++
@@ -135,5 +139,3 @@ index 57ee4bc536..c1d0cae4ef 100644
 +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
 +		!BR2_TOOLCHAIN_HAS_THREADS || \
 +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
--- 
-2.26.2
