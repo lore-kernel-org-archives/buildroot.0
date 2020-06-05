@@ -1,40 +1,39 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat,  6 Jun 2020 00:54:21 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-Message-ID: <20200605225421.13494-1-nolange79@gmail.com>
+Date: Sat,  6 Jun 2020 00:55:54 +0200
+Subject: [Buildroot] [PATCH] package/iproute2: order after libcap and selinux
+Message-ID: <20200605225555.13679-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop default dependencies, haveged needs nothing but
-local sockets and /dev/random.
-This allows the entropy to be available earlier.
+the configuration will automatically detect
+if libcap / selinux is available.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/haveged/haveged.service | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/iproute2/iproute2.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
-index 91035c6711..ed9f043a91 100644
---- a/package/haveged/haveged.service
-+++ b/package/haveged/haveged.service
-@@ -1,10 +1,13 @@
- [Unit]
- Description=Entropy Harvesting Daemon
- Documentation=man:haveged(8)
-+DefaultDependencies=no
-+Conflicts=shutdown.target
-+Before=sysinit.target shutdown.target systemd-update-done.service
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 6d20f65f34..e5841cc460 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -16,6 +16,14 @@ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ IPROUTE2_DEPENDENCIES += elfutils
+ endif
  
- [Service]
- ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
- SuccessExitStatus=143
- 
- [Install]
--WantedBy=multi-user.target
-+WantedBy=sysinit.target
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++IPROUTE2_DEPENDENCIES += libcap
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++IPROUTE2_DEPENDENCIES += libselinux
++endif
++
+ ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
+ IPROUTE2_DEPENDENCIES += iptables
+ else
 -- 
 2.26.2
