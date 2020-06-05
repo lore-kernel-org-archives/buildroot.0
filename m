@@ -1,8 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  5 Jun 2020 20:04:14 +0200
-Subject: [Buildroot] [PATCH 01/10] package/perl-date-manip: bump to version
- 6.82
-Message-ID: <20200605180423.1991841-1-francois.perrad@gadz.org>
+Date: Fri,  5 Jun 2020 20:04:16 +0200
+Subject: [Buildroot] [PATCH 03/10] package/perl-http-daemon: bump to version
+ 6.12
+In-Reply-To: <20200605180423.1991841-1-francois.perrad@gadz.org>
+References: <20200605180423.1991841-1-francois.perrad@gadz.org>
+Message-ID: <20200605180423.1991841-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,36 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-date-manip/perl-date-manip.hash | 6 +++---
- package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
+ package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
-index a35b51456..207c59208 100644
---- a/package/perl-date-manip/perl-date-manip.hash
-+++ b/package/perl-date-manip/perl-date-manip.hash
+diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
+index b2e5dbceb..f8272a4fc 100644
+--- a/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-http-daemon/perl-http-daemon.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    a9ff96f05675ac4cb7f19c4b03a7363b Date-Manip-6.81.tar.gz
--sha256 044c319e2213dad73abd32b7f731bf4593d1e9fa96024bdc6b6475a2e768949b Date-Manip-6.81.tar.gz
-+md5  13c7600ff8a33d585b753874df85e4ea  Date-Manip-6.82.tar.gz
-+sha256  fa96bcf94c6b4b7d3333f073f5d0faad59f546e5aec13ac01718f2e6ef14672a  Date-Manip-6.82.tar.gz
+-md5    c5d6e1d84f7f09770d9ce52d4bddef59 HTTP-Daemon-6.06.tar.gz
+-sha256 fc03a161b54553f766457a4267e7066767f54ad01cacfe9a91d7caa2a0319bad HTTP-Daemon-6.06.tar.gz
++md5  63674e3f81760a29075853413eb157d8  HTTP-Daemon-6.12.tar.gz
++sha256  df47bed10c38670c780fd0116867d5fd4693604acde31ba63380dce04c4e1fa6  HTTP-Daemon-6.12.tar.gz
  
  # computed by scancpan
--sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
-+sha256  8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d  LICENSE
-diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
-index 20dc72276..a54a53a1f 100644
---- a/package/perl-date-manip/perl-date-manip.mk
-+++ b/package/perl-date-manip/perl-date-manip.mk
+-sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENCE
++sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENCE
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
+index 3fb89db92..e47507262 100644
+--- a/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATE_MANIP_VERSION = 6.81
-+PERL_DATE_MANIP_VERSION = 6.82
- PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
- PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
- PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_DAEMON_VERSION = 6.06
++PERL_HTTP_DAEMON_VERSION = 6.12
+ PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
+ PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
 -- 
 2.25.1
