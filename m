@@ -1,80 +1,85 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat,  6 Jun 2020 00:59:03 +0200
-Subject: [Buildroot] [PATCH 3/4] package/openssh: seperate sd service for
- host key generation
+Date: Sat,  6 Jun 2020 00:59:04 +0200
+Subject: [Buildroot] [PATCH 4/4] package/openssh: add sd socket-activated
+ ssh daemon services
 In-Reply-To: <20200605225905.14082-1-nolange79@gmail.com>
 References: <20200605225905.14082-1-nolange79@gmail.com>
-Message-ID: <20200605225905.14082-3-nolange79@gmail.com>
+Message-ID: <20200605225905.14082-4-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-split out generationg of host keys into an optional service
-that can easily be removed or deactivated.
-
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/openssh/openssh.mk               |  5 +++--
- package/openssh/sshd-host-keygen.service | 20 ++++++++++++++++++++
- package/openssh/sshd.service             |  1 -
- 3 files changed, 23 insertions(+), 3 deletions(-)
- create mode 100644 package/openssh/sshd-host-keygen.service
+ package/openssh/openssh.mk               |  6 +++---
+ package/openssh/sshd-host-keygen.service |  2 +-
+ package/openssh/sshd.socket              | 11 +++++++++++
+ package/openssh/sshd at .service            | 10 ++++++++++
+ 4 files changed, 25 insertions(+), 4 deletions(-)
+ create mode 100644 package/openssh/sshd.socket
+ create mode 100644 package/openssh/sshd at .service
 
 diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index d425db1428..6b3ee1f5f4 100644
+index 6b3ee1f5f4..1f2638e9c9 100644
 --- a/package/openssh/openssh.mk
 +++ b/package/openssh/openssh.mk
-@@ -114,8 +114,9 @@ endef
+@@ -114,9 +114,9 @@ endef
  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
  
  define OPENSSH_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 package/openssh/sshd.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/sshd.service
-+	mkdir $(TARGET_DIR)/usr/lib/systemd/system
-+	$(INSTALL) -m 644 package/openssh/sshd*.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system
+-	$(INSTALL) -m 644 package/openssh/sshd*.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
++	$(INSTALL) -m 644 package/openssh/sshd*.service package/openssh/sshd.socket \
++		$(TARGET_DIR)/usr/lib/systemd/system/.
  	$(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
  endef
  
 diff --git a/package/openssh/sshd-host-keygen.service b/package/openssh/sshd-host-keygen.service
-new file mode 100644
-index 0000000000..058e671c44
---- /dev/null
+index 058e671c44..ffde622b01 100644
+--- a/package/openssh/sshd-host-keygen.service
 +++ b/package/openssh/sshd-host-keygen.service
-@@ -0,0 +1,20 @@
+@@ -17,4 +17,4 @@ Type=oneshot
+ RemainAfterExit=yes
+ 
+ [Install]
+-WantedBy=sshd.service
++WantedBy=sshd.service sshd.socket
+diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
+new file mode 100644
+index 0000000000..bbae9ed7aa
+--- /dev/null
++++ b/package/openssh/sshd.socket
+@@ -0,0 +1,11 @@
 +[Unit]
-+Description=SSH Key Generation
++Description=OpenBSD Secure Shell server socket
 +Before=sshd.service
++Conflicts=sshd.service
 +
-+ConditionPathExists=|!/etc/ssh/ssh_host_dsa_key
-+ConditionPathExists=|!/etc/ssh/ssh_host_dsa_key.pub
-+ConditionPathExists=|!/etc/ssh/ssh_host_ecdsa_key
-+ConditionPathExists=|!/etc/ssh/ssh_host_ecdsa_key.pub
-+ConditionPathExists=|!/etc/ssh/ssh_host_ed25519_key
-+ConditionPathExists=|!/etc/ssh/ssh_host_ed25519_key.pub
-+ConditionPathExists=|!/etc/ssh/ssh_host_rsa_key
-+ConditionPathExists=|!/etc/ssh/ssh_host_rsa_key.pub
-+
-+[Service]
-+ExecStart=/usr/bin/ssh-keygen -A
-+Type=oneshot
-+RemainAfterExit=yes
++[Socket]
++ListenStream=22
++Accept=yes
 +
 +[Install]
-+WantedBy=sshd.service
-diff --git a/package/openssh/sshd.service b/package/openssh/sshd.service
-index 715bd3f7eb..797e249d8d 100644
---- a/package/openssh/sshd.service
-+++ b/package/openssh/sshd.service
-@@ -4,7 +4,6 @@ Documentation=man:sshd(8) man:sshd_config(5)
- After=network.target auditd.service
- 
- [Service]
--ExecStartPre=/usr/bin/ssh-keygen -A
- ExecStartPre=/usr/sbin/sshd -t
- ExecStart=/usr/sbin/sshd -D
- ExecReload=/usr/sbin/sshd -t
++WantedBy=sockets.target
+diff --git a/package/openssh/sshd at .service b/package/openssh/sshd at .service
+new file mode 100644
+index 0000000000..b3a590d9a3
+--- /dev/null
++++ b/package/openssh/sshd at .service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=OpenBSD Secure Shell server per-connection daemon
++Documentation=man:sshd(8) man:sshd_config(5)
++After=auditd.service
++
++[Service]
++ExecStart=-/usr/sbin/sshd -i
++StandardInput=socket
++RuntimeDirectory=sshd
++RuntimeDirectoryMode=0755
 -- 
 2.26.2
