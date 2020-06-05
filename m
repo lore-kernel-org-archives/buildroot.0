@@ -1,39 +1,35 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat,  6 Jun 2020 00:55:54 +0200
-Subject: [Buildroot] [PATCH] package/iproute2: order after libcap and selinux
-Message-ID: <20200605225555.13679-1-nolange79@gmail.com>
+Date: Sat,  6 Jun 2020 00:57:18 +0200
+Subject: [Buildroot] [PATCH] package/libxml2: remove helper script from
+ target
+Message-ID: <20200605225719.13836-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the configuration will automatically detect
-if libcap / selinux is available.
-
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/iproute2/iproute2.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libxml2/libxml2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 6d20f65f34..e5841cc460 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -16,6 +16,14 @@ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- IPROUTE2_DEPENDENCIES += elfutils
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ea6a8c1f6d..a0efe041a5 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -49,6 +49,12 @@ else
+ LIBXML2_CONF_OPTS += --without-iconv
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+IPROUTE2_DEPENDENCIES += libcap
-+endif
++define LIBXML2_INSTALL_TARGET_POST
++	rm -f $(TARGET_DIR)/usr/lib/xml2Conf.sh
++endef
 +
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+IPROUTE2_DEPENDENCIES += libselinux
-+endif
++LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_INSTALL_TARGET_POST
 +
- ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
- IPROUTE2_DEPENDENCIES += iptables
- else
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
 -- 
 2.26.2
