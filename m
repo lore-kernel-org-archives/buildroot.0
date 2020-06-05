@@ -1,56 +1,48 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  5 Jun 2020 20:04:18 +0200
-Subject: [Buildroot] [PATCH 05/10] package/perl-json-maybe: bump to version
- 1.004002
+Date: Fri,  5 Jun 2020 20:04:19 +0200
+Subject: [Buildroot] [PATCH 06/10] package/perl-mozilla-ca: bump to version
+ 20200520
 In-Reply-To: <20200605180423.1991841-1-francois.perrad@gadz.org>
 References: <20200605180423.1991841-1-francois.perrad@gadz.org>
-Message-ID: <20200605180423.1991841-5-francois.perrad@gadz.org>
+Message-ID: <20200605180423.1991841-6-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-now, LICENSE has its own file
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-json-maybexs/perl-json-maybexs.hash | 6 +++---
- package/perl-json-maybexs/perl-json-maybexs.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-mozilla-ca/perl-mozilla-ca.hash | 6 +++---
+ package/perl-mozilla-ca/perl-mozilla-ca.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
-index c8bf172aa..3f1a99c38 100644
---- a/package/perl-json-maybexs/perl-json-maybexs.hash
-+++ b/package/perl-json-maybexs/perl-json-maybexs.hash
+diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
+index 0d52d192e..c577d4887 100644
+--- a/package/perl-mozilla-ca/perl-mozilla-ca.hash
++++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    db61fb5515f8e2f19709a317e26dde42 JSON-MaybeXS-1.004000.tar.gz
--sha256 59bda02e8f4474c73913723c608b539e2452e16c54ed7f0150c01aad06e0a126 JSON-MaybeXS-1.004000.tar.gz
-+md5  2c40209b38b7a569b3bfc4d88e47d98c  JSON-MaybeXS-1.004002.tar.gz
-+sha256  3b8e2fdc3b36d0c5edbc78121840dced63798ad49cabcf875d5c5e32336d77b5  JSON-MaybeXS-1.004002.tar.gz
+-md5    9c93333e1d9d3fad639e9d4082898de1 Mozilla-CA-20180117.tar.gz
+-sha256 f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406 Mozilla-CA-20180117.tar.gz
++md5  8ac3fe1a83c45da3f468f78ab8133ea6  Mozilla-CA-20200520.tar.gz
++sha256  b3ca0002310bf24a16c0d5920bdea97a2f46e77e7be3e7377e850d033387c726  Mozilla-CA-20200520.tar.gz
  
  # computed by scancpan
--sha256 d972e00126c5337e88d81d64fc349a3f4c54841075f4180a1145441d30c86f83 README
-+sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
-diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
-index cb6518b59..bb11cd3a2 100644
---- a/package/perl-json-maybexs/perl-json-maybexs.mk
-+++ b/package/perl-json-maybexs/perl-json-maybexs.mk
-@@ -4,11 +4,11 @@
+-sha256 95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e README
++sha256  95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e  README
+diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+index 9fca66d00..3bcb947f7 100644
+--- a/package/perl-mozilla-ca/perl-mozilla-ca.mk
++++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_JSON_MAYBEXS_VERSION = 1.004000
-+PERL_JSON_MAYBEXS_VERSION = 1.004002
- PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
--PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
-+PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
--PERL_JSON_MAYBEXS_LICENSE_FILES = README
-+PERL_JSON_MAYBEXS_LICENSE_FILES = LICENSE
- PERL_JSON_MAYBEXS_DISTNAME = JSON-MaybeXS
- 
- $(eval $(perl-package))
+-PERL_MOZILLA_CA_VERSION = 20180117
++PERL_MOZILLA_CA_VERSION = 20200520
+ PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
+ PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABH
+ PERL_MOZILLA_CA_LICENSE = MPL-2.0
 -- 
 2.25.1
