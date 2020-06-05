@@ -1,52 +1,56 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  5 Jun 2020 20:04:17 +0200
-Subject: [Buildroot] [PATCH 04/10] package/perl-http-message: bump to
- version 6.24
+Date: Fri,  5 Jun 2020 20:04:18 +0200
+Subject: [Buildroot] [PATCH 05/10] package/perl-json-maybe: bump to version
+ 1.004002
 In-Reply-To: <20200605180423.1991841-1-francois.perrad@gadz.org>
 References: <20200605180423.1991841-1-francois.perrad@gadz.org>
-Message-ID: <20200605180423.1991841-4-francois.perrad@gadz.org>
+Message-ID: <20200605180423.1991841-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LICENSE diff:
-- This software is copyright (c) 1994-2017 by Gisle Aas.
-+ This software is copyright (c) 1994 by Gisle Aas.
+now, LICENSE has its own file
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-message/perl-http-message.hash | 6 +++---
- package/perl-http-message/perl-http-message.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-json-maybexs/perl-json-maybexs.hash | 6 +++---
+ package/perl-json-maybexs/perl-json-maybexs.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index 80e117cff..99464e3ba 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
+index c8bf172aa..3f1a99c38 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.hash
++++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    3cfb96e96c1881afa72639a8f4282e86 HTTP-Message-6.22.tar.gz
--sha256 970efd151b81c95831d2a5f9e117f8032b63a1768cd2cd3f092ad634c85175c3 HTTP-Message-6.22.tar.gz
-+md5  d1d1dc1f83ece90bd0503b4495274955  HTTP-Message-6.24.tar.gz
-+sha256  554a1acf2daa401091f7012f5cb82d04d281db43fbd8f39a1fcbb7ed56dde16d  HTTP-Message-6.24.tar.gz
+-md5    db61fb5515f8e2f19709a317e26dde42 JSON-MaybeXS-1.004000.tar.gz
+-sha256 59bda02e8f4474c73913723c608b539e2452e16c54ed7f0150c01aad06e0a126 JSON-MaybeXS-1.004000.tar.gz
++md5  2c40209b38b7a569b3bfc4d88e47d98c  JSON-MaybeXS-1.004002.tar.gz
++sha256  3b8e2fdc3b36d0c5edbc78121840dced63798ad49cabcf875d5c5e32336d77b5  JSON-MaybeXS-1.004002.tar.gz
  
  # computed by scancpan
--sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b LICENSE
-+sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index c80d88405..d802c258d 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
-@@ -4,7 +4,7 @@
+-sha256 d972e00126c5337e88d81d64fc349a3f4c54841075f4180a1145441d30c86f83 README
++sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
+index cb6518b59..bb11cd3a2 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.mk
++++ b/package/perl-json-maybexs/perl-json-maybexs.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.22
-+PERL_HTTP_MESSAGE_VERSION = 6.24
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
- PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+-PERL_JSON_MAYBEXS_VERSION = 1.004000
++PERL_JSON_MAYBEXS_VERSION = 1.004002
+ PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
+-PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
+-PERL_JSON_MAYBEXS_LICENSE_FILES = README
++PERL_JSON_MAYBEXS_LICENSE_FILES = LICENSE
+ PERL_JSON_MAYBEXS_DISTNAME = JSON-MaybeXS
+ 
+ $(eval $(perl-package))
 -- 
 2.25.1
