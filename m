@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  5 Jun 2020 20:04:19 +0200
-Subject: [Buildroot] [PATCH 06/10] package/perl-mozilla-ca: bump to version
- 20200520
+Date: Fri,  5 Jun 2020 20:04:20 +0200
+Subject: [Buildroot] [PATCH 07/10] package/perl-net-dns: bump to versionn
+ 1.24
 In-Reply-To: <20200605180423.1991841-1-francois.perrad@gadz.org>
 References: <20200605180423.1991841-1-francois.perrad@gadz.org>
-Message-ID: <20200605180423.1991841-6-francois.perrad@gadz.org>
+Message-ID: <20200605180423.1991841-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mozilla-ca/perl-mozilla-ca.hash | 6 +++---
- package/perl-mozilla-ca/perl-mozilla-ca.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-index 0d52d192e..c577d4887 100644
---- a/package/perl-mozilla-ca/perl-mozilla-ca.hash
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 1c79646a0..14662a235 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9c93333e1d9d3fad639e9d4082898de1 Mozilla-CA-20180117.tar.gz
--sha256 f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406 Mozilla-CA-20180117.tar.gz
-+md5  8ac3fe1a83c45da3f468f78ab8133ea6  Mozilla-CA-20200520.tar.gz
-+sha256  b3ca0002310bf24a16c0d5920bdea97a2f46e77e7be3e7377e850d033387c726  Mozilla-CA-20200520.tar.gz
+-md5  105517139b39650f78c21b2e461ac97e  Net-DNS-1.23.tar.gz
+-sha256  cf327f31063b96cd3421be43a1d6cb41eaa61d0595450032e57905b1bd6b2c3e  Net-DNS-1.23.tar.gz
++md5  1bf07817bb272d412a737ecc2347d70b  Net-DNS-1.24.tar.gz
++sha256  11a6c2ba6cb1c6640f01c9bbf2036bcbe3974232e9b939ab94985230c92cde63  Net-DNS-1.24.tar.gz
  
  # computed by scancpan
--sha256 95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e README
-+sha256  95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e  README
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
-index 9fca66d00..3bcb947f7 100644
---- a/package/perl-mozilla-ca/perl-mozilla-ca.mk
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+ sha256  afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583  README
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index b0feef4e1..a6e0f9a28 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOZILLA_CA_VERSION = 20180117
-+PERL_MOZILLA_CA_VERSION = 20200520
- PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
- PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABH
- PERL_MOZILLA_CA_LICENSE = MPL-2.0
+-PERL_NET_DNS_VERSION = 1.23
++PERL_NET_DNS_VERSION = 1.24
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 -- 
 2.25.1
