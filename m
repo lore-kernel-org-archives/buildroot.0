@@ -1,163 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2020 22:21:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ell: needs headers >= 4.12
-In-Reply-To: <20200605194825.70189-1-fontaine.fabrice@gmail.com>
-References: <20200605194825.70189-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200605202158.GN13972@scaer>
+Date: Fri, 5 Jun 2020 22:34:11 +0200
+Subject: [Buildroot] [git commit] package/perl-http-daemon: bump to version
+ 6.12
+Message-ID: <20200605203650.7BEAF82616@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5b7cc165cc37c0cf689420b76b308a6cafdae797
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-05 21:48 +0200, Fabrice Fontaine spake thusly:
-> ell needs headers >= 4.12 since version 0.31 and
-> https://git.kernel.org/pub/scm/libs/ell/ell.git/commit?id=fa950995a48bbcd8f0d3dfbbe9a7f768aba5c50f
-> 
-> Indeed NLM_F_CAPPED, NLM_F_ACK_TLVS, NLMSGERR_ATTR_MSG and
-> NETLINK_EXT_ACK are only available since
-> https://github.com/torvalds/linux/commit/2d4bc93368f5a0ddb57c8c885cdad9c9b7a10ed5
-> 
-> So add this dependency to ell and its reverse dependencies
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/bafc0ee2a3bcb2418a3612da38eb9dcd586b57d4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/perl-http-daemon/perl-http-daemon.hash | 6 +++---
+ package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/bluez5_utils/Config.in | 4 ++++
->  package/connman/Config.in      | 4 ++++
->  package/ell/Config.in          | 6 ++++--
->  package/iwd/Config.in          | 6 ++++--
->  package/ofono/Config.in        | 7 +++++--
->  5 files changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-> index 1e9eda31dc..73c6f01324 100644
-> --- a/package/bluez5_utils/Config.in
-> +++ b/package/bluez5_utils/Config.in
-> @@ -62,12 +62,16 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
->  
->  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
->  	bool "build mesh profile"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
->  	select BR2_PACKAGE_ELL
->  	select BR2_PACKAGE_JSON_C
->  	select BR2_PACKAGE_READLINE
->  	help
->  	  Build BlueZ 5.x mesh plugin
->  
-> +comment "mesh profile needs a toolchain w/ headers >= 4.12"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> +
->  config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
->  	bool "build midi profile"
->  	select BR2_PACKAGE_ALSA_LIB
-> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> index 614b826f96..72b76bf19d 100644
-> --- a/package/connman/Config.in
-> +++ b/package/connman/Config.in
-> @@ -85,8 +85,12 @@ config BR2_PACKAGE_CONNMAN_NEARD
->  config BR2_PACKAGE_CONNMAN_OFONO
->  	bool "enable ofono support"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ofono
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ofono
->  	select BR2_PACKAGE_OFONO
->  
-> +comment "ofono support needs a toolchain w/ headers >= 4.12"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> +
->  config BR2_PACKAGE_CONNMAN_DEBUG
->  	bool "enable compiling with debugging information"
->  
-> diff --git a/package/ell/Config.in b/package/ell/Config.in
-> index f27d581f98..d337154878 100644
-> --- a/package/ell/Config.in
-> +++ b/package/ell/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_ELL
->  	bool "ell"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_USE_WCHAR
->  	help
-> @@ -8,6 +9,7 @@ config BR2_PACKAGE_ELL
->  
->  	  https://01.org/ell
->  
-> -comment "ell needs a toolchain w/ dynamic library, wchar"
-> +comment "ell needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> -	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-> index c790f3dba1..eff24a8599 100644
-> --- a/package/iwd/Config.in
-> +++ b/package/iwd/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_IWD
->  	bool "iwd"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
->  	depends on !BR2_STATIC_LIBS # ell
->  	depends on BR2_USE_WCHAR # ell
->  	select BR2_PACKAGE_ELL
-> @@ -9,6 +10,7 @@ config BR2_PACKAGE_IWD
->  
->  	  https://iwd.wiki.kernel.org/
->  
-> -comment "iwd needs a toolchain w/ dynamic library, wchar"
-> +comment "iwd needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
-> -	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
-> index 57ee4bc536..c1d0cae4ef 100644
-> --- a/package/ofono/Config.in
-> +++ b/package/ofono/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_OFONO
->  	depends on BR2_USE_MMU # dbus, libglib2
->  	depends on !BR2_STATIC_LIBS # dlopen(), ell
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
->  	select BR2_PACKAGE_DBUS
->  	select BR2_PACKAGE_ELL
->  	select BR2_PACKAGE_LIBCAP_NG
-> @@ -17,7 +18,9 @@ config BR2_PACKAGE_OFONO
->  
->  	  http://ofono.org/
->  
-> -comment "ofono needs a toolchain w/ dynamic library, wchar, threads"
-> +comment "ofono needs a toolchain w/ dynamic library, wchar, threads, headers >= 4.12"
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> -	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
+index b2e5dbceb3..f8272a4fce 100644
+--- a/package/perl-http-daemon/perl-http-daemon.hash
++++ b/package/perl-http-daemon/perl-http-daemon.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    c5d6e1d84f7f09770d9ce52d4bddef59 HTTP-Daemon-6.06.tar.gz
+-sha256 fc03a161b54553f766457a4267e7066767f54ad01cacfe9a91d7caa2a0319bad HTTP-Daemon-6.06.tar.gz
++md5  63674e3f81760a29075853413eb157d8  HTTP-Daemon-6.12.tar.gz
++sha256  df47bed10c38670c780fd0116867d5fd4693604acde31ba63380dce04c4e1fa6  HTTP-Daemon-6.12.tar.gz
+ 
+ # computed by scancpan
+-sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENCE
++sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENCE
+diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
+index 3fb89db924..e475072628 100644
+--- a/package/perl-http-daemon/perl-http-daemon.mk
++++ b/package/perl-http-daemon/perl-http-daemon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_HTTP_DAEMON_VERSION = 6.06
++PERL_HTTP_DAEMON_VERSION = 6.12
+ PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
+ PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
