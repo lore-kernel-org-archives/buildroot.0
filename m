@@ -1,90 +1,49 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 5 Jun 2020 09:14:32 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libhttpserver: bump to version
- 0.18.0
-In-Reply-To: <20200604213522.12291-2-fontaine.fabrice@gmail.com>
-References: <20200604213522.12291-1-fontaine.fabrice@gmail.com>
- <20200604213522.12291-2-fontaine.fabrice@gmail.com>
-Message-ID: <c91ec9df-6ce4-5321-1a59-9afbbadf5cb4@relinux.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  5 Jun 2020 10:53:05 +0300
+Subject: [Buildroot] [PATCH] package/msmtp: bump to version 1.8.11
+Message-ID: <dcad64108897fa6b795575407184b0608af7de3e.1591343585.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 04.06.20 um 23:35 schrieb Fabrice Fontaine:
-> - Remove patch (already in version)
-> - Update indentation in hash file (two spaces)
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Stephan Hoffmann <sho@relinux.de>
-> ---
->  ...-expectations-in-libhttpserver.pc.in.patch | 27 -------------------
->  package/libhttpserver/libhttpserver.hash      |  4 +--
->  package/libhttpserver/libhttpserver.mk        |  2 +-
->  3 files changed, 3 insertions(+), 30 deletions(-)
->  delete mode 100644 package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
->
-> diff --git a/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch b/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
-> deleted file mode 100644
-> index 74ca58bb31..0000000000
-> --- a/package/libhttpserver/0001-Fix-lib-expectations-in-libhttpserver.pc.in.patch
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -From 2bc7cf0beb6b8a124c1c7360c4fb5279e8763f07 Mon Sep 17 00:00:00 2001
-> -From: Sebastiano Merlino <electrictwister2000@gmail.com>
-> -Date: Sat, 8 Jun 2019 15:36:06 -0700
-> -Subject: [PATCH] Fix lib expectations in libhttpserver.pc.in
-> -
-> -Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
-> ----
-> -Patch status: upstream commit 458d16b922304006fe418897044e14
-> -
-> - libhttpserver.pc.in | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/libhttpserver.pc.in b/libhttpserver.pc.in
-> -index 36355ee..55f7c0e 100644
-> ---- a/libhttpserver.pc.in
-> -+++ b/libhttpserver.pc.in
-> -@@ -8,6 +8,6 @@ Description: A C++ library for creating an embedded Rest HTTP server
-> - Version: @VERSION@
-> - Requires: libmicrohttpd >= 0.9.37
-> - Conflicts:
-> --Libs: -L${libdir} -lmicrohttpd
-> -+Libs: -L${libdir} -lhttpserver
-> - Libs.private: @LHT_LIBDEPS@
-> - Cflags: -I${includedir} -I${includedir}/httpserver
-> --- 
-> -2.17.1
-> -
-> diff --git a/package/libhttpserver/libhttpserver.hash b/package/libhttpserver/libhttpserver.hash
-> index 0333aabbae..0791d800b8 100644
-> --- a/package/libhttpserver/libhttpserver.hash
-> +++ b/package/libhttpserver/libhttpserver.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256 778fa0aec199bf8737b2d540c2563a694c18957329f9885e372f7aaafb838351 libhttpserver-0.17.5.tar.gz
-> -sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a COPYING.LESSER
-> +sha256  b4a745a9f32a1ac02b545c062fc85342a655c3770cd8d4d7218f34509ea27d98  libhttpserver-0.18.0.tar.gz
-> +sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LESSER
-> diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
-> index 2c536cf012..170d46b06a 100644
-> --- a/package/libhttpserver/libhttpserver.mk
-> +++ b/package/libhttpserver/libhttpserver.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBHTTPSERVER_VERSION = 0.17.5
-> +LIBHTTPSERVER_VERSION = 0.18.0
->  LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
->  LIBHTTPSERVER_LICENSE = LGPL-2.1+
->  LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
+Format hash file with two spaces delimiters.
 
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/msmtp/msmtp.hash | 7 ++++---
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index b2aa47cd8fa5..8fc674bfa57a 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking signature
+-# https://marlam.de/msmtp/releases/msmtp-1.8.7.tar.xz.sig
+-sha256	9a53bcdc244ec5b1a806934ecc7746d9d09db581f587bedf597e9da2f48c51f1	msmtp-1.8.7.tar.xz
++# https://marlam.de/msmtp/releases/msmtp-1.8.11.tar.xz.sig
++# with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
++sha256  f25f0fa177ce9e0ad65c127e790a37f35fb64fee9e33d90345844c5c86780e60  msmtp-1.8.11.tar.xz
+ 
+ # Hash for license file:
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 8c260471e6d6..43a9ed1e934a 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.8.7
++MSMTP_VERSION = 1.8.11
+ MSMTP_SITE = https://marlam.de/msmtp/releases
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de Stephan at reLinux.de
+2.26.2
