@@ -1,149 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Jun 2020 23:41:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-markdown2: drop patches
-In-Reply-To: <20200605210351.153252-1-fontaine.fabrice@gmail.com>
-References: <20200605210351.153252-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200605214102.GS13972@scaer>
+Date: Fri, 5 Jun 2020 23:58:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python: use a shell
+ expansion for sysconfigdata_name
+In-Reply-To: <20200605205920.465052-1-aduskett@gmail.com>
+References: <20200605205920.465052-1-aduskett@gmail.com>
+Message-ID: <20200605215846.GT13972@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Adam, All,
 
-On 2020-06-05 23:03 +0200, Fabrice Fontaine spake thusly:
-> Commit a6569f2b3dd8b774683fdc0f7df3fcfde0b31f64 forgot to drop patches
-> when merging next branch
+On 2020-06-05 13:59 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/bf305c78dddd035b97e88943a1d19a8ceb6b41f7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Currently, GNU Make expands the Python SYSCONFIGDATA_NAME variable; however,
+> when building with per-package directories, this variable is not set because
+> the evaluation of this variable occurs before buildroot creates the
+> per-package directories of a given package.
 
-Applied to master with an expanded commit log, thanks.
+This can be easily demonstrated with that trivial Makefile:
+
+    $ cat Makefile
+    BLA = $(wildcard bla)
+    all:
+        @echo 'BLA=$(BLA)'
+        @touch bla
+        @echo 'BLA=$(BLA)'
+
+    $ make
+    BLA=
+    BLA=
+
+    $ make
+    BLA=bla
+    BLA=bla
+
+I.e. the variables are evaluated at the beginning of a recipe, not for
+each line of the recipe.
+
+> There are two solutions to fix this problem:
+> - Add a step between "patch" and "configure," which would evaluate all of the
+>   variables after creating the per-package directories.
+> 
+> - Evaluate SYSCONFIGDATA_NAME via a shell expansion instead of GNU Make.
+> 
+> As the second option is more expedient, the second option is what this commit
+> impliments.
+> 
+> Remove the current PKG_PYTHON_SYSCONFIGDATA_NAME definition and replace it
+> with the following:
+> 
+> PKG_PYTHON_SYSCONFIGDATA_PATH:
+>   - This variable is used to make the next line easier to read.
+> 
+> PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] &&
+> basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
+> 
+>   - The "-e" check ensures the path exists, as the basename command only
+>     evaluates strings.
+> 
+>   - The "|| true" is added to ensure the old behavior of returning an empty
+>     string if the file does not exist still works.
+
+That's not correct. The real reason for the  || true  is to cover cases
+where the expansion would be in a context where 'set -e' is in effect,
+and the when the file actually does not exist (i.e. for python2 for
+example), where we do not want the shell to fail in that case (to mimick
+the existing behaviour).
+
+But I'd also like some more knowledgeable people to look at it too...
 
 Regards,
 Yann E. MORIN.
 
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12941
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  ...gs-with-punctuation-after-as-part-of.patch | 53 -------------------
->  .../0002-Better-fix-for-issue-348.patch       | 32 -----------
->  package/python-markdown2/python-markdown2.mk  |  4 --
->  3 files changed, 89 deletions(-)
->  delete mode 100644 package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
->  delete mode 100644 package/python-markdown2/0002-Better-fix-for-issue-348.patch
+>  package/pkg-python.mk | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch b/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-> deleted file mode 100644
-> index ee980e22e8..0000000000
-> --- a/package/python-markdown2/0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-> +++ /dev/null
-> @@ -1,53 +0,0 @@
-> -From 9144d0fc5d5249cc4d81287ee79091806e6dde52 Mon Sep 17 00:00:00 2001
-> -From: Gareth Simpson <gareth.simpson@zoodigital.com>
-> -Date: Fri, 1 May 2020 19:31:21 +0100
-> -Subject: [PATCH] Fix for issue 348 - incomplete tags with punctuation after as
-> - part of the tag name are a source of XSS
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Retrieved from:
-> -https://github.com/trentm/python-markdown2/commit/9144d0fc5d5249cc4d81287ee79091806e6dde52]
-> ----
-> - lib/markdown2.py                           | 2 +-
-> - test/tm-cases/issue348_incomplete_tag.html | 1 +
-> - test/tm-cases/issue348_incomplete_tag.opts | 1 +
-> - test/tm-cases/issue348_incomplete_tag.text | 1 +
-> - 4 files changed, 4 insertions(+), 1 deletion(-)
-> - create mode 100644 test/tm-cases/issue348_incomplete_tag.html
-> - create mode 100644 test/tm-cases/issue348_incomplete_tag.opts
-> - create mode 100644 test/tm-cases/issue348_incomplete_tag.text
-> -
-> -diff --git a/lib/markdown2.py b/lib/markdown2.py
-> -index 3a5d5d9..636bf07 100755
-> ---- a/lib/markdown2.py
-> -+++ b/lib/markdown2.py
-> -@@ -2164,7 +2164,7 @@ def _encode_amps_and_angles(self, text):
-> -         text = self._naked_gt_re.sub('&gt;', text)
-> -         return text
-> - 
-> --    _incomplete_tags_re = re.compile("<(/?\w+[\s/]+?)")
-> -+    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
-> - 
-> -     def _encode_incomplete_tags(self, text):
-> -         if self.safe_mode not in ("replace", "escape"):
-> -diff --git a/test/tm-cases/issue348_incomplete_tag.html b/test/tm-cases/issue348_incomplete_tag.html
-> -new file mode 100644
-> -index 0000000..46059cc
-> ---- /dev/null
-> -+++ b/test/tm-cases/issue348_incomplete_tag.html
-> -@@ -0,0 +1 @@
-> -+<p>&lt;lol@/ //id="pwn"//onclick="alert(1)"//<strong>abc</strong></p>
-> -diff --git a/test/tm-cases/issue348_incomplete_tag.opts b/test/tm-cases/issue348_incomplete_tag.opts
-> -new file mode 100644
-> -index 0000000..ad487c0
-> ---- /dev/null
-> -+++ b/test/tm-cases/issue348_incomplete_tag.opts
-> -@@ -0,0 +1 @@
-> -+{"safe_mode": "escape"}
-> -diff --git a/test/tm-cases/issue348_incomplete_tag.text b/test/tm-cases/issue348_incomplete_tag.text
-> -new file mode 100644
-> -index 0000000..bb4a0de
-> ---- /dev/null
-> -+++ b/test/tm-cases/issue348_incomplete_tag.text
-> -@@ -0,0 +1 @@
-> -+<lol@/ //id="pwn"//onclick="alert(1)"//**abc**
-> diff --git a/package/python-markdown2/0002-Better-fix-for-issue-348.patch b/package/python-markdown2/0002-Better-fix-for-issue-348.patch
-> deleted file mode 100644
-> index 127bb51da2..0000000000
-> --- a/package/python-markdown2/0002-Better-fix-for-issue-348.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From 0c0543846fa54281e2269b0bff841a0b9ffe23fe Mon Sep 17 00:00:00 2001
-> -From: Gareth Simpson <gareth.simpson@zoodigital.com>
-> -Date: Sat, 2 May 2020 21:22:36 +0100
-> -Subject: [PATCH] Better fix for issue 348
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Retrieved from:
-> -https://github.com/trentm/python-markdown2/commit/0c0543846fa54281e2269b0bff841a0b9ffe23fe]
-> ----
-> - lib/markdown2.py | 5 ++++-
-> - 1 file changed, 4 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/lib/markdown2.py b/lib/markdown2.py
-> -index 636bf07..be86502 100755
-> ---- a/lib/markdown2.py
-> -+++ b/lib/markdown2.py
-> -@@ -2164,11 +2164,14 @@ def _encode_amps_and_angles(self, text):
-> -         text = self._naked_gt_re.sub('&gt;', text)
-> -         return text
-> - 
-> --    _incomplete_tags_re = re.compile("<(/?\w+?(?!://).?[\s/]+?)")
-> -+    _incomplete_tags_re = re.compile("<(/?\w+?(?!\w).+?[\s/]+?)")
-> - 
-> -     def _encode_incomplete_tags(self, text):
-> -         if self.safe_mode not in ("replace", "escape"):
-> -             return text
-> -+            
-> -+        if text.endswith(">"):
-> -+            return text  # this is not an incomplete tag, this is a link in the form <http://x.y.z>
-> - 
-> -         return self._incomplete_tags_re.sub("&lt;\\1", text)
-> - 
-> diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
-> index 095f672028..c7858a3966 100644
-> --- a/package/python-markdown2/python-markdown2.mk
-> +++ b/package/python-markdown2/python-markdown2.mk
-> @@ -11,8 +11,4 @@ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
->  PYTHON_MARKDOWN2_LICENSE = MIT
->  PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
+> diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+> index 4bf762e662..73fe9954e7 100644
+> --- a/package/pkg-python.mk
+> +++ b/package/pkg-python.mk
+> @@ -20,9 +20,11 @@
+>  #
+>  ################################################################################
 >  
-> -# 0001-Fix-for-issue-348-incomplete-tags-with-punctuation-after-as-part-of.patch
-> -# 0002-Better-fix-for-issue-348.patch
-> -PYTHON_MARKDOWN2_IGNORE_CVES += CVE-2020-11888
-> -
->  $(eval $(python-package))
+> -define PKG_PYTHON_SYSCONFIGDATA_NAME
+> -$(basename $(notdir $(wildcard $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py)))
+> -endef
+> +# basename does not evaluate if a file exists, so we must check to ensure
+> +# the _sysconfigdata__linux_*.py file exists. The "|| true" is added to return
+> +# an empty string if the file does not exist.
+> +PKG_PYTHON_SYSCONFIGDATA_PATH = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/_sysconfigdata__linux_*.py
+> +PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
+>  
+>  # Target distutils-based packages
+>  PKG_PYTHON_DISTUTILS_ENV = \
 > -- 
 > 2.26.2
 > 
