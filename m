@@ -1,64 +1,96 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  6 Jun 2020 15:58:49 +0200
-Subject: [Buildroot] [PATCH] package/netsurf: bump to version 3.10
-Message-ID: <20200606135849.4158368-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Jun 2020 17:02:22 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/linux-firmware: add support
+ for nvidia files
+In-Reply-To: <20200606034839.352118-1-christian@paral.in>
+References: <20200606034839.352118-1-christian@paral.in>
+Message-ID: <20200606170222.268eeda8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/netsurf/0003-do-not-cross-compile-nsgenbind.patch | 2 +-
- package/netsurf/netsurf.hash                              | 4 ++--
- package/netsurf/netsurf.mk                                | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+On Fri,  5 Jun 2020 20:48:39 -0700
+Christian Stewart <christian@paral.in> wrote:
 
-diff --git a/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch b/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
-index 01e77e977..2d4637511 100644
---- a/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
-+++ b/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
-@@ -16,7 +16,7 @@ diff --git a/Makefile b/Makefile
- index f279f01..5698c87 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -109,7 +109,7 @@ endef
-+@@ -110,7 +110,7 @@ endef
-  
-  # prefixed install macro for each host sub target
-  define do_build_prefix_install
-diff --git a/package/netsurf/netsurf.hash b/package/netsurf/netsurf.hash
-index 0f38ea208..77de5c6de 100644
---- a/package/netsurf/netsurf.hash
-+++ b/package/netsurf/netsurf.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 11e384eaf47e65c186da5001f1055a02f2d72ff17b50f403b8392546a2cf65ff  netsurf-all-3.9.tar.gz
--sha256 55c4a7ae3953d720a462e69d1f128a20004933d12538be5314a33f8821675378  netsurf/COPYING
-+sha256  495adf6b6614ce36fca6c605f7c321f9cb4a3df838043158122678ce2b3325b7  netsurf-all-3.10.tar.gz
-+sha256  55c4a7ae3953d720a462e69d1f128a20004933d12538be5314a33f8821675378  netsurf/COPYING
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index 0077adde2..5677b6946 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NETSURF_VERSION = 3.9
-+NETSURF_VERSION = 3.10
- NETSURF_SOURCE = netsurf-all-$(NETSURF_VERSION).tar.gz
- NETSURF_SITE = http://download.netsurf-browser.org/netsurf/releases/source-full
- NETSURF_LICENSE = GPL-2.0
-@@ -15,7 +15,7 @@ NETSURF_DEPENDENCIES = expat jpeg libpng \
- 
- ifeq ($(BR2_PACKAGE_NETSURF_GTK),y)
- NETSURF_DEPENDENCIES += libgtk2
--NETSURF_FRONTEND = gtk
-+NETSURF_FRONTEND = gtk2
- endif
- 
- ifeq ($(BR2_PACKAGE_NETSURF_GTK3),y)
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/linux-firmware/Config.in         | 5 +++++
+>  package/linux-firmware/linux-firmware.mk | 5 +++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+> index eba58014b6..2d729716aa 100644
+> --- a/package/linux-firmware/Config.in
+> +++ b/package/linux-firmware/Config.in
+> @@ -29,6 +29,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_I915
+>  	help
+>  	  Firmware files for the Intel i915 video cards.
+>  
+> +config BR2_PACKAGE_LINUX_FIRMWARE_NVIDIA
+> +	bool "Nvidia video card firmware"
+> +	help
+> +	  Firmware files for the Nvidia video cards.
+
+For most other firmware files, we have more fine grained options. When
+I look at the nvidia/ folder, it has firmware for various graphics
+cards:
+
+gk20a
+gm200
+gm204
+gm206
+gm20b
+gp100
+gp102
+gp104
+gp106
+gp107
+gp108
+gp10b
+gv100
+tegra124
+tegra186
+tegra194
+tegra210
+tu102
+tu104
+tu106
+tu10x
+
+Size-wise, it goes like this:
+
+116K	./gm200
+96K	./gp107
+36K	./gp106
+44K	./gm206
+120K	./gp100
+28K	./gm204
+340K	./tu10x
+148K	./tegra210
+116K	./gp108
+128K	./tegra194
+164K	./gm20b
+68K	./gk20a
+368K	./gp102
+276K	./gv100
+128K	./tu106
+128K	./tu104
+148K	./tegra186
+76K	./gp104
+196K	./gp10b
+272K	./tu102
+152K	./tegra124
+3,1M	.
+
+So, in practice, on a given platform, you would typically need only
+100-200 KB of firmware on the total 3.1 MB.
+
+Best regards,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
