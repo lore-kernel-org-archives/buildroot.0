@@ -1,54 +1,44 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 00:29:59 +0200
-Subject: [Buildroot] [PATCH] package/libxml-parser-perl: make host build
- use correct compiler
-In-Reply-To: <20200606220456.12fed0b1@windsurf>
-References: <20200605225812.13944-1-nolange79@gmail.com>
- <20200606220456.12fed0b1@windsurf>
-Message-ID: <CADYdroM-KRu5foedcafU8WogfgEJCmMQbk5XYgMv2dDrkf2y7g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Jun 2020 00:33:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/librsvg: add gobject-introspection
+ support
+Message-ID: <20200606223306.3374021-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sa., 6. Juni 2020 um 22:04 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Sat,  6 Jun 2020 00:58:12 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > This package uses gcc filename without path, which breaks the host build
-> > if host and target compiler have the same filename.
->
-> How is it possible for the host and target compilers to have the same
-> file name ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/librsvg/librsvg.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-I use crosstool for a x86_64 target compiler, same architecture as my
-desktop pc.
-
->
-> > We pack the HOST variables as override so absolute paths are used for
-> > the host tools.
->
-> I'm not sure what you mean by "we pack the HOST variables".
->
-> Note: I do understand that the patch will ensure that the compiler
-> point by $(HOSTCC) will be used, instead of whatever default the
-> libxml-parser-perl build system thinks it should use. But your commit
-> log is very confusing.
->
-> Also, your Signed-off-by is missing.
-
-Was using  git send-email blindly without checking, sorry.
-
->
-> Could you resend, with a clarified explanation, and your SoB added ?
-
-Done.
-
-On an not entirely unrelated note, I got troubles getting into patchwork,
-did reset my PW 2-3 time, still can't log in. Is there some hidden 8
-letter limit or similar?
-
-Norbert
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 470910d94c..e124fdd5d3 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -10,7 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+-LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
++LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
+ HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+ 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
+@@ -19,5 +19,12 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libcroco host-libgli
+ LIBRSVG_LICENSE = LGPL-2.0+
+ LIBRSVG_LICENSE_FILES = COPYING.LIB
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBRSVG_CONF_OPTS += --enable-introspection
++LIBRSVG_DEPENDENCIES += gobject-introspection
++else
++LIBRSVG_CONF_OPTS += --disable-introspection
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.26.2
