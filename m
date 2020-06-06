@@ -1,60 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Jun 2020 13:43:43 +0200
-Subject: [Buildroot] [git commit] fs/ubi: expose BINARIES_DIR to ubinize.cfg
-Message-ID: <20200606114402.EE7478434B@busybox.osuosl.org>
+Date: Sat, 6 Jun 2020 13:46:36 +0200
+Subject: [Buildroot] [PATCH] fs/ubi: expose BINARIES_DIR to ubinize.cfg
+In-Reply-To: <20200606105015.1603519-1-alexandre.belloni@bootlin.com>
+References: <20200606105015.1603519-1-alexandre.belloni@bootlin.com>
+Message-ID: <20200606114636.GC13972@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=145ee99bc95f99bd6b8aa0ed4a0220173ca7ec25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Alexandre, All,
 
-It is often necessary to refer to other images that are present in
-BINARIES_DIR from a custom ubinize configuration e.g. to include the
-kernel in a UBI volume.
+On 2020-06-06 12:50 +0200, Alexandre Belloni spake thusly:
+> It is often necessary to refer to other images that are present in
+> BINARIES_DIR from a custom ubinize configuration e.g. to include the kernel
+> in a UBI volume.
+> 
+> As for BR2_ROOTFS_UBIFS_PATH, replace BINARIES_DIR when copying the file.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-As we do for BR2_ROOTFS_UBIFS_PATH, replace BINARIES_DIR when copying
-the file.
+You forgot to update the help text to also mention this replacement, so
+I did add a blurb there, and applied to master (with a rewrpaeed commit
+log, too). Thanks.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-[yann.morin.1998 at free.fr:
-  - add the blurb in the help text
-  - rewrap commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- fs/ubi/Config.in | 5 +++++
- fs/ubi/ubi.mk    | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
-index 85b1c56bb0..3427ea0518 100644
---- a/fs/ubi/Config.in
-+++ b/fs/ubi/Config.in
-@@ -38,6 +38,11 @@ config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
- 	  So the volume defined for the root filesystem can specify the
- 	  image path as:  image=BR2_ROOTFS_UBIFS_PATH
- 
-+	  Buildroot also replaces the string "BINARIES_DIR" with the
-+	  value of $(BINARIES_DIR), so that it is possible to reference
-+	  other build artefacts (e.g. to include the kernel in a UBI
-+	  volume).
-+
- config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
- 	string "Configuration file path"
- 	depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
-diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
-index d848f8b23a..54bb81ea08 100644
---- a/fs/ubi/ubi.mk
-+++ b/fs/ubi/ubi.mk
-@@ -23,7 +23,7 @@ endif
- # don't use sed -i as it misbehaves on systems with SELinux enabled when this is
- # executed through fakeroot (see #9386)
- define ROOTFS_UBI_CMD
--	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
-+	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;;s;BINARIES_DIR;$(BINARIES_DIR);' \
- 		$(UBI_UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
- 	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
- 	rm $(BUILD_DIR)/ubinize.cfg
+> ---
+>  fs/ubi/ubi.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
+> index d848f8b23a65..54bb81ea08a4 100644
+> --- a/fs/ubi/ubi.mk
+> +++ b/fs/ubi/ubi.mk
+> @@ -23,7 +23,7 @@ endif
+>  # don't use sed -i as it misbehaves on systems with SELinux enabled when this is
+>  # executed through fakeroot (see #9386)
+>  define ROOTFS_UBI_CMD
+> -	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
+> +	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;;s;BINARIES_DIR;$(BINARIES_DIR);' \
+>  		$(UBI_UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
+>  	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
+>  	rm $(BUILD_DIR)/ubinize.cfg
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
