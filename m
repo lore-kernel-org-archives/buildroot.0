@@ -1,33 +1,60 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Sat, 6 Jun 2020 13:26:29 +0200
-Subject: [Buildroot] make sdk - relocate - ccache not working as expected
-In-Reply-To: <CANQCQpYLf0veHYzjNeYcq3_FdTF+4ig85YbNq5RVJvyaqKL0pA@mail.gmail.com>
-References: <2b30abbf-41ab-253e-0c91-6bb6cf5e36a5@jcz.nl>
- <CANQCQpYLf0veHYzjNeYcq3_FdTF+4ig85YbNq5RVJvyaqKL0pA@mail.gmail.com>
-Message-ID: <d0c7e492-7055-1829-4fdb-15a298680407@jcz.nl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Jun 2020 13:43:43 +0200
+Subject: [Buildroot] [git commit] fs/ubi: expose BINARIES_DIR to ubinize.cfg
+Message-ID: <20200606114402.EE7478434B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=145ee99bc95f99bd6b8aa0ed4a0220173ca7ec25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-01 13:32, Matthew Weber wrote:
-> The ccache callback's path is compiled into the toolchain-wrapper, so
-> you'd have to disable ccache and do a clean build before doing the
-> make sdk.  Or set the BR_NO_CCACHE=1 environment variable when using
-> your sdk.  Something I've done in my sdk exports is adjust the
-> toolchain wrapper before running make sdk. Here's an untested example
-> of something you could add to your post build script or adjust the
-> tarball to have this change after make sdk runs.
+It is often necessary to refer to other images that are present in
+BINARIES_DIR from a custom ubinize configuration e.g. to include the
+kernel in a UBI volume.
 
-This made me thinking; after doing a search I figured out the following workaround works for me:
+As we do for BR2_ROOTFS_UBIFS_PATH, replace BINARIES_DIR when copying
+the file.
 
-CCACHE_DIR=<somewhere-the-user-running-under-can-write-to>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+[yann.morin.1998 at free.fr:
+  - add the blurb in the help text
+  - rewrap commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ fs/ubi/Config.in | 5 +++++
+ fs/ubi/ubi.mk    | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-I consider this a bug in the toolchainwrapper (I guess). What do fellow buildroot users think?
-
-regards,
-
-Jaap
+diff --git a/fs/ubi/Config.in b/fs/ubi/Config.in
+index 85b1c56bb0..3427ea0518 100644
+--- a/fs/ubi/Config.in
++++ b/fs/ubi/Config.in
+@@ -38,6 +38,11 @@ config BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
+ 	  So the volume defined for the root filesystem can specify the
+ 	  image path as:  image=BR2_ROOTFS_UBIFS_PATH
+ 
++	  Buildroot also replaces the string "BINARIES_DIR" with the
++	  value of $(BINARIES_DIR), so that it is possible to reference
++	  other build artefacts (e.g. to include the kernel in a UBI
++	  volume).
++
+ config BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE
+ 	string "Configuration file path"
+ 	depends on BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
+diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
+index d848f8b23a..54bb81ea08 100644
+--- a/fs/ubi/ubi.mk
++++ b/fs/ubi/ubi.mk
+@@ -23,7 +23,7 @@ endif
+ # don't use sed -i as it misbehaves on systems with SELinux enabled when this is
+ # executed through fakeroot (see #9386)
+ define ROOTFS_UBI_CMD
+-	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
++	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;;s;BINARIES_DIR;$(BINARIES_DIR);' \
+ 		$(UBI_UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
+ 	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
+ 	rm $(BUILD_DIR)/ubinize.cfg
