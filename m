@@ -1,52 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 22:31:37 +0200
-Subject: [Buildroot] [PATCH 2/4] package/openssh: improve integration
- for systemd
-In-Reply-To: <20200605225905.14082-2-nolange79@gmail.com>
-References: <20200605225905.14082-1-nolange79@gmail.com>
- <20200605225905.14082-2-nolange79@gmail.com>
-Message-ID: <20200606223137.71ee0eca@windsurf>
+Date: Sat, 6 Jun 2020 22:33:15 +0200
+Subject: [Buildroot] [git commit] package/dbus: fix group and mode for the
+ launcher
+Message-ID: <20200606203414.2999B82AA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  6 Jun 2020 00:59:02 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7ac245a0cb76f270b28860936245ca1abba0804a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> the openssh daemon is not suited for systemd's simple
-> service type. dependend services should only start
-> when sshd is ready to accept connections.
-> 
-> A patch is added from debian to allow openssh
-> to communicate this state.
-> 
-> Restarts are prevented if the reason is a faulty
-> config file (errocode 255).
-> 
-> The "user confinement directory" is changed to
-> '/run/sshd' which is automatically managed by systemd.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/openssh/00-systemd-readiness.patch | 84 ++++++++++++++++++++++
->  package/openssh/openssh.mk                 | 14 +++-
->  package/openssh/sshd-sysusers.conf         |  2 +-
->  package/openssh/sshd.service               | 13 +++-
->  4 files changed, 109 insertions(+), 4 deletions(-)
->  create mode 100644 package/openssh/00-systemd-readiness.patch
+The D-Bus installation process installs dbus-daemon-launch-helper as
+follows:
 
-On this patch, as well as patches 3/4 and 4/4 in this series, I would
-really appreciate some review from people more knowledgeable than I am
-in systemd.
+  chown root:$(DBUS_USER) $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper$(EXEEXT); \
+  chmod 4750 $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper$(EXEEXT); \
 
-Matt ? J?r?my ?
+And when the installation does not take place as root (like is the
+case in the context of Buildroot), it prints:
 
-Best regards,
+  echo "Not installing $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper binary setuid!"; \
+  echo "You'll need to manually set permissions to root:$(DBUS_USER) and permissions 4750"; \
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+So let's adjust the installation logic of dbus-daemon-launch-helper to
+match these requirements.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index a4043864d1..bb9f17a5e0 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -11,7 +11,7 @@ DBUS_LICENSE_FILES = COPYING
+ DBUS_INSTALL_STAGING = YES
+ 
+ define DBUS_PERMISSIONS
+-	/usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
++	/usr/libexec/dbus-daemon-launch-helper f 4750 0 dbus - - - - -
+ endef
+ 
+ define DBUS_USERS
