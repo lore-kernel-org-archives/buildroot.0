@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 22:15:52 +0200
-Subject: [Buildroot] [PATCH] package/libxml2: remove helper script from
+Date: Sat, 6 Jun 2020 22:16:38 +0200
+Subject: [Buildroot] [git commit] package/libxml2: remove helper script from
  target
-In-Reply-To: <20200605225719.13836-1-nolange79@gmail.com>
-References: <20200605225719.13836-1-nolange79@gmail.com>
-Message-ID: <20200606221552.2cb93d51@windsurf>
+Message-ID: <20200606201558.A000183D45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  6 Jun 2020 00:57:18 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=89a0b73aed88990b81ce67d65bc03cdd046558e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/libxml2/libxml2.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-> index ea6a8c1f6d..a0efe041a5 100644
-> --- a/package/libxml2/libxml2.mk
-> +++ b/package/libxml2/libxml2.mk
-> @@ -49,6 +49,12 @@ else
->  LIBXML2_CONF_OPTS += --without-iconv
->  endif
->  
-> +define LIBXML2_INSTALL_TARGET_POST
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxml2/libxml2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-LIBXML2_INSTALL_TARGET_POST is really not a great name: we want a name
-that is more descriptive of what the hook is doing. So I renamed to
-LIBXML2_CLEANUP_XML2CONF, and applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ea6a8c1f6d..acbdfb7728 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -49,6 +49,11 @@ else
+ LIBXML2_CONF_OPTS += --without-iconv
+ endif
+ 
++define LIBXML2_CLEANUP_XML2CONF
++	rm -f $(TARGET_DIR)/usr/lib/xml2Conf.sh
++endef
++LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_CLEANUP_XML2CONF
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
