@@ -1,53 +1,51 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat,  6 Jun 2020 13:36:47 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump version to 1.13.12
-Message-ID: <20200606203647.36297-1-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Jun 2020 22:38:08 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dbus: remove /usr/lib/dbus-1.0
+ if empty
+In-Reply-To: <20200605225247.13350-2-nolange79@gmail.com>
+References: <20200605225247.13350-1-nolange79@gmail.com>
+ <20200605225247.13350-2-nolange79@gmail.com>
+Message-ID: <20200606223808.5797eb98@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go1.13.9 (released 2020/03/19) includes fixes to the go command, tools, the
-runtime, the toolchain, and the crypto/cypher package.
+On Sat,  6 Jun 2020 00:52:46 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-go1.13.10 (released 2020/04/08) includes fixes to the go command, the runtime,
-and the os/exec and time packages.
+> ---
+>  package/dbus/dbus.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-go1.13.11 (released 2020/05/14) includes fixes to the compiler.
+Your Signed-off-by is missing, and there is no commit log. We clearly
+need a better explanation. And your commit title is wrong: you're not
+just removing /usr/lib/dbus-1.0 is empty: you're changing from removing
+it unconditionally to removing just /usr/lib/dbus-1.0/include and then
+removing /usr/lib/dbus-1.0 if it's empty.
 
-go1.13.12 (released 2020/06/01) includes fixes to the runtime, and the go/types
-and math/big packages.
+So it means that you have installed *something* in /usr/lib/dbus-1.0
+that you want Buildroot to keep on the target. But what? This is not
+explained in your commit log.
 
-Release notes: https://golang.org/doc/go1.13
+> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+> index bb9f17a5e0..7a7762f537 100644
+> --- a/package/dbus/dbus.mk
+> +++ b/package/dbus/dbus.mk
+> @@ -80,7 +80,8 @@ endef
+>  DBUS_PRE_INSTALL_TARGET_HOOKS += DBUS_REMOVE_VAR_LIB_DBUS
+>  
+>  define DBUS_REMOVE_DEVFILES
+> -	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0
+> +	rm -rf $(TARGET_DIR)/usr/lib/dbus-1.0/include
+> +	-rmdir $(TARGET_DIR)/usr/lib/dbus-1.0 2>/dev/null
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Can we use --ignore-fail-on-non-empty instead ? Yann, is this option
+reasonably available even on old distributions ?
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index dc966e85d2..a874345762 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	b13bf04633d4d8cf53226ebeaace8d4d2fd07ae6fa676d0844a688339debec34  go1.13.8.src.tar.gz
-+sha256	17ba2c4de4d78793a21cc659d9907f4356cd9c8de8b7d0899cdedcef712eba34  go1.13.12.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 64edbf3da1..c26b9f1c83 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.13.8
-+GO_VERSION = 1.13.12
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
