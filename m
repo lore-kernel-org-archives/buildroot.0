@@ -1,36 +1,69 @@
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Sat,  6 Jun 2020 12:50:15 +0200
-Subject: [Buildroot] [PATCH] fs/ubi: expose BINARIES_DIR to ubinize.cfg
-Message-ID: <20200606105015.1603519-1-alexandre.belloni@bootlin.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 6 Jun 2020 13:20:43 +0200
+Subject: [Buildroot] [PATCH 1/2] package/edid-decode: use
+ TARGET_CONFIGURE_OPTS
+In-Reply-To: <20200606091928.1351706-1-fontaine.fabrice@gmail.com>
+References: <20200606091928.1351706-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200606132043.1e796306@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is often necessary to refer to other images that are present in
-BINARIES_DIR from a custom ubinize configuration e.g. to include the kernel
-in a UBI volume.
+Hello Fabrice,
 
-As for BR2_ROOTFS_UBIFS_PATH, replace BINARIES_DIR when copying the file.
+On Sat,  6 Jun 2020 11:19:27 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- fs/ubi/ubi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Do not use CXX to save the "$(TARGET_CXX) $(TARGET_CXXFLAGS)
+> $(TARGET_LDFLAGS)" tuple and instead use TARGET_CONFIGURE_OPTS to pass
+> variables using the "standard" variables
+>
+> LDFLAGS is supported since
+> https://git.linuxtv.org/edid-decode.git/commit/?id=0a454bcbba5e172c64236811ed98c161689372f1
+>
+> CFLAGS is supported since
+> https://git.linuxtv.org/edid-decode.git/commit/?id=b202b675e38578b33494fc45c2869917e66ba22d
+>
+> edid-decode did not switch CFLAGS to CXXFLAGS in
+> https://git.linuxtv.org/edid-decode.git/commit/Makefile?id=e00579c128ced87a69df29a01caaaf0cd4a4c8cc
+> so use CFLAGS to pass TARGET_CXXFLAGS
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/71e4a50542c4551797f1d0404d27244612b427d7
+>
 
-diff --git a/fs/ubi/ubi.mk b/fs/ubi/ubi.mk
-index d848f8b23a65..54bb81ea08a4 100644
---- a/fs/ubi/ubi.mk
-+++ b/fs/ubi/ubi.mk
-@@ -23,7 +23,7 @@ endif
- # don't use sed -i as it misbehaves on systems with SELinux enabled when this is
- # executed through fakeroot (see #9386)
- define ROOTFS_UBI_CMD
--	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' \
-+	sed 's;BR2_ROOTFS_UBIFS_PATH;$@fs;;s;BINARIES_DIR;$(BINARIES_DIR);' \
- 		$(UBI_UBINIZE_CONFIG_FILE_PATH) > $(BUILD_DIR)/ubinize.cfg
- 	$(HOST_DIR)/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
- 	rm $(BUILD_DIR)/ubinize.cfg
--- 
-2.26.2
+Just from code-review (did not yet test your patch), this patch does not change
+the resulting used compile/link flags and is only in preparation of the next
+patch? And as a standalone one does not fix the build failure?
+
+Regards,
+Peter
+
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/edid-decode/edid-decode.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+> index 8fe1e2712a..c41a9f2a76 100644
+> --- a/package/edid-decode/edid-decode.mk
+> +++ b/package/edid-decode/edid-decode.mk
+> @@ -10,12 +10,13 @@ EDID_DECODE_LICENSE = MIT
+>  EDID_DECODE_LICENSE_FILES = LICENSE
+>
+>  define EDID_DECODE_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> -		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		CFLAGS="$(TARGET_CXXFLAGS)"
+>  endef
+>
+>  define EDID_DECODE_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		DESTDIR="$(TARGET_DIR)" install
+>  endef
+>
+>  $(eval $(generic-package))
