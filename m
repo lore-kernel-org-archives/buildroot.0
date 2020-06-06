@@ -1,99 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 23:47:19 +0200
-Subject: [Buildroot] [git commit] package/optee-benchmark: fix gcc 10 warning
-Message-ID: <20200606214636.273A282ADA@busybox.osuosl.org>
+From: Christopher Pelloux <git@chp.io>
+Date: Sat, 06 Jun 2020 21:47:38 +0000
+Subject: [Buildroot] [PATCH 1/1] package/json-c: bump version to 0.14
+Message-ID: <20200606214729.6487-1-git@chp.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf306252baba39b7af41f5e307a818a58b484d9c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Notes:
 
-The function yaml_mapping_start_event_initialize()
-take yaml_mapping_style_t style as last argument:
+- json-c now uses cmake instead of autoconf
+- This version also brings support to the much welcomed feature for
+  parsing uint64_t types
 
-int yaml_mapping_start_event_initialize(
-    yaml_event_t *event,
-    const yaml_char_t *anchor,
-    const yaml_char_t *tag,
-    int implicit,
-    yaml_mapping_style_t style)
-
-Use YAML_ANY_MAPPING_STYLE instead of YAML_ANY_SEQUENCE_STYLE
-
-Fixes:
-main.c:173:5: error: implicit conversion from ???enum yaml_sequence_style_e??? to ???yaml_mapping_style_t??? {aka ???enum yaml_mapping_style_e???} [-Werror=enum-conversion]
-  173 |     YAML_ANY_SEQUENCE_STYLE))
-      |     ^~~~~~~~~~~~~~~~~~~~~~~
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>
-Reviewed-by: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Christopher Pelloux <git@chp.io>
 ---
- package/optee-benchmark/0001-main-fix-typo.patch | 55 ++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ package/json-c/json-c.hash |  2 +-
+ package/json-c/json-c.mk   | 14 +++-----------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/package/optee-benchmark/0001-main-fix-typo.patch b/package/optee-benchmark/0001-main-fix-typo.patch
-new file mode 100644
-index 0000000000..8ad5a26f13
---- /dev/null
-+++ b/package/optee-benchmark/0001-main-fix-typo.patch
-@@ -0,0 +1,55 @@
-+From ffa935dc881c394a824e063c8fde7dd102e06d8c Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 8 May 2020 23:39:59 +0200
-+Subject: [PATCH] main: fix typo
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The function yaml_mapping_start_event_initialize()
-+take yaml_mapping_style_t style as last argument:
-+
-+int yaml_mapping_start_event_initialize(
-+	yaml_event_t *event,
-+	const yaml_char_t *anchor,
-+	const yaml_char_t *tag,
-+	int implicit,
-+	yaml_mapping_style_t style)
-+
-+Use YAML_ANY_MAPPING_STYLE instead of YAML_ANY_SEQUENCE_STYLE
-+
-+Fixes:
-+main.c:173:5: error: implicit conversion from ???enum yaml_sequence_style_e??? to ???yaml_mapping_style_t??? {aka ???enum yaml_mapping_style_e???} [-Werror=enum-conversion]
-+  173 |     YAML_ANY_SEQUENCE_STYLE))
-+      |     ^~~~~~~~~~~~~~~~~~~~~~~
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ main.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/main.c b/main.c
-+index 29a7c42..1685d3e 100644
-+--- a/main.c
-++++ b/main.c
-+@@ -170,7 +170,7 @@ static bool init_emitter(FILE *ts_file)
-+ 	/* Mapping start */
-+ 	if (!yaml_mapping_start_event_initialize(&event,
-+ 				NULL, NULL , YAML_IMPLICIT,
-+-				YAML_ANY_SEQUENCE_STYLE))
-++				YAML_ANY_MAPPING_STYLE))
-+ 		ERROR_GOTO(emitter_delete,
-+ 			"Failed to initialize YAML mapping start event");
-+ 	if (!yaml_emitter_emit(&emitter, &event))
-+@@ -263,7 +263,7 @@ static bool fill_timestamp(uint32_t core, uint64_t count, uint64_t addr,
-+ 	/* Mapping start */
-+ 	if (!yaml_mapping_start_event_initialize(&event,
-+ 				NULL, NULL , YAML_IMPLICIT,
-+-				YAML_ANY_SEQUENCE_STYLE))
-++				YAML_ANY_MAPPING_STYLE))
-+ 		ERROR_RETURN_FALSE(
-+ 			"Failed to initialize YAML mapping start event");
-+ 	if (!yaml_emitter_emit(&emitter, &event))
-+-- 
-+2.25.4
-+
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+index 0e03007476..93eaff67c3 100644
+--- a/package/json-c/json-c.hash
++++ b/package/json-c/json-c.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/json-c/json-c/wiki
+-sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
++sha256 b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
+ # Locally calculated
+ sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index 2788fe563b..3e17effdad 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,19 +4,11 @@
+ #
+ ################################################################################
+ 
+-JSON_C_VERSION = 0.13.1
++JSON_C_VERSION = 0.14
+ JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
+ JSON_C_INSTALL_STAGING = YES
+ JSON_C_LICENSE = MIT
+ JSON_C_LICENSE_FILES = COPYING
+ 
+-# update config.h.in timestamp to avoid autoheader run
+-define JSON_C_UPDATE_CONFIG_TIMESTAMP
+-	touch $(@D)/config.h.in
+-endef
+-
+-JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
+-HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.17.1
