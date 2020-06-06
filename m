@@ -1,44 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:21:13 +0200
-Subject: [Buildroot] [git commit] package/ethtool: bump to 5.7
-Message-ID: <20200606192209.B5E29837FB@busybox.osuosl.org>
+Date: Sat, 6 Jun 2020 21:21:07 +0200
+Subject: [Buildroot] [git commit] package/ethtool: add patch to fix build
+ failures
+Message-ID: <20200606192209.A968882B31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c44f18b266c1425696f3321143aa11b9ccc7a40c
+commit: https://git.buildroot.net/buildroot/commit/?id=269d7c27a1681ab8344f08943d66ed3297f5da65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add a patch from the kernel netdev mailing list [1] that solves
+autobuilder failures.
+
+Fixes:
+http://autobuild.buildroot.net/results/394e846bb48a0cc8564ebc3e8d1179ccd1f1560d/
+
+[1] https://patchwork.ozlabs.org/project/netdev/patch/bb60cbfe99071fca4b0ea9e62d67a2341d8dd652.1590707335.git.mkubecek at suse.cz/
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../ethtool/0001-netlink-fix-build-warnings.patch  | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 67fe263315..e3a958ab39 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  ca0f1b526dad5153f0aa0f1eb3c17c31770c75a74f70af622b1a83ae38043995  ethtool-5.6.tar.xz
-+sha256  724eb8bd3c3a389fe285735959a1902fbd9310624656ad3220c5f23df1053c39  ethtool-5.7.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index c36268544f..40abe57918 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 5.6
-+ETHTOOL_VERSION = 5.7
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+diff --git a/package/ethtool/0001-netlink-fix-build-warnings.patch b/package/ethtool/0001-netlink-fix-build-warnings.patch
+new file mode 100644
+index 0000000000..4e9b520d58
+--- /dev/null
++++ b/package/ethtool/0001-netlink-fix-build-warnings.patch
+@@ -0,0 +1,52 @@
++From 93b2d0ef0c2be825e56d1f810fbbfba4800fa831 Mon Sep 17 00:00:00 2001
++From: Michal Kubecek <mkubecek@suse.cz>
++Date: Fri, 29 May 2020 01:21:12 +0200
++Subject: [PATCH] netlink: fix build warnings
++
++Depending on compiler version and options, some of these warnings may
++result in build failure.
++
++- gcc 4.8 wants __KERNEL_DIV_ROUND_UP defined before including ethtool.h
++- avoid pointer arithmetic on void *
++
++Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
++
++[Patch was taken from the linux netdev mailinglist and will be applied in the
++upcoming ethtool release 5.8]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ netlink/desc-ethtool.c | 2 +-
++ netlink/parser.c       | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/netlink/desc-ethtool.c b/netlink/desc-ethtool.c
++index 76c6f13..423479d 100644
++--- a/netlink/desc-ethtool.c
+++++ b/netlink/desc-ethtool.c
++@@ -4,9 +4,9 @@
++  * Descriptions of ethtool netlink messages and attributes for pretty print.
++  */
++ 
+++#include "../internal.h"
++ #include <linux/ethtool_netlink.h>
++ 
++-#include "../internal.h"
++ #include "prettymsg.h"
++ 
++ static const struct pretty_nla_desc __header_desc[] = {
++diff --git a/netlink/parser.c b/netlink/parser.c
++index fff23f2..d790abe 100644
++--- a/netlink/parser.c
+++++ b/netlink/parser.c
++@@ -1016,7 +1016,7 @@ int nl_parser(struct nl_context *nlctx, const struct param_parser *params,
++ 			buff = tmp_buff_find(buffs, parser->group);
++ 		msgbuff = buff ? &buff->msgbuff : &nlsk->msgbuff;
++ 
++-		param_dest = dest ? (dest + parser->dest_offset) : NULL;
+++		param_dest = dest ? ((char *)dest + parser->dest_offset) : NULL;
++ 		ret = parser->handler(nlctx, parser->type, parser->handler_data,
++ 				      msgbuff, param_dest);
++ 		if (ret < 0)
++-- 
++2.20.1
++
