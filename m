@@ -1,44 +1,36 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  6 Jun 2020 20:38:20 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/ethtool: bump to 5.7
-In-Reply-To: <20200606183817.5113-1-heiko.thiery@gmail.com>
-References: <20200606183817.5113-1-heiko.thiery@gmail.com>
-Message-ID: <20200606183817.5113-2-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Jun 2020 21:20:32 +0200
+Subject: [Buildroot] [PATCH 1/2] package/upx: use HOST_CONFIGURE_OPTS
+Message-ID: <20200606192033.2763135-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Use HOST_CONFIGURE_OPTS to pass CPPFLAGS and LDFLAGS
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 67fe263315..e3a958ab39 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  ca0f1b526dad5153f0aa0f1eb3c17c31770c75a74f70af622b1a83ae38043995  ethtool-5.6.tar.xz
-+sha256  724eb8bd3c3a389fe285735959a1902fbd9310624656ad3220c5f23df1053c39  ethtool-5.7.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index c36268544f..40abe57918 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/upx/upx.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index 1fe7162c21..c554553ce9 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -15,10 +15,8 @@ HOST_UPX_DEPENDENCIES = host-ucl host-zlib
+ # We need to specify all, otherwise the default target only prints a message
+ # stating to "please choose a target for 'make'"... :-(
+ define HOST_UPX_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR) \
+-		CXXFLAGS_WERROR= \
+-		-C $(@D) all
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
++		UPX_UCLDIR=$(HOST_DIR) CXXFLAGS_WERROR= -C $(@D) all
+ endef
  
--ETHTOOL_VERSION = 5.6
-+ETHTOOL_VERSION = 5.7
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+ # UPX has no install procedure, so install it manually.
 -- 
-2.20.1
+2.26.2
