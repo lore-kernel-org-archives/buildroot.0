@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:33:10 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <20200605225421.13494-1-nolange79@gmail.com>
-References: <20200605225421.13494-1-nolange79@gmail.com>
-Message-ID: <20200606213310.606b44b6@windsurf>
+Date: Sat, 6 Jun 2020 21:34:59 +0200
+Subject: [Buildroot] [git commit] package/iproute2: add optional
+ dependencies on libselinux and libcap
+Message-ID: <20200606193443.DB3E782AA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b9f6fd03918f5ee00460efdf09422e98789bdbb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  6 Jun 2020 00:54:21 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+The configure script will automatically detect used pkg-config if
+libcap or libselinux are available.
 
-> Drop default dependencies, haveged needs nothing but
-> local sockets and /dev/random.
-> This allows the entropy to be available earlier.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iproute2/iproute2.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks Norbert. I will need the review of those systemd person on this
-patch. J?r?my ? Matt ?
-
->  package/haveged/haveged.service | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
-> index 91035c6711..ed9f043a91 100644
-> --- a/package/haveged/haveged.service
-> +++ b/package/haveged/haveged.service
-> @@ -1,10 +1,13 @@
->  [Unit]
->  Description=Entropy Harvesting Daemon
->  Documentation=man:haveged(8)
-> +DefaultDependencies=no
-> +Conflicts=shutdown.target
-> +Before=sysinit.target shutdown.target systemd-update-done.service
->  
->  [Service]
->  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
->  SuccessExitStatus=143
->  
->  [Install]
-> -WantedBy=multi-user.target
-> +WantedBy=sysinit.target
-
-
-
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 6d20f65f34..e5841cc460 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -16,6 +16,14 @@ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ IPROUTE2_DEPENDENCIES += elfutils
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++IPROUTE2_DEPENDENCIES += libcap
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++IPROUTE2_DEPENDENCIES += libselinux
++endif
++
+ ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
+ IPROUTE2_DEPENDENCIES += iptables
+ else
