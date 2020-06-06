@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:27:51 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/libnetconf2: add patch to
- fix incompatiblity with libssh
-In-Reply-To: <20200606071601.6410-1-heiko.thiery@gmail.com>
-References: <20200606071601.6410-1-heiko.thiery@gmail.com>
-Message-ID: <20200606212751.7fbeead7@windsurf>
+Date: Sat, 6 Jun 2020 21:28:00 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gdk-pixbuf: add
+ gobject-introspection support
+In-Reply-To: <20200606083438.1317261-1-fontaine.fabrice@gmail.com>
+References: <20200606083438.1317261-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200606212800.126f7a81@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  6 Jun 2020 09:16:02 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Sat,  6 Jun 2020 10:34:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> The libnetconf2 upstream project rejects building with ssh support for
-> libssh 0.9.3 and 0.9.4 due to an existing regression.
+> This will fix the following build failure when enabling introspection on
+> libgtk2:
 > 
-> This libssh regression bug is already fixed upstream. The libssh buildroot
-> package has the patch (39099153d9404cd6f107f0fd92ce8686bbd1beb2).
-> 
-> Thus we can remove the libnetconf2 cmake check.
+> Couldn't find include 'GdkPixbuf-2.0.gir' (search path: '['/tmp/instance-0/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/tmp/instance-0/output-1/host/share', 'gir-1.0', '/tmp/instance-0/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/f72fcccafe70ecb6b2ba21e8d19c5827a09ffec7/
+>  - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
 > 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...move-version-check-for-faulty-libssh.patch | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
+>  package/gdk-pixbuf/gdk-pixbuf.mk | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
