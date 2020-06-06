@@ -1,61 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Jun 2020 14:26:34 +0200
-Subject: [Buildroot] [PATCH 2/2] package/edid-decode: fix build with gcc
- <= 5
-In-Reply-To: <20200606135659.275463ab@gmx.net>
-References: <20200606091928.1351706-1-fontaine.fabrice@gmail.com>
- <20200606091928.1351706-2-fontaine.fabrice@gmail.com>
- <20200606135659.275463ab@gmx.net>
-Message-ID: <20200606122634.GG13972@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Jun 2020 14:28:09 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/edid-decode: use TARGET_CONFIGURE_OPTS
+Message-ID: <20200606122810.2745801-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Do not use CXX to save the "$(TARGET_CXX) $(TARGET_CXXFLAGS)
+$(TARGET_LDFLAGS)" tuple and instead use TARGET_CONFIGURE_OPTS to pass
+variables using the "standard" variables
 
-On 2020-06-06 13:56 +0200, Peter Seiderer spake thusly:
-> On Sat,  6 Jun 2020 11:19:28 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> > Pass -std=c++11 to fix the following build failure with gcc <= 5:
-[--SNIP--]
-> > diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-> > index c41a9f2a76..7e463c02b1 100644
-> > --- a/package/edid-decode/edid-decode.mk
-> > +++ b/package/edid-decode/edid-decode.mk
-> > @@ -11,7 +11,7 @@ EDID_DECODE_LICENSE_FILES = LICENSE
-> >
-> >  define EDID_DECODE_BUILD_CMDS
-> >  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> > -		CFLAGS="$(TARGET_CXXFLAGS)"
-> > +		CFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-> >  endef
-> 
-> Thanks for taking care of the build failure, but with c++11 something
-> like 'depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11' (or 4_7/4_8) missing?
+LDFLAGS is supported since
+https://git.linuxtv.org/edid-decode.git/commit/?id=0a454bcbba5e172c64236811ed98c161689372f1
 
-Parts of C++11 already landed as far back as gcc-4.3:
-    https://gcc.gnu.org/projects/cxx-status.html#cxx11
+CFLAGS is supported since
+https://git.linuxtv.org/edid-decode.git/commit/?id=b202b675e38578b33494fc45c2869917e66ba22d
 
-So, to have full C++11 support, on eeds gcc-4.8 or later, but for some
-subsets of C++11, older versions may still be suitable.
+edid-decode did not switch CFLAGS to CXXFLAGS in
+https://git.linuxtv.org/edid-decode.git/commit/Makefile?id=e00579c128ced87a69df29a01caaaf0cd4a4c8cc
+so use CFLAGS to pass TARGET_CXXFLAGS
 
-But the C++98 standard was the default one until gcc-6.1, which switched
-directly over to C++14 as the default. That's why the C++11 standard has
-to be explicitly requested.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Peter Seiderer):
+ - Drop link on autobuilder failure
 
-However, -std=c++11 is only recognised from gcc-4.7 onward; older
-versions only knew about -std=c++0x. So if this would also work for
-gcc <= 4.6, we 'd have to use =std=c++0x (which is still recognised up
-to gcc-9.x).
+ package/edid-decode/edid-decode.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+index 8fe1e2712a..c41a9f2a76 100644
+--- a/package/edid-decode/edid-decode.mk
++++ b/package/edid-decode/edid-decode.mk
+@@ -10,12 +10,13 @@ EDID_DECODE_LICENSE = MIT
+ EDID_DECODE_LICENSE_FILES = LICENSE
+ 
+ define EDID_DECODE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CXXFLAGS)"
+ endef
+ 
+ define EDID_DECODE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
