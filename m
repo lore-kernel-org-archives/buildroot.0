@@ -1,68 +1,50 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  6 Jun 2020 09:16:02 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/libnetconf2: add patch to fix
- incompatiblity with libssh
-Message-ID: <20200606071601.6410-1-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Jun 2020 10:34:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gdk-pixbuf: add
+ gobject-introspection support
+Message-ID: <20200606083438.1317261-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libnetconf2 upstream project rejects building with ssh support for
-libssh 0.9.3 and 0.9.4 due to an existing regression.
+This will fix the following build failure when enabling introspection on
+libgtk2:
 
-This libssh regression bug is already fixed upstream. The libssh buildroot
-package has the patch (39099153d9404cd6f107f0fd92ce8686bbd1beb2).
-
-Thus we can remove the libnetconf2 cmake check.
+Couldn't find include 'GdkPixbuf-2.0.gir' (search path: '['/tmp/instance-0/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/tmp/instance-0/output-1/host/share', 'gir-1.0', '/tmp/instance-0/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
 
 Fixes:
-http://autobuild.buildroot.net/results/f72fcccafe70ecb6b2ba21e8d19c5827a09ffec7/
+ - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...move-version-check-for-faulty-libssh.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
+ package/gdk-pixbuf/gdk-pixbuf.mk | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-new file mode 100644
-index 0000000000..d1df807626
---- /dev/null
-+++ b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-@@ -0,0 +1,32 @@
-+From ad89283f9ed36f0f1234c7f005edfc34e8b9fd58 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@kontron.com>
-+Date: Thu, 4 Jun 2020 15:31:56 +0200
-+Subject: [PATCH] CMakeList.txt: remove version check for faulty libssh version
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 59e0d5f454..b7937a48e9 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -23,11 +23,16 @@ GDK_PIXBUF_CONF_ENV = \
+ HOST_GDK_PIXBUF_CONF_ENV = \
+ 	gio_can_sniff=no
+ 
+-GDK_PIXBUF_CONF_OPTS = \
+-	--disable-glibtest \
+-	--disable-introspection
++GDK_PIXBUF_CONF_OPTS = --disable-glibtest
+ HOST_GDK_PIXBUF_CONF_OPTS = --disable-introspection
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++GDK_PIXBUF_CONF_OPTS += --enable-introspection
++GDK_PIXBUF_DEPENDENCIES += gobject-introspection
++else
++GDK_PIXBUF_CONF_OPTS += --disable-introspection
++endif
 +
-+libssh is fixed by a patch in buildroot so we can drop the libssh
-+version check for 0.9.3 and 0.9.4.
-+
-+See: 39099153d9404cd6f107f0fd92ce8686bbd1beb2
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-+---
-+ CMakeLists.txt | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f21fec9..29ef202 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -148,9 +148,6 @@ endif()
-+ # dependencies - libssh
-+ if(ENABLE_SSH)
-+     find_package(LibSSH 0.7.0 REQUIRED)
-+-    if(LIBSSH_VERSION VERSION_EQUAL 0.9.3 OR LIBSSH_VERSION VERSION_EQUAL 0.9.4)
-+-        message(FATAL_ERROR "LibSSH ${LIBSSH_VERSION} includes regression bugs and libnetconf2 will NOT work properly, try to use another version")
-+-    endif()
-+ 
-+     target_link_libraries(netconf2 ${LIBSSH_LIBRARIES})
-+     list(APPEND CMAKE_REQUIRED_LIBRARIES ${LIBSSH_LIBRARIES})
-+-- 
-+2.20.1
-+
+ ifneq ($(BR2_PACKAGE_LIBPNG),y)
+ GDK_PIXBUF_CONF_OPTS += --without-libpng
+ else
 -- 
-2.20.1
+2.26.2
