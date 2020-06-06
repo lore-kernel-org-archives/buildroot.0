@@ -1,57 +1,61 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 00:51:24 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: remove /usr/lib/rpm directory
- on target
-In-Reply-To: <20200606223946.1358ed82@windsurf>
+Date: Sun, 7 Jun 2020 00:57:23 +0200
+Subject: [Buildroot] [PATCH 2/2] fs: clean the volatile /run and /tmp
+ directories
+In-Reply-To: <20200606224227.60a26aeb@windsurf>
 References: <20200605224858.12870-1-nolange79@gmail.com>
- <20200606223946.1358ed82@windsurf>
-Message-ID: <CADYdroPxh5nVuYj_6G3vdL0MoG6yu++oyxA1rowBNELwbGS3Mw@mail.gmail.com>
+ <20200605224858.12870-2-nolange79@gmail.com>
+ <20200606224227.60a26aeb@windsurf>
+Message-ID: <CADYdroO8PNfE=Cmd96rE-Kfd_nTq_7+h-JLdH-uUPGP3GmsBqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sa., 6. Juni 2020 um 22:39 Uhr schrieb Thomas Petazzoni
+Am Sa., 6. Juni 2020 um 22:42 Uhr schrieb Thomas Petazzoni
 <thomas.petazzoni@bootlin.com>:
 >
-> On Sat,  6 Jun 2020 00:48:56 +0200
+> Hello,
+>
+> On Sat,  6 Jun 2020 00:48:57 +0200
 > Norbert Lange <nolange79@gmail.com> wrote:
 >
-> > this is only relevant for staging (if at all)
+> > Scripts in the fakeroot environment could call
+> > tools preparing the early environment, leaving
+> > traces in /run or /tmp.
+> >
+> > mkusers might create home directories in /run for
+> > example.
 > >
 > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >  Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index ce1c08a6f6..6a76e87b5e 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -748,7 +748,7 @@ target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
-> >       rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
-> >               $(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-> >               $(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake \
-> > -             $(TARGET_DIR)/usr/doc
-> > +             $(TARGET_DIR)/usr/lib/rpm $(TARGET_DIR)/usr/doc
 >
-> What have you found installed in $(TARGET_DIR)/usr/lib/rpm ? Why does
-> this needs to be done in target-finalize and not in the rpm package ?
-> Is it because other packages install stuff in /usr/lib/rpm ? If so,
-> what ?
+> Looping Yann on this. I agree that we definitely want /tmp and /run to
+> be empty, as we are anyway going to mount a tmpfs over them, so
+> whatever they contains is not visible on the target system, but takes
+> up some space on the filesystem.
+>
+> However, I'm not sure if removing all what they contain is the right
+> approach. Shouldn't we avoid creating things in /tmp and /run in the
+> first place ?
 
-I believe this to be a common occurrence, like /usr/share/aclocal. But
-I need to check that again
+Yeah we should avoid creating stuff there, but it's sometimes hard to do.
+One example is defining a user with home dir in /run, mkusers will
+then create a dir there
+(pretty late to clear it up otherwise)
+
+More important would be tools that lazily create stuff on the first boot,
+and either buildroot or a custom fakeroot stage script would run this
+on the host instead (worstcase in some sort of container/chroot).
+
 
 >
-> Again, we need better commit logs, otherwise for each of your changes
-> we'll have to ask for additional clarifications/details.
->
-> Thanks!
+> Yann, any feedback on this ?
 >
 > Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
+
+Norbert
