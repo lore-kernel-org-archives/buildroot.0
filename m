@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 22:29:19 +0200
-Subject: [Buildroot] [PATCH 1/4] package/openssh: Depend on libaudit if
- available
-In-Reply-To: <20200605225905.14082-1-nolange79@gmail.com>
+Date: Sat, 6 Jun 2020 22:31:37 +0200
+Subject: [Buildroot] [PATCH 2/4] package/openssh: improve integration
+ for systemd
+In-Reply-To: <20200605225905.14082-2-nolange79@gmail.com>
 References: <20200605225905.14082-1-nolange79@gmail.com>
-Message-ID: <20200606222919.03831690@windsurf>
+ <20200605225905.14082-2-nolange79@gmail.com>
+Message-ID: <20200606223137.71ee0eca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  6 Jun 2020 00:59:01 +0200
+On Sat,  6 Jun 2020 00:59:02 +0200
 Norbert Lange <nolange79@gmail.com> wrote:
 
+> the openssh daemon is not suited for systemd's simple
+> service type. dependend services should only start
+> when sshd is ready to accept connections.
+> 
+> A patch is added from debian to allow openssh
+> to communicate this state.
+> 
+> Restarts are prevented if the reason is a faulty
+> config file (errocode 255).
+> 
+> The "user confinement directory" is changed to
+> '/run/sshd' which is automatically managed by systemd.
+> 
 > Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
->  package/openssh/openssh.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 515eec2c03..55b917e20a 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -39,6 +39,11 @@ else
->  OPENSSH_CONF_OPTS += --without-ssl-engine
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_AUDIT),y)
-> +OPENSSH_DEPENDENCIES += audit
-> +OPENSSH_CONF_OPTS += --with-audit=linux
-> +endif
+>  package/openssh/00-systemd-readiness.patch | 84 ++++++++++++++++++++++
+>  package/openssh/openssh.mk                 | 14 +++-
+>  package/openssh/sshd-sysusers.conf         |  2 +-
+>  package/openssh/sshd.service               | 13 +++-
+>  4 files changed, 109 insertions(+), 4 deletions(-)
+>  create mode 100644 package/openssh/00-systemd-readiness.patch
 
-We like to have an "else" clause that explicitly disables the feature,
-so I've added that, reworked the commit title, and applied. Thanks!
+On this patch, as well as patches 3/4 and 4/4 in this series, I would
+really appreciate some review from people more knowledgeable than I am
+in systemd.
+
+Matt ? J?r?my ?
+
+Best regards,
 
 Thomas
 -- 
