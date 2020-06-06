@@ -1,61 +1,47 @@
-From: Christopher Pelloux <git@chp.io>
-Date: Sat, 06 Jun 2020 21:47:38 +0000
-Subject: [Buildroot] [PATCH 1/1] package/json-c: bump version to 0.14
-Message-ID: <20200606214729.6487-1-git@chp.io>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Jun 2020 23:48:36 +0200
+Subject: [Buildroot] [PATCH for-next] package/optee-benchmark: fix gcc
+ 10 warning
+In-Reply-To: <20200530171428.562778-1-romain.naour@gmail.com>
+References: <20200530171428.562778-1-romain.naour@gmail.com>
+Message-ID: <20200606234836.30c72356@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Notes:
+On Sat, 30 May 2020 19:14:28 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-- json-c now uses cmake instead of autoconf
-- This version also brings support to the much welcomed feature for
-  parsing uint64_t types
+> The function yaml_mapping_start_event_initialize()
+> take yaml_mapping_style_t style as last argument:
+> 
+> int yaml_mapping_start_event_initialize(
+>     yaml_event_t *event,
+>     const yaml_char_t *anchor,
+>     const yaml_char_t *tag,
+>     int implicit,
+>     yaml_mapping_style_t style)
+> 
+> Use YAML_ANY_MAPPING_STYLE instead of YAML_ANY_SEQUENCE_STYLE
+> 
+> Fixes:
+> main.c:173:5: error: implicit conversion from ?enum yaml_sequence_style_e? to ?yaml_mapping_style_t? {aka ?enum yaml_mapping_style_e?} [-Werror=enum-conversion]
+>   173 |     YAML_ANY_SEQUENCE_STYLE))
+>       |     ^~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+>  .../optee-benchmark/0001-main-fix-typo.patch  | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 package/optee-benchmark/0001-main-fix-typo.patch
 
-Signed-off-by: Christopher Pelloux <git@chp.io>
----
- package/json-c/json-c.hash |  2 +-
- package/json-c/json-c.mk   | 14 +++-----------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index 0e03007476..93eaff67c3 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
-+sha256 b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
- # Locally calculated
- sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 2788fe563b..3e17effdad 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,19 +4,11 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.13.1
-+JSON_C_VERSION = 0.14
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
- 
--# update config.h.in timestamp to avoid autoheader run
--define JSON_C_UPDATE_CONFIG_TIMESTAMP
--	touch $(@D)/config.h.in
--endef
--
--JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
--HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
