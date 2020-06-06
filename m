@@ -1,137 +1,85 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 6 Jun 2020 19:51:15 +0200
-Subject: [Buildroot] Build Fail: FONTCONFIG_VERSION = 2.13.1 - Can't
- find uuid
-In-Reply-To: <CAHdaamNmZ_-RT9C0=dOHe_vPUQ_VS=7Hf0gzmLyP4udxajmokQ@mail.gmail.com>
-References: <CAHdaamNmZ_-RT9C0=dOHe_vPUQ_VS=7Hf0gzmLyP4udxajmokQ@mail.gmail.com>
-Message-ID: <20200606195115.3bf76145@gmx.net>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat,  6 Jun 2020 20:38:18 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/ethtool: add patch to fix build
+ failures
+Message-ID: <20200606183817.5113-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ernie,
+Add a patch from the kernel netdev mailing list [1] that solves
+autobuilder failures.
 
-On Sat, 6 Jun 2020 09:52:07 -0700, Ernie Carp <erniecarp2018@gmail.com> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/394e846bb48a0cc8564ebc3e8d1179ccd1f1560d/
 
-> Hello,
->
-> I post this in case it helps someone else.
->
-> Using Buildroot Version: 2020.08-git-00103-gc7cd1f0-dirty
-> Board: atmel_sama5d27_som1_ek_mmc_dev_defconfig
-> util-linux version - 2.35.1
->
-> When enabling rrdtool, FONTCONFIG_VERSION = 2.13.1 fails with error:
->
-> checking for UUID... no
-> checking where uuid functions comes from... configure: error:
-> *** uuid is required. install util-linux
->
-> I checked, util-linux is installed and uuid is selected but build fails. I
-> don't know how to fix it properly so I used the older package makefile from
-> buildroot 2019.05-git-00237-gb643a75-dirty that has util-linux version 2.33
-> and now rrdtool and all dependencies build without error.
+[1] https://patchwork.ozlabs.org/project/netdev/patch/bb60cbfe99071fca4b0ea9e62d67a2341d8dd652.1590707335.git.mkubecek at suse.cz/
 
-The following defconfig compiles here without failure
-(atmel_sama5d27_som1_ek_mmc_dev_defconfig with BR2_PACKAGE_RRDTOOL=y):
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ .../0001-netlink-fix-build-warnings.patch     | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/ethtool/0001-netlink-fix-build-warnings.patch
 
-BR2_arm=y
-BR2_cortex_a5=y
-BR2_ARM_ENABLE_NEON=y
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_INSTRUCTIONS_THUMB2=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREAD_DEBUG=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-at91-linux4sam-2020.04.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_ALSA_UTILS=y
-BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-BR2_PACKAGE_ALSA_UTILS_APLAY=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_SWSCALE=y
-BR2_PACKAGE_MPG123=y
-BR2_PACKAGE_BZIP2=y
-BR2_PACKAGE_GZIP=y
-BR2_PACKAGE_UNZIP=y
-BR2_PACKAGE_XZ=y
-BR2_PACKAGE_ZIP=y
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_LMBENCH=y
-BR2_PACKAGE_DOSFSTOOLS=y
-BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-BR2_PACKAGE_MMC_UTILS=y
-BR2_PACKAGE_MTD=y
-BR2_PACKAGE_RRDTOOL=y
-BR2_PACKAGE_WILC1000_FIRMWARE=y
-BR2_PACKAGE_EVTEST=y
-BR2_PACKAGE_I2C_TOOLS=y
-BR2_PACKAGE_RNG_TOOLS=y
-BR2_PACKAGE_SETSERIAL=y
-BR2_PACKAGE_SPI_TOOLS=y
-BR2_PACKAGE_USBUTILS=y
-BR2_PACKAGE_LIBDRM=y
-BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-BR2_PACKAGE_DTC=y
-BR2_PACKAGE_DTC_PROGRAMS=y
-BR2_PACKAGE_BLUEZ5_UTILS=y
-BR2_PACKAGE_BRIDGE_UTILS=y
-BR2_PACKAGE_CAN_UTILS=y
-BR2_PACKAGE_ETHTOOL=y
-BR2_PACKAGE_IPERF=y
-BR2_PACKAGE_IPROUTE2=y
-BR2_PACKAGE_IPTABLES=y
-BR2_PACKAGE_IW=y
-BR2_PACKAGE_LRZSZ=y
-BR2_PACKAGE_MII_DIAG=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_WGET=y
-BR2_PACKAGE_WIRELESS_TOOLS=y
-BR2_PACKAGE_WPA_SUPPLICANT=y
-BR2_PACKAGE_BASH=y
-BR2_PACKAGE_HTOP=y
-BR2_PACKAGE_VIM=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-BR2_TARGET_AT91BOOTSTRAP3=y
-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.2)/at91bootstrap3-v3.9.2.tar.gz"
-BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.04)/u-boot-at91-linux4sam-2020.04.tar.gz"
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
-BR2_TARGET_UBOOT_NEEDS_DTC=y
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-
-Are your sure you did a complete re-build (or at least a re-build of the
-util-linux package) after enabling rrdtool (see [1])?
-
-Regards,
-Peter
-
-[1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
-
->
-> Regards,
-> Ernie Carp
+diff --git a/package/ethtool/0001-netlink-fix-build-warnings.patch b/package/ethtool/0001-netlink-fix-build-warnings.patch
+new file mode 100644
+index 0000000000..4e9b520d58
+--- /dev/null
++++ b/package/ethtool/0001-netlink-fix-build-warnings.patch
+@@ -0,0 +1,52 @@
++From 93b2d0ef0c2be825e56d1f810fbbfba4800fa831 Mon Sep 17 00:00:00 2001
++From: Michal Kubecek <mkubecek@suse.cz>
++Date: Fri, 29 May 2020 01:21:12 +0200
++Subject: [PATCH] netlink: fix build warnings
++
++Depending on compiler version and options, some of these warnings may
++result in build failure.
++
++- gcc 4.8 wants __KERNEL_DIV_ROUND_UP defined before including ethtool.h
++- avoid pointer arithmetic on void *
++
++Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
++
++[Patch was taken from the linux netdev mailinglist and will be applied in the
++upcoming ethtool release 5.8]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ netlink/desc-ethtool.c | 2 +-
++ netlink/parser.c       | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/netlink/desc-ethtool.c b/netlink/desc-ethtool.c
++index 76c6f13..423479d 100644
++--- a/netlink/desc-ethtool.c
+++++ b/netlink/desc-ethtool.c
++@@ -4,9 +4,9 @@
++  * Descriptions of ethtool netlink messages and attributes for pretty print.
++  */
++ 
+++#include "../internal.h"
++ #include <linux/ethtool_netlink.h>
++ 
++-#include "../internal.h"
++ #include "prettymsg.h"
++ 
++ static const struct pretty_nla_desc __header_desc[] = {
++diff --git a/netlink/parser.c b/netlink/parser.c
++index fff23f2..d790abe 100644
++--- a/netlink/parser.c
+++++ b/netlink/parser.c
++@@ -1016,7 +1016,7 @@ int nl_parser(struct nl_context *nlctx, const struct param_parser *params,
++ 			buff = tmp_buff_find(buffs, parser->group);
++ 		msgbuff = buff ? &buff->msgbuff : &nlsk->msgbuff;
++ 
++-		param_dest = dest ? (dest + parser->dest_offset) : NULL;
+++		param_dest = dest ? ((char *)dest + parser->dest_offset) : NULL;
++ 		ret = parser->handler(nlctx, parser->type, parser->handler_data,
++ 				      msgbuff, param_dest);
++ 		if (ret < 0)
++-- 
++2.20.1
++
+-- 
+2.20.1
