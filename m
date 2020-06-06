@@ -1,55 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:27:03 +0200
-Subject: [Buildroot] [git commit] package/pango: add gobject-introspection
- support
-Message-ID: <20200606193054.1E5778266F@busybox.osuosl.org>
+Date: Sat, 6 Jun 2020 21:33:10 +0200
+Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
+In-Reply-To: <20200605225421.13494-1-nolange79@gmail.com>
+References: <20200605225421.13494-1-nolange79@gmail.com>
+Message-ID: <20200606213310.606b44b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abefa5a54abede7c9d7b846fd8cfab1f476282b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This will fix the following build failure when enabling introspection on
-libgtk2:
+On Sat,  6 Jun 2020 00:54:21 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-Couldn't find include 'Pango-1.0.gir' (search path: '['/home/fabrice/buildroot/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/home/fabrice/buildroot/output/host/share', '/usr/share/gnome/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/fabrice/buildroot/output/host/share/gir-1.0', '/usr/share/gir-1.0']')
+> Drop default dependencies, haveged needs nothing but
+> local sockets and /dev/random.
+> This allows the entropy to be available earlier.
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
+Thanks Norbert. I will need the review of those systemd person on this
+patch. J?r?my ? Matt ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pango/pango.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+>  package/haveged/haveged.service | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
+> index 91035c6711..ed9f043a91 100644
+> --- a/package/haveged/haveged.service
+> +++ b/package/haveged/haveged.service
+> @@ -1,10 +1,13 @@
+>  [Unit]
+>  Description=Entropy Harvesting Daemon
+>  Documentation=man:haveged(8)
+> +DefaultDependencies=no
+> +Conflicts=shutdown.target
+> +Before=sysinit.target shutdown.target systemd-update-done.service
+>  
+>  [Service]
+>  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
+>  SuccessExitStatus=143
+>  
+>  [Install]
+> -WantedBy=multi-user.target
+> +WantedBy=sysinit.target
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 48edd18b05..1b12c09b22 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -12,7 +12,7 @@ PANGO_INSTALL_STAGING = YES
- PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
- 
--PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
-+PANGO_CONF_OPTS = -Duse_fontconfig=true
- HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
- 
- PANGO_DEPENDENCIES = \
-@@ -33,6 +33,13 @@ HOST_PANGO_DEPENDENCIES = \
- 	host-fontconfig \
- 	host-freetype
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+PANGO_CONF_OPTS += -Dintrospection=true
-+PANGO_DEPENDENCIES += gobject-introspection
-+else
-+PANGO_CONF_OPTS += -Dintrospection=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
- PANGO_DEPENDENCIES += xlib_libX11
- endif
+
+
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
