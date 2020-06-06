@@ -1,58 +1,77 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 6 Jun 2020 21:43:33 +0200
-Subject: [Buildroot] [PATCH v2 0/2] Add netopeer2 server and cli package
-In-Reply-To: <20200416122939.10312-1-heiko.thiery@gmail.com>
-References: <20200416122939.10312-1-heiko.thiery@gmail.com>
-Message-ID: <CAEyMn7Ygd7B34odjjJ8LZzEpxmXiu1E0MZ5_vcp2AvhDWvMpAQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 6 Jun 2020 21:44:48 +0200
+Subject: [Buildroot] [PATCH v2,
+ 2/2] package/edid-decode: fix build with gcc <= 5
+In-Reply-To: <20200606122810.2745801-2-fontaine.fabrice@gmail.com>
+References: <20200606122810.2745801-1-fontaine.fabrice@gmail.com>
+ <20200606122810.2745801-2-fontaine.fabrice@gmail.com>
+Message-ID: <20200606214449.39fc4e02@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Fabrice,
 
-Am Do., 16. Apr. 2020 um 14:29 Uhr schrieb Heiko Thiery
-<heiko.thiery@gmail.com>:
+On Sat,  6 Jun 2020 14:28:10 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Pass -std=c++11 to fix the following build failure with gcc <= 5:
 >
-> This patchset adds netopeer2 support to buildroot (cli and server).
+> /tmp/instance-0/output-1/host/bin/mips64el-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os       -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -g -DSHA="not available" -o edid-decode edid-decode.cpp parse-base-block.cpp parse-cta-block.cpp parse-displayid-block.cpp parse-ls-ext-block.cpp parse-di-ext-block.cpp parse-vtb-ext-block.cpp -lm
+> edid-decode.cpp: In member function 'std::__cxx11::string edid_state::dtd_type()':
+> edid-decode.cpp:192:17: error: 'to_string' is not a member of 'std'
+>   unsigned len = std::to_string(preparse_total_dtds).length();
+>                  ^
 >
+> Also add a dependency on gcc 4.7
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/71e4a50542c4551797f1d0404d27244612b427d7
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2:
-> - remove unneeded selects formerly coming from sysrepo
->  - BR2_PACKAGE_LIBAVL
->  - BR2_PACKAGE_LIBEV
->  - BR2_PACKAGE_PROTOBUF_C
+> Changes v1 -> v2 (after review of Peter Seiderer):
+>  - Add dependency on gcc 4.7
 >
-> Heiko Thiery (2):
->   package/netopeer2-server: add package
->   package/netopeer2-cli: add package
+>  package/edid-decode/Config.in      | 6 ++++--
+>  package/edid-decode/edid-decode.mk | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 >
->  DEVELOPERS                                    |  2 +
->  package/Config.in                             |  2 +
->  package/netopeer2-cli/Config.in               | 20 ++++++++
->  package/netopeer2-cli/netopeer2-cli.hash      |  1 +
->  package/netopeer2-cli/netopeer2-cli.mk        | 17 +++++++
->  package/netopeer2-server/Config.in            | 43 ++++++++++++++++
->  package/netopeer2-server/S52netopeer2-server  | 50 +++++++++++++++++++
->  .../netopeer2-server/netopeer2-server.hash    |  3 ++
->  package/netopeer2-server/netopeer2-server.mk  | 21 ++++++++
->  9 files changed, 159 insertions(+)
->  create mode 100644 package/netopeer2-cli/Config.in
->  create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
->  create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
->  create mode 100644 package/netopeer2-server/Config.in
->  create mode 100644 package/netopeer2-server/S52netopeer2-server
->  create mode 100644 package/netopeer2-server/netopeer2-server.hash
->  create mode 100644 package/netopeer2-server/netopeer2-server.mk
+> diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
+> index d2d21288de..ddf1942c68 100644
+> --- a/package/edid-decode/Config.in
+> +++ b/package/edid-decode/Config.in
+> @@ -1,10 +1,12 @@
+>  config BR2_PACKAGE_EDID_DECODE
+>  	bool "edid-decode"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+>  	help
+>  	  Decode EDID data in human-readable format.
 >
-> --
-> 2.20.1
+>  	  https://git.linuxtv.org/edid-decode.git/
 >
+> -comment "edid-decode needs a toolchain w/ C++"
+> -	depends on !!BR2_INSTALL_LIBSTDCPP
+> +comment "edid-decode needs a toolchain w/ C++, gcc >= 4.7"
+> +	depends on !!BR2_INSTALL_LIBSTDCPP || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+> index c41a9f2a76..7e463c02b1 100644
+> --- a/package/edid-decode/edid-decode.mk
+> +++ b/package/edid-decode/edid-decode.mk
+> @@ -11,7 +11,7 @@ EDID_DECODE_LICENSE_FILES = LICENSE
+>
+>  define EDID_DECODE_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> -		CFLAGS="$(TARGET_CXXFLAGS)"
+> +		CFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+>  endef
+>
+>  define EDID_DECODE_INSTALL_TARGET_CMDS
 
-The netopeer2 upstream project released several versions since this
-patchset was provided. Now some more work and cleanup has to be done
-before a new version of this patchset can be provided.
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
--- 
-Heiko
+Regards,
+Peter
