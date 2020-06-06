@@ -1,61 +1,45 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 00:57:23 +0200
-Subject: [Buildroot] [PATCH 2/2] fs: clean the volatile /run and /tmp
- directories
-In-Reply-To: <20200606224227.60a26aeb@windsurf>
-References: <20200605224858.12870-1-nolange79@gmail.com>
- <20200605224858.12870-2-nolange79@gmail.com>
- <20200606224227.60a26aeb@windsurf>
-Message-ID: <CADYdroO8PNfE=Cmd96rE-Kfd_nTq_7+h-JLdH-uUPGP3GmsBqg@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 6 Jun 2020 16:02:28 -0700
+Subject: [Buildroot] [PATCH v2 1/7] configs/guest_*: some new defconfig
+In-Reply-To: <20200530124735.1384078-2-francois.perrad@gadz.org>
+References: <20200530124735.1384078-1-francois.perrad@gadz.org>
+ <20200530124735.1384078-2-francois.perrad@gadz.org>
+Message-ID: <CA+h8R2otU6ZBqn_tsz9kaHrGDf8UBW9D8LS44GK5aS9CO6r2Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sa., 6. Juni 2020 um 22:42 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello,
->
-> On Sat,  6 Jun 2020 00:48:57 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > Scripts in the fakeroot environment could call
-> > tools preparing the early environment, leaving
-> > traces in /run or /tmp.
-> >
-> > mkusers might create home directories in /run for
-> > example.
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
->
-> Looping Yann on this. I agree that we definitely want /tmp and /run to
-> be empty, as we are anyway going to mount a tmpfs over them, so
-> whatever they contains is not visible on the target system, but takes
-> up some space on the filesystem.
->
-> However, I'm not sure if removing all what they contain is the right
-> approach. Shouldn't we avoid creating things in /tmp and /run in the
-> first place ?
-
-Yeah we should avoid creating stuff there, but it's sometimes hard to do.
-One example is defining a user with home dir in /run, mkusers will
-then create a dir there
-(pretty late to clear it up otherwise)
-
-More important would be tools that lazily create stuff on the first boot,
-and either buildroot or a custom fakeroot stage script would run this
-on the host instead (worstcase in some sort of container/chroot).
+Hi Francois,
 
 
->
-> Yann, any feedback on this ?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+On Sat, May 30, 2020 at 5:48 AM Francois Perrad <fperrad@gmail.com> wrote:
+>  create mode 100644 configs/guest_arm_a7_defconfig
+>  create mode 100644 configs/guest_arm_a9_defconfig
+>  create mode 100644 configs/guest_x86_64_defconfig
+> +++ b/configs/guest_arm_a7_defconfig
+> @@ -0,0 +1,16 @@
+> +# Architecture
+> +BR2_arm=y
+> +BR2_cortex_a7=y
+> +
+> +# Toolchain
+> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="4.15"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+> +
+> +# System
+> +BR2_INIT_SYSTEMD=y
+> +# BR2_TARGET_GENERIC_GETTY is not set
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_TAR=y
 
-Norbert
+These appear to be basically the default configuration, except TAR is
+selected and GETTY is disabled. Is it necessary to add these given
+that they don't do much?
+
+Best,
+Christian Stewart
