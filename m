@@ -1,110 +1,137 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 6 Jun 2020 19:05:37 +0200
-Subject: [Buildroot] [PATCH v3 6/9] package/minetest: do not select
- luajit
-In-Reply-To: <20200525004845.3019642-6-james.hilliard1@gmail.com>
-References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
- <20200525004845.3019642-6-james.hilliard1@gmail.com>
-Message-ID: <9bd512a3-e010-62d9-4fe2-841e25abaae5@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 6 Jun 2020 19:51:15 +0200
+Subject: [Buildroot] Build Fail: FONTCONFIG_VERSION = 2.13.1 - Can't
+ find uuid
+In-Reply-To: <CAHdaamNmZ_-RT9C0=dOHe_vPUQ_VS=7Hf0gzmLyP4udxajmokQ@mail.gmail.com>
+References: <CAHdaamNmZ_-RT9C0=dOHe_vPUQ_VS=7Hf0gzmLyP4udxajmokQ@mail.gmail.com>
+Message-ID: <20200606195115.3bf76145@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James,
+Hello Ernie,
 
-Le 25/05/2020 ? 02:48, James Hilliard a ?crit?:
-> Since luajit is not a requirement for minetest we should not select it
-> instead we should conditionally use it when available.
+On Sat, 6 Jun 2020 09:52:07 -0700, Ernie Carp <erniecarp2018@gmail.com> wrote:
 
-I never tested minetest without Luajit since I'm testing with a target using efl
-+ enlightenment that already depend on luajit.
+> Hello,
+>
+> I post this in case it helps someone else.
+>
+> Using Buildroot Version: 2020.08-git-00103-gc7cd1f0-dirty
+> Board: atmel_sama5d27_som1_ek_mmc_dev_defconfig
+> util-linux version - 2.35.1
+>
+> When enabling rrdtool, FONTCONFIG_VERSION = 2.13.1 fails with error:
+>
+> checking for UUID... no
+> checking where uuid functions comes from... configure: error:
+> *** uuid is required. install util-linux
+>
+> I checked, util-linux is installed and uuid is selected but build fails. I
+> don't know how to fix it properly so I used the older package makefile from
+> buildroot 2019.05-git-00237-gb643a75-dirty that has util-linux version 2.33
+> and now rrdtool and all dependencies build without error.
 
-There is only Debian that still support Lua 5.1 for minetest, other distribution
-dropped Lua 5.1 support.
+The following defconfig compiles here without failure
+(atmel_sama5d27_som1_ek_mmc_dev_defconfig with BR2_PACKAGE_RRDTOOL=y):
 
-[Luajit or Lua 5.1]
-https://salsa.debian.org/games-team/minetest/-/blob/master/debian/control#L22
+BR2_arm=y
+BR2_cortex_a5=y
+BR2_ARM_ENABLE_NEON=y
+BR2_ARM_ENABLE_VFP=y
+BR2_ARM_INSTRUCTIONS_THUMB2=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREAD_DEBUG=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam-2020.04)/linux-at91-linux4sam-2020.04.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_ALSA_UTILS=y
+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+BR2_PACKAGE_ALSA_UTILS_APLAY=y
+BR2_PACKAGE_FFMPEG=y
+BR2_PACKAGE_FFMPEG_GPL=y
+BR2_PACKAGE_FFMPEG_SWSCALE=y
+BR2_PACKAGE_MPG123=y
+BR2_PACKAGE_BZIP2=y
+BR2_PACKAGE_GZIP=y
+BR2_PACKAGE_UNZIP=y
+BR2_PACKAGE_XZ=y
+BR2_PACKAGE_ZIP=y
+BR2_PACKAGE_GDB=y
+BR2_PACKAGE_LMBENCH=y
+BR2_PACKAGE_DOSFSTOOLS=y
+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
+BR2_PACKAGE_MMC_UTILS=y
+BR2_PACKAGE_MTD=y
+BR2_PACKAGE_RRDTOOL=y
+BR2_PACKAGE_WILC1000_FIRMWARE=y
+BR2_PACKAGE_EVTEST=y
+BR2_PACKAGE_I2C_TOOLS=y
+BR2_PACKAGE_RNG_TOOLS=y
+BR2_PACKAGE_SETSERIAL=y
+BR2_PACKAGE_SPI_TOOLS=y
+BR2_PACKAGE_USBUTILS=y
+BR2_PACKAGE_LIBDRM=y
+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+BR2_PACKAGE_DTC=y
+BR2_PACKAGE_DTC_PROGRAMS=y
+BR2_PACKAGE_BLUEZ5_UTILS=y
+BR2_PACKAGE_BRIDGE_UTILS=y
+BR2_PACKAGE_CAN_UTILS=y
+BR2_PACKAGE_ETHTOOL=y
+BR2_PACKAGE_IPERF=y
+BR2_PACKAGE_IPROUTE2=y
+BR2_PACKAGE_IPTABLES=y
+BR2_PACKAGE_IW=y
+BR2_PACKAGE_LRZSZ=y
+BR2_PACKAGE_MII_DIAG=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_WGET=y
+BR2_PACKAGE_WIRELESS_TOOLS=y
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_PACKAGE_BASH=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_VIM=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+BR2_TARGET_AT91BOOTSTRAP3=y
+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL=y
+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,at91bootstrap,v3.9.2)/at91bootstrap3-v3.9.2.tar.gz"
+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,u-boot-at91,linux4sam-2020.04)/u-boot-at91-linux4sam-2020.04.tar.gz"
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
+BR2_TARGET_UBOOT_NEEDS_DTC=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
 
-[Luajit support only]
-https://src.fedoraproject.org/rpms/minetest/blob/f32/f/minetest.spec#_38
-https://www.archlinux.org/packages/community/x86_64/minetest/
 
-Not only for minetest package but for other packages in this series, what's the
-benefit of adding back Lua 5.1 ? Sure Luajit has some architecture dependencies
-compared to Lua... but the Lua ABI version handling is a nightmare.
+Are your sure you did a complete re-build (or at least a re-build of the
+util-linux package) after enabling rrdtool (see [1])?
 
-Best regards,
-Romain
+Regards,
+Peter
 
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/minetest/Config.in   |  4 ----
->  package/minetest/minetest.mk | 10 ++++++++--
->  2 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-> index 085525534d..19da290df4 100644
-> --- a/package/minetest/Config.in
-> +++ b/package/minetest/Config.in
-> @@ -5,11 +5,9 @@ config BR2_PACKAGE_MINETEST
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_PACKAGE_XORG7 # irrlicht
->  	depends on BR2_PACKAGE_HAS_LIBGL # irrlicht
-> -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	select BR2_PACKAGE_IRRLICHT
->  	select BR2_PACKAGE_GMP
->  	select BR2_PACKAGE_JSONCPP
-> -	select BR2_PACKAGE_LUAJIT
->  	select BR2_PACKAGE_SQLITE
->  	select BR2_PACKAGE_ZLIB
->  	# At least one option must be enabled
-> @@ -53,13 +51,11 @@ comment "sound support needs a toolchain w/ threads NPTL"
->  endif
->  
->  comment "minetest needs a toolchain w/ C++, gcc >= 4.9, threads"
-> -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	depends on !BR2_INSTALL_LIBSTDCPP \
->  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
->  		|| !BR2_TOOLCHAIN_HAS_THREADS
->  
->  comment "minetest needs X11 and an OpenGL provider"
-> -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	depends on (BR2_INSTALL_LIBSTDCPP \
->  		&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
->  		&& BR2_TOOLCHAIN_HAS_THREADS)
-> diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-> index e8fe5b45ce..c0301273be 100644
-> --- a/package/minetest/minetest.mk
-> +++ b/package/minetest/minetest.mk
-> @@ -9,12 +9,11 @@ MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
->  MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
->  MINETEST_LICENSE_FILES = LICENSE.txt
->  
-> -MINETEST_DEPENDENCIES = gmp irrlicht jsoncpp luajit sqlite zlib
-> +MINETEST_DEPENDENCIES = gmp irrlicht jsoncpp sqlite zlib
->  
->  MINETEST_CONF_OPTS = \
->  	-DDEFAULT_RUN_IN_PLACE=OFF \
->  	-DENABLE_GLES=OFF \
-> -	-DENABLE_LUAJIT=ON \
->  	-DENABLE_CURSES=OFF \
->  	-DAPPLY_LOCALE_BLACKLIST=OFF \
->  	-DENABLE_SYSTEM_GMP=ON \
-> @@ -75,6 +74,13 @@ else
->  MINETEST_CONF_OPTS += -DENABLE_SPATIAL=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> +MINETEST_DEPENDENCIES += luajit
-> +MINETEST_CONF_OPTS += -DENABLE_LUAJIT=ON
-> +else
-> +MINETEST_CONF_OPTS += -DENABLE_LUAJIT=OFF
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
->  MINETEST_DEPENDENCIES += postgresql
->  MINETEST_CONF_OPTS += -DENABLE_POSTGRESQL=ON
-> 
+[1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
+
+>
+> Regards,
+> Ernie Carp
