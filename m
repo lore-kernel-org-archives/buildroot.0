@@ -1,55 +1,117 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Jun 2020 10:34:38 +0200
-Subject: [Buildroot] [PATCH 2/2] package/pango: add gobject-introspection
- support
-In-Reply-To: <20200606083438.1317261-1-fontaine.fabrice@gmail.com>
-References: <20200606083438.1317261-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200606083438.1317261-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Jun 2020 11:10:32 +0200
+Subject: [Buildroot] [git commit] package/libdrm: fix build failure
+Message-ID: <20200606091036.E5FEA84339@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix the following build failure when enabling introspection on
-libgtk2:
+commit: https://git.buildroot.net/buildroot/commit/?id=0eef19ec87e6805fec5d02972ad72aa47c453690
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Couldn't find include 'Pango-1.0.gir' (search path: '['/home/fabrice/buildroot/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/home/fabrice/buildroot/output/host/share', '/usr/share/gnome/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/fabrice/buildroot/output/host/share/gir-1.0', '/usr/share/gir-1.0']')
+Add patch to fix build failure with Sourcery Codebench toolchain.
+
+The patch is provided upstream:
+https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/75
 
 Fixes:
- - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
+http://autobuild.buildroot.net/results/b7910460015b077fcb2431da608c34f95c2f2fbb/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pango/pango.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ .../libdrm/0003-xf86drm.c-fix-build-failure.patch  | 84 ++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 48edd18b05..1b12c09b22 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -12,7 +12,7 @@ PANGO_INSTALL_STAGING = YES
- PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
- 
--PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
-+PANGO_CONF_OPTS = -Duse_fontconfig=true
- HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
- 
- PANGO_DEPENDENCIES = \
-@@ -33,6 +33,13 @@ HOST_PANGO_DEPENDENCIES = \
- 	host-fontconfig \
- 	host-freetype
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+PANGO_CONF_OPTS += -Dintrospection=true
-+PANGO_DEPENDENCIES += gobject-introspection
-+else
-+PANGO_CONF_OPTS += -Dintrospection=false
-+endif
+diff --git a/package/libdrm/0003-xf86drm.c-fix-build-failure.patch b/package/libdrm/0003-xf86drm.c-fix-build-failure.patch
+new file mode 100644
+index 0000000000..ba84114f14
+--- /dev/null
++++ b/package/libdrm/0003-xf86drm.c-fix-build-failure.patch
+@@ -0,0 +1,84 @@
++From c7d89412884de2dbfa543720d185027377e62f21 Mon Sep 17 00:00:00 2001
++From: Heiko Thiery <heiko.thiery@gmail.com>
++Date: Fri, 5 Jun 2020 23:46:52 +0200
++Subject: [PATCH] xf86drm.c: fix build failure
 +
- ifeq ($(BR2_PACKAGE_XORG7),y)
- PANGO_DEPENDENCIES += xlib_libX11
- endif
--- 
-2.26.2
++./xf86drm.c: In function 'drmNodeIsDRM':
++../xf86drm.c:2825:7: error: "__FreeBSD__" is not defined [-Werror=undef]
++ #elif __FreeBSD__
++       ^
++../xf86drm.c: In function 'drmGetMinorNameForFD':
++../xf86drm.c:2938:7: error: "__FreeBSD__" is not defined [-Werror=undef]
++ #elif __FreeBSD__
++       ^
++../xf86drm.c: In function 'drmParsePciBusInfo':
++../xf86drm.c:3258:7: error: "__FreeBSD__" is not defined [-Werror=undef]
++ #elif __FreeBSD__
++       ^
++../xf86drm.c: In function 'drmParsePciDeviceInfo':
++../xf86drm.c:3427:7: error: "__FreeBSD__" is not defined [-Werror=undef]
++ #elif __FreeBSD__
++       ^
++../xf86drm.c: In function 'drmGetDeviceNameFromFd2':
++../xf86drm.c:4305:7: error: "__FreeBSD__" is not defined [-Werror=undef]
++ #elif __FreeBSD__
++       ^
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++[A merge-request with this fix is opened at https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/75]
++---
++ xf86drm.c | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/xf86drm.c b/xf86drm.c
++index 07a18c44..50a6f092 100644
++--- a/xf86drm.c
+++++ b/xf86drm.c
++@@ -2822,7 +2822,7 @@ static bool drmNodeIsDRM(int maj, int min)
++     snprintf(path, sizeof(path), "/sys/dev/char/%d:%d/device/drm",
++              maj, min);
++     return stat(path, &sbuf) == 0;
++-#elif __FreeBSD__
+++#elif defined(__FreeBSD__)
++     char name[SPECNAMELEN];
++ 
++     if (!devname_r(makedev(maj, min), S_IFCHR, name, sizeof(name)))
++@@ -2935,7 +2935,7 @@ static char *drmGetMinorNameForFD(int fd, int type)
++ 
++     closedir(sysdir);
++     return NULL;
++-#elif __FreeBSD__
+++#elif defined(__FreeBSD__)
++     struct stat sbuf;
++     char dname[SPECNAMELEN];
++     const char *mname;
++@@ -3255,7 +3255,7 @@ static int drmParsePciBusInfo(int maj, int min, drmPciBusInfoPtr info)
++     info->func = pinfo.func;
++ 
++     return 0;
++-#elif __FreeBSD__
+++#elif defined(__FreeBSD__)
++     return get_sysctl_pci_bus_info(maj, min, info);
++ #else
++ #warning "Missing implementation of drmParsePciBusInfo"
++@@ -3424,7 +3424,7 @@ static int drmParsePciDeviceInfo(int maj, int min,
++     device->subdevice_id = pinfo.subdevice_id;
++ 
++     return 0;
++-#elif __FreeBSD__
+++#elif defined(__FreeBSD__)
++     drmPciBusInfo info;
++     struct pci_conf_io pc;
++     struct pci_match_conf patterns[1];
++@@ -4302,7 +4302,7 @@ drm_public char *drmGetDeviceNameFromFd2(int fd)
++     free(value);
++ 
++     return strdup(path);
++-#elif __FreeBSD__
+++#elif defined(__FreeBSD__)
++     return drmGetDeviceNameFromFd(fd);
++ #else
++     struct stat      sbuf;
++-- 
++2.20.1
++
