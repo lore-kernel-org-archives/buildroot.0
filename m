@@ -1,44 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 22:42:27 +0200
-Subject: [Buildroot] [PATCH 2/2] fs: clean the volatile /run and /tmp
- directories
-In-Reply-To: <20200605224858.12870-2-nolange79@gmail.com>
-References: <20200605224858.12870-1-nolange79@gmail.com>
- <20200605224858.12870-2-nolange79@gmail.com>
-Message-ID: <20200606224227.60a26aeb@windsurf>
+From: Christian Stewart <christian@paral.in>
+Date: Sat,  6 Jun 2020 14:09:52 -0700
+Subject: [Buildroot] [PATCH v1 1/2] package/docker-engine: bump to version
+ 19.03.11
+Message-ID: <20200606210953.131088-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat,  6 Jun 2020 00:48:57 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
-
-> Scripts in the fakeroot environment could call
-> tools preparing the early environment, leaving
-> traces in /run or /tmp.
-> 
-> mkusers might create home directories in /run for
-> example.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-
-Looping Yann on this. I agree that we definitely want /tmp and /run to
-be empty, as we are anyway going to mount a tmpfs over them, so
-whatever they contains is not visible on the target system, but takes
-up some space on the filesystem.
-
-However, I'm not sure if removing all what they contain is the right
-approach. Shouldn't we avoid creating things in /tmp and /run in the
-first place ?
-
-Yann, any feedback on this ?
-
-Thomas
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index c23eea90a8..99159f9376 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	13ec45ad45091111bd566aca9d81989b3f05e0625dab68d33c3ad81ff924172f  docker-engine-19.03.8.tar.gz
++sha256	5ff62d7b3638a275b2c459e53a4d1a7a8fb03dde8305defcd55e05e059e5618d  docker-engine-19.03.11.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 78f6c1261c..2f622014ba 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = 19.03.8
++DOCKER_ENGINE_VERSION = 19.03.11
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
