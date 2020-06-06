@@ -1,86 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:21:07 +0200
-Subject: [Buildroot] [git commit] package/ethtool: add patch to fix build
- failures
-Message-ID: <20200606192209.A968882B31@busybox.osuosl.org>
+Date: Sat, 6 Jun 2020 21:10:18 +0200
+Subject: [Buildroot] [git commit] package/kodi: bump version to 18.7.1
+Message-ID: <20200606192209.B088284394@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=269d7c27a1681ab8344f08943d66ed3297f5da65
+commit: https://git.buildroot.net/buildroot/commit/?id=1d6a0cd0492750b671038c0008b353b533fc1548
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch from the kernel netdev mailing list [1] that solves
-autobuilder failures.
+Release notes: https://github.com/xbmc/xbmc/releases/tag/18.7.1-Leia
 
-Fixes:
-http://autobuild.buildroot.net/results/394e846bb48a0cc8564ebc3e8d1179ccd1f1560d/
-
-[1] https://patchwork.ozlabs.org/project/netdev/patch/bb60cbfe99071fca4b0ea9e62d67a2341d8dd652.1590707335.git.mkubecek at suse.cz/
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../ethtool/0001-netlink-fix-build-warnings.patch  | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ethtool/0001-netlink-fix-build-warnings.patch b/package/ethtool/0001-netlink-fix-build-warnings.patch
-new file mode 100644
-index 0000000000..4e9b520d58
---- /dev/null
-+++ b/package/ethtool/0001-netlink-fix-build-warnings.patch
-@@ -0,0 +1,52 @@
-+From 93b2d0ef0c2be825e56d1f810fbbfba4800fa831 Mon Sep 17 00:00:00 2001
-+From: Michal Kubecek <mkubecek@suse.cz>
-+Date: Fri, 29 May 2020 01:21:12 +0200
-+Subject: [PATCH] netlink: fix build warnings
-+
-+Depending on compiler version and options, some of these warnings may
-+result in build failure.
-+
-+- gcc 4.8 wants __KERNEL_DIV_ROUND_UP defined before including ethtool.h
-+- avoid pointer arithmetic on void *
-+
-+Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
-+
-+[Patch was taken from the linux netdev mailinglist and will be applied in the
-+upcoming ethtool release 5.8]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ netlink/desc-ethtool.c | 2 +-
-+ netlink/parser.c       | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/netlink/desc-ethtool.c b/netlink/desc-ethtool.c
-+index 76c6f13..423479d 100644
-+--- a/netlink/desc-ethtool.c
-++++ b/netlink/desc-ethtool.c
-+@@ -4,9 +4,9 @@
-+  * Descriptions of ethtool netlink messages and attributes for pretty print.
-+  */
-+ 
-++#include "../internal.h"
-+ #include <linux/ethtool_netlink.h>
-+ 
-+-#include "../internal.h"
-+ #include "prettymsg.h"
-+ 
-+ static const struct pretty_nla_desc __header_desc[] = {
-+diff --git a/netlink/parser.c b/netlink/parser.c
-+index fff23f2..d790abe 100644
-+--- a/netlink/parser.c
-++++ b/netlink/parser.c
-+@@ -1016,7 +1016,7 @@ int nl_parser(struct nl_context *nlctx, const struct param_parser *params,
-+ 			buff = tmp_buff_find(buffs, parser->group);
-+ 		msgbuff = buff ? &buff->msgbuff : &nlsk->msgbuff;
-+ 
-+-		param_dest = dest ? (dest + parser->dest_offset) : NULL;
-++		param_dest = dest ? ((char *)dest + parser->dest_offset) : NULL;
-+ 		ret = parser->handler(nlctx, parser->type, parser->handler_data,
-+ 				      msgbuff, param_dest);
-+ 		if (ret < 0)
-+-- 
-+2.20.1
-+
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index f1889f3195..0c11ace012 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
++KODI_JSONSCHEMABUILDER_VERSION = 18.7.1-Leia
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index ec8ffeae43..a16478b159 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 18.7-Leia
++KODI_TEXTUREPACKER_VERSION = 18.7.1-Leia
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index be2659d385..1617b25979 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
++sha256 5cfec391bcd168bbd4f9d38a6c8ec93e42e040cf82cf6ebf23db5e86753816fb  kodi-18.7.1-Leia.tar.gz
+ sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
+ sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 180e3b9d10..6a49184c00 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 18.7-Leia
++KODI_VERSION = 18.7.1-Leia
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.md
