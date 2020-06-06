@@ -1,71 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 6 Jun 2020 21:41:24 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/edid-decode: use TARGET_CONFIGURE_OPTS
-In-Reply-To: <20200606122810.2745801-1-fontaine.fabrice@gmail.com>
-References: <20200606122810.2745801-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200606214124.7ca0bef0@gmx.net>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 6 Jun 2020 21:43:33 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Add netopeer2 server and cli package
+In-Reply-To: <20200416122939.10312-1-heiko.thiery@gmail.com>
+References: <20200416122939.10312-1-heiko.thiery@gmail.com>
+Message-ID: <CAEyMn7Ygd7B34odjjJ8LZzEpxmXiu1E0MZ5_vcp2AvhDWvMpAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi,
 
-On Sat,  6 Jun 2020 14:28:09 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Do not use CXX to save the "$(TARGET_CXX) $(TARGET_CXXFLAGS)
-> $(TARGET_LDFLAGS)" tuple and instead use TARGET_CONFIGURE_OPTS to pass
-> variables using the "standard" variables
+Am Do., 16. Apr. 2020 um 14:29 Uhr schrieb Heiko Thiery
+<heiko.thiery@gmail.com>:
 >
-> LDFLAGS is supported since
-> https://git.linuxtv.org/edid-decode.git/commit/?id=0a454bcbba5e172c64236811ed98c161689372f1
+> This patchset adds netopeer2 support to buildroot (cli and server).
 >
-> CFLAGS is supported since
-> https://git.linuxtv.org/edid-decode.git/commit/?id=b202b675e38578b33494fc45c2869917e66ba22d
->
-> edid-decode did not switch CFLAGS to CXXFLAGS in
-> https://git.linuxtv.org/edid-decode.git/commit/Makefile?id=e00579c128ced87a69df29a01caaaf0cd4a4c8cc
-> so use CFLAGS to pass TARGET_CXXFLAGS
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2 (after review of Peter Seiderer):
->  - Drop link on autobuilder failure
+> Changes v1 -> v2:
+> - remove unneeded selects formerly coming from sysrepo
+>  - BR2_PACKAGE_LIBAVL
+>  - BR2_PACKAGE_LIBEV
+>  - BR2_PACKAGE_PROTOBUF_C
 >
->  package/edid-decode/edid-decode.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Heiko Thiery (2):
+>   package/netopeer2-server: add package
+>   package/netopeer2-cli: add package
 >
-> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-> index 8fe1e2712a..c41a9f2a76 100644
-> --- a/package/edid-decode/edid-decode.mk
-> +++ b/package/edid-decode/edid-decode.mk
-> @@ -10,12 +10,13 @@ EDID_DECODE_LICENSE = MIT
->  EDID_DECODE_LICENSE_FILES = LICENSE
+>  DEVELOPERS                                    |  2 +
+>  package/Config.in                             |  2 +
+>  package/netopeer2-cli/Config.in               | 20 ++++++++
+>  package/netopeer2-cli/netopeer2-cli.hash      |  1 +
+>  package/netopeer2-cli/netopeer2-cli.mk        | 17 +++++++
+>  package/netopeer2-server/Config.in            | 43 ++++++++++++++++
+>  package/netopeer2-server/S52netopeer2-server  | 50 +++++++++++++++++++
+>  .../netopeer2-server/netopeer2-server.hash    |  3 ++
+>  package/netopeer2-server/netopeer2-server.mk  | 21 ++++++++
+>  9 files changed, 159 insertions(+)
+>  create mode 100644 package/netopeer2-cli/Config.in
+>  create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
+>  create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
+>  create mode 100644 package/netopeer2-server/Config.in
+>  create mode 100644 package/netopeer2-server/S52netopeer2-server
+>  create mode 100644 package/netopeer2-server/netopeer2-server.hash
+>  create mode 100644 package/netopeer2-server/netopeer2-server.mk
 >
->  define EDID_DECODE_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> -		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		CFLAGS="$(TARGET_CXXFLAGS)"
->  endef
+> --
+> 2.20.1
 >
->  define EDID_DECODE_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		DESTDIR="$(TARGET_DIR)" install
 
-No need for the 'TARGET_CONFIGURE_OPTS' here (as the install only uses DESTDIR)...
+The netopeer2 upstream project released several versions since this
+patchset was provided. Now some more work and cleanup has to be done
+before a new version of this patchset can be provided.
 
-With this fixed and because the same effective compile options are used
-as without the patch you can add my:
-
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
->  endef
->
->  $(eval $(generic-package))
+-- 
+Heiko
