@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jun 2020 00:33:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsvg: add gobject-introspection
+Date: Sun,  7 Jun 2020 00:36:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvips: add gobject-introspection
  support
-Message-ID: <20200606223306.3374021-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200606223649.3408185-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +11,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/librsvg/librsvg.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/libvips/libvips.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 470910d94c..e124fdd5d3 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -10,7 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
--LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
-+LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
- HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
- LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
- 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
-@@ -19,5 +19,12 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libcroco host-libgli
- LIBRSVG_LICENSE = LGPL-2.0+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 001a148a7e..169fda9b10 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -21,7 +21,6 @@ LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ 
+ LIBVIPS_CONF_OPTS = \
+-	--disable-introspection \
+ 	--without-dmalloc \
+ 	--without-gsf \
+ 	--without-magick \
+@@ -41,6 +40,13 @@ LIBVIPS_DEPENDENCIES = \
+ 	host-pkgconf expat libglib2 \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBRSVG_CONF_OPTS += --enable-introspection
-+LIBRSVG_DEPENDENCIES += gobject-introspection
++LIBVIPS_CONF_OPTS += --enable-introspection
++LIBVIPS_DEPENDENCIES += gobject-introspection
 +else
-+LIBRSVG_CONF_OPTS += --disable-introspection
++LIBVIPS_CONF_OPTS += --disable-introspection
 +endif
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ LIBVIPS_CONF_OPTS += --with-jpeg
+ LIBVIPS_DEPENDENCIES += jpeg
 -- 
 2.26.2
