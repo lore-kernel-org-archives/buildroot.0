@@ -1,33 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Jun 2020 14:36:38 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/manual/adding-packages-generic.txt:
- fix typo
-Message-ID: <20200606123638.2747300-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  6 Jun 2020 15:58:49 +0200
+Subject: [Buildroot] [PATCH] package/netsurf: bump to version 3.10
+Message-ID: <20200606135849.4158368-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LIBTOO_SOURCE -> LIBFOO_SOURCE
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- docs/manual/adding-packages-generic.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netsurf/0003-do-not-cross-compile-nsgenbind.patch | 2 +-
+ package/netsurf/netsurf.hash                              | 4 ++--
+ package/netsurf/netsurf.mk                                | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 568daaeb8d..b8bfcb4aff 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -452,7 +452,7 @@ not and can not work as people would expect it should:
-   of the manifest file for this package.
+diff --git a/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch b/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
+index 01e77e977..2d4637511 100644
+--- a/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
++++ b/package/netsurf/0003-do-not-cross-compile-nsgenbind.patch
+@@ -16,7 +16,7 @@ diff --git a/Makefile b/Makefile
+ index f279f01..5698c87 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -109,7 +109,7 @@ endef
++@@ -110,7 +110,7 @@ endef
+  
+  # prefixed install macro for each host sub target
+  define do_build_prefix_install
+diff --git a/package/netsurf/netsurf.hash b/package/netsurf/netsurf.hash
+index 0f38ea208..77de5c6de 100644
+--- a/package/netsurf/netsurf.hash
++++ b/package/netsurf/netsurf.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 11e384eaf47e65c186da5001f1055a02f2d72ff17b50f403b8392546a2cf65ff  netsurf-all-3.9.tar.gz
+-sha256 55c4a7ae3953d720a462e69d1f128a20004933d12538be5314a33f8821675378  netsurf/COPYING
++sha256  495adf6b6614ce36fca6c605f7c321f9cb4a3df838043158122678ce2b3325b7  netsurf-all-3.10.tar.gz
++sha256  55c4a7ae3953d720a462e69d1f128a20004933d12538be5314a33f8821675378  netsurf/COPYING
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index 0077adde2..5677b6946 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- * +LIBFOO_ACTUAL_SOURCE_TARBALL+ only applies to packages whose
--  +LIBFOO_SITE+ / +LIBTOO_SOURCE+ pair points to an archive that does
-+  +LIBFOO_SITE+ / +LIBFOO_SOURCE+ pair points to an archive that does
-   not actually contain source code, but binary code. This a very
-   uncommon case, only known to apply to external toolchains which come
-   already compiled, although theoretically it might apply to other
+-NETSURF_VERSION = 3.9
++NETSURF_VERSION = 3.10
+ NETSURF_SOURCE = netsurf-all-$(NETSURF_VERSION).tar.gz
+ NETSURF_SITE = http://download.netsurf-browser.org/netsurf/releases/source-full
+ NETSURF_LICENSE = GPL-2.0
+@@ -15,7 +15,7 @@ NETSURF_DEPENDENCIES = expat jpeg libpng \
+ 
+ ifeq ($(BR2_PACKAGE_NETSURF_GTK),y)
+ NETSURF_DEPENDENCIES += libgtk2
+-NETSURF_FRONTEND = gtk
++NETSURF_FRONTEND = gtk2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETSURF_GTK3),y)
 -- 
-2.26.2
+2.25.1
