@@ -1,116 +1,40 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  6 Jun 2020 08:43:09 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/libdrm: fix build failure
-Message-ID: <20200606064309.3466-1-heiko.thiery@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  6 Jun 2020 09:11:48 +0200
+Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2020.05
+Message-ID: <20200606071149.1994707-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix build failure with Sourcery Codebench toolchain.
-
-The patch is provided upstream:
-https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/75
-
-Fixes:
-http://autobuild.buildroot.net/results/b7910460015b077fcb2431da608c34f95c2f2fbb/
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0003-xf86drm.c-fix-build-failure.patch    | 84 +++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 package/libdrm/0003-xf86drm.c-fix-build-failure.patch
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/0003-xf86drm.c-fix-build-failure.patch b/package/libdrm/0003-xf86drm.c-fix-build-failure.patch
-new file mode 100644
-index 0000000000..ba84114f14
---- /dev/null
-+++ b/package/libdrm/0003-xf86drm.c-fix-build-failure.patch
-@@ -0,0 +1,84 @@
-+From c7d89412884de2dbfa543720d185027377e62f21 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Fri, 5 Jun 2020 23:46:52 +0200
-+Subject: [PATCH] xf86drm.c: fix build failure
-+
-+./xf86drm.c: In function 'drmNodeIsDRM':
-+../xf86drm.c:2825:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-+ #elif __FreeBSD__
-+       ^
-+../xf86drm.c: In function 'drmGetMinorNameForFD':
-+../xf86drm.c:2938:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-+ #elif __FreeBSD__
-+       ^
-+../xf86drm.c: In function 'drmParsePciBusInfo':
-+../xf86drm.c:3258:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-+ #elif __FreeBSD__
-+       ^
-+../xf86drm.c: In function 'drmParsePciDeviceInfo':
-+../xf86drm.c:3427:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-+ #elif __FreeBSD__
-+       ^
-+../xf86drm.c: In function 'drmGetDeviceNameFromFd2':
-+../xf86drm.c:4305:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-+ #elif __FreeBSD__
-+       ^
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+[A merge-request with this fix is opened at https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/75]
-+---
-+ xf86drm.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/xf86drm.c b/xf86drm.c
-+index 07a18c44..50a6f092 100644
-+--- a/xf86drm.c
-++++ b/xf86drm.c
-+@@ -2822,7 +2822,7 @@ static bool drmNodeIsDRM(int maj, int min)
-+     snprintf(path, sizeof(path), "/sys/dev/char/%d:%d/device/drm",
-+              maj, min);
-+     return stat(path, &sbuf) == 0;
-+-#elif __FreeBSD__
-++#elif defined(__FreeBSD__)
-+     char name[SPECNAMELEN];
-+ 
-+     if (!devname_r(makedev(maj, min), S_IFCHR, name, sizeof(name)))
-+@@ -2935,7 +2935,7 @@ static char *drmGetMinorNameForFD(int fd, int type)
-+ 
-+     closedir(sysdir);
-+     return NULL;
-+-#elif __FreeBSD__
-++#elif defined(__FreeBSD__)
-+     struct stat sbuf;
-+     char dname[SPECNAMELEN];
-+     const char *mname;
-+@@ -3255,7 +3255,7 @@ static int drmParsePciBusInfo(int maj, int min, drmPciBusInfoPtr info)
-+     info->func = pinfo.func;
-+ 
-+     return 0;
-+-#elif __FreeBSD__
-++#elif defined(__FreeBSD__)
-+     return get_sysctl_pci_bus_info(maj, min, info);
-+ #else
-+ #warning "Missing implementation of drmParsePciBusInfo"
-+@@ -3424,7 +3424,7 @@ static int drmParsePciDeviceInfo(int maj, int min,
-+     device->subdevice_id = pinfo.subdevice_id;
-+ 
-+     return 0;
-+-#elif __FreeBSD__
-++#elif defined(__FreeBSD__)
-+     drmPciBusInfo info;
-+     struct pci_conf_io pc;
-+     struct pci_match_conf patterns[1];
-+@@ -4302,7 +4302,7 @@ drm_public char *drmGetDeviceNameFromFd2(int fd)
-+     free(value);
-+ 
-+     return strdup(path);
-+-#elif __FreeBSD__
-++#elif defined(__FreeBSD__)
-+     return drmGetDeviceNameFromFd(fd);
-+ #else
-+     struct stat      sbuf;
-+-- 
-+2.20.1
-+
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 29c6ce77f..7c8a52bc7 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 82cb80b29ad7aebb0c0b42449d371eafa8935b07884526345f9788c8bcf4d632  MoarVM-2020.02.1.tar.gz
++sha256 9368d2c691ea8710459a48c323915df6648c4a67d2ce24c27fc74f6b084a824b  MoarVM-2020.05.tar.gz
+ sha256 c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index a0c7766bf..4e8ca9190 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOARVM_VERSION = 2020.02.1
++MOARVM_VERSION = 2020.05
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
 -- 
-2.20.1
+2.25.1
