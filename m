@@ -1,41 +1,39 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 6 Jun 2020 16:11:55 -0700
-Subject: [Buildroot] [PATCH v2 4/7] package/docker-engine: needs more
- runtime dependencies
-In-Reply-To: <20200530124735.1384078-5-francois.perrad@gadz.org>
-References: <20200530124735.1384078-1-francois.perrad@gadz.org>
- <20200530124735.1384078-5-francois.perrad@gadz.org>
-Message-ID: <CA+h8R2p5YBObVJy9b672j4VaWYLAebY=m0Hov2iVnUQzh9+NWQ@mail.gmail.com>
+Date: Sat, 6 Jun 2020 16:22:45 -0700
+Subject: [Buildroot] [PATCH v3 1/6] package/go: implement go modules
+ integration
+In-Reply-To: <20200301075223.1398715-1-christian@paral.in>
+References: <20200301075223.1398715-1-christian@paral.in>
+Message-ID: <CA+h8R2pfMBEJMQGbKda83jniXNwyAbTRYrr5ETf8Vnb7Sn23QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+Hi all,
 
-On Sat, May 30, 2020 at 5:48 AM Francois Perrad <fperrad@gmail.com> wrote:
+
+On Sat, Feb 29, 2020 at 11:52 PM Christian Stewart <christian@paral.in> wrote:
+> This commit moves from the GOPATH mechanism to the new GO111MODULE approach for
+> Go based packages. Old Go packages compile with small tweaks.
 >
-> fix error:
->         failed to start daemon: Devices cgroup isn't mounted
+> The Go module system replaces the GOPATH mechanism by allowing the Go tool to
+> work with packages correctly without a GOPATH tree.
 
-I don't see this error, and I don't have the cgroupfs-mount enabled.
+I have been using this series for everything, including my daily
+driver, since submitting this patch.
 
-With systemd, cgroups should be mounted automatically, at least as far
-as I know.
+It works fine and most importantly works with both the old vendor/
+approach as well as the new go.mod approach.
 
-> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-> index 1fd229fcb..64afba30f 100644
-> --- a/package/docker-engine/Config.in
-> +++ b/package/docker-engine/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
->         depends on BR2_USE_MMU # docker-containerd
-> +       select BR2_PACKAGE_CGROUPFS_MOUNT # runtime dependency
->         select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
->         select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
->         select BR2_PACKAGE_IPTABLES # runtime dependency
+In this version of the series the Go compiler is never asked to
+download anything. It merely replaces the old "gopath" hacks that were
+in place before. A future patch series on top of this one would add
+support for Go downloading packages as well, however, for now that is
+not part of this series. This is as minimal as possible.
+
+I recommend merging the series as is (in v3) as soon as possible.
 
 Best regards,
 Christian Stewart
