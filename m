@@ -1,96 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 17:02:22 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/linux-firmware: add support
- for nvidia files
-In-Reply-To: <20200606034839.352118-1-christian@paral.in>
-References: <20200606034839.352118-1-christian@paral.in>
-Message-ID: <20200606170222.268eeda8@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  6 Jun 2020 17:09:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 18.7.1
+Message-ID: <20200606150919.4369-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  5 Jun 2020 20:48:39 -0700
-Christian Stewart <christian@paral.in> wrote:
+Release notes: https://github.com/xbmc/xbmc/releases/tag/18.7.1-Leia
 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/linux-firmware/Config.in         | 5 +++++
->  package/linux-firmware/linux-firmware.mk | 5 +++++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-> index eba58014b6..2d729716aa 100644
-> --- a/package/linux-firmware/Config.in
-> +++ b/package/linux-firmware/Config.in
-> @@ -29,6 +29,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_I915
->  	help
->  	  Firmware files for the Intel i915 video cards.
->  
-> +config BR2_PACKAGE_LINUX_FIRMWARE_NVIDIA
-> +	bool "Nvidia video card firmware"
-> +	help
-> +	  Firmware files for the Nvidia video cards.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-For most other firmware files, we have more fine grained options. When
-I look at the nvidia/ folder, it has firmware for various graphics
-cards:
-
-gk20a
-gm200
-gm204
-gm206
-gm20b
-gp100
-gp102
-gp104
-gp106
-gp107
-gp108
-gp10b
-gv100
-tegra124
-tegra186
-tegra194
-tegra210
-tu102
-tu104
-tu106
-tu10x
-
-Size-wise, it goes like this:
-
-116K	./gm200
-96K	./gp107
-36K	./gp106
-44K	./gm206
-120K	./gp100
-28K	./gm204
-340K	./tu10x
-148K	./tegra210
-116K	./gp108
-128K	./tegra194
-164K	./gm20b
-68K	./gk20a
-368K	./gp102
-276K	./gv100
-128K	./tu106
-128K	./tu104
-148K	./tegra186
-76K	./gp104
-196K	./gp10b
-272K	./tu102
-152K	./tegra124
-3,1M	.
-
-So, in practice, on a given platform, you would typically need only
-100-200 KB of firmware on the total 3.1 MB.
-
-Best regards,
-
-Thomas
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index f1889f3195..0c11ace012 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
++KODI_JSONSCHEMABUILDER_VERSION = 18.7.1-Leia
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index ec8ffeae43..a16478b159 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 18.7-Leia
++KODI_TEXTUREPACKER_VERSION = 18.7.1-Leia
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index be2659d385..1617b25979 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
++sha256 5cfec391bcd168bbd4f9d38a6c8ec93e42e040cf82cf6ebf23db5e86753816fb  kodi-18.7.1-Leia.tar.gz
+ sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
+ sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index b62f4d92a9..d6f06c0a6c 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 18.7-Leia
++KODI_VERSION = 18.7.1-Leia
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.md
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
