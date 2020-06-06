@@ -1,66 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:31:20 +0200
-Subject: [Buildroot] [git commit] package/edid-decode: fix build with gcc <=
- 5
-Message-ID: <20200606193054.51F148266F@busybox.osuosl.org>
+Date: Sat, 6 Jun 2020 21:27:03 +0200
+Subject: [Buildroot] [git commit] package/pango: add gobject-introspection
+ support
+Message-ID: <20200606193054.1E5778266F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c00d881c2709aca8bd6de1fcc40af19584c6887
+commit: https://git.buildroot.net/buildroot/commit/?id=abefa5a54abede7c9d7b846fd8cfab1f476282b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pass -std=c++11 to fix the following build failure with gcc <= 5:
+This will fix the following build failure when enabling introspection on
+libgtk2:
 
-/tmp/instance-0/output-1/host/bin/mips64el-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os       -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -g -DSHA="not available" -o edid-decode edid-decode.cpp parse-base-block.cpp parse-cta-block.cpp parse-displayid-block.cpp parse-ls-ext-block.cpp parse-di-ext-block.cpp parse-vtb-ext-block.cpp -lm
-edid-decode.cpp: In member function 'std::__cxx11::string edid_state::dtd_type()':
-edid-decode.cpp:192:17: error: 'to_string' is not a member of 'std'
-  unsigned len = std::to_string(preparse_total_dtds).length();
-                 ^
-
-Also add a dependency on gcc 4.7
+Couldn't find include 'Pango-1.0.gir' (search path: '['/home/fabrice/buildroot/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/home/fabrice/buildroot/output/host/share', '/usr/share/gnome/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/fabrice/buildroot/output/host/share/gir-1.0', '/usr/share/gir-1.0']')
 
 Fixes:
- - http://autobuild.buildroot.org/results/71e4a50542c4551797f1d0404d27244612b427d7
+ - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/edid-decode/Config.in      | 6 ++++--
- package/edid-decode/edid-decode.mk | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/pango/pango.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-index d2d21288de..ddf1942c68 100644
---- a/package/edid-decode/Config.in
-+++ b/package/edid-decode/Config.in
-@@ -1,10 +1,12 @@
- config BR2_PACKAGE_EDID_DECODE
- 	bool "edid-decode"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	help
- 	  Decode EDID data in human-readable format.
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 48edd18b05..1b12c09b22 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -12,7 +12,7 @@ PANGO_INSTALL_STAGING = YES
+ PANGO_LICENSE = LGPL-2.0+
+ PANGO_LICENSE_FILES = COPYING
  
- 	  https://git.linuxtv.org/edid-decode.git/
+-PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
++PANGO_CONF_OPTS = -Duse_fontconfig=true
+ HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
  
--comment "edid-decode needs a toolchain w/ C++"
--	depends on !!BR2_INSTALL_LIBSTDCPP
-+comment "edid-decode needs a toolchain w/ C++, gcc >= 4.7"
-+	depends on !!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index c41a9f2a76..7e463c02b1 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -11,7 +11,7 @@ EDID_DECODE_LICENSE_FILES = LICENSE
+ PANGO_DEPENDENCIES = \
+@@ -33,6 +33,13 @@ HOST_PANGO_DEPENDENCIES = \
+ 	host-fontconfig \
+ 	host-freetype
  
- define EDID_DECODE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		CFLAGS="$(TARGET_CXXFLAGS)"
-+		CFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- endef
- 
- define EDID_DECODE_INSTALL_TARGET_CMDS
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++PANGO_CONF_OPTS += -Dintrospection=true
++PANGO_DEPENDENCIES += gobject-introspection
++else
++PANGO_CONF_OPTS += -Dintrospection=false
++endif
++
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ PANGO_DEPENDENCIES += xlib_libX11
+ endif
