@@ -1,69 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 6 Jun 2020 13:20:43 +0200
-Subject: [Buildroot] [PATCH 1/2] package/edid-decode: use
- TARGET_CONFIGURE_OPTS
-In-Reply-To: <20200606091928.1351706-1-fontaine.fabrice@gmail.com>
-References: <20200606091928.1351706-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200606132043.1e796306@gmx.net>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sat, 6 Jun 2020 13:26:29 +0200
+Subject: [Buildroot] make sdk - relocate - ccache not working as expected
+In-Reply-To: <CANQCQpYLf0veHYzjNeYcq3_FdTF+4ig85YbNq5RVJvyaqKL0pA@mail.gmail.com>
+References: <2b30abbf-41ab-253e-0c91-6bb6cf5e36a5@jcz.nl>
+ <CANQCQpYLf0veHYzjNeYcq3_FdTF+4ig85YbNq5RVJvyaqKL0pA@mail.gmail.com>
+Message-ID: <d0c7e492-7055-1829-4fdb-15a298680407@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi Matt, all,
 
-On Sat,  6 Jun 2020 11:19:27 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On 2020-06-01 13:32, Matthew Weber wrote:
+> The ccache callback's path is compiled into the toolchain-wrapper, so
+> you'd have to disable ccache and do a clean build before doing the
+> make sdk.  Or set the BR_NO_CCACHE=1 environment variable when using
+> your sdk.  Something I've done in my sdk exports is adjust the
+> toolchain wrapper before running make sdk. Here's an untested example
+> of something you could add to your post build script or adjust the
+> tarball to have this change after make sdk runs.
 
-> Do not use CXX to save the "$(TARGET_CXX) $(TARGET_CXXFLAGS)
-> $(TARGET_LDFLAGS)" tuple and instead use TARGET_CONFIGURE_OPTS to pass
-> variables using the "standard" variables
->
-> LDFLAGS is supported since
-> https://git.linuxtv.org/edid-decode.git/commit/?id=0a454bcbba5e172c64236811ed98c161689372f1
->
-> CFLAGS is supported since
-> https://git.linuxtv.org/edid-decode.git/commit/?id=b202b675e38578b33494fc45c2869917e66ba22d
->
-> edid-decode did not switch CFLAGS to CXXFLAGS in
-> https://git.linuxtv.org/edid-decode.git/commit/Makefile?id=e00579c128ced87a69df29a01caaaf0cd4a4c8cc
-> so use CFLAGS to pass TARGET_CXXFLAGS
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/71e4a50542c4551797f1d0404d27244612b427d7
->
+This made me thinking; after doing a search I figured out the following workaround works for me:
 
-Just from code-review (did not yet test your patch), this patch does not change
-the resulting used compile/link flags and is only in preparation of the next
-patch? And as a standalone one does not fix the build failure?
+CCACHE_DIR=<somewhere-the-user-running-under-can-write-to>
 
-Regards,
-Peter
+I consider this a bug in the toolchainwrapper (I guess). What do fellow buildroot users think?
 
+regards,
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/edid-decode/edid-decode.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-> index 8fe1e2712a..c41a9f2a76 100644
-> --- a/package/edid-decode/edid-decode.mk
-> +++ b/package/edid-decode/edid-decode.mk
-> @@ -10,12 +10,13 @@ EDID_DECODE_LICENSE = MIT
->  EDID_DECODE_LICENSE_FILES = LICENSE
->
->  define EDID_DECODE_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> -		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		CFLAGS="$(TARGET_CXXFLAGS)"
->  endef
->
->  define EDID_DECODE_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		DESTDIR="$(TARGET_DIR)" install
->  endef
->
->  $(eval $(generic-package))
+Jaap
