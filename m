@@ -1,40 +1,38 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Sat, 6 Jun 2020 23:51:41 +0200
-Subject: [Buildroot] [PATCH/next] package/libqmi: bump to version 1.24.14
-In-Reply-To: <20200606234951.792cf0d2@windsurf>
-References: <20200530075324.123263-1-aleksander@aleksander.es>
- <20200606234951.792cf0d2@windsurf>
-Message-ID: <CAAP7uc+Trd8aw_45VMi9p0dYwibMD5LAfMVkRdXF7eWhyhjYYg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  6 Jun 2020 23:52:39 +0200
+Subject: [Buildroot] [PATCH] gitlab-ci: regenerate after
+ freescale_imx8mnevk_defconfig addition
+Message-ID: <20200606215239.403537-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey!
+Fixes: 2c01eeece96ce449163e066566c787bfc2a10651
 
-On Sat, 6 Jun 2020, 23:49 Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
-wrote:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/584436394
 
-> On Sat, 30 May 2020 09:53:24 +0200
-> Aleksander Morgado <aleksander@aleksander.es> wrote:
->
-> > https://lists.freedesktop.org/archives/libqmi-devel/2020-May/003321.html
-> >
-> > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> > ---
-> >  package/libqmi/libqmi.hash | 2 +-
-> >  package/libqmi/libqmi.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> I'm sorry to see your patch only now, but we have already merged a
-> patch from Matt Weber that bumps libqmi. Sorry about that :/
->
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ .gitlab-ci.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No worries! :)
-Cheers
-
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200606/13ff5375/attachment.html>
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 66a679077c..f6eb7f6fe6 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -187,10 +187,10 @@ freescale_imx6sxsabresd_defconfig: { extends: .defconfig }
+ freescale_imx6ullevk_defconfig: { extends: .defconfig }
+ freescale_imx7dsabresd_defconfig: { extends: .defconfig }
+ freescale_imx8mmevk_defconfig: { extends: .defconfig }
++freescale_imx8mnevk_defconfig: { extends: .defconfig }
+ freescale_imx8mqevk_defconfig: { extends: .defconfig }
+ freescale_imx8qmmek_defconfig: { extends: .defconfig }
+ freescale_imx8qxpmek_defconfig: { extends: .defconfig }
+-freescale_imx8mnevk_defconfig: { extends: .defconfig }
+ freescale_p1025twr_defconfig: { extends: .defconfig }
+ freescale_t1040d4rdb_defconfig: { extends: .defconfig }
+ freescale_t2080_qds_rdb_defconfig: { extends: .defconfig }
+-- 
+2.25.4
