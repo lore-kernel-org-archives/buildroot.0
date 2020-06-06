@@ -1,69 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 21:26:20 +0200
-Subject: [Buildroot] [git commit] package/libnetconf2: add patch to fix
- incompatiblity with libssh
-Message-ID: <20200606193053.F36578266F@busybox.osuosl.org>
+Date: Sat, 6 Jun 2020 21:29:26 +0200
+Subject: [Buildroot] [git commit] package/edid-decode: use
+ TARGET_CONFIGURE_OPTS
+Message-ID: <20200606193054.41DB980764@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31e1ea377ca3ca0a3346c34f8379c66c30b1f1d5
+commit: https://git.buildroot.net/buildroot/commit/?id=18684d51f446ebde877e28ea3a242150b0f71fe4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libnetconf2 upstream project rejects building with ssh support for
-libssh 0.9.3 and 0.9.4 due to an existing regression.
+Do not use CXX to set the "$(TARGET_CXX) $(TARGET_CXXFLAGS)
+$(TARGET_LDFLAGS)" variables and instead use TARGET_CONFIGURE_OPTS to
+pass variables using the "standard" variables.
 
-This libssh regression bug is already fixed upstream. The libssh buildroot
-package has the patch (39099153d9404cd6f107f0fd92ce8686bbd1beb2).
+LDFLAGS is supported since
+https://git.linuxtv.org/edid-decode.git/commit/?id=0a454bcbba5e172c64236811ed98c161689372f1
 
-Thus we can remove the libnetconf2 cmake check.
+CFLAGS is supported since
+https://git.linuxtv.org/edid-decode.git/commit/?id=b202b675e38578b33494fc45c2869917e66ba22d
 
-Fixes:
-http://autobuild.buildroot.net/results/f72fcccafe70ecb6b2ba21e8d19c5827a09ffec7/
+edid-decode did not switch CFLAGS to CXXFLAGS in
+https://git.linuxtv.org/edid-decode.git/commit/Makefile?id=e00579c128ced87a69df29a01caaaf0cd4a4c8cc
+so use CFLAGS to pass TARGET_CXXFLAGS
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...xt-remove-version-check-for-faulty-libssh.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/edid-decode/edid-decode.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-new file mode 100644
-index 0000000000..d1df807626
---- /dev/null
-+++ b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-@@ -0,0 +1,32 @@
-+From ad89283f9ed36f0f1234c7f005edfc34e8b9fd58 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@kontron.com>
-+Date: Thu, 4 Jun 2020 15:31:56 +0200
-+Subject: [PATCH] CMakeList.txt: remove version check for faulty libssh version
-+
-+libssh is fixed by a patch in buildroot so we can drop the libssh
-+version check for 0.9.3 and 0.9.4.
-+
-+See: 39099153d9404cd6f107f0fd92ce8686bbd1beb2
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-+---
-+ CMakeLists.txt | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f21fec9..29ef202 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -148,9 +148,6 @@ endif()
-+ # dependencies - libssh
-+ if(ENABLE_SSH)
-+     find_package(LibSSH 0.7.0 REQUIRED)
-+-    if(LIBSSH_VERSION VERSION_EQUAL 0.9.3 OR LIBSSH_VERSION VERSION_EQUAL 0.9.4)
-+-        message(FATAL_ERROR "LibSSH ${LIBSSH_VERSION} includes regression bugs and libnetconf2 will NOT work properly, try to use another version")
-+-    endif()
-+ 
-+     target_link_libraries(netconf2 ${LIBSSH_LIBRARIES})
-+     list(APPEND CMAKE_REQUIRED_LIBRARIES ${LIBSSH_LIBRARIES})
-+-- 
-+2.20.1
-+
+diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+index 8fe1e2712a..c41a9f2a76 100644
+--- a/package/edid-decode/edid-decode.mk
++++ b/package/edid-decode/edid-decode.mk
+@@ -10,12 +10,13 @@ EDID_DECODE_LICENSE = MIT
+ EDID_DECODE_LICENSE_FILES = LICENSE
+ 
+ define EDID_DECODE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		CXX="$(TARGET_CXX) $(TARGET_CXXFLAGS) $(TARGET_LDFLAGS)"
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CXXFLAGS)"
+ endef
+ 
+ define EDID_DECODE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
+ $(eval $(generic-package))
