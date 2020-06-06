@@ -1,72 +1,149 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Jun 2020 17:09:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 18.7.1
-Message-ID: <20200606150919.4369-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 6 Jun 2020 18:36:27 +0200
+Subject: [Buildroot] [PATCH v3 7/9] package/efl: depend on lua ABI
+ version 5.1
+In-Reply-To: <20200525004845.3019642-7-james.hilliard1@gmail.com>
+References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
+ <20200525004845.3019642-7-james.hilliard1@gmail.com>
+Message-ID: <53cf1b5f-9859-eaeb-f35d-cdfee0d2773c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://github.com/xbmc/xbmc/releases/tag/18.7.1-Leia
+Hi James,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
- package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
- package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+Le 25/05/2020 ? 02:48, James Hilliard a ?crit?:
+> Since efl is compatible with lua interpreters that provide the
+> version 5.1 ABI we should depend on that instead of unconditionally
+> selecting luajit.
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index f1889f3195..0c11ace012 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 18.7-Leia
-+KODI_JSONSCHEMABUILDER_VERSION = 18.7.1-Leia
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index ec8ffeae43..a16478b159 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,7 +6,7 @@
- 
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 18.7-Leia
-+KODI_TEXTUREPACKER_VERSION = 18.7.1-Leia
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index be2659d385..1617b25979 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 f6bb2ad9d8ca27d1b6bf68690d699f5e2bf3d0c7e5700d8e564b7583054c434e  kodi-18.7-Leia.tar.gz
-+sha256 5cfec391bcd168bbd4f9d38a6c8ec93e42e040cf82cf6ebf23db5e86753816fb  kodi-18.7.1-Leia.tar.gz
- sha256 e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
- sha256 38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
- sha256 071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index b62f4d92a9..d6f06c0a6c 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 18.7-Leia
-+KODI_VERSION = 18.7.1-Leia
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
--- 
-2.26.2
+We had some issues with lua support in previous efl version (1.17.x) [1], can
+you explain in the commit log that it's safe to add back Lua 5.1 support ?
+
+[1]
+https://git.buildroot.net/buildroot/commit/?id=92f7591eca0d2b4ff827ed90629be94292c8b102
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/efl/Config.in |  7 +++----
+>  package/efl/efl.mk    | 26 ++++++++++++++++++++------
+>  2 files changed, 23 insertions(+), 10 deletions(-)
+> 
+> diff --git a/package/efl/Config.in b/package/efl/Config.in
+> index ff49161163..b074774790 100644
+> --- a/package/efl/Config.in
+> +++ b/package/efl/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_EFL
+>  	 # g++ issue with 4.4.5, tested with g++ 4.7.2
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+> +	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_USE_WCHAR # use wchar_t
+> @@ -13,7 +13,6 @@ config BR2_PACKAGE_EFL
+>  	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+>  	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
+>  	# https://phab.enlightenment.org/T2728
+> -	select BR2_PACKAGE_LUAJIT # Lua support broken
+>  	select BR2_PACKAGE_LZ4
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+> @@ -302,9 +301,9 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
+>  
+>  endif # BR2_PACKAGE_EFL
+>  
+> -comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
+> +comment "efl needs a toolchain w/ C++, luajit or lua 5.1, dynamic library, gcc >= 4.7, threads, wchar"
+>  	depends on !BR2_INSTALL_LIBSTDCPP \
+>  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+>  		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+> -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+> +	depends on !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+>  	depends on BR2_USE_MMU
+> diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+> index d8364ed76f..ba44738e59 100644
+> --- a/package/efl/efl.mk
+> +++ b/package/efl/efl.mk
+> @@ -20,8 +20,8 @@ EFL_LICENSE_FILES = \
+>  
+>  EFL_INSTALL_STAGING = YES
+>  
+> -EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+> -	jpeg luajit lz4 zlib
+> +EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype \
+> +	jpeg lz4 zlib
+>  
+>  # Configure options:
+>  # --disable-lua-old: build elua for the target.
+
+Don't forget to update/remove the comment.
+
+> @@ -38,11 +38,9 @@ EFL_CONF_OPTS = \
+>  	--with-eldbus_codegen=$(HOST_DIR)/bin/eldbus-codegen \
+>  	--with-elementary-codegen=$(HOST_DIR)/bin/elementary_codegen \
+>  	--with-elm-prefs-cc=$(HOST_DIR)/bin/elm_prefs_cc \
+> -	--with-elua=$(HOST_DIR)/bin/elua \
+>  	--with-eolian-gen=$(HOST_DIR)/bin/eolian_gen \
+>  	--disable-image-loader-jp2k \
+>  	--with-net-control=none \
+> -	--disable-lua-old \
+>  	--disable-sdl \
+>  	--disable-spectre \
+>  	--disable-xinput22 \
+> @@ -92,6 +90,16 @@ else
+>  EFL_CONF_OPTS += --disable-fribidi
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> +EFL_CONF_OPTS += \
+> +	--with-elua=$(HOST_DIR)/usr/bin/elua \
+> +	--disable-lua-old
+> +EFL_DEPENDENCIES += host-luajit luajit
+> +else ifeq ($(BR2_PACKAGE_LUA),y)
+> +EFL_CONF_OPTS += --enable-lua-old
+> +EFL_DEPENDENCIES += host-lua lua
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
+>  EFL_CONF_OPTS += --enable-gstreamer1
+>  EFL_DEPENDENCIES += gstreamer1 gst1-plugins-base
+> @@ -320,7 +328,6 @@ HOST_EFL_DEPENDENCIES = \
+>  	host-libglib2 \
+>  	host-libjpeg \
+>  	host-libpng \
+> -	host-luajit \
+>  	host-zlib
+>  
+>  # Configure options:
+> @@ -351,7 +358,6 @@ HOST_EFL_CONF_OPTS += \
+>  	--disable-libmount \
+>  	--disable-libraw \
+>  	--disable-librsvg \
+> -	--disable-lua-old \
+>  	--disable-multisense \
+>  	--disable-physics \
+>  	--disable-poppler \
+> @@ -379,6 +385,14 @@ else
+>  HOST_EFL_CONF_OPTS += --disable-cxx-bindings
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> +HOST_EFL_CONF_OPTS += --disable-lua-old
+> +HOST_EFL_DEPENDENCIES += host-luajit
+> +else ifeq ($(BR2_PACKAGE_LUA),y)
+> +HOST_EFL_CONF_OPTS += --enable-lua-old
+> +HOST_EFL_DEPENDENCIES += host-lua
+> +endif
+> +
+>  # Always disable upower system module from host as it's
+>  # not useful and would try to use the output/host/var
+>  # system bus which is non-existent and does not contain
+> 
