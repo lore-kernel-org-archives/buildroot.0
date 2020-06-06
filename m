@@ -1,47 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Jun 2020 23:21:14 +0200
-Subject: [Buildroot] [git commit] package/asterisk: bump version to 16.10.0
-Message-ID: <20200606212735.C102F8442D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 06 Jun 2020 23:29:19 +0200
+Subject: [Buildroot] [PATCH] strace: bump to version 5.7
+In-Reply-To: <4f8ce0c199f730641f988fbc2841c3145b9fa759.1591267219.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 4 Jun 2020 13:40:19 +0300")
+References: <4f8ce0c199f730641f988fbc2841c3145b9fa759.1591267219.git.baruch@tkos.co.il>
+Message-ID: <87lfkzc28g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0152c0553a5ef4bc4252948a0f6b14b51e5c1b87
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Release Notes:
-https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
+ > Drop upstream patch.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/ca298d6543c07efbf77f2adeb4832bbac00ae73f/
+ > http://autobuild.buildroot.net/results/f26a4f2bb5a9b25739e55be5e5ded2b83a0937ac/
+ > http://autobuild.buildroot.net/results/53d6dac4047742ae2acd682a0dd97d986ba611bb/
 
-Signed-off-by: Felix Vollmer <FelixVollmer@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > The build issue affects 2020.05 as well.
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 26aa4b89b7..50457ba8f5 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  474cbc6f9dddee94616f8af8e097bc4d340dc9698c4165dc45be6e0be80ff725  asterisk-16.6.2.tar.gz
-+sha256  f0ba5e3c4ef46f6657dd3a7167190f9b6cd6bbf4af09ecc291a9d5868b477609  asterisk-16.10.0.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index cea287f0d7..97e97c14c8 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 16.6.2
-+ASTERISK_VERSION = 16.10.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+Committed to 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
