@@ -1,77 +1,65 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 6 Jun 2020 21:44:48 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/edid-decode: fix build with gcc <= 5
-In-Reply-To: <20200606122810.2745801-2-fontaine.fabrice@gmail.com>
-References: <20200606122810.2745801-1-fontaine.fabrice@gmail.com>
- <20200606122810.2745801-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200606214449.39fc4e02@gmx.net>
+Date: Sat, 6 Jun 2020 21:48:06 +0200
+Subject: [Buildroot] [PATCH 2/2] package/edid-decode: fix build with gcc
+ <= 5
+In-Reply-To: <20200606122634.GG13972@scaer>
+References: <20200606091928.1351706-1-fontaine.fabrice@gmail.com>
+ <20200606091928.1351706-2-fontaine.fabrice@gmail.com>
+ <20200606135659.275463ab@gmx.net> <20200606122634.GG13972@scaer>
+Message-ID: <20200606214806.62d4cac3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello Yann,
 
-On Sat,  6 Jun 2020 14:28:10 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 6 Jun 2020 14:26:34 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Pass -std=c++11 to fix the following build failure with gcc <= 5:
+> Peter, All,
 >
-> /tmp/instance-0/output-1/host/bin/mips64el-linux-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os       -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -g -DSHA="not available" -o edid-decode edid-decode.cpp parse-base-block.cpp parse-cta-block.cpp parse-displayid-block.cpp parse-ls-ext-block.cpp parse-di-ext-block.cpp parse-vtb-ext-block.cpp -lm
-> edid-decode.cpp: In member function 'std::__cxx11::string edid_state::dtd_type()':
-> edid-decode.cpp:192:17: error: 'to_string' is not a member of 'std'
->   unsigned len = std::to_string(preparse_total_dtds).length();
->                  ^
+> On 2020-06-06 13:56 +0200, Peter Seiderer spake thusly:
+> > On Sat,  6 Jun 2020 11:19:28 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > > Pass -std=c++11 to fix the following build failure with gcc <= 5:
+> [--SNIP--]
+> > > diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+> > > index c41a9f2a76..7e463c02b1 100644
+> > > --- a/package/edid-decode/edid-decode.mk
+> > > +++ b/package/edid-decode/edid-decode.mk
+> > > @@ -11,7 +11,7 @@ EDID_DECODE_LICENSE_FILES = LICENSE
+> > >
+> > >  define EDID_DECODE_BUILD_CMDS
+> > >  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> > > -		CFLAGS="$(TARGET_CXXFLAGS)"
+> > > +		CFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+> > >  endef
+> >
+> > Thanks for taking care of the build failure, but with c++11 something
+> > like 'depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11' (or 4_7/4_8) missing?
 >
-> Also add a dependency on gcc 4.7
+> Parts of C++11 already landed as far back as gcc-4.3:
+>     https://gcc.gnu.org/projects/cxx-status.html#cxx11
 >
-> Fixes:
->  - http://autobuild.buildroot.org/results/71e4a50542c4551797f1d0404d27244612b427d7
+> So, to have full C++11 support, on eeds gcc-4.8 or later, but for some
+> subsets of C++11, older versions may still be suitable.
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Peter Seiderer):
->  - Add dependency on gcc 4.7
+> But the C++98 standard was the default one until gcc-6.1, which switched
+> directly over to C++14 as the default. That's why the C++11 standard has
+> to be explicitly requested.
 >
->  package/edid-decode/Config.in      | 6 ++++--
->  package/edid-decode/edid-decode.mk | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-> index d2d21288de..ddf1942c68 100644
-> --- a/package/edid-decode/Config.in
-> +++ b/package/edid-decode/Config.in
-> @@ -1,10 +1,12 @@
->  config BR2_PACKAGE_EDID_DECODE
->  	bool "edid-decode"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
->  	help
->  	  Decode EDID data in human-readable format.
->
->  	  https://git.linuxtv.org/edid-decode.git/
->
-> -comment "edid-decode needs a toolchain w/ C++"
-> -	depends on !!BR2_INSTALL_LIBSTDCPP
-> +comment "edid-decode needs a toolchain w/ C++, gcc >= 4.7"
-> +	depends on !!BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-> index c41a9f2a76..7e463c02b1 100644
-> --- a/package/edid-decode/edid-decode.mk
-> +++ b/package/edid-decode/edid-decode.mk
-> @@ -11,7 +11,7 @@ EDID_DECODE_LICENSE_FILES = LICENSE
->
->  define EDID_DECODE_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> -		CFLAGS="$(TARGET_CXXFLAGS)"
-> +		CFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
->  endef
->
->  define EDID_DECODE_INSTALL_TARGET_CMDS
+> However, -std=c++11 is only recognised from gcc-4.7 onward; older
+> versions only knew about -std=c++0x. So if this would also work for
+> gcc <= 4.6, we 'd have to use =std=c++0x (which is still recognised up
+> to gcc-9.x).
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Thanks for the detailed explanation! So for edid-decode the simplest
+solution is at-least-4.7 and std=c++11...
 
 Regards,
 Peter
+
+>
+> Regards,
+> Yann E. MORIN.
+>
