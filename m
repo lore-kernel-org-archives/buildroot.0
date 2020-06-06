@@ -1,43 +1,60 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat,  6 Jun 2020 14:09:53 -0700
-Subject: [Buildroot] [PATCH v1 2/2] package/docker-cli: bump to version
- 19.03.11
-In-Reply-To: <20200606210953.131088-1-christian@paral.in>
-References: <20200606210953.131088-1-christian@paral.in>
-Message-ID: <20200606210953.131088-2-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Jun 2020 23:13:19 +0200
+Subject: [Buildroot] [git commit] package/gnuradio: add option to enable
+ gr-dtc support
+Message-ID: <20200606211258.14C1F8442D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=c878facaf807dd6f1ab5ad50dc8a3667c3d146dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index ef98aed9a7..8868a60e38 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	36dd85273c95f4755e08b37ea9660a1bf5c315570b679a0ce268750ca1ed3801  docker-cli-19.03.8.tar.gz
-+sha256	a5b1d6c5766f77896273e864a448a7f0ea4055bb52f50f884f14ad6ef0d5fdb4  docker-cli-19.03.11.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 37f2a0e1c1..1466b0afbd 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+gr-dtv provides support for a series of gnuradio blocks for digital
+television standards.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gnuradio/Config.in   | 8 ++++++++
+ package/gnuradio/gnuradio.mk | 6 ++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 01a396227f..07a33514d1 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -54,6 +54,14 @@ config BR2_PACKAGE_GNURADIO_CTRLPORT
+ 	help
+ 	  GNU Radio ctrlport block
  
--DOCKER_CLI_VERSION = 19.03.8
-+DOCKER_CLI_VERSION = 19.03.11
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
++config BR2_PACKAGE_GNURADIO_DTV
++	bool "gr-dtv support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	select BR2_PACKAGE_GNURADIO_FEC
++	select BR2_PACKAGE_GNURADIO_FILTER
++	help
++	  various digital television standards blocks
++
+ config BR2_PACKAGE_GNURADIO_FEC
+ 	bool "gr-fec support"
+ 	select BR2_PACKAGE_GNURADIO_BLOCKS
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 2820334996..0a818cfc24 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -93,6 +93,12 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_GR_DIGITAL=OFF
+ endif
  
--- 
-2.27.0
++ifeq ($(BR2_PACKAGE_GNURADIO_DTV),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_DTV=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_DTV=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_GNURADIO_FEC),y)
+ GNURADIO_DEPENDENCIES += gsl
+ GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=ON
