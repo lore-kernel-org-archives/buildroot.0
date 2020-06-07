@@ -1,59 +1,78 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 20:18:38 +0200
-Subject: [Buildroot] [PATCH 2/3] package/systemd: do not force dbus if
- dbus-broker is available
-In-Reply-To: <1a991eb7b9305597080a0506302667dfb10de018.1591551884.git.yann.morin.1998@free.fr>
-References: <cover.1591551884.git.yann.morin.1998@free.fr>
- <1a991eb7b9305597080a0506302667dfb10de018.1591551884.git.yann.morin.1998@free.fr>
-Message-ID: <CADYdroN2hTCZVdHJb3NVLd_diGk8F_EbMJr0-OrQtvz4qTGrUg@mail.gmail.com>
+Date: Sun, 7 Jun 2020 20:35:44 +0200
+Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
+In-Reply-To: <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
+References: <20200605225421.13494-1-nolange79@gmail.com>
+ <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
+Message-ID: <CADYdroMhuGysCOy2aV2ihoA3kQ9fSUdKiocpL4h2niT7=iWuHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 7. Juni 2020 um 19:44 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
+Am So., 7. Juni 2020 um 12:35 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
 >
-> dbus-broker fits the bill as a message bus daemon, so only enable the
-> original dbus if dbus-broker is not enabled.
+>
+>
+> Le sam. 6 juin 2020 ? 00:55, Norbert Lange <nolange79@gmail.com> a ?crit :
+>>
+>> Drop default dependencies, haveged needs nothing but
+>> local sockets and /dev/random.
+>> This allows the entropy to be available earlier.
+>>
+>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>> ---
+>>  package/haveged/haveged.service | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
+>> index 91035c6711..ed9f043a91 100644
+>> --- a/package/haveged/haveged.service
+>> +++ b/package/haveged/haveged.service
+>> @@ -1,10 +1,13 @@
+>>  [Unit]
+>>  Description=Entropy Harvesting Daemon
+>>  Documentation=man:haveged(8)
+>> +DefaultDependencies=no
+>> +Conflicts=shutdown.target
+>> +Before=sysinit.target shutdown.target systemd-update-done.service
+>>
+> Since v243 (quoting  systemd's NEWS file) :
+>
+> * systemd-random-seed.service is now a synchronization point for full
+>           initialization of the kernel's entropy pool. Services that require
+>           /dev/urandom to be correctly initialized should be ordered after this
+>           service.
+>
+> so... in that case it might make sense to add Before=systemd-random-seed.service
+> (assuming that works. This a very early point, so it needs some testing)
 
-Well, the core components of systemd run fine without dbus(-broker). I
-have such a setup with systemd + journald + networkd (and most of util
-linux removed) running since months.
-Rule of the thumb is that you dont need dbus(-broker) unless you need
-to interact with non-root (ie. logind) or non-local stuff
-(containerd).
 
-Changes are at (not rebased, kept that one for last)
-https://github.com/nolange/buildroot/commits/improve_systemd_nodbus
-
-This to me would be the minimal "buildroot approach" (at the cost of
-messing up if eg. busybox doesn't provide a few tools), but I
-obviously can't speak for the maintainers.
+No, doesnt make sense, a "before"  only means the service is *started before*,
+not the process did do anything worthwile. (That's the reason for my
+openssh patch BTW)
+systemd-random-seed.service is a one-shot, so a "before" *that*
+service means the dependants wait till it is finished.
 
 >
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/systemd/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index dd3b8c534d..37f9d04850 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -25,7 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
->         depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
->         select BR2_PACKAGE_HAS_UDEV
-> -       select BR2_PACKAGE_DBUS # runtime dependency only
-> +       select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
->         select BR2_PACKAGE_LIBCAP
->         select BR2_PACKAGE_UTIL_LINUX
->         select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> --
-> 2.20.1
->
+>>  [Service]
+>>  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
+>>  SuccessExitStatus=143
+>>
+> I could not find any documentation on haveged return codes, so i'll trust you on that one
 
+
+Don't trust me, I did not touch the values (but I  can attest they work).
+
+>>  [Install]
+>> -WantedBy=multi-user.target
+>> +WantedBy=sysinit.target
+>> --
+>> 2.26.2
+>>
+> Apart from my earlier remark, you can add my ReviewedBy
+
+
+Thx.
 Norbert
