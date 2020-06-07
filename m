@@ -1,73 +1,137 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Jun 2020 12:59:09 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/acpica: bump version to
- 20200528
-In-Reply-To: <20200607093130.23818-1-heiko.thiery@gmail.com>
-References: <20200607093130.23818-1-heiko.thiery@gmail.com>
-Message-ID: <20200607105909.GO13972@scaer>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Sun, 7 Jun 2020 13:06:52 +0200
+Subject: [Buildroot] [PATCH 4/4] package/openssh: add sd
+ socket-activated ssh daemon services
+In-Reply-To: <20200605225905.14082-4-nolange79@gmail.com>
+References: <20200605225905.14082-1-nolange79@gmail.com>
+ <20200605225905.14082-4-nolange79@gmail.com>
+Message-ID: <CAFvCimXvo_pXCk8B8S13W7av52AvCsRQc2nA1eTFff=XQU4M5g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-On 2020-06-07 11:31 +0200, Heiko Thiery spake thusly:
-> - Update the hash file to the new 2 spaces convention
-> - Update the hash of the license file due to license date change
->    - * Copyright (C) 2000 - 2019, Intel Corp.
->    + * Copyright (C) 2000 - 2020, Intel Corp.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/fe58e834bb67a9aab640e1d913588b47eaf7e4f5/
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
-> v1 -> v2:
->  Updated commit message to clarify reason for license file hash change
-> ---
->  package/acpica/acpica.hash | 4 ++--
->  package/acpica/acpica.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-> index ac2201d570..961ee9dbe3 100644
-> --- a/package/acpica/acpica.hash
-> +++ b/package/acpica/acpica.hash
-> @@ -1,3 +1,3 @@
->  # locally computed hash
-> -sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
-> -sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
-> +sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
-> +sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
-> diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-> index 68b948c86d..8f1a36fbb7 100644
-> --- a/package/acpica/acpica.mk
-> +++ b/package/acpica/acpica.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ACPICA_VERSION = 20191018
-> +ACPICA_VERSION = 20200528
->  ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
->  ACPICA_SITE = https://acpica.org/sites/acpica/files
->  ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
-> -- 
-> 2.20.1
-> 
+>  package/openssh/openssh.mk               |  6 +++---
+>  package/openssh/sshd-host-keygen.service |  2 +-
+>  package/openssh/sshd.socket              | 11 +++++++++++
+>  package/openssh/sshd at .service            | 10 ++++++++++
+>  4 files changed, 25 insertions(+), 4 deletions(-)
+>  create mode 100644 package/openssh/sshd.socket
+>  create mode 100644 package/openssh/sshd at .service
+>
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 6b3ee1f5f4..1f2638e9c9 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -114,9 +114,9 @@ endef
+>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
+>
+>  define OPENSSH_INSTALL_INIT_SYSTEMD
+> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
+> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
+> -               $(TARGET_DIR)/usr/lib/systemd/system/
+> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
+> +       $(INSTALL) -m 644 package/openssh/sshd*.service
+> package/openssh/sshd.socket \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/.
+>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+>  endef
+>
+> diff --git a/package/openssh/sshd-host-keygen.service
+> b/package/openssh/sshd-host-keygen.service
+> index 058e671c44..ffde622b01 100644
+> --- a/package/openssh/sshd-host-keygen.service
+> +++ b/package/openssh/sshd-host-keygen.service
+> @@ -17,4 +17,4 @@ Type=oneshot
+>  RemainAfterExit=yes
+>
+>  [Install]
+> -WantedBy=sshd.service
+> +WantedBy=sshd.service sshd.socket
+> diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
+> new file mode 100644
+> index 0000000000..bbae9ed7aa
+> --- /dev/null
+> +++ b/package/openssh/sshd.socket
+> @@ -0,0 +1,11 @@
+> +[Unit]
+> +Description=OpenBSD Secure Shell server socket
+> +Before=sshd.service
+> +Conflicts=sshd.service
+>
+No, that would stop the socket when the service is started, and you don't
+want that.
+If you do that, only one connection would be accepted before the socket is
+stoped
+and since you have accept=yes no further connections would be accepted
+
+
+> +
+> +[Socket]
+> +ListenStream=22
+> +Accept=yes
+> +
+> +[Install]
+> +WantedBy=sockets.target
+> diff --git a/package/openssh/sshd at .service b/package/openssh/sshd at .service
+> new file mode 100644
+> index 0000000000..b3a590d9a3
+> --- /dev/null
+> +++ b/package/openssh/sshd at .service
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=OpenBSD Secure Shell server per-connection daemon
+> +Documentation=man:sshd(8) man:sshd_config(5)
+> +After=auditd.service
+> +
+> +[Service]
+> +ExecStart=-/usr/sbin/sshd -i
+> +StandardInput=socket
+> +RuntimeDirectory=sshd
+> +RuntimeDirectoryMode=0755
+>
+
+I am a bit confused, you have both an ssh.service and a ssh.socket+ssh@
+.service
+Wouldn't those two fight over port 22 ?
+
+
+
+
+> --
+> 2.26.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/7c81434a/attachment.html>
