@@ -1,46 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Jun 2020 08:57:07 +0200
-Subject: [Buildroot] [git commit branch/trash] package/libvips: add
+Date: Sun, 7 Jun 2020 08:57:06 +0200
+Subject: [Buildroot] [git commit branch/trash] package/librsvg: add
  gobject-introspection support
-Message-ID: <20200607065638.3457F803A0@busybox.osuosl.org>
+Message-ID: <20200607065638.2756F8453F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bb3657c22d89edbee2e8625765d7a01267719fe
+commit: https://git.buildroot.net/buildroot/commit/?id=f7402a7ae7e63b956b6ca2b2f517c1b238f24bb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/trash
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libvips/libvips.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/librsvg/librsvg.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 001a148a7e..169fda9b10 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -21,7 +21,6 @@ LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
- 	LIBS=$(TARGET_NLS_LIBS)
- 
- LIBVIPS_CONF_OPTS = \
--	--disable-introspection \
- 	--without-dmalloc \
- 	--without-gsf \
- 	--without-magick \
-@@ -41,6 +40,13 @@ LIBVIPS_DEPENDENCIES = \
- 	host-pkgconf expat libglib2 \
- 	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 470910d94c..e124fdd5d3 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -10,7 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+-LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
++LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
+ HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+ 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
+@@ -19,5 +19,12 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libcroco host-libgli
+ LIBRSVG_LICENSE = LGPL-2.0+
+ LIBRSVG_LICENSE_FILES = COPYING.LIB
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBVIPS_CONF_OPTS += --enable-introspection
-+LIBVIPS_DEPENDENCIES += gobject-introspection
++LIBRSVG_CONF_OPTS += --enable-introspection
++LIBRSVG_DEPENDENCIES += gobject-introspection
 +else
-+LIBVIPS_CONF_OPTS += --disable-introspection
++LIBRSVG_CONF_OPTS += --disable-introspection
 +endif
 +
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBVIPS_CONF_OPTS += --with-jpeg
- LIBVIPS_DEPENDENCIES += jpeg
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
