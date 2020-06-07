@@ -1,89 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Jun 2020 17:56:52 +0200
-Subject: [Buildroot] [PATCH 08/10] package/systemd: add hook to update
- journalctl catalogs
-In-Reply-To: <20200206093633.251413-9-nolange79@gmail.com>
-References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-9-nolange79@gmail.com>
-Message-ID: <20200607155652.GS13972@scaer>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun,  7 Jun 2020 18:03:05 +0200
+Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.3.3
+Message-ID: <20200607160305.110673-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+This patch bumps python-can to version 3.3.3.
 
-On 2020-02-06 10:36 +0100, Norbert Lange spake thusly:
-> journald supports catalog files, or rather a binary database of
-> those.
-> This add a hook to create said database from the available
-> catalog source files (which are not needed afterwards).
-> 
-> One ugly workaround is or ensuring that PURGE_LOCALES is
-> called before, we do this by adding this hook
-> (will then run twice during the finalize target step).
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/systemd/systemd.mk | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 6ea25e3363..8db3a1b117 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -500,6 +500,16 @@ define SYSTEMD_PRESET_ALL
->  endef
->  SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
->  
-> +define SYSTEMD_UPDATE_CATALOGS
-> +	$(HOST_DIR)/bin/journalctl --root=$(TARGET_DIR) --update-catalog
-> +endef
-> +
-> +# SYSTEMD_UPDATE_CATALOGS needs to run after PURGE_LOCALES
-> +ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-> +SYSTEMD_TARGET_FINALIZE_HOOKS += PURGE_LOCALES
-> +endif
-> +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_UPDATE_CATALOGS
-> +
->  SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
->  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
->  
-> @@ -577,6 +587,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  #   $(HOST_DIR)/lib
->  # * thus re-tweak rpath after the installation for all binaries that need it
->  HOST_SYSTEMD_HOST_TOOLS = \
-> +	journalctl \
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/python-can/python-can.hash | 2 +-
+ package/python-can/python-can.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Why are you adding journalctl to this list?
-
-This list is only used to fix the RPATH in the prgrams. If the programs
-do not need the RPATH, we don;t need to fix them up.
-
-This list is not about identifying the host tools we are using (indeed,
-most entries in that list are not used at all).
-
-If however, you foudn a case where journalctl needs an RPATH entry,
-then:
-  - explain why: identify the libraries involved, and add explicit
-    dependencies on the packages providign those libraries,
-  - send that change in a separate patch.
-
-Regards,
-Yann E. MORIN.
-
->  	systemd-analyze \
->  	systemd-mount \
->  	systemctl \
-> -- 
-> 2.24.1
-> 
-
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+index 0a945eb006..ced51d8b75 100644
+--- a/package/python-can/python-can.hash
++++ b/package/python-can/python-can.hash
+@@ -1,4 +1,4 @@
+ # sha256 from https://pypi.org/pypi/python-can/json
+-sha256	8dc9e0f926e880cd57a3badbaebc6393cde7adffdd3e1975a78a82c48d4e3bbe  python-can-3.3.1.tar.gz
++sha256	ecd69cf6b2f0235345ebe607a15325cf1384c85b24ffbe1d68c3754357f87488  python-can-3.3.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index 749583f961..158e89f204 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CAN_VERSION = 3.3.1
+-PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/d1/7e/d92889e3fa6ed625b5d6f065bff1c1b5921519a5133553905affb0d6b97c
++PYTHON_CAN_VERSION = 3.3.3
++PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/b0/fa/8c6eb8988130f256db4c3cf84537c44684dbb3d528d2e1a1d2209eac4d90
+ PYTHON_CAN_SETUP_TYPE = setuptools
+ PYTHON_CAN_LICENSE = LGPL-3.0
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
