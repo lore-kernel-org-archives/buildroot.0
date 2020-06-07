@@ -1,56 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jun 2020 11:12:29 +0200
-Subject: [Buildroot] [git commit] package/docker-engine: security bump to
- version 19.03.11
-Message-ID: <20200607091236.54CB780E37@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun,  7 Jun 2020 11:31:31 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/acpica: bump version to 20200528
+Message-ID: <20200607093130.23818-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b73b3835f4a287d20d3c83a5e4587f9c56df5393
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Update the hash file to the new 2 spaces convention
+- Update the hash of the license file due to license date change
+   - * Copyright (C) 2000 - 2019, Intel Corp.
+   + * Copyright (C) 2000 - 2020, Intel Corp.
 
-Fixes the following security issues:
+Fixes:
+http://autobuild.buildroot.net/results/fe58e834bb67a9aab640e1d913588b47eaf7e4f5/
 
-- CVE-2020-13401: Disable IPv6 Router Advertisements to prevent address
-  spoofing
-  An attacker in a container, with the CAP_NET_RAW capability, can craft
-  IPv6 router advertisements, and consequently spoof external IPv6 hosts,
-  obtain sensitive information, or cause a denial of service.
-
-In addition, 19.03.9..11 fixes a number of issues. For details, see:
-
-https://docs.docker.com/engine/release-notes/
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Peter: mention security impact, extend commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v1 -> v2:
+ Updated commit message to clarify reason for license file hash change
+---
+ package/acpica/acpica.hash | 4 ++--
+ package/acpica/acpica.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index c23eea90a8..99159f9376 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index ac2201d570..961ee9dbe3 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256	13ec45ad45091111bd566aca9d81989b3f05e0625dab68d33c3ad81ff924172f  docker-engine-19.03.8.tar.gz
-+sha256	5ff62d7b3638a275b2c459e53a4d1a7a8fb03dde8305defcd55e05e059e5618d  docker-engine-19.03.11.tar.gz
- sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 78f6c1261c..2f622014ba 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+ # locally computed hash
+-sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
+-sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
++sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
++sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 68b948c86d..8f1a36fbb7 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 19.03.8
-+DOCKER_ENGINE_VERSION = 19.03.11
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-ACPICA_VERSION = 20191018
++ACPICA_VERSION = 20200528
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+-- 
+2.20.1
