@@ -1,109 +1,93 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jun 2020 12:03:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.32.1
-Message-ID: <20200607100354.3983731-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Sun, 7 Jun 2020 12:35:00 +0200
+Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
+In-Reply-To: <20200605225421.13494-1-nolange79@gmail.com>
+References: <20200605225421.13494-1-nolange79@gmail.com>
+Message-ID: <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch, not needed since version 2.32.0 and
-https://github.com/PurpleI2P/i2pd/commit/db6a0e6ad9124ef9b6217af487b3c844234ba5e1
+Le sam. 6 juin 2020 ? 00:55, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ....txt-don-t-install-source-and-licens.patch | 58 -------------------
- package/i2pd/i2pd.hash                        |  2 +-
- package/i2pd/i2pd.mk                          |  2 +-
- 3 files changed, 2 insertions(+), 60 deletions(-)
- delete mode 100644 package/i2pd/0001-build-CMakeLists.txt-don-t-install-source-and-licens.patch
+> Drop default dependencies, haveged needs nothing but
+> local sockets and /dev/random.
+> This allows the entropy to be available earlier.
+>
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/haveged/haveged.service | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/haveged/haveged.service
+> b/package/haveged/haveged.service
+> index 91035c6711..ed9f043a91 100644
+> --- a/package/haveged/haveged.service
+> +++ b/package/haveged/haveged.service
+> @@ -1,10 +1,13 @@
+>  [Unit]
+>  Description=Entropy Harvesting Daemon
+>  Documentation=man:haveged(8)
+> +DefaultDependencies=no
+> +Conflicts=shutdown.target
+> +Before=sysinit.target shutdown.target systemd-update-done.service
+>
+> Since v243 (quoting  systemd's NEWS file) :
 
-diff --git a/package/i2pd/0001-build-CMakeLists.txt-don-t-install-source-and-licens.patch b/package/i2pd/0001-build-CMakeLists.txt-don-t-install-source-and-licens.patch
-deleted file mode 100644
-index bf5807f8d7..0000000000
---- a/package/i2pd/0001-build-CMakeLists.txt-don-t-install-source-and-licens.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 5fec22461a6d8d1045c849e468436b00ec7f9616 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sun, 1 Apr 2018 20:11:21 +0200
--Subject: [PATCH] build/CMakeLists.txt: don't install source and license
--
--The CMakeLists.txt has the interesting (weird?) idea of installing the
--license to /usr/LICENSE and the source code to /usr/src/, which is a
--bit annoying. Let's not install such things.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- build/CMakeLists.txt | 30 ------------------------------
-- 1 file changed, 30 deletions(-)
--
--diff --git a/build/CMakeLists.txt b/build/CMakeLists.txt
--index a6736a0b..3de79f3e 100644
----- a/build/CMakeLists.txt
--+++ b/build/CMakeLists.txt
--@@ -473,36 +473,6 @@ if (WITH_BINARY)
--   endif ()
-- endif ()
-- 
---install(FILES ../LICENSE
---  DESTINATION .
---  COMPONENT Runtime
---  )
---# Take a copy on Appveyor
---install(FILES "C:/projects/openssl-$ENV{OPENSSL}/LICENSE"
---  DESTINATION .
---  COMPONENT Runtime
---  RENAME LICENSE_OPENSSL
---  OPTIONAL                      # for local builds only!
---  )
---
---file(GLOB_RECURSE I2PD_SOURCES "../libi2pd/*.cpp" "../libi2pd_client/*.cpp" "../daemon/*.cpp" "../build" "../Win32" "../Makefile*")
---install(FILES ${I2PD_SOURCES} DESTINATION src/ COMPONENT Source)
---# install(DIRECTORY ../ DESTINATION src/
---#   # OPTIONAL
---#   COMPONENT Source FILES_MATCHING
---#   PATTERN .git EXCLUDE
---#   PATTERN "*.cpp"
---#   )
---
---file(GLOB I2PD_HEADERS "../libi2pd/*.h" "../libi2pd_client/*.h" "../daemon/*.h")
---install(FILES ${I2PD_HEADERS} DESTINATION src/ COMPONENT Headers)
---# install(DIRECTORY ../ DESTINATION src/
---#   # OPTIONAL
---#   COMPONENT Headers FILES_MATCHING
---#   PATTERN .git EXCLUDE
---#   PATTERN "*.h"
---#   )
---
-- set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Purple I2P, a C++ I2P daemon")
-- set(CPACK_PACKAGE_VENDOR "Purple I2P")
-- set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../README.md")
---- 
--2.14.3
--
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index 93e9070066..d56c9c1b47 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7e37abcf49e9f59ef6939069f4d74fc6bf29b09deec111bd3561021fc1349528  i2pd-2.31.0.tar.gz
-+sha256  64229101411a9dda3237dc27939aa13ec90d4900aae499e59931063c36e8556b  i2pd-2.32.1.tar.gz
- sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 0d2daa10f5..736794866d 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--I2PD_VERSION = 2.31.0
-+I2PD_VERSION = 2.32.1
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+* systemd-random-seed.service is now a synchronization point for full
+          initialization of the kernel's entropy pool. Services that require
+          /dev/urandom to be correctly initialized should be ordered after
+this
+          service.
+
+so... in that case it might make sense to add
+Before=systemd-random-seed.service
+(assuming that works. This a very early point, so it needs some testing)
+
+ [Service]
+>  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
+>  SuccessExitStatus=143
+>
+> I could not find any documentation on haveged return codes, so i'll trust
+you on that one
+
+>  [Install]
+> -WantedBy=multi-user.target
+> +WantedBy=sysinit.target
+> --
+> 2.26.2
+>
+> Apart from my earlier remark, you can add my ReviewedBy
+
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
 -- 
-2.26.2
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/ae7af58a/attachment.html>
