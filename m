@@ -1,47 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jun 2020 09:16:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gsettings-desktop-schemas: bump to
- version 3.36.1
-Message-ID: <20200607071628.3415014-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Jun 2020 09:27:08 +0200
+Subject: [Buildroot] [git commit] linux: rename config option
+Message-ID: <20200607072634.2E14284688@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash fle (two spaces)
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e3e939694c4777c5287e44e67772f4e5c043aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Commit a4eef9a3959 (linux: introduce BR2_KERNEL_DTB_KEEP_DIRNAME)
+introduced a new config option, but its name was not matching the
+naming-scheme of the other config options.
+
+Rename it.
+
+We don't need legacy handling, because that config option was added very
+recently and was never part of a release.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../gsettings-desktop-schemas.hash                          | 6 +++---
- .../gsettings-desktop-schemas/gsettings-desktop-schemas.mk  | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/Config.in | 2 +-
+ linux/linux.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-index c37b7377de..d530517cd1 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.33/gsettings-desktop-schemas-3.33.1.sha256sum
--sha256	bd337f13955856140fdbd3073c56d4adca20333f8bdac41e429c3dca4730cdff	gsettings-desktop-schemas-3.33.1.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.36/gsettings-desktop-schemas-3.36.1.sha256sum
-+sha256  004bdbe43cf8290f2de7d8537e14d8957610ca479a4fa368e34dbd03f03ec9d9  gsettings-desktop-schemas-3.36.1.tar.xz
+diff --git a/linux/Config.in b/linux/Config.in
+index 61e84f00b4..2af3a00352 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -407,7 +407,7 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	  You can provide a list of dts paths to copy and
+ 	  build, separated by spaces.
  
- # Hash for license file
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-index 90b945b7c7..d9b05ef392 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.33
-+GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.36
- GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).1
- GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
- GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
--- 
-2.26.2
+-config BR2_KERNEL_DTB_KEEP_DIRNAME
++config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
+ 	bool "Keep the directory name of the Device Tree"
+ 	help
+ 	  If enabled, the device tree blobs keep their
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c3859a59d5..b90b032bb9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -381,7 +381,7 @@ define LINUX_INSTALL_DTB
+ 	$(foreach dtb,$(LINUX_DTBS), \
+ 		install -D \
+ 			$(or $(wildcard $(LINUX_ARCH_PATH)/boot/dts/$(dtb)),$(LINUX_ARCH_PATH)/boot/$(dtb)) \
+-			$(1)/$(if $(BR2_KERNEL_DTB_KEEP_DIRNAME),$(dtb),$(notdir $(dtb)))
++			$(1)/$(if $(BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME),$(dtb),$(notdir $(dtb)))
+ 	)
+ endef
+ endif # BR2_LINUX_KERNEL_APPENDED_DTB
