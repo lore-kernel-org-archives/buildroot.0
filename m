@@ -1,66 +1,36 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 22:57:58 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dbus: remove /usr/lib/dbus-1.0
- if empty
-In-Reply-To: <20200607104549.420b50ff@windsurf>
-References: <20200605225247.13350-1-nolange79@gmail.com>
- <20200605225247.13350-2-nolange79@gmail.com>
- <20200606223808.5797eb98@windsurf>
- <CADYdroNQNLa3a2TkgJoPJgj460+XD7rRcwWYKaa_2bV9sqejGQ@mail.gmail.com>
- <20200607104549.420b50ff@windsurf>
-Message-ID: <CADYdroPdfDQn=9o0=D7GUqW1VuTbQ_ahdrhP0VSr-Q4F0-yAHw@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sun, 7 Jun 2020 23:19:50 +0200
+Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.3.3
+In-Reply-To: <873676abos.fsf@dell.be.48ers.dk>
+References: <20200607160305.110673-1-angelo@amarulasolutions.com>
+ <873676abos.fsf@dell.be.48ers.dk>
+Message-ID: <CA+_SqVbJ_veRsD9SK1g70+-4n4=9OcR+xh91d1NDrF+-2nj=8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 7. Juni 2020 um 10:45 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
+On Sun, Jun 7, 2020 at 10:00 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> writes:
 >
-> Hello Norbert,
+>  > This patch bumps python-can to version 3.3.3.
+>  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 >
-> On Sun, 7 Jun 2020 00:36:47 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
+> Committed, thanks.
 >
-> > > Your Signed-off-by is missing, and there is no commit log. We clearly
-> > > need a better explanation. And your commit title is wrong: you're not
-> > > just removing /usr/lib/dbus-1.0 is empty: you're changing from removing
-> > > it unconditionally to removing just /usr/lib/dbus-1.0/include and then
-> > > removing /usr/lib/dbus-1.0 if it's empty.
-> >
-> > Ok, gonna improve that in a v2 if you find no other objections
+> Is this something that needs to be backported to 2020.02 / 2020.05?
 >
-> My main objection is that we need a better commit log.
->
-> > > So it means that you have installed *something* in /usr/lib/dbus-1.0
-> > > that you want Buildroot to keep on the target. But what? This is not
-> > > explained in your commit log.
-> >
-> > I wrote this commit some months ago, would have to outright lie, but I
-> > think it was dbusbroker (patch on the ML).
-> > The basic gist is, that /usr/lib/dbus-1.0 is some sort of libexec dir
-> > (on Debian and Fedora AFAIK), and I believe dbusbroker installs it
-> > stuff there.
-> >
-> > What we really want is to remove the unneeded files (the includes),
-> > and the parent directory it is empty.
->
-> Could you verify what dbusbroker installs in this directory, explain
-> why it is relevant, and use that as a justification in the commit log ?
->
-> Thanks a lot!
->
-> Thomas
+
+Can't say for sure, changelog is still at version 3.2.0. I have to look a
+the commits.
+
+
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Well,
-
-turns out I was playing with libexec configuration, and dbus then
-places its helpers in /usr/lib/dbus-1.0.
-So, it's actually useless for the upstream buildroot (as you wont
-allow for libexec config), but it actually wont hurt either.
-Amended patch is following.
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/c2adcdb4/attachment.html>
