@@ -1,45 +1,56 @@
 From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 7 Jun 2020 13:09:23 +0200
-Subject: [Buildroot] [PATCH 01/10] package/systemd: move preset-all HOOK
- to fakeroot stage
-In-Reply-To: <20200206093633.251413-2-nolange79@gmail.com>
+Date: Sun, 7 Jun 2020 13:10:58 +0200
+Subject: [Buildroot] [PATCH 02/10] package/systemd: add libnss-systemd
+ to name resolution
+In-Reply-To: <20200206093633.251413-3-nolange79@gmail.com>
 References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-2-nolange79@gmail.com>
-Message-ID: <CAFvCimXcWJqe7oUKV0FsCk_=_RFRFtduG53=-1WxzP4vUEvxvg@mail.gmail.com>
+ <20200206093633.251413-3-nolange79@gmail.com>
+Message-ID: <CAFvCimV8L4aNeTx+4AShTtzD5LzOcOD4QQ5mvzx1-sE-D3rz0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LGTM
+I don't have enough knowledge of nss, to vet this patch, but
+adding nss-systemd in nsswitch by itself is a great idea
 
 Le jeu. 6 f?vr. 2020 ? 10:36, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-> User can drop in more systemd units or presets
-> in an rootfs overlay, which will be copied over *after*
-> the TARGET_FINALIZE_HOOKS are run.
->
-> Instead, run preset-all afterwards from ROOTFS_PRE_CMD_HOOKS
+> The feature DynamicUser creates users/groups without
+> touching the /etc/{passwd,group} files on disk.
+> Adding the dynamic resolver to /etc/nsswitch.conf
+> ensures the Names are resolved consistently.
 >
 > Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
->  package/systemd/systemd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/systemd/systemd.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
 > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 6e31a14ac3..05b07cfd1b 100644
+> index 05b07cfd1b..a390cdd1a9 100644
 > --- a/package/systemd/systemd.mk
 > +++ b/package/systemd/systemd.mk
-> @@ -490,7 +490,7 @@ endef
->  define SYSTEMD_PRESET_ALL
->         $(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
+> @@ -409,7 +409,15 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+>         touch $(TARGET_DIR)/etc/machine-id
 >  endef
-> -SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_PRESET_ALL
-> +SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
 >
->  SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
->  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+> +define SYSTEMD_ADD_NSSCONFIG_HOOK
+> +       grep >/dev/null '^passwd:.*systemd'
+> $(TARGET_DIR)/etc/nsswitch.conf || \
+> +               sed '/^passwd:/ s/$$/ systemd/'
+> $(TARGET_DIR)/etc/nsswitch.conf
+> +       grep >/dev/null '^group:.*systemd' $(TARGET_DIR)/etc/nsswitch.conf
+> || \
+> +               sed '/^group:/ s/$$/ systemd/'
+> $(TARGET_DIR)/etc/nsswitch.conf
+> +endef
+> +
+>  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+> +       SYSTEMD_ADD_NSSCONFIG_HOOK \
+>         SYSTEMD_INSTALL_INIT_HOOK \
+>         SYSTEMD_INSTALL_MACHINEID_HOOK \
+>         SYSTEMD_INSTALL_RESOLVCONF_HOOK
 > --
 > 2.24.1
 >
@@ -71,4 +82,4 @@ Architecte technique
 <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/50da848b/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/7428896a/attachment.html>
