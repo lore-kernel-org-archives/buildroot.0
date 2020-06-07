@@ -1,40 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Jun 2020 09:00:51 +0200
-Subject: [Buildroot] [git commit] gitlab-ci: regenerate after
- freescale_imx8mnevk_defconfig addition
-Message-ID: <20200607070058.1C00882AA1@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 07 Jun 2020 10:06:16 +0300
+Subject: [Buildroot] [git commit branch/trash] package/librsvg: add
+ gobject-introspection support
+In-Reply-To: <20200607065638.2756F8453F@busybox.osuosl.org>
+References: <20200607065638.2756F8453F@busybox.osuosl.org>
+Message-ID: <874krnjqxj.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e31f462a1e10287d3f75218e4d8f4233106f305a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-Fixes: 2c01eeece96ce449163e066566c787bfc2a10651
+On Sun, Jun 07 2020, Yann E. MORIN wrote:
 
-https://gitlab.com/buildroot.org/buildroot/-/jobs/584436394
+> commit: https://git.buildroot.net/buildroot/commit/?id=f7402a7ae7e63b956b6ca2b2f517c1b238f24bb6
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/trash
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .gitlab-ci.yml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What is this 'trash' branch?
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 4642c3065c..951f843cf2 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -187,10 +187,10 @@ freescale_imx6sxsabresd_defconfig: { extends: .defconfig }
- freescale_imx6ullevk_defconfig: { extends: .defconfig }
- freescale_imx7dsabresd_defconfig: { extends: .defconfig }
- freescale_imx8mmevk_defconfig: { extends: .defconfig }
-+freescale_imx8mnevk_defconfig: { extends: .defconfig }
- freescale_imx8mqevk_defconfig: { extends: .defconfig }
- freescale_imx8qmmek_defconfig: { extends: .defconfig }
- freescale_imx8qxpmek_defconfig: { extends: .defconfig }
--freescale_imx8mnevk_defconfig: { extends: .defconfig }
- freescale_p1025twr_defconfig: { extends: .defconfig }
- freescale_t1040d4rdb_defconfig: { extends: .defconfig }
- freescale_t2080_qds_rdb_defconfig: { extends: .defconfig }
+I see this and the libvips commits in master.
+
+baruch
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  package/librsvg/librsvg.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+> index 470910d94c..e124fdd5d3 100644
+> --- a/package/librsvg/librsvg.mk
+> +++ b/package/librsvg/librsvg.mk
+> @@ -10,7 +10,7 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_
+>  LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+>  LIBRSVG_INSTALL_STAGING = YES
+>  LIBRSVG_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+> -LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
+> +LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
+>  HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+>  LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
+>  	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3) \
+> @@ -19,5 +19,12 @@ HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libcroco host-libgli
+>  LIBRSVG_LICENSE = LGPL-2.0+
+>  LIBRSVG_LICENSE_FILES = COPYING.LIB
+>  
+> +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> +LIBRSVG_CONF_OPTS += --enable-introspection
+> +LIBRSVG_DEPENDENCIES += gobject-introspection
+> +else
+> +LIBRSVG_CONF_OPTS += --disable-introspection
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
