@@ -1,49 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Jun 2020 10:53:15 +0200
-Subject: [Buildroot] [PATCH] package/libxml-parser-perl: make host build
- use correct compiler
-In-Reply-To: <CADYdroM-KRu5foedcafU8WogfgEJCmMQbk5XYgMv2dDrkf2y7g@mail.gmail.com>
-References: <20200605225812.13944-1-nolange79@gmail.com>
- <20200606220456.12fed0b1@windsurf>
- <CADYdroM-KRu5foedcafU8WogfgEJCmMQbk5XYgMv2dDrkf2y7g@mail.gmail.com>
-Message-ID: <20200607105315.5488ddf4@windsurf>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 7 Jun 2020 10:53:27 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/acpica: bump version to
+ 20200528
+In-Reply-To: <20200607081049.GN13972@scaer>
+References: <20200607073610.16911-1-heiko.thiery@gmail.com>
+ <20200607081049.GN13972@scaer>
+Message-ID: <CAEyMn7Z9JLr45ohhGdr4pumnA_qZJW=9MMzdG6sQrz1hDmmpLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 7 Jun 2020 00:29:59 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+Hi Yann, All,
 
-> > How is it possible for the host and target compilers to have the same
-> > file name ?  
-> 
-> I use crosstool for a x86_64 target compiler, same architecture as my
-> desktop pc.
+Am So., 7. Juni 2020 um 10:10 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Heiko, All,
+>
+> On 2020-06-07 09:36 +0200, Heiko Thiery spake thusly:
+> > - Update the hash file to the new 2 spaces convention
+> > - Update the hash of the license file
+>
+> We have hashes of license files because we want to be able to detect the
+> changes, so we can update the licensing information. So, just updating
+> the hash without saying what changed is side-stepping the very purpose
+> of the licenses' hash files.
 
-That is still weird: the native compiler on your system is normally
-called "gcc", while the compiler in your toolchain is generally named
-x86_64-linux-gcc or some variation on that.
+Ups. You're right .. that was my fault and I did a too fast bump to
+new version without think about that ;-(
 
-Even though your patch is definitely correct, I'd like to understand
-how you fall into this situation. Indeed, I'm pretty sure several other
-host packages might be affected, and if this is a valid situation, we
-should see if there's a way to test it in our autobuilders.
+> The explanation may well be just (e.g.):
+>
+>   - copyright year changed in license file; update corresponding hashes
+>
+> Also, see below...
+>
+> > Fixes:
+> > http://autobuild.buildroot.net/results/fe58e834bb67a9aab640e1d913588b47eaf7e4f5/
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > ---
+> >  package/acpica/acpica.hash | 4 ++--
+> >  package/acpica/acpica.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+> > index ac2201d570..961ee9dbe3 100644
+> > --- a/package/acpica/acpica.hash
+> > +++ b/package/acpica/acpica.hash
+> > @@ -1,3 +1,3 @@
+> >  # locally computed hash
+> > -sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
+> > -sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
+> > +sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
+> > +sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
+> > diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+> > index 68b948c86d..8f1a36fbb7 100644
+> > --- a/package/acpica/acpica.mk
+> > +++ b/package/acpica/acpica.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >
+> > -ACPICA_VERSION = 20191018
+> > +ACPICA_VERSION = 20200528
+> >  ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+>
+> As per upstream:
+>
+>     Important Note: The unix2 source package is deprecated since the
+>     dual-license is now included in all source modules (along with the
+>     Intel license). This package will be removed from future ACPICA
+>     releases.
+>
+> So, what should we do with that?
 
-> On an not entirely unrelated note, I got troubles getting into patchwork,
-> did reset my PW 2-3 time, still can't log in. Is there some hidden 8
-> letter limit or similar?
+I have to admit I'm not sure. Just tried to fix the autobuilder build
+fail ;-) Nevertheless I will take a look again on that.
 
-I don't think there is such a limitation. This patchwork instance is
-not always super stable, yesterday we had 500 errors for a few moments
-for example. If you have issues, we can contact the admins of the
-instance and see if they can have a look.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  ACPICA_SITE = https://acpica.org/sites/acpica/files
+> >  ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Heiko
