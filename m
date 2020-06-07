@@ -1,195 +1,111 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 7 Jun 2020 21:31:53 +0200
-Subject: [Buildroot] [PATCH 4/4] package/openssh: add sd
- socket-activated ssh daemon services
-In-Reply-To: <CADYdroPgiZyWpMXW5x082G6hS+E8nT-3snbYCrPeZ1rYt2BYgw@mail.gmail.com>
-References: <20200605225905.14082-1-nolange79@gmail.com>
- <20200605225905.14082-4-nolange79@gmail.com>
- <CAFvCimXvo_pXCk8B8S13W7av52AvCsRQc2nA1eTFff=XQU4M5g@mail.gmail.com>
- <CADYdroPgiZyWpMXW5x082G6hS+E8nT-3snbYCrPeZ1rYt2BYgw@mail.gmail.com>
-Message-ID: <CAFvCimXg6NsWyufFX3XnyVsP6=vRpeh--+wTzv4unmernjZQOA@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sun, 7 Jun 2020 21:35:36 +0200
+Subject: [Buildroot] [PATCH 02/10] package/systemd: add libnss-systemd
+ to name resolution
+In-Reply-To: <20200607114042.GP13972@scaer>
+References: <20200206093633.251413-1-nolange79@gmail.com>
+ <20200206093633.251413-3-nolange79@gmail.com>
+ <20200607114042.GP13972@scaer>
+Message-ID: <CADYdroO0cjnrr_dfUaB=W-Mdn=oqYxsGBdabYs+dVZkAdKXSeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 7 juin 2020 ? 21:11, Norbert Lange <nolange79@gmail.com> a ?crit :
-
-> Am So., 7. Juni 2020 um 13:07 Uhr schrieb J?r?my ROSEN <
-> jeremy.rosen at smile.fr>:
-> >
-> >
-> >
-> > Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a
-> ?crit :
-> >>
-> >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> >> ---
-> >>  package/openssh/openssh.mk               |  6 +++---
-> >>  package/openssh/sshd-host-keygen.service |  2 +-
-> >>  package/openssh/sshd.socket              | 11 +++++++++++
-> >>  package/openssh/sshd at .service            | 10 ++++++++++
-> >>  4 files changed, 25 insertions(+), 4 deletions(-)
-> >>  create mode 100644 package/openssh/sshd.socket
-> >>  create mode 100644 package/openssh/sshd at .service
-> >>
-> >> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> >> index 6b3ee1f5f4..1f2638e9c9 100644
-> >> --- a/package/openssh/openssh.mk
-> >> +++ b/package/openssh/openssh.mk
-> >> @@ -114,9 +114,9 @@ endef
-> >>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
-> >>
-> >>  define OPENSSH_INSTALL_INIT_SYSTEMD
-> >> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
-> >> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
-> >> -               $(TARGET_DIR)/usr/lib/systemd/system/
-> >> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
-> >> +       $(INSTALL) -m 644 package/openssh/sshd*.service
-> package/openssh/sshd.socket \
-> >> +               $(TARGET_DIR)/usr/lib/systemd/system/.
-> >>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
-> >>  endef
-> >>
-> >> diff --git a/package/openssh/sshd-host-keygen.service
-> b/package/openssh/sshd-host-keygen.service
-> >> index 058e671c44..ffde622b01 100644
-> >> --- a/package/openssh/sshd-host-keygen.service
-> >> +++ b/package/openssh/sshd-host-keygen.service
-> >> @@ -17,4 +17,4 @@ Type=oneshot
-> >>  RemainAfterExit=yes
-> >>
-> >>  [Install]
-> >> -WantedBy=sshd.service
-> >> +WantedBy=sshd.service sshd.socket
-> >> diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
-> >> new file mode 100644
-> >> index 0000000000..bbae9ed7aa
-> >> --- /dev/null
-> >> +++ b/package/openssh/sshd.socket
-> >> @@ -0,0 +1,11 @@
-> >> +[Unit]
-> >> +Description=OpenBSD Secure Shell server socket
-> >> +Before=sshd.service
-> >> +Conflicts=sshd.service
-> >
-> > No, that would stop the socket when the service is started, and you
-> don't want that.
-> > If you do that, only one connection would be accepted before the socket
-> is stoped
-> > and since you have accept=yes no further connections would be accepted
+Am So., 7. Juni 2020 um 13:40 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
 >
-> there is the singular sshd service
-> and the sshd.socket which spawns sshd@ instance services.
-> Those are mutually exclusive (because of the "Conflicts"), the
-> "Before" line just ensures that the sshd.socket wins out by default.
+> Nrobert, All,
 >
+> On 2020-02-06 10:36 +0100, Norbert Lange spake thusly:
+> > The feature DynamicUser creates users/groups without
+> > touching the /etc/{passwd,group} files on disk.
+> > Adding the dynamic resolver to /etc/nsswitch.conf
+> > ensures the Names are resolved consistently.
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> >  package/systemd/systemd.mk | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > index 05b07cfd1b..a390cdd1a9 100644
+> > --- a/package/systemd/systemd.mk
+> > +++ b/package/systemd/systemd.mk
+> > @@ -409,7 +409,15 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+> >       touch $(TARGET_DIR)/etc/machine-id
+> >  endef
+> >
+> > +define SYSTEMD_ADD_NSSCONFIG_HOOK
+> > +     grep >/dev/null '^passwd:.*systemd' $(TARGET_DIR)/etc/nsswitch.conf || \
 >
-aah right, I messed up sshd.service and sshd at .service in my head.
-my bad.
-
-I personally think we shouldn't install both methods.
-either choose a distro-wide decision or provide a config option
-
-Anyway, I see what you are doing now, and that should work, AFAICT.
-
-I still think that it's cool that openssh supports all those startup
-methods,
-but I'm not convinced we need to support all of them in BR.
-
-Thoughts ?
-
-Regards
-Jeremy
-
-> >
-> >>
-> >> +
-> >> +[Socket]
-> >> +ListenStream=22
-> >> +Accept=yes
-> >> +
-> >> +[Install]
-> >> +WantedBy=sockets.target
-> >> diff --git a/package/openssh/sshd at .service b/package/openssh/sshd@
-> .service
-> >> new file mode 100644
-> >> index 0000000000..b3a590d9a3
-> >> --- /dev/null
-> >> +++ b/package/openssh/sshd at .service
-> >> @@ -0,0 +1,10 @@
-> >> +[Unit]
-> >> +Description=OpenBSD Secure Shell server per-connection daemon
-> >> +Documentation=man:sshd(8) man:sshd_config(5)
-> >> +After=auditd.service
-> >> +
-> >> +[Service]
-> >> +ExecStart=-/usr/sbin/sshd -i
-> >> +StandardInput=socket
-> >> +RuntimeDirectory=sshd
-> >> +RuntimeDirectoryMode=0755
-> >
-> >
-> > I am a bit confused, you have both an ssh.service and a ssh.socket+ssh@
-> .service
-> > Wouldn't those two fight over port 22 ?
+> While this is valid sytx, we customarily put the redirection at the end
+> of the command.
 >
-> No, on a fresh installation, the socket will be started, the sshd
-> service will not because of the "Conflicts".
-> if you manually enable/start the sshd.service then the socket will be
-> shutdown first.
+> However, in this case, you would want to use 'grep -q', as that does not
+> output anything.
+
+I will do if thats preferred, but I usually redirect because
+
+"Portable shell scripts should avoid both -q and -s and should
+redirect standard and error output to /dev/null instead."
+(https://www.gnu.org/software/grep/manual/html_node/General-Output-Control.html)
+
 >
-> >
-> >
-> >
-> >>
-> >> --
-> >> 2.26.2
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
+> > +             sed '/^passwd:/ s/$$/ systemd/' $(TARGET_DIR)/etc/nsswitch.conf
+>
+> How can that even work? By default, sed will out put to stdout, not
+> replace in-place.
+
+Excellent point.
+
+>
+> This clearly has not been tested (or git-commit --amend was forgotten).
+
+It's tested in a way, that I have the resulting file in the rootfs overlay ;)
+
+>
+> In this case, you want to use $(SED) that includes the -i option to do
+> in-place modifications.
+>
+> > +     grep >/dev/null '^group:.*systemd' $(TARGET_DIR)/etc/nsswitch.conf || \
+>
+> Ditto grep -q.
+>
+> > +             sed '/^group:/ s/$$/ systemd/' $(TARGET_DIR)/etc/nsswitch.conf
+>
+> Ditto $(SED).
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > +endef
+> > +
+> >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+> > +     SYSTEMD_ADD_NSSCONFIG_HOOK \
+> >       SYSTEMD_INSTALL_INIT_HOOK \
+> >       SYSTEMD_INSTALL_MACHINEID_HOOK \
+> >       SYSTEMD_INSTALL_RESOLVCONF_HOOK
 > > --
+> > 2.24.1
 > >
-> >
-> > 20 rue des Jardins
-> > 92600 Asni?res-sur-Seine
-> >
-> > J?r?my ROSEN
-> > Architecte technique
-> >
-> >  jeremy.rosen at smile.fr
-> >   +33 6 88 25 87 42
-> >  http://www.smile.eu
 >
-> Norbert
->
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+Come to think of it, systemd comes with 4 or so nss plugins, maybe
+it's a better approach
+to have a fully featured nsswitch.conf in the skeleton and then cut
+out the plugins that are NOT built?
+Or use the one from systemd (source: factory/etc/nsswitch.conf), after
+a sed 's,compat,files,g'
 
 
--- 
-[image: SMILE]  <http://www.smile.eu/>
 
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/a3eff4e2/attachment.html>
+Norbert
