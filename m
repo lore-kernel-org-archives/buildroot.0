@@ -1,104 +1,72 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun,  7 Jun 2020 19:02:38 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-web2py: bump version to
- 2.20.4
-In-Reply-To: <20200607170238.194921-1-angelo@amarulasolutions.com>
-References: <20200607170238.194921-1-angelo@amarulasolutions.com>
-Message-ID: <20200607170238.194921-2-angelo@amarulasolutions.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  7 Jun 2020 19:44:48 +0200
+Subject: [Buildroot] [PATCH 0/3] dus-borker: new package (branch
+ yem/dbus-broker)
+Message-ID: <cover.1591551884.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps ptyhon-web2py to version 2.20.4
+Hello All!
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- ...py-import-escape-from-html-instead-o.patch | 49 -------------------
- package/python-web2py/python-web2py.hash      |  2 +-
- package/python-web2py/python-web2py.mk        |  4 +-
- 3 files changed, 3 insertions(+), 52 deletions(-)
- delete mode 100644 package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
+This series is a rework of the original submission by Norbert, to add
+dbus-broker and make use of it as a message us daemon for use with
+systemd.
 
-diff --git a/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch b/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
-deleted file mode 100644
-index d6321e5592..0000000000
---- a/package/python-web2py/0001-gluon-languages.py-import-escape-from-html-instead-o.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From cf3c8e6ac8c428151dc191510554b4ee2705958d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 30 Oct 2019 10:08:35 +0100
--Subject: [PATCH] gluon/languages.py: import escape from html instead of cgi
--
--import escape from html and fallback on current import from cgi to fix
--the following build failure with python 3.8:
--
--/home/buildroot/autobuild/run/instance-2/output-1/host/bin/python -c 'import os; os.chdir("/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2"); from gluon.main import save_password; save_password("web2py",8000)'
--Traceback (most recent call last):
--  File "<string>", line 1, in <module>
--  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/__init__.py", line 34, in <module>
--    from .globals import current
--  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/globals.py", line 24, in <module>
--    from gluon.serializers import json, custom_json
--  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/serializers.py", line 10, in <module>
--    from gluon.languages import lazyT
--  File "/home/buildroot/autobuild/run/instance-2/output-1/build/python-web2py-2.17.2/gluon/languages.py", line 19, in <module>
--    from cgi import escape
--ImportError: cannot import name 'escape' from 'cgi' (/home/buildroot/autobuild/run/instance-2/output-1/host/lib/python3.8/cgi.py)
--
--Fixes:
-- - http://autobuild.buildroot.org/results/fa515627ae888d08fc10074e8d9f6e9dbede91a7
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/web2py/web2py/pull/2272]
-----
-- gluon/languages.py | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/gluon/languages.py b/gluon/languages.py
--index 9ed60f9c..554d7339 100644
----- a/gluon/languages.py
--+++ b/gluon/languages.py
--@@ -16,7 +16,10 @@ import re
-- import sys
-- import pkgutil
-- import logging
---from cgi import escape
--+try:
--+    from html import escape
--+except ImportError:
--+    from cgi import escape
-- from threading import RLock
-- 
-- from pydal._compat import copyreg, PY2, maketrans, iterkeys, unicodeT, to_unicode, to_bytes, iteritems, to_native, pjoin
---- 
--2.23.0
--
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index 57ac02c2a9..4ff85668a1 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256 8205a7a08595ca1a41919750a8dc4e431258966cb46c8021564b25003cf90863  python-web2py-2.17.2.tar.gz
-+sha256 e3f05266b4b97650b76bfb85028df5e2194955674c9b98cfc065c72ed5791690  python-web2py-2.20.4.tar.gz
- sha256 2aae96826184a492bc799add49aed7b29036e7aba2d2294fb65053bd30fe55fe  LICENSE
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 8706c87968..9aebf4d19d 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_WEB2PY_VERSION = 2.17.2
--PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,R-$(PYTHON_WEB2PY_VERSION))
-+PYTHON_WEB2PY_VERSION = 2.20.4
-+PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
- PYTHON_WEB2PY_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python) \
+I (Yann) have reorganised the package, and fixed various issues, and
+finally introduced run-time tests.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 65b63785a642bbc565924edf365b5d7c080f961c
+
+  package/systemd: move preset-all HOOK to fakeroot stage (2020-06-07 13:45:38 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to f95931fc0eccd42e1aedeb83187ee01098903e3a
+
+  support/run-test: add test for systemd using dbus-broker (2020-06-07 19:44:37 +0200)
+
+
+----------------------------------------------------------------
+Norbert Lange (1):
+      package/dbusbroker: new package
+
+Yann E. MORIN (2):
+      package/systemd: do not force dbus if dbus-broker is available
+      support/run-test: add test for systemd using dbus-broker
+
+ DEVELOPERS                                 |   1 +
+ package/Config.in                          |   1 +
+ package/dbus-broker/Config.in              |  21 +++++
+ package/dbus-broker/dbus-broker.hash       |   3 +
+ package/dbus-broker/dbus-broker.mk         |  71 +++++++++++++++++
+ package/dbus-broker/dbus.socket            |   5 ++
+ package/dbus-broker/session.conf           |  65 ++++++++++++++++
+ package/dbus-broker/system.conf            | 120 +++++++++++++++++++++++++++++
+ package/systemd/Config.in                  |   2 +-
+ support/testing/tests/init/test_systemd.py |  28 +++++++
+ 10 files changed, 316 insertions(+), 1 deletion(-)
+ create mode 100644 package/dbus-broker/Config.in
+ create mode 100644 package/dbus-broker/dbus-broker.hash
+ create mode 100644 package/dbus-broker/dbus-broker.mk
+ create mode 100644 package/dbus-broker/dbus.socket
+ create mode 100644 package/dbus-broker/session.conf
+ create mode 100644 package/dbus-broker/system.conf
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
