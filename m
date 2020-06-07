@@ -1,10 +1,11 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 20:12:35 +0200
-Subject: [Buildroot] [PATCH 0/3] dus-borker: new package (branch
- yem/dbus-broker)
-In-Reply-To: <cover.1591551884.git.yann.morin.1998@free.fr>
+Date: Sun, 7 Jun 2020 20:18:38 +0200
+Subject: [Buildroot] [PATCH 2/3] package/systemd: do not force dbus if
+ dbus-broker is available
+In-Reply-To: <1a991eb7b9305597080a0506302667dfb10de018.1591551884.git.yann.morin.1998@free.fr>
 References: <cover.1591551884.git.yann.morin.1998@free.fr>
-Message-ID: <CADYdroME33bfcew=STjg8Udmn0ZLgTSAAZ=T8Gy2hkTe-BBu7g@mail.gmail.com>
+ <1a991eb7b9305597080a0506302667dfb10de018.1591551884.git.yann.morin.1998@free.fr>
+Message-ID: <CADYdroN2hTCZVdHJb3NVLd_diGk8F_EbMJr0-OrQtvz4qTGrUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,79 +15,45 @@ To: buildroot@busybox.net
 Am So., 7. Juni 2020 um 19:44 Uhr schrieb Yann E. MORIN
 <yann.morin.1998@free.fr>:
 >
-> Hello All!
->
-> This series is a rework of the original submission by Norbert, to add
-> dbus-broker and make use of it as a message us daemon for use with
-> systemd.
->
-> I (Yann) have reorganised the package, and fixed various issues, and
-> finally introduced run-time tests.
+> dbus-broker fits the bill as a message bus daemon, so only enable the
+> original dbus if dbus-broker is not enabled.
 
-Well, nice but a warning would've been nice. This mailing list
-discussions and patch schemes are not what I am used to doing,
-and I am currently rebasing and reworking a dozen of patches.
+Well, the core components of systemd run fine without dbus(-broker). I
+have such a setup with systemd + journald + networkd (and most of util
+linux removed) running since months.
+Rule of the thumb is that you dont need dbus(-broker) unless you need
+to interact with non-root (ie. logind) or non-local stuff
+(containerd).
 
-I worked your feedback into my patch, as the last 2 commits at:
-https://github.com/nolange/buildroot/commits/add_dbusbroker
+Changes are at (not rebased, kept that one for last)
+https://github.com/nolange/buildroot/commits/improve_systemd_nodbus
 
->
->
-> Regards,
-> Yann E. MORIN.
->
->
-> The following changes since commit 65b63785a642bbc565924edf365b5d7c080f961c
->
->   package/systemd: move preset-all HOOK to fakeroot stage (2020-06-07 13:45:38 +0200)
->
->
-> are available in the git repository at:
->
->   git://git.buildroot.org/~ymorin/git/buildroot.git
->
-> for you to fetch changes up to f95931fc0eccd42e1aedeb83187ee01098903e3a
->
->   support/run-test: add test for systemd using dbus-broker (2020-06-07 19:44:37 +0200)
-
-Now, after buildroot master and my patches there's another source.
-I would have preferred getting the package done first, even if it's
-not perfectly integrated (or not at all) into systemd and runtime
-tests.
-
+This to me would be the minimal "buildroot approach" (at the cost of
+messing up if eg. busybox doesn't provide a few tools), but I
+obviously can't speak for the maintainers.
 
 >
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/systemd/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> ----------------------------------------------------------------
-> Norbert Lange (1):
->       package/dbusbroker: new package
->
-> Yann E. MORIN (2):
->       package/systemd: do not force dbus if dbus-broker is available
->       support/run-test: add test for systemd using dbus-broker
->
->  DEVELOPERS                                 |   1 +
->  package/Config.in                          |   1 +
->  package/dbus-broker/Config.in              |  21 +++++
->  package/dbus-broker/dbus-broker.hash       |   3 +
->  package/dbus-broker/dbus-broker.mk         |  71 +++++++++++++++++
->  package/dbus-broker/dbus.socket            |   5 ++
->  package/dbus-broker/session.conf           |  65 ++++++++++++++++
->  package/dbus-broker/system.conf            | 120 +++++++++++++++++++++++++++++
->  package/systemd/Config.in                  |   2 +-
->  support/testing/tests/init/test_systemd.py |  28 +++++++
->  10 files changed, 316 insertions(+), 1 deletion(-)
->  create mode 100644 package/dbus-broker/Config.in
->  create mode 100644 package/dbus-broker/dbus-broker.hash
->  create mode 100644 package/dbus-broker/dbus-broker.mk
->  create mode 100644 package/dbus-broker/dbus.socket
->  create mode 100644 package/dbus-broker/session.conf
->  create mode 100644 package/dbus-broker/system.conf
->
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index dd3b8c534d..37f9d04850 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -25,7 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>         depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+>         select BR2_PACKAGE_HAS_UDEV
+> -       select BR2_PACKAGE_DBUS # runtime dependency only
+> +       select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
+>         select BR2_PACKAGE_LIBCAP
+>         select BR2_PACKAGE_UTIL_LINUX
+>         select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> 2.20.1
+>
+
+Norbert
