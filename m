@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jun 2020 22:04:14 +0200
-Subject: [Buildroot] [git commit] package/znc: security bump version to 1.8.1
-Message-ID: <20200607200416.EDDEA814C6@busybox.osuosl.org>
+Date: Sun, 7 Jun 2020 21:58:29 +0200
+Subject: [Buildroot] [git commit] configs/imx7dpico: Bump Kernel version
+Message-ID: <20200607200416.6A21D814C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a924b350d6214cd89037b82f198b401df749cf1
+commit: https://git.buildroot.net/buildroot/commit/?id=2a81aec18c44450a15c39cd9fdf5017f98da4290
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://wiki.znc.in/ChangeLog/1.8.1
+Bump kernel to version 5.7.1
 
-Fixes CVE-2020-13775.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/znc/znc.hash | 2 +-
- package/znc/znc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/imx7dpico_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index 137829ee52..2f6c7d51de 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  94fdb227c1afa3abff468e0b7b1309120ad99d6aa64c4fd35bef02928171bd54  znc-1.8.0.tar.gz
-+sha256  3195f7614a800a843af12271593d39cd3eb40c15657cce56d9cf28754cd86141  znc-1.8.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 95302071e1..1c95397c65 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+index b4a539b8e1..a3c2af1641 100644
+--- a/configs/imx7dpico_defconfig
++++ b/configs/imx7dpico_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
--ZNC_VERSION = 1.8.0
-+ZNC_VERSION = 1.8.1
- ZNC_SITE = http://znc.in/releases/archive
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
+-# Linux headers same as kernel, a 5.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++# Linux headers same as kernel, a 5.7 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
