@@ -1,91 +1,90 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jun 2020 10:01:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/c-periphery: disable tests
-Message-ID: <20200607080124.3449783-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Jun 2020 10:10:49 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/acpica: bump version to
+ 20200528
+In-Reply-To: <20200607073610.16911-1-heiko.thiery@gmail.com>
+References: <20200607073610.16911-1-heiko.thiery@gmail.com>
+Message-ID: <20200607081049.GN13972@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to disable tests, it should be noted that -DBUILD_TESTS=OFF
-is already passed by cmake-infrastructure
+Heiko, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/6bbc4de3f857dcb7ff5e6f9fa1441ba4e0af1338
+On 2020-06-07 09:36 +0200, Heiko Thiery spake thusly:
+> - Update the hash file to the new 2 spaces convention
+> - Update the hash of the license file
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...MakeLists.txt-add-BUILD_TESTS-option.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
+We have hashes of license files because we want to be able to detect the
+changes, so we can update the licensing information. So, just updating
+the hash without saying what changed is side-stepping the very purpose
+of the licenses' hash files.
 
-diff --git a/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch b/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
-new file mode 100644
-index 0000000000..f932ec6366
---- /dev/null
-+++ b/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
-@@ -0,0 +1,61 @@
-+From 7b3f137af40f4355404c146af7d9764c961a2fc7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 7 Jun 2020 09:46:10 +0200
-+Subject: [PATCH] CMakeLists.txt: add BUILD_TESTS option
-+
-+Add an option to enable or disable tests. This will allow the user to
-+build c-periphery without threads and will avoid the following build
-+failure:
-+
-+[ 68%] Building C object CMakeFiles/test_serial.dir/tests/test_serial.c.o
-+/data/buildroot/buildroot-test/instance-0/output/build/c-periphery-2.2.1/tests/test_gpio_sysfs.c:13:10: fatal error: pthread.h: No such file or directory
-+ #include <pthread.h>
-+          ^~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6bbc4de3f857dcb7ff5e6f9fa1441ba4e0af1338
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/vsergeev/c-periphery/pull/26]
-+---
-+ CMakeLists.txt | 20 ++++++++++++--------
-+ 1 file changed, 12 insertions(+), 8 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index f442bce..6565557 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,6 +1,8 @@
-+ cmake_minimum_required(VERSION 2.6)
-+ project(periphery C)
-+ 
-++option(BUILD_TESTS "Build tests" ON)
-++
-+ # Check for Linux kernel headers
-+ include(CheckIncludeFiles)
-+ CHECK_INCLUDE_FILES(linux/gpio.h HAVE_LINUX_HEADERS)
-+@@ -44,11 +46,13 @@ install(TARGETS periphery DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+ install(FILES ${periphery_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-+ install(FILES ${CMAKE_BINARY_DIR}/libperiphery.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-+ 
-+-# Declare tests targets
-+-foreach(TEST_SOURCE ${periphery_TESTS})
-+-    get_filename_component(TEST_PROGRAM ${TEST_SOURCE} NAME_WE)
-+-    add_executable(${TEST_PROGRAM} ${TEST_SOURCE})
-+-    target_link_libraries(${TEST_PROGRAM} periphery pthread)
-+-    set(TEST_PROGRAMS ${TEST_PROGRAMS} ${TEST_PROGRAM})
-+-endforeach()
-+-add_custom_target(tests DEPENDS periphery ${TEST_PROGRAMS})
-++if(BUILD_TESTS)
-++    # Declare tests targets
-++    foreach(TEST_SOURCE ${periphery_TESTS})
-++        get_filename_component(TEST_PROGRAM ${TEST_SOURCE} NAME_WE)
-++        add_executable(${TEST_PROGRAM} ${TEST_SOURCE})
-++        target_link_libraries(${TEST_PROGRAM} periphery pthread)
-++        set(TEST_PROGRAMS ${TEST_PROGRAMS} ${TEST_PROGRAM})
-++    endforeach()
-++    add_custom_target(tests DEPENDS periphery ${TEST_PROGRAMS})
-++endif()
-+-- 
-+2.26.2
-+
+The explanation may well be just (e.g.):
+
+  - copyright year changed in license file; update corresponding hashes
+
+Also, see below...
+
+> Fixes:
+> http://autobuild.buildroot.net/results/fe58e834bb67a9aab640e1d913588b47eaf7e4f5/
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/acpica/acpica.hash | 4 ++--
+>  package/acpica/acpica.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+> index ac2201d570..961ee9dbe3 100644
+> --- a/package/acpica/acpica.hash
+> +++ b/package/acpica/acpica.hash
+> @@ -1,3 +1,3 @@
+>  # locally computed hash
+> -sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
+> -sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
+> +sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
+> +sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
+> diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+> index 68b948c86d..8f1a36fbb7 100644
+> --- a/package/acpica/acpica.mk
+> +++ b/package/acpica/acpica.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ACPICA_VERSION = 20191018
+> +ACPICA_VERSION = 20200528
+>  ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+
+As per upstream:
+
+    Important Note: The unix2 source package is deprecated since the
+    dual-license is now included in all source modules (along with the
+    Intel license). This package will be removed from future ACPICA
+    releases.
+
+So, what should we do with that?
+
+Regards,
+Yann E. MORIN.
+
+>  ACPICA_SITE = https://acpica.org/sites/acpica/files
+>  ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
