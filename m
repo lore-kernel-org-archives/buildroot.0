@@ -1,55 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 7 Jun 2020 11:12:29 +0200
-Subject: [Buildroot] [git commit] package/go: bump version to 1.13.12
-Message-ID: <20200607091236.4B25F84657@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: security bump to
+ version 19.03.11
+Message-ID: <20200607091236.54CB780E37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cbb3dd94ec24929d937a95a57d9a5d54b9d444d
+commit: https://git.buildroot.net/buildroot/commit/?id=b73b3835f4a287d20d3c83a5e4587f9c56df5393
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-go1.13.9 (released 2020/03/19) includes fixes to the go command, tools, the
-runtime, the toolchain, and the crypto/cypher package.
+Fixes the following security issues:
 
-go1.13.10 (released 2020/04/08) includes fixes to the go command, the runtime,
-and the os/exec and time packages.
+- CVE-2020-13401: Disable IPv6 Router Advertisements to prevent address
+  spoofing
+  An attacker in a container, with the CAP_NET_RAW capability, can craft
+  IPv6 router advertisements, and consequently spoof external IPv6 hosts,
+  obtain sensitive information, or cause a denial of service.
 
-go1.13.11 (released 2020/05/14) includes fixes to the compiler.
+In addition, 19.03.9..11 fixes a number of issues. For details, see:
 
-go1.13.12 (released 2020/06/01) includes fixes to the runtime, and the go/types
-and math/big packages.
-
-Release notes: https://golang.org/doc/go1.13
+https://docs.docker.com/engine/release-notes/
 
 Signed-off-by: Christian Stewart <christian@paral.in>
+[Peter: mention security impact, extend commit message]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index dc966e85d2..a874345762 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index c23eea90a8..99159f9376 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	b13bf04633d4d8cf53226ebeaace8d4d2fd07ae6fa676d0844a688339debec34  go1.13.8.src.tar.gz
-+sha256	17ba2c4de4d78793a21cc659d9907f4356cd9c8de8b7d0899cdedcef712eba34  go1.13.12.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 376c3db7f0..dd15ed5168 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Locally calculated
+-sha256	13ec45ad45091111bd566aca9d81989b3f05e0625dab68d33c3ad81ff924172f  docker-engine-19.03.8.tar.gz
++sha256	5ff62d7b3638a275b2c459e53a4d1a7a8fb03dde8305defcd55e05e059e5618d  docker-engine-19.03.11.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 78f6c1261c..2f622014ba 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.13.8
-+GO_VERSION = 1.13.12
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+-DOCKER_ENGINE_VERSION = 19.03.8
++DOCKER_ENGINE_VERSION = 19.03.11
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
  
+ DOCKER_ENGINE_LICENSE = Apache-2.0
