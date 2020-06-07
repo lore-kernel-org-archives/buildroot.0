@@ -1,50 +1,89 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Sun,  7 Jun 2020 17:06:14 +0200
-Subject: [Buildroot] [PATCH 5/5] configs/stm32mp157c_dk2: Bump Kernel and
- U-Boot
-In-Reply-To: <20200607150614.410703-1-offougajoris@gmail.com>
-References: <20200607150614.410703-1-offougajoris@gmail.com>
-Message-ID: <20200607150614.410703-5-offougajoris@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Jun 2020 17:56:52 +0200
+Subject: [Buildroot] [PATCH 08/10] package/systemd: add hook to update
+ journalctl catalogs
+In-Reply-To: <20200206093633.251413-9-nolange79@gmail.com>
+References: <20200206093633.251413-1-nolange79@gmail.com>
+ <20200206093633.251413-9-nolange79@gmail.com>
+Message-ID: <20200607155652.GS13972@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kernel to version 5.7.1 and U-Boot to 2020.04
+Norbert, All,
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
----
- configs/stm32mp157c_dk2_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 2020-02-06 10:36 +0100, Norbert Lange spake thusly:
+> journald supports catalog files, or rather a binary database of
+> those.
+> This add a hook to create said database from the available
+> catalog source files (which are not needed afterwards).
+> 
+> One ugly workaround is or ensuring that PURGE_LOCALES is
+> called before, we do this by adding this hook
+> (will then run twice during the finalize target step).
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/systemd/systemd.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 6ea25e3363..8db3a1b117 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -500,6 +500,16 @@ define SYSTEMD_PRESET_ALL
+>  endef
+>  SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
+>  
+> +define SYSTEMD_UPDATE_CATALOGS
+> +	$(HOST_DIR)/bin/journalctl --root=$(TARGET_DIR) --update-catalog
+> +endef
+> +
+> +# SYSTEMD_UPDATE_CATALOGS needs to run after PURGE_LOCALES
+> +ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+> +SYSTEMD_TARGET_FINALIZE_HOOKS += PURGE_LOCALES
+> +endif
+> +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_UPDATE_CATALOGS
+> +
+>  SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  
+> @@ -577,6 +587,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
+>  #   $(HOST_DIR)/lib
+>  # * thus re-tweak rpath after the installation for all binaries that need it
+>  HOST_SYSTEMD_HOST_TOOLS = \
+> +	journalctl \
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index d38fa5bab4..ca72049cb2 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,12 +1,12 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.26"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+Why are you adding journalctl to this list?
+
+This list is only used to fix the RPATH in the prgrams. If the programs
+do not need the RPATH, we don;t need to fix them up.
+
+This list is not about identifying the host tools we are using (indeed,
+most entries in that list are not used at all).
+
+If however, you foudn a case where journalctl needs an RPATH entry,
+then:
+  - explain why: identify the libraries involved, and add explicit
+    dependencies on the packages providign those libraries,
+  - send that change in a separate patch.
+
+Regards,
+Yann E. MORIN.
+
+>  	systemd-analyze \
+>  	systemd-mount \
+>  	systemctl \
+> -- 
+> 2.24.1
+> 
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
