@@ -1,168 +1,149 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 7 Jun 2020 23:43:05 +0200
-Subject: [Buildroot] [PATCH 4/4] package/openssh: add sd
- socket-activated ssh daemon services
-In-Reply-To: <CADYdroM=C+w2BhU6EQjVyh_SFnnCbaQXwRg3Aff8DDrD=-MAVA@mail.gmail.com>
-References: <20200605225905.14082-1-nolange79@gmail.com>
- <20200605225905.14082-4-nolange79@gmail.com>
- <CAFvCimXvo_pXCk8B8S13W7av52AvCsRQc2nA1eTFff=XQU4M5g@mail.gmail.com>
- <CADYdroPgiZyWpMXW5x082G6hS+E8nT-3snbYCrPeZ1rYt2BYgw@mail.gmail.com>
- <CAFvCimXg6NsWyufFX3XnyVsP6=vRpeh--+wTzv4unmernjZQOA@mail.gmail.com>
- <CADYdroNue6TAbG+w6d08gH+E-fWApG=tYmq5JqvGDmJvnUGTug@mail.gmail.com>
- <CADYdroM=C+w2BhU6EQjVyh_SFnnCbaQXwRg3Aff8DDrD=-MAVA@mail.gmail.com>
-Message-ID: <CAFvCimUEE-7n-=dbpFZC1mQ+sKQUCp7WoMd7XMxx5cwrpzKcPA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  8 Jun 2020 00:01:36 +0200
+Subject: [Buildroot] [PATCH v1] configs/raspberrypi*: bump kernel version to
+ 676fd5a
+Message-ID: <20200607220136.4021-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sounds good... the help text might need a little work, but I like the idea
-itself...
+Now based on 4.19.126 (from 4.19.113).
 
-Le dim. 7 juin 2020 ? 23:30, Norbert Lange <nolange79@gmail.com> a ?crit :
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Notes:
+  - fixed compile with gcc-10.1.1 for me:
+    scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
+---
+ configs/raspberrypi0_defconfig       | 2 +-
+ configs/raspberrypi0w_defconfig      | 2 +-
+ configs/raspberrypi2_defconfig       | 2 +-
+ configs/raspberrypi3_64_defconfig    | 2 +-
+ configs/raspberrypi3_defconfig       | 2 +-
+ configs/raspberrypi3_qt5we_defconfig | 2 +-
+ configs/raspberrypi4_64_defconfig    | 2 +-
+ configs/raspberrypi4_defconfig       | 2 +-
+ configs/raspberrypi_defconfig        | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-> Am So., 7. Juni 2020 um 21:45 Uhr schrieb Norbert Lange <
-> nolange79 at gmail.com>:
-> >
-> > Am So., 7. Juni 2020 um 21:32 Uhr schrieb J?r?my ROSEN <
-> jeremy.rosen at smile.fr>:
-> > >
-> > >
-> > >
-> > > Le dim. 7 juin 2020 ? 21:11, Norbert Lange <nolange79@gmail.com> a
-> ?crit :
-> > >>
-> > >> Am So., 7. Juni 2020 um 13:07 Uhr schrieb J?r?my ROSEN <
-> jeremy.rosen at smile.fr>:
-> > >> >
-> > >> >
-> > >> >
-> > >> > Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a
-> ?crit :
-> > >> >>
-> > >> >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > >> >> ---
-> > >> >>  package/openssh/openssh.mk               |  6 +++---
-> > >> >>  package/openssh/sshd-host-keygen.service |  2 +-
-> > >> >>  package/openssh/sshd.socket              | 11 +++++++++++
-> > >> >>  package/openssh/sshd at .service            | 10 ++++++++++
-> > >> >>  4 files changed, 25 insertions(+), 4 deletions(-)
-> > >> >>  create mode 100644 package/openssh/sshd.socket
-> > >> >>  create mode 100644 package/openssh/sshd at .service
-> > >> >>
-> > >> >> diff --git a/package/openssh/openssh.mk b/package/openssh/
-> openssh.mk
-> > >> >> index 6b3ee1f5f4..1f2638e9c9 100644
-> > >> >> --- a/package/openssh/openssh.mk
-> > >> >> +++ b/package/openssh/openssh.mk
-> > >> >> @@ -114,9 +114,9 @@ endef
-> > >> >>  OPENSSH_POST_INSTALL_TARGET_HOOKS +=
-> OPENSSH_INSTALL_SERVER_PROGRAMS
-> > >> >>
-> > >> >>  define OPENSSH_INSTALL_INIT_SYSTEMD
-> > >> >> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
-> > >> >> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
-> > >> >> -               $(TARGET_DIR)/usr/lib/systemd/system/
-> > >> >> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
-> > >> >> +       $(INSTALL) -m 644 package/openssh/sshd*.service
-> package/openssh/sshd.socket \
-> > >> >> +               $(TARGET_DIR)/usr/lib/systemd/system/.
-> > >> >>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
-> > >> >>  endef
-> > >> >>
-> > >> >> diff --git a/package/openssh/sshd-host-keygen.service
-> b/package/openssh/sshd-host-keygen.service
-> > >> >> index 058e671c44..ffde622b01 100644
-> > >> >> --- a/package/openssh/sshd-host-keygen.service
-> > >> >> +++ b/package/openssh/sshd-host-keygen.service
-> > >> >> @@ -17,4 +17,4 @@ Type=oneshot
-> > >> >>  RemainAfterExit=yes
-> > >> >>
-> > >> >>  [Install]
-> > >> >> -WantedBy=sshd.service
-> > >> >> +WantedBy=sshd.service sshd.socket
-> > >> >> diff --git a/package/openssh/sshd.socket
-> b/package/openssh/sshd.socket
-> > >> >> new file mode 100644
-> > >> >> index 0000000000..bbae9ed7aa
-> > >> >> --- /dev/null
-> > >> >> +++ b/package/openssh/sshd.socket
-> > >> >> @@ -0,0 +1,11 @@
-> > >> >> +[Unit]
-> > >> >> +Description=OpenBSD Secure Shell server socket
-> > >> >> +Before=sshd.service
-> > >> >> +Conflicts=sshd.service
-> > >> >
-> > >> > No, that would stop the socket when the service is started, and you
-> don't want that.
-> > >> > If you do that, only one connection would be accepted before the
-> socket is stoped
-> > >> > and since you have accept=yes no further connections would be
-> accepted
-> > >>
-> > >> there is the singular sshd service
-> > >> and the sshd.socket which spawns sshd@ instance services.
-> > >> Those are mutually exclusive (because of the "Conflicts"), the
-> > >> "Before" line just ensures that the sshd.socket wins out by default.
-> > >>
-> > >
-> > > aah right, I messed up sshd.service and sshd at .service in my head.
-> > > my bad.
-> > >
-> > > I personally think we shouldn't install both methods.
-> > > either choose a distro-wide decision or provide a config option
-> > >
-> > > Anyway, I see what you are doing now, and that should work, AFAICT.
-> > >
-> > > I still think that it's cool that openssh supports all those startup
-> methods,
-> > > but I'm not convinced we need to support all of them in BR.
-> >
-> > sshd is better for throughput/efficiency if you have alot connections,
-> >
-> > the socket option saves memory if you rarely have connections (and is
-> > actually a simpler service file).
-> >
-> > I would support both, but let users pick.
-> >
-> > Norbert
->
-> How about this option:
->
-> config BR2_PACKAGE_OPENSSH_SERVER_SOCKET
-> bool "server socket"
-> depends on BR2_INIT_SYSTEMD
-> help
->   Systemd socket activation server.
->
-> makefile gonna get allota ifdefs, right now it's a bit naive anyway,
-> as you could pick server and not key_utils and then the services (sys
-> and systemd) would fail when trying to verify/generate the host keys.
->
-> Norbert
->
-
-
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index da20eb4dae..6ad0efc284 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index 14a8853117..2023ee4fa5 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index c45461d108..7990a2dcf0 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 27bd5aa0bb..3be79a0f63 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index f001d8f845..a22589aa2e 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index d62e66d08b..3b2e5cd29a 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index 283ef4ba36..d3de09668f 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index c4a97f8f3c..943f955ce6 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index f07411b2e6..a0c83a5686 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,4f2a4cc501c428c940549f39d5562e60404ac4f7)/linux-4f2a4cc501c428c940549f39d5562e60404ac4f7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/b76f928e/attachment.html>
+2.26.2
