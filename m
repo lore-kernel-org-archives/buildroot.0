@@ -1,47 +1,91 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  7 Jun 2020 09:36:10 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/acpica: bump version to 20200528
-Message-ID: <20200607073610.16911-1-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Jun 2020 10:01:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/c-periphery: disable tests
+Message-ID: <20200607080124.3449783-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update the hash file to the new 2 spaces convention
-- Update the hash of the license file
+Add a patch to disable tests, it should be noted that -DBUILD_TESTS=OFF
+is already passed by cmake-infrastructure
 
 Fixes:
-http://autobuild.buildroot.net/results/fe58e834bb67a9aab640e1d913588b47eaf7e4f5/
+ - http://autobuild.buildroot.org/results/6bbc4de3f857dcb7ff5e6f9fa1441ba4e0af1338
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/acpica/acpica.hash | 4 ++--
- package/acpica/acpica.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...MakeLists.txt-add-BUILD_TESTS-option.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index ac2201d570..961ee9dbe3 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
--sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
-+sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
-+sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 68b948c86d..8f1a36fbb7 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ACPICA_VERSION = 20191018
-+ACPICA_VERSION = 20200528
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+diff --git a/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch b/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
+new file mode 100644
+index 0000000000..f932ec6366
+--- /dev/null
++++ b/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
+@@ -0,0 +1,61 @@
++From 7b3f137af40f4355404c146af7d9764c961a2fc7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 7 Jun 2020 09:46:10 +0200
++Subject: [PATCH] CMakeLists.txt: add BUILD_TESTS option
++
++Add an option to enable or disable tests. This will allow the user to
++build c-periphery without threads and will avoid the following build
++failure:
++
++[ 68%] Building C object CMakeFiles/test_serial.dir/tests/test_serial.c.o
++/data/buildroot/buildroot-test/instance-0/output/build/c-periphery-2.2.1/tests/test_gpio_sysfs.c:13:10: fatal error: pthread.h: No such file or directory
++ #include <pthread.h>
++          ^~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/6bbc4de3f857dcb7ff5e6f9fa1441ba4e0af1338
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/vsergeev/c-periphery/pull/26]
++---
++ CMakeLists.txt | 20 ++++++++++++--------
++ 1 file changed, 12 insertions(+), 8 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f442bce..6565557 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,6 +1,8 @@
++ cmake_minimum_required(VERSION 2.6)
++ project(periphery C)
++ 
+++option(BUILD_TESTS "Build tests" ON)
+++
++ # Check for Linux kernel headers
++ include(CheckIncludeFiles)
++ CHECK_INCLUDE_FILES(linux/gpio.h HAVE_LINUX_HEADERS)
++@@ -44,11 +46,13 @@ install(TARGETS periphery DESTINATION ${CMAKE_INSTALL_LIBDIR})
++ install(FILES ${periphery_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
++ install(FILES ${CMAKE_BINARY_DIR}/libperiphery.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
++ 
++-# Declare tests targets
++-foreach(TEST_SOURCE ${periphery_TESTS})
++-    get_filename_component(TEST_PROGRAM ${TEST_SOURCE} NAME_WE)
++-    add_executable(${TEST_PROGRAM} ${TEST_SOURCE})
++-    target_link_libraries(${TEST_PROGRAM} periphery pthread)
++-    set(TEST_PROGRAMS ${TEST_PROGRAMS} ${TEST_PROGRAM})
++-endforeach()
++-add_custom_target(tests DEPENDS periphery ${TEST_PROGRAMS})
+++if(BUILD_TESTS)
+++    # Declare tests targets
+++    foreach(TEST_SOURCE ${periphery_TESTS})
+++        get_filename_component(TEST_PROGRAM ${TEST_SOURCE} NAME_WE)
+++        add_executable(${TEST_PROGRAM} ${TEST_SOURCE})
+++        target_link_libraries(${TEST_PROGRAM} periphery pthread)
+++        set(TEST_PROGRAMS ${TEST_PROGRAMS} ${TEST_PROGRAM})
+++    endforeach()
+++    add_custom_target(tests DEPENDS periphery ${TEST_PROGRAMS})
+++endif()
++-- 
++2.26.2
++
 -- 
-2.20.1
+2.26.2
