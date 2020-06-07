@@ -1,73 +1,168 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jun 2020 23:41:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nftables: fix build with gcc <= 4.8
-Message-ID: <20200607214113.4107523-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Sun, 7 Jun 2020 23:43:05 +0200
+Subject: [Buildroot] [PATCH 4/4] package/openssh: add sd
+ socket-activated ssh daemon services
+In-Reply-To: <CADYdroM=C+w2BhU6EQjVyh_SFnnCbaQXwRg3Aff8DDrD=-MAVA@mail.gmail.com>
+References: <20200605225905.14082-1-nolange79@gmail.com>
+ <20200605225905.14082-4-nolange79@gmail.com>
+ <CAFvCimXvo_pXCk8B8S13W7av52AvCsRQc2nA1eTFff=XQU4M5g@mail.gmail.com>
+ <CADYdroPgiZyWpMXW5x082G6hS+E8nT-3snbYCrPeZ1rYt2BYgw@mail.gmail.com>
+ <CAFvCimXg6NsWyufFX3XnyVsP6=vRpeh--+wTzv4unmernjZQOA@mail.gmail.com>
+ <CADYdroNue6TAbG+w6d08gH+E-fWApG=tYmq5JqvGDmJvnUGTug@mail.gmail.com>
+ <CADYdroM=C+w2BhU6EQjVyh_SFnnCbaQXwRg3Aff8DDrD=-MAVA@mail.gmail.com>
+Message-ID: <CAFvCimUEE-7n-=dbpFZC1mQ+sKQUCp7WoMd7XMxx5cwrpzKcPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/cf2359b8311fe91f9335c91f2bb4a730c9f4c9dc
+Sounds good... the help text might need a little work, but I like the idea
+itself...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...01-src-main.c-fix-build-with-gcc-4.8.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch
+Le dim. 7 juin 2020 ? 23:30, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-diff --git a/package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch b/package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..11b63b452a
---- /dev/null
-+++ b/package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,46 @@
-+From e871a7ad19f6b38d9c0a1c6cf554692b5cdea9bc Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 7 Jun 2020 23:25:55 +0200
-+Subject: [PATCH] src/main.c: fix build with gcc <= 4.8
-+
-+Since commit 719e44277f8e89323a87219b4d4bc7abac05b051, build with
-+gcc <= 4.8 fails on:
-+
-+main.c:186:2: error: 'for' loop initial declarations are only allowed in C99 mode
-+  for (size_t i = IDX_INTERACTIVE + 1; i < NR_NFT_OPTIONS; ++i)
-+  ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cf2359b8311fe91f9335c91f2bb4a730c9f4c9dc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://marc.info/?l=netfilter-devel&m=159156583001993]
-+---
-+ src/main.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/main.c b/src/main.c
-+index d830c7a2..e248a347 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -169,6 +169,7 @@ static void print_option(const struct nft_opt *opt)
-+ 
-+ static void show_help(const char *name)
-+ {
-++	size_t i;
-+ 	printf("Usage: %s [ options ] [ cmds... ]\n"
-+ 	       "\n"
-+ 	       "Options:\n", name);
-+@@ -185,7 +186,7 @@ static void show_help(const char *name)
-+ 
-+ 	fputs("\n", stdout);
-+ 
-+-	for (size_t i = IDX_INTERACTIVE + 1; i < NR_NFT_OPTIONS; ++i)
-++	for (i = IDX_INTERACTIVE + 1; i < NR_NFT_OPTIONS; ++i)
-+ 		print_option(&nft_options[i]);
-+ 
-+ 	fputs("\n", stdout);
-+-- 
-+2.26.2
-+
+> Am So., 7. Juni 2020 um 21:45 Uhr schrieb Norbert Lange <
+> nolange79 at gmail.com>:
+> >
+> > Am So., 7. Juni 2020 um 21:32 Uhr schrieb J?r?my ROSEN <
+> jeremy.rosen at smile.fr>:
+> > >
+> > >
+> > >
+> > > Le dim. 7 juin 2020 ? 21:11, Norbert Lange <nolange79@gmail.com> a
+> ?crit :
+> > >>
+> > >> Am So., 7. Juni 2020 um 13:07 Uhr schrieb J?r?my ROSEN <
+> jeremy.rosen at smile.fr>:
+> > >> >
+> > >> >
+> > >> >
+> > >> > Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a
+> ?crit :
+> > >> >>
+> > >> >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > >> >> ---
+> > >> >>  package/openssh/openssh.mk               |  6 +++---
+> > >> >>  package/openssh/sshd-host-keygen.service |  2 +-
+> > >> >>  package/openssh/sshd.socket              | 11 +++++++++++
+> > >> >>  package/openssh/sshd at .service            | 10 ++++++++++
+> > >> >>  4 files changed, 25 insertions(+), 4 deletions(-)
+> > >> >>  create mode 100644 package/openssh/sshd.socket
+> > >> >>  create mode 100644 package/openssh/sshd at .service
+> > >> >>
+> > >> >> diff --git a/package/openssh/openssh.mk b/package/openssh/
+> openssh.mk
+> > >> >> index 6b3ee1f5f4..1f2638e9c9 100644
+> > >> >> --- a/package/openssh/openssh.mk
+> > >> >> +++ b/package/openssh/openssh.mk
+> > >> >> @@ -114,9 +114,9 @@ endef
+> > >> >>  OPENSSH_POST_INSTALL_TARGET_HOOKS +=
+> OPENSSH_INSTALL_SERVER_PROGRAMS
+> > >> >>
+> > >> >>  define OPENSSH_INSTALL_INIT_SYSTEMD
+> > >> >> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
+> > >> >> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
+> > >> >> -               $(TARGET_DIR)/usr/lib/systemd/system/
+> > >> >> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
+> > >> >> +       $(INSTALL) -m 644 package/openssh/sshd*.service
+> package/openssh/sshd.socket \
+> > >> >> +               $(TARGET_DIR)/usr/lib/systemd/system/.
+> > >> >>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+> > >> >>  endef
+> > >> >>
+> > >> >> diff --git a/package/openssh/sshd-host-keygen.service
+> b/package/openssh/sshd-host-keygen.service
+> > >> >> index 058e671c44..ffde622b01 100644
+> > >> >> --- a/package/openssh/sshd-host-keygen.service
+> > >> >> +++ b/package/openssh/sshd-host-keygen.service
+> > >> >> @@ -17,4 +17,4 @@ Type=oneshot
+> > >> >>  RemainAfterExit=yes
+> > >> >>
+> > >> >>  [Install]
+> > >> >> -WantedBy=sshd.service
+> > >> >> +WantedBy=sshd.service sshd.socket
+> > >> >> diff --git a/package/openssh/sshd.socket
+> b/package/openssh/sshd.socket
+> > >> >> new file mode 100644
+> > >> >> index 0000000000..bbae9ed7aa
+> > >> >> --- /dev/null
+> > >> >> +++ b/package/openssh/sshd.socket
+> > >> >> @@ -0,0 +1,11 @@
+> > >> >> +[Unit]
+> > >> >> +Description=OpenBSD Secure Shell server socket
+> > >> >> +Before=sshd.service
+> > >> >> +Conflicts=sshd.service
+> > >> >
+> > >> > No, that would stop the socket when the service is started, and you
+> don't want that.
+> > >> > If you do that, only one connection would be accepted before the
+> socket is stoped
+> > >> > and since you have accept=yes no further connections would be
+> accepted
+> > >>
+> > >> there is the singular sshd service
+> > >> and the sshd.socket which spawns sshd@ instance services.
+> > >> Those are mutually exclusive (because of the "Conflicts"), the
+> > >> "Before" line just ensures that the sshd.socket wins out by default.
+> > >>
+> > >
+> > > aah right, I messed up sshd.service and sshd at .service in my head.
+> > > my bad.
+> > >
+> > > I personally think we shouldn't install both methods.
+> > > either choose a distro-wide decision or provide a config option
+> > >
+> > > Anyway, I see what you are doing now, and that should work, AFAICT.
+> > >
+> > > I still think that it's cool that openssh supports all those startup
+> methods,
+> > > but I'm not convinced we need to support all of them in BR.
+> >
+> > sshd is better for throughput/efficiency if you have alot connections,
+> >
+> > the socket option saves memory if you rarely have connections (and is
+> > actually a simpler service file).
+> >
+> > I would support both, but let users pick.
+> >
+> > Norbert
+>
+> How about this option:
+>
+> config BR2_PACKAGE_OPENSSH_SERVER_SOCKET
+> bool "server socket"
+> depends on BR2_INIT_SYSTEMD
+> help
+>   Systemd socket activation server.
+>
+> makefile gonna get allota ifdefs, right now it's a bit naive anyway,
+> as you could pick server and not key_utils and then the services (sys
+> and systemd) would fail when trying to verify/generate the host keys.
+>
+> Norbert
+>
+
+
 -- 
-2.26.2
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/b76f928e/attachment.html>
