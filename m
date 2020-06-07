@@ -1,243 +1,66 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 22:36:18 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <CAFvCimWLcZxrusY5ig1fRxj-SQFQsKvxajJh_s-9==bm1ATo+w@mail.gmail.com>
-References: <20200605225421.13494-1-nolange79@gmail.com>
- <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
- <CADYdroMhuGysCOy2aV2ihoA3kQ9fSUdKiocpL4h2niT7=iWuHw@mail.gmail.com>
- <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
- <CADYdroM-mpaz+7zqGMnKJ5J=sJL-TiAQOXs_vieW6ts77=VBHQ@mail.gmail.com>
- <CAFvCimVmWczV2XjFsx=De3Q1ZCLxSTOu9etaFqN9z54cv0ACyw@mail.gmail.com>
- <CADYdroPOE148vzGPNQhBX3mb3tAVK0d-D4vt89rrphK=zfbzxQ@mail.gmail.com>
- <CAFvCimUXkpkYLQ8mfhvAzTcHJ14Vs4queFjipCRNkZsVyCmP=g@mail.gmail.com>
- <CADYdroPU=MZa4RCqoS9TrF89jKp2vNXGggMp3iGri8F8DAp02A@mail.gmail.com>
- <CAFvCimUod4o5Yk0UqtrgymKSD3vTMMMuT-XhNm+g4kmmysdQ4Q@mail.gmail.com>
- <CADYdroNrgMbYrmLqRmCSobfNnQTtjN4ZfYYViS6JAdMYTZAEbA@mail.gmail.com>
- <CAFvCimWLcZxrusY5ig1fRxj-SQFQsKvxajJh_s-9==bm1ATo+w@mail.gmail.com>
-Message-ID: <CADYdroOVGUozgyP258MinUAtznRSRSw-SvrGbD7ZGkqAVdfQJw@mail.gmail.com>
+Date: Sun, 7 Jun 2020 22:57:58 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dbus: remove /usr/lib/dbus-1.0
+ if empty
+In-Reply-To: <20200607104549.420b50ff@windsurf>
+References: <20200605225247.13350-1-nolange79@gmail.com>
+ <20200605225247.13350-2-nolange79@gmail.com>
+ <20200606223808.5797eb98@windsurf>
+ <CADYdroNQNLa3a2TkgJoPJgj460+XD7rRcwWYKaa_2bV9sqejGQ@mail.gmail.com>
+ <20200607104549.420b50ff@windsurf>
+Message-ID: <CADYdroPdfDQn=9o0=D7GUqW1VuTbQ_ahdrhP0VSr-Q4F0-yAHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 7. Juni 2020 um 22:19 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
+Am So., 7. Juni 2020 um 10:45 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
 >
+> Hello Norbert,
 >
+> On Sun, 7 Jun 2020 00:36:47 +0200
+> Norbert Lange <nolange79@gmail.com> wrote:
 >
-> Le dim. 7 juin 2020 ? 22:14, Norbert Lange <nolange79@gmail.com> a ?crit :
->>
->> Am So., 7. Juni 2020 um 22:07 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
->> >
->> >
->> >
->> > Le dim. 7 juin 2020 ? 21:59, Norbert Lange <nolange79@gmail.com> a ?crit :
->> >>
->> >> Am So., 7. Juni 2020 um 21:47 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
->> >> >
->> >> >
->> >> >
->> >> > Le dim. 7 juin 2020 ? 21:42, Norbert Lange <nolange79@gmail.com> a ?crit :
->> >> >>
->> >> >> Am So., 7. Juni 2020 um 21:27 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
->> >> >> >
->> >> >> >
->> >> >> >
->> >> >> > Le dim. 7 juin 2020 ? 21:18, Norbert Lange <nolange79@gmail.com> a ?crit :
->> >> >> >>
->> >> >> >> Am So., 7. Juni 2020 um 21:05 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
->> >> >> >> >
->> >> >> >> >
->> >> >> >> >
->> >> >> >> > Le dim. 7 juin 2020 ? 20:35, Norbert Lange <nolange79@gmail.com> a ?crit :
->> >> >> >> >>
->> >> >> >> >> Am So., 7. Juni 2020 um 12:35 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
->> >> >> >> >> >
->> >> >> >> >> >
->> >> >> >> >> >
->> >> >> >> >> > Le sam. 6 juin 2020 ? 00:55, Norbert Lange <nolange79@gmail.com> a ?crit :
->> >> >> >> >> >>
->> >> >> >> >> >> Drop default dependencies, haveged needs nothing but
->> >> >> >> >> >> local sockets and /dev/random.
->> >> >> >> >> >> This allows the entropy to be available earlier.
->> >> >> >> >> >>
->> >> >> >> >> >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->> >> >> >> >> >> ---
->> >> >> >> >> >>  package/haveged/haveged.service | 5 ++++-
->> >> >> >> >> >>  1 file changed, 4 insertions(+), 1 deletion(-)
->> >> >> >> >> >>
->> >> >> >> >> >> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
->> >> >> >> >> >> index 91035c6711..ed9f043a91 100644
->> >> >> >> >> >> --- a/package/haveged/haveged.service
->> >> >> >> >> >> +++ b/package/haveged/haveged.service
->> >> >> >> >> >> @@ -1,10 +1,13 @@
->> >> >> >> >> >>  [Unit]
->> >> >> >> >> >>  Description=Entropy Harvesting Daemon
->> >> >> >> >> >>  Documentation=man:haveged(8)
->> >> >> >> >> >> +DefaultDependencies=no
->> >> >> >> >> >> +Conflicts=shutdown.target
->> >> >> >> >> >> +Before=sysinit.target shutdown.target systemd-update-done.service
->> >> >> >> >> >>
->> >> >> >> >> > Since v243 (quoting  systemd's NEWS file) :
->> >> >> >> >> >
->> >> >> >> >> > * systemd-random-seed.service is now a synchronization point for full
->> >> >> >> >> >           initialization of the kernel's entropy pool. Services that require
->> >> >> >> >> >           /dev/urandom to be correctly initialized should be ordered after this
->> >> >> >> >> >           service.
->> >> >> >> >> >
->> >> >> >> >> > so... in that case it might make sense to add Before=systemd-random-seed.service
->> >> >> >> >> > (assuming that works. This a very early point, so it needs some testing)
->> >> >> >> >>
->> >> >> >> >>
->> >> >> >> >> No, doesnt make sense, a "before"  only means the service is *started before*,
->> >> >> >> >> not the process did do anything worthwile. (That's the reason for my
->> >> >> >> >> openssh patch BTW)
->> >> >> >> >> systemd-random-seed.service is a one-shot, so a "before" *that*
->> >> >> >> >> service means the dependants wait till it is finished.
->> >> >> >> >>
->> >> >> >> > (note that I don't really understand what haveged does, so I might be completely wrong in my
->> >> >> >> > understanding)
->> >> >> >> >
->> >> >> >> > systemd-random-seed is the sync point, that means that any service that needs
->> >> >> >> > random numbers should  be ordered after random-seed.
->> >> >> >> >
->> >> >> >> > So, to me, it makes sense that we want to have haveged started before that point. Thus
->> >> >> >> > having haveged ordered before random-seed.
->> >> >> >> >
->> >> >> >> > and I don't really understand your sentence above...
->> >> >> >> > if you add Before=systemd-random-seed, it's systemd-random-seed that will wait for
->> >> >> >> > haveged to be started, not the other way round. (which seems to be what you say ??)
->> >> >> >>
->> >> >> >>
->> >> >> >>  Yes, systemd-random-seed will wait for haveged to be *startet* (and
->> >> >> >> maybe its immediatly preempted),
->> >> >> >> but it takes several seconds after that till /dev/urandom is "ready"
->> >> >> >> (what that means changed in the last few years multiple times)
->> >> >> >>
->> >> >> > ... yeah ...
->> >> >> >>
->> >> >> >> >
->> >> >> >> > now... if haveged needs some time to "do something usefull" then it means that haveged
->> >> >> >> > is badly synchronised on startup. The Ready signal in systemd is defined as "the point
->> >> >> >> > at which the service is able to render the service expected for it'
->> >> >> >>
->> >> >> >>
->> >> >> >> Yes, but haveged does not send such a signal (and systemd only wait
->> >> >> >> for that if the Type=notify).
->> >> >> >
->> >> >> >
->> >> >> > There is a workaround for that. Add an ExecStartPost that detects readiness.
->> >> >> > (mentionning that for completeness sake, not sure if it's worth doing here.)
->> >> >> >
->> >> >> >>
->> >> >> >> Further the service only feeds data to the kernel, and the only valid
->> >> >> >> meaning of /dev/urandom is "ready"
->> >> >> >> comes from the kernel.
->> >> >> >>
->> >> >> > and random-seed will wait for that, so syncronisation will work correctly
->> >> >>
->> >> >> Nope, it does not. It's a (poor) substitute to wait after some entropy
->> >> >> was fed to the kernel.
->> >> >>
->> >> > comment at the bottom of random-seed.service:
->> >> >
->> >> > # This service waits until the kernel's entropy pool is initialized, and may be
->> >> > # used as ordering barrier for service that require an initialized entropy
->> >> > # pool. Since initialization can take a while on entropy-starved systems, let's
->> >> > # increase the time-out substantially here.
->> >> >
->> >> > and from the man page
->> >> >
->> >> >  This new seed is  retrieved synchronously from the kernel, which means the
->> >> > service will not complete start-up until the random pool is fully initialized.
->> >> >
->> >> >  I might misread stuff, as you stated randomness handing in linux is complicated
->> >> > but I really think that the initial idea behind that service was synchronisation...
->> >>
->> >>
->> >> No you are correct, Ive been proven wrong. Did not know reading the
->> >> seed would sync to the entropy pool being ready.
->> >>
->> >> >
->> >> >
->> >> >> >
->> >> >> >>
->> >> >> >>  The point of waiting for "systemd-random-seed" is a substitute if you
->> >> >> >> are in a really tough spot,
->> >> >> >> and independent of what haveged does.
->> >> >> >>
->> >> >> > No, it's more than a substitute. it's a sync point.
->> >> >> > It doesn't just load entropy into the kernel, it also blocks until the kernel reports
->> >> >> > that /dev/urandom is ready
->> >> >>
->> >> >> Show me where?
->> >> >>
->> >> >> >
->> >> >> > IOW the only way to make sure that haveged is started "at the right point" in a generic
->> >> >> > way is to add that Before=
->> >> >> >
->> >> >> > That would allow any service that needs reliable randomness to be correctly synced
->> >> >> > with haveged, even if they are not aware that haveged is here...
->> >> >>
->> >> >> Well, consider that systemd-random-seed would block for that (which it
->> >> >> does not),
->> >> >> then it does not matter *when* haveged is started, only that it is not
->> >> >> blocked (and it is not).
->> >> >> In other words, it would make no difference.
->> >>
->> >>
->> >> That point still stands though.
->> >> -   haveged will be "startable" as early as systemd-random-seed,
->> >> potentially before (does not need a filesystem).
->> >> -   even if it is started later, systemd-random-seed will block until
->> >> haveged was running long enough to feed entropy to the kernel
->> >
->> >
->> > not if there are other sources of entropy available and the kernel marks
->> >  urandom  as ready before haveged is started
->> >
->> > more importantly, I am worried about "the promise".
->> > A user installing haveged will want to rely on it to provide improved
->> > randomness. by not syncing correctly, we are missing on that promise.
->> >
->> > Overall, I think it's good practice. Haveged should be aware of
->> > systemd-random-seed and should be started before systemd-random-seed.
->> >
->> > Having it explicitely before is more readable, safer, and doesn't rely on a
->> > kernel sync that is hard to understand.
->> >
->> > The more I think about it, the more I think you should add that...
->> > It's just a line in a config file and it might really improve clarity, avoid
->> > potential bugs and better guarantee that services needing high
->> > quality randomness will have it properly.
->>
->> haveged is *not* a prefered source of entropy,
->> it's there that VMs and embedded systems don't stall for minutes at bootup
->> (I use that with a ConditionVirtualization to test my rootfs under qemu)
->>
->> So I'd prefer any other sources to feed the kernel, this is the
->> software fallback.
+> > > Your Signed-off-by is missing, and there is no commit log. We clearly
+> > > need a better explanation. And your commit title is wrong: you're not
+> > > just removing /usr/lib/dbus-1.0 is empty: you're changing from removing
+> > > it unconditionally to removing just /usr/lib/dbus-1.0/include and then
+> > > removing /usr/lib/dbus-1.0 if it's empty.
+> >
+> > Ok, gonna improve that in a v2 if you find no other objections
 >
+> My main objection is that we need a better commit log.
 >
-> Ok, but with that i'm not sure what the proper configurtion for
-> buildroot in general should be...
+> > > So it means that you have installed *something* in /usr/lib/dbus-1.0
+> > > that you want Buildroot to keep on the target. But what? This is not
+> > > explained in your commit log.
+> >
+> > I wrote this commit some months ago, would have to outright lie, but I
+> > think it was dbusbroker (patch on the ML).
+> > The basic gist is, that /usr/lib/dbus-1.0 is some sort of libexec dir
+> > (on Debian and Fedora AFAIK), and I believe dbusbroker installs it
+> > stuff there.
+> >
+> > What we really want is to remove the unneeded files (the includes),
+> > and the parent directory it is empty.
 >
-> I mean... if it's not high grade entropy, it shouldn't credit the kernel entropy
-> pool,and if the user is ok with unreliable entropy, systemd-random-seed is
-> probably a faster way to get some.
+> Could you verify what dbusbroker installs in this directory, explain
+> why it is relevant, and use that as a justification in the commit log ?
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
+Well,
 
-haveged is barely entropy, certainly not more than the kernel
-provides, it is a means to fake entropy. Gets you to boot faster.
-systemd-random-seed needs a filesystem to store stuff, does not credit
-the entropy pool (by default).. and won't help at all when booting the
-first time.
-
-I think what you have in mind is more like rng-tools, which feed real,
-quality entropy to the kernel.
-
-The user should pick what he needs, haveged will never give you better
-entropy over the kernel or real HW sources,  systemd-random-seed will
-not let you boot faster (by default).
-
-Norbert
+turns out I was playing with libexec configuration, and dbus then
+places its helpers in /usr/lib/dbus-1.0.
+So, it's actually useless for the upstream buildroot (as you wont
+allow for libexec config), but it actually wont hurt either.
+Amended patch is following.
