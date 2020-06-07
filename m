@@ -1,171 +1,63 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun,  7 Jun 2020 15:33:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsync: bump to version 2.3.1
-Message-ID: <1591536830-15198-1-git-send-email-pjtexier@koncepto.io>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Sun,  7 Jun 2020 16:05:39 +0200
+Subject: [Buildroot] [PATCH v2] package/mraa: bump to version 2.1.0
+Message-ID: <20200607140539.1497-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a patch release that adds peformance improvements. See [1]
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Also:
- - Remove upstream patches
- - update hash file formatting (2 spaces).
+Change the upstream URL as the project is now under Eclipse umbrella.
 
-[1] - https://github.com/librsync/librsync/releases/tag/v2.3.1
+Remove obsolete options like IPK nad RPM and disable JSONPLAT option
+that is enabled by default but requires c-json package.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...1-CMakeLists-fix-build-with-old-compilers.patch | 39 -------------
- ...make-FindPOPT.cmake-Add-PkgConfig-support.patch | 67 ----------------------
- package/librsync/librsync.hash                     |  4 +-
- package/librsync/librsync.mk                       |  2 +-
- 4 files changed, 3 insertions(+), 109 deletions(-)
- delete mode 100644 package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch
- delete mode 100644 package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
+Changes v1 -> v2:
+	- fix COPYING checksum
 
-diff --git a/package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch b/package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch
-deleted file mode 100644
-index 76598c2..0000000
---- a/package/librsync/0001-CMakeLists-fix-build-with-old-compilers.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 77b78e01f83b65f3c38941f54f71beaaddcb6fc1 Mon Sep 17 00:00:00 2001
--From: Pierre-Jean Texier <pjtexier@koncepto.io>
--Date: Sat, 23 Nov 2019 16:51:46 +0100
--Subject: [PATCH] CMakeLists: fix build with old compilers
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The librsync code uses some C99 constructs, but old compilers such
--as gcc 4.7 don't default to -std=c99. This commit makes sure librsync
--is built with -std=gnu99.
--
--Fixes:
--
--src/rabinkarp.h:82:5: error: ?for? loop initial declarations are only allowed in C99 or C11 mode
--     for (size_t i = len; i; i--) {
--     ^
--src/rabinkarp.h:82:5: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
--
--Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
--[Upstream status: https://github.com/librsync/librsync/pull/181]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f810061..794d9c0 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -149,7 +149,7 @@ if (CMAKE_C_COMPILER_ID MATCHES "(Clang|Gnu|GNU)")
--   # TODO: Set for MSVC and other compilers.
--   # TODO: Set -Werror when the build is clean.
-- 
---  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
--+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=gnu99")
-- endif()
-- 
-- site_name(BUILD_HOSTNAME)
-diff --git a/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch b/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
-deleted file mode 100644
-index 1c8a332..0000000
---- a/package/librsync/0002-cmake-FindPOPT.cmake-Add-PkgConfig-support.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From f5a131ab66fec23d0c79b55fc3907603b094deb9 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 31 Dec 2019 18:13:29 +0100
--Subject: [PATCH] cmake/FindPOPT.cmake: Add PkgConfig support
--
--Add PkgConfig support to retrieve popt dependencies otherwise static
--build can fail if popt has been linked with iconv:
--
--[100%] Linking C executable rdiff
--/home/buildroot/autobuild/instance-2/output-1/per-package/librsync/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-2/output-1/per-package/librsync/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libpopt.a(poptint.o): in function `POPT_fprintf':
--poptint.c:(.text+0x34c): undefined reference to `libiconv_open
--
--Fixes:
-- - http://autobuild.buildroot.org/results/896e8e3efbedad90d66ae8c4e1e50f16206cab49
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/librsync/librsync/pull/186]
-----
-- cmake/FindPOPT.cmake | 29 ++++++++++++++++++-----------
-- 1 file changed, 18 insertions(+), 11 deletions(-)
--
--diff --git a/cmake/FindPOPT.cmake b/cmake/FindPOPT.cmake
--index 1ca452a..87b3e95 100644
----- a/cmake/FindPOPT.cmake
--+++ b/cmake/FindPOPT.cmake
--@@ -42,20 +42,27 @@ if (NOT POPT_FOUND)
--   endif (NOT POPT_ROOT_DIR)
-- 
--   ##_____________________________________________________________________________
---  ## Check for the header files
--+  ## Check with PkgConfig (to retrieve static dependencies such as iconv)
--+  find_package(PkgConfig QUIET)
--+  pkg_search_module (POPT QUIET popt)
--+  if (NOT POPT_FOUND)
-- 
---  find_path (POPT_INCLUDE_DIRS popt.h
---    HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
---    PATH_SUFFIXES include
---    )
--+    ##_____________________________________________________________________________
--+    ## Check for the header files
-- 
---  ##_____________________________________________________________________________
---  ## Check for the library
--+    find_path (POPT_INCLUDE_DIRS popt.h
--+      HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
--+      PATH_SUFFIXES include
--+      )
-- 
---  find_library (POPT_LIBRARIES popt
---    HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
---    PATH_SUFFIXES lib
---    )
--+    ##_____________________________________________________________________________
--+    ## Check for the library
--+
--+    find_library (POPT_LIBRARIES popt
--+      HINTS ${POPT_ROOT_DIR} ${CMAKE_INSTALL_PREFIX} $ENV{programfiles}\\GnuWin32 $ENV{programfiles32}\\GnuWin32
--+      PATH_SUFFIXES lib
--+      )
--+  endif (POPT_FOUND)
-- 
--   ##_____________________________________________________________________________
--   ## Actions taken when all components have been found
---- 
--2.24.0
--
-diff --git a/package/librsync/librsync.hash b/package/librsync/librsync.hash
-index d00e5cd..1b2130b 100644
---- a/package/librsync/librsync.hash
-+++ b/package/librsync/librsync.hash
+ package/mraa/mraa.hash | 4 ++--
+ package/mraa/mraa.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/mraa/mraa.hash b/package/mraa/mraa.hash
+index f2eb73ca74..f29a5ce838 100644
+--- a/package/mraa/mraa.hash
++++ b/package/mraa/mraa.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256 b5ab8e2092b82b7d7bb9c1dd52e6a77083a89f8ad9b9309da611f490d0b49a71  librsync-2.2.1.tar.gz
--sha256 5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-+sha256  dbd7eb643665691bdf4009174461463737b19b4814b789baad62914cabfe4569  librsync-2.3.1.tar.gz
-+sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
-index bf0785b..fbe56d4 100644
---- a/package/librsync/librsync.mk
-+++ b/package/librsync/librsync.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  e4501e6936afb426c75b7d406c1a7a27b514297f640e887de4d88a2d9687f37b  mraa-0.9.1.tar.gz
+-sha256  04f8503394c6d01c86538a693f6990fc1debd94119954ff4eae4407fe7c60a8e  COPYING
++sha256  5351ce9eb654014d8ea7f43bdb2d17e6d1955536938a2ea0d467f4008e614345  mraa-2.1.0.tar.gz
++sha256  fac52622ed3badd86b34857b21777ab90296d6ccbc2ac0fd457c09fdeefa9ef1  COPYING
+diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
+index 5077859fa5..23413de08e 100644
+--- a/package/mraa/mraa.mk
++++ b/package/mraa/mraa.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBRSYNC_VERSION = 2.2.1
-+LIBRSYNC_VERSION = 2.3.1
- LIBRSYNC_SITE = $(call github,librsync,librsync,v$(LIBRSYNC_VERSION))
- LIBRSYNC_LICENSE = LGPL-2.1+
- LIBRSYNC_LICENSE_FILES = COPYING
+-MRAA_VERSION = 0.9.1
+-MRAA_SITE = $(call github,intel-iot-devkit,mraa,v$(MRAA_VERSION))
++MRAA_VERSION = 2.1.0
++MRAA_SITE = $(call github,eclipse,mraa,v$(MRAA_VERSION))
+ MRAA_LICENSE = MIT
+ MRAA_LICENSE_FILES = COPYING
+ MRAA_INSTALL_STAGING = YES
+@@ -17,8 +17,7 @@ MRAA_CONF_OPTS += \
+ 	-DBUILDSWIG=OFF \
+ 	-DUSBPLAT=OFF \
+ 	-DFTDI4222=OFF \
+-	-DIPK=OFF \
+-	-DRPM=OFF \
++	-DJSONPLAT=OFF \
+ 	-DENABLEEXAMPLES=OFF \
+ 	-DBUILDTESTS=OFF
+ 
 -- 
-2.7.4
+2.17.0
