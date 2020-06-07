@@ -1,110 +1,47 @@
 From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 7 Jun 2020 13:06:52 +0200
-Subject: [Buildroot] [PATCH 4/4] package/openssh: add sd
- socket-activated ssh daemon services
-In-Reply-To: <20200605225905.14082-4-nolange79@gmail.com>
-References: <20200605225905.14082-1-nolange79@gmail.com>
- <20200605225905.14082-4-nolange79@gmail.com>
-Message-ID: <CAFvCimXvo_pXCk8B8S13W7av52AvCsRQc2nA1eTFff=XQU4M5g@mail.gmail.com>
+Date: Sun, 7 Jun 2020 13:09:23 +0200
+Subject: [Buildroot] [PATCH 01/10] package/systemd: move preset-all HOOK
+ to fakeroot stage
+In-Reply-To: <20200206093633.251413-2-nolange79@gmail.com>
+References: <20200206093633.251413-1-nolange79@gmail.com>
+ <20200206093633.251413-2-nolange79@gmail.com>
+Message-ID: <CAFvCimXcWJqe7oUKV0FsCk_=_RFRFtduG53=-1WxzP4vUEvxvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a ?crit :
+LGTM
 
+Le jeu. 6 f?vr. 2020 ? 10:36, Norbert Lange <nolange79@gmail.com> a ?crit :
+
+> User can drop in more systemd units or presets
+> in an rootfs overlay, which will be copied over *after*
+> the TARGET_FINALIZE_HOOKS are run.
+>
+> Instead, run preset-all afterwards from ROOTFS_PRE_CMD_HOOKS
+>
 > Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
->  package/openssh/openssh.mk               |  6 +++---
->  package/openssh/sshd-host-keygen.service |  2 +-
->  package/openssh/sshd.socket              | 11 +++++++++++
->  package/openssh/sshd at .service            | 10 ++++++++++
->  4 files changed, 25 insertions(+), 4 deletions(-)
->  create mode 100644 package/openssh/sshd.socket
->  create mode 100644 package/openssh/sshd at .service
+>  package/systemd/systemd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 6b3ee1f5f4..1f2638e9c9 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -114,9 +114,9 @@ endef
->  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
->
->  define OPENSSH_INSTALL_INIT_SYSTEMD
-> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
-> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
-> -               $(TARGET_DIR)/usr/lib/systemd/system/
-> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
-> +       $(INSTALL) -m 644 package/openssh/sshd*.service
-> package/openssh/sshd.socket \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/.
->         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 6e31a14ac3..05b07cfd1b 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -490,7 +490,7 @@ endef
+>  define SYSTEMD_PRESET_ALL
+>         $(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
 >  endef
+> -SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_PRESET_ALL
+> +SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
 >
-> diff --git a/package/openssh/sshd-host-keygen.service
-> b/package/openssh/sshd-host-keygen.service
-> index 058e671c44..ffde622b01 100644
-> --- a/package/openssh/sshd-host-keygen.service
-> +++ b/package/openssh/sshd-host-keygen.service
-> @@ -17,4 +17,4 @@ Type=oneshot
->  RemainAfterExit=yes
->
->  [Install]
-> -WantedBy=sshd.service
-> +WantedBy=sshd.service sshd.socket
-> diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
-> new file mode 100644
-> index 0000000000..bbae9ed7aa
-> --- /dev/null
-> +++ b/package/openssh/sshd.socket
-> @@ -0,0 +1,11 @@
-> +[Unit]
-> +Description=OpenBSD Secure Shell server socket
-> +Before=sshd.service
-> +Conflicts=sshd.service
->
-No, that would stop the socket when the service is started, and you don't
-want that.
-If you do that, only one connection would be accepted before the socket is
-stoped
-and since you have accept=yes no further connections would be accepted
-
-
-> +
-> +[Socket]
-> +ListenStream=22
-> +Accept=yes
-> +
-> +[Install]
-> +WantedBy=sockets.target
-> diff --git a/package/openssh/sshd at .service b/package/openssh/sshd at .service
-> new file mode 100644
-> index 0000000000..b3a590d9a3
-> --- /dev/null
-> +++ b/package/openssh/sshd at .service
-> @@ -0,0 +1,10 @@
-> +[Unit]
-> +Description=OpenBSD Secure Shell server per-connection daemon
-> +Documentation=man:sshd(8) man:sshd_config(5)
-> +After=auditd.service
-> +
-> +[Service]
-> +ExecStart=-/usr/sbin/sshd -i
-> +StandardInput=socket
-> +RuntimeDirectory=sshd
-> +RuntimeDirectoryMode=0755
->
-
-I am a bit confused, you have both an ssh.service and a ssh.socket+ssh@
-.service
-Wouldn't those two fight over port 22 ?
-
-
-
-
+>  SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
 > --
-> 2.26.2
+> 2.24.1
 >
 > _______________________________________________
 > buildroot mailing list
@@ -134,4 +71,4 @@ Architecte technique
 <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/7c81434a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/50da848b/attachment-0001.html>
