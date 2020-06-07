@@ -1,37 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Jun 2020 19:44:49 +0200
-Subject: [Buildroot] [PATCH 2/3] package/systemd: do not force dbus if
- dbus-broker is available
-In-Reply-To: <cover.1591551884.git.yann.morin.1998@free.fr>
-References: <cover.1591551884.git.yann.morin.1998@free.fr>
-Message-ID: <1a991eb7b9305597080a0506302667dfb10de018.1591551884.git.yann.morin.1998@free.fr>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun,  7 Jun 2020 20:11:17 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/brltty: fix input_event related
+ compile failure
+Message-ID: <20200607181116.29433-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dbus-broker fits the bill as a message bus daemon, so only enable the
-original dbus if dbus-broker is not enabled.
+Add a patch to fix input_event time related compile failure. The problem
+is reported and fixed upstream.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Norbert Lange <nolange79@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/7c5278c0ff2b2d8f88803e256803b31a75904efe/build-end.log
+
+./system_linux.c: In function 'writeInputEvent':
+./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+   gettimeofday(&event.time, NULL);
+                       ^~~~
+                       type
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/systemd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...nput_event-time-related-compile-fail.patch | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/brltty/0002-fix-input_event-time-related-compile-fail.patch
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index dd3b8c534d..37f9d04850 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -25,7 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
- 	select BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_DBUS # runtime dependency only
-+	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+diff --git a/package/brltty/0002-fix-input_event-time-related-compile-fail.patch b/package/brltty/0002-fix-input_event-time-related-compile-fail.patch
+new file mode 100644
+index 0000000000..249d420ca9
+--- /dev/null
++++ b/package/brltty/0002-fix-input_event-time-related-compile-fail.patch
+@@ -0,0 +1,52 @@
++From 43390f9906a8c663872e0eab56c1173032d1bd6c Mon Sep 17 00:00:00 2001
++From: Heiko Thiery <heiko.thiery@gmail.com>
++Date: Sun, 7 Jun 2020 12:58:38 +0200
++Subject: [PATCH] fix input_event time related compile fail
++
++./system_linux.c: In function 'writeInputEvent':
++./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
++   gettimeofday(&event.time, NULL);
++                       ^~~~
++                       type
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ Programs/system_linux.c | 13 ++++++++++++-
++ 1 file changed, 12 insertions(+), 1 deletion(-)
++
++diff --git a/Programs/system_linux.c b/Programs/system_linux.c
++index a97ee7ff6..77052d32f 100644
++--- a/Programs/system_linux.c
+++++ b/Programs/system_linux.c
++@@ -40,6 +40,14 @@
++ #ifdef HAVE_LINUX_INPUT_H
++ #include <linux/input.h>
++ 
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#endif
+++
+++#ifndef input_event_usec
+++#define input_event_usec time.tv_usec
+++#endif
+++
++ #include "kbd_keycodes.h"
++ 
++ LINUX_KEY_MAP(xt00) = {
++@@ -957,9 +965,12 @@ int
++ writeInputEvent (UinputObject *uinput, uint16_t type, uint16_t code, int32_t value) {
++ #ifdef HAVE_LINUX_UINPUT_H
++   struct input_event event;
+++  struct timeval tv;
++ 
++   memset(&event, 0, sizeof(event));
++-  gettimeofday(&event.time, NULL);
+++  gettimeofday(&tv, NULL);
+++  event.input_event_sec = tv.tv_sec;
+++  event.input_event_usec = tv.tv_usec;
++   event.type = type;
++   event.code = code;
++   event.value = value;
++-- 
++2.20.1
++
 -- 
 2.20.1
