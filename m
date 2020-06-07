@@ -1,143 +1,289 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 21:18:09 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
-References: <20200605225421.13494-1-nolange79@gmail.com>
- <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
- <CADYdroMhuGysCOy2aV2ihoA3kQ9fSUdKiocpL4h2niT7=iWuHw@mail.gmail.com>
- <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
-Message-ID: <CADYdroM-mpaz+7zqGMnKJ5J=sJL-TiAQOXs_vieW6ts77=VBHQ@mail.gmail.com>
+Date: Sun, 7 Jun 2020 21:24:37 +0200
+Subject: [Buildroot] [PATCH 2/4] package/openssh: improve integration
+ for systemd
+In-Reply-To: <CAFvCimWh8THn3i6E4nu6juCLNH9O7ieyjm+2R86fXSS9pQMR7A@mail.gmail.com>
+References: <20200605225905.14082-1-nolange79@gmail.com>
+ <20200605225905.14082-2-nolange79@gmail.com>
+ <CAFvCimXCm=x_T9jSrnXHsNvZQwjp8Oy4eFMdPQ_JTgX1X8uOVQ@mail.gmail.com>
+ <CADYdroPp+YZXqaAJNKM=FF5ZQfYxm-2c0Z5N0QfzYyFdAnBH6Q@mail.gmail.com>
+ <CAFvCimWh8THn3i6E4nu6juCLNH9O7ieyjm+2R86fXSS9pQMR7A@mail.gmail.com>
+Message-ID: <CADYdroM-D8REHx3opjs2ZBct5obJWhxc5gt9P2kqwx31cwmHmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 7. Juni 2020 um 21:05 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
+Am So., 7. Juni 2020 um 21:16 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
 >
 >
 >
-> Le dim. 7 juin 2020 ? 20:35, Norbert Lange <nolange79@gmail.com> a ?crit :
+> Le dim. 7 juin 2020 ? 21:03, Norbert Lange <nolange79@gmail.com> a ?crit :
 >>
->> Am So., 7. Juni 2020 um 12:35 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
+>> Am So., 7. Juni 2020 um 12:54 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
 >> >
 >> >
 >> >
->> > Le sam. 6 juin 2020 ? 00:55, Norbert Lange <nolange79@gmail.com> a ?crit :
+>> > Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a ?crit :
 >> >>
->> >> Drop default dependencies, haveged needs nothing but
->> >> local sockets and /dev/random.
->> >> This allows the entropy to be available earlier.
+>> >> the openssh daemon is not suited for systemd's simple
+>> >> service type. dependend services should only start
+>> >> when sshd is ready to accept connections.
+>> >>
+>> >> A patch is added from debian to allow openssh
+>> >> to communicate this state.
+>> >>
+>> >> Restarts are prevented if the reason is a faulty
+>> >> config file (errocode 255).
+>> >>
+>> >> The "user confinement directory" is changed to
+>> >> '/run/sshd' which is automatically managed by systemd.
 >> >>
 >> >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 >> >> ---
->> >>  package/haveged/haveged.service | 5 ++++-
->> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+>> >>  package/openssh/00-systemd-readiness.patch | 84 ++++++++++++++++++++++
+>> >>  package/openssh/openssh.mk                 | 14 +++-
+>> >>  package/openssh/sshd-sysusers.conf         |  2 +-
+>> >>  package/openssh/sshd.service               | 13 +++-
+>> >>  4 files changed, 109 insertions(+), 4 deletions(-)
+>> >>  create mode 100644 package/openssh/00-systemd-readiness.patch
 >> >>
->> >> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
->> >> index 91035c6711..ed9f043a91 100644
->> >> --- a/package/haveged/haveged.service
->> >> +++ b/package/haveged/haveged.service
->> >> @@ -1,10 +1,13 @@
+>> >> diff --git a/package/openssh/00-systemd-readiness.patch b/package/openssh/00-systemd-readiness.patch
+>> >> new file mode 100644
+>> >> index 0000000000..be3b6b0074
+>> >> --- /dev/null
+>> >> +++ b/package/openssh/00-systemd-readiness.patch
+>> >> @@ -0,0 +1,84 @@
+>> >> +From ab765b2bd55062a704f09da8f8c1c4ad1d6630a7 Mon Sep 17 00:00:00 2001
+>> >> +From: Michael Biebl <biebl@debian.org>
+>> >> +Date: Mon, 21 Dec 2015 16:08:47 +0000
+>> >> +Subject: Add systemd readiness notification support
+>> >> +
+>> >> +Bug-Debian: https://bugs.debian.org/778913
+>> >> +Forwarded: no
+>> >> +Last-Update: 2017-08-22
+>> >> +
+>> >> +Patch-Name: systemd-readiness.patch
+>> >> +---
+>> >> + configure.ac | 24 ++++++++++++++++++++++++
+>> >> + sshd.c       |  9 +++++++++
+>> >> + 2 files changed, 33 insertions(+)
+>> >> +
+>> >> +diff --git a/configure.ac b/configure.ac
+>> >> +index e894db9fc..c119d6fd1 100644
+>> >> +--- a/configure.ac
+>> >> ++++ b/configure.ac
+>> >> +@@ -4499,6 +4499,29 @@ AC_ARG_WITH([kerberos5],
+>> >> + AC_SUBST([GSSLIBS])
+>> >> + AC_SUBST([K5LIBS])
+>> >> +
+>> >> ++# Check whether user wants systemd support
+>> >> ++SYSTEMD_MSG="no"
+>> >> ++AC_ARG_WITH(systemd,
+>> >> ++      [  --with-systemd          Enable systemd support],
+>> >> ++      [ if test "x$withval" != "xno" ; then
+>> >> ++              AC_PATH_TOOL([PKGCONFIG], [pkg-config], [no])
+>> >> ++              if test "$PKGCONFIG" != "no"; then
+>> >> ++                      AC_MSG_CHECKING([for libsystemd])
+>> >> ++                      if $PKGCONFIG --exists libsystemd; then
+>> >> ++                              SYSTEMD_CFLAGS=`$PKGCONFIG --cflags libsystemd`
+>> >> ++                              SYSTEMD_LIBS=`$PKGCONFIG --libs libsystemd`
+>> >> ++                              CPPFLAGS="$CPPFLAGS $SYSTEMD_CFLAGS"
+>> >> ++                              SSHDLIBS="$SSHDLIBS $SYSTEMD_LIBS"
+>> >> ++                              AC_MSG_RESULT([yes])
+>> >> ++                              AC_DEFINE(HAVE_SYSTEMD, 1, [Define if you want systemd support.])
+>> >> ++                              SYSTEMD_MSG="yes"
+>> >> ++                      else
+>> >> ++                              AC_MSG_RESULT([no])
+>> >> ++                      fi
+>> >> ++              fi
+>> >> ++      fi ]
+>> >> ++)
+>> >> ++
+>> >> + # Looking for programs, paths and files
+>> >> +
+>> >> + PRIVSEP_PATH=/var/empty
+>> >> +@@ -5305,6 +5328,7 @@ echo "                   libldns support: $LDNS_MSG"
+>> >> + echo "  Solaris process contract support: $SPC_MSG"
+>> >> + echo "           Solaris project support: $SP_MSG"
+>> >> + echo "         Solaris privilege support: $SPP_MSG"
+>> >> ++echo "                   systemd support: $SYSTEMD_MSG"
+>> >> + echo "       IP address in \$DISPLAY hack: $DISPLAY_HACK_MSG"
+>> >> + echo "           Translate v4 in v6 hack: $IPV4_IN6_HACK_MSG"
+>> >> + echo "                  BSD Auth support: $BSD_AUTH_MSG"
+>> >> +diff --git a/sshd.c b/sshd.c
+>> >> +index 4e8ff0662..5e7679a33 100644
+>> >> +--- a/sshd.c
+>> >> ++++ b/sshd.c
+>> >> +@@ -85,6 +85,10 @@
+>> >> + #include <prot.h>
+>> >> + #endif
+>> >> +
+>> >> ++#ifdef HAVE_SYSTEMD
+>> >> ++#include <systemd/sd-daemon.h>
+>> >> ++#endif
+>> >> ++
+>> >> + #include "xmalloc.h"
+>> >> + #include "ssh.h"
+>> >> + #include "ssh2.h"
+>> >> +@@ -1951,6 +1955,11 @@ main(int ac, char **av)
+>> >> +                       }
+>> >> +               }
+>> >> +
+>> >> ++#ifdef HAVE_SYSTEMD
+>> >> ++              /* Signal systemd that we are ready to accept connections */
+>> >> ++              sd_notify(0, "READY=1");
+>> >> ++#endif
+>> >> ++
+>> >> +               /* Accept a connection and return in a forked child */
+>> >> +               server_accept_loop(&sock_in, &sock_out,
+>> >> +                   &newsock, config_s);
+>> >> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+>> >> index 55b917e20a..d425db1428 100644
+>> >> --- a/package/openssh/openssh.mk
+>> >> +++ b/package/openssh/openssh.mk
+>> >> @@ -12,6 +12,7 @@ OPENSSH_CONF_ENV = \
+>> >>         LD="$(TARGET_CC)" \
+>> >>         LDFLAGS="$(TARGET_CFLAGS)" \
+>> >>         LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+>> >> +OPENSSH_AUTORECONF = YES
+>> >>  OPENSSH_CONF_OPTS = \
+>> >>         --sysconfdir=/etc/ssh \
+>> >>         --with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
+>> >> @@ -22,9 +23,20 @@ OPENSSH_CONF_OPTS = \
+>> >>         --disable-wtmpx \
+>> >>         --disable-strip
+>> >>
+>> >> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>> >> +OPENSSH_DEPENDENCIES = systemd
+>> >> +
+>> >> +OPENSSH_CONF_OPTS += \
+>> >> +       --with-privsep-path=/run/sshd \
+>> >> +       --with-pid-dir=/run \
+>> >> +       --with-systemd
+>> >> +
+>> >> +else
+>> >> +
+>> >>  define OPENSSH_PERMISSIONS
+>> >>         /var/empty d 755 root root - - - - -
+>> >>  endef
+>> >
+>> >
+>> > Do we still need this when using systemd, or can it be commented out ?
+>>
+>> Not sure what you mean with "this"?
+>> The OPENSSH_PERMISSIONS block is needed when not using systemd and it
+>> is only active then.
+>>
+>
+> my bad, I missed the enclosing ifeq()
+>
+>>
+>> >
+>> >
+>> >>
+>> >> +endif
+>> >>
+>> >>  ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+>> >>  OPENSSH_CONF_OPTS += --without-pie
+>> >> @@ -72,7 +84,7 @@ define OPENSSH_INSTALL_SYSTEMD_SYSUSERS
+>> >>  endef
+>> >>  else
+>> >>  define OPENSSH_USERS
+>> >> -       sshd -1 sshd -1 * /var/empty - - SSH drop priv user
+>> >> +       sshd -1 sshd -1 * $(if $(BR2_PACKAGE_SYSTEMD),/run/sshd,/var/empty) - - SSH drop priv user
+>> >>  endef
+>> >>  endif
+>> >>
+>> >> diff --git a/package/openssh/sshd-sysusers.conf b/package/openssh/sshd-sysusers.conf
+>> >> index ac77aec065..303d0dbb63 100644
+>> >> --- a/package/openssh/sshd-sysusers.conf
+>> >> +++ b/package/openssh/sshd-sysusers.conf
+>> >> @@ -1 +1 @@
+>> >> -u sshd - "SSH drop priv user" /var/empty
+>> >> +u sshd - "SSH drop priv user" /run/sshd
+>> >> diff --git a/package/openssh/sshd.service b/package/openssh/sshd.service
+>> >> index b5e96b3a25..715bd3f7eb 100644
+>> >> --- a/package/openssh/sshd.service
+>> >> +++ b/package/openssh/sshd.service
+>> >> @@ -1,11 +1,20 @@
 >> >>  [Unit]
->> >>  Description=Entropy Harvesting Daemon
->> >>  Documentation=man:haveged(8)
->> >> +DefaultDependencies=no
->> >> +Conflicts=shutdown.target
->> >> +Before=sysinit.target shutdown.target systemd-update-done.service
+>> >>  Description=OpenSSH server daemon
+>> >> -After=syslog.target network.target auditd.service
+>> >> +Documentation=man:sshd(8) man:sshd_config(5)
+>> >> +After=network.target auditd.service
 >> >>
->> > Since v243 (quoting  systemd's NEWS file) :
->> >
->> > * systemd-random-seed.service is now a synchronization point for full
->> >           initialization of the kernel's entropy pool. Services that require
->> >           /dev/urandom to be correctly initialized should be ordered after this
->> >           service.
->> >
->> > so... in that case it might make sense to add Before=systemd-random-seed.service
->> > (assuming that works. This a very early point, so it needs some testing)
->>
->>
->> No, doesnt make sense, a "before"  only means the service is *started before*,
->> not the process did do anything worthwile. (That's the reason for my
->> openssh patch BTW)
->> systemd-random-seed.service is a one-shot, so a "before" *that*
->> service means the dependants wait till it is finished.
->>
-> (note that I don't really understand what haveged does, so I might be completely wrong in my
-> understanding)
->
-> systemd-random-seed is the sync point, that means that any service that needs
-> random numbers should  be ordered after random-seed.
->
-> So, to me, it makes sense that we want to have haveged started before that point. Thus
-> having haveged ordered before random-seed.
->
-> and I don't really understand your sentence above...
-> if you add Before=systemd-random-seed, it's systemd-random-seed that will wait for
-> haveged to be started, not the other way round. (which seems to be what you say ??)
-
-
- Yes, systemd-random-seed will wait for haveged to be *startet* (and
-maybe its immediatly preempted),
-but it takes several seconds after that till /dev/urandom is "ready"
-(what that means changed in the last few years multiple times)
-
->
-> now... if haveged needs some time to "do something usefull" then it means that haveged
-> is badly synchronised on startup. The Ready signal in systemd is defined as "the point
-> at which the service is able to render the service expected for it'
-
-
-Yes, but haveged does not send such a signal (and systemd only wait
-for that if the Type=notify).
-Further the service only feeds data to the kernel, and the only valid
-meaning of /dev/urandom is "ready"
-comes from the kernel.
-
- The point of waiting for "systemd-random-seed" is a substitute if you
-are in a really tough spot,
-and independent of what haveged does.
-
->
->
->
->
->>
->> >
+>> >>
 >> >>  [Service]
->> >>  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
->> >>  SuccessExitStatus=143
+>> >>  ExecStartPre=/usr/bin/ssh-keygen -A
+>> >> -ExecStart=/usr/sbin/sshd -D -e
+>> >> +ExecStartPre=/usr/sbin/sshd -t
+>> >> +ExecStart=/usr/sbin/sshd -D
+>> >
+>> > You droped the -e, so  you are logging to syslog
+>> > However you droped the dependency on syslog.target earlier...
+>> > (maybe it should be syslog.socket instead of .target, btw)
+>>
+>>
+>> syslog.target is long long gone, and the syslog will be
+>> unconditionally available
+>> https://www.freedesktop.org/wiki/Software/systemd/syslog/
+>>
+>>
+>> >
+>> >
+>> > how exactly do you want to log  ? (I think logging to stdout is better, it will be
+>> > redirected to the journal.
+>>
+>>
+>> stdout is not really useful if syslog is supported.
+>>
+> i'd go the other way round
+>
+> syslog is not really necessary if stdout is available,
+> but it's a matter of taste :P so let's go your way.
+
+Its more the point, that Openssh already implemented syslog, and thats
+a clear functional superset of listening to stdout.
+
+>
+>>
+>> >
+>> >
 >> >>
->> > I could not find any documentation on haveged return codes, so i'll trust you on that one
+>> >> +ExecReload=/usr/sbin/sshd -t
+>> >>  ExecReload=/bin/kill -HUP $MAINPID
+>> >> +KillMode=process
+>> >
+>> >
+>> > Wouldn't mixed be better here ?
+>> > I'm not really sure what the use-case for procss is anyway...
 >>
 >>
->> Don't trust me, I did not touch the values (but I  can attest they work).
+>> I taken that from debian, I could not argue against it (there is a
+>> long discussion which I linked above).
+>> Can you argue *for* mixed?
 >>
->> >>  [Install]
->> >> -WantedBy=multi-user.target
->> >> +WantedBy=sysinit.target
->> >> --
->> >> 2.26.2
->> >>
->> > Apart from my earlier remark, you can add my ReviewedBy
->>
->>
->> Thx.
->> Norbert
 >
 >
+> I didn't see any link
+> * process : SIGTERM and SIGKILL is sent only to MainPID
+> * mixed : SIGTERM is sent to MainPID, SIGKILL is sent to every process in the service cgroup.
 >
-> --
+> This means that if all works well, they do the same thing
 >
+> in case the MainPID fails to properly terminate its children, process would leave children alive
+> but mixed woul kill everybody
 >
-> 20 rue des Jardins
-> 92600 Asni?res-sur-Seine
+> Since we are trying to terminate the service, it makes sense to me to make sur all child process
+> are killed.
 >
-> J?r?my ROSEN
-> Architecte technique
->
->  jeremy.rosen at smile.fr
->   +33 6 88 25 87 42
->  http://www.smile.eu
+> but I don't see your link so I may be missing something
+
+The link is in the added patch: https://bugs.debian.org/778913
+
+As said, I could not argue either way, but I got some respect for the
+debian guys ;)
 
 Norbert
