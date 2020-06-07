@@ -1,89 +1,92 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun,  7 Jun 2020 20:11:17 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/brltty: fix input_event related
- compile failure
-Message-ID: <20200607181116.29433-1-heiko.thiery@gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sun, 7 Jun 2020 20:12:35 +0200
+Subject: [Buildroot] [PATCH 0/3] dus-borker: new package (branch
+ yem/dbus-broker)
+In-Reply-To: <cover.1591551884.git.yann.morin.1998@free.fr>
+References: <cover.1591551884.git.yann.morin.1998@free.fr>
+Message-ID: <CADYdroME33bfcew=STjg8Udmn0ZLgTSAAZ=T8Gy2hkTe-BBu7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix input_event time related compile failure. The problem
-is reported and fixed upstream.
+Am So., 7. Juni 2020 um 19:44 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Hello All!
+>
+> This series is a rework of the original submission by Norbert, to add
+> dbus-broker and make use of it as a message us daemon for use with
+> systemd.
+>
+> I (Yann) have reorganised the package, and fixed various issues, and
+> finally introduced run-time tests.
 
-Fixes:
-http://autobuild.buildroot.net/results/7c5278c0ff2b2d8f88803e256803b31a75904efe/build-end.log
+Well, nice but a warning would've been nice. This mailing list
+discussions and patch schemes are not what I am used to doing,
+and I am currently rebasing and reworking a dozen of patches.
 
-./system_linux.c: In function 'writeInputEvent':
-./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
-   gettimeofday(&event.time, NULL);
-                       ^~~~
-                       type
+I worked your feedback into my patch, as the last 2 commits at:
+https://github.com/nolange/buildroot/commits/add_dbusbroker
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- ...nput_event-time-related-compile-fail.patch | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/brltty/0002-fix-input_event-time-related-compile-fail.patch
+>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>
+> The following changes since commit 65b63785a642bbc565924edf365b5d7c080f961c
+>
+>   package/systemd: move preset-all HOOK to fakeroot stage (2020-06-07 13:45:38 +0200)
+>
+>
+> are available in the git repository at:
+>
+>   git://git.buildroot.org/~ymorin/git/buildroot.git
+>
+> for you to fetch changes up to f95931fc0eccd42e1aedeb83187ee01098903e3a
+>
+>   support/run-test: add test for systemd using dbus-broker (2020-06-07 19:44:37 +0200)
 
-diff --git a/package/brltty/0002-fix-input_event-time-related-compile-fail.patch b/package/brltty/0002-fix-input_event-time-related-compile-fail.patch
-new file mode 100644
-index 0000000000..249d420ca9
---- /dev/null
-+++ b/package/brltty/0002-fix-input_event-time-related-compile-fail.patch
-@@ -0,0 +1,52 @@
-+From 43390f9906a8c663872e0eab56c1173032d1bd6c Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Sun, 7 Jun 2020 12:58:38 +0200
-+Subject: [PATCH] fix input_event time related compile fail
-+
-+./system_linux.c: In function 'writeInputEvent':
-+./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
-+   gettimeofday(&event.time, NULL);
-+                       ^~~~
-+                       type
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ Programs/system_linux.c | 13 ++++++++++++-
-+ 1 file changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/Programs/system_linux.c b/Programs/system_linux.c
-+index a97ee7ff6..77052d32f 100644
-+--- a/Programs/system_linux.c
-++++ b/Programs/system_linux.c
-+@@ -40,6 +40,14 @@
-+ #ifdef HAVE_LINUX_INPUT_H
-+ #include <linux/input.h>
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#endif
-++
-++#ifndef input_event_usec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ #include "kbd_keycodes.h"
-+ 
-+ LINUX_KEY_MAP(xt00) = {
-+@@ -957,9 +965,12 @@ int
-+ writeInputEvent (UinputObject *uinput, uint16_t type, uint16_t code, int32_t value) {
-+ #ifdef HAVE_LINUX_UINPUT_H
-+   struct input_event event;
-++  struct timeval tv;
-+ 
-+   memset(&event, 0, sizeof(event));
-+-  gettimeofday(&event.time, NULL);
-++  gettimeofday(&tv, NULL);
-++  event.input_event_sec = tv.tv_sec;
-++  event.input_event_usec = tv.tv_usec;
-+   event.type = type;
-+   event.code = code;
-+   event.value = value;
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+Now, after buildroot master and my patches there's another source.
+I would have preferred getting the package done first, even if it's
+not perfectly integrated (or not at all) into systemd and runtime
+tests.
+
+
+>
+>
+> ----------------------------------------------------------------
+> Norbert Lange (1):
+>       package/dbusbroker: new package
+>
+> Yann E. MORIN (2):
+>       package/systemd: do not force dbus if dbus-broker is available
+>       support/run-test: add test for systemd using dbus-broker
+>
+>  DEVELOPERS                                 |   1 +
+>  package/Config.in                          |   1 +
+>  package/dbus-broker/Config.in              |  21 +++++
+>  package/dbus-broker/dbus-broker.hash       |   3 +
+>  package/dbus-broker/dbus-broker.mk         |  71 +++++++++++++++++
+>  package/dbus-broker/dbus.socket            |   5 ++
+>  package/dbus-broker/session.conf           |  65 ++++++++++++++++
+>  package/dbus-broker/system.conf            | 120 +++++++++++++++++++++++++++++
+>  package/systemd/Config.in                  |   2 +-
+>  support/testing/tests/init/test_systemd.py |  28 +++++++
+>  10 files changed, 316 insertions(+), 1 deletion(-)
+>  create mode 100644 package/dbus-broker/Config.in
+>  create mode 100644 package/dbus-broker/dbus-broker.hash
+>  create mode 100644 package/dbus-broker/dbus-broker.mk
+>  create mode 100644 package/dbus-broker/dbus.socket
+>  create mode 100644 package/dbus-broker/session.conf
+>  create mode 100644 package/dbus-broker/system.conf
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
