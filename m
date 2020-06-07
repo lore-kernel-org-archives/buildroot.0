@@ -1,45 +1,49 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun,  7 Jun 2020 18:03:05 +0200
-Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.3.3
-Message-ID: <20200607160305.110673-1-angelo@amarulasolutions.com>
+Date: Sun,  7 Jun 2020 18:15:19 +0200
+Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 7.1.2
+Message-ID: <20200607161519.133543-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps python-can to version 3.3.3.
+This package bumps python-pillow to version 7.1.2.
+It updates also the LICENSE hash cause of a copyright year update.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-can/python-can.hash | 2 +-
- package/python-can/python-can.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pillow/python-pillow.hash | 6 +++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index 0a945eb006..ced51d8b75 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,4 @@
- # sha256 from https://pypi.org/pypi/python-can/json
--sha256	8dc9e0f926e880cd57a3badbaebc6393cde7adffdd3e1975a78a82c48d4e3bbe  python-can-3.3.1.tar.gz
-+sha256	ecd69cf6b2f0235345ebe607a15325cf1384c85b24ffbe1d68c3754357f87488  python-can-3.3.3.tar.gz
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 0d66c4bb3c..d222645633 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/project/Pillow/
+-md5	d099946335c1ba372f5b1fa68ca71645  Pillow-7.0.0.tar.gz
+-sha256	4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946  Pillow-7.0.0.tar.gz
++md5	f1f7592c51260e5080d3cd71781ea675  Pillow-7.1.2.tar.gz
++sha256	a0b49960110bc6ff5fead46013bcb8825d101026d466f3a4de3476defe0fb0dd  Pillow-7.1.2.tar.gz
  # Locally computed sha256 checksums
- sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 749583f961..158e89f204 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
+-sha256	04a04a908e52921829c7f51528e5619c79becdde99c484ab7d4f235e2927968c  LICENSE
++sha256	37de42abe33a247e8f03d2313657a0f174a239a198f526add6544ff3e2643b81  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 5ff2dcfdb6..2832eeee0b 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 3.3.1
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/d1/7e/d92889e3fa6ed625b5d6f065bff1c1b5921519a5133553905affb0d6b97c
-+PYTHON_CAN_VERSION = 3.3.3
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/b0/fa/8c6eb8988130f256db4c3cf84537c44684dbb3d528d2e1a1d2209eac4d90
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+-PYTHON_PILLOW_VERSION = 7.0.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab
++PYTHON_PILLOW_VERSION = 7.1.2
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/ce/ef/e793f6ffe245c960c42492d0bb50f8d14e2ba223f1922a5c3c81569cec44
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 -- 
 2.25.1
