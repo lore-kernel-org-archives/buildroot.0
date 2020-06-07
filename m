@@ -1,78 +1,50 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 7 Jun 2020 20:35:44 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
-References: <20200605225421.13494-1-nolange79@gmail.com>
- <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
-Message-ID: <CADYdroMhuGysCOy2aV2ihoA3kQ9fSUdKiocpL4h2niT7=iWuHw@mail.gmail.com>
+Date: Sun, 7 Jun 2020 20:41:33 +0200
+Subject: [Buildroot] [PATCH 2/2] fs: clean the volatile /run and /tmp
+ directories
+In-Reply-To: <20200607104708.1eed13a9@windsurf>
+References: <20200605224858.12870-1-nolange79@gmail.com>
+ <20200605224858.12870-2-nolange79@gmail.com>
+ <20200606224227.60a26aeb@windsurf>
+ <CADYdroO8PNfE=Cmd96rE-Kfd_nTq_7+h-JLdH-uUPGP3GmsBqg@mail.gmail.com>
+ <20200607104708.1eed13a9@windsurf>
+Message-ID: <CADYdroO5MrSswWd_17ETVEbuFCOHMu-r-KKcFpBvLoXXSeH7DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 7. Juni 2020 um 12:35 Uhr schrieb J?r?my ROSEN <jeremy.rosen@smile.fr>:
+Am So., 7. Juni 2020 um 10:47 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
 >
+> On Sun, 7 Jun 2020 00:57:23 +0200
+> Norbert Lange <nolange79@gmail.com> wrote:
 >
+> > > However, I'm not sure if removing all what they contain is the right
+> > > approach. Shouldn't we avoid creating things in /tmp and /run in the
+> > > first place ?
+> >
+> > Yeah we should avoid creating stuff there, but it's sometimes hard to do.
+> > One example is defining a user with home dir in /run, mkusers will
+> > then create a dir there
+> > (pretty late to clear it up otherwise)
 >
-> Le sam. 6 juin 2020 ? 00:55, Norbert Lange <nolange79@gmail.com> a ?crit :
->>
->> Drop default dependencies, haveged needs nothing but
->> local sockets and /dev/random.
->> This allows the entropy to be available earlier.
->>
->> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->> ---
->>  package/haveged/haveged.service | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
->> index 91035c6711..ed9f043a91 100644
->> --- a/package/haveged/haveged.service
->> +++ b/package/haveged/haveged.service
->> @@ -1,10 +1,13 @@
->>  [Unit]
->>  Description=Entropy Harvesting Daemon
->>  Documentation=man:haveged(8)
->> +DefaultDependencies=no
->> +Conflicts=shutdown.target
->> +Before=sysinit.target shutdown.target systemd-update-done.service
->>
-> Since v243 (quoting  systemd's NEWS file) :
->
-> * systemd-random-seed.service is now a synchronization point for full
->           initialization of the kernel's entropy pool. Services that require
->           /dev/urandom to be correctly initialized should be ordered after this
->           service.
->
-> so... in that case it might make sense to add Before=systemd-random-seed.service
-> (assuming that works. This a very early point, so it needs some testing)
+> But our skeleton has a fstab that always mounts a tmpfs filesystem on
+> /run, so how can it make sense for mkusers to create a home directory
+> in /run ?
 
-
-No, doesnt make sense, a "before"  only means the service is *started before*,
-not the process did do anything worthwile. (That's the reason for my
-openssh patch BTW)
-systemd-random-seed.service is a one-shot, so a "before" *that*
-service means the dependants wait till it is finished.
+Think of system users, where the "home" is usually non-persistent or
+just some sort of jail.
+For ex. my openssh patch sets the sshd user's home to /run/sshd - A
+directory that's automatically
+created when the service starts and deleted when it stops.
 
 >
->>  [Service]
->>  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
->>  SuccessExitStatus=143
->>
-> I could not find any documentation on haveged return codes, so i'll trust you on that one
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-
-Don't trust me, I did not touch the values (but I  can attest they work).
-
->>  [Install]
->> -WantedBy=multi-user.target
->> +WantedBy=sysinit.target
->> --
->> 2.26.2
->>
-> Apart from my earlier remark, you can add my ReviewedBy
-
-
-Thx.
 Norbert
