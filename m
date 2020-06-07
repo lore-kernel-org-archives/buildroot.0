@@ -1,120 +1,152 @@
 From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Sun, 7 Jun 2020 21:05:27 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <CADYdroMhuGysCOy2aV2ihoA3kQ9fSUdKiocpL4h2niT7=iWuHw@mail.gmail.com>
-References: <20200605225421.13494-1-nolange79@gmail.com>
- <CAFvCimXjptaExo7ia5XWRxrQrAYEhJqEZisTyp2_uUbWwu40uA@mail.gmail.com>
- <CADYdroMhuGysCOy2aV2ihoA3kQ9fSUdKiocpL4h2niT7=iWuHw@mail.gmail.com>
-Message-ID: <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
+Date: Sun, 7 Jun 2020 21:09:20 +0200
+Subject: [Buildroot] [PATCH 3/4] package/openssh: seperate sd service
+ for host key generation
+In-Reply-To: <CADYdroMhy_o2RQv4Az2UcGPw0WXd+wOoZgJvGOr4KGpvZjM9oA@mail.gmail.com>
+References: <20200605225905.14082-1-nolange79@gmail.com>
+ <20200605225905.14082-3-nolange79@gmail.com>
+ <CAFvCimUz5XVA9roApaXTqzkW4QMO4d_Qcy_aY5GjUY9Hbid5Kw@mail.gmail.com>
+ <CADYdroMhy_o2RQv4Az2UcGPw0WXd+wOoZgJvGOr4KGpvZjM9oA@mail.gmail.com>
+Message-ID: <CAFvCimXa51Fgzn1r2vjPhknAyaRAZL+x0xwiXFr-+sMgSaMaaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 7 juin 2020 ? 20:35, Norbert Lange <nolange79@gmail.com> a ?crit :
+Le dim. 7 juin 2020 ? 20:56, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-> Am So., 7. Juni 2020 um 12:35 Uhr schrieb J?r?my ROSEN <
+> Am So., 7. Juni 2020 um 12:44 Uhr schrieb J?r?my ROSEN <
 > jeremy.rosen at smile.fr>:
 > >
+> > Why the RemainAfterExit ?
+> > This is a "real oneshot", it doesn't need a state to stay behind.
+> > Moreover it would only stay behind when actually generating the key. in
+> all followup boot the unit would not be started at all
+>
+> Yeah... there is some truth to that, but those one-shots have tricky
+> sideeffects systemd 245 changed something that completely undermines
+> my understanding of how they should work,
+> and make that flag practically a necessity. See:
+> https://github.com/systemd/systemd/issues/15091
+>
+> I dont think I am able to correctly describe all pro's and cons but I
+> added this flag after:
+>
+> -   later services did not care for failures
+> -   starting/stopping *any* service will recheck the condition and
+> fill the syslog (* depends on other stuff aswell, but that's what
+> happens for me)
+>
+> In short: add RemainAfterExit for every one-shot, or there will be
+> dragons. Doesn't seem upstream is bothered by this.
+>
+> ok, I see your point... you are protected by your various Condition= from
+this bug, but that would fill the logs with condition checks messages.
+
+Could you please add a comment pointing to that bug report ?
+
+Appart from that
+Reviewd-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+
+
 > >
+> > Appart from that, Looks good to me...
 > >
-> > Le sam. 6 juin 2020 ? 00:55, Norbert Lange <nolange79@gmail.com> a
+> > Le sam. 6 juin 2020 ? 00:59, Norbert Lange <nolange79@gmail.com> a
 > ?crit :
 > >>
-> >> Drop default dependencies, haveged needs nothing but
-> >> local sockets and /dev/random.
-> >> This allows the entropy to be available earlier.
+> >> split out generationg of host keys into an optional service
+> >> that can easily be removed or deactivated.
 > >>
 > >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > >> ---
-> >>  package/haveged/haveged.service | 5 ++++-
-> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >>  package/openssh/openssh.mk               |  5 +++--
+> >>  package/openssh/sshd-host-keygen.service | 20 ++++++++++++++++++++
+> >>  package/openssh/sshd.service             |  1 -
+> >>  3 files changed, 23 insertions(+), 3 deletions(-)
+> >>  create mode 100644 package/openssh/sshd-host-keygen.service
 > >>
-> >> diff --git a/package/haveged/haveged.service
-> b/package/haveged/haveged.service
-> >> index 91035c6711..ed9f043a91 100644
-> >> --- a/package/haveged/haveged.service
-> >> +++ b/package/haveged/haveged.service
-> >> @@ -1,10 +1,13 @@
-> >>  [Unit]
-> >>  Description=Entropy Harvesting Daemon
-> >>  Documentation=man:haveged(8)
-> >> +DefaultDependencies=no
-> >> +Conflicts=shutdown.target
-> >> +Before=sysinit.target shutdown.target systemd-update-done.service
+> >> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> >> index d425db1428..6b3ee1f5f4 100644
+> >> --- a/package/openssh/openssh.mk
+> >> +++ b/package/openssh/openssh.mk
+> >> @@ -114,8 +114,9 @@ endef
+> >>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
 > >>
-> > Since v243 (quoting  systemd's NEWS file) :
-> >
-> > * systemd-random-seed.service is now a synchronization point for full
-> >           initialization of the kernel's entropy pool. Services that
-> require
-> >           /dev/urandom to be correctly initialized should be ordered
-> after this
-> >           service.
-> >
-> > so... in that case it might make sense to add
-> Before=systemd-random-seed.service
-> > (assuming that works. This a very early point, so it needs some testing)
->
->
-> No, doesnt make sense, a "before"  only means the service is *started
-> before*,
-> not the process did do anything worthwile. (That's the reason for my
-> openssh patch BTW)
-> systemd-random-seed.service is a one-shot, so a "before" *that*
-> service means the dependants wait till it is finished.
->
-> (note that I don't really understand what haveged does, so I might be
-completely wrong in my
-understanding)
-
-systemd-random-seed is the sync point, that means that any service that
-needs
-random numbers should  be ordered after random-seed.
-
-So, to me, it makes sense that we want to have haveged started before that
-point. Thus
-having haveged ordered before random-seed.
-
-and I don't really understand your sentence above...
-if you add Before=systemd-random-seed, it's systemd-random-seed that will
-wait for
-haveged to be started, not the other way round. (which seems to be what you
-say ??)
-
-now... if haveged needs some time to "do something usefull" then it means
-that haveged
-is badly synchronised on startup. The Ready signal in systemd is defined as
-"the point
-at which the service is able to render the service expected for it'
-
-
-
-
-
-> >
+> >>  define OPENSSH_INSTALL_INIT_SYSTEMD
+> >> -       $(INSTALL) -D -m 644 package/openssh/sshd.service \
+> >> -               $(TARGET_DIR)/usr/lib/systemd/system/sshd.service
+> >> +       mkdir $(TARGET_DIR)/usr/lib/systemd/system
+> >> +       $(INSTALL) -m 644 package/openssh/sshd*.service \
+> >> +               $(TARGET_DIR)/usr/lib/systemd/system/
+> >>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+> >>  endef
+> >>
+> >> diff --git a/package/openssh/sshd-host-keygen.service
+> b/package/openssh/sshd-host-keygen.service
+> >> new file mode 100644
+> >> index 0000000000..058e671c44
+> >> --- /dev/null
+> >> +++ b/package/openssh/sshd-host-keygen.service
+> >> @@ -0,0 +1,20 @@
+> >> +[Unit]
+> >> +Description=SSH Key Generation
+> >> +Before=sshd.service
+> >> +
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_dsa_key
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_dsa_key.pub
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_ecdsa_key
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_ecdsa_key.pub
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_ed25519_key
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_ed25519_key.pub
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_rsa_key
+> >> +ConditionPathExists=|!/etc/ssh/ssh_host_rsa_key.pub
+> >> +
+> >> +[Service]
+> >> +ExecStart=/usr/bin/ssh-keygen -A
+> >> +Type=oneshot
+> >> +RemainAfterExit=yes
+> >> +
+> >> +[Install]
+> >> +WantedBy=sshd.service
+> >> diff --git a/package/openssh/sshd.service b/package/openssh/sshd.service
+> >> index 715bd3f7eb..797e249d8d 100644
+> >> --- a/package/openssh/sshd.service
+> >> +++ b/package/openssh/sshd.service
+> >> @@ -4,7 +4,6 @@ Documentation=man:sshd(8) man:sshd_config(5)
+> >>  After=network.target auditd.service
+> >>
 > >>  [Service]
-> >>  ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
-> >>  SuccessExitStatus=143
-> >>
-> > I could not find any documentation on haveged return codes, so i'll
-> trust you on that one
->
->
-> Don't trust me, I did not touch the values (but I  can attest they work).
->
-> >>  [Install]
-> >> -WantedBy=multi-user.target
-> >> +WantedBy=sysinit.target
+> >> -ExecStartPre=/usr/bin/ssh-keygen -A
+> >>  ExecStartPre=/usr/sbin/sshd -t
+> >>  ExecStart=/usr/sbin/sshd -D
+> >>  ExecReload=/usr/sbin/sshd -t
 > >> --
 > >> 2.26.2
 > >>
-> > Apart from my earlier remark, you can add my ReviewedBy
->
->
-> Thx.
-> Norbert
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
+> >
+> > --
+> >
+> >
+> > 20 rue des Jardins
+> > 92600 Asni?res-sur-Seine
+> >
+> > J?r?my ROSEN
+> > Architecte technique
+> >
+> >  jeremy.rosen at smile.fr
+> >   +33 6 88 25 87 42
+> >  http://www.smile.eu
+> >
+> >
+> >
 >
 
 
@@ -139,4 +171,4 @@ Architecte technique
 <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/76b40797/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200607/68875fbe/attachment.html>
