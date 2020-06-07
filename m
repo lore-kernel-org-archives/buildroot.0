@@ -1,54 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Jun 2020 09:27:08 +0200
-Subject: [Buildroot] [git commit] linux: rename config option
-Message-ID: <20200607072634.2E14284688@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun,  7 Jun 2020 09:36:10 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/acpica: bump version to 20200528
+Message-ID: <20200607073610.16911-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8e3e939694c4777c5287e44e67772f4e5c043aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Update the hash file to the new 2 spaces convention
+- Update the hash of the license file
 
-Commit a4eef9a3959 (linux: introduce BR2_KERNEL_DTB_KEEP_DIRNAME)
-introduced a new config option, but its name was not matching the
-naming-scheme of the other config options.
+Fixes:
+http://autobuild.buildroot.net/results/fe58e834bb67a9aab640e1d913588b47eaf7e4f5/
 
-Rename it.
-
-We don't need legacy handling, because that config option was added very
-recently and was never part of a release.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- linux/Config.in | 2 +-
- linux/linux.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/acpica/acpica.hash | 4 ++--
+ package/acpica/acpica.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 61e84f00b4..2af3a00352 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -407,7 +407,7 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	  You can provide a list of dts paths to copy and
- 	  build, separated by spaces.
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index ac2201d570..961ee9dbe3 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256 edb9a886455d22955c93753e2de61b780bed94fb434079e844dc5e4376cadd4c  acpica-unix2-20191018.tar.gz
+-sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
++sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
++sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 68b948c86d..8f1a36fbb7 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--config BR2_KERNEL_DTB_KEEP_DIRNAME
-+config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
- 	bool "Keep the directory name of the Device Tree"
- 	help
- 	  If enabled, the device tree blobs keep their
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c3859a59d5..b90b032bb9 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -381,7 +381,7 @@ define LINUX_INSTALL_DTB
- 	$(foreach dtb,$(LINUX_DTBS), \
- 		install -D \
- 			$(or $(wildcard $(LINUX_ARCH_PATH)/boot/dts/$(dtb)),$(LINUX_ARCH_PATH)/boot/$(dtb)) \
--			$(1)/$(if $(BR2_KERNEL_DTB_KEEP_DIRNAME),$(dtb),$(notdir $(dtb)))
-+			$(1)/$(if $(BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME),$(dtb),$(notdir $(dtb)))
- 	)
- endef
- endif # BR2_LINUX_KERNEL_APPENDED_DTB
+-ACPICA_VERSION = 20191018
++ACPICA_VERSION = 20200528
+ ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+ ACPICA_SITE = https://acpica.org/sites/acpica/files
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+-- 
+2.20.1
