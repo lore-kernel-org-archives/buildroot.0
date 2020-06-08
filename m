@@ -1,66 +1,142 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 8 Jun 2020 14:35:40 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/ethtool: bump to 5.7
-In-Reply-To: <CANQCQpaaSmzCnwYFBn+FcprC1cuV5Jz2ek7076cHuMbUpT5MCQ@mail.gmail.com>
-References: <20200606183817.5113-1-heiko.thiery@gmail.com>
- <20200606183817.5113-2-heiko.thiery@gmail.com>
- <CANQCQpaaSmzCnwYFBn+FcprC1cuV5Jz2ek7076cHuMbUpT5MCQ@mail.gmail.com>
-Message-ID: <CAEyMn7ay0iHgybPGLDXsxSjXFmMc8Y8QnkkTcUPUE6=RZA5Qig@mail.gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Mon, 8 Jun 2020 16:14:00 +0200
+Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
+In-Reply-To: <20200608083829.dm3kjkjo2q2j3xd3@falbala.internal.home.lespocky.de>
+References: <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
+ <CADYdroM-mpaz+7zqGMnKJ5J=sJL-TiAQOXs_vieW6ts77=VBHQ@mail.gmail.com>
+ <CAFvCimVmWczV2XjFsx=De3Q1ZCLxSTOu9etaFqN9z54cv0ACyw@mail.gmail.com>
+ <CADYdroPOE148vzGPNQhBX3mb3tAVK0d-D4vt89rrphK=zfbzxQ@mail.gmail.com>
+ <CAFvCimUXkpkYLQ8mfhvAzTcHJ14Vs4queFjipCRNkZsVyCmP=g@mail.gmail.com>
+ <CADYdroPU=MZa4RCqoS9TrF89jKp2vNXGggMp3iGri8F8DAp02A@mail.gmail.com>
+ <CAFvCimUod4o5Yk0UqtrgymKSD3vTMMMuT-XhNm+g4kmmysdQ4Q@mail.gmail.com>
+ <CADYdroNrgMbYrmLqRmCSobfNnQTtjN4ZfYYViS6JAdMYTZAEbA@mail.gmail.com>
+ <CAFvCimWLcZxrusY5ig1fRxj-SQFQsKvxajJh_s-9==bm1ATo+w@mail.gmail.com>
+ <CADYdroOVGUozgyP258MinUAtznRSRSw-SvrGbD7ZGkqAVdfQJw@mail.gmail.com>
+ <20200608083829.dm3kjkjo2q2j3xd3@falbala.internal.home.lespocky.de>
+Message-ID: <CAFvCimW_m5hQ3Y2+DJyRmD-Wjvu5AmL2HyYrCtXCFbBZqhXybA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Le lun. 8 juin 2020 ? 10:38, Alexander Dahl <post@lespocky.de> a ?crit :
 
-Am Mo., 8. Juni 2020 um 13:51 Uhr schrieb Matthew Weber
-<matthew.weber@collins.com>:
+> Hei hei,
 >
-> Heiko,
+> I'd like to hook in, because I had that topic on my desk lately
+> (although not with buildroot).
 >
-> On Sat, Jun 6, 2020 at 1:43 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> On Sun, Jun 07, 2020 at 10:36:18PM +0200, Norbert Lange wrote:
+> > > I mean... if it's not high grade entropy, it shouldn't credit the
+> kernel entropy
+> > > pool,and if the user is ok with unreliable entropy,
+> systemd-random-seed is
+> > > probably a faster way to get some.
 > >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> >  package/ethtool/ethtool.hash | 2 +-
-> >  package/ethtool/ethtool.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-> > index 67fe263315..e3a958ab39 100644
-> > --- a/package/ethtool/ethtool.hash
-> > +++ b/package/ethtool/ethtool.hash
-> > @@ -1,5 +1,5 @@
-> >  # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
-> > -sha256  ca0f1b526dad5153f0aa0f1eb3c17c31770c75a74f70af622b1a83ae38043995  ethtool-5.6.tar.xz
-> > +sha256  724eb8bd3c3a389fe285735959a1902fbd9310624656ad3220c5f23df1053c39  ethtool-5.7.tar.xz
-> >  # Locally calculated
-> >  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> >  sha256 5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-> > diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-> > index c36268544f..40abe57918 100644
-> > --- a/package/ethtool/ethtool.mk
-> > +++ b/package/ethtool/ethtool.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
+> > haveged is barely entropy, certainly not more than the kernel
+> > provides, it is a means to fake entropy. Gets you to boot faster.
+>
+> Well, the system can boot faster, because haveged provides entropy
+> from unpredictable internal CPU states. It's not just another PRNG.
+>
+> Oh. I didn't know that... interesting
+
+So. haveged provides high quality entropy to the kernel.
+That entropy is probably credited (unlike systemd-random-seed)
+So it is even more important that it is ordered before systemd-random-seed.
+
+> systemd-random-seed needs a filesystem to store stuff, does not credit
+> > the entropy pool (by default).. and won't help at all when booting the
+> > first time.
 > >
-> > -ETHTOOL_VERSION = 5.6
-> > +ETHTOOL_VERSION = 5.7
+
+
+> > I think what you have in mind is more like rng-tools, which feed real,
+> > quality entropy to the kernel.
 >
-> Did you notice by chance if this included GCC10 fixes?
+> rng-tools can not do that by itself, but needs a real HWRNG or
+> something like jitterentropy-rng (which gets its entropy from CPU
+> execution timing jitter). So rng-tools alone doesn't help you,
+> especially if your hardware has no hwrng.
 >
-> http://autobuild.buildroot.net/results/ce233c3eb6b4384c8fb9749802a0afe223b13b39/build-end.log
+> > The user should pick what he needs, haveged will never give you better
+> > entropy over the kernel or real HW sources,  systemd-random-seed will
+> > not let you boot faster (by default).
+>
+> I'm curious, where do you think the kernel gets entropy from? ;-)
+>
+> What you all might find interesting: newer OpenSSL versions, I think
+> from some 1.1.1 bugfix release onwards block until the kernel has
+> initialized its crng.  The upcoming (not yet released) dropbear will
+> do that, too. Both don't rely on /dev/urandom for that but on the
+> getrandom(2) syscall IIRC. Without having looked in systemd source, I
+> would guess they do something similar?
+>
+> Yes it's exactly that. systemd-random-seed will block until urng is ready
+so
+other services don't have to do that themselves (it makes sense for
+dropbear/openssl to do that themselves anyway, for the non-systemd case,
+ but in a systemd-based distro, they won't wait because systemd-random-seed
+ will already have done the waiting)
 
-Besides the bump to 5.7 I also added one patch from that series to fix an issue.
+So at this point,  I am more and more convinced that haveged must be
+ordered before systemd-random-seed. Not doing so is incorrect. At best
+it will work by luck and at worst the entropy provided by haveged will
+arrive
+too late.
 
-The patch [1][ was from an upstream pending series [2].
+On a read-only filesystem, systemd-random-seed will not read the file and
+feed
+entropy (which is not credited anyway) but it will still block the boot and
+thus
+ensure that any "normal" (post sysinit) daemon will have proper urng.
 
-[1] https://patchwork.ozlabs.org/project/netdev/patch/bb60cbfe99071fca4b0ea9e62d67a2341d8dd652.1590707335.git.mkubecek at suse.cz/
-[2] https://patchwork.ozlabs.org/project/netdev/list/?series=180039&state=*
+Please add the Before= it has no ill effect AFAICT and not doing so might
+prevent faster boots in the very cases where you try to avoid it.
 
-I think that should fix that.
+Regards.
+Jeremy
+
+
+
+> So, it's complicated ? ;-)
+>
+> Greets
+> Alex
+>
+> --
+> /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+> \ / CAMPAIGN     | speech censured, the first thought forbidden, the
+>  X  AGAINST      | first freedom denied, chains us all irrevocably.?
+> / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 
 -- 
-Heiko
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200608/daa97438/attachment.html>
