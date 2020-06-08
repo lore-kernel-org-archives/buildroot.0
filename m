@@ -1,80 +1,56 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 8 Jun 2020 10:38:29 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <CADYdroOVGUozgyP258MinUAtznRSRSw-SvrGbD7ZGkqAVdfQJw@mail.gmail.com>
-References: <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
- <CADYdroM-mpaz+7zqGMnKJ5J=sJL-TiAQOXs_vieW6ts77=VBHQ@mail.gmail.com>
- <CAFvCimVmWczV2XjFsx=De3Q1ZCLxSTOu9etaFqN9z54cv0ACyw@mail.gmail.com>
- <CADYdroPOE148vzGPNQhBX3mb3tAVK0d-D4vt89rrphK=zfbzxQ@mail.gmail.com>
- <CAFvCimUXkpkYLQ8mfhvAzTcHJ14Vs4queFjipCRNkZsVyCmP=g@mail.gmail.com>
- <CADYdroPU=MZa4RCqoS9TrF89jKp2vNXGggMp3iGri8F8DAp02A@mail.gmail.com>
- <CAFvCimUod4o5Yk0UqtrgymKSD3vTMMMuT-XhNm+g4kmmysdQ4Q@mail.gmail.com>
- <CADYdroNrgMbYrmLqRmCSobfNnQTtjN4ZfYYViS6JAdMYTZAEbA@mail.gmail.com>
- <CAFvCimWLcZxrusY5ig1fRxj-SQFQsKvxajJh_s-9==bm1ATo+w@mail.gmail.com>
- <CADYdroOVGUozgyP258MinUAtznRSRSw-SvrGbD7ZGkqAVdfQJw@mail.gmail.com>
-Message-ID: <20200608083829.dm3kjkjo2q2j3xd3@falbala.internal.home.lespocky.de>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Mon,  8 Jun 2020 12:04:42 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.6.1
+Message-ID: <20200608090442.2265237-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+This update brings in a few build fixes only. In particular the
+one for EGL implementations which use oddball definitions of the
+EGLNativeDisplayType type might be needed for some configurations.
 
-I'd like to hook in, because I had that topic on my desk lately
-(although not with buildroot).
+Full release notes:
 
-On Sun, Jun 07, 2020 at 10:36:18PM +0200, Norbert Lange wrote:
-> > I mean... if it's not high grade entropy, it shouldn't credit the kernel entropy
-> > pool,and if the user is ok with unreliable entropy, systemd-random-seed is
-> > probably a faster way to get some.
-> 
-> 
-> haveged is barely entropy, certainly not more than the kernel
-> provides, it is a means to fake entropy. Gets you to boot faster.
+  https://wpewebkit.org/release/wpebackend-fdo-1.6.1.html
 
-Well, the system can boot faster, because haveged provides entropy
-from unpredictable internal CPU states. It's not just another PRNG.
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> systemd-random-seed needs a filesystem to store stuff, does not credit
-> the entropy pool (by default).. and won't help at all when booting the
-> first time.
-> 
-> I think what you have in mind is more like rng-tools, which feed real,
-> quality entropy to the kernel.
-
-rng-tools can not do that by itself, but needs a real HWRNG or
-something like jitterentropy-rng (which gets its entropy from CPU
-execution timing jitter). So rng-tools alone doesn't help you,
-especially if your hardware has no hwrng.
-
-> The user should pick what he needs, haveged will never give you better
-> entropy over the kernel or real HW sources,  systemd-random-seed will
-> not let you boot faster (by default).
-
-I'm curious, where do you think the kernel gets entropy from? ;-)
-
-What you all might find interesting: newer OpenSSL versions, I think
-from some 1.1.1 bugfix release onwards block until the kernel has
-initialized its crng.  The upcoming (not yet released) dropbear will
-do that, too. Both don't rely on /dev/urandom for that but on the
-getrandom(2) syscall IIRC. Without having looked in systemd source, I
-would guess they do something similar?
-
-So, it's complicated ? ;-)
-
-Greets
-Alex
-
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 1380934af3..0b821f3443 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.0.tar.xz.sums
+-md5  456afeed22f6749f7b2a97c11660835d  wpebackend-fdo-1.6.0.tar.xz
+-sha1  d128e2c7ff273d9b9f31217f6ac25be3b266d805  wpebackend-fdo-1.6.0.tar.xz
+-sha256  7f5bd7b9d8f97b1655f4dcd39fad92719d0fb3985b251da5802df13aaa09f567  wpebackend-fdo-1.6.0.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.1.tar.xz.sums
++md5  ea6c2a13e6c2423f2c2b0b31fcf9567b  wpebackend-fdo-1.6.1.tar.xz
++sha1  53e38189324d9c0c87f40164d8349a827663aabd  wpebackend-fdo-1.6.1.tar.xz
++sha256  740eee3327acfb462b8460519a219e30dc0a870326e88e2ddc4fe2c8de20b1c9  wpebackend-fdo-1.6.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 99e10c5a01..5bc2d3ed37 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEBACKEND_FDO_VERSION = 1.6.0
++WPEBACKEND_FDO_VERSION = 1.6.1
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200608/7ae2d73a/attachment.asc>
+2.27.0
