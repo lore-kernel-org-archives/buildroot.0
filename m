@@ -1,41 +1,188 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  9 Jun 2020 00:13:47 +0200
-Subject: [Buildroot] [PATCH 5/5] package/gcc: switch to gcc 9.x as the
- default
-In-Reply-To: <20200608221347.2639059-1-romain.naour@gmail.com>
-References: <20200608221347.2639059-1-romain.naour@gmail.com>
-Message-ID: <20200608221347.2639059-5-romain.naour@gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Tue, 9 Jun 2020 00:50:16 +0200
+Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
+In-Reply-To: <20200608233429.4a64a8a9@gmx.net>
+References: <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
+ <CADYdroM-mpaz+7zqGMnKJ5J=sJL-TiAQOXs_vieW6ts77=VBHQ@mail.gmail.com>
+ <CAFvCimVmWczV2XjFsx=De3Q1ZCLxSTOu9etaFqN9z54cv0ACyw@mail.gmail.com>
+ <CADYdroPOE148vzGPNQhBX3mb3tAVK0d-D4vt89rrphK=zfbzxQ@mail.gmail.com>
+ <CAFvCimUXkpkYLQ8mfhvAzTcHJ14Vs4queFjipCRNkZsVyCmP=g@mail.gmail.com>
+ <CADYdroPU=MZa4RCqoS9TrF89jKp2vNXGggMp3iGri8F8DAp02A@mail.gmail.com>
+ <CAFvCimUod4o5Yk0UqtrgymKSD3vTMMMuT-XhNm+g4kmmysdQ4Q@mail.gmail.com>
+ <CADYdroNrgMbYrmLqRmCSobfNnQTtjN4ZfYYViS6JAdMYTZAEbA@mail.gmail.com>
+ <CAFvCimWLcZxrusY5ig1fRxj-SQFQsKvxajJh_s-9==bm1ATo+w@mail.gmail.com>
+ <CADYdroOVGUozgyP258MinUAtznRSRSw-SvrGbD7ZGkqAVdfQJw@mail.gmail.com>
+ <20200608083829.dm3kjkjo2q2j3xd3@falbala.internal.home.lespocky.de>
+ <CAFvCimW_m5hQ3Y2+DJyRmD-Wjvu5AmL2HyYrCtXCFbBZqhXybA@mail.gmail.com>
+ <20200608233429.4a64a8a9@gmx.net>
+Message-ID: <CAFvCimVq=q=J6jBhSqj+OxRTmX=mq82MKBw-1X9isx40mr2DEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even if gcc 8 is still maintained for some time (gcc 8.5 is pending),
-switch to gcc 9.x since it has been released since 2019-05-03 and
-gcc 10.x is available since 2020-05-07.
+Thx. an After= would indeed be completely wrong (and
+it did cause a multi minute boot-delay  and was
+removed.
 
-We have been having toolchains in the autobuilders with gcc
-9.x for a while, so the vast majority of the problems should have
-already been solved.
+Unfortunately, apart from that there is no real rational about
+why this After= was added in the first place and it is not related
+to our discussion (we want to add a Before=)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thx for the search, though...
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index c7444e243b..f417712b52 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -4,7 +4,7 @@ choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_CSKY if BR2_csky
--	default BR2_GCC_VERSION_8_X
-+	default BR2_GCC_VERSION_9_X
- 	help
- 	  Select the version of gcc you wish to use.
- 
+Le lun. 8 juin 2020 ? 23:34, Peter Seiderer <ps.report@gmx.net> a ?crit :
+
+> Hello J?r?my, Norbert, Alexander,
+>
+> On Mon, 8 Jun 2020 16:14:00 +0200, J?r?my ROSEN <jeremy.rosen@smile.fr>
+> wrote:
+>
+> > Le lun. 8 juin 2020 ? 10:38, Alexander Dahl <post@lespocky.de> a ?crit :
+> >
+> > > Hei hei,
+> > >
+> > > I'd like to hook in, because I had that topic on my desk lately
+> > > (although not with buildroot).
+> > >
+> > > On Sun, Jun 07, 2020 at 10:36:18PM +0200, Norbert Lange wrote:
+> > > > > I mean... if it's not high grade entropy, it shouldn't credit the
+> > > kernel entropy
+> > > > > pool,and if the user is ok with unreliable entropy,
+> > > systemd-random-seed is
+> > > > > probably a faster way to get some.
+> > > >
+> > > >
+> > > > haveged is barely entropy, certainly not more than the kernel
+> > > > provides, it is a means to fake entropy. Gets you to boot faster.
+> > >
+> > > Well, the system can boot faster, because haveged provides entropy
+> > > from unpredictable internal CPU states. It's not just another PRNG.
+> > >
+> > > Oh. I didn't know that... interesting
+> >
+> > So. haveged provides high quality entropy to the kernel.
+> > That entropy is probably credited (unlike systemd-random-seed)
+> > So it is even more important that it is ordered before
+> systemd-random-seed.
+> >
+> > > systemd-random-seed needs a filesystem to store stuff, does not
+> credit
+> > > > the entropy pool (by default).. and won't help at all when booting
+> the
+> > > > first time.
+> > > >
+> >
+> >
+> > > > I think what you have in mind is more like rng-tools, which feed
+> real,
+> > > > quality entropy to the kernel.
+> > >
+> > > rng-tools can not do that by itself, but needs a real HWRNG or
+> > > something like jitterentropy-rng (which gets its entropy from CPU
+> > > execution timing jitter). So rng-tools alone doesn't help you,
+> > > especially if your hardware has no hwrng.
+> > >
+> > > > The user should pick what he needs, haveged will never give you
+> better
+> > > > entropy over the kernel or real HW sources,  systemd-random-seed will
+> > > > not let you boot faster (by default).
+> > >
+> > > I'm curious, where do you think the kernel gets entropy from? ;-)
+> > >
+> > > What you all might find interesting: newer OpenSSL versions, I think
+> > > from some 1.1.1 bugfix release onwards block until the kernel has
+> > > initialized its crng.  The upcoming (not yet released) dropbear will
+> > > do that, too. Both don't rely on /dev/urandom for that but on the
+> > > getrandom(2) syscall IIRC. Without having looked in systemd source, I
+> > > would guess they do something similar?
+> > >
+> > > Yes it's exactly that. systemd-random-seed will block until urng is
+> ready
+> > so
+> > other services don't have to do that themselves (it makes sense for
+> > dropbear/openssl to do that themselves anyway, for the non-systemd case,
+> >  but in a systemd-based distro, they won't wait because
+> systemd-random-seed
+> >  will already have done the waiting)
+> >
+> > So at this point,  I am more and more convinced that haveged must be
+> > ordered before systemd-random-seed. Not doing so is incorrect. At best
+> > it will work by luck and at worst the entropy provided by haveged will
+> > arrive
+> > too late.
+> >
+> > On a read-only filesystem, systemd-random-seed will not read the file and
+> > feed
+> > entropy (which is not credited anyway) but it will still block the boot
+> and
+> > thus
+> > ensure that any "normal" (post sysinit) daemon will have proper urng.
+> >
+> > Please add the Before= it has no ill effect AFAICT and not doing so might
+> > prevent faster boots in the very cases where you try to avoid it.
+>
+> Did not follow the thread in detail, but did a quick search for
+> haveged and systemd, found two relevant hits [1], [2], debian
+> (and other) had 'After=systemd-random-seed.service' but dropped
+> it leaving only:
+>
+>     After=apparmor.service systemd-tmpfiles-setup.service
+>     Before=sysinit.target shutdown.target
+>
+> Regards,
+> Peter
+>
+> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=938939
+> [2]
+> https://salsa.debian.org/debian/haveged/-/merge_requests/1?commit_id=f92a246e53de88a346a2fb6dc770a624f0660bef
+>
+> >
+> > Regards.
+> > Jeremy
+> >
+> >
+> >
+> > > So, it's complicated ? ;-)
+> > >
+> > > Greets
+> > > Alex
+> > >
+> > > --
+> > > /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+> > > \ / CAMPAIGN     | speech censured, the first thought forbidden, the
+> > >  X  AGAINST      | first freedom denied, chains us all irrevocably.?
+> > > / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> >
+> >
+>
+>
+
 -- 
-2.25.4
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200609/2121d8fb/attachment.html>
