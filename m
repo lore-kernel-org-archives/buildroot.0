@@ -1,184 +1,54 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Mon, 8 Jun 2020 12:09:11 +0200
-Subject: [Buildroot] [PATCH 02/10] package/systemd: add libnss-systemd
- to name resolution
-In-Reply-To: <CADYdroO0cjnrr_dfUaB=W-Mdn=oqYxsGBdabYs+dVZkAdKXSeg@mail.gmail.com>
-References: <20200206093633.251413-1-nolange79@gmail.com>
- <20200206093633.251413-3-nolange79@gmail.com>
- <20200607114042.GP13972@scaer>
- <CADYdroO0cjnrr_dfUaB=W-Mdn=oqYxsGBdabYs+dVZkAdKXSeg@mail.gmail.com>
-Message-ID: <CAFvCimXRUpM8V3yJG=MM8Mq70rRVr2FMt3D5qxRYL0qoUj-07w@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  8 Jun 2020 12:32:10 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: install to staging
+Message-ID: <20200608103210.23757-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 7 juin 2020 ? 21:35, Norbert Lange <nolange79@gmail.com> a ?crit :
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> Am So., 7. Juni 2020 um 13:40 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-> >
-> > Nrobert, All,
-> >
-> > On 2020-02-06 10:36 +0100, Norbert Lange spake thusly:
-> > > The feature DynamicUser creates users/groups without
-> > > touching the /etc/{passwd,group} files on disk.
-> > > Adding the dynamic resolver to /etc/nsswitch.conf
-> > > ensures the Names are resolved consistently.
-> > >
-> > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > > ---
-> > >  package/systemd/systemd.mk | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > >
-> > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> > > index 05b07cfd1b..a390cdd1a9 100644
-> > > --- a/package/systemd/systemd.mk
-> > > +++ b/package/systemd/systemd.mk
-> > > @@ -409,7 +409,15 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
-> > >       touch $(TARGET_DIR)/etc/machine-id
-> > >  endef
-> > >
-> > > +define SYSTEMD_ADD_NSSCONFIG_HOOK
-> > > +     grep >/dev/null '^passwd:.*systemd'
-> $(TARGET_DIR)/etc/nsswitch.conf || \
-> >
-> > While this is valid sytx, we customarily put the redirection at the end
-> > of the command.
-> >
-> > However, in this case, you would want to use 'grep -q', as that does not
-> > output anything.
->
-> I will do if thats preferred, but I usually redirect because
->
-> "Portable shell scripts should avoid both -q and -s and should
-> redirect standard and error output to /dev/null instead."
-> (
-> https://www.gnu.org/software/grep/manual/html_node/General-Output-Control.html
-> )
->
-> >
-> > > +             sed '/^passwd:/ s/$$/ systemd/'
-> $(TARGET_DIR)/etc/nsswitch.conf
-> >
-> > How can that even work? By default, sed will out put to stdout, not
-> > replace in-place.
->
-> Excellent point.
->
-> >
-> > This clearly has not been tested (or git-commit --amend was forgotten).
->
-> It's tested in a way, that I have the resulting file in the rootfs overlay
-> ;)
->
-> >
-> > In this case, you want to use $(SED) that includes the -i option to do
-> > in-place modifications.
-> >
-> > > +     grep >/dev/null '^group:.*systemd'
-> $(TARGET_DIR)/etc/nsswitch.conf || \
-> >
-> > Ditto grep -q.
-> >
-> > > +             sed '/^group:/ s/$$/ systemd/'
-> $(TARGET_DIR)/etc/nsswitch.conf
-> >
-> > Ditto $(SED).
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > +endef
-> > > +
-> > >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
-> > > +     SYSTEMD_ADD_NSSCONFIG_HOOK \
-> > >       SYSTEMD_INSTALL_INIT_HOOK \
-> > >       SYSTEMD_INSTALL_MACHINEID_HOOK \
-> > >       SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> > > --
-> > > 2.24.1
-> > >
-> >
-> > --
-> >
-> .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->        |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> >
-> '------------------------------^-------^------------------^--------------------'
->
-> Come to think of it, systemd comes with 4 or so nss plugins, maybe
-> it's a better approach
-> to have a fully featured nsswitch.conf in the skeleton and then cut
-> out the plugins that are NOT built?
-> Or use the one from systemd (source: factory/etc/nsswitch.conf), after
-> a sed 's,compat,files,g'
->
->
->
-> Norbert
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Install header files and libraries into the staging area. Some
+packages like mraa (if enabled for Node.js) search for node.h
+and v8.h. Hence, Node.js development file must be installed to
+the staging area.
 
-For the record : systemd's upstream nsswitch.conf
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/nodejs/nodejs.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-# This file is part of systemd.
-
-passwd:         compat mymachines systemd
-group:          compat mymachines systemd
-shadow:         compat
-
-hosts:          files mymachines resolve [!UNAVAIL=return] dns myhostname
-networks:       files
-
-protocols:      db files
-services:       db files
-ethers:         db files
-rpc:            db files
-
-netgroup:       nis
-
-
-* mymachines add resolution for local (machinectl compatible) containers.
-   It also resolves UID/GID assigned to said-containers
-* systemd adds UID/GID resolution for DynamicUser
-  DynamicUser allows a service to run with a dynamically determined UID,
-  thus simplifying configuration (no need for a line in /etc/passwd)
-
-so independently of "how" I think it makes sense to always enable
-nss-systemd
-and enable mymachines when systemd-nspawn is compiled in.
-
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 37d7877226..3f35ac7c33 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -11,6 +11,7 @@ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+ 	libuv zlib nghttp2 \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+ HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
++NODEJS_INSTALL_STAGING = YES
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+ NODEJS_LICENSE_FILES = LICENSE
+ 
+@@ -215,6 +216,17 @@ define NODEJS_INSTALL_MODULES
+ endef
+ endif
+ 
++define NODEJS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
++		$(MAKE) -C $(@D) install \
++		DESTDIR=$(STAGING_DIR) \
++		$(TARGET_CONFIGURE_OPTS) \
++		NO_LOAD=cctest.target.mk \
++		PATH=$(@D)/bin:$(BR_PATH) \
++		LDFLAGS="$(NODEJS_LDFLAGS)" \
++		LD="$(TARGET_CXX)"
++endef
++
+ define NODEJS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) install \
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200608/eb84b6c0/attachment.html>
+2.17.0
