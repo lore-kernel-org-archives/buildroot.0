@@ -1,101 +1,39 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Mon,  8 Jun 2020 23:30:43 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pybind: new package
-Message-ID: <20200608213043.3443-1-guillaume.bressaix@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Jun 2020 23:32:16 +0200
+Subject: [Buildroot] Status of parallel build with Qt5
+In-Reply-To: <3FC2CC68-E196-4121-9FB1-5BE83B58DBAC@getmailspring.com>
+References: <3FC2CC68-E196-4121-9FB1-5BE83B58DBAC@getmailspring.com>
+Message-ID: <20200608233216.0d0f494b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PyBind is a light (headers only) package
-for C++/Python and Python/C++ bindings.
+On Mon, 8 Jun 2020 11:47:26 +0200
+LP C <lpdev@cordier.org> wrote:
 
-host-python-pybind is a dependency
-of my future contribution, so I added this feature.
+> Is there any status regarding the build of Qt5 with parallel build?
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pybind/Config.in          | 10 ++++++++++
- package/python-pybind/python-pybind.hash |  4 ++++
- package/python-pybind/python-pybind.mk   | 15 +++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/python-pybind/Config.in
- create mode 100644 package/python-pybind/python-pybind.hash
- create mode 100644 package/python-pybind/python-pybind.mk
+See this series from Andreas:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f697c96ce4..9a94307082 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1052,6 +1052,7 @@ F:	package/sdl2/
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/liquid-dsp/
- F:	package/pixiewps/
-+F:	package/python-pybind/
- F:	package/reaver/
- 
- N:	Guo Ren <ren_guo@c-sky.com>
-diff --git a/package/Config.in b/package/Config.in
-index 520e5d5570..b0a7da2f5c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1070,6 +1070,7 @@ menu "External python modules"
- 	source "package/python-pyalsa/Config.in"
- 	source "package/python-pyasn1/Config.in"
- 	source "package/python-pyasn1-modules/Config.in"
-+	source "package/python-pybind/Config.in"
- 	source "package/python-pycairo/Config.in"
- 	source "package/python-pycares/Config.in"
- 	source "package/python-pycli/Config.in"
-diff --git a/package/python-pybind/Config.in b/package/python-pybind/Config.in
-new file mode 100644
-index 0000000000..832a9fb971
---- /dev/null
-+++ b/package/python-pybind/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_PYBIND
-+	bool "python-pybind"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  PyBind is a lightweight header-only library
-+	  that exposes C++ types in Python and vice versa,
-+	  mainly to create Python bindings of existing C++
-+	  code.
-+
-+	  http://pybind11.readthedocs.org/en/master
-diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
-new file mode 100644
-index 0000000000..6578f60c88
---- /dev/null
-+++ b/package/python-pybind/python-pybind.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   v2.5.0.tar.gz
-+# License files, locally calculated
-+sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9   LICENSE
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-new file mode 100644
-index 0000000000..03cea1c060
---- /dev/null
-+++ b/package/python-pybind/python-pybind.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pybind
-+#
-+################################################################################
-+
-+PYTHON_PYBIND_VERSION = 2.5.0
-+PYTHON_PYBIND_SOURCE = v$(PYTHON_PYBIND_VERSION).tar.gz
-+PYTHON_PYBIND_SITE = https://github.com/pybind/pybind11/archive
-+PYTHON_PYBIND_LICENSE = BSD-3-Clause
-+PYTHON_PYBIND_LICENSE_FILES = LICENSE
-+PYTHON_PYBIND_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
+  https://patchwork.ozlabs.org/project/buildroot/list/?series=159093
+
+> Wouldn't be possible to disable parallel build for this specific
+> package in the meantime?
+
+No, you can't disable parallel build for one specific package.
+
+> PS: Newbie question here: what is the best practice to
+> answer/participate to an old thread from the mailing list? As I don't
+> have the email in my inbox, I cannot answer back, thus forcing me to
+> start a new thread. Thanks
+
+I'm not sure if the mbox is easily available from the archives. If it
+was, you could import it in your e-mail client.
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
