@@ -1,49 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  9 Jun 2020 15:31:16 +0200
-Subject: [Buildroot] [PATCH] python-webob: bump version to 1.8.6
-Message-ID: <20200609133117.3553-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 09 Jun 2020 13:31:49 +0000
+Subject: [Buildroot] [Bug 12991] New: PER_PACKAGE_DIRECTORIES problem with
+ host/share/gettext
+Message-ID: <bug-12991-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And adjust the .hash spacing for the new agreements.
+https://bugs.busybox.net/show_bug.cgi?id=12991
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-webob/python-webob.hash | 6 +++---
- package/python-webob/python-webob.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+            Bug ID: 12991
+           Summary: PER_PACKAGE_DIRECTORIES problem with
+                    host/share/gettext
+           Product: buildroot
+           Version: 2020.05
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: info at hifiberry.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
-index af3c7a0851..aab2f1d9e4 100644
---- a/package/python-webob/python-webob.hash
-+++ b/package/python-webob/python-webob.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/webob/json
--md5	1761f416e8cf53f6fb674149cc223bd1  WebOb-1.8.5.tar.gz
--sha256	05aaab7975e0ee8af2026325d656e5ce14a71f1883c52276181821d6d5bf7086  WebOb-1.8.5.tar.gz
-+md5  dc3cc8c317d4acd03a6fd97cb0a9121a  WebOb-1.8.6.tar.gz
-+sha256  aa3a917ed752ba3e0b242234b2a373f9c4e2a75d35291dcbe977649bd21fd108  WebOb-1.8.6.tar.gz
- # Locally computed sha256 checksums
--sha256	27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
-+sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
-diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
-index fd9b2d1b36..051c117538 100644
---- a/package/python-webob/python-webob.mk
-+++ b/package/python-webob/python-webob.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WEBOB_VERSION = 1.8.5
-+PYTHON_WEBOB_VERSION = 1.8.6
- PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
--PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/9d/1a/0c89c070ee2829c934cb6c7082287c822e28236a4fcf90063e6be7c35532
-+PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/2a/32/5f3f43d0784bdd9392db0cb98434d7cd23a0d8a420c4d243ad4cb8517f2a
- PYTHON_WEBOB_SETUP_TYPE = setuptools
- PYTHON_WEBOB_LICENSE = MIT
- PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
+Some packages create a symlink for gettext-tiny in
+ .../per-package/PKGNAME/host/share
+
+e.g.:
+
+lrwxrwxrwx 72 matuschd matuschd   84 Jun  9 11:49
+/home/matuschd/buildroot-4/per-package/xkeyboard-config/host/share/gettext ->
+/home/matuschd/buildroot-4/per-package/host-gettext-tiny/host/usr/share/gettext-tiny
+
+However, cairo and fontconfig, create a directory with a subdirectory "its":
+
+ls -l /home/matuschd/buildroot-4/per-package/python-pycairo/host/share/gettext
+total 4
+drwxr-xr-x 2 matuschd matuschd 4096 Jun  9 11:54 its
+
+
+As the result, the final rsync fails as the directory is non-empty:
+
+rsync -a --link-dest=/home/matuschd/buildroot-4/per-package/alsa-utils/host/
+/home/matuschd/buildroot-4/per-package/alsa-utils/host/
+/home/matuschd/buildroot-4/host
+cannot delete non-empty directory: share/gettext
+could not make way for new symlink: share/gettext
+rsync error: some files/attrs were not transferred (see previous errors) (code
+23) at main.c(1196) [sender=3.1.2]
+Makefile:737: recipe for target 'host-finalize' failed
+make[1]: *** [host-finalize] Error 23
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+This way, the PER_PACKAGE_DIRECTORY setting can't be used 
+
+I'm not sure at what point this should be fixed
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
