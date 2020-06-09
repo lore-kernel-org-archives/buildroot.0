@@ -1,66 +1,115 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 09 Jun 2020 13:31:49 +0000
-Subject: [Buildroot] [Bug 12991] New: PER_PACKAGE_DIRECTORIES problem with
- host/share/gettext
-Message-ID: <bug-12991-163@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue,  9 Jun 2020 17:20:07 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: dri: link statically
+ libmegadriver_stub after libdricommon
+Message-ID: <20200609152007.2920080-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12991
+Meson build system enable by default -Wl,--as-needed in the linker command line [1] and
+due to this the megadriver_stub build can fail with some toolchain:
 
-            Bug ID: 12991
-           Summary: PER_PACKAGE_DIRECTORIES problem with
-                    host/share/gettext
-           Product: buildroot
-           Version: 2020.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: info at hifiberry.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++
+  -o src/mesa/drivers/dri/libmesa_dri_drivers.so
+  -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group
+  -Wl,-soname,libmesa_dri_drivers.so -Wl,--whole-archive
+  src/mesa/drivers/dri/radeon/libr100.a src/mesa/drivers/dri/nouveau/libnouveau_vieux.a
+  -Wl,--no-whole-archive
+  src/mesa/drivers/dri/common/libmegadriver_stub.a
+  src/mesa/drivers/dri/common/libdricommon.a
+  src/mapi/shared-glapi/libglapi.so.0.0.0
+  src/mesa/libmesa_classic.a src/mesa/libmesa_common.a
+  src/compiler/glsl/libglsl.a src/compiler/glsl/glcpp/libglcpp.a
+  src/util/libmesa_util.a src/util/format/libmesa_format.a
+  src/compiler/nir/libnir.a src/compiler/libcompiler.a
+  src/util/libxmlconfig.a
+  [...]
+src/mesa/drivers/dri/common/libmegadriver_stub.a(megadriver_stub.c.o): In function `megadriver_stub_init':
+megadriver_stub.c:(.text.startup+0x20): undefined reference to `dladdr'
+megadriver_stub.c:(.text.startup+0xbc): undefined reference to `dlsym'
+collect2: error: ld returned 1 exit status
 
-Some packages create a symlink for gettext-tiny in
- .../per-package/PKGNAME/host/share
+This is because the static librairies needs to be correcly sorted by dependency.
+libmegadriver_stub include dri_util.h that internally include dri_interface.h needed for
+dlsym and dladdr definition.
 
-e.g.:
+[1] https://mesonbuild.com/Builtin-options.html
 
-lrwxrwxrwx 72 matuschd matuschd   84 Jun  9 11:49
-/home/matuschd/buildroot-4/per-package/xkeyboard-config/host/share/gettext ->
-/home/matuschd/buildroot-4/per-package/host-gettext-tiny/host/usr/share/gettext-tiny
+Fixes:
+http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
 
-However, cairo and fontconfig, create a directory with a subdirectory "its":
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...lly-libmegadriver_stub-after-libdric.patch | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/mesa3d/0009-dri-link-statically-libmegadriver_stub-after-libdric.patch
 
-ls -l /home/matuschd/buildroot-4/per-package/python-pycairo/host/share/gettext
-total 4
-drwxr-xr-x 2 matuschd matuschd 4096 Jun  9 11:54 its
-
-
-As the result, the final rsync fails as the directory is non-empty:
-
-rsync -a --link-dest=/home/matuschd/buildroot-4/per-package/alsa-utils/host/
-/home/matuschd/buildroot-4/per-package/alsa-utils/host/
-/home/matuschd/buildroot-4/host
-cannot delete non-empty directory: share/gettext
-could not make way for new symlink: share/gettext
-rsync error: some files/attrs were not transferred (see previous errors) (code
-23) at main.c(1196) [sender=3.1.2]
-Makefile:737: recipe for target 'host-finalize' failed
-make[1]: *** [host-finalize] Error 23
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-This way, the PER_PACKAGE_DIRECTORY setting can't be used 
-
-I'm not sure at what point this should be fixed
-
+diff --git a/package/mesa3d/0009-dri-link-statically-libmegadriver_stub-after-libdric.patch b/package/mesa3d/0009-dri-link-statically-libmegadriver_stub-after-libdric.patch
+new file mode 100644
+index 0000000000..47909ed5e5
+--- /dev/null
++++ b/package/mesa3d/0009-dri-link-statically-libmegadriver_stub-after-libdric.patch
+@@ -0,0 +1,58 @@
++From b4f68629937eac22f122b9b069e4e5acbcc51a75 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 9 Jun 2020 16:49:32 +0200
++Subject: [PATCH] dri: link statically libmegadriver_stub after libdricommon
++
++Meson build system enable by default -Wl,--as-needed in the linker command line [1] and
++due to this the megadriver_stub build can fail with some toolchain:
++
++/home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++
++  -o src/mesa/drivers/dri/libmesa_dri_drivers.so
++  -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group
++  -Wl,-soname,libmesa_dri_drivers.so -Wl,--whole-archive
++  src/mesa/drivers/dri/radeon/libr100.a src/mesa/drivers/dri/nouveau/libnouveau_vieux.a
++  -Wl,--no-whole-archive
++  src/mesa/drivers/dri/common/libmegadriver_stub.a
++  src/mesa/drivers/dri/common/libdricommon.a
++  src/mapi/shared-glapi/libglapi.so.0.0.0
++  src/mesa/libmesa_classic.a src/mesa/libmesa_common.a
++  src/compiler/glsl/libglsl.a src/compiler/glsl/glcpp/libglcpp.a
++  src/util/libmesa_util.a src/util/format/libmesa_format.a
++  src/compiler/nir/libnir.a src/compiler/libcompiler.a
++  src/util/libxmlconfig.a
++  [...]
++src/mesa/drivers/dri/common/libmegadriver_stub.a(megadriver_stub.c.o): In function `megadriver_stub_init':
++megadriver_stub.c:(.text.startup+0x20): undefined reference to `dladdr'
++megadriver_stub.c:(.text.startup+0xbc): undefined reference to `dlsym'
++collect2: error: ld returned 1 exit status
++
++This is because the static librairies needs to be correcly sorted by dependency.
++libmegadriver_stub include dri_util.h that internally include dri_interface.h needed for
++dlsym and dladdr definition.
++
++[1] https://mesonbuild.com/Builtin-options.html
++
++Fixes:
++http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/mesa/drivers/dri/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/mesa/drivers/dri/meson.build b/src/mesa/drivers/dri/meson.build
++index b09ca16e38a..9ac6731c522 100644
++--- a/src/mesa/drivers/dri/meson.build
+++++ b/src/mesa/drivers/dri/meson.build
++@@ -59,7 +59,7 @@ if _dri_drivers != []
++     [],
++     link_whole : _dri_drivers,
++     link_with : [
++-      libmegadriver_stub, libdricommon, libglapi,
+++      libdricommon, libmegadriver_stub, libglapi,
++       libmesa_classic,
++     ],
++     dependencies : [
++-- 
++2.25.4
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.4
