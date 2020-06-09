@@ -1,35 +1,22 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Tue,  9 Jun 2020 14:17:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pip: add host-python-pip
- possibility
-Message-ID: <20200609121702.19880-1-guillaume.bressaix@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 09 Jun 2020 13:24:48 +0000
+Subject: [Buildroot] [Bug 12941] Python GObject fails to build when using
+ BR2_PER_PACKAGE_DIRECTORIES
+In-Reply-To: <bug-12941-163@https.bugs.busybox.net/>
+References: <bug-12941-163@https.bugs.busybox.net/>
+Message-ID: <bug-12941-163-908an5SxSl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My next contribution requires host-python-pip
-because 'import pip' is required in its setup.py
-and so, must be present at build time.
+https://bugs.busybox.net/show_bug.cgi?id=12941
 
-This is a just a new option, compatible
-with previous packages. Call it with
-with 'PYTHON_FOO_DEPENCIES = host-python-pip'
+--- Comment #3 from info at hifiberry.com ---
+It seems to work, but I ran into another issue with another package.
+Therefore, I'm not 100% sure yet.
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- package/python-pip/python-pip.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index cc40eecdfe..0af41ab807 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -12,3 +12,4 @@ PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
