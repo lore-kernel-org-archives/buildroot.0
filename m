@@ -1,188 +1,177 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Tue, 9 Jun 2020 00:50:16 +0200
-Subject: [Buildroot] [PATCH] package/haveged: Allow service to run early
-In-Reply-To: <20200608233429.4a64a8a9@gmx.net>
-References: <CAFvCimWgEF5hx+LXPasKNSP59CU2RqU-22iLkMQb_9QQRDk=mA@mail.gmail.com>
- <CADYdroM-mpaz+7zqGMnKJ5J=sJL-TiAQOXs_vieW6ts77=VBHQ@mail.gmail.com>
- <CAFvCimVmWczV2XjFsx=De3Q1ZCLxSTOu9etaFqN9z54cv0ACyw@mail.gmail.com>
- <CADYdroPOE148vzGPNQhBX3mb3tAVK0d-D4vt89rrphK=zfbzxQ@mail.gmail.com>
- <CAFvCimUXkpkYLQ8mfhvAzTcHJ14Vs4queFjipCRNkZsVyCmP=g@mail.gmail.com>
- <CADYdroPU=MZa4RCqoS9TrF89jKp2vNXGggMp3iGri8F8DAp02A@mail.gmail.com>
- <CAFvCimUod4o5Yk0UqtrgymKSD3vTMMMuT-XhNm+g4kmmysdQ4Q@mail.gmail.com>
- <CADYdroNrgMbYrmLqRmCSobfNnQTtjN4ZfYYViS6JAdMYTZAEbA@mail.gmail.com>
- <CAFvCimWLcZxrusY5ig1fRxj-SQFQsKvxajJh_s-9==bm1ATo+w@mail.gmail.com>
- <CADYdroOVGUozgyP258MinUAtznRSRSw-SvrGbD7ZGkqAVdfQJw@mail.gmail.com>
- <20200608083829.dm3kjkjo2q2j3xd3@falbala.internal.home.lespocky.de>
- <CAFvCimW_m5hQ3Y2+DJyRmD-Wjvu5AmL2HyYrCtXCFbBZqhXybA@mail.gmail.com>
- <20200608233429.4a64a8a9@gmx.net>
-Message-ID: <CAFvCimVq=q=J6jBhSqj+OxRTmX=mq82MKBw-1X9isx40mr2DEg@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  8 Jun 2020 21:14:11 -0500
+Subject: [Buildroot] [PATCH v2] package/xml-security-c: new package
+Message-ID: <20200609021411.3778-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx. an After= would indeed be completely wrong (and
-it did cause a multi minute boot-delay  and was
-removed.
+From: Chris Simons <chris.simons@rockwellcollins.com>
 
-Unfortunately, apart from that there is no real rational about
-why this After= was added in the first place and it is not related
-to our discussion (we want to add a Before=)
+Adds support for the Apache Santuario XML Security for C++ that
+implementations the XML Digital Signature and Encryption
+specifications.
 
-Thx for the search, though...
+Signed-off-by: Chris Simons <chris.simons@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+--
+Changes
+v1 -> v2
+[Thomas P
+ - Added build time dependency on openssl as it is needed (test build
+   lucked out that openssl was already built)
+ - Added autoconf cached value for getcmd test and upstreamed
+ - Made Config.in dependency style updates
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...ariable-cache-option-for-getcwd-test.patch | 50 +++++++++++++++++++
+ package/xml-security-c/Config.in              | 15 ++++++
+ package/xml-security-c/xml-security-c.hash    |  4 ++
+ package/xml-security-c/xml-security-c.mk      | 19 +++++++
+ 6 files changed, 90 insertions(+)
+ create mode 100644 package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
+ create mode 100644 package/xml-security-c/Config.in
+ create mode 100644 package/xml-security-c/xml-security-c.hash
+ create mode 100644 package/xml-security-c/xml-security-c.mk
 
-Le lun. 8 juin 2020 ? 23:34, Peter Seiderer <ps.report@gmx.net> a ?crit :
-
-> Hello J?r?my, Norbert, Alexander,
->
-> On Mon, 8 Jun 2020 16:14:00 +0200, J?r?my ROSEN <jeremy.rosen@smile.fr>
-> wrote:
->
-> > Le lun. 8 juin 2020 ? 10:38, Alexander Dahl <post@lespocky.de> a ?crit :
-> >
-> > > Hei hei,
-> > >
-> > > I'd like to hook in, because I had that topic on my desk lately
-> > > (although not with buildroot).
-> > >
-> > > On Sun, Jun 07, 2020 at 10:36:18PM +0200, Norbert Lange wrote:
-> > > > > I mean... if it's not high grade entropy, it shouldn't credit the
-> > > kernel entropy
-> > > > > pool,and if the user is ok with unreliable entropy,
-> > > systemd-random-seed is
-> > > > > probably a faster way to get some.
-> > > >
-> > > >
-> > > > haveged is barely entropy, certainly not more than the kernel
-> > > > provides, it is a means to fake entropy. Gets you to boot faster.
-> > >
-> > > Well, the system can boot faster, because haveged provides entropy
-> > > from unpredictable internal CPU states. It's not just another PRNG.
-> > >
-> > > Oh. I didn't know that... interesting
-> >
-> > So. haveged provides high quality entropy to the kernel.
-> > That entropy is probably credited (unlike systemd-random-seed)
-> > So it is even more important that it is ordered before
-> systemd-random-seed.
-> >
-> > > systemd-random-seed needs a filesystem to store stuff, does not
-> credit
-> > > > the entropy pool (by default).. and won't help at all when booting
-> the
-> > > > first time.
-> > > >
-> >
-> >
-> > > > I think what you have in mind is more like rng-tools, which feed
-> real,
-> > > > quality entropy to the kernel.
-> > >
-> > > rng-tools can not do that by itself, but needs a real HWRNG or
-> > > something like jitterentropy-rng (which gets its entropy from CPU
-> > > execution timing jitter). So rng-tools alone doesn't help you,
-> > > especially if your hardware has no hwrng.
-> > >
-> > > > The user should pick what he needs, haveged will never give you
-> better
-> > > > entropy over the kernel or real HW sources,  systemd-random-seed will
-> > > > not let you boot faster (by default).
-> > >
-> > > I'm curious, where do you think the kernel gets entropy from? ;-)
-> > >
-> > > What you all might find interesting: newer OpenSSL versions, I think
-> > > from some 1.1.1 bugfix release onwards block until the kernel has
-> > > initialized its crng.  The upcoming (not yet released) dropbear will
-> > > do that, too. Both don't rely on /dev/urandom for that but on the
-> > > getrandom(2) syscall IIRC. Without having looked in systemd source, I
-> > > would guess they do something similar?
-> > >
-> > > Yes it's exactly that. systemd-random-seed will block until urng is
-> ready
-> > so
-> > other services don't have to do that themselves (it makes sense for
-> > dropbear/openssl to do that themselves anyway, for the non-systemd case,
-> >  but in a systemd-based distro, they won't wait because
-> systemd-random-seed
-> >  will already have done the waiting)
-> >
-> > So at this point,  I am more and more convinced that haveged must be
-> > ordered before systemd-random-seed. Not doing so is incorrect. At best
-> > it will work by luck and at worst the entropy provided by haveged will
-> > arrive
-> > too late.
-> >
-> > On a read-only filesystem, systemd-random-seed will not read the file and
-> > feed
-> > entropy (which is not credited anyway) but it will still block the boot
-> and
-> > thus
-> > ensure that any "normal" (post sysinit) daemon will have proper urng.
-> >
-> > Please add the Before= it has no ill effect AFAICT and not doing so might
-> > prevent faster boots in the very cases where you try to avoid it.
->
-> Did not follow the thread in detail, but did a quick search for
-> haveged and systemd, found two relevant hits [1], [2], debian
-> (and other) had 'After=systemd-random-seed.service' but dropped
-> it leaving only:
->
->     After=apparmor.service systemd-tmpfiles-setup.service
->     Before=sysinit.target shutdown.target
->
-> Regards,
-> Peter
->
-> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=938939
-> [2]
-> https://salsa.debian.org/debian/haveged/-/merge_requests/1?commit_id=f92a246e53de88a346a2fb6dc770a624f0660bef
->
-> >
-> > Regards.
-> > Jeremy
-> >
-> >
-> >
-> > > So, it's complicated ? ;-)
-> > >
-> > > Greets
-> > > Alex
-> > >
-> > > --
-> > > /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-> > > \ / CAMPAIGN     | speech censured, the first thought forbidden, the
-> > >  X  AGAINST      | first freedom denied, chains us all irrevocably.?
-> > > / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > >
-> >
-> >
->
->
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index efb97c739c..bd5a2d9cb4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1723,6 +1723,7 @@ F:	package/valijson/
+ F:	package/wpa_supplicant/
+ F:	package/wireless_tools/
+ F:	package/xen/
++F:	package/xml-security-c/
+ F:	support/testing/tests/package/br2-external/openjdk/
+ F:	support/testing/tests/package/test_openjdk.py
+ F:	support/testing/tests/package/test_opkg/
+diff --git a/package/Config.in b/package/Config.in
+index 85d7326361..3560bd9149 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1586,6 +1586,7 @@ menu "JSON/XML"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/valijson/Config.in"
+ 	source "package/xerces/Config.in"
++	source "package/xml-security-c/Config.in"
+ 	source "package/yajl/Config.in"
+ 	source "package/yaml-cpp/Config.in"
+ endmenu
+diff --git a/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
+new file mode 100644
+index 0000000000..26b53ba719
+--- /dev/null
++++ b/package/xml-security-c/0001-autoconf-variable-cache-option-for-getcwd-test.patch
+@@ -0,0 +1,50 @@
++From 9d14fad412a497fe83cfc6ab594ddc612512f02a Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Thu, 4 Jun 2020 20:34:11 -0500
++Subject: [PATCH] autoconf variable cache option for getcwd test
++
++The cached variable allows cross compiled builds to successfully set the
++desired default for this value without invoking a test.
++
++Fixes:
++https://issues.apache.org/jira/browse/SANTUARIO-549
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ configure.ac | 20 ++++++++++++--------
++ 1 file changed, 12 insertions(+), 8 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index b43d7a5..c3d4489 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -74,14 +74,18 @@ AC_CHECK_FUNCS([strcasecmp])
++ 
++ # Check whether getcwd can dynamically allocate memory.
++ AC_MSG_CHECKING([whether getcwd(NULL, 0) works])
++-AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
++-     #include <unistd.h>],
++-[char *cwd = getcwd(NULL, 0);
++-return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
++-     [AC_MSG_RESULT(yes)
++-      AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
++-         [Define to 1 if getcwd(NULL, 0) works])],
++-     [AC_MSG_RESULT(no)])
+++AC_CACHE_VAL([xml_cv_func_getcwd_null],
+++[AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+++     #include <unistd.h>
+++     char *cwd = getcwd(NULL, 0);
+++     return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;]])],
+++  [xml_cv_func_getcwd_null=yes],
+++  [xml_cv_func_getcwd_null=no])])
+++AC_MSG_RESULT([$xml_cv_func_getcwd_null])
+++if test $xml_cv_func_getcwd_null = yes; then
+++AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
+++  [Define to 1 if getcwd(NULL, 0) works])
+++fi
++ 
++ AC_LANG(C++)
++ 
++-- 
++2.17.1
++
+diff --git a/package/xml-security-c/Config.in b/package/xml-security-c/Config.in
+new file mode 100644
+index 0000000000..0d0385c698
+--- /dev/null
++++ b/package/xml-security-c/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_XML_SECURITY_C
++	bool "xml-security-c"
++	depends on BR2_INSTALL_LIBSTDCPP # xerces
++	depends on BR2_USE_WCHAR # xerces
++	select BR2_PACKAGE_XERCES
++	select BR2_PACKAGE_OPENSSL
++	help
++	  The xml-security-c library is a C++ implementation of
++	  the XML Digital Signature and Encryption specifications.
++
++	  https://santuario.apache.org/cindex.html
++
++comment "xml-security-c needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++	!BR2_USE_WCHAR
+diff --git a/package/xml-security-c/xml-security-c.hash b/package/xml-security-c/xml-security-c.hash
+new file mode 100644
+index 0000000000..9a82a55f17
+--- /dev/null
++++ b/package/xml-security-c/xml-security-c.hash
+@@ -0,0 +1,4 @@
++# From http://www.apache.org/dist/santuario/c-library/xml-security-c-2.0.2.tar.gz.sha256
++sha256  c303a2b08cb9ca0f5594adcbb83829b1e793175d7114a82f7d78def8bb2e30df  xml-security-c-2.0.2.tar.gz
++
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE.txt
+diff --git a/package/xml-security-c/xml-security-c.mk b/package/xml-security-c/xml-security-c.mk
+new file mode 100644
+index 0000000000..36f69483c2
+--- /dev/null
++++ b/package/xml-security-c/xml-security-c.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# xml-security-c
++#
++################################################################################
++
++XML_SECURITY_C_VERSION = 2.0.2
++XML_SECURITY_C_SITE = http://archive.apache.org/dist/santuario/c-library
++XML_SECURITY_C_LICENSE = Apache-2.0
++XML_SECURITY_C_LICENSE_FILES = LICENSE.txt
++XML_SECURITY_C_DEPENDENCIES = openssl xerces
++XML_SECURITY_C_INSTALL_STAGING = YES
++
++XML_SECURITY_C_CONF_ENV = xml_cv_func_getcwd_null=yes
++
++# Patched configure.ac
++XML_SECURITY_C_AUTORECONF = YES
++
++$(eval $(autotools-package))
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200609/2121d8fb/attachment.html>
+2.17.1
