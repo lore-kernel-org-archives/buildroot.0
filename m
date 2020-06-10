@@ -1,147 +1,51 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed, 10 Jun 2020 16:25:40 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/earlyoom: new package
-In-Reply-To: <CAMWSM7jocpDbRK_juyowYXoHn1h4oKig+NRu8+wYV95z-uDcYQ@mail.gmail.com>
-References: <20200529015402.2646343-1-joseph.kogut@gmail.com>
- <20200608175806.1064874-1-joseph.kogut@gmail.com>
- <20200610232043.0bb71e99@windsurf.home>
- <CAMWSM7jocpDbRK_juyowYXoHn1h4oKig+NRu8+wYV95z-uDcYQ@mail.gmail.com>
-Message-ID: <CAMWSM7iRP+LXpYgQ6LdqxKWiL5KN3L8rA71h3_jE6gqzfJynJg@mail.gmail.com>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Thu, 11 Jun 2020 01:34:50 +0200
+Subject: [Buildroot] [PATCH 1/3] package/python-ifaddr: bump to version 0.1.7
+Message-ID: <20200610233456.374430-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 10, 2020 at 2:31 PM Joseph Kogut <joseph.kogut@gmail.com> wrote:
->
-> Hi Thomas,
->
-> Great feedback, thank you for taking the time.
->
-> On Wed, Jun 10, 2020 at 2:20 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello Joseph,
-> >
-> > On Mon,  8 Jun 2020 10:58:06 -0700
-> > Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> >
-> > > diff --git a/package/earlyoom/Config.in b/package/earlyoom/Config.in
-> > > new file mode 100644
-> > > index 0000000000..1df1cd8f63
-> > > --- /dev/null
-> > > +++ b/package/earlyoom/Config.in
-> > > @@ -0,0 +1,11 @@
-> > > +config BR2_PACKAGE_EARLYOOM
-> > > +     bool "earlyoom"
-> >
-> > Are you sure there are not any dependency ? I'm pretty sure at least
-> > "depends on BR2_USE_MMU" is needed, as the code uses fork(). Could you
-> > do a test build with ./utils/test-pkg and see what results it gives ?
-> >
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-ifaddr/python-ifaddr.hash | 8 ++++----
+ package/python-ifaddr/python-ifaddr.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-Looks like you were correct with the BR2_USE_MMU dependency. It also
-requires C99 for some reason, which broke the build with the old (4.8)
-codesourcery arm toolchain. I was able to remove this dependency with
-a trivial patch, and I've submitted it upstream.
-
->
-> I was either unaware of the existence of this tool, or had forgotten
-> about it. After checking the manual, it's clearly documented, so I'll
-> have to make sure to refer to that more.
->
-> >
-> > > +EARLYOOM_VERSION = 1.6
-> > > +EARLYOOM_SITE = $(call github,rfjakob,earlyoom,v$(EARLYOOM_VERSION))
-> > > +EARLYOOM_LICENSE = MIT
-> > > +EARLYOOM_LICENSE_FILES = LICENSE
-> > > +
-> > > +EARLYOOM_MAKE_OPTS = \
-> > > +     CC=$(TARGET_CC) \
-> >
-> > Could you use:
-> >
-> >         $(TARGET_CONFIGURE_OPTS)
-> >
-> > instead ?
-> >
-> > > +     DESTDIR=$(TARGET_DIR) \
-> >
-> > Ideally, this should be passed at install time only.
-> >
-> > > +     VERSION=$(EARLYOOM_VERSION) \
-> > > +     PREFIX=/usr \
-> > > +     SYSTEMDUNITDIR=/usr/lib/systemd/system
-> > > +
-> > > +define EARLYOOM_CONFIGURE_CMDS
-> > > +     $(SED) "/systemctl/d" $(EARLYOOM_DIR)/Makefile
-> > > +     $(SED) "/chcon/d" $(EARLYOOM_DIR)/Makefile
-> > > +     $(SED) "/update-rc.d/d" $(EARLYOOM_DIR)/Makefile
-> > > +     $(SED) "s/init.d\/earlyoom/init.d\/S01_earlyoom/" \
-> > > +             $(EARLYOOM_DIR)/Makefile
-> >
-> > Can we patch the Makefile instead? Ideally, a solution that is
-> > acceptable upstream would be nice. Maybe just some checks in the
-> > Makefile that sees if "make install" is executed as root, and if it is,
-> > do the systemctl, chcon, update-rc.d calls, but not otherwise ?
-> >
->
-> There are a few things I'd do differently with the Makefile. I'll see
-> if I can get those changes submitted upstream, as well as include that
-> patch in my next version of this package.
->
-> > > +endef
-> > > +
-> > > +define EARLYOOM_BUILD_CMDS
-> > > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) earlyoom $(EARLYOOM_MAKE_OPTS)
-> > > +endef
-> > > +
-> > > +define EARLYOOM_INSTALL_INIT_SYSV
-> > > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install-initscript $(EARLYOOM_MAKE_OPTS)
-> > > +endef
-> > > +
-> > > +define EARLYOOM_INSTALL_INIT_SYSTEMD
-> > > +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install $(EARLYOOM_MAKE_OPTS)
-> > > +endef
-> >
-> > Not a big fan of not having an INSTALL_TARGET_CMDS that installs the
-> > binary. Also, the init script provided by earlyoom clearly doesn't work
-> > with Buildroot. It does things such as:
-> >
-> > . /lib/lsb/init-functions
-> >
-> > which doesn't exist in Buildroot.
-> >
-> > So I think I would prefer:
-> >
-> > define EARLYOOM_INSTALL_TARGET_CMDS
-> >         ... $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-bin
-> > endef
-> >
-> > define EARLYOOM_INSTALL_INIT_SYSTEMD
-> >         manually install the earlyoom.service file
-> > endef
-> >
-> > define EARLYOOM_INSTALL_INIT_SYSV
-> >         manually install an init script provided in package/earlyoom
-> > endef
-> >
-
-It also looks as though the Makefile wouldn't need modifications to
-check for root as mentioned above, as this approach would skip the
-privileged commands to enable the service.
-
-> > Could you look at adjusting your patch to this ?
-> >
->
-> Definitely, I'll revise and resubmit.
->
->
-> > Thanks a lot!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+diff --git a/package/python-ifaddr/python-ifaddr.hash b/package/python-ifaddr/python-ifaddr.hash
+index 18df40ac4c..57b155caa5 100644
+--- a/package/python-ifaddr/python-ifaddr.hash
++++ b/package/python-ifaddr/python-ifaddr.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/ifaddr/json
+-md5	cc1b7f0a587ef38491f07e50bf91d82e  ifaddr-0.1.6.tar.gz
+-sha256	c19c64882a7ad51a394451dabcbbed72e98b5625ec1e79789924d5ea3e3ecb93  ifaddr-0.1.6.tar.gz
+-# Locally calculated
+-sha256	926c6fdac9ede91ae54c67066597466b04f9b4f956a24f9c77931e7765607b2c  setup.py
++md5  97c4eb7505643b5f1fe17733cb42abd9  ifaddr-0.1.7.tar.gz
++sha256  1f9e8a6ca6f16db5a37d3356f07b6e52344f6f9f7e806d618537731669eb1a94  ifaddr-0.1.7.tar.gz
++# Locally computed sha256 checksums
++sha256  8700856576ae2bc80c63bc970250510d9213fb02fed006d5f22742c9ddde24d7  LICENSE.txt
+diff --git a/package/python-ifaddr/python-ifaddr.mk b/package/python-ifaddr/python-ifaddr.mk
+index 23c4ee365e..f1154d9de8 100644
+--- a/package/python-ifaddr/python-ifaddr.mk
++++ b/package/python-ifaddr/python-ifaddr.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IFADDR_VERSION = 0.1.6
++PYTHON_IFADDR_VERSION = 0.1.7
+ PYTHON_IFADDR_SOURCE = ifaddr-$(PYTHON_IFADDR_VERSION).tar.gz
+-PYTHON_IFADDR_SITE = https://files.pythonhosted.org/packages/9f/54/d92bda685093ebc70e2057abfa83ef1b3fb0ae2b6357262a3e19dfe96bb8
++PYTHON_IFADDR_SITE = https://files.pythonhosted.org/packages/3d/fc/4ce147e3997cd0ea470ad27112087545cf83bf85015ddb3054673cb471bb
+ PYTHON_IFADDR_SETUP_TYPE = setuptools
+ PYTHON_IFADDR_LICENSE = MIT
+-PYTHON_IFADDR_LICENSE_FILES = setup.py
++PYTHON_IFADDR_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
+-- 
+2.18.2
