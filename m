@@ -1,59 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 22:29:09 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/freeswitch: add patch to fix
- build issues
-In-Reply-To: <20200609082519.15482-1-heiko.thiery@gmail.com>
-References: <20200609082519.15482-1-heiko.thiery@gmail.com>
-Message-ID: <20200610222909.4c971e82@windsurf.home>
+Date: Wed, 10 Jun 2020 22:29:28 +0200
+Subject: [Buildroot] [git commit] package/libgit2: bump to version 1.0.1
+Message-ID: <20200610202828.52286825DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  9 Jun 2020 10:25:20 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c2dc9de31679eaeaab2e506aceb6bb0fbaf75189
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff --git a/package/freeswitch/0001-disable-the-check-for-check-lib.patch b/package/freeswitch/0001-disable-the-check-for-check-lib.patch
-> new file mode 100644
-> index 0000000000..213d7d35f4
-> --- /dev/null
-> +++ b/package/freeswitch/0001-disable-the-check-for-check-lib.patch
-> @@ -0,0 +1,33 @@
-> +From 6a63b51efdf431960711832d78225e50772ba8aa Mon Sep 17 00:00:00 2001
-> +From: Heiko Thiery <heiko.thiery@gmail.com>
-> +Date: Tue, 9 Jun 2020 08:32:51 +0200
-> +Subject: [PATCH] disable the check for check lib
-> +
-> +Do not set the define HAVE_CHECK to prevent building code with
-> +incompatible check lib.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + libs/sofia-sip/configure.ac | 6 +++---
-> + 1 file changed, 3 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/libs/sofia-sip/configure.ac b/libs/sofia-sip/configure.ac
-> +index 9542208cb6..ebc677628d 100644
-> +--- a/libs/sofia-sip/configure.ac
-> ++++ b/libs/sofia-sip/configure.ac
-> +@@ -249,9 +249,9 @@ SAC_TPORT
-> + dnl Check is used for testing
-> + PKG_CHECK_MODULES(CHECK, check >= 0.9.4, have_check="yes", have_check="no")
-> + AM_CONDITIONAL(HAVE_CHECK, test x"$have_check" = "xyes")
-> +-if test x"$have_check" = "xyes"; then
-> +-   AC_DEFINE([HAVE_CHECK], 1, [Define to 1 if check library is available])
-> +-fi
-> ++#if test x"$have_check" = "xyes"; then
-> ++#   AC_DEFINE([HAVE_CHECK], 1, [Define to 1 if check library is available])
-> ++#fi
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Since we're anyway patching the configure.ac script, can we do better,
-and add a --enable/--disable or --with/--without option, and then use
-it from freeswitch Makefile.am to disable building sofia-sip tests ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 6e977a97e0..1cb12ea035 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6a1fa16a7f6335ce8b2630fbdbb5e57c4027929ebc56fcd1ac55edb141b409b4  libgit2-1.0.0.tar.gz
++sha256  689f442c39c4117df515d1a0ffd7b401b91a500d7e2875ac45a440d86f198f5a  libgit2-1.0.1.tar.gz
+ sha256  afc8bde99ba630012107c25d3c42dde628ec5f0cd3f428131f7e3a0f7d58ff42  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 46cc4286c6..d674f17c7f 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.0.0
++LIBGIT2_VERSION = 1.0.1
+ LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v$(LIBGIT2_VERSION)
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch)
+ LIBGIT2_LICENSE_FILES = COPYING
