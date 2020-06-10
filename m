@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 23:25:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wayland: switch to https
-In-Reply-To: <20200607211955.4004689-1-fontaine.fabrice@gmail.com>
-References: <20200607211955.4004689-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200610232502.3f70d1d7@windsurf.home>
+Date: Wed, 10 Jun 2020 23:25:44 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/brltty: fix input_event
+ related compile failure
+In-Reply-To: <20200607181116.29433-1-heiko.thiery@gmail.com>
+References: <20200607181116.29433-1-heiko.thiery@gmail.com>
+Message-ID: <20200610232544.0c7afc3c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  7 Jun 2020 23:19:55 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun,  7 Jun 2020 20:11:17 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> --2020-06-07 20:39:28--  http://wayland.freedesktop.org/releases/wayland-1.18.0.tar.xz
-> Resolving wayland.freedesktop.org (wayland.freedesktop.org)... 35.227.58.183
-> Connecting to wayland.freedesktop.org (wayland.freedesktop.org)|35.227.58.183|:80... connected.
-> HTTP request sent, awaiting response... 308 Permanent Redirect
-> 2020-06-07 20:39:29 ERROR 308: Permanent Redirect.
+> Add a patch to fix input_event time related compile failure. The problem
+> is reported and fixed upstream.
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/f3af97ad46830568ee3ad710fe45329f7626c27b
+> http://autobuild.buildroot.net/results/7c5278c0ff2b2d8f88803e256803b31a75904efe/build-end.log
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ./system_linux.c: In function 'writeInputEvent':
+> ./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+>    gettimeofday(&event.time, NULL);
+>                        ^~~~
+>                        type
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
->  package/wayland/Config.in  | 2 +-
->  package/wayland/wayland.mk | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...nput_event-time-related-compile-fail.patch | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 package/brltty/0002-fix-input_event-time-related-compile-fail.patch
 
-Applied to master, thanks.
+Applied to master, thanks. If not already done, please submit the patch
+upstream. Thanks!
 
 Thomas
 -- 
