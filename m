@@ -1,37 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 23:24:25 +0200
-Subject: [Buildroot] [PATCH v1] configs/raspberrypi*: bump kernel
- version to 676fd5a
-In-Reply-To: <20200607220136.4021-1-ps.report@gmx.net>
-References: <20200607220136.4021-1-ps.report@gmx.net>
-Message-ID: <20200610232425.11aa2a17@windsurf.home>
+Date: Wed, 10 Jun 2020 23:24:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nftables: fix build with gcc <=
+ 4.8
+In-Reply-To: <20200607214113.4107523-1-fontaine.fabrice@gmail.com>
+References: <20200607214113.4107523-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200610232442.102ecb82@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  8 Jun 2020 00:01:36 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Sun,  7 Jun 2020 23:41:13 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Now based on 4.19.126 (from 4.19.113).
+> Fixes:
+>  - http://autobuild.buildroot.org/results/cf2359b8311fe91f9335c91f2bb4a730c9f4c9dc
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Notes:
->   - fixed compile with gcc-10.1.1 for me:
->     scripts/dtc/dtc-parser.tab.o:(.bss+0x10): multiple definition of `yylloc'; scripts/dtc/dtc-lexer.lex.o:(.bss+0x0): first defined here
-> ---
->  configs/raspberrypi0_defconfig       | 2 +-
->  configs/raspberrypi0w_defconfig      | 2 +-
->  configs/raspberrypi2_defconfig       | 2 +-
->  configs/raspberrypi3_64_defconfig    | 2 +-
->  configs/raspberrypi3_defconfig       | 2 +-
->  configs/raspberrypi3_qt5we_defconfig | 2 +-
->  configs/raspberrypi4_64_defconfig    | 2 +-
->  configs/raspberrypi4_defconfig       | 2 +-
->  configs/raspberrypi_defconfig        | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
+>  ...01-src-main.c-fix-build-with-gcc-4.8.patch | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch
 
 Applied to master, thanks.
 
