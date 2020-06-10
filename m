@@ -1,33 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 22:37:51 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/linux-pam: bump to version 1.4.0
-In-Reply-To: <20200609054825.136425-1-fontaine.fabrice@gmail.com>
-References: <20200609054825.136425-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200610223751.36811385@windsurf.home>
+Date: Wed, 10 Jun 2020 22:38:11 +0200
+Subject: [Buildroot] [git commit] package/python-webob: bump version to 1.8.6
+Message-ID: <20200610203718.D06EB81886@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  9 Jun 2020 07:48:25 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=54a048edaf874f60d53cfa5b23fb7db3ad9e8a9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop first patch, not needed since
->   https://github.com/linux-pam/linux-pam/commit/4dd9b97b762cc73816cb867d49c9d0d0b91d642c
-> - Drop other patches (already in version)
-> - Drop autoreconf
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Drop autoreconf
+And adjust the .hash spacing.
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-webob/python-webob.hash | 6 +++---
+ package/python-webob/python-webob.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
+index af3c7a0851..aab2f1d9e4 100644
+--- a/package/python-webob/python-webob.hash
++++ b/package/python-webob/python-webob.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/webob/json
+-md5	1761f416e8cf53f6fb674149cc223bd1  WebOb-1.8.5.tar.gz
+-sha256	05aaab7975e0ee8af2026325d656e5ce14a71f1883c52276181821d6d5bf7086  WebOb-1.8.5.tar.gz
++md5  dc3cc8c317d4acd03a6fd97cb0a9121a  WebOb-1.8.6.tar.gz
++sha256  aa3a917ed752ba3e0b242234b2a373f9c4e2a75d35291dcbe977649bd21fd108  WebOb-1.8.6.tar.gz
+ # Locally computed sha256 checksums
+-sha256	27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
++sha256  27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
+diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
+index fd9b2d1b36..051c117538 100644
+--- a/package/python-webob/python-webob.mk
++++ b/package/python-webob/python-webob.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEBOB_VERSION = 1.8.5
++PYTHON_WEBOB_VERSION = 1.8.6
+ PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
+-PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/9d/1a/0c89c070ee2829c934cb6c7082287c822e28236a4fcf90063e6be7c35532
++PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/2a/32/5f3f43d0784bdd9392db0cb98434d7cd23a0d8a420c4d243ad4cb8517f2a
+ PYTHON_WEBOB_SETUP_TYPE = setuptools
+ PYTHON_WEBOB_LICENSE = MIT
+ PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
