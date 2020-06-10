@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 23:33:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: bump to version
- 5a6e0a2db163e6ae9461552b59079870d0959340
-In-Reply-To: <20200606233739.1998087-1-james.hilliard1@gmail.com>
-References: <20200606233739.1998087-1-james.hilliard1@gmail.com>
-Message-ID: <20200610233342.73abac0d@windsurf.home>
+Date: Wed, 10 Jun 2020 23:35:12 +0200
+Subject: [Buildroot] [PATCH v2] package/libcamera: bump version to
+ 8823461
+In-Reply-To: <20200610211811.17118-1-ps.report@gmx.net>
+References: <20200610211811.17118-1-ps.report@gmx.net>
+Message-ID: <20200610233512.2cf87475@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  6 Jun 2020 17:37:39 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Wed, 10 Jun 2020 23:18:11 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/mjpg-streamer/mjpg-streamer.hash | 2 +-
->  package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> - add host dependencies: openssl, pkgconf, pyhton3-pyyaml
+> - add dependencies: boost, gnutls
 
-Applied to master, thanks.
+Nooooo, it really unconditionally needs boost and gnutls? Why so? This
+really seems like an odd choice from upstream. Kieran, do you confirm
+this is really what you guys are doing?
 
 Thomas
 -- 
