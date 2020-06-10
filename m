@@ -1,83 +1,55 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 11 Jun 2020 00:48:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: fix pkg-config --static
-In-Reply-To: <20200412211446.1789f4f0@windsurf.home>
-References: <20200215152620.3553021-1-fontaine.fabrice@gmail.com>
- <20200412211446.1789f4f0@windsurf.home>
-Message-ID: <d7250596-6394-ddc2-eddf-7e0d14b6cdd0@gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Thu, 11 Jun 2020 00:55:13 +0200
+Subject: [Buildroot] [PATCH 2/2] fs: clean the volatile /run and /tmp
+ directories
+In-Reply-To: <CADYdroO5MrSswWd_17ETVEbuFCOHMu-r-KKcFpBvLoXXSeH7DA@mail.gmail.com>
+References: <20200605224858.12870-1-nolange79@gmail.com>
+ <20200605224858.12870-2-nolange79@gmail.com>
+ <20200606224227.60a26aeb@windsurf>
+ <CADYdroO8PNfE=Cmd96rE-Kfd_nTq_7+h-JLdH-uUPGP3GmsBqg@mail.gmail.com>
+ <20200607104708.1eed13a9@windsurf>
+ <CADYdroO5MrSswWd_17ETVEbuFCOHMu-r-KKcFpBvLoXXSeH7DA@mail.gmail.com>
+Message-ID: <CADYdroO46-MaeFC-aAEf62SekFkf7gNzF1k=wFBkSok=Qzn0rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Fabrice,
+Am So., 7. Juni 2020 um 20:41 Uhr schrieb Norbert Lange <nolange79@gmail.com>:
+>
+> Am So., 7. Juni 2020 um 10:47 Uhr schrieb Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>:
+> >
+> > On Sun, 7 Jun 2020 00:57:23 +0200
+> > Norbert Lange <nolange79@gmail.com> wrote:
+> >
+> > > > However, I'm not sure if removing all what they contain is the right
+> > > > approach. Shouldn't we avoid creating things in /tmp and /run in the
+> > > > first place ?
+> > >
+> > > Yeah we should avoid creating stuff there, but it's sometimes hard to do.
+> > > One example is defining a user with home dir in /run, mkusers will
+> > > then create a dir there
+> > > (pretty late to clear it up otherwise)
+> >
+> > But our skeleton has a fstab that always mounts a tmpfs filesystem on
+> > /run, so how can it make sense for mkusers to create a home directory
+> > in /run ?
+>
+> Think of system users, where the "home" is usually non-persistent or
+> just some sort of jail.
+> For ex. my openssh patch sets the sshd user's home to /run/sshd - A
+> directory that's automatically
+> created when the service starts and deleted when it stops.
+>
 
-Le 12/04/2020 ? 21:14, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Sat, 15 Feb 2020 16:26:20 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> pkg-config wrapper is not used since commit
->> 4e0bc29993376613d200e892d491e31ea5a49622, this raise static build
->> failures with libglib2 because --static is not passed anymore to
->> pkg-config so add a patch to get back the old behaviour.
->>
->> Fixes:
->>  - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->>  ...dencies-base.py-add-pkg_config_stati.patch | 38 +++++++++++++++++++
->>  package/meson/cross-compilation.conf.in       |  1 +
->>  package/pkg-meson.mk                          |  1 +
->>  3 files changed, 40 insertions(+)
->>  create mode 100644 package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> 
-> So, the feedback from upstream at
-> https://github.com/mesonbuild/meson/pull/6629 was not very positive,
-> and they suggested how it should be implemented.
-> 
-> However, in the mean time, we are a bit screwed, and libglib2 has
-> continued to fail building consistently in our autobuilders since then.
-> 
-> Since your solution Fabrice is simple enough and straightforward, I
-> decided to apply it nevertheless. I just made sure setting the STATIC
-> property is done in both the per-package cross-compilation.conf and the
-> global cross-compilation.conf.
-> 
-> It would however be nice to keep working on the issue with upstream, so
-> that we get a proper solution at some point in the future.
+Some other example is dbus, creates a user with homedir=/var/run/dbus. So
+not only my hackjobs are affected ;)
 
-It seems this patch introduced a build issue with libgbm mesa3d:
+Should I somehow ping you if some patches are ready BTW (not sure if
+you read through all discussions)?
+On that note, can you upgrade fakeroot to 1.24 now?
+https://patchwork.ozlabs.org/project/buildroot/list/?series=176013
 
-http://autobuild.buildroot.net/results/1b5/1b58d73ecbbe1af2c3e140563d696cf32d1c4a5a/build-end.log
-
-See initial discussions:
-http://lists.busybox.net/pipermail/buildroot/2020-June/284543.html
-
-By reverting this patch allow to build the following defconfig:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_VALGRIND=y
-BR2_PACKAGE_VALGRIND_SGCHECK=y
-BR2_PACKAGE_VALGRIND_BBV=y
-BR2_PACKAGE_VALGRIND_LACKEY=y
-BR2_PACKAGE_VALGRIND_NULGRIND=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-
-That's because --static is always used while calling pkg-config.
-Doing so in mesa build add valgrind static libraries while building shared
-library libgbm.so.
-
-Best regards,
-Romain
-
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+Norbert
