@@ -1,27 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Jun 2020 20:15:35 +0000
-Subject: [Buildroot] [Bug 12971] qt5webengine: graph-depends seems producing
- incorrect output
-In-Reply-To: <bug-12971-163@https.bugs.busybox.net/>
-References: <bug-12971-163@https.bugs.busybox.net/>
-Message-ID: <bug-12971-163-RQj7y1DLSk@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 10 Jun 2020 22:21:27 +0200
+Subject: [Buildroot] [PATCH] python-semver: bump version to 2.10.1
+In-Reply-To: <20200609061628.12049-1-peter@korsgaard.com>
+References: <20200609061628.12049-1-peter@korsgaard.com>
+Message-ID: <20200610222127.474915a8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12971
+On Tue,  9 Jun 2020 08:16:28 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Indeed as Peter said, graph-depends draws the graph of build-time dependencies,
-as listed by the package <pkg>_DEPENDENCIES variable.
+> And adjust the .hash spacing for the new agreements.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-However, I find it odd that qt5declarative is only a runtime dependency for
-qt5webengine, if it is needed, it should also be needed at build time, but
-qt5webengine builds fine without this. Would it be possible to check if this
-runtime dependency is really needed ?
+Commit title was missing "package/". Also the "for the new agreements"
+wording seemed weird.
 
+Adjusted both and applied to master. Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
