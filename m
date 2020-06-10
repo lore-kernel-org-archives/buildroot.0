@@ -1,76 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 22:55:23 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pybind: new package
-In-Reply-To: <20200608213043.3443-1-guillaume.bressaix@gmail.com>
-References: <20200608213043.3443-1-guillaume.bressaix@gmail.com>
-Message-ID: <20200610225523.5bc2d13b@windsurf.home>
+Date: Wed, 10 Jun 2020 22:56:56 +0200
+Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.9
+Message-ID: <20200610205554.2356C817EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guillaume,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf46f03e8a002751e3c82841ebf936701989cd37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've applied your patch, but after a number of changes. See below.
+Format hash file with two spaces delimiters.
 
-On Mon,  8 Jun 2020 23:30:43 +0200
-"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/haveged/haveged.hash | 4 ++--
+ package/haveged/haveged.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> PyBind is a light (headers only) package
-> for C++/Python and Python/C++ bindings.
-> 
-> host-python-pybind is a dependency
-> of my future contribution, so I added this feature.
-
-This sort of comment should not go in the commit log, but below the
-"---" sign that follows the Signed-off-by line. And in fact, I have
-dropped the host variant: it should be added in the patch series
-together with your "future contribution" that will need the host
-variant of python-pybind.
-
-
-> diff --git a/package/python-pybind/Config.in b/package/python-pybind/Config.in
-> new file mode 100644
-> index 0000000000..832a9fb971
-> --- /dev/null
-> +++ b/package/python-pybind/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_PYBIND
-> +	bool "python-pybind"
-> +	depends on BR2_PACKAGE_PYTHON3
-
-Its documentation says Python 2.x is supported, so I've dropped this
-"depends on".
-
-> new file mode 100644
-> index 0000000000..03cea1c060
-> --- /dev/null
-> +++ b/package/python-pybind/python-pybind.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-pybind
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYBIND_VERSION = 2.5.0
-> +PYTHON_PYBIND_SOURCE = v$(PYTHON_PYBIND_VERSION).tar.gz
-> +PYTHON_PYBIND_SITE = https://github.com/pybind/pybind11/archive
-
-Here you should have use the "github" macro, because they anyway don't
-provide their own tarballs, only automatically generated ones. This
-also allows to have a better tarball name than v2.5.0.tar.gz.
-
-> +$(eval $(python-package))
-> +$(eval $(host-python-package))
-
-So I said above, I've dropped this last line.
-
-Applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index 2bb1fdd846..2f1338a6a8 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  99aa1996c6e39ea2459cfc37addfb8b1eecc63f3a2b6da9db17b22e76b6851ae	haveged-1.9.8.tar.gz
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256  13a0d81bb395c6ebde70a6474452001d9f898d786ddf4872af9f9f96f9e99ded  haveged-1.9.9.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index cc834304df..40fa1c7c15 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HAVEGED_VERSION = 1.9.8
++HAVEGED_VERSION = 1.9.9
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
