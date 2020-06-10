@@ -1,26 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Jun 2020 23:33:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gsettings-desktop-schemas: bump
- to version 3.36.1
-In-Reply-To: <20200607071628.3415014-1-fontaine.fabrice@gmail.com>
-References: <20200607071628.3415014-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200610233301.770fa4c6@windsurf.home>
+Date: Wed, 10 Jun 2020 23:33:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version
+ 0.12.5
+In-Reply-To: <20200606234539.2470905-1-james.hilliard1@gmail.com>
+References: <20200606234539.2470905-1-james.hilliard1@gmail.com>
+Message-ID: <20200610233320.0c1d9b9b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  7 Jun 2020 09:16:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat,  6 Jun 2020 17:45:39 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Update indentation in hash fle (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  .../gsettings-desktop-schemas.hash                          | 6 +++---
->  .../gsettings-desktop-schemas/gsettings-desktop-schemas.mk  | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/v4l2loopback/v4l2loopback.hash | 2 +-
+>  package/v4l2loopback/v4l2loopback.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
