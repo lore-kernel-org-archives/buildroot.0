@@ -1,55 +1,39 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 11 Jun 2020 00:55:13 +0200
-Subject: [Buildroot] [PATCH 2/2] fs: clean the volatile /run and /tmp
- directories
-In-Reply-To: <CADYdroO5MrSswWd_17ETVEbuFCOHMu-r-KKcFpBvLoXXSeH7DA@mail.gmail.com>
-References: <20200605224858.12870-1-nolange79@gmail.com>
- <20200605224858.12870-2-nolange79@gmail.com>
- <20200606224227.60a26aeb@windsurf>
- <CADYdroO8PNfE=Cmd96rE-Kfd_nTq_7+h-JLdH-uUPGP3GmsBqg@mail.gmail.com>
- <20200607104708.1eed13a9@windsurf>
- <CADYdroO5MrSswWd_17ETVEbuFCOHMu-r-KKcFpBvLoXXSeH7DA@mail.gmail.com>
-Message-ID: <CADYdroO46-MaeFC-aAEf62SekFkf7gNzF1k=wFBkSok=Qzn0rg@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 11 Jun 2020 01:16:47 +0200
+Subject: [Buildroot] [PATCH v2] package/libcamera: bump version to
+ 8823461
+In-Reply-To: <20200610233512.2cf87475@windsurf.home>
+References: <20200610211811.17118-1-ps.report@gmx.net>
+ <20200610233512.2cf87475@windsurf.home>
+Message-ID: <20200611011647.27d9d262@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am So., 7. Juni 2020 um 20:41 Uhr schrieb Norbert Lange <nolange79@gmail.com>:
->
-> Am So., 7. Juni 2020 um 10:47 Uhr schrieb Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com>:
-> >
-> > On Sun, 7 Jun 2020 00:57:23 +0200
-> > Norbert Lange <nolange79@gmail.com> wrote:
-> >
-> > > > However, I'm not sure if removing all what they contain is the right
-> > > > approach. Shouldn't we avoid creating things in /tmp and /run in the
-> > > > first place ?
-> > >
-> > > Yeah we should avoid creating stuff there, but it's sometimes hard to do.
-> > > One example is defining a user with home dir in /run, mkusers will
-> > > then create a dir there
-> > > (pretty late to clear it up otherwise)
-> >
-> > But our skeleton has a fstab that always mounts a tmpfs filesystem on
-> > /run, so how can it make sense for mkusers to create a home directory
-> > in /run ?
->
-> Think of system users, where the "home" is usually non-persistent or
-> just some sort of jail.
-> For ex. my openssh patch sets the sshd user's home to /run/sshd - A
-> directory that's automatically
-> created when the service starts and deleted when it stops.
->
+Hello Thomas,
 
-Some other example is dbus, creates a user with homedir=/var/run/dbus. So
-not only my hackjobs are affected ;)
+On Wed, 10 Jun 2020 23:35:12 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Should I somehow ping you if some patches are ready BTW (not sure if
-you read through all discussions)?
-On that note, can you upgrade fakeroot to 1.24 now?
-https://patchwork.ozlabs.org/project/buildroot/list/?series=176013
+> On Wed, 10 Jun 2020 23:18:11 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > - add host dependencies: openssl, pkgconf, pyhton3-pyyaml
+> > - add dependencies: boost, gnutls
+>
+> Nooooo, it really unconditionally needs boost and gnutls? Why so? This
+> really seems like an odd choice from upstream. Kieran, do you confirm
+> this is really what you guys are doing?
 
-Norbert
+According to [1] (and tested) gnutls is required...
+
+The Boost dependency is only needed for the raspberrypi part and can
+be avoided by adding 'LIBCAMERA_CONF_OPTS += Dpipelines=ipu3,rkisp1,simple,uvcvideo,vimc'
+(all but raspberrypi)
+
+Regards,
+Peter
+
+>
+> Thomas
