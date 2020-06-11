@@ -1,26 +1,93 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jun 2020 13:29:56 +0000
-Subject: [Buildroot] [Bug 13001] openjdk-bin replaces libfreetype.so from
- host-freetype
-In-Reply-To: <bug-13001-163@https.bugs.busybox.net/>
-References: <bug-13001-163@https.bugs.busybox.net/>
-Message-ID: <bug-13001-163-wWPVqqLI67@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 11 Jun 2020 15:36:34 +0200
+Subject: [Buildroot] [PATCH] package/meson: fix shared build issue due to
+ --static flag always passed to pkg-config
+Message-ID: <20200611133634.1112377-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13001
+Since cf75d7da98596580eee5a9b5e1a3e156ad832099 we have a build failures when
+building libgbm.so when valgrind package is selected because --static is always
+passed to pkg-config even for shared build.
 
---- Comment #1 from Jared Bents <jared.bents@rockwellcollins.com> ---
-Created attachment 8501
-  --> https://bugs.busybox.net/attachment.cgi?id=8501&action=edit
-proposed patch to fix
+Even if -Dvalgrind=false on meson command line to build mesa, the valgrind
+libraries come from pkg-config libdrm...
 
-The proposed patch to fix the issue removes libfreetype.so and adds
-host-freetype dependency
+output/host/bin/pkg-config libdrm --libs --static
+-L[...]/sysroot/usr/lib -ldrm -lm -L[...]/sysroot/usr/lib/valgrind
+-lcoregrind-arm64-linux -lvex-arm64-linux -lgcc
 
+... and break the build.
+
+See initial discussions:
+http://lists.busybox.net/pipermail/buildroot/2020-June/284543.html
+
+This is due to a wrong condition test added by the patch
+0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch.
+
+Before this patch, the issue can be reproduced using the following defconfig:
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_VALGRIND=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+
+Fixes:
+http://autobuild.buildroot.net/results/1b5/1b58d73ecbbe1af2c3e140563d696cf32d1c4a5a/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...endencies-base.py-add-pkg_config_stati.patch | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+index 7bb00f3fba..1f51397921 100644
+--- a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
++++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+@@ -1,4 +1,4 @@
+-From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
++From 2c41e9505d44340415da98f10b915c659b09bb39 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sat, 15 Feb 2020 15:13:59 +0100
+ Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
+@@ -16,23 +16,26 @@ Fixes:
+  - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Romain: Fix if condition]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+- mesonbuild/dependencies/base.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ mesonbuild/dependencies/base.py | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
+-index a83e3d6c..913bff6b 100644
++index 5636602e..f068b5b0 100644
+ --- a/mesonbuild/dependencies/base.py
+ +++ b/mesonbuild/dependencies/base.py
+-@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
++@@ -858,7 +858,8 @@ class PkgConfigDependency(ExternalDependency):
+      def _set_libs(self):
+          env = None
+          libcmd = [self.name, '--libs']
+ -        if self.static:
+-+        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
+++        if self.static or \
+++           (self.env.properties[self.for_machine].get('pkg_config_static', False) == 'true'):
+              libcmd.append('--static')
+          # Force pkg-config to output -L fields even if they are system
+          # paths so we can do manual searching with cc.find_library() later.
+ -- 
+-2.24.1
++2.25.4
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.4
