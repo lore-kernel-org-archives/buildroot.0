@@ -1,171 +1,32 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Thu, 11 Jun 2020 15:39:22 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/openssh: add sd
- socket-activated ssh daemon services
-In-Reply-To: <CADYdroPgiPgRifzY_8-a8Pdxk1ReDAYhFWhQz2k+cpJomsFoAg@mail.gmail.com>
-References: <20200611091407.12688-1-nolange79@gmail.com>
- <20200611091407.12688-4-nolange79@gmail.com>
- <CAFvCimXpEcORcHFmmKFK_pxqyNFWxsqCjub2m+Hqr9Po==oS0A@mail.gmail.com>
- <CADYdroPgiPgRifzY_8-a8Pdxk1ReDAYhFWhQz2k+cpJomsFoAg@mail.gmail.com>
-Message-ID: <CAFvCimXWfCGqx_=We4wU=8d3LNR_4hZWkY3EZb9kqMoNH1DxQw@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 11 Jun 2020 21:14:04 +0300
+Subject: [Buildroot] [PATCH 1/1] python-pybind: new package
+In-Reply-To: <20200610225523.5bc2d13b@windsurf.home>
+References: <20200608213043.3443-1-guillaume.bressaix@gmail.com>
+ <20200610225523.5bc2d13b@windsurf.home>
+Message-ID: <CALFsTFXhvaq-sgWkHEk=gzOQTgDjbhKzNwOTVfrBiTT1Hqq40Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Urgh
-Thx for pointing that out. That's why I don't like mail-based workflows...
+Hello,
 
-Anyway, I won't block the patch on that particular point, though I'd like
-it addressed if possible....
+I'm not sure pybind11 is just a "regular" python package.
+First, it needs C++11 so we have to make sure the toolchain supports
+that in order to be able to actually compile the generated pybind11
+code.
+Secondly, the installation through setup.py just installs the pybind11
+headers and it doesn't give any way for C++ projects to locate the
+package. For example, this project won't find pybind11 because it uses
+find_package(pybind11...) in it's CMakeLists.txt:
+https://github.com/pybind/pybind11_json. The installation of pybind11
+using CMake gives a solution to this problem.
 
+Those considerations have been taken into account in a previous patch
+I sent to the mailing list few weeks ago:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200513183903.8656-1-asafka7 at gmail.com/
 
-Cheers
-Jeremy
-
-
-Le jeu. 11 juin 2020 ? 11:54, Norbert Lange <nolange79@gmail.com> a ?crit :
-
->
->
-> J?r?my ROSEN <jeremy.rosen@smile.fr> schrieb am Do., 11. Juni 2020, 11:35:
->
->> Reviewed-By J?r?my Rosen <jeremy.rosen@smile.fr>
->>
->> (I think I didn't add my RB for that one..)
->>
->> Le jeu. 11 juin 2020 ? 11:14, Norbert Lange <nolange79@gmail.com> a
->> ?crit :
->>
->>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
->>> ---
->>>  package/openssh/openssh.mk               |  6 +++---
->>>  package/openssh/sshd-host-keygen.service |  2 +-
->>>  package/openssh/sshd.socket              | 11 +++++++++++
->>>  package/openssh/sshd at .service            | 10 ++++++++++
->>>  4 files changed, 25 insertions(+), 4 deletions(-)
->>>  create mode 100644 package/openssh/sshd.socket
->>>  create mode 100644 package/openssh/sshd at .service
->>>
->>> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
->>> index 1fcd957299..cbfe8f6f7d 100644
->>> --- a/package/openssh/openssh.mk
->>> +++ b/package/openssh/openssh.mk
->>> @@ -116,9 +116,9 @@ endef
->>>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
->>>
->>>  define OPENSSH_INSTALL_INIT_SYSTEMD
->>> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
->>> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
->>> -               $(TARGET_DIR)/usr/lib/systemd/system/
->>> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
->>> +       $(INSTALL) -m 644 package/openssh/sshd*.service
->>> package/openssh/sshd.socket \
->>> +               $(TARGET_DIR)/usr/lib/systemd/system/.
->>>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
->>>  endef
->>>
->>> diff --git a/package/openssh/sshd-host-keygen.service
->>> b/package/openssh/sshd-host-keygen.service
->>> index 2db1be16c4..0e071c9d8c 100644
->>> --- a/package/openssh/sshd-host-keygen.service
->>> +++ b/package/openssh/sshd-host-keygen.service
->>> @@ -20,4 +20,4 @@ Type=oneshot
->>>  RemainAfterExit=yes
->>>
->>>  [Install]
->>> -WantedBy=sshd.service
->>> +WantedBy=sshd.service sshd.socket
->>> diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
->>> new file mode 100644
->>> index 0000000000..bbae9ed7aa
->>> --- /dev/null
->>> +++ b/package/openssh/sshd.socket
->>> @@ -0,0 +1,11 @@
->>> +[Unit]
->>> +Description=OpenBSD Secure Shell server socket
->>> +Before=sshd.service
->>> +Conflicts=sshd.service
->>> +
->>> +[Socket]
->>> +ListenStream=22
->>> +Accept=yes
->>> +
->>> +[Install]
->>> +WantedBy=sockets.target
->>> diff --git a/package/openssh/sshd at .service b/package/openssh/sshd@
->>> .service
->>> new file mode 100644
->>> index 0000000000..b3a590d9a3
->>> --- /dev/null
->>> +++ b/package/openssh/sshd at .service
->>> @@ -0,0 +1,10 @@
->>> +[Unit]
->>> +Description=OpenBSD Secure Shell server per-connection daemon
->>> +Documentation=man:sshd(8) man:sshd_config(5)
->>> +After=auditd.service
->>> +
->>> +[Service]
->>> +ExecStart=-/usr/sbin/sshd -i
->>> +StandardInput=socket
->>> +RuntimeDirectory=sshd
->>> +RuntimeDirectoryMode=0755
->>> --
->>> 2.26.2
->>>
->>>
->>
->> --
->> [image: SMILE]  <http://www.smile.eu/>
->>
->> 20 rue des Jardins
->> 92600 Asni?res-sur-Seine
->> *J?r?my ROSEN*
->> Architecte technique
->>
->> [image: email] jeremy.rosen at smile.fr
->> [image: phone]  +33 6 88 25 87 42
->> [image: url] http://www.smile.eu
->>
->> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
->> <https://www.facebook.com/smileopensource> [image: LinkedIn]
->> <https://www.linkedin.com/company/smile> [image: Github]
->> <https://github.com/Smile-SA>
->>
->> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
->> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
->>
->
-> No, but I thought that was intentional, as this patch doesn't have an
-> option to chose between singular sever and the socket activation mode.
->
-> Norbert
->
->>
->> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
->>
->
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200611/0874979c/attachment.html>
+Regards,
+Asaf.
