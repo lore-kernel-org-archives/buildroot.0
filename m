@@ -1,119 +1,53 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Thu, 11 Jun 2020 11:35:42 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/openssh: add sd
- socket-activated ssh daemon services
-In-Reply-To: <20200611091407.12688-4-nolange79@gmail.com>
-References: <20200611091407.12688-1-nolange79@gmail.com>
- <20200611091407.12688-4-nolange79@gmail.com>
-Message-ID: <CAFvCimXpEcORcHFmmKFK_pxqyNFWxsqCjub2m+Hqr9Po==oS0A@mail.gmail.com>
+From: Felix Vollmer <felixvollmer@gmail.com>
+Date: Thu, 11 Jun 2020 11:40:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/asterisk: bump version to
+ 16.10.0
+In-Reply-To: <20200606232934.51a6d8de@windsurf>
+References: <20200604212509.162415-1-FelixVollmer@gmail.com>
+ <20200606232934.51a6d8de@windsurf>
+Message-ID: <CABhhZifXw4eYCGyDO7Z6+YRHZ8a4YCTPnoyR-4uDuq+JiKvLaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-By J?r?my Rosen <jeremy.rosen@smile.fr>
+Thanks!
+I actually have Asterisk running on an embedded system, which is built
+by buildroot (https://github.com/fvollmer/SIP-Heating-Gateway). It is
+just a small personal project and I probably will only update the
+system image in case of security vulnerabilities. I'll try to have an
+eye on the asterisk, but I'm not sure how much time I actually have to
+maintain the buildroot asterisk package.
 
-(I think I didn't add my RB for that one..)
-
-Le jeu. 11 juin 2020 ? 11:14, Norbert Lange <nolange79@gmail.com> a ?crit :
-
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/openssh/openssh.mk               |  6 +++---
->  package/openssh/sshd-host-keygen.service |  2 +-
->  package/openssh/sshd.socket              | 11 +++++++++++
->  package/openssh/sshd at .service            | 10 ++++++++++
->  4 files changed, 25 insertions(+), 4 deletions(-)
->  create mode 100644 package/openssh/sshd.socket
->  create mode 100644 package/openssh/sshd at .service
+Am Sa., 6. Juni 2020 um 23:29 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
 >
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 1fcd957299..cbfe8f6f7d 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -116,9 +116,9 @@ endef
->  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
+> Hello Felix,
 >
->  define OPENSSH_INSTALL_INIT_SYSTEMD
-> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
-> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
-> -               $(TARGET_DIR)/usr/lib/systemd/system/
-> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
-> +       $(INSTALL) -m 644 package/openssh/sshd*.service
-> package/openssh/sshd.socket \
-> +               $(TARGET_DIR)/usr/lib/systemd/system/.
->         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
->  endef
+> Thanks for your contribution? Are you actually using Asterisk on
+> systems built by Buildroot? We indeed don't really have a maintainer
+> for the Asterisk package in Buildroot. Yann E. Morin, which you Cc'ed
+> added it a while ago, but I don't think he is really using Asterisk.
+> Having another person looking after our Asterisk package would be very
+> nice.
 >
-> diff --git a/package/openssh/sshd-host-keygen.service
-> b/package/openssh/sshd-host-keygen.service
-> index 2db1be16c4..0e071c9d8c 100644
-> --- a/package/openssh/sshd-host-keygen.service
-> +++ b/package/openssh/sshd-host-keygen.service
-> @@ -20,4 +20,4 @@ Type=oneshot
->  RemainAfterExit=yes
+> On Thu,  4 Jun 2020 23:25:09 +0200
+> Felix Vollmer <felixvollmer@gmail.com> wrote:
 >
->  [Install]
-> -WantedBy=sshd.service
-> +WantedBy=sshd.service sshd.socket
-> diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
-> new file mode 100644
-> index 0000000000..bbae9ed7aa
-> --- /dev/null
-> +++ b/package/openssh/sshd.socket
-> @@ -0,0 +1,11 @@
-> +[Unit]
-> +Description=OpenBSD Secure Shell server socket
-> +Before=sshd.service
-> +Conflicts=sshd.service
-> +
-> +[Socket]
-> +ListenStream=22
-> +Accept=yes
-> +
-> +[Install]
-> +WantedBy=sockets.target
-> diff --git a/package/openssh/sshd at .service b/package/openssh/sshd at .service
-> new file mode 100644
-> index 0000000000..b3a590d9a3
-> --- /dev/null
-> +++ b/package/openssh/sshd at .service
-> @@ -0,0 +1,10 @@
-> +[Unit]
-> +Description=OpenBSD Secure Shell server per-connection daemon
-> +Documentation=man:sshd(8) man:sshd_config(5)
-> +After=auditd.service
-> +
-> +[Service]
-> +ExecStart=-/usr/sbin/sshd -i
-> +StandardInput=socket
-> +RuntimeDirectory=sshd
-> +RuntimeDirectoryMode=0755
+> > Release Notes:
+> > https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
+> >
+> > Signed-off-by: Felix Vollmer <FelixVollmer@gmail.com>
+> > ---
+> >  package/asterisk/asterisk.hash | 2 +-
+> >  package/asterisk/asterisk.mk   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> Applied to master, thanks.
+>
+> Thomas
 > --
-> 2.26.2
->
->
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200611/13580769/attachment.html>
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
