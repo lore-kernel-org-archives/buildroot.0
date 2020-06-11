@@ -1,103 +1,57 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Thu, 11 Jun 2020 09:21:59 +0100
-Subject: [Buildroot] [PATCH v2] package/libcamera: bump version to
- 8823461
-In-Reply-To: <20200611011647.27d9d262@gmx.net>
-References: <20200610211811.17118-1-ps.report@gmx.net>
- <20200610233512.2cf87475@windsurf.home> <20200611011647.27d9d262@gmx.net>
-Message-ID: <be04a74b-a17f-4e66-c037-47bcf51a5068@ideasonboard.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Thu, 11 Jun 2020 11:03:40 +0200
+Subject: [Buildroot] [PATCH] package/qwt: bump version to 6.1.5
+Message-ID: <20200611090340.2070566-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On 11/06/2020 00:16, Peter Seiderer wrote:
-> Hello Thomas,
-> 
-> On Wed, 10 Jun 2020 23:35:12 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
->> On Wed, 10 Jun 2020 23:18:11 +0200
->> Peter Seiderer <ps.report@gmx.net> wrote:
->>
->>> - add host dependencies: openssl, pkgconf, pyhton3-pyyaml
+Fix:
+- http://autobuild.buildroot.net/results/27ac3c09048744189236bd67aa643163d0d01ad5/
+- http://autobuild.buildroot.net/results/9693ad79e4c23c9c0324df02a4d57c662b82fbce/
+- http://autobuild.buildroot.net/results/e8aafa2a1a5fa4e207d2e8bb8c9570789a8ccaa7/
 
-s/pyhton3-pyyaml/python3-pyyaml/
+Respect hash rules
 
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/qwt/qwt.hash | 10 +++++-----
+ package/qwt/qwt.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
->>> - add dependencies: boost, gnutls
->>
->> Nooooo, it really unconditionally needs boost and gnutls? Why so? This
->> really seems like an odd choice from upstream. Kieran, do you confirm
->> this is really what you guys are doing?
-> 
-> According to [1] (and tested) gnutls is required...
-
-The module signing process requires openssl on the host to 'sign' the
-IPA modules during the build process.
-
-On the target, gnutls is used to validate and verify IPA modules as
-having been built at the same time. If so, then those modules are
-permitted to be included in the same process space as libcamera and are
-'trusted'.
-
-Otherwise - if they are 'external' modules, they are forced to be
-external and run in the sand-box environment. If gnutls is not
-available, the module signing process will declare all modules to be
-'untrusted'.
-
-
-
-> The Boost dependency is only needed for the raspberrypi part and can
-> be avoided by adding 'LIBCAMERA_CONF_OPTS += Dpipelines=ipu3,rkisp1,simple,uvcvideo,vimc'
-> (all but raspberrypi)
-
-Boost is unfortunate at the moment, and indeed is required to build the
-RPi IPA.
-
-Technically it only uses headers from boost I think for JSON parsing ...
-and we do want to remove that dependency - as it ends up pulling in a
-huge dependency for ... a very small part of that. :S
-
-Ok - so grepping shows it uses the following headers:
-
- #include <boost/property_tree/ptree.hpp>
- #include <boost/property_tree/json_parser.hpp>
- #include <boost/any.hpp>
-
-
-Anyone know if it's feasible to extract just the json_parser/ptree
-headers from boost? I fear a never ending entanglement of required
-headers if we tried to pull just those components out.
-
-Hrm ... and std::any doesn't get in C++ until C++17 .. so we do still
-need that one too ...
-
-
-
-You could disable the RPi pipeline in buildroot, but I would expect that
-RPi is probably the main target for anyone using buildroot to play with
-libcamera at the moment ... (perhaps along with the rockchip targets)
-
-
-We probably need to work on making the pipeline configurations smarter
-to only build for the current architecture - but that should probably be
-handled in libcamera. (with a compile test pipelines=all option).
-
---
-Kieran
-
-
-
-> Regards,
-> Peter
-> 
->>
->> Thomas
-
+diff --git a/package/qwt/qwt.hash b/package/qwt/qwt.hash
+index 95e910e5e4..cc78236ad1 100644
+--- a/package/qwt/qwt.hash
++++ b/package/qwt/qwt.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/qwt/files/qwt/6.1.4/
+-sha1 a1028cb0a33322920266fb183869023b8ed30394  qwt-6.1.4.tar.bz2
+-md5  4fb1852f694420e3ab9c583526edecc5          qwt-6.1.4.tar.bz2
++# From https://sourceforge.net/projects/qwt/files/qwt/6.1.5/
++sha1  07c71427f1f4bbd0354b3a98965943ce2f220766  qwt-6.1.5.tar.bz2
++md5  d65582f99312796ed42c3be3208ed3db  qwt-6.1.5.tar.bz2
+ 
+ # Locally computed
+-sha256 1529215329e51fc562e0009505a838f427919a18b362afff441f035b2d9b5bd9  qwt-6.1.4.tar.bz2
+-sha256 d8737db330e1eeb439962e11654ab7f1aece3561d9415454a8c538643824ede6  COPYING
++sha256  4076de63ec2b5e84379ddfebf27c7b29b8dc9074f3db7e2ca61d11a1d8adc041  qwt-6.1.5.tar.bz2
++sha256  d8737db330e1eeb439962e11654ab7f1aece3561d9415454a8c538643824ede6  COPYING
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index f09304d0e4..95a041e97a 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QWT_VERSION = 6.1.4
++QWT_VERSION = 6.1.5
+ QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
+ QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
+ QWT_INSTALL_STAGING = YES
 -- 
-Regards
---
-Kieran
+2.26.2
