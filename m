@@ -1,93 +1,171 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 11 Jun 2020 15:36:34 +0200
-Subject: [Buildroot] [PATCH] package/meson: fix shared build issue due to
- --static flag always passed to pkg-config
-Message-ID: <20200611133634.1112377-1-romain.naour@gmail.com>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Thu, 11 Jun 2020 15:39:22 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/openssh: add sd
+ socket-activated ssh daemon services
+In-Reply-To: <CADYdroPgiPgRifzY_8-a8Pdxk1ReDAYhFWhQz2k+cpJomsFoAg@mail.gmail.com>
+References: <20200611091407.12688-1-nolange79@gmail.com>
+ <20200611091407.12688-4-nolange79@gmail.com>
+ <CAFvCimXpEcORcHFmmKFK_pxqyNFWxsqCjub2m+Hqr9Po==oS0A@mail.gmail.com>
+ <CADYdroPgiPgRifzY_8-a8Pdxk1ReDAYhFWhQz2k+cpJomsFoAg@mail.gmail.com>
+Message-ID: <CAFvCimXWfCGqx_=We4wU=8d3LNR_4hZWkY3EZb9kqMoNH1DxQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since cf75d7da98596580eee5a9b5e1a3e156ad832099 we have a build failures when
-building libgbm.so when valgrind package is selected because --static is always
-passed to pkg-config even for shared build.
+Urgh
+Thx for pointing that out. That's why I don't like mail-based workflows...
 
-Even if -Dvalgrind=false on meson command line to build mesa, the valgrind
-libraries come from pkg-config libdrm...
+Anyway, I won't block the patch on that particular point, though I'd like
+it addressed if possible....
 
-output/host/bin/pkg-config libdrm --libs --static
--L[...]/sysroot/usr/lib -ldrm -lm -L[...]/sysroot/usr/lib/valgrind
--lcoregrind-arm64-linux -lvex-arm64-linux -lgcc
 
-... and break the build.
+Cheers
+Jeremy
 
-See initial discussions:
-http://lists.busybox.net/pipermail/buildroot/2020-June/284543.html
 
-This is due to a wrong condition test added by the patch
-0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch.
+Le jeu. 11 juin 2020 ? 11:54, Norbert Lange <nolange79@gmail.com> a ?crit :
 
-Before this patch, the issue can be reproduced using the following defconfig:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_VALGRIND=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+>
+>
+> J?r?my ROSEN <jeremy.rosen@smile.fr> schrieb am Do., 11. Juni 2020, 11:35:
+>
+>> Reviewed-By J?r?my Rosen <jeremy.rosen@smile.fr>
+>>
+>> (I think I didn't add my RB for that one..)
+>>
+>> Le jeu. 11 juin 2020 ? 11:14, Norbert Lange <nolange79@gmail.com> a
+>> ?crit :
+>>
+>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>> ---
+>>>  package/openssh/openssh.mk               |  6 +++---
+>>>  package/openssh/sshd-host-keygen.service |  2 +-
+>>>  package/openssh/sshd.socket              | 11 +++++++++++
+>>>  package/openssh/sshd at .service            | 10 ++++++++++
+>>>  4 files changed, 25 insertions(+), 4 deletions(-)
+>>>  create mode 100644 package/openssh/sshd.socket
+>>>  create mode 100644 package/openssh/sshd at .service
+>>>
+>>> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+>>> index 1fcd957299..cbfe8f6f7d 100644
+>>> --- a/package/openssh/openssh.mk
+>>> +++ b/package/openssh/openssh.mk
+>>> @@ -116,9 +116,9 @@ endef
+>>>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
+>>>
+>>>  define OPENSSH_INSTALL_INIT_SYSTEMD
+>>> -       mkdir $(TARGET_DIR)/usr/lib/systemd/system
+>>> -       $(INSTALL) -m 644 package/openssh/sshd*.service \
+>>> -               $(TARGET_DIR)/usr/lib/systemd/system/
+>>> +       mkdir -p $(TARGET_DIR)/usr/lib/systemd/system
+>>> +       $(INSTALL) -m 644 package/openssh/sshd*.service
+>>> package/openssh/sshd.socket \
+>>> +               $(TARGET_DIR)/usr/lib/systemd/system/.
+>>>         $(OPENSSH_INSTALL_SYSTEMD_SYSUSERS)
+>>>  endef
+>>>
+>>> diff --git a/package/openssh/sshd-host-keygen.service
+>>> b/package/openssh/sshd-host-keygen.service
+>>> index 2db1be16c4..0e071c9d8c 100644
+>>> --- a/package/openssh/sshd-host-keygen.service
+>>> +++ b/package/openssh/sshd-host-keygen.service
+>>> @@ -20,4 +20,4 @@ Type=oneshot
+>>>  RemainAfterExit=yes
+>>>
+>>>  [Install]
+>>> -WantedBy=sshd.service
+>>> +WantedBy=sshd.service sshd.socket
+>>> diff --git a/package/openssh/sshd.socket b/package/openssh/sshd.socket
+>>> new file mode 100644
+>>> index 0000000000..bbae9ed7aa
+>>> --- /dev/null
+>>> +++ b/package/openssh/sshd.socket
+>>> @@ -0,0 +1,11 @@
+>>> +[Unit]
+>>> +Description=OpenBSD Secure Shell server socket
+>>> +Before=sshd.service
+>>> +Conflicts=sshd.service
+>>> +
+>>> +[Socket]
+>>> +ListenStream=22
+>>> +Accept=yes
+>>> +
+>>> +[Install]
+>>> +WantedBy=sockets.target
+>>> diff --git a/package/openssh/sshd at .service b/package/openssh/sshd@
+>>> .service
+>>> new file mode 100644
+>>> index 0000000000..b3a590d9a3
+>>> --- /dev/null
+>>> +++ b/package/openssh/sshd at .service
+>>> @@ -0,0 +1,10 @@
+>>> +[Unit]
+>>> +Description=OpenBSD Secure Shell server per-connection daemon
+>>> +Documentation=man:sshd(8) man:sshd_config(5)
+>>> +After=auditd.service
+>>> +
+>>> +[Service]
+>>> +ExecStart=-/usr/sbin/sshd -i
+>>> +StandardInput=socket
+>>> +RuntimeDirectory=sshd
+>>> +RuntimeDirectoryMode=0755
+>>> --
+>>> 2.26.2
+>>>
+>>>
+>>
+>> --
+>> [image: SMILE]  <http://www.smile.eu/>
+>>
+>> 20 rue des Jardins
+>> 92600 Asni?res-sur-Seine
+>> *J?r?my ROSEN*
+>> Architecte technique
+>>
+>> [image: email] jeremy.rosen at smile.fr
+>> [image: phone]  +33 6 88 25 87 42
+>> [image: url] http://www.smile.eu
+>>
+>> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+>> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+>> <https://www.linkedin.com/company/smile> [image: Github]
+>> <https://github.com/Smile-SA>
+>>
+>> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+>> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>
+>
+> No, but I thought that was intentional, as this patch doesn't have an
+> option to chose between singular sever and the socket activation mode.
+>
+> Norbert
+>
+>>
+>> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>
+>
 
-Fixes:
-http://autobuild.buildroot.net/results/1b5/1b58d73ecbbe1af2c3e140563d696cf32d1c4a5a/build-end.log
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...endencies-base.py-add-pkg_config_stati.patch | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-index 7bb00f3fba..1f51397921 100644
---- a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-+++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-@@ -1,4 +1,4 @@
--From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
-+From 2c41e9505d44340415da98f10b915c659b09bb39 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 15 Feb 2020 15:13:59 +0100
- Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-@@ -16,23 +16,26 @@ Fixes:
-  - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Romain: Fix if condition]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-- mesonbuild/dependencies/base.py | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ mesonbuild/dependencies/base.py | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
--index a83e3d6c..913bff6b 100644
-+index 5636602e..f068b5b0 100644
- --- a/mesonbuild/dependencies/base.py
- +++ b/mesonbuild/dependencies/base.py
--@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
-+@@ -858,7 +858,8 @@ class PkgConfigDependency(ExternalDependency):
-      def _set_libs(self):
-          env = None
-          libcmd = [self.name, '--libs']
- -        if self.static:
--+        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
-++        if self.static or \
-++           (self.env.properties[self.for_machine].get('pkg_config_static', False) == 'true'):
-              libcmd.append('--static')
-          # Force pkg-config to output -L fields even if they are system
-          # paths so we can do manual searching with cc.find_library() later.
- -- 
--2.24.1
-+2.25.4
- 
 -- 
-2.25.4
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200611/0874979c/attachment.html>
