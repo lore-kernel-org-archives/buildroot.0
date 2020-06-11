@@ -1,27 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jun 2020 06:31:41 +0000
-Subject: [Buildroot] [Bug 12986] Mtools: Error converting to codepage 850
-In-Reply-To: <bug-12986-163@https.bugs.busybox.net/>
-References: <bug-12986-163@https.bugs.busybox.net/>
-Message-ID: <bug-12986-163-yoc4buUmG0@https.bugs.busybox.net/>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Thu, 11 Jun 2020 10:11:56 +0200
+Subject: [Buildroot] [PATCH 1/3] python-scipy: needs host-python-pybind
+Message-ID: <20200611081158.16509-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12986
+patch serie to add python-scipy
 
---- Comment #1 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
-Hi,
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 
-Thanks for the bug report, I sent the following patch:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200611062826.643125-1-fontaine.fabrice at gmail.com/
+---
 
-Best Regards,
+python-pybind is a build time dependency for python-scipy
 
-Fabrice
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/python-pybind/python-pybind.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+index 634e869e40..239893b97c 100644
+--- a/package/python-pybind/python-pybind.mk
++++ b/package/python-pybind/python-pybind.mk
+@@ -11,3 +11,4 @@ PYTHON_PYBIND_LICENSE_FILES = LICENSE
+ PYTHON_PYBIND_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
