@@ -1,34 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Jun 2020 08:28:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtools: select
- BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
-Message-ID: <20200611062826.643125-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 11 Jun 2020 06:31:41 +0000
+Subject: [Buildroot] [Bug 12986] Mtools: Error converting to codepage 850
+In-Reply-To: <bug-12986-163@https.bugs.busybox.net/>
+References: <bug-12986-163@https.bugs.busybox.net/>
+Message-ID: <bug-12986-163-yoc4buUmG0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=12986
+https://bugs.busybox.net/show_bug.cgi?id=12986
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mtools/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+--- Comment #1 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
+Hi,
 
-diff --git a/package/mtools/Config.in b/package/mtools/Config.in
-index 99a073ca83..43e14e2c0c 100644
---- a/package/mtools/Config.in
-+++ b/package/mtools/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_MTOOLS
- 	bool "mtools"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
-+	# runtime UTF conversion support
-+	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Mtools is a collection of utilities to access MS-DOS disks
- 	  from Unix without mounting them. It supports Win'95 style
+Thanks for the bug report, I sent the following patch:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200611062826.643125-1-fontaine.fabrice at gmail.com/
+
+Best Regards,
+
+Fabrice
+
 -- 
-2.26.2
+You are receiving this mail because:
+You are on the CC list for the bug.
