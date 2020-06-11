@@ -1,57 +1,65 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu, 11 Jun 2020 11:03:40 +0200
-Subject: [Buildroot] [PATCH] package/qwt: bump version to 6.1.5
-Message-ID: <20200611090340.2070566-1-gwenj@trabucayre.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 11 Jun 2020 11:12:41 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/freeswitch: add patch to fix
+ build issues
+In-Reply-To: <20200610222909.4c971e82@windsurf.home>
+References: <20200609082519.15482-1-heiko.thiery@gmail.com>
+ <20200610222909.4c971e82@windsurf.home>
+Message-ID: <CAEyMn7am11TOOs3b-Yu5EQqRkOqV6Njq5HhvbGCXUhe3Wj_WiQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hi Thomas,
 
-Fix:
-- http://autobuild.buildroot.net/results/27ac3c09048744189236bd67aa643163d0d01ad5/
-- http://autobuild.buildroot.net/results/9693ad79e4c23c9c0324df02a4d57c662b82fbce/
-- http://autobuild.buildroot.net/results/e8aafa2a1a5fa4e207d2e8bb8c9570789a8ccaa7/
+Am Mi., 10. Juni 2020 um 22:29 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Tue,  9 Jun 2020 10:25:20 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > diff --git a/package/freeswitch/0001-disable-the-check-for-check-lib.patch b/package/freeswitch/0001-disable-the-check-for-check-lib.patch
+> > new file mode 100644
+> > index 0000000000..213d7d35f4
+> > --- /dev/null
+> > +++ b/package/freeswitch/0001-disable-the-check-for-check-lib.patch
+> > @@ -0,0 +1,33 @@
+> > +From 6a63b51efdf431960711832d78225e50772ba8aa Mon Sep 17 00:00:00 2001
+> > +From: Heiko Thiery <heiko.thiery@gmail.com>
+> > +Date: Tue, 9 Jun 2020 08:32:51 +0200
+> > +Subject: [PATCH] disable the check for check lib
+> > +
+> > +Do not set the define HAVE_CHECK to prevent building code with
+> > +incompatible check lib.
+> > +
+> > +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > +---
+> > + libs/sofia-sip/configure.ac | 6 +++---
+> > + 1 file changed, 3 insertions(+), 3 deletions(-)
+> > +
+> > +diff --git a/libs/sofia-sip/configure.ac b/libs/sofia-sip/configure.ac
+> > +index 9542208cb6..ebc677628d 100644
+> > +--- a/libs/sofia-sip/configure.ac
+> > ++++ b/libs/sofia-sip/configure.ac
+> > +@@ -249,9 +249,9 @@ SAC_TPORT
+> > + dnl Check is used for testing
+> > + PKG_CHECK_MODULES(CHECK, check >= 0.9.4, have_check="yes", have_check="no")
+> > + AM_CONDITIONAL(HAVE_CHECK, test x"$have_check" = "xyes")
+> > +-if test x"$have_check" = "xyes"; then
+> > +-   AC_DEFINE([HAVE_CHECK], 1, [Define to 1 if check library is available])
+> > +-fi
+> > ++#if test x"$have_check" = "xyes"; then
+> > ++#   AC_DEFINE([HAVE_CHECK], 1, [Define to 1 if check library is available])
+> > ++#fi
+>
+> Since we're anyway patching the configure.ac script, can we do better,
+> and add a --enable/--disable or --with/--without option, and then use
+> it from freeswitch Makefile.am to disable building sofia-sip tests ?
 
-Respect hash rules
+I have to admit I've no experience with automake and co. But I will
+give it a try.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/qwt/qwt.hash | 10 +++++-----
- package/qwt/qwt.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/qwt/qwt.hash b/package/qwt/qwt.hash
-index 95e910e5e4..cc78236ad1 100644
---- a/package/qwt/qwt.hash
-+++ b/package/qwt/qwt.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/qwt/files/qwt/6.1.4/
--sha1 a1028cb0a33322920266fb183869023b8ed30394  qwt-6.1.4.tar.bz2
--md5  4fb1852f694420e3ab9c583526edecc5          qwt-6.1.4.tar.bz2
-+# From https://sourceforge.net/projects/qwt/files/qwt/6.1.5/
-+sha1  07c71427f1f4bbd0354b3a98965943ce2f220766  qwt-6.1.5.tar.bz2
-+md5  d65582f99312796ed42c3be3208ed3db  qwt-6.1.5.tar.bz2
- 
- # Locally computed
--sha256 1529215329e51fc562e0009505a838f427919a18b362afff441f035b2d9b5bd9  qwt-6.1.4.tar.bz2
--sha256 d8737db330e1eeb439962e11654ab7f1aece3561d9415454a8c538643824ede6  COPYING
-+sha256  4076de63ec2b5e84379ddfebf27c7b29b8dc9074f3db7e2ca61d11a1d8adc041  qwt-6.1.5.tar.bz2
-+sha256  d8737db330e1eeb439962e11654ab7f1aece3561d9415454a8c538643824ede6  COPYING
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index f09304d0e4..95a041e97a 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QWT_VERSION = 6.1.4
-+QWT_VERSION = 6.1.5
- QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
 -- 
-2.26.2
+Heiko
