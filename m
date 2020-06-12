@@ -1,54 +1,73 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Jun 2020 01:24:31 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/iwd: needs dbus (runtime)
-Message-ID: <20200612232433.18442-1-ps.report@gmx.net>
+Date: Sat, 13 Jun 2020 01:24:33 +0200
+Subject: [Buildroot] [PATCH v1 3/3] package/iwd: add sysv init script
+In-Reply-To: <20200612232433.18442-1-ps.report@gmx.net>
+References: <20200612232433.18442-1-ps.report@gmx.net>
+Message-ID: <20200612232433.18442-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes (on startup):
-
-  $ usr/libexec/iwd
-  Wireless daemon version 1.7
-  Failed to initialize D-Bus
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Note:
- - for an alternative iwd without dbus demand take a lookt at
-   https://github.com/dylanaraps/eiwd
----
- package/iwd/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/iwd/S40iwd | 30 ++++++++++++++++++++++++++++++
+ package/iwd/iwd.mk |  7 +++++++
+ 2 files changed, 37 insertions(+)
+ create mode 100644 package/iwd/S40iwd
 
-diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-index eff24a8599..4501017630 100644
---- a/package/iwd/Config.in
-+++ b/package/iwd/Config.in
-@@ -1,16 +1,20 @@
- config BR2_PACKAGE_IWD
- 	bool "iwd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
-+	depends on BR2_USE_MMU # dbus
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
- 	depends on !BR2_STATIC_LIBS # ell
- 	depends on BR2_USE_WCHAR # ell
-+	select BR2_PACKAGE_DBUS # runtime
- 	select BR2_PACKAGE_ELL
- 	help
- 	  iNet Wireless daemon (iwd)
+diff --git a/package/iwd/S40iwd b/package/iwd/S40iwd
+new file mode 100644
+index 0000000000..4a720b43c2
+--- /dev/null
++++ b/package/iwd/S40iwd
+@@ -0,0 +1,30 @@
++#!/bin/sh
++#
++# Start iwd daemon
++#
++
++# Create needed directories.
++[ -d /tmp/iwd/hotspot ] || mkdir -p /tmp/iwd/hotspot
++
++case "$1" in
++    start)
++	printf "Starting iwd:"
++	/usr/libexec/iwd &
++	echo "OK"
++        ;;
++    stop)
++	printf "Stopping iwd:"
++	killall iwd
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++        ;;
++    restart|reload)
++        "$0" stop
++        "$0" start
++        ;;
++    *)
++        echo "Usage: $0 {start|stop|restart|reload}"
++	exit 1
++        ;;
++esac
++
++exit $?
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index d105d3b128..285fef2fd8 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -65,4 +65,11 @@ IWD_POST_INSTALL_TARGET_HOOKS += \
+ 	IWD_INSTALL_CONFIG_FILE \
+ 	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
  
- 	  https://iwd.wiki.kernel.org/
- 
--comment "iwd needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
-+comment "iwd needs a toolchain w/ threads, dynamic library, wchar, headers >= 4.12"
-+	depends on BR2_USE_MMU # dbus
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
--	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++define IWD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/iwd/S40iwd \
++		$(TARGET_DIR)/etc/init.d/S40iwd
++	mkdir -p $(TARGET_DIR)/var/lib/iwd
++	ln -sf /tmp/iwd/hotspot $(TARGET_DIR)/var/lib/iwd/hotspot
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.26.2
