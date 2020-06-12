@@ -1,50 +1,72 @@
 From: Heiko Stuebner <heiko@sntech.de>
-Date: Fri, 12 Jun 2020 13:31:53 +0200
-Subject: [Buildroot] [PATCH] package/libwebsockets: Add support for
- unix-domain-sockets
-Message-ID: <20200612113153.3220089-1-heiko@sntech.de>
+Date: Fri, 12 Jun 2020 15:32:49 +0200
+Subject: [Buildroot] [PATCH] fs: squashfs: Add config option to pass
+ mksquashfs cmdln paramters.
+Message-ID: <20200612133249.4127906-1-heiko@sntech.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+From: Christoph Muellner <christoph.muellner@theobroma-systems.com>
 
-libwebsockets allows the usage of unix-domain-sockets since 2016,
-so add an option to enable its usage.
+This can be use to specify additional command line argument to
+mksquashfs (e.g. -nopad). The implementation is inspired by
+a similar mechanism for ext file system images.
 
-Signed-off-by: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
 Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 ---
- package/libwebsockets/Config.in        | 4 ++++
- package/libwebsockets/libwebsockets.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ fs/squashfs/Config.in   | 11 +++++++++++
+ fs/squashfs/squashfs.mk |  8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index 2b350bf389..78a659fd35 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -8,3 +8,7 @@ config BR2_PACKAGE_LIBWEBSOCKETS
- 	  in both directions.
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index dde2097cb7..789b2cd24a 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -5,6 +5,16 @@ config BR2_TARGET_ROOTFS_SQUASHFS
  
- 	  http://libwebsockets.org/
+ if BR2_TARGET_ROOTFS_SQUASHFS
+ 
++config BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS
++	string "additional mksquashfs options"
++	default ""
++	help
++	  Specify a space-separated list of mksquashfs options, including
++	  any squashfs filesystem features.
 +
-+config BR2_PACKAGE_LIBWEBSOCKETS_INCLUDE_UNIX_SOCK
-+       bool "include support for unix-sockets"
-+       depends on BR2_PACKAGE_LIBWEBSOCKETS
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index dedd03347d..3f6ab1408d 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -59,4 +59,8 @@ ifeq ($(BR2_SHARED_LIBS),y)
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
++	  For more information about the mke2fs options, see the manual
++	  page mksquashfs(1).
++
+ choice
+ 	prompt "Compression algorithm"
+ 	default BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+@@ -31,4 +41,5 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
+ 	bool "zstd"
+ 
+ endchoice
++
  endif
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index 34ab048603..4bc6b338b0 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -6,7 +6,13 @@
  
-+ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_INCLUDE_UNIX_SOCK),y)
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_UNIX_SOCK=ON
-+endif
+ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+ 
+-ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
++SQUASHFS_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS))
 +
- $(eval $(cmake-package))
++ROOTFS_SQUASHFS_ARGS = \
++	-noappend \
++	-processors \
++	$(PARALLEL_JOBS) \
++	$(SQUASHFS_MKFS_OPTS)
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
 -- 
 2.26.2
