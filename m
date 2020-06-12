@@ -1,114 +1,203 @@
-From: Guillaume Bres <guillaume.bressaix@gmail.com>
-Date: Fri, 12 Jun 2020 18:01:24 +0200
-Subject: [Buildroot] [PATCH 1/1] python-pybind: new package
-In-Reply-To: <CALFsTFUv5=cD1DSgtWRV3r_wBtMe0qWu8hLJAfW=yhFdg4i-Ww@mail.gmail.com>
-References: <20200608213043.3443-1-guillaume.bressaix@gmail.com>
- <20200610225523.5bc2d13b@windsurf.home>
- <CALFsTFXhvaq-sgWkHEk=gzOQTgDjbhKzNwOTVfrBiTT1Hqq40Q@mail.gmail.com>
- <CAJe0E3dM513JW=UOo1NJ4CEwEcBE5BgBuGkfwdKZZmyc_6jbEw@mail.gmail.com>
- <CALFsTFUv5=cD1DSgtWRV3r_wBtMe0qWu8hLJAfW=yhFdg4i-Ww@mail.gmail.com>
-Message-ID: <CAJe0E3evH3dMDCbmPFSTdcPmRaBhma1GqucxvErvF2kB_59WhA@mail.gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Fri, 12 Jun 2020 10:40:29 -0700
+Subject: [Buildroot] [PATCH v3 1/1] package/earlyoom: new package
+In-Reply-To: <20200608175806.1064874-1-joseph.kogut@gmail.com>
+References: <20200608175806.1064874-1-joseph.kogut@gmail.com>
+Message-ID: <20200612174029.732057-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, Thomas,
+EarlyOOM daemon for triggering Linux OOM killer before running out of
+memory, avoiding situations where the machine becomes unresponsive from
+out of control swapping.
 
-Well, only when you wrote that I noticed the package is named
-> python-pybind on Buildroot, but the real package name is actually
-> pybind11. So yes, I think it should be changed to python-pybind11.
+Some desktop distributions are installing and enabling this daemon by
+default to prevent unresponsive machines in OOM scenarios.
 
+https://fedoraproject.org/wiki/Changes/EnableEarlyoom
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+Changes v2 -> v3:
+  * Depend on BR2_USE_MMU for fork()
+  * Include BR specific sysv init script
+  * Skip targets that call privileged commands
+  * Package cleanups
+  * Fix build on older versions of GCC by specifying required gnu99 dialect.
+  * Fix version definition used during build
 
-I proposed a patch to rename pybind11 so a potential cmake support in the
-future
-with $(eval(cmake-package)) does not face problems.
-The C++11 check is not needed until we make the package a cmake package,
-I prefered to push only the name changes at the moment, we will look into
-the cmake thing afterwards
+Changes v1 -> v2:
+  * Amend commit message with additional information about usage by
+    other distros
+  * Add project URL to Config.in help section
+  * Add runlevel to sysv init script
 
-Thomas,
-I will revise the patch I have in standby once this package has been
-effectively renamed, it needs its dependency
-to 'host-python-pybind' updated
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/earlyoom/Config.in     | 12 +++++++++
+ package/earlyoom/S02earlyoom   | 49 ++++++++++++++++++++++++++++++++++
+ package/earlyoom/earlyoom.hash |  4 +++
+ package/earlyoom/earlyoom.mk   | 40 +++++++++++++++++++++++++++
+ 6 files changed, 107 insertions(+)
+ create mode 100644 package/earlyoom/Config.in
+ create mode 100644 package/earlyoom/S02earlyoom
+ create mode 100644 package/earlyoom/earlyoom.hash
+ create mode 100644 package/earlyoom/earlyoom.mk
 
-Guillaume W. Bres
-Software engineer
-<guillaume.bressaix@gmail.com>
-
-
-Le ven. 12 juin 2020 ? 16:55, Asaf Kahlon <asafka7@gmail.com> a ?crit :
-
-> Hello,
->
-> On Fri, Jun 12, 2020 at 10:43 AM Guillaume Bres
-> <guillaume.bressaix@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > If I understand correctly, this patch only covers the first use case
-> (C++/Python). I only added this one because my following patch requires
-> host-python-pybind, but I agree it certainly lacks a depends on
-> !BR2_INSTALL_LIBSTDCPP. I'll wait for people's point of view before going
-> any further anyway. If you agree on this, I will add the dependency and
-> push a v2
-> >
-> This patch includes only the installation of pybind11 to the target -
-> which isn't worth much since it includes only headers. It should be
-> installed to the staging dir instead. As far as I understand, there's
-> no point in installing this package to the target at all.
-> In addition, pay attention you don't only need C++, but at least C++11.
->
-> > The other use case that people might need in the future, is not allowed
-> at the moment until we unlock it with $(eval $(cmake-package)) but requires
-> further work (I am also not familiar with cmake at the moment). Maybe you
-> could proceed with adding the cmake support because you are knowledgeable
-> and already got it working?
-> >
-> Actually, the cmake part is already implemented in the patch I sent in
-> the previous mail. Feel free to take any parts you need from it.
->
-> > One last question though: "For example, this project won't find pybind11
-> because it uses find_package(pybind11...)", so we should rename the package
-> to python-pybind11? so we don't have any other problems when unlocking the
-> cmake option. If you agree on that point, my v2 will be renamed to
-> python-pybind11 & and I will also adapt my following work to this new name
-> >
-> Well, only when you wrote that I noticed the package is named
-> python-pybind on Buildroot, but the real package name is actually
-> pybind11. So yes, I think it should be changed to python-pybind11.
->
-> > Guillaume W. Bres
-> > Software engineer
-> > <guillaume.bressaix@gmail.com>
-> >
-> >
-> > Le jeu. 11 juin 2020 ? 20:14, Asaf Kahlon <asafka7@gmail.com> a ?crit :
-> >>
-> >> Hello,
-> >>
-> >> I'm not sure pybind11 is just a "regular" python package.
-> >> First, it needs C++11 so we have to make sure the toolchain supports
-> >> that in order to be able to actually compile the generated pybind11
-> >> code.
-> >> Secondly, the installation through setup.py just installs the pybind11
-> >> headers and it doesn't give any way for C++ projects to locate the
-> >> package. For example, this project won't find pybind11 because it uses
-> >> find_package(pybind11...) in it's CMakeLists.txt:
-> >> https://github.com/pybind/pybind11_json. The installation of pybind11
-> >> using CMake gives a solution to this problem.
-> >>
-> >> Those considerations have been taken into account in a previous patch
-> >> I sent to the mailing list few weeks ago:
-> >>
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200513183903.8656-1-asafka7 at gmail.com/
-> >>
-> >> Regards,
-> >> Asaf.
-> Best regards,
-> Asaf.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200612/c920eee5/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 88050349db..3f64853316 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1366,6 +1366,7 @@ N:	Joseph Kogut <joseph.kogut@gmail.com>
+ F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+ F:	package/clang/
++F:	package/earlyoom/
+ F:	package/gconf/
+ F:	package/libnss/
+ F:	package/lld/
+diff --git a/package/Config.in b/package/Config.in
+index 85d7326361..9bda8419c0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2335,6 +2335,7 @@ menu "System tools"
+ 	source "package/docker-containerd/Config.in"
+ 	source "package/docker-engine/Config.in"
+ 	source "package/docker-proxy/Config.in"
++	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+ 	source "package/efivar/Config.in"
+ 	source "package/emlog/Config.in"
+diff --git a/package/earlyoom/Config.in b/package/earlyoom/Config.in
+new file mode 100644
+index 0000000000..a3cac273f0
+--- /dev/null
++++ b/package/earlyoom/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_EARLYOOM
++	bool "earlyoom"
++	depends on BR2_USE_MMU
++	help
++	  Early OOM daemon for Linux.
++
++	  User space daemon for triggering Linux OOM killer
++	  before running out of memory, avoiding situations
++	  where the machine becomes unresponsive from out of
++	  control swapping.
++
++	  https://github.com/rfjakob/earlyoom
+diff --git a/package/earlyoom/S02earlyoom b/package/earlyoom/S02earlyoom
+new file mode 100644
+index 0000000000..c02495af90
+--- /dev/null
++++ b/package/earlyoom/S02earlyoom
+@@ -0,0 +1,49 @@
++#!/bin/sh
++
++DAEMON="earlyoom"
++PIDFILE="/var/run/$DAEMON.pid"
++
++EARLYOOM_ARGS=""
++
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf() 'Starting %s: ' "$DAEMON"
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/bin/$DAEMON" \
++	       -- $EARLYOOM_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/earlyoom/earlyoom.hash b/package/earlyoom/earlyoom.hash
+new file mode 100644
+index 0000000000..4cafe50bc3
+--- /dev/null
++++ b/package/earlyoom/earlyoom.hash
+@@ -0,0 +1,4 @@
++# locally calculated
++sha256 b81804fc4470f996014d52252a87a1cf3b43d3d8754140035b10dcee349302b8  earlyoom-1.6.tar.gz
++# License files, locally calculated
++sha256 e730b3ec729de46d987ae73f30ed337e4cbe832f09205330acfa71848c6e0087  LICENSE
+diff --git a/package/earlyoom/earlyoom.mk b/package/earlyoom/earlyoom.mk
+new file mode 100644
+index 0000000000..066a479bd1
+--- /dev/null
++++ b/package/earlyoom/earlyoom.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# earlyoom
++#
++################################################################################
++
++EARLYOOM_VERSION = 1.6
++EARLYOOM_SITE = $(call github,rfjakob,earlyoom,v$(EARLYOOM_VERSION))
++EARLYOOM_LICENSE = MIT
++EARLYOOM_LICENSE_FILES = LICENSE
++
++EARLYOOM_BUILD_TARGETS = earlyoom.service earlyoom
++EARLYOOM_INSTALL_TARGETS = install-default install-bin
++EARLYOOM_CFLAGS = '$(TARGET_CFLAGS) -std=gnu99 -DVERSION=\"1.6\"'
++
++EARLYOOM_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	PREFIX=/usr
++
++define EARLYOOM_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(EARLYOOM_MAKE_OPTS) -C $(@D) \
++		$(EARLYOOM_BUILD_TARGETS) CFLAGS=$(EARLYOOM_CFLAGS)
++endef
++
++define EARLYOOM_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(EARLYOOM_MAKE_OPTS) -C $(@D) \
++		$(EARLYOOM_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR)
++endef
++
++define EARLYOOM_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 $(EARLYOOM_PKGDIR)/S02earlyoom \
++		$(TARGET_DIR)/etc/init.d/S02earlyoom
++endef
++
++define EARLYOOM_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/earlyoom.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/earlyoom.service
++endef
++
++$(eval $(generic-package))
+-- 
+2.27.0
