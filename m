@@ -1,9 +1,10 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 12 Jun 2020 07:31:08 +0200
-Subject: [Buildroot] [PATCH 1/3] python3-m2crypto: import package
+Date: Fri, 12 Jun 2020 07:31:10 +0200
+Subject: [Buildroot] [PATCH 3/3] wireless-regdb: omit author info from
+ private key in home directory
 In-Reply-To: <20200612053110.15316-1-dev.kurt@vandijck-laurijssen.be>
 References: <20200612053110.15316-1-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200612053110.15316-2-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200612053110.15316-4-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- package/python3-m2crypto/python3-m2crypto.mk | 21 ++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/python3-m2crypto/python3-m2crypto.mk
+ .../002-no-author-from-user-privkey.patch            | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 package/wireless-regdb/002-no-author-from-user-privkey.patch
 
-diff --git a/package/python3-m2crypto/python3-m2crypto.mk b/package/python3-m2crypto/python3-m2crypto.mk
+diff --git a/package/wireless-regdb/002-no-author-from-user-privkey.patch b/package/wireless-regdb/002-no-author-from-user-privkey.patch
 new file mode 100644
-index 0000000000..4394226067
+index 0000000000..8cab1e169c
 --- /dev/null
-+++ b/package/python3-m2crypto/python3-m2crypto.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# python3-m2crypto
-+#
-+################################################################################
-+
-+# Please keep in sync with
-+PYTHON3_M2CRYPTO_VERSION = 0.35.2
-+PYTHON3_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON3_M2CRYPTO_VERSION).tar.gz
-+PYTHON3_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/74/18/3beedd4ac48b52d1a4d12f2a8c5cf0ae342ce974859fba838cbbc1580249
-+PYTHON3_M2CRYPTO_SETUP_TYPE = setuptools
-+PYTHON3_M2CRYPTO_LICENSE = MIT
-+PYTHON3_M2CRYPTO_LICENSE_FILES = LICENSE
-+HOST_PYTHON3_M2CRYPTO_DL_SUBDIR = python-m2crypto
-+HOST_PYTHON3_M2CRYPTO_NEEDS_HOST_PYTHON = python3
-+
-+HOST_PYTHON3_M2CRYPTO_DEPENDENCIES = host-swig
-+
-+HOST_PYTHON3_M2CRYPTO_BUILD_OPTS = --openssl $(HOST_DIR)
-+
-+$(eval $(host-python-package))
++++ b/package/wireless-regdb/002-no-author-from-user-privkey.patch
+@@ -0,0 +1,12 @@
++diff -Naur wireless-regdb.orig/Makefile wireless-regdb/Makefile
++--- wireless-regdb.orig/Makefile	2017-03-07 14:13:09.000000000 +0100
+++++ wireless-regdb/Makefile	2019-01-07 14:15:14.296020922 +0100
++@@ -29,7 +29,7 @@
++ 			echo custom-user; \
++ 		fi)
++ 
++-REGDB_PRIVKEY ?= ~/.wireless-regdb-$(REGDB_AUTHOR).key.priv.pem
+++REGDB_PRIVKEY ?= ~/.wireless-regdb.key.priv.pem
++ REGDB_PUBKEY ?= $(REGDB_AUTHOR).key.pub.pem
++ 
++ REGDB_UPSTREAM_PUBKEY ?= sforshee.key.pub.pem
 -- 
 2.25.0
