@@ -1,203 +1,83 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Fri, 12 Jun 2020 10:40:29 -0700
-Subject: [Buildroot] [PATCH v3 1/1] package/earlyoom: new package
-In-Reply-To: <20200608175806.1064874-1-joseph.kogut@gmail.com>
-References: <20200608175806.1064874-1-joseph.kogut@gmail.com>
-Message-ID: <20200612174029.732057-1-joseph.kogut@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Fri, 12 Jun 2020 13:10:28 -0700
+Subject: [Buildroot] ebtables and musl
+Message-ID: <CAGt4E5tuHRkxko=NPY+-YsWwnhk1McnJMU_LmdcShHFuRjTkMA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-EarlyOOM daemon for triggering Linux OOM killer before running out of
-memory, avoiding situations where the machine becomes unresponsive from
-out of control swapping.
+Hi all,
 
-Some desktop distributions are installing and enabling this daemon by
-default to prevent unresponsive machines in OOM scenarios.
+I see this patch in Buildroot:
+http://lists.busybox.net/pipermail/buildroot/2017-February/184225.html
 
-https://fedoraproject.org/wiki/Changes/EnableEarlyoom
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
-Changes v2 -> v3:
-  * Depend on BR2_USE_MMU for fork()
-  * Include BR specific sysv init script
-  * Skip targets that call privileged commands
-  * Package cleanups
-  * Fix build on older versions of GCC by specifying required gnu99 dialect.
-  * Fix version definition used during build
+However, I am still running into the issue it is supposed to fix.
 
-Changes v1 -> v2:
-  * Amend commit message with additional information about usage by
-    other distros
-  * Add project URL to Config.in help section
-  * Add runlevel to sysv init script
+This is with musl-1.2.0, the latest and greatest. I'm no longer stuck
+with the ancient libmusl that caused issues with procps. It doesn't
+seem to help with ebtables, though.
 
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/earlyoom/Config.in     | 12 +++++++++
- package/earlyoom/S02earlyoom   | 49 ++++++++++++++++++++++++++++++++++
- package/earlyoom/earlyoom.hash |  4 +++
- package/earlyoom/earlyoom.mk   | 40 +++++++++++++++++++++++++++
- 6 files changed, 107 insertions(+)
- create mode 100644 package/earlyoom/Config.in
- create mode 100644 package/earlyoom/S02earlyoom
- create mode 100644 package/earlyoom/earlyoom.hash
- create mode 100644 package/earlyoom/earlyoom.mk
+/mnt/disk1/Development/br-musl/output/arm64/host/bin/aarch64-linux-gcc
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
+  -fPIC -O3 -DPROGVERSION=\"2.0.10-4\" -DPROGNAME=\"ebtables\"
+-DPROGDATE=\"December\ 2011\" -D_PATH_ETHERTYPES=\"/etc/ethertypes\"
+-DEBTD_ARGC_MAX=50 -DEBTD_CMDLINE_MAXLN=2048
+-DLOCKFILE=\"/var/lib/ebtables/lock\" -DLOCKDIR=\"/var/lib/ebtables/\"
+-c -o extensions/ebt_802_3.o extensions/ebt_802_3.c -Iinclude/
+In file included from include/linux/netfilter_bridge.h:8:0,
+                 from include/linux/netfilter_bridge/ebtables.h:17,
+                 from include/ebtables_u.h:28,
+                 from useful_functions.c:25:
+include/linux/if_ether.h:119:8: error: redefinition of 'struct ethhdr'
+ struct ethhdr {
+        ^~~~~~
+In file included from
+../../host/aarch64-buildroot-linux-musl/sysroot/usr/include/netinet/ether.h:8:0,
+                 from include/ebtables_u.h:27,
+                 from useful_functions.c:25:
+../../host/aarch64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:113:8:
+note: originally defined here
+ struct ethhdr {
+        ^~~~~~
+Makefile:78: recipe for target 'useful_functions.o' failed
+make[2]: *** [useful_functions.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 88050349db..3f64853316 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1366,6 +1366,7 @@ N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
- F:	package/clang/
-+F:	package/earlyoom/
- F:	package/gconf/
- F:	package/libnss/
- F:	package/lld/
-diff --git a/package/Config.in b/package/Config.in
-index 85d7326361..9bda8419c0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2335,6 +2335,7 @@ menu "System tools"
- 	source "package/docker-containerd/Config.in"
- 	source "package/docker-engine/Config.in"
- 	source "package/docker-proxy/Config.in"
-+	source "package/earlyoom/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
-diff --git a/package/earlyoom/Config.in b/package/earlyoom/Config.in
-new file mode 100644
-index 0000000000..a3cac273f0
---- /dev/null
-+++ b/package/earlyoom/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_EARLYOOM
-+	bool "earlyoom"
-+	depends on BR2_USE_MMU
-+	help
-+	  Early OOM daemon for Linux.
-+
-+	  User space daemon for triggering Linux OOM killer
-+	  before running out of memory, avoiding situations
-+	  where the machine becomes unresponsive from out of
-+	  control swapping.
-+
-+	  https://github.com/rfjakob/earlyoom
-diff --git a/package/earlyoom/S02earlyoom b/package/earlyoom/S02earlyoom
-new file mode 100644
-index 0000000000..c02495af90
---- /dev/null
-+++ b/package/earlyoom/S02earlyoom
-@@ -0,0 +1,49 @@
-+#!/bin/sh
-+
-+DAEMON="earlyoom"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+EARLYOOM_ARGS=""
-+
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf() 'Starting %s: ' "$DAEMON"
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/bin/$DAEMON" \
-+	       -- $EARLYOOM_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/earlyoom/earlyoom.hash b/package/earlyoom/earlyoom.hash
-new file mode 100644
-index 0000000000..4cafe50bc3
---- /dev/null
-+++ b/package/earlyoom/earlyoom.hash
-@@ -0,0 +1,4 @@
-+# locally calculated
-+sha256 b81804fc4470f996014d52252a87a1cf3b43d3d8754140035b10dcee349302b8  earlyoom-1.6.tar.gz
-+# License files, locally calculated
-+sha256 e730b3ec729de46d987ae73f30ed337e4cbe832f09205330acfa71848c6e0087  LICENSE
-diff --git a/package/earlyoom/earlyoom.mk b/package/earlyoom/earlyoom.mk
-new file mode 100644
-index 0000000000..066a479bd1
---- /dev/null
-+++ b/package/earlyoom/earlyoom.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# earlyoom
-+#
-+################################################################################
-+
-+EARLYOOM_VERSION = 1.6
-+EARLYOOM_SITE = $(call github,rfjakob,earlyoom,v$(EARLYOOM_VERSION))
-+EARLYOOM_LICENSE = MIT
-+EARLYOOM_LICENSE_FILES = LICENSE
-+
-+EARLYOOM_BUILD_TARGETS = earlyoom.service earlyoom
-+EARLYOOM_INSTALL_TARGETS = install-default install-bin
-+EARLYOOM_CFLAGS = '$(TARGET_CFLAGS) -std=gnu99 -DVERSION=\"1.6\"'
-+
-+EARLYOOM_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	PREFIX=/usr
-+
-+define EARLYOOM_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(EARLYOOM_MAKE_OPTS) -C $(@D) \
-+		$(EARLYOOM_BUILD_TARGETS) CFLAGS=$(EARLYOOM_CFLAGS)
-+endef
-+
-+define EARLYOOM_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(EARLYOOM_MAKE_OPTS) -C $(@D) \
-+		$(EARLYOOM_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR)
-+endef
-+
-+define EARLYOOM_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 $(EARLYOOM_PKGDIR)/S02earlyoom \
-+		$(TARGET_DIR)/etc/init.d/S02earlyoom
-+endef
-+
-+define EARLYOOM_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/earlyoom.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/earlyoom.service
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.27.0
+I am not quite sure what to make of it yet.
+
+Is it cause by the fact that include/linux/if_ether.h defines
+
+#ifndef _LINUX_IF_ETHER_H
+#define _LINUX_IF_ETHER_H
+
+but include/netinet/if_ether.h defines
+
+#ifndef _NETINET_IF_ETHER_H
+#define _NETINET_IF_ETHER_H
+
+and they both end up being included?
+
+$ find . -name if_ether.h -ls
+  6025818      4 -rw-r--r--   1 mmayer   mmayer       1506 May 26
+16:30 ./build/linux-custom/include/linux/if_ether.h
+  6028683      8 -rw-r--r--   1 mmayer   mmayer       7461 May 26
+16:30 ./build/linux-custom/include/uapi/linux/if_ether.h
+  6047054      8 -rw-r--r--   1 mmayer   mmayer       5751 Dec 15
+2011 ./build/ebtables-2.0.10-4/include/linux/if_ether.h
+  5934557      8 -rw-r--r--   1 mmayer   mmayer       7016 Jun 10
+16:52 ./host/aarch64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h
+  5935035      4 -rw-r--r--   1 mmayer   mmayer       3625 Jun 10
+16:52 ./host/aarch64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h
+
+Also, there's five different copies of if_ether.h floating around.
+
+While we are on the topic of ebtables, why is buildroot still using
+v2.0.10-4 from 2014 when there is 2.0.11 from 2019 (as per
+http://ftp.netfilter.org/pub/ebtables/)? Is it just a matter of
+submitting a patch to update it or is there an underlying reason to
+keep the old version around?
+
+Thanks,
+-Markus
