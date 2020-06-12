@@ -1,72 +1,69 @@
-From: Heiko Stuebner <heiko@sntech.de>
-Date: Fri, 12 Jun 2020 15:32:49 +0200
-Subject: [Buildroot] [PATCH] fs: squashfs: Add config option to pass
- mksquashfs cmdln paramters.
-Message-ID: <20200612133249.4127906-1-heiko@sntech.de>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 12 Jun 2020 17:55:17 +0300
+Subject: [Buildroot] [PATCH 1/1] python-pybind: new package
+In-Reply-To: <CAJe0E3dM513JW=UOo1NJ4CEwEcBE5BgBuGkfwdKZZmyc_6jbEw@mail.gmail.com>
+References: <20200608213043.3443-1-guillaume.bressaix@gmail.com>
+ <20200610225523.5bc2d13b@windsurf.home>
+ <CALFsTFXhvaq-sgWkHEk=gzOQTgDjbhKzNwOTVfrBiTT1Hqq40Q@mail.gmail.com>
+ <CAJe0E3dM513JW=UOo1NJ4CEwEcBE5BgBuGkfwdKZZmyc_6jbEw@mail.gmail.com>
+Message-ID: <CALFsTFUv5=cD1DSgtWRV3r_wBtMe0qWu8hLJAfW=yhFdg4i-Ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+Hello,
 
-This can be use to specify additional command line argument to
-mksquashfs (e.g. -nopad). The implementation is inspired by
-a similar mechanism for ext file system images.
+On Fri, Jun 12, 2020 at 10:43 AM Guillaume Bres
+<guillaume.bressaix@gmail.com> wrote:
+>
+> Hello,
+>
+> If I understand correctly, this patch only covers the first use case (C++/Python). I only added this one because my following patch requires host-python-pybind, but I agree it certainly lacks a depends on !BR2_INSTALL_LIBSTDCPP. I'll wait for people's point of view before going any further anyway. If you agree on this, I will add the dependency and push a v2
+>
+This patch includes only the installation of pybind11 to the target -
+which isn't worth much since it includes only headers. It should be
+installed to the staging dir instead. As far as I understand, there's
+no point in installing this package to the target at all.
+In addition, pay attention you don't only need C++, but at least C++11.
 
-Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
-Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
----
- fs/squashfs/Config.in   | 11 +++++++++++
- fs/squashfs/squashfs.mk |  8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+> The other use case that people might need in the future, is not allowed at the moment until we unlock it with $(eval $(cmake-package)) but requires further work (I am also not familiar with cmake at the moment). Maybe you could proceed with adding the cmake support because you are knowledgeable and already got it working?
+>
+Actually, the cmake part is already implemented in the patch I sent in
+the previous mail. Feel free to take any parts you need from it.
 
-diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-index dde2097cb7..789b2cd24a 100644
---- a/fs/squashfs/Config.in
-+++ b/fs/squashfs/Config.in
-@@ -5,6 +5,16 @@ config BR2_TARGET_ROOTFS_SQUASHFS
- 
- if BR2_TARGET_ROOTFS_SQUASHFS
- 
-+config BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS
-+	string "additional mksquashfs options"
-+	default ""
-+	help
-+	  Specify a space-separated list of mksquashfs options, including
-+	  any squashfs filesystem features.
-+
-+	  For more information about the mke2fs options, see the manual
-+	  page mksquashfs(1).
-+
- choice
- 	prompt "Compression algorithm"
- 	default BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
-@@ -31,4 +41,5 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
- 	bool "zstd"
- 
- endchoice
-+
- endif
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 34ab048603..4bc6b338b0 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -6,7 +6,13 @@
- 
- ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- 
--ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
-+SQUASHFS_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS))
-+
-+ROOTFS_SQUASHFS_ARGS = \
-+	-noappend \
-+	-processors \
-+	$(PARALLEL_JOBS) \
-+	$(SQUASHFS_MKFS_OPTS)
- 
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
--- 
-2.26.2
+> One last question though: "For example, this project won't find pybind11 because it uses find_package(pybind11...)", so we should rename the package to python-pybind11? so we don't have any other problems when unlocking the cmake option. If you agree on that point, my v2 will be renamed to python-pybind11 & and I will also adapt my following work to this new name
+>
+Well, only when you wrote that I noticed the package is named
+python-pybind on Buildroot, but the real package name is actually
+pybind11. So yes, I think it should be changed to python-pybind11.
+
+> Guillaume W. Bres
+> Software engineer
+> <guillaume.bressaix@gmail.com>
+>
+>
+> Le jeu. 11 juin 2020 ? 20:14, Asaf Kahlon <asafka7@gmail.com> a ?crit :
+>>
+>> Hello,
+>>
+>> I'm not sure pybind11 is just a "regular" python package.
+>> First, it needs C++11 so we have to make sure the toolchain supports
+>> that in order to be able to actually compile the generated pybind11
+>> code.
+>> Secondly, the installation through setup.py just installs the pybind11
+>> headers and it doesn't give any way for C++ projects to locate the
+>> package. For example, this project won't find pybind11 because it uses
+>> find_package(pybind11...) in it's CMakeLists.txt:
+>> https://github.com/pybind/pybind11_json. The installation of pybind11
+>> using CMake gives a solution to this problem.
+>>
+>> Those considerations have been taken into account in a previous patch
+>> I sent to the mailing list few weeks ago:
+>> https://patchwork.ozlabs.org/project/buildroot/patch/20200513183903.8656-1-asafka7 at gmail.com/
+>>
+>> Regards,
+>> Asaf.
+Best regards,
+Asaf.
