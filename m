@@ -1,196 +1,294 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 12 Jun 2020 06:27:17 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-06-11
-Message-ID: <20200612062723.6D70888341@hemlock.osuosl.org>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 12 Jun 2020 09:02:03 +0200
+Subject: [Buildroot] [PATCH v2] package/dbusbroker: new package
+In-Reply-To: <20200612053155.GU13972@scaer>
+References: <20200610232428.201616-1-nolange79@gmail.com>
+ <20200612053155.GU13972@scaer>
+Message-ID: <CADYdroP2X5Q1hgO27YPh9uNCF=LZQSxtW1L+kd0bDGLjPDLqcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Fr., 12. Juni 2020 um 07:32 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Norbert, All,
+>
+> Thanks for this new improved version. :-)
+>
+> I still have a few concerns about it, see below...
+>
+> On 2020-06-11 01:24 +0200, Norbert Lange spake thusly:
+> > Add dbus-broker, which is a drop-in replacement
+> > for the dbus-daemon.
+>
+> Sorry, but this commit log is far from enough. See below for all the
+> pieces I find are missing.
+>
+> A commit log is not here to describe what is being done, but why it
+> is being done. It is here so that the others can understand it. The
+> more details you can add (up to a certain externt, of course!), the
+> easier the patch can be reviewed, especially when there are
+> misundersstanding like what I provided in my own submission.
 
-Autobuild statistics for 2020-06-11
-===============================
+Yes, I hoped you could merge this from your version, which I commented BTW.
+I have more a problem with the workflow of the ML, especially if someone
+"branches out" with another patch.
 
-      branch |  OK | NOK | TIM | TOT |
-  2020.02.x  | 14  |  5  |  0  | 19  |
-  2020.05.x  | 20  |  5  |  0  | 25  |
-    master   | 112 | 80  |  0  | 192 |
+>
+> > Its possible to use this package standalone (without the dbus
+> > package - if buildroot's systemd would not depend on dbus).
+> >
+> > This is sufficient to provide systemd's (d)bus functionality.
+> > To allow standalone usage, the necessary config files are
+> > copied and adopted over from dbus.
+>
+> As I explained previously, if you want to make systemd use dbus-broker,
+> you change the systemd Config.in, as I did in my series. And if this
+> will be done in a followup patch, you can write (instead of the two
+> paragraphs above):
+>
+>     dbus-broker is sufficient to provide a dbus-daemon that can fullfil
+>     the requirements for systemd's dbus functionality. This will be done
+>     in a followup change.
 
-Results for branch 'master'
-===========================
+Ok, that was my intention.
 
-Classification of failures by reason
-------------------------------------
+>
+> Also, I find it lacking the part that describes how dbus-broker is split
+> between a launcher and a bus daemon, and that the launcher can only be
+> used with systemd, because the launcher makes heavy use of systemd
+> functionalities.
+>
+> The commit log also misses the explanations about the licensing
+> information. This is *very* important to have, because it is not
+> obvious hy the terms are as they are, and wh we have two files for
+> each sub-projects. You could have simply duplicated what I wrote
+> in my own submission.
 
-               linux-pam-1.4.0 | 35
-                       unknown | 6 
-                  ndisc6-1.0.4 | 4 
-                qt5base-5.15.0 | 4 
-                  assimp-5.0.1 | 3 
-              host-grpc-1.25.0 | 3 
-              ibm-sw-tpm2-1563 | 2 
-                   mimic-1.1.0 | 2 
-          python-web2py-2.20.4 | 2 
-               apparmor-2.13.4 | 1 
-                     avahi-0.8 | 1 
-               domoticz-2020.1 | 1 
-             freeswitch-1.10.3 | 1 
-                 gnutls-3.6.13 | 1 
-             kismet-2016-07-R1 | 1 
-          libhttpserver-0.18.0 | 1 
-                   libnss-3.52 | 1 
-make: *** wait: No child pr... | 1 
-                minidlna-1.2.1 | 1 
-                    mpv-0.29.1 | 1 
-                 openal-1.19.1 | 1 
-              openjdk-14.0.1+7 | 1 
-               pulseview-0.4.1 | 1 
-                     qwt-6.1.4 | 1 
-                 samba4-4.11.9 | 1 
-                      tio-1.32 | 1 
-                    vlc-3.0.10 | 1 
-                 xvisor-0.2.11 | 1 
+Yes, I am not up to speed about commit-log stuff, and I usually
+keep explanations where the code is.
 
+>
+> Finally, the folowing, from here [*]:
+>
+> > bases on Yanns changes, and
+> > -   add an own config entry for dbus-broker-launch
+> >     enabled by default if systemd init is used
+>
+> We usually do not enable options by default. But see below...
+>
+> > -   undo BR2_COREUTILS_HOST_DEPENDENCY
+>
+> So, I see you don;t like it, but BR2_COREUTILS_HOST_DEPENDENCY is
+> already a dependency of systemd, so adding it to dbus-broker is not in
+> fact adding any new build-time overhead. And if your build machine has a
+> recent-enough, BR2_COREUTILS_HOST_DEPENDENCY will be empty already.
 
-Detail of failures
-------------------
+There is still the point of keeping things simple, and I dont get why
+../dbus.socket
+cant be used, instead of an gnu-specific option.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  sparc64    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/c3ef7ad664b9f6fbf43f4df0d449ec327f119eb5 |     
-  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/1710dbbdf820b928d5b0fa4dbc5d87a88c072b47 |     
-  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/9f91068c48d540fcbdf5d274f6443e55397651c2 |     
-  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/a3b543d61ccf98d8133e6262b88d19a69eed0660 |     
-   nios2     |           avahi-0.8            | NOK | http://autobuild.buildroot.net/results/4c499a5bb78cf2d1ae915d59b2323d6661d83330 | ORPH
-    arc      |        domoticz-2020.1         | NOK | http://autobuild.buildroot.net/results/1e896c38928971c094b677ee06ed19a3c0dbbdf3 |     
-  aarch64    |       freeswitch-1.10.3        | NOK | http://autobuild.buildroot.net/results/b58e4315e97019181fc099befacda00343df1868 |     
-    or1k     |         gnutls-3.6.13          | NOK | http://autobuild.buildroot.net/results/d13109d74f33cc9bb58afc1848d54b1b3b0f4382 |     
-  mips64el   |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/563269214ef66b410732d493e9a633916acedac6 |     
-    arm      |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/b132ffd49ad42095192c58f7195f4ce5bd051319 |     
-    arm      |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/480301890a0237802a03a3550272a69d835ed6c3 |     
-    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/e47a66c7f41f951343098eff9d0729e258dd8250 |     
-    i586     |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/fee0eeb52e354bdc4515b40b76854729393d50f5 |     
-    arm      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/c0d31111d3a63b92919d3d4d7d3db7f6b4a45fe8 | ORPH
-    arm      |      libhttpserver-0.18.0      | NOK | http://autobuild.buildroot.net/results/821ee5e524b228860df266393a674e55aee9421f |     
- powerpc64   |          libnss-3.52           | NOK | http://autobuild.buildroot.net/results/53f9908b5129a031dca0ab855bff54c1f83a7861 |     
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/ba4ff0cae5b3190bc1a3f76d703ae1ac78857086 | ORPH
-   xtensa    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/b01e84c790bbc3c2d2e2c7a09b06555a1610d8d6 | ORPH
-    sh4      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/228a25d63189c60d16f24cb6a641638986583bf2 | ORPH
-  mips64el   |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/a6314c0994b5f9ce87ca5a85198c90b00b87be76 | ORPH
-   sparc     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/6ca8b00f861424f37190da999547b35996642904 | ORPH
-  riscv64    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/0f63310c4ca84174f893d8695d9acab529ec3dd8 | ORPH
-   sparc     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/67c72857a9ec0e7636159c4a66898380bd68aa10 | ORPH
-   x86_64    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/93b78c27f3ba4c16067e006c270151bd91da1676 | ORPH
-   mipsel    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/556bd9609aeab9e3dfe9c92b8e95a69a7300b0b6 | ORPH
-  powerpc    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/01b667de89f262a913f6dd2a0deb37ed0daa755b | ORPH
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/0432736ffee376dd84757469434a4bbcfdcdaf4b | ORPH
-    sh4      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/e9e2c151e638b03d45604e85d52ec8c57634f6ba | ORPH
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/283ae8682c00b455cb328bb307f190715ac7f268 | ORPH
-    m68k     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/2183011b5e0270cf4406bfb1868d44b763cad3e5 | ORPH
-   sparc     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/42e83582976e7be403e5fa3852fbac9948ea8d99 | ORPH
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/fddb4efc45c3915e9599cc7755d0571607305ac3 | ORPH
-  powerpc    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/2f299472ec11dc80fcafbb2ce80d4da3d8c2e770 | ORPH
-  powerpc    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/a16cf179f263cbd9eee82ed889720736da7db16f | ORPH
-    arc      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/9df01f9e09819b681482727b3615355d399e7e95 | ORPH
-   sparc     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/fdc21cf0edb27b9cf181b1d131b873c0ba4d8ae9 | ORPH
-    i686     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/b2f7655eb185d0fb16ea61d400bd20a92668ec68 | ORPH
-   xtensa    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/d17c3211cc5a33629c521e91b38bc41bd9741f6f | ORPH
-  powerpc    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/b2165ec4d14d1ed89cb3e4758ed456cc596df544 | ORPH
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/44080ab5670dac1f5e98315033cc49f63873ef30 | ORPH
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/fcf58c0f651a82b32ae5a44fdac81c978d71e93e | ORPH
-    sh4      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/f7e8793be5a19ab9cecb3dc43e6e71a8d33b99af | ORPH
-microblazeel |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/562471849f1492737aad2d2031dada694ddc304a | ORPH
-    arm      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/dcccad6ed4b3a1f8029447668e4f85d53527e0b8 | ORPH
-    or1k     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/dce8022183ebb8f4dcedf576ae1c6bb679ed6555 | ORPH
-   x86_64    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/cdf70d2521e6a6c051f752528b9bf3845453a2bf | ORPH
-   sparc     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/d727efdc70e7a496dec23fe52a4884696be34308 | ORPH
-    arc      |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/07f59716f4221c11df2309fa2aff1bf6e1afe1d6 | ORPH
-   xtensa    |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/240171db22d64d91ccf5a410a93c7bea154478d5 | ORPH
-    m68k     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/cc5d5b3dc54017695d2807d90b5b481f08723ff6 | ORPH
-    i586     |        linux-pam-1.4.0         | NOK | http://autobuild.buildroot.net/results/9872639c34435e9c3eb43e8b97fbfcc77f217dde | ORPH
-  riscv64    | make: *** wait: No child pr... | NOK | http://autobuild.buildroot.net/results/677000b874db997c8ee35abdd8935b0abb3d691a |     
-  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/6c93222545649939d547b14dfe1fe2f2beaf0c4b |     
-  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/658904224c7ef45c48080890461ba9694b9858d7 |     
-    arm      |         minidlna-1.2.1         | NOK | http://autobuild.buildroot.net/results/e12b69c01c4e59e649e66fb6e73d8332a957456f |     
-    arm      |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/1cf6384087eaec5c3bc0acae21ecc57382b09f2d |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/beb7381cd75d6b413afbfa0556f8c52a0d4095f6 | ORPH
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/f3a766cbf06ce715c0b0f4735970504d7934451a | ORPH
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/f415db771a0289c99375c2138c38537da8f125bd | ORPH
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/de5b339c23ab32b0ecbdad8e73aa1ef667374771 | ORPH
-    or1k     |         openal-1.19.1          | NOK | http://autobuild.buildroot.net/results/c754bbae80576e3ebef09d810416b4f55828eb48 |     
-  aarch64    |        openjdk-14.0.1+7        | NOK | http://autobuild.buildroot.net/results/f943884fa44aa2ee64299cabafb8576b8ee22b45 |     
-   mipsel    |        pulseview-0.4.1         | NOK | http://autobuild.buildroot.net/results/d94d3122ed542978ecbc8dabf5ea9de76f6649b7 |     
-    arm      |      python-web2py-2.20.4      | NOK | http://autobuild.buildroot.net/results/9d627152920973effeb48ad03c27a1c69fa83931 |     
-  aarch64    |      python-web2py-2.20.4      | NOK | http://autobuild.buildroot.net/results/09d5a482319499d4fd9938facd282a5fd6fbcdff |     
-  aarch64    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/a2c8608a681e00f1d1c9653384fae4466d8f2f84 |     
-    mips     |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/72fae2cd692557de141c4a8680e9971fb910a217 |     
-  riscv64    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/0e75cf99cb0791fc3d4d6152c9d4ff469a6c646a |     
-  mips64el   |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/bf199c2daae794df608df20032a8b352f1f0212f |     
-   xtensa    |           qwt-6.1.4            | NOK | http://autobuild.buildroot.net/results/2b5f30b7a7f3b35921567b5cfd261a72ba98eecb | ORPH
-  mips64el   |         samba4-4.11.9          | NOK | http://autobuild.buildroot.net/results/97a4c3057402e6d3731ad243c510f97891df9e07 |     
-  sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/2815a3483f32e7d2992293f3cb658d0499c7556d |     
- powerpc64   |            unknown             | NOK | http://autobuild.buildroot.net/results/a7391675ea598e81d3052e36b547e0bb80c7b4d9 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/d56aab9770ce52b8444395d7607975480bb3d55d |     
-    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/b99bd1b7522c49c2daec3b5789eee2c28d8b5bc5 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/6fce17a871bb7888a94e42ade8952fa2f6464ecc |     
- powerpc64   |            unknown             | NOK | http://autobuild.buildroot.net/results/1fa754fecd7cee5e175e45f2b5920300212ee8fa |     
-  nds32le    |            unknown             | NOK | http://autobuild.buildroot.net/results/f37fb1569dc77fa80ea866e222dfcd8fc7be636b |     
-    arm      |           vlc-3.0.10           | NOK | http://autobuild.buildroot.net/results/e2b670ab75e980ab27955c3759854faa9985731b |     
-    arm      |         xvisor-0.2.11          | NOK | http://autobuild.buildroot.net/results/c384f726bfd69e75cf8579c22ee9db9c68f74f37 |     
+>
+> > -   undo adding dbus user - never used by this package
+>
+> So, how does the does the message bus daemon runs as non-root? In the
+> original dbus pakcage, we define a user, that is used to switch the
+> mesage bus to run as non-root. Pleas explain why the user is nopt
+> needed.
 
+Ok,  I take everything back.
+I thought this was handled in the service files by adding isolation options
+(as systemd does the "launching"). Seems like it does drop to the uid,
+dunno what I tested months ago when first created that package
 
-Results for branch '2020.02.x'
-==============================
+>
+> > -   add condtional audit dependency
+> > -   cleanup conditional logic a bit
+>
+> [*] ... to here, should have been after the --- line.
+>
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> [--SNIP--]
+> > diff --git a/package/dbus-broker/Config.in b/package/dbus-broker/Config.in
+> > new file mode 100644
+> > index 0000000000..8cde3310eb
+> > --- /dev/null
+> > +++ b/package/dbus-broker/Config.in
+> > @@ -0,0 +1,35 @@
+> > +config BR2_PACKAGE_DBUS_BROKER
+> > +     bool "dbus-broker"
+> > +     depends on BR2_USE_MMU
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS
+> > +     help
+> > +       Linux D-Bus Message Broker.
+> > +
+> > +       The dbus-broker project is an implementation of a message bus
+> > +       as defined by the D-Bus specification. Its aim is to provide
+> > +       high performance and reliability, while keeping compatibility
+> > +       to the D-Bus reference implementation.
+> > +
+> > +       It is exclusively written for Linux systems, and makes use of
+> > +       many modern features provided by recent linux kernel releases.
+> > +
+> > +       https://github.com/bus1/dbus-broker/wiki
+> > +
+> > +if BR2_PACKAGE_DBUS_BROKER
+> > +config BR2_PACKAGE_DBUS_BROKER_LAUNCH
+> > +     bool "dbus-broker-launch"
+> > +     default y
+> > +     depends on BR2_INIT_SYSTEMD
+>
+> Do not depend on the init config option, but on the package (it is the
+> package that provides libsystemd et al., not the init feature):
+>
+>     depends on BR2_PACKAGE_SYSTEMD
+>
+> But see below...
+>
+> > +     select BR2_PACKAGE_EXPAT
+> > +     help
+> > +       Launcher for D-Bus Message Brokers.
+> > +
+> > +       dbus-broker-launch is a launcher for dbus-broker, spawning and
+> > +       managing a D-Bus Message Bus. The launcher aims to be fully
+> > +       compatible to the D-Bus reference implementation dbus-daemon,
+> > +       supporting the same configuration syntax and runtime environment.
+> > +endif
+>
+> Why do you add an option to enable the launcher? Just do it
+> unconditionally when systemd is enabled. And select expat as I did in my
+> own patch, in the main symbol:
 
-Classification of failures by reason
-------------------------------------
+Well, my first attempt was to only make dbus-broker(-launch) available
+with systemd,
+given that there is probably no one using it differently yet.
+If you argue that it makes sense to provide the plain dbus-broker,
+then it makes sense doing so with systemd aswell.
+(see below, I use system without dbus or dbus-broker-launch).
 
-                 dmalloc-5.5.2 | 1 
-                 gnutls-3.6.13 | 1 
-          host-acpica-20191018 | 1 
-                 opencv3-3.4.9 | 1 
-   openvmtools-10.3.5-10430147 | 1 
+>
+>     config BR2_PACKAGE_DBUS_BROKER
+>         [...]
+>         select BR2_PACKAGE_EXPAT if BR2_PACKAGE_SYSTEMD
+>
+> Note: if the option were to stay, which I doubt is interesting), then
+> it would miss a comment that explains why the launcher is not availble:
+>
+>     comment "dbus-broker-launch needs systemd"
+>         deepnds on !BR2_INIT_SYSTEMD
+>
+> > +comment "dbus-broker needs a toolchain w/ threads"
+> > +     depends on BR2_USE_MMU
+> > +     depends on !BR2_TOOLCHAIN_HAS_THREADS
+>
+> Yes, good. :-)
+>
+> > diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
+> > new file mode 100644
+> > index 0000000000..8a06d9ea82
+> > --- /dev/null
+> > +++ b/package/dbus-broker/dbus-broker.mk
+> > @@ -0,0 +1,72 @@
+> > +################################################################################
+> > +#
+> > +# dbus-broker
+> > +#
+> > +# Launching services is delegated to systemd so there is very little else
+> > +# needed. No separate user is necessary and no helper for launching.
+> > +#
+> > +# Service + Config files were copied over from dbus,
+> > +# uneeded / unecessary entries removed for clarity.
+>
+> Do not add any comment in this section. If you have help to provide,
+> write in the help entry of the Config.in option, or in the commit log.
+>
+> > +################################################################################
+> > +
+> > +DBUS_BROKER_VERSION = 23
+> > +DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
+> > +DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
+> > +DBUS_BROKER_LICENSE = \
+> > +     Apache-2.0, \
+> > +     Apache-2.0 and/or LGPL-2.1+ (c-dvar, c-ini, c-list, c-rbtree, c-shquote, c-stdaux, c-utf8)
+> > +DBUS_BROKER_LICENSE_FILES = \
+> > +     LICENSE \
+> > +     subprojects/c-dvar/AUTHORS subprojects/c-dvar/README.md \
+> > +     subprojects/c-ini/AUTHORS subprojects/c-ini/README.md \
+> > +     subprojects/c-list/AUTHORS subprojects/c-list/README.md \
+> > +     subprojects/c-rbtree/AUTHORS subprojects/c-rbtree/README.md \
+> > +     subprojects/c-shquote/AUTHORS subprojects/c-shquote/README.md \
+> > +     subprojects/c-stdaux/AUTHORS subprojects/c-stdaux/README.md \
+> > +     subprojects/c-utf8/AUTHORS subprojects/c-utf8/README.md
+> > +
+> > +ifeq ($(BR2_PACKAGE_DBUS_BROKER_LAUNCH),y)
+>
+> ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>
+> > +DBUS_BROKER_DEPENDENCIES += expat systemd
+> > +DBUS_BROKER_CONF_OPTS += -Dlauncher=true
+> > +else
+> > +DBUS_BROKER_CONF_OPTS += -Dlauncher=false
+> > +endif
+> [--SNIP--]
+> > +# Only install config and service files if dbus is not available
+> > +ifeq ($(BR2_PACKAGE_DBUS)X$(BR2_PACKAGE_DBUS_BROKER_LAUNCH),Xy)
+> > +define DBUS_BROKER_INSTALL_CONFIG_FILES
+>
+> This is not entirey wrong, but I think still incorrect. All those files
+> are only releveant when systemd is used as an init system. As such, the
+> DBUS_BROKER_INSTALL_INIT_SYSTEMD hook should be used.
+>
+> > +     $(INSTALL) -D -m644 $(DBUS_BROKER_PKGDIR)/dbus.socket \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/dbus.socket
+> > +     $(INSTALL) -D -m644 $(DBUS_BROKER_PKGDIR)/session.conf \
+> > +             $(TARGET_DIR)/usr/share/dbus-1/session.conf
+> > +     $(INSTALL) -D -m644 $(DBUS_BROKER_PKGDIR)/system.conf \
+> > +             $(TARGET_DIR)/usr/share/dbus-1/system.conf
+> > +     ln -sf ../dbus.socket \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/sockets.target.wants/dbus.socket
+> > +endef
+> > +
+> > +DBUS_BROKER_POST_INSTALL_TARGET_HOOKS += DBUS_BROKER_INSTALL_CONFIG_FILES
+> > +endif
+> > +
+> > +$(eval $(meson-package))
+>
+> So, in addition to all the above, this patch is lacking two other things
+> that I did provide:
+>
+>   - switching systemd to work with dbus-broker (rather than whining
+>     about it in the commit log;
 
+I got a patch series for systemd, just a matter of finding the time
+(and retesting).
+But I would just simply *take out* the dependency to DBUS
+( and UTIL_LINUX_BINARIES and UTIL_LINUX_NOLOGIN, getting a systemd
+rootfs below 20MB).
 
-Detail of failures
-------------------
+I have been running systemd without either for more than a year.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |         dmalloc-5.5.2          | NOK | http://autobuild.buildroot.net/results/1b4b36336abefed78d65fa7894a376b3a96969d8 | ORPH
-    or1k     |         gnutls-3.6.13          | NOK | http://autobuild.buildroot.net/results/6ec5c1c0753eeae0457f90d100f5ea749487641a |     
-    arm      |      host-acpica-20191018      | NOK | http://autobuild.buildroot.net/results/54e6bbeda233ec27127be6994ab10cdb2abd9bdb |     
-   sparc     |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/21f11ab6c42c0636593df1bcfe002270fe36fe8e |     
-   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/cd5236b9095631c36b1b97a54931fa1c4f4f9bb9 |     
+What would be your pick here? no dependency and a warning if neither
+is available?
+adding some BR2_HAS_DBUS_DAEMON that is set by both, so systemd
+features (like logind) and packages depending on that (and potentially
+on PACKAGE_DBUS if they need the library or tools)?
 
+(https://github.com/nolange/buildroot/commits/improve_systemd_nodbus)
 
-Results for branch '2020.05.x'
-==============================
+>
+>   - a runtime test that demonstrates that systemd does run fine with
+>     dbus-broker, and that the original dbus still takes precendence when
+>     both dbus and dbus-broker are enabled.
+>
+> Note that the runtime test is not only about demonstrating the feature;
+> it is also and foremost a way to guarantee that any regression will be
+> caught, since we automatically run the runtime tests weekly in gitlab-ci.
 
-Classification of failures by reason
-------------------------------------
+Ok. Since you already have that, and I know little about your test framework,
+then could you please incorporate this version into your patch-set.
 
-               apcupsd-3.14.14 | 1 
-                  assimp-5.0.1 | 1 
-              host-grpc-1.25.0 | 1 
-             host-pango-1.44.6 | 1 
-                      tio-1.32 | 1 
-
-
-Detail of failures
-------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/87fe126a33df38a5affb726bca49ec563da326a2 |     
-  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/63c711d1c3ebffaca4405c168b54424a277b5770 |     
-    arm      |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/3213ebe3cf9d0fc7189204118cdaac757aa078c7 |     
-  riscv64    |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/1f3524fbf09d3fce79ecb16653981e1b2a43de76 | ORPH
-  sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/0b394d954df27eabe24651b9f9f090d3aa9f158c |     
-
-
-
--- 
-http://autobuild.buildroot.net
+Norbert
