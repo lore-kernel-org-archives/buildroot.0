@@ -1,10 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Jun 2020 21:20:32 +0200
-Subject: [Buildroot] [PATCH v1 2/4] support/testing: add python-colorzero
- test
+Date: Sat, 13 Jun 2020 21:20:34 +0200
+Subject: [Buildroot] [PATCH v1 4/4] support/testing: add python-gpiozero test
 In-Reply-To: <20200613192034.10286-1-ps.report@gmx.net>
 References: <20200613192034.10286-1-ps.report@gmx.net>
-Message-ID: <20200613192034.10286-2-ps.report@gmx.net>
+Message-ID: <20200613192034.10286-4-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +12,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../tests/package/sample_python_colorzero.py  |  8 +++++++
- .../tests/package/test_python_colorzero.py    | 23 +++++++++++++++++++
- 2 files changed, 31 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_colorzero.py
- create mode 100644 support/testing/tests/package/test_python_colorzero.py
+ .../tests/package/sample_python_gpiozero.py   |  5 +++
+ .../tests/package/test_python_gpiozero.py     | 32 +++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_gpiozero.py
+ create mode 100644 support/testing/tests/package/test_python_gpiozero.py
 
-diff --git a/support/testing/tests/package/sample_python_colorzero.py b/support/testing/tests/package/sample_python_colorzero.py
+diff --git a/support/testing/tests/package/sample_python_gpiozero.py b/support/testing/tests/package/sample_python_gpiozero.py
 new file mode 100644
-index 0000000000..23862a816d
+index 0000000000..b95df07fe7
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_colorzero.py
-@@ -0,0 +1,8 @@
-+from colorzero import Color
++++ b/support/testing/tests/package/sample_python_gpiozero.py
+@@ -0,0 +1,5 @@
++from gpiozero import pi_info
 +
-+red = Color('red')
-+green = Color('lime')
-+blue = Color('blue')
-+assert(red.rgb == (1.0, 0.0, 0.0))
-+assert(green.rgb == (0.0, 1.0, 0.0))
-+assert(blue.rgb == (0.0, 0.0, 1.0))
-diff --git a/support/testing/tests/package/test_python_colorzero.py b/support/testing/tests/package/test_python_colorzero.py
++piBoardInfo = pi_info('a020d3')  # 3B+
++
++assert(piBoardInfo.model == '3B+')
+diff --git a/support/testing/tests/package/test_python_gpiozero.py b/support/testing/tests/package/test_python_gpiozero.py
 new file mode 100644
-index 0000000000..b7c228ac3c
+index 0000000000..2498a55514
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_colorzero.py
-@@ -0,0 +1,23 @@
++++ b/support/testing/tests/package/test_python_gpiozero.py
+@@ -0,0 +1,32 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy2Colorzero(TestPythonPackageBase):
++class TestPythonGpiozero(TestPythonPackageBase):
++    config = TestPythonPackageBase.config
++    sample_scripts = ["tests/package/sample_python_gpiozero.py"]
++
++    def run_sample_scripts(self):
++        cmd = self.interpreter + " sample_python_gpiozero.py"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "pinout -r a020d3 -m | cat"
++        self.assertRunOk(cmd)
++
++
++class TestPythonPy2Gpiozero(TestPythonGpiozero):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_COLORZERO=y
++        BR2_PACKAGE_PYTHON_GPIOZERO=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_colorzero.py"]
-+    timeout = 30
 +
 +
-+class TestPythonPy3Colorzero(TestPythonPackageBase):
++class TestPythonPy3Gpiozero(TestPythonGpiozero):
 +    __test__ = True
-+    config = TestPythonPackageBase.config + \
++    config = TestPythonGpiozero.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_COLORZERO=y
++        BR2_PACKAGE_PYTHON_GPIOZERO=y
 +        """
-+    sample_scripts = ["tests/package/sample_python_colorzero.py"]
-+    timeout = 30
 -- 
 2.27.0
