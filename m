@@ -1,94 +1,59 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Jun 2020 21:20:33 +0200
-Subject: [Buildroot] [PATCH v1 3/4] package/python-gpiozero: new package
-In-Reply-To: <20200613192034.10286-1-ps.report@gmx.net>
-References: <20200613192034.10286-1-ps.report@gmx.net>
-Message-ID: <20200613192034.10286-3-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 13 Jun 2020 21:57:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libhttpserver: needs gcc >= 5
+Message-ID: <20200613195730.2028789-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-gpiozero/Config.in            |  9 +++++++++
- package/python-gpiozero/python-gpiozero.hash |  4 ++++
- package/python-gpiozero/python-gpiozero.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-gpiozero/Config.in
- create mode 100644 package/python-gpiozero/python-gpiozero.hash
- create mode 100644 package/python-gpiozero/python-gpiozero.mk
+libhtpserver uses the following constructor since version 0.18.0 and
+https://github.com/etr/libhttpserver/commit/9cdc90177e12902adf4063300fd688fcfdbe8168:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9cd7d373b6..24babce128 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2024,6 +2024,7 @@ F:	package/libevdev/
- F:	package/log4cplus/
- F:	package/postgresql/
- F:	package/python-colorzero/
-+F:	package/python-gpiozero/
- F:	package/qt5/
- F:	package/quotatool/
- F:	package/racehound/
-diff --git a/package/Config.in b/package/Config.in
-index 502f917815..8be605e752 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -968,6 +968,7 @@ menu "External python modules"
- 	source "package/python-futures/Config.in"
- 	source "package/python-gitdb2/Config.in"
- 	source "package/python-gobject/Config.in"
-+	source "package/python-gpiozero/Config.in"
- 	source "package/python-greenlet/Config.in"
- 	source "package/python-gunicorn/Config.in"
- 	source "package/python-h2/Config.in"
-diff --git a/package/python-gpiozero/Config.in b/package/python-gpiozero/Config.in
-new file mode 100644
-index 0000000000..1e2735be45
---- /dev/null
-+++ b/package/python-gpiozero/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_GPIOZERO
-+	bool "python-gpiozero"
-+	depends on BR2_arm
-+	select BR2_PACKAGE_PYTHON_COLORZERO # runtime
-+	select BR2_PACKAGE_PYTHON_RPI_GPIO # runtime
-+	help
-+	  A simple interface to GPIO devices with Raspberry Pi.
-+
-+	  https://github.com/gpiozero/gpiozero
-diff --git a/package/python-gpiozero/python-gpiozero.hash b/package/python-gpiozero/python-gpiozero.hash
-new file mode 100644
-index 0000000000..a1e66e590c
---- /dev/null
-+++ b/package/python-gpiozero/python-gpiozero.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256  8cb9824fe1b08e7935de03899455e20ce2c242e4cebb0c954c274c48059f6ea5  python-gpiozero-v1.5.1.tar.gz
-+# Locally computed
-+sha256  b6e26763b79d7904d6eaa66f7f53ae374cf30431bb6ba8bcb0d9d5ff56dc69e3  LICENSE.rst
-diff --git a/package/python-gpiozero/python-gpiozero.mk b/package/python-gpiozero/python-gpiozero.mk
-new file mode 100644
-index 0000000000..71d0d43bb1
---- /dev/null
-+++ b/package/python-gpiozero/python-gpiozero.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-gpiozero
-+#
-+################################################################################
-+
-+PYTHON_GPIOZERO_VERSION = v1.5.1
-+PYTHON_GPIOZERO_SITE = $(call github,gpiozero,gpiozero,$(PYTHON_GPIOZERO_VERSION))
-+PYTHON_GPIOZERO_LICENSE = BSD-3-Clause 
-+PYTHON_GPIOZERO_LICENSE_FILES = LICENSE.rst
-+PYTHON_GPIOZERO_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+http_request(http_request&& b) noexcept = default;
+
+This raises the following build failure on gcc 4.8:
+
+In file included from http_request.cpp:22:0:
+httpserver/http_request.hpp:234:9: error: function 'httpserver::http_request::http_request(httpserver::http_request&&)' defaulted on its first declaration with an exception-specification that differs from the implicit declaration 'httpserver::http_request::http_request(httpserver::http_request&&)'
+         http_request(http_request&& b) noexcept = default;
+         ^
+
+This build failure is due to the following gcc bug:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59526
+
+Instead of adding BR2_TOOLCHAIN_HAS_GCC_BUG_59526, simply add a
+dependency on gcc >= 5
+
+Fixes:
+ - http://autobuild.buildroot.org/results/18a29056e0191d9f23e1f9c6f72b13c07d03b300/
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libhttpserver/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/libhttpserver/Config.in b/package/libhttpserver/Config.in
+index 03715d0569..0261e866b4 100644
+--- a/package/libhttpserver/Config.in
++++ b/package/libhttpserver/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBHTTPSERVER
+ 	bool "libhttpserver"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+ 	help
+@@ -11,5 +12,6 @@ config BR2_PACKAGE_LIBHTTPSERVER
+ 
+ 	  https://github.com/etr/libhttpserver
+ 
+-comment "libhttpserver needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "libhttpserver needs a toolchain w/ C++, threads, gcc >= 5"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
 -- 
-2.27.0
+2.26.2
