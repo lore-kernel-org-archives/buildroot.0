@@ -1,49 +1,40 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Sat, 13 Jun 2020 18:16:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/eigen: fix package detection with
- CMake
-Message-ID: <20200613161643.609929-1-juju@cotds.org>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Sat, 13 Jun 2020 18:20:01 +0200
+Subject: [Buildroot] [PATCH] uclibc: add simlinks from
+ libdl/libm/libpthread/librt
+Message-ID: <20200613162001.154280-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eigen3 library normally installs a signature file named
-"signature_of_eigen3_matrix_library" to help library detection:
-https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
+All the symbols that were previously present in libdl.so.0, libm.so.0,
+libpthread.so.0 and librt.so.0 are now all packed within uClibc.
 
-This Buildroot package does not use CMake for installing files, as only
-the headers are needed in the STAGING_DIR. A generic-package is used
-instead with simple copies.
+In order to keep binary compatibility with old executables, which were
+dynamically linked with one of the libraries above, add symbolic links
+to the uClibc shared library.
 
-The library also provide a CMake macro that use this file to
-detect it:
-https://gitlab.com/libeigen/eigen/-/blob/3.3.7/cmake/FindEigen3.cmake#L76
-
-Without the signature file installed, packages searching for this
-library with this method will fail. Other packages usings pkg-config are
-not affected by this issue.
-
-This patch install the signature file at the expected path, to fix
-detections.
-
-Signed-off-by: Julien Olivain <juju@cotds.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/eigen/eigen.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/uclibc/uclibc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 5c9e028442..68ffe84cb4 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -34,6 +34,7 @@ define EIGEN_INSTALL_STAGING_CMDS
- 	$(RM) -r $(EIGEN_DEST_DIR)
- 	mkdir -p $(EIGEN_DEST_DIR)
- 	cp -a $(@D)/Eigen $(EIGEN_DEST_DIR)
-+	cp -a $(@D)/signature_of_eigen3_matrix_library $(EIGEN_DEST_DIR)
- 	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
- 	$(INSTALL) -D -m 0644 $(@D)/eigen3.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/eigen3.pc
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3ba4589672..73664d5b0b 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -424,6 +424,10 @@ define UCLIBC_INSTALL_TARGET_CMDS
+ 		RUNTIME_PREFIX=/ \
+ 		install_runtime
+ 	$(UCLIBC_INSTALL_UTILS_TARGET)
++	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libdl.so.0
++	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libm.so.0
++	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libpthread.so.0
++	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/librt.so.0
+ endef
+ 
+ # STATIC has no ld* tools, only getconf
 -- 
-2.26.2
+2.27.0
