@@ -1,42 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 13 Jun 2020 17:41:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/faad2: bump version to 2.9.2
-Message-ID: <20200613154121.2483961-1-bernd.kuhls@t-online.de>
+Date: Sat, 13 Jun 2020 17:58:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/alsa-utils: bump version to 1.2.3
+In-Reply-To: <20200613155804.2518256-1-bernd.kuhls@t-online.de>
+References: <20200613155804.2518256-1-bernd.kuhls@t-online.de>
+Message-ID: <20200613155804.2518256-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://github.com/knik0/faad2/blob/master/ChangeLog
+Removed _AUTORECONF added with
+https://git.buildroot.net/buildroot/commit/?id=e10cf295c900790d96d777cc7ff0aea287afd056
+because we do not patch alsa.m4 anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/faad2/faad2.hash | 2 +-
- package/faad2/faad2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/alsa-utils/alsa-utils.hash | 2 +-
+ package/alsa-utils/alsa-utils.mk   | 6 +-----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index 1a03bc9b7b..e9aa78051f 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
+diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
+index 3db06ab4c1..aec86aee00 100644
+--- a/package/alsa-utils/alsa-utils.hash
++++ b/package/alsa-utils/alsa-utils.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7fa33cff76abdda5a220ca5de0b2e05a77354f3b97f735193c2940224898aa9a  faad2-2.9.1.tar.gz
-+sha256  9728b2b94f94ab49363cd229e7377fbe6ef3c311c5cd80da662d53ddb0ee091d  faad2-2.9.2.tar.gz
- sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 9ec9d8f52c..69c44461f2 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
+ # Locally calculated
+-sha256  44807bd578c5f6df6e91a11b8d37e546424a5a1ea8d8e659ee359fe01730e4f3  alsa-utils-1.2.2.tar.bz2
++sha256  ff19ae48c22938de7a491bdb39db74a2eee2546013f39bf1a86185e426f921aa  alsa-utils-1.2.3.tar.bz2
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 7afa36d503..27894d3e92 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FAAD2_VERSION = 2.9.1
-+FAAD2_VERSION = 2.9.2
- FAAD2_SITE = $(call github,knik0,faad2,$(subst .,_,$(FAAD2_VERSION)))
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
+-ALSA_UTILS_VERSION = 1.2.2
++ALSA_UTILS_VERSION = 1.2.3
+ ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
+ ALSA_UTILS_SITE = https://www.alsa-project.org/files/pub/utils
+ ALSA_UTILS_LICENSE = GPL-2.0
+@@ -14,10 +14,6 @@ ALSA_UTILS_DEPENDENCIES = host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_NCURSES),ncurses) \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+-# Regenerate aclocal.m4 to pick the patched
+-# version of alsa.m4 from alsa-lib
+-ALSA_UTILS_AUTORECONF = YES
+-ALSA_UTILS_GETTEXTIZE = YES
+ 
+ ALSA_UTILS_CONF_ENV = \
+ 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) \
 -- 
 2.26.2
