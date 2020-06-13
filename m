@@ -1,97 +1,103 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 13 Jun 2020 12:47:08 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: disable --as-needed linker flag
- for Codesourcery ARM 2014.05 toolchain
-Message-ID: <20200613104708.2415431-1-romain.naour@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 13 Jun 2020 13:23:17 +0200
+Subject: [Buildroot] ebtables and musl
+In-Reply-To: <CAGt4E5tuHRkxko=NPY+-YsWwnhk1McnJMU_LmdcShHFuRjTkMA@mail.gmail.com>
+References: <CAGt4E5tuHRkxko=NPY+-YsWwnhk1McnJMU_LmdcShHFuRjTkMA@mail.gmail.com>
+Message-ID: <20200613132317.4edb7676@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Meson build system enable by default -Wl,--as-needed [1][2] in the linker command line
-and due to this the libmesa_dri_drivers.so build fail with the Codesourcery ARM and
-Aarch64 2014.05 toolchain:
+Hello Markus,
 
-/home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++
-  -o src/mesa/drivers/dri/libmesa_dri_drivers.so
-  -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group
-  -Wl,-soname,libmesa_dri_drivers.so -Wl,--whole-archive
-  src/mesa/drivers/dri/radeon/libr100.a src/mesa/drivers/dri/nouveau/libnouveau_vieux.a
-  -Wl,--no-whole-archive
-  src/mesa/drivers/dri/common/libmegadriver_stub.a
-  src/mesa/drivers/dri/common/libdricommon.a
-  src/mapi/shared-glapi/libglapi.so.0.0.0
-  src/mesa/libmesa_classic.a src/mesa/libmesa_common.a
-  src/compiler/glsl/libglsl.a src/compiler/glsl/glcpp/libglcpp.a
-  src/util/libmesa_util.a src/util/format/libmesa_format.a
-  src/compiler/nir/libnir.a src/compiler/libcompiler.a
-  src/util/libxmlconfig.a
-  [...]
+On Fri, 12 Jun 2020 13:10:28 -0700, Markus Mayer <mmayer@broadcom.com> wrote:
 
-src/mesa/drivers/dri/common/libmegadriver_stub.a(megadriver_stub.c.o): In function `megadriver_stub_init':
-megadriver_stub.c:(.text.startup+0x20): undefined reference to `dladdr'
-megadriver_stub.c:(.text.startup+0xbc): undefined reference to `dlsym'
-collect2: error: ld returned 1 exit status
+> Hi all,
+>
+> I see this patch in Buildroot:
+> http://lists.busybox.net/pipermail/buildroot/2017-February/184225.html
+>
+> However, I am still running into the issue it is supposed to fix.
+>
+> This is with musl-1.2.0, the latest and greatest. I'm no longer stuck
+> with the ancient libmusl that caused issues with procps. It doesn't
+> seem to help with ebtables, though.
+>
+> /mnt/disk1/Development/br-musl/output/arm64/host/bin/aarch64-linux-gcc
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
+>   -fPIC -O3 -DPROGVERSION=\"2.0.10-4\" -DPROGNAME=\"ebtables\"
+> -DPROGDATE=\"December\ 2011\" -D_PATH_ETHERTYPES=\"/etc/ethertypes\"
+> -DEBTD_ARGC_MAX=50 -DEBTD_CMDLINE_MAXLN=2048
+> -DLOCKFILE=\"/var/lib/ebtables/lock\" -DLOCKDIR=\"/var/lib/ebtables/\"
+> -c -o extensions/ebt_802_3.o extensions/ebt_802_3.c -Iinclude/
+> In file included from include/linux/netfilter_bridge.h:8:0,
+>                  from include/linux/netfilter_bridge/ebtables.h:17,
+>                  from include/ebtables_u.h:28,
+>                  from useful_functions.c:25:
+> include/linux/if_ether.h:119:8: error: redefinition of 'struct ethhdr'
+>  struct ethhdr {
+>         ^~~~~~
+> In file included from
+> ../../host/aarch64-buildroot-linux-musl/sysroot/usr/include/netinet/ether.h:8:0,
+>                  from include/ebtables_u.h:27,
+>                  from useful_functions.c:25:
+> ../../host/aarch64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:113:8:
+> note: originally defined here
+>  struct ethhdr {
+>         ^~~~~~
+> Makefile:78: recipe for target 'useful_functions.o' failed
+> make[2]: *** [useful_functions.o] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+>
+> I am not quite sure what to make of it yet.
+>
+> Is it cause by the fact that include/linux/if_ether.h defines
+>
+> #ifndef _LINUX_IF_ETHER_H
+> #define _LINUX_IF_ETHER_H
+>
+> but include/netinet/if_ether.h defines
+>
+> #ifndef _NETINET_IF_ETHER_H
+> #define _NETINET_IF_ETHER_H
+>
+> and they both end up being included?
+>
+> $ find . -name if_ether.h -ls
+>   6025818      4 -rw-r--r--   1 mmayer   mmayer       1506 May 26
+> 16:30 ./build/linux-custom/include/linux/if_ether.h
+>   6028683      8 -rw-r--r--   1 mmayer   mmayer       7461 May 26
+> 16:30 ./build/linux-custom/include/uapi/linux/if_ether.h
+>   6047054      8 -rw-r--r--   1 mmayer   mmayer       5751 Dec 15
+> 2011 ./build/ebtables-2.0.10-4/include/linux/if_ether.h
+>   5934557      8 -rw-r--r--   1 mmayer   mmayer       7016 Jun 10
+> 16:52 ./host/aarch64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h
+>   5935035      4 -rw-r--r--   1 mmayer   mmayer       3625 Jun 10
+> 16:52 ./host/aarch64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h
+>
+> Also, there's five different copies of if_ether.h floating around.
 
-This problem seems to be specific to this toolchain release (ARM and aarch64)
-CodeSourcery 2014.05: gcc 4.8.3-prerelease; binutils 2.24.51.20140217; glibc 2.18
+Care to provide a config/defconfig file for the failure (and provide the
+used buildroot version)?
 
-The following prebuilt toolchain has been tested and doesn't trigger this issue:
-Linaro 4.9-4.9-2014.11: gcc 4.9.3; binutils 2.24.0; glibc 2.19
-CodeSourcery 2014.11: gcc 4.9.1; binutils 2.24.51.20140217; glibc 2.20
+>
+> While we are on the topic of ebtables, why is buildroot still using
+> v2.0.10-4 from 2014 when there is 2.0.11 from 2019 (as per
+> http://ftp.netfilter.org/pub/ebtables/)? Is it just a matter of
+> submitting a patch to update it or is there an underlying reason to
+> keep the old version around?
 
-Older toolchains doesn't have a recent enough glibc or linux-headers version
-to breaking the build with mesa3d 20.1.0 or libdrm 2.4.102.
+Probably not, care to send an ebtables update patch?
 
-In order to build mesa3d with the CodeSourcery 2014.05 using --as-needed would be
-reorder the static librairies:
+Regards,
+Peter
 
- diff --git a/src/mesa/drivers/dri/meson.build b/src/mesa/drivers/dri/meson.build
- index b09ca16e38a..9ac6731c522 100644
- --- a/src/mesa/drivers/dri/meson.build
- +++ b/src/mesa/drivers/dri/meson.build
- @@ -59,7 +59,7 @@ if _dri_drivers != []
-      [],
-      link_whole : _dri_drivers,
-      link_with : [
- -      libmegadriver_stub, libdricommon, libglapi,
- +      libdricommon, libmegadriver_stub, libglapi,
-        libmesa_classic,
-      ],
-
-Instead, we can disable --as-needed from the meson build system using
-"-Db_asneeded=false" only for this toolchain.
-
-[1] https://mesonbuild.com/Builtin-options.html
-[2] https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
-
-Fixes:
-http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/mesa3d.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index e726bd33b3..59d96fe7c2 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -27,6 +27,12 @@ MESA3D_CONF_OPTS = \
- 	-Dgallium-omx=disabled \
- 	-Dpower8=false
- 
-+# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
-+# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
-+MESA3D_CONF_OPTS += -Db_asneeded=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
- MESA3D_DEPENDENCIES += host-llvm llvm
- MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
--- 
-2.25.4
+>
+> Thanks,
+> -Markus
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
