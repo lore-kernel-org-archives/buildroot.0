@@ -1,163 +1,73 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 Jun 2020 18:47:33 +0200
-Subject: [Buildroot] [PATCH 1/2] core.br2-external: fix reporting errors
-In-Reply-To: <20200614155537.GW2346@scaer>
-References: <cover.1590183628.git.yann.morin.1998@free.fr>
- <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
- <05960843-2563-586e-2995-f7a1b6945a70@gmail.com>
- <20200614155537.GW2346@scaer>
-Message-ID: <d356561d-4a18-79e8-a31a-abc831e952ed@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 14 Jun 2020 18:49:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minizip: fix static build of demos
+ with openssl
+Message-ID: <20200614164925.282394-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Fixes:
+ - http://autobuild.buildroot.org/results/2f11b237a3577df55bc1ee139ed4d51f3ee4e08d
+ - http://autobuild.buildroot.org/results/b54b625751a45d3b449fffcdfaa06fb9209b4652
 
-Le 14/06/2020 ? 17:55, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2020-06-14 17:33 +0200, Romain Naour spake thusly:
->> Le 22/05/2020 ? 23:40, Yann E. MORIN a ?crit?:
->>> When a br2-external tree has an issue, e.g. a missing file, or does not
->>> have a name, or the name uses invalid cahrs, we report that condition by
->>> setting the variable BR2_EXTERNAL_ERROR.
->>>
->>> That variable is defined in the script support/scripts/br2-external,
->>> which outputs it on stdout, and checked by the Makefile.
->>>
->>> Before d027cd75d09, stdout was explicitly redirected to the generated
->>> .mk file, with   exec >"${ofile}"   as the Makefile and Kconfig
->>> fragments were generated each with their own call to the script, and o
->>> the validation phase would emit the BR2_EXTERNAL_ERROR variable in the
->>> Makefile fragment.
->>>
->>> But with d027cd75d09, both the Makefile and Kconfig fragmetns were now
->>> generated with a single call to the script, and as such the semantics of
->>> the scripts changed, and only each of the actual generators, do_mk and
->>> do_kconfig, ahd their out put redirected. Which left do_validate with
->>> the default stdout. Which would emit BR2_EXTERNAL_ERROR on stdout.
->>>
->>> In turn, the stdout of the script would be interpreted by as part of the
->>> Makefile. But this does not end up very well when a br2-external tree
->>> indeed has an error:
->>>
->>>     Makefile:184: *** multiple target patterns.  Stop.
->>
->> When external.desc exist but empty, I get another error (I'm currently on master)
->>
->> $ echo "" > support/testing/tests/download/br2-external/git-hash/external.desc
->> $ make BR2_EXTERNAL=$PWD/support/testing/tests/download/br2-external/git-hash/
->> menuconfig
->>
->> Config.in:22: can't open file "output/.br2-external.in.paths"
-> 
-> Ah yeah, this one is also fixed! ;-)
-> 
->> But Indeed, I get the same error when external.desc is missing.
->>
->>
->> Here is the error message displayed with the series applied:
->>
->> case: missing external.desc
->>
->>   does not have an 'external.desc'. See
->> https://buildroot.org/manual.html#br2-external-converting.
->>
->> case: empty external.desc
->>
->>   does not define the name.
->>
->> While at it you can use MANUAL_URL in the error message when the external name
->> is missing.
-> 
-> I disagree. The first test is for testing that an old br2-external, from
-> before the multi-br2-external support, in which case we want to point
-> the user to the manual for the conversion step.
-> 
-> However, when external.desc exists, this is not a conversion, and the
-> user is already aware of the requirements for external.desc; they just
-> made a mistake and should just refer to the manual.
-> 
->> With that fixed(improved :p):
->> Reviewed-by: Romain Naour <romain.naour@gmail.com>
->> Tested-by: Romain Naour <romain.naour@gmail.com>
-> 
-> Does that still stand with the patch as-is?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...s.txt-use-pkg-config-to-find-openssl.patch | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
 
-Ok as-is.
-
-> 
->> Also, it would be great to have some tests in the testsuite for such cases. It's
->> easy to make a mistake while adding a br2_external tree.
-> 
-> As already shared on IRC, I hae a set of test-cases that I wrote back in
-> the days I was working on multi-br2-external support:
-> 
->     https://git.buildroot.org/~ymorin/git/br2-external-tests/
-> 
-> Feel free to grab those and turn them into actual tests in our testing
-> infra! ;-)
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Best regards,
->> Romain
->>
->>
->>>
->>> So we must redirect the output of the validation step to the
->>> Makefile fragment.
->>>
->>> Note that we don't need to append in do_mk, and we can do an overwrite
->>> redirection: if we go so far as to call do_mk, it means there was no
->>> error, and thus the fragment is empty.
->>>
->>> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->>> ---
->>>  support/scripts/br2-external | 7 ++++---
->>>  1 file changed, 4 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/support/scripts/br2-external b/support/scripts/br2-external
->>> index 171526f8c8..fdea5aa251 100755
->>> --- a/support/scripts/br2-external
->>> +++ b/support/scripts/br2-external
->>> @@ -33,9 +33,8 @@ main() {
->>>      # Trap any unexpected error to generate a meaningful error message
->>>      trap "error 'unexpected error while generating ${ofile}\n'" ERR
->>>  
->>> -    do_validate ${@//:/ }
->>> -
->>>      mkdir -p "${outputdir}"
->>> +    do_validate "${outputdir}" ${@//:/ }
->>>      do_mk "${outputdir}"
->>>      do_kconfig "${outputdir}"
->>>  }
->>> @@ -51,7 +50,9 @@ main() {
->>>  # snippet means that there were no error.
->>>  #
->>>  do_validate() {
->>> +    local outputdir="${1}"
->>>      local br2_ext
->>> +    shift
->>>  
->>>      if [ ${#} -eq 0 ]; then
->>>          # No br2-external tree is valid
->>> @@ -60,7 +61,7 @@ do_validate() {
->>>  
->>>      for br2_ext in "${@}"; do
->>>          do_validate_one "${br2_ext}"
->>> -    done
->>> +    done >"${outputdir}/.br2-external.mk"
->>>  }
->>>  
->>>  do_validate_one() {
->>>
->>
-> 
+diff --git a/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch b/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
+new file mode 100644
+index 0000000000..8b44a17712
+--- /dev/null
++++ b/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
+@@ -0,0 +1,44 @@
++From 1fdf5da78369305164313610dbb1ec868233ba08 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Jun 2020 14:04:03 +0200
++Subject: [PATCH] CMakeLists.txt: use pkg-config to find openssl
++
++Use pkg-config to find openssl libraries otherwise minizip will fail to
++retrieve openssl static dependencies such as -latomic and build of
++test_cmd will fail on:
++
++[100%] Linking C executable test_cmd
++/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/test/autobuild/run/instance-3/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(bio_lib.o): in function `BIO_free':
++bio_lib.c:(.text+0x510): undefined reference to `__atomic_fetch_sub_4'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b54b625751a45d3b449fffcdfaa06fb9209b4652
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/nmoinvaz/minizip/pull/499]
++---
++ CMakeLists.txt | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index b789f62..7a81e32 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -140,7 +140,13 @@ endif()
++ 
++ # Check to see if openssl installation is present
++ if(MZ_OPENSSL)
++-    find_package(OpenSSL)
+++    find_package(PkgConfig)
+++    if(PKGCONFIG_FOUND)
+++        pkg_check_modules(OPENSSL openssl)
+++    endif()
+++    if(NOT OPENSSL_FOUND)
+++        find_package(OpenSSL)
+++    endif()
++     if (OPENSSL_FOUND)
++         message(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
++ 
++-- 
++2.26.2
++
+-- 
+2.26.2
