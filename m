@@ -1,123 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 16:15:04 +0200
-Subject: [Buildroot] [PATCH v2] package/meson: fix shared build issue
- due to --static flag always passed to pkg-config
-In-Reply-To: <20200614125002.3476208-1-romain.naour@gmail.com>
-References: <20200614125002.3476208-1-romain.naour@gmail.com>
-Message-ID: <20200614141504.GP2346@scaer>
+Date: Sun, 14 Jun 2020 16:17:12 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-intel:
+ bump version
+Message-ID: <20200614141633.6CCD882ABB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3fa168b81474eb19423c806340af9a8ada5bbf40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-14 14:50 +0200, Romain Naour spake thusly:
-> Since cf75d7da98596580eee5a9b5e1a3e156ad832099 we have a build failures when
-> building libgbm.so when valgrind package is selected because --static is always
-> passed to pkg-config even for shared build.
-> 
-> Even if -Dvalgrind=false on meson command line to build mesa, the valgrind
-> libraries come from pkg-config libdrm...
-> 
-> output/host/bin/pkg-config libdrm --libs --static
-> -L[...]/sysroot/usr/lib -ldrm -lm -L[...]/sysroot/usr/lib/valgrind
-> -lcoregrind-arm64-linux -lvex-arm64-linux -lgcc
-> 
-> ... and break the build.
-> 
-> See initial discussions:
-> http://lists.busybox.net/pipermail/buildroot/2020-June/284543.html
-> 
-> This is due to a wrong condition test added by the patch
-> 0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch.
-> 
-> Use None instead of False when pkg_config_static is not set, indeed
-> pkg_config_static is a string not a boolean. But pkg_config_static is
-> alsways set to 'true' or 'flase' in our meson package infra.
-> 
-> Before this patch, the issue can be reproduced using the following defconfig:
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_VALGRIND=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1b5/1b58d73ecbbe1af2c3e140563d696cf32d1c4a5a/build-end.log
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reformatted hashes.
 
-Applied to master, after rewording the commit log slightly. Thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> v2: Use None instead of False since pkg_config_static is a string not a boolean (Yann).
-> ---
->  ...endencies-base.py-add-pkg_config_stati.patch | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> index 7bb00f3fba..4196545a96 100644
-> --- a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> +++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> @@ -1,4 +1,4 @@
-> -From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
-> +From 71295eec724f89ef5f5822c17cf44480335225cd Mon Sep 17 00:00:00 2001
->  From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  Date: Sat, 15 Feb 2020 15:13:59 +0100
->  Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-> @@ -16,23 +16,26 @@ Fixes:
->   - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
->  
->  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Romain: Fix if condition, pkg_config_static is a string not a boolean]
-> +Signed-off-by: Romain Naour <romain.naour@gmail.com>
->  ---
-> - mesonbuild/dependencies/base.py | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> + mesonbuild/dependencies/base.py | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
->  
->  diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
-> -index a83e3d6c..913bff6b 100644
-> +index 5636602e..de4e87bc 100644
->  --- a/mesonbuild/dependencies/base.py
->  +++ b/mesonbuild/dependencies/base.py
-> -@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
-> +@@ -858,7 +858,8 @@ class PkgConfigDependency(ExternalDependency):
->       def _set_libs(self):
->           env = None
->           libcmd = [self.name, '--libs']
->  -        if self.static:
-> -+        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
-> ++        if self.static or \
-> ++           (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
->               libcmd.append('--static')
->           # Force pkg-config to output -L fields even if they are system
->           # paths so we can do manual searching with cc.find_library() later.
->  -- 
-> -2.24.1
-> +2.25.4
->  
-> -- 
-> 2.25.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+index ff816c7bbe..321ae5b606 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 b074366aad25cae38bb455792ac3110d52bcb0e4a183766c37ee12cbe56d7f8c  xdriver_xf86-video-intel-f66d39544bb8339130c96d282a80f87ca1606caf.tar.gz
+-sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
++sha256  029afa61e785f6e0fb18d2c2f1619e97af8b6f19c7fa0ba9923eea03ccf78626  xdriver_xf86-video-intel-5ca3ac1a90af177eb111a965e9b4dd8a27cc58fc.tar.gz
++sha256  5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index fb74eb6ad5..ac598cf0fb 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = f66d39544bb8339130c96d282a80f87ca1606caf
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 5ca3ac1a90af177eb111a965e9b4dd8a27cc58fc
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
