@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 11:56:29 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
- file
-In-Reply-To: <20200612232433.18442-2-ps.report@gmx.net>
+Date: Sun, 14 Jun 2020 12:00:44 +0200
+Subject: [Buildroot] [PATCH v1 3/3] package/iwd: add sysv init script
+In-Reply-To: <20200612232433.18442-3-ps.report@gmx.net>
 References: <20200612232433.18442-1-ps.report@gmx.net>
- <20200612232433.18442-2-ps.report@gmx.net>
-Message-ID: <20200614095628.GJ2346@scaer>
+ <20200612232433.18442-3-ps.report@gmx.net>
+Message-ID: <20200614100044.GK2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,103 +14,78 @@ To: buildroot@busybox.net
 Peter, All,
 
 On 2020-06-13 01:24 +0200, Peter Seiderer spake thusly:
-> Add basic /etc/iwd/main.conf configuration file to enable
-> network configuration (use built-in dhcp client).
-> 
-> For the non systemd case select the openresolv package to
-> fulfill the iwd resolvconf requirement.
-> 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/iwd/Config.in |  1 +
->  package/iwd/iwd.mk    | 19 +++++++++++++++++++
->  package/iwd/main.conf |  3 +++
->  3 files changed, 23 insertions(+)
->  create mode 100644 package/iwd/main.conf
+>  package/iwd/S40iwd | 30 ++++++++++++++++++++++++++++++
+>  package/iwd/iwd.mk |  7 +++++++
+>  2 files changed, 37 insertions(+)
+>  create mode 100644 package/iwd/S40iwd
 > 
-> diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-> index 4501017630..6d42cac35c 100644
-> --- a/package/iwd/Config.in
-> +++ b/package/iwd/Config.in
-> @@ -8,6 +8,7 @@ config BR2_PACKAGE_IWD
->  	depends on BR2_USE_WCHAR # ell
->  	select BR2_PACKAGE_DBUS # runtime
->  	select BR2_PACKAGE_ELL
-> +	select BR2_PACKAGE_OPENRESOLV if !BR2_INIT_SYSTEMD
+> diff --git a/package/iwd/S40iwd b/package/iwd/S40iwd
+> new file mode 100644
+> index 0000000000..4a720b43c2
+> --- /dev/null
+> +++ b/package/iwd/S40iwd
+> @@ -0,0 +1,30 @@
+> +#!/bin/sh
+> +#
+> +# Start iwd daemon
+> +#
+> +
+> +# Create needed directories.
+> +[ -d /tmp/iwd/hotspot ] || mkdir -p /tmp/iwd/hotspot
 
-I think this is preferable to use BR2_PACKAGE_SYSTEMD as the dependency,
-rather than BR2_INIT_SYSTEMD, even if the two are currently tightly
-intertwinned.
+No need to test-and-create, as mkdir -p does that well for you already.
 
->  	help
->  	  iNet Wireless daemon (iwd)
->  
+Is that script just about acting as a hotspot, then?
+
+> +case "$1" in
+> +    start)
+> +	printf "Starting iwd:"
+> +	/usr/libexec/iwd &
+> +	echo "OK"
+
+This script has a mix of leading spaces and TABs.
+
+Don't mix (use spaces please! ;-] ).
+
+> +        ;;
+> +    stop)
+> +	printf "Stopping iwd:"
+> +	killall iwd
+
+Can't we use start-stop-daemon instead? See package/busybox/S01syslogd
+as a template.
+
+> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +        ;;
+> +    restart|reload)
+> +        "$0" stop
+> +        "$0" start
+> +        ;;
+> +    *)
+> +        echo "Usage: $0 {start|stop|restart|reload}"
+> +	exit 1
+> +        ;;
+> +esac
+> +
+> +exit $?
 > diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-> index 32ff175933..d105d3b128 100644
+> index d105d3b128..285fef2fd8 100644
 > --- a/package/iwd/iwd.mk
 > +++ b/package/iwd/iwd.mk
-> @@ -46,4 +46,23 @@ else
->  IWD_CONF_OPTS += --disable-systemd-service
->  endif
+> @@ -65,4 +65,11 @@ IWD_POST_INSTALL_TARGET_HOOKS += \
+>  	IWD_INSTALL_CONFIG_FILE \
+>  	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
 >  
-> +define IWD_INSTALL_CONFIG_FILE
-> +	mkdir -p $(TARGET_DIR)/etc/iwd
-> +	$(INSTALL) -m 644 package/iwd/main.conf $(TARGET_DIR)/etc/iwd/main.conf
+> +define IWD_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 -D package/iwd/S40iwd \
+> +		$(TARGET_DIR)/etc/init.d/S40iwd
+> +	mkdir -p $(TARGET_DIR)/var/lib/iwd
+> +	ln -sf /tmp/iwd/hotspot $(TARGET_DIR)/var/lib/iwd/hotspot
 > +endef
 > +
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> +	echo -e "[Network]\nNameResolvingService=systemd" >> $(TARGET_DIR)/etc/iwd/main.conf
-
-Do not use 'echo -e' but use printf. Also the line is too long:
-
-    printf '[Network]\nNameResolvingService=systemd\n' \
-        >>$(TARGET_DIR)/etc/iwd/main.conf
-
-However, this will not be working nicely on rebuilds, as it will keep
-appending this to the file. See below for a better approach (I think):
-
-Also, the condiotion on BR2_INIT_SYSTEMD is already handled by the
-infra, by using the appropriate INIT_INSTALL hooks:
-
-    define IWD_INSTALL_INIT_SYSV
-        sed -r -e '$s/$/\n[Network]\nNameResolvingService=resolvconf/' \
-            $(IWD_PKGDIR)main.conf \
-            >$(TARGET_DIR)/etc/iwd/main.conf
-    endef
-
-    define IWD_INSTALL_INIT_SYSTEMD
-        sed -r -e '$s/$/\n[Network]\nNameResolvingService=systemd/' \
-            $(IWD_PKGDIR)main.conf \
-            >$(TARGET_DIR)/etc/iwd/main.conf
-    endef
-
-> +endef
-> +else
-> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> +	echo -e "[Network]\nNameResolvingService=resolvconf" >> $(TARGET_DIR)/etc/iwd/main.conf
-> +endef
-> +endif
-> +
-> +IWD_POST_INSTALL_TARGET_HOOKS += \
-> +	IWD_INSTALL_CONFIG_FILE \
-> +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-
-And thus those post-install hooks are not longer required.
-
-Regards,
-Yann E. MORIN.
-
 >  $(eval $(autotools-package))
-> diff --git a/package/iwd/main.conf b/package/iwd/main.conf
-> new file mode 100644
-> index 0000000000..c26a50d302
-> --- /dev/null
-> +++ b/package/iwd/main.conf
-> @@ -0,0 +1,3 @@
-> +# use built-in dhcp client
-> +[General]
-> +EnableNetworkConfiguration=true
 > -- 
 > 2.26.2
 > 
