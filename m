@@ -1,68 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 16:48:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-vuplus: remove tinyxml
- dependency
-In-Reply-To: <20200614143232.2773755-1-bernd.kuhls@t-online.de>
-References: <20200614143232.2773755-1-bernd.kuhls@t-online.de>
-Message-ID: <20200614144838.GT2346@scaer>
+Date: Sun, 14 Jun 2020 17:00:21 +0200
+Subject: [Buildroot] [PATCH] uclibc: add simlinks from
+ libdl/libm/libpthread/librt
+In-Reply-To: <20200613162001.154280-1-paul@crapouillou.net>
+References: <20200613162001.154280-1-paul@crapouillou.net>
+Message-ID: <20200614150021.GU2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Paul, All,
 
-On 2020-06-14 16:32 +0200, Bernd Kuhls spake thusly:
-> Package kodi-platform depends on kodi
-> https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L8
+On 2020-06-13 18:20 +0200, Paul Cercueil spake thusly:
+> All the symbols that were previously present in libdl.so.0, libm.so.0,
+> libpthread.so.0 and librt.so.0 are now all packed within uClibc.
 > 
-> which in turn depends on tinyxml
-> https://github.com/xbmc/xbmc/blob/Leia/CMakeLists.txt#L136
+> In order to keep binary compatibility with old executables, which were
+> dynamically linked with one of the libraries above, add symbolic links
+> to the uClibc shared library.
 > 
-> so we do not need to explicitly depend on tinyxml here.
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  package/uclibc/uclibc.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 3ba4589672..73664d5b0b 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -424,6 +424,10 @@ define UCLIBC_INSTALL_TARGET_CMDS
+>  		RUNTIME_PREFIX=/ \
+>  		install_runtime
+>  	$(UCLIBC_INSTALL_UTILS_TARGET)
+> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libdl.so.0
+> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libm.so.0
+> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libpthread.so.0
+> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/librt.so.0
 
-I disagree. If kodi one day stops depending on tinyxml, that would break
-the build of pvr-vuplus.
+This does not account for external toolchains.
 
-Since tinyxml *is* a dependency of pvr-vuplus we do want to keep it
-here.
+I wonder how good those symlinks are anyway: uClibc has no ABI/API
+stability anyway, so there are no guarantee that a program linked
+against a version of uClibc will work against another version, or even
+the same version that was compiled with another configuration...
+
+And I am not sure we want to condone such a case.
+
+My opinion would be that, if you really need those legacy symlinks,
+then you should create them in a post-build script.
+
+I'm leaving this patch opened in patchwork, so other maintainers may
+reverse my position.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-pvr-vuplus/Config.in          | 1 -
->  package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
-> index b6a03e843f..4989b1c77c 100644
-> --- a/package/kodi-pvr-vuplus/Config.in
-> +++ b/package/kodi-pvr-vuplus/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
->  	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
->  	select BR2_PACKAGE_KODI_PLATFORM
-> -	select BR2_PACKAGE_TINYXML
->  	help
->  	  VuPlus PVR client addon for Kodi
+>  endef
 >  
-> diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-> index bf1de1178d..32b6d939af 100644
-> --- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-> +++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-> @@ -8,6 +8,6 @@ KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
->  KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
->  KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
->  KODI_PVR_VUPLUS_LICENSE_FILES = debian/copyright
-> -KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
-> +KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform
->  
->  $(eval $(cmake-package))
+>  # STATIC has no ld* tools, only getconf
 > -- 
-> 2.26.2
+> 2.27.0
 > 
 > _______________________________________________
 > buildroot mailing list
