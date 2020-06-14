@@ -1,79 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 22:08:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dbus: security bump to version
- 1.12.18
-In-Reply-To: <20200614194401.676838-1-fontaine.fabrice@gmail.com>
-References: <20200614194401.676838-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200614200852.GM2346@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 Jun 2020 22:12:40 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] support/docker: add a Fedore-32
+ based image
+In-Reply-To: <48c45cb866a160ce4cc05b03fdf15237eb346b66.1589751688.git.yann.morin.1998@free.fr>
+References: <cover.1589751688.git.yann.morin.1998@free.fr>
+ <48c45cb866a160ce4cc05b03fdf15237eb346b66.1589751688.git.yann.morin.1998@free.fr>
+Message-ID: <3aff567d-eeaa-2aaf-0760-29854a21a504@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Commit tittle : Fedore/Fedora
 
-On 2020-06-14 21:44 +0200, Fabrice Fontaine spake thusly:
-> - Fix CVE-2020-12049: An issue was discovered in dbus >= 1.3.0 before
->   1.12.18. The DBusServer in libdbus, as used in dbus-daemon, leaks file
->   descriptors when a message exceeds the per-message file descriptor
->   limit. A local attacker with access to the D-Bus system bus or another
->   system service's private AF_UNIX socket could use this to make the
->   system service reach its file descriptor limit, denying service to
->   subsequent D-Bus clients.
-> - Also update indentation in hash file (two spaces)
+Le 17/05/2020 ? 23:41, Yann E. MORIN a ?crit?:
+> Hopefully, this image is reproducible, since we are not using any update
+> repository, and from the looks of it, the repository of the release is
+> never touched.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
 > ---
->  package/dbus/dbus.hash | 6 +++---
->  package/dbus/dbus.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Changes v1 -> v2:
+>   - fix ordering of packages list  (Ricardo)
+> ---
+>  support/docker/Dockerfile.fedora-32 | 48 +++++++++++++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 support/docker/Dockerfile.fedora-32
 > 
-> diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-> index 9529d2e04f..cfa06301f6 100644
-> --- a/package/dbus/dbus.hash
-> +++ b/package/dbus/dbus.hash
-> @@ -1,6 +1,6 @@
->  # Locally calculated after checking pgp signature
-> -# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.16.tar.gz.asc
-> +# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.18.tar.gz.asc
->  # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
-> -sha256	54a22d2fa42f2eb2a871f32811c6005b531b9613b1b93a0d269b05e7549fec80  dbus-1.12.16.tar.gz
-> +sha256  64cf4d70840230e5e9bc784d153880775ab3db19d656ead8a0cb9c0ab5a95306  dbus-1.12.18.tar.gz
->  # Locally calculated
-> -sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-> +sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-> index bb9f17a5e0..5c2a5fb2cc 100644
-> --- a/package/dbus/dbus.mk
-> +++ b/package/dbus/dbus.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DBUS_VERSION = 1.12.16
-> +DBUS_VERSION = 1.12.18
->  DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
->  DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
->  DBUS_LICENSE_FILES = COPYING
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/support/docker/Dockerfile.fedora-32 b/support/docker/Dockerfile.fedora-32
+> new file mode 100644
+> index 0000000000..85e5c4ba9c
+> --- /dev/null
+> +++ b/support/docker/Dockerfile.fedora-32
+> @@ -0,0 +1,48 @@
+> +# vi: ft=dockerfile
+> +# Note: this dockerfile is not reproducible, because the repository
+> +# where we fetch packages from is not pinned to a specific point in
+> +# time; i.e. we'll get whatever is current at the moment we build.
+> +
+> +FROM fedora:32
+> +
+> +LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+> +      vendor="Buildroot" \
+> +      description="Container based on Fedora 32, with everything needed to run Buildroot already installed"
+> +
+> +# Remove the repository with updates, so we only
+> +# get packages as they were at time of release.
+> +RUN rm -f /etc/yum.repos.d/fedora-updates*.repo && \
+> +    dnf -y install \
+> +        @development-tools \
+> +        bc \
+> +        bzip2 \
+> +        bzr \
+> +        cpio \
+> +        cvs \
+> +        file \
+> +        gcc-c++ \
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+In order to use x86 toolchains, we should install glibc.i686 package.
+
+> +        git \
+> +        mercurial \
+> +        ncurses-devel \
+> +        perl-ExtUtils-MakeMaker \
+> +        perl-Thread-Queue \
+
+> +        python-nose2 \> +        python-pexpect \
+
+There is no such python2 package but instead
+
+python3-nose2
+python3-pexpect
+
+
+> +        qemu-system-arm \
+> +        qemu-system-x86 \
+> +        rsync \
+> +        subversion \
+
+sudo ?
+
+> +        unzip \
+> +        wget \
+> +        which \
+> +    && dnf -y clean all
+> +
+> +RUN useradd -ms /bin/bash br-user && \
+> +    chown -R br-user:br-user /home/br-user && \
+> +    printf 'br-user ALL=NOPASSWD: /usr/bin/su -\n' >/etc/sudoers.d/br-user && \
+> +    chmod 0440 /etc/sudoers.d/br-user
+> +
+> +USER br-user
+> +WORKDIR /home/br-user
+> +ENV HOME /home/br-user
+> +ENV LC_ALL C.utf8
+> 
