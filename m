@@ -1,93 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 23:15:44 +0200
-Subject: [Buildroot] [PATCH v2] package/eigen: use cmake-package infra
-In-Reply-To: <20200614173754.702855-1-juju@cotds.org>
-References: <20200614173754.702855-1-juju@cotds.org>
-Message-ID: <20200614211544.GO2346@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sun, 14 Jun 2020 14:19:12 -0700
+Subject: [Buildroot] [PATCH 1/2] package/janus-gateway: bump to version
+ 0.10.1
+Message-ID: <20200614211913.646488-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On 2020-06-14 19:37 +0200, Julien Olivain spake thusly:
-> The eigen package was introduced as a generic package, but upstream was
-> in fact using CMake.
-> 
-> The motivation of this change is to fix package detection with CMake.
-> 
-> Eigen3 library normally installs a signature file named
-> "signature_of_eigen3_matrix_library" to help library detection:
-> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
-> 
-> The library also provide a CMake macro that use this file to
-> detect it:
-> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/cmake/FindEigen3.cmake#L76
-> 
-> Without the signature file installed, packages searching for this
-> library with this method will fail. Other packages usings pkg-config are
-> not affected by this issue.
-> 
-> By using the cmake-package infrastructure, all the needed files
-> are now installed, fixing this CMake detection issue.
-> 
-> Other changes in this patch:
-> - Updated the Eigen git repository to the new url:
->   https://gitlab.com/libeigen/eigen
-> - Removed all build and install staging commands
->   (now included in upstream cmake)
-> - Package needs EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
-> - Removed the BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES option,
->   as this option is not proposed by the upstream CMake
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ .../0002-Add-test-for-Wunused-but-set-variable.patch      | 8 ++++----
+ package/janus-gateway/janus-gateway.hash                  | 4 ++--
+ package/janus-gateway/janus-gateway.mk                    | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-    ... but they are unconditionally installed. A such, no need to
-    introduce a legacy entry for BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES:
-    users that had it enabled will still get the files installed, while
-    those that did not will get them installed now.
-
-> - Updated hash for source package
-
-... because the first component in the stored paths changed from
-eigen-eigen-323c052e1731/ to eigen-3.3.7/ and some mercurial related
-files (.hg_archival.txt, .hgtags) got dropped after the conversion to
-git.
-
-> - Reformat hash file with two spaces delimiters
-> - Define EIGEN_CONF_OPTS to set pkg-config .pc install path
-
-This one I am having a hard time with, see below...
-
-> Signed-off-by: Julien Olivain <juju@cotds.org>
-[--SNIP--]
-> +# Default Eigen CMake installs .pc file in
-> +# $(STAGING)/usr/share/pkgconfig
-> +# change it to lib/pkgconfig, to be consistent with other packages.
-> +EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR:PATH=lib/pkgconfig
-
-So this is a syntax that I am not familiar with.
-
-First, it uses a non-absolute path "lib/pkgconfig". This is strange to
-me. Second, it uses a variable with a colon PKGCONFIG_INSTALL_DIR:PATH,
-and I don't know that either.
-
-Yes, it works as expected, but I like to understand what's going on. Can
-you shed a light on this, please?
-
-I've tested -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig which is the
-usual way we're used to in Buildroot, and that works too.
-
-I'll wait for your feedback on the above, but I'd prefer we use the more
-traditional form unless there is a good reason not to.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
+index ac6b045078..c68d6b3b02 100644
+--- a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
++++ b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
+@@ -26,12 +26,12 @@ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+  create mode 100644 m4/ax_check_compile_flag.m4
+ 
+ diff --git a/Makefile.am b/Makefile.am
+-index c6e9ad2..42d256b 100644
++index f961fdb..3ddbe59 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+-@@ -140,6 +140,7 @@ janus_CFLAGS = \
+- 	-DTRANSPORTDIR=\"$(transportdir)\" \
++@@ -151,6 +151,7 @@ janus_CFLAGS = \
+  	-DEVENTDIR=\"$(eventdir)\" \
++ 	-DLOGGERDIR=\"$(loggerdir)\" \
+  	-DCONFDIR=\"$(confdir)\" \
+ +	@GCC_WARN_UNUSED_BUT_SET@ \
+  	$(BORINGSSL_CFLAGS) \
+@@ -60,7 +60,7 @@ index ca17a29..beef91a 100644
+ +		-Wunsafe-loop-optimizations"
+  esac
+  
+- JANUS_VERSION=63
++ JANUS_VERSION=101
+ diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
+ new file mode 100644
+ index 0000000..51df0c0
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index c61ffcd5b6..64af919519 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 b6829edaf25862fbf613e2c3d2be7cad29943c0bb1ea5d1b935a07abfee37245 janus-gateway-0.9.2.tar.gz
+-sha256 91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6 COPYING
++sha256  731760e6911908bc523815809487e51320a738f3533f267d4beb83eaa725de85  janus-gateway-0.10.1.tar.gz
++sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index bbc7f95ee1..0ecd83fce1 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = 0.9.2
++JANUS_GATEWAY_VERSION = 0.10.1
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
