@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 11:44:19 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/iwd: needs dbus (runtime)
-In-Reply-To: <20200612232433.18442-1-ps.report@gmx.net>
+Date: Sun, 14 Jun 2020 11:56:29 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
+ file
+In-Reply-To: <20200612232433.18442-2-ps.report@gmx.net>
 References: <20200612232433.18442-1-ps.report@gmx.net>
-Message-ID: <20200614094419.GI2346@scaer>
+ <20200612232433.18442-2-ps.report@gmx.net>
+Message-ID: <20200614095628.GJ2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +15,103 @@ To: buildroot@busybox.net
 Peter, All,
 
 On 2020-06-13 01:24 +0200, Peter Seiderer spake thusly:
-> Fixes (on startup):
+> Add basic /etc/iwd/main.conf configuration file to enable
+> network configuration (use built-in dhcp client).
 > 
->   $ usr/libexec/iwd
->   Wireless daemon version 1.7
->   Failed to initialize D-Bus
+> For the non systemd case select the openresolv package to
+> fulfill the iwd resolvconf requirement.
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/iwd/Config.in |  1 +
+>  package/iwd/iwd.mk    | 19 +++++++++++++++++++
+>  package/iwd/main.conf |  3 +++
+>  3 files changed, 23 insertions(+)
+>  create mode 100644 package/iwd/main.conf
+> 
+> diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+> index 4501017630..6d42cac35c 100644
+> --- a/package/iwd/Config.in
+> +++ b/package/iwd/Config.in
+> @@ -8,6 +8,7 @@ config BR2_PACKAGE_IWD
+>  	depends on BR2_USE_WCHAR # ell
+>  	select BR2_PACKAGE_DBUS # runtime
+>  	select BR2_PACKAGE_ELL
+> +	select BR2_PACKAGE_OPENRESOLV if !BR2_INIT_SYSTEMD
 
-Applied to master, after fixing two minor nits:
-  - move MMU dependency first
-  - split long line in comment dependencies
+I think this is preferable to use BR2_PACKAGE_SYSTEMD as the dependency,
+rather than BR2_INIT_SYSTEMD, even if the two are currently tightly
+intertwinned.
 
-Thanks.
+>  	help
+>  	  iNet Wireless daemon (iwd)
+>  
+> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+> index 32ff175933..d105d3b128 100644
+> --- a/package/iwd/iwd.mk
+> +++ b/package/iwd/iwd.mk
+> @@ -46,4 +46,23 @@ else
+>  IWD_CONF_OPTS += --disable-systemd-service
+>  endif
+>  
+> +define IWD_INSTALL_CONFIG_FILE
+> +	mkdir -p $(TARGET_DIR)/etc/iwd
+> +	$(INSTALL) -m 644 package/iwd/main.conf $(TARGET_DIR)/etc/iwd/main.conf
+> +endef
+> +
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> +	echo -e "[Network]\nNameResolvingService=systemd" >> $(TARGET_DIR)/etc/iwd/main.conf
+
+Do not use 'echo -e' but use printf. Also the line is too long:
+
+    printf '[Network]\nNameResolvingService=systemd\n' \
+        >>$(TARGET_DIR)/etc/iwd/main.conf
+
+However, this will not be working nicely on rebuilds, as it will keep
+appending this to the file. See below for a better approach (I think):
+
+Also, the condiotion on BR2_INIT_SYSTEMD is already handled by the
+infra, by using the appropriate INIT_INSTALL hooks:
+
+    define IWD_INSTALL_INIT_SYSV
+        sed -r -e '$s/$/\n[Network]\nNameResolvingService=resolvconf/' \
+            $(IWD_PKGDIR)main.conf \
+            >$(TARGET_DIR)/etc/iwd/main.conf
+    endef
+
+    define IWD_INSTALL_INIT_SYSTEMD
+        sed -r -e '$s/$/\n[Network]\nNameResolvingService=systemd/' \
+            $(IWD_PKGDIR)main.conf \
+            >$(TARGET_DIR)/etc/iwd/main.conf
+    endef
+
+> +endef
+> +else
+> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> +	echo -e "[Network]\nNameResolvingService=resolvconf" >> $(TARGET_DIR)/etc/iwd/main.conf
+> +endef
+> +endif
+> +
+> +IWD_POST_INSTALL_TARGET_HOOKS += \
+> +	IWD_INSTALL_CONFIG_FILE \
+> +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+
+And thus those post-install hooks are not longer required.
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Note:
->  - for an alternative iwd without dbus demand take a lookt at
->    https://github.com/dylanaraps/eiwd
-> ---
->  package/iwd/Config.in | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-> index eff24a8599..4501017630 100644
-> --- a/package/iwd/Config.in
-> +++ b/package/iwd/Config.in
-> @@ -1,16 +1,20 @@
->  config BR2_PACKAGE_IWD
->  	bool "iwd"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
-> +	depends on BR2_USE_MMU # dbus
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
->  	depends on !BR2_STATIC_LIBS # ell
->  	depends on BR2_USE_WCHAR # ell
-> +	select BR2_PACKAGE_DBUS # runtime
->  	select BR2_PACKAGE_ELL
->  	help
->  	  iNet Wireless daemon (iwd)
->  
->  	  https://iwd.wiki.kernel.org/
->  
-> -comment "iwd needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
-> +comment "iwd needs a toolchain w/ threads, dynamic library, wchar, headers >= 4.12"
-> +	depends on BR2_USE_MMU # dbus
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
-> -	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+>  $(eval $(autotools-package))
+> diff --git a/package/iwd/main.conf b/package/iwd/main.conf
+> new file mode 100644
+> index 0000000000..c26a50d302
+> --- /dev/null
+> +++ b/package/iwd/main.conf
+> @@ -0,0 +1,3 @@
+> +# use built-in dhcp client
+> +[General]
+> +EnableNetworkConfiguration=true
 > -- 
 > 2.26.2
 > 
