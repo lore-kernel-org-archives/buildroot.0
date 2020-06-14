@@ -1,75 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 09:23:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhttpserver: needs gcc >= 5
-In-Reply-To: <20200613195730.2028789-1-fontaine.fabrice@gmail.com>
-References: <20200613195730.2028789-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200614072322.GA2346@scaer>
+Date: Sun, 14 Jun 2020 09:28:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/eigen: fix package detection
+ with CMake
+In-Reply-To: <20200613161643.609929-1-juju@cotds.org>
+References: <20200613161643.609929-1-juju@cotds.org>
+Message-ID: <20200614072836.GB2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Julien, Matt, all,
 
-On 2020-06-13 21:57 +0200, Fabrice Fontaine spake thusly:
-> libhtpserver uses the following constructor since version 0.18.0 and
-> https://github.com/etr/libhttpserver/commit/9cdc90177e12902adf4063300fd688fcfdbe8168:
+On 2020-06-13 18:16 +0200, Julien Olivain spake thusly:
+> Eigen3 library normally installs a signature file named
+> "signature_of_eigen3_matrix_library" to help library detection:
+> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
 > 
-> http_request(http_request&& b) noexcept = default;
-> 
-> This raises the following build failure on gcc 4.8:
-> 
-> In file included from http_request.cpp:22:0:
-> httpserver/http_request.hpp:234:9: error: function 'httpserver::http_request::http_request(httpserver::http_request&&)' defaulted on its first declaration with an exception-specification that differs from the implicit declaration 'httpserver::http_request::http_request(httpserver::http_request&&)'
->          http_request(http_request&& b) noexcept = default;
->          ^
-> 
-> This build failure is due to the following gcc bug:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59526
-> 
-> Instead of adding BR2_TOOLCHAIN_HAS_GCC_BUG_59526, simply add a
-> dependency on gcc >= 5
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/18a29056e0191d9f23e1f9c6f72b13c07d03b300/
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> This Buildroot package does not use CMake for installing files, as only
+> the headers are needed in the STAGING_DIR. A generic-package is used
+> instead with simple copies.
 
-Applied to master, after slightly extending the comment (C++11 PR59526),
-and moving the dependency first (seems more logical than in the middle
-of other toolchain features).
-
-Thanks.
+Why can't we use the cmake-package infra, rahter than duplicate what
+upstream does?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/libhttpserver/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> The library also provide a CMake macro that use this file to
+> detect it:
+> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/cmake/FindEigen3.cmake#L76
 > 
-> diff --git a/package/libhttpserver/Config.in b/package/libhttpserver/Config.in
-> index 03715d0569..0261e866b4 100644
-> --- a/package/libhttpserver/Config.in
-> +++ b/package/libhttpserver/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_LIBHTTPSERVER
->  	bool "libhttpserver"
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_LIBMICROHTTPD
->  	help
-> @@ -11,5 +12,6 @@ config BR2_PACKAGE_LIBHTTPSERVER
->  
->  	  https://github.com/etr/libhttpserver
->  
-> -comment "libhttpserver needs a toolchain w/ C++, threads"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "libhttpserver needs a toolchain w/ C++, threads, gcc >= 5"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> Without the signature file installed, packages searching for this
+> library with this method will fail. Other packages usings pkg-config are
+> not affected by this issue.
+> 
+> This patch install the signature file at the expected path, to fix
+> detections.
+> 
+> Signed-off-by: Julien Olivain <juju@cotds.org>
+> ---
+>  package/eigen/eigen.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+> index 5c9e028442..68ffe84cb4 100644
+> --- a/package/eigen/eigen.mk
+> +++ b/package/eigen/eigen.mk
+> @@ -34,6 +34,7 @@ define EIGEN_INSTALL_STAGING_CMDS
+>  	$(RM) -r $(EIGEN_DEST_DIR)
+>  	mkdir -p $(EIGEN_DEST_DIR)
+>  	cp -a $(@D)/Eigen $(EIGEN_DEST_DIR)
+> +	cp -a $(@D)/signature_of_eigen3_matrix_library $(EIGEN_DEST_DIR)
+>  	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
+>  	$(INSTALL) -D -m 0644 $(@D)/eigen3.pc \
+>  		$(STAGING_DIR)/usr/lib/pkgconfig/eigen3.pc
 > -- 
 > 2.26.2
 > 
