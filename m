@@ -1,52 +1,159 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jun 2020 17:45:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pcsc-lite: bump to version 1.9.0
-Message-ID: <20200614154557.3415092-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 17:55:37 +0200
+Subject: [Buildroot] [PATCH 1/2] core.br2-external: fix reporting errors
+In-Reply-To: <05960843-2563-586e-2995-f7a1b6945a70@gmail.com>
+References: <cover.1590183628.git.yann.morin.1998@free.fr>
+ <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
+ <05960843-2563-586e-2995-f7a1b6945a70@gmail.com>
+Message-ID: <20200614155537.GW2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ChangeLog:
-- SCardEndTransaction(): greatly improve performances (x300)
-- tokenparser: accept any Unicode character in a reader name
-- Use /run instead of /var/run by default
-- Fix a memory leak from a polkit call
-- Some other minor improvements
+Romain, All,
 
-Also update indentation in hash file (two spaces)
+On 2020-06-14 17:33 +0200, Romain Naour spake thusly:
+> Le 22/05/2020 ? 23:40, Yann E. MORIN a ?crit?:
+> > When a br2-external tree has an issue, e.g. a missing file, or does not
+> > have a name, or the name uses invalid cahrs, we report that condition by
+> > setting the variable BR2_EXTERNAL_ERROR.
+> > 
+> > That variable is defined in the script support/scripts/br2-external,
+> > which outputs it on stdout, and checked by the Makefile.
+> > 
+> > Before d027cd75d09, stdout was explicitly redirected to the generated
+> > .mk file, with   exec >"${ofile}"   as the Makefile and Kconfig
+> > fragments were generated each with their own call to the script, and o
+> > the validation phase would emit the BR2_EXTERNAL_ERROR variable in the
+> > Makefile fragment.
+> > 
+> > But with d027cd75d09, both the Makefile and Kconfig fragmetns were now
+> > generated with a single call to the script, and as such the semantics of
+> > the scripts changed, and only each of the actual generators, do_mk and
+> > do_kconfig, ahd their out put redirected. Which left do_validate with
+> > the default stdout. Which would emit BR2_EXTERNAL_ERROR on stdout.
+> > 
+> > In turn, the stdout of the script would be interpreted by as part of the
+> > Makefile. But this does not end up very well when a br2-external tree
+> > indeed has an error:
+> > 
+> >     Makefile:184: *** multiple target patterns.  Stop.
+> 
+> When external.desc exist but empty, I get another error (I'm currently on master)
+> 
+> $ echo "" > support/testing/tests/download/br2-external/git-hash/external.desc
+> $ make BR2_EXTERNAL=$PWD/support/testing/tests/download/br2-external/git-hash/
+> menuconfig
+> 
+> Config.in:22: can't open file "output/.br2-external.in.paths"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pcsc-lite/pcsc-lite.hash | 6 +++---
- package/pcsc-lite/pcsc-lite.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Ah yeah, this one is also fixed! ;-)
 
-diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
-index 5df6a93582..08bc85b154 100644
---- a/package/pcsc-lite/pcsc-lite.hash
-+++ b/package/pcsc-lite/pcsc-lite.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 3eb7be7d6ef618c0a444316cf5c1f2f9d7227aedba7a192f389fe3e7c0dfbbd9  pcsc-lite-1.8.26.tar.bz2
--sha256 40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
-+sha256  0148d403137124552c5d0f10f8cdab2cbb8dfc7c6ce75e018faf667be34f2ef9  pcsc-lite-1.9.0.tar.bz2
-+sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index 96fa3f937a..c411e9c7ee 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCSC_LITE_VERSION = 1.8.26
-+PCSC_LITE_VERSION = 1.9.0
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
- PCSC_LITE_INSTALL_STAGING = YES
+> But Indeed, I get the same error when external.desc is missing.
+> 
+> 
+> Here is the error message displayed with the series applied:
+> 
+> case: missing external.desc
+> 
+>   does not have an 'external.desc'. See
+> https://buildroot.org/manual.html#br2-external-converting.
+> 
+> case: empty external.desc
+> 
+>   does not define the name.
+> 
+> While at it you can use MANUAL_URL in the error message when the external name
+> is missing.
+
+I disagree. The first test is for testing that an old br2-external, from
+before the multi-br2-external support, in which case we want to point
+the user to the manual for the conversion step.
+
+However, when external.desc exists, this is not a conversion, and the
+user is already aware of the requirements for external.desc; they just
+made a mistake and should just refer to the manual.
+
+> With that fixed(improved :p):
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> Tested-by: Romain Naour <romain.naour@gmail.com>
+
+Does that still stand with the patch as-is?
+
+> Also, it would be great to have some tests in the testsuite for such cases. It's
+> easy to make a mistake while adding a br2_external tree.
+
+As already shared on IRC, I hae a set of test-cases that I wrote back in
+the days I was working on multi-br2-external support:
+
+    https://git.buildroot.org/~ymorin/git/br2-external-tests/
+
+Feel free to grab those and turn them into actual tests in our testing
+infra! ;-)
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> Romain
+> 
+> 
+> > 
+> > So we must redirect the output of the validation step to the
+> > Makefile fragment.
+> > 
+> > Note that we don't need to append in do_mk, and we can do an overwrite
+> > redirection: if we go so far as to call do_mk, it means there was no
+> > error, and thus the fragment is empty.
+> > 
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > ---
+> >  support/scripts/br2-external | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+> > index 171526f8c8..fdea5aa251 100755
+> > --- a/support/scripts/br2-external
+> > +++ b/support/scripts/br2-external
+> > @@ -33,9 +33,8 @@ main() {
+> >      # Trap any unexpected error to generate a meaningful error message
+> >      trap "error 'unexpected error while generating ${ofile}\n'" ERR
+> >  
+> > -    do_validate ${@//:/ }
+> > -
+> >      mkdir -p "${outputdir}"
+> > +    do_validate "${outputdir}" ${@//:/ }
+> >      do_mk "${outputdir}"
+> >      do_kconfig "${outputdir}"
+> >  }
+> > @@ -51,7 +50,9 @@ main() {
+> >  # snippet means that there were no error.
+> >  #
+> >  do_validate() {
+> > +    local outputdir="${1}"
+> >      local br2_ext
+> > +    shift
+> >  
+> >      if [ ${#} -eq 0 ]; then
+> >          # No br2-external tree is valid
+> > @@ -60,7 +61,7 @@ do_validate() {
+> >  
+> >      for br2_ext in "${@}"; do
+> >          do_validate_one "${br2_ext}"
+> > -    done
+> > +    done >"${outputdir}/.br2-external.mk"
+> >  }
+> >  
+> >  do_validate_one() {
+> > 
+> 
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
