@@ -1,132 +1,109 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 14 Jun 2020 23:28:26 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 23:28:52 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/iwd: add basic configuration
  file
-In-Reply-To: <20200614205715.GN2346@scaer>
-References: <20200612232433.18442-1-ps.report@gmx.net>
- <20200612232433.18442-2-ps.report@gmx.net>
- <20200614095628.GJ2346@scaer> <20200614210740.0d39d95d@gmx.net>
- <20200614205715.GN2346@scaer>
-Message-ID: <20200614232826.146a5b79@gmx.net>
+In-Reply-To: <20200614202522.14975-1-ps.report@gmx.net>
+References: <20200614202522.14975-1-ps.report@gmx.net>
+Message-ID: <20200614212852.GP2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Peter, All,
 
-On Sun, 14 Jun 2020 22:57:15 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On 2020-06-14 22:25 +0200, Peter Seiderer spake thusly:
+> Add basic /etc/iwd/main.conf configuration file to enable
+> network configuration (use built-in dhcp client).
+> 
+> For the non systemd case select the openresolv package to
+> fulfill the iwd resolvconf requirement.
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - use printf insteadof echo (Yann E. MORIN)
 
-> On 2020-06-14 21:07 +0200, Peter Seiderer spake thusly:
-> > On Sun, 14 Jun 2020 11:56:29 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > On 2020-06-13 01:24 +0200, Peter Seiderer spake thusly:
-> [--SNIP--]
-> > > > +	select BR2_PACKAGE_OPENRESOLV if !BR2_INIT_SYSTEMD
-> > > I think this is preferable to use BR2_PACKAGE_SYSTEMD as the dependency,
-> > > rather than BR2_INIT_SYSTEMD, even if the two are currently tightly
-> > > intertwinned.
-> > I would prefer the !BR2_INIT_SYSTEMD as I believe iwd needs
-> > an service of the running systemd (or an alternative implementation)
-> > and not a feature/library of the systemd package (only runtime not
-> > a compile time dependency)...
->
-> I'm still not convinced...
->
-> What if one has:
->
->     BR2_INIT_SYSTEMD=y
->     # BR2_PACKAGE_SYSTEMD_RESOLVED is not set
->
-> Does systemd still provides resolv.conf?
->
-> I guess not. So in fact the dependency is really not about the init
-> system. but about a package that provides resolv.conf. In which case it
-> should be changed to:
->
->     select BR2_PACKAGE_OPENRESOLV if !BR2_PACKAGE_SYSTEMD_RESOLVED
+For the records, I'm still not happy with that patch, which did not
+really change since the vporevious iteration, and I have still some
+pending questions there, see thread starting at:
 
-Or:
-	select BR2_PACKAGE_OPENRESOLV if !BR2_INIT_SYSTEMD
-	select BR2_PACKAGE_SYSTEMD_RESOLVED if BR2_PACKAGE_SYSTEMD
->
-> Or did I miss something else?
->
-> [--SNIP--]
-> > > > +ifeq ($(BR2_INIT_SYSTEMD),y)
-> > > > +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> > > > +	echo -e "[Network]\nNameResolvingService=systemd" >> $(TARGET_DIR)/etc/iwd/main.conf
-> [--SNIP--]
-> > > However, this will not be working nicely on rebuilds, as it will keep
-> > > appending this to the file. See below for a better approach (I think):
-> > On re-builds the common IWD_INSTALL_CONFIG_FILE (copy plain main.conf will
-> > be executed first, so no problem...
->
-> Indeed, but still that's not obvious, as it splits the install of that
-> one file in two places: a generic one, and a per-init-system one.
->
-> > > Also, the condiotion on BR2_INIT_SYSTEMD is already handled by the
-> > > infra, by using the appropriate INIT_INSTALL hooks:
-> > >
-> > >     define IWD_INSTALL_INIT_SYSV
-> > >         sed -r -e '$s/$/\n[Network]\nNameResolvingService=resolvconf/' \
-> > >             $(IWD_PKGDIR)main.conf \
-> > >             >$(TARGET_DIR)/etc/iwd/main.conf
-> > >     endef
-> >
-> > Does not work, gives:
-> >
-> > 	sed: -e expression #1, char 46: missing command
->
-> This is Makefile, I forgot to duplicate the $ signs when copy-pasting
-> from my shell experiment...
->
-> > And did not figure out what would be the right sed exprecssion (the leading $
-> > seems to be wrong, but without another error occures)...
->
-> The leading $ means 'on the last line', so the replacement is only
-> attemped on the last line.
-
-Did not know this one, will test...
-
->
-> > >     define IWD_INSTALL_INIT_SYSTEMD
-> > >         sed -r -e '$s/$/\n[Network]\nNameResolvingService=systemd/' \
-> > >             $(IWD_PKGDIR)main.conf \
-> > >             >$(TARGET_DIR)/etc/iwd/main.conf
-> > >     endef
-> > Nice shortcut, but misses the enable-the-one-option-for-systemd and
-> > enable-the-other-option-for-all-other-init-systems...
->
-> Sorry, I don't follow you.
->
-> For systemd, only the IWD_INSTALL_INIT_SYSTEMD hook is run, and for the
-> others, only the IWD_INSTALL_INIT_SYSV hook is run. And each does append
-> a different NameResolvingService key, systemd in the first case,
-> resolvconf in the second case.
->
-> Ah, there is *one* case where the file would not be copied and expanded
-> with my proposal, when the user uses BR2_INIT_NONE. But this really is
-> the user's reponsibility to catter for the requirements of their init
-> system...
-
-And what is about the LIBFOO_INSTALL_INIT_OPENRC mentioned in [1]?
+    http://lists.busybox.net/pipermail/buildroot/2020-June/284664.html
 
 Regards,
-Peter
+Yann E. MORIN.
 
-[1] https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems
+> ---
+>  package/iwd/Config.in |  1 +
+>  package/iwd/iwd.mk    | 21 +++++++++++++++++++++
+>  package/iwd/main.conf |  3 +++
+>  3 files changed, 25 insertions(+)
+>  create mode 100644 package/iwd/main.conf
+> 
+> diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+> index ec53d13047..e02d946e79 100644
+> --- a/package/iwd/Config.in
+> +++ b/package/iwd/Config.in
+> @@ -8,6 +8,7 @@ config BR2_PACKAGE_IWD
+>  	depends on BR2_USE_WCHAR # ell
+>  	select BR2_PACKAGE_DBUS # runtime
+>  	select BR2_PACKAGE_ELL
+> +	select BR2_PACKAGE_OPENRESOLV if !BR2_INIT_SYSTEMD
+>  	help
+>  	  iNet Wireless daemon (iwd)
+>  
+> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+> index 32ff175933..d57b858ea1 100644
+> --- a/package/iwd/iwd.mk
+> +++ b/package/iwd/iwd.mk
+> @@ -46,4 +46,25 @@ else
+>  IWD_CONF_OPTS += --disable-systemd-service
+>  endif
+>  
+> +define IWD_INSTALL_CONFIG_FILE
+> +	mkdir -p $(TARGET_DIR)/etc/iwd
+> +	$(INSTALL) -m 644 package/iwd/main.conf $(TARGET_DIR)/etc/iwd/main.conf
+> +endef
+> +
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> +	print "[Network]\nNameResolvingService=systemd\n" \
+> +		>> $(TARGET_DIR)/etc/iwd/main.conf
+> +endef
+> +else
+> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> +	echo -e "[Network]\nNameResolvingService=resolvconf\n" \
+> +		>> $(TARGET_DIR)/etc/iwd/main.conf
+> +endef
+> +endif
+> +
+> +IWD_POST_INSTALL_TARGET_HOOKS += \
+> +	IWD_INSTALL_CONFIG_FILE \
+> +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/iwd/main.conf b/package/iwd/main.conf
+> new file mode 100644
+> index 0000000000..c26a50d302
+> --- /dev/null
+> +++ b/package/iwd/main.conf
+> @@ -0,0 +1,3 @@
+> +# use built-in dhcp client
+> +[General]
+> +EnableNetworkConfiguration=true
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
->
-> [--SNIP--]
-> > > > +IWD_POST_INSTALL_TARGET_HOOKS += \
-> > > > +	IWD_INSTALL_CONFIG_FILE \
-> > > > +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> > > And thus those post-install hooks are not longer required.
-> > Nice, but see downside above...
->
-> Except for BR2_INIT_NONE, I don't see the problem...
->
-> Regards,
-> Yann E. MORIN.
->
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
