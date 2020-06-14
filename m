@@ -1,119 +1,96 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 14 Jun 2020 21:22:24 +0200
-Subject: [Buildroot] [PATCH v1 3/3] package/iwd: add sysv init script
-In-Reply-To: <20200614100044.GK2346@scaer>
-References: <20200612232433.18442-1-ps.report@gmx.net>
- <20200612232433.18442-3-ps.report@gmx.net>
- <20200614100044.GK2346@scaer>
-Message-ID: <20200614212224.2796adc3@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 Jun 2020 21:29:45 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] support/docker: add new dockers
+ (branch yem/dockers)
+In-Reply-To: <cover.1589751688.git.yann.morin.1998@free.fr>
+References: <cover.1589751688.git.yann.morin.1998@free.fr>
+Message-ID: <d052609a-1d54-ee6c-257d-1792f1898de6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi Yann, Thomas,
 
-On Sun, 14 Jun 2020 12:00:44 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Le 17/05/2020 ? 23:41, Yann E. MORIN a ?crit?:
+> Hello All!
+> 
+> Enhance our docker support, update the existing image, add a new one.
+> 
+> This will help:
+> 
+>   - users, to get a build environment known to work,
+> 
+>   - developpers, to more easily reproduce build failures reported by
+>     users.
+> 
+> A basic set of a few, very various distros have been chosen, to cover
+> a range of diversity:
+> 
+>   - the existing, rock-solid Debian Stretch, pinned to a known state,
+>     that we use for the Gitlab-CI testing;
 
-> Peter, All,
->
-> On 2020-06-13 01:24 +0200, Peter Seiderer spake thusly:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  package/iwd/S40iwd | 30 ++++++++++++++++++++++++++++++
-> >  package/iwd/iwd.mk |  7 +++++++
-> >  2 files changed, 37 insertions(+)
-> >  create mode 100644 package/iwd/S40iwd
-> >
-> > diff --git a/package/iwd/S40iwd b/package/iwd/S40iwd
-> > new file mode 100644
-> > index 0000000000..4a720b43c2
-> > --- /dev/null
-> > +++ b/package/iwd/S40iwd
-> > @@ -0,0 +1,30 @@
-> > +#!/bin/sh
-> > +#
-> > +# Start iwd daemon
-> > +#
-> > +
-> > +# Create needed directories.
-> > +[ -d /tmp/iwd/hotspot ] || mkdir -p /tmp/iwd/hotspot
->
-> No need to test-and-create, as mkdir -p does that well for you already.
+This Docker image could be used by toolchain-builder project instead of
+reinstalling every time packages needed by Buildroot:
 
-Did copy from S30dbus...., will fix it...
+https://github.com/bootlin/toolchains-builder/blob/master/.gitlab-ci.yml.in
 
->
-> Is that script just about acting as a hotspot, then?
+Note: openssh-client is used to upload build artifacts and the toolchain archive
+to the Bootlin server. So we still need admin right to install some package.
 
-No (and did yet test only the client part), but iwd does not start up
-without a hotspot directory...
+Best regards,
+Romain
 
->
-> > +case "$1" in
-> > +    start)
-> > +	printf "Starting iwd:"
-> > +	/usr/libexec/iwd &
-> > +	echo "OK"
->
-> This script has a mix of leading spaces and TABs.
->
-> Don't mix (use spaces please! ;-] ).
-
-Arghh, still have no xterm which does the tab-copy right...and there
-are always some space/tabs I am missing...., will fix...
-
-
->
-> > +        ;;
-> > +    stop)
-> > +	printf "Stopping iwd:"
-> > +	killall iwd
->
-> Can't we use start-stop-daemon instead? See package/busybox/S01syslogd
-> as a template.
-
-O.k, will take a look at it...
-
-Regards,
-Peter
-
->
-> > +	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> > +        ;;
-> > +    restart|reload)
-> > +        "$0" stop
-> > +        "$0" start
-> > +        ;;
-> > +    *)
-> > +        echo "Usage: $0 {start|stop|restart|reload}"
-> > +	exit 1
-> > +        ;;
-> > +esac
-> > +
-> > +exit $?
-> > diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-> > index d105d3b128..285fef2fd8 100644
-> > --- a/package/iwd/iwd.mk
-> > +++ b/package/iwd/iwd.mk
-> > @@ -65,4 +65,11 @@ IWD_POST_INSTALL_TARGET_HOOKS += \
-> >  	IWD_INSTALL_CONFIG_FILE \
-> >  	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> >
-> > +define IWD_INSTALL_INIT_SYSV
-> > +	$(INSTALL) -m 0755 -D package/iwd/S40iwd \
-> > +		$(TARGET_DIR)/etc/init.d/S40iwd
-> > +	mkdir -p $(TARGET_DIR)/var/lib/iwd
-> > +	ln -sf /tmp/iwd/hotspot $(TARGET_DIR)/var/lib/iwd/hotspot
-> > +endef
-> > +
-> >  $(eval $(autotools-package))
-> > --
-> > 2.26.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+> 
+>   - Fedora-F32, a bleeding-edge mainstream distro, pinned to the state
+>     it was at release time;
+> 
+> More variants can be added later, depending on the demand.
+> 
+> Note: when this series is applied (if it is), I'll generate the images
+> and push them to the Buildroot repo on the Docker hub.
+> 
+> Changes v1 -> v2:
+>   - reorder patches to ensure bisectability  (Ricardo)
+>   - drop the Makefile rule in favour of a script
+>   - drop Arch and Alpine for now...
+> 
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+> The following changes since commit 53158e41fdd4bcc1272bbf4e61b68f58bf9c1527
+> 
+>   package/openocd: fix -fno-common build failure (2020-05-17 21:50:04 +0200)
+> 
+> 
+> are available in the git repository at:
+> 
+>   git://git.buildroot.org/~ymorin/git/buildroot.git
+> 
+> for you to fetch changes up to 48c45cb866a160ce4cc05b03fdf15237eb346b66
+> 
+>   support/docker: add a Fedore-32 based image (2020-05-17 23:31:36 +0200)
+> 
+> 
+> ----------------------------------------------------------------
+> Yann E. MORIN (4):
+>       support/docker: rename the Dockerfile and its accompanying file
+>       support/docker: add script to generate docker iamges
+>       support/docker: allow the br-user to becone root
+>       support/docker: add a Fedore-32 based image
+> 
+>  support/docker/Dockerfile.base                     |  1 +
+>  .../{Dockerfile => Dockerfile.debian-stretch}      | 12 ++++--
+>  support/docker/Dockerfile.fedora-32                | 48 ++++++++++++++++++++++
+>  support/docker/build-all                           | 17 ++++++++
+>  ...ources.list => debian-stretch.apt-sources.list} |  0
+>  5 files changed, 75 insertions(+), 3 deletions(-)
+>  create mode 120000 support/docker/Dockerfile.base
+>  rename support/docker/{Dockerfile => Dockerfile.debian-stretch} (80%)
+>  create mode 100644 support/docker/Dockerfile.fedora-32
+>  create mode 100755 support/docker/build-all
+>  rename support/docker/{apt-sources.list => debian-stretch.apt-sources.list} (100%)
+> 
