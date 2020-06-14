@@ -1,79 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 21:58:09 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/icu: needs gcc >= 4.9 and host gcc >= 4.9
-In-Reply-To: <20200614191948.413010-1-fontaine.fabrice@gmail.com>
-References: <20200614191948.413010-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200614195809.GJ2346@scaer>
+Date: Sun, 14 Jun 2020 21:59:41 +0200
+Subject: [Buildroot] [git commit] package/boost: drop first patch
+Message-ID: <20200614195841.10037815B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b509bddbc63d958de4bfd6cb80205268b42efca4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-14 21:19 +0200, Fabrice Fontaine spake thusly:
-> icu uses std::max_align_t since version 67-1 and
-> https://github.com/unicode-org/icu/commit/a3078fb8c89b61c35ccebb04cf6b189bc81093b3
-> 
-> This raises the following build failure with gcc 4.8:
-> 
-> utext.cpp:572:5: error: 'max_align_t' in namespace 'std' does not name a type
->      std::max_align_t    extension;
->      ^
-> 
-> This build failure is due to GCC bug 56019:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56019
-> 
-> Instead of adding BR2_TOOLCHAIN_HAS_GCC_BUG_56019, just bumps gcc
-> dependency from 4.8 to 4.9
-> 
-> As this issue also affects host-icu, add Config.in.host with a
-> host gcc >= 4.9 dependency
+First patch is not needed since version 1.67.0 and
+https://github.com/boostorg/locale/commit/90dd8146fbb01fd0a1b0473ad5a5d28644b65e87
 
-You don;t need to add this hos symbol. Only icu depends on host-icu, so
-just have icu bear the two depends.
+Indeed, since this bump, the patch is wrongly patching
+virtual string_type format(double value,size_t &code_points) const
 
-Besides, you forgot soemthing, see below...
+instead of:
+virtual string_type format(int64_t value,size_t &code_points) const
 
-[--SNIP--]
-> diff --git a/package/icu/Config.in b/package/icu/Config.in
-> index 32f35b9d96..1b792de5ba 100644
-> --- a/package/icu/Config.in
-> +++ b/package/icu/Config.in
-> @@ -1,13 +1,15 @@
->  config BR2_PACKAGE_ICU
->  	bool "icu"
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-icu
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_USE_WCHAR
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11 PR56019
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	# icu does some funky things by generating by itself an ELF
->  	# file, and it cannot easily be changed to generate FLAT
->  	# format.
->  	depends on !BR2_BINFMT_FLAT
-> +	select BR2_PACKAGE_HOST_ICU
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...fix-ambiguous-format-call-on-64bit-builds.patch | 27 ----------------------
+ ...eventfd.patch => 0001-fix-uclibc-eventfd.patch} |  0
+ package/boost/{0003-fenv.patch => 0002-fenv.patch} |  0
+ 3 files changed, 27 deletions(-)
 
-You select BR2_PACKAGE_HOST_ICU, but you forgot to propagate its
-dependency on BR2_HOST_GCC_AT_LEAST_4_9.
-
-However, as I said, you don't need to introduce BR2_PACKAGE_HOST_ICU.
-Just have BR2_PACKAGE_ICU carry the two dependencies:
-
-    config BR2_PACKAGE_ICU
-        depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11 PR56019
-        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11 PR56019
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/boost/0001-fix-ambiguous-format-call-on-64bit-builds.patch b/package/boost/0001-fix-ambiguous-format-call-on-64bit-builds.patch
+deleted file mode 100644
+index e8972fd726..0000000000
+--- a/package/boost/0001-fix-ambiguous-format-call-on-64bit-builds.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-boost: fix ambiguous format call on 64-bit builds
+-
+-Fixes problem:
+-
+-libs/locale/src/icu/formatter.cpp: In member function
+-'virtual std::basic_string<_CharT, std::char_traits<_CharT>, std::allocator<_CharT> > boost::locale::impl_icu::number_format<CharType>::format(boost::int64_t, size_t&) const':
+-libs/locale/src/icu/formatter.cpp:61: error: call of overloaded 'format(boost::int64_t&, icu_49::UnicodeString&)' is ambiguous
+-/ec/include/unicode/numfmt.h:317: note: candidates are: icu_49::UnicodeString& icu_49::NumberFormat::format(double, icu_49::UnicodeString&) const
+-/ec/include/unicode/numfmt.h:330: note:                 icu_49::UnicodeString& icu_49::NumberFormat::format(int32_t, icu_49::UnicodeString&) const
+-/ec/include/unicode/numfmt.h:343: note:                 icu_49::UnicodeString& icu_49::NumberFormat::format(int64_t, icu_49::UnicodeString&) const
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-Backported-from: https://svn.boost.org/trac/boost/ticket/6851
+-
+-
+-diff -ruN boost_1_49_0.orig/libs/locale/src/icu/formatter.cpp boost_1_49_0/libs/locale/src/icu/formatter.cpp
+---- boost_1_49_0.orig/libs/locale/src/icu/formatter.cpp 2011-07-12 14:57:36.000000000 +0100
+-+++ boost_1_49_0/libs/locale/src/icu/formatter.cpp      2012-05-01 14:27:54.000000000 +0100
+-@@ -58,7 +58,7 @@
+-             virtual string_type format(int64_t value,size_t &code_points) const
+-             {
+-                 icu::UnicodeString tmp;
+--                icu_fmt_->format(value,tmp);
+-+                icu_fmt_->format(::int64_t(value),tmp);
+-                 code_points=tmp.countChar32();
+-                 return cvt_.std(tmp);
+-             }
+diff --git a/package/boost/0002-fix-uclibc-eventfd.patch b/package/boost/0001-fix-uclibc-eventfd.patch
+similarity index 100%
+rename from package/boost/0002-fix-uclibc-eventfd.patch
+rename to package/boost/0001-fix-uclibc-eventfd.patch
+diff --git a/package/boost/0003-fenv.patch b/package/boost/0002-fenv.patch
+similarity index 100%
+rename from package/boost/0003-fenv.patch
+rename to package/boost/0002-fenv.patch
