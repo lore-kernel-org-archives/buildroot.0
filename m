@@ -1,66 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 18:29:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libzip: bump to version 1.7.1
-In-Reply-To: <1592055093-4172-1-git-send-email-pjtexier@koncepto.io>
-References: <1592055093-4172-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20200614162954.GD2346@scaer>
+Date: Sun, 14 Jun 2020 18:30:32 +0200
+Subject: [Buildroot] [git commit] package/php: bump version to 7.4.7
+Message-ID: <20200614163044.08CF27FD51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pierre-Jean, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=759ed1039552bf79275bf000b89227a7f2cc8040
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-13 15:31 +0200, Pierre-Jean Texier spake thusly:
-> See https://github.com/nih-at/libzip/releases
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.7
 
-Applied to master, thanks.
+Contrary to the release notification on the mailinglist
+https://news-web.php.net/php.announce/287
+which declares this release as "security bug fix release" no CVE IDs
+could be found on the bugtracker entries mentioned in the Changelog.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  package/libzip/libzip.hash | 2 +-
->  package/libzip/libzip.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
-> index af4c9db..1ca4828 100644
-> --- a/package/libzip/libzip.hash
-> +++ b/package/libzip/libzip.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  705dac7a671b3f440181481e607b0908129a9cf1ddfcba75d66436c0e7d33641  libzip-1.6.1.tar.xz
-> +sha256  a020dc1b17a79faa748e43a05f8605d65e403813e8e97ad3a300a90ddba097ac  libzip-1.7.1.tar.xz
->  sha256  af6d9141427cf40b7d1fa6d7f5473b06a7faa9f9b0a2ea588eb6ba7b2e1c8a9e  LICENSE
-> diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-> index f021e06..c30ad03 100644
-> --- a/package/libzip/libzip.mk
-> +++ b/package/libzip/libzip.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBZIP_VERSION = 1.6.1
-> +LIBZIP_VERSION = 1.7.1
->  LIBZIP_SITE = https://libzip.org/download
->  LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
->  LIBZIP_LICENSE = BSD-3-Clause
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 0267375f6e..9789a99988 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  d740322f84f63019622b9f369d64ea5ab676547d2bdcf12be77a5a4cffd06832  php-7.4.6.tar.xz
++sha256  53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf  php-7.4.7.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 73be57a8a1..ed71404c7b 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.6
++PHP_VERSION = 7.4.7
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
