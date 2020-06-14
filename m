@@ -1,88 +1,119 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jun 2020 22:52:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xvkbd: bump to version 4.1
-Message-ID: <20200614205231.893919-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 22:57:15 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
+ file
+In-Reply-To: <20200614210740.0d39d95d@gmx.net>
+References: <20200612232433.18442-1-ps.report@gmx.net>
+ <20200612232433.18442-2-ps.report@gmx.net>
+ <20200614095628.GJ2346@scaer> <20200614210740.0d39d95d@gmx.net>
+Message-ID: <20200614205715.GN2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version) and so autoreconf
-- Update hash of README (update in year, version, miscellaneous
-  information)
-- Update indentaton in hash file (two spaces)
+On 2020-06-14 21:07 +0200, Peter Seiderer spake thusly:
+> On Sun, 14 Jun 2020 11:56:29 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > On 2020-06-13 01:24 +0200, Peter Seiderer spake thusly:
+[--SNIP--]
+> > > +	select BR2_PACKAGE_OPENRESOLV if !BR2_INIT_SYSTEMD
+> > I think this is preferable to use BR2_PACKAGE_SYSTEMD as the dependency,
+> > rather than BR2_INIT_SYSTEMD, even if the two are currently tightly
+> > intertwinned.
+> I would prefer the !BR2_INIT_SYSTEMD as I believe iwd needs
+> an service of the running systemd (or an alternative implementation)
+> and not a feature/library of the systemd package (only runtime not
+> a compile time dependency)...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...01-Makefile-am-fix-install-data-hook.patch | 27 -------------------
- package/xvkbd/xvkbd.hash                      |  6 ++---
- package/xvkbd/xvkbd.mk                        |  4 +--
- 3 files changed, 4 insertions(+), 33 deletions(-)
- delete mode 100644 package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
+I'm still not convinced...
 
-diff --git a/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch b/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
-deleted file mode 100644
-index b275760de1..0000000000
---- a/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Makefile.am: fix install-data-hook
--
--- Prefix $(appdefaultdir) and $(datarootdir) with $(DESTDIR) to allow
--  cross-compilation
--- Create $(DESTDIR)$(appdefaultdir) if it doesn't exist
--
--Upstream status: sent to Tom Sato <VEF00200@nifty.com>
--
--diff -Nuar xvkbd-4.0-orig/Makefile.am xvkbd-4.0/Makefile.am
----- xvkbd-4.0-orig/Makefile.am	2019-10-06 11:27:13.692243604 +0200
--+++ xvkbd-4.0/Makefile.am	2019-10-06 11:35:15.872263440 +0200
--@@ -17,11 +17,12 @@
-- 	[ which ad2c > /dev/null ] || ad2c XVkbd-common.ad > XVkbd-common.h
-- 
-- install-data-hook:
--+	[ -d $(DESTDIR)$(appdefaultdir) ] || mkdir $(DESTDIR)$(appdefaultdir)
-- 	for file in *.ad; do \
---		$(INSTALL_DATA) $$file $(appdefaultdir)/$${file%.ad}; \
--+		$(INSTALL_DATA) $$file $(DESTDIR)$(appdefaultdir)/$${file%.ad}; \
-- 	done
---	[ -d $(datarootdir)/xvkbd/ ] || mkdir $(datarootdir)/xvkbd/
---	$(INSTALL_DATA) words.english $(datarootdir)/xvkbd/words.english
--+	[ -d $(DESTDIR)$(datarootdir)/xvkbd/ ] || mkdir $(DESTDIR)$(datarootdir)/xvkbd/
--+	$(INSTALL_DATA) words.english $(DESTDIR)$(datarootdir)/xvkbd/words.english
-- 
-- EXTRA_DIST = XVkbd-common.h *.ad *.xbm xvkbd.man README ChangeLog Imakefile words.english
-- 
-diff --git a/package/xvkbd/xvkbd.hash b/package/xvkbd/xvkbd.hash
-index dd6ed79b93..8f13ab7c50 100644
---- a/package/xvkbd/xvkbd.hash
-+++ b/package/xvkbd/xvkbd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	eb54e440badc40299ba9a8f27fcea740cd3501310e8955651af7ade517a3ac82	xvkbd-4.0.tar.gz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
--sha256	af0d9b39a91d2779e9758d8dacc24d466bea124c1d401687bddc48543516cd68	README
-+sha256  952d07df0fe1e45286520b7c98b4fd00fd60dbf3e3e8ff61e12c259f76a3bef4  xvkbd-4.1.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  5dada320d6b4fb7c76ef110a027b019feaf1149576acf7ac5cacf0d0dcdc3671  README
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index 1d056c1c4c..f65c02bc06 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
- 
--XVKBD_VERSION = 4.0
-+XVKBD_VERSION = 4.1
- XVKBD_SITE = http://t-sato.in.coocan.jp/xvkbd
- XVKBD_LICENSE = GPL-2.0+
- XVKBD_LICENSE_FILES = COPYING README
--# We're patching Makefile.am
--XVKBD_AUTORECONF = YES
- 
- XVKBD_DEPENDENCIES = \
- 	xlib_libICE \
+What if one has:
+
+    BR2_INIT_SYSTEMD=y
+    # BR2_PACKAGE_SYSTEMD_RESOLVED is not set
+
+Does systemd still provides resolv.conf?
+
+I guess not. So in fact the dependency is really not about the init
+system. but about a package that provides resolv.conf. In which case it
+should be changed to:
+
+    select BR2_PACKAGE_OPENRESOLV if !BR2_PACKAGE_SYSTEMD_RESOLVED
+
+Or did I miss something else?
+
+[--SNIP--]
+> > > +ifeq ($(BR2_INIT_SYSTEMD),y)
+> > > +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> > > +	echo -e "[Network]\nNameResolvingService=systemd" >> $(TARGET_DIR)/etc/iwd/main.conf
+[--SNIP--]
+> > However, this will not be working nicely on rebuilds, as it will keep
+> > appending this to the file. See below for a better approach (I think):
+> On re-builds the common IWD_INSTALL_CONFIG_FILE (copy plain main.conf will
+> be executed first, so no problem...
+
+Indeed, but still that's not obvious, as it splits the install of that
+one file in two places: a generic one, and a per-init-system one.
+
+> > Also, the condiotion on BR2_INIT_SYSTEMD is already handled by the
+> > infra, by using the appropriate INIT_INSTALL hooks:
+> >
+> >     define IWD_INSTALL_INIT_SYSV
+> >         sed -r -e '$s/$/\n[Network]\nNameResolvingService=resolvconf/' \
+> >             $(IWD_PKGDIR)main.conf \
+> >             >$(TARGET_DIR)/etc/iwd/main.conf
+> >     endef
+> 
+> Does not work, gives:
+> 
+> 	sed: -e expression #1, char 46: missing command
+
+This is Makefile, I forgot to duplicate the $ signs when copy-pasting
+from my shell experiment...
+
+> And did not figure out what would be the right sed exprecssion (the leading $
+> seems to be wrong, but without another error occures)...
+
+The leading $ means 'on the last line', so the replacement is only
+attemped on the last line.
+
+> >     define IWD_INSTALL_INIT_SYSTEMD
+> >         sed -r -e '$s/$/\n[Network]\nNameResolvingService=systemd/' \
+> >             $(IWD_PKGDIR)main.conf \
+> >             >$(TARGET_DIR)/etc/iwd/main.conf
+> >     endef
+> Nice shortcut, but misses the enable-the-one-option-for-systemd and
+> enable-the-other-option-for-all-other-init-systems...
+
+Sorry, I don't follow you.
+
+For systemd, only the IWD_INSTALL_INIT_SYSTEMD hook is run, and for the
+others, only the IWD_INSTALL_INIT_SYSV hook is run. And each does append
+a different NameResolvingService key, systemd in the first case,
+resolvconf in the second case.
+
+Ah, there is *one* case where the file would not be copied and expanded
+with my proposal, when the user uses BR2_INIT_NONE. But this really is
+the user's reponsibility to catter for the requirements of their init
+system...
+
+[--SNIP--]
+> > > +IWD_POST_INSTALL_TARGET_HOOKS += \
+> > > +	IWD_INSTALL_CONFIG_FILE \
+> > > +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> > And thus those post-install hooks are not longer required.
+> Nice, but see downside above...
+
+Except for BR2_INIT_NONE, I don't see the problem...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
