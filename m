@@ -1,347 +1,268 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jun 2020 18:55:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linux-pam: fix build on musl
-Message-ID: <20200614165549.378645-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 19:02:05 +0200
+Subject: [Buildroot] [PATCH v3] package/libcamera: bump version to
+ 96fab38
+In-Reply-To: <e96772e7-eec4-1b04-6889-1a11a05c4225@ideasonboard.com>
+References: <20200611094228.14887-1-ps.report@gmx.net>
+ <e96772e7-eec4-1b04-6889-1a11a05c4225@ideasonboard.com>
+Message-ID: <20200614170205.GH2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/2e634e22583f1f54cd4aff4d22942a3bcf4951a2
+Kieran, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../linux-pam/0002-fix-build-on-musl.patch    | 320 ++++++++++++++++++
- 1 file changed, 320 insertions(+)
- create mode 100644 package/linux-pam/0002-fix-build-on-musl.patch
+On 2020-06-11 11:18 +0100, Kieran Bingham spake thusly:
+> On 11/06/2020 10:42, Peter Seiderer wrote:
+> > - add host dependencies: openssl, pkgconf, python3-pyyaml
+> > - add dependencies: gnutls
+> > - changed from mandatory to optional dependency: udev
+> > - add dedicated pipeline configure options
+> > - add optional dependencies: boost, gstreamer1/gst1-plugins-base,
+> >   qt5base, tiff
+> > - update license info (Apache-2.0 omitted - applies only for android code)
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - re-add LIBCAMERA_LICENSE_FILES list (Kieran Bingham)
+> >   - fix typo in commit message (Kieran Bingham)
+> >   - add Reviewed-by from Kieran Bingham
+> 
+> You could actually add this to the patch :-)
+> 
+>   Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
-diff --git a/package/linux-pam/0002-fix-build-on-musl.patch b/package/linux-pam/0002-fix-build-on-musl.patch
-new file mode 100644
-index 0000000000..44fceccc88
---- /dev/null
-+++ b/package/linux-pam/0002-fix-build-on-musl.patch
-@@ -0,0 +1,320 @@
-+From 295bf7403364b23ab03287ecdd95ea266d6f4d89 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Jun 2020 17:39:03 +0200
-+Subject: [PATCH] fix build on musl
-+
-+Rename check_user_in_passwd from pam_localuser.c to
-+pam_modutil_check_user_in_passwd and use it in pam_faillock.c instead of
-+fgetpwent_r which is not available on musl
-+
-+Fix #236
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0432736ffee376dd84757469434a4bbcfdcdaf4b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/linux-pam/linux-pam/pull/237]
-+---
-+ libpam/Makefile.am                        |  1 +
-+ libpam/include/security/pam_modutil.h     |  5 ++
-+ libpam/libpam.map                         |  5 ++
-+ libpam/pam_modutil_check_user_in_passwd.c | 89 +++++++++++++++++++++++
-+ modules/pam_faillock/pam_faillock.c       | 37 +---------
-+ modules/pam_localuser/pam_localuser.c     | 86 +---------------------
-+ 6 files changed, 103 insertions(+), 120 deletions(-)
-+ create mode 100644 libpam/pam_modutil_check_user_in_passwd.c
-+
-+diff --git a/libpam/Makefile.am b/libpam/Makefile.am
-+index 9252a837..a8fc428d 100644
-+--- a/libpam/Makefile.am
-++++ b/libpam/Makefile.am
-+@@ -35,6 +35,7 @@ libpam_la_SOURCES = pam_account.c pam_auth.c pam_data.c pam_delay.c \
-+ 	pam_misc.c pam_password.c pam_prelude.c \
-+ 	pam_session.c pam_start.c pam_strerror.c \
-+ 	pam_vprompt.c pam_syslog.c pam_dynamic.c pam_audit.c \
-++	pam_modutil_check_user_in_passwd.c \
-+ 	pam_modutil_cleanup.c pam_modutil_getpwnam.c pam_modutil_ioloop.c \
-+ 	pam_modutil_getgrgid.c pam_modutil_getpwuid.c pam_modutil_getgrnam.c \
-+ 	pam_modutil_getspnam.c pam_modutil_getlogin.c pam_modutil_ingroup.c \
-+diff --git a/libpam/include/security/pam_modutil.h b/libpam/include/security/pam_modutil.h
-+index 3a6aec6a..33f87b90 100644
-+--- a/libpam/include/security/pam_modutil.h
-++++ b/libpam/include/security/pam_modutil.h
-+@@ -58,6 +58,11 @@ extern "C" {
-+ 
-+ #include <security/_pam_types.h>
-+ 
-++extern int PAM_NONNULL((1,2))
-++pam_modutil_check_user_in_passwd(pam_handle_t *pamh,
-++                                 const char *user_name,
-++                                 const char *file_name);
-++
-+ extern struct passwd * PAM_NONNULL((1,2))
-+ pam_modutil_getpwnam(pam_handle_t *pamh, const char *user);
-+ 
-+diff --git a/libpam/libpam.map b/libpam/libpam.map
-+index c9690a91..3cc7ef35 100644
-+--- a/libpam/libpam.map
-++++ b/libpam/libpam.map
-+@@ -82,3 +82,8 @@ LIBPAM_1.4 {
-+   global:
-+     pam_start_confdir;
-+ } LIBPAM_1.0;
-++
-++LIBPAM_MODUTIL_1.4.1 {
-++  global:
-++    pam_modutil_check_user_in_passwd;
-++} LIBPAM_MODUTIL_1.3.2;
-+diff --git a/libpam/pam_modutil_check_user_in_passwd.c b/libpam/pam_modutil_check_user_in_passwd.c
-+new file mode 100644
-+index 00000000..b998aa25
-+--- /dev/null
-++++ b/libpam/pam_modutil_check_user_in_passwd.c
-+@@ -0,0 +1,89 @@
-++#include "pam_modutil_private.h"
-++#include <security/pam_ext.h>
-++
-++#include <stdio.h>
-++#include <syslog.h>
-++
-++int
-++pam_modutil_check_user_in_passwd(pam_handle_t *pamh,
-++                                 const char *user_name,
-++                                 const char *file_name)
-++{
-++	int rc;
-++	size_t user_len;
-++	FILE *fp;
-++	char line[BUFSIZ];
-++
-++	/* Validate the user name.  */
-++	if ((user_len = strlen(user_name)) == 0) {
-++		pam_syslog(pamh, LOG_NOTICE, "user name is not valid");
-++		return PAM_SERVICE_ERR;
-++	}
-++
-++	if (user_len > sizeof(line) - sizeof(":")) {
-++		pam_syslog(pamh, LOG_NOTICE, "user name is too long");
-++		return PAM_SERVICE_ERR;
-++	}
-++
-++	if (strchr(user_name, ':') != NULL) {
-++		/*
-++		 * "root:x" is not a local user name even if the passwd file
-++		 * contains a line starting with "root:x:".
-++		 */
-++		return PAM_PERM_DENIED;
-++	}
-++
-++	/* Open the passwd file.  */
-++	if (file_name == NULL) {
-++		file_name = "/etc/passwd";
-++	}
-++	if ((fp = fopen(file_name, "r")) == NULL) {
-++		pam_syslog(pamh, LOG_ERR, "error opening %s: %m", file_name);
-++		return PAM_SERVICE_ERR;
-++	}
-++
-++	/*
-++	 * Scan the file using fgets() instead of fgetpwent_r() because
-++	 * the latter is not flexible enough in handling long lines
-++	 * in passwd files.
-++	 */
-++	rc = PAM_PERM_DENIED;
-++	while (fgets(line, sizeof(line), fp) != NULL) {
-++		size_t line_len;
-++		const char *str;
-++
-++		/*
-++		 * Does this line start with the user name
-++		 * followed by a colon?
-++		 */
-++		if (strncmp(user_name, line, user_len) == 0 &&
-++		    line[user_len] == ':') {
-++			rc = PAM_SUCCESS;
-++			break;
-++		}
-++		/* Has a newline been read?  */
-++		line_len = strlen(line);
-++		if (line_len < sizeof(line) - 1 ||
-++		    line[line_len - 1] == '\n') {
-++			/* Yes, continue with the next line.  */
-++			continue;
-++		}
-++
-++		/* No, read till the end of this line first.  */
-++		while ((str = fgets(line, sizeof(line), fp)) != NULL) {
-++			line_len = strlen(line);
-++			if (line_len == 0 ||
-++			    line[line_len - 1] == '\n') {
-++				break;
-++			}
-++		}
-++		if (str == NULL) {
-++			/* fgets returned NULL, we are done.  */
-++			break;
-++		}
-++		/* Continue with the next line.  */
-++	}
-++
-++	fclose(fp);
-++	return rc;
-++}
-+diff --git a/modules/pam_faillock/pam_faillock.c b/modules/pam_faillock/pam_faillock.c
-+index f592d0a2..8bca46ca 100644
-+--- a/modules/pam_faillock/pam_faillock.c
-++++ b/modules/pam_faillock/pam_faillock.c
-+@@ -348,42 +348,7 @@ set_conf_opt(pam_handle_t *pamh, struct options *opts, const char *name, const c
-+ static int
-+ check_local_user (pam_handle_t *pamh, const char *user)
-+ {
-+-	struct passwd pw, *pwp;
-+-	char buf[16384];
-+-	int found = 0;
-+-	FILE *fp;
-+-	int errn;
-+-
-+-	fp = fopen(PATH_PASSWD, "r");
-+-	if (fp == NULL) {
-+-		pam_syslog(pamh, LOG_ERR, "unable to open %s: %m",
-+-			   PATH_PASSWD);
-+-		return -1;
-+-	}
-+-
-+-	for (;;) {
-+-		errn = fgetpwent_r(fp, &pw, buf, sizeof (buf), &pwp);
-+-		if (errn == ERANGE) {
-+-			pam_syslog(pamh, LOG_WARNING, "%s contains very long lines; corrupted?",
-+-				   PATH_PASSWD);
-+-			break;
-+-		}
-+-		if (errn != 0)
-+-			break;
-+-		if (strcmp(pwp->pw_name, user) == 0) {
-+-			found = 1;
-+-			break;
-+-		}
-+-	}
-+-
-+-	fclose (fp);
-+-
-+-	if (errn != 0 && errn != ENOENT) {
-+-		pam_syslog(pamh, LOG_ERR, "unable to enumerate local accounts: %m");
-+-		return -1;
-+-	} else {
-+-		return found;
-+-	}
-++	return pam_modutil_check_user_in_passwd(pamh, user, NULL);
-+ }
-+ 
-+ static int
-+diff --git a/modules/pam_localuser/pam_localuser.c b/modules/pam_localuser/pam_localuser.c
-+index cb507524..a9f2233c 100644
-+--- a/modules/pam_localuser/pam_localuser.c
-++++ b/modules/pam_localuser/pam_localuser.c
-+@@ -45,92 +45,10 @@
-+ #include <unistd.h>
-+ 
-+ #include <security/pam_modules.h>
-++#include <security/pam_modutil.h>
-+ #include <security/pam_ext.h>
-+ #include "pam_inline.h"
-+ 
-+-static int
-+-check_user_in_passwd(pam_handle_t *pamh, const char *user_name,
-+-		     const char *file_name)
-+-{
-+-	int rc;
-+-	size_t user_len;
-+-	FILE *fp;
-+-	char line[BUFSIZ];
-+-
-+-	/* Validate the user name.  */
-+-	if ((user_len = strlen(user_name)) == 0) {
-+-		pam_syslog(pamh, LOG_NOTICE, "user name is not valid");
-+-		return PAM_SERVICE_ERR;
-+-	}
-+-
-+-	if (user_len > sizeof(line) - sizeof(":")) {
-+-		pam_syslog(pamh, LOG_NOTICE, "user name is too long");
-+-		return PAM_SERVICE_ERR;
-+-	}
-+-
-+-	if (strchr(user_name, ':') != NULL) {
-+-		/*
-+-		 * "root:x" is not a local user name even if the passwd file
-+-		 * contains a line starting with "root:x:".
-+-		 */
-+-		return PAM_PERM_DENIED;
-+-	}
-+-
-+-	/* Open the passwd file.  */
-+-	if (file_name == NULL) {
-+-		file_name = "/etc/passwd";
-+-	}
-+-	if ((fp = fopen(file_name, "r")) == NULL) {
-+-		pam_syslog(pamh, LOG_ERR, "error opening %s: %m", file_name);
-+-		return PAM_SERVICE_ERR;
-+-	}
-+-
-+-	/*
-+-	 * Scan the file using fgets() instead of fgetpwent_r() because
-+-	 * the latter is not flexible enough in handling long lines
-+-	 * in passwd files.
-+-	 */
-+-	rc = PAM_PERM_DENIED;
-+-	while (fgets(line, sizeof(line), fp) != NULL) {
-+-		size_t line_len;
-+-		const char *str;
-+-
-+-		/*
-+-		 * Does this line start with the user name
-+-		 * followed by a colon?
-+-		 */
-+-		if (strncmp(user_name, line, user_len) == 0 &&
-+-		    line[user_len] == ':') {
-+-			rc = PAM_SUCCESS;
-+-			break;
-+-		}
-+-		/* Has a newline been read?  */
-+-		line_len = strlen(line);
-+-		if (line_len < sizeof(line) - 1 ||
-+-		    line[line_len - 1] == '\n') {
-+-			/* Yes, continue with the next line.  */
-+-			continue;
-+-		}
-+-
-+-		/* No, read till the end of this line first.  */
-+-		while ((str = fgets(line, sizeof(line), fp)) != NULL) {
-+-			line_len = strlen(line);
-+-			if (line_len == 0 ||
-+-			    line[line_len - 1] == '\n') {
-+-				break;
-+-			}
-+-		}
-+-		if (str == NULL) {
-+-			/* fgets returned NULL, we are done.  */
-+-			break;
-+-		}
-+-		/* Continue with the next line.  */
-+-	}
-+-
-+-	fclose(fp);
-+-	return rc;
-+-}
-+-
-+ int
-+ pam_sm_authenticate(pam_handle_t *pamh, int flags UNUSED,
-+ 		    int argc, const char **argv)
-+@@ -173,7 +91,7 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags UNUSED,
-+ 		return rc == PAM_CONV_AGAIN ? PAM_INCOMPLETE : rc;
-+ 	}
-+ 
-+-	return check_user_in_passwd(pamh, user_name, file_name);
-++	return pam_modutil_check_user_in_passwd(pamh, user_name, file_name);
-+ }
-+ 
-+ int
-+-- 
-+2.26.2
-+
+Pro-tip: if you do not indent that line, then patchwork will pick it up,
+and it will automatically be included in the patch when we apply it
+locally. ;-)
+
+> With the pipelines being configurable now, I fear that by default - none
+> of them will get built.
+
+Is that a problem? I mean, would the build break if none is enabled?
+
+As I understand it, it would make sense that a thir-party provides a
+binary blob for their hardware, nd use none of the pipelines for the
+known boards, no?
+
+> Should there be a default enabled? Perhaps at least the
+> BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO should probably be default y.
+> (but leave it configurable).
+> 
+> And if you're doing defaults, is there a way to make the IPU3 default to
+> build on x86 targets, and the RPI/rkisp default on if an ARM target?
+
+We usually do not have 'default y' options, because that is in the end
+so use-case-specific.
+
+If it makes sense that no pipeline is enabled, I'm fine with having none
+enabled by default.
+
+[--SNIP--]
+> > -comment "libcamera needs udev and a toolchain w/ C++, threads, gcc >= 5"
+> > +if BR2_PACKAGE_LIBCAMERA
+> > +
+> > +config BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3
+> > +	bool "libcamera ipu3 pipeline"
+
+No need to have 'libcamera' in the prompt: menuconfig will proprely
+indent it below the main symbol, so that it is obvious that it is a
+libcamera opiton.
+
+Also, since there are more than 5 such sub-options, it would be nice to
+have them in a submenu, by changing the main symbol from 'config' to
+'menuconfig':
+
+    menuconfig BR2_PACKAGE_LIBCAMERA
+        bool "libcamera"
+        depends blabla
+
+    if BR2_PACKAGE_LIBCAMERA
+
+    # sub-options, and menuconfig will automatically put
+    # them in a sub-menu of hte main symbol, above.
+
+    endif
+
+> > +	help
+> > +	  libcamera ipu3 pipeline
+
+A help text that just repeats the prompt is useless. If you have nothing
+else to say, just do not add a help entry.
+
+(note :the two comments above apply to all pipeline sub-options, of
+course).
+
+> > +config BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI
+> > +	bool "libcamera raspberrypi pipeline"
+> > +	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
+> > +	select BR2_PACKAGE_BOOST
+> > +	help
+> > +	  libcamera raspberrypi pipeline
+> > +
+> > +config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
+> > +	bool "libcamera rkisp1 pipeline"
+> > +	help
+> > +	  libcamera rkips1 pipeline
+> > +
+> > +config BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE
+> > +	bool "libcamera simple pipeline"
+> > +	help
+> > +	  libcamera simple pipeline
+> > +
+> > +config BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO
+> > +	bool "libcamera uvcvideo pipeline"
+> > +	help
+> > +	  libcamera uvcvideo pipeline
+> > +
+> > +
+
+Spurious empty line.
+
+> > +config BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC
+> > +	bool "libcamera vimc pipeline"
+> > +	help
+> > +	  libcamera vimc pipeline
+> > +
+> > +endif # BR2_PACKAGE_LIBCAMERA
+> > +
+> > +comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 5"
+> >  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+> > -		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_PACKAGE_HAS_UDEV
+> > +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+> > diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+> > index 6f721d87ee..907764de63 100644
+> > --- a/package/libcamera/libcamera.hash
+> > +++ b/package/libcamera/libcamera.hash
+> > @@ -1,3 +1,12 @@
+> > -sha256 cbaa7e06059717f71b57f9c20135c86d5f121d9aab10bfc20513ba5d04478756  libcamera-448393f77ec9e37cb807e8e8d35c1a4877d253d4.tar.gz
+> > -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/gnu-gpl-2.0.txt
+> > -sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  licenses/gnu-lgpl-2.1.txt
+> > +sha256  6995be9d707ba3bcbe7a79bad894484561ee686f68b6523943ada7c0f6607e86  libcamera-96fab38e02792a109c0d35ca2154e95a7b4c8fcb.tar.gz
+> > +
+> > +# license files
+> > +sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+> > +sha256  e11af671c491efac2f94c1d752bea92f4308ca2450c7d11e582e4b48c40e4de1  LICENSES/BSD-3-Clause.txt
+> > +sha256  6a573fb2f9082662978cf21fb153096df0a1981deaea7dbc10a11046fe005d9f  LICENSES/CC0-1.0.txt
+> > +sha256  ec3732087acf8c52429a020d6bba362ff578705bdb53365a21744485ec15b0e6  LICENSES/CC-BY-SA-4.0.txt
+> > +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
+> > +sha256  606aa26338f69ce178f1cbc648b7574aec4b5bbaeb20f4df36ff49010cb8fbbd  LICENSES/GPL-2.0-or-later.txt
+> > +sha256  1ccf09bf2f598308df4bed9cd8e9657dc5cd0973d2800318f2e241486e2edf3f  LICENSES/LGPL-2.1-or-later.txt
+> > +sha256  3f9e477523febab58de8b716ccfbcf02e6ef1c8e7728953905e8558637abe2a9  LICENSES/Linux-syscall-note.txt
+> > +sha256  8f25018489d6fe0dec34a352314c38dc146247b7de65735790f4398a92afa84b  LICENSES/MIT.txt
+> > diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+> > index d209a38df3..c7513d2e68 100644
+> > --- a/package/libcamera/libcamera.mk
+> > +++ b/package/libcamera/libcamera.mk
+> > @@ -5,14 +5,69 @@
+> >  ################################################################################
+> >  
+> >  LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+> > -LIBCAMERA_VERSION = 448393f77ec9e37cb807e8e8d35c1a4877d253d4
+> > +LIBCAMERA_VERSION = 96fab38e02792a109c0d35ca2154e95a7b4c8fcb
+> >  LIBCAMERA_SITE_METHOD = git
+> > -LIBCAMERA_DEPENDENCIES = udev
+> > -LIBCAMERA_CONF_OPTS = -Dtest=false -Ddocumentation=false
+> > +LIBCAMERA_DEPENDENCIES = \
+> > +	host-openssl \
+> > +	host-pkgconf \
+> > +	host-python3-pyyaml \
+> > +	gnutls
+> > +LIBCAMERA_CONF_OPTS = \
+> > +	-Dandroid=false \
+> > +	-Ddocumentation=false \
+> > +	-Dtest=false \
+> > +	-Dv4l2=false
+> >  LIBCAMERA_INSTALL_STAGING = yes
+> > -LIBCAMERA_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (utils)
+> > +LIBCAMERA_LICENSE = \
+> > +	LGPL-2.1+ (library), \
+> > +	GPL-2.0+ (utils), \
+> > +	MIT (qcam/assets/feathericons), \
+> > +	BSD-2-Clause (raspberrypi), \
+> > +	GPL-2.0 with Linux-syscall-note or BSD-3-Clause (linux kernel headers), \
+> > +	CC0-1.0 (meson build system), \
+> > +	CC-BY-SA-4.0 (doc)
+> >  LIBCAMERA_LICENSE_FILES = \
+> > -	licenses/gnu-gpl-2.0.txt \
+> > -	licenses/gnu-lgpl-2.1.txt
+> > +	LICENSES/LGPL-2.1-or-later.txt \
+> > +	LICENSES/GPL-2.0-or-later.txt \
+> > +	LICENSES/MIT.txt \
+> > +	LICENSES/BSD-2-Clause.txt \
+> > +	LICENSES/GPL-2.0-only.txt \
+> > +	LICENSES/Linux-syscall-note.txt \
+> > +	LICENSES/BSD-3-Clause.txt \
+> > +	LICENSES/CC0-1.0.txt \
+> > +	LICENSES/CC-BY-SA-4.0.txt
+
+All those licensing info should be explained in the commit log, please.
+
+> > +LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3) += ipu3
+> > +ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI),y)
+> > +LIBCAMERA_PIPELINES-y += raspberrypi
+> > +LIBCAMERA_DEPENDENCIES += boost
+> > +endif
+> > +LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1) += rkisp1
+> > +LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE) += simple
+> > +LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO) += uvcvideo
+> > +LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC) += vimc
+> > +
+> > +LIBCAMERA_CONF_OPTS += -Dpipelines=$(subst $(space),$(comma),$(LIBCAMERA_PIPELINES-y))
+> > +
+> > +# gstreamer-video-1.0, gstreamer-allocators-1.0
+> > +ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
+> > +LIBCAMERA_CONF_OPTS += -Dgstreamer=enabled
+> > +LIBCAMERA_DEPENDENCIES += gstreamer1 gst1-plugins-base
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+> > +LIBCAMERA_DEPENDENCIES += qt5base
+> > +ifeq ($(BR2_PACKAGE_QT5TOOLS)$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),yy)
+
+BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS is already a sub-option of BR2_PACKAGE_QT5TOOLS,
+so the former can't be enabled if the latter is not. Thus, the following
+condition is enough:
+
+    ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+
+> > +LIBCAMERA_DEPENDENCIES += qt5tools
+> > +endif
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_TIFF),y)
+> > +LIBCAMERA_DEPENDENCIES += tiff
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> > +LIBCAMERA_DEPENDENCIES += udev
+> > +endif
+
+Are there any option to explicitly drive the enabling or disabling of
+those two dependencies (tiff and udev)?
+
+Regards,
+Yann E. MORIN.
+
+> >  $(eval $(meson-package))
+> > 
+> 
+> -- 
+> Regards
+> --
+> Kieran
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
