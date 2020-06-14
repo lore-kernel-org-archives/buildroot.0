@@ -1,78 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 12:07:18 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: new package
-Message-ID: <20200614100646.DD23F7FBA9@busybox.osuosl.org>
+Date: Sun, 14 Jun 2020 12:07:16 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-octonet: new package
+Message-ID: <20200614100646.D06C0818AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6df8c3dc96413b36b794e9d8f213475e33829b8
+commit: https://git.buildroot.net/buildroot/commit/?id=43ce6878aa45663b2f0538e5445737ab7adf4403
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/kodi-pvr-zattoo/Config.in            | 10 ++++++++++
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash |  3 +++
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 13 +++++++++++++
- package/kodi/Config.in                       |  1 +
- 4 files changed, 27 insertions(+)
+ package/kodi-pvr-octonet/Config.in             | 13 +++++++++++++
+ package/kodi-pvr-octonet/kodi-pvr-octonet.hash |  3 +++
+ package/kodi-pvr-octonet/kodi-pvr-octonet.mk   | 13 +++++++++++++
+ package/kodi/Config.in                         |  1 +
+ 4 files changed, 30 insertions(+)
 
-diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
+diff --git a/package/kodi-pvr-octonet/Config.in b/package/kodi-pvr-octonet/Config.in
 new file mode 100644
-index 0000000000..ab7ff70034
+index 0000000000..b8bcd7e218
 --- /dev/null
-+++ b/package/kodi-pvr-zattoo/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_PVR_ZATTOO
-+	bool "kodi-pvr-zattoo"
++++ b/package/kodi-pvr-octonet/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_KODI_PVR_OCTONET
++	bool "kodi-pvr-octonet"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
++	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_RAPIDXML
-+	select BR2_PACKAGE_TINYXML2
 +	help
-+	  Kodi PVR-Addon for Zattoo
++	  DigitalDevices Octonet PVR client addon for Kodi
 +
-+	  https://github.com/rbuehlma/pvr.zattoo
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++	  https://github.com/DigitalDevices/pvr.octonet
++
++comment "kodi-pvr-octonet needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.hash b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
 new file mode 100644
-index 0000000000..5e1454eff6
+index 0000000000..5ee0eeb6e9
 --- /dev/null
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
 @@ -0,0 +1,3 @@
 +# Locally computed
-+sha256  36dedc8bc6b95aa6036d0e5aa94d90f7d965f57325cc858ad6bcc401f371d3ed  kodi-pvr-zattoo-18.1.19-Leia.tar.gz
-+sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++sha256  e55d440afe3b1f1bc1529d1f662d4d18f5334ecf01e023d34d5a7e419b6fbf10  kodi-pvr-octonet-e35cc373476a92aee11ec8e8a14fb8fc086a4f84.tar.gz
++sha256  8547bcbe8bd72c18ac285fd801fcbff8806a988913741b14497f4aba88bba403  debian/copyright
+diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
 new file mode 100644
-index 0000000000..14ac22db50
+index 0000000000..890a283565
 --- /dev/null
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-pvr-zattoo
++# kodi-pvr-octonet
 +#
 +################################################################################
 +
-+KODI_PVR_ZATTOO_VERSION = 18.1.19-Leia
-+KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
-+KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
-+KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
-+KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidxml tinyxml2
++KODI_PVR_OCTONET_VERSION = e35cc373476a92aee11ec8e8a14fb8fc086a4f84
++KODI_PVR_OCTONET_SITE = $(call github,DigitalDevices,pvr.octonet,$(KODI_PVR_OCTONET_VERSION))
++KODI_PVR_OCTONET_LICENSE = GPL-2.0+
++KODI_PVR_OCTONET_LICENSE_FILES = debian/copyright
++KODI_PVR_OCTONET_DEPENDENCIES = json-for-modern-cpp kodi-platform libplatform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7d66c822dc..2acb271992 100644
+index fb6b07b53f..7d66c822dc 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -343,6 +343,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-vdr-vnsi/Config.in"
- 	source "package/kodi-pvr-vuplus/Config.in"
- 	source "package/kodi-pvr-wmc/Config.in"
-+	source "package/kodi-pvr-zattoo/Config.in"
- endmenu
- 
- menu "Screensavers"
+@@ -336,6 +336,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-mythtv/Config.in"
+ 	source "package/kodi-pvr-nextpvr/Config.in"
+ 	source "package/kodi-pvr-njoy/Config.in"
++	source "package/kodi-pvr-octonet/Config.in"
+ 	source "package/kodi-pvr-pctv/Config.in"
+ 	source "package/kodi-pvr-stalker/Config.in"
+ 	source "package/kodi-pvr-vbox/Config.in"
