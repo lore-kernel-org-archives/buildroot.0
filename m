@@ -1,77 +1,123 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 17:00:21 +0200
-Subject: [Buildroot] [PATCH] uclibc: add simlinks from
- libdl/libm/libpthread/librt
-In-Reply-To: <20200613162001.154280-1-paul@crapouillou.net>
-References: <20200613162001.154280-1-paul@crapouillou.net>
-Message-ID: <20200614150021.GU2346@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 Jun 2020 17:33:23 +0200
+Subject: [Buildroot] [PATCH 1/2] core.br2-external: fix reporting errors
+In-Reply-To: <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
+References: <cover.1590183628.git.yann.morin.1998@free.fr>
+ <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
+Message-ID: <05960843-2563-586e-2995-f7a1b6945a70@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Le 22/05/2020 ? 23:40, Yann E. MORIN a ?crit?:
+> When a br2-external tree has an issue, e.g. a missing file, or does not
+> have a name, or the name uses invalid cahrs, we report that condition by
+> setting the variable BR2_EXTERNAL_ERROR.
+> 
+> That variable is defined in the script support/scripts/br2-external,
+> which outputs it on stdout, and checked by the Makefile.
+> 
+> Before d027cd75d09, stdout was explicitly redirected to the generated
+> .mk file, with   exec >"${ofile}"   as the Makefile and Kconfig
+> fragments were generated each with their own call to the script, and o
+> the validation phase would emit the BR2_EXTERNAL_ERROR variable in the
+> Makefile fragment.
+> 
+> But with d027cd75d09, both the Makefile and Kconfig fragmetns were now
+> generated with a single call to the script, and as such the semantics of
+> the scripts changed, and only each of the actual generators, do_mk and
+> do_kconfig, ahd their out put redirected. Which left do_validate with
+> the default stdout. Which would emit BR2_EXTERNAL_ERROR on stdout.
+> 
+> In turn, the stdout of the script would be interpreted by as part of the
+> Makefile. But this does not end up very well when a br2-external tree
+> indeed has an error:
+> 
+>     Makefile:184: *** multiple target patterns.  Stop.
 
-On 2020-06-13 18:20 +0200, Paul Cercueil spake thusly:
-> All the symbols that were previously present in libdl.so.0, libm.so.0,
-> libpthread.so.0 and librt.so.0 are now all packed within uClibc.
+When external.desc exist but empty, I get another error (I'm currently on master)
+
+$ echo "" > support/testing/tests/download/br2-external/git-hash/external.desc
+$ make BR2_EXTERNAL=$PWD/support/testing/tests/download/br2-external/git-hash/
+menuconfig
+
+Config.in:22: can't open file "output/.br2-external.in.paths"
+
+But Indeed, I get the same error when external.desc is missing.
+
+
+Here is the error message displayed with the series applied:
+
+case: missing external.desc
+
+  does not have an 'external.desc'. See
+https://buildroot.org/manual.html#br2-external-converting.
+
+case: empty external.desc
+
+  does not define the name.
+
+While at it you can use MANUAL_URL in the error message when the external name
+is missing.
+
+With that fixed(improved :p):
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+
+Also, it would be great to have some tests in the testsuite for such cases. It's
+easy to make a mistake while adding a br2_external tree.
+
+Best regards,
+Romain
+
+
 > 
-> In order to keep binary compatibility with old executables, which were
-> dynamically linked with one of the libraries above, add symbolic links
-> to the uClibc shared library.
+> So we must redirect the output of the validation step to the
+> Makefile fragment.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Note that we don't need to append in do_mk, and we can do an overwrite
+> redirection: if we go so far as to call do_mk, it means there was no
+> error, and thus the fragment is empty.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > ---
->  package/uclibc/uclibc.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  support/scripts/br2-external | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 3ba4589672..73664d5b0b 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -424,6 +424,10 @@ define UCLIBC_INSTALL_TARGET_CMDS
->  		RUNTIME_PREFIX=/ \
->  		install_runtime
->  	$(UCLIBC_INSTALL_UTILS_TARGET)
-> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libdl.so.0
-> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libm.so.0
-> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/libpthread.so.0
-> +	ln -sf libuClibc-$(UCLIBC_VERSION).so $(TARGET_DIR)/lib/librt.so.0
-
-This does not account for external toolchains.
-
-I wonder how good those symlinks are anyway: uClibc has no ABI/API
-stability anyway, so there are no guarantee that a program linked
-against a version of uClibc will work against another version, or even
-the same version that was compiled with another configuration...
-
-And I am not sure we want to condone such a case.
-
-My opinion would be that, if you really need those legacy symlinks,
-then you should create them in a post-build script.
-
-I'm leaving this patch opened in patchwork, so other maintainers may
-reverse my position.
-
-Regards,
-Yann E. MORIN.
-
->  endef
+> diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+> index 171526f8c8..fdea5aa251 100755
+> --- a/support/scripts/br2-external
+> +++ b/support/scripts/br2-external
+> @@ -33,9 +33,8 @@ main() {
+>      # Trap any unexpected error to generate a meaningful error message
+>      trap "error 'unexpected error while generating ${ofile}\n'" ERR
 >  
->  # STATIC has no ld* tools, only getconf
-> -- 
-> 2.27.0
+> -    do_validate ${@//:/ }
+> -
+>      mkdir -p "${outputdir}"
+> +    do_validate "${outputdir}" ${@//:/ }
+>      do_mk "${outputdir}"
+>      do_kconfig "${outputdir}"
+>  }
+> @@ -51,7 +50,9 @@ main() {
+>  # snippet means that there were no error.
+>  #
+>  do_validate() {
+> +    local outputdir="${1}"
+>      local br2_ext
+> +    shift
+>  
+>      if [ ${#} -eq 0 ]; then
+>          # No br2-external tree is valid
+> @@ -60,7 +61,7 @@ do_validate() {
+>  
+>      for br2_ext in "${@}"; do
+>          do_validate_one "${br2_ext}"
+> -    done
+> +    done >"${outputdir}/.br2-external.mk"
+>  }
+>  
+>  do_validate_one() {
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
