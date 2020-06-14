@@ -1,124 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 18:21:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump version to 1.73.0
-In-Reply-To: <20200613153509.2471832-1-bernd.kuhls@t-online.de>
-References: <20200613153509.2471832-1-bernd.kuhls@t-online.de>
-Message-ID: <20200614162108.GA2346@scaer>
+Date: Sun, 14 Jun 2020 18:23:30 +0200
+Subject: [Buildroot] [git commit] package/pcsc-lite: bump to version 1.9.0
+Message-ID: <20200614162227.9AAF882A89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6cca904ff8d939d2149155fede06d2c160eed156
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-13 17:35 +0200, Bernd Kuhls spake thusly:
-> Changelog: https://www.boost.org/users/history/version_1_73_0.html
-> 
-> Removed patch 0004 which was committed upstream:
-> https://github.com/boostorg/predef/commit/4bc7cc02eda854e4c8ac73caecfee37717083a6b
-> 
-> Reformatted hash file.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ChangeLog:
+- SCardEndTransaction(): greatly improve performances (x300)
+- tokenparser: accept any Unicode character in a reader name
+- Use /run instead of /var/run by default
+- Fix a memory leak from a polkit call
+- Some other minor improvements
 
-Applied to master, thanks.
+Also update indentation in hash file (two spaces)
 
-However, Boost has a tendency to introduce subtle breakage, so please
-keep an eye on the autobuilders for such a breakage in the comming days.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pcsc-lite/pcsc-lite.hash | 6 +++---
+ package/pcsc-lite/pcsc-lite.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0004-add-riscv-endian-detection.patch     | 36 -------------------
->  package/boost/boost.hash                      |  6 ++--
->  package/boost/boost.mk                        |  2 +-
->  3 files changed, 4 insertions(+), 40 deletions(-)
->  delete mode 100644 package/boost/0004-add-riscv-endian-detection.patch
-> 
-> diff --git a/package/boost/0004-add-riscv-endian-detection.patch b/package/boost/0004-add-riscv-endian-detection.patch
-> deleted file mode 100644
-> index 879838df3a..0000000000
-> --- a/package/boost/0004-add-riscv-endian-detection.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -Add RISC-V endian detection
-> -
-> -boost/predef/other/endian.h has two ways of detecting the endianess:
-> -
-> - (1) It includes <endian.h> if BOOST_LIB_C_GNU is defined, and then
-> -     use __BYTE_ORDER to decide the endianness.
-> -
-> - (2) Otherwise, if (1) was not possible for some reason, it uses
-> -     architecture defines to decide the endianness.
-> -
-> -(1) works perfectly fine with glibc toolchains, because
-> -BOOST_LIB_C_GNU is defined, but it doesn't work with musl. Due to
-> -this, <endian.h> is not included, __BYTE_ORDER is not defined, and
-> -method (1) does not work, causing build failures on musl toolchains
-> -that don't have explicit handling by architecture name (method 2).
-> -
-> -So this commit fixes RISC-V musl build by adding support for the
-> -__riscv architecture define, to determine that the endianness is
-> -little endian.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> -
-> -Index: b/boost/predef/other/endian.h
-> -===================================================================
-> ---- a/boost/predef/other/endian.h
-> -+++ b/boost/predef/other/endian.h
-> -@@ -127,7 +127,8 @@
-> -         defined(__AARCH64EL__) || \
-> -         defined(_MIPSEL) || \
-> -         defined(__MIPSEL) || \
-> --        defined(__MIPSEL__)
-> -+        defined(__MIPSEL__) || \
-> -+        defined(__riscv)
-> - #       undef BOOST_ENDIAN_LITTLE_BYTE
-> - #       define BOOST_ENDIAN_LITTLE_BYTE BOOST_VERSION_NUMBER_AVAILABLE
-> - #   endif
-> diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-> index 0348f40461..c94699aa67 100644
-> --- a/package/boost/boost.hash
-> +++ b/package/boost/boost.hash
-> @@ -1,5 +1,5 @@
-> -# From http://www.boost.org/users/history/version_1_72_0.html
-> -sha256 59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722  boost_1_72_0.tar.bz2
-> +# From https://www.boost.org/users/history/version_1_73_0.html
-> +sha256  4eb3b8d442b426dc35346235c8733b5ae35ba431690e38c6a8263dce9fcbb402  boost_1_73_0.tar.bz2
->  
->  # Locally computed
-> -sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-> +sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-> index 2daf7f5a96..ef638fc9df 100644
-> --- a/package/boost/boost.mk
-> +++ b/package/boost/boost.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BOOST_VERSION = 1.72.0
-> +BOOST_VERSION = 1.73.0
->  BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
->  BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
->  BOOST_INSTALL_STAGING = YES
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
+index 5df6a93582..08bc85b154 100644
+--- a/package/pcsc-lite/pcsc-lite.hash
++++ b/package/pcsc-lite/pcsc-lite.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 3eb7be7d6ef618c0a444316cf5c1f2f9d7227aedba7a192f389fe3e7c0dfbbd9  pcsc-lite-1.8.26.tar.bz2
+-sha256 40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
++sha256  0148d403137124552c5d0f10f8cdab2cbb8dfc7c6ce75e018faf667be34f2ef9  pcsc-lite-1.9.0.tar.bz2
++sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index 96fa3f937a..c411e9c7ee 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCSC_LITE_VERSION = 1.8.26
++PCSC_LITE_VERSION = 1.9.0
+ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+ PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
+ PCSC_LITE_INSTALL_STAGING = YES
