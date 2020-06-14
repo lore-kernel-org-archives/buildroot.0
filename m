@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 Jun 2020 21:31:50 +0200
-Subject: [Buildroot] [PATCH 1/4 v2] support/docker: rename the
- Dockerfile and its accompanying file
-In-Reply-To: <88b63f759c190f6f3bfd4716b76d608284a5291f.1589751688.git.yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 21:38:27 +0200
+Subject: [Buildroot] [PATCH 2/4 v2] support/docker: add script to
+ generate docker iamges
+In-Reply-To: <b7c22346be9c030f714864671b2ea334c20c5142.1589751688.git.yann.morin.1998@free.fr>
 References: <cover.1589751688.git.yann.morin.1998@free.fr>
- <88b63f759c190f6f3bfd4716b76d608284a5291f.1589751688.git.yann.morin.1998@free.fr>
-Message-ID: <9f51b6a3-9fb9-1874-d80e-af1488518a9e@gmail.com>
+ <b7c22346be9c030f714864671b2ea334c20c5142.1589751688.git.yann.morin.1998@free.fr>
+Message-ID: <0dfb5a2d-a412-c386-aeed-593cff991e15@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +13,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Le 17/05/2020 ? 23:41, Yann E. MORIN a ?crit?:
-> Currently, we only generate one docker image, for use by the gitlab-ci
-> infra.
-> 
-> However, users have expressed an interest in using that image for other
-> uses, like:
-> 
->   - reproducing build failures as reported by the gitlab-ci jobs;
-> 
->   - having a ready-to-use base image to use as-is, or as a template for
->     further customisations.
-> 
-> Additionally, some users have reported the need for similar base images,
-> but based off different distros, with the same goals as above, plus:
-> 
->   - reproducing build failures reported by users on other distros.
-> 
-> As a first step toward providing such images, rename our Dockerfile to
-> include the name and version of the distro it is based off.
-> 
-> We add a symlink so that we still have a 'base' image that we can
-> reference from the gitlab-ci infra.
-> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/docker/build-all | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100755 support/docker/build-all
+> 
+> diff --git a/support/docker/build-all b/support/docker/build-all
+> new file mode 100755
+> index 0000000000..4f3217e7fe
+> --- /dev/null
+> +++ b/support/docker/build-all
+> @@ -0,0 +1,17 @@
+> +#!/bin/sh
+> +set -e
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
-> ---
->  support/docker/Dockerfile.base                             | 1 +
->  support/docker/{Dockerfile => Dockerfile.debian-stretch}   | 7 +++++--
->  .../{apt-sources.list => debian-stretch.apt-sources.list}  | 0
->  3 files changed, 6 insertions(+), 2 deletions(-)
->  create mode 120000 support/docker/Dockerfile.base
->  rename support/docker/{Dockerfile => Dockerfile.debian-stretch} (88%)
->  rename support/docker/{apt-sources.list => debian-stretch.apt-sources.list} (100%)
-> 
-> diff --git a/support/docker/Dockerfile.base b/support/docker/Dockerfile.base
-> new file mode 120000
-> index 0000000000..06a988b45e
-> --- /dev/null
-> +++ b/support/docker/Dockerfile.base
-> @@ -0,0 +1 @@
-> +Dockerfile.debian-stretch
-> \ No newline at end of file
-> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile.debian-stretch
-> similarity index 88%
-> rename from support/docker/Dockerfile
-> rename to support/docker/Dockerfile.debian-stretch
-> index 03acde85d2..0d2ce2aa79 100644
-> --- a/support/docker/Dockerfile
-> +++ b/support/docker/Dockerfile.debian-stretch
-> @@ -1,6 +1,9 @@
-> +# vi: ft=dockerfile
->  # This Dockerfile generates the docker image that gets used by Gitlab CI
->  # To build it (YYYYMMDD.HHMM is the current date and time in UTC):
-> -#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM support/docker
-> +#   sudo docker build -t buildroot/base:YYYYMMDD.HHMM \
-> +#                     -f support/docker/Dockerfile.debian-stretch \
-> +#                     support/docker
->  #   sudo docker push buildroot/base:YYYYMMDD.HHMM
->  
->  # We use a specific tag for the base image *and* the corresponding date
-> @@ -16,7 +19,7 @@ description="Container with everything needed to run Buildroot"
->  ENV DEBIAN_FRONTEND noninteractive
->  
->  # This repository can be a bit slow at times. Don't panic...
-> -COPY apt-sources.list /etc/apt/sources.list
-> +COPY debian-stretch.apt-sources.list /etc/apt/sources.list
->  
->  # The container has no package lists, so need to update first
->  RUN dpkg --add-architecture i386 && \
-> diff --git a/support/docker/apt-sources.list b/support/docker/debian-stretch.apt-sources.list
-> similarity index 100%
-> rename from support/docker/apt-sources.list
-> rename to support/docker/debian-stretch.apt-sources.list
+> +
+> +BR2_DOCKER_VERSION="${1}"
+> +
+> +if [ -z "${BR2_DOCKER_VERSION}" ]; then
+> +    printf "Usage: ${0} VERSION\n"
+> +    exit 1
+> +fi
+> +
+> +CONTEXT_DIR="${0%/*}"
+> +for d in "${CONTEXT_DIR}"/Dockerfile.*; do \
+> +    distro="${d#*/Dockerfile.}"
+> +    docker build \
+> +        -t "buildroot/${distro}:${BR2_DOCKER_VERSION}" \
+> +        -f "${d}" "${CONTEXT_DIR}"
+> +done
 > 
