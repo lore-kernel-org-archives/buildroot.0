@@ -1,102 +1,99 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2020 09:33:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-peripheral-steamcontroller:
- remove package
-Message-ID: <20200614073300.503435-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 09:36:21 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: disable --as-needed linker
+ flag for Codesourcery ARM 2014.05 toolchain
+Message-ID: <20200614073739.5A99982A4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package is broken:
-https://github.com/kodi-game/peripheral.steamcontroller/pull/8#issuecomment-441469406
-https://github.com/kodi-game/peripheral.steamcontroller/issues/10#issuecomment-467551856
+commit: https://git.buildroot.net/buildroot/commit/?id=d3f576d2f37a05275c0d25f855dc24935ff5de5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Meson build system enable by default -Wl,--as-needed [1][2] in the linker command line
+and due to this the libmesa_dri_drivers.so build fail with the Codesourcery ARM and
+Aarch64 2014.05 toolchain:
+
+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++
+  -o src/mesa/drivers/dri/libmesa_dri_drivers.so
+  -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group
+  -Wl,-soname,libmesa_dri_drivers.so -Wl,--whole-archive
+  src/mesa/drivers/dri/radeon/libr100.a src/mesa/drivers/dri/nouveau/libnouveau_vieux.a
+  -Wl,--no-whole-archive
+  src/mesa/drivers/dri/common/libmegadriver_stub.a
+  src/mesa/drivers/dri/common/libdricommon.a
+  src/mapi/shared-glapi/libglapi.so.0.0.0
+  src/mesa/libmesa_classic.a src/mesa/libmesa_common.a
+  src/compiler/glsl/libglsl.a src/compiler/glsl/glcpp/libglcpp.a
+  src/util/libmesa_util.a src/util/format/libmesa_format.a
+  src/compiler/nir/libnir.a src/compiler/libcompiler.a
+  src/util/libxmlconfig.a
+  [...]
+
+src/mesa/drivers/dri/common/libmegadriver_stub.a(megadriver_stub.c.o): In function `megadriver_stub_init':
+megadriver_stub.c:(.text.startup+0x20): undefined reference to `dladdr'
+megadriver_stub.c:(.text.startup+0xbc): undefined reference to `dlsym'
+collect2: error: ld returned 1 exit status
+
+This problem seems to be specific to this toolchain release (ARM and aarch64)
+CodeSourcery 2014.05: gcc 4.8.3-prerelease; binutils 2.24.51.20140217; glibc 2.18
+
+The following prebuilt toolchain has been tested and doesn't trigger this issue:
+Linaro 4.9-4.9-2014.11: gcc 4.9.3; binutils 2.24.0; glibc 2.19
+CodeSourcery 2014.11: gcc 4.9.1; binutils 2.24.51.20140217; glibc 2.20
+
+Older toolchains doesn't have a recent enough glibc or linux-headers version
+to breaking the build with mesa3d 20.1.0 or libdrm 2.4.102.
+
+In order to build mesa3d with the CodeSourcery 2014.05 using --as-needed would be
+reorder the static librairies:
+
+ diff --git a/src/mesa/drivers/dri/meson.build b/src/mesa/drivers/dri/meson.build
+ index b09ca16e38a..9ac6731c522 100644
+ --- a/src/mesa/drivers/dri/meson.build
+ +++ b/src/mesa/drivers/dri/meson.build
+ @@ -59,7 +59,7 @@ if _dri_drivers != []
+      [],
+      link_whole : _dri_drivers,
+      link_with : [
+ -      libmegadriver_stub, libdricommon, libglapi,
+ +      libdricommon, libmegadriver_stub, libglapi,
+        libmesa_classic,
+      ],
+
+Instead, we can disable --as-needed from the meson build system using
+"-Db_asneeded=false" only for this toolchain.
+
+[1] https://mesonbuild.com/Builtin-options.html
+[2] https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
+
+Fixes:
+http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                                    |  8 ++++++++
- package/kodi-peripheral-steamcontroller/Config.in   |  8 --------
- .../kodi-peripheral-steamcontroller.hash            |  3 ---
- .../kodi-peripheral-steamcontroller.mk              | 13 -------------
- package/kodi/Config.in                              |  1 -
- 5 files changed, 8 insertions(+), 25 deletions(-)
- delete mode 100644 package/kodi-peripheral-steamcontroller/Config.in
- delete mode 100644 package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
- delete mode 100644 package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
+ package/mesa3d/mesa3d.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d65d963d45..4074c34c56 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,14 @@ endif
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e726bd33b3..59d96fe7c2 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -27,6 +27,12 @@ MESA3D_CONF_OPTS = \
+ 	-Dgallium-omx=disabled \
+ 	-Dpower8=false
  
- ###############################################################################
- 
-+comment "Legacy options removed in 2020.08"
++# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
++# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
++MESA3D_CONF_OPTS += -Db_asneeded=false
++endif
 +
-+config BR2_PACKAGE_KODI_PERIPHERAL_STEAMCONTROLLER
-+	bool "kodi-peripheral-steamcontroller package was removed"
-+	select BR2_LEGACY
-+	help
-+	  This package is broken.
-+
- comment "Legacy options removed in 2020.05"
- 
- config BR2_PACKAGE_WIRINGPI
-diff --git a/package/kodi-peripheral-steamcontroller/Config.in b/package/kodi-peripheral-steamcontroller/Config.in
-deleted file mode 100644
-index a994f4c9fb..0000000000
---- a/package/kodi-peripheral-steamcontroller/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_KODI_PERIPHERAL_STEAMCONTROLLER
--	bool "kodi-peripheral-steamcontroller"
--	select BR2_PACKAGE_KODI_PLATFORM
--	select BR2_PACKAGE_LIBUSB
--	help
--	  Steam controller driver for Kodi
--
--	  https://github.com/kodi-game/peripheral.steamcontroller
-diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
-deleted file mode 100644
-index 15706cb043..0000000000
---- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256 aece8f4b4c4360ae6b8007c9a1d1ee39d90808053bc5b2e3e08e4c5c70a7f8db  kodi-peripheral-steamcontroller-702fea828f9c5c94d0bd77dbb5fe78451edfa2ea.tar.gz
--sha256 243622a4e1a2ba091ae1d433483ad8b34a7cc337048d5bef8072fbb324fbc79a  debian/copyright
-diff --git a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk b/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
-deleted file mode 100644
-index 15607145b8..0000000000
---- a/package/kodi-peripheral-steamcontroller/kodi-peripheral-steamcontroller.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# kodi-peripheral-steamcontroller
--#
--################################################################################
--
--KODI_PERIPHERAL_STEAMCONTROLLER_VERSION = 702fea828f9c5c94d0bd77dbb5fe78451edfa2ea
--KODI_PERIPHERAL_STEAMCONTROLLER_SITE = $(call github,kodi-game,peripheral.steamcontroller,$(KODI_PERIPHERAL_STEAMCONTROLLER_VERSION))
--KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE = GPL-2.0+
--KODI_PERIPHERAL_STEAMCONTROLLER_LICENSE_FILES = debian/copyright
--KODI_PERIPHERAL_STEAMCONTROLLER_DEPENDENCIES = kodi-platform libusb
--
--$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 4d0a8364c2..5e4c7ca099 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -358,7 +358,6 @@ endmenu
- 
- menu "Peripheral addons"
- 	source "package/kodi-peripheral-joystick/Config.in"
--	source "package/kodi-peripheral-steamcontroller/Config.in"
- 	source "package/kodi-peripheral-xarcade/Config.in"
- endmenu
- 
--- 
-2.26.2
+ ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+ MESA3D_DEPENDENCIES += host-llvm llvm
+ MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
