@@ -1,131 +1,96 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 18:13:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fmt: bump version to 6.2.1
-In-Reply-To: <20200613160337.2531242-1-bernd.kuhls@t-online.de>
-References: <20200613160337.2531242-1-bernd.kuhls@t-online.de>
-Message-ID: <20200614161352.GZ2346@scaer>
+Date: Sun, 14 Jun 2020 18:17:23 +0200
+Subject: [Buildroot] [git commit] package/boost: bump version to 1.73.0
+Message-ID: <20200614161758.B0E6A83717@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=194997a3c86eba25dd0e93fd86038881cf010fe0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-13 18:03 +0200, Bernd Kuhls spake thusly:
-> Changelog: https://github.com/fmtlib/fmt/blob/master/ChangeLog.rst
-> 
-> Removed patch included in this version bump.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Changelog: https://www.boost.org/users/history/version_1_73_0.html
 
-Applied to master, thanks.
+Removed patch 0004 which was committed upstream:
+https://github.com/boostorg/predef/commit/4bc7cc02eda854e4c8ac73caecfee37717083a6b
 
-Regards,
-Yann E. MORIN.
+Reformatted hash file.
 
-> ---
->  ...g-of-unsigned-char-strings-in-printf.patch | 54 -------------------
->  package/fmt/fmt.hash                          |  4 +-
->  package/fmt/fmt.mk                            |  2 +-
->  3 files changed, 3 insertions(+), 57 deletions(-)
->  delete mode 100644 package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch
-> 
-> diff --git a/package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch b/package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch
-> deleted file mode 100644
-> index 41c72aa4a3..0000000000
-> --- a/package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch
-> +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -From 7d01859ef16e6b65bc023ad8bebfedecb088bf81 Mon Sep 17 00:00:00 2001
-> -From: Victor Zverovich <viz@fb.com>
-> -Date: Wed, 8 Apr 2020 12:32:34 -0700
-> -Subject: [PATCH] Fix handling of unsigned char strings in printf
-> -
-> -Downloaded from upstream commit
-> -https://github.com/fmtlib/fmt/commit/7d01859ef16e6b65bc023ad8bebfedecb088bf81
-> -
-> -to fix Kodi build error:
-> -https://github.com/xbmc/xbmc/issues/17629
-> -https://github.com/fmtlib/fmt/issues/1620
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ----
-> - include/fmt/core.h  | 8 ++++++++
-> - test/printf-test.cc | 6 ++++++
-> - 2 files changed, 14 insertions(+)
-> -
-> -diff --git a/include/fmt/core.h b/include/fmt/core.h
-> -index 6df2875ac..dc10722bf 100644
-> ---- a/include/fmt/core.h
-> -+++ b/include/fmt/core.h
-> -@@ -972,6 +972,14 @@ template <typename Context> struct arg_mapper {
-> -     static_assert(std::is_same<char_type, char>::value, "invalid string type");
-> -     return reinterpret_cast<const char*>(val);
-> -   }
-> -+  FMT_CONSTEXPR const char* map(signed char* val) {
-> -+    const auto* const_val = val;
-> -+    return map(const_val);
-> -+  }
-> -+  FMT_CONSTEXPR const char* map(unsigned char* val) {
-> -+    const auto* const_val = val;
-> -+    return map(const_val);
-> -+  }
-> - 
-> -   FMT_CONSTEXPR const void* map(void* val) { return val; }
-> -   FMT_CONSTEXPR const void* map(const void* val) { return val; }
-> -diff --git a/test/printf-test.cc b/test/printf-test.cc
-> -index 5aaa27b13..545e02aab 100644
-> ---- a/test/printf-test.cc
-> -+++ b/test/printf-test.cc
-> -@@ -447,6 +447,12 @@ TEST(PrintfTest, String) {
-> -   EXPECT_PRINTF(L"    (null)", L"%10s", null_wstr);
-> - }
-> - 
-> -+TEST(PrintfTest, UCharString) {
-> -+  unsigned char str[] = "test";
-> -+  unsigned char* pstr = str;
-> -+  EXPECT_EQ("test", fmt::sprintf("%s", pstr));
-> -+}
-> -+
-> - TEST(PrintfTest, Pointer) {
-> -   int n;
-> -   void* p = &n;
-> diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-> index 29b8237082..da58d45c33 100644
-> --- a/package/fmt/fmt.hash
-> +++ b/package/fmt/fmt.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 fe6e4ff397e01c379fc4532519339c93da47404b9f6674184a458a9967a76575  fmt-6.2.0.tar.gz
-> -sha256 825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-> +sha256  5edf8b0f32135ad5fafb3064de26d063571e95e8ae46829c2f4f4b52696bbff0  fmt-6.2.1.tar.gz
-> +sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-> diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-> index 9601141e06..62c165fbea 100644
-> --- a/package/fmt/fmt.mk
-> +++ b/package/fmt/fmt.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FMT_VERSION = 6.2.0
-> +FMT_VERSION = 6.2.1
->  FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
->  FMT_LICENSE = MIT with exception
->  FMT_LICENSE_FILES = LICENSE.rst
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../boost/0004-add-riscv-endian-detection.patch    | 36 ----------------------
+ package/boost/boost.hash                           |  6 ++--
+ package/boost/boost.mk                             |  2 +-
+ 3 files changed, 4 insertions(+), 40 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/boost/0004-add-riscv-endian-detection.patch b/package/boost/0004-add-riscv-endian-detection.patch
+deleted file mode 100644
+index 879838df3a..0000000000
+--- a/package/boost/0004-add-riscv-endian-detection.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-Add RISC-V endian detection
+-
+-boost/predef/other/endian.h has two ways of detecting the endianess:
+-
+- (1) It includes <endian.h> if BOOST_LIB_C_GNU is defined, and then
+-     use __BYTE_ORDER to decide the endianness.
+-
+- (2) Otherwise, if (1) was not possible for some reason, it uses
+-     architecture defines to decide the endianness.
+-
+-(1) works perfectly fine with glibc toolchains, because
+-BOOST_LIB_C_GNU is defined, but it doesn't work with musl. Due to
+-this, <endian.h> is not included, __BYTE_ORDER is not defined, and
+-method (1) does not work, causing build failures on musl toolchains
+-that don't have explicit handling by architecture name (method 2).
+-
+-So this commit fixes RISC-V musl build by adding support for the
+-__riscv architecture define, to determine that the endianness is
+-little endian.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-
+-Index: b/boost/predef/other/endian.h
+-===================================================================
+---- a/boost/predef/other/endian.h
+-+++ b/boost/predef/other/endian.h
+-@@ -127,7 +127,8 @@
+-         defined(__AARCH64EL__) || \
+-         defined(_MIPSEL) || \
+-         defined(__MIPSEL) || \
+--        defined(__MIPSEL__)
+-+        defined(__MIPSEL__) || \
+-+        defined(__riscv)
+- #       undef BOOST_ENDIAN_LITTLE_BYTE
+- #       define BOOST_ENDIAN_LITTLE_BYTE BOOST_VERSION_NUMBER_AVAILABLE
+- #   endif
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index 0348f40461..c94699aa67 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+-# From http://www.boost.org/users/history/version_1_72_0.html
+-sha256 59c9b274bc451cf91a9ba1dd2c7fdcaf5d60b1b3aa83f2c9fa143417cc660722  boost_1_72_0.tar.bz2
++# From https://www.boost.org/users/history/version_1_73_0.html
++sha256  4eb3b8d442b426dc35346235c8733b5ae35ba431690e38c6a8263dce9fcbb402  boost_1_73_0.tar.bz2
+ 
+ # Locally computed
+-sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 2daf7f5a96..ef638fc9df 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.72.0
++BOOST_VERSION = 1.73.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
