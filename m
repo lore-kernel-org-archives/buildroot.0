@@ -1,39 +1,44 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Sun, 14 Jun 2020 12:54:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/eigen: fix package detection
- with CMake
-In-Reply-To: <20200614072836.GB2346@scaer>
-References: <20200613161643.609929-1-juju@cotds.org>
- <20200614072836.GB2346@scaer>
-Message-ID: <f72aa8654240c37329f54d89df688f04@cotds.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2020 12:56:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-intel:
+ bump version
+Message-ID: <20200614105651.2149674-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Matt,
+Reformatted hashes.
 
-On 2020-06-14 09:28, Yann E. MORIN wrote:
-> Julien, Matt, all,
-> 
-> On 2020-06-13 18:16 +0200, Julien Olivain spake thusly:
->> Eigen3 library normally installs a signature file named
->> "signature_of_eigen3_matrix_library" to help library detection:
->> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
->> 
->> This Buildroot package does not use CMake for installing files, as 
->> only
->> the headers are needed in the STAGING_DIR. A generic-package is used
->> instead with simple copies.
-> 
-> Why can't we use the cmake-package infra, rahter than duplicate what
-> upstream does?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash    | 4 ++--
+ .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk      | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I agree, I can't see any reason why this package cannot use its upstream 
-cmake infra.
-I'll try to rewrite this patch to switch it as a cmake-package.
-
-Best regards,
-
-Julien.
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+index ff816c7bbe..321ae5b606 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 b074366aad25cae38bb455792ac3110d52bcb0e4a183766c37ee12cbe56d7f8c  xdriver_xf86-video-intel-f66d39544bb8339130c96d282a80f87ca1606caf.tar.gz
+-sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
++sha256  029afa61e785f6e0fb18d2c2f1619e97af8b6f19c7fa0ba9923eea03ccf78626  xdriver_xf86-video-intel-5ca3ac1a90af177eb111a965e9b4dd8a27cc58fc.tar.gz
++sha256  5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index fb74eb6ad5..ac598cf0fb 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = f66d39544bb8339130c96d282a80f87ca1606caf
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 5ca3ac1a90af177eb111a965e9b4dd8a27cc58fc
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-- 
+2.26.2
