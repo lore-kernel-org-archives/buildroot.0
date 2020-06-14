@@ -1,108 +1,143 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 12:08:49 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/kodi-pvr-octonet: new package
-In-Reply-To: <20200614084906.874597-1-bernd.kuhls@t-online.de>
-References: <20200614084906.874597-1-bernd.kuhls@t-online.de>
-Message-ID: <20200614100849.GM2346@scaer>
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Date: Sun, 14 Jun 2020 12:20:20 +0200
+Subject: [Buildroot] [PATCH] fs: squashfs: Add config option to pass
+ mksquashfs cmdln paramters.
+In-Reply-To: <20200614075725.GD2346@scaer>
+References: <20200612133249.4127906-1-heiko@sntech.de>
+ <20200614075725.GD2346@scaer>
+Message-ID: <2569767.EKUIr981zW@diego>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hi,
 
-On 2020-06-14 10:49 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Both octonet and zattoo applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v2: typo fix in kodi-pvr-octonet.mk comment
+Am Sonntag, 14. Juni 2020, 09:57:25 CEST schrieb Yann E. MORIN:
+> Heiko, All,
 > 
->  package/kodi-pvr-octonet/Config.in             | 13 +++++++++++++
->  package/kodi-pvr-octonet/kodi-pvr-octonet.hash |  3 +++
->  package/kodi-pvr-octonet/kodi-pvr-octonet.mk   | 13 +++++++++++++
->  package/kodi/Config.in                         |  1 +
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/kodi-pvr-octonet/Config.in
->  create mode 100644 package/kodi-pvr-octonet/kodi-pvr-octonet.hash
->  create mode 100644 package/kodi-pvr-octonet/kodi-pvr-octonet.mk
+> On 2020-06-12 15:32 +0200, Heiko Stuebner spake thusly:
+> > From: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+> > 
+> > This can be use to specify additional command line argument to
+> > mksquashfs (e.g. -nopad). The implementation is inspired by
+> > a similar mechanism for ext file system images.
 > 
-> diff --git a/package/kodi-pvr-octonet/Config.in b/package/kodi-pvr-octonet/Config.in
-> new file mode 100644
-> index 0000000000..b8bcd7e218
-> --- /dev/null
-> +++ b/package/kodi-pvr-octonet/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_KODI_PVR_OCTONET
-> +	bool "kodi-pvr-octonet"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
-> +	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
-> +	select BR2_PACKAGE_KODI_PLATFORM
-> +	select BR2_PACKAGE_LIBPLATFORM
-> +	help
-> +	  DigitalDevices Octonet PVR client addon for Kodi
-> +
-> +	  https://github.com/DigitalDevices/pvr.octonet
-> +
-> +comment "kodi-pvr-octonet needs a toolchain w/ gcc >= 4.9"
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.hash b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-> new file mode 100644
-> index 0000000000..5ee0eeb6e9
-> --- /dev/null
-> +++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  e55d440afe3b1f1bc1529d1f662d4d18f5334ecf01e023d34d5a7e419b6fbf10  kodi-pvr-octonet-e35cc373476a92aee11ec8e8a14fb8fc086a4f84.tar.gz
-> +sha256  8547bcbe8bd72c18ac285fd801fcbff8806a988913741b14497f4aba88bba403  debian/copyright
-> diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-> new file mode 100644
-> index 0000000000..890a283565
-> --- /dev/null
-> +++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# kodi-pvr-octonet
-> +#
-> +################################################################################
-> +
-> +KODI_PVR_OCTONET_VERSION = e35cc373476a92aee11ec8e8a14fb8fc086a4f84
-> +KODI_PVR_OCTONET_SITE = $(call github,DigitalDevices,pvr.octonet,$(KODI_PVR_OCTONET_VERSION))
-> +KODI_PVR_OCTONET_LICENSE = GPL-2.0+
-> +KODI_PVR_OCTONET_LICENSE_FILES = debian/copyright
-> +KODI_PVR_OCTONET_DEPENDENCIES = json-for-modern-cpp kodi-platform libplatform
-> +
-> +$(eval $(cmake-package))
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index 5e4c7ca099..dd90c999fe 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -378,6 +378,7 @@ menu "PVR addons"
->  	source "package/kodi-pvr-mythtv/Config.in"
->  	source "package/kodi-pvr-nextpvr/Config.in"
->  	source "package/kodi-pvr-njoy/Config.in"
-> +	source "package/kodi-pvr-octonet/Config.in"
->  	source "package/kodi-pvr-pctv/Config.in"
->  	source "package/kodi-pvr-stalker/Config.in"
->  	source "package/kodi-pvr-vbox/Config.in"
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> What kind of options do you expect to need to pass?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+In our case it is "-nopad" to omit padding to the
+next 4k boundary.
+
+
+> Usually, I'd prefer we have common options directly mapped to entries in
+> the menuconfig, and keep this kind of "pass-through" options for more
+> exotic options.
+> 
+> For example, if we are looking at the compression options, I'd like we
+> add a config option like
+> 
+>     config BR2_TARGET_ROOTFS_SQUASHFS_EXTRA_COMPRESS
+>         bool "high-compression"
+>         depends on !BR2_TARGET_ROOTFS_SQUASHFS4_LZMA # No option
+>         help
+>           Say 'y' to compress even further, at the expense of
+>           compression time.
+> 
+>           For example:
+>             - for gzip, this enables all the -Xstrategy
+>             - for lz4, this enables -Xhc
+>             - for lzo, this enables -Xcompression-level 9
+>             - for xz, this chooses appropriate -Xbcj filters
+>             - for zstd, this enables -Xcompression-level 22
+> 
+> And maybe a few other such options, eventually adding the
+> BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS for corner-cases only.
+
+ok, so if I'm reading you correctly, I should probably
+just introduce a 
+	config BR2_TARGET_ROOTFS_SQUASHFS_NOPAD
+option, right?
+
+
+> > Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+> > Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+> > ---
+> >  fs/squashfs/Config.in   | 11 +++++++++++
+> >  fs/squashfs/squashfs.mk |  8 +++++++-
+> >  2 files changed, 18 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+> > index dde2097cb7..789b2cd24a 100644
+> > --- a/fs/squashfs/Config.in
+> > +++ b/fs/squashfs/Config.in
+> > @@ -5,6 +5,16 @@ config BR2_TARGET_ROOTFS_SQUASHFS
+> >  
+> >  if BR2_TARGET_ROOTFS_SQUASHFS
+> >  
+> > +config BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS
+> > +	string "additional mksquashfs options"
+> > +	default ""
+> > +	help
+> > +	  Specify a space-separated list of mksquashfs options, including
+> > +	  any squashfs filesystem features.
+> > +
+> > +	  For more information about the mke2fs options, see the manual
+> 
+> s/mke2fs/mksquashfs/
+
+ok
+
+
+> > +	  page mksquashfs(1).
+> > +
+> >  choice
+> >  	prompt "Compression algorithm"
+> >  	default BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+> > @@ -31,4 +41,5 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
+> >  	bool "zstd"
+> >  
+> >  endchoice
+> > +
+> >  endif
+> > diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+> > index 34ab048603..4bc6b338b0 100644
+> > --- a/fs/squashfs/squashfs.mk
+> > +++ b/fs/squashfs/squashfs.mk
+> > @@ -6,7 +6,13 @@
+> >  
+> >  ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+> >  
+> > -ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
+> > +SQUASHFS_MKFS_OPTS = $(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS))
+> 
+> Keep the vairalbes prefixed with ROOTFS_ here, to avoid clashing with
+> the package namespace: SQUASHFS_MKFS_OPTS by name would be a variable of
+> the "squashfs" package.
+
+ok, I wasn't sure here what the correct naming is, a lot of file-systems
+seem to use their options without ROOTFS_*
+
+So I'll change this to ROOTFS_* then.
+
+
+> > +ROOTFS_SQUASHFS_ARGS = \
+> > +	-noappend \
+> > +	-processors \
+> > +	$(PARALLEL_JOBS) \
+> 
+> $(PARALLEL_JOBS) is a parameter to the --processor option, so it should
+> be on the same line.
+> 
+> However, I don;t think you need to introduce an intermediate variable:
+> 
+>     ROOTFS_SQUASHFS_ARGS = \
+>         -noappend \
+>         -processors $(PARALLEL_JOBS) \
+>         $(call qstrip,$(BR2_TARGET_ROOTFS_SQUASHFS_MKFS_OPTIONS))
+
+this was a bit "modelled" after (aka stolen from) how the extfs does this ;-)
+But yeah, we can make this nicer .
+
+
+Heiko
