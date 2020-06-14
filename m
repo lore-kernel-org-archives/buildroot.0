@@ -1,67 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jun 2020 16:19:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <20200614105237.2052709-1-bernd.kuhls@t-online.de>
-References: <20200614105237.2052709-1-bernd.kuhls@t-online.de>
-Message-ID: <20200614141951.GR2346@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Jun 2020 16:22:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-platform: bump version
+Message-ID: <20200614142219.2773474-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Sent patch upstream and added URL for reference.
 
-On 2020-06-14 12:52 +0200, Bernd Kuhls spake thusly:
-> Reformatted hashes.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...01-kodiplatform-config.cmake-fix-for-cross-compilation.patch | 2 ++
+ package/kodi-platform/kodi-platform.hash                        | 2 +-
+ package/kodi-platform/kodi-platform.mk                          | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tvheadend/tvheadend.hash | 4 ++--
->  package/tvheadend/tvheadend.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-> index 92dc921825..83b61ec5ae 100644
-> --- a/package/tvheadend/tvheadend.hash
-> +++ b/package/tvheadend/tvheadend.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 0c2cc2ee09d21b34f2d72d971557a843b20a9e7da3d6550c4ce2fbe37c35ba13  tvheadend-221c29b40b1e53ae09a69d9458442dd4fea665f5.tar.gz
-> -sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-> +sha256  b44a09c6579ee7ce7e4b490bd8b7d6d22daed70ccd6571aad222b8c73ffaeeda  tvheadend-51a4c5bec7b6fc69dab7b8d559f9b1b881f0eb8e.tar.gz
-> +sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index df7fd7fd9c..b21ab66c9e 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TVHEADEND_VERSION = 221c29b40b1e53ae09a69d9458442dd4fea665f5
-> +TVHEADEND_VERSION = 51a4c5bec7b6fc69dab7b8d559f9b1b881f0eb8e
->  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
->  TVHEADEND_LICENSE = GPL-3.0+
->  TVHEADEND_LICENSE_FILES = LICENSE.md
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch b/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
+index 18a74e7b54..cc514b002b 100644
+--- a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
++++ b/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
+@@ -6,6 +6,8 @@ Subject: [PATCH] kodiplatform-config.cmake: fix for cross-compilation
+ Use CMAKE_FIND_ROOT_PATH in kodiplatform-config.cmake in order to make
+ it cross-compilation friendly.
+ 
++Patch sent upstream: https://github.com/xbmc/kodi-platform/pull/30
++
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+  CMakeLists.txt               | 2 +-
+diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
+index 28363888e5..29a43cf021 100644
+--- a/package/kodi-platform/kodi-platform.hash
++++ b/package/kodi-platform/kodi-platform.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d5b9b61c1c22b471d948b2c8de50f77ccadbd908869b13b5d98c42f447268d56  kodi-platform-915da086fa7b4ea72796052a04ed6de95501b95c.tar.gz
++sha256  159165ae641da5eb273885ce53b8a4b84e62a595c4974f9d12c1b5d1428ef25c  kodi-platform-809c5e9d711e378561440a896fcb7dbcd009eb3d.tar.gz
+ sha256  2f4bc4c1244b679121749378ff1a2b4b4e318897dac3d346a236432948ebeea7  debian/copyright
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 8c42bfd953..f1b97e3259 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PLATFORM_VERSION = 915da086fa7b4ea72796052a04ed6de95501b95c
++KODI_PLATFORM_VERSION = 809c5e9d711e378561440a896fcb7dbcd009eb3d
+ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPL-2.0+
+ KODI_PLATFORM_LICENSE_FILES = debian/copyright
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
