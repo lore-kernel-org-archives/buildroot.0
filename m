@@ -1,108 +1,57 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 Jun 2020 11:16:41 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: disable --as-needed linker
- flag for Codesourcery ARM 2014.05 toolchain
-In-Reply-To: <20200614074029.GC2346@scaer>
-References: <20200613104708.2415431-1-romain.naour@gmail.com>
- <20200614074029.GC2346@scaer>
-Message-ID: <b81acb46-b182-9b3d-d108-6f67e7023bf4@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 11:42:41 +0200
+Subject: [Buildroot] [git commit] package/iwd: needs dbus (runtime)
+Message-ID: <20200614094159.A406282602@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=6f5f6bcd897871a99cb7b6220f94f101ea5212c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 14/06/2020 ? 09:40, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2020-06-13 12:47 +0200, Romain Naour spake thusly:
->> Meson build system enable by default -Wl,--as-needed [1][2] in the linker command line
->> and due to this the libmesa_dri_drivers.so build fail with the Codesourcery ARM and
->> Aarch64 2014.05 toolchain:
-> 
-> What about removing this old toolchain, now?
-> 
-> Ditto other old toolchains?
+Fixes (on startup):
 
-I agree, I doesn't make sense to continue to build such bleeding edge package
-with old toolchains and spend time to investigate this kind of issue.
+  $ usr/libexec/iwd
+  Wireless daemon version 1.7
+  Failed to initialize D-Bus
 
-Also this CodeSourcery is special since it use a development version of binutils.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - move MMU dependency first
+  - split long line in comment dependencies
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/iwd/Config.in | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Note: We should stop testing with Linaro toolchain and use the ARM toolchain
-instead. ARM toolchain supersede the Linaro toolchain.
-
-> 
->> In order to build mesa3d with the CodeSourcery 2014.05 using --as-needed would be
->> reorder the static librairies:
->>
->>  diff --git a/src/mesa/drivers/dri/meson.build b/src/mesa/drivers/dri/meson.build
->>  index b09ca16e38a..9ac6731c522 100644
->>  --- a/src/mesa/drivers/dri/meson.build
->>  +++ b/src/mesa/drivers/dri/meson.build
->>  @@ -59,7 +59,7 @@ if _dri_drivers != []
->>       [],
->>       link_whole : _dri_drivers,
->>       link_with : [
->>  -      libmegadriver_stub, libdricommon, libglapi,
->>  +      libdricommon, libmegadriver_stub, libglapi,
->>         libmesa_classic,
->>       ],
-> 
-> That might make sense to push upstream, no?
-
-I'm not sure.
-
-Best regards,
-Romain
-
-> 
->> Instead, we can disable --as-needed from the meson build system using
->> "-Db_asneeded=false" only for this toolchain.
->>
->> [1] https://mesonbuild.com/Builtin-options.html
->> [2] https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> Applied to master, thanks.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>  package/mesa3d/mesa3d.mk | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
->> index e726bd33b3..59d96fe7c2 100644
->> --- a/package/mesa3d/mesa3d.mk
->> +++ b/package/mesa3d/mesa3d.mk
->> @@ -27,6 +27,12 @@ MESA3D_CONF_OPTS = \
->>  	-Dgallium-omx=disabled \
->>  	-Dpower8=false
->>  
->> +# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
->> +# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
->> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
->> +MESA3D_CONF_OPTS += -Db_asneeded=false
->> +endif
->> +
->>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
->>  MESA3D_DEPENDENCIES += host-llvm llvm
->>  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
->> -- 
->> 2.25.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+index eff24a8599..ec53d13047 100644
+--- a/package/iwd/Config.in
++++ b/package/iwd/Config.in
+@@ -1,16 +1,20 @@
+ config BR2_PACKAGE_IWD
+ 	bool "iwd"
++	depends on BR2_USE_MMU # dbus
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+ 	depends on !BR2_STATIC_LIBS # ell
+ 	depends on BR2_USE_WCHAR # ell
++	select BR2_PACKAGE_DBUS # runtime
+ 	select BR2_PACKAGE_ELL
+ 	help
+ 	  iNet Wireless daemon (iwd)
+ 
+ 	  https://iwd.wiki.kernel.org/
+ 
+-comment "iwd needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
++comment "iwd needs a toolchain w/ threads, dynamic library, wchar, headers >= 4.12"
++	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
