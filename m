@@ -1,53 +1,108 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 14 Jun 2020 09:06:49 +0000
-Subject: [Buildroot] [Bug 13001] openjdk-bin replaces libfreetype.so from
- host-freetype
-In-Reply-To: <bug-13001-163@https.bugs.busybox.net/>
-References: <bug-13001-163@https.bugs.busybox.net/>
-Message-ID: <bug-13001-163-IMnvn5XTJo@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 Jun 2020 11:16:41 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: disable --as-needed linker
+ flag for Codesourcery ARM 2014.05 toolchain
+In-Reply-To: <20200614074029.GC2346@scaer>
+References: <20200613104708.2415431-1-romain.naour@gmail.com>
+ <20200614074029.GC2346@scaer>
+Message-ID: <b81acb46-b182-9b3d-d108-6f67e7023bf4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13001
+Hi Yann,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Le 14/06/2020 ? 09:40, Yann E. MORIN a ?crit?:
+> Romain, All,
+> 
+> On 2020-06-13 12:47 +0200, Romain Naour spake thusly:
+>> Meson build system enable by default -Wl,--as-needed [1][2] in the linker command line
+>> and due to this the libmesa_dri_drivers.so build fail with the Codesourcery ARM and
+>> Aarch64 2014.05 toolchain:
+> 
+> What about removing this old toolchain, now?
+> 
+> Ditto other old toolchains?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+I agree, I doesn't make sense to continue to build such bleeding edge package
+with old toolchains and spend time to investigate this kind of issue.
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Jared, All,
+Also this CodeSourcery is special since it use a development version of binutils.
 
-Thanks for the report and the proposed patch.
+Note: We should stop testing with Linaro toolchain and use the ARM toolchain
+instead. ARM toolchain supersede the Linaro toolchain.
 
-I think the removal of that file should be done in a post-extract hook instead.
+> 
+>> In order to build mesa3d with the CodeSourcery 2014.05 using --as-needed would be
+>> reorder the static librairies:
+>>
+>>  diff --git a/src/mesa/drivers/dri/meson.build b/src/mesa/drivers/dri/meson.build
+>>  index b09ca16e38a..9ac6731c522 100644
+>>  --- a/src/mesa/drivers/dri/meson.build
+>>  +++ b/src/mesa/drivers/dri/meson.build
+>>  @@ -59,7 +59,7 @@ if _dri_drivers != []
+>>       [],
+>>       link_whole : _dri_drivers,
+>>       link_with : [
+>>  -      libmegadriver_stub, libdricommon, libglapi,
+>>  +      libdricommon, libmegadriver_stub, libglapi,
+>>         libmesa_classic,
+>>       ],
+> 
+> That might make sense to push upstream, no?
 
-Additionally, it would also be better to do the removal of unpack200 in that
-same post-extract hook as well.
+I'm not sure.
 
-Can you send it to the list with those changes, please?
+Best regards,
+Romain
 
-But note that ythere are a few other libraries that may be provided by other
-packages:
-
-- libzip.so, by package libzip, for which we do have a host variant, and so may
-well start clashing too
-- libnet.so, by package libnet; thats OK so far as we have no host variant for
-it, but that should be fixed as well I think
-- libsctp.so, by package lksctp-tools; thats OK so far as we have no host
-variant for it, but that should be fixed as well I think
-
-Could you also have a look into those, please?
-
-Adam, some more feedback, please?
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+>> Instead, we can disable --as-needed from the meson build system using
+>> "-Db_asneeded=false" only for this toolchain.
+>>
+>> [1] https://mesonbuild.com/Builtin-options.html
+>> [2] https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+> Applied to master, thanks.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> ---
+>>  package/mesa3d/mesa3d.mk | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+>> index e726bd33b3..59d96fe7c2 100644
+>> --- a/package/mesa3d/mesa3d.mk
+>> +++ b/package/mesa3d/mesa3d.mk
+>> @@ -27,6 +27,12 @@ MESA3D_CONF_OPTS = \
+>>  	-Dgallium-omx=disabled \
+>>  	-Dpower8=false
+>>  
+>> +# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
+>> +# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
+>> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+>> +MESA3D_CONF_OPTS += -Db_asneeded=false
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+>>  MESA3D_DEPENDENCIES += host-llvm llvm
+>>  MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
+>> -- 
+>> 2.25.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
