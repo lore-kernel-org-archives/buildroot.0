@@ -1,44 +1,93 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 14 Jun 2020 13:58:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/json-for-modern-cpp: bump to
- version 3.8.0
-Message-ID: <20200614205859.608988-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jun 2020 23:15:44 +0200
+Subject: [Buildroot] [PATCH v2] package/eigen: use cmake-package infra
+In-Reply-To: <20200614173754.702855-1-juju@cotds.org>
+References: <20200614173754.702855-1-juju@cotds.org>
+Message-ID: <20200614211544.GO2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Julien, All,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 4 ++--
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2020-06-14 19:37 +0200, Julien Olivain spake thusly:
+> The eigen package was introduced as a generic package, but upstream was
+> in fact using CMake.
+> 
+> The motivation of this change is to fix package detection with CMake.
+> 
+> Eigen3 library normally installs a signature file named
+> "signature_of_eigen3_matrix_library" to help library detection:
+> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
+> 
+> The library also provide a CMake macro that use this file to
+> detect it:
+> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/cmake/FindEigen3.cmake#L76
+> 
+> Without the signature file installed, packages searching for this
+> library with this method will fail. Other packages usings pkg-config are
+> not affected by this issue.
+> 
+> By using the cmake-package infrastructure, all the needed files
+> are now installed, fixing this CMake detection issue.
+> 
+> Other changes in this patch:
+> - Updated the Eigen git repository to the new url:
+>   https://gitlab.com/libeigen/eigen
+> - Removed all build and install staging commands
+>   (now included in upstream cmake)
+> - Package needs EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
+> - Removed the BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES option,
+>   as this option is not proposed by the upstream CMake
 
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index c67cd37558..cdd5338a1b 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	249548f4867417d66ae46b338dfe0a2805f3323e81c9e9b83c89f3adbfde6f31	json-3.7.3.tar.gz
--sha256	7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1	LICENSE.MIT
-+sha256  7d0edf65f2ac7390af5e5a0b323b31202a6c11d744a74b588dc30f5a8c9865ba  json-3.8.0.tar.gz
-+sha256  7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1  LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index e6f1df96f6..afc900b7dd 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_FOR_MODERN_CPP_VERSION = 3.7.3
-+JSON_FOR_MODERN_CPP_VERSION = 3.8.0
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
+    ... but they are unconditionally installed. A such, no need to
+    introduce a legacy entry for BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES:
+    users that had it enabled will still get the files installed, while
+    those that did not will get them installed now.
+
+> - Updated hash for source package
+
+... because the first component in the stored paths changed from
+eigen-eigen-323c052e1731/ to eigen-3.3.7/ and some mercurial related
+files (.hg_archival.txt, .hgtags) got dropped after the conversion to
+git.
+
+> - Reformat hash file with two spaces delimiters
+> - Define EIGEN_CONF_OPTS to set pkg-config .pc install path
+
+This one I am having a hard time with, see below...
+
+> Signed-off-by: Julien Olivain <juju@cotds.org>
+[--SNIP--]
+> +# Default Eigen CMake installs .pc file in
+> +# $(STAGING)/usr/share/pkgconfig
+> +# change it to lib/pkgconfig, to be consistent with other packages.
+> +EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR:PATH=lib/pkgconfig
+
+So this is a syntax that I am not familiar with.
+
+First, it uses a non-absolute path "lib/pkgconfig". This is strange to
+me. Second, it uses a variable with a colon PKGCONFIG_INSTALL_DIR:PATH,
+and I don't know that either.
+
+Yes, it works as expected, but I like to understand what's going on. Can
+you shed a light on this, please?
+
+I've tested -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig which is the
+usual way we're used to in Buildroot, and that works too.
+
+I'll wait for your feedback on the above, but I'd prefer we use the more
+traditional form unless there is a good reason not to.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
