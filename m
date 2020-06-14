@@ -1,43 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 14 Jun 2020 12:52:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-Message-ID: <20200614105237.2052709-1-bernd.kuhls@t-online.de>
+From: Julien Olivain <juju@cotds.org>
+Date: Sun, 14 Jun 2020 12:54:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/eigen: fix package detection
+ with CMake
+In-Reply-To: <20200614072836.GB2346@scaer>
+References: <20200613161643.609929-1-juju@cotds.org>
+ <20200614072836.GB2346@scaer>
+Message-ID: <f72aa8654240c37329f54d89df688f04@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+Hi Yann, Matt,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tvheadend/tvheadend.hash | 4 ++--
- package/tvheadend/tvheadend.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2020-06-14 09:28, Yann E. MORIN wrote:
+> Julien, Matt, all,
+> 
+> On 2020-06-13 18:16 +0200, Julien Olivain spake thusly:
+>> Eigen3 library normally installs a signature file named
+>> "signature_of_eigen3_matrix_library" to help library detection:
+>> https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
+>> 
+>> This Buildroot package does not use CMake for installing files, as 
+>> only
+>> the headers are needed in the STAGING_DIR. A generic-package is used
+>> instead with simple copies.
+> 
+> Why can't we use the cmake-package infra, rahter than duplicate what
+> upstream does?
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 92dc921825..83b61ec5ae 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 0c2cc2ee09d21b34f2d72d971557a843b20a9e7da3d6550c4ce2fbe37c35ba13  tvheadend-221c29b40b1e53ae09a69d9458442dd4fea665f5.tar.gz
--sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-+sha256  b44a09c6579ee7ce7e4b490bd8b7d6d22daed70ccd6571aad222b8c73ffaeeda  tvheadend-51a4c5bec7b6fc69dab7b8d559f9b1b881f0eb8e.tar.gz
-+sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index df7fd7fd9c..b21ab66c9e 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 221c29b40b1e53ae09a69d9458442dd4fea665f5
-+TVHEADEND_VERSION = 51a4c5bec7b6fc69dab7b8d559f9b1b881f0eb8e
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
--- 
-2.26.2
+I agree, I can't see any reason why this package cannot use its upstream 
+cmake infra.
+I'll try to rewrite this patch to switch it as a cmake-package.
+
+Best regards,
+
+Julien.
