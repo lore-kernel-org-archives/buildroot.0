@@ -1,56 +1,65 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 15 Jun 2020 21:46:27 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-bitstring: bump to version
- 3.1.7
+Date: Mon, 15 Jun 2020 21:46:28 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-lxml: bump to version 4.5.1
 In-Reply-To: <20200615184632.493821-1-asafka7@gmail.com>
 References: <20200615184632.493821-1-asafka7@gmail.com>
-Message-ID: <20200615184632.493821-3-asafka7@gmail.com>
+Message-ID: <20200615184632.493821-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* License was changed from UNIX to Windows line endings.
-* SETUP_TYPE is actually distutils, and not setuptools.
-* Use two spaces for hash file indentation.
+The options --with-xslt-config and --with-xml2-config were
+renamed to --xslt-config and --xml2-config", respectively.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-bitstring/python-bitstring.hash | 6 +++---
- package/python-bitstring/python-bitstring.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-lxml/python-lxml.hash |  2 +-
+ package/python-lxml/python-lxml.mk   | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
-index 07586d5300..04e4914696 100644
---- a/package/python-bitstring/python-bitstring.hash
-+++ b/package/python-bitstring/python-bitstring.hash
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 593a5e1c56..240314e888 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bitstring/json
--md5	38372014dd629be75c3a0ff7d799aa3f  bitstring-3.1.6.tar.gz
--sha256	c97a8e2a136e99b523b27da420736ae5cb68f83519d633794a6a11192f69f8bf  bitstring-3.1.6.tar.gz
-+md5  18661a3e5c47c59bd926dd0fefae0baa  bitstring-3.1.7.tar.gz
-+sha256  fdf3eb72b229d2864fb507f8f42b1b2c57af7ce5fec035972f9566de440a864a  bitstring-3.1.7.tar.gz
- # Locally computed sha256 checksums
--sha256	2e97cff64585d7cb66190ad298e9d77fd791e8b91bcc97967fa743edf8c2ba1b  LICENSE
-+sha256  ea3c0e2288994d3dfeaac0fd2163f2cf5f9671c3ae70a9e9d563795e28cfb0b9  LICENSE
-diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
-index 636ae0e0c0..c36993416d 100644
---- a/package/python-bitstring/python-bitstring.mk
-+++ b/package/python-bitstring/python-bitstring.mk
-@@ -4,10 +4,10 @@
+ # Locally computed
+-sha256  8620ce80f50d023d414183bf90cc2576c2837b88e00bea3f33ad2630133bbb60  lxml-4.5.0.tar.gz
++sha256  27ee0faf8077c7c1a589573b1450743011117f1aa1a91d5ae776bbc5ca6070f2  lxml-4.5.1.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index cfb87bb6fd..7e727a6753 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_BITSTRING_VERSION = 3.1.6
-+PYTHON_BITSTRING_VERSION = 3.1.7
- PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
--PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/f4/87/fe6f7093088f4396e84c1b5d5dfb08c4840487ad46ff4805b7008c8f5ffc
--PYTHON_BITSTRING_SETUP_TYPE = setuptools
-+PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/c3/fc/ffac2c199d2efe1ec5111f55efeb78f5f2972456df6939fea849f103f9f5
-+PYTHON_BITSTRING_SETUP_TYPE = distutils
- PYTHON_BITSTRING_LICENSE = MIT
- PYTHON_BITSTRING_LICENSE_FILES = LICENSE
+-PYTHON_LXML_VERSION = 4.5.0
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/39/2b/0a66d5436f237aff76b91e68b4d8c041d145ad0a2cdeefe2c42f76ba2857
++PYTHON_LXML_VERSION = 4.5.1
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/03/a8/73d795778143be51d8b86750b371b3efcd7139987f71618ad9f4b8b65543
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
  
+ # Not including the GPL, because it is used only for the test scripts.
+@@ -26,11 +26,11 @@ HOST_PYTHON_LXML_DEPENDENCIES = host-libxml2 host-libxslt host-zlib
+ # python-lxml needs these scripts in order to properly detect libxml2 and
+ # libxslt compiler and linker flags
+ PYTHON_LXML_BUILD_OPTS = \
+-	--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
+-	--with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config
++	--xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
++	--xml2-config=$(STAGING_DIR)/usr/bin/xml2-config
+ HOST_PYTHON_LXML_BUILD_OPTS = \
+-	--with-xslt-config=$(HOST_DIR)/bin/xslt-config \
+-	--with-xml2-config=$(HOST_DIR)/bin/xml2-config
++	--xslt-config=$(HOST_DIR)/bin/xslt-config \
++	--xml2-config=$(HOST_DIR)/bin/xml2-config
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
 2.26.2
