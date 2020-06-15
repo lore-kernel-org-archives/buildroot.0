@@ -1,39 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jun 2020 11:37:12 +0200
-Subject: [Buildroot] [git commit] configs/orangepi_zero_defconfig: use
- python 3.x
-Message-ID: <20200615093551.0739D83A18@busybox.osuosl.org>
+Date: Mon, 15 Jun 2020 11:41:55 +0200
+Subject: [Buildroot] [git commit] package/systemd: remove unused user
+ accounts
+Message-ID: <20200615094047.43A638227E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7d006fa924731011042ef3cdb0d1d06d48428b8
+commit: https://git.buildroot.net/buildroot/commit/?id=b82ee4dbb6280402d836aee2177e035c55b7b839
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Orange Pi Zero defconfig has been updated to use U-Boot 2020.04 by
-commit 9e2bfccf4da8 (configs/orangepi_zero: bump kernel and uboot
-versions). Since then it requires Python 3.x on the host.
+Since V235 the "gateway" and "upload" services use DynamicUsers,
+requiring no entries in /etc/passwd.
+This functionality requires nss-systemd, which is always
+enabled in buildroot.
 
-Fixes:
-	https://gitlab.com/buildroot.org/buildroot/-/jobs/593313572
+The "bus-proxy" user was removed in V230.
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: J??r??my Rosen <jeremy.rosen@smile.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/orangepi_zero_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/systemd/systemd.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 2ec71dbd71..f674ceaa24 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -24,6 +24,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e61cec80f0..141209897d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -486,10 +486,7 @@ define SYSTEMD_USERS
+ 	- - systemd-journal -1 * - - - Journal
+ 	- - render -1 * - - - DRI rendering nodes
+ 	- - kvm -1 * - - - kvm nodes
+-	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+-	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+ 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+-	systemd-journal-upload -1 systemd-journal-upload -1 * - - - Journal Upload
+ 	$(SYSTEMD_COREDUMP_USER)
+ 	$(SYSTEMD_NETWORKD_USER)
+ 	$(SYSTEMD_RESOLVED_USER)
