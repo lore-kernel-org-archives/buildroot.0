@@ -1,57 +1,154 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Jun 2020 20:17:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freetype: bump version to 2.10.2
-Message-ID: <20200615181753.997099-1-bernd.kuhls@t-online.de>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 15 Jun 2020 20:31:03 +0200
+Subject: [Buildroot] [PATCH] package/ttyd: new package
+Message-ID: <20200615183103.476615-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
+ttyd is a simple command-line tool for sharing
+terminal over the web.
 
-Reformatted hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/freetype/freetype.hash | 14 +++++++-------
- package/freetype/freetype.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../ttyd/0001-cmake-fix-build-without-C.patch | 41 +++++++++++++++++++
+ package/ttyd/Config.in                        | 20 +++++++++
+ package/ttyd/ttyd.hash                        |  3 ++
+ package/ttyd/ttyd.mk                          | 13 ++++++
+ 6 files changed, 79 insertions(+)
+ create mode 100644 package/ttyd/0001-cmake-fix-build-without-C.patch
+ create mode 100644 package/ttyd/Config.in
+ create mode 100644 package/ttyd/ttyd.hash
+ create mode 100644 package/ttyd/ttyd.mk
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index c4e75c327c..7fc00f1c97 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.1/
--md5 bd42e75127f8431923679480efb5ba8f freetype-2.10.1.tar.xz
--sha1 79874ef4eaa52025126b71d836453b8279bdd331 freetype-2.10.1.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
-+md5  7c0d5a39f232d7eb9f9d7da76bf08074  freetype-2.10.2.tar.xz
-+sha1  b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875  freetype-2.10.2.tar.xz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 76a153d695..cbe6bc1856 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -294,6 +294,7 @@ F:	board/stmicroelectronics/stm32mp157a-dk1/
+ F:	configs/stm32mp157a_dk1_defconfig
+ F:	package/python-esptool/
+ F:	package/python-pyaes/
++F:	package/ttyd/
+ F:	package/qt5/qt5scxml/
+ F:	package/qt5/qt5webview/
  
- # Locally calculated
--sha256	16dbfa488a21fe827dc27eaf708f42f7aa3bb997d745d31a19781628c36ba26f	freetype-2.10.1.tar.xz
--sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
--sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
--sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
-+sha256  1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b  freetype-2.10.2.tar.xz
-+sha256  fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb  docs/LICENSE.TXT
-+sha256  08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1  docs/FTL.TXT
-+sha256  c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18  docs/GPLv2.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 8b3a4ca09c..516d1c0cfc 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.10.1
-+FREETYPE_VERSION = 2.10.2
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index d32eadab88..1f44fe7ca9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2310,6 +2310,7 @@ comment "Utilities"
+ 	source "package/time/Config.in"
+ 	source "package/tini/Config.in"
+ 	source "package/tmux/Config.in"
++	source "package/ttyd/Config.in"
+ 	source "package/which/Config.in"
+ 	source "package/xmlstarlet/Config.in"
+ 	source "package/xxhash/Config.in"
+diff --git a/package/ttyd/0001-cmake-fix-build-without-C.patch b/package/ttyd/0001-cmake-fix-build-without-C.patch
+new file mode 100644
+index 0000000000..8d5d35ca19
+--- /dev/null
++++ b/package/ttyd/0001-cmake-fix-build-without-C.patch
+@@ -0,0 +1,41 @@
++From cec921a680576865847d98552ded2a67efd8eb50 Mon Sep 17 00:00:00 2001
++From: Bartosz Bilas <b.bilas@grinn-global.com>
++Date: Mon, 15 Jun 2020 17:32:26 +0200
++Subject: [PATCH] cmake: fix build without C++
++
++Specify that ttyd is a C project to avoid the
++following build failure if a C++ compiler isn't found.
++
++CMake Error at CMakeLists.txt:3 (project):
++  The CMAKE_CXX_COMPILER:
++
++    /home/bartekk/Projects/buildroots/buildroot-dev/buildroot/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++
++
++  is not a full path to an existing compiler tool.
++
++  Tell CMake where to find the compiler by setting either the environment
++  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
++  to the compiler, or to the compiler name if it is in the PATH.
++
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ Upstream status: https://github.com/tsl0922/ttyd/pull/382
++
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 8061f47..efd76d2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,6 +1,6 @@
++ cmake_minimum_required(VERSION 2.8)
++ 
++-project(ttyd)
+++project(ttyd C)
++ set(PROJECT_VERSION "1.6.0")
++ 
++ find_package(Git)
++-- 
++2.27.0
++
+diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
+new file mode 100644
+index 0000000000..83f27d9282
+--- /dev/null
++++ b/package/ttyd/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_TTYD
++	bool "ttyd"
++	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_USE_MMU # libuv
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_LIBWEBSOCKETS
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
++	help
++	  ttyd is a simple command-line tool for sharing terminal
++	  over the web.
++
++	  https://github.com/tsl0922/ttyd
++
++comment "ttyd needs a toolchain w/ NPTL, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| BR2_USE_MMU || BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
+new file mode 100644
+index 0000000000..c73af44af3
+--- /dev/null
++++ b/package/ttyd/ttyd.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  d14740bc82be0d0760dd0a3c97acbcbde490412a4edc61edabe46d311b068f83  ttyd-1.6.0.tar.gz
++sha256  711762f081c180ade3d09d7b0b7537eaf35eca8d1671e47bc66eaa39376edb12  LICENSE
+diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
+new file mode 100644
+index 0000000000..a7e2ee9bb5
+--- /dev/null
++++ b/package/ttyd/ttyd.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# ttyd
++#
++################################################################################
++
++TTYD_VERSION = 1.6.0
++TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
++TTYD_LICENSE = MIT
++TTYD_LICENSE_FILES = LICENSE
++TTYD_DEPENDENCIES = json-c libuv libwebsockets openssl zlib
++
++$(eval $(cmake-package))
 -- 
-2.26.2
+2.27.0
