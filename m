@@ -1,50 +1,56 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 15 Jun 2020 09:20:48 +0200
-Subject: [Buildroot] [PATCH v2 08/14] package/systemd: add hook to update
- journalctl catalogs
+Date: Mon, 15 Jun 2020 09:20:53 +0200
+Subject: [Buildroot] [PATCH v2 13/14] systemd: remove hard dependency on dbus
 In-Reply-To: <20200615072055.2083-1-nolange79@gmail.com>
 References: <20200615072055.2083-1-nolange79@gmail.com>
-Message-ID: <20200615072055.2083-9-nolange79@gmail.com>
+Message-ID: <20200615072055.2083-14-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-journald supports catalog files, or rather a binary database of
-those.
-This add a hook to create said database from the available
-catalog source files (which are not needed afterwards).
+A substantial functionality of systemd does not
+depend on dbus anymore.
+It is certainly possible to used most of its core
+system managment functionality inclusive logging.
 
-One ugly workaround is or ensuring that PURGE_LOCALES is
-called before, we do this by adding this hook
-(will then run twice during the finalize target step).
+In other words, most commands from systemctl and
+loginctl do work, aslong as used from root.
+
+These features will need dbus (incomplete list):
+
+-   Access to systemd from non-root
+-   Loginctl
+-   Timedatectl
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/systemd.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/systemd/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 2c7f35bf25..d3be92b78c 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -579,6 +579,16 @@ define SYSTEMD_PRESET_ALL
- endef
- SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_PRESET_ALL
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index b09bd36ab6..a7f41d2a38 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -25,7 +25,6 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+ 	select BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_DBUS # runtime dependency only
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+@@ -90,6 +89,10 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
  
-+define SYSTEMD_UPDATE_CATALOGS
-+	$(HOST_DIR)/bin/journalctl --root=$(TARGET_DIR) --update-catalog
-+endef
++comment "systemd recommends enabling a dbus daemon"
++	depends on !BR2_PACKAGE_DBUS
++	depends on !BR2_PACKAGE_DBUS_BROKER
 +
-+# SYSTEMD_UPDATE_CATALOGS needs to run after PURGE_LOCALES
-+ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-+SYSTEMD_TARGET_FINALIZE_HOOKS += PURGE_LOCALES
-+endif
-+SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_UPDATE_CATALOGS
-+
- SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
- SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
- 
+ config BR2_PACKAGE_SYSTEMD_BOOT
+ 	bool "systemd-boot"
+ 	depends on BR2_i386 || BR2_x86_64
 -- 
 2.27.0
