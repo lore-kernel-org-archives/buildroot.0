@@ -1,37 +1,37 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon, 15 Jun 2020 15:06:32 +0200
-Subject: [Buildroot] [PATCH 2/3] package/freescale-imx/firmware-imx: install
- easrc firmware for i.MX8MN
-In-Reply-To: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>
-References: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20200615130633.19909-2-sebastien.szymanski@armadeus.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 15 Jun 2020 13:09:54 +0000
+Subject: [Buildroot] [Bug 13001] openjdk-bin replaces libfreetype.so from
+ host-freetype
+In-Reply-To: <bug-13001-163@https.bugs.busybox.net/>
+References: <bug-13001-163@https.bugs.busybox.net/>
+Message-ID: <bug-13001-163-ZhBsyWHEe4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On i.MX8MN, the easrc driver needs a firmware in /lib/firmwareimx/easrc/
-so install it.
+https://bugs.busybox.net/show_bug.cgi?id=13001
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Jared Bents <jared.bents@rockwellcollins.com> changed:
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 725f275948..49fda89f28 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -13,6 +13,9 @@ FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
- FIRMWARE_IMX_REDISTRIBUTE = NO
- 
- FIRMWARE_IMX_BLOBS = sdma epdc
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
-+FIRMWARE_IMX_BLOBS += easrc
-+endif
- 
- define FIRMWARE_IMX_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #8501|0                           |1
+        is obsolete|                            |
+
+--- Comment #3 from Jared Bents <jared.bents@rockwellcollins.com> ---
+Created attachment 8506
+  --> https://bugs.busybox.net/attachment.cgi?id=8506&action=edit
+proposed patch to fix v2
+
+Updated proposed patch to use post extract hook and include three more
+libraries
+
+- libzip.so, by package libzip
+- libnet.so, by package libnet; added host variant
+- libsctp.so, by package lksctp-tools; added host variant
+
 -- 
-2.26.2
+You are receiving this mail because:
+You are on the CC list for the bug.
