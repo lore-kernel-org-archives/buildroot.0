@@ -1,67 +1,89 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 15 Jun 2020 21:46:26 +0300
-Subject: [Buildroot] [PATCH 1/1] package/{libuv,
- uvw}: bump to versions 1.38.0, 2.6.0_libuv-v1.38
-In-Reply-To: <20200615184632.493821-1-asafka7@gmail.com>
-References: <20200615184632.493821-1-asafka7@gmail.com>
-Message-ID: <20200615184632.493821-2-asafka7@gmail.com>
+Date: Mon, 15 Jun 2020 21:46:25 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.9.2
+Message-ID: <20200615184632.493821-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove patch (applied upstream).
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- package/uvw/uvw.hash     | 2 +-
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ ...on.build-libfuse-is-a-C-only-project.patch | 39 -------------------
+ package/libfuse3/libfuse3.hash                |  2 +-
+ package/libfuse3/libfuse3.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+ delete mode 100644 package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 8e1824f397..2aba18490e 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
+deleted file mode 100644
+index 279f590ce9..0000000000
+--- a/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From fc25c5002cae23151309fce6059e230545fd4d82 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 20 Apr 2020 21:20:19 +0200
+-Subject: [PATCH] Do not require C++ compiler for building
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/libfuse/libfuse/commit/fc25c5002cae23151309fce6059e230545fd4d82]
+----
+- example/meson.build | 2 +-
+- meson.build         | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/example/meson.build b/example/meson.build
+-index 3edddea9..2342df9c 100644
+---- a/example/meson.build
+-+++ b/example/meson.build
+-@@ -31,7 +31,7 @@ foreach ex : threaded_examples
+-                install: false)
+- endforeach
+- 
+--if not platform.endswith('bsd') and platform != 'dragonfly'
+-+if not platform.endswith('bsd') and platform != 'dragonfly' and add_languages('cpp', required : false)
+-     executable('passthrough_hp', 'passthrough_hp.cc',
+-                dependencies: [ thread_dep, libfuse_dep ],
+-                install: false)
+-diff --git a/meson.build b/meson.build
+-index 69b3630d..4428bdb9 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1,4 +1,4 @@
+--project('libfuse3', ['cpp', 'c'], version: '3.9.1',
+-+project('libfuse3', ['c'], version: '3.9.1',
+-         meson_version: '>= 0.42',
+-         default_options: [ 'buildtype=debugoptimized' ])
+- 
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index bc09da4cf8..c7f371368a 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7afa3c8a326b3eed02a9addb584ae7e995ae4d30516cad5e1e4af911931162a6  libuv-1.37.0.tar.gz
-+sha256  2cd9a757fe6c512440933e2bdcab21143d4aa6249b2541399908ce038b756c9d  libuv-1.38.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index e61f565b54..493168cd99 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.37.0
-+LIBUV_VERSION = 1.38.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index bdc1524bfe..f842345ea6 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bae3e0eccee602b3fb86d89db0c69ae2022a92142f50a042f0949da678614a6c  uvw-2.5.0_libuv-v1.37.tar.gz
-+sha256  2695276bb4b154174ac0a6401bde5c0768bca99a43c9a469af67526f7e2e9410  uvw-2.6.0_libuv-v1.38.tar.gz
- sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 98c61c80ac..dd9b6b27dc 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
+ # Locally calculated sha256 checksums
+-sha256  4f3dea4979c30fbd85f46b8812bee5945bd6bb4487165eb01ecde57bbfbb332f  libfuse3-3.9.1.tar.gz
++sha256  b4409255cbda6f6975ca330f5b04cb335b823a95ddd8c812c3d224ec53478fc0  libfuse3-3.9.2.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index d23d8d9a43..1e959640e2 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UVW_VERSION = 2.5.0_libuv-v1.37
-+UVW_VERSION = 2.6.0_libuv-v1.38
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+-LIBFUSE3_VERSION = 3.9.1
++LIBFUSE3_VERSION = 3.9.2
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
 -- 
 2.26.2
