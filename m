@@ -1,154 +1,212 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 15 Jun 2020 18:09:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version 1.3.4
-Message-ID: <20200615160952.101687-1-titouan.christophe@railnova.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 15 Jun 2020 18:54:10 +0200
+Subject: [Buildroot] [PATCH v2 01/14] package/systemd: configure nss
+ plugins in nsswitch.conf
+In-Reply-To: <CADYdroNsfJ1dvjzRyoG6vEamVdNbDqhBtv9qrGXUm-jqSysakw@mail.gmail.com>
+References: <20200615072055.2083-1-nolange79@gmail.com>
+ <20200615072055.2083-2-nolange79@gmail.com>
+ <20200615114825.GZ2346@scaer>
+ <CADYdroNsfJ1dvjzRyoG6vEamVdNbDqhBtv9qrGXUm-jqSysakw@mail.gmail.com>
+Message-ID: <20200615165410.GB2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a crucial bugfix release that fixes a backward incompatible ABI
-change introduced in 1.3.2.
+Norbert, All,
 
-Also drop patches that are now applied upstream.
+On 2020-06-15 14:14 +0200, Norbert Lange spake thusly:
+> Am Mo., 15. Juni 2020 um 13:48 Uhr schrieb Yann E. MORIN
+> <yann.morin.1998@free.fr>:
+> >
+> > Norbert, All,
+> >
+> > On 2020-06-15 09:20 +0200, Norbert Lange spake thusly:
+> > > This adds configuration of the nsswitch.conf file,
+> > > it does so by pathing the template provided by systemd.
+> > >
+> > > The template is fully populated, the services that are
+> > > not available are removed.
+> > >
+> > > If the plugin nss-compat is not available, the entries
+> > > will be replaced with nss-files.
+> >
+> > systemd is glibc-only, and libnss_compat.so* is provided by glibc. What
+> > glibc does not provide it?
+> see: toolchain/toolchain-external/pkg-toolchain-external.mk
+> you only copy over ibnss_files there.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- ...ists.txt-fix-build-on-uclibc-or-musl.patch | 45 ------------------
- ...X-language-to-support-using-Generate.patch | 46 -------------------
- package/paho-mqtt-c/paho-mqtt-c.hash          |  2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk            |  2 +-
- 4 files changed, 2 insertions(+), 93 deletions(-)
- delete mode 100644 package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
- delete mode 100644 package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
+Aha. But then I think this is more an oversight than a deliberate
+filtering. In my opinion, the list should include libnss_*.so.*.
 
-diff --git a/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-deleted file mode 100644
-index 7989f045b9..0000000000
---- a/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 517e8659ab566b15cc409490a432e8935b164de8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 24 Apr 2020 11:55:41 +0200
--Subject: [PATCH] src/CMakeLists.txt: fix build on uclibc or musl
--
--Build of version 1.3.2 with uclibc or musl fails on:
--
--[ 58%] Linking C shared library libpaho-mqtt3c.so
--/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lanl
--collect2: error: ld returned 1 exit status
--
--This is due to commit 21ffebcb749fc8bd8578df85550f03f74e571620 which
--added a link to anl which is not available on uclibc or musl.
--
--Fix this by checking if anl is found on the system before using it
--
--Fixes:
-- - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8]
-----
-- src/CMakeLists.txt | 8 +++++++-
-- 1 file changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index fb367b37..95fd43e7 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -60,7 +60,13 @@ IF (WIN32)
--     SET(LIBS_SYSTEM ws2_32 crypt32 RpcRT4)
-- ELSEIF (UNIX)
--     IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
---        SET(LIBS_SYSTEM c dl pthread anl rt)
--+        SET(LIBS_SYSTEM c dl pthread rt)
--+        # anl is only available with glibc so check if it is found before using
--+        # it or build will fail on uclibc or musl
--+        FIND_LIBRARY(LIB_ANL anl)
--+        IF(LIB_ANL)
--+            SET(LIBS_SYSTEM "${LIBS_SYSTEM} ${LIB_ANL}")
--+        ENDIF()
--         ADD_DEFINITIONS(-D_GNU_SOURCE -fvisibility=hidden)
--     ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
--         SET(LIBS_SYSTEM c dl)
-diff --git a/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch b/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
-deleted file mode 100644
-index ee4c2307ef..0000000000
---- a/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 342b3824d261f552a7be5dac7a242c263d9b9fd4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 1 May 2020 12:41:59 +0200
--Subject: [PATCH] Revert "Enable CXX language to support using
-- GenerateExportHeader"
--
--This reverts commit 23d68e8c798d29309a277fb3c869c23f9cac2bbf. Indeed,
--GenerateExportHeader has been removed with commit
--db5a2c216b122c57dc281aea2f3b7afa210dc0fc and ENABLE_LANGUAGE(CXX) will
--raise the following build failure if no C++ compiler is found:
--
--CMake Error at CMakeLists.txt:34 (ENABLE_LANGUAGE):
--  The CMAKE_CXX_COMPILER:
--
--    /home/buildroot/autobuild/instance-1/output-1/host/bin/arm-linux-g++
--
--  is not a full path to an existing compiler tool.
--
--  Tell CMake where to find the compiler by setting either the environment
--  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
--  to the compiler, or to the compiler name if it is in the PATH.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/831ecc34b51ee2be82a3c25f5ec94f0dd2103655
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/eclipse/paho.mqtt.c/pull/872]
-----
-- CMakeLists.txt | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index c52a42e..a290730 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -31,7 +31,6 @@ file(READ version.minor PAHO_VERSION_MINOR)
-- file(READ version.patch PAHO_VERSION_PATCH)
-- SET(CLIENT_VERSION ${PAHO_VERSION_MAJOR}.${PAHO_VERSION_MINOR}.${PAHO_VERSION_PATCH})
-- 
---ENABLE_LANGUAGE(CXX)
-- INCLUDE(GNUInstallDirs)
-- 
-- STRING(TIMESTAMP BUILD_TIMESTAMP UTC)
---- 
--2.26.2
--
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 8f6ca61480..bbfa2da386 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  c426334c2ffc9f7a230e3de5162bdbc1762f8f60ffe27460e553edb74c7e0681  paho-mqtt-c-1.3.2.tar.gz
-+sha256  1ae9b657b693254ed0710350df3dcf5232d1f479409a52861b5e5bb5cc3da046  paho-mqtt-c-1.3.4.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index c7ecf412cd..aa2a0b026e 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.2
-+PAHO_MQTT_C_VERSION = 1.3.4
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+> > > nss-systemd is used for the DynamicUser features,
+> > > which is a defacto necessity for systemd.
+> > > It handles transient users/groups without
+> > > touching the /etc/{passwd,group} files on disk.
+> > >
+> > > nss-myhostname allows resolving the hostname,
+> > > again without touching files in /etc.
+> > > Enabling this feature requires configuring the plugin.
+> > >
+> > > nss-resolve is part of resolved, and required for
+> > > consistent dns lookups.
+> > >
+> > > nss-mymachines adds name resolution from
+> > > containers.
+> > >
+> > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > > ---
+> > >  package/systemd/systemd.mk | 16 ++++++++++++++++
+> > >  1 file changed, 16 insertions(+)
+> > >
+> > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > > index e61cec80f0..cf6c0f9576 100644
+> > > --- a/package/systemd/systemd.mk
+> > > +++ b/package/systemd/systemd.mk
+> > > @@ -472,7 +472,23 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+> > >       touch $(TARGET_DIR)/etc/machine-id
+> > >  endef
+> > >
+> > > +define SYSTEMD_NSSCONFIG_HOOK
+> > > +     [ -r "$$(find $(TARGET_DIR)/usr/lib -name libnss_compat.so.*)" ] || \
+> >
+> > As said above, this is supposed to always exist in a glibc-based
+> > toolchain, which is all that systemd supports, so I don;t see why we
+> > would want to replace the 'compat' plugin by the 'files' one.
+> 
+> Well, until now, buildroot did use nothing but 'files'. I am not
+> against changing that,
+> but I dont complain about having the choice.
+> the 'compat' plugin doesn't add anything I care about, if it adds IPC
+> then I would
+> actually prefer not using it.
+
+So I had a look at the nsswitch.conf man page, and the 'compat' plugin
+is described as:
+
+    The NSS "compat" service is similar to "files" except that it
+    additionally permits special entries in corresponding files for
+    granting users or members of netgroups access to the system.
+
+So, in the context of Buildroot, we can just plain replace 'compat' with
+'files' uncondtionally.
+
+> > > +             sed 's,\bcompat\b,files,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
+> >
+> > We already have a variable that does 'sed -i' :
+> >
+> >     $(SED) 's,\bcompat\b,files,g' $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
+> >
+> > > +     [ "$(BR2_PACKAGE_SYSTEMD_RESOLVED)" = "y" ] || \
+> >
+> > Usually, we do not test configuration-level conditions in shell, but in
+> > Makefile:
+> >
+> >     ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+> >     define SYSTEMD_NSSWITCH_CONF_RESOLVED
+> >         sed blablabla...
+> >     endef
+> >     SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_NSSWITCH_CONF_RESOLVED   # See below, point 3...
+> >     endif
+> That's overly fragmented IHMO,
+
+... but much more in line with how we do it elsewhere.
+
+> I thought about $(if $(BR2_PACKAGE_SYSTEMD_RESOLVED),sed blahblah),
+> that would need replacing of the commas.
+
+Alternatively, that could be used, yes, but I still prefer the one-hook
+per option, even if it is still fragmented.
+
+But the conditional options already exist elsewhere in the file, so the
+corresponding conditional blocks can be re-used and extended. For example,
+there is already a conditional block for BR2_PACKAGE_SYSTEMD_RESOLVED:
+
+    https://git.buildroot.org/buildroot/tree/package/systemd/systemd.mk#n394
+
+     ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+     define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+         ln -sf ../run/systemd/resolve/resolv.conf \
+             $(TARGET_DIR)/etc/resolv.conf
+     endef
+     SYSTEMD_CONF_OPTS += -Dnss-resolve=true -Dresolve=true
+     SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - systemd Resolver
+    +define SYSTEMD_NSSWITCH_CONF_RESOLVED
+    +    sed blablabla...
+    +endef
+    +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_NSSWITCH_CONF_RESOLVED
+     else
+     SYSTEMD_CONF_OPTS += -Dnss-resolve=false -Dresolve=false
+     endif
+
+> > > +             sed -e 's,\bresolve[[:space:]][[:space:]]*\[[^]]*\][[:space:]]*,,g' \
+> >
+> > "[[:space:]][:space:]]*" is equivalent to "[[:space:]]+".
+> >
+> > > +             -e 's,\bresolve\b[[:space:]]*,,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
+> >
+> > As I understand it, you are trying to remove the 'resolve' plugin,
+> > whether it has a follwing "[action]" or not, right? If so, here's my
+> > proposal of a simpler regexp that cactches both cases:
+> >
+> >     's,\bresolve[[:space:]]+(\[[^]]+\])?[[:space:]],,g'
+> I suppose $(SED) enables extended regex?
+
+Unfortunately, it does not (so it matches your usage):
+
+    https://git.buildroot.org/buildroot/tree/Makefile#n313
+
+Hmm... But see below, using $(SED) might not be a good idea.
+
+[--SNIP--]
+> >  1. /etc/nsswitch.conf is already provided by the glibc package, so
+> >     overwriting it will not play nicely with per-package directories,
+> using a separate default for systemd might make sense in the glibc package?
+> what about your arguments about 'compat' vs 'files' here?
+
+Moot now: switch to using 'files' unconditionally.
+
+> At any rate, the file in /usr/share/factory/etc/nsswitch.conf should
+> prolly be kept in sync or removed.
+
+Not sure I understand that one...
+
+> >  2. we already have other packages that may tweak that file, like:
+> >     package/nss-mdns/nss-mdns.mk
+> >     package/nss-myhostname/nss-myhostname.mk
+> >
+> >  3. which brings us to the point that this file should be tweaked as a
+> >     target-finalize hook
+> 
+> kinda like this ?:
+> https://github.com/nolange/buildroot/commit/237eebe9c29c3b8ab68d3abead52e1b7b08e1649
+
+I still think it should be made to be target-finalize hooks, one for
+each option.
+
+Also, I don;t get why you want to use the one in factory, rather than
+tweak the existing /etc/nsswitch.conf that has already been installed,
+like the other nss plugins do.
+
+And then, at the end. copy the one from /etc/nsswitch.conf over to the
+one in factory. That last one is a bit more tricky to come up with
+correctly, as this must be done after all nss plugins have had a chance
+to tweak nsswitch.conf. So I guess we should extend SYSTEMD_ROOTFS_PRE_CMD_HOOKS
+with a new hook that copies /etc/nsswitch.conf over to the factory.
+
+Regards,
+Yann E. MORIN.
+
+> Note that I am missing the line for mymachines, my sed-foo is too weak
+> to add that at the correct position.
+> 
+> Norbert
+
 -- 
-2.25.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
