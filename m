@@ -1,60 +1,71 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 15 Jun 2020 09:20:47 +0200
-Subject: [Buildroot] [PATCH v2 07/14] package/systemd: fixup RPATH for more
- systemd host binaries
+Date: Mon, 15 Jun 2020 09:20:49 +0200
+Subject: [Buildroot] [PATCH v2 09/14] package/systemd: option to delete all
+ catalog files
 In-Reply-To: <20200615072055.2083-1-nolange79@gmail.com>
 References: <20200615072055.2083-1-nolange79@gmail.com>
-Message-ID: <20200615072055.2083-8-nolange79@gmail.com>
+Message-ID: <20200615072055.2083-10-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All systemd binaries depend on libsystemd-shared and need their
-RPATH fixed. Use a glob to catch them all
+Unless you need to rebuild the database, there is
+no need for the (source) catalog files.
+
+This option removes the files, and the service
+in a ROOTFS_PRE_CMD_HOOK.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/systemd.mk | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+ package/systemd/Config.in  | 12 ++++++++++++
+ package/systemd/systemd.mk | 10 ++++++++++
+ 2 files changed, 22 insertions(+)
 
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index dd3b8c534d..b09bd36ab6 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -251,6 +251,18 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
++config BR2_PACKAGE_SYSTEMD_RETAIN_CATALOGS
++	bool "retain source catalog files"
++	help
++	  catalog files are used to provide extended and potentially localized
++	  messages for the journal.
++	  The files reside in /usr/lib/systemd/catalog, but arent used directly,
++	  instead a binary database will be built using these files.
++
++	  Only if the database needs to be rebuilt later they need to be retained.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/catalog/
++
+ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	bool "enable locale daemon"
+ 	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 2cc71ee667..2c7f35bf25 100644
+index d3be92b78c..e117e3a082 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -659,6 +659,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
- 	host-libcap \
- 	host-gperf
+@@ -464,6 +464,16 @@ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+ endif
  
-+HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
++ifneq ($(BR2_PACKAGE_SYSTEMD_RETAIN_CATALOGS),y)
++define SYSTEMD_RM_SOURCE_CATALOGS_HOOK
++	rm -rf $(TARGET_DIR)/usr/lib/systemd/catalog
++	find $(TARGET_DIR)/usr/lib/systemd/system \
++		-name systemd-journal-catalog-update.service -delete
++endef
 +
- # Fix RPATH After installation
- # * systemd provides a install_rpath instruction to meson because the binaries
- #   need to link with libsystemd which is not in a standard path
-@@ -667,20 +669,11 @@ HOST_SYSTEMD_DEPENDENCIES = \
- # * the original path had been tweaked by buildroot via LDFLAGS to add
- #   $(HOST_DIR)/lib
- # * thus re-tweak rpath after the installation for all binaries that need it
--HOST_SYSTEMD_HOST_TOOLS = \
--	systemd-analyze \
--	systemd-machine-id-setup \
--	systemd-mount \
--	systemd-nspawn \
--	systemctl \
--	udevadm
--
--HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
- 
- define HOST_SYSTEMD_FIX_RPATH
--	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
--		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
--	)
-+	cd $(HOST_DIR)/bin && for f in journalctl systemctl udevadm systemd-*; do \
-+	  [ ! -x $$f ] || $(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $$f; \
-+	  done
- endef
- HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
- 
++SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_SOURCE_CATALOGS_HOOK
++endif
++
+ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs multi-user.target \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
 -- 
 2.27.0
