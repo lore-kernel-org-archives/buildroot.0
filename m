@@ -1,63 +1,49 @@
 From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon, 15 Jun 2020 15:37:35 +0200
-Subject: [Buildroot] [PATCH 1/1] imx-usb-loader: bump version to 30b43d6
-Message-ID: <20200615133735.12926-1-sebastien.szymanski@armadeus.com>
+Date: Mon, 15 Jun 2020 15:06:33 +0200
+Subject: [Buildroot] [PATCH 3/3] package/freescale-imx/firmware-imx: bump
+ version to 8.6
+In-Reply-To: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>
+References: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20200615130633.19909-3-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to get i.MX8M Nano support.
-
-Changes sinces 4aa9809:
-
-  30b43d6 (HEAD -> master, origin/master, origin/HEAD) Fix MinGW Build (#114)
-  25d6c0d mx8m_usb_sdp_spl: create generic sdp spl config for all imx8m
-  dc0fb26 mx8mn_usb_sdp_spl.conf: initial addition
-  f009770 imx_sdp: don't try to load hdmi firmware
-  c5c4d28 add SPDS protocol support, imx8mn(nano)
-  15dbbd7 tests: add pid 0x1001
-  353791c tests: add pids 0x0134/0x1000
-  06fb581 tests: pid=0x0080 is for mx6ull
-  6b07a0a mx8mm_usb_sdp_spl.conf/ mx8mm_usb_work.conf: s/imx-mkimage/u-boot-imx6/
-  b00b0e2 mx8mq_usb_work.conf: load flash.bin from u-boot-imx6 directory
-  bda7ab6 add mx8mq_usb_sdp_spl.conf
-  7984efc Moving libusb_free_device_list to get imx_usb to work on Windows.
-  29fa8ab imx_usb: use device found by find_imx_device
-  abe7f5d add support for relocatable installs
-  3d36c83 Fixed build for Visual Studio 2015 Express.
-  fe50624 imx_usb.config: add mx8mm_usb_sdp_spl.conf/mx8mm_usb_work.conf lines
-  f7752f4 mx8mq_usb_work.conf: use bl31-iMX8MQ-2g.bin to match branch boundary-imx_4.9.123_imx8mm_ga of imx-mkimage
-  8c9eee7 add mx8mm config files
+This package needed to be updated to be aligned with NXP
+BSP 5.4.3_1.0.0.
 
 Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
- package/imx-usb-loader/imx-usb-loader.hash | 2 +-
- package/imx-usb-loader/imx-usb-loader.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/imx-usb-loader/imx-usb-loader.hash b/package/imx-usb-loader/imx-usb-loader.hash
-index 182116a25f..7e1c097143 100644
---- a/package/imx-usb-loader/imx-usb-loader.hash
-+++ b/package/imx-usb-loader/imx-usb-loader.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  5a17886042c09f0f16093031183a287a2a7ae0fa9cd8bdfa31e7b31cb92510d9  imx-usb-loader-4aa9809099dcece9a9225776321f3b4b5b896d78.tar.gz
-+sha256  4357907c9669874d3ccbf00395bf0b1733c26e6daea85d721f1c0cd897f4162c  imx-usb-loader-30b43d69770cd69e84c045dc9dcabb1f3e9d975a.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
-index 594bbb9ca1..1a09486928 100644
---- a/package/imx-usb-loader/imx-usb-loader.mk
-+++ b/package/imx-usb-loader/imx-usb-loader.mk
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index e49ce085bf..54a3dafcc0 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  45b0a7392e7a4b2e6c7e1cb988dd660ff3f8cd465afdf796ff840a00db08389d  firmware-imx-8.5.bin
+-sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
+-sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
++sha256  a7f4a22c05a990aad43a616e312847ab9d85ce00691b34fa8590d5c7c1d722e9  firmware-imx-8.6.bin
++sha256  1360edf65a32b66d28bcf2d53a1a1c2dc88d4e254c15da3d8e37bf1b6f1f19a1  EULA
++sha256  30ba26ae82fba4033513b67c2c3a00b00e78908d278568a7d648d3430875123a  COPYING
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 49fda89f28..f27afc5a3b 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_USB_LOADER_VERSION = 4aa9809099dcece9a9225776321f3b4b5b896d78
-+IMX_USB_LOADER_VERSION = 30b43d69770cd69e84c045dc9dcabb1f3e9d975a
+-FIRMWARE_IMX_VERSION = 8.5
++FIRMWARE_IMX_VERSION = 8.6
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
  
- IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
- IMX_USB_LOADER_LICENSE = LGPL-2.1+
 -- 
 2.26.2
