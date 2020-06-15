@@ -1,35 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 15 Jun 2020 21:23:59 +0000
-Subject: [Buildroot] [Bug 12941] Python GObject fails to build when using
- BR2_PER_PACKAGE_DIRECTORIES
-In-Reply-To: <bug-12941-163@https.bugs.busybox.net/>
-References: <bug-12941-163@https.bugs.busybox.net/>
-Message-ID: <bug-12941-163-AMzaNqlXrS@https.bugs.busybox.net/>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 15 Jun 2020 23:40:07 +0200
+Subject: [Buildroot] [PATCH v2] package/systemd: fixup RPATH for more
+ systemd host binaries
+Message-ID: <20200615214007.200671-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12941
+All systemd binaries depend on libsystemd-shared and need their
+RPATH fixed. Use a glob to catch them all
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+v1->v2:
+-   dont ignore failure from patchelf
+---
+ package/systemd/systemd.mk | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |FIXED
-
---- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Daniel, All,
-
-Thanks for the report. This is now supposedly fixed with the patch from
-Adam, that was applied as commit 2158c87206.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 2cc71ee667..ae0de067e1 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -659,6 +659,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ 	host-libcap \
+ 	host-gperf
+ 
++HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
++
+ # Fix RPATH After installation
+ # * systemd provides a install_rpath instruction to meson because the binaries
+ #   need to link with libsystemd which is not in a standard path
+@@ -667,19 +669,10 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ # * the original path had been tweaked by buildroot via LDFLAGS to add
+ #   $(HOST_DIR)/lib
+ # * thus re-tweak rpath after the installation for all binaries that need it
+-HOST_SYSTEMD_HOST_TOOLS = \
+-	systemd-analyze \
+-	systemd-machine-id-setup \
+-	systemd-mount \
+-	systemd-nspawn \
+-	systemctl \
+-	udevadm
+-
+-HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+ 
+ define HOST_SYSTEMD_FIX_RPATH
+-	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+-		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
++	$(foreach f,$(wildcard $(addprefix $(HOST_DIR)/bin/,journalctl systemctl udevadm systemd-*)), \
++		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(f)
+ 	)
+ endef
+ HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.27.0
