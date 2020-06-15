@@ -1,160 +1,234 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Mon, 15 Jun 2020 20:49:11 +0200
-Subject: [Buildroot] [PATCH v3] package/eigen: use cmake-package infra
-In-Reply-To: <20200614173754.702855-1-juju@cotds.org>
-References: <20200614173754.702855-1-juju@cotds.org>
-Message-ID: <20200615184911.71434-1-juju@cotds.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 15 Jun 2020 20:59:11 +0200
+Subject: [Buildroot] [PATCH v1] package/rtl8821au: add two patches fixing
+ compile/runtime for kernels >= 5.3
+Message-ID: <20200615185911.16490-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The eigen package was introduced as a generic package, but upstream was
-in fact using CMake.
+Add two patches from upstream merge request ([1] to fix compile
+and runtime failures in case of linux kernel >= 5.3.
 
-The motivation of this change is to fix package detection with CMake.
+[1] https://github.com/abperiasamy/rtl8812AU_8821AU_linux/pull/316
 
-Eigen3 library normally installs a signature file named
-"signature_of_eigen3_matrix_library" to help library detection:
-https://gitlab.com/libeigen/eigen/-/blob/3.3.7/CMakeLists.txt#L423
-
-The library also provide a CMake macro that use this file to
-detect it:
-https://gitlab.com/libeigen/eigen/-/blob/3.3.7/cmake/FindEigen3.cmake#L76
-
-Without the signature file installed, packages searching for this
-library with this method will fail. Other packages usings pkg-config are
-not affected by this issue.
-
-By using the cmake-package infrastructure, all the needed files
-are now installed, fixing this CMake detection issue.
-
-Other changes in this patch:
-- Updated the Eigen git repository to the new url:
-  https://gitlab.com/libeigen/eigen
-- Removed all build and install staging commands
-  (now included in upstream cmake)
-- Package needs EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
-- Removed the BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES option,
-  as this option is not proposed by the upstream CMake.
-  Unsupported module header files are now unconditionally installed. As
-  such, no need to introduce a legacy entry for
-  BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES: users that had it enabled will
-  still get the files installed, while those that did not will get them
-  installed now.
-- Updated hash for source package, because the first component in the
-  stored paths changed from eigen-eigen-323c052e1731/ to eigen-3.3.7/
-  and some mercurial related files (.hg_archival.txt, .hgtags) got
-  dropped after the conversion to git.
-- Reformat hash file with two spaces delimiters
-- Define EIGEN_CONF_OPTS to set pkg-config .pc install path
-
-Signed-off-by: Julien Olivain <juju@cotds.org>
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v2 -> v3:
-Suggested by Yann:
-  - clarified commit log about hash change
-  - clarified commit log about unsupported module option removal
-  - Use absolute path to set PKGCONFIG_INSTALL_DIR CMake variable
+ ...-fallthrough-comments-for-kernel-5.3.patch |  28 +++
+ ...river-crashes-from-aircrack-ng-rtl88.patch | 168 ++++++++++++++++++
+ 2 files changed, 196 insertions(+)
+ create mode 100644 package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
+ create mode 100644 package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
 
-Changes v1 -> v2:
-  - use cmake package infra, instead of fixing cmake detection
-    issue by duplicating upstream commands, as suggested by Yann.
----
- package/eigen/Config.in  |  8 --------
- package/eigen/eigen.hash | 14 +++++++-------
- package/eigen/eigen.mk   | 36 +++++++-----------------------------
- 3 files changed, 14 insertions(+), 44 deletions(-)
-
-diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-index 48752e0c8d..ef0a16f2f7 100644
---- a/package/eigen/Config.in
-+++ b/package/eigen/Config.in
-@@ -13,13 +13,5 @@ config BR2_PACKAGE_EIGEN
- 
- 	  http://eigen.tuxfamily.org/
- 
--if BR2_PACKAGE_EIGEN
--
--config BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES
--	bool "unsupported modules"
--	help
--	  Install eigen unsupported modules
--endif
--
- comment "eigen needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
-index e5c8404022..5ec561ad10 100644
---- a/package/eigen/eigen.hash
-+++ b/package/eigen/eigen.hash
-@@ -1,8 +1,8 @@
- # Locally computed
--sha256 9f13cf90dedbe3e52a19f43000d71fdf72e986beb9a5436dddcd61ff9d77a3ce 3.3.7.tar.bz2
--sha256 4f877e5ae4672568ef82cfd0023e2cef4a7cf55d867ab249efc9569a7eb9e5b1 COPYING.BSD
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING.GPL
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LGPL
--sha256 f5b330efdad110cdd84d585ec61220b0650461fa599e36b13e1726c9346dcfb9 COPYING.MINPACK
--sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85 COPYING.MPL2
--sha256 c83230b770f17ef1386ea1fd3681271dd98aa93646bdbfb5bff3a1b7050fff9d COPYING.README
-+sha256  685adf14bd8e9c015b78097c1dc22f2f01343756f196acdc76a678e1ae352e11  eigen-3.3.7.tar.bz2
-+sha256  4f877e5ae4672568ef82cfd0023e2cef4a7cf55d867ab249efc9569a7eb9e5b1  COPYING.BSD
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPL
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256  f5b330efdad110cdd84d585ec61220b0650461fa599e36b13e1726c9346dcfb9  COPYING.MINPACK
-+sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  COPYING.MPL2
-+sha256  c83230b770f17ef1386ea1fd3681271dd98aa93646bdbfb5bff3a1b7050fff9d  COPYING.README
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 5c9e028442..1645489717 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -5,38 +5,16 @@
- ################################################################################
- 
- EIGEN_VERSION = 3.3.7
--EIGEN_SOURCE = $(EIGEN_VERSION).tar.bz2
--EIGEN_SITE = https://bitbucket.org/eigen/eigen/get
-+EIGEN_SOURCE = eigen-$(EIGEN_VERSION).tar.bz2
-+EIGEN_SITE = https://gitlab.com/libeigen/eigen/-/archive/$(EIGEN_VERSION)
- EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
- EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
- EIGEN_INSTALL_STAGING = YES
- EIGEN_INSTALL_TARGET = NO
--EIGEN_DEST_DIR = $(STAGING_DIR)/usr/include/eigen3
-+EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--ifeq ($(BR2_PACKAGE_EIGEN_UNSUPPORTED_MODULES),y)
--define EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS
--	mkdir -p $(EIGEN_DEST_DIR)/unsupported
--	cp -a $(@D)/unsupported/Eigen $(EIGEN_DEST_DIR)/unsupported
--endef
--endif
-+# Default Eigen CMake installs .pc file in /usr/share/pkgconfig
-+# change it to /usr/lib/pkgconfig, to be consistent with other packages.
-+EIGEN_CONF_OPTS = -DPKGCONFIG_INSTALL_DIR=/usr/lib/pkgconfig
- 
--# Generate the .pc file at build time
--define EIGEN_BUILD_CMDS
--	sed -r -e 's,^Version: .*,Version: $(EIGEN_VERSION),' \
--		-e 's,^Cflags: .*,Cflags: -I$$\{prefix\}/include/eigen3,' \
--		-e 's,^prefix.*,prefix=/usr,' \
--		$(@D)/eigen3.pc.in >$(@D)/eigen3.pc
--endef
--
--# This package only consists of headers that need to be
--# copied over to the sysroot for compile time use
--define EIGEN_INSTALL_STAGING_CMDS
--	$(RM) -r $(EIGEN_DEST_DIR)
--	mkdir -p $(EIGEN_DEST_DIR)
--	cp -a $(@D)/Eigen $(EIGEN_DEST_DIR)
--	$(EIGEN_INSTALL_UNSUPPORTED_MODULES_CMDS)
--	$(INSTALL) -D -m 0644 $(@D)/eigen3.pc \
--		$(STAGING_DIR)/usr/lib/pkgconfig/eigen3.pc
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+diff --git a/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch b/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
+new file mode 100644
+index 0000000000..d323e8f938
+--- /dev/null
++++ b/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
+@@ -0,0 +1,28 @@
++From f41695e4069404639690d98c7aadfe72117965a6 Mon Sep 17 00:00:00 2001
++From: Jesper Skov <jb1811@jyskebank.dk>
++Date: Fri, 25 Oct 2019 10:05:41 +0200
++Subject: [PATCH] Fix implicit fallthrough comments for kernel 5.3
++
++[Upstram: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/e8a30a4c5a80efbbd5b1dbfe11b22916df4492f9.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ core/rtw_mlme_ext.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/core/rtw_mlme_ext.c b/core/rtw_mlme_ext.c
++index 24565ea..380f507 100644
++--- a/core/rtw_mlme_ext.c
+++++ b/core/rtw_mlme_ext.c
++@@ -758,7 +758,9 @@ void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
++ 		else
++ 			ptable->func = &OnAuthClient;
++ 	//pass through
+++	//fallthrough
++ 	case WIFI_ASSOCREQ:
+++	//fallthrough
++ 	case WIFI_REASSOCREQ:
++ 		_mgt_dispatcher(padapter, ptable, precv_frame);
++ #ifdef CONFIG_HOSTAPD_MLME
++-- 
++2.26.0
++
+diff --git a/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch b/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
+new file mode 100644
+index 0000000000..6b1b70270a
+--- /dev/null
++++ b/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
+@@ -0,0 +1,168 @@
++From b7f8f8572d5abca6e1f0163a583628c0207d0be4 Mon Sep 17 00:00:00 2001
++From: Jesper Skov <jb1811@jyskebank.dk>
++Date: Fri, 25 Oct 2019 10:10:29 +0200
++Subject: [PATCH] Fix kernel 5.3 driver crashes, from aircrack-ng/rtl8812au#421
++
++[Upstream: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/822b485d36d6f72304a219c3be228f40968b542b.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ os_dep/linux/rtw_cfgvendor.c | 45 ++++++++++++++++++++++++++++++++++++
++ 1 file changed, 45 insertions(+)
++
++diff --git a/os_dep/linux/rtw_cfgvendor.c b/os_dep/linux/rtw_cfgvendor.c
++index e7ba90a..81fc8af 100644
++--- a/os_dep/linux/rtw_cfgvendor.c
+++++ b/os_dep/linux/rtw_cfgvendor.c
++@@ -1173,6 +1173,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = BRCM_VENDOR_SCMD_PRIV_STR
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_priv_string_handler
++ 	},
++ #if defined(GSCAN_SUPPORT) && 0
++@@ -1182,6 +1185,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_GET_CAPABILITIES
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_gscan_get_capabilities
++ 	},
++ 	{
++@@ -1190,6 +1196,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_SET_CONFIG
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_set_scan_cfg
++ 	},
++ 	{
++@@ -1198,6 +1207,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_SET_SCAN_CONFIG
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_set_batch_scan_cfg
++ 	},
++ 	{
++@@ -1206,6 +1218,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_ENABLE_GSCAN
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_initiate_gscan
++ 	},
++ 	{
++@@ -1214,6 +1229,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_ENABLE_FULL_SCAN_RESULTS
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_enable_full_scan_result
++ 	},
++ 	{
++@@ -1222,6 +1240,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_SET_HOTLIST
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_hotlist_cfg
++ 	},
++ 	{
++@@ -1230,6 +1251,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_SET_SIGNIFICANT_CHANGE_CONFIG
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_significant_change_cfg
++ 	},
++ 	{
++@@ -1238,6 +1262,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_GET_SCAN_RESULTS
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_gscan_get_batch_results
++ 	},
++ 	{
++@@ -1246,6 +1273,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = GSCAN_SUBCMD_GET_CHANNEL_LIST
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_gscan_get_channel_list
++ 	},
++ #endif /* GSCAN_SUPPORT */
++@@ -1256,6 +1286,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = RTT_SUBCMD_SET_CONFIG
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_rtt_set_config
++ 	},
++ 	{
++@@ -1264,6 +1297,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = RTT_SUBCMD_CANCEL_CONFIG
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_rtt_cancel_config
++ 	},
++ 	{
++@@ -1272,6 +1308,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = RTT_SUBCMD_GETCAPABILITY
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = wl_cfgvendor_rtt_get_capability
++ 	},
++ #endif /* RTT_SUPPORT */
++@@ -1281,6 +1320,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = ANDR_WIFI_SUBCMD_GET_FEATURE_SET
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = rtw_cfgvendor_get_feature_set
++ 	},
++ 	{
++@@ -1289,6 +1331,9 @@ static const struct wiphy_vendor_command rtw_vendor_cmds [] = {
++ 			.subcmd = ANDR_WIFI_SUBCMD_GET_FEATURE_SET_MATRIX
++ 		},
++ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,3,0)
+++		.policy = VENDOR_CMD_RAW_DATA,
+++#endif
++ 		.doit = rtw_cfgvendor_get_feature_set_matrix
++ 	}
++ };
++-- 
++2.26.0
++
 -- 
-2.26.2
+2.27.0
