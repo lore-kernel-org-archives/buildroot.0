@@ -1,62 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jun 2020 11:42:40 +0200
-Subject: [Buildroot] [PATCH v2 02/14] package/systemd: remove unused
- user accounts
-In-Reply-To: <20200615072055.2083-3-nolange79@gmail.com>
-References: <20200615072055.2083-1-nolange79@gmail.com>
- <20200615072055.2083-3-nolange79@gmail.com>
-Message-ID: <20200615094240.GU2346@scaer>
+Date: Mon, 15 Jun 2020 11:43:50 +0200
+Subject: [Buildroot] [git commit] package/systemd: create "remote" user if
+ the feature is enabled
+Message-ID: <20200615094226.B3492815BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b9aad0ee4cc2d669e4ce0a378621b40b788be1ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-15 09:20 +0200, Norbert Lange spake thusly:
-> Since V235 the "gateway" and "upload" services use DynamicUsers,
-> requiring no entries in /etc/passwd.
-> This functionality requires nss-systemd, which is always
-> enabled in buildroot.
-> 
-> The "bus-proxy" user was removed in V230.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/systemd/systemd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/systemd/systemd.mk | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index cf6c0f9576..8e82d8afa7 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -502,10 +502,7 @@ define SYSTEMD_USERS
->  	- - systemd-journal -1 * - - - Journal
->  	- - render -1 * - - - DRI rendering nodes
->  	- - kvm -1 * - - - kvm nodes
-> -	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
-> -	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
->  	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
-> -	systemd-journal-upload -1 systemd-journal-upload -1 * - - - Journal Upload
->  	$(SYSTEMD_COREDUMP_USER)
->  	$(SYSTEMD_NETWORKD_USER)
->  	$(SYSTEMD_RESOLVED_USER)
-> -- 
-> 2.27.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 141209897d..f627ce6cd8 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -214,6 +214,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
+ SYSTEMD_CONF_OPTS += -Dremote=true
++SYSTEMD_REMOTE_USER = systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+ else
+ SYSTEMD_CONF_OPTS += -Dremote=false
+ endif
+@@ -486,7 +487,7 @@ define SYSTEMD_USERS
+ 	- - systemd-journal -1 * - - - Journal
+ 	- - render -1 * - - - DRI rendering nodes
+ 	- - kvm -1 * - - - kvm nodes
+-	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
++	$(SYSTEMD_REMOTE_USER)
+ 	$(SYSTEMD_COREDUMP_USER)
+ 	$(SYSTEMD_NETWORKD_USER)
+ 	$(SYSTEMD_RESOLVED_USER)
