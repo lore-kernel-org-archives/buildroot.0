@@ -1,331 +1,46 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 15 Jun 2020 09:20:51 +0200
-Subject: [Buildroot] [PATCH v2 11/14] package/systemd: use an upstream patch
- for tmpfiles
-In-Reply-To: <20200615072055.2083-1-nolange79@gmail.com>
-References: <20200615072055.2083-1-nolange79@gmail.com>
-Message-ID: <20200615072055.2083-12-nolange79@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 15 Jun 2020 09:22:47 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
+ file
+In-Reply-To: <20200614234827.2208bc3a@gmx.net>
+References: <20200612232433.18442-1-ps.report@gmx.net>
+ <20200612232433.18442-2-ps.report@gmx.net>
+ <20200614095628.GJ2346@scaer> <20200614210740.0d39d95d@gmx.net>
+ <20200614205715.GN2346@scaer> <20200614232826.146a5b79@gmx.net>
+ <20200614213610.GQ2346@scaer> <20200614234827.2208bc3a@gmx.net>
+Message-ID: <20200615072247.GR2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-running systemd-tmpfiles will currently use the hosts
-user/group uids, even when specifying --root=.
-The next systemd release v245 will include this change.
+Peter, All,
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- ...e-rootfs-database-for-tmpfiles.patch.patch | 300 ++++++++++++++++++
- 1 file changed, 300 insertions(+)
- create mode 100644 package/systemd/0001-use-rootfs-database-for-tmpfiles.patch.patch
+On 2020-06-14 23:48 +0200, Peter Seiderer spake thusly:
+> On Sun, 14 Jun 2020 23:36:10 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > On 2020-06-14 23:28 +0200, Peter Seiderer spake thusly:
+[--SNIP--]
+> > > And what is about the LIBFOO_INSTALL_INIT_OPENRC mentioned in [1]?
+> > Aha! If not specified, it defaults to using the sysv hook, quoting:
+> >     The only exception is when openrc is chosen as init system and
+> >     LIBFOO_INSTALL_INIT_OPENRC has not been set, in such situation
+> >     LIBFOO_INSTALL_INIT_SYSV will be called, since openrc supports
+> >     sysv init scripts.
+> So, what do with the openrc-init case (for the config file)?
 
-diff --git a/package/systemd/0001-use-rootfs-database-for-tmpfiles.patch.patch b/package/systemd/0001-use-rootfs-database-for-tmpfiles.patch.patch
-new file mode 100644
-index 0000000000..5847bbd673
---- /dev/null
-+++ b/package/systemd/0001-use-rootfs-database-for-tmpfiles.patch.patch
-@@ -0,0 +1,300 @@
-+From ab5b7df682c9e779e859a9caf9c2012d3db92dc3 Mon Sep 17 00:00:00 2001
-+From: Lennart Poettering <lennart@poettering.net>
-+Date: Tue, 5 May 2020 22:45:54 +0200
-+Subject: [PATCH 1/3] tmpfiles: optionally, read /etc/passwd + /etc/group
-+ without NSS
-+
-+There are two libc APIs for accessing the user database: NSS/getpwuid(),
-+and fgetpwent(). if we run in --root= mode (i.e. "offline" mode), let's
-+use the latter. Otherwise the former. This means tmpfiles can use the
-+database included in the root environment for chowning, which is a lot
-+more appropriate.
-+
-+Fixes: #14806
-+Signed-off-by: Norbert Lange <nolange79@gmail.com>
-+
-+---
-+ src/tmpfiles/tmpfiles.c | 145 +++++++++++++++++++++++++++++++++++++---
-+ 1 file changed, 137 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/tmpfiles/tmpfiles.c b/src/tmpfiles/tmpfiles.c
-+index 7137e9fbd72..6ece1b5ed16 100644
-+--- a/src/tmpfiles/tmpfiles.c
-++++ b/src/tmpfiles/tmpfiles.c
-+@@ -2487,7 +2487,139 @@ static int patch_var_run(const char *fname, unsigned line, char **path) {
-+         return 0;
-+ }
-+
-+-static int parse_line(const char *fname, unsigned line, const char *buffer, bool *invalid_config) {
-++DEFINE_HASH_OPS_WITH_KEY_DESTRUCTOR(uid_gid_hash_ops, char, string_hash_func, string_compare_func, free);
-++
-++static int find_uid(const char *user, uid_t *ret_uid, Hashmap **cache) {
-++        void *found;
-++        int r;
-++
-++        assert(user);
-++        assert(ret_uid);
-++        assert(cache);
-++
-++        /* First: parse as numeric UID string */
-++        r = parse_uid(user, ret_uid);
-++        if (r >= 0)
-++                return r;
-++
-++        /* Second: pass to NSS if we are running "online" */
-++        if (!arg_root)
-++                return get_user_creds(&user, ret_uid, NULL, NULL, NULL, 0);
-++
-++        /* Third: use fgetpwent() to read /etc/passwd directly, if we are "offline" */
-++        if (!*cache) {
-++                _cleanup_(hashmap_freep) Hashmap *uid_by_name = NULL;
-++                _cleanup_fclose_ FILE *f = NULL;
-++                struct passwd *pw;
-++                const char *passwd_path;
-++
-++                passwd_path = prefix_roota(arg_root, "/etc/passwd");
-++                f = fopen(passwd_path, "re");
-++                if (!f)
-++                        return errno == ENOENT ? -ESRCH : -errno;
-++
-++                uid_by_name = hashmap_new(&uid_gid_hash_ops);
-++                if (!uid_by_name)
-++                        return -ENOMEM;
-++
-++                while ((r = fgetpwent_sane(f, &pw)) > 0) {
-++                        _cleanup_free_ char *n = NULL;
-++
-++                        n = strdup(pw->pw_name);
-++                        if (!n)
-++                                return -ENOMEM;
-++
-++                        r = hashmap_put(uid_by_name, n, UID_TO_PTR(pw->pw_uid));
-++                        if (r == -EEXIST) {
-++                                log_warning_errno(r, "Duplicate entry in %s for %s: %m", passwd_path, pw->pw_name);
-++                                continue;
-++                        }
-++                        if (r < 0)
-++                                return r;
-++
-++                        TAKE_PTR(n);
-++                }
-++
-++                *cache = TAKE_PTR(uid_by_name);
-++        }
-++
-++        found = hashmap_get(*cache, user);
-++        if (!found)
-++                return -ESRCH;
-++
-++        *ret_uid = PTR_TO_UID(found);
-++        return 0;
-++}
-++
-++static int find_gid(const char *group, gid_t *ret_gid, Hashmap **cache) {
-++        void *found;
-++        int r;
-++
-++        assert(group);
-++        assert(ret_gid);
-++        assert(cache);
-++
-++        /* First: parse as numeric GID string */
-++        r = parse_gid(group, ret_gid);
-++        if (r >= 0)
-++                return r;
-++
-++        /* Second: pass to NSS if we are running "online" */
-++        if (!arg_root)
-++                return get_group_creds(&group, ret_gid, 0);
-++
-++        /* Third: use fgetgrent() to read /etc/group directly, if we are "offline" */
-++        if (!*cache) {
-++                _cleanup_(hashmap_freep) Hashmap *gid_by_name = NULL;
-++                _cleanup_fclose_ FILE *f = NULL;
-++                struct group *gr;
-++                const char *group_path;
-++
-++                group_path = prefix_roota(arg_root, "/etc/group");
-++                f = fopen(group_path, "re");
-++                if (!f)
-++                        return errno == ENOENT ? -ESRCH : -errno;
-++
-++                gid_by_name = hashmap_new(&uid_gid_hash_ops);
-++                if (!gid_by_name)
-++                        return -ENOMEM;
-++
-++                while ((r = fgetgrent_sane(f, &gr)) > 0) {
-++                        _cleanup_free_ char *n = NULL;
-++
-++                        n = strdup(gr->gr_name);
-++                        if (!n)
-++                                return -ENOMEM;
-++
-++                        r = hashmap_put(gid_by_name, n, GID_TO_PTR(gr->gr_gid));
-++                        if (r == -EEXIST) {
-++                                log_warning_errno(r, "Duplicate entry in %s for %s: %m", group_path, gr->gr_name);
-++                                continue;
-++                        }
-++                        if (r < 0)
-++                                return r;
-++
-++                        TAKE_PTR(n);
-++                }
-++
-++                *cache = TAKE_PTR(gid_by_name);
-++        }
-++
-++        found = hashmap_get(*cache, group);
-++        if (!found)
-++                return -ESRCH;
-++
-++        *ret_gid = PTR_TO_GID(found);
-++        return 0;
-++}
-++
-++static int parse_line(
-++                const char *fname,
-++                unsigned line,
-++                const char *buffer,
-++                bool *invalid_config,
-++                Hashmap **uid_cache,
-++                Hashmap **gid_cache) {
-+
-+         _cleanup_free_ char *action = NULL, *mode = NULL, *user = NULL, *group = NULL, *age = NULL, *path = NULL;
-+         _cleanup_(item_free_contents) Item i = {};
-+@@ -2718,9 +2850,7 @@ static int parse_line(const char *fname, unsigned line, const char *buffer, bool
-+         }
-+
-+         if (!empty_or_dash(user)) {
-+-                const char *u = user;
-+-
-+-                r = get_user_creds(&u, &i.uid, NULL, NULL, NULL, USER_CREDS_ALLOW_MISSING);
-++                r = find_uid(user, &i.uid, uid_cache);
-+                 if (r < 0) {
-+                         *invalid_config = true;
-+                         return log_syntax(NULL, LOG_ERR, fname, line, r, "Failed to resolve user '%s': %m", user);
-+@@ -2730,9 +2860,7 @@ static int parse_line(const char *fname, unsigned line, const char *buffer, bool
-+         }
-+
-+         if (!empty_or_dash(group)) {
-+-                const char *g = group;
-+-
-+-                r = get_group_creds(&g, &i.gid, USER_CREDS_ALLOW_MISSING);
-++                r = find_gid(group, &i.gid, gid_cache);
-+                 if (r < 0) {
-+                         *invalid_config = true;
-+                         return log_syntax(NULL, LOG_ERR, fname, line, r, "Failed to resolve group '%s'.", group);
-+@@ -2981,6 +3109,7 @@ static int parse_argv(int argc, char *argv[]) {
-+ }
-+
-+ static int read_config_file(char **config_dirs, const char *fn, bool ignore_enoent, bool *invalid_config) {
-++        _cleanup_(hashmap_freep) Hashmap *uid_cache = NULL, *gid_cache = NULL;
-+         _cleanup_fclose_ FILE *_f = NULL;
-+         Iterator iterator;
-+         unsigned v = 0;
-+@@ -3026,7 +3155,7 @@ static int read_config_file(char **config_dirs, const char *fn, bool ignore_enoe
-+                 if (IN_SET(*l, 0, '#'))
-+                         continue;
-+
-+-                k = parse_line(fn, v, l, &invalid_line);
-++                k = parse_line(fn, v, l, &invalid_line, &uid_cache, &gid_cache);
-+                 if (k < 0) {
-+                         if (invalid_line)
-+                                 /* Allow reporting with a special code if the caller requested this */
-+
-+From cc0ff79bd0f94336fc53407da7a20ff3c779456f Mon Sep 17 00:00:00 2001
-+From: Lennart Poettering <lennart@poettering.net>
-+Date: Tue, 5 May 2020 22:48:50 +0200
-+Subject: [PATCH 2/3] sysusers/tmpfiles: use --root=/ as way to force offline
-+ operation (i.e.  without NSS)
-+
-+---
-+ src/sysusers/sysusers.c |  2 +-
-+ src/tmpfiles/tmpfiles.c | 10 ++++++----
-+ 2 files changed, 7 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/sysusers/sysusers.c b/src/sysusers/sysusers.c
-+index a36cfb210f6..9b57f0f933a 100644
-+--- a/src/sysusers/sysusers.c
-++++ b/src/sysusers/sysusers.c
-+@@ -1813,7 +1813,7 @@ static int parse_argv(int argc, char *argv[]) {
-+                         break;
-+
-+                 case ARG_ROOT:
-+-                        r = parse_path_argument_and_warn(optarg, true, &arg_root);
-++                        r = parse_path_argument_and_warn(optarg, /* suppress_root= */ false, &arg_root);
-+                         if (r < 0)
-+                                 return r;
-+                         break;
-+diff --git a/src/tmpfiles/tmpfiles.c b/src/tmpfiles/tmpfiles.c
-+index 6ece1b5ed16..dc1dd89aecc 100644
-+--- a/src/tmpfiles/tmpfiles.c
-++++ b/src/tmpfiles/tmpfiles.c
-+@@ -2741,7 +2741,7 @@ static int parse_line(
-+
-+         case COPY_FILES:
-+                 if (!i.argument) {
-+-                        i.argument = path_join(arg_root, "/usr/share/factory", i.path);
-++                        i.argument = path_join("/usr/share/factory", i.path);
-+                         if (!i.argument)
-+                                 return log_oom();
-+
-+@@ -2749,7 +2749,9 @@ static int parse_line(
-+                         *invalid_config = true;
-+                         return log_syntax(NULL, LOG_ERR, fname, line, SYNTHETIC_ERRNO(EBADMSG), "Source path '%s' is not absolute.", i.argument);
-+
-+-                } else if (arg_root) {
-++                }
-++
-++                if (!empty_or_root(arg_root)) {
-+                         char *p;
-+
-+                         p = path_join(arg_root, i.argument);
-+@@ -2840,7 +2842,7 @@ static int parse_line(
-+                 return log_syntax(NULL, LOG_ERR, fname, line, r, "Failed to substitute specifiers in argument: %m");
-+         }
-+
-+-        if (arg_root) {
-++        if (!empty_or_root(arg_root)) {
-+                 char *p;
-+
-+                 p = path_join(arg_root, i.path);
-+@@ -3068,7 +3070,7 @@ static int parse_argv(int argc, char *argv[]) {
-+                         break;
-+
-+                 case ARG_ROOT:
-+-                        r = parse_path_argument_and_warn(optarg, true, &arg_root);
-++                        r = parse_path_argument_and_warn(optarg, /* suppress_root= */ false, &arg_root);
-+                         if (r < 0)
-+                                 return r;
-+                         break;
-+
-+From 4ae0e6b69fff5ed93ec2762bc40ea59f69c68a93 Mon Sep 17 00:00:00 2001
-+From: Lennart Poettering <lennart@poettering.net>
-+Date: Tue, 5 May 2020 23:23:00 +0200
-+Subject: [PATCH 3/3] man: document the new tmpfiles --root= behaviour
-+ regarding users
-+
-+---
-+ man/systemd-tmpfiles.xml | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/man/systemd-tmpfiles.xml b/man/systemd-tmpfiles.xml
-+index 7720ef53fa1..998fd0911ba 100644
-+--- a/man/systemd-tmpfiles.xml
-++++ b/man/systemd-tmpfiles.xml
-+@@ -161,10 +161,10 @@
-+         <listitem><para>Takes a directory path as an argument. All paths will be prefixed with the given alternate
-+         <replaceable>root</replaceable> path, including config search paths.</para>
-+
-+-        <para>Note that this option does not alter how the users and groups specified in the configuration files are
-+-        resolved. With or without this option, users and groups are always resolved according to the host's user and
-+-        group databases, any such databases stored under the specified root directories are not
-+-        consulted.</para></listitem>
-++        <para>When this option is used, the libc Name Service Switch (NSS) is bypassed for resolving users
-++        and groups. Instead the files <filename>/etc/passwd</filename> and <filename>/etc/group</filename>
-++        inside the alternate root are read directly. This means that users/groups not listed in these files
-++        will not be resolved, i.e. LDAP NIS and other complex databases are not considered.</para></listitem>
-+       </varlistentry>
-+
-+       <varlistentry>
+In the openrc case, you'd get to use openresolv, so the config file
+would be the same as for the sysv case. And since you are adding a
+startup script for sysv (in the followup patch), it will also be used
+for the openrc case.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.27.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
