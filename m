@@ -1,47 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Jun 2020 20:07:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.8
-Message-ID: <20200615180722.986395-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 15 Jun 2020 20:09:10 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
+ file
+In-Reply-To: <20200615072247.GR2346@scaer>
+References: <20200612232433.18442-1-ps.report@gmx.net>
+ <20200612232433.18442-2-ps.report@gmx.net>
+ <20200614095628.GJ2346@scaer> <20200614210740.0d39d95d@gmx.net>
+ <20200614205715.GN2346@scaer> <20200614232826.146a5b79@gmx.net>
+ <20200614213610.GQ2346@scaer> <20200614234827.2208bc3a@gmx.net>
+ <20200615072247.GR2346@scaer>
+Message-ID: <20200615200910.6098e90c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fetchmail/fetchmail.hash | 8 ++++----
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Hello Yann,
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index c9d9f4a466..b40ce7f7b1 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37024049
--sha256  16efec4b6019b4d2b6e43ed1d4f523dee019ac86754de856d0cf34d503d66011  fetchmail-6.4.6.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37037213/
-+sha256  26cd936ece146e056cdf79a676a33738b4eab0a5ae2edf3fce5ba034721b09bd  fetchmail-6.4.8.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  7d2e440c94f98fcb44212314665bf8572182d24c  fetchmail-6.4.6.tar.xz
--md5  e6621616ccbde3792f6a3ccc85681fa9  fetchmail-6.4.6.tar.xz
-+sha1  900386d69e2731999f142d5c16b4f2b69ed87f7a  fetchmail-6.4.8.tar.xz
-+md5  4e5e67efe498038032576fa24c7f848e  fetchmail-6.4.8.tar.xz
- # Locally computed:
- sha256  89d6efe79c78f965b256e007d6acc367fff982c59b6195fb6ec5895ea0fc9bd5  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index eaf6724fca..1835059f61 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).6
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).8
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
--- 
-2.26.2
+On Mon, 15 Jun 2020 09:22:47 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> Peter, All,
+>
+> On 2020-06-14 23:48 +0200, Peter Seiderer spake thusly:
+> > On Sun, 14 Jun 2020 23:36:10 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > On 2020-06-14 23:28 +0200, Peter Seiderer spake thusly:
+> [--SNIP--]
+> > > > And what is about the LIBFOO_INSTALL_INIT_OPENRC mentioned in [1]?
+> > > Aha! If not specified, it defaults to using the sysv hook, quoting:
+> > >     The only exception is when openrc is chosen as init system and
+> > >     LIBFOO_INSTALL_INIT_OPENRC has not been set, in such situation
+> > >     LIBFOO_INSTALL_INIT_SYSV will be called, since openrc supports
+> > >     sysv init scripts.
+> > So, what do with the openrc-init case (for the config file)?
+>
+> In the openrc case, you'd get to use openresolv, so the config file
+> would be the same as for the sysv case. And since you are adding a
+> startup script for sysv (in the followup patch), it will also be used
+> for the openrc case.
+
+But in case of LIBFOO_INSTALL_INIT_OPENRC no (additional) entry will be
+written to the config file...
+
+Regards,
+Peter
+
+>
+> Regards,
+> Yann E. MORIN.
+>
