@@ -1,59 +1,50 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 15 Jun 2020 23:40:07 +0200
-Subject: [Buildroot] [PATCH v2] package/systemd: fixup RPATH for more
- systemd host binaries
-Message-ID: <20200615214007.200671-1-nolange79@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 15 Jun 2020 15:14:47 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/json-for-modern-cpp: bump to
+ version 3.8.0
+Message-ID: <20200615221447.3044371-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All systemd binaries depend on libsystemd-shared and need their
-RPATH fixed. Use a glob to catch them all
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
-v1->v2:
--   dont ignore failure from patchelf
----
- package/systemd/systemd.mk | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+Other changes:
+  - Update the hash for LICENSE.MIT due to a year change.
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 2cc71ee667..ae0de067e1 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -659,6 +659,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
- 	host-libcap \
- 	host-gperf
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Update the hash for the license file (Asaf)
+
+ package/json-for-modern-cpp/json-for-modern-cpp.hash | 4 ++--
+ package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+index c67cd37558..4d540f2404 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	249548f4867417d66ae46b338dfe0a2805f3323e81c9e9b83c89f3adbfde6f31	json-3.7.3.tar.gz
+-sha256	7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1	LICENSE.MIT
++sha256  7d0edf65f2ac7390af5e5a0b323b31202a6c11d744a74b588dc30f5a8c9865ba  json-3.8.0.tar.gz
++sha256  50be9457e5c9faaba5e60d9c73f8eabe9e0737a2d9c3e58357d856661862c18e  LICENSE.MIT
+diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+index e6f1df96f6..afc900b7dd 100644
+--- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
++++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-+
- # Fix RPATH After installation
- # * systemd provides a install_rpath instruction to meson because the binaries
- #   need to link with libsystemd which is not in a standard path
-@@ -667,19 +669,10 @@ HOST_SYSTEMD_DEPENDENCIES = \
- # * the original path had been tweaked by buildroot via LDFLAGS to add
- #   $(HOST_DIR)/lib
- # * thus re-tweak rpath after the installation for all binaries that need it
--HOST_SYSTEMD_HOST_TOOLS = \
--	systemd-analyze \
--	systemd-machine-id-setup \
--	systemd-mount \
--	systemd-nspawn \
--	systemctl \
--	udevadm
--
--HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
- 
- define HOST_SYSTEMD_FIX_RPATH
--	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
--		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
-+	$(foreach f,$(wildcard $(addprefix $(HOST_DIR)/bin/,journalctl systemctl udevadm systemd-*)), \
-+		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(f)
- 	)
- endef
- HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
+-JSON_FOR_MODERN_CPP_VERSION = 3.7.3
++JSON_FOR_MODERN_CPP_VERSION = 3.8.0
+ JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+ JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+ JSON_FOR_MODERN_CPP_LICENSE = MIT
 -- 
-2.27.0
+2.26.2
