@@ -1,11 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jun 2020 11:53:47 +0200
-Subject: [Buildroot] [PATCH v2 07/14] package/systemd: fixup RPATH for
- more systemd host binaries
-In-Reply-To: <20200615072055.2083-8-nolange79@gmail.com>
-References: <20200615072055.2083-1-nolange79@gmail.com>
- <20200615072055.2083-8-nolange79@gmail.com>
-Message-ID: <20200615095347.GX2346@scaer>
+Date: Mon, 15 Jun 2020 12:21:19 +0200
+Subject: [Buildroot] [PATCH v2] package/dbusbroker: new package
+In-Reply-To: <CADYdroPBJBr4psh4YLM+Er--SEF_1hCUd0Drqizcv3mjM2+eJw@mail.gmail.com>
+References: <20200610232428.201616-1-nolange79@gmail.com>
+ <20200612053155.GU13972@scaer>
+ <CADYdroP2X5Q1hgO27YPh9uNCF=LZQSxtW1L+kd0bDGLjPDLqcQ@mail.gmail.com>
+ <20200614131013.GO2346@scaer>
+ <CADYdroPBJBr4psh4YLM+Er--SEF_1hCUd0Drqizcv3mjM2+eJw@mail.gmail.com>
+Message-ID: <20200615102119.GY2346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,79 +16,73 @@ To: buildroot@busybox.net
 
 Norbert, All,
 
-On 2020-06-15 09:20 +0200, Norbert Lange spake thusly:
-> All systemd binaries depend on libsystemd-shared and need their
-> RPATH fixed. Use a glob to catch them all
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/systemd/systemd.mk | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 2cc71ee667..2c7f35bf25 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -659,6 +659,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  	host-libcap \
->  	host-gperf
->  
-> +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-> +
->  # Fix RPATH After installation
->  # * systemd provides a install_rpath instruction to meson because the binaries
->  #   need to link with libsystemd which is not in a standard path
-> @@ -667,20 +669,11 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  # * the original path had been tweaked by buildroot via LDFLAGS to add
->  #   $(HOST_DIR)/lib
->  # * thus re-tweak rpath after the installation for all binaries that need it
-> -HOST_SYSTEMD_HOST_TOOLS = \
-> -	systemd-analyze \
-> -	systemd-machine-id-setup \
-> -	systemd-mount \
-> -	systemd-nspawn \
-> -	systemctl \
-> -	udevadm
-> -
-> -HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
->  
->  define HOST_SYSTEMD_FIX_RPATH
-> -	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
-> -		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
-> -	)
-> +	cd $(HOST_DIR)/bin && for f in journalctl systemctl udevadm systemd-*; do \
-> +	  [ ! -x $$f ] || $(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $$f; \
-> +	  done
+On 2020-06-14 23:30 +0200, Norbert Lange spake thusly:
+> Am So., 14. Juni 2020 um 15:10 Uhr schrieb Yann E. MORIN
+> <yann.morin.1998@free.fr>:
+[--SNIP--]
+> > So you are very welcome to have re-spun this new iteration. :-)
+> As said, I have trouble with the ML flow, seems like the commit should then
+> include the whole discussion as otherwise no one is able to follow?
 
-You fell in the usual trap: if patchelf fails, then the error is not
-caught, and the loop continues and ends succesfully, while in fact there
-was an error...
+I guess that's what the post-commit history (all that is after the ---
+line) is for: keep a track of the changes between the various iteration
+of a patch (if I understood your isue correctly).
 
-There are two solutions to fix that:
+[--SNIP--]
+> > OK, I knew that would have been systemd doing the uid-drop, by I'd still
+> > like the info appear somewhere (so that we do not later question this in
+> > light of the original dbus package which defines one).
+> Not sure if we got some communication issues. The setting does
+> something (drop privileges),
+> while I originally considered the launcher ignoring the Xml key.
+> I guess you could tweak the systemd service to use a Dynamic user,
+> but I won't touch that for now.
 
-  - with the loop implemented in shell, terminate the command in the
-    loop with:  || exit 1
+So I did some testing:
 
-      $(HOST_DIR)/bin/patchelf [...] $$f || exit 1;
+  - without the <user> entry in system.conf, the launcher and the
+    message bus are running as root.
 
-  - keep the loop implemented in Makefile:
+  - with a <user> entry in system.conf (and the correct user in
+    /etc/passwd and /etc/group), the launcher and the message bus are
+    running as non-root with the specified user, and systemd is working
+    happily.
 
-    HOST_SYSTEMD_HOST_TOOLS = $(wildcard $(addprefix $(HOST_DIR)/bin,journalctl systemctl udevadm systemd-*))
-    $(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
-        $(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
-    )
+So, I would like we do use a non-root user for dbus-broker, like we do
+for the original dbus.
 
-Needless to say that we tend to prefer the second solution.
+I'll add that when I re-submit later tonight.
+
+[--SNIP--]
+> > And explain in the commit log that the launcher needs systemd, and that
+> > without the launcher there is no point in dbus-broker.
+> Seems to be the best option for now IMHO. Revisit the launcher-less option
+> once you have something to test.
+
+Agreed.
+
+[--SNIP--]
+> dbus/broker should be enabled by default with systemd, but with some way
+> that the user still can disable those. Dunno what's the correct to do
+> this in buildroot,
+> add a line to dbus  'default y if BR2_PACKAGE_SYSTEMD'?
+
+We can revisit that in a later patch (I've seen and started to apply
+your otehr series, which conclusion is to indeed drop the dbus
+requirement; let's see that happen there, not here).
+
+[--SNIP--]
+> > If you agree, then I'll try to merge your new submission with your
+> > comments into my series and re-spin it soon-ish, if that's OK with you.
+> You doing the work, and I get to nag? Deal ;)
+
+My pleasure! ;-)
+
+Thanks for the discusion and the explanations. New iteration pending by
+the end of the day (hopefully).
 
 Regards,
 Yann E. MORIN.
-
->  endef
->  HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
->  
-> -- 
-> 2.27.0
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
