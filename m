@@ -1,56 +1,38 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 15 Jun 2020 09:20:53 +0200
-Subject: [Buildroot] [PATCH v2 13/14] systemd: remove hard dependency on dbus
+Date: Mon, 15 Jun 2020 09:20:54 +0200
+Subject: [Buildroot] [PATCH v2 14/14] systemd: remove util-linux dependencies
 In-Reply-To: <20200615072055.2083-1-nolange79@gmail.com>
 References: <20200615072055.2083-1-nolange79@gmail.com>
-Message-ID: <20200615072055.2083-14-nolange79@gmail.com>
+Message-ID: <20200615072055.2083-15-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A substantial functionality of systemd does not
-depend on dbus anymore.
-It is certainly possible to used most of its core
-system managment functionality inclusive logging.
-
-In other words, most commands from systemctl and
-loginctl do work, aslong as used from root.
-
-These features will need dbus (incomplete list):
-
--   Access to systemd from non-root
--   Loginctl
--   Timedatectl
+systemd used only a small part of the util-linux binaries.
+definitely needed are mount and umount from coreutils,
+the rest of the tools could be provided by busybox aswell.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/systemd/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index b09bd36ab6..a7f41d2a38 100644
+index a7f41d2a38..0fbc1de432 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -25,7 +25,6 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
- 	select BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_DBUS # runtime dependency only
- 	select BR2_PACKAGE_LIBCAP
+@@ -29,10 +29,8 @@ menuconfig BR2_PACKAGE_SYSTEMD
  	select BR2_PACKAGE_UTIL_LINUX
  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-@@ -90,6 +89,10 @@ if BR2_PACKAGE_SYSTEMD
- config BR2_PACKAGE_PROVIDES_UDEV
- 	default "systemd"
- 
-+comment "systemd recommends enabling a dbus daemon"
-+	depends on !BR2_PACKAGE_DBUS
-+	depends on !BR2_PACKAGE_DBUS_BROKER
-+
- config BR2_PACKAGE_SYSTEMD_BOOT
- 	bool "systemd-boot"
- 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+-	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+-	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+ 	select BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
 -- 
 2.27.0
