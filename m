@@ -1,35 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jun 2020 22:03:54 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/iwd: add basic configuration
- file
-In-Reply-To: <20200615204154.5ec709b9@gmx.net>
-References: <20200612232433.18442-1-ps.report@gmx.net>
- <20200612232433.18442-2-ps.report@gmx.net>
- <20200614095628.GJ2346@scaer> <20200614210740.0d39d95d@gmx.net>
- <20200614205715.GN2346@scaer> <20200615204154.5ec709b9@gmx.net>
-Message-ID: <20200615200354.GD2346@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 15 Jun 2020 20:08:35 +0000
+Subject: [Buildroot] [Bug 13001] openjdk-bin replaces libfreetype.so from
+ host-freetype
+In-Reply-To: <bug-13001-163@https.bugs.busybox.net/>
+References: <bug-13001-163@https.bugs.busybox.net/>
+Message-ID: <bug-13001-163-IGXur1gK9Q@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+https://bugs.busybox.net/show_bug.cgi?id=13001
 
-On 2020-06-15 20:41 +0200, Peter Seiderer spake thusly:
-> But nevertheless I would like to keep the split into copy of plain file and
-> append of extra options (in case more options with different dependencies
-> follow)...
+--- Comment #5 from Jared Bents <jared.bents@rockwellcollins.com> ---
+Yann,
 
-... at which point we will be able to revisit it.
+I'll send it to the mailing list once I finish testing. It looks like some of
+the libraries in the v2 patch will have to stay as the included binaries
+instead of building from source because they either cause an issue with openjdk
+or with other packages (for example, host-libzip causes host-zip to fail to
+build).
 
-Regards,
-Yann E. MORIN.
+I'll include everything in the description once finished.
+
+Thank you,
+Jared
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
