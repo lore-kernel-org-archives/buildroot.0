@@ -1,40 +1,19 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 15 Jun 2020 12:00:32 +0530
-Subject: [Buildroot] [PATCH 1/4] configs/rockpro64: new defconfig
-In-Reply-To: <1592073154-13731-2-git-send-email-sunil@amarulasolutions.com>
-References: <1592073154-13731-1-git-send-email-sunil@amarulasolutions.com>
- <1592073154-13731-2-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <CAMty3ZB-7hyy4T2KZcixhMR34V4GHn+95q7dA8zxnNrLM_dHgA@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 15 Jun 2020 09:20:40 +0200
+Subject: [Buildroot] systemd improvements V2
+Message-ID: <20200615072055.2083-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 14, 2020 at 12:02 AM <sunil@amarulasolutions.com> wrote:
->
-> From: Suniel Mahesh <sunil@amarulasolutions.com>
->
-> A defconfig for the rockpro64 was added in
-> 59e1077b4ebe79622a454b0a8a840e4349a0440d, but then removed
-> in 10f49213b7e2837ae6ed63fc16fbdaa954ecd87f because an ARM32
-> compiler was needed to build ATF, and this was not supported
-> back then.
->
-> Now, since package/arm-gnu-a-toolchain/ has been added, this
-> defconfig can be re-introduced.
->
-> Following new changes are introduced in comparision with the
-> older changeset:
->
->     - renamed defconfig from pine64_rockpro64 to rockpro64
->     - updated readme
->     - using a GPT partition layout
->     - update defconfig to build ATF
->     - bump u-boot to 2020.04
->     - bump linux to 5.4.35
->
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> ---
 
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+-   nss patch redone, now using the template from share/factory,
+    and support all 4 plugins from systemd
+-   added upstream patch for systemd-tmpfilesd
+-   separate RPATH fixup, inlcude all systemd binaries
+-   include fix when using an ro filesystem with timesyncd
+    (still needs a writable /var/tmp)
+-   remove some dbus/util linux subpackage seletion
+    (I expect there be discussions)
