@@ -1,43 +1,72 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 15 Jun 2020 09:20:42 +0200
-Subject: [Buildroot] [PATCH v2 02/14] package/systemd: remove unused user
- accounts
+Date: Mon, 15 Jun 2020 09:20:41 +0200
+Subject: [Buildroot] [PATCH v2 01/14] package/systemd: configure nss plugins
+ in nsswitch.conf
 In-Reply-To: <20200615072055.2083-1-nolange79@gmail.com>
 References: <20200615072055.2083-1-nolange79@gmail.com>
-Message-ID: <20200615072055.2083-3-nolange79@gmail.com>
+Message-ID: <20200615072055.2083-2-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since V235 the "gateway" and "upload" services use DynamicUsers,
-requiring no entries in /etc/passwd.
-This functionality requires nss-systemd, which is always
-enabled in buildroot.
+This adds configuration of the nsswitch.conf file,
+it does so by pathing the template provided by systemd.
 
-The "bus-proxy" user was removed in V230.
+The template is fully populated, the services that are
+not available are removed.
+
+If the plugin nss-compat is not available, the entries
+will be replaced with nss-files.
+
+nss-systemd is used for the DynamicUser features,
+which is a defacto necessity for systemd.
+It handles transient users/groups without
+touching the /etc/{passwd,group} files on disk.
+
+nss-myhostname allows resolving the hostname,
+again without touching files in /etc.
+Enabling this feature requires configuring the plugin.
+
+nss-resolve is part of resolved, and required for
+consistent dns lookups.
+
+nss-mymachines adds name resolution from
+containers.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 ---
- package/systemd/systemd.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/systemd/systemd.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index cf6c0f9576..8e82d8afa7 100644
+index e61cec80f0..cf6c0f9576 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -502,10 +502,7 @@ define SYSTEMD_USERS
- 	- - systemd-journal -1 * - - - Journal
- 	- - render -1 * - - - DRI rendering nodes
- 	- - kvm -1 * - - - kvm nodes
--	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
--	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
- 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
--	systemd-journal-upload -1 systemd-journal-upload -1 * - - - Journal Upload
- 	$(SYSTEMD_COREDUMP_USER)
- 	$(SYSTEMD_NETWORKD_USER)
- 	$(SYSTEMD_RESOLVED_USER)
+@@ -472,7 +472,23 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+ 
++define SYSTEMD_NSSCONFIG_HOOK
++	[ -r "$$(find $(TARGET_DIR)/usr/lib -name libnss_compat.so.*)" ] || \
++		sed 's,\bcompat\b,files,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
++	[ "$(BR2_PACKAGE_SYSTEMD_RESOLVED)" = "y" ] || \
++		sed -e 's,\bresolve[[:space:]][[:space:]]*\[[^]]*\][[:space:]]*,,g' \
++		-e 's,\bresolve\b[[:space:]]*,,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
++	[ "$(BR2_PACKAGE_SYSTEMD_MYHOSTNAME)" = "y" ] || \
++		sed -e 's,\bmyhostname[[:space:]][[:space:]]*\[[^]]*\][[:space:]]*,,g' \
++		-e 's,\bmyhostname\b[[:space:]]*,,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
++	[ "$(BR2_PACKAGE_SYSTEMD_MACHINED)" = "y" ] || \
++		sed -e 's,\bmymachines[[:space:]][[:space:]]*\[[^]]*\][[:space:]]*,,g' \
++		-e 's,\bmymachines\b[[:space:]]*,,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
++	install -m644 $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf
++endef
++
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
++	SYSTEMD_NSSCONFIG_HOOK \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
 -- 
 2.27.0
