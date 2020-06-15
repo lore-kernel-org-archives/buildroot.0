@@ -1,212 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jun 2020 18:54:10 +0200
-Subject: [Buildroot] [PATCH v2 01/14] package/systemd: configure nss
- plugins in nsswitch.conf
-In-Reply-To: <CADYdroNsfJ1dvjzRyoG6vEamVdNbDqhBtv9qrGXUm-jqSysakw@mail.gmail.com>
-References: <20200615072055.2083-1-nolange79@gmail.com>
- <20200615072055.2083-2-nolange79@gmail.com>
- <20200615114825.GZ2346@scaer>
- <CADYdroNsfJ1dvjzRyoG6vEamVdNbDqhBtv9qrGXUm-jqSysakw@mail.gmail.com>
-Message-ID: <20200615165410.GB2346@scaer>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 15 Jun 2020 20:19:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/json-for-modern-cpp: bump to
+ version 3.8.0
+In-Reply-To: <20200614205859.608988-1-aduskett@gmail.com>
+References: <20200614205859.608988-1-aduskett@gmail.com>
+Message-ID: <CALFsTFXuprauK+G3VDOm0uZMj4HqXZGuUc4yLxWVdP7r3CAgwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Hello,
 
-On 2020-06-15 14:14 +0200, Norbert Lange spake thusly:
-> Am Mo., 15. Juni 2020 um 13:48 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-> >
-> > Norbert, All,
-> >
-> > On 2020-06-15 09:20 +0200, Norbert Lange spake thusly:
-> > > This adds configuration of the nsswitch.conf file,
-> > > it does so by pathing the template provided by systemd.
-> > >
-> > > The template is fully populated, the services that are
-> > > not available are removed.
-> > >
-> > > If the plugin nss-compat is not available, the entries
-> > > will be replaced with nss-files.
-> >
-> > systemd is glibc-only, and libnss_compat.so* is provided by glibc. What
-> > glibc does not provide it?
-> see: toolchain/toolchain-external/pkg-toolchain-external.mk
-> you only copy over ibnss_files there.
+On Sun, Jun 14, 2020 at 11:59 PM <aduskett@gmail.com> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/json-for-modern-cpp/json-for-modern-cpp.hash | 4 ++--
+>  package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> index c67cd37558..cdd5338a1b 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 249548f4867417d66ae46b338dfe0a2805f3323e81c9e9b83c89f3adbfde6f31        json-3.7.3.tar.gz
+> -sha256 7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1        LICENSE.MIT
+> +sha256  7d0edf65f2ac7390af5e5a0b323b31202a6c11d744a74b588dc30f5a8c9865ba  json-3.8.0.tar.gz
+> +sha256  7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1  LICENSE.MIT
 
-Aha. But then I think this is more an oversight than a deliberate
-filtering. In my opinion, the list should include libnss_*.so.*.
+According to the official release page, the copyright year was bumped
+on this release:
+https://github.com/nlohmann/json/releases/tag/v3.8.0
+So the hash of LICENSE.MIT should be updated too.
 
-> > > nss-systemd is used for the DynamicUser features,
-> > > which is a defacto necessity for systemd.
-> > > It handles transient users/groups without
-> > > touching the /etc/{passwd,group} files on disk.
-> > >
-> > > nss-myhostname allows resolving the hostname,
-> > > again without touching files in /etc.
-> > > Enabling this feature requires configuring the plugin.
-> > >
-> > > nss-resolve is part of resolved, and required for
-> > > consistent dns lookups.
-> > >
-> > > nss-mymachines adds name resolution from
-> > > containers.
-> > >
-> > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > > ---
-> > >  package/systemd/systemd.mk | 16 ++++++++++++++++
-> > >  1 file changed, 16 insertions(+)
-> > >
-> > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> > > index e61cec80f0..cf6c0f9576 100644
-> > > --- a/package/systemd/systemd.mk
-> > > +++ b/package/systemd/systemd.mk
-> > > @@ -472,7 +472,23 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
-> > >       touch $(TARGET_DIR)/etc/machine-id
-> > >  endef
-> > >
-> > > +define SYSTEMD_NSSCONFIG_HOOK
-> > > +     [ -r "$$(find $(TARGET_DIR)/usr/lib -name libnss_compat.so.*)" ] || \
-> >
-> > As said above, this is supposed to always exist in a glibc-based
-> > toolchain, which is all that systemd supports, so I don;t see why we
-> > would want to replace the 'compat' plugin by the 'files' one.
-> 
-> Well, until now, buildroot did use nothing but 'files'. I am not
-> against changing that,
-> but I dont complain about having the choice.
-> the 'compat' plugin doesn't add anything I care about, if it adds IPC
-> then I would
-> actually prefer not using it.
-
-So I had a look at the nsswitch.conf man page, and the 'compat' plugin
-is described as:
-
-    The NSS "compat" service is similar to "files" except that it
-    additionally permits special entries in corresponding files for
-    granting users or members of netgroups access to the system.
-
-So, in the context of Buildroot, we can just plain replace 'compat' with
-'files' uncondtionally.
-
-> > > +             sed 's,\bcompat\b,files,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
-> >
-> > We already have a variable that does 'sed -i' :
-> >
-> >     $(SED) 's,\bcompat\b,files,g' $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
-> >
-> > > +     [ "$(BR2_PACKAGE_SYSTEMD_RESOLVED)" = "y" ] || \
-> >
-> > Usually, we do not test configuration-level conditions in shell, but in
-> > Makefile:
-> >
-> >     ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-> >     define SYSTEMD_NSSWITCH_CONF_RESOLVED
-> >         sed blablabla...
-> >     endef
-> >     SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_NSSWITCH_CONF_RESOLVED   # See below, point 3...
-> >     endif
-> That's overly fragmented IHMO,
-
-... but much more in line with how we do it elsewhere.
-
-> I thought about $(if $(BR2_PACKAGE_SYSTEMD_RESOLVED),sed blahblah),
-> that would need replacing of the commas.
-
-Alternatively, that could be used, yes, but I still prefer the one-hook
-per option, even if it is still fragmented.
-
-But the conditional options already exist elsewhere in the file, so the
-corresponding conditional blocks can be re-used and extended. For example,
-there is already a conditional block for BR2_PACKAGE_SYSTEMD_RESOLVED:
-
-    https://git.buildroot.org/buildroot/tree/package/systemd/systemd.mk#n394
-
-     ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-     define SYSTEMD_INSTALL_RESOLVCONF_HOOK
-         ln -sf ../run/systemd/resolve/resolv.conf \
-             $(TARGET_DIR)/etc/resolv.conf
-     endef
-     SYSTEMD_CONF_OPTS += -Dnss-resolve=true -Dresolve=true
-     SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - systemd Resolver
-    +define SYSTEMD_NSSWITCH_CONF_RESOLVED
-    +    sed blablabla...
-    +endef
-    +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_NSSWITCH_CONF_RESOLVED
-     else
-     SYSTEMD_CONF_OPTS += -Dnss-resolve=false -Dresolve=false
-     endif
-
-> > > +             sed -e 's,\bresolve[[:space:]][[:space:]]*\[[^]]*\][[:space:]]*,,g' \
-> >
-> > "[[:space:]][:space:]]*" is equivalent to "[[:space:]]+".
-> >
-> > > +             -e 's,\bresolve\b[[:space:]]*,,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
-> >
-> > As I understand it, you are trying to remove the 'resolve' plugin,
-> > whether it has a follwing "[action]" or not, right? If so, here's my
-> > proposal of a simpler regexp that cactches both cases:
-> >
-> >     's,\bresolve[[:space:]]+(\[[^]]+\])?[[:space:]],,g'
-> I suppose $(SED) enables extended regex?
-
-Unfortunately, it does not (so it matches your usage):
-
-    https://git.buildroot.org/buildroot/tree/Makefile#n313
-
-Hmm... But see below, using $(SED) might not be a good idea.
-
-[--SNIP--]
-> >  1. /etc/nsswitch.conf is already provided by the glibc package, so
-> >     overwriting it will not play nicely with per-package directories,
-> using a separate default for systemd might make sense in the glibc package?
-> what about your arguments about 'compat' vs 'files' here?
-
-Moot now: switch to using 'files' unconditionally.
-
-> At any rate, the file in /usr/share/factory/etc/nsswitch.conf should
-> prolly be kept in sync or removed.
-
-Not sure I understand that one...
-
-> >  2. we already have other packages that may tweak that file, like:
-> >     package/nss-mdns/nss-mdns.mk
-> >     package/nss-myhostname/nss-myhostname.mk
-> >
-> >  3. which brings us to the point that this file should be tweaked as a
-> >     target-finalize hook
-> 
-> kinda like this ?:
-> https://github.com/nolange/buildroot/commit/237eebe9c29c3b8ab68d3abead52e1b7b08e1649
-
-I still think it should be made to be target-finalize hooks, one for
-each option.
-
-Also, I don;t get why you want to use the one in factory, rather than
-tweak the existing /etc/nsswitch.conf that has already been installed,
-like the other nss plugins do.
-
-And then, at the end. copy the one from /etc/nsswitch.conf over to the
-one in factory. That last one is a bit more tricky to come up with
-correctly, as this must be done after all nss plugins have had a chance
-to tweak nsswitch.conf. So I guess we should extend SYSTEMD_ROOTFS_PRE_CMD_HOOKS
-with a new hook that copies /etc/nsswitch.conf over to the factory.
-
+> diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> index e6f1df96f6..afc900b7dd 100644
+> --- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> +++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -JSON_FOR_MODERN_CPP_VERSION = 3.7.3
+> +JSON_FOR_MODERN_CPP_VERSION = 3.8.0
+>  JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
+>  JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
+>  JSON_FOR_MODERN_CPP_LICENSE = MIT
+> --
+> 2.26.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 Regards,
-Yann E. MORIN.
-
-> Note that I am missing the line for mymachines, my sed-foo is too weak
-> to add that at the correct position.
-> 
-> Norbert
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Asaf.
