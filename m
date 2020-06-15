@@ -1,76 +1,83 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Mon, 15 Jun 2020 16:02:59 -0700
-Subject: [Buildroot] ebtables and musl
-In-Reply-To: <87r1uhc79s.fsf@tarshish>
-References: <CAGt4E5tuHRkxko=NPY+-YsWwnhk1McnJMU_LmdcShHFuRjTkMA@mail.gmail.com>
- <20200613132317.4edb7676@gmx.net> <20200613144325.6c88eb8d@gmx.net>
- <CAGt4E5s_t30GHmTFiSA3MZQo0Vj-fkqvGPPc9kNdoa6w6-B7DA@mail.gmail.com>
- <87lfkqe4hk.fsf@tarshish>
- <CAGt4E5v4-5FxqZTENCMreZah33Yo8A3NJNactKK9BfMJzKxUPg@mail.gmail.com>
- <8843cd27-6553-986e-92d5-e210a3f678f0@gmail.com> <87r1uhc79s.fsf@tarshish>
-Message-ID: <CAGt4E5tNPvzbk1uiZu-8zVeWimyqPsYygBKSuAjVw6q5pWm2gw@mail.gmail.com>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 15 Jun 2020 18:28:20 -0500
+Subject: [Buildroot] [PATCH v1 1/1] package/openjdk-bin: use libraries from
+ host pkgs
+Message-ID: <20200615232820.18254-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Jun 2020 at 20:55, Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Florian,
->
-> On Mon, Jun 15 2020, Florian Fainelli wrote:
-> > On 6/13/2020 8:34 PM, Markus Mayer wrote:
-> >> On Sat, 13 Jun 2020 at 20:00, Baruch Siach <baruch@tkos.co.il> wrote:
-> >>> On Sat, Jun 13 2020, Markus Mayer wrote:
-> >>>
-> >>>> On Sat, 13 Jun 2020 at 05:43, Peter Seiderer <ps.report@gmx.net> wrote:
-> >>>>> On Fri, 12 Jun 2020 13:10:28 -0700, Markus Mayer <mmayer@broadcom.com> wrote:
-> >>>>>>> While we are on the topic of ebtables, why is buildroot still using
-> >>>>>>> v2.0.10-4 from 2014 when there is 2.0.11 from 2019 (as per
-> >>>>>>> http://ftp.netfilter.org/pub/ebtables/)? Is it just a matter of
-> >>>>>>> submitting a patch to update it or is there an underlying reason to
-> >>>>>>> keep the old version around?
-> >>>>>>
-> >>>>>> Probably not, care to send an ebtables update patch?
-> >>>>
-> >>>> Sure. I'll send a patch.
-> >>>
-> >>> We have a version upgrade patch in patchwork:
-> >>>
-> >>>   http://patchwork.ozlabs.org/project/buildroot/patch/20200427212653.29933-1-ryanbarnett3 at gmail.com/
-> >>>
-> >>> You might want to test and contribute your Tested-by.
-> >>
-> >> Will do. I'll let you know how it goes.
-> >
-> > Would not these two patches be relevant for the kernel headers too:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=da360299b6734135a5f66d7db458dcc7801c826a
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6926e041a8920c8ec27e4e155efa760aa01551fd
-> >
-> > which would not require patching ebtables or musl at all?
->
-> Buildroot allows the user to set the kernel version, or even provide a
-> whole kernel tree. This includes kernels older than v4.15/v4.16. Because
-> of that we can't rely on any given patch to apply to the kernel version
-> we happen to use for the toolchain.
->
-> The ebtables patch is no longer needed for version 2.0.11. The musl
-> patch however is still needed for compatibility with older kernels.
+Update to remove libfreetype.so as it is created by host-freetype
+and other packages fail with the version of libfreetype.so provided
+by host-openjdk-bin such as host-xapp_mkfontscale.
 
-Building ebtables 2.0.11 with musl 1.2.0 works for me if I use the
-same toolchain (musl) patch that Buildroot is using and apply it to
-our external toolchain
-(https://git.buildroot.net/buildroot/tree/package/musl/0001-avoid-kernel-if_ether.h.patch).
-The kernel version is 4.9.
+Update to add host variant of lksctp-tools, remove libsctp.so, and
+add host-lksctp-tools dependency.
 
-Regards,
--Markus
+Two other libraries are included by host-opensdk-bin that could be
+provided by other packages being built from source however they have
+issues and have not been included in this update:
+* Add host variant of libnet, remove libnet.so,
+  and add host-libnet dependency. However, this causes openjdk to
+  hang during the build and is not included.
+* Remove libzip.so and add host-libzip dependency. However, this
+  currently causes host-zip to fail to build and is not included.
 
-> baruch
->
-> --
->                                                      ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bug tracker - https://bugs.busybox.net/show_bug.cgi?id=13001
+
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ package/lksctp-tools/lksctp-tools.mk |  1 +
+ package/openjdk-bin/openjdk-bin.mk   | 15 ++++++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/package/lksctp-tools/lksctp-tools.mk b/package/lksctp-tools/lksctp-tools.mk
+index 5ac794e842..ace11ecc97 100644
+--- a/package/lksctp-tools/lksctp-tools.mk
++++ b/package/lksctp-tools/lksctp-tools.mk
+@@ -20,3 +20,4 @@ endef
+ LKSCTP_TOOLS_POST_INSTALL_TARGET_HOOKS += LKSCTP_TOOLS_CLEANUP_TARGET
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 31dc4a4666..6660d7ef03 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -11,18 +11,31 @@ HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VE
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
+ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
++HOST_OPENJDK_BIN_DEPENDENCIES = \
++	host-freetype \
++	host-lksctp-tools
+ 
+ # unpack200 has an invalid RPATH and relies on libzlib. When
+ # host-libzlib is installed on the system, the error "ERROR: package
+ # host-libzlib installs executables without proper RPATH: will occur.
+ # Because unpack200 is a deprecated tool, removing it to fix this
+ # issue is safe.
++# Dependency on host-freetype creates an up to date libfreetype.so so
++# libfreetype.so is removed from host-openjdk-bin after extract.
++# Dependency on host-lksctp-tools creates an up to date libsctp.so so
++# libsctp.so is removed from host-openjdk-bin after extract.
++define HOST_OPENJDK_BIN_CLEANUP
++	$(RM) -f $(@D)/bin/unpack200
++	$(RM) -f $(@D)/lib/libfreetype.so
++	$(RM) -f $(@D)/lib/libsctp.so
++endef
++HOST_OPENJDK_BIN_POST_EXTRACT_HOOKS += HOST_OPENJDK_BIN_CLEANUP
++
+ define HOST_OPENJDK_BIN_INSTALL_CMDS
+ 	mkdir -p $(HOST_DIR)/bin
+ 	cp -dpfr $(@D)/bin/* $(HOST_DIR)/bin/
+ 	mkdir -p $(HOST_DIR)/lib
+ 	cp -dpfr $(@D)/lib/* $(HOST_DIR)/lib/
+-	$(RM) -f $(HOST_DIR)/bin/unpack200
+ endef
+ 
+ $(eval $(host-generic-package))
+-- 
+2.17.1
