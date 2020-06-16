@@ -1,89 +1,85 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 16 Jun 2020 18:25:39 +0200
-Subject: [Buildroot] [PATCH] package/iproute2: bump to version 5.7.0
-Message-ID: <20200616162539.17854-1-petr.vorel@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 16 Jun 2020 18:34:53 +0200
+Subject: [Buildroot] [PATCH v3] package/libcamera: bump version to
+ 96fab38
+In-Reply-To: <20200616072746.GI2346@scaer>
+References: <20200611094228.14887-1-ps.report@gmx.net>
+ <e96772e7-eec4-1b04-6889-1a11a05c4225@ideasonboard.com>
+ <20200614170205.GH2346@scaer>
+ <2c5bda12-fde1-a43d-6bb9-6e3d3b94fbe3@ideasonboard.com>
+ <20200616072746.GI2346@scaer>
+Message-ID: <20200616183453.5b4a400d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Hi,
+Hello Yann, Kieran,
 
-tested:
-                             andes-nds32 [ 1/44]: OK
-                             arm-aarch64 [ 2/44]: OK
-                        br-aarch64-glibc [ 3/44]: OK
-                           br-arcle-hs38 [ 4/44]: OK
-                            br-arm-basic [ 5/44]: OK
-                  br-arm-cortex-a9-glibc [ 6/44]: OK
-                   br-arm-cortex-a9-musl [ 7/44]: OK
-                   br-arm-cortex-m4-full [ 8/44]: SKIPPED
-                             br-arm-full [ 9/44]: OK
-                    br-arm-full-nothread [10/44]: OK
-                      br-arm-full-static [11/44]: OK
-                br-i386-pentium-mmx-musl [12/44]: OK
-                   br-i386-pentium4-full [13/44]: OK
-                    br-microblazeel-full [14/44]: OK
-                      br-mipsel-o32-full [15/44]: OK
-                 br-mips32r6-el-hf-glibc [16/44]: OK
-                      br-mips64-n64-full [17/44]: OK
-                 br-mips64r6-el-hf-glibc [18/44]: OK
-                       br-m68k-5208-full [19/44]: SKIPPED
-                      br-m68k-68040-full [20/44]: OK
-                          br-nios2-glibc [21/44]: OK
-                      br-openrisc-uclibc [22/44]: OK
-                  br-powerpc-e500mc-full [23/44]: OK
-               br-powerpc-603e-basic-cpp [24/44]: OK
-             br-powerpc64le-power8-glibc [25/44]: OK
-               br-powerpc64-power7-glibc [26/44]: OK
-                              br-riscv32 [27/44]: OK
-                              br-riscv64 [28/44]: OK
-                             br-sh4-full [29/44]: OK
-                         br-sparc-uclibc [30/44]: OK
-                        br-sparc64-glibc [31/44]: OK
-                          br-xtensa-full [32/44]: OK
-                    br-x86-64-core2-full [33/44]: OK
-                          br-x86-64-musl [34/44]: OK
-                       linaro-aarch64-be [35/44]: OK
-                          linaro-aarch64 [36/44]: OK
-                              linaro-arm [37/44]: OK
-                     sourcery-arm-armv4t [38/44]: OK
-                            sourcery-arm [39/44]: OK
-                     sourcery-arm-thumb2 [40/44]: OK
-                           sourcery-mips [41/44]: OK
-                         sourcery-mips64 [42/44]: OK
-                          sourcery-nios2 [43/44]: OK
-                         sourcery-x86-64 [44/44]: OK
-44 builds, 2 skipped, 0 build failed, 0 legal-info failed
+On Tue, 16 Jun 2020 09:27:46 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Kieran, Peter, All,
+>
+> On 2020-06-15 12:32 +0100, Kieran Bingham spake thusly:
+> > On 14/06/2020 18:02, Yann E. MORIN wrote:
+> [--SNIP--]
+> > > As I understand it, it would make sense that a thir-party provides a
+> > > binary blob for their hardware, nd use none of the pipelines for the
+> > > known boards, no?
+> > Libcamera could be built without any I believe (/me goes to test).
+> > Yes, libcamera will build successfully and cleanly with -Dpipelines=""
+> >
+> > But a pipeline handler is always required for *operation*, and those can
+> > not be 'binary blobs'.
+> >
+> > Only the image processing algorithm (IPA) components can be an external
+> > binary. There must be a corresponding (open source) pipeline-handler to
+> > support the algorithms.
+>
+> OK, so I guess this indeed calls for always enabling a default pipeline
+> handler, and the UVC one makes for a good default one (see below).
+>
+> > > If it makes sense that no pipeline is enabled, I'm fine with having none
+> > > enabled by default.
+> > I guess my only thought would be to expect at least UVC support - but
+> > hey, the target might not have USB - so it certainly is use-case specific.
+>
+> But as you said a pipeline handler is mandatory, the UVC one is generic
+> enough that it is enabled by default.
+>
+> What we usually do in such a situation, is something like:
+>
+>     config BR2_PACKAGE_LIBCAMERA
+>         bool "libcamera"
+>         select BR2_PACKAGE_LIBCAMERA_PIPELINE_UVC if !BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+>
+>     config BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+>         bool
+>
+>     config BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3
+>         bool "ipu3 pipeline"
+>         select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+>
+>     config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
+>         bool "rkisp1 pipeline"
+>         select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+>
+>     config BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI
+>         bool "rpi pipeline"
+>         select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+>
+>     config BR2_PACKAGE_LIBCAMERA_PIPELINE_UVC
+>         bool "UVC pipeline"
+>
+> Peter, can you respin with this change, please? ;-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 0477eb71bf..b2a9e21e11 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  1b5b0e25ce6e23da7526ea1da044e814ad85ba761b10dd29c2b027c056b04692  iproute2-5.6.0.tar.xz
-+sha256  725dc7ba94aae54c6f8d4223ca055d9fb4fe89d6994b1c03bfb4411c4dd10f21  iproute2-5.7.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index e5841cc460..1b71f5c06a 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPROUTE2_VERSION = 5.6.0
-+IPROUTE2_VERSION = 5.7.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
--- 
-2.27.0
+Yes, can do, will be in the next patch iteration...
+
+Regards,
+Peter
+
+>
+> Regards,
+> Yann E. MORIN.
+>
