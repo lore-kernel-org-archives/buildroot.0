@@ -1,320 +1,260 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 16 Jun 2020 14:16:45 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/netopeer2: add package
-Message-ID: <20200616121644.7039-1-heiko.thiery@gmail.com>
+From: LP C <lpdev@cordier.org>
+Date: Tue, 16 Jun 2020 16:46:32 +0200
+Subject: [Buildroot] Status of parallel build with Qt5
+In-Reply-To: <20200608233216.0d0f494b@windsurf>
+References: <20200608233216.0d0f494b@windsurf>
+Message-ID: <3100E836-9C18-4B1D-BACB-120B2F035E34@getmailspring.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Netopeer2 is a set of tools implementing network configuration
-tools based on the NETCONF Protocol. This is the second
-generation of the toolset, originally available as the Netopeer
-project. Netopeer2 is based on the new generation of the NETCONF
-and YANG libraries - libyang and libnetconf2. The Netopeer
-server uses sysrepo as a NETCONF datastore implementation.
+On Jun 8 2020, at 11:32 pm, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...BUGFIX-take-DESTDIR-into-account-649.patch | 33 ++++++++
- ...HANGE-use-su-only-for-effective-root.patch | 79 +++++++++++++++++++
- package/netopeer2/Config.in                   | 36 +++++++++
- package/netopeer2/S52netopeer2                | 50 ++++++++++++
- package/netopeer2/netopeer2.hash              |  3 +
- package/netopeer2/netopeer2.mk                | 22 ++++++
- 8 files changed, 225 insertions(+)
- create mode 100644 package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
- create mode 100644 package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
- create mode 100644 package/netopeer2/Config.in
- create mode 100644 package/netopeer2/S52netopeer2
- create mode 100644 package/netopeer2/netopeer2.hash
- create mode 100644 package/netopeer2/netopeer2.mk
+> On Mon, 8 Jun 2020 11:47:26 +0200
+> LP C <lpdev@cordier.org> wrote:
+>  
+>> Is there any status regarding the build of Qt5 with parallel build?
+>  
+> See this series from Andreas:
+>  
+>  https://patchwork.ozlabs.org/project/buildroot/list/?series=159093
+>  
+>> Wouldn't be possible to disable parallel build for this specific
+>> package in the meantime?
+>  
+> No, you can't disable parallel build for one specific package.
+>  
+>> PS: Newbie question here: what is the best practice to
+>> answer/participate to an old thread from the mailing list? As I don't
+>> have the email in my inbox, I cannot answer back, thus forcing me to
+>> start a new thread. Thanks
+>  
+> I'm not sure if the mbox is easily available from the archives. If it
+> was, you could import it in your e-mail client.
+>  
+> Thomas
+> --  
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>  
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 76a153d695..57628fbead 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1080,6 +1080,7 @@ F:	package/python-sip/
- N:	Heiko Thiery <heiko.thiery@gmail.com>
- F:	package/libnetconf2/
- F:	package/libyang/
-+F:	package/netopeer2/
- F:	package/sysrepo/
- 
- N:	Henrique Camargo <henrique@henriquecamargo.com>
-diff --git a/package/Config.in b/package/Config.in
-index d32eadab88..bd89fed041 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1739,6 +1739,7 @@ menu "Networking"
- 	source "package/mongoose/Config.in"
- 	source "package/nanomsg/Config.in"
- 	source "package/neon/Config.in"
-+	source "package/netopeer2/Config.in"
- 	source "package/nghttp2/Config.in"
- 	source "package/norm/Config.in"
- 	source "package/nss-mdns/Config.in"
-diff --git a/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
-new file mode 100644
-index 0000000000..bff4337fe7
---- /dev/null
-+++ b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
-@@ -0,0 +1,33 @@
-+From c6afffafd1e27054ff59b82ffed3a99795814631 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Mon, 8 Jun 2020 09:47:58 +0200
-+Subject: [PATCH] build BUGFIX take DESTDIR into account (#649)
-+
-+When installing yang modules add DESTDIR prefix to the NP2_MODULE_DIR.
-+
-+Fixes #648
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+[patch taken from upstream:
-+https://github.com/CESNET/netopeer2/commit/726b1384a3f93090ede1143da86c99d5d24d06c5]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ scripts/setup.sh | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/scripts/setup.sh b/scripts/setup.sh
-+index 7175bc4..81abf63 100755
-+--- a/scripts/setup.sh
-++++ b/scripts/setup.sh
-+@@ -8,7 +8,7 @@ fi
-+ 
-+ # avoid problems with sudo path
-+ SYSREPOCTL=`su -c "which sysrepoctl" $USER`
-+-MODDIR=${NP2_MODULE_DIR}
-++MODDIR=${DESTDIR}${NP2_MODULE_DIR}
-+ PERMS=${NP2_MODULE_PERMS}
-+ OWNER=${NP2_MODULE_OWNER}
-+ GROUP=${NP2_MODULE_GROUP}
-+-- 
-+2.20.1
-+
-diff --git a/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
-new file mode 100644
-index 0000000000..b960a87beb
---- /dev/null
-+++ b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
-@@ -0,0 +1,79 @@
-+From 71cc996faa5500b3bfd499ad0c436c8b96629ea7 Mon Sep 17 00:00:00 2001
-+From: Michal Vasko <mvasko@cesnet.cz>
-+Date: Wed, 10 Jun 2020 15:20:23 +0200
-+Subject: [PATCH] scripts CHANGE use su only for effective root
-+
-+Fixes #645
-+
-+[patch taken from upstream:
-+https://github.com/CESNET/netopeer2/commit/2161b333009c21ffc8501e5127b82e6f0570ca8e]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ scripts/merge_config.sh  |  8 ++++++--
-+ scripts/merge_hostkey.sh | 11 ++++++++---
-+ scripts/setup.sh         |  8 ++++++--
-+ 3 files changed, 20 insertions(+), 7 deletions(-)
-+
-+diff --git a/scripts/merge_config.sh b/scripts/merge_config.sh
-+index dde0c75..4ad151c 100755
-+--- a/scripts/merge_config.sh
-++++ b/scripts/merge_config.sh
-+@@ -2,8 +2,12 @@
-+ 
-+ set -e
-+ 
-+-# avoid problems with sudo path
-+-SYSREPOCFG=`su -c "which sysrepocfg" $USER`
-++# avoid problems with sudo PATH
-++if [ `id -u` -eq 0 ]; then
-++    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
-++else
-++    SYSREPOCFG=`which sysrepocfg`
-++fi
-+ KS_KEY_NAME=genkey
-+ 
-+ # check that there is no listen/Call Home configuration yet
-+diff --git a/scripts/merge_hostkey.sh b/scripts/merge_hostkey.sh
-+index 87947fa..a0677ee 100755
-+--- a/scripts/merge_hostkey.sh
-++++ b/scripts/merge_hostkey.sh
-+@@ -2,9 +2,14 @@
-+ 
-+ set -e
-+ 
-+-# avoid problems with sudo path
-+-SYSREPOCFG=`su -c "which sysrepocfg" $USER`
-+-OPENSSL=`su -c "which openssl" $USER`
-++# avoid problems with sudo PATH
-++if [ `id -u` -eq 0 ]; then
-++    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
-++    OPENSSL=`su -c 'which openssl' -l $USER`
-++else
-++    SYSREPOCFG=`which sysrepocfg`
-++    OPENSSL=`which openssl`
-++fi
-+ 
-+ # check that there is no SSH key with this name yet
-+ KEYSTORE_KEY=`$SYSREPOCFG -X -x "/ietf-keystore:keystore/asymmetric-keys/asymmetric-key[name='genkey']/name"`
-+diff --git a/scripts/setup.sh b/scripts/setup.sh
-+index 81abf63..8bf6825 100755
-+--- a/scripts/setup.sh
-++++ b/scripts/setup.sh
-+@@ -6,8 +6,12 @@ if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" -o -z "$NP2_MODULE_OWNER" -o
-+     exit 1
-+ fi
-+ 
-+-# avoid problems with sudo path
-+-SYSREPOCTL=`su -c "which sysrepoctl" $USER`
-++# avoid problems with sudo PATH
-++if [ `id -u` -eq 0 ]; then
-++    SYSREPOCTL=`su -c 'which sysrepoctl' -l $USER`
-++else
-++    SYSREPOCTL=`which sysrepoctl`
-++fi
-+ MODDIR=${DESTDIR}${NP2_MODULE_DIR}
-+ PERMS=${NP2_MODULE_PERMS}
-+ OWNER=${NP2_MODULE_OWNER}
-+-- 
-+2.20.1
-+
-diff --git a/package/netopeer2/Config.in b/package/netopeer2/Config.in
-new file mode 100644
-index 0000000000..fcf3aaf57d
---- /dev/null
-+++ b/package/netopeer2/Config.in
-@@ -0,0 +1,36 @@
-+comment "netopeer2 needs a toolchain w/ C++, threads, dynamic library, host gcc >= 4.8"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_HOST_GCC_AT_LEAST_4_8
-+
-+config BR2_PACKAGE_NETOPEER2
-+	bool "netopeer2"
-+	depends on BR2_USE_MMU # sysrepo
-+	depends on !BR2_STATIC_LIBS # sysrepo
-+	depends on BR2_INSTALL_LIBSTDCPP # sysrepo
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_LIBNETCONF2
-+	select BR2_PACKAGE_PCRE # sysrepo
-+	select BR2_PACKAGE_PCRE_UCP # syrepo
-+	select BR2_PACKAGE_SYSREPO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+
-+	help
-+	  Netopeer2 is a set of tools implementing network
-+	  configuration tools based on the NETCONF Protocol.
-+
-+	  This is the server part.
-+
-+	  https://github.com/CESNET/Netopeer2
-+
-+if BR2_PACKAGE_NETOPEER2
-+
-+config BR2_PACKAGE_NETOPEER2_CLI
-+       bool "cli"
-+       help
-+         Enable netopeer2 CLI.
-+
-+endif
-diff --git a/package/netopeer2/S52netopeer2 b/package/netopeer2/S52netopeer2
-new file mode 100644
-index 0000000000..cf53a8f109
---- /dev/null
-+++ b/package/netopeer2/S52netopeer2
-@@ -0,0 +1,50 @@
-+#!/bin/sh
-+
-+DAEMON="netopeer2-server"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+NETOPEER2_SERVER_ARGS=""
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+
-+	start-stop-daemon -S -b -q -p $PIDFILE -x "/usr/bin/$DAEMON" \
-+		-- $NETOPEER2_SERVER_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p $PIDFILE
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+reload() {
-+	# we do not support real reload .. just restart
-+	restart
-+}
-+
-+case "$1" in
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+esac
-diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
-new file mode 100644
-index 0000000000..93a094d563
---- /dev/null
-+++ b/package/netopeer2/netopeer2.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  66f3ad68cc6e41f3231b090ef27016ccbfe007cda7d08ec19f409f7429f46ff9  netopeer2-1.1.34.tar.gz
-+sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
-diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-new file mode 100644
-index 0000000000..2553501f1d
---- /dev/null
-+++ b/package/netopeer2/netopeer2.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# netopeer2
-+#
-+################################################################################
-+
-+NETOPEER2_VERSION = 1.1.34
-+NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
-+NETOPEER2_DL_SUBDIR = netopeer2
-+NETOPEER2_LICENSE = BSD-3-Clause
-+NETOPEER2_LICENSE_FILES = LICENSE
-+NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
-+
-+NETOPEER2_CONF_OPTS += \
-+	-DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
-+
-+define NETOPEER2_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
-+		$(TARGET_DIR)/etc/init.d/S52netopeer2
-+endef
-+
-+$(eval $(cmake-package))
--- 
-2.20.1
+Hi,  
+
+I tried to build with 2020.05 and also tried to compile with andreas
+unmerged patches in top of it. I get this error, and I have no clues on
+how to solve it. I'm building for the x86 target.
+
+/sandbox/awow/per-package/qt5base/host/bin/x86_64-buildroot-linux-gnu-g++
+--sysroot=/sandbox/awow/per-package/qt5multimedia/host/x86_64-buildroot-linux-gnu/sysroot
+-Wl,--no-undefined -Wl,--version-script,QtMultimedia.version -Wl,-O1
+-Wl,--enable-new-dtags -shared -Wl,-Bsymbolic-functions
+-Wl,-soname,libQt5Multimedia.so.5 -o libQt5Multimedia.so.5.14.2
+.obj/qmediabindableinterface.o .obj/qmediacontrol.o
+.obj/qmediametadata.o .obj/qmediaobject.o .obj/qmediapluginloader.o
+.obj/qmediaservice.o .obj/qmediaserviceprovider.o .obj/qmediatimerange.o
+.obj/qmediaresourcepolicyplugin_p.o .obj/qmediaresourcepolicy_p.o
+.obj/qmediaresourceset_p.o .obj/qmediastoragelocation.o
+.obj/qmultimedia.o .obj/qmultimediautils.o .obj/qaudio.o
+.obj/qaudioformat.o .obj/qaudiodeviceinfo.o .obj/qaudiooutput.o
+.obj/qaudioinput.o .obj/qaudiosystemplugin.o .obj/qaudiosystem.o
+.obj/qaudiodevicefactory.o .obj/qsoundeffect.o .obj/qwavedecoder_p.o
+.obj/qsamplecache_p.o .obj/qsound.o .obj/qaudiobuffer.o
+.obj/qaudioprobe.o .obj/qaudiodecoder.o .obj/qaudiohelpers.o
+.obj/qsoundeffect_qaudio_p.o .obj/qcamera.o .obj/qcameraexposure.o
+.obj/qcamerafocus.o .obj/qcameraimageprocessing.o
+.obj/qcameraimagecapture.o .obj/qcamerainfo.o
+.obj/qcameraviewfindersettings.o
+.obj/qcameracapturebufferformatcontrol.o
+.obj/qcameracapturedestinationcontrol.o .obj/qcameracontrol.o
+.obj/qcamerainfocontrol.o .obj/qcameraexposurecontrol.o
+.obj/qcamerafeedbackcontrol.o .obj/qcameraflashcontrol.o
+.obj/qcamerafocuscontrol.o .obj/qcamerazoomcontrol.o
+.obj/qcameraimagecapturecontrol.o .obj/qcameraimageprocessingcontrol.o
+.obj/qcameralockscontrol.o .obj/qcameraviewfindersettingscontrol.o
+.obj/qimageencodercontrol.o .obj/qmediacontainercontrol.o
+.obj/qmediagaplessplaybackcontrol.o .obj/qmedianetworkaccesscontrol.o
+.obj/qmediaplayercontrol.o .obj/qmediaplaylistcontrol.o
+.obj/qmediaplaylistsourcecontrol.o .obj/qmediarecordercontrol.o
+.obj/qmediastreamscontrol.o .obj/qmetadatareadercontrol.o
+.obj/qmetadatawritercontrol.o .obj/qradiodatacontrol.o
+.obj/qradiotunercontrol.o .obj/qvideorenderercontrol.o
+.obj/qvideowindowcontrol.o .obj/qmediaaudioprobecontrol.o
+.obj/qmediavideoprobecontrol.o .obj/qmediaavailabilitycontrol.o
+.obj/qaudiodecodercontrol.o .obj/qvideoencodersettingscontrol.o
+.obj/qaudioencodersettingscontrol.o .obj/qaudioinputselectorcontrol.o
+.obj/qaudiooutputselectorcontrol.o .obj/qvideodeviceselectorcontrol.o
+.obj/qaudiorolecontrol.o .obj/qcustomaudiorolecontrol.o
+.obj/qmedianetworkplaylistprovider.o .obj/qmediacontent.o
+.obj/qmediaplayer.o .obj/qmediaplaylist.o .obj/qmediaplaylistioplugin.o
+.obj/qmediaplaylistnavigator.o .obj/qmediaplaylistprovider.o
+.obj/qmediaresource.o .obj/qplaylistfileparser.o .obj/qradiodata.o
+.obj/qradiotuner.o .obj/qaudiorecorder.o .obj/qmediaencodersettings.o
+.obj/qmediarecorder.o .obj/qabstractvideobuffer.o
+.obj/qabstractvideosurface.o .obj/qimagevideobuffer.o
+.obj/qmemoryvideobuffer.o .obj/qvideoframe.o
+.obj/qvideooutputorientationhandler.o .obj/qvideosurfaceformat.o
+.obj/qvideosurfaceoutput.o .obj/qvideoprobe.o
+.obj/qabstractvideofilter.o .obj/qvideoframeconversionhelper.o
+.obj/qvideoframeconversionhelper_sse2.o .obj/moc_qaudioprobe.o
+.obj/moc_qcamerafeedbackcontrol.o
+.obj/moc_qmediagaplessplaybackcontrol.o .obj/moc_qvideoprobe.o
+.obj/moc_qabstractvideofilter.o .obj/moc_qmediaresourcepolicyplugin_p.o
+.obj/moc_qmediaresourceset_p.o .obj/moc_qplaylistfileparser_p.o
+.obj/moc_qvideooutputorientationhandler_p.o
+.obj/moc_qvideosurfaceoutput_p.o -latomic
+/sandbox/awow/per-package/qt5multimedia/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Network.so
+/sandbox/awow/per-package/qt5multimedia/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Gui.so
+/sandbox/awow/per-package/qt5multimedia/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Core.so
+-lpthread
+-L/sandbox/awow/per-package/qt5base/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib
+-lGL -lrt -lpthread -ldl?
+
+/sandbox/awow/per-package/qt5base/host/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+cannot find /usr/lib64/libmvec_nonshared.a
+
+collect2: error: ld returned 1 exit status
+make[4]: *** [Makefile:529: ../../lib/libQt5Multimedia.so.5.14.2] Error 1
+make[3]: *** [Makefile:49: sub-multimedia-make_first] Error 2
+make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+make[1]: *** [package/pkg-generic.mk:266:
+/sandbox/awow/build/qt5multimedia-5.14.2/.stamp_built] Error 2
+make: *** [Makefile:23: _all] Error 2
+make -j 8? 15205.79s user 2260.01s system 645% cpu 45:03.91 total
+
+
+Defconfig:
+=========================
+
+BR2_x86_64=y
+BR2_CCACHE=y
+BR2_OPTIMIZE_3=y
+BR2_REPRODUCIBLE=y
+BR2_PER_PACKAGE_DIRECTORIES=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_OPENMP=y
+BR2_TARGET_GENERIC_HOSTNAME="COMP"
+BR2_TARGET_GENERIC_ISSUE="Welcome to COMP"
+BR2_INIT_SYSTEMD=y
+BR2_SYSTEM_BIN_SH_BASH=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty2"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.18"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL_MY_PATH)/board/COMP/linux-4.19.config"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+BR2_PACKAGE_LINUX_TOOLS_CPUPOWER=y
+BR2_PACKAGE_FFMPEG_GPL=y
+BR2_PACKAGE_FFMPEG_NONFREE=y
+BR2_PACKAGE_FFMPEG_POSTPROC=y
+BR2_PACKAGE_MAKE=y
+BR2_PACKAGE_SED=y
+BR2_PACKAGE_TREE=y
+BR2_PACKAGE_E2FSPROGS=y
+BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+BR2_PACKAGE_EXFAT=y
+BR2_PACKAGE_EXFAT_UTILS=y
+BR2_PACKAGE_LIBVA_UTILS=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XAPP_SETXKBMAP=y
+BR2_PACKAGE_XAPP_TWM=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XSET=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
+BR2_PACKAGE_XTERM=y
+BR2_PACKAGE_FLUXBOX=y
+BR2_PACKAGE_LINUX_FIRMWARE=y
+BR2_PACKAGE_LINUX_FIRMWARE_I915=y
+BR2_PACKAGE_LINUX_FIRMWARE_IBT=y
+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=y
+BR2_PACKAGE_ACPID=y
+BR2_PACKAGE_ACPITOOL=y
+BR2_PACKAGE_GPTFDISK=y
+BR2_PACKAGE_GPTFDISK_GDISK=y
+BR2_PACKAGE_GPTFDISK_SGDISK=y
+BR2_PACKAGE_KBD=y
+BR2_PACKAGE_LSHW=y
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PORTAUDIO=y
+BR2_PACKAGE_LIBSHA1=y
+BR2_PACKAGE_LIBCONFIG=y
+BR2_PACKAGE_JASPER=y
+BR2_PACKAGE_OPENCV_WITH_FFMPEG=y
+BR2_PACKAGE_TIFF=y
+BR2_PACKAGE_GNU_EFI=y
+BR2_PACKAGE_X264=y
+BR2_PACKAGE_ZEROMQ_DRAFTS=y
+BR2_PACKAGE_NCURSES_WCHAR=y
+BR2_PACKAGE_NCURSES_TARGET_PROGS=y
+BR2_PACKAGE_HAVEGED=y
+BR2_PACKAGE_DHCP=y
+BR2_PACKAGE_DHCP_CLIENT=y
+BR2_PACKAGE_IPTABLES=y
+BR2_PACKAGE_NETWORK_MANAGER=y
+BR2_PACKAGE_NETWORK_MANAGER_TUI=y
+BR2_PACKAGE_PURE_FTPD=y
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
+BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
+BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO=y
+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y
+BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION=y
+BR2_PACKAGE_FILE=y
+BR2_PACKAGE_TIME=y
+BR2_PACKAGE_WHICH=y
+BR2_PACKAGE_EFIBOOTMGR=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_SWUPDATE=y
+# BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE is not set
+BR2_PACKAGE_SYSTEMD_HIBERNATE=y
+BR2_PACKAGE_SYSTEMD_LOGIND=y
+BR2_PACKAGE_SYSTEMD_RFKILL=y
+BR2_PACKAGE_TAR=y
+BR2_PACKAGE_VIM=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_LABEL="obrA"
+BR2_TARGET_ROOTFS_EXT2_SIZE="850M"
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_GRUB2=y
+BR2_TARGET_GRUB2_X86_64_EFI=y
+BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat squash4 part_msdos
+part_gpt normal efi_gop loadenv probe search search_fs_file
+search_fs_uuid search_label cat echo regexp file"
+BR2_TARGET_GRUB2_INSTALL_TOOLS=y
+BR2_PACKAGE_HOST_CMAKE=y
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENEXT2FS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+BR2_PACKAGE_HOST_PKGCONF=y
+
+Thanks for your help
+
+Louis-Paul CORDIER
