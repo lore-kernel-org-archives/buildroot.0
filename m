@@ -1,56 +1,59 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Jun 2020 12:03:35 -0500
-Subject: [Buildroot] [RFC v9 04/10] cpe-info: cpe minor version support
-In-Reply-To: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
-References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200616170341.45098-4-matthew.weber@rockwellcollins.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 16 Jun 2020 19:17:40 +0200
+Subject: [Buildroot] [PATCH] package/ttyd: new package
+In-Reply-To: <87y2onmzs3.fsf@tarshish>
+References: <20200615183103.476615-1-b.bilas@grinn-global.com>
+ <87y2onmzs3.fsf@tarshish>
+Message-ID: <0091388d-beeb-fa2d-ff6e-d1cb0c71bb92@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Minor version are used to allow -rc, - and other variants of
-representing a sub release in the CPE dictionary.
+Hi Baruch,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-
-v8
-- New support to allow rc, -,  and p# minor versions as the CPE dict
-  currently uses these on a number of packages.
----
- package/Makefile.in    | 2 +-
- package/pkg-generic.mk | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c6a21276a2..f66f7041ee 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -375,7 +375,7 @@ TARGET_CONFIGURE_ARGS = \
- 
- CPE_PREFIX_OS = cpe:2.3:o
- CPE_PREFIX_APP = cpe:2.3:a
--CPE_SUFFIX = *:*:*:*:*:*:*
-+CPE_SUFFIX = *:*:*:*:*:*
- 
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- NLS_OPTS = --enable-nls
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index efdde0ad94..3bc9567652 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -974,7 +974,8 @@ endif
- $(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
- $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
- $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
--$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
-+$(2)_CPE_ID_VERSION_MINOR ?= *
-+$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_VERSION_MINOR)
- 
- ifneq ($(filter linux linux-headers,$(1)),)
- $(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
--- 
-2.17.1
+On 16.06.2020 05:54, Baruch Siach wrote:
+> Hi Bartosz,
+>
+> On Mon, Jun 15 2020, Bartosz Bilas wrote:
+>> ttyd is a simple command-line tool for sharing
+>> terminal over the web.
+>>
+>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>> ---
+> [snip]
+>
+>> diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
+>> new file mode 100644
+>> index 0000000000..83f27d9282
+>> --- /dev/null
+>> +++ b/package/ttyd/Config.in
+>> @@ -0,0 +1,20 @@
+>> +config BR2_PACKAGE_TTYD
+>> +	bool "ttyd"
+>> +	depends on !BR2_STATIC_LIBS # libuv
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+>> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+>> +	depends on BR2_USE_MMU # libuv
+>> +	select BR2_PACKAGE_JSON_C
+>> +	select BR2_PACKAGE_LIBUV
+>> +	select BR2_PACKAGE_LIBWEBSOCKETS
+>> +	select BR2_PACKAGE_OPENSSL
+>> +	select BR2_PACKAGE_ZLIB
+>> +	help
+>> +	  ttyd is a simple command-line tool for sharing terminal
+>> +	  over the web.
+>> +
+>> +	  https://github.com/tsl0922/ttyd
+>> +
+>> +comment "ttyd needs a toolchain w/ NPTL, dynamic library"
+>> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+>> +		|| BR2_USE_MMU || BR2_TOOLCHAIN_HAS_SYNC_4
+> This makes the comment always appear when BR2_USE_MMU is enabled, even
+> when ttyd is selectable. There should be a separate 'depends on
+> BR2_USE_MMU' to hide the comment when BR2_USE_MMU is not enabled.
+Thanks for the review, I'm gonna send the v2.
+> baruch 
+Best
+Bartek
