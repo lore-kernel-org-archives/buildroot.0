@@ -1,153 +1,165 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 16 Jun 2020 12:03:39 -0500
-Subject: [Buildroot] [RFC v9 08/10] support/scripts/cpe-report: new script
+Date: Tue, 16 Jun 2020 12:03:40 -0500
+Subject: [Buildroot] [RFC v9 09/10] docs/manual: new security management
+ section
 In-Reply-To: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
 References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200616170341.45098-8-matthew.weber@rockwellcollins.com>
+Message-ID: <20200616170341.45098-9-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The script supports looking up all the CPEs provided in a
-make cpe-info csv file export from a target Buildroot build.
-It checks the current version and suggests a CPE needs update
-or possibly an initial submission is required to NIST.
+This changeset captures an initial discussion on the use of CPE
+reporting within a target build.  It notes the reporting limitations
+and provides actions a user could take to improve upon the current
+report information.
 
-Adds option to allow alternate locations for the dictionary
-URL and caching of a processed dictionary to speed up execution.
+There is also an example of how one might do CVE analysis using the
+CPE report information.
 
-Outputs a cpe/ folder with propsed xml generated from the
-dictionary contents to propose updated versions to NIST.
-
-For missing CPE matches, a cpe-report-missing.txt is created
-by the script that can be used later to manually create proposed
-new NIST dictionary entries.
-
-Ref: NIST has a group email (cpe_dictionary at nist.gov) used to
-recieve these version update and new entry xml files.  They do
-process the XML and provide feedback. In some cases they will
-propose back something different where the vendor or version is
-slightly different.
-
-Limitations
- - Currently any use of non-number version identifiers isn't
-   supported by NIST as they use ranges to determine impact
-   of a CVE
- - Any Linux version from a non-upstream is also not supported
-   without manually adjusting the information as the custom
-   kernel will more then likely not match the upstream version
-   used in the dictionary
-
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes
 
 v8
- - Updated to just output missing and needs version update
- - Optional processed dictionary caching support
- - Optional dictionary URL
- - Creation of a missing status file (cpe-report-missing.txt)
- - Adjusted index used in CSV for removal of CVE patched item
+ - Updated for cpe-report changes
+ - Added notes on doing CVE searches and submissions
 
-v5 -> v7
- - No change
-
-v5
-[Ricardo
- - Updated v4 comments about general flake formatting cleanup
- - Incorporated parts of patch 1/2 suggestions for optimizations
-
-[Ricardo/Arnout
- - Collectly, decided to move cpe report analysis to this
-   script and use a seperate module cpedb class
-
-[Arnout
- - Rename cpe_dict to instead be cpedb
-
-v1 -> v4
- - Patch did not exist and was part of pkg-stats file
+v7
+ - New
 ---
- support/scripts/cpe-report | 70 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100755 support/scripts/cpe-report
+ docs/manual/cpe-reporting.txt | 107 ++++++++++++++++++++++++++++++++++
+ docs/manual/manual.txt        |   2 +
+ 2 files changed, 109 insertions(+)
+ create mode 100644 docs/manual/cpe-reporting.txt
 
-diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
-new file mode 100755
-index 0000000000..7242a372b2
+diff --git a/docs/manual/cpe-reporting.txt b/docs/manual/cpe-reporting.txt
+new file mode 100644
+index 0000000000..11da979345
 --- /dev/null
-+++ b/support/scripts/cpe-report
-@@ -0,0 +1,70 @@
-+#!/usr/bin/env python
++++ b/docs/manual/cpe-reporting.txt
+@@ -0,0 +1,107 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+import argparse
-+import sys
-+import csv
-+from cpedb import CPEDB
++[[cpe-info]]
 +
-+CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
++== Security Vulnerability Management
 +
++There are many different vulnerability databases (open/paid). This
++section documents the use of the National Vulnerability Database(NVD)
++provided by the National Institute of Standards and Technology (NIST).
 +
-+def get_target_cpe_report(cpe_report_file, cpedb):
-+    report_cpe_exact_match = ""
-+    report_cpe_needing_update = ""
-+    report_cpe_needing_update_list = ""
-+    report_cpe_missing = ""
++Within Buildroot, the intent is to provide good reporting of the build
++configuration's inventory of software. The vulnerability analysis is
++assumed to occur outside of the Buildroot environment (at this time).
 +
-+    print("CPE: Checking for matches...")
-+    try:
-+        with open(cpe_report_file) as cpe_file:
-+            cpe_list = csv.reader(cpe_file)
-+            next(cpe_list)  # make cpe-info has a one line header
-+            for cpe in cpe_list:
-+                result = cpedb.find(cpe[0])
-+                if not result:
-+                    result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
-+                    if not result:
-+                        report_cpe_missing += cpe[0] + "," + cpe[1] + "," + cpe[3] + "\n"
-+                    else:
-+                        latest_version = cpedb.find_partial_latest_version(cpedb.get_cpe_no_version(cpe[0]))
-+                        report_cpe_needing_update += cpe[0] + ", Latest Version Guess from Dict[" + latest_version + "]\n"
-+                        report_cpe_needing_update_list += cpe[0] + "\n"
-+                else:
-+                    report_cpe_exact_match += cpe[0] + "\n"
-+    except (OSError, IOError) as e:
-+        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
-+        sys.exit(1)
++=== Common Platform Enumeration (CPE) Reporting
 +
-+    print("CPE: Found but may REQUIRE an UPDATE:\n" + report_cpe_needing_update)
-+    print("CPE: Not found:\n" + report_cpe_missing)
++Buildroot consists of a series of upstream packages.  Each of those
++packages may have a CPE definition used to map vulnerabilities to Common
++Vulnerabilities and Exposures (CVE). A single package CPE has many versions
++and each version may have a suite of CVEs associated.
 +
-+    fp = open('cpe-report-missing.txt', 'w+')
-+    fp.write(report_cpe_missing)
-+    fp.close()
++To make the gathering of the software inventory of CPE easier, Buildroot can
++collect for you all the CPE related to the configured defconfig. To produce
++this material, after you have configured Buildroot with +make menuconfig+,
+++make xconfig+ or +make gconfig+, run:
 +
-+    for cpe in report_cpe_needing_update_list.splitlines():
-+        cpedb.update(cpe)
-+    print("XML Generation Complete of NIST update files, see ./cpe/*")
++--------------------
++make cpe-info
++--------------------
 +
++Buildroot then collects and writes the +$(TOPDIR)/cpe-manifest.csv+. This file
++can be used for manual inspection against a CVE database or provided to
++external tools which perform CVE inventory/analysis.
 +
-+def parse_args():
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('-c', dest='cpe_report', action='store', required=True,
-+                        help='CPE Report generated by make cpe-info (csv format)')
-+    parser.add_argument('-u', dest='url', action='store', required=False,
-+                        help='(optional)URL to the NIST dict (official-cpe-dictionary_v2.3.xml.gz)')
-+    return parser.parse_args()
++*CPE Maintenance*
 +
++To maintain these CPE strings for version changes against the NIST dictionary,
++the manifest can be further processed. First, navigate to your Buildroot
++directory and execute the script below. The script has some optional arguments
++for providing a alternate dictionary URL or caching a processed dictionary.
 +
-+def __main__():
-+    args = parse_args()
-+    cpedb = CPEDB()
-+    url = CPE_XML_URL
-+    if args.url:
-+        url = args.url
-+    cpedb.get_xml_dict(url)
-+    print("Performing Target CPE Report Analysis...")
-+    get_target_cpe_report(args.cpe_report, cpedb)
++--------------------
++support/scripts/cpe-report -c $(TOPDIR)/cpe-manifest.csv
++--------------------
 +
++This script retrieves the NIST dictionary and classifies each CPE as either
++matched, requires version update or missing. Based on this analysis, the script
++automatically uses the NIST dictionary entries to produce a draft of XML which
++can be submitted to NIST to update a version of an entry in the dictionary. It
++is important to review the generated xml files in the cpe folder as they may
++need refined reference tags and adjustments to how the version is represented
++in the title.
 +
-+__main__()
++In the case of missing items, a +cpe-report-missing.txt+ report is output by
++the script and can be used as a starting point to manually create a xml file
++to submit. Note, some manual analysis using the NIST search engine (https://nvd.nist.gov/products/cpe/search)
++is suggested for these missing item as the Buildroot +CPE_ID_+ variables maybe
++slightly incorrect and cause the cpe-report script to catagorize the package
++as missing. If that is the case, a change can be made by adjusting the default
++CPE variables in the specific package's +.mk+. See xref:_infrastructure_for_packages_with_specific_build_systems[]
++discussion on the use of +LIBFOO_CPE_*+.
++If the package is truely missing, the package's Kconfig help material and .mk
++should provide most of the information to construct a new NIST submission.
++
++To submit a new entry or updated entry to NIST, create an request email to the
++cpe_dictionary at nist.gov recipient and attach a individual xml file per package
++being added/updated.  It is OK to have multiple version updates in a single
++file as long as they are all for the same package. For reference the guidance
++can be found on the NIST CPE site (https://nvd.nist.gov/products/cpe).
++
++*Limitations*
++
++Buildroot does not produce or accurately present some of the CPE material. Items
++such as any versions which are non-number/hash are not compliant with the CPE
++string specification and would require a manual analysis to update the CPE list
++before any external CVE analysis should occur. This is a similar situation for
++packages like the Linux kernel or U-Boot which may not have a version which
++directly maps to a CPE.
++
++There is an assumed default CPE string for each package which is auto-generated
++using existing package information. The output of +make cpe-info+ is based on
++this default information and the packages which have been individually tailored
++to match existing CPE strings. The Buildroot developers try to do their best to
++keep those declarative statements as accurate as possible, to the best of their
++knowledge. However, it is very well possible that those declarative statements
++are not all fully accurate nor exhaustive. Similar to legal-info, it is your
++responsibility to verify this information.
++
++=== Common Vulnerability and Exposures (CVE) Anaylsis
++The Common Vulnerabilities and Exposures (CVE) system provides a
++reference-method for publicly known information-security vulnerabilities and
++exposures. (https://en.wikipedia.org/wiki/Common_Vulnerabilities_and_Exposures)
++
++Like previously stated, there are many tools and methods to perform this
++analysis. The most basic example is to do a manual CVE analysis by navigating
++to the NVD search engine (https://nvd.nist.gov/vuln/search) and using the CPE
++string identified in the first field of the +$(TOPDIR)/cpe-manifest.csv+.
++Here's an example for tcpdump.
++
++CPE ID: "cpe:2.3:a:tcpdump:tcpdump:4.9.1:*:*:*:*:*:*:*"
++
++Result: https://nvd.nist.gov/vuln/search/results?form_type=Basic&results_type=overview&query=cpe%3A2.3%3Aa%3Atcpdump%3Atcpdump%3A4.9.1%3A*%3A*%3A*%3A*%3A*%3A*%3A*&search_type=all
++
++Beyond the manual search approach, the next step would be a more centralized
++shared database with multi-feed support (NVD+).  The cve-search project aims
++to offer that type of solution (https://github.com/cve-search/cve-search).
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 48de65ee10..fcc087f6f1 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -46,6 +46,8 @@ include::legal-notice.txt[]
+ 
+ include::beyond-buildroot.txt[]
+ 
++include::cpe-reporting.txt[]
++
+ = Developer guide
+ 
+ include::how-buildroot-works.txt[]
 -- 
 2.17.1
