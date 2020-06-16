@@ -1,104 +1,58 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 16 Jun 2020 06:32:59 +0300
-Subject: [Buildroot] [PATCH v3 1/2] package/iwd: add basic configuration
- file
-In-Reply-To: <20200615184753.15197-1-ps.report@gmx.net>
-References: <20200615184753.15197-1-ps.report@gmx.net>
-Message-ID: <871rmfofbo.fsf@tarshish>
+Date: Tue, 16 Jun 2020 06:54:04 +0300
+Subject: [Buildroot] [PATCH] package/ttyd: new package
+In-Reply-To: <20200615183103.476615-1-b.bilas@grinn-global.com>
+References: <20200615183103.476615-1-b.bilas@grinn-global.com>
+Message-ID: <87y2onmzs3.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Bartosz,
 
-On Mon, Jun 15 2020, Peter Seiderer wrote:
-> Add basic /etc/iwd/main.conf configuration file to enable
-> network configuration (use built-in dhcp client).
+On Mon, Jun 15 2020, Bartosz Bilas wrote:
+> ttyd is a simple command-line tool for sharing
+> terminal over the web.
 >
-> For the non systemd-resolved case select the openresolv package
-> to fulfill the iwd resolvconf requirement (and adjust the
-> configuration file accordingly).
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 > ---
-> Changes v1 -> v2:
->   - use printf insteadof echo (Yann E. MORIN)
->
-> Changes v2 -> v3:
->   - select openresolv in all cases but systemd-resloved is enabled
->   - enable NameResolvingService=systemd in the configuration file only in
->     case of systemd-resloved is enabled, enable NameResolvingService=resolvconf
->     in the configuration file otherwise
-> ---
->  package/iwd/Config.in |  1 +
->  package/iwd/iwd.mk    | 21 +++++++++++++++++++++
->  package/iwd/main.conf |  3 +++
->  3 files changed, 25 insertions(+)
->  create mode 100644 package/iwd/main.conf
->
-> diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-> index ec53d13047..4e85fb4fd7 100644
-> --- a/package/iwd/Config.in
-> +++ b/package/iwd/Config.in
-> @@ -8,6 +8,7 @@ config BR2_PACKAGE_IWD
->  	depends on BR2_USE_WCHAR # ell
->  	select BR2_PACKAGE_DBUS # runtime
->  	select BR2_PACKAGE_ELL
-> +	select BR2_PACKAGE_OPENRESOLV if !BR2_PACKAGE_SYSTEMD_RESOLVED
->  	help
->  	  iNet Wireless daemon (iwd)
->  
-> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-> index 32ff175933..c58e795f99 100644
-> --- a/package/iwd/iwd.mk
-> +++ b/package/iwd/iwd.mk
-> @@ -46,4 +46,25 @@ else
->  IWD_CONF_OPTS += --disable-systemd-service
->  endif
->  
-> +define IWD_INSTALL_CONFIG_FILE
-> +	mkdir -p $(TARGET_DIR)/etc/iwd
-> +	$(INSTALL) -m 644 package/iwd/main.conf $(TARGET_DIR)/etc/iwd/main.conf
-> +endef
+
+[snip]
+
+> diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
+> new file mode 100644
+> index 0000000000..83f27d9282
+> --- /dev/null
+> +++ b/package/ttyd/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_TTYD
+> +	bool "ttyd"
+> +	depends on !BR2_STATIC_LIBS # libuv
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+> +	depends on BR2_USE_MMU # libuv
+> +	select BR2_PACKAGE_JSON_C
+> +	select BR2_PACKAGE_LIBUV
+> +	select BR2_PACKAGE_LIBWEBSOCKETS
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  ttyd is a simple command-line tool for sharing terminal
+> +	  over the web.
 > +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> +	print "[Network]\nNameResolvingService=systemd\n" \
+> +	  https://github.com/tsl0922/ttyd
+> +
+> +comment "ttyd needs a toolchain w/ NPTL, dynamic library"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+> +		|| BR2_USE_MMU || BR2_TOOLCHAIN_HAS_SYNC_4
 
-print? Are you sure this does what you expect? It is surely not
-portable. On my system (Debian) /usr/bin/print is a symlink to
-run-mailcap.
-
-> +		>> $(TARGET_DIR)/etc/iwd/main.conf
-> +endef
-> +else
-> +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> +	echo -e "[Network]\nNameResolvingService=resolvconf\n" \
-
-You still use 'echo' here.
+This makes the comment always appear when BR2_USE_MMU is enabled, even
+when ttyd is selectable. There should be a separate 'depends on
+BR2_USE_MMU' to hide the comment when BR2_USE_MMU is not enabled.
 
 baruch
-
-> +		>> $(TARGET_DIR)/etc/iwd/main.conf
-> +endef
-> +endif
-> +
-> +IWD_POST_INSTALL_TARGET_HOOKS += \
-> +	IWD_INSTALL_CONFIG_FILE \
-> +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/iwd/main.conf b/package/iwd/main.conf
-> new file mode 100644
-> index 0000000000..c26a50d302
-> --- /dev/null
-> +++ b/package/iwd/main.conf
-> @@ -0,0 +1,3 @@
-> +# use built-in dhcp client
-> +[General]
-> +EnableNetworkConfiguration=true
 
 -- 
                                                      ~. .~   Tk Open Systems
