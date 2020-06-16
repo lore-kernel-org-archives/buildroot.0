@@ -1,119 +1,115 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Tue, 16 Jun 2020 08:17:17 +0200
-Subject: [Buildroot] [PATCH v2 01/14] package/systemd: configure nss
- plugins in nsswitch.conf
-In-Reply-To: <20200615165410.GB2346@scaer>
-References: <20200615072055.2083-1-nolange79@gmail.com>
- <20200615072055.2083-2-nolange79@gmail.com>
- <20200615114825.GZ2346@scaer>
- <CADYdroNsfJ1dvjzRyoG6vEamVdNbDqhBtv9qrGXUm-jqSysakw@mail.gmail.com>
- <20200615165410.GB2346@scaer>
-Message-ID: <CAFvCimWheKSOE-nYZTpj+vQN+fSV=8jj9J4Be=BapopxfSEP9g@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 16 Jun 2020 08:25:31 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/iwd: add basic configuration
+ file
+In-Reply-To: <871rmfofbo.fsf@tarshish>
+References: <20200615184753.15197-1-ps.report@gmx.net>
+ <871rmfofbo.fsf@tarshish>
+Message-ID: <20200616082531.66780344@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->
->
-> > At any rate, the file in /usr/share/factory/etc/nsswitch.conf should
-> > prolly be kept in sync or removed.
->
-> Not sure I understand that one...
->
->
-the directories /usr/share/factory/etc and /usr/share/factory/var  will
-be automatically copied to /etv and /var very early at boot if those
-directories are empty or do not exist.
+Hello Baruch,
 
-the point is to be able to boot a totally empty rootfs except for /usr.
-Apparently this is a common practice in datacenters, allowing to
-have '/' be a tmpfs, /usr being read-only and having a completely
-stateless boot.
+On Tue, 16 Jun 2020 06:32:59 +0300, Baruch Siach <baruch@tkos.co.il> wrote:
 
-That's actually pretty cool, and I had the idea of enabling this in
-buildroot at some point.
-For me there are two cases that buildroot should handle
-
-* either empty entirely /usr/share/factory at the end of the boot
-  and disable the feature entirely to save staff
-* or automatically copy /etc and /var to the factory at the end
-  of the boot to make this feature work reliably.
-
-Anyway, a proper handling of that feature is probably a
-completely different patchset...
-
-
-> > >  2. we already have other packages that may tweak that file, like:
-> > >     package/nss-mdns/nss-mdns.mk
-> > >     package/nss-myhostname/nss-myhostname.mk
-> > >
-> > >  3. which brings us to the point that this file should be tweaked as a
-> > >     target-finalize hook
+> Hi Peter,
+>
+> On Mon, Jun 15 2020, Peter Seiderer wrote:
+> > Add basic /etc/iwd/main.conf configuration file to enable
+> > network configuration (use built-in dhcp client).
 > >
-> > kinda like this ?:
+> > For the non systemd-resolved case select the openresolv package
+> > to fulfill the iwd resolvconf requirement (and adjust the
+> > configuration file accordingly).
 > >
-> https://github.com/nolange/buildroot/commit/237eebe9c29c3b8ab68d3abead52e1b7b08e1649
->
-> I still think it should be made to be target-finalize hooks, one for
-> each option.
->
-> Also, I don;t get why you want to use the one in factory, rather than
-> tweak the existing /etc/nsswitch.conf that has already been installed,
-> like the other nss plugins do.
->
-> And then, at the end. copy the one from /etc/nsswitch.conf over to the
-> one in factory. That last one is a bit more tricky to come up with
-> correctly, as this must be done after all nss plugins have had a chance
-> to tweak nsswitch.conf. So I guess we should extend
-> SYSTEMD_ROOTFS_PRE_CMD_HOOKS
-> with a new hook that copies /etc/nsswitch.conf over to the factory.
->
-> Regards,
-> Yann E. MORIN.
->
-> > Note that I am missing the line for mymachines, my sed-foo is too weak
-> > to add that at the correct position.
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - use printf insteadof echo (Yann E. MORIN)
 > >
-> > Norbert
+> > Changes v2 -> v3:
+> >   - select openresolv in all cases but systemd-resloved is enabled
+> >   - enable NameResolvingService=systemd in the configuration file only in
+> >     case of systemd-resloved is enabled, enable NameResolvingService=resolvconf
+> >     in the configuration file otherwise
+> > ---
+> >  package/iwd/Config.in |  1 +
+> >  package/iwd/iwd.mk    | 21 +++++++++++++++++++++
+> >  package/iwd/main.conf |  3 +++
+> >  3 files changed, 25 insertions(+)
+> >  create mode 100644 package/iwd/main.conf
+> >
+> > diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+> > index ec53d13047..4e85fb4fd7 100644
+> > --- a/package/iwd/Config.in
+> > +++ b/package/iwd/Config.in
+> > @@ -8,6 +8,7 @@ config BR2_PACKAGE_IWD
+> >  	depends on BR2_USE_WCHAR # ell
+> >  	select BR2_PACKAGE_DBUS # runtime
+> >  	select BR2_PACKAGE_ELL
+> > +	select BR2_PACKAGE_OPENRESOLV if !BR2_PACKAGE_SYSTEMD_RESOLVED
+> >  	help
+> >  	  iNet Wireless daemon (iwd)
+> >
+> > diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+> > index 32ff175933..c58e795f99 100644
+> > --- a/package/iwd/iwd.mk
+> > +++ b/package/iwd/iwd.mk
+> > @@ -46,4 +46,25 @@ else
+> >  IWD_CONF_OPTS += --disable-systemd-service
+> >  endif
+> >
+> > +define IWD_INSTALL_CONFIG_FILE
+> > +	mkdir -p $(TARGET_DIR)/etc/iwd
+> > +	$(INSTALL) -m 644 package/iwd/main.conf $(TARGET_DIR)/etc/iwd/main.conf
+> > +endef
+> > +
+> > +ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+> > +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> > +	print "[Network]\nNameResolvingService=systemd\n" \
 >
-> --
+> print? Are you sure this does what you expect? It is surely not
+> portable. On my system (Debian) /usr/bin/print is a symlink to
+> run-mailcap.
+
+Your are right, I completely messed up this patch version...and is
+definitely not the one I tested with..., update follows, thanks
+for review....
+
+Regards,
+Peter
+
 >
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
+> > +		>> $(TARGET_DIR)/etc/iwd/main.conf
+> > +endef
+> > +else
+> > +define IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> > +	echo -e "[Network]\nNameResolvingService=resolvconf\n" \
 >
-> '------------------------------^-------^------------------^--------------------'
+> You still use 'echo' here.
 >
-
-
--- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200616/6f6bd8ed/attachment.html>
+> baruch
+>
+> > +		>> $(TARGET_DIR)/etc/iwd/main.conf
+> > +endef
+> > +endif
+> > +
+> > +IWD_POST_INSTALL_TARGET_HOOKS += \
+> > +	IWD_INSTALL_CONFIG_FILE \
+> > +	IWD_CONFIG_FILE_NAME_RESOLV_SERVICE
+> > +
+> >  $(eval $(autotools-package))
+> > diff --git a/package/iwd/main.conf b/package/iwd/main.conf
+> > new file mode 100644
+> > index 0000000000..c26a50d302
+> > --- /dev/null
+> > +++ b/package/iwd/main.conf
+> > @@ -0,0 +1,3 @@
+> > +# use built-in dhcp client
+> > +[General]
+> > +EnableNetworkConfiguration=true
+>
