@@ -1,31 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 21:09:35 +0200
-Subject: [Buildroot] [PATCH v2 00/17] OLPC XO updates
-In-Reply-To: <20200617104925.1036330-1-lkundrak@v3.sk>
+Date: Wed, 17 Jun 2020 21:10:22 +0200
+Subject: [Buildroot] [PATCH v2 13/17] configs/olpc_xo1: enable JFFS2
+ image
+In-Reply-To: <20200617104925.1036330-14-lkundrak@v3.sk>
 References: <20200617104925.1036330-1-lkundrak@v3.sk>
-Message-ID: <20200617210935.30c5b508@windsurf.home>
+ <20200617104925.1036330-14-lkundrak@v3.sk>
+Message-ID: <20200617211022.79a48a3f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 17 Jun 2020 12:49:08 +0200
+On Wed, 17 Jun 2020 12:49:21 +0200
 Lubomir Rintel <lkundrak@v3.sk> wrote:
 
-> please consider applying this patch set. The ultimate goal is to enable
-> jffs2 images for the XO-1. While I that, I noticed that while tidying up
-> the kernel configuration, I messed up a bit and some config symbols
-> ended up disabled.
+> The machine has a NAND flash device and firmware capable of loading the
+> OS from a JFFS2 file system on it. Enable creation of JFFS2 image that
+> can be written to said flash device.
 > 
-> Since this was first posted, a 5.7 kernel was release. I've tested that
-> 5.7.1 works well on both XO-1.75 (arm) and XO-1 (x86), so I've added two
-> patches that bump the kernel version too.
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> ---
+>  configs/olpc_xo1_defconfig | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/configs/olpc_xo1_defconfig b/configs/olpc_xo1_defconfig
+> index 5919f6ab36..36ac051ffb 100644
+> --- a/configs/olpc_xo1_defconfig
+> +++ b/configs/olpc_xo1_defconfig
+> @@ -21,4 +21,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_LABEL="XO1"
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+>  BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O dir_index,^huge_file,^64bit,^extent"
+> +BR2_TARGET_ROOTFS_JFFS2=y
+> +BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
+> +BR2_TARGET_ROOTFS_JFFS2_PAD=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTD=y
 
-I've applied the entire series, with very small changes. I'll reply to
-the individual patches I tweaked, but everything is applied.
+This last line is not needed: host-mtd is already a dependency of the
+jffs2 filesystem logic, see fs/jffs2/jffs2.mk. So I dropped this last
+line.
 
 Thanks!
 
