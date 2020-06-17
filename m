@@ -1,46 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 20:57:53 +0200
-Subject: [Buildroot] [git commit] board/olpc: move LIS3_SPI to XO-1.75
-Message-ID: <20200617190503.111B8814E6@busybox.osuosl.org>
+Date: Wed, 17 Jun 2020 20:57:35 +0200
+Subject: [Buildroot] [git commit] board/olpc: move the SDHCI drivers to
+ appropriate board configs
+Message-ID: <20200617190502.EBA3B814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd367f44e90b5f17c203f81b4dbf9fcd280e5f91
+commit: https://git.buildroot.net/buildroot/commit/?id=0bcca6bf42d1dda64755b11f1c803ba7d67e9889
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's only present on ARM OLPC laptops.
+Platform driver on XO-1.75, PCI on XO-1.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ board/olpc/linux.config         | 2 --
  board/olpc/xo-1.75/linux.config | 1 +
- board/olpc/xo-1/linux.config    | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ board/olpc/xo-1/linux.config    | 1 +
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/board/olpc/linux.config b/board/olpc/linux.config
+index e4f94c87c9..4ba157cf0b 100644
+--- a/board/olpc/linux.config
++++ b/board/olpc/linux.config
+@@ -53,8 +53,6 @@ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_MMC=y
+ CONFIG_MMC_SDHCI=y
+-CONFIG_MMC_SDHCI_PCI=y
+-CONFIG_MMC_SDHCI_PLTFM=y
+ CONFIG_LEDS_CLASS=y
+ CONFIG_LEDS_GPIO=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
 diff --git a/board/olpc/xo-1.75/linux.config b/board/olpc/xo-1.75/linux.config
-index b686950799..30e43a8860 100644
+index f8c0bff5cc..b686950799 100644
 --- a/board/olpc/xo-1.75/linux.config
 +++ b/board/olpc/xo-1.75/linux.config
-@@ -12,6 +12,7 @@ CONFIG_ARM_APPENDED_DTB=y
- CONFIG_ARM_ATAG_DTB_COMPAT=y
- CONFIG_VFP=y
- CONFIG_NEON=y
-+CONFIG_SENSORS_LIS3_SPI=y
- CONFIG_SERIO_OLPC_APSP=y
- CONFIG_REGULATOR_88PG86X=m
- CONFIG_VIDEO_MMP_CAMERA=y
+@@ -20,6 +20,7 @@ CONFIG_DRM_DISPLAY_CONNECTOR=m
+ CONFIG_DRM_SIMPLE_BRIDGE=m
+ CONFIG_DRM_ETNAVIV=m
+ CONFIG_USB_EHCI_MV=y
++CONFIG_MMC_SDHCI_PLTFM=y
+ CONFIG_MMC_SDHCI_PXAV3=y
+ CONFIG_OLPC_XO175=y
+ CONFIG_OLPC_XO175_EC=y
 diff --git a/board/olpc/xo-1/linux.config b/board/olpc/xo-1/linux.config
-index 0680e073cb..9f6731a5a5 100644
+index 594ee9547e..8ed10ff62b 100644
 --- a/board/olpc/xo-1/linux.config
 +++ b/board/olpc/xo-1/linux.config
-@@ -29,7 +29,6 @@ CONFIG_MTD_NAND_CAFE=y
- CONFIG_MTD_UBI=y
- CONFIG_CS5535_MFGPT=y
- CONFIG_CS5535_CLOCK_EVENT_SRC=y
--CONFIG_SENSORS_LIS3_SPI=y
- CONFIG_MOUSE_PS2_OLPC=y
- CONFIG_SERIAL_8250_NR_UARTS=1
- CONFIG_SERIAL_8250_RUNTIME_UARTS=1
+@@ -65,6 +65,7 @@ CONFIG_SND_AC97_POWER_SAVE=y
+ CONFIG_SND_CS5535AUDIO=y
+ CONFIG_USB_EHCI_ROOT_HUB_TT=y
+ CONFIG_USB_OHCI_HCD=y
++CONFIG_MMC_SDHCI_PCI=y
+ CONFIG_FB_OLPC_DCON=y
+ CONFIG_XO1_RFKILL=y
+ CONFIG_RESET_CONTROLLER=y
