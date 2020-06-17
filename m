@@ -1,68 +1,152 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 17 Jun 2020 22:18:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tinydtls: security bump to
- version 0.9-rc1
-In-Reply-To: <20200617220843.416f77be@windsurf.home>
-References: <20200615203150.1052024-1-fontaine.fabrice@gmail.com>
- <20200617220843.416f77be@windsurf.home>
-Message-ID: <CAPi7W80vaeBw8o=4NuKyJrNCVcNO0F4eB-DWThVXKWgE4pyTEw@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 17 Jun 2020 13:19:58 -0700
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: fix building against gcc10
+Message-ID: <20200617201958.2368005-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Adam Duskett <Aduskett@gmail.com>
 
-Le mer. 17 juin 2020 ? 22:08, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Mon, 15 Jun 2020 22:31:50 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > - Switch site to github
-> > - License is now EPL-1.0 or EDLv1.0 as specified in the new LICENSE file
-> > - Update indentation of hash file (two spaces)
-> > - Drop first patch (already in version) and second patch (not needed since
-> >   https://github.com/eclipse/tinydtls/commit/f1ff324a4d1cc14dc6e1c3a88ea16f0242e106de)
-> > - Fix CVE-2017-7243 as specified in
-> >   https://github.com/eclipse/tinydtls/issues/12 as well as other
-> >   security issues:
-> >   https://github.com/eclipse/tinydtls/commit/68a1cdaff9e329e13ea59529f1eb61b05632c297
-> >   https://github.com/eclipse/tinydtls/commit/494a40dfbb174930ca616e560532d52549736b42
-> >   https://github.com/eclipse/tinydtls/commit/2d9f0a82377277af1be8d559d18e30477d63e8ec
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> I've applied to master. See below some comments.
->
-> > -TINYDTLS_REL = r5
-> > -TINYDTLS_VERSION = 0.8.2
-> > -TINYDTLS_SITE = http://downloads.sourceforge.net/project/tinydtls/$(TINYDTLS_REL)
-> > -TINYDTLS_LICENSE = MIT
-> > -TINYDTLS_LICENSE_FILES = tinydtls.h
-> > +TINYDTLS_VERSION = 0.9-rc1
->
-> A bit annoying that we have to point to a release candidate version.
-I know, I asked for a release and you can find upstream's feedback
-here: https://github.com/eclipse/tinydtls/issues/35.
->
-> > +TINYDTLS_SITE = $(call github,eclipse,tinydtls,v$(TINYDTLS_VERSION))
-> > +TINYDTLS_LICENSE = EPL-1.0 or EDLv1.0
->
-> I've changed EDLv1.0 to EDL-1.0. Even though there is no official SPDX
-> tag for this license, SPDX always uses <initials>-<version>, so we're
-> trying to stick to that as well;
->
-> Applied, thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+GCC10 set's the -fno-common flag by default which causes OpenJDK to fail when
+compiling.
 
-Fabrice
+Because there is no easy way to create a patch from the OpenJDK mercurial
+repository, this patch was created by hand from the three commits listed in
+the provided patch itself.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/openjdk/0001-fix-gcc-10-support.patch | 119 ++++++++++++++++++
+ 1 file changed, 119 insertions(+)
+ create mode 100644 package/openjdk/0001-fix-gcc-10-support.patch
+
+diff --git a/package/openjdk/0001-fix-gcc-10-support.patch b/package/openjdk/0001-fix-gcc-10-support.patch
+new file mode 100644
+index 0000000000..5364c47252
+--- /dev/null
++++ b/package/openjdk/0001-fix-gcc-10-support.patch
+@@ -0,0 +1,119 @@
++From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
++From: Patrick Zhang <patrick.zhang@amperecomputing.com>
++Date: Wed, 05 Feb 2020 17:14:15 -0700
++Subject: [PATCH] fix gcc 10 support
++
++This patch fixes the "multiple definition" link errors with GCC10 due to
++GCC10 setting -fno-common by default.
++
++This is a combination of the following upstream commits:
++  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
++  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
++  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
++
++Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
++---
++ src/java.base/unix/native/libjava/childproc.c        |  1 +
++ src/java.base/unix/native/libjava/childproc.h        |  2 +-
++ .../share/native/libj2gss/NativeFunc.c               |  3 +++
++ .../share/native/libj2gss/NativeFunc.h               |  2 +-
++ src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
++ src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
++ 6 files changed, 19 insertions(+), 8 deletions(-)
++
++diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
++index 811aaeac5..16480bfbf 100644
++--- a/src/java.base/unix/native/libjava/childproc.c
+++++ b/src/java.base/unix/native/libjava/childproc.c
++@@ -34,6 +34,7 @@
++ 
++ #include "childproc.h"
++ 
+++const char * const *parentPathv;
++ 
++ ssize_t
++ restartableWrite(int fd, const void *buf, size_t count)
++diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
++index 091150930..d57e44b6e 100644
++--- a/src/java.base/unix/native/libjava/childproc.h
+++++ b/src/java.base/unix/native/libjava/childproc.h
++@@ -126,7 +126,7 @@ typedef struct _SpawnInfo {
++  * The cached and split version of the JDK's effective PATH.
++  * (We don't support putenv("PATH=...") in native code)
++  */
++-const char * const *parentPathv;
+++extern const char * const *parentPathv;
++ 
++ ssize_t restartableWrite(int fd, const void *buf, size_t count);
++ int restartableDup2(int fd_from, int fd_to);
++diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
++index da7bc0445..5941f7b5a 100644
++--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
++@@ -27,6 +27,9 @@
++ #include <stdlib.h>
++ #include "NativeFunc.h"
++ 
+++/* global GSS function table */
+++GSS_FUNCTION_TABLE_PTR ftab;
+++
++ /* standard GSS method names (ordering is from mapfile) */
++ static const char RELEASE_NAME[]                = "gss_release_name";
++ static const char IMPORT_NAME[]                 = "gss_import_name";
++diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
++index 82914387c..e4a4981a3 100644
++--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
++@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
++ typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
++ 
++ /* global GSS function table */
++-GSS_FUNCTION_TABLE_PTR ftab;
+++extern GSS_FUNCTION_TABLE_PTR ftab;
++ 
++ #endif
++diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
++index cc1367f78..46b07db0a 100644
++--- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
+++++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
++@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
++ 
++ #endif /* __linux__ */
++ 
++-sctp_getladdrs_func* nio_sctp_getladdrs;
++-sctp_freeladdrs_func* nio_sctp_freeladdrs;
++-sctp_getpaddrs_func* nio_sctp_getpaddrs;
++-sctp_freepaddrs_func* nio_sctp_freepaddrs;
++-sctp_bindx_func* nio_sctp_bindx;
++-sctp_peeloff_func* nio_sctp_peeloff;
+++extern sctp_getladdrs_func* nio_sctp_getladdrs;
+++extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
+++extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
+++extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
+++extern sctp_bindx_func* nio_sctp_bindx;
+++extern sctp_peeloff_func* nio_sctp_peeloff;
++ 
++ jboolean loadSocketExtensionFuncs(JNIEnv* env);
++ 
++diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
++index d40c15aa3..ab9b6e093 100644
++--- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+++++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
++@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
++ static const char* nativeSctpLib = "libsctp.so.1";
++ static jboolean funcsLoaded = JNI_FALSE;
++ 
+++sctp_getladdrs_func* nio_sctp_getladdrs;
+++sctp_freeladdrs_func* nio_sctp_freeladdrs;
+++sctp_getpaddrs_func* nio_sctp_getpaddrs;
+++sctp_freepaddrs_func* nio_sctp_freepaddrs;
+++sctp_bindx_func* nio_sctp_bindx;
+++sctp_peeloff_func* nio_sctp_peeloff;
+++
++ JNIEXPORT jint JNICALL DEF_JNI_OnLoad
++   (JavaVM *vm, void *reserved) {
++     return JNI_VERSION_1_2;
++-- 
++2.26.2
++
+-- 
+2.26.2
