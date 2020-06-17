@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 23:00:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: bump version to 1.9.3
-In-Reply-To: <20200615181302.988932-1-bernd.kuhls@t-online.de>
-References: <20200615181302.988932-1-bernd.kuhls@t-online.de>
-Message-ID: <20200617230003.7df98e28@windsurf.home>
+Date: Wed, 17 Jun 2020 23:00:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freetype: bump version to 2.10.2
+In-Reply-To: <20200615181753.997099-1-bernd.kuhls@t-online.de>
+References: <20200615181753.997099-1-bernd.kuhls@t-online.de>
+Message-ID: <20200617230006.1a108305@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jun 2020 20:13:02 +0200
+On Mon, 15 Jun 2020 20:17:53 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Removed patch which was committed upstream.
+> Release notes:
+> https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
+> 
+> Reformatted hashes.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/jsoncpp/0001-Meson-updates.patch | 147 -----------------------
->  package/jsoncpp/jsoncpp.hash             |   2 +-
->  package/jsoncpp/jsoncpp.mk               |   2 +-
->  3 files changed, 2 insertions(+), 149 deletions(-)
->  delete mode 100644 package/jsoncpp/0001-Meson-updates.patch
+>  package/freetype/freetype.hash | 14 +++++++-------
+>  package/freetype/freetype.mk   |  2 +-
+>  2 files changed, 8 insertions(+), 8 deletions(-)
 
 Applied to master, thanks.
 
