@@ -1,61 +1,55 @@
-From: Mike Davies <busybox_mail@rovoreed.com>
-Date: Wed, 17 Jun 2020 18:21:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rpi-userland: fix build on 64-bit
- Raspberry Pi 3
-Message-ID: <0478efa17e8530ec60d74c8e3fff37fccbed614f.camel@rovoreed.com>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Wed, 17 Jun 2020 13:47:04 -0400
+Subject: [Buildroot] Failed MMC & USB Mount
+In-Reply-To: <ccd1b0539d4d4936baf2ae9be8d89a72@enduropls.ca>
+References: <ccd1b0539d4d4936baf2ae9be8d89a72@enduropls.ca>
+Message-ID: <20200617174704.GA23053@rfs.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Joel,
 
-Prior to this patch it was not possible to select the package rpi-userland if
-raspberrypi3_64_defconfig was used.
-Then the .mk file needed updating to allow 64 bit builds.
+On Wed, Jun 17, 2020 at 04:21:28PM +0000, Joel Brunetti wrote:
+>?
+>The system is running off an initrd image so there is no root file system and the system does otherwise boot as expected.
+>?
+>It appears from the logs the USB device or eMMC device drivers are not fully initialized when the kernel hands off to init.
+>?
+>I have tried adding 'root=/dev/sda1 rootwait' and 'rootdelay=10' to my kernel arguments in u-boot and while they are being passed (cat /proc/cmdline) they are not being respected. probably because I'm not waiting on root.
+>?
+>My question is; Is there another way to convince the kernel or busybox init to wait for the devices in /etc/fstab before continuing? Is there a better place to ask?
 
-Signed-off-by: Mike Davies <git-user44@rovoreed.com>
----
- package/rpi-userland/Config.in       | 4 ++--
- package/rpi-userland/rpi-userland.mk | 6 ++++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+Since you are using an initrd (probably initramfs in fact) as your root 
+filesystem, the "rootwait" will not have intended effect of delaying the 
+mount until the SD/eMMC is ready. This commandline argument is normally 
+used when the root device is the SD card, such as root=/dev/mmcblk0p1.
 
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 342faf26e3..81f3588822 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_RPI_USERLAND
-        bool "rpi-userland"
--       depends on BR2_arm
-+       depends on BR2_arm || BR2_aarch64
-        depends on BR2_INSTALL_LIBSTDCPP
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on !BR2_STATIC_LIBS
-@@ -40,6 +40,6 @@ config BR2_PACKAGE_RPI_USERLAND_HELLO
- endif
- 
- comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
--       depends on BR2_arm
-+       depends on BR2_arm || BR2_aarch64
-        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-                BR2_STATIC_LIBS
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index efb02f719f..d8b2a281af 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -13,6 +13,12 @@ RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
- 
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
- 
-+ifeq ($(BR2_aarch64),y)
-+
-+RPI_USERLAND_CONF_OPTS += -DARM64=YES
-+
-+endif # BR2_aarch64
-+
- ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
- 
- RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
--- 
-2.21.3
+Also keep in mind that the kernel does not know about /etc/fstab at all.
+
+Your observation that mount is successful after logging in and manually 
+mounting it is consistent with the fact that SD takes some time to 
+initialize. Means the hardware works, which is always good to know ;-)
+
+A few possible options for you to consider:
+- you can modify the init scripts, to put a time delay before the 
+   automatic "mount -a". Of course this delays everything else too,
+   and tuning the amount of delay is tedious and unreliable
+- do not use /etc/fstab for the SD card. Instead write your own init 
+   script to delay until the SD appears. Basically just a loop:
+   while ! test -e /dev/mmcblk0p1 ; do sleep 1 ; done
+   Of course this could block forever if no SD card is present, so you 
+   probably want to limit maximum retries
+- do not use /etc/fstab to mount the SD card, instead use one of the
+   hotplug mechanisms, such as mdev for small systems (see 
+   https://git.busybox.net/busybox/tree/docs/mdev.txt).
+
+I'd recommend the third option personally. It also handles removable 
+media like USB sticks nicely. Of course, since it is now dynamic, any 
+code that depends on accessing SD card will need to be able to deal with 
+the card missing / appearing later / possibly being removed / etc.
+
+Regards,
+-Ralph
