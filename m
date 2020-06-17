@@ -1,52 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 23:00:59 +0200
-Subject: [Buildroot] [PATCH 1/1] imx-usb-loader: bump version to 30b43d6
-In-Reply-To: <20200615133735.12926-1-sebastien.szymanski@armadeus.com>
-References: <20200615133735.12926-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20200617230059.53caab40@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 17 Jun 2020 23:01:23 +0200
+Subject: [Buildroot] [git commit] fs: squashfs: Add config option to pass
+ nopad parameter to mksquashfs
+Message-ID: <20200617205953.561EC83DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jun 2020 15:37:35 +0200
-S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7c57c1952f0528e8e738eaebb0f25bfd69fabbd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump version to get i.MX8M Nano support.
-> 
-> Changes sinces 4aa9809:
-> 
->   30b43d6 (HEAD -> master, origin/master, origin/HEAD) Fix MinGW Build (#114)
->   25d6c0d mx8m_usb_sdp_spl: create generic sdp spl config for all imx8m
->   dc0fb26 mx8mn_usb_sdp_spl.conf: initial addition
->   f009770 imx_sdp: don't try to load hdmi firmware
->   c5c4d28 add SPDS protocol support, imx8mn(nano)
->   15dbbd7 tests: add pid 0x1001
->   353791c tests: add pids 0x0134/0x1000
->   06fb581 tests: pid=0x0080 is for mx6ull
->   6b07a0a mx8mm_usb_sdp_spl.conf/ mx8mm_usb_work.conf: s/imx-mkimage/u-boot-imx6/
->   b00b0e2 mx8mq_usb_work.conf: load flash.bin from u-boot-imx6 directory
->   bda7ab6 add mx8mq_usb_sdp_spl.conf
->   7984efc Moving libusb_free_device_list to get imx_usb to work on Windows.
->   29fa8ab imx_usb: use device found by find_imx_device
->   abe7f5d add support for relocatable installs
->   3d36c83 Fixed build for Visual Studio 2015 Express.
->   fe50624 imx_usb.config: add mx8mm_usb_sdp_spl.conf/mx8mm_usb_work.conf lines
->   f7752f4 mx8mq_usb_work.conf: use bl31-iMX8MQ-2g.bin to match branch boundary-imx_4.9.123_imx8mm_ga of imx-mkimage
->   8c9eee7 add mx8mm config files
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  package/imx-usb-loader/imx-usb-loader.hash | 2 +-
->  package/imx-usb-loader/imx-usb-loader.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Add an option to enable/disable padding to a multiple of 4k. Padding is
+the default as it also was the past default behaviour.
 
-Applied to master, thanks. Note: "package/" prefix was missing in the
-commit title, I fixed that when applying.
+Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ fs/squashfs/Config.in   | 8 ++++++++
+ fs/squashfs/squashfs.mk | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+index dde2097cb7..70d4a20cf0 100644
+--- a/fs/squashfs/Config.in
++++ b/fs/squashfs/Config.in
+@@ -5,6 +5,13 @@ config BR2_TARGET_ROOTFS_SQUASHFS
+ 
+ if BR2_TARGET_ROOTFS_SQUASHFS
+ 
++config BR2_TARGET_ROOTFS_SQUASHFS_PAD
++	bool "pad to a 4K boundary"
++	default y # legacy was always ON
++	help
++	  Say 'y' here (the default) to pad the the filesystem image
++	  to a 4K boundary. Say 'n' to disable padding.
++
+ choice
+ 	prompt "Compression algorithm"
+ 	default BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+@@ -31,4 +38,5 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_ZSTD
+ 	bool "zstd"
+ 
+ endchoice
++
+ endif
+diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+index 34ab048603..7a5e3e313e 100644
+--- a/fs/squashfs/squashfs.mk
++++ b/fs/squashfs/squashfs.mk
+@@ -8,6 +8,10 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+ 
+ ROOTFS_SQUASHFS_ARGS = -noappend -processors $(PARALLEL_JOBS)
+ 
++ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_PAD),)
++ROOTFS_SQUASHFS_ARGS += -nopad
++endif
++
+ ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
+ ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
+ else ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
