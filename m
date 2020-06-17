@@ -1,70 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 22:21:16 +0200
-Subject: [Buildroot] [git commit] package/libnss: fix build with old PPC ABI
-Message-ID: <20200617201944.2E2EF83BBF@busybox.osuosl.org>
+Date: Wed, 17 Jun 2020 22:21:33 +0200
+Subject: [Buildroot] [git commit] package/glib-networking: bump to version
+ 2.64.3
+Message-ID: <20200617202045.86C8D83BA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f30fc8944763c17ac8140c01b0775f458c6ade54
+commit: https://git.buildroot.net/buildroot/commit/?id=d9e3ec19d68b2c95435f7f2c347898bd294058e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/bdbd33c7a764931b2066dd8b527dde2f5dc298b4
-http://autobuild.buildroot.net/results/61bf50f73bb79e85c22e663f5fc22f4b9ccc0d3b
-http://autobuild.buildroot.net/results/4437942a528ab8f782d3b97595e76bb690d3a409
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnss/0001-fix-old-abi-ppc.patch | 40 +++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/glib-networking/glib-networking.hash | 4 ++--
+ package/glib-networking/glib-networking.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/0001-fix-old-abi-ppc.patch b/package/libnss/0001-fix-old-abi-ppc.patch
-new file mode 100644
-index 0000000000..202b4ad271
---- /dev/null
-+++ b/package/libnss/0001-fix-old-abi-ppc.patch
-@@ -0,0 +1,40 @@
-+From a7a862bab5e4aae4615ddae3cbe230345f92ed0d Mon Sep 17 00:00:00 2001
-+From: Lauri Kasanen <cand@gmx.com>
-+Date: Mon, 1 Jun 2020 12:11:45 +0300
-+Subject: [PATCH v3] Bug 1642174 /usr/bin/ld: OBJS/Linux_SINGLE_SHLIB/sha512-p8.o:
-+ ABI version 2 is not compatible with ABI version 1 output
-+
-+Don't try to build the SHA-2 accelerated asm on old-ABI ppc.
-+
-+Currently make only, I don't have enough gyp-fu to do that side.
-+However, the reporters of 1642174 and 1635625 both used make, not gyp.
-+
-+Signed-off-by: Lauri Kasanen <cand@gmx.com>
-+[Fetch-from: https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
-+ Manually modified paths to apply to nss subdirectory in release tarball.]
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ lib/freebl/Makefile | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
-+index 5f7384429..e0461c7d3 100644
-+--- a/nss/lib/freebl/Makefile
-++++ b/nss/lib/freebl/Makefile
-+@@ -267,9 +267,12 @@ ifeq ($(CPU_ARCH),arm)
-+ endif
-+ ifeq ($(CPU_ARCH),ppc)
-+     EXTRA_SRCS += gcm-ppc.c
-+-    ASFILES += sha512-p8.s
-+ ifdef USE_64
-+     DEFINES += -DNSS_NO_INIT_SUPPORT
-++    PPC_ABI := $(shell $(CC) -dM -E - < /dev/null | awk '$$2 == "_CALL_ELF" {print $$3}')
-++    ifeq ($(PPC_ABI),2)
-++        ASFILES += sha512-p8.s
-++    endif
-+ endif # USE_64
-+ endif # ppc
-+ endif # Linux
-+--
-+2.19.1
-+
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 88649d842f..336e0aa07b 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,3 +1,3 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.62/glib-networking-2.62.4.sha256sum
+-sha256  c18f289eec480fdce12044c0a06f77521edf9f460d16ad4213de61f2a3b294cf  glib-networking-2.62.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.64/glib-networking-2.64.3.sha256sum
++sha256  937a06b124052813bfc0b0b86bff42016ff01067582e1aca65bb6dbe0845a168  glib-networking-2.64.3.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index e1d4823adc..295c7516cc 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GLIB_NETWORKING_VERSION_MAJOR = 2.62
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).4
++GLIB_NETWORKING_VERSION_MAJOR = 2.64
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).3
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
