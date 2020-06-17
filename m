@@ -1,53 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 17 Jun 2020 19:54:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump version to 3.0.11
-Message-ID: <20200617175410.1172563-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Jun 2020 18:13:26 +0000
+Subject: [Buildroot] [Bug 13001] openjdk-bin replaces libfreetype.so from
+ host-freetype
+In-Reply-To: <bug-13001-163@https.bugs.busybox.net/>
+References: <bug-13001-163@https.bugs.busybox.net/>
+Message-ID: <bug-13001-163-lZvVu7yFaQ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2020-13428: https://www.videolan.org/security/sb-vlc3011.html
+https://bugs.busybox.net/show_bug.cgi?id=13001
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/vlc/vlc.hash | 12 ++++++------
- package/vlc/vlc.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+--- Comment #6 from Adam Duskett <aduskett@gmail.com> ---
+Sorry for the delayed response, as this ticket is mine.
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 8b2910af49..7775e449f4 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha256
--sha256  a966abfc7f3b2ff3adaa130306ecaf5d6ad3b6dc73385fc9ab0c1204029d4c31  vlc-3.0.10.tar.xz
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha1
--sha1  4b3c75d1861bf463db53ba9059e8cc165f5c30a7  vlc-3.0.10.tar.xz
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.md5
--md5  28417dd27462ccb014b7dc7e50e9e9d6  vlc-3.0.10.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha256
-+sha256  3e94a1acf33445e9da15d528aa48657aa26b912eaa2656b403d43860a8834919  vlc-3.0.11.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha1
-+sha1  66d377a2f24b6b865d5c56530e10d84b8262b46c  vlc-3.0.11.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.md5
-+md5  7e68f9e2d307eb7cc16e7345cda9e978  vlc-3.0.11.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 039f106181..38d9751690 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 3.0.10
-+VLC_VERSION = 3.0.11
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+I would propose doing what we did with OpenJDK, which is installing
+host-openjdk-bin to /usr/lib/jvm. This directory structure provides two
+advantages:
+
+1) The directory structure is consistent with how we handle the target OpenJDK.
+2) I have been spending some time with OpenJDK and Buildroot as of late. Part
+of what I have had to do was set up Maven with Buildroot, and in doing so I
+found that the host-openjdk-bin install step does not copy the conf file from
+the source directory to the host directory.
+
+This lack of copying causes Maven to crash with the error "Can't read
+cryptographic policy directory: unlimited."
+
+After some research, I found that Maven looks for conf files in
+$(JAVA_HOME)/conf, which Buildroot does not provide.
+
+Maven also searched for $(JAVA_HOME)/bin and $(JAVA_HOME)/lib which do exist.
+
+So there are two options to fix this issue:
+
+Copy the conf directory to $(HOST_DIR), which would result in a
+$(HOST_DIR)/conf directory.
+
+OR
+
+Follow the standard practice of installing the entire JVM to /usr/lib/jvm
+
+
+I would propose the second option as it also looks nicer and allows us not to
+have a $(HOST_DIR)/conf directory.
+
+
+Yann, thoughts?
+
 -- 
-2.26.2
+You are receiving this mail because:
+You are on the CC list for the bug.
