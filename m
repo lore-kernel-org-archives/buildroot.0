@@ -1,43 +1,53 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 17 Jun 2020 19:28:42 +0200
-Subject: [Buildroot] [PATCH 0/6] Cups revamp
-Message-ID: <20200617172848.2601-1-angelo@amarulasolutions.com>
+Date: Wed, 17 Jun 2020 19:28:43 +0200
+Subject: [Buildroot] [PATCH 1/6] package/dejavu: Install dejavu fonts in
+ staging dir
+In-Reply-To: <20200617172848.2601-1-angelo@amarulasolutions.com>
+References: <20200617172848.2601-1-angelo@amarulasolutions.com>
+Message-ID: <20200617172848.2601-2-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series fixes various nitpicks we found using cups and do some
-bumps.
+From: Michael Trimarchi <michael@amarulasolutions.com>
 
-Angelo Compagnucci (5):
-  package/cups-filters: bump to version 1.27.5
-  package/cups: bump to version 2.3.3
-  package/cups: Add udev rules to assign usb printers group to lp
-  package/cups: adding python support
-  package/qt5: Enable cups support when BR2_PACKAGE_CUPS
+The dejavu fonts is used by cups-filters and needs to be
+installed in staging directory.
 
-Michael Trimarchi (1):
-  package/dejavu: Install dejavu fonts in staging dir
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/dejavu/dejavu.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- package/cups-filters/Config.in                |  3 ++
- package/cups-filters/S82cups-browsed          | 23 +++++++++++++
- package/cups-filters/cups-filters.hash        |  2 +-
- package/cups-filters/cups-filters.mk          | 20 ++++++++++--
- ...move-man-from-BUILDDIRS-in-configure.patch |  8 +++--
- package/cups/0002-Do-not-use-genstrings.patch | 14 ++++----
- ...0004-Remove-PIE-flags-from-the-build.patch |  8 +++--
- package/cups/70-usb-printers.rules            |  4 +++
- package/cups/S81cupsd                         | 23 +++++++++++++
- package/cups/cups.hash                        |  2 +-
- package/cups/cups.mk                          | 32 +++++++++++++++++--
- package/dejavu/dejavu.mk                      |  9 ++++++
- package/qt5/qt5base/qt5base.mk                |  8 ++++-
- 13 files changed, 136 insertions(+), 20 deletions(-)
- create mode 100644 package/cups-filters/S82cups-browsed
- create mode 100644 package/cups/70-usb-printers.rules
- create mode 100644 package/cups/S81cupsd
-
+diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
+index 9b57f0992e..be3d91f179 100644
+--- a/package/dejavu/dejavu.mk
++++ b/package/dejavu/dejavu.mk
+@@ -11,6 +11,7 @@ DEJAVU_LICENSE_FILES = LICENSE
+ 
+ DEJAVU_FONTS_INSTALL =
+ DEJAVU_FONTCONFIG_CONF_INSTALL =
++DEJAVU_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_DEJAVU_MONO),y)
+ DEJAVU_FONTS_INSTALL += DejaVuSansMono*.ttf
+@@ -50,6 +51,14 @@ define DEJAVU_FONTCONFIG_CONF_INSTALL_CMDS
+ endef
+ endif
+ 
++define DEJAVU_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/share/fonts/dejavu/
++	for i in $(DEJAVU_FONTS_INSTALL) ; do \
++		$(INSTALL) -m 0644 $(@D)/ttf/$$i \
++			$(STAGING_DIR)/usr/share/fonts/dejavu/ || exit 1 ; \
++	done
++endef
++
+ define DEJAVU_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/share/fonts/dejavu/
+ 	for i in $(DEJAVU_FONTS_INSTALL) ; do \
 -- 
 2.25.1
