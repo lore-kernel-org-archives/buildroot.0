@@ -1,24 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 22:26:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vpnc: use github release
-In-Reply-To: <20200617202056.41589-1-fontaine.fabrice@gmail.com>
-References: <20200617202056.41589-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200617222620.59ba4aed@windsurf.home>
+Date: Wed, 17 Jun 2020 22:26:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glib-networking: bump to
+ version 2.64.3
+In-Reply-To: <20200617200448.40711-1-fontaine.fabrice@gmail.com>
+References: <20200617200448.40711-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200617222631.2b307164@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Jun 2020 22:20:56 +0200
+On Wed, 17 Jun 2020 22:04:48 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> -VPNC_VERSION = b1243d29e0c00312ead038b04a2cf5e2fa31d740
-> +VPNC_VERSION = 0.5.3r550-2jnpr1
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/glib-networking/glib-networking.hash | 4 ++--
+>  package/glib-networking/glib-networking.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Wow, this release number is almost as cryptic as a full Git SHA1 ! :-)
-
-But anyway: applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
