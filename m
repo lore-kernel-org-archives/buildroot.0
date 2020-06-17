@@ -1,49 +1,61 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 17 Jun 2020 19:28:48 +0200
-Subject: [Buildroot] [PATCH 6/6] package/qt5: Enable cups support when
- BR2_PACKAGE_CUPS
-In-Reply-To: <20200617172848.2601-1-angelo@amarulasolutions.com>
-References: <20200617172848.2601-1-angelo@amarulasolutions.com>
-Message-ID: <20200617172848.2601-7-angelo@amarulasolutions.com>
+From: Mike Davies <busybox_mail@rovoreed.com>
+Date: Wed, 17 Jun 2020 18:21:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rpi-userland: fix build on 64-bit
+ Raspberry Pi 3
+Message-ID: <0478efa17e8530ec60d74c8e3fff37fccbed614f.camel@rovoreed.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cups support should be enabled in Qt if CUPS is available system wide.
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Prior to this patch it was not possible to select the package rpi-userland if
+raspberrypi3_64_defconfig was used.
+Then the .mk file needed updating to allow 64 bit builds.
+
+Signed-off-by: Mike Davies <git-user44@rovoreed.com>
 ---
- package/qt5/qt5base/qt5base.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/rpi-userland/Config.in       | 4 ++--
+ package/rpi-userland/rpi-userland.mk | 6 ++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 42d77306cc..c6b459a0e1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -23,7 +23,6 @@ QT5BASE_INSTALL_STAGING = YES
- #     feature enabled
- QT5BASE_CONFIGURE_OPTS += \
- 	-optimized-qmake \
--	-no-cups \
- 	-no-iconv \
- 	-system-zlib \
- 	-system-pcre \
-@@ -108,6 +107,13 @@ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- QT5BASE_DEPENDENCIES += udev
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 342faf26e3..81f3588822 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_RPI_USERLAND
+        bool "rpi-userland"
+-       depends on BR2_arm
++       depends on BR2_arm || BR2_aarch64
+        depends on BR2_INSTALL_LIBSTDCPP
+        depends on BR2_TOOLCHAIN_HAS_THREADS
+        depends on !BR2_STATIC_LIBS
+@@ -40,6 +40,6 @@ config BR2_PACKAGE_RPI_USERLAND_HELLO
  endif
  
-+ifeq ($(BR2_PACKAGE_CUPS), y)
-+QT5BASE_DEPENDENCIES += cups
-+QT5BASE_CONFIGURE_OPTS += -cups
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-cups
-+endif
+ comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
+-       depends on BR2_arm
++       depends on BR2_arm || BR2_aarch64
+        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+                BR2_STATIC_LIBS
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index efb02f719f..d8b2a281af 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -13,6 +13,12 @@ RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
+ 
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+ 
++ifeq ($(BR2_aarch64),y)
 +
- # Qt5 SQL Plugins
- ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
- ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
++RPI_USERLAND_CONF_OPTS += -DARM64=YES
++
++endif # BR2_aarch64
++
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
+ 
+ RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
 -- 
-2.25.1
+2.21.3
