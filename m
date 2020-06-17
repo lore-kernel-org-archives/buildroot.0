@@ -1,49 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 22:59:44 +0200
-Subject: [Buildroot] [git commit] package/fetchmail: bump version to 6.4.8
-Message-ID: <20200617205807.E45F483BC9@busybox.osuosl.org>
+Date: Wed, 17 Jun 2020 22:59:45 +0200
+Subject: [Buildroot] [git commit] package/freetype: bump version to 2.10.2
+Message-ID: <20200617205808.09DAB83BC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3347143e42a88a87e51abd33539e21436aedff58
+commit: https://git.buildroot.net/buildroot/commit/?id=d32fc1f9c981ce7ad24764e28b20fb1e7f04995b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
+
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fetchmail/fetchmail.hash | 8 ++++----
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/freetype/freetype.hash | 14 +++++++-------
+ package/freetype/freetype.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index c9d9f4a466..b40ce7f7b1 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37024049
--sha256  16efec4b6019b4d2b6e43ed1d4f523dee019ac86754de856d0cf34d503d66011  fetchmail-6.4.6.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37037213/
-+sha256  26cd936ece146e056cdf79a676a33738b4eab0a5ae2edf3fce5ba034721b09bd  fetchmail-6.4.8.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  7d2e440c94f98fcb44212314665bf8572182d24c  fetchmail-6.4.6.tar.xz
--md5  e6621616ccbde3792f6a3ccc85681fa9  fetchmail-6.4.6.tar.xz
-+sha1  900386d69e2731999f142d5c16b4f2b69ed87f7a  fetchmail-6.4.8.tar.xz
-+md5  4e5e67efe498038032576fa24c7f848e  fetchmail-6.4.8.tar.xz
- # Locally computed:
- sha256  89d6efe79c78f965b256e007d6acc367fff982c59b6195fb6ec5895ea0fc9bd5  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index eaf6724fca..1835059f61 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index c4e75c327c..7fc00f1c97 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,9 +1,9 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.1/
+-md5 bd42e75127f8431923679480efb5ba8f freetype-2.10.1.tar.xz
+-sha1 79874ef4eaa52025126b71d836453b8279bdd331 freetype-2.10.1.tar.xz
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
++md5  7c0d5a39f232d7eb9f9d7da76bf08074  freetype-2.10.2.tar.xz
++sha1  b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875  freetype-2.10.2.tar.xz
+ 
+ # Locally calculated
+-sha256	16dbfa488a21fe827dc27eaf708f42f7aa3bb997d745d31a19781628c36ba26f	freetype-2.10.1.tar.xz
+-sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
+-sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
+-sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
++sha256  1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b  freetype-2.10.2.tar.xz
++sha256  fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb  docs/LICENSE.TXT
++sha256  08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1  docs/FTL.TXT
++sha256  c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18  docs/GPLv2.TXT
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 8b3a4ca09c..516d1c0cfc 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).6
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).8
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-FREETYPE_VERSION = 2.10.1
++FREETYPE_VERSION = 2.10.2
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
