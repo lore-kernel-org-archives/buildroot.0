@@ -1,36 +1,62 @@
 From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Wed, 17 Jun 2020 12:49:21 +0200
-Subject: [Buildroot] [PATCH v2 13/17] configs/olpc_xo1: enable JFFS2 image
+Date: Wed, 17 Jun 2020 12:49:22 +0200
+Subject: [Buildroot] [PATCH v2 14/17] board/olpc: move the paragraph on
+ firmware up in the readme
 In-Reply-To: <20200617104925.1036330-1-lkundrak@v3.sk>
 References: <20200617104925.1036330-1-lkundrak@v3.sk>
-Message-ID: <20200617104925.1036330-14-lkundrak@v3.sk>
+Message-ID: <20200617104925.1036330-15-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The machine has a NAND flash device and firmware capable of loading the
-OS from a JFFS2 file system on it. Enable creation of JFFS2 image that
-can be written to said flash device.
-
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- configs/olpc_xo1_defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+ board/olpc/readme.txt | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/configs/olpc_xo1_defconfig b/configs/olpc_xo1_defconfig
-index 5919f6ab36..36ac051ffb 100644
---- a/configs/olpc_xo1_defconfig
-+++ b/configs/olpc_xo1_defconfig
-@@ -21,4 +21,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_LABEL="XO1"
- BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O dir_index,^huge_file,^64bit,^extent"
-+BR2_TARGET_ROOTFS_JFFS2=y
-+BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
-+BR2_TARGET_ROOTFS_JFFS2_PAD=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTD=y
+diff --git a/board/olpc/readme.txt b/board/olpc/readme.txt
+index d57635926e..2ed44011f7 100644
+--- a/board/olpc/readme.txt
++++ b/board/olpc/readme.txt
+@@ -28,18 +28,6 @@ Then:
+   $ make menuconfig           # Customize the build configuration
+   $ make                      # Build
+ 
+-Create the bootable media
+-=========================
+-
+-When the build is finished, the resulting image file will be called
+-"sdcard.img". It can be written directly to a SD-card or and USB flash stick.
+-
+-Please double check that you're using the right device (e.g. with "lsblk"
+-command). Doing the following will DESTROY ALL DATA that's currently on the
+-media.
+-
+-  # cat output/images/sdcard.img >/dev/<device>
+-
+ Preparing the machine
+ =====================
+ 
+@@ -71,6 +59,18 @@ to update the firmware:
+   ok flash ext:\q4e00ja.rom   \ Flash the "q4e00ja.rom" from the SD card
+   ok flash u:\q4e00ja.rom     \ Flash the "q4e00ja.rom" from USB stick
+ 
++Create the bootable media
++=========================
++
++When the build is finished, the resulting image file will be called
++"sdcard.img". It can be written directly to a SD-card or and USB flash stick.
++
++Please double check that you're using the right device (e.g. with "lsblk"
++command). Doing the following will DESTROY ALL DATA that's currently on the
++media.
++
++  # cat output/images/sdcard.img >/dev/<device>
++
+ Booting the machine
+ ===================
+ 
 -- 
 2.26.2
