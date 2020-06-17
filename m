@@ -1,45 +1,43 @@
 From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Wed, 17 Jun 2020 12:49:19 +0200
-Subject: [Buildroot] [PATCH v2 11/17] board/olpc/xo-1: drop garbage from
- kernel config
+Date: Wed, 17 Jun 2020 12:49:20 +0200
+Subject: [Buildroot] [PATCH v2 12/17] board/olpc: set JFFS2 root when
+ booting from a MTD
 In-Reply-To: <20200617104925.1036330-1-lkundrak@v3.sk>
 References: <20200617104925.1036330-1-lkundrak@v3.sk>
-Message-ID: <20200617104925.1036330-12-lkundrak@v3.sk>
+Message-ID: <20200617104925.1036330-13-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These are unnecessary in a defconfig.
+This makes the boot script set appropriate root parameters when it's
+loaded from a NAND flash device.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- board/olpc/xo-1/linux.config | 4 ----
- 1 file changed, 4 deletions(-)
+ board/olpc/olpc.fth | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/board/olpc/xo-1/linux.config b/board/olpc/xo-1/linux.config
-index 2541a310a5..12919471a2 100644
---- a/board/olpc/xo-1/linux.config
-+++ b/board/olpc/xo-1/linux.config
-@@ -4,7 +4,6 @@ CONFIG_MGEODE_LX=y
- CONFIG_X86_MSR=y
- CONFIG_HZ_100=y
- CONFIG_KEXEC=y
--CONFIG_PHYSICAL_START=0x400000
- CONFIG_CMDLINE_BOOL=y
- CONFIG_ACPI=y
- CONFIG_CPU_IDLE=y
-@@ -13,10 +12,7 @@ CONFIG_OLPC=y
- CONFIG_OLPC_XO1_PM=y
- CONFIG_OLPC_XO1_RTC=y
- CONFIG_OLPC_XO1_SCI=y
--# CONFIG_FIRMWARE_MEMMAP is not set
- # CONFIG_VIRTUALIZATION is not set
--CONFIG_ARCH_MMAP_RND_BITS=16
--CONFIG_REFCOUNT_FULL=y
- CONFIG_SPARSEMEM_MANUAL=y
- CONFIG_CMA=y
- CONFIG_MTD_CMDLINE_PARTS=y
+diff --git a/board/olpc/olpc.fth b/board/olpc/olpc.fth
+index 678f0af5b5..b4cbecf11f 100644
+--- a/board/olpc/olpc.fth
++++ b/board/olpc/olpc.fth
+@@ -5,10 +5,11 @@
+ 
+ " /aliases" find-device " last" get-property
+ abort" No last alias"
+-" /pci/sd at c"          2over substring?  if  " root=/dev/mmcblk0p1 " to boot-file  then
+-" /sd/sdhci at d4280000" 2over substring?  if  " root=/dev/mmcblk1p1 " to boot-file  then
+-" /pci/usb@"          2over substring?  if  " root=/dev/sda1 "      to boot-file  then
+-" /usb@"              2over substring?  if  " root=/dev/sda1 "      to boot-file  then
++" /pci/sd at c"          2over substring?  if  " root=/dev/mmcblk0p1 "                  to boot-file  then
++" /sd/sdhci at d4280000" 2over substring?  if  " root=/dev/mmcblk1p1 "                  to boot-file  then
++" /pci/usb@"          2over substring?  if  " root=/dev/sda1 "                       to boot-file  then
++" /usb@"              2over substring?  if  " root=/dev/sda1 "                       to boot-file  then
++" /pci/nandflash at c"   2over substring?  if  " root=/dev/mtdblock0 rootfstype=jffs2 " to boot-file  then
+ 2drop
+ 
+ root-device " compatible" get-property dend  if  0 0  then  ( compatible$ )
 -- 
 2.26.2
