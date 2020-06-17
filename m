@@ -1,56 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Jun 2020 22:58:22 +0200
-Subject: [Buildroot] [git commit] suport/download: fix git wrapper with
- submodules on older git versions
-Message-ID: <20200617205700.9DCBE825F5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Jun 2020 22:58:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/spdlog: bump to version 1.6.1
+In-Reply-To: <20200615184632.493821-6-asafka7@gmail.com>
+References: <20200615184632.493821-1-asafka7@gmail.com>
+ <20200615184632.493821-6-asafka7@gmail.com>
+Message-ID: <20200617225844.6dc38285@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fe9894f655fd79207c41673e1966cc4d4d101d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 15 Jun 2020 21:46:30 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-Older versions of git store the absolute path of the submodules'
-repository as stored in the super-project, e.g.:
+> License was updated with little rephrasings, typo fixes,
+> and a note about using fmt as a third party library under the
+> MIT license.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/spdlog/spdlog.hash | 4 ++--
+>  package/spdlog/spdlog.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-    $ cat some-submodule/.git
-    gitdir: /path/to/super-project/.git/modules/some-submodule
+Applied to master, thanks.
 
-Obviously, this is not very reproducible.
-
-More recent versions of git, however, store relative paths, which
-de-facto makes it reproducible.
-
-Fix older versions by replacing the absolute paths with relative ones.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/download/git | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/support/download/git b/support/download/git
-index 075f665bbf..15d8c66e05 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -176,6 +176,19 @@ date="$( _git log -1 --pretty=format:%cD )"
- # There might be submodules, so fetch them.
- if [ ${recurse} -eq 1 ]; then
-     _git submodule update --init --recursive
-+
-+    # Older versions of git will store the absolute path of the git tree
-+    # in the .git of submodules, while newer versions just use relative
-+    # paths. Detect and fix the older variants to use relative paths, so
-+    # that the archives are reproducible across a wider range of git
-+    # versions. However, we can't do that if git is too old and uses
-+    # full repositories for submodules.
-+    cmd='printf "%s\n" "${path}/"'
-+    for module_dir in $( _git submodule --quiet foreach "'${cmd}'" ); do
-+        [ -f "${module_dir}/.git" ] || continue
-+        relative_dir="$( sed -r -e 's,/+,/,g; s,[^/]+/,../,g' <<<"${module_dir}" )"
-+        sed -r -i -e "s:^gitdir\: $(pwd)/:gitdir\: "${relative_dir}":" "${module_dir}/.git"
-+    done
- fi
- 
- # Generate the archive, sort with the C locale so that it is reproducible.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
