@@ -1,97 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Jun 2020 22:39:16 +0200
-Subject: [Buildroot] [PATCH v3] package/systemd: fixup RPATH for more
- systemd host binaries
-In-Reply-To: <20200615222856.147762-1-nolange79@gmail.com>
-References: <20200615222856.147762-1-nolange79@gmail.com>
-Message-ID: <20200617203916.GH2351@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Jun 2020 22:48:48 +0200
+Subject: [Buildroot] [PATCH v2] package/ttyd: new package
+In-Reply-To: <20200616171901.4566-1-b.bilas@grinn-global.com>
+References: <20200616171901.4566-1-b.bilas@grinn-global.com>
+Message-ID: <20200617224848.084dccef@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+On Tue, 16 Jun 2020 19:19:01 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-On 2020-06-16 00:28 +0200, Norbert Lange spake thusly:
-> All systemd binaries depend on libsystemd-shared and need their
-> RPATH fixed. Use a glob to catch them all
+> ttyd is a simple command-line tool for sharing
+> terminal over the web.
 > 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-
-Applied to master, with the following changes:
-
-  - don't use 'set -e', use the more traditional '|| eixt 1'
-  - don't cd into HOST_DIR/bin, but use $(addprefix ...)
-  - use positive logic in the test
-  - expand commit log
-
-... which makes it more in-line with how we're doing similar tweaks in
-other packages.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 > ---
-> v1->v2:
-> -   dont ignore failure from patchelf
-> v2->v3:
-> -   change back to shell loop, the wildcard gets expanded before
->     the install step and is empty the first time
-> -   add busctl
-> ---
->  package/systemd/systemd.mk | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 2cc71ee667..b04391da9e 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -659,6 +659,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  	host-libcap \
->  	host-gperf
->  
-> +HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-> +
->  # Fix RPATH After installation
->  # * systemd provides a install_rpath instruction to meson because the binaries
->  #   need to link with libsystemd which is not in a standard path
-> @@ -667,20 +669,13 @@ HOST_SYSTEMD_DEPENDENCIES = \
->  # * the original path had been tweaked by buildroot via LDFLAGS to add
->  #   $(HOST_DIR)/lib
->  # * thus re-tweak rpath after the installation for all binaries that need it
-> -HOST_SYSTEMD_HOST_TOOLS = \
-> -	systemd-analyze \
-> -	systemd-machine-id-setup \
-> -	systemd-mount \
-> -	systemd-nspawn \
-> -	systemctl \
-> -	udevadm
-> -
-> -HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-> +HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl udevadm systemd-*
->  
->  define HOST_SYSTEMD_FIX_RPATH
-> -	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
-> -		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
-> -	)
-> +	cd $(HOST_DIR)/bin && for f in $(HOST_SYSTEMD_HOST_TOOLS); do \
-> +		set -e; \
-> +		[ ! -x $$f ] || $(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $$f; \
-> +	done
->  endef
->  HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
->  
-> -- 
-> 2.27.0
-> 
+> Changes v1 -> v2:
+>   - Add the separate dependency on MMU and
+>     the availability of atomic operations. 
+>     (Suggested by Baruch)
+>     
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  .../ttyd/0001-cmake-fix-build-without-C.patch | 41 +++++++++++++++++++
+>  package/ttyd/Config.in                        | 21 ++++++++++
+>  package/ttyd/ttyd.hash                        |  3 ++
+>  package/ttyd/ttyd.mk                          | 13 ++++++
+>  6 files changed, 80 insertions(+)
+>  create mode 100644 package/ttyd/0001-cmake-fix-build-without-C.patch
+>  create mode 100644 package/ttyd/Config.in
+>  create mode 100644 package/ttyd/ttyd.hash
+>  create mode 100644 package/ttyd/ttyd.mk
 
+Applied to master, thanks.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
