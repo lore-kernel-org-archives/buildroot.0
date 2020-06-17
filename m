@@ -1,80 +1,211 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Jun 2020 22:35:54 +0200
-Subject: [Buildroot] [git commit] package/systemd: fixup RPATH for more
- systemd host binaries
-Message-ID: <20200617203418.B569A84273@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Jun 2020 22:38:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gpiod: add gpiod hardware
+ handling daemon
+In-Reply-To: <20200616164200.6399-1-marc.chalain@gmail.com>
+References: <20200616164200.6399-1-marc.chalain@gmail.com>
+Message-ID: <20200617223824.0ab717d2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f1a9ee9328797f46a65cd7ad55b0df92252b566
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 16 Jun 2020 18:42:00 +0200
+mchalain <marc.chalain@gmail.com> wrote:
 
-All systemd binaries depend on libsystemd-shared and need their RPATH
-fixed. Use a glob to catch them all.
+> Gpiod is a little daemon to trig gpio event and launch scripts on level
+> changing events.
+> As udev or mdev, it reads rules files to attach scripts on events. and
+> launch the scripts with environment variables to describe the event.
+> It uses libgpiod to monitor the gpio and libconfig to read the rules.
+> It is tested on Raspberry Pi (0,3,4) with success, during few months.
+> 
+> Signed-off-by: mchalain <marc.chalain@gmail.com>
 
-We can't use $(wildcard ...) because this is expanded before any file
-may exist (it's in the same rule that install those file, and the
-expansion in Makefile is done once at the beginning of the recipe).
+Thanks a lot for your contribution. I have not reviewed it carefully.
+However, while it looks potentially interesting, I am personally always
+a bit concerned in packaging software components that look like
+"personal projects". This project has only been written by you, there
+are no contributions from others, no stars, no fork on Github, nothing
+indicates that anyone but you is using gpiod.
 
-We need to test each file:
- 1. to ignore files that were not build (e.g. because the host is
-    missing some dependencies (in which case we don't care; we're only
-    interested in systemctl, and that one is already built)
- 2. to ensure the glob was expanded (in case no file would match
-    systemd-*)
+So I am wondering if it is not too early to have that in Buildroot. On
+the other hand, you could certainly say that having it in Buildroot
+would give it some exposure that might encourage some users to try it
+out.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-[yann.morin.1998 at free.fr:
-  - don't use 'set -e', use the more traditional '|| eixt 1'
-  - don't cd into HOST_DIR/bin, but use $(addprefix ...)
-  - use positive logic in the test
-  - expand commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/systemd/systemd.mk | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+Anyway, we will need your Signed-off-by to use your full first name and
+last name, properly capitalized.
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1fcffdb3a9..8e01a0db5b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -641,6 +641,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
- 	host-libcap \
- 	host-gperf
- 
-+HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-+
- # Fix RPATH After installation
- # * systemd provides a install_rpath instruction to meson because the binaries
- #   need to link with libsystemd which is not in a standard path
-@@ -649,20 +651,14 @@ HOST_SYSTEMD_DEPENDENCIES = \
- # * the original path had been tweaked by buildroot via LDFLAGS to add
- #   $(HOST_DIR)/lib
- # * thus re-tweak rpath after the installation for all binaries that need it
--HOST_SYSTEMD_HOST_TOOLS = \
--	systemd-analyze \
--	systemd-machine-id-setup \
--	systemd-mount \
--	systemd-nspawn \
--	systemctl \
--	udevadm
--
--HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-+HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
- 
- define HOST_SYSTEMD_FIX_RPATH
--	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
--		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
--	)
-+	for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
-+		[ -e $$f ] || continue; \
-+		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
-+		|| exit 1; \
-+	done
- endef
- HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
- 
+
+> diff --git a/package/gpiod/Config.in b/package/gpiod/Config.in
+> new file mode 100644
+> index 0000000000..e9d5dc47f9
+> --- /dev/null
+> +++ b/package/gpiod/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_GPIOD
+> +	bool "gpiod: gpio monitor daemon"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+
+This needs a comment:
+
+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8 # libgpiod
+
+> +	select BR2_PACKAGE_LIBGPIOD
+> +	select BR2_PACKAGE_LIBCONFIG
+> +	help
+> +	  GPIOD monitors gpio events and start scripts.
+> +	  The daemon loads rules defining a gpio and
+> +	  the scripts to launch when the level of gpio changes.
+> +
+> +comment "gpiod: needs a toolchain w/ support of MMU and headers > 4.8"
+> +	depends on !BR2_USE_MMU
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+
+No, this should be:
+
+comment "gpiod needs a toolchain w/ kernel headers >= 4.8"
+	depends on BR2_USE_MMU
+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+
+> +RUNDIR=/var/run
+> +SBINDIR=/usr/sbin
+> +BINDIR=/usr/bin
+> +
+> +start() {
+> +	printf "Starting gpiod: "
+> +	start-stop-daemon -S -q --exec ${SBINDIR}/gpiod -- -D -p ${RUNDIR}/gpiod.pid
+> +	[ $? == 0 ] && echo "OK" || echo "FAILED"
+> +}
+> +stop() {
+> +	printf "Stopping gpiod: "
+> +	${SBINDIR}/gpiod -K -p ${RUNDIR}/gpiod.pid
+> +	echo "OK"
+> +}
+
+Please follow the template package/busybox/S01syslogd for your init
+script.
+
+
+> diff --git a/package/gpiod/gpiod.hash b/package/gpiod/gpiod.hash
+> new file mode 100644
+> index 0000000000..4a9c10297c
+> --- /dev/null
+> +++ b/package/gpiod/gpiod.hash
+> @@ -0,0 +1 @@
+> +sha256 f7c12fafcfb02515ae34d9502b4121d7980606fb53b57bee35143bd985bfdddc  gpiod-1.0.tar.gz
+
+We need a hash for the license file.
+
+> diff --git a/package/gpiod/gpiod.mk b/package/gpiod/gpiod.mk
+> new file mode 100644
+> index 0000000000..ed99f1d3be
+> --- /dev/null
+> +++ b/package/gpiod/gpiod.mk
+> @@ -0,0 +1,52 @@
+> +################################################################################
+> +#
+> +# gpiod
+> +#
+> +################################################################################
+> +
+> +GPIOD_VERSION = 1.0
+> +GPIOD_SITE = $(call github,mchalain,gpiod,$(GPIOD_VERSION))
+
+We need GPIOD_LICENSE and GPIOD_LICENSE_FILES.
+
+> +GPIOD_MAKE_OPTS+=prefix=/usr
+> +GPIOD_MAKE_OPTS+=sysconfdir=/etc/gpiod
+
+Just one assignment, and unconditional:
+
+GPIOD_MAKE_OPTS = \
+	prefix=/usr \
+	sysconfdir=/etc/gpiod
+
+> +#GPIOD_MAKE_OPTS+=DEBUG=y
+
+Drop comments please.
+
+> +
+> +GPIOD_KCONFIG_FILE=$(GPIOD_PKGDIR)/gpiod_defconfig
+> +GPIOD_KCONFIG_EDITORS = config
+> +GPIOD_KCONFIG_OPTS = $(GPIOD_MAKE_OPTS)
+> +
+> +GPIOD_DEPENDENCIES += libgpiod
+> +GPIOD_DEPENDENCIES += libconfig
+
+One line for dependencies, and unconditional:
+
+GPIOD_DEPENDENCIES = libgpiod libconfig
+
+> +define GPIOD_LIBCONFIG_OPTS
+> +	$(call KCONFIG_ENABLE_OPT,LIBCONFIG,$(@D)/.config)
+> +endef
+> +
+> +define GPIOD_KCONFIG_FIXUP_CMDS
+> +	$(GPIOD_LIBCONFIG_OPTS)
+> +endef
+> +
+> +define GPIOD_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) \
+> +		$(MAKE1) -C $(@D) $(GPIOD_MAKE_OPTS)
+> +endef
+> +
+> +define GPIOD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/gpiod/rules.d
+
+Why do you need this ?
+
+> +	$(MAKE) -C $(@D) $(GPIOD_MAKE_OPTS) \
+> +		DESTDIR="$(TARGET_DIR)" DEVINSTALL=n install
+
+I don't think you need DEVINSTALL=n here
+
+> +endef
+> +
+> +define GPIOD_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 $(GPIOD_PKGDIR)/gpiod.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/gpiod.service
+
+This is OK. Perhaps use $(@D) instead of $(GPIOD_PKGDIR)
+
+However, the service file was missing in your patch.
+
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -fs ../../../../usr/lib/systemd/system/gpiod.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/gpiod.service
+
+These two commands are not needed, systemd preset-all is going to take
+care of this.
+
+> +endef
+> +define GPIOD_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 $(GPIOD_PKGDIR)/S20gpiod \
+> +		$(TARGET_DIR)/etc/init.d/S20gpiod
+> +endef
+> +
+> +$(eval $(kconfig-package))
+
+I'm a bit skeptical on the usage of kconfig-package here. You are *not*
+using kconfig at all. You have a makefile that emulates some of the
+kconfig behavior, but you're not using kconfig. So if we later change
+how kconfig-package behave, to use some kconfig functionality that you
+do not emulate, things will no longer work for the gpiod package.
+
+> diff --git a/package/gpiod/gpiod_defconfig b/package/gpiod/gpiod_defconfig
+> new file mode 100644
+> index 0000000000..e69de29bb2
+
+So it's just empty ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
