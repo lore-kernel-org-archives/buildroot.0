@@ -1,44 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 22:48:48 +0200
-Subject: [Buildroot] [PATCH v2] package/ttyd: new package
-In-Reply-To: <20200616171901.4566-1-b.bilas@grinn-global.com>
-References: <20200616171901.4566-1-b.bilas@grinn-global.com>
-Message-ID: <20200617224848.084dccef@windsurf.home>
+Date: Wed, 17 Jun 2020 22:49:28 +0200
+Subject: [Buildroot] [git commit] package/{libuv,
+ uvw}: bump to versions 1.38.0, 2.6.0_libuv-v1.38
+Message-ID: <20200617205529.9B4E38447F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Jun 2020 19:19:01 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3634b9d11a0f84c1055e5814182a1cf16f064045
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> ttyd is a simple command-line tool for sharing
-> terminal over the web.
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
-> Changes v1 -> v2:
->   - Add the separate dependency on MMU and
->     the availability of atomic operations. 
->     (Suggested by Baruch)
->     
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  .../ttyd/0001-cmake-fix-build-without-C.patch | 41 +++++++++++++++++++
->  package/ttyd/Config.in                        | 21 ++++++++++
->  package/ttyd/ttyd.hash                        |  3 ++
->  package/ttyd/ttyd.mk                          | 13 ++++++
->  6 files changed, 80 insertions(+)
->  create mode 100644 package/ttyd/0001-cmake-fix-build-without-C.patch
->  create mode 100644 package/ttyd/Config.in
->  create mode 100644 package/ttyd/ttyd.hash
->  create mode 100644 package/ttyd/ttyd.mk
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ package/uvw/uvw.hash     | 2 +-
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 8e1824f397..2aba18490e 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7afa3c8a326b3eed02a9addb584ae7e995ae4d30516cad5e1e4af911931162a6  libuv-1.37.0.tar.gz
++sha256  2cd9a757fe6c512440933e2bdcab21143d4aa6249b2541399908ce038b756c9d  libuv-1.38.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index e61f565b54..493168cd99 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.37.0
++LIBUV_VERSION = 1.38.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index bdc1524bfe..f842345ea6 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bae3e0eccee602b3fb86d89db0c69ae2022a92142f50a042f0949da678614a6c  uvw-2.5.0_libuv-v1.37.tar.gz
++sha256  2695276bb4b154174ac0a6401bde5c0768bca99a43c9a469af67526f7e2e9410  uvw-2.6.0_libuv-v1.38.tar.gz
+ sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index 98c61c80ac..dd9b6b27dc 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UVW_VERSION = 2.5.0_libuv-v1.37
++UVW_VERSION = 2.6.0_libuv-v1.38
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
