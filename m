@@ -1,40 +1,75 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 17 Jun 2020 19:28:47 +0200
-Subject: [Buildroot] [PATCH 5/6] package/cups: adding python support
+Date: Wed, 17 Jun 2020 19:28:46 +0200
+Subject: [Buildroot] [PATCH 4/6] package/cups: Add udev rules to assign usb
+ printers group to lp
 In-Reply-To: <20200617172848.2601-1-angelo@amarulasolutions.com>
 References: <20200617172848.2601-1-angelo@amarulasolutions.com>
-Message-ID: <20200617172848.2601-6-angelo@amarulasolutions.com>
+Message-ID: <20200617172848.2601-5-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enables python support if python is available.
+This patch is based on patch from the rockchip tree:
+
+commit c8a337593660f27379c30248a11bf08dc8712113
+Author: Jeffy Chen <jeffy.chen@rock-chips.com>
+Date:   Tue Nov 13 18:59:43 2018 +0800
+
+    package: cups: Add udev rules to assign usb printers' group to lp
+
+    Change-Id: Ieae17deaa7d3623e1f0e1cc826871f1719d98d88
+    Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+
+but fixes the missing lp user and group.
 
 Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/cups/cups.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/cups/70-usb-printers.rules |  4 ++++
+ package/cups/cups.mk               | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/cups/70-usb-printers.rules
 
+diff --git a/package/cups/70-usb-printers.rules b/package/cups/70-usb-printers.rules
+new file mode 100644
+index 0000000000..537645523d
+--- /dev/null
++++ b/package/cups/70-usb-printers.rules
+@@ -0,0 +1,4 @@
++# Allow USB printers in the lp group
++# Match rules converted from usblp.c driver's usblp_ids
++ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="07", ATTR{bInterfaceSubClass}=="01", GROUP="lp"
++ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0202", GROUP="lp"
 diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index d4356682bf..c75a618941 100644
+index 461e0d9143..d4356682bf 100644
 --- a/package/cups/cups.mk
 +++ b/package/cups/cups.mk
-@@ -72,6 +72,13 @@ else
+@@ -72,10 +72,24 @@ else
  CUPS_CONF_OPTS += --disable-avahi
  endif
  
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+CUPS_CONF_OPTS += --with-python
-+CUPS_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+else
-+CUPS_CONF_OPTS += --without-python
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++define CUPS_INSTALL_UDEV_RULES
++	$(INSTALL) -D -m 0644 package/cups/70-usb-printers.rules \
++		$(TARGET_DIR)/lib/udev/rules.d/70-usb-printers.rules
++endef
++
++CUPS_POST_INSTALL_TARGET_HOOKS += CUPS_INSTALL_UDEV_RULES
 +endif
 +
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- define CUPS_INSTALL_UDEV_RULES
- 	$(INSTALL) -D -m 0644 package/cups/70-usb-printers.rules \
+ define CUPS_INSTALL_INIT_SYSV
+ 	@$(RM) $(TARGET_DIR)/etc/init.d/cups
+ 	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
+ 		$(TARGET_DIR)/etc/init.d/S81cupsd
+ endef
+ 
++define CUPS_USERS
++	lp -1 lp -1 * /var/spool/lpd /bin/false - lp
++	- - lpadmin -1 * - - - Printers admin group.
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.25.1
