@@ -1,56 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 20:55:40 +0200
-Subject: [Buildroot] [git commit] package/vlc: security bump version to
- 3.0.11
-Message-ID: <20200617190502.AA53983C07@busybox.osuosl.org>
+Date: Wed, 17 Jun 2020 20:57:13 +0200
+Subject: [Buildroot] [git commit] board/olpc: move SERIO_OLPC_APSP to XO-1.75
+Message-ID: <20200617190502.C7FB983C07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d9200f9927407921153769a7b674f731d7d534d
+commit: https://git.buildroot.net/buildroot/commit/?id=ab1bd2ca48db97b77855dfdd059f34cb41a341b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2020-13428: https://www.videolan.org/security/sb-vlc3011.html
+This is the keyboard connected via the SP "security processor" on a
+XO-1.75. XO-1 has a regular PC keyboard.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.hash | 12 ++++++------
- package/vlc/vlc.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ board/olpc/linux.config         | 1 -
+ board/olpc/xo-1.75/linux.config | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 8b2910af49..7775e449f4 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha256
--sha256  a966abfc7f3b2ff3adaa130306ecaf5d6ad3b6dc73385fc9ab0c1204029d4c31  vlc-3.0.10.tar.xz
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha1
--sha1  4b3c75d1861bf463db53ba9059e8cc165f5c30a7  vlc-3.0.10.tar.xz
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.md5
--md5  28417dd27462ccb014b7dc7e50e9e9d6  vlc-3.0.10.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha256
-+sha256  3e94a1acf33445e9da15d528aa48657aa26b912eaa2656b403d43860a8834919  vlc-3.0.11.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha1
-+sha1  66d377a2f24b6b865d5c56530e10d84b8262b46c  vlc-3.0.11.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.md5
-+md5  7e68f9e2d307eb7cc16e7345cda9e978  vlc-3.0.11.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 039f106181..38d9751690 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 3.0.10
-+VLC_VERSION = 3.0.11
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+diff --git a/board/olpc/linux.config b/board/olpc/linux.config
+index 524b80494a..75670936e5 100644
+--- a/board/olpc/linux.config
++++ b/board/olpc/linux.config
+@@ -29,7 +29,6 @@ CONFIG_INPUT_MOUSEDEV_SCREEN_X=1200
+ CONFIG_INPUT_MOUSEDEV_SCREEN_Y=900
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_INPUT_TABLET=y
+-CONFIG_SERIO_OLPC_APSP=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
+ CONFIG_BATTERY_OLPC=y
+diff --git a/board/olpc/xo-1.75/linux.config b/board/olpc/xo-1.75/linux.config
+index 0ca7d16e30..4a779a3b23 100644
+--- a/board/olpc/xo-1.75/linux.config
++++ b/board/olpc/xo-1.75/linux.config
+@@ -12,6 +12,7 @@ CONFIG_ARM_APPENDED_DTB=y
+ CONFIG_ARM_ATAG_DTB_COMPAT=y
+ CONFIG_VFP=y
+ CONFIG_NEON=y
++CONFIG_SERIO_OLPC_APSP=y
+ CONFIG_REGULATOR_88PG86X=m
+ CONFIG_VIDEO_MMP_CAMERA=y
+ CONFIG_DRM_ARMADA=y
