@@ -1,61 +1,149 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 17 Jun 2020 19:28:44 +0200
-Subject: [Buildroot] [PATCH 2/6] package/cups-filters: bump to version 1.27.5
+Date: Wed, 17 Jun 2020 19:28:45 +0200
+Subject: [Buildroot] [PATCH 3/6] package/cups: bump to version 2.3.3
 In-Reply-To: <20200617172848.2601-1-angelo@amarulasolutions.com>
 References: <20200617172848.2601-1-angelo@amarulasolutions.com>
-Message-ID: <20200617172848.2601-3-angelo@amarulasolutions.com>
+Message-ID: <20200617172848.2601-4-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps cups-filters to version 1.27.5.
-While bumping, fixing also the missing installation for the service files
-for cups-browsed.
+This patch bumps cups to version 2.3.3.
+While bumping, fixing also the wrong installation of service files:
+the rcdir was left to the default value, that means installing the
+service files into the wrong /etc/rcX.d directory.
+Adding also a simplified systemv service file for loading cupsd.
 
 Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/cups-filters/Config.in         |  3 +++
- package/cups-filters/S82cups-browsed   | 23 +++++++++++++++++++++++
- package/cups-filters/cups-filters.hash |  2 +-
- package/cups-filters/cups-filters.mk   | 20 +++++++++++++++++---
- 4 files changed, 44 insertions(+), 4 deletions(-)
- create mode 100644 package/cups-filters/S82cups-browsed
+ ...move-man-from-BUILDDIRS-in-configure.patch |  8 ++++---
+ package/cups/0002-Do-not-use-genstrings.patch | 14 ++++++-----
+ ...0004-Remove-PIE-flags-from-the-build.patch |  8 ++++---
+ package/cups/S81cupsd                         | 23 +++++++++++++++++++
+ package/cups/cups.hash                        |  2 +-
+ package/cups/cups.mk                          | 11 +++++++--
+ 6 files changed, 51 insertions(+), 15 deletions(-)
+ create mode 100644 package/cups/S81cupsd
 
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-index 9e4e37ca6b..26e8d4aa06 100644
---- a/package/cups-filters/Config.in
-+++ b/package/cups-filters/Config.in
-@@ -8,6 +8,9 @@ config BR2_PACKAGE_CUPS_FILTERS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_CUPS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	select BR2_PACKAGE_DEJAVU
-+	select BR2_PACKAGE_DEJAVU_SANS
-+	select BR2_PACKAGE_DEJAVU_SERIF
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+index b1ab7cbace..7fcf7133c8 100644
+--- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
++++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+@@ -6,15 +6,17 @@ Subject: [PATCH] Remove man from BUILDDIRS in configure
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ [Fabrice: updated for 2.3.0]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Michael: updated for 2.3.3]
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+ ---
+  config-scripts/cups-common.m4 | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
+-index fbba715..77d0f5c 100644
++index a460a73..d427acb 100644
+ --- a/config-scripts/cups-common.m4
+ +++ b/config-scripts/cups-common.m4
+-@@ -446,7 +446,7 @@ AC_ARG_WITH(components, [  --with-components       set components to build:
++@@ -434,7 +434,7 @@ LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
+  
+  case "$COMPONENTS" in
+  	all)
+@@ -24,5 +26,5 @@ index fbba715..77d0f5c 100644
+  
+  	core)
+ -- 
+-2.8.1
++2.17.1
+ 
+diff --git a/package/cups/0002-Do-not-use-genstrings.patch b/package/cups/0002-Do-not-use-genstrings.patch
+index b3566b8b15..c7d6735b5f 100644
+--- a/package/cups/0002-Do-not-use-genstrings.patch
++++ b/package/cups/0002-Do-not-use-genstrings.patch
+@@ -16,23 +16,25 @@ genstrings call.]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ [Fabrice: updated for 2.3.0]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Michael: updated for 2.3.3]
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+ ---
+  ppdc/Makefile | 2 --
+  1 file changed, 2 deletions(-)
+ 
+ diff --git a/ppdc/Makefile b/ppdc/Makefile
+-index 68bf6b2..d57a0c9 100644
++index 32e2e0b..7b18879 100644
+ --- a/ppdc/Makefile
+ +++ b/ppdc/Makefile
+-@@ -242,8 +242,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
+-	$(LD_CXX) $(ARCHFLAGS) $(ALL_LDFLAGS) -o genstrings genstrings.o \
+-		libcupsppdc.a $(LINKCUPSSTATIC)
+-	$(CODE_SIGN) -s "$(CODE_SIGN_IDENTITY)" $@
++@@ -186,8 +186,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
++ 	$(LD_CXX) $(ARCHFLAGS) $(ALL_LDFLAGS) -o genstrings genstrings.o \
++ 		libcupsppdc.a $(LINKCUPSSTATIC)
++ 	$(CODE_SIGN) -s "$(CODE_SIGN_IDENTITY)" $@
+ -	echo Generating localization strings...
+ -	./genstrings >sample.c
+  
+  
+  #
+ -- 
+-2.6.4
++2.17.1
+ 
+diff --git a/package/cups/0004-Remove-PIE-flags-from-the-build.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+index 8401e133e9..c2765dff09 100644
+--- a/package/cups/0004-Remove-PIE-flags-from-the-build.patch
++++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+@@ -13,15 +13,17 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+ [Fabrice: updated for 2.3.0]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Michael: updated for 2.3.3]
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+ ---
+  Makedefs.in | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Makedefs.in b/Makedefs.in
+-index 3afef0a..299b297 100644
++index 5f1d32f..d669ea8 100644
+ --- a/Makedefs.in
+ +++ b/Makedefs.in
+-@@ -148,7 +148,7 @@ IPPFIND_BIN	=	@IPPFIND_BIN@
++@@ -155,7 +155,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
+  			$(ONDEMANDFLAGS) $(OPTIONS)
+  ALL_DSOFLAGS	=	-L../cups @ARCHFLAGS@ @RELROFLAGS@ $(DSOFLAGS) $(OPTIM)
+  ALL_LDFLAGS	=	-L../cups @LDARCHFLAGS@ @RELROFLAGS@ $(LDFLAGS)  \
+@@ -31,5 +33,5 @@ index 3afef0a..299b297 100644
+  ARFLAGS		=	@ARFLAGS@
+  BACKLIBS	=	@BACKLIBS@
+ -- 
+-2.7.4
++2.17.1
+ 
+diff --git a/package/cups/S81cupsd b/package/cups/S81cupsd
 new file mode 100644
-index 0000000000..c73ff1fbfa
+index 0000000000..f527d55f1e
 --- /dev/null
-+++ b/package/cups-filters/S82cups-browsed
++++ b/package/cups/S81cupsd
 @@ -0,0 +1,23 @@
 +#!/bin/sh
 +
 +case "$1" in
 +	start)
-+		printf "Starting cups-browsed: "
-+		start-stop-daemon -S -q -m -p /var/run/cups-browsed.pid \
-+			-b -x cups-browsed -- -c /etc/cups/cups-browsed.conf
++		printf "Starting cupsd: "
++		start-stop-daemon -S -q -m -p /var/run/cupsd.pid \
++			-b -x cupsd -- -C /etc/cups/cupsd.conf -s /etc/cups/cups-files
 +		[ $? = 0 ] && echo "OK" || echo "FAIL"
 +		;;
 +	stop)
-+		printf "Stopping cups-browsed: "
-+		start-stop-daemon -K -q -p /var/run/cups-browsed.pid
++		printf "Stopping cupsd: "
++		start-stop-daemon -K -q -p /var/run/cupsd.pid
 +		[ $? = 0 ] && echo "OK" || echo "FAIL"
 +		;;
 +	restart)
@@ -67,59 +155,47 @@ index 0000000000..c73ff1fbfa
 +		echo "Usage: $0 {start|stop|restart}"
 +		;;
 +esac
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 9e24abe393..61cb42a438 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 ff8679fcd0c31c25d229262c7ad100ba161ef6b2aa455a2df673dd74ef93f488  cups-filters-1.26.0.tar.gz
-+sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
- sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 1f17018bc5..20d4c68995 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 8f037c6420..2eb289e209 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256 1bca9d89507e3f68cbc84482fe46ae8d5333af5bc2b9061347b2007182ac77ce  cups-2.3.1-source.tar.gz
++sha256 261fd948bce8647b6d5cb2a1784f0c24cc52b5c4e827b71d726020bcc502f3ee  cups-2.3.3-source.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256 a5d616e6322a9cb1a971e18765025edfca4f3cd9c0eafc32d6d2eb4b8c8787b5  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 18f01d8484..461e0d9143 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_FILTERS_VERSION = 1.26.0
-+CUPS_FILTERS_VERSION = 1.27.5
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
- 
--CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
-+CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg dejavu
- 
- CUPS_FILTERS_CONF_OPTS = \
- 	--disable-mutool \
-@@ -19,7 +19,10 @@ CUPS_FILTERS_CONF_OPTS = \
- 	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--with-pdftops=pdftops \
--	--with-jpeg
-+	--with-jpeg \
-+	--with-rcdir=no \
-+	--with-fontdir=$(STAGING_DIR)/usr/share/fonts/ \
-+	--with-test-font-path=$(STAGING_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- CUPS_FILTERS_CONF_OPTS += --with-png
-@@ -71,4 +74,15 @@ else
- CUPS_FILTERS_CONF_OPTS += --disable-poppler
+-CUPS_VERSION = 2.3.1
++CUPS_VERSION = 2.3.3
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+@@ -21,7 +21,8 @@ CUPS_CONF_OPTS = \
+ 	--with-docdir=/usr/share/cups/doc-root \
+ 	--disable-gssapi \
+ 	--disable-pam \
+-	--libdir=/usr/lib
++	--libdir=/usr/lib \
++	--with-rcdir=no
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
+ 	host-autoconf \
+@@ -71,4 +72,10 @@ else
+ CUPS_CONF_OPTS += --disable-avahi
  endif
  
-+define CUPS_FILTERS_INSTALL_INIT_SYSV
-+	@$(RM) $(TARGET_DIR)/etc/init.d/cups-browsed
-+	$(INSTALL) -D -m 0755 package/cups-filters/S82cups-browsed \
-+		$(TARGET_DIR)/etc/init.d/S82cups-browsed
-+endef
-+
-+define CUPS_FILTERS_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0755 $(@D)/utils/cups-browsed.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/cups-browsed.service
++define CUPS_INSTALL_INIT_SYSV
++	@$(RM) $(TARGET_DIR)/etc/init.d/cups
++	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
++		$(TARGET_DIR)/etc/init.d/S81cupsd
 +endef
 +
  $(eval $(autotools-package))
