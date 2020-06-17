@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 21:06:18 +0200
-Subject: [Buildroot] [git commit] configs/olpc_xo1: bump kernel version
-Message-ID: <20200617190503.7A0E7814E6@busybox.osuosl.org>
+Date: Wed, 17 Jun 2020 21:02:47 +0200
+Subject: [Buildroot] [git commit] board/olpc: set JFFS2 root when booting
+ from a MTD
+Message-ID: <20200617190503.52B29814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17e399a449d430aee67f36798cd844697d4dd789
+commit: https://git.buildroot.net/buildroot/commit/?id=751a13618a7452a322104251bd0b9cd56e941009
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update kernel to version 5.7.1.
+This makes the boot script set appropriate root parameters when it's
+loaded from a NAND flash device.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/olpc_xo1_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ board/olpc/olpc.fth | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/configs/olpc_xo1_defconfig b/configs/olpc_xo1_defconfig
-index 800e5226e7..41226d892c 100644
---- a/configs/olpc_xo1_defconfig
-+++ b/configs/olpc_xo1_defconfig
-@@ -1,11 +1,11 @@
- BR2_x86_geode=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olpc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olpc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olpc/xo-1/linux.config"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olpc/linux.config"
+diff --git a/board/olpc/olpc.fth b/board/olpc/olpc.fth
+index 678f0af5b5..b4cbecf11f 100644
+--- a/board/olpc/olpc.fth
++++ b/board/olpc/olpc.fth
+@@ -5,10 +5,11 @@
+ 
+ " /aliases" find-device " last" get-property
+ abort" No last alias"
+-" /pci/sd at c"          2over substring?  if  " root=/dev/mmcblk0p1 " to boot-file  then
+-" /sd/sdhci at d4280000" 2over substring?  if  " root=/dev/mmcblk1p1 " to boot-file  then
+-" /pci/usb@"          2over substring?  if  " root=/dev/sda1 "      to boot-file  then
+-" /usb@"              2over substring?  if  " root=/dev/sda1 "      to boot-file  then
++" /pci/sd at c"          2over substring?  if  " root=/dev/mmcblk0p1 "                  to boot-file  then
++" /sd/sdhci at d4280000" 2over substring?  if  " root=/dev/mmcblk1p1 "                  to boot-file  then
++" /pci/usb@"          2over substring?  if  " root=/dev/sda1 "                       to boot-file  then
++" /usb@"              2over substring?  if  " root=/dev/sda1 "                       to boot-file  then
++" /pci/nandflash at c"   2over substring?  if  " root=/dev/mtdblock0 rootfstype=jffs2 " to boot-file  then
+ 2drop
+ 
+ root-device " compatible" get-property dend  if  0 0  then  ( compatible$ )
