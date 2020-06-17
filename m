@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 08:21:53 +0200
-Subject: [Buildroot] [git commit] package/gsettings-desktop-schemas: bump to
- version 3.36.1
-Message-ID: <20200617062110.51D8B84274@busybox.osuosl.org>
+Date: Wed, 17 Jun 2020 08:21:54 +0200
+Subject: [Buildroot] [git commit] package/mjpg-streamer: bump to version
+ 5a6e0a2db163e6ae9461552b59079870d0959340
+Message-ID: <20200617062110.66EA5842C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea3c66c909d8f29cc1666b8ee8c33917290c90d3
+commit: https://git.buildroot.net/buildroot/commit/?id=e3e369b057570e79a31f8741da9aa03c154cd679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash fle (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash | 6 +++---
- package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mjpg-streamer/mjpg-streamer.hash | 2 +-
+ package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-index c37b7377de..d530517cd1 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.33/gsettings-desktop-schemas-3.33.1.sha256sum
--sha256	bd337f13955856140fdbd3073c56d4adca20333f8bdac41e429c3dca4730cdff	gsettings-desktop-schemas-3.33.1.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.36/gsettings-desktop-schemas-3.36.1.sha256sum
-+sha256  004bdbe43cf8290f2de7d8537e14d8957610ca479a4fa368e34dbd03f03ec9d9  gsettings-desktop-schemas-3.36.1.tar.xz
- 
- # Hash for license file
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-index 98d16745b2..8573c75fde 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
+diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
+index 0a08151a4b..63dcdb9fbe 100644
+--- a/package/mjpg-streamer/mjpg-streamer.hash
++++ b/package/mjpg-streamer/mjpg-streamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 bd934363b5cb6ef3665aa2dfa15d08b72bbfe84ca60f7c342fe8ae1f94e19201  mjpg-streamer-501f6362c5afddcfb41055f97ae484252c85c912.tar.gz
++sha256 5b427b07c03c2c0468cc782daf1510d315141170246828fcbb7c07f927879973  mjpg-streamer-5a6e0a2db163e6ae9461552b59079870d0959340.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index d5980dbf15..64404e21fa 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.33
-+GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.36
- GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).1
- GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
- GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
+-MJPG_STREAMER_VERSION = 501f6362c5afddcfb41055f97ae484252c85c912
++MJPG_STREAMER_VERSION = 5a6e0a2db163e6ae9461552b59079870d0959340
+ MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
+ MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
+ MJPG_STREAMER_LICENSE = GPL-2.0+
