@@ -1,43 +1,70 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 17 Jun 2020 22:20:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vpnc: use github release
-Message-ID: <20200617202056.41589-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Jun 2020 22:21:16 +0200
+Subject: [Buildroot] [git commit] package/libnss: fix build with old PPC ABI
+Message-ID: <20200617201944.2E2EF83BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use github release instead of commit hash so the package will be set as
-"up-to-date" in http://autobuild.buildroot.org/stats
+commit: https://git.buildroot.net/buildroot/commit/?id=f30fc8944763c17ac8140c01b0775f458c6ade54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/bdbd33c7a764931b2066dd8b527dde2f5dc298b4
+http://autobuild.buildroot.net/results/61bf50f73bb79e85c22e663f5fc22f4b9ccc0d3b
+http://autobuild.buildroot.net/results/4437942a528ab8f782d3b97595e76bb690d3a409
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vpnc/vpnc.hash | 2 +-
- package/vpnc/vpnc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/0001-fix-old-abi-ppc.patch | 40 +++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/vpnc/vpnc.hash b/package/vpnc/vpnc.hash
-index f512a77792..a1b3b3b200 100644
---- a/package/vpnc/vpnc.hash
-+++ b/package/vpnc/vpnc.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  c10a5c2c0813198ca2404dd36db380cdb6395b46338123b341775095cf61521d  vpnc-b1243d29e0c00312ead038b04a2cf5e2fa31d740.tar.gz
-+sha256  5929d3b7f72970c8f7850e0daba0d9d05aaaa1281c69f58ac8647be11385ede5  vpnc-0.5.3r550-2jnpr1.tar.gz
- sha256  bf3ec1bd1dec31a6ab8980bfd04569f506432f35ee01e88a3910847784bc2de1  COPYING
-diff --git a/package/vpnc/vpnc.mk b/package/vpnc/vpnc.mk
-index 81cd830ead..8db5e766c1 100644
---- a/package/vpnc/vpnc.mk
-+++ b/package/vpnc/vpnc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VPNC_VERSION = b1243d29e0c00312ead038b04a2cf5e2fa31d740
-+VPNC_VERSION = 0.5.3r550-2jnpr1
- VPNC_SITE = $(call github,ndpgroup,vpnc,$(VPNC_VERSION))
- VPNC_LICENSE = GPL-2.0+
- VPNC_LICENSE_FILES = COPYING
--- 
-2.26.2
+diff --git a/package/libnss/0001-fix-old-abi-ppc.patch b/package/libnss/0001-fix-old-abi-ppc.patch
+new file mode 100644
+index 0000000000..202b4ad271
+--- /dev/null
++++ b/package/libnss/0001-fix-old-abi-ppc.patch
+@@ -0,0 +1,40 @@
++From a7a862bab5e4aae4615ddae3cbe230345f92ed0d Mon Sep 17 00:00:00 2001
++From: Lauri Kasanen <cand@gmx.com>
++Date: Mon, 1 Jun 2020 12:11:45 +0300
++Subject: [PATCH v3] Bug 1642174 /usr/bin/ld: OBJS/Linux_SINGLE_SHLIB/sha512-p8.o:
++ ABI version 2 is not compatible with ABI version 1 output
++
++Don't try to build the SHA-2 accelerated asm on old-ABI ppc.
++
++Currently make only, I don't have enough gyp-fu to do that side.
++However, the reporters of 1642174 and 1635625 both used make, not gyp.
++
++Signed-off-by: Lauri Kasanen <cand@gmx.com>
++[Fetch-from: https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
++ Manually modified paths to apply to nss subdirectory in release tarball.]
++Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
++---
++ lib/freebl/Makefile | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
++index 5f7384429..e0461c7d3 100644
++--- a/nss/lib/freebl/Makefile
+++++ b/nss/lib/freebl/Makefile
++@@ -267,9 +267,12 @@ ifeq ($(CPU_ARCH),arm)
++ endif
++ ifeq ($(CPU_ARCH),ppc)
++     EXTRA_SRCS += gcm-ppc.c
++-    ASFILES += sha512-p8.s
++ ifdef USE_64
++     DEFINES += -DNSS_NO_INIT_SUPPORT
+++    PPC_ABI := $(shell $(CC) -dM -E - < /dev/null | awk '$$2 == "_CALL_ELF" {print $$3}')
+++    ifeq ($(PPC_ABI),2)
+++        ASFILES += sha512-p8.s
+++    endif
++ endif # USE_64
++ endif # ppc
++ endif # Linux
++--
++2.19.1
++
