@@ -1,47 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 22:10:56 +0200
-Subject: [Buildroot] [git commit] package/json-for-modern-cpp: bump to
- version 3.8.0
-Message-ID: <20200617200922.7F1558427A@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 17 Jun 2020 22:18:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tinydtls: security bump to
+ version 0.9-rc1
+In-Reply-To: <20200617220843.416f77be@windsurf.home>
+References: <20200615203150.1052024-1-fontaine.fabrice@gmail.com>
+ <20200617220843.416f77be@windsurf.home>
+Message-ID: <CAPi7W80vaeBw8o=4NuKyJrNCVcNO0F4eB-DWThVXKWgE4pyTEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9df9055fd32d7455e5a2a0abbc50936b2f4a8f0c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Other changes:
-  - Update the hash for LICENSE.MIT due to a year change.
+Le mer. 17 juin 2020 ? 22:08, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> On Mon, 15 Jun 2020 22:31:50 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > - Switch site to github
+> > - License is now EPL-1.0 or EDLv1.0 as specified in the new LICENSE file
+> > - Update indentation of hash file (two spaces)
+> > - Drop first patch (already in version) and second patch (not needed since
+> >   https://github.com/eclipse/tinydtls/commit/f1ff324a4d1cc14dc6e1c3a88ea16f0242e106de)
+> > - Fix CVE-2017-7243 as specified in
+> >   https://github.com/eclipse/tinydtls/issues/12 as well as other
+> >   security issues:
+> >   https://github.com/eclipse/tinydtls/commit/68a1cdaff9e329e13ea59529f1eb61b05632c297
+> >   https://github.com/eclipse/tinydtls/commit/494a40dfbb174930ca616e560532d52549736b42
+> >   https://github.com/eclipse/tinydtls/commit/2d9f0a82377277af1be8d559d18e30477d63e8ec
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> I've applied to master. See below some comments.
+>
+> > -TINYDTLS_REL = r5
+> > -TINYDTLS_VERSION = 0.8.2
+> > -TINYDTLS_SITE = http://downloads.sourceforge.net/project/tinydtls/$(TINYDTLS_REL)
+> > -TINYDTLS_LICENSE = MIT
+> > -TINYDTLS_LICENSE_FILES = tinydtls.h
+> > +TINYDTLS_VERSION = 0.9-rc1
+>
+> A bit annoying that we have to point to a release candidate version.
+I know, I asked for a release and you can find upstream's feedback
+here: https://github.com/eclipse/tinydtls/issues/35.
+>
+> > +TINYDTLS_SITE = $(call github,eclipse,tinydtls,v$(TINYDTLS_VERSION))
+> > +TINYDTLS_LICENSE = EPL-1.0 or EDLv1.0
+>
+> I've changed EDLv1.0 to EDL-1.0. Even though there is no official SPDX
+> tag for this license, SPDX always uses <initials>-<version>, so we're
+> trying to stick to that as well;
+>
+> Applied, thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 4 ++--
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index c67cd37558..4d540f2404 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	249548f4867417d66ae46b338dfe0a2805f3323e81c9e9b83c89f3adbfde6f31	json-3.7.3.tar.gz
--sha256	7400586ce89c6a2cc65f6ca46997da5d356a230673d3a211e040b783f23578a1	LICENSE.MIT
-+sha256  7d0edf65f2ac7390af5e5a0b323b31202a6c11d744a74b588dc30f5a8c9865ba  json-3.8.0.tar.gz
-+sha256  50be9457e5c9faaba5e60d9c73f8eabe9e0737a2d9c3e58357d856661862c18e  LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index e6f1df96f6..afc900b7dd 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_FOR_MODERN_CPP_VERSION = 3.7.3
-+JSON_FOR_MODERN_CPP_VERSION = 3.8.0
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
+Fabrice
