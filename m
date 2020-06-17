@@ -1,28 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jun 2020 21:08:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: security bump version to
- 3.0.11
-In-Reply-To: <20200617175410.1172563-1-bernd.kuhls@t-online.de>
-References: <20200617175410.1172563-1-bernd.kuhls@t-online.de>
-Message-ID: <20200617210857.4c67a4ea@windsurf.home>
+Date: Wed, 17 Jun 2020 21:09:35 +0200
+Subject: [Buildroot] [PATCH v2 00/17] OLPC XO updates
+In-Reply-To: <20200617104925.1036330-1-lkundrak@v3.sk>
+References: <20200617104925.1036330-1-lkundrak@v3.sk>
+Message-ID: <20200617210935.30c5b508@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Jun 2020 19:54:10 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Fixes CVE-2020-13428: https://www.videolan.org/security/sb-vlc3011.html
+On Wed, 17 Jun 2020 12:49:08 +0200
+Lubomir Rintel <lkundrak@v3.sk> wrote:
+
+> please consider applying this patch set. The ultimate goal is to enable
+> jffs2 images for the XO-1. While I that, I noticed that while tidying up
+> the kernel configuration, I messed up a bit and some config symbols
+> ended up disabled.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/vlc/vlc.hash | 12 ++++++------
->  package/vlc/vlc.mk   |  2 +-
->  2 files changed, 7 insertions(+), 7 deletions(-)
+> Since this was first posted, a 5.7 kernel was release. I've tested that
+> 5.7.1 works well on both XO-1.75 (arm) and XO-1 (x86), so I've added two
+> patches that bump the kernel version too.
 
-Applied to master, thanks.
+I've applied the entire series, with very small changes. I'll reply to
+the individual patches I tweaked, but everything is applied.
+
+Thanks!
 
 Thomas
 -- 
