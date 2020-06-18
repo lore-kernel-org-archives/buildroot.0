@@ -1,179 +1,132 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Jun 2020 10:44:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: fix building against
- gcc10
-In-Reply-To: <20200617201958.2368005-1-aduskett@gmail.com>
-References: <20200617201958.2368005-1-aduskett@gmail.com>
-Message-ID: <20200618084437.GL2351@scaer>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Thu, 18 Jun 2020 13:02:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pybind: rename package to
+ python-pybind11
+Message-ID: <20200618110209.5750-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 
-On 2020-06-17 13:19 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> GCC10 set's the -fno-common flag by default which causes OpenJDK to fail when
-> compiling.
-> 
-> Because there is no easy way to create a patch from the OpenJDK mercurial
-> repository, this patch was created by hand from the three commits listed in
-> the provided patch itself.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/openjdk/0001-fix-gcc-10-support.patch | 119 ++++++++++++++++++
->  1 file changed, 119 insertions(+)
->  create mode 100644 package/openjdk/0001-fix-gcc-10-support.patch
-> 
-> diff --git a/package/openjdk/0001-fix-gcc-10-support.patch b/package/openjdk/0001-fix-gcc-10-support.patch
+---
 
-openjdk has a version choice, so we have to have the patch in a
-per-version sub-directory, even if the patch applies sas-is to both
-versions.
+python-pybind only allows C++ -> python bindings at the moment.
 
-Regards,
-Yann E. MORIN.
+As pointed by Asaf, we will face issues if we try to activate
+Python->C++ bindings in the future, because Cmake will
+search for 'pybind11' as a key word.
 
-> new file mode 100644
-> index 0000000000..5364c47252
-> --- /dev/null
-> +++ b/package/openjdk/0001-fix-gcc-10-support.patch
-> @@ -0,0 +1,119 @@
-> +From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
-> +From: Patrick Zhang <patrick.zhang@amperecomputing.com>
-> +Date: Wed, 05 Feb 2020 17:14:15 -0700
-> +Subject: [PATCH] fix gcc 10 support
-> +
-> +This patch fixes the "multiple definition" link errors with GCC10 due to
-> +GCC10 setting -fno-common by default.
-> +
-> +This is a combination of the following upstream commits:
-> +  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
-> +  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
-> +  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
-> +
-> +Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
-> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> +---
-> + src/java.base/unix/native/libjava/childproc.c        |  1 +
-> + src/java.base/unix/native/libjava/childproc.h        |  2 +-
-> + .../share/native/libj2gss/NativeFunc.c               |  3 +++
-> + .../share/native/libj2gss/NativeFunc.h               |  2 +-
-> + src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
-> + src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
-> + 6 files changed, 19 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
-> +index 811aaeac5..16480bfbf 100644
-> +--- a/src/java.base/unix/native/libjava/childproc.c
-> ++++ b/src/java.base/unix/native/libjava/childproc.c
-> +@@ -34,6 +34,7 @@
-> + 
-> + #include "childproc.h"
-> + 
-> ++const char * const *parentPathv;
-> + 
-> + ssize_t
-> + restartableWrite(int fd, const void *buf, size_t count)
-> +diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
-> +index 091150930..d57e44b6e 100644
-> +--- a/src/java.base/unix/native/libjava/childproc.h
-> ++++ b/src/java.base/unix/native/libjava/childproc.h
-> +@@ -126,7 +126,7 @@ typedef struct _SpawnInfo {
-> +  * The cached and split version of the JDK's effective PATH.
-> +  * (We don't support putenv("PATH=...") in native code)
-> +  */
-> +-const char * const *parentPathv;
-> ++extern const char * const *parentPathv;
-> + 
-> + ssize_t restartableWrite(int fd, const void *buf, size_t count);
-> + int restartableDup2(int fd_from, int fd_to);
-> +diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-> +index da7bc0445..5941f7b5a 100644
-> +--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-> ++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-> +@@ -27,6 +27,9 @@
-> + #include <stdlib.h>
-> + #include "NativeFunc.h"
-> + 
-> ++/* global GSS function table */
-> ++GSS_FUNCTION_TABLE_PTR ftab;
-> ++
-> + /* standard GSS method names (ordering is from mapfile) */
-> + static const char RELEASE_NAME[]                = "gss_release_name";
-> + static const char IMPORT_NAME[]                 = "gss_import_name";
-> +diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-> +index 82914387c..e4a4981a3 100644
-> +--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-> ++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-> +@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
-> + typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
-> + 
-> + /* global GSS function table */
-> +-GSS_FUNCTION_TABLE_PTR ftab;
-> ++extern GSS_FUNCTION_TABLE_PTR ftab;
-> + 
-> + #endif
-> +diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
-> +index cc1367f78..46b07db0a 100644
-> +--- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
-> ++++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
-> +@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
-> + 
-> + #endif /* __linux__ */
-> + 
-> +-sctp_getladdrs_func* nio_sctp_getladdrs;
-> +-sctp_freeladdrs_func* nio_sctp_freeladdrs;
-> +-sctp_getpaddrs_func* nio_sctp_getpaddrs;
-> +-sctp_freepaddrs_func* nio_sctp_freepaddrs;
-> +-sctp_bindx_func* nio_sctp_bindx;
-> +-sctp_peeloff_func* nio_sctp_peeloff;
-> ++extern sctp_getladdrs_func* nio_sctp_getladdrs;
-> ++extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
-> ++extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
-> ++extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
-> ++extern sctp_bindx_func* nio_sctp_bindx;
-> ++extern sctp_peeloff_func* nio_sctp_peeloff;
-> + 
-> + jboolean loadSocketExtensionFuncs(JNIEnv* env);
-> + 
-> +diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-> +index d40c15aa3..ab9b6e093 100644
-> +--- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-> ++++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-> +@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
-> + static const char* nativeSctpLib = "libsctp.so.1";
-> + static jboolean funcsLoaded = JNI_FALSE;
-> + 
-> ++sctp_getladdrs_func* nio_sctp_getladdrs;
-> ++sctp_freeladdrs_func* nio_sctp_freeladdrs;
-> ++sctp_getpaddrs_func* nio_sctp_getpaddrs;
-> ++sctp_freepaddrs_func* nio_sctp_freepaddrs;
-> ++sctp_bindx_func* nio_sctp_bindx;
-> ++sctp_peeloff_func* nio_sctp_peeloff;
-> ++
-> + JNIEXPORT jint JNICALL DEF_JNI_OnLoad
-> +   (JavaVM *vm, void *reserved) {
-> +     return JNI_VERSION_1_2;
-> +-- 
-> +2.26.2
-> +
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                                          |  2 +-
+ package/Config.in                                   |  2 +-
+ package/python-pybind/python-pybind.mk              | 13 -------------
+ .../{python-pybind => python-pybind11}/Config.in    |  6 +++---
+ .../python-pybind11.hash}                           |  2 +-
+ package/python-pybind11/python-pybind11.mk          | 13 +++++++++++++
+ 6 files changed, 19 insertions(+), 19 deletions(-)
+ delete mode 100644 package/python-pybind/python-pybind.mk
+ rename package/{python-pybind => python-pybind11}/Config.in (53%)
+ rename package/{python-pybind/python-pybind.hash => python-pybind11/python-pybind11.hash} (83%)
+ create mode 100644 package/python-pybind11/python-pybind11.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cbe6bc1856..147381bf0b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1053,7 +1053,7 @@ F:	package/sdl2/
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+-F:	package/python-pybind/
++F:	package/python-pybind11/
+ F:	package/reaver/
+ 
+ N:	Guo Ren <ren_guo@c-sky.com>
+diff --git a/package/Config.in b/package/Config.in
+index 1f44fe7ca9..36e9c606c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1070,7 +1070,7 @@ menu "External python modules"
+ 	source "package/python-pyalsa/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+ 	source "package/python-pyasn1-modules/Config.in"
+-	source "package/python-pybind/Config.in"
++	source "package/python-pybind11/Config.in"
+ 	source "package/python-pycairo/Config.in"
+ 	source "package/python-pycares/Config.in"
+ 	source "package/python-pycli/Config.in"
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+deleted file mode 100644
+index 634e869e40..0000000000
+--- a/package/python-pybind/python-pybind.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# python-pybind
+-#
+-################################################################################
+-
+-PYTHON_PYBIND_VERSION = 2.5.0
+-PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+-PYTHON_PYBIND_LICENSE = BSD-3-Clause
+-PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-PYTHON_PYBIND_SETUP_TYPE = setuptools
+-
+-$(eval $(python-package))
+diff --git a/package/python-pybind/Config.in b/package/python-pybind11/Config.in
+similarity index 53%
+rename from package/python-pybind/Config.in
+rename to package/python-pybind11/Config.in
+index 604cb9ee67..714c37f13c 100644
+--- a/package/python-pybind/Config.in
++++ b/package/python-pybind11/Config.in
+@@ -1,7 +1,7 @@
+-config BR2_PACKAGE_PYTHON_PYBIND
+-	bool "python-pybind"
++config BR2_PACKAGE_PYTHON_PYBIND11
++	bool "python-pybind11"
+ 	help
+-	  PyBind is a lightweight header-only library that exposes C++
++	  PyBind11 is a lightweight header-only library that exposes C++
+ 	  types in Python and vice versa, mainly to create Python
+ 	  bindings of existing C++ code.
+ 
+diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind11/python-pybind11.hash
+similarity index 83%
+rename from package/python-pybind/python-pybind.hash
+rename to package/python-pybind11/python-pybind11.hash
+index 751b0bdf6e..2cdcbee8b2 100644
+--- a/package/python-pybind/python-pybind.hash
++++ b/package/python-pybind11/python-pybind11.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind-2.5.0.tar.gz
++sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind11-2.5.0.tar.gz
+ # License files, locally calculated
+ sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9   LICENSE
+diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
+new file mode 100644
+index 0000000000..c4fc578894
+--- /dev/null
++++ b/package/python-pybind11/python-pybind11.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pybind11
++#
++################################################################################
++
++PYTHON_PYBIND11_VERSION = 2.5.0
++PYTHON_PYBIND11_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND11_VERSION))
++PYTHON_PYBIND11_LICENSE = BSD-3-Clause
++PYTHON_PYBIND11_LICENSE_FILES = LICENSE
++PYTHON_PYBIND11_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
