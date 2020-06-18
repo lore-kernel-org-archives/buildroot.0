@@ -1,43 +1,179 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 09:25:04 +0200
-Subject: [Buildroot] [PATCH 2/2] package/open-plc-utils: install
- packages to /usr/bin
-In-Reply-To: <20200617222159.176141-2-aduskett@gmail.com>
-References: <20200617222159.176141-1-aduskett@gmail.com>
- <20200617222159.176141-2-aduskett@gmail.com>
-Message-ID: <20200618092504.393decb1@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 18 Jun 2020 10:44:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: fix building against
+ gcc10
+In-Reply-To: <20200617201958.2368005-1-aduskett@gmail.com>
+References: <20200617201958.2368005-1-aduskett@gmail.com>
+Message-ID: <20200618084437.GL2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Jun 2020 15:21:59 -0700
-aduskett at gmail.com wrote:
+Adam, All,
 
+On 2020-06-17 13:19 -0700, aduskett at gmail.com spake thusly:
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
-> By default, open-plc-utils installs all of the compiled binaries to
-> /usr/local/bin which is not in the default path provided by Buildroot.
+> GCC10 set's the -fno-common flag by default which causes OpenJDK to fail when
+> compiling.
 > 
-> Passing BIN="$(TARGET_DIR)/usr/bin" to make install forces open-plc-utils to
-> install the compiled binaries to /usr/bin.
+> Because there is no easy way to create a patch from the OpenJDK mercurial
+> repository, this patch was created by hand from the three commits listed in
+> the provided patch itself.
 > 
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/openjdk/0001-fix-gcc-10-support.patch | 119 ++++++++++++++++++
+>  1 file changed, 119 insertions(+)
+>  create mode 100644 package/openjdk/0001-fix-gcc-10-support.patch
+> 
+> diff --git a/package/openjdk/0001-fix-gcc-10-support.patch b/package/openjdk/0001-fix-gcc-10-support.patch
 
-Is this something related to the version bump, or independent, i.e
-something that already happens with the open-plc-utils currently in
-Buildroot?
+openjdk has a version choice, so we have to have the patch in a
+per-version sub-directory, even if the patch applies sas-is to both
+versions.
 
-In the latter case, then this fix should have come as a first patch in
-the series, so that it's clear it's a fix for something that is broken
-today, so that we know it needs to be backported to 2020.02.x and
-2020.05.x.
+Regards,
+Yann E. MORIN.
 
-Thanks!
+> new file mode 100644
+> index 0000000000..5364c47252
+> --- /dev/null
+> +++ b/package/openjdk/0001-fix-gcc-10-support.patch
+> @@ -0,0 +1,119 @@
+> +From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
+> +From: Patrick Zhang <patrick.zhang@amperecomputing.com>
+> +Date: Wed, 05 Feb 2020 17:14:15 -0700
+> +Subject: [PATCH] fix gcc 10 support
+> +
+> +This patch fixes the "multiple definition" link errors with GCC10 due to
+> +GCC10 setting -fno-common by default.
+> +
+> +This is a combination of the following upstream commits:
+> +  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
+> +  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
+> +  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
+> +
+> +Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +---
+> + src/java.base/unix/native/libjava/childproc.c        |  1 +
+> + src/java.base/unix/native/libjava/childproc.h        |  2 +-
+> + .../share/native/libj2gss/NativeFunc.c               |  3 +++
+> + .../share/native/libj2gss/NativeFunc.h               |  2 +-
+> + src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
+> + src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
+> + 6 files changed, 19 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
+> +index 811aaeac5..16480bfbf 100644
+> +--- a/src/java.base/unix/native/libjava/childproc.c
+> ++++ b/src/java.base/unix/native/libjava/childproc.c
+> +@@ -34,6 +34,7 @@
+> + 
+> + #include "childproc.h"
+> + 
+> ++const char * const *parentPathv;
+> + 
+> + ssize_t
+> + restartableWrite(int fd, const void *buf, size_t count)
+> +diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
+> +index 091150930..d57e44b6e 100644
+> +--- a/src/java.base/unix/native/libjava/childproc.h
+> ++++ b/src/java.base/unix/native/libjava/childproc.h
+> +@@ -126,7 +126,7 @@ typedef struct _SpawnInfo {
+> +  * The cached and split version of the JDK's effective PATH.
+> +  * (We don't support putenv("PATH=...") in native code)
+> +  */
+> +-const char * const *parentPathv;
+> ++extern const char * const *parentPathv;
+> + 
+> + ssize_t restartableWrite(int fd, const void *buf, size_t count);
+> + int restartableDup2(int fd_from, int fd_to);
+> +diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+> +index da7bc0445..5941f7b5a 100644
+> +--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+> ++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
+> +@@ -27,6 +27,9 @@
+> + #include <stdlib.h>
+> + #include "NativeFunc.h"
+> + 
+> ++/* global GSS function table */
+> ++GSS_FUNCTION_TABLE_PTR ftab;
+> ++
+> + /* standard GSS method names (ordering is from mapfile) */
+> + static const char RELEASE_NAME[]                = "gss_release_name";
+> + static const char IMPORT_NAME[]                 = "gss_import_name";
+> +diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+> +index 82914387c..e4a4981a3 100644
+> +--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+> ++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
+> +@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
+> + typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
+> + 
+> + /* global GSS function table */
+> +-GSS_FUNCTION_TABLE_PTR ftab;
+> ++extern GSS_FUNCTION_TABLE_PTR ftab;
+> + 
+> + #endif
+> +diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
+> +index cc1367f78..46b07db0a 100644
+> +--- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
+> ++++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
+> +@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
+> + 
+> + #endif /* __linux__ */
+> + 
+> +-sctp_getladdrs_func* nio_sctp_getladdrs;
+> +-sctp_freeladdrs_func* nio_sctp_freeladdrs;
+> +-sctp_getpaddrs_func* nio_sctp_getpaddrs;
+> +-sctp_freepaddrs_func* nio_sctp_freepaddrs;
+> +-sctp_bindx_func* nio_sctp_bindx;
+> +-sctp_peeloff_func* nio_sctp_peeloff;
+> ++extern sctp_getladdrs_func* nio_sctp_getladdrs;
+> ++extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
+> ++extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
+> ++extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
+> ++extern sctp_bindx_func* nio_sctp_bindx;
+> ++extern sctp_peeloff_func* nio_sctp_peeloff;
+> + 
+> + jboolean loadSocketExtensionFuncs(JNIEnv* env);
+> + 
+> +diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+> +index d40c15aa3..ab9b6e093 100644
+> +--- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+> ++++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
+> +@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
+> + static const char* nativeSctpLib = "libsctp.so.1";
+> + static jboolean funcsLoaded = JNI_FALSE;
+> + 
+> ++sctp_getladdrs_func* nio_sctp_getladdrs;
+> ++sctp_freeladdrs_func* nio_sctp_freeladdrs;
+> ++sctp_getpaddrs_func* nio_sctp_getpaddrs;
+> ++sctp_freepaddrs_func* nio_sctp_freepaddrs;
+> ++sctp_bindx_func* nio_sctp_bindx;
+> ++sctp_peeloff_func* nio_sctp_peeloff;
+> ++
+> + JNIEXPORT jint JNICALL DEF_JNI_OnLoad
+> +   (JavaVM *vm, void *reserved) {
+> +     return JNI_VERSION_1_2;
+> +-- 
+> +2.26.2
+> +
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
