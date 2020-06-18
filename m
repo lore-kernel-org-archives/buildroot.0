@@ -1,86 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Jun 2020 22:21:33 +0200
-Subject: [Buildroot] [PATCH v4 2/2] package/libcamera: add v4l2
- compatibility layer option
-In-Reply-To: <20200616185951.30319-3-ps.report@gmx.net>
-References: <20200616185951.30319-1-ps.report@gmx.net>
- <20200616185951.30319-3-ps.report@gmx.net>
-Message-ID: <20200618202133.GR2351@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jun 2020 22:24:32 +0200
+Subject: [Buildroot] [PATCH 1/3] python3-m2crypto: import package
+In-Reply-To: <20200612053110.15316-2-dev.kurt@vandijck-laurijssen.be>
+References: <20200612053110.15316-1-dev.kurt@vandijck-laurijssen.be>
+ <20200612053110.15316-2-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200618222432.283a0899@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello Kurt,
 
-On 2020-06-16 20:59 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Thanks for this contribution. The commit title needs to be:
 
-Applied to master, thanks.
+	package/python3-m2crypto: new package
 
-Regards,
-Yann E. MORIN.
+It should be mentioned that we used to have a python-m2crypto package,
+which was removed in commit 484c04878e5e76cdc0cc33c7646f98ab41698a7e
+because it was only used by crda, and crda no longer needed it.
 
+On Fri, 12 Jun 2020 07:31:08 +0200
+Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
+
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 > ---
-> Changes v3 -> v4:
->   - new patch
-> ---
->  package/libcamera/Config.in    | 5 +++++
->  package/libcamera/libcamera.mk | 9 +++++++--
->  2 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-> index 56ca5aaf18..960d78b82e 100644
-> --- a/package/libcamera/Config.in
-> +++ b/package/libcamera/Config.in
-> @@ -16,6 +16,11 @@ menuconfig BR2_PACKAGE_LIBCAMERA
->  
->  if BR2_PACKAGE_LIBCAMERA
->  
-> +config BR2_PACKAGE_LIBCAMERA_V4L2
-> +	bool "libcamera v4l2 compatibility layer"
-> +	help
-> +	  libcamera v4l2 compatibility layer
-> +
->  config BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
->  	bool
->  
-> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-> index c7513d2e68..1633becf04 100644
-> --- a/package/libcamera/libcamera.mk
-> +++ b/package/libcamera/libcamera.mk
-> @@ -15,8 +15,7 @@ LIBCAMERA_DEPENDENCIES = \
->  LIBCAMERA_CONF_OPTS = \
->  	-Dandroid=false \
->  	-Ddocumentation=false \
-> -	-Dtest=false \
-> -	-Dv4l2=false
-> +	-Dtest=false
->  LIBCAMERA_INSTALL_STAGING = yes
->  LIBCAMERA_LICENSE = \
->  	LGPL-2.1+ (library), \
-> @@ -37,6 +36,12 @@ LIBCAMERA_LICENSE_FILES = \
->  	LICENSES/CC0-1.0.txt \
->  	LICENSES/CC-BY-SA-4.0.txt
->  
-> +ifeq ($(BR2_PACKAGE_LIBCAMERA_V4L2),y)
-> +LIBCAMERA_CONF_OPTS = -Dv4l2=true
-> +else
-> +LIBCAMERA_CONF_OPTS = -Dv4l2=false
-> +endif
-> +
->  LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3) += ipu3
->  ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RASPBERRYPI),y)
->  LIBCAMERA_PIPELINES-y += raspberrypi
-> -- 
-> 2.27.0
-> 
+>  package/python3-m2crypto/python3-m2crypto.mk | 21 ++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 
+You're missing a .hash file, as well as an entry in the DEVELOPERS file.
+
+>  create mode 100644 package/python3-m2crypto/python3-m2crypto.mk
+> 
+> diff --git a/package/python3-m2crypto/python3-m2crypto.mk b/package/python3-m2crypto/python3-m2crypto.mk
+> new file mode 100644
+> index 0000000000..4394226067
+> --- /dev/null
+> +++ b/package/python3-m2crypto/python3-m2crypto.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# python3-m2crypto
+> +#
+> +################################################################################
+> +
+> +# Please keep in sync with
+
+in sync with ?
+
+> +PYTHON3_M2CRYPTO_VERSION = 0.35.2
+> +PYTHON3_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON3_M2CRYPTO_VERSION).tar.gz
+> +PYTHON3_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/74/18/3beedd4ac48b52d1a4d12f2a8c5cf0ae342ce974859fba838cbbc1580249
+> +PYTHON3_M2CRYPTO_SETUP_TYPE = setuptools
+> +PYTHON3_M2CRYPTO_LICENSE = MIT
+> +PYTHON3_M2CRYPTO_LICENSE_FILES = LICENSE
+> +HOST_PYTHON3_M2CRYPTO_DL_SUBDIR = python-m2crypto
+> +HOST_PYTHON3_M2CRYPTO_NEEDS_HOST_PYTHON = python3
+> +
+> +HOST_PYTHON3_M2CRYPTO_DEPENDENCIES = host-swig
+> +
+> +HOST_PYTHON3_M2CRYPTO_BUILD_OPTS = --openssl $(HOST_DIR)
+
+It needs OpenSSL ? Then I guess host-openssl should be in the dependencies, no ?
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
