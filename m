@@ -1,50 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 18 Jun 2020 22:39:22 +0200
-Subject: [Buildroot] [git commit] package/empty: bump to version 0.6.21b
-Message-ID: <20200618203740.6B3178111E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/inotify-tools: bump to version
+ 3.20.2.2
+Message-ID: <20200618203740.784ED8111E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=032944acf292ea81f498be81ce121e9a5714c593
+commit: https://git.buildroot.net/buildroot/commit/?id=6cbb7141e7a397a0fa8f0ad05d8ece3042901759
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tarball is now without a leading directory component. Don't strip
-leading patch component.
+Use upstream provided tarball. Drop autoreconf.
+
+Update homepage URL. The old URL redirects to the new one.
+
+Format hash file with two spaces delimiters.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/empty/empty.hash | 2 +-
- package/empty/empty.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/inotify-tools/Config.in          | 2 +-
+ package/inotify-tools/inotify-tools.hash | 4 ++--
+ package/inotify-tools/inotify-tools.mk   | 5 ++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/empty/empty.hash b/package/empty/empty.hash
-index 47e9577070..c5fbc2b4ac 100644
---- a/package/empty/empty.hash
-+++ b/package/empty/empty.hash
+diff --git a/package/inotify-tools/Config.in b/package/inotify-tools/Config.in
+index 1ca01b6e1e..6b113d9e42 100644
+--- a/package/inotify-tools/Config.in
++++ b/package/inotify-tools/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_INOTIFY_TOOLS
+ 	  filesystem events. Provides the 'inotifywait' and
+ 	  'inotifywatch' binaries.
+ 
+-	  https://github.com/rvoicilas/inotify-tools
++	  https://github.com/inotify-tools/inotify-tools
+diff --git a/package/inotify-tools/inotify-tools.hash b/package/inotify-tools/inotify-tools.hash
+index 83dc22b4a2..5984827f8b 100644
+--- a/package/inotify-tools/inotify-tools.hash
++++ b/package/inotify-tools/inotify-tools.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7e6636e400856984c4405ce7bd0843aaa3329fa3efd20c58df8400a9eaa35f09  empty-0.6.20b.tgz
-+sha256  2fccd0faa1b3deaec1add679cbde3f34250e45872ad5df463badd4bb4edeb797  empty-0.6.21b.tgz
- sha256  f01dbe3c624084900b9df1393d9062518b2bc0487acd6a3300ebd6e71352d112  COPYRIGHT
-diff --git a/package/empty/empty.mk b/package/empty/empty.mk
-index 5e3ed42bef..a9b8080a8e 100644
---- a/package/empty/empty.mk
-+++ b/package/empty/empty.mk
-@@ -4,11 +4,12 @@
+ # Locally computed
+-sha256 a433cc1dedba851078276db69b0e97f9fe41e4ba3336d2971adfca4b3a6242ac inotify-tools-3.20.1.tar.gz
+-sha256 e41fc126320a79ed53b5aa3386f059f7d10770856d6fd714ab80a96ce6bd09d6 COPYING
++sha256  c5b018567814ea555d716f518b6e3ae243c733f7bd3e8585d81748a6da286f3c  inotify-tools-3.20.2.2.tar.gz
++sha256  e41fc126320a79ed53b5aa3386f059f7d10770856d6fd714ab80a96ce6bd09d6  COPYING
+diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
+index 63626307c2..b410ade33d 100644
+--- a/package/inotify-tools/inotify-tools.mk
++++ b/package/inotify-tools/inotify-tools.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--EMPTY_VERSION = 0.6.20b
-+EMPTY_VERSION = 0.6.21b
- EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
- EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
- EMPTY_LICENSE = BSD-3-Clause
- EMPTY_LICENSE_FILES = COPYRIGHT
-+EMPTY_STRIP_COMPONENTS = 0
+-INOTIFY_TOOLS_VERSION = 3.20.1
+-INOTIFY_TOOLS_SITE = $(call github,rvoicilas,inotify-tools,$(INOTIFY_TOOLS_VERSION))
++INOTIFY_TOOLS_VERSION = 3.20.2.2
++INOTIFY_TOOLS_SITE = https://github.com/inotify-tools/inotify-tools/releases/download/$(INOTIFY_TOOLS_VERSION)
+ INOTIFY_TOOLS_LICENSE = GPL-2.0+
+ INOTIFY_TOOLS_LICENSE_FILES = COPYING
+ INOTIFY_TOOLS_INSTALL_STAGING = YES
+-INOTIFY_TOOLS_AUTORECONF = YES
  
- define EMPTY_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+ $(eval $(autotools-package))
