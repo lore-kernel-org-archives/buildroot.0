@@ -1,283 +1,47 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 18 Jun 2020 10:49:55 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/openjdk: fix building against
- gcc10
-Message-ID: <20200618174955.53551-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jun 2020 21:10:48 +0200
+Subject: [Buildroot] iproute2 binaries getting linked against libelf,
+ which is not available in target
+In-Reply-To: <021201d64596$e75979a0$b60c6ce0$@ipcomm.de>
+References: <021201d64596$e75979a0$b60c6ce0$@ipcomm.de>
+Message-ID: <20200618211048.00347d62@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+On Thu, 18 Jun 2020 19:35:48 +0200 (CEST)
+Andreas Hilse <andreas.hilse@ipcomm.de> wrote:
 
-GCC10 set's the -fno-common flag by default which causes OpenJDK to fail when
-compiling.
+> I found an issue with buildroot 2020.02.x concerning iproute2 binaries
+> being linked against libelf.
+> 
+> According to iproute2.mk it should only link against libelf if
+> BR2_PACKAGE_ELFUTILS is selected.
+> But it also links against libelf without that option selected and thus
+> renders the created binaries unusable in the target system.
+> 
+> After digging further I found that this is due to the iproute2 configure
+> script detecting libelf being available in the used toolchain
+> (crosstool-ng companion library).
 
-Because there is no easy way to create a patch from the OpenJDK mercurial
-repository, this patch was created by hand from the three commits listed in
-the provided patch itself.
+So your crosstool-ng toolchain comes with more libraries than just the
+C library ? Buildroot really expects external toolchains to be "pure"
+toolchains, i.e with only the C library and no other additional library.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - Add the patch to their respective version directories. (Yann)
+> After finding out I can work around this issue.
+> I thought this might be a thing to be addressed in buildroot, but I'm not
+> sure how to approach it.
 
- .../11.0.7+10/0001-fix-gcc-10-support.patch   | 119 ++++++++++++++++++
- .../14.0.1+7/0001-fix-gcc-10-support.patch    | 119 ++++++++++++++++++
- 2 files changed, 238 insertions(+)
- create mode 100644 package/openjdk/11.0.7+10/0001-fix-gcc-10-support.patch
- create mode 100644 package/openjdk/14.0.1+7/0001-fix-gcc-10-support.patch
+There is no provision in the iproute2 configure script to explicitly
+disable a functionality. So we would have to patch this configure
+script.
 
-diff --git a/package/openjdk/11.0.7+10/0001-fix-gcc-10-support.patch b/package/openjdk/11.0.7+10/0001-fix-gcc-10-support.patch
-new file mode 100644
-index 0000000000..9941d0151f
---- /dev/null
-+++ b/package/openjdk/11.0.7+10/0001-fix-gcc-10-support.patch
-@@ -0,0 +1,119 @@
-+From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
-+From: Patrick Zhang <patrick.zhang@amperecomputing.com>
-+Date: Wed, 05 Feb 2020 17:14:15 -0700
-+Subject: [PATCH] fix gcc 10 support
-+
-+This patch fixes the "multiple definition" link errors with GCC10 due to
-+GCC10 setting -fno-common by default.
-+
-+This is a combination of the following upstream commits:
-+  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
-+  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
-+  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
-+
-+Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ src/java.base/unix/native/libjava/childproc.c        |  1 +
-+ src/java.base/unix/native/libjava/childproc.h        |  2 +-
-+ .../share/native/libj2gss/NativeFunc.c               |  3 +++
-+ .../share/native/libj2gss/NativeFunc.h               |  2 +-
-+ src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
-+ src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
-+ 6 files changed, 19 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
-+index 811aaeac5..16480bfbf 100644
-+--- a/src/java.base/unix/native/libjava/childproc.c
-++++ b/src/java.base/unix/native/libjava/childproc.c
-+@@ -33,6 +33,7 @@
-+ 
-+ #include "childproc.h"
-+ 
-++const char * const *parentPathv;
-+ 
-+ ssize_t
-+ restartableWrite(int fd, const void *buf, size_t count)
-+diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
-+index 091150930..d57e44b6e 100644
-+--- a/src/java.base/unix/native/libjava/childproc.h
-++++ b/src/java.base/unix/native/libjava/childproc.h
-+@@ -118,7 +118,7 @@ typedef struct _SpawnInfo {
-+  * The cached and split version of the JDK's effective PATH.
-+  * (We don't support putenv("PATH=...") in native code)
-+  */
-+-const char * const *parentPathv;
-++extern const char * const *parentPathv;
-+ 
-+ ssize_t restartableWrite(int fd, const void *buf, size_t count);
-+ int restartableDup2(int fd_from, int fd_to);
-+diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-+index da7bc0445..5941f7b5a 100644
-+--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-+@@ -27,6 +27,9 @@
-+ #include <stdlib.h>
-+ #include "NativeFunc.h"
-+ 
-++/* global GSS function table */
-++GSS_FUNCTION_TABLE_PTR ftab;
-++
-+ /* standard GSS method names (ordering is from mapfile) */
-+ static const char RELEASE_NAME[]                = "gss_release_name";
-+ static const char IMPORT_NAME[]                 = "gss_import_name";
-+diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-+index 82914387c..e4a4981a3 100644
-+--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-+@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
-+ typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
-+ 
-+ /* global GSS function table */
-+-GSS_FUNCTION_TABLE_PTR ftab;
-++extern GSS_FUNCTION_TABLE_PTR ftab;
-+ 
-+ #endif
-+diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
-+index cc1367f78..46b07db0a 100644
-+--- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
-++++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
-+@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
-+ 
-+ #endif /* __linux__ */
-+ 
-+-sctp_getladdrs_func* nio_sctp_getladdrs;
-+-sctp_freeladdrs_func* nio_sctp_freeladdrs;
-+-sctp_getpaddrs_func* nio_sctp_getpaddrs;
-+-sctp_freepaddrs_func* nio_sctp_freepaddrs;
-+-sctp_bindx_func* nio_sctp_bindx;
-+-sctp_peeloff_func* nio_sctp_peeloff;
-++extern sctp_getladdrs_func* nio_sctp_getladdrs;
-++extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
-++extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
-++extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
-++extern sctp_bindx_func* nio_sctp_bindx;
-++extern sctp_peeloff_func* nio_sctp_peeloff;
-+ 
-+ jboolean loadSocketExtensionFuncs(JNIEnv* env);
-+ 
-+diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-+index d40c15aa3..ab9b6e093 100644
-+--- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-++++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-+@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
-+ static const char* nativeSctpLib = "libsctp.so.1";
-+ static jboolean funcsLoaded = JNI_FALSE;
-+ 
-++sctp_getladdrs_func* nio_sctp_getladdrs;
-++sctp_freeladdrs_func* nio_sctp_freeladdrs;
-++sctp_getpaddrs_func* nio_sctp_getpaddrs;
-++sctp_freepaddrs_func* nio_sctp_freepaddrs;
-++sctp_bindx_func* nio_sctp_bindx;
-++sctp_peeloff_func* nio_sctp_peeloff;
-++
-+ JNIEXPORT jint JNICALL DEF_JNI_OnLoad
-+   (JavaVM *vm, void *reserved) {
-+     return JNI_VERSION_1_2;
-+-- 
-+2.26.2
-+
-diff --git a/package/openjdk/14.0.1+7/0001-fix-gcc-10-support.patch b/package/openjdk/14.0.1+7/0001-fix-gcc-10-support.patch
-new file mode 100644
-index 0000000000..5364c47252
---- /dev/null
-+++ b/package/openjdk/14.0.1+7/0001-fix-gcc-10-support.patch
-@@ -0,0 +1,119 @@
-+From 58911e9de888aece29f491995a8b8a31f7d6b424 Mon Sep 17 00:00:00 2001
-+From: Patrick Zhang <patrick.zhang@amperecomputing.com>
-+Date: Wed, 05 Feb 2020 17:14:15 -0700
-+Subject: [PATCH] fix gcc 10 support
-+
-+This patch fixes the "multiple definition" link errors with GCC10 due to
-+GCC10 setting -fno-common by default.
-+
-+This is a combination of the following upstream commits:
-+  - https://hg.openjdk.java.net/jdk/jdk/rev/8e6fa89397ca
-+  - https://hg.openjdk.java.net/jdk/jdk/rev/6925fca95959
-+  - https://hg.openjdk.java.net/jdk/jdk/rev/9e54ea7d9cd9
-+
-+Signed-off-by: Patrick Zhang <patrick.zhang@amperecomputing.com>
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ src/java.base/unix/native/libjava/childproc.c        |  1 +
-+ src/java.base/unix/native/libjava/childproc.h        |  2 +-
-+ .../share/native/libj2gss/NativeFunc.c               |  3 +++
-+ .../share/native/libj2gss/NativeFunc.h               |  2 +-
-+ src/jdk.sctp/unix/native/libsctp/Sctp.h              | 12 ++++++------
-+ src/jdk.sctp/unix/native/libsctp/SctpNet.c           |  7 +++++++
-+ 6 files changed, 19 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/java.base/unix/native/libjava/childproc.c b/src/java.base/unix/native/libjava/childproc.c
-+index 811aaeac5..16480bfbf 100644
-+--- a/src/java.base/unix/native/libjava/childproc.c
-++++ b/src/java.base/unix/native/libjava/childproc.c
-+@@ -34,6 +34,7 @@
-+ 
-+ #include "childproc.h"
-+ 
-++const char * const *parentPathv;
-+ 
-+ ssize_t
-+ restartableWrite(int fd, const void *buf, size_t count)
-+diff --git a/src/java.base/unix/native/libjava/childproc.h b/src/java.base/unix/native/libjava/childproc.h
-+index 091150930..d57e44b6e 100644
-+--- a/src/java.base/unix/native/libjava/childproc.h
-++++ b/src/java.base/unix/native/libjava/childproc.h
-+@@ -126,7 +126,7 @@ typedef struct _SpawnInfo {
-+  * The cached and split version of the JDK's effective PATH.
-+  * (We don't support putenv("PATH=...") in native code)
-+  */
-+-const char * const *parentPathv;
-++extern const char * const *parentPathv;
-+ 
-+ ssize_t restartableWrite(int fd, const void *buf, size_t count);
-+ int restartableDup2(int fd_from, int fd_to);
-+diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-+index da7bc0445..5941f7b5a 100644
-+--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.c
-+@@ -27,6 +27,9 @@
-+ #include <stdlib.h>
-+ #include "NativeFunc.h"
-+ 
-++/* global GSS function table */
-++GSS_FUNCTION_TABLE_PTR ftab;
-++
-+ /* standard GSS method names (ordering is from mapfile) */
-+ static const char RELEASE_NAME[]                = "gss_release_name";
-+ static const char IMPORT_NAME[]                 = "gss_import_name";
-+diff --git a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-+index 82914387c..e4a4981a3 100644
-+--- a/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-++++ b/src/java.security.jgss/share/native/libj2gss/NativeFunc.h
-+@@ -277,6 +277,6 @@ typedef struct GSS_FUNCTION_TABLE {
-+ typedef GSS_FUNCTION_TABLE *GSS_FUNCTION_TABLE_PTR;
-+ 
-+ /* global GSS function table */
-+-GSS_FUNCTION_TABLE_PTR ftab;
-++extern GSS_FUNCTION_TABLE_PTR ftab;
-+ 
-+ #endif
-+diff --git a/src/jdk.sctp/unix/native/libsctp/Sctp.h b/src/jdk.sctp/unix/native/libsctp/Sctp.h
-+index cc1367f78..46b07db0a 100644
-+--- a/src/jdk.sctp/unix/native/libsctp/Sctp.h
-++++ b/src/jdk.sctp/unix/native/libsctp/Sctp.h
-+@@ -322,12 +322,12 @@ typedef int sctp_peeloff_func(int sock, sctp_assoc_t id);
-+ 
-+ #endif /* __linux__ */
-+ 
-+-sctp_getladdrs_func* nio_sctp_getladdrs;
-+-sctp_freeladdrs_func* nio_sctp_freeladdrs;
-+-sctp_getpaddrs_func* nio_sctp_getpaddrs;
-+-sctp_freepaddrs_func* nio_sctp_freepaddrs;
-+-sctp_bindx_func* nio_sctp_bindx;
-+-sctp_peeloff_func* nio_sctp_peeloff;
-++extern sctp_getladdrs_func* nio_sctp_getladdrs;
-++extern sctp_freeladdrs_func* nio_sctp_freeladdrs;
-++extern sctp_getpaddrs_func* nio_sctp_getpaddrs;
-++extern sctp_freepaddrs_func* nio_sctp_freepaddrs;
-++extern sctp_bindx_func* nio_sctp_bindx;
-++extern sctp_peeloff_func* nio_sctp_peeloff;
-+ 
-+ jboolean loadSocketExtensionFuncs(JNIEnv* env);
-+ 
-+diff --git a/src/jdk.sctp/unix/native/libsctp/SctpNet.c b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-+index d40c15aa3..ab9b6e093 100644
-+--- a/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-++++ b/src/jdk.sctp/unix/native/libsctp/SctpNet.c
-+@@ -43,6 +43,13 @@ static jmethodID isaCtrID = 0;
-+ static const char* nativeSctpLib = "libsctp.so.1";
-+ static jboolean funcsLoaded = JNI_FALSE;
-+ 
-++sctp_getladdrs_func* nio_sctp_getladdrs;
-++sctp_freeladdrs_func* nio_sctp_freeladdrs;
-++sctp_getpaddrs_func* nio_sctp_getpaddrs;
-++sctp_freepaddrs_func* nio_sctp_freepaddrs;
-++sctp_bindx_func* nio_sctp_bindx;
-++sctp_peeloff_func* nio_sctp_peeloff;
-++
-+ JNIEXPORT jint JNICALL DEF_JNI_OnLoad
-+   (JavaVM *vm, void *reserved) {
-+     return JNI_VERSION_1_2;
-+-- 
-+2.26.2
-+
+Best regards,
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
