@@ -1,83 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 18 Jun 2020 21:45:00 +0200
-Subject: [Buildroot] [git commit] support/testing: add python-gpiozero test
-Message-ID: <20200618194318.BF32682B7D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add python-colorzero test
+Message-ID: <20200618194318.A33F882B7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d0af210f71a952fde3a715565cd94d20d678485
+commit: https://git.buildroot.net/buildroot/commit/?id=dc5761beb0fdd27d5f89a5f618c3ec02e5d0e800
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  .gitlab-ci.yml                                     |  2 ++
- .../tests/package/sample_python_gpiozero.py        |  5 ++++
- .../testing/tests/package/test_python_gpiozero.py  | 32 ++++++++++++++++++++++
- 3 files changed, 39 insertions(+)
+ .../tests/package/sample_python_colorzero.py       |  8 ++++++++
+ .../testing/tests/package/test_python_colorzero.py | 23 ++++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 3bad5d5ae9..ac4c826fb7 100644
+index 951f843cf2..3bad5d5ae9 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -492,6 +492,8 @@ tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
- tests.package.test_python_gitdb2.TestPythonPy2Gitdb2: { extends: .runtime_test }
- tests.package.test_python_gitdb2.TestPythonPy3Gitdb2: { extends: .runtime_test }
- tests.package.test_python_gobject.TestPythonPy3Gobject: { extends: .runtime_test }
-+tests.package.test_python_gpiozero.TestPythonPy2Gpiozero: { extends: .runtime_test }
-+tests.package.test_python_gpiozero.TestPythonPy3Gpiozero: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
- tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/sample_python_gpiozero.py b/support/testing/tests/package/sample_python_gpiozero.py
+@@ -481,6 +481,8 @@ tests.package.test_python_cbor.TestPythonPy2Cbor: { extends: .runtime_test }
+ tests.package.test_python_cbor.TestPythonPy3Cbor: { extends: .runtime_test }
+ tests.package.test_python_click.TestPythonPy2Click: { extends: .runtime_test }
+ tests.package.test_python_click.TestPythonPy3Click: { extends: .runtime_test }
++tests.package.test_python_colorzero.TestPythonPy2Colorzero: { extends: .runtime_test }
++tests.package.test_python_colorzero.TestPythonPy3Colorzero: { extends: .runtime_test }
+ tests.package.test_python_constantly.TestPythonPy2Constantly: { extends: .runtime_test }
+ tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtime_test }
+ tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/sample_python_colorzero.py b/support/testing/tests/package/sample_python_colorzero.py
 new file mode 100644
-index 0000000000..b95df07fe7
+index 0000000000..23862a816d
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_gpiozero.py
-@@ -0,0 +1,5 @@
-+from gpiozero import pi_info
++++ b/support/testing/tests/package/sample_python_colorzero.py
+@@ -0,0 +1,8 @@
++from colorzero import Color
 +
-+piBoardInfo = pi_info('a020d3')  # 3B+
-+
-+assert(piBoardInfo.model == '3B+')
-diff --git a/support/testing/tests/package/test_python_gpiozero.py b/support/testing/tests/package/test_python_gpiozero.py
++red = Color('red')
++green = Color('lime')
++blue = Color('blue')
++assert(red.rgb == (1.0, 0.0, 0.0))
++assert(green.rgb == (0.0, 1.0, 0.0))
++assert(blue.rgb == (0.0, 0.0, 1.0))
+diff --git a/support/testing/tests/package/test_python_colorzero.py b/support/testing/tests/package/test_python_colorzero.py
 new file mode 100644
-index 0000000000..2498a55514
+index 0000000000..b7c228ac3c
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_gpiozero.py
-@@ -0,0 +1,32 @@
++++ b/support/testing/tests/package/test_python_colorzero.py
+@@ -0,0 +1,23 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonGpiozero(TestPythonPackageBase):
-+    config = TestPythonPackageBase.config
-+    sample_scripts = ["tests/package/sample_python_gpiozero.py"]
-+
-+    def run_sample_scripts(self):
-+        cmd = self.interpreter + " sample_python_gpiozero.py"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+
-+        cmd = "pinout -r a020d3 -m | cat"
-+        self.assertRunOk(cmd)
-+
-+
-+class TestPythonPy2Gpiozero(TestPythonGpiozero):
++class TestPythonPy2Colorzero(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_GPIOZERO=y
++        BR2_PACKAGE_PYTHON_COLORZERO=y
 +        """
++    sample_scripts = ["tests/package/sample_python_colorzero.py"]
++    timeout = 30
 +
 +
-+class TestPythonPy3Gpiozero(TestPythonGpiozero):
++class TestPythonPy3Colorzero(TestPythonPackageBase):
 +    __test__ = True
-+    config = TestPythonGpiozero.config + \
++    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_GPIOZERO=y
++        BR2_PACKAGE_PYTHON_COLORZERO=y
 +        """
++    sample_scripts = ["tests/package/sample_python_colorzero.py"]
++    timeout = 30
