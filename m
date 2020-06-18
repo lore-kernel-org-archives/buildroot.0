@@ -1,118 +1,96 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 18 Jun 2020 22:25:47 +0200
-Subject: [Buildroot] [git commit] package/python-colorzero: new package
-In-Reply-To: <20200618194318.944C282B7D@busybox.osuosl.org>
-References: <20200618194318.944C282B7D@busybox.osuosl.org>
-Message-ID: <20200618222547.3fb85f94@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jun 2020 22:27:59 +0200
+Subject: [Buildroot] [PATCH 2/3] wireless-regdb: add option to rebuild
+In-Reply-To: <20200612053110.15316-3-dev.kurt@vandijck-laurijssen.be>
+References: <20200612053110.15316-1-dev.kurt@vandijck-laurijssen.be>
+ <20200612053110.15316-3-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200618222759.622bda7d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Kurt,
 
-On Thu, 18 Jun 2020 21:45:00 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Fri, 12 Jun 2020 07:31:09 +0200
+Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=185398f6198f222b45c85a6260b4e723e2f9a4c9
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-colorzero/Config.in             |  6 ++++++
->  package/python-colorzero/python-colorzero.hash |  4 ++++
->  package/python-colorzero/python-colorzero.mk   | 13 +++++++++++++
->  support/scripts/pkg-stats                      |  2 ++
->  6 files changed, 27 insertions(+)
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cbe6bc1856..65bce3e4a4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2025,6 +2025,7 @@ F:	package/iwd/
->  F:	package/libevdev/
->  F:	package/log4cplus/
->  F:	package/postgresql/
-> +F:	package/python-colorzero/
->  F:	package/qt5/
->  F:	package/quotatool/
->  F:	package/racehound/
-> diff --git a/package/Config.in b/package/Config.in
-> index 1f44fe7ca9..fbe87ec902 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -913,6 +913,7 @@ menu "External python modules"
->  	source "package/python-coherence/Config.in"
->  	source "package/python-colorama/Config.in"
->  	source "package/python-colorlog/Config.in"
-> +	source "package/python-colorzero/Config.in"
->  	source "package/python-configobj/Config.in"
->  	source "package/python-configshell-fb/Config.in"
->  	source "package/python-constantly/Config.in"
-> diff --git a/package/python-colorzero/Config.in b/package/python-colorzero/Config.in
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+
+Could you expand the commit log to explain why rebuilding the wireless
+regdb might be necessary ?
+
+> diff --git a/package/wireless-regdb/0003-python3.patch b/package/wireless-regdb/0003-python3.patch
 > new file mode 100644
-> index 0000000000..b2ef711fbe
-> --- /dev/null
-> +++ b/package/python-colorzero/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_COLORZERO
-> +	bool "python-colorzero"
+> index 0000000000..87226b763f
+
+We need all patches to have a description + Signed-off-by line, and be
+generated using "git format-patch -N" if the upstream project uses Git.
+
+> diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
+> index 17350a41d8..cb8ec20977 100644
+> --- a/package/wireless-regdb/Config.in
+> +++ b/package/wireless-regdb/Config.in
+> @@ -12,3 +12,13 @@ config BR2_PACKAGE_WIRELESS_REGDB
+>  	  application is needed.
+>  
+>  	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
+> +
+> +if BR2_PACKAGE_WIRELESS_REGDB
+> +
+> +config BR2_WIRELESS_REGDB_REBUILD
+> +	bool "rebuild wireless-regdb"
 > +	help
-> +	  A color manipulation library for Python.
+> +	  Say no to use the pre-built wireless regdb.
 > +
-> +	  https://github.com/waveform80/colorzero
-> diff --git a/package/python-colorzero/python-colorzero.hash b/package/python-colorzero/python-colorzero.hash
-> new file mode 100644
-> index 0000000000..118ccea7d7
-> --- /dev/null
-> +++ b/package/python-colorzero/python-colorzero.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +sha256  24d30b55793150f9ae7478f8aa2126fe5598a31f928907eadbf9d5a19aa9964c  python-colorzero-1.1.tar.gz
-> +# Locally computed
-> +sha256  47778d78e05bb6c39c022814e3712a0327c6418c7251757e72167ab8ff12bb4d  LICENSE.txt
-> diff --git a/package/python-colorzero/python-colorzero.mk b/package/python-colorzero/python-colorzero.mk
-> new file mode 100644
-> index 0000000000..6ddbcbe1c5
-> --- /dev/null
-> +++ b/package/python-colorzero/python-colorzero.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-colorzero
-> +#
-> +################################################################################
+> +	  Say yes to rebuild, and make sure to deploy your wireless-regdb public key.
+
+Lines are too long.
+
+Could you give a bit of background about this wireless-regdb public
+key? I see that the Makefile is using some private/public key pair from
+the user home directory, this looks absolutely horrible in the context
+of Buildroot. Should we instead have Config.in options to provide the
+path to the private/public key pair ?
+
+> +endif
+> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+> index 31b62e36e1..d3b30c7fce 100644
+> --- a/package/wireless-regdb/wireless-regdb.mk
+> +++ b/package/wireless-regdb/wireless-regdb.mk
+> @@ -10,12 +10,21 @@ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+>  WIRELESS_REGDB_LICENSE = ISC
+>  WIRELESS_REGDB_LICENSE_FILES = LICENSE
+>  
+> +ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
+> +WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
+> +define WIRELESS_REGDB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+
+Why do you need the "clean" step here ? To force removing the
+pre-generated wireless regdb, and therefore have the next make
+invocation re-generate it ?
+
+> +endef
+> +endif
 > +
-> +PYTHON_COLORZERO_VERSION = 1.1
-> +PYTHON_COLORZERO_SITE = $(call github,waveform80,colorzero,release-$(PYTHON_COLORZERO_VERSION))
-> +PYTHON_COLORZERO_LICENSE = BSD-3-Clause
-> +PYTHON_COLORZERO_LICENSE_FILES = LICENSE.txt
-> +PYTHON_COLORZERO_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index c1f41fc9e8..4d76ca32f9 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -383,6 +383,8 @@ class CVE:
->                      if not hasattr(cve_affected_version, "version"):
->                          print("Cannot parse CVE affected version '%s'" % v["version_value"])
->                          continue
-> +                    print(pkg_version)
-> +                    print(cve_affected_version)
->                      return pkg_version <= cve_affected_version
->                  else:
->                      print("version_affected: %s" % v['version_affected'])
+>  ifeq ($(BR2_PACKAGE_CRDA),y)
+>  define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
+>  	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
+>  		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+> -	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+> -		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+> +	$(INSTALL) -d $(TARGET_DIR)/etc/wireless-regdb/pubkeys
+> +	$(INSTALL) -m 644 $(wildcard $(@D)/*.key.pub.pem) \
+> +		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/
 
-Seems there leaked some unrelated code change in?
+So here you install all public keys. But how are they going to end up
+in the wireless-regdb build directory ?
 
-Regards,
-Peter
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
