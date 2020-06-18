@@ -1,42 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 09:23:03 +0200
-Subject: [Buildroot] rm_work
-In-Reply-To: <7d1c3ddd-3d77-0edd-6f7e-7e574a728ad7@grandegger.com>
-References: <7d1c3ddd-3d77-0edd-6f7e-7e574a728ad7@grandegger.com>
-Message-ID: <20200618092303.601a065e@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Jun 2020 07:23:51 +0000
+Subject: [Buildroot] [Bug 13011] Incorrect selection of gcc version
+In-Reply-To: <bug-13011-163@https.bugs.busybox.net/>
+References: <bug-13011-163@https.bugs.busybox.net/>
+Message-ID: <bug-13011-163-xswTjXbQCI@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=13011
 
-On Thu, 18 Jun 2020 09:01:36 +0200
-Wolfgang Grandegger <wg@grandegger.com> wrote:
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
-> I want to build my Buildroot-BSP in a RAMdisk, but there is not enough
-> space for the build directory. Is it possible to free the build
-> resources immediately after the package has been build, installed and
-> deployed, similar to Yocto's "rm_work". At least I didn't find an option
-> in the "Build Options" menu. Could such a feature be implemented easily?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
-We indeed do not have such an option. In *theory* it could be easily
-implemented. However, in practice, there are a number of cases where
-the build directory of a package gets used even *after* that package
-has been completely built/installed.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Thanks for the report! This is already fixed in master in commit
+https://git.buildroot.org/buildroot/commit/toolchain?id=5303e72a80e44c265473706a2d4f3acb5010814f
 
-A simple example: building external kernel modules. We use the Linux
-kernel build tree in output/build/linux-<version>/.
-
-So, if we want to reach the goal of being able to drop the build
-directory of each package after its build is completed, quite a few
-packages will have to be changed/fixed.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
