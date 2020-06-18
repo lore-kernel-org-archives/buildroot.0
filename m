@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 21:10:48 +0200
-Subject: [Buildroot] iproute2 binaries getting linked against libelf,
- which is not available in target
-In-Reply-To: <021201d64596$e75979a0$b60c6ce0$@ipcomm.de>
-References: <021201d64596$e75979a0$b60c6ce0$@ipcomm.de>
-Message-ID: <20200618211048.00347d62@windsurf.home>
+Date: Thu, 18 Jun 2020 21:11:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-pybind: rename
+ package to python-pybind11
+In-Reply-To: <20200618134017.18704-1-guillaume.bressaix@gmail.com>
+References: <20200618134017.18704-1-guillaume.bressaix@gmail.com>
+Message-ID: <20200618211142.3720a766@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Jun 2020 19:35:48 +0200 (CEST)
-Andreas Hilse <andreas.hilse@ipcomm.de> wrote:
+On Thu, 18 Jun 2020 15:40:17 +0200
+"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
 
-> I found an issue with buildroot 2020.02.x concerning iproute2 binaries
-> being linked against libelf.
+> Renaming this package because the current name
+> might be misleading in the future
 > 
-> According to iproute2.mk it should only link against libelf if
-> BR2_PACKAGE_ELFUTILS is selected.
-> But it also links against libelf without that option selected and thus
-> renders the created binaries unusable in the target system.
-> 
-> After digging further I found that this is due to the iproute2 configure
-> script detecting libelf being available in the used toolchain
-> (crosstool-ng companion library).
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 
-So your crosstool-ng toolchain comes with more libraries than just the
-C library ? Buildroot really expects external toolchains to be "pure"
-toolchains, i.e with only the C library and no other additional library.
+I still don't get how "misleading in the future" is a good
+justification.
 
-> After finding out I can work around this issue.
-> I thought this might be a thing to be addressed in buildroot, but I'm not
-> sure how to approach it.
+> Please note that this package only allows C++->python
+> bindings at the moment, Asaf's related work must be
+> merged for python->c++ bindings
 
-There is no provision in the iproute2 configure script to explicitly
-disable a functionality. So we would have to patch this configure
-script.
-
-Best regards,
+I also don't understand why this note makes sense here. If the current
+package is limited, its Config.in help text should be improved to
+document those limitations.
 
 Thomas
 -- 
