@@ -1,42 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:40:02 +0200
-Subject: [Buildroot] [PATCH] package/fastd: bump to v19
-In-Reply-To: <20200611192504.4058-1-post@lespocky.de>
-References: <20200611192504.4058-1-post@lespocky.de>
-Message-ID: <20200618224002.4da2ed12@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 18 Jun 2020 22:38:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: drop dynamic library
+ dependency
+Message-ID: <20200618203856.57694-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Jun 2020 21:25:04 +0200
-Alexander Dahl <post@lespocky.de> wrote:
+paho-mqtt-c can be built statically since version 1.3.3 and
+https://github.com/eclipse/paho.mqtt.c/commit/f1459fac2532658a04962ae0ab67b5c3dc92ad75
 
-> Maintenance release, most important is OpenSSL 1.1+ support. See full
-> release notes for details:
-> 
-> https://fastd.readthedocs.io/en/stable/releases/v19.html
-> 
-> Two patches went upstream.  The last remaining patch was not touched,
-> LTO might not work as expected, but upstream dropped CMake in favour of
-> the meson build system after v19, so it seemed not worth the effort.
-> 
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-> ---
->  ...akeList-do-not-overwrite-module-path.patch |  56 -------
->  ...emove-aes128-ctr-NaCl-implementation.patch | 137 ------------------
->  package/fastd/fastd.hash                      |   4 +-
->  package/fastd/fastd.mk                        |   4 +-
->  4 files changed, 3 insertions(+), 198 deletions(-)
->  delete mode 100644 package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
->  delete mode 100644 package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch
+See https://github.com/eclipse/paho.mqtt.c/issues/848
 
-You had forgotten to update the hash of the license file (and explain
-why it needs to be updated). I fixed that and applied. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/janus-gateway/Config.in    |  5 ++---
+ package/paho-mqtt-c/Config.in      |  5 ++---
+ package/paho-mqtt-c/paho-mqtt-c.mk | 14 ++++++++++++++
+ 3 files changed, 18 insertions(+), 6 deletions(-)
 
-Thomas
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+index fc32546717..136e6f0b20 100644
+--- a/package/janus-gateway/Config.in
++++ b/package/janus-gateway/Config.in
+@@ -59,12 +59,11 @@ comment "transports"
+ 
+ config BR2_PACKAGE_JANUS_GATEWAY_MQTT
+ 	bool "MQTT"
+-	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_PAHO_MQTT_C
+ 
+-comment "MQTT transport needs a toolchain w/ threads and dynamic library support"
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++comment "MQTT transport needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_JANUS_GATEWAY_RABBITMQ
+ 	bool "RabbitMQ"
+diff --git a/package/paho-mqtt-c/Config.in b/package/paho-mqtt-c/Config.in
+index 3560d8c08c..0f4b2a29b2 100644
+--- a/package/paho-mqtt-c/Config.in
++++ b/package/paho-mqtt-c/Config.in
+@@ -1,11 +1,10 @@
+ config BR2_PACKAGE_PAHO_MQTT_C
+ 	bool "paho-mqtt-c"
+-	depends on !BR2_STATIC_LIBS  # dlopen()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  MQTT client C library
+ 
+ 	  https://eclipse.org/paho/clients/c/
+ 
+-comment "paho-mqtt-c needs a toolchain w/ threads and dynamic library support"
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++comment "paho-mqtt-c needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index aa2a0b026e..984c512bbc 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -22,4 +22,18 @@ else
+ PAHO_MQTT_C_CONF_OPTS += -DPAHO_WITH_SSL=FALSE
+ endif
+ 
++ifeq ($(BR2_SHARED_LIBS),y)
++PAHO_MQTT_C_CONF_OPTS += \
++	-DPAHO_BUILD_SHARED=TRUE \
++	-DPAHO_BUILD_STATIC=FALSE
++else ifeq ($(BR2_STATIC_LIBS),y)
++PAHO_MQTT_C_CONF_OPTS += \
++	-DPAHO_BUILD_SHARED=FALSE \
++	-DPAHO_BUILD_STATIC=TRUE
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++PAHO_MQTT_C_CONF_OPTS += \
++	-DPAHO_BUILD_SHARED=TRUE \
++	-DPAHO_BUILD_STATIC=TRUE
++endif
++
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
