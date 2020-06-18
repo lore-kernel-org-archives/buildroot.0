@@ -1,30 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:17:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sngrep: bump to version 1.4.7
-In-Reply-To: <20200614213824.939388-1-aduskett@gmail.com>
-References: <20200614213824.939388-1-aduskett@gmail.com>
-Message-ID: <20200618221738.04cbd438@windsurf.home>
+Date: Thu, 18 Jun 2020 22:17:45 +0200
+Subject: [Buildroot] [PATCH] core: splimplify locales whitelisting
+In-Reply-To: <20200615111643.30568-1-yann.morin.1998@free.fr>
+References: <20200615111643.30568-1-yann.morin.1998@free.fr>
+Message-ID: <20200618221745.389ada47@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Jun 2020 14:38:24 -0700
-aduskett at gmail.com wrote:
+On Mon, 15 Jun 2020 13:16:43 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->   - Remove upstream patch
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  ...0001-capture-fix-typo-in-FILE-object.patch | 43 -------------------
->  package/sngrep/sngrep.hash                    |  8 ++--
->  package/sngrep/sngrep.mk                      |  2 +-
->  3 files changed, 5 insertions(+), 48 deletions(-)
->  delete mode 100644 package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
+>  Makefile | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
 Applied to master, thanks.
 
