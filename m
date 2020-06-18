@@ -1,102 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 18 Jun 2020 15:32:56 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xkeyboard-config: bump
- version to 2.30
-Message-ID: <20200618133116.35D5A8050F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xapp_twm: bump version to
+ 1.0.11
+Message-ID: <20200618133116.4981A8050F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d63e242677ca1ab32f5ca26c43dc342588d001ab
+commit: https://git.buildroot.net/buildroot/commit/?id=6d76d968cd2fef9d1b6b2258f839826162581e99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was committed upstream, updated project URL,
-reformatted hashes.
+Follow upstream-switch to .xz tarball, reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-fix-python3-support.patch                 | 37 ----------------------
- package/x11r7/xkeyboard-config/Config.in           |  2 +-
- .../x11r7/xkeyboard-config/xkeyboard-config.hash   |  4 +--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |  2 +-
- 4 files changed, 4 insertions(+), 41 deletions(-)
+ package/x11r7/xapp_twm/xapp_twm.hash | 10 ++++------
+ package/x11r7/xapp_twm/xapp_twm.mk   |  4 ++--
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/0001-fix-python3-support.patch b/package/x11r7/xkeyboard-config/0001-fix-python3-support.patch
-deleted file mode 100644
-index c9f8b59d0c..0000000000
---- a/package/x11r7/xkeyboard-config/0001-fix-python3-support.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From c847c834cce190c5c835a454bfe548195da9fa53 Mon Sep 17 00:00:00 2001
--From: MilhouseVH <milhouseVH.github@nmacleod.com>
--Date: Sun, 16 Feb 2020 09:41:43 +0000
--Subject: [PATCH] fix python3 support
--
--https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/issues/197
--[Retrieved from:
--https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/-/commit/c847c834cce190c5c835a454bfe548195da9fa53]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- rules/compat/map-variants.py | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/rules/compat/map-variants.py b/rules/compat/map-variants.py
--index ebbfec9..979ba43 100755
----- a/rules/compat/map-variants.py
--+++ b/rules/compat/map-variants.py
--@@ -1,4 +1,4 @@
---#!/usr/bin/python3
--+#!/usr/bin/env python3
-- 
-- import argparse
-- import re
--@@ -12,8 +12,8 @@ class Layout(object):
--             assert variant is None
--             # parse a layout(variant) string
--             match = re.match(r'([^(]+)\(([^)]+)\)', layout)
---            self.layout = match[1]
---            self.variant = match[2]
--+            self.layout = match.groups()[0]
--+            self.variant = match.groups()[1]
-- 
--     def __str__(self):
--         if self.variant:
---- 
--2.24.1
--
-diff --git a/package/x11r7/xkeyboard-config/Config.in b/package/x11r7/xkeyboard-config/Config.in
-index c941742421..17cfe738d4 100644
---- a/package/x11r7/xkeyboard-config/Config.in
-+++ b/package/x11r7/xkeyboard-config/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_XKEYBOARD_CONFIG
- 	help
- 	  keyboard configuration database for X
- 
--	  http://xlibs.freedesktop.org/xkbdesc
-+	  https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 5066a46885..4da866f7b5 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/x11r7/xapp_twm/xapp_twm.hash b/package/x11r7/xapp_twm/xapp_twm.hash
+index 572ecb9820..26661f1fbd 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.hash
++++ b/package/x11r7/xapp_twm/xapp_twm.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002857.html
+-md5 e322c08eeb635f924ede5b8eba3db54e  twm-1.0.10.tar.bz2
+-sha1 f632a47620dfe6d75b003839d269b14fa22b262e  twm-1.0.10.tar.bz2
+-sha256 6449eadca16ce0f0d900605b0cc020b95f40619261b7beccfb46bcc1836445d7  twm-1.0.10.tar.bz2
+-sha512 1280683fce7ebbf5670239cb1f3cee2b40612bd9850d98827e793cf8bf298bdb58e48387cab943ea6befc6f7b34da2567353c22b8eaeb8bcf1b9e303cd7e6a9e  twm-1.0.10.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-June/003047.html
++sha256  f4e8a842dec410e79741f25ed4dfac09df080835d0bba2e3983b5914569b68c7  twm-1.0.11.tar.xz
++sha512  948034bba23e6b6c4412fcd2e46bb11a9980297601218a54a5055165ab0229a44dde0d50f338b24e82d76f390597e2fa09d11ff7f3fe1b1d736b10083c7da20d  twm-1.0.11.tar.xz
  # Locally computed
--sha256 1d4175278bf06000683656763a8b1d3282c61a314b6db41260c8efe92d621802  xkeyboard-config-2.29.tar.bz2
--sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
-+sha256  095a524f7b633ed257617202d06c9c71fe020c8897b106cf0dcdd0c6e8b797d4  xkeyboard-config-2.30.tar.bz2
-+sha256  6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index f2fc8565c3..9cf1a57877 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,7 +4,7 @@
+-sha256 4809ffc9656bc9a704e19ab467d1cedc97c48c9d1f9a4018e6d99d2e61f75945  COPYING
++sha256  4809ffc9656bc9a704e19ab467d1cedc97c48c9d1f9a4018e6d99d2e61f75945  COPYING
+diff --git a/package/x11r7/xapp_twm/xapp_twm.mk b/package/x11r7/xapp_twm/xapp_twm.mk
+index 0af30f737c..46d4ca331d 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.mk
++++ b/package/x11r7/xapp_twm/xapp_twm.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.29
-+XKEYBOARD_CONFIG_VERSION = 2.30
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = https://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-XAPP_TWM_VERSION = 1.0.10
+-XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.bz2
++XAPP_TWM_VERSION = 1.0.11
++XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.xz
+ XAPP_TWM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_TWM_LICENSE = MIT
+ XAPP_TWM_LICENSE_FILES = COPYING
