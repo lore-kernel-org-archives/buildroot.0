@@ -1,46 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:16:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3: bump version to 3.8.3
-In-Reply-To: <20200614202346.133133-1-aduskett@gmail.com>
-References: <20200614202346.133133-1-aduskett@gmail.com>
-Message-ID: <20200618221632.45e8c48b@windsurf.home>
+Date: Thu, 18 Jun 2020 22:16:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xvkbd: bump to version 4.1
+In-Reply-To: <20200614205231.893919-1-fontaine.fabrice@gmail.com>
+References: <20200614205231.893919-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200618221642.2b54e8ee@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Jun 2020 13:23:46 -0700
-aduskett at gmail.com wrote:
+On Sun, 14 Jun 2020 22:52:31 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> - Drop patch (already in version) and so autoreconf
+> - Update hash of README (update in year, version, miscellaneous
+>   information)
+> - Update indentaton in hash file (two spaces)
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0001-Make-the-build-of-pyc-files-conditional.patch      | 2 +-
->  ...sable-buggy_getaddrinfo-configure-test-when-cross-.patch | 2 +-
->  ...d-infrastructure-to-disable-the-build-of-certain-e.patch | 2 +-
->  ...d-an-option-to-disable-installation-of-test-module.patch | 2 +-
->  package/python3/0014-Add-an-option-to-disable-pydoc.patch   | 2 +-
->  package/python3/0015-Add-an-option-to-disable-lib2to3.patch | 2 +-
->  .../0016-Add-option-to-disable-the-sqlite3-module.patch     | 2 +-
->  .../0017-Add-an-option-to-disable-the-tk-module.patch       | 2 +-
->  .../0018-Add-an-option-to-disable-the-curses-module.patch   | 2 +-
->  package/python3/0019-Add-an-option-to-disable-expat.patch   | 2 +-
->  .../python3/0020-Add-an-option-to-disable-CJK-codecs.patch  | 2 +-
->  package/python3/0021-Add-an-option-to-disable-NIS.patch     | 2 +-
->  .../python3/0022-Add-an-option-to-disable-unicodedata.patch | 2 +-
->  package/python3/0023-Add-an-option-to-disable-IDLE.patch    | 2 +-
->  package/python3/0024-Add-an-option-to-disable-decimal.patch | 6 +++---
->  ...25-Add-an-option-to-disable-the-ossaudiodev-module.patch | 6 +++---
->  .../0026-Add-an-option-to-disable-openssl-support.patch     | 2 +-
->  .../0027-Add-an-option-to-disable-the-readline-module.patch | 2 +-
->  ...8-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch | 2 +-
->  .../python3/0031-Add-an-option-to-disable-uuid-module.patch | 2 +-
->  ...nfigure.ac-fixup-CC-print-multiarch-output-for-mus.patch | 2 +-
->  package/python3/python3.hash                                | 6 +++---
->  package/python3/python3.mk                                  | 2 +-
->  23 files changed, 29 insertions(+), 29 deletions(-)
+>  ...01-Makefile-am-fix-install-data-hook.patch | 27 -------------------
+>  package/xvkbd/xvkbd.hash                      |  6 ++---
+>  package/xvkbd/xvkbd.mk                        |  4 +--
+>  3 files changed, 4 insertions(+), 33 deletions(-)
+>  delete mode 100644 package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
 
 Applied to master, thanks.
 
