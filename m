@@ -1,157 +1,113 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Jun 2020 13:42:46 +0200
-Subject: [Buildroot] [PATCH] package/openjdk-bin: install to
- host/usr/lib/jvm
-In-Reply-To: <20200617215520.3600744-1-aduskett@gmail.com>
-References: <20200617215520.3600744-1-aduskett@gmail.com>
-Message-ID: <20200618114246.GM2351@scaer>
+Date: Thu, 18 Jun 2020 13:46:49 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/openjdk-bin: use libraries
+ from host pkgs
+In-Reply-To: <20200615232820.18254-1-jared.bents@rockwellcollins.com>
+References: <20200615232820.18254-1-jared.bents@rockwellcollins.com>
+Message-ID: <20200618114649.GN2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Jared, All,
 
-On 2020-06-17 14:55 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> Buildroot currently installs openjdk-bin to $(HOST_DIR)/ instead of the more
-> traditional (for java installations) $(HOST_DIR)/usr/lib/jvm.
+On 2020-06-15 18:28 -0500, Jared Bents spake thusly:
+> Update to remove libfreetype.so as it is created by host-freetype
+> and other packages fail with the version of libfreetype.so provided
+> by host-openjdk-bin such as host-xapp_mkfontscale.
 > 
-> As described in https://bugs.busybox.net/show_bug.cgi?id=13001
+> Update to add host variant of lksctp-tools, remove libsctp.so, and
+> add host-lksctp-tools dependency.
 > 
-> "Openjdk-bin provides it's own libfreetype.so and places it into
-> $(HOST_DIR)/lib/. This library causes build failures with the
-> host-xapp_mkfontscale package due to the overwritten libfreetype.so.
+> Two other libraries are included by host-opensdk-bin that could be
+> provided by other packages being built from source however they have
+> issues and have not been included in this update:
+> * Add host variant of libnet, remove libnet.so,
+>   and add host-libnet dependency. However, this causes openjdk to
+>   hang during the build and is not included.
+> * Remove libzip.so and add host-libzip dependency. However, this
+>   currently causes host-zip to fail to build and is not included.
 > 
-> mkfontscale.o: In function `doDirectory':
-> mkfontscale.c:(.text+0x1a80): undefined reference to `FT_Get_BDF_Property'
-> collect2: error: ld returned 1 exit status
+> Bug tracker - https://bugs.busybox.net/show_bug.cgi?id=13001
 > 
-> Reproducing the error is done by repeating the following steps.
-> make host-freetype
-> make host-openjdk-bin
-> make host-xapp_mkfontscale"
-> 
-> There are two options for fixing this problem:
-> 
-> 1) Add host-freetype and host-lksctp-tools as dependencies to host-openjdk-bin
->    and then remove the provided libfreetype.so and libsctp.so libraries in a
->    post_extract_hook.
-> 
-> 2) Change the installation directory from $(HOST_DIR)/ to
->    $(HOST_DIR)/usr/lib/jvm just like the target OpenJDK package and copy the
->    entire source directories contents to the above location.
-> 
-> The second option provides the following advantages:
->  - The directory structure is consistent with how we handle the target OpenJDK.
-> 
->  - The HOST_OPENJDK_BIN_INSTALL_CMDS step is simplified.
-> 
->  - Packages such as Maven require directories of which we are currently not
->    copying. These missing directories cause programs such as Maven to crash
->    when running with an error such as
->    "Can't read cryptographic policy directory: unlimited."
-> 
-> Because the second option is both simple, easier to implement, is low-impact,
-> and fixes the problems described above wholly, it is the best to implement.
-> 
-> To implement the above changes, we must also modify the following files in the
-> same patch to match the host's new directory paths:
-> 
->  - openjdk.mk
->  - openjdk-jni-test.mk
->  - openjdk-hello-world.mk
-> 
-> Tested with:
-> ./support/testing/run-tests -o out -d dl tests.package.test_openjdk.TestOpenJdk
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=13001
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
-I've slightly changed that patch, see the commit I just pushed:
+Thanks for your patch.
 
-  - introduce HOST_OPENJDK_BIN_ROOT_DIR and JAVAC
-  - expand and tweak the commit log
+However, as you noticed, soem of the remaining libraries are causing
+problens, either in openjdk itself or in other packages, so we can't
+remove them or replace them.
 
-Thanks!
+So, Adam has proposed an alternative solution, to move the openjdk out
+of the way and into its own installation directory.
+
+This both fixes our issue, while at the same time ressembling the java
+world a bit more (that's what java users expect, that it is install in
+/usr/lib/jvm or some sorts...)
+
+As such, I've applied Adam's patch instead.
+
+Thanks for the report and the proposed patch nonetheless. :-)
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/openjdk-bin/openjdk-bin.mk                        | 8 +++-----
->  package/openjdk/openjdk.mk                                | 2 +-
->  .../package/openjdk-hello-world/openjdk-hello-world.mk    | 2 +-
->  .../openjdk/package/openjdk-jni-test/openjdk-jni-test.mk  | 2 +-
->  4 files changed, 6 insertions(+), 8 deletions(-)
+>  package/lksctp-tools/lksctp-tools.mk |  1 +
+>  package/openjdk-bin/openjdk-bin.mk   | 15 ++++++++++++++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
 > 
+> diff --git a/package/lksctp-tools/lksctp-tools.mk b/package/lksctp-tools/lksctp-tools.mk
+> index 5ac794e842..ace11ecc97 100644
+> --- a/package/lksctp-tools/lksctp-tools.mk
+> +++ b/package/lksctp-tools/lksctp-tools.mk
+> @@ -20,3 +20,4 @@ endef
+>  LKSCTP_TOOLS_POST_INSTALL_TARGET_HOOKS += LKSCTP_TOOLS_CLEANUP_TARGET
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 > diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-> index f4a8979e0b..f67f3b7ee5 100644
+> index 31dc4a4666..6660d7ef03 100644
 > --- a/package/openjdk-bin/openjdk-bin.mk
 > +++ b/package/openjdk-bin/openjdk-bin.mk
-> @@ -26,11 +26,9 @@ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEM
+> @@ -11,18 +11,31 @@ HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VE
+>  HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+>  HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
+>  HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
+> +HOST_OPENJDK_BIN_DEPENDENCIES = \
+> +	host-freetype \
+> +	host-lksctp-tools
+>  
+>  # unpack200 has an invalid RPATH and relies on libzlib. When
+>  # host-libzlib is installed on the system, the error "ERROR: package
+>  # host-libzlib installs executables without proper RPATH: will occur.
 >  # Because unpack200 is a deprecated tool, removing it to fix this
 >  # issue is safe.
+> +# Dependency on host-freetype creates an up to date libfreetype.so so
+> +# libfreetype.so is removed from host-openjdk-bin after extract.
+> +# Dependency on host-lksctp-tools creates an up to date libsctp.so so
+> +# libsctp.so is removed from host-openjdk-bin after extract.
+> +define HOST_OPENJDK_BIN_CLEANUP
+> +	$(RM) -f $(@D)/bin/unpack200
+> +	$(RM) -f $(@D)/lib/libfreetype.so
+> +	$(RM) -f $(@D)/lib/libsctp.so
+> +endef
+> +HOST_OPENJDK_BIN_POST_EXTRACT_HOOKS += HOST_OPENJDK_BIN_CLEANUP
+> +
 >  define HOST_OPENJDK_BIN_INSTALL_CMDS
-> -	mkdir -p $(HOST_DIR)/bin
-> -	cp -dpfr $(@D)/bin/* $(HOST_DIR)/bin/
-> -	mkdir -p $(HOST_DIR)/lib
-> -	cp -dpfr $(@D)/lib/* $(HOST_DIR)/lib/
+>  	mkdir -p $(HOST_DIR)/bin
+>  	cp -dpfr $(@D)/bin/* $(HOST_DIR)/bin/
+>  	mkdir -p $(HOST_DIR)/lib
+>  	cp -dpfr $(@D)/lib/* $(HOST_DIR)/lib/
 > -	$(RM) -f $(HOST_DIR)/bin/unpack200
-> +	mkdir -p $(HOST_DIR)/usr/lib/jvm
-> +	cp -dpfr $(@D)/* $(HOST_DIR)/usr/lib/jvm/
-> +	$(RM) -f $(HOST_DIR)/usr/lib/jvm/bin/unpack200
 >  endef
 >  
 >  $(eval $(host-generic-package))
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index 22c9a777b5..baefdf59bb 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -94,7 +94,7 @@ OPENJDK_CONF_OPTS = \
->  	--enable-openjdk-only \
->  	--enable-unlimited-crypto \
->  	--openjdk-target=$(GNU_TARGET_NAME) \
-> -	--with-boot-jdk=$(HOST_DIR) \
-> +	--with-boot-jdk=$(HOST_DIR)/usr/lib/jvm \
->  	--with-stdc++lib=dynamic \
->  	--with-debug-level=release \
->  	--with-devkit=$(HOST_DIR) \
-> diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-> index 998117b8e2..6157c4dd9c 100644
-> --- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-> +++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
-> @@ -8,7 +8,7 @@ OPENJDK_HELLO_WORLD_DEPENDENCIES = openjdk
->  
->  define OPENJDK_HELLO_WORLD_BUILD_CMDS
->  	$(INSTALL) -D $(OPENJDK_HELLO_WORLD_PKGDIR)/HelloWorld.java $(@D)/HelloWorld.java
-> -	$(HOST_DIR)/bin/javac $(@D)/HelloWorld.java
-> +	$(HOST_DIR)/usr/lib/jvm/bin/javac $(@D)/HelloWorld.java
->  endef
->  
->  define OPENJDK_HELLO_WORLD_INSTALL_TARGET_CMDS
-> diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
-> index f279e5cd70..51ae44cabd 100644
-> --- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
-> +++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
-> @@ -10,7 +10,7 @@ JNI_INCLUDE_PATH = $(BUILD_DIR)/openjdk-$(OPENJDK_VERSION)/build/linux-aarch64-s
->  
->  define OPENJDK_JNI_TEST_BUILD_CMDS
->  	# Compile Java classes and generate native headers
-> -	$(HOST_DIR)/bin/javac -d $(@D) -h $(@D) \
-> +	$(HOST_DIR)/usr/lib/jvm/bin/javac -d $(@D) -h $(@D) \
->  		$(OPENJDK_JNI_TEST_PKGDIR)/JniTest.java \
->  		$(OPENJDK_JNI_TEST_PKGDIR)/JniWrapper.java \
->  		$(OPENJDK_JNI_TEST_PKGDIR)/JniHelper.java
 > -- 
-> 2.26.2
+> 2.17.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
