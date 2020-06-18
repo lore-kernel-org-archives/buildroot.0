@@ -1,54 +1,133 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 15:32:56 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-libinput:
- bump version to 0.30.0
-Message-ID: <20200618133116.55C7F85FAA@busybox.osuosl.org>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Thu, 18 Jun 2020 15:40:17 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-pybind: rename package to
+ python-pybind11
+Message-ID: <20200618134017.18704-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a83050a61ac381b1246b9c89ec01f9c85d93e6c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Renaming this package because the current name
+might be misleading in the future
 
-Reformatted hashes.
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../xdriver_xf86-input-libinput.hash                         | 12 ++++++------
- .../xdriver_xf86-input-libinput.mk                           |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index c33893efe7..51f0ce7856 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2019-August/003017.html
--md5 d600e8e2e30747b8ce49ec5294ff0ab6  xf86-input-libinput-0.29.0.tar.bz2
--sha1 efa9dbe08ee827949aff0bd752f8270237247c56  xf86-input-libinput-0.29.0.tar.bz2
--sha256 c28b56a21754b972db31798e6a4cf4dc9d69208d08f8fe41701a94def5e94bee  xf86-input-libinput-0.29.0.tar.bz2
--sha512 f19ef2e9e0c1336d8e0b17853e1fe0c66ecf50e7b10b10b6c5cbafc99323694597821e15e8e358419ef3c68d1009967fd2ec3760800c85adbb71ac3ecc99954b  xf86-input-libinput-0.29.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-May/003045.html
-+md5  11dcfa2cc39f790731a9545fcdeea717  xf86-input-libinput-0.30.0.tar.bz2
-+sha1  b705d0280b4fa7ccf44b9ff3869f5d7846e26414  xf86-input-libinput-0.30.0.tar.bz2
-+sha256  f9c7f9fd41ae14061e0e9c3bd45fa170e5e21027a2bc5810034e1e748db996c0  xf86-input-libinput-0.30.0.tar.bz2
-+sha512  823f80f7d53866f2f06c1fb7b2d64111bf807329acaaeda4a09413cdb5f3e3235c1dd4f99183aae75adf5a01503e40e35b4449b31f977afd842b4723b062c380  xf86-input-libinput-0.30.0.tar.bz2
- # Locally computed
--sha256 b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
-+sha256  b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 2208500556..64d972cf33 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Please note that this package only allows C++->python
+bindings at the moment, Asaf's related work must be
+merged for python->c++ bindings
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                                          |  2 +-
+ package/Config.in                                   |  2 +-
+ package/python-pybind/python-pybind.mk              | 13 -------------
+ .../{python-pybind => python-pybind11}/Config.in    |  6 +++---
+ .../python-pybind11.hash}                           |  2 +-
+ package/python-pybind11/python-pybind11.mk          | 13 +++++++++++++
+ 6 files changed, 19 insertions(+), 19 deletions(-)
+ delete mode 100644 package/python-pybind/python-pybind.mk
+ rename package/{python-pybind => python-pybind11}/Config.in (53%)
+ rename package/{python-pybind/python-pybind.hash => python-pybind11/python-pybind11.hash} (83%)
+ create mode 100644 package/python-pybind11/python-pybind11.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cbe6bc1856..147381bf0b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1053,7 +1053,7 @@ F:	package/sdl2/
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+-F:	package/python-pybind/
++F:	package/python-pybind11/
+ F:	package/reaver/
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.29.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.30.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+ N:	Guo Ren <ren_guo@c-sky.com>
+diff --git a/package/Config.in b/package/Config.in
+index 1f44fe7ca9..36e9c606c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1070,7 +1070,7 @@ menu "External python modules"
+ 	source "package/python-pyalsa/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+ 	source "package/python-pyasn1-modules/Config.in"
+-	source "package/python-pybind/Config.in"
++	source "package/python-pybind11/Config.in"
+ 	source "package/python-pycairo/Config.in"
+ 	source "package/python-pycares/Config.in"
+ 	source "package/python-pycli/Config.in"
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+deleted file mode 100644
+index 634e869e40..0000000000
+--- a/package/python-pybind/python-pybind.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# python-pybind
+-#
+-################################################################################
+-
+-PYTHON_PYBIND_VERSION = 2.5.0
+-PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+-PYTHON_PYBIND_LICENSE = BSD-3-Clause
+-PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-PYTHON_PYBIND_SETUP_TYPE = setuptools
+-
+-$(eval $(python-package))
+diff --git a/package/python-pybind/Config.in b/package/python-pybind11/Config.in
+similarity index 53%
+rename from package/python-pybind/Config.in
+rename to package/python-pybind11/Config.in
+index 604cb9ee67..714c37f13c 100644
+--- a/package/python-pybind/Config.in
++++ b/package/python-pybind11/Config.in
+@@ -1,7 +1,7 @@
+-config BR2_PACKAGE_PYTHON_PYBIND
+-	bool "python-pybind"
++config BR2_PACKAGE_PYTHON_PYBIND11
++	bool "python-pybind11"
+ 	help
+-	  PyBind is a lightweight header-only library that exposes C++
++	  PyBind11 is a lightweight header-only library that exposes C++
+ 	  types in Python and vice versa, mainly to create Python
+ 	  bindings of existing C++ code.
+ 
+diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind11/python-pybind11.hash
+similarity index 83%
+rename from package/python-pybind/python-pybind.hash
+rename to package/python-pybind11/python-pybind11.hash
+index 751b0bdf6e..2cdcbee8b2 100644
+--- a/package/python-pybind/python-pybind.hash
++++ b/package/python-pybind11/python-pybind11.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind-2.5.0.tar.gz
++sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind11-2.5.0.tar.gz
+ # License files, locally calculated
+ sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9   LICENSE
+diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
+new file mode 100644
+index 0000000000..c4fc578894
+--- /dev/null
++++ b/package/python-pybind11/python-pybind11.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pybind11
++#
++################################################################################
++
++PYTHON_PYBIND11_VERSION = 2.5.0
++PYTHON_PYBIND11_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND11_VERSION))
++PYTHON_PYBIND11_LICENSE = BSD-3-Clause
++PYTHON_PYBIND11_LICENSE_FILES = LICENSE
++PYTHON_PYBIND11_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+-- 
+2.20.1
