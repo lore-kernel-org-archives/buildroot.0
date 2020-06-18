@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:16:28 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/icu: needs gcc >= 4.9 and host gcc >= 4.9
-In-Reply-To: <20200614201349.677681-1-fontaine.fabrice@gmail.com>
-References: <20200614201349.677681-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200618221628.560cd839@windsurf.home>
+Date: Thu, 18 Jun 2020 22:16:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python3: bump version to 3.8.3
+In-Reply-To: <20200614202346.133133-1-aduskett@gmail.com>
+References: <20200614202346.133133-1-aduskett@gmail.com>
+Message-ID: <20200618221632.45e8c48b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Jun 2020 22:13:49 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 14 Jun 2020 13:23:46 -0700
+aduskett at gmail.com wrote:
 
-> icu uses std::max_align_t since version 67-1 and
-> https://github.com/unicode-org/icu/commit/a3078fb8c89b61c35ccebb04cf6b189bc81093b3
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> This raises the following build failure with gcc 4.8:
-> 
-> utext.cpp:572:5: error: 'max_align_t' in namespace 'std' does not name a type
->      std::max_align_t    extension;
->      ^
-> 
-> This build failure is due to GCC bug 56019:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56019
-> 
-> Instead of adding BR2_TOOLCHAIN_HAS_GCC_BUG_56019, just bumps gcc
-> dependency from 4.8 to 4.9
-> 
-> As this issue also affects host-icu, add a host gcc >= 4.9 dependency
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/6d2658a3c165c99df3eae87b2970e738bd386245
->  - http://autobuild.buildroot.org/results/d204f1a528765d1440620a1eed8c29cbb5ec93c3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
-> Changes v2 -> v3 (after review of Yann E. Morin):
->  - Drop Config.in.host for host-icu
+>  .../0001-Make-the-build-of-pyc-files-conditional.patch      | 2 +-
+>  ...sable-buggy_getaddrinfo-configure-test-when-cross-.patch | 2 +-
+>  ...d-infrastructure-to-disable-the-build-of-certain-e.patch | 2 +-
+>  ...d-an-option-to-disable-installation-of-test-module.patch | 2 +-
+>  package/python3/0014-Add-an-option-to-disable-pydoc.patch   | 2 +-
+>  package/python3/0015-Add-an-option-to-disable-lib2to3.patch | 2 +-
+>  .../0016-Add-option-to-disable-the-sqlite3-module.patch     | 2 +-
+>  .../0017-Add-an-option-to-disable-the-tk-module.patch       | 2 +-
+>  .../0018-Add-an-option-to-disable-the-curses-module.patch   | 2 +-
+>  package/python3/0019-Add-an-option-to-disable-expat.patch   | 2 +-
+>  .../python3/0020-Add-an-option-to-disable-CJK-codecs.patch  | 2 +-
+>  package/python3/0021-Add-an-option-to-disable-NIS.patch     | 2 +-
+>  .../python3/0022-Add-an-option-to-disable-unicodedata.patch | 2 +-
+>  package/python3/0023-Add-an-option-to-disable-IDLE.patch    | 2 +-
+>  package/python3/0024-Add-an-option-to-disable-decimal.patch | 6 +++---
+>  ...25-Add-an-option-to-disable-the-ossaudiodev-module.patch | 6 +++---
+>  .../0026-Add-an-option-to-disable-openssl-support.patch     | 2 +-
+>  .../0027-Add-an-option-to-disable-the-readline-module.patch | 2 +-
+>  ...8-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch | 2 +-
+>  .../python3/0031-Add-an-option-to-disable-uuid-module.patch | 2 +-
+>  ...nfigure.ac-fixup-CC-print-multiarch-output-for-mus.patch | 2 +-
+>  package/python3/python3.hash                                | 6 +++---
+>  package/python3/python3.mk                                  | 2 +-
+>  23 files changed, 29 insertions(+), 29 deletions(-)
 
 Applied to master, thanks.
 
