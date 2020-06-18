@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 23:35:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-yatl: new package
-In-Reply-To: <20200611205607.1869425-1-fontaine.fabrice@gmail.com>
+Date: Thu, 18 Jun 2020 23:36:09 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-web2py: needs python-yatl
+In-Reply-To: <20200611205607.1869425-2-fontaine.fabrice@gmail.com>
 References: <20200611205607.1869425-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200618233510.38eadb22@windsurf.home>
+ <20200611205607.1869425-2-fontaine.fabrice@gmail.com>
+Message-ID: <20200618233609.47c3bb58@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Jun 2020 22:56:06 +0200
+On Thu, 11 Jun 2020 22:56:07 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> License is BSD-3-Clause as stated in upstream LICENSE.txt:
-> https://github.com/web2py/yatl/blob/master/LICENSE.txt
+> python-yatl is a mandatory dependency of python-web2py since version
+> 2.18.4 and
+> https://github.com/web2py/web2py/commit/0663088d7f7c3257eaa9cdd8415483372d3c80b7
 > 
-> An issue was opened to add LICENSE.txt in pypi tarballs:
-> https://github.com/web2py/yatl/issues/21
-> 
-> Add host variant as it will be needed for python-web2py
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9d627152920973effeb48ad03c27a1c69fa83931
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/python-yatl/Config.in        |  6 ++++++
->  package/python-yatl/python-yatl.hash |  3 +++
->  package/python-yatl/python-yatl.mk   | 14 ++++++++++++++
->  5 files changed, 25 insertions(+)
->  create mode 100644 package/python-yatl/Config.in
->  create mode 100644 package/python-yatl/python-yatl.hash
->  create mode 100644 package/python-yatl/python-yatl.mk
+>  package/python-web2py/Config.in        | 1 +
+>  package/python-web2py/python-web2py.mk | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
+I agree with Asaf: python-yatl is not needed at build time, only the
+host variant is. And in fact, it was the same with python-pydal. So I
+did a preparation patch that dropped python-pydal as a build-time
+dependency. Then I applied your patch on top of that, and changed it to
+also treat python-yatl as a runtime dependency. host-python-pydal and
+host-python-yatl remain build time dependencies of course.
+
+Best regards,
 
 Thomas
 -- 
