@@ -1,33 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:39:40 +0200
-Subject: [Buildroot] [PATCH] package/inotify-tools: bump to version
- 3.20.2.2
-In-Reply-To: <5d835ebf3428198b12412ca081eb6bdf4a5aca25.1591879444.git.baruch@tkos.co.il>
-References: <5d835ebf3428198b12412ca081eb6bdf4a5aca25.1591879444.git.baruch@tkos.co.il>
-Message-ID: <20200618223940.726a3f48@windsurf.home>
+Date: Thu, 18 Jun 2020 22:40:02 +0200
+Subject: [Buildroot] [PATCH] package/fastd: bump to v19
+In-Reply-To: <20200611192504.4058-1-post@lespocky.de>
+References: <20200611192504.4058-1-post@lespocky.de>
+Message-ID: <20200618224002.4da2ed12@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Jun 2020 15:44:04 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+On Thu, 11 Jun 2020 21:25:04 +0200
+Alexander Dahl <post@lespocky.de> wrote:
 
-> Use upstream provided tarball. Drop autoreconf.
+> Maintenance release, most important is OpenSSL 1.1+ support. See full
+> release notes for details:
 > 
-> Update homepage URL. The old URL redirects to the new one.
+> https://fastd.readthedocs.io/en/stable/releases/v19.html
 > 
-> Format hash file with two spaces delimiters.
+> Two patches went upstream.  The last remaining patch was not touched,
+> LTO might not work as expected, but upstream dropped CMake in favour of
+> the meson build system after v19, so it seemed not worth the effort.
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Alexander Dahl <post@lespocky.de>
 > ---
->  package/inotify-tools/Config.in          | 2 +-
->  package/inotify-tools/inotify-tools.hash | 4 ++--
->  package/inotify-tools/inotify-tools.mk   | 5 ++---
->  3 files changed, 5 insertions(+), 6 deletions(-)
+>  ...akeList-do-not-overwrite-module-path.patch |  56 -------
+>  ...emove-aes128-ctr-NaCl-implementation.patch | 137 ------------------
+>  package/fastd/fastd.hash                      |   4 +-
+>  package/fastd/fastd.mk                        |   4 +-
+>  4 files changed, 3 insertions(+), 198 deletions(-)
+>  delete mode 100644 package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
+>  delete mode 100644 package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch
 
-Applied to master, thanks.
+You had forgotten to update the hash of the license file (and explain
+why it needs to be updated). I fixed that and applied. Thanks!
 
 Thomas
 -- 
