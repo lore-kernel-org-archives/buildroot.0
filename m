@@ -1,132 +1,159 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Thu, 18 Jun 2020 13:02:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pybind: rename package to
- python-pybind11
-Message-ID: <20200618110209.5750-1-guillaume.bressaix@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 18 Jun 2020 11:01:41 +0200
+Subject: [Buildroot] [git commit] package/openjdk-bin: install to
+ host/usr/lib/jvm
+Message-ID: <20200618113811.DFA5285F7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e9a02417f3f4475cf9a789f480743e3702d32e59
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Buildroot currently installs openjdk-bin to $(HOST_DIR)/ instead of the more
+traditional (for java installations) $(HOST_DIR)/usr/lib/jvm.
+
+As described in https://bugs.busybox.net/show_bug.cgi?id=13001
+
+"Openjdk-bin provides it's own libfreetype.so and places it into
+$(HOST_DIR)/lib/. This library causes build failures with the
+host-xapp_mkfontscale package due to the overwritten libfreetype.so.
+
+mkfontscale.o: In function `doDirectory':
+mkfontscale.c:(.text+0x1a80): undefined reference to `FT_Get_BDF_Property'
+collect2: error: ld returned 1 exit status
+
+Reproducing the error is done by repeating the following steps.
+make host-freetype
+make host-openjdk-bin
+make host-xapp_mkfontscale"
+
+There are two options for fixing this problem:
+
+ 1) add host-freetype and host-lksctp-tools as dependencies to host-openjdk-bin
+    and then remove the provided libfreetype.so and libsctp.so libraries
+    in a post_extract_hook.
+
+ 2) change the installation directory from $(HOST_DIR)/ to
+    $(HOST_DIR)/usr/lib/jvm just like the target OpenJDK package and
+    copy the entire source directories contents to the above location.
+
+The second option provides the following advantages:
+  - the directory structure is consistent with how we handle the target OpenJDK.
+
+  - the HOST_OPENJDK_BIN_INSTALL_CMDS step is simplified.
+
+  - packages such as Maven require directories of which we are currently not
+    copying. These missing directories cause programs such as Maven to crash
+    when running with an error such as
+    "Can't read cryptographic policy directory: unlimited."
+
+  - does not miss any other libraries that solution 1 would not cope with
+    (e.g. libzip.so from host-libzip, or libnet.so from not-yet existing
+    host-libnet, or libsctp.so from not-yet existing host-lksctp-tools)
+
+Because the second option is both simple, easier to implement, is low-impact,
+and fixes the problems described above wholly, it is the best to implement.
+
+To implement the above changes, we must also modify the following files in the
+same patch to match the host's new directory paths:
+
+ - openjdk.mk
+ - openjdk-jni-test.mk
+ - openjdk-hello-world.mk
+
+To avoid having to change all those packages in the future, expose two
+new variables, HOST_OPENJDK_BIN_ROOT_DIR which contains the path where
+the openjdk-bin was installed in, and JAVAC, which contains the path to
+the javac compiler (modeled after the way the autoconf et al. variables
+are set and exposed).
+
+Tested with:
+./support/testing/run-tests -o out -d dl tests.package.test_openjdk.TestOpenJdk
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=13001
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr:
+  - introduce HOST_OPENJDK_BIN_ROOT_DIR and JAVAC
+  - expand and tweak the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
+ package/openjdk-bin/openjdk-bin.mk                          | 13 ++++++++-----
+ package/openjdk/openjdk.mk                                  |  2 +-
+ .../package/openjdk-hello-world/openjdk-hello-world.mk      |  2 +-
+ .../openjdk/package/openjdk-jni-test/openjdk-jni-test.mk    |  2 +-
+ 4 files changed, 11 insertions(+), 8 deletions(-)
 
-python-pybind only allows C++ -> python bindings at the moment.
-
-As pointed by Asaf, we will face issues if we try to activate
-Python->C++ bindings in the future, because Cmake will
-search for 'pybind11' as a key word.
-
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- DEVELOPERS                                          |  2 +-
- package/Config.in                                   |  2 +-
- package/python-pybind/python-pybind.mk              | 13 -------------
- .../{python-pybind => python-pybind11}/Config.in    |  6 +++---
- .../python-pybind11.hash}                           |  2 +-
- package/python-pybind11/python-pybind11.mk          | 13 +++++++++++++
- 6 files changed, 19 insertions(+), 19 deletions(-)
- delete mode 100644 package/python-pybind/python-pybind.mk
- rename package/{python-pybind => python-pybind11}/Config.in (53%)
- rename package/{python-pybind/python-pybind.hash => python-pybind11/python-pybind11.hash} (83%)
- create mode 100644 package/python-pybind11/python-pybind11.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cbe6bc1856..147381bf0b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1053,7 +1053,7 @@ F:	package/sdl2/
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/liquid-dsp/
- F:	package/pixiewps/
--F:	package/python-pybind/
-+F:	package/python-pybind11/
- F:	package/reaver/
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index f4a8979e0b..b8110ab968 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -20,17 +20,20 @@ endif
+ HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
+ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
  
- N:	Guo Ren <ren_guo@c-sky.com>
-diff --git a/package/Config.in b/package/Config.in
-index 1f44fe7ca9..36e9c606c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1070,7 +1070,7 @@ menu "External python modules"
- 	source "package/python-pyalsa/Config.in"
- 	source "package/python-pyasn1/Config.in"
- 	source "package/python-pyasn1-modules/Config.in"
--	source "package/python-pybind/Config.in"
-+	source "package/python-pybind11/Config.in"
- 	source "package/python-pycairo/Config.in"
- 	source "package/python-pycares/Config.in"
- 	source "package/python-pycli/Config.in"
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-deleted file mode 100644
-index 634e869e40..0000000000
---- a/package/python-pybind/python-pybind.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# python-pybind
--#
--################################################################################
--
--PYTHON_PYBIND_VERSION = 2.5.0
--PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
--PYTHON_PYBIND_LICENSE = BSD-3-Clause
--PYTHON_PYBIND_LICENSE_FILES = LICENSE
--PYTHON_PYBIND_SETUP_TYPE = setuptools
--
--$(eval $(python-package))
-diff --git a/package/python-pybind/Config.in b/package/python-pybind11/Config.in
-similarity index 53%
-rename from package/python-pybind/Config.in
-rename to package/python-pybind11/Config.in
-index 604cb9ee67..714c37f13c 100644
---- a/package/python-pybind/Config.in
-+++ b/package/python-pybind11/Config.in
-@@ -1,7 +1,7 @@
--config BR2_PACKAGE_PYTHON_PYBIND
--	bool "python-pybind"
-+config BR2_PACKAGE_PYTHON_PYBIND11
-+	bool "python-pybind11"
- 	help
--	  PyBind is a lightweight header-only library that exposes C++
-+	  PyBind11 is a lightweight header-only library that exposes C++
- 	  types in Python and vice versa, mainly to create Python
- 	  bindings of existing C++ code.
++HOST_OPENJDK_BIN_ROOT_DIR = $(HOST_DIR)/usr/lib/jvm
++
+ # unpack200 has an invalid RPATH and relies on libzlib. When
+ # host-libzlib is installed on the system, the error "ERROR: package
+ # host-libzlib installs executables without proper RPATH: will occur.
+ # Because unpack200 is a deprecated tool, removing it to fix this
+ # issue is safe.
+ define HOST_OPENJDK_BIN_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/bin
+-	cp -dpfr $(@D)/bin/* $(HOST_DIR)/bin/
+-	mkdir -p $(HOST_DIR)/lib
+-	cp -dpfr $(@D)/lib/* $(HOST_DIR)/lib/
+-	$(RM) -f $(HOST_DIR)/bin/unpack200
++	mkdir -p $(HOST_OPENJDK_BIN_ROOT_DIR)
++	cp -dpfr $(@D)/* $(HOST_OPENJDK_BIN_ROOT_DIR)
++	$(RM) -f $(HOST_OPENJDK_BIN_ROOT_DIR)/bin/unpack200
+ endef
  
-diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind11/python-pybind11.hash
-similarity index 83%
-rename from package/python-pybind/python-pybind.hash
-rename to package/python-pybind11/python-pybind11.hash
-index 751b0bdf6e..2cdcbee8b2 100644
---- a/package/python-pybind/python-pybind.hash
-+++ b/package/python-pybind11/python-pybind11.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind-2.5.0.tar.gz
-+sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind11-2.5.0.tar.gz
- # License files, locally calculated
- sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9   LICENSE
-diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
-new file mode 100644
-index 0000000000..c4fc578894
---- /dev/null
-+++ b/package/python-pybind11/python-pybind11.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-pybind11
-+#
-+################################################################################
+ $(eval $(host-generic-package))
 +
-+PYTHON_PYBIND11_VERSION = 2.5.0
-+PYTHON_PYBIND11_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND11_VERSION))
-+PYTHON_PYBIND11_LICENSE = BSD-3-Clause
-+PYTHON_PYBIND11_LICENSE_FILES = LICENSE
-+PYTHON_PYBIND11_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
--- 
-2.20.1
++# variables used by other packages
++JAVAC = $(HOST_OPENJDK_BIN_ROOT_DIR)/bin/javac
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 22c9a777b5..8ce740ebb7 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -94,7 +94,7 @@ OPENJDK_CONF_OPTS = \
+ 	--enable-openjdk-only \
+ 	--enable-unlimited-crypto \
+ 	--openjdk-target=$(GNU_TARGET_NAME) \
+-	--with-boot-jdk=$(HOST_DIR) \
++	--with-boot-jdk=$(HOST_OPENJDK_BIN_ROOT_DIR) \
+ 	--with-stdc++lib=dynamic \
+ 	--with-debug-level=release \
+ 	--with-devkit=$(HOST_DIR) \
+diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+index 998117b8e2..ddd5e38884 100644
+--- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
++++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-hello-world/openjdk-hello-world.mk
+@@ -8,7 +8,7 @@ OPENJDK_HELLO_WORLD_DEPENDENCIES = openjdk
+ 
+ define OPENJDK_HELLO_WORLD_BUILD_CMDS
+ 	$(INSTALL) -D $(OPENJDK_HELLO_WORLD_PKGDIR)/HelloWorld.java $(@D)/HelloWorld.java
+-	$(HOST_DIR)/bin/javac $(@D)/HelloWorld.java
++	$(JAVAC) $(@D)/HelloWorld.java
+ endef
+ 
+ define OPENJDK_HELLO_WORLD_INSTALL_TARGET_CMDS
+diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
+index f279e5cd70..2028ad40c7 100644
+--- a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
++++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
+@@ -10,7 +10,7 @@ JNI_INCLUDE_PATH = $(BUILD_DIR)/openjdk-$(OPENJDK_VERSION)/build/linux-aarch64-s
+ 
+ define OPENJDK_JNI_TEST_BUILD_CMDS
+ 	# Compile Java classes and generate native headers
+-	$(HOST_DIR)/bin/javac -d $(@D) -h $(@D) \
++	$(JAVAC) -d $(@D) -h $(@D) \
+ 		$(OPENJDK_JNI_TEST_PKGDIR)/JniTest.java \
+ 		$(OPENJDK_JNI_TEST_PKGDIR)/JniWrapper.java \
+ 		$(OPENJDK_JNI_TEST_PKGDIR)/JniHelper.java
