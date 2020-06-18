@@ -1,34 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:15:36 +0200
-Subject: [Buildroot] [git commit] Make: simplify locales whitelisting
-Message-ID: <20200618201403.830007FD24@busybox.osuosl.org>
+Date: Thu, 18 Jun 2020 22:16:28 +0200
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/icu: needs gcc >= 4.9 and host gcc >= 4.9
+In-Reply-To: <20200614201349.677681-1-fontaine.fabrice@gmail.com>
+References: <20200614201349.677681-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200618221628.560cd839@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f88d5f52441c4b3d2de816ba93adba87f529b51d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 14 Jun 2020 22:13:49 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> icu uses std::max_align_t since version 67-1 and
+> https://github.com/unicode-org/icu/commit/a3078fb8c89b61c35ccebb04cf6b189bc81093b3
+> 
+> This raises the following build failure with gcc 4.8:
+> 
+> utext.cpp:572:5: error: 'max_align_t' in namespace 'std' does not name a type
+>      std::max_align_t    extension;
+>      ^
+> 
+> This build failure is due to GCC bug 56019:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56019
+> 
+> Instead of adding BR2_TOOLCHAIN_HAS_GCC_BUG_56019, just bumps gcc
+> dependency from 4.8 to 4.9
+> 
+> As this issue also affects host-icu, add a host gcc >= 4.9 dependency
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/6d2658a3c165c99df3eae87b2970e738bd386245
+>  - http://autobuild.buildroot.org/results/d204f1a528765d1440620a1eed8c29cbb5ec93c3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Yann E. Morin):
+>  - Drop Config.in.host for host-icu
 
-diff --git a/Makefile b/Makefile
-index ce1c08a6f6..04c29b1c71 100644
---- a/Makefile
-+++ b/Makefile
-@@ -695,8 +695,7 @@ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
- # in the whitelist file. If it doesn't, kill it.
- # Finally, specifically for X11, regenerate locale.dir from the whitelist.
- define PURGE_LOCALES
--	rm -f $(LOCALE_WHITELIST)
--	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
-+	printf '%s\n' $(LOCALE_NOPURGE) locale-archive > $(LOCALE_WHITELIST)
- 
- 	for dir in $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale); \
- 	do \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
