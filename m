@@ -1,77 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 18 Jun 2020 21:45:00 +0200
-Subject: [Buildroot] [git commit] support/testing: add python-colorzero test
-Message-ID: <20200618194318.A33F882B7D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gpiozero: new package
+Message-ID: <20200618194318.B1B8A8006E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc5761beb0fdd27d5f89a5f618c3ec02e5d0e800
+commit: https://git.buildroot.net/buildroot/commit/?id=4e41b6377d7b1ce559b543a7fe1ad37740ec8916
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                     |  2 ++
- .../tests/package/sample_python_colorzero.py       |  8 ++++++++
- .../testing/tests/package/test_python_colorzero.py | 23 ++++++++++++++++++++++
- 3 files changed, 33 insertions(+)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-gpiozero/Config.in            |  9 +++++++++
+ package/python-gpiozero/python-gpiozero.hash |  4 ++++
+ package/python-gpiozero/python-gpiozero.mk   | 13 +++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 951f843cf2..3bad5d5ae9 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -481,6 +481,8 @@ tests.package.test_python_cbor.TestPythonPy2Cbor: { extends: .runtime_test }
- tests.package.test_python_cbor.TestPythonPy3Cbor: { extends: .runtime_test }
- tests.package.test_python_click.TestPythonPy2Click: { extends: .runtime_test }
- tests.package.test_python_click.TestPythonPy3Click: { extends: .runtime_test }
-+tests.package.test_python_colorzero.TestPythonPy2Colorzero: { extends: .runtime_test }
-+tests.package.test_python_colorzero.TestPythonPy3Colorzero: { extends: .runtime_test }
- tests.package.test_python_constantly.TestPythonPy2Constantly: { extends: .runtime_test }
- tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtime_test }
- tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/sample_python_colorzero.py b/support/testing/tests/package/sample_python_colorzero.py
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 65bce3e4a4..32a9ecc909 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2026,6 +2026,7 @@ F:	package/libevdev/
+ F:	package/log4cplus/
+ F:	package/postgresql/
+ F:	package/python-colorzero/
++F:	package/python-gpiozero/
+ F:	package/qt5/
+ F:	package/quotatool/
+ F:	package/racehound/
+diff --git a/package/Config.in b/package/Config.in
+index fbe87ec902..8da95d846d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -968,6 +968,7 @@ menu "External python modules"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gitdb2/Config.in"
+ 	source "package/python-gobject/Config.in"
++	source "package/python-gpiozero/Config.in"
+ 	source "package/python-greenlet/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+ 	source "package/python-h2/Config.in"
+diff --git a/package/python-gpiozero/Config.in b/package/python-gpiozero/Config.in
 new file mode 100644
-index 0000000000..23862a816d
+index 0000000000..1e2735be45
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_colorzero.py
-@@ -0,0 +1,8 @@
-+from colorzero import Color
++++ b/package/python-gpiozero/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_GPIOZERO
++	bool "python-gpiozero"
++	depends on BR2_arm
++	select BR2_PACKAGE_PYTHON_COLORZERO # runtime
++	select BR2_PACKAGE_PYTHON_RPI_GPIO # runtime
++	help
++	  A simple interface to GPIO devices with Raspberry Pi.
 +
-+red = Color('red')
-+green = Color('lime')
-+blue = Color('blue')
-+assert(red.rgb == (1.0, 0.0, 0.0))
-+assert(green.rgb == (0.0, 1.0, 0.0))
-+assert(blue.rgb == (0.0, 0.0, 1.0))
-diff --git a/support/testing/tests/package/test_python_colorzero.py b/support/testing/tests/package/test_python_colorzero.py
++	  https://github.com/gpiozero/gpiozero
+diff --git a/package/python-gpiozero/python-gpiozero.hash b/package/python-gpiozero/python-gpiozero.hash
 new file mode 100644
-index 0000000000..b7c228ac3c
+index 0000000000..2302003561
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_colorzero.py
-@@ -0,0 +1,23 @@
-+from tests.package.test_python import TestPythonPackageBase
++++ b/package/python-gpiozero/python-gpiozero.hash
+@@ -0,0 +1,4 @@
++# Locally computed
++sha256  8cb9824fe1b08e7935de03899455e20ce2c242e4cebb0c954c274c48059f6ea5  python-gpiozero-1.5.1.tar.gz
++# Locally computed
++sha256  b6e26763b79d7904d6eaa66f7f53ae374cf30431bb6ba8bcb0d9d5ff56dc69e3  LICENSE.rst
+diff --git a/package/python-gpiozero/python-gpiozero.mk b/package/python-gpiozero/python-gpiozero.mk
+new file mode 100644
+index 0000000000..67e8067a8b
+--- /dev/null
++++ b/package/python-gpiozero/python-gpiozero.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-gpiozero
++#
++################################################################################
 +
++PYTHON_GPIOZERO_VERSION = 1.5.1
++PYTHON_GPIOZERO_SITE = $(call github,gpiozero,gpiozero,v$(PYTHON_GPIOZERO_VERSION))
++PYTHON_GPIOZERO_LICENSE = BSD-3-Clause
++PYTHON_GPIOZERO_LICENSE_FILES = LICENSE.rst
++PYTHON_GPIOZERO_SETUP_TYPE = setuptools
 +
-+class TestPythonPy2Colorzero(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_COLORZERO=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_colorzero.py"]
-+    timeout = 30
-+
-+
-+class TestPythonPy3Colorzero(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_COLORZERO=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_colorzero.py"]
-+    timeout = 30
++$(eval $(python-package))
