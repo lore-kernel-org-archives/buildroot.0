@@ -1,28 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Jun 2020 07:23:51 +0000
-Subject: [Buildroot] [Bug 13011] Incorrect selection of gcc version
-In-Reply-To: <bug-13011-163@https.bugs.busybox.net/>
-References: <bug-13011-163@https.bugs.busybox.net/>
-Message-ID: <bug-13011-163-xswTjXbQCI@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jun 2020 09:25:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/open-plc-utils: install
+ packages to /usr/bin
+In-Reply-To: <20200617222159.176141-2-aduskett@gmail.com>
+References: <20200617222159.176141-1-aduskett@gmail.com>
+ <20200617222159.176141-2-aduskett@gmail.com>
+Message-ID: <20200618092504.393decb1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13011
+On Wed, 17 Jun 2020 15:21:59 -0700
+aduskett at gmail.com wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> By default, open-plc-utils installs all of the compiled binaries to
+> /usr/local/bin which is not in the default path provided by Buildroot.
+> 
+> Passing BIN="$(TARGET_DIR)/usr/bin" to make install forces open-plc-utils to
+> install the compiled binaries to /usr/bin.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WORKSFORME
+Is this something related to the version bump, or independent, i.e
+something that already happens with the open-plc-utils currently in
+Buildroot?
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Thanks for the report! This is already fixed in master in commit
-https://git.buildroot.org/buildroot/commit/toolchain?id=5303e72a80e44c265473706a2d4f3acb5010814f
+In the latter case, then this fix should have come as a first patch in
+the series, so that it's clear it's a fix for something that is broken
+today, so that we know it needs to be backported to 2020.02.x and
+2020.05.x.
 
+Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
