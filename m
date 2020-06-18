@@ -1,43 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 23:36:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-web2py: needs python-yatl
-In-Reply-To: <20200611205607.1869425-2-fontaine.fabrice@gmail.com>
-References: <20200611205607.1869425-1-fontaine.fabrice@gmail.com>
- <20200611205607.1869425-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200618233609.47c3bb58@windsurf.home>
+From: Alexander Dahl <post@lespocky.de>
+Date: Fri, 19 Jun 2020 00:15:59 +0200
+Subject: [Buildroot] [PATCH] package/fastd: bump to v19
+In-Reply-To: <20200618224002.4da2ed12@windsurf.home>
+References: <20200611192504.4058-1-post@lespocky.de>
+ <20200618224002.4da2ed12@windsurf.home>
+Message-ID: <20200618221558.bjtrlxvwco7cpg6p@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Jun 2020 22:56:07 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Thomas,
 
-> python-yatl is a mandatory dependency of python-web2py since version
-> 2.18.4 and
-> https://github.com/web2py/web2py/commit/0663088d7f7c3257eaa9cdd8415483372d3c80b7
+On Thu, Jun 18, 2020 at 10:40:02PM +0200, Thomas Petazzoni wrote:
+> On Thu, 11 Jun 2020 21:25:04 +0200
+> Alexander Dahl <post@lespocky.de> wrote:
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9d627152920973effeb48ad03c27a1c69fa83931
+> > Maintenance release, most important is OpenSSL 1.1+ support. See full
+> > release notes for details:
+> > 
+> > https://fastd.readthedocs.io/en/stable/releases/v19.html
+> > 
+> > Two patches went upstream.  The last remaining patch was not touched,
+> > LTO might not work as expected, but upstream dropped CMake in favour of
+> > the meson build system after v19, so it seemed not worth the effort.
+> > 
+> > Signed-off-by: Alexander Dahl <post@lespocky.de>
+> > ---
+> >  ...akeList-do-not-overwrite-module-path.patch |  56 -------
+> >  ...emove-aes128-ctr-NaCl-implementation.patch | 137 ------------------
+> >  package/fastd/fastd.hash                      |   4 +-
+> >  package/fastd/fastd.mk                        |   4 +-
+> >  4 files changed, 3 insertions(+), 198 deletions(-)
+> >  delete mode 100644 package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
+> >  delete mode 100644 package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-web2py/Config.in        | 1 +
->  package/python-web2py/python-web2py.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+> You had forgotten to update the hash of the license file (and explain
+> why it needs to be updated). I fixed that and applied. Thanks!
 
-I agree with Asaf: python-yatl is not needed at build time, only the
-host variant is. And in fact, it was the same with python-pydal. So I
-did a preparation patch that dropped python-pydal as a build-time
-dependency. Then I applied your patch on top of that, and changed it to
-also treat python-yatl as a runtime dependency. host-python-pydal and
-host-python-yatl remain build time dependencies of course.
+I did not really forget it, but there was no error or warning on
+mismatch on my side. Maybe I did not let the whole BSP build finish,
+but just called some intermediate state before that was checked. Will
+check next time. Thanks for fixing it.
 
-Best regards,
+Greets
+Alex
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200619/d272f1d2/attachment.asc>
