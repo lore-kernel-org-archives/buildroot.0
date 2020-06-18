@@ -1,89 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:14:18 +0200
-Subject: [Buildroot] [git commit] package/xvkbd: bump to version 4.1
-Message-ID: <20200618201237.F2F7D85F62@busybox.osuosl.org>
+Date: Thu, 18 Jun 2020 22:14:19 +0200
+Subject: [Buildroot] [git commit] package/sngrep: bump to version 1.4.7
+Message-ID: <20200618201238.3931B85F62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c9d0828fc3160114b46b3f1c105ff5d27caf5dd
+commit: https://git.buildroot.net/buildroot/commit/?id=8418b2fa519287be8fcb0bec21bd3b121e64b35e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patch (already in version) and so autoreconf
-- Update hash of README (update in year, version, miscellaneous
-  information)
-- Update indentaton in hash file (two spaces)
+Other changes:
+  - Remove upstream patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Makefile-am-fix-install-data-hook.patch   | 27 ----------------------
- package/xvkbd/xvkbd.hash                           |  6 ++---
- package/xvkbd/xvkbd.mk                             |  4 +---
- 3 files changed, 4 insertions(+), 33 deletions(-)
+ .../0001-capture-fix-typo-in-FILE-object.patch     | 43 ----------------------
+ package/sngrep/sngrep.hash                         |  8 ++--
+ package/sngrep/sngrep.mk                           |  2 +-
+ 3 files changed, 5 insertions(+), 48 deletions(-)
 
-diff --git a/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch b/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
+diff --git a/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch b/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
 deleted file mode 100644
-index b275760de1..0000000000
---- a/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
+index ec8a0f5dc5..0000000000
+--- a/package/sngrep/0001-capture-fix-typo-in-FILE-object.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--Makefile.am: fix install-data-hook
+@@ -1,43 +0,0 @@
+-From 604f6d0ce2ec42ac494d76c95e68850ea6e7da8f Mon Sep 17 00:00:00 2001
+-From: Sebastian Kemper <sebastian_ml@gmx.net>
+-Date: Sun, 4 Nov 2018 16:58:00 +0100
+-Subject: [PATCH] capture: fix typo in FILE object
 -
--- Prefix $(appdefaultdir) and $(datarootdir) with $(DESTDIR) to allow
--  cross-compilation
--- Create $(DESTDIR)$(appdefaultdir) if it doesn't exist
+-FILE *fstdin is defined, but when calling freopen() stdin is used instead
+-of fstdin.
 -
--Upstream status: sent to Tom Sato <VEF00200@nifty.com>
+-This causes the compile to fail:
 -
--diff -Nuar xvkbd-4.0-orig/Makefile.am xvkbd-4.0/Makefile.am
----- xvkbd-4.0-orig/Makefile.am	2019-10-06 11:27:13.692243604 +0200
--+++ xvkbd-4.0/Makefile.am	2019-10-06 11:35:15.872263440 +0200
--@@ -17,11 +17,12 @@
-- 	[ which ad2c > /dev/null ] || ad2c XVkbd-common.ad > XVkbd-common.h
+-  CC       sngrep-capture.o
+-capture.c: In function 'capture_offline':
+-capture.c:194:21: error: assignment of read-only variable 'stdin'
+-         if (!(stdin = freopen("/dev/tty", "r", stdin))) {
+-                     ^
+-make[5]: *** [Makefile:519: sngrep-capture.o] Error 1
+-
+-This commit fixes the typo.
+-
+-Signed-off-by: Sebastian Kemper <sebastian_ml@gmx.net>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 604f6d0ce2ec
+-
+- src/capture.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/capture.c b/src/capture.c
+-index 911c35f43a35..a799413e2b0e 100644
+---- a/src/capture.c
+-+++ b/src/capture.c
+-@@ -191,7 +191,7 @@ capture_offline(const char *infile, const char *outfile)
 - 
-- install-data-hook:
--+	[ -d $(DESTDIR)$(appdefaultdir) ] || mkdir $(DESTDIR)$(appdefaultdir)
-- 	for file in *.ad; do \
---		$(INSTALL_DATA) $$file $(appdefaultdir)/$${file%.ad}; \
--+		$(INSTALL_DATA) $$file $(DESTDIR)$(appdefaultdir)/$${file%.ad}; \
-- 	done
---	[ -d $(datarootdir)/xvkbd/ ] || mkdir $(datarootdir)/xvkbd/
---	$(INSTALL_DATA) words.english $(datarootdir)/xvkbd/words.english
--+	[ -d $(DESTDIR)$(datarootdir)/xvkbd/ ] || mkdir $(DESTDIR)$(datarootdir)/xvkbd/
--+	$(INSTALL_DATA) words.english $(DESTDIR)$(datarootdir)/xvkbd/words.english
-- 
-- EXTRA_DIST = XVkbd-common.h *.ad *.xbm xvkbd.man README ChangeLog Imakefile words.english
-- 
-diff --git a/package/xvkbd/xvkbd.hash b/package/xvkbd/xvkbd.hash
-index dd6ed79b93..8f13ab7c50 100644
---- a/package/xvkbd/xvkbd.hash
-+++ b/package/xvkbd/xvkbd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	eb54e440badc40299ba9a8f27fcea740cd3501310e8955651af7ade517a3ac82	xvkbd-4.0.tar.gz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
--sha256	af0d9b39a91d2779e9758d8dacc24d466bea124c1d401687bddc48543516cd68	README
-+sha256  952d07df0fe1e45286520b7c98b4fd00fd60dbf3e3e8ff61e12c259f76a3bef4  xvkbd-4.1.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  5dada320d6b4fb7c76ef110a027b019feaf1149576acf7ac5cacf0d0dcdc3671  README
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index 1d056c1c4c..f65c02bc06 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -4,12 +4,10 @@
+-     // Reopen tty for ncurses after pcap have used stdin
+-     if (!strncmp(infile, "/dev/stdin", 10)) {
+--        if (!(stdin = freopen("/dev/tty", "r", stdin))) {
+-+        if (!(fstdin = freopen("/dev/tty", "r", stdin))) {
+-             fprintf(stderr, "Failed to reopen tty while using stdin for capture.");
+-             return 1;
+-         }
+--- 
+-2.19.2
+-
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index a751d95394..33fa91ef5e 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/irontec/sngrep/releases/download/v1.4.6/sngrep-1.4.6.tar.gz.md5sum
+-md5 094e76786b118258bac69e1514aac826  sngrep-1.4.6.tar.gz
++# From https://github.com/irontec/sngrep/releases/download/v1.4.7/sngrep-1.4.7.tar.gz.md5sum
++md5  78fe753e24f36ddaf627bc2b734f45ba  sngrep-1.4.7.tar.gz
+ 
+ # Locally computed
+-sha256 638d6557dc68db401b07d73b2e7f8276800281f021fe0c942992566d6b59a48a sngrep-1.4.6.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE
++sha256  3c96aadd8b8c6b7adb5552d6fb4234f2000f15109b0f6c5feb632c81306cc49b  sngrep-1.4.7.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 1cb3814c9e..841a7bb991 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XVKBD_VERSION = 4.0
-+XVKBD_VERSION = 4.1
- XVKBD_SITE = http://t-sato.in.coocan.jp/xvkbd
- XVKBD_LICENSE = GPL-2.0+
- XVKBD_LICENSE_FILES = COPYING README
--# We're patching Makefile.am
--XVKBD_AUTORECONF = YES
- 
- XVKBD_DEPENDENCIES = \
- 	xlib_libICE \
+-SNGREP_VERSION = 1.4.6
++SNGREP_VERSION = 1.4.7
+ SNGREP_SITE = $(call github,irontec,sngrep,v$(SNGREP_VERSION))
+ SNGREP_LICENSE = GPL-3.0+
+ SNGREP_LICENSE_FILES = LICENSE
