@@ -1,91 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 22:14:19 +0200
-Subject: [Buildroot] [git commit] package/libcpprestsdk: bump to version
- 2.10.16
-Message-ID: <20200618201238.2749886062@busybox.osuosl.org>
+Date: Thu, 18 Jun 2020 22:14:18 +0200
+Subject: [Buildroot] [git commit] package/xvkbd: bump to version 4.1
+Message-ID: <20200618201237.F2F7D85F62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fada99faadb9241404c0ec87cfff697f5718c9a
+commit: https://git.buildroot.net/buildroot/commit/?id=6c9d0828fc3160114b46b3f1c105ff5d27caf5dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Other changes:
-  - Remove upstream patch
+- Drop patch (already in version) and so autoreconf
+- Update hash of README (update in year, version, miscellaneous
+  information)
+- Update indentaton in hash file (two spaces)
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...prestsdk-fix-building-as-a-static-library.patch | 38 ----------------------
- package/libcpprestsdk/libcpprestsdk.hash           |  2 +-
- package/libcpprestsdk/libcpprestsdk.mk             |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
+ .../0001-Makefile-am-fix-install-data-hook.patch   | 27 ----------------------
+ package/xvkbd/xvkbd.hash                           |  6 ++---
+ package/xvkbd/xvkbd.mk                             |  4 +---
+ 3 files changed, 4 insertions(+), 33 deletions(-)
 
-diff --git a/package/libcpprestsdk/0001-libcpprestsdk-fix-building-as-a-static-library.patch b/package/libcpprestsdk/0001-libcpprestsdk-fix-building-as-a-static-library.patch
+diff --git a/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch b/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
 deleted file mode 100644
-index de900178d5..0000000000
---- a/package/libcpprestsdk/0001-libcpprestsdk-fix-building-as-a-static-library.patch
+index b275760de1..0000000000
+--- a/package/xvkbd/0001-Makefile-am-fix-install-data-hook.patch
 +++ /dev/null
-@@ -1,38 +0,0 @@
--From 8a9c3db14a390c0a8788405e52e9b8737a430191 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@gmail.com>
--Date: Mon, 12 Feb 2018 07:49:34 -0500
--Subject: [PATCH] libcpprestsdk: fix building as a static library
+@@ -1,27 +0,0 @@
+-Makefile.am: fix install-data-hook
 -
--Use pkg-config to find OpenSSL. This will automatically find any
--dependent libraries and put them in the correct order for linking.
+-- Prefix $(appdefaultdir) and $(datarootdir) with $(DESTDIR) to allow
+-  cross-compilation
+-- Create $(DESTDIR)$(appdefaultdir) if it doesn't exist
 -
--Upstream status: submitted
--https://github.com/Microsoft/cpprestsdk/pull/688
+-Upstream status: sent to Tom Sato <VEF00200@nifty.com>
 -
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- Release/cmake/cpprest_find_openssl.cmake | 10 +++++++---
-- 1 file changed, 7 insertions(+), 3 deletions(-)
--
--diff --git a/Release/cmake/cpprest_find_openssl.cmake b/Release/cmake/cpprest_find_openssl.cmake
--index 0b49a7e..2be8afb 100644
----- a/Release/cmake/cpprest_find_openssl.cmake
--+++ b/Release/cmake/cpprest_find_openssl.cmake
--@@ -41,8 +41,12 @@ function(cpprest_find_openssl)
--       # This should prevent linking against the system provided 0.9.8y
--       set(_OPENSSL_VERSION "")
--     endif()
---    find_package(OpenSSL 1.0.0 REQUIRED)
---
--+    if(UNIX)
--+		find_package(PkgConfig REQUIRED)
--+		pkg_search_module(OPENSSL openssl REQUIRED)
--+    else()
--+    	find_package(OpenSSL 1.0.0 REQUIRED)
--+	endif()
--     INCLUDE(CheckCXXSourceCompiles)
--     set(CMAKE_REQUIRED_INCLUDES "${OPENSSL_INCLUDE_DIR}")
--     set(CMAKE_REQUIRED_LIBRARIES "${OPENSSL_LIBRARIES}")
---- 
--2.14.3
--
-diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
-index 1f79a4ad95..e76522f6ee 100644
---- a/package/libcpprestsdk/libcpprestsdk.hash
-+++ b/package/libcpprestsdk/libcpprestsdk.hash
-@@ -1,3 +1,3 @@
+-diff -Nuar xvkbd-4.0-orig/Makefile.am xvkbd-4.0/Makefile.am
+---- xvkbd-4.0-orig/Makefile.am	2019-10-06 11:27:13.692243604 +0200
+-+++ xvkbd-4.0/Makefile.am	2019-10-06 11:35:15.872263440 +0200
+-@@ -17,11 +17,12 @@
+- 	[ which ad2c > /dev/null ] || ad2c XVkbd-common.ad > XVkbd-common.h
+- 
+- install-data-hook:
+-+	[ -d $(DESTDIR)$(appdefaultdir) ] || mkdir $(DESTDIR)$(appdefaultdir)
+- 	for file in *.ad; do \
+--		$(INSTALL_DATA) $$file $(appdefaultdir)/$${file%.ad}; \
+-+		$(INSTALL_DATA) $$file $(DESTDIR)$(appdefaultdir)/$${file%.ad}; \
+- 	done
+--	[ -d $(datarootdir)/xvkbd/ ] || mkdir $(datarootdir)/xvkbd/
+--	$(INSTALL_DATA) words.english $(datarootdir)/xvkbd/words.english
+-+	[ -d $(DESTDIR)$(datarootdir)/xvkbd/ ] || mkdir $(DESTDIR)$(datarootdir)/xvkbd/
+-+	$(INSTALL_DATA) words.english $(DESTDIR)$(datarootdir)/xvkbd/words.english
+- 
+- EXTRA_DIST = XVkbd-common.h *.ad *.xbm xvkbd.man README ChangeLog Imakefile words.english
+- 
+diff --git a/package/xvkbd/xvkbd.hash b/package/xvkbd/xvkbd.hash
+index dd6ed79b93..8f13ab7c50 100644
+--- a/package/xvkbd/xvkbd.hash
++++ b/package/xvkbd/xvkbd.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  1c027a53457e87b0b3a475e5c8045b94400c475898c8bd51b0fbd218b99a7f7b  libcpprestsdk-2.10.15.tar.gz
-+sha256  3d75e17c7d79131320438f2a15331f7ca6281c38c0e2daa27f051e290eeb8681  libcpprestsdk-2.10.16.tar.gz
- sha256  5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97  license.txt
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index 69ff9f17cc..d8525cfe1b 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -4,7 +4,7 @@
+-sha256	eb54e440badc40299ba9a8f27fcea740cd3501310e8955651af7ade517a3ac82	xvkbd-4.0.tar.gz
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+-sha256	af0d9b39a91d2779e9758d8dacc24d466bea124c1d401687bddc48543516cd68	README
++sha256  952d07df0fe1e45286520b7c98b4fd00fd60dbf3e3e8ff61e12c259f76a3bef4  xvkbd-4.1.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  5dada320d6b4fb7c76ef110a027b019feaf1149576acf7ac5cacf0d0dcdc3671  README
+diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
+index 1d056c1c4c..f65c02bc06 100644
+--- a/package/xvkbd/xvkbd.mk
++++ b/package/xvkbd/xvkbd.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--LIBCPPRESTSDK_VERSION = 2.10.15
-+LIBCPPRESTSDK_VERSION = 2.10.16
- LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION))
- LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
+-XVKBD_VERSION = 4.0
++XVKBD_VERSION = 4.1
+ XVKBD_SITE = http://t-sato.in.coocan.jp/xvkbd
+ XVKBD_LICENSE = GPL-2.0+
+ XVKBD_LICENSE_FILES = COPYING README
+-# We're patching Makefile.am
+-XVKBD_AUTORECONF = YES
+ 
+ XVKBD_DEPENDENCIES = \
+ 	xlib_libICE \
