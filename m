@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jun 2020 13:59:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pybind: rename package
- to python-pybind11
-In-Reply-To: <20200618110209.5750-1-guillaume.bressaix@gmail.com>
-References: <20200618110209.5750-1-guillaume.bressaix@gmail.com>
-Message-ID: <20200618135910.25621d99@windsurf.home>
+Date: Thu, 18 Jun 2020 15:32:56 +0200
+Subject: [Buildroot] [git commit] configs/liteboard: bump U-Boot to 2020.04
+Message-ID: <20200618133116.0937C8050F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Jun 2020 13:02:09 +0200
-"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1060d08b2cbd82f5cc5420bfe8a4439116c66556
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/grinn_liteboard_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Your commit log is empty, which is not good.
-
-> python-pybind only allows C++ -> python bindings at the moment.
-> 
-> As pointed by Asaf, we will face issues if we try to activate
-> Python->C++ bindings in the future, because Cmake will
-> search for 'pybind11' as a key word.
-
-I don't understand how this is a justification for the renaming of the
-package.
-
-However, python-pybind11 indeed makes more sense because that's the
-name of the upstream project. But that thing about CMake that will
-search pybind11 as a keyword doesn't make much sense: CMake does not
-care at all about what the Buildroot package name is.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
+index 6cee075006..66077a6c15 100644
+--- a/configs/grinn_liteboard_defconfig
++++ b/configs/grinn_liteboard_defconfig
+@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="liteboard"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
