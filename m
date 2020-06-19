@@ -1,61 +1,89 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Fri, 19 Jun 2020 00:15:59 +0200
-Subject: [Buildroot] [PATCH] package/fastd: bump to v19
-In-Reply-To: <20200618224002.4da2ed12@windsurf.home>
-References: <20200611192504.4058-1-post@lespocky.de>
- <20200618224002.4da2ed12@windsurf.home>
-Message-ID: <20200618221558.bjtrlxvwco7cpg6p@falbala.internal.home.lespocky.de>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 19 Jun 2020 02:01:47 +0200
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.53.1
+Message-ID: <20200619000147.86253-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Bump version to 3.53.1 and add a patch from upstream[1] to fix build
+failure.
 
-On Thu, Jun 18, 2020 at 10:40:02PM +0200, Thomas Petazzoni wrote:
-> On Thu, 11 Jun 2020 21:25:04 +0200
-> Alexander Dahl <post@lespocky.de> wrote:
-> 
-> > Maintenance release, most important is OpenSSL 1.1+ support. See full
-> > release notes for details:
-> > 
-> > https://fastd.readthedocs.io/en/stable/releases/v19.html
-> > 
-> > Two patches went upstream.  The last remaining patch was not touched,
-> > LTO might not work as expected, but upstream dropped CMake in favour of
-> > the meson build system after v19, so it seemed not worth the effort.
-> > 
-> > Signed-off-by: Alexander Dahl <post@lespocky.de>
-> > ---
-> >  ...akeList-do-not-overwrite-module-path.patch |  56 -------
-> >  ...emove-aes128-ctr-NaCl-implementation.patch | 137 ------------------
-> >  package/fastd/fastd.hash                      |   4 +-
-> >  package/fastd/fastd.mk                        |   4 +-
-> >  4 files changed, 3 insertions(+), 198 deletions(-)
-> >  delete mode 100644 package/fastd/0002-CMakeList-do-not-overwrite-module-path.patch
-> >  delete mode 100644 package/fastd/0003-cipher-remove-aes128-ctr-NaCl-implementation.patch
-> 
-> You had forgotten to update the hash of the license file (and explain
-> why it needs to be updated). I fixed that and applied. Thanks!
+Release notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.53.1_release_notes
 
-I did not really forget it, but there was no error or warning on
-mismatch on my side. Maybe I did not let the whole BSP build finish,
-but just called some intermediate state before that was checked. Will
-check next time. Thanks for fixing it.
+[1]:
+https://hg.mozilla.org/projects/nss/rev/e955ece90b050e9da67528f09648945156d2bcea
 
-Greets
-Alex
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ ...d-infinite-recursion-when-CHECKLOC-i.patch | 30 +++++++++++++++++++
+ package/libnss/libnss.hash                    |  4 +--
+ package/libnss/libnss.mk                      |  2 +-
+ 3 files changed, 33 insertions(+), 3 deletions(-)
+ create mode 100644 package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch
 
+diff --git a/package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch b/package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch
+new file mode 100644
+index 0000000000..c8bdfd7a3f
+--- /dev/null
++++ b/package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch
+@@ -0,0 +1,30 @@
++From b0e9408ea779b37e97e706d037e497d2bf807593 Mon Sep 17 00:00:00 2001
++From: Mike Hommey <mh@glandium.org>
++Date: Wed, 3 Jun 2020 03:04:49 +0000
++Subject: [PATCH] Bug 1642153 - Avoid infinite recursion when CHECKLOC is not
++ set. r=jcj
++
++Differential Revision: https://phabricator.services.mozilla.com/D77596
++
++--HG--
++extra : moz-landing-system : lando
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/cmd/shlibsign/Makefile | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/nss/cmd/shlibsign/Makefile b/cmd/shlibsign/Makefile
++index 73641d996..a1192055c 100644
++--- a/nss/cmd/shlibsign/Makefile
+++++ b/nss/cmd/shlibsign/Makefile
++@@ -96,4 +96,6 @@ else
++ endif
++ 
++ libs: install
+++ifdef CHECKLOC
++ 	$(MAKE) $(CHECKLOC)
+++endif
++-- 
++2.25.1
++
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 425f5da515..5f76bffd00 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_52_RTM/src/SHA256SUMS
+-sha256	0a0aeb0cdda65ddcb64f746223df58b150f6803f4bfa1a4e876bbe6f9c4c1561  nss-3.52.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_53_1_RTM/src/SHA256SUMS
++sha256	2dccde67079b25c4e95ac3121f11b2819c37cf8c48ca263a45d8f83f7a315316  nss-3.53.1.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 020cf212d4..8b31892353 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.52
++LIBNSS_VERSION = 3.53.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200619/d272f1d2/attachment.asc>
+2.25.1
