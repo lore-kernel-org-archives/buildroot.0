@@ -1,53 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 19 Jun 2020 21:30:19 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.6
-Message-ID: <20200619193019.4067-1-ps.report@gmx.net>
+From: Alexander Dahl <post@lespocky.de>
+Date: Fri, 19 Jun 2020 21:39:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gpiod: add gpiod hardware
+ handling daemon
+In-Reply-To: <CAAj6r7oaCxid93ovxKciNNTyGn+MQwvUPG73PjgX5F0ZDTm__w@mail.gmail.com>
+References: <20200616164200.6399-1-marc.chalain@gmail.com>
+ <20200617223824.0ab717d2@windsurf.home>
+ <CAAj6r7oaCxid93ovxKciNNTyGn+MQwvUPG73PjgX5F0ZDTm__w@mail.gmail.com>
+Message-ID: <20200619193946.7hu3b3bo56xg5g5n@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Hei hei,
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-June/041478.html
+On Fri, Jun 19, 2020 at 05:37:55PM +0200, Marc Chalain wrote:
+> > Thanks a lot for your contribution. I have not reviewed it carefully.
+> > However, while it looks potentially interesting, I am personally always
+> > a bit concerned in packaging software components that look like
+> > "personal projects". This project has only been written by you, there
+> > are no contributions from others, no stars, no fork on Github, nothing
+> > indicates that anyone but you is using gpiod.
+> >
+> > This project comes from a professional project. I didn't find any tool
+> to launch an application on a switch event. I thought that is stupid to
+> write
+> code in the application only for that, when there isn't time mandatory.
+> This is a personal project, but I hope to reuse it in the future.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+I had a similar problem last year. There's triggerhappy which I first
+noticed on raspbian, but that was already too heavy and did not
+fullfill my needs (pressing a button for five seconds and acting after
+that). 
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 0edbca5082..97bdeb36e7 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-April/041400.html
--md5  c9a1b15bb932eaf22f840efe4c3f84eb  libinput-1.15.5.tar.xz
--sha1  644b1c6936cfff8a4547da71fbcd7ebd28618426  libinput-1.15.5.tar.xz
--sha256  a90efc8f423c3094f2f9f372fb92381b2f3aad62e8b5882a8abe333aa8249c97  libinput-1.15.5.tar.xz
--sha512  a0a3a325048841fc017e19d3bc5f5490605972ab9e2730dc5678bda7efb7a5b1fa6f531f3c8abd8393899ec383d8d2bcfd586eacee04fc1fbda0e02ba2af956a  libinput-1.15.5.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-June/041478.html
-+md5  b2388a1d6f0dcc944b49bc7239a53be8  libinput-1.15.6.tar.xz
-+sha1  3313a4d76df51e62dfd3cf84918352faa0cf21de  libinput-1.15.6.tar.xz
-+sha256  aeedea216a6317ddc6e27c3d54f26b987078780db6a8320cc09e19c25b307f1c  libinput-1.15.6.tar.xz
-+sha512  90459e5a1f22fd42ffcbab157b461e4514c30803bcebdaced76c65c05cccfa6f259640a50497055fe7ed0b376a6979f6d1d01227ae447fe60ba88fa81142b969  libinput-1.15.6.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index bf58e70822..4d708955ea 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.15.5
-+LIBINPUT_VERSION = 1.15.6
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+I know OpenWrt has something similar, but I found it was embedded to
+deep in their code to just use that part and they stripped out all
+that evdev stuff from kernel and userspace (probably to shrink size).
+
+However, I defined my button in dts as key, not just as gpio, because
+it is actually a key and linux has infrastructure for that.
+Furthermore there are reliable userspace libraries to not reinvent the
+wheel. I was able to build something around libevdev in two days.
+
+Besides: your gpiod uses the well known libgpiod, but is not part of
+that project, right? That is a little puzzling, people will mix that
+up. 
+
+Greets
+Alex
+
 -- 
-2.27.0
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200619/07176cbb/attachment.asc>
