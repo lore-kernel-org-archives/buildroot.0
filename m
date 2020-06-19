@@ -1,129 +1,158 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 19 Jun 2020 11:26:33 +0300
-Subject: [Buildroot] [PATCH v1 1/1] package/fuse-overlayfs: new package
-In-Reply-To: <20200618191839.398771-1-christian@paral.in>
-References: <20200618191839.398771-1-christian@paral.in>
-Message-ID: <CALFsTFWb=6=1OANGVzEmu58ccgDGimtfEXxQ0SK+PuW53VSpeg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 19 Jun 2020 11:37:45 +0300
+Subject: [Buildroot] [PATCH] stress-ng: bump to version 0.11.14
+Message-ID: <4289a40f5c830717edc9c400b89408216152c9c2.1592555865.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Enable build for musl libc. glibc specific code is now behind __GNUC__.
+Add a patch to fix collision with kernel defined struct sysinfo.
 
-On Thu, Jun 18, 2020 at 10:18 PM Christian Stewart <christian@paral.in> wrote:
->
-> FUSE-overlayfs is an implementation of overlay+shiftfs in FUSE, intended to be
-> used as the backing filesystem for rootless containers.
->
-> Reference: http://github.com/containers/fuse-overlayfs
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/fuse-overlayfs/Config.in           | 15 +++++++++++++++
->  package/fuse-overlayfs/fuse-overlayfs.hash |  4 ++++
->  package/fuse-overlayfs/fuse-overlayfs.mk   | 15 +++++++++++++++
->  5 files changed, 36 insertions(+)
->  create mode 100644 package/fuse-overlayfs/Config.in
->  create mode 100644 package/fuse-overlayfs/fuse-overlayfs.hash
->  create mode 100644 package/fuse-overlayfs/fuse-overlayfs.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cbe6bc1856..acecf1f3bf 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -539,6 +539,7 @@ F:  package/docker-cli/
->  F:     package/docker-containerd/
->  F:     package/docker-engine/
->  F:     package/docker-proxy/
-> +F:     package/fuse-overlayfs/
->  F:     package/go/
->  F:     package/mosh/
->  F:     package/pkg-golang.mk
-> diff --git a/package/Config.in b/package/Config.in
-> index 1f44fe7ca9..3de5559505 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -203,6 +203,7 @@ menu "Filesystem and flash utilities"
->         source "package/f2fs-tools/Config.in"
->         source "package/flashbench/Config.in"
->         source "package/fscryptctl/Config.in"
-> +       source "package/fuse-overlayfs/Config.in"
->         source "package/fwup/Config.in"
->         source "package/genext2fs/Config.in"
->         source "package/genpart/Config.in"
-> diff --git a/package/fuse-overlayfs/Config.in b/package/fuse-overlayfs/Config.in
-> new file mode 100644
-> index 0000000000..3ff268401b
-> --- /dev/null
-> +++ b/package/fuse-overlayfs/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_FUSE_OVERLAYFS
-> +       bool "fuse-overlayfs"
-> +       depends on !BR2_STATIC_LIBS # libfuse3
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3
-> +       depends on BR2_USE_MMU # libfuse3
-> +       select BR2_PACKAGE_LIBFUSE3
-> +       help
-> +         FUSE-overlayfs is an implementation of overlay+shiftfs in FUSE, intended to
-> +         be used as the backing filesystem for rootless containers.
-> +
-> +         http://github.com/containers/fuse-overlayfs
-> +
-> +comment "fuse-overlayfs needs a toolchain w/ threads, dynamic library"
-> +       depends on BR2_USE_MMU
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> \ No newline at end of file
+Drop attr dependency. Not used anymore.
 
-Please fix check-package warnings for this file (newline at the end of
-the file and help text format:
-http://nightly.buildroot.org/#writing-rules-config-in)
+Make keyutils an optional dependency. Detected at config time.
 
-> diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
-> new file mode 100644
-> index 0000000000..ee1eb694c9
-> --- /dev/null
-> +++ b/package/fuse-overlayfs/fuse-overlayfs.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +sha256 060168c2d5a8c6cc768b4542eba9953b7ff4a31f94bfb2e05b3d1051390838b1  fuse-overlayfs-1.1.0.tar.gz
-> +# Locally computed
-> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
-> new file mode 100644
-> index 0000000000..9a67f0b75a
-> --- /dev/null
-> +++ b/package/fuse-overlayfs/fuse-overlayfs.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# fuse-overlayfs
-> +#
-> +################################################################################
-> +
-> +FUSE_OVERLAYFS_VERSION = 1.1.0
-> +FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
-> +FUSE_OVERLAYFS_LICENSE = GPL-3.0
-> +FUSE_OVERLAYFS_LICENSE_FILES = COPYING
-> +
-> +FUSE_OVERLAYFS_AUTORECONF = YES
-> +FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-autoconf host-automake host-libtool host-pkgconf
+Enable static build now that keyutils is not a mandatory dependency.
 
-Since you use the pkg-autotools infrastructure, you don't need to add
-the autoconf, automake and libtool dependencies here.
+Format hash file with two spaces delimiters.
 
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.27.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...tress-ng.h-suppress-kernel-sysinfo.h.patch | 49 +++++++++++++++++++
+ package/stress-ng/Config.in                   | 10 +---
+ package/stress-ng/stress-ng.hash              |  4 +-
+ package/stress-ng/stress-ng.mk                |  8 +--
+ 4 files changed, 58 insertions(+), 13 deletions(-)
+ create mode 100644 package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
 
-Best regards,
-Asaf.
+diff --git a/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch b/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
+new file mode 100644
+index 000000000000..cc8b1a1b67fb
+--- /dev/null
++++ b/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
+@@ -0,0 +1,49 @@
++From 8c223daf10319f15570a74ed83a1d655fdbd4a7b Mon Sep 17 00:00:00 2001
++Message-Id: <8c223daf10319f15570a74ed83a1d655fdbd4a7b.1592540443.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 19 Jun 2020 07:10:24 +0300
++Subject: [PATCH] stress-ng.h: suppress kernel sysinfo.h
++
++The kernel sysinfo.h (indirectly included from genetlink.h) defines
++struct sysinfo. This collides with musl libc definition of the same
++struct.
++
++Fixes this build issue:
++
++In file included from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:5,
++                 from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netlink.h:5,
++                 from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/genetlink.h:6,
++                 from stress-ng.h:464,
++                 from stress-access.c:25:
++.../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:8:8: error: redefinition of ?struct sysinfo?
++ struct sysinfo {
++        ^~~~~~~
++In file included from stress-ng.h:389,
++                 from stress-access.c:25:
++.../arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
++ struct sysinfo {
++        ^~~~~~~
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/ColinIanKing/stress-ng/pull/69
++
++ stress-ng.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/stress-ng.h b/stress-ng.h
++index 1a662938c1d9..e8aa0efe7527 100644
++--- a/stress-ng.h
+++++ b/stress-ng.h
++@@ -387,6 +387,8 @@
++ 
++ #if defined(HAVE_SYS_SYSINFO_H)
++ #include <sys/sysinfo.h>
+++/* Suppress kernel sysinfo to avoid collision with musl */
+++#define _LINUX_SYSINFO_H
++ #endif
++ 
++ #if defined(HAVE_SYS_SYSMACROS_H)
++-- 
++2.27.0
++
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+index 4fcfa3554c76..64b473b75c90 100644
+--- a/package/stress-ng/Config.in
++++ b/package/stress-ng/Config.in
+@@ -1,16 +1,11 @@
+ config BR2_PACKAGE_STRESS_NG
+ 	bool "stress-ng"
+ 	depends on BR2_USE_MMU # fork()
+-	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
+ 	depends on !BR2_nios2
+ 	depends on !BR2_arc
+-	depends on !BR2_STATIC_LIBS # keyutils
+-	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
+-	select BR2_PACKAGE_ATTR # stress-xattr.c needs xattr.h
+ 	help
+ 	  stress-ng will stress test a computer system in various
+ 	  selectable ways. It was designed to exercise various physical
+@@ -19,8 +14,7 @@ config BR2_PACKAGE_STRESS_NG
+ 
+ 	  http://kernel.ubuntu.com/~cking/stress-ng/
+ 
+-comment "stress-ng needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.3"
++comment "stress-ng needs a toolchain w/ headers >= 3.3"
+ 	depends on !BR2_nios2 && !BR2_arc
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
+-		|| BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index a2b9b9ef9522..9993c759bafb 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 85ae86587f605225cc736e1ddba6cc5fd129dfbba0f7d94df755e2e6ac5230e6 stress-ng-0.10.07.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
++sha256  b21436fdbd9dc482a3fd95ae27cccf0097d0f226361ea3785215f7a4ad50136b  stress-ng-0.11.14.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 55e3d297bcb8..61bc07d60a68 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,18 +4,20 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.10.07
++STRESS_NG_VERSION = 0.11.14
+ STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
+ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
+ 
+-STRESS_NG_DEPENDENCIES = attr keyutils
+-
+ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ STRESS_NG_DEPENDENCIES += libbsd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KEYUTILS),y)
++STRESS_NG_DEPENDENCIES += keyutils
++endif
++
+ define STRESS_NG_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+-- 
+2.27.0
