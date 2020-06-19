@@ -1,26 +1,48 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 19 Jun 2020 11:01:34 -0300
-Subject: [Buildroot] [PATCH 1/3] package/freescale-imx/firmware-imx:
- install sdma firmware for i.MX8M{, M, N}
-In-Reply-To: <20200619135929.GA529674@p1g2>
-References: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>
- <CAOMZO5ABSEJvLkBJGNUtoSgZoBCEZAqkGqLv7wVuffE57zJq+Q@mail.gmail.com>
- <d6c168ae-abe9-26ba-f8f8-d62687ff2592@armadeus.com>
- <20200619132043.GA525498@p1g2>
- <6b4eda2b-4095-0c6d-fd6f-b5e0ca483603@armadeus.com>
- <20200619135929.GA529674@p1g2>
-Message-ID: <CAOMZO5Ae-h_yFo9qHhJMeOvFi=Bw2FX9JCm9Vyf1LaiQGgr3Bg@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 19 Jun 2020 16:57:12 +0200
+Subject: [Buildroot] [PATCH v2 0/7] Cups revamp
+Message-ID: <20200619145719.2352019-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 19, 2020 at 10:59 AM Gary Bisson
-<gary.bisson@boundarydevices.com> wrote:
+This series fixes various nitpicks we found using cups and do some
+bumps.
 
-> Your title says "add SDMA firmware for i.MX8M" but in the end it also
-> installs VPU and EPDC files.
+Changelog:
+v1->v2:
+* Adding missing patch "Add lp user as default cups user" 
 
-Agreed. Yes, this was the exact point that called my attention when I
-reviewed this patch.
+Angelo Compagnucci (5):
+  package/cups-filters: bump to version 1.27.5
+  package/cups: bump to version 2.3.3
+  package/cups: Add lp user as default cups user
+  package/cups: Add udev rules to assign usb printers group to lp
+  package/cups: adding python support
+
+Michael Trimarchi (2):
+  package/dejavu: Install dejavu fonts in staging dir
+  package/qt5: Enable cups support when BR2_PACKAGE_CUPS
+
+ package/cups-filters/Config.in                |  3 ++
+ package/cups-filters/S82cups-browsed          | 23 ++++++++++++
+ package/cups-filters/cups-filters.hash        |  2 +-
+ package/cups-filters/cups-filters.mk          | 20 +++++++++--
+ ...move-man-from-BUILDDIRS-in-configure.patch |  8 +++--
+ package/cups/0002-Do-not-use-genstrings.patch | 14 ++++----
+ ...0004-Remove-PIE-flags-from-the-build.patch |  8 +++--
+ package/cups/70-usb-printers.rules            |  4 +++
+ package/cups/S81cupsd                         | 23 ++++++++++++
+ package/cups/cups.hash                        |  2 +-
+ package/cups/cups.mk                          | 35 +++++++++++++++++--
+ package/dejavu/dejavu.mk                      |  9 +++++
+ package/qt5/qt5base/qt5base.mk                |  8 ++++-
+ 13 files changed, 139 insertions(+), 20 deletions(-)
+ create mode 100644 package/cups-filters/S82cups-browsed
+ create mode 100644 package/cups/70-usb-printers.rules
+ create mode 100644 package/cups/S81cupsd
+
+-- 
+2.25.1
