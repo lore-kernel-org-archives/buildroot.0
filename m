@@ -1,83 +1,49 @@
-From: Louis-Paul CORDIER <lpdev@cordier.org>
-Date: Fri, 19 Jun 2020 12:22:22 +0200
-Subject: [Buildroot] [PATCH v6 20/28] qt5: Fix pkgconfig search path for
- per-package infrastructure
-In-Reply-To: <20200217212350.29750-21-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-21-anaumann@ultratronik.de>
-Message-ID: <a339f273-33f3-f232-eac4-6e50427abf6d@cordier.org>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Fri, 19 Jun 2020 08:46:06 -0400
+Subject: [Buildroot] [PATCH] package/ktap: fix compilation with gcc >= 8.x
+ and newer kernel
+Message-ID: <20200619124606.125213-1-ralphs@netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Package currently fails to build for multiple architectures.
+Can be fixed with two patches, taken from following github PR:
+https://github.com/ktap/ktap/pull/107
 
-On 2/17/20 10:23 PM, Andreas Naumann wrote:
-> Per default qmake uses the pkg-config binary and search path detected by qt5base
-> and set in mkspecs/qconfig.pri. For per-package infra, this leads to packages
-> not contained in qt5base not being detected.
-> To overcome this, set the correct pathes in the global QMAKE variable.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->   package/qt5/qt5.mk | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-> index eb2a749678..c3b9f69c3f 100644
-> --- a/package/qt5/qt5.mk
-> +++ b/package/qt5/qt5.mk
-> @@ -33,4 +33,6 @@ endef
->   endif
->   
->   # Variable for other Qt applications to use
-> -QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
-> +QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++ \
-> +	PKG_CONFIG_SYSROOT_DIR=$(STAGING_DIR) \
-> +	PKG_CONFIG_LIBDIR=$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig
-> 
+---
+Direct links to the patches, for reviewers convenience:
+https://github.com/ktap/ktap/pull/107/commits/65923a4439398318e6d395da76e3f8c28bd6e1d4
+https://github.com/ktap/ktap/pull/107/commits/b2651aa7dca61e55d16668adb7b849fde6755e4c
 
-Andreas, all,
+ package/ktap/ktap.hash | 2 ++
+ package/ktap/ktap.mk   | 2 ++
+ 2 files changed, 4 insertions(+)
 
-I attached 2 additional patches, that fix compile issue on x86 platform 
-(see 
-http://lists.busybox.net/pipermail/buildroot/2020-June/285123.html). I 
-based my work on top of 2020.05 tag, plus:
-
-- [v6,19/28] core/pkg-infra: Add per-package support in qmake infra 
-(https://patchwork.ozlabs.org/project/buildroot/patch/20200217212350.29750-20-anaumann at ultratronik.de/)
-- [v6,20/28] qt5: Fix pkgconfig search path for per-package 
-infrastructure 
-(https://patchwork.ozlabs.org/project/buildroot/patch/20200217212350.29750-21-anaumann at ultratronik.de/)
-
-Description of my patches:
-
-1. The first one is fixing the absolute path added in .pri and .pc files 
-when building qt5base. When using sysroot, thos abolute path are 
-breaking the compilation because they are pointing to directories 
-outside the sysroot.
-
-2. The second one is fixing .cmake files that also contains absolute 
-paths after qt5base installation
-
-I'm now able to use full parallel build with per-package with Qt5.
-
-Thank you for your hard work Andreas,
-
-BR,
-Louis-Paul CORDIER
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-core-pkg-infra-Fix-pkg-config-and-.pri-absolute-path.patch
-Type: text/x-patch
-Size: 1889 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200619/9c71f155/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-package-qt5base-fix-absolute-path-generated-in-.cmak.patch
-Type: text/x-patch
-Size: 1085 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200619/9c71f155/attachment-0001.bin>
+diff --git a/package/ktap/ktap.hash b/package/ktap/ktap.hash
+index 1eff712501..697c0356c7 100644
+--- a/package/ktap/ktap.hash
++++ b/package/ktap/ktap.hash
+@@ -1,3 +1,5 @@
+ # Locally calculated
+ sha256 44a0808d57175cf9d15466f720e1e10d5ed1abc3497aedf9ddd6469545552345  ktap-23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f.tar.gz
+ sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE-GPL
++sha256 5b0ecb2e3d73df5f91513834dc64ea2e3845fa6cfbd74c895d9182498b799c7c  65923a4439398318e6d395da76e3f8c28bd6e1d4.patch
++sha256 a3dca7eacaec4a2a22e9fa58328aa454b58cebc763f552a433d6ff2961e2cb26  b2651aa7dca61e55d16668adb7b849fde6755e4c.patch
+diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
+index 3b9134da65..7479fa3b13 100644
+--- a/package/ktap/ktap.mk
++++ b/package/ktap/ktap.mk
+@@ -8,6 +8,8 @@ KTAP_VERSION = 23bc7a4a94bd9e4e1b8b7c06632e61c041d57b5f
+ KTAP_SITE = $(call github,ktap,ktap,$(KTAP_VERSION))
+ KTAP_LICENSE = GPL-2.0
+ KTAP_LICENSE_FILES = LICENSE-GPL
++KTAP_PATCH += https://github.com/leitao/ktap/commit/65923a4439398318e6d395da76e3f8c28bd6e1d4.patch
++KTAP_PATCH += https://github.com/leitao/ktap/commit/b2651aa7dca61e55d16668adb7b849fde6755e4c.patch
+ 
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ KTAP_DEPENDENCIES += elfutils
+-- 
+2.17.1
