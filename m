@@ -1,75 +1,129 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 19 Jun 2020 09:03:24 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-06-18
-In-Reply-To: <20200619065116.3112286EDC@fraxinus.osuosl.org>
-References: <20200619065116.3112286EDC@fraxinus.osuosl.org>
-Message-ID: <20200619090324.681c9cb4@x230_1.trabucayre.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 19 Jun 2020 11:26:33 +0300
+Subject: [Buildroot] [PATCH v1 1/1] package/fuse-overlayfs: new package
+In-Reply-To: <20200618191839.398771-1-christian@paral.in>
+References: <20200618191839.398771-1-christian@paral.in>
+Message-ID: <CALFsTFWb=6=1OANGVzEmu58ccgDGimtfEXxQ0SK+PuW53VSpeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Hello,
 
-On Fri, 19 Jun 2020 06:51:09 -0000
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Thu, Jun 18, 2020 at 10:18 PM Christian Stewart <christian@paral.in> wrote:
+>
+> FUSE-overlayfs is an implementation of overlay+shiftfs in FUSE, intended to be
+> used as the backing filesystem for rootless containers.
+>
+> Reference: http://github.com/containers/fuse-overlayfs
+>
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  DEVELOPERS                                 |  1 +
+>  package/Config.in                          |  1 +
+>  package/fuse-overlayfs/Config.in           | 15 +++++++++++++++
+>  package/fuse-overlayfs/fuse-overlayfs.hash |  4 ++++
+>  package/fuse-overlayfs/fuse-overlayfs.mk   | 15 +++++++++++++++
+>  5 files changed, 36 insertions(+)
+>  create mode 100644 package/fuse-overlayfs/Config.in
+>  create mode 100644 package/fuse-overlayfs/fuse-overlayfs.hash
+>  create mode 100644 package/fuse-overlayfs/fuse-overlayfs.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index cbe6bc1856..acecf1f3bf 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -539,6 +539,7 @@ F:  package/docker-cli/
+>  F:     package/docker-containerd/
+>  F:     package/docker-engine/
+>  F:     package/docker-proxy/
+> +F:     package/fuse-overlayfs/
+>  F:     package/go/
+>  F:     package/mosh/
+>  F:     package/pkg-golang.mk
+> diff --git a/package/Config.in b/package/Config.in
+> index 1f44fe7ca9..3de5559505 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -203,6 +203,7 @@ menu "Filesystem and flash utilities"
+>         source "package/f2fs-tools/Config.in"
+>         source "package/flashbench/Config.in"
+>         source "package/fscryptctl/Config.in"
+> +       source "package/fuse-overlayfs/Config.in"
+>         source "package/fwup/Config.in"
+>         source "package/genext2fs/Config.in"
+>         source "package/genpart/Config.in"
+> diff --git a/package/fuse-overlayfs/Config.in b/package/fuse-overlayfs/Config.in
+> new file mode 100644
+> index 0000000000..3ff268401b
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_FUSE_OVERLAYFS
+> +       bool "fuse-overlayfs"
+> +       depends on !BR2_STATIC_LIBS # libfuse3
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3
+> +       depends on BR2_USE_MMU # libfuse3
+> +       select BR2_PACKAGE_LIBFUSE3
+> +       help
+> +         FUSE-overlayfs is an implementation of overlay+shiftfs in FUSE, intended to
+> +         be used as the backing filesystem for rootless containers.
+> +
+> +         http://github.com/containers/fuse-overlayfs
+> +
+> +comment "fuse-overlayfs needs a toolchain w/ threads, dynamic library"
+> +       depends on BR2_USE_MMU
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> \ No newline at end of file
 
-> Hello,
-> 
-> Autobuild statistics for 2020-06-18
-> ===============================
-> 
->       branch |  OK | NOK | TIM | TOT |
->   2020.02.x  | 22  |  4  |  0  | 26  |
->   2020.05.x  | 23  |  9  |  0  | 32  |
->     master   | 103 | 163 |  0  | 266 |
-> 
-> Results for branch 'master'
-> ===========================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->                        unknown | 66
->                 iproute2-5.7.0 | 16
->               gnuradio-3.8.1.0 | 12
-[...]
->                      qwt-6.1.4 | 1 
-[...]
-> 
-> Detail of failures
-> ------------------
-> 
->     arch     |             reason             | OK? |                                       url                                       | orph?
-> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-[...]
->    mipsel    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/a026b0a33e19d02f15ac5cd33aa59a989f64c731 |     
->    xtensa    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/17b5afee21a6954427d111caa0aaa7a666fe4aa3 |     
->    nios2     |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/28bfa0480525e5bd661682dfb1307679b7e5beb9 |     
->   aarch64    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/c8a64b2575a68f3d03a6435de23444cee7ee3343 |     
->    nios2     |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/307bbd816e1bdaca4c54ade2d1ddd5e111581475 |     
->   sparc64    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/f1589c11104a15eeb509bffcb41a5d3bb4662ab4 |     
->   mips64el   |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/011ececa3605c4df5ab563d3d41ff739ed153b19 |     
->  aarch64_be  |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/1e1be93bbde42347591273bbb9d4ad1fe9eb4d19 |     
->   sparc64    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/d80a1c7d453f3dca2f68336f4bf1f12915a03084 |     
->    sparc     |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/056a540ba2447ee2fc68bea1e03c27ad4997c10f |     
->     arm      |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/3d1b271deaf2b78f7dc53368506a8e8e84766c21 |     
->    nios2     |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/8e96e3633408e583d4391b0d5e7c68edebcb5e56 |     
-I have just send a patch to fix these.
-http://patchwork.ozlabs.org/project/buildroot/list/?series=184416
-[...]
->    mipsel    |           qwt-6.1.4            | NOK | http://autobuild.buildroot.net/results/fdc3b6dd1f6498e9531d42bd0e075cb842038287 | ORPH
-Fixed by http://lists.busybox.net/pipermail/buildroot/2020-June/284622.html
-but strange this patch is not shown in patchwork...
-[...]
-> 
+Please fix check-package warnings for this file (newline at the end of
+the file and help text format:
+http://nightly.buildroot.org/#writing-rules-config-in)
 
-Gwenhael
-> -- 
-> http://autobuild.buildroot.net
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+> new file mode 100644
+> index 0000000000..ee1eb694c9
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+> @@ -0,0 +1,4 @@
+> +# Locally computed
+> +sha256 060168c2d5a8c6cc768b4542eba9953b7ff4a31f94bfb2e05b3d1051390838b1  fuse-overlayfs-1.1.0.tar.gz
+> +# Locally computed
+> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+> new file mode 100644
+> index 0000000000..9a67f0b75a
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# fuse-overlayfs
+> +#
+> +################################################################################
+> +
+> +FUSE_OVERLAYFS_VERSION = 1.1.0
+> +FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+> +FUSE_OVERLAYFS_LICENSE = GPL-3.0
+> +FUSE_OVERLAYFS_LICENSE_FILES = COPYING
+> +
+> +FUSE_OVERLAYFS_AUTORECONF = YES
+> +FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-autoconf host-automake host-libtool host-pkgconf
+
+Since you use the pkg-autotools infrastructure, you don't need to add
+the autoconf, automake and libtool dependencies here.
+
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.27.0
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+Best regards,
+Asaf.
