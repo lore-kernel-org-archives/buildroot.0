@@ -1,109 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:48:15 +0200
-Subject: [Buildroot] [git commit] package/paho-mqtt-cpp: drop dynamic
- library dependency
-Message-ID: <20200620204624.2713D822A3@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sat, 20 Jun 2020 22:48:55 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/cups: bump to version 2.3.3
+In-Reply-To: <20200620223540.3ccb6371@windsurf.home>
+References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
+ <20200619145719.2352019-4-angelo@amarulasolutions.com>
+ <20200620223540.3ccb6371@windsurf.home>
+Message-ID: <CA+_SqVa8bHa4+FZ_NjE4Gw-V1SAGNrSE_AX=fzX=eH07R=wxnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10cd5bdf2317f47441c23d52ce720492c9ecd5ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, Jun 20, 2020 at 10:35 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...make-FindMahoMqttC.cmake-fix-static-build.patch | 35 ++++++++++++++++++++++
- package/paho-mqtt-cpp/Config.in                    |  6 ++--
- package/paho-mqtt-cpp/paho-mqtt-cpp.mk             | 14 +++++++++
- 3 files changed, 51 insertions(+), 4 deletions(-)
+> Hello Angelo,
+>
+> On Fri, 19 Jun 2020 16:57:15 +0200
+> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>
+> > This patch bumps cups to version 2.3.3.
+> > While bumping, fixing also the wrong installation of service files:
+> > the rcdir was left to the default value, that means installing the
+> > service files into the /etc/rcX.d directory.
+> > Adding also a simplified systemv service file for loading cupsd.
+>
+> Again, this seems to be mixing up different changes together in the
+> same commit. If I understand correctly what you're saying, you should
+> have at least three different commits:
+>
+>  - Fix the rcdir value, due to which the systemd service file was not
+>    installed at the right place.
+>
+>  - Provide and install an init script
+>
+>  - Bump the version.
+>
 
-diff --git a/package/paho-mqtt-cpp/0001-cmake-FindMahoMqttC.cmake-fix-static-build.patch b/package/paho-mqtt-cpp/0001-cmake-FindMahoMqttC.cmake-fix-static-build.patch
-new file mode 100644
-index 0000000000..934dca219e
---- /dev/null
-+++ b/package/paho-mqtt-cpp/0001-cmake-FindMahoMqttC.cmake-fix-static-build.patch
-@@ -0,0 +1,35 @@
-+From 8aeafa1c2ec90b0e95ba5944266eda115457e10d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 15 Jun 2020 13:40:22 +0200
-+Subject: [PATCH] cmake/FindMahoMqttC.cmake: fix static build
-+
-+Static libraries of paho-mqtt-c are not suffixed with -static since
-+version 1.3.2 and
-+https://github.com/eclipse/paho.mqtt.c/commit/8cc51c78b76a1eabd1df3124b0887ce8b01070ff
-+
-+See: https://github.com/eclipse/paho.mqtt.c/pull/704
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/eclipse/paho.mqtt.cpp/pull/275]
-+---
-+ cmake/FindPahoMqttC.cmake | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/cmake/FindPahoMqttC.cmake b/cmake/FindPahoMqttC.cmake
-+index 53f15a3..0ec95bd 100644
-+--- a/cmake/FindPahoMqttC.cmake
-++++ b/cmake/FindPahoMqttC.cmake
-+@@ -5,10 +5,6 @@ if(PAHO_WITH_SSL)
-+ else()
-+     set(_PAHO_MQTT_C_LIB_NAME paho-mqtt3a)
-+ endif()
-+-# add suffix when using static Paho MQTT C library variant
-+-if(PAHO_BUILD_STATIC)
-+-    set(_PAHO_MQTT_C_LIB_NAME ${_PAHO_MQTT_C_LIB_NAME}-static)
-+-endif()
-+ 
-+ find_library(PAHO_MQTT_C_LIBRARIES NAMES ${_PAHO_MQTT_C_LIB_NAME})
-+ unset(_PAHO_MQTT_C_LIB_NAME)
-+-- 
-+2.26.2
-+
-diff --git a/package/paho-mqtt-cpp/Config.in b/package/paho-mqtt-cpp/Config.in
-index dfeb5545f0..a46c1256e8 100644
---- a/package/paho-mqtt-cpp/Config.in
-+++ b/package/paho-mqtt-cpp/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PAHO_MQTT_CPP
- 	bool "paho-mqtt-cpp"
--	depends on !BR2_STATIC_LIBS  # dlopen()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -10,9 +9,8 @@ config BR2_PACKAGE_PAHO_MQTT_CPP
- 
- 	  https://eclipse.org/paho/clients/cpp/
- 
--comment "paho-mqtt-cpp needs a toolchain w/ threads, C++, dynamic library support"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_INSTALL_LIBSTDCPP
-+comment "paho-mqtt-cpp needs a toolchain w/ threads, C++"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- comment "paho-mqtt-cpp needs a toolchain not affected by GCC bug 64735"
-diff --git a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-index 2cb65d9840..bf1c4a27b7 100644
---- a/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-+++ b/package/paho-mqtt-cpp/paho-mqtt-cpp.mk
-@@ -22,4 +22,18 @@ else
- PAHO_MQTT_CPP_CONF_OPTS += -DPAHO_WITH_SSL=FALSE
- endif
- 
-+ifeq ($(BR2_SHARED_LIBS),y)
-+PAHO_MQTT_CPP_CONF_OPTS += \
-+	-DPAHO_BUILD_SHARED=TRUE \
-+	-DPAHO_BUILD_STATIC=FALSE
-+else ifeq ($(BR2_STATIC_LIBS),y)
-+PAHO_MQTT_CPP_CONF_OPTS += \
-+	-DPAHO_BUILD_SHARED=FALSE \
-+	-DPAHO_BUILD_STATIC=TRUE
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+PAHO_MQTT_CPP_CONF_OPTS += \
-+	-DPAHO_BUILD_SHARED=TRUE \
-+	-DPAHO_BUILD_STATIC=TRUE
-+endif
-+
- $(eval $(cmake-package))
+It's really that important to split it? No problem to do that, but this
+package installs a service and the way it is doing in the new version is
+the one proposed in the patch. The old version could have been different,
+I've not checked btw.
+Anyway, having this is required to have the service correctly installed, so
+I don't think the patch should be splitted because the bump really requires
+it.
+Probably the commit message could be better explaining this.
+
+
+> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+>
+> Same issue as PATCH 2/7 about author/SoB.
+>
+>
+> > diff --git a/package/cups/S81cupsd b/package/cups/S81cupsd
+> > new file mode 100644
+> > index 0000000000..f527d55f1e
+> > --- /dev/null
+> > +++ b/package/cups/S81cupsd
+>
+> Please take inspiration from package/busybox/S01syslogd.
+>
+
+Will do.
+
+
+> > -CUPS_VERSION = 2.3.1
+> > +CUPS_VERSION = 2.3.3
+> >  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+> >  CUPS_SITE =
+> https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+> >  CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+> > @@ -21,7 +21,8 @@ CUPS_CONF_OPTS = \
+> >       --with-docdir=/usr/share/cups/doc-root \
+> >       --disable-gssapi \
+> >       --disable-pam \
+> > -     --libdir=/usr/lib
+> > +     --libdir=/usr/lib \
+> > +     --with-rcdir=no
+>
+>         --without-rcdir
+>
+> > +define CUPS_INSTALL_INIT_SYSV
+> > +     @$(RM) $(TARGET_DIR)/etc/init.d/cups
+>
+> This should also be done in the systemd case I believe, and should not
+> have the @.
+>
+
+Not for systemd, cause the package installs the .service file and not the
+systemv related ones.
+
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200620/e867f725/attachment.html>
