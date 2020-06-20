@@ -1,104 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Jun 2020 22:54:26 +0200
-Subject: [Buildroot] [git commit] package/fuse-overlayfs: new package
-Message-ID: <20200620205238.61C9D81932@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Jun 2020 22:55:16 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/cups: bump to version 2.3.3
+In-Reply-To: <CA+_SqVa8bHa4+FZ_NjE4Gw-V1SAGNrSE_AX=fzX=eH07R=wxnA@mail.gmail.com>
+References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
+ <20200619145719.2352019-4-angelo@amarulasolutions.com>
+ <20200620223540.3ccb6371@windsurf.home>
+ <CA+_SqVa8bHa4+FZ_NjE4Gw-V1SAGNrSE_AX=fzX=eH07R=wxnA@mail.gmail.com>
+Message-ID: <20200620225516.59ac83ee@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c417174643eb8aa89f4010e9cec0a99221d847af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Jun 2020 22:48:55 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-FUSE-overlayfs is an implementation of overlay+shiftfs in FUSE, intended to be
-used as the backing filesystem for rootless containers.
+> It's really that important to split it? No problem to do that, but this
+> package installs a service and the way it is doing in the new version is
+> the one proposed in the patch. The old version could have been different,
+> I've not checked btw.
+> Anyway, having this is required to have the service correctly installed, so
+> I don't think the patch should be splitted because the bump really requires
+> it.
 
-Reference: http://github.com/containers/fuse-overlayfs
+How is this related to the bump? Is it the version bump that adds the
+service file? Or did it already exist before the bump?
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/fuse-overlayfs/Config.in           | 15 +++++++++++++++
- package/fuse-overlayfs/fuse-overlayfs.hash |  4 ++++
- package/fuse-overlayfs/fuse-overlayfs.mk   | 15 +++++++++++++++
- 5 files changed, 36 insertions(+)
+> > > +define CUPS_INSTALL_INIT_SYSV
+> > > +     @$(RM) $(TARGET_DIR)/etc/init.d/cups  
+> >
+> > This should also be done in the systemd case I believe, and should not
+> > have the @.
+> >  
+> 
+> Not for systemd, cause the package installs the .service file and not the
+> systemv related ones.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7cd67a5540..dc9fa8a718 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -539,6 +539,7 @@ F:	package/docker-cli/
- F:	package/docker-containerd/
- F:	package/docker-engine/
- F:	package/docker-proxy/
-+F:	package/fuse-overlayfs/
- F:	package/go/
- F:	package/mosh/
- F:	package/pkg-golang.mk
-diff --git a/package/Config.in b/package/Config.in
-index 7e4476d337..dc24921e0f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -203,6 +203,7 @@ menu "Filesystem and flash utilities"
- 	source "package/f2fs-tools/Config.in"
- 	source "package/flashbench/Config.in"
- 	source "package/fscryptctl/Config.in"
-+	source "package/fuse-overlayfs/Config.in"
- 	source "package/fwup/Config.in"
- 	source "package/genext2fs/Config.in"
- 	source "package/genpart/Config.in"
-diff --git a/package/fuse-overlayfs/Config.in b/package/fuse-overlayfs/Config.in
-new file mode 100644
-index 0000000000..a13cdd9e93
---- /dev/null
-+++ b/package/fuse-overlayfs/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_FUSE_OVERLAYFS
-+	bool "fuse-overlayfs"
-+	depends on BR2_USE_MMU # libfuse3
-+	depends on !BR2_STATIC_LIBS # libfuse3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3
-+	select BR2_PACKAGE_LIBFUSE3
-+	help
-+	  FUSE-overlayfs is an implementation of overlay+shiftfs in
-+	  FUSE, intended to be used for rootless containers.
-+
-+	  http://github.com/containers/fuse-overlayfs
-+
-+comment "fuse-overlayfs needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
-new file mode 100644
-index 0000000000..ee1eb694c9
---- /dev/null
-+++ b/package/fuse-overlayfs/fuse-overlayfs.hash
-@@ -0,0 +1,4 @@
-+# Locally computed
-+sha256	060168c2d5a8c6cc768b4542eba9953b7ff4a31f94bfb2e05b3d1051390838b1  fuse-overlayfs-1.1.0.tar.gz
-+# Locally computed
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
-new file mode 100644
-index 0000000000..25f4eadd11
---- /dev/null
-+++ b/package/fuse-overlayfs/fuse-overlayfs.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# fuse-overlayfs
-+#
-+################################################################################
-+
-+FUSE_OVERLAYFS_VERSION = 1.1.0
-+FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
-+FUSE_OVERLAYFS_LICENSE = GPL-3.0
-+FUSE_OVERLAYFS_LICENSE_FILES = COPYING
-+
-+FUSE_OVERLAYFS_AUTORECONF = YES
-+FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-pkgconf
-+
-+$(eval $(autotools-package))
+OK, I see: when --enable-systemd is used to build cups, it doesn't
+install its own init script. Makes sense. Thanks for explaining this
+aspect!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
