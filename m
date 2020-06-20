@@ -1,48 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 23:00:00 +0200
-Subject: [Buildroot] [git commit] package/python-redis: bump to version 3.5.3
-Message-ID: <20200620210036.C4A6382610@busybox.osuosl.org>
+Date: Sat, 20 Jun 2020 22:59:35 +0200
+Subject: [Buildroot] [git commit] package/python-ifaddr: bump to version
+ 0.1.7
+Message-ID: <20200620210036.B94A882610@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa3267bd460095eb9e1478b27d9cb8fa80f96163
+commit: https://git.buildroot.net/buildroot/commit/?id=e80acf0976161d57ca04c33d25d62104b6fcb4e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+There is now a LICENSE.txt file, so let's use it as the license file
+instead of setup.py. It does contain the MIT license text, as
+expected.
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-redis/python-redis.hash | 4 ++--
- package/python-redis/python-redis.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-ifaddr/python-ifaddr.hash | 8 ++++----
+ package/python-ifaddr/python-ifaddr.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
-index b7a62ca297..57c71dabfa 100644
---- a/package/python-redis/python-redis.hash
-+++ b/package/python-redis/python-redis.hash
+diff --git a/package/python-ifaddr/python-ifaddr.hash b/package/python-ifaddr/python-ifaddr.hash
+index 18df40ac4c..57b155caa5 100644
+--- a/package/python-ifaddr/python-ifaddr.hash
++++ b/package/python-ifaddr/python-ifaddr.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/redis/json
--md5  e3155d2b7a7577ce61e572b4e3535545  redis-3.5.2.tar.gz
--sha256  6d65e84bc58091140081ee9d9c187aab0480097750fac44239307a3bdf0b1251  redis-3.5.2.tar.gz
-+md5  7a00d4540374f34e152a33faa1fcee5f  redis-3.5.3.tar.gz
-+sha256  0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2  redis-3.5.3.tar.gz
- # Locally computed sha256 checksums
- sha256  790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
-diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
-index e09e3d8426..98c1a16599 100644
---- a/package/python-redis/python-redis.mk
-+++ b/package/python-redis/python-redis.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/ifaddr/json
+-md5	cc1b7f0a587ef38491f07e50bf91d82e  ifaddr-0.1.6.tar.gz
+-sha256	c19c64882a7ad51a394451dabcbbed72e98b5625ec1e79789924d5ea3e3ecb93  ifaddr-0.1.6.tar.gz
+-# Locally calculated
+-sha256	926c6fdac9ede91ae54c67066597466b04f9b4f956a24f9c77931e7765607b2c  setup.py
++md5  97c4eb7505643b5f1fe17733cb42abd9  ifaddr-0.1.7.tar.gz
++sha256  1f9e8a6ca6f16db5a37d3356f07b6e52344f6f9f7e806d618537731669eb1a94  ifaddr-0.1.7.tar.gz
++# Locally computed sha256 checksums
++sha256  8700856576ae2bc80c63bc970250510d9213fb02fed006d5f22742c9ddde24d7  LICENSE.txt
+diff --git a/package/python-ifaddr/python-ifaddr.mk b/package/python-ifaddr/python-ifaddr.mk
+index 23c4ee365e..f1154d9de8 100644
+--- a/package/python-ifaddr/python-ifaddr.mk
++++ b/package/python-ifaddr/python-ifaddr.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_REDIS_VERSION = 3.5.2
-+PYTHON_REDIS_VERSION = 3.5.3
- PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
--PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/08/ca/549a324a6a40611ac6d6192586ca562e79db86dd25fa59c3877ce69ce910
-+PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/b3/17/1e567ff78c83854e16b98694411fe6e08c3426af866ad11397cddceb80d3
- PYTHON_REDIS_SETUP_TYPE = setuptools
- PYTHON_REDIS_LICENSE = MIT
- PYTHON_REDIS_LICENSE_FILES = LICENSE
+-PYTHON_IFADDR_VERSION = 0.1.6
++PYTHON_IFADDR_VERSION = 0.1.7
+ PYTHON_IFADDR_SOURCE = ifaddr-$(PYTHON_IFADDR_VERSION).tar.gz
+-PYTHON_IFADDR_SITE = https://files.pythonhosted.org/packages/9f/54/d92bda685093ebc70e2057abfa83ef1b3fb0ae2b6357262a3e19dfe96bb8
++PYTHON_IFADDR_SITE = https://files.pythonhosted.org/packages/3d/fc/4ce147e3997cd0ea470ad27112087545cf83bf85015ddb3054673cb471bb
+ PYTHON_IFADDR_SETUP_TYPE = setuptools
+ PYTHON_IFADDR_LICENSE = MIT
+-PYTHON_IFADDR_LICENSE_FILES = setup.py
++PYTHON_IFADDR_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(python-package))
