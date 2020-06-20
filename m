@@ -1,77 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:35:40 +0200
-Subject: [Buildroot] [PATCH v2 3/7] package/cups: bump to version 2.3.3
-In-Reply-To: <20200619145719.2352019-4-angelo@amarulasolutions.com>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Sat, 20 Jun 2020 22:37:03 +0200
+Subject: [Buildroot] [PATCH v2 1/7] package/dejavu: Install dejavu fonts
+ in staging dir
+In-Reply-To: <20200620222933.16376fca@windsurf.home>
 References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
- <20200619145719.2352019-4-angelo@amarulasolutions.com>
-Message-ID: <20200620223540.3ccb6371@windsurf.home>
+ <20200619145719.2352019-2-angelo@amarulasolutions.com>
+ <20200620222933.16376fca@windsurf.home>
+Message-ID: <CAOf5uwmnNUUGTFa5mL1Jwovuj4VT9ND_CPW=rFt912QY3ymfsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+Hi
 
-On Fri, 19 Jun 2020 16:57:15 +0200
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+On Sat, Jun 20, 2020 at 10:29 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Angelo,
+>
+> On Fri, 19 Jun 2020 16:57:13 +0200
+> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>
+> > From: Michael Trimarchi <michael@amarulasolutions.com>
+> >
+> > The dejavu font is used by cups-filters and needs to be
+> > installed in staging directory.
+> >
+> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+>
+> The question is why should we do this just for the DejaVu fonts ? And
+> not other font packages ?
 
-> This patch bumps cups to version 2.3.3.
-> While bumping, fixing also the wrong installation of service files:
-> the rcdir was left to the default value, that means installing the
-> service files into the /etc/rcX.d directory.
-> Adding also a simplified systemv service file for loading cupsd.
+Ok, optional can be created a patch to remove this dependency that is used
+to compile tests.
 
-Again, this seems to be mixing up different changes together in the
-same commit. If I understand correctly what you're saying, you should
-have at least three different commits:
+Michael
 
- - Fix the rcdir value, due to which the systemd service file was not
-   installed at the right place.
+>
+> > +define DEJAVU_INSTALL_STAGING_CMDS
+> > +     mkdir -p $(STAGING_DIR)/usr/share/fonts/dejavu/
+> > +     for i in $(DEJAVU_FONTS_INSTALL) ; do \
+> > +             $(INSTALL) -m 0644 $(@D)/ttf/$$i \
+> > +                     $(STAGING_DIR)/usr/share/fonts/dejavu/ || exit 1 ; \
+> > +     done
+> > +endef
+> > +
+> >  define DEJAVU_INSTALL_TARGET_CMDS
+> >       mkdir -p $(TARGET_DIR)/usr/share/fonts/dejavu/
+> >       for i in $(DEJAVU_FONTS_INSTALL) ; do \
+>
+> We could factorize things a bit between staging/target installation,
+> and perhaps use a make "foreach" loop (if that works). But really these
+> are minor details, the main question is: why DejaVu specifically.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
- - Provide and install an init script
-
- - Bump the version.
-
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-
-Same issue as PATCH 2/7 about author/SoB.
 
 
-> diff --git a/package/cups/S81cupsd b/package/cups/S81cupsd
-> new file mode 100644
-> index 0000000000..f527d55f1e
-> --- /dev/null
-> +++ b/package/cups/S81cupsd
-
-Please take inspiration from package/busybox/S01syslogd.
-
-> -CUPS_VERSION = 2.3.1
-> +CUPS_VERSION = 2.3.3
->  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
->  CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
->  CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
-> @@ -21,7 +21,8 @@ CUPS_CONF_OPTS = \
->  	--with-docdir=/usr/share/cups/doc-root \
->  	--disable-gssapi \
->  	--disable-pam \
-> -	--libdir=/usr/lib
-> +	--libdir=/usr/lib \
-> +	--with-rcdir=no
-
-	--without-rcdir
-
-> +define CUPS_INSTALL_INIT_SYSV
-> +	@$(RM) $(TARGET_DIR)/etc/init.d/cups
-
-This should also be done in the systemd case I believe, and should not
-have the @.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
