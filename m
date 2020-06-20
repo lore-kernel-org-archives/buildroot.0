@@ -1,146 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jun 2020 22:28:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tinydtls: fix build on big endian
-Message-ID: <20200620202833.1181380-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Jun 2020 22:29:33 +0200
+Subject: [Buildroot] [PATCH v2 1/7] package/dejavu: Install dejavu fonts
+ in staging dir
+In-Reply-To: <20200619145719.2352019-2-angelo@amarulasolutions.com>
+References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
+ <20200619145719.2352019-2-angelo@amarulasolutions.com>
+Message-ID: <20200620222933.16376fca@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e8704e02fdede7b63e22da552292977b23380b32
+Hello Angelo,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-sha2-sha2.c-fix-build-on-big-endian.patch | 119 ++++++++++++++++++
- 1 file changed, 119 insertions(+)
- create mode 100644 package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
+On Fri, 19 Jun 2020 16:57:13 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-diff --git a/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch b/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
-new file mode 100644
-index 0000000000..81cf26bb4b
---- /dev/null
-+++ b/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
-@@ -0,0 +1,119 @@
-+From 608738ccad9ac3743ccd535bde1e84f401e6176f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Jun 2020 12:50:40 +0200
-+Subject: [PATCH] sha2/sha2.c: fix build on big endian
-+
-+Build is broken since 865ec9ba1d44e629c1107c299aebd20e901a19ff because
-+tmp is undefined in put32be and put64be:
-+
-+sha2.c: In function 'put32be':
-+sha2.c:177:34: error: 'tmp' undeclared (first use in this function)
-+  MEMCPY_BCOPY(data, &val, sizeof(tmp));
-+                                  ^~~
-+
-+Fix this error by replacing tmp by val
-+
-+Moreover, move MEMCPY_BCOPY before its usage or linking step will fail
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e8704e02fdede7b63e22da552292977b23380b32
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/eclipse/tinydtls/pull/37]
-+---
-+ sha2/sha2.c | 58 ++++++++++++++++++++++++++---------------------------
-+ 1 file changed, 29 insertions(+), 29 deletions(-)
-+
-+diff --git a/sha2/sha2.c b/sha2/sha2.c
-+index cb6d90f..5c794c6 100644
-+--- a/sha2/sha2.c
-++++ b/sha2/sha2.c
-+@@ -114,6 +114,33 @@
-+ #error Define BYTE_ORDER to be equal to either LITTLE_ENDIAN or BIG_ENDIAN
-+ #endif
-+ 
-++/*
-++ * Macros for copying blocks of memory and for zeroing out ranges
-++ * of memory.  Using these macros makes it easy to switch from
-++ * using memset()/memcpy() and using bzero()/bcopy().
-++ *
-++ * Please define either SHA2_USE_MEMSET_MEMCPY or define
-++ * SHA2_USE_BZERO_BCOPY depending on which function set you
-++ * choose to use:
-++ */
-++#if !defined(SHA2_USE_MEMSET_MEMCPY) && !defined(SHA2_USE_BZERO_BCOPY)
-++/* Default to memset()/memcpy() if no option is specified */
-++#define	SHA2_USE_MEMSET_MEMCPY	1
-++#endif
-++#if defined(SHA2_USE_MEMSET_MEMCPY) && defined(SHA2_USE_BZERO_BCOPY)
-++/* Abort with an error if BOTH options are defined */
-++#error Define either SHA2_USE_MEMSET_MEMCPY or SHA2_USE_BZERO_BCOPY, not both!
-++#endif
-++
-++#ifdef SHA2_USE_MEMSET_MEMCPY
-++#define MEMSET_BZERO(p,l)	memset((p), 0, (l))
-++#define MEMCPY_BCOPY(d,s,l)	memcpy((d), (s), (l))
-++#endif
-++#ifdef SHA2_USE_BZERO_BCOPY
-++#define MEMSET_BZERO(p,l)	bzero((p), (l))
-++#define MEMCPY_BCOPY(d,s,l)	bcopy((s), (d), (l))
-++#endif
-++
-+ /*
-+  * Define the followingsha2_* types to types of the correct length on
-+  * the native archtecture.   Most BSD systems and Linux define u_intXX_t
-+@@ -174,7 +201,7 @@ static inline void put32be(sha2_byte* data, sha2_word32 val)
-+ 	data[1] = val; val >>= 8;
-+ 	data[0] = val;
-+ #else /* BYTE_ORDER != LITTLE_ENDIAN */
-+-	MEMCPY_BCOPY(data, &val, sizeof(tmp));
-++	MEMCPY_BCOPY(data, &val, sizeof(val));
-+ #endif /* BYTE_ORDER != LITTLE_ENDIAN */
-+ }
-+ 
-+@@ -209,7 +236,7 @@ static inline void put64be(sha2_byte* data, sha2_word64 val)
-+ 	data[1] = val; val >>= 8;
-+ 	data[0] = val;
-+ #else /* BYTE_ORDER != LITTLE_ENDIAN */
-+-	MEMCPY_BCOPY(data, &val, sizeof(tmp));
-++	MEMCPY_BCOPY(data, &val, sizeof(val));
-+ #endif /* BYTE_ORDER != LITTLE_ENDIAN */
-+ }
-+ 
-+@@ -225,33 +252,6 @@ static inline void put64be(sha2_byte* data, sha2_word64 val)
-+ 	} \
-+ }
-+ 
-+-/*
-+- * Macros for copying blocks of memory and for zeroing out ranges
-+- * of memory.  Using these macros makes it easy to switch from
-+- * using memset()/memcpy() and using bzero()/bcopy().
-+- *
-+- * Please define either SHA2_USE_MEMSET_MEMCPY or define
-+- * SHA2_USE_BZERO_BCOPY depending on which function set you
-+- * choose to use:
-+- */
-+-#if !defined(SHA2_USE_MEMSET_MEMCPY) && !defined(SHA2_USE_BZERO_BCOPY)
-+-/* Default to memset()/memcpy() if no option is specified */
-+-#define	SHA2_USE_MEMSET_MEMCPY	1
-+-#endif
-+-#if defined(SHA2_USE_MEMSET_MEMCPY) && defined(SHA2_USE_BZERO_BCOPY)
-+-/* Abort with an error if BOTH options are defined */
-+-#error Define either SHA2_USE_MEMSET_MEMCPY or SHA2_USE_BZERO_BCOPY, not both!
-+-#endif
-+-
-+-#ifdef SHA2_USE_MEMSET_MEMCPY
-+-#define MEMSET_BZERO(p,l)	memset((p), 0, (l))
-+-#define MEMCPY_BCOPY(d,s,l)	memcpy((d), (s), (l))
-+-#endif
-+-#ifdef SHA2_USE_BZERO_BCOPY
-+-#define MEMSET_BZERO(p,l)	bzero((p), (l))
-+-#define MEMCPY_BCOPY(d,s,l)	bcopy((s), (d), (l))
-+-#endif
-+-
-+ 
-+ /*** THE SIX LOGICAL FUNCTIONS ****************************************/
-+ /*
-+-- 
-+2.26.2
-+
+> From: Michael Trimarchi <michael@amarulasolutions.com>
+> 
+> The dejavu font is used by cups-filters and needs to be
+> installed in staging directory.
+> 
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+
+The question is why should we do this just for the DejaVu fonts ? And
+not other font packages ?
+
+> +define DEJAVU_INSTALL_STAGING_CMDS
+> +	mkdir -p $(STAGING_DIR)/usr/share/fonts/dejavu/
+> +	for i in $(DEJAVU_FONTS_INSTALL) ; do \
+> +		$(INSTALL) -m 0644 $(@D)/ttf/$$i \
+> +			$(STAGING_DIR)/usr/share/fonts/dejavu/ || exit 1 ; \
+> +	done
+> +endef
+> +
+>  define DEJAVU_INSTALL_TARGET_CMDS
+>  	mkdir -p $(TARGET_DIR)/usr/share/fonts/dejavu/
+>  	for i in $(DEJAVU_FONTS_INSTALL) ; do \
+
+We could factorize things a bit between staging/target installation,
+and perhaps use a make "foreach" loop (if that works). But really these
+are minor details, the main question is: why DejaVu specifically.
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
