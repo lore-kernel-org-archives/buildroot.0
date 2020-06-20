@@ -1,10 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jun 2020 16:35:01 +0200
-Subject: [Buildroot] [PATCH 2/2] package/janus-gateway: fix build of
- audiobridge without libogg
-In-Reply-To: <20200620143501.853894-1-fontaine.fabrice@gmail.com>
-References: <20200620143501.853894-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200620143501.853894-2-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Jun 2020 18:04:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
+ libmatroska
+Message-ID: <20200620160437.1010552-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,93 +10,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/e9dd68127bd8e6337eac23d43e99399ec370b1e0
+ - http://autobuild.buildroot.org/results/ee365f792feb0fe69ed765fda625afabc91ec769
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...diobridge.c-fix-build-without-libogg.patch | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
+ ...make-FindMatroska-fix-static-linking.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
 
-diff --git a/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch b/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
+diff --git a/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch b/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
 new file mode 100644
-index 0000000000..1d25b1a071
+index 0000000000..128d617045
 --- /dev/null
-+++ b/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
-@@ -0,0 +1,74 @@
-+From b728e30508101093331b08ac617e6315ba82caa1 Mon Sep 17 00:00:00 2001
++++ b/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
+@@ -0,0 +1,37 @@
++From aab2eacbaad10759294f4fd74bbb5ecef3cf3a8d Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Jun 2020 15:38:08 +0200
-+Subject: [PATCH] plugins/janus_audiobridge.c: fix build without libogg
++Date: Tue, 24 Dec 2019 22:57:18 +0100
++Subject: [PATCH] cmake/FindMatroska: fix static linking
 +
-+Build without libogg is broken since commit
-+53761d07c5456424d368c708fda2757e6606a4bf:
-+
-+plugins/janus_audiobridge.c:1337:41: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 1337 |  janus_audiobridge_file_free(participant->annc);
-+      |                                         ^~
-+  CC       plugins/plugins_libjanus_nosip_la-janus_nosip.lo
-+plugins/janus_audiobridge.c: In function 'janus_audiobridge_mixer_thread':
-+plugins/janus_audiobridge.c:6394:9: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6394 |     if(p->annc == NULL || g_atomic_int_get(&p->destroyed)) {
-+      |         ^~
-+plugins/janus_audiobridge.c:6398:16: warning: implicit declaration of function 'janus_audiobridge_file_read'; did you mean 'janus_audiobridge_mixer_thread'? [-Wimplicit-function-declaration]
-+ 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
-+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-+      |                janus_audiobridge_mixer_thread
-+plugins/janus_audiobridge.c:6398:16: warning: nested extern declaration of 'janus_audiobridge_file_read' [-Wnested-externs]
-+plugins/janus_audiobridge.c:6398:45: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
-+      |                                             ^~
-+plugins/janus_audiobridge.c:6401:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6401 |      if(p->annc->started) {
-+      |          ^~
-+plugins/janus_audiobridge.c:6428:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6428 |     if(!p->annc->started) {
-+      |          ^~
-+plugins/janus_audiobridge.c:6430:7: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6430 |      p->annc->started = TRUE;
-+      |       ^~
-+  CC       plugins/plugins_libjanus_streaming_la-janus_streaming.lo
++Fix static linking with libmatrasoka by adding PC_EBM_LIBRARIES to
++EBML_LIBRARIES and PC_MAT_LIBRARIES to MATROSKA_LIBRARIES
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/meetecho/janus-gateway/pull/2238]
++[Retrieved from:
++https://github.com/gerbera/gerbera/commit/aab2eacbaad10759294f4fd74bbb5ecef3cf3a8d]
 +---
-+ plugins/janus_audiobridge.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ cmake/FindMatroska.cmake | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/plugins/janus_audiobridge.c b/plugins/janus_audiobridge.c
-+index 200a1f1d..ee931e24 100644
-+--- a/plugins/janus_audiobridge.c
-++++ b/plugins/janus_audiobridge.c
-+@@ -1334,7 +1334,9 @@ static void janus_audiobridge_participant_free(const janus_refcount *participant
-+ 		}
-+ 		g_async_queue_unref(participant->outbuf);
-+ 	}
-++#ifdef HAVE_LIBOGG
-+ 	janus_audiobridge_file_free(participant->annc);
-++#endif
-+ 	g_free(participant);
-+ }
-+ 
-+@@ -6385,6 +6387,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
-+ 			janus_mutex_unlock(&p->qmutex);
-+ 			ps = ps->next;
-+ 		}
-++#ifdef HAVE_LIBOGG
-+ 		/* If there are announcements playing, mix those too */
-+ 		GList *anncs_list = g_hash_table_get_values(audiobridge->anncs);
-+ 		if(anncs_list != NULL) {
-+@@ -6458,6 +6461,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
-+ 				ps = ps->next;
-+ 			}
-+ 		}
-++#endif
-+ 		/* Are we recording the mix? (only do it if there's someone in, though...) */
-+ 		if(audiobridge->recording != NULL && g_list_length(participants_list) > 0) {
-+ 			for(i=0; i<samples; i++) {
-+-- 
-+2.26.2
-+
++diff --git a/cmake/FindMatroska.cmake b/cmake/FindMatroska.cmake
++index 4b09a5ec..12ca593d 100644
++--- a/cmake/FindMatroska.cmake
+++++ b/cmake/FindMatroska.cmake
++@@ -23,7 +23,7 @@ FIND_LIBRARY(EBML_LIBRARY ebml
++ FIND_PACKAGE_HANDLE_STANDARD_ARGS(EBML
++     REQUIRED_VARS EBML_LIBRARY EBML_INCLUDE_DIR)
++ if (EBML_FOUND)
++-    set (EBML_LIBRARIES ${EBML_LIBRARY})
+++    set (EBML_LIBRARIES ${EBML_LIBRARY} ${PC_EBM_LIBRARIES})
++     set (EBML_INCLUDE_DIRS ${EBML_INCLUDE_DIR} )
++ endif ()
++ MARK_AS_ADVANCED(
++@@ -41,7 +41,7 @@ find_library(MATROSKA_LIBRARY matroska
++ FIND_PACKAGE_HANDLE_STANDARD_ARGS(MATROSKA
++     REQUIRED_VARS MATROSKA_LIBRARY MATROSKA_INCLUDE_DIR)
++ if (MATROSKA_FOUND)
++-    set (MATROSKA_LIBRARIES ${MATROSKA_LIBRARY})
+++    set (MATROSKA_LIBRARIES ${MATROSKA_LIBRARY} ${PC_MAT_LIBRARIES})
++     set (MATROSKA_INCLUDE_DIRS ${MATROSKA_INCLUDE_DIR} )
++ endif ()
++ MARK_AS_ADVANCED(
 -- 
 2.26.2
