@@ -1,32 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 08:35:02 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mutt: fix CVE-2020-14093
-In-Reply-To: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
-References: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200620083502.0fa8a098@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Jun 2020 08:56:20 +0200
+Subject: [Buildroot] [git commit] package/lbcamera: don't override
+ _CONF_OPTS, but append
+Message-ID: <20200620065639.BC6A682943@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Jun 2020 00:11:49 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f835da1c6d7ab59f459e66932ccfbfe5d49560b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Mutt before 1.14.3 allows an IMAP fcc/postpone man-in-the-middle attack
-> via a PREAUTH response.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...sible-IMAP-MITM-via-PREAUTH-response.patch | 60 +++++++++++++++++++
->  package/mutt/mutt.mk                          |  3 +
->  2 files changed, 63 insertions(+)
->  create mode 100644 package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
+Commit 99cc53f3f4 (package/libcamera: add v4l2 compatibility layer
+option) incorrectly added the v4l2 option, which makes it so that
+the previous options are overrdien.
 
-Both applied, thanks!
+Fix that by using an append-assignment.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libcamera/libcamera.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index fb0e54785b..ebdf2dba34 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -37,9 +37,9 @@ LIBCAMERA_LICENSE_FILES = \
+ 	LICENSES/CC-BY-SA-4.0.txt
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAMERA_V4L2),y)
+-LIBCAMERA_CONF_OPTS = -Dv4l2=true
++LIBCAMERA_CONF_OPTS += -Dv4l2=true
+ else
+-LIBCAMERA_CONF_OPTS = -Dv4l2=false
++LIBCAMERA_CONF_OPTS += -Dv4l2=false
+ endif
+ 
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3) += ipu3
