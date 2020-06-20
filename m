@@ -1,102 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 08:32:34 +0200
-Subject: [Buildroot] [git commit] package/iwd: bump version to 1.8
-Message-ID: <20200620063046.13F49805FE@busybox.osuosl.org>
+Date: Sat, 20 Jun 2020 08:33:39 +0200
+Subject: [Buildroot] [git commit] package/mutt: fix CVE-2020-14093
+Message-ID: <20200620063227.387B27F917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6be50c515925f7b8d03c8d274eddb5a589f77c6
+commit: https://git.buildroot.net/buildroot/commit/?id=6756a3504cfc65352a970ff9999a72b31c1a194a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- removed 0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-  (upstream applied [1])
+Mutt before 1.14.3 allows an IMAP fcc/postpone man-in-the-middle attack
+via a PREAUTH response.
 
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=c352714e61809fc486470cc9a4ad3e3e84811b80
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...01-frame-xchg.c-fix-build-with-glibc-2.24.patch | 46 ----------------------
- package/iwd/iwd.hash                               |  2 +-
- package/iwd/iwd.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
+ ...t-possible-IMAP-MITM-via-PREAUTH-response.patch | 60 ++++++++++++++++++++++
+ package/mutt/mutt.mk                               |  3 ++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-deleted file mode 100644
-index cd0bae4835..0000000000
---- a/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 44cd3719eb94c8d5776b37c73993eea0617902f7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 11 Apr 2020 23:21:42 +0200
--Subject: [PATCH] frame-xchg.c: fix build with glibc < 2.24
--
--SOL_NETLINK is used since commit
--87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
--build failure with glibc < 2.24:
--
--src/frame-xchg.c: In function 'frame_watch_group_io_read':
--src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
--   if (cmsg->cmsg_level != SOL_NETLINK)
--                           ^
--
--This failure is due to glibc that doesn't support SOL_NETLINK before
--version 2.24 and
--https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80
--
--Fixes:
-- - http://autobuild.buildroot.org/results/3485088b84111c271bbcfaf025aa4103c6452072
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/ZRN25CA5I7PGUTFIRJLLXN7VHWGDAZDN]
-----
-- src/frame-xchg.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/frame-xchg.c b/src/frame-xchg.c
--index 50351615..4c950fd3 100644
----- a/src/frame-xchg.c
--+++ b/src/frame-xchg.c
--@@ -42,6 +42,10 @@
-- #include "src/netdev.h"
-- #include "src/frame-xchg.h"
-- 
--+#ifndef SOL_NETLINK
--+#define SOL_NETLINK 270
--+#endif
--+
-- struct watch_group {
-- 	/*
-- 	 * Group IDs, except 0, are per wdev for user's convenience.
---- 
--2.25.1
--
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 9c6b9c3ea4..10c9dde983 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  1707397235c972a2760c5e8865360759ac1feb6c06ac954799dff765feb240ca  iwd-1.7.tar.gz
-+sha256  14b39fc8b2bf170e75cc3d0c08b666dbcfeaee73384485cb6eaf463da8963aa4  iwd-1.8.tar.gz
+diff --git a/package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch b/package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
+new file mode 100644
+index 0000000000..913b6087b2
+--- /dev/null
++++ b/package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
+@@ -0,0 +1,60 @@
++From 3e88866dc60b5fa6aaba6fd7c1710c12c1c3cd01 Mon Sep 17 00:00:00 2001
++From: Kevin McCarthy <kevin@8t8.us>
++Date: Sun, 14 Jun 2020 11:30:00 -0700
++Subject: [PATCH] Prevent possible IMAP MITM via PREAUTH response.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This is similar to CVE-2014-2567 and CVE-2020-12398.  STARTTLS is not
++allowed in the Authenticated state, so previously Mutt would
++implicitly mark the connection as authenticated and skip any
++encryption checking/enabling.
++
++No credentials are exposed, but it does allow messages to be sent to
++an attacker, via postpone or fcc'ing for instance.
++
++Reuse the $ssl_starttls quadoption "in reverse" to prompt to abort the
++connection if it is unencrypted.
++
++Thanks very much to Damian Poddebniak and Fabian Ising from the
++M??nster University of Applied Sciences for reporting this issue, and
++their help in testing the fix.
++
++[Retrieved from:
++https://gitlab.com/muttmua/mutt/commit/3e88866dc60b5fa6aaba6fd7c1710c12c1c3cd01]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ imap/imap.c | 16 ++++++++++++++++
++ 1 file changed, 16 insertions(+)
++
++diff --git a/imap/imap.c b/imap/imap.c
++index 63362176..3ca10df4 100644
++--- a/imap/imap.c
+++++ b/imap/imap.c
++@@ -530,6 +530,22 @@ int imap_open_connection (IMAP_DATA* idata)
++   }
++   else if (ascii_strncasecmp ("* PREAUTH", idata->buf, 9) == 0)
++   {
+++#if defined(USE_SSL)
+++    /* An unencrypted PREAUTH response is most likely a MITM attack.
+++     * Require a confirmation. */
+++    if (!idata->conn->ssf)
+++    {
+++      if (option(OPTSSLFORCETLS) ||
+++          (query_quadoption (OPT_SSLSTARTTLS,
+++                             _("Abort unencrypted PREAUTH connection?")) != MUTT_NO))
+++      {
+++        mutt_error _("Encrypted connection unavailable");
+++        mutt_sleep (1);
+++        goto err_close_conn;
+++      }
+++    }
+++#endif
+++
++     idata->state = IMAP_AUTHENTICATED;
++     if (imap_check_capabilities (idata) != 0)
++       goto bail;
++-- 
++GitLab
++
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index a71c0e3551..5d400f8b8c 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -13,6 +13,9 @@ MUTT_CONF_OPTS = --disable-doc --disable-smtp
+ # We're patching configure.ac
+ MUTT_AUTORECONF = YES
  
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 853638e8ca..bba787c07f 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 1.7
-+IWD_VERSION = 1.8
- IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
- IWD_SITE_METHOD = git
- IWD_LICENSE = LGPL-2.1+
++# 0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
++MUTT_IGNORE_CVES += CVE-2020-14093
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
