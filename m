@@ -1,55 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:37:41 +0200
-Subject: [Buildroot] [PATCH v2 4/7] package/cups: Add lp user as default
- cups user
-In-Reply-To: <20200619145719.2352019-5-angelo@amarulasolutions.com>
+Date: Sat, 20 Jun 2020 22:39:13 +0200
+Subject: [Buildroot] [PATCH v2 5/7] package/cups: Add udev rules to
+ assign usb printers group to lp
+In-Reply-To: <20200619145719.2352019-6-angelo@amarulasolutions.com>
 References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
- <20200619145719.2352019-5-angelo@amarulasolutions.com>
-Message-ID: <20200620223741.2c38c12b@windsurf.home>
+ <20200619145719.2352019-6-angelo@amarulasolutions.com>
+Message-ID: <20200620223913.38af0c62@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Angelo,
 
-On Fri, 19 Jun 2020 16:57:16 +0200
+On Fri, 19 Jun 2020 16:57:17 +0200
 Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-> This patch is a backport from the rockchip tree.
+> commit c8a337593660f27379c30248a11bf08dc8712113
+> Author: Jeffy Chen <jeffy.chen@rock-chips.com>
+> Date:   Tue Nov 13 18:59:43 2018 +0800
+> 
+>     package: cups: Add udev rules to assign usb printers' group to lp
+> 
+>     Change-Id: Ieae17deaa7d3623e1f0e1cc826871f1719d98d88
+>     Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+> 
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  package/cups/70-usb-printers.rules | 4 ++++
+>  package/cups/cups.mk               | 9 +++++++++
+>  2 files changed, 13 insertions(+)
+>  create mode 100644 package/cups/70-usb-printers.rules
+> 
+> diff --git a/package/cups/70-usb-printers.rules b/package/cups/70-usb-printers.rules
+> new file mode 100644
+> index 0000000000..537645523d
+> --- /dev/null
+> +++ b/package/cups/70-usb-printers.rules
+> @@ -0,0 +1,4 @@
+> +# Allow USB printers in the lp group
+> +# Match rules converted from usblp.c driver's usblp_ids
+> +ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="07", ATTR{bInterfaceSubClass}=="01", GROUP="lp"
 
-Good idea to try to bring back into Buildroot changes made in other
-forks! However, it would be nice to have a better commit log that
-explains why these changes are needed, i.e what is the visible issue
-without this fix.
+This first rule makes sense, i.e it's based on the interface
+class/subclass.
 
-> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-> index 461e0d9143..40fe210c94 100644
-> --- a/package/cups/cups.mk
-> +++ b/package/cups/cups.mk
-> @@ -22,6 +22,9 @@ CUPS_CONF_OPTS = \
->  	--disable-gssapi \
->  	--disable-pam \
->  	--libdir=/usr/lib \
-> +	--with-cups-user=lp \
-> +	--with-cups-group=lp \
-> +	--with-system-groups="lpadmin sys root" \
+> +ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0202", GROUP="lp"
 
-What is this --with-system-groups option doing?
+But this one looks weird. Why do we care specifically about the printer
+of vendor id 04b8 and product id 0202, and not some random other
+printer ?
 
->  	--with-rcdir=no
->  CUPS_CONFIG_SCRIPTS = cups-config
->  CUPS_DEPENDENCIES = \
-> @@ -78,4 +81,9 @@ define CUPS_INSTALL_INIT_SYSV
->  		$(TARGET_DIR)/etc/init.d/S81cupsd
->  endef
->  
-> +define CUPS_USERS
-> +	lp -1 lp -1 * /var/spool/lpd /bin/false - lp
-> +	- - lpadmin -1 * - - - Printers admin group.
+I suppose if you're adding this udev rules file it's because cups
+doesn't provide one that we could use as-is ?
 
-So we need both a "lp" group and a "lpadmin" group ?
+Thanks!
 
 Thomas
 -- 
