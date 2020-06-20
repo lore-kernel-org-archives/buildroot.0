@@ -1,65 +1,96 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jun 2020 18:04:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
- libmatroska
-Message-ID: <20200620160437.1010552-1-fontaine.fabrice@gmail.com>
+From: Marc Chalain <marc.chalain@gmail.com>
+Date: Sat, 20 Jun 2020 19:29:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gpiod: add gpiod hardware
+ handling daemon
+In-Reply-To: <20200620123339.tf7zog3j7zsad7nj@falbala.internal.home.lespocky.de>
+References: <20200616164200.6399-1-marc.chalain@gmail.com>
+ <20200617223824.0ab717d2@windsurf.home>
+ <CAAj6r7oaCxid93ovxKciNNTyGn+MQwvUPG73PjgX5F0ZDTm__w@mail.gmail.com>
+ <20200619193946.7hu3b3bo56xg5g5n@falbala.internal.home.lespocky.de>
+ <CAAj6r7oxgNt5ATvMhVKVqSxRay5HkN5Y+O-0r+ce-Ksg=q3nDw@mail.gmail.com>
+ <20200620123339.tf7zog3j7zsad7nj@falbala.internal.home.lespocky.de>
+Message-ID: <CAAj6r7r2tT8VmGVMDodKMHNNrsysqBgc5Dnn+sT=rWGbvWksgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/ee365f792feb0fe69ed765fda625afabc91ec769
+hello,
+just to speak clearly and explain that I agree with you
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...make-FindMatroska-fix-static-linking.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
+compatible = "gpio-keys";
+label = "mediakey";
+nextkey: gpiokey,next {
+label = "next";
+gpios = <&gpio 22 1>;
+linux,code = <163>; /* 163 KEY_NEXTSONG */
+status = "disabled";
+};
+for me this is a keyboard definition with one key.
+I think that we spoke about exactly the same thing.
 
-diff --git a/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch b/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
-new file mode 100644
-index 0000000000..128d617045
---- /dev/null
-+++ b/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
-@@ -0,0 +1,37 @@
-+From aab2eacbaad10759294f4fd74bbb5ecef3cf3a8d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 24 Dec 2019 22:57:18 +0100
-+Subject: [PATCH] cmake/FindMatroska: fix static linking
-+
-+Fix static linking with libmatrasoka by adding PC_EBM_LIBRARIES to
-+EBML_LIBRARIES and PC_MAT_LIBRARIES to MATROSKA_LIBRARIES
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/gerbera/gerbera/commit/aab2eacbaad10759294f4fd74bbb5ecef3cf3a8d]
-+---
-+ cmake/FindMatroska.cmake | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/cmake/FindMatroska.cmake b/cmake/FindMatroska.cmake
-+index 4b09a5ec..12ca593d 100644
-+--- a/cmake/FindMatroska.cmake
-++++ b/cmake/FindMatroska.cmake
-+@@ -23,7 +23,7 @@ FIND_LIBRARY(EBML_LIBRARY ebml
-+ FIND_PACKAGE_HANDLE_STANDARD_ARGS(EBML
-+     REQUIRED_VARS EBML_LIBRARY EBML_INCLUDE_DIR)
-+ if (EBML_FOUND)
-+-    set (EBML_LIBRARIES ${EBML_LIBRARY})
-++    set (EBML_LIBRARIES ${EBML_LIBRARY} ${PC_EBM_LIBRARIES})
-+     set (EBML_INCLUDE_DIRS ${EBML_INCLUDE_DIR} )
-+ endif ()
-+ MARK_AS_ADVANCED(
-+@@ -41,7 +41,7 @@ find_library(MATROSKA_LIBRARY matroska
-+ FIND_PACKAGE_HANDLE_STANDARD_ARGS(MATROSKA
-+     REQUIRED_VARS MATROSKA_LIBRARY MATROSKA_INCLUDE_DIR)
-+ if (MATROSKA_FOUND)
-+-    set (MATROSKA_LIBRARIES ${MATROSKA_LIBRARY})
-++    set (MATROSKA_LIBRARIES ${MATROSKA_LIBRARY} ${PC_MAT_LIBRARIES})
-+     set (MATROSKA_INCLUDE_DIRS ${MATROSKA_INCLUDE_DIR} )
-+ endif ()
-+ MARK_AS_ADVANCED(
--- 
-2.26.2
+Le sam. 20 juin 2020 ? 14:33, Alexander Dahl <post@lespocky.de> a ?crit :
+
+> Hei hei,
+>
+> On Fri, Jun 19, 2020 at 10:25:52PM +0200, Marc Chalain wrote:
+> > Le ven. 19 juin 2020 ? 21:39, Alexander Dahl <post@lespocky.de> a ?crit
+> :
+> > > However, I defined my button in dts as key, not just as gpio, because
+> > > it is actually a key and linux has infrastructure for that.
+> > > Furthermore there are reliable userspace libraries to not reinvent the
+> > > wheel. I was able to build something around libevdev in two days.
+> > >
+> > This solution may be complicated when you use some buttons for an
+> > application,
+> > and just another button for a system feature. You have to manage several
+> > keyboards,
+> >  to name each one by udev (or mdev) to use the good one with each
+> > application.
+>
+> No and no.
+>
+> There's no keyboard involved, the keycode I used is not even assigned
+> to a key usually found on keyboards. The system has neither udev nor
+> mdev, the key is ready by just defining it in dts.
+>
+> > A daemon on GPIO will never replace a keyboard. When you need several
+> > events
+> > key and a short time response, a keyboard is more powerful.
+> > The Daemon is useful for few events in the life of the system, and you
+> > don't want
+> > modify an application.
+>
+> This is exactly my usecase, a tiny daemon doing basically nothing but
+> waiting for a button press once a year or so.
+>
+> > > Besides: your gpiod uses the well known libgpiod, but is not part of
+> > > that project, right? That is a little puzzling, people will mix that
+> > > up.
+> > >
+> > Yes I'm sorry for the name. I wanted to use direct access to the
+> > /dev/gpiochip,
+> > and after I saw that libgpiod was a kernel.org project. I should change
+> the
+> > name
+> > but it's the right name for its usage, and it uses libgpiod, then the
+> > daemon promotes
+> > the library. Another name would have been stupid.
+> > I will propose the daemon to the libgpiod developer, when I will be
+> ready.
+>
+> Looking forward to that. :-)
+>
+> Greets
+> Alex
+>
+> --
+> /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+> \ / CAMPAIGN     | speech censured, the first thought forbidden, the
+>  X  AGAINST      | first freedom denied, chains us all irrevocably.?
+> / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200620/0dceda13/attachment.html>
