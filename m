@@ -1,103 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:21:04 +0200
-Subject: [Buildroot] [git commit] package/janus-gateway: fix build of
- audiobridge without libogg
-Message-ID: <20200620202009.83193805AA@busybox.osuosl.org>
+Date: Sat, 20 Jun 2020 22:20:59 +0200
+Subject: [Buildroot] [git commit] package/janus-gateway: fix libogg
+ dependency
+Message-ID: <20200620202009.6BA8E82974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a37b1c64913e23ad4df9821ad715df305e1e62
+commit: https://git.buildroot.net/buildroot/commit/?id=2b47bd59a6f73e6d91f94059a58efc5be1ef627e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/e9dd68127bd8e6337eac23d43e99399ec370b1e0
+libogg is not only used for voicemail plugin, it is an optional
+dependency of:
+- audiobridge plugin since version 0.9.3 and
+  https://github.com/meetecho/janus-gateway/commit/53761d07c5456424d368c708fda2757e6606a4bf
+- streaming plugin since version 0.9.3 and
+  https://github.com/meetecho/janus-gateway/commit/d9aa1cec84c662f2f7fda025ee023f6dec927bdc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...us_audiobridge.c-fix-build-without-libogg.patch | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ package/janus-gateway/janus-gateway.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch b/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
-new file mode 100644
-index 0000000000..1d25b1a071
---- /dev/null
-+++ b/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
-@@ -0,0 +1,74 @@
-+From b728e30508101093331b08ac617e6315ba82caa1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Jun 2020 15:38:08 +0200
-+Subject: [PATCH] plugins/janus_audiobridge.c: fix build without libogg
-+
-+Build without libogg is broken since commit
-+53761d07c5456424d368c708fda2757e6606a4bf:
-+
-+plugins/janus_audiobridge.c:1337:41: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 1337 |  janus_audiobridge_file_free(participant->annc);
-+      |                                         ^~
-+  CC       plugins/plugins_libjanus_nosip_la-janus_nosip.lo
-+plugins/janus_audiobridge.c: In function 'janus_audiobridge_mixer_thread':
-+plugins/janus_audiobridge.c:6394:9: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6394 |     if(p->annc == NULL || g_atomic_int_get(&p->destroyed)) {
-+      |         ^~
-+plugins/janus_audiobridge.c:6398:16: warning: implicit declaration of function 'janus_audiobridge_file_read'; did you mean 'janus_audiobridge_mixer_thread'? [-Wimplicit-function-declaration]
-+ 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
-+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-+      |                janus_audiobridge_mixer_thread
-+plugins/janus_audiobridge.c:6398:16: warning: nested extern declaration of 'janus_audiobridge_file_read' [-Wnested-externs]
-+plugins/janus_audiobridge.c:6398:45: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
-+      |                                             ^~
-+plugins/janus_audiobridge.c:6401:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6401 |      if(p->annc->started) {
-+      |          ^~
-+plugins/janus_audiobridge.c:6428:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6428 |     if(!p->annc->started) {
-+      |          ^~
-+plugins/janus_audiobridge.c:6430:7: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-+ 6430 |      p->annc->started = TRUE;
-+      |       ^~
-+  CC       plugins/plugins_libjanus_streaming_la-janus_streaming.lo
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/meetecho/janus-gateway/pull/2238]
-+---
-+ plugins/janus_audiobridge.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/plugins/janus_audiobridge.c b/plugins/janus_audiobridge.c
-+index 200a1f1d..ee931e24 100644
-+--- a/plugins/janus_audiobridge.c
-++++ b/plugins/janus_audiobridge.c
-+@@ -1334,7 +1334,9 @@ static void janus_audiobridge_participant_free(const janus_refcount *participant
-+ 		}
-+ 		g_async_queue_unref(participant->outbuf);
-+ 	}
-++#ifdef HAVE_LIBOGG
-+ 	janus_audiobridge_file_free(participant->annc);
-++#endif
-+ 	g_free(participant);
-+ }
-+ 
-+@@ -6385,6 +6387,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
-+ 			janus_mutex_unlock(&p->qmutex);
-+ 			ps = ps->next;
-+ 		}
-++#ifdef HAVE_LIBOGG
-+ 		/* If there are announcements playing, mix those too */
-+ 		GList *anncs_list = g_hash_table_get_values(audiobridge->anncs);
-+ 		if(anncs_list != NULL) {
-+@@ -6458,6 +6461,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
-+ 				ps = ps->next;
-+ 			}
-+ 		}
-++#endif
-+ 		/* Are we recording the mix? (only do it if there's someone in, though...) */
-+ 		if(audiobridge->recording != NULL && g_list_length(participants_list) > 0) {
-+ 			for(i=0; i<samples; i++) {
-+-- 
-+2.26.2
-+
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 56b7d67332..94d83eb33e 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -11,7 +11,8 @@ JANUS_GATEWAY_LICENSE_FILES = COPYING
+ 
+ # ding-libs provides the ini_config library
+ JANUS_GATEWAY_DEPENDENCIES = host-pkgconf jansson libnice \
+-	libsrtp host-gengetopt libglib2 openssl libconfig
++	libsrtp host-gengetopt libglib2 openssl libconfig \
++	$(if $(BR2_PACKAGE_LIBOGG),libogg)
+ 
+ # Straight out of the repository, no ./configure, and we also patch
+ # configure.ac.
+@@ -72,7 +73,6 @@ JANUS_GATEWAY_CONF_OPTS += --disable-plugin-videoroom
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JANUS_GATEWAY_VOICE_MAIL),y)
+-JANUS_GATEWAY_DEPENDENCIES += libogg
+ JANUS_GATEWAY_CONF_OPTS += --enable-plugin-voicemail
+ else
+ JANUS_GATEWAY_CONF_OPTS += --disable-plugin-voicemail
