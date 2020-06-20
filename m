@@ -1,97 +1,74 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Jun 2020 23:34:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.3
-Message-ID: <20200620213401.689760-1-bernd.kuhls@t-online.de>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 20 Jun 2020 23:53:12 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/cups: bump to version 2.3.3
+In-Reply-To: <20200620225516.59ac83ee@windsurf.home>
+References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
+ <20200619145719.2352019-4-angelo@amarulasolutions.com>
+ <20200620223540.3ccb6371@windsurf.home>
+ <CA+_SqVa8bHa4+FZ_NjE4Gw-V1SAGNrSE_AX=fzX=eH07R=wxnA@mail.gmail.com>
+ <20200620225516.59ac83ee@windsurf.home>
+Message-ID: <CA+TH9VmLyk-z85zMi75mry9Fx9QSUxC9PPKndKnwiXTL-rh6CA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added patch to fix build without ssse3.
+Il sab 20 giu 2020, 22:55 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ha scritto:
 
-Updated license hash due to various changes since August 2019, these
-changes are unrelated to buildroot:
-http://git.videolan.org/?p=ffmpeg.git;a=history;f=LICENSE.md;h=613070e1b631a919a74c862f2a75a0f249a631ff;hb=8e12af29d1a3f95c9e952d78354e3c8b1c0431a8
+> On Sat, 20 Jun 2020 22:48:55 +0200
+> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>
+> > It's really that important to split it? No problem to do that, but this
+> > package installs a service and the way it is doing in the new version is
+> > the one proposed in the patch. The old version could have been different,
+> > I've not checked btw.
+> > Anyway, having this is required to have the service correctly installed,
+> so
+> > I don't think the patch should be splitted because the bump really
+> requires
+> > it.
+>
+> How is this related to the bump? Is it the version bump that adds the
+> service file? Or did it already exist before the bump?
+>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...-x86-yuv2rgb-Fix-build-without-SSSE3.patch | 40 +++++++++++++++++++
- package/ffmpeg/ffmpeg.hash                    |  4 +-
- package/ffmpeg/ffmpeg.mk                      |  2 +-
- 3 files changed, 43 insertions(+), 3 deletions(-)
- create mode 100644 package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
+Cups is a service and a service without an init script is useless.
 
-diff --git a/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch b/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
-new file mode 100644
-index 0000000000..27a9029984
---- /dev/null
-+++ b/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch
-@@ -0,0 +1,40 @@
-+From bf8eae2d30a205bb76ac625e04c0351106981b9e Mon Sep 17 00:00:00 2001
-+From: Parker Ernest <@>
-+Date: Sun, 23 Feb 2020 13:22:42 +0100
-+Subject: [PATCH] swscale/x86/yuv2rgb: Fix build without SSSE3
-+
-+commit fc6a5883d6af8cae0e96af84dda0ad74b360a084 breaks build on
-+x86_64 CPUs which do not have SSSE3, e.g. AMD Phenom-II
-+
-+Downloaded from upstream patchworks:
-+https://patchwork.ffmpeg.org/project/ffmpeg/patch/20200223122256.23402-1-michael at niedermayer.cc/
-+
-+Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libswscale/x86/yuv2rgb.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/libswscale/x86/yuv2rgb.c b/libswscale/x86/yuv2rgb.c
-+index c12e88cbb5..4791e5b93a 100644
-+--- a/libswscale/x86/yuv2rgb.c
-++++ b/libswscale/x86/yuv2rgb.c
-+@@ -83,6 +83,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
-+ #if HAVE_X86ASM
-+     int cpu_flags = av_get_cpu_flags();
-+ 
-++#if HAVE_SSSE3
-+     if (EXTERNAL_SSSE3(cpu_flags)) {
-+         switch (c->dstFormat) {
-+         case AV_PIX_FMT_RGB32:
-+@@ -111,6 +112,7 @@ av_cold SwsFunc ff_yuv2rgb_init_x86(SwsContext *c)
-+             return yuv420_rgb15_ssse3;
-+         }
-+     }
-++#endif
-+ 
-+     if (EXTERNAL_MMXEXT(cpu_flags)) {
-+         switch (c->dstFormat) {
-+-- 
-+2.26.2
-+
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 35bd681326..1572285cd6 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  9df6c90aed1337634c1fb026fb01c154c29c82a64ea71291ff2da9aacb9aad31  ffmpeg-4.2.3.tar.xz
-+sha256  1d0ad06484f44bcb97eba5e93c40bcb893890f9f64aeb43e46cd9bb4cbd6795d  ffmpeg-4.3.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
--sha256  cad1218c22121b169fb1380178ab7a0b33cb38a3ff6d3915b8533d1d954f3ce7  LICENSE.md
-+sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 736aa5b4ba..aeebc0effc 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.2.3
-+FFMPEG_VERSION = 4.3
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
--- 
-2.26.2
+So, to have the new version working it needs the rcdir change and the
+systemv script. Systemd script is instead fine.
+
+If you are asking me to even fix the older version I can do that, but I'm
+doing a bump and fixing at the same time because either the bump will not
+work.
+
+
+
+> > > > +define CUPS_INSTALL_INIT_SYSV
+> > > > +     @$(RM) $(TARGET_DIR)/etc/init.d/cups
+> > >
+> > > This should also be done in the systemd case I believe, and should not
+> > > have the @.
+> > >
+> >
+> > Not for systemd, cause the package installs the .service file and not the
+> > systemv related ones.
+>
+> OK, I see: when --enable-systemd is used to build cups, it doesn't
+> install its own init script. Makes sense. Thanks for explaining this
+> aspect!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200620/4e5b9534/attachment.html>
