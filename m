@@ -1,36 +1,136 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:55:54 +0200
-Subject: [Buildroot] [PATCH v1] package/rtl8821au: add two patches
- fixing compile/runtime for kernels >= 5.3
-In-Reply-To: <20200615185911.16490-1-ps.report@gmx.net>
-References: <20200615185911.16490-1-ps.report@gmx.net>
-Message-ID: <20200620225554.311744f8@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Jun 2020 22:55:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/fuse-overlayfs: new package
+In-Reply-To: <20200619180431.57528-1-christian@paral.in>
+References: <20200619180431.57528-1-christian@paral.in>
+Message-ID: <20200620205548.GS2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jun 2020 20:59:11 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Christian, All,
 
-> Add two patches from upstream merge request ([1] to fix compile
-> and runtime failures in case of linux kernel >= 5.3.
+On 2020-06-19 11:04 -0700, Christian Stewart spake thusly:
+> FUSE-overlayfs is an implementation of overlay+shiftfs in FUSE, intended to be
+> used as the backing filesystem for rootless containers.
 > 
-> [1] https://github.com/abperiasamy/rtl8812AU_8821AU_linux/pull/316
+> Reference: http://github.com/containers/fuse-overlayfs
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...-fallthrough-comments-for-kernel-5.3.patch |  28 +++
->  ...river-crashes-from-aircrack-ng-rtl88.patch | 168 ++++++++++++++++++
->  2 files changed, 196 insertions(+)
->  create mode 100644 package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
->  create mode 100644 package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
 Applied to master, thanks.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+> ---
+> 
+> v1 -> v2:
+> 
+>  - remove superfluous autoconf, automake deps
+>  - fix check-package warnings about Config.in
+> 
+> ---
+>  DEVELOPERS                                 |  1 +
+>  package/Config.in                          |  1 +
+>  package/fuse-overlayfs/Config.in           | 15 +++++++++++++++
+>  package/fuse-overlayfs/fuse-overlayfs.hash |  4 ++++
+>  package/fuse-overlayfs/fuse-overlayfs.mk   | 15 +++++++++++++++
+>  5 files changed, 36 insertions(+)
+>  create mode 100644 package/fuse-overlayfs/Config.in
+>  create mode 100644 package/fuse-overlayfs/fuse-overlayfs.hash
+>  create mode 100644 package/fuse-overlayfs/fuse-overlayfs.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 7cd67a5540..dc9fa8a718 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -539,6 +539,7 @@ F:	package/docker-cli/
+>  F:	package/docker-containerd/
+>  F:	package/docker-engine/
+>  F:	package/docker-proxy/
+> +F:	package/fuse-overlayfs/
+>  F:	package/go/
+>  F:	package/mosh/
+>  F:	package/pkg-golang.mk
+> diff --git a/package/Config.in b/package/Config.in
+> index 7e4476d337..dc24921e0f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -203,6 +203,7 @@ menu "Filesystem and flash utilities"
+>  	source "package/f2fs-tools/Config.in"
+>  	source "package/flashbench/Config.in"
+>  	source "package/fscryptctl/Config.in"
+> +	source "package/fuse-overlayfs/Config.in"
+>  	source "package/fwup/Config.in"
+>  	source "package/genext2fs/Config.in"
+>  	source "package/genpart/Config.in"
+> diff --git a/package/fuse-overlayfs/Config.in b/package/fuse-overlayfs/Config.in
+> new file mode 100644
+> index 0000000000..7647c5a1a4
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_FUSE_OVERLAYFS
+> +	bool "fuse-overlayfs"
+> +	depends on !BR2_STATIC_LIBS # libfuse3
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3
+> +	depends on BR2_USE_MMU # libfuse3
+> +	select BR2_PACKAGE_LIBFUSE3
+> +	help
+> +	  FUSE-overlayfs is an implementation of overlay+shiftfs in
+> +	  FUSE, intended to be used for rootless containers.
+> +
+> +	  http://github.com/containers/fuse-overlayfs
+> +
+> +comment "fuse-overlayfs needs a toolchain w/ threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+> new file mode 100644
+> index 0000000000..ee1eb694c9
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+> @@ -0,0 +1,4 @@
+> +# Locally computed
+> +sha256	060168c2d5a8c6cc768b4542eba9953b7ff4a31f94bfb2e05b3d1051390838b1  fuse-overlayfs-1.1.0.tar.gz
+> +# Locally computed
+> +sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+> new file mode 100644
+> index 0000000000..25f4eadd11
+> --- /dev/null
+> +++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# fuse-overlayfs
+> +#
+> +################################################################################
+> +
+> +FUSE_OVERLAYFS_VERSION = 1.1.0
+> +FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+> +FUSE_OVERLAYFS_LICENSE = GPL-3.0
+> +FUSE_OVERLAYFS_LICENSE_FILES = COPYING
+> +
+> +FUSE_OVERLAYFS_AUTORECONF = YES
+> +FUSE_OVERLAYFS_DEPENDENCIES = libfuse3 host-pkgconf
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
