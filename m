@@ -1,35 +1,146 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:22:50 +0200
-Subject: [Buildroot] [PATCH 1/2] package/janus-gateway: fix libogg
- dependency
-In-Reply-To: <20200620143501.853894-1-fontaine.fabrice@gmail.com>
-References: <20200620143501.853894-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200620222250.473ce2a0@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 20 Jun 2020 22:28:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tinydtls: fix build on big endian
+Message-ID: <20200620202833.1181380-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Jun 2020 16:35:00 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/e8704e02fdede7b63e22da552292977b23380b32
 
-> libogg is not only used for voicemail plugin, it is an optional
-> dependency of:
-> - audiobridge plugin since version 0.9.3 and
->   https://github.com/meetecho/janus-gateway/commit/53761d07c5456424d368c708fda2757e6606a4bf
-> - streaming plugin since version 0.9.3 and
->   https://github.com/meetecho/janus-gateway/commit/d9aa1cec84c662f2f7fda025ee023f6dec927bdc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/janus-gateway/janus-gateway.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-sha2-sha2.c-fix-build-on-big-endian.patch | 119 ++++++++++++++++++
+ 1 file changed, 119 insertions(+)
+ create mode 100644 package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
 
-Both applied. Thanks!
-
-Thomas
+diff --git a/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch b/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
+new file mode 100644
+index 0000000000..81cf26bb4b
+--- /dev/null
++++ b/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
+@@ -0,0 +1,119 @@
++From 608738ccad9ac3743ccd535bde1e84f401e6176f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 20 Jun 2020 12:50:40 +0200
++Subject: [PATCH] sha2/sha2.c: fix build on big endian
++
++Build is broken since 865ec9ba1d44e629c1107c299aebd20e901a19ff because
++tmp is undefined in put32be and put64be:
++
++sha2.c: In function 'put32be':
++sha2.c:177:34: error: 'tmp' undeclared (first use in this function)
++  MEMCPY_BCOPY(data, &val, sizeof(tmp));
++                                  ^~~
++
++Fix this error by replacing tmp by val
++
++Moreover, move MEMCPY_BCOPY before its usage or linking step will fail
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e8704e02fdede7b63e22da552292977b23380b32
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/eclipse/tinydtls/pull/37]
++---
++ sha2/sha2.c | 58 ++++++++++++++++++++++++++---------------------------
++ 1 file changed, 29 insertions(+), 29 deletions(-)
++
++diff --git a/sha2/sha2.c b/sha2/sha2.c
++index cb6d90f..5c794c6 100644
++--- a/sha2/sha2.c
+++++ b/sha2/sha2.c
++@@ -114,6 +114,33 @@
++ #error Define BYTE_ORDER to be equal to either LITTLE_ENDIAN or BIG_ENDIAN
++ #endif
++ 
+++/*
+++ * Macros for copying blocks of memory and for zeroing out ranges
+++ * of memory.  Using these macros makes it easy to switch from
+++ * using memset()/memcpy() and using bzero()/bcopy().
+++ *
+++ * Please define either SHA2_USE_MEMSET_MEMCPY or define
+++ * SHA2_USE_BZERO_BCOPY depending on which function set you
+++ * choose to use:
+++ */
+++#if !defined(SHA2_USE_MEMSET_MEMCPY) && !defined(SHA2_USE_BZERO_BCOPY)
+++/* Default to memset()/memcpy() if no option is specified */
+++#define	SHA2_USE_MEMSET_MEMCPY	1
+++#endif
+++#if defined(SHA2_USE_MEMSET_MEMCPY) && defined(SHA2_USE_BZERO_BCOPY)
+++/* Abort with an error if BOTH options are defined */
+++#error Define either SHA2_USE_MEMSET_MEMCPY or SHA2_USE_BZERO_BCOPY, not both!
+++#endif
+++
+++#ifdef SHA2_USE_MEMSET_MEMCPY
+++#define MEMSET_BZERO(p,l)	memset((p), 0, (l))
+++#define MEMCPY_BCOPY(d,s,l)	memcpy((d), (s), (l))
+++#endif
+++#ifdef SHA2_USE_BZERO_BCOPY
+++#define MEMSET_BZERO(p,l)	bzero((p), (l))
+++#define MEMCPY_BCOPY(d,s,l)	bcopy((s), (d), (l))
+++#endif
+++
++ /*
++  * Define the followingsha2_* types to types of the correct length on
++  * the native archtecture.   Most BSD systems and Linux define u_intXX_t
++@@ -174,7 +201,7 @@ static inline void put32be(sha2_byte* data, sha2_word32 val)
++ 	data[1] = val; val >>= 8;
++ 	data[0] = val;
++ #else /* BYTE_ORDER != LITTLE_ENDIAN */
++-	MEMCPY_BCOPY(data, &val, sizeof(tmp));
+++	MEMCPY_BCOPY(data, &val, sizeof(val));
++ #endif /* BYTE_ORDER != LITTLE_ENDIAN */
++ }
++ 
++@@ -209,7 +236,7 @@ static inline void put64be(sha2_byte* data, sha2_word64 val)
++ 	data[1] = val; val >>= 8;
++ 	data[0] = val;
++ #else /* BYTE_ORDER != LITTLE_ENDIAN */
++-	MEMCPY_BCOPY(data, &val, sizeof(tmp));
+++	MEMCPY_BCOPY(data, &val, sizeof(val));
++ #endif /* BYTE_ORDER != LITTLE_ENDIAN */
++ }
++ 
++@@ -225,33 +252,6 @@ static inline void put64be(sha2_byte* data, sha2_word64 val)
++ 	} \
++ }
++ 
++-/*
++- * Macros for copying blocks of memory and for zeroing out ranges
++- * of memory.  Using these macros makes it easy to switch from
++- * using memset()/memcpy() and using bzero()/bcopy().
++- *
++- * Please define either SHA2_USE_MEMSET_MEMCPY or define
++- * SHA2_USE_BZERO_BCOPY depending on which function set you
++- * choose to use:
++- */
++-#if !defined(SHA2_USE_MEMSET_MEMCPY) && !defined(SHA2_USE_BZERO_BCOPY)
++-/* Default to memset()/memcpy() if no option is specified */
++-#define	SHA2_USE_MEMSET_MEMCPY	1
++-#endif
++-#if defined(SHA2_USE_MEMSET_MEMCPY) && defined(SHA2_USE_BZERO_BCOPY)
++-/* Abort with an error if BOTH options are defined */
++-#error Define either SHA2_USE_MEMSET_MEMCPY or SHA2_USE_BZERO_BCOPY, not both!
++-#endif
++-
++-#ifdef SHA2_USE_MEMSET_MEMCPY
++-#define MEMSET_BZERO(p,l)	memset((p), 0, (l))
++-#define MEMCPY_BCOPY(d,s,l)	memcpy((d), (s), (l))
++-#endif
++-#ifdef SHA2_USE_BZERO_BCOPY
++-#define MEMSET_BZERO(p,l)	bzero((p), (l))
++-#define MEMCPY_BCOPY(d,s,l)	bcopy((s), (d), (l))
++-#endif
++-
++ 
++ /*** THE SIX LOGICAL FUNCTIONS ****************************************/
++ /*
++-- 
++2.26.2
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
