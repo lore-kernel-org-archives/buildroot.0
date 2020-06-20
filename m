@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:10:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/alsa-lib: bumpv ersion to
- 1.2.3.1
-In-Reply-To: <20200620181726.1938758-1-bernd.kuhls@t-online.de>
-References: <20200620181726.1938758-1-bernd.kuhls@t-online.de>
-Message-ID: <20200620221036.5ab861c7@windsurf.home>
+Date: Sat, 20 Jun 2020 22:10:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix static build with
+ libmatroska
+In-Reply-To: <20200620160437.1010552-1-fontaine.fabrice@gmail.com>
+References: <20200620160437.1010552-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200620221041.78a130ca@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Jun 2020 20:17:26 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 20 Jun 2020 18:04:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Removed patch which was committed upstream.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ee365f792feb0fe69ed765fda625afabc91ec769
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0002-dlmisc.c-fix-uclibc-build.patch      | 37 -------------------
->  package/alsa-lib/alsa-lib.hash                |  2 +-
->  package/alsa-lib/alsa-lib.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 39 deletions(-)
->  delete mode 100644 package/alsa-lib/0002-dlmisc.c-fix-uclibc-build.patch
+>  ...make-FindMatroska-fix-static-linking.patch | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
 
 Applied to master, thanks.
 
