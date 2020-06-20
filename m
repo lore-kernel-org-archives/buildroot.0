@@ -1,71 +1,58 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Sat, 20 Jun 2020 22:37:03 +0200
-Subject: [Buildroot] [PATCH v2 1/7] package/dejavu: Install dejavu fonts
- in staging dir
-In-Reply-To: <20200620222933.16376fca@windsurf.home>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Jun 2020 22:37:41 +0200
+Subject: [Buildroot] [PATCH v2 4/7] package/cups: Add lp user as default
+ cups user
+In-Reply-To: <20200619145719.2352019-5-angelo@amarulasolutions.com>
 References: <20200619145719.2352019-1-angelo@amarulasolutions.com>
- <20200619145719.2352019-2-angelo@amarulasolutions.com>
- <20200620222933.16376fca@windsurf.home>
-Message-ID: <CAOf5uwmnNUUGTFa5mL1Jwovuj4VT9ND_CPW=rFt912QY3ymfsw@mail.gmail.com>
+ <20200619145719.2352019-5-angelo@amarulasolutions.com>
+Message-ID: <20200620223741.2c38c12b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hello,
 
-On Sat, Jun 20, 2020 at 10:29 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Angelo,
->
-> On Fri, 19 Jun 2020 16:57:13 +0200
-> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
->
-> > From: Michael Trimarchi <michael@amarulasolutions.com>
-> >
-> > The dejavu font is used by cups-filters and needs to be
-> > installed in staging directory.
-> >
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-> > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->
-> The question is why should we do this just for the DejaVu fonts ? And
-> not other font packages ?
+On Fri, 19 Jun 2020 16:57:16 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-Ok, optional can be created a patch to remove this dependency that is used
-to compile tests.
+> This patch is a backport from the rockchip tree.
 
-Michael
+Good idea to try to bring back into Buildroot changes made in other
+forks! However, it would be nice to have a better commit log that
+explains why these changes are needed, i.e what is the visible issue
+without this fix.
 
->
-> > +define DEJAVU_INSTALL_STAGING_CMDS
-> > +     mkdir -p $(STAGING_DIR)/usr/share/fonts/dejavu/
-> > +     for i in $(DEJAVU_FONTS_INSTALL) ; do \
-> > +             $(INSTALL) -m 0644 $(@D)/ttf/$$i \
-> > +                     $(STAGING_DIR)/usr/share/fonts/dejavu/ || exit 1 ; \
-> > +     done
-> > +endef
-> > +
-> >  define DEJAVU_INSTALL_TARGET_CMDS
-> >       mkdir -p $(TARGET_DIR)/usr/share/fonts/dejavu/
-> >       for i in $(DEJAVU_FONTS_INSTALL) ; do \
->
-> We could factorize things a bit between staging/target installation,
-> and perhaps use a make "foreach" loop (if that works). But really these
-> are minor details, the main question is: why DejaVu specifically.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+> index 461e0d9143..40fe210c94 100644
+> --- a/package/cups/cups.mk
+> +++ b/package/cups/cups.mk
+> @@ -22,6 +22,9 @@ CUPS_CONF_OPTS = \
+>  	--disable-gssapi \
+>  	--disable-pam \
+>  	--libdir=/usr/lib \
+> +	--with-cups-user=lp \
+> +	--with-cups-group=lp \
+> +	--with-system-groups="lpadmin sys root" \
 
+What is this --with-system-groups option doing?
 
+>  	--with-rcdir=no
+>  CUPS_CONFIG_SCRIPTS = cups-config
+>  CUPS_DEPENDENCIES = \
+> @@ -78,4 +81,9 @@ define CUPS_INSTALL_INIT_SYSV
+>  		$(TARGET_DIR)/etc/init.d/S81cupsd
+>  endef
+>  
+> +define CUPS_USERS
+> +	lp -1 lp -1 * /var/spool/lpd /bin/false - lp
+> +	- - lpadmin -1 * - - - Printers admin group.
 
+So we need both a "lp" group and a "lpadmin" group ?
+
+Thomas
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
