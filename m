@@ -1,26 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 22:55:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-cpp: drop dynamic
- library dependency
-In-Reply-To: <20200620202934.1181500-1-fontaine.fabrice@gmail.com>
-References: <20200620202934.1181500-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200620225545.14162331@windsurf.home>
+Date: Sat, 20 Jun 2020 22:55:54 +0200
+Subject: [Buildroot] [PATCH v1] package/rtl8821au: add two patches
+ fixing compile/runtime for kernels >= 5.3
+In-Reply-To: <20200615185911.16490-1-ps.report@gmx.net>
+References: <20200615185911.16490-1-ps.report@gmx.net>
+Message-ID: <20200620225554.311744f8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Jun 2020 22:29:34 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 15 Jun 2020 20:59:11 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Add two patches from upstream merge request ([1] to fix compile
+> and runtime failures in case of linux kernel >= 5.3.
+> 
+> [1] https://github.com/abperiasamy/rtl8812AU_8821AU_linux/pull/316
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...FindMahoMqttC.cmake-fix-static-build.patch | 35 +++++++++++++++++++
->  package/paho-mqtt-cpp/Config.in               |  6 ++--
->  package/paho-mqtt-cpp/paho-mqtt-cpp.mk        | 14 ++++++++
->  3 files changed, 51 insertions(+), 4 deletions(-)
->  create mode 100644 package/paho-mqtt-cpp/0001-cmake-FindMahoMqttC.cmake-fix-static-build.patch
+>  ...-fallthrough-comments-for-kernel-5.3.patch |  28 +++
+>  ...river-crashes-from-aircrack-ng-rtl88.patch | 168 ++++++++++++++++++
+>  2 files changed, 196 insertions(+)
+>  create mode 100644 package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
+>  create mode 100644 package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
 
 Applied to master, thanks.
 
