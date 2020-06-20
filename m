@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 08:34:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/circus: bump to version 0.16.1
-In-Reply-To: <20200619215542.257729-1-fontaine.fabrice@gmail.com>
-References: <20200619215542.257729-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200620083454.30ee9e78@windsurf.home>
+Date: Sat, 20 Jun 2020 08:35:02 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mutt: fix CVE-2020-14093
+In-Reply-To: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
+References: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200620083502.0fa8a098@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 19 Jun 2020 23:55:42 +0200
+On Sat, 20 Jun 2020 00:11:49 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Drop patch (already in version)
-> - Update indentation in hash file (two spaces)
+> Mutt before 1.14.3 allows an IMAP fcc/postpone man-in-the-middle attack
+> via a PREAUTH response.
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...ame-async-argument-of-_create_circus.patch | 97 -------------------
->  package/circus/circus.hash                    |  4 +-
->  package/circus/circus.mk                      |  4 +-
->  3 files changed, 4 insertions(+), 101 deletions(-)
->  delete mode 100644 package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
+>  ...sible-IMAP-MITM-via-PREAUTH-response.patch | 60 +++++++++++++++++++
+>  package/mutt/mutt.mk                          |  3 +
+>  2 files changed, 63 insertions(+)
+>  create mode 100644 package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
