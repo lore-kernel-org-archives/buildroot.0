@@ -1,51 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 21:26:33 +0200
-Subject: [Buildroot] [PATCH] stress-ng: bump to version 0.11.14
-In-Reply-To: <4289a40f5c830717edc9c400b89408216152c9c2.1592555865.git.baruch@tkos.co.il>
-References: <4289a40f5c830717edc9c400b89408216152c9c2.1592555865.git.baruch@tkos.co.il>
-Message-ID: <20200620212633.2baaac4a@windsurf.home>
+Date: Sat, 20 Jun 2020 21:27:02 +0200
+Subject: [Buildroot] [git commit] package/libopenssl: fix target
+ architecture for MIPS64n32
+Message-ID: <20200620193433.495A282E00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 19 Jun 2020 11:37:45 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=42718e13d26c507930019c0dc46da6bcd9d7e719
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Enable build for musl libc. glibc specific code is now behind __GNUC__.
-> Add a patch to fix collision with kernel defined struct sysinfo.
-> 
-> Drop attr dependency. Not used anymore.
-> 
-> Make keyutils an optional dependency. Detected at config time.
-> 
-> Enable static build now that keyutils is not a mandatory dependency.
-> 
-> Format hash file with two spaces delimiters.
-> 
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Commit 1ebb35ee5fb7bd5e6278a84ac2c18aa0a38056fb changed the libopenssl
+target architecture to 'linux-generic64' for 64-bit archs based on
+BR2_ARCH_IS_64. However, MIPS64n32 has BR2_ARCH_IS_64 set, but is a 32-bit
+ABI. On such board, libopenssl needs to be configured with linux-generic32
+to function properly.
 
-Thanks, applied! One comment below.
+One symptom of this problem is that ssh-keygen hangs on key generation,
+waiting for more random bits. See [1] for the discussion with openssl
+upstream.
 
-> +Subject: [PATCH] stress-ng.h: suppress kernel sysinfo.h
-> +
-> +The kernel sysinfo.h (indirectly included from genetlink.h) defines
-> +struct sysinfo. This collides with musl libc definition of the same
-> +struct.
+Thanks to Ronny Meeus for investigating the issue and kudos to the openssl
+community for their responsive and helpful interaction!
 
-This hack of defining _LINUX_SYSINFO_H is not pretty. But after looking
-at it, I see that uClibc-ng does exactly that. glibc takes a different
-route: they use directly the definition from the kernel headers, and
-don't duplicate it in the glibc headers.
+Reported-by: Ronny Meeus <ronny.meeus@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Anyway, that's good enough, so I've applied.
+[1] https://mta.openssl.org/pipermail/openssl-users/2020-June/012565.html
 
-Thanks,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libopenssl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 881518d1cb..8909e36b9e 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -29,7 +29,7 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
+ 	# no-asm is needed with generic architectures such as
+ 	# linux-generic{32,64}, see
+ 	# https://github.com/openssl/openssl/issues/9839
+-	default "linux-generic64 no-asm"	if BR2_ARCH_IS_64
++	default "linux-generic64 no-asm"	if BR2_ARCH_IS_64 && !BR2_MIPS_NABI32
+ 	default "linux-generic32 no-asm"
+ 
+ config BR2_PACKAGE_LIBOPENSSL_BIN
