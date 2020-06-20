@@ -1,1540 +1,204 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Jun 2020 00:11:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mutt: bump to version 1.14.4
-In-Reply-To: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
-References: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200619221150.284997-2-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Jun 2020 06:26:31 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-06-19
+Message-ID: <20200620062637.31F5586456@fraxinus.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patches (already in version) and so autoreconf
-- Update indentation in hash file
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...0001-Convert-makedoc-c-to-makedoc-pl.patch | 1090 -----------------
- ...vert-hcachever-sh-in-to-hcachever-pl.patch |  310 -----
- ...sible-IMAP-MITM-via-PREAUTH-response.patch |   60 -
- package/mutt/mutt.hash                        |    4 +-
- package/mutt/mutt.mk                          |    7 +-
- 5 files changed, 3 insertions(+), 1468 deletions(-)
- delete mode 100644 package/mutt/0001-Convert-makedoc-c-to-makedoc-pl.patch
- delete mode 100644 package/mutt/0002-Convert-hcachever-sh-in-to-hcachever-pl.patch
- delete mode 100644 package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
+Autobuild statistics for 2020-06-19
+===============================
 
-diff --git a/package/mutt/0001-Convert-makedoc-c-to-makedoc-pl.patch b/package/mutt/0001-Convert-makedoc-c-to-makedoc-pl.patch
-deleted file mode 100644
-index ed15e34f66..0000000000
---- a/package/mutt/0001-Convert-makedoc-c-to-makedoc-pl.patch
-+++ /dev/null
-@@ -1,1090 +0,0 @@
--From 27fdc2f5b55fa1849d1b51fa866a4c2a4e83a3cd Mon Sep 17 00:00:00 2001
--From: Kevin McCarthy <kevin@8t8.us>
--Date: Tue, 24 Dec 2019 19:04:07 -0800
--Subject: [PATCH] Convert makedoc.c to makedoc.pl.
--
--This removes the build-time dependency on a compiled program, which
--doesn't work for cross-compilation.
--
--My perl is pretty rusty, and the result isn't super pretty.  However,
--since perl is already a build dependency, it made the most sense to
--use that.  The output of Muttrc, muttrc.man, and manual.xml match.
--
--There might be a few bugs, so I'm going to leave makedoc.c in for now
--as a reference.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://gitlab.com/muttmua/mutt/commit/27fdc2f5b55fa1849d1b51fa866a4c2a4e83a3cd]
-----
-- doc/Makefile.am     |  16 +-
-- doc/devel-notes.txt |   2 +-
-- doc/makedoc.pl      | 952 ++++++++++++++++++++++++++++++++++++++++++++
-- init.h              |   2 +-
-- sort.h              |   2 +-
-- 5 files changed, 962 insertions(+), 12 deletions(-)
-- create mode 100644 doc/makedoc.pl
--
--diff --git a/doc/Makefile.am b/doc/Makefile.am
--index 8f94a09b..1cb21b64 100644
----- a/doc/Makefile.am
--+++ b/doc/Makefile.am
--@@ -17,8 +17,6 @@ AM_CPPFLAGS = -I. -I.. -I$(includedir) -I$(top_srcdir)
-- 
-- MAKEDOC_CPP = $(CPP) $(AM_CPPFLAGS) $(DEFS) $(CPPFLAGS) -D_MAKEDOC -C
-- 
---noinst_PROGRAMS = makedoc
---
-- EXTRA_DIST = dotlock.man		\
--         smime_keys.man                  \
-- 	mutt.man			\
--@@ -38,7 +36,7 @@ EXTRA_DIST = dotlock.man		\
-- 	patch-notes.txt			\
-- 	smime-notes.txt			\
-- 	Muttrc Muttrc.head stamp-doc-rc \
---	makedoc.c makedoc-defs.h 	\
--+	makedoc.pl makedoc-defs.h 	\
-- 	mutt.css mutt.xsl html.xsl chunk.xsl $(BUILT_DISTFILES)
-- 
-- CHUNKED_DOCFILES = index.html intro.html gettingstarted.html \
--@@ -136,11 +134,11 @@ manual.txt: manual.html
-- 
-- Muttrc: stamp-doc-rc
-- 
---stamp-doc-rc: $(top_srcdir)/init.h makedoc$(EXEEXT) $(srcdir)/Muttrc.head
--+stamp-doc-rc: $(top_srcdir)/init.h makedoc.pl $(srcdir)/Muttrc.head
-- 	-rm -f Muttrc stamp-doc-rc
-- 	sed -e 's,[@]docdir[@],$(docdir),' $(srcdir)/Muttrc.head > Muttrc
-- 	$(CPP) $(AM_CPPFLAGS) $(DEFS) $(CPPFLAGS) -D_MAKEDOC -C \
---	  $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -c >> Muttrc
--+	  $(top_srcdir)/init.h | perl $(srcdir)/makedoc.pl -c >> Muttrc
-- 	touch stamp-doc-rc
-- 
-- manual.html: $(srcdir)/html.xsl $(srcdir)/mutt.xsl stamp-doc-xml $(srcdir)/mutt.css
--@@ -211,8 +209,8 @@ instdoc: instdoc.sh
-- 
-- update-doc: stamp-doc-rc $(BUILD_DOC_TARGETS)
-- 
---muttrc.man: makedoc$(EXEEXT) $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
---	$(MAKEDOC_CPP) $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -m | 	    \
--+muttrc.man: makedoc.pl $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
--+	$(MAKEDOC_CPP) $(top_srcdir)/init.h | perl $(srcdir)/makedoc.pl -m | 	    \
-- 		cat $(srcdir)/muttrc.man.head - $(srcdir)/muttrc.man.tail\
-- 		> muttrc.man
-- 
--@@ -232,13 +230,13 @@ mutt_pgpring.1: $(srcdir)/pgpring.man
-- smime_keys.1: $(srcdir)/smime_keys.man
-- 	$(EDIT) $(srcdir)/smime_keys.man > $@
-- 
---stamp-doc-xml: makedoc$(EXEEXT) $(top_srcdir)/init.h \
--+stamp-doc-xml: makedoc.pl $(top_srcdir)/init.h \
--                manual.xml.head $(top_srcdir)/functions.h $(top_srcdir)/OPS* manual.xml.tail \
--                $(srcdir)/gen-map-doc $(top_srcdir)/VERSION $(top_srcdir)/ChangeLog
-- 	( date=`(cd $(top_srcdir) && ./mkreldate.sh)` && \
-- 	  version=`(cd $(top_srcdir) && env sh ./version.sh)` && \
-- 	  sed -e "s/@VERSION\@/$$version ($$date)/" $(srcdir)/manual.xml.head && \
---	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | ./makedoc$(EXEEXT) -s && \
--+	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | perl $(srcdir)/makedoc.pl -s && \
-- 	  $(MAKEDOC_CPP) $(top_srcdir)/functions.h | \
-- 	    perl $(srcdir)/gen-map-doc $(srcdir)/manual.xml.tail $(top_srcdir)/OPS* \
-- 	) > manual.xml
--diff --git a/doc/devel-notes.txt b/doc/devel-notes.txt
--index 99bc0fa0..bde077ab 100644
----- a/doc/devel-notes.txt
--+++ b/doc/devel-notes.txt
--@@ -225,7 +225,7 @@ these variables, and the global Muttrc, are generated automatically
-- from that documentation.  To start this process, type "make
-- update-doc" in the top-level source directory.
-- 
---Note that you may have to update the makedoc utility (makedoc.c)
--+Note that you may have to update the makedoc utility (makedoc.pl)
-- when adding new data types to init.h.
-- 
-- More precisely, variable name, type, and default value are directly
--diff --git a/doc/makedoc.pl b/doc/makedoc.pl
--new file mode 100644
--index 00000000..e64d3c50
----- /dev/null
--+++ b/doc/makedoc.pl
--@@ -0,0 +1,952 @@
--+#! /usr/bin/perl -w
--+#
--+# Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
--+# Copyright (C) 2019 Kevin J. McCarthy <kevin@8t8.us>
--+#
--+#     This program is free software; you can redistribute it and/or modify
--+#     it under the terms of the GNU General Public License as published by
--+#     the Free Software Foundation; either version 2 of the License, or
--+#     (at your option) any later version.
--+#
--+#     This program is distributed in the hope that it will be useful,
--+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
--+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--+#     GNU General Public License for more details.
--+#
--+#     You should have received a copy of the GNU General Public License
--+#     along with this program; if not, write to the Free Software
--+#     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
--+
--+# This program was translated from the C version (makedoc.c).
--+# So it looks like "c'ish perl" because it is, plus my perl is rusty ;-)
--+
--+
--+# Documentation line parser notes:
--+#
--+# The format is very remotely inspired by nroff. Most important, it's
--+# easy to parse and convert, and it was easy to generate from the SGML
--+# source of mutt's original manual.
--+#
--+# - \fI switches to italics
--+# - \fB switches to boldface
--+# - \fC swtiches to a literal string
--+# - \fP switches to normal display
--+# - .dl on a line starts a definition list (name taken taken from HTML).
--+# - .dt starts a term in a definition list.
--+# - .dd starts a definition in a definition list.
--+# - .de on a line finishes a definition list.
--+# - .il on a line starts an itemized list
--+# - .dd starts an item in an itemized list
--+# - .ie on a line finishes an itemized list
--+# - .ts on a line starts a "tscreen" environment (name taken from SGML).
--+# - .te on a line finishes this environment.
--+# - .pp on a line starts a paragraph.
--+# - \$word will be converted to a reference to word, where appropriate.
--+#   Note that \$$word is possible as well.
--+# - '. ' in the beginning of a line expands to two space characters.
--+#   This is used to protect indentations in tables.
--+#
--+
--+use strict;
--+use warnings;
--+use Getopt::Std;
--+
--+# Output formats
--+my $F_CONF = 1;
--+my $F_MAN  = 2;
--+my $F_SGML = 3;
--+
--+my $OutputFormat;
--+
--+# docstatus flags, used by print_it()
--+my $D_INIT = (1 << 0);   # init
--+my $D_NL   = (1 << 1);   # (usually) on a new line
--+my $D_NP   = (1 << 2);   # new paragraph           ".pp"
--+my $D_PA   = (1 << 3);   # inside paragraph        ".pp"
--+
--+my $D_EM   = (1 << 4);   # emphasis                "\fI" .. "\fP"
--+my $D_BF   = (1 << 5);   # boldface                "\fB" .. "\fP"
--+my $D_TT   = (1 << 6);   # literal string          "\fC" .. "\fP"
--+
--+my $D_TAB  = (1 << 7);   # "tscreen" screen shot   ".ts" .. ".te"
--+my $D_DL   = (1 << 8);   # start defn list         ".dl" .. ".de"
--+my $D_DT   = (1 << 9);   # dlist term              ".dt"
--+my $D_DD   = (1 << 10);  # dlist defn              ".dd"
--+my $D_IL   = (1 << 11);  # itemized list           ".il" .. ".ie"
--+
--+# Commands sent to print_it() in response to various input strings
--+my $SP_START_EM    = 1;
--+my $SP_START_BF    = 2;
--+my $SP_START_TT    = 3;
--+my $SP_END_FT      = 4;
--+my $SP_NEWLINE     = 5;
--+my $SP_NEWPAR      = 6;
--+my $SP_END_PAR     = 7;
--+my $SP_STR         = 8;
--+my $SP_START_TAB   = 9;
--+my $SP_END_TAB     = 10;
--+my $SP_START_DL    = 11;
--+my $SP_DT          = 12;
--+my $SP_DD          = 13;
--+my $SP_END_DD      = 14;
--+my $SP_END_DL      = 15;
--+my $SP_START_IL    = 16;
--+my $SP_END_IL      = 17;
--+my $SP_END_SECT    = 18;
--+my $SP_REFER       = 19;
--+
--+# Types to documentation readable strings:
--+my %type2human = ("DT_NONE"  => "-none-",
--+                  "DT_BOOL"  => "boolean",
--+                  "DT_NUM"   => "number",
--+                  "DT_LNUM"  => "number (long)",
--+                  "DT_STR"   => "string",
--+                  "DT_PATH"  => "path",
--+                  "DT_QUAD"  => "quadoption",
--+                  "DT_SORT"  => "sort order",
--+                  "DT_RX"    => "regular expression",
--+                  "DT_MAGIC" => "folder magic",
--+                  "DT_ADDR"  => "e-mail address",
--+                  "DT_MBCHARTBL"=> "string");
--+
--+my %string_types = ("DT_STR"  => 1,
--+                    "DT_RX"   => 1,
--+                    "DT_ADDR" => 1,
--+                    "DT_PATH" => 1,
--+                    "DT_MBCHARTBL" => 1);
--+
--+my %quad2human = ("MUTT_YES" => "yes",
--+                  "MUTT_NO"  => "no",
--+                  "MUTT_ASKYES" => "ask-yes",
--+                  "MUTT_ASKNO" => "ask-no");
--+
--+my %bool2human = ("1" => "yes",
--+                  "0" => "no");
--+
--+
--+# prototypes
--+# to update:
--+#   M-1 M-! grep '^sub' makedoc.pl
--+sub makedoc();
--+sub flush_doc($);
--+sub handle_confline($);
--+sub pretty_default($$);
--+sub string_unescape($);
--+sub string_escape($);
--+sub print_confline($$$);
--+sub print_confline_conf($$$);
--+sub print_conf_strval($);
--+sub print_confline_man($$$);
--+sub man_string_escape($);
--+sub print_man_strval($);
--+sub print_confline_sgml($$$);
--+sub print_sgml_id($);
--+sub print_sgml($);
--+sub print_sgml_strval($);
--+sub handle_docline($$);
--+sub commit_buff($$);
--+sub print_docline($$$);
--+sub print_ref($$);
--+sub print_docline_conf($$$$);
--+sub print_docline_man($$$$);
--+sub print_docline_sgml($$$$);
--+
--+
--+our($opt_c, $opt_m, $opt_s);
--+getopts('cms');
--+if ($opt_c) {
--+  $OutputFormat = $F_CONF;
--+}
--+elsif ($opt_m) {
--+  $OutputFormat = $F_MAN;
--+}
--+elsif ($opt_s) {
--+  $OutputFormat = $F_SGML;
--+}
--+else {
--+  die "$0: no output format specified"
--+}
--+
--+makedoc();
--+
--+
--+sub makedoc() {
--+  my $line;
--+  my $lineno = 0;
--+  my $active = 0;
--+  my $docstat = $D_INIT;
--+
--+  while ($line = <STDIN>) {
--+    chomp($line);
--+    $line =~ s/^\s+//;
--+    if ($line eq '/*++*/') {
--+      $active = 1;
--+    }
--+    elsif ($line eq '/*--*/') {
--+      $docstat = flush_doc($docstat);
--+      $active = 0;
--+    }
--+    elsif ($active) {
--+      if (($line =~ /^\/\*\*/) || ($line =~ /^\*\*/)) {
--+        $line =~ s/^[\/*]+\s*//;
--+        $docstat = handle_docline($line, $docstat);
--+      }
--+      elsif ($line =~ /^{/) {
--+        $line =~ s/^{\s*//;
--+        $docstat = flush_doc($docstat);
--+        handle_confline($line);
--+      }
--+    }
--+  }
--+  flush_doc($docstat);
--+  print("\n");
--+}
--+
--+sub flush_doc($) {
--+  my ($docstat) = @_;
--+
--+  if ($docstat & $D_INIT) {
--+    return $D_INIT;
--+  }
--+
--+  if ($docstat & ($D_PA)) {
--+    $docstat = print_docline($SP_END_PAR, undef, $docstat);
--+  }
--+
--+  if ($docstat & ($D_TAB)) {
--+    $docstat = print_docline($SP_END_TAB, undef, $docstat);
--+  }
--+
--+  if ($docstat & ($D_DL)) {
--+    $docstat = print_docline($SP_END_DL, undef, $docstat);
--+  }
--+
--+  if ($docstat & ($D_EM | $D_BF | $D_TT)) {
--+    $docstat = print_docline($SP_END_FT, undef, $docstat);
--+  }
--+
--+  $docstat = print_docline($SP_END_SECT, undef, $docstat);
--+
--+  $docstat = print_docline($SP_NEWLINE, undef, 0);
--+
--+  return $D_INIT;
--+}
--+
--+####################
--+# Confline handling
--+####################
--+
--+sub handle_confline($) {
--+  my ($line) = @_;
--+
--+  my ($name, $type, $flags, $data, $val) = split(/\s*,\s*/, $line, 5);
--+  $name =~ s/"//g;
--+
--+  $type =~ s/\|.*//;
--+
--+  $val =~ s/^{\s*\.[lp]\s*=\s*"?//;
--+  $val =~ s/"?\s*}\s*},\s*$//;
--+  # This is a hack to concatenate compile-time constants.
--+  # (?<!..) is a zero-width negative lookbehind assertion, asserting
--+  # the first quote isn't preceded by a backslash
--+  $val =~ s/(?<!\\)"\s+"//g;
--+  $val = pretty_default($type, $val);
--+
--+  print_confline($name, $type, $val);
--+}
--+
--+sub pretty_default($$) {
--+  my ($type, $val) = @_;
--+
--+  if ($type eq "DT_QUAD") {
--+    $val = $quad2human{$val};
--+  }
--+  elsif ($type eq "DT_BOOL") {
--+    $val = $bool2human{$val};
--+  }
--+  elsif ($type eq "DT_SORT") {
--+    if ($val !~ /^SORT_/) {
--+      die "Expected SORT_ prefix instead of $val\n";
--+    }
--+    $val =~ s/^SORT_//;
--+    $val = lc $val;
--+  }
--+  elsif ($type eq "DT_MAGIC") {
--+    if ($val !~ /^MUTT_/) {
--+      die "Expected MUTT_ prefix instead of $val\n";
--+    }
--+    $val =~ s/^MUTT_//;
--+    $val = lc $val;
--+  }
--+  elsif (exists $string_types{$type}) {
--+    if ($val eq "0") {
--+      $val = "";
--+    }
--+    else {
--+      $val = string_unescape($val);
--+    }
--+  }
--+
--+  return $val;
--+}
--+
--+sub string_unescape($) {
--+  my ($val) = @_;
--+
--+  $val =~ s/\\r/\r/g;
--+  $val =~ s/\\n/\n/g;
--+  $val =~ s/\\t/\t/g;
--+  $val =~ s/\\a/\a/g;
--+  $val =~ s/\\f/\f/g;
--+  $val =~ s/\\(.)/$1/g;
--+
--+  return $val;
--+}
--+
--+sub string_escape($) {
--+  my ($val) = @_;
--+
--+  $val =~ s/\r/\\r/g;
--+  $val =~ s/\n/\\n/g;
--+  $val =~ s/\t/\\t/g;
--+  $val =~ s/\f/\\f/g;
--+
--+  $val =~ s/([^\x20-\x7e])/sprintf("\\%03o", unpack("%C", $1))/ge;
--+
--+  return $val;
--+}
--+
--+sub print_confline($$$) {
--+  my ($name, $type, $val) = @_;
--+
--+  if ($type eq "DT_SYN") {
--+    return;
--+  }
--+
--+  if ($OutputFormat == $F_CONF) {
--+    print_confline_conf($name, $type, $val);
--+  }
--+  elsif ($OutputFormat == $F_MAN) {
--+    print_confline_man($name, $type, $val);
--+  }
--+  elsif ($OutputFormat == $F_SGML) {
--+    print_confline_sgml($name, $type, $val);
--+  }
--+}
--+
--+# conf output format
--+
--+sub print_confline_conf($$$) {
--+  my ($name, $type, $val) = @_;
--+
--+  if (exists $string_types{$type}) {
--+    print "\n# set ${name}=\"";
--+    print_conf_strval($val);
--+    print "\"";
--+  }
--+  else {
--+    print "\n# set ${name}=${val}";
--+  }
--+
--+  print "\n#\n# Name: ${name}";
--+  print "\n# Type: ${type2human{$type}}";
--+  if (exists $string_types{$type}) {
--+    print "\n# Default: \"";
--+    print_conf_strval($val);
--+    print "\"";
--+  }
--+  else {
--+    print "\n# Default: ${val}";
--+  }
--+
--+  print "\n# ";
--+}
--+
--+sub print_conf_strval($) {
--+  my ($val) = @_;
--+
--+  $val =~ s/(["\\])/\\$1/g;
--+  $val = string_escape($val);
--+  print $val;
--+}
--+
--+# man output format
--+
--+sub print_confline_man($$$) {
--+  my ($name, $type, $val) = @_;
--+
--+  print "\n.TP\n.B ${name}\n";
--+  print ".nf\n";
--+  print "Type: ${type2human{$type}}\n";
--+  if (exists $string_types{$type}) {
--+    print "Default: \\(lq";
--+    print_man_strval($val);
--+    print "\\(rq\n";
--+  }
--+  else {
--+    print "Default: ";
--+    print_man_strval($val);
--+    print "\n";
--+  }
--+
--+  print ".fi";
--+}
--+
--+sub man_string_escape($) {
--+  my ($val) = @_;
--+
--+  $val =~ s/\r/\\\\r/g;
--+  $val =~ s/\n/\\\\n/g;
--+  $val =~ s/\t/\\\\t/g;
--+  $val =~ s/\f/\\\\f/g;
--+
--+  $val =~ s/([^\x20-\x7e])/sprintf("\\\\%03o", unpack("%C", $1))/ge;
--+
--+  return $val;
--+}
--+
--+sub print_man_strval($) {
--+  my ($val) = @_;
--+
--+  $val =~ s/"/\\(rq/g;
--+  $val =~ s/([\\\-])/\\$1/g;
--+  $val = man_string_escape($val);
--+  print $val;
--+}
--+
--+# sgml output format
--+
--+sub print_confline_sgml($$$) {
--+  my ($name, $type, $val) = @_;
--+
--+  print "\n<sect2 id=\"";
--+  print_sgml_id($name);
--+  print "\">\n<title>";
--+  print_sgml($name);
--+  print "</title>\n<literallayout>Type: ${type2human{$type}}";
--+
--+  if (exists $string_types{$type}) {
--+    if ($val ne "") {
--+      print "\nDefault: <quote><literal>";
--+      print_sgml_strval($val);
--+      print "</literal></quote>";
--+    }
--+    else {
--+      print "\nDefault: (empty)";
--+    }
--+  }
--+  else {
--+    print "\nDefault: ${val}"
--+  }
--+
--+  print "</literallayout>\n";
--+}
--+
--+sub print_sgml_id($) {
--+  my ($id) = @_;
--+
--+  $id =~ s/^<//;
--+  $id =~ s/>$//;
--+  $id =~ s/_/-/g;
--+
--+  print $id;
--+}
--+
--+sub print_sgml($) {
--+  my ($val) = @_;
--+
--+  $val =~ s/&/&amp;/g;
--+  $val =~ s/</&lt;/g;
--+  $val =~ s/>/&gt;/g;
--+
--+  print $val;
--+}
--+
--+sub print_sgml_strval($) {
--+  my ($val) = @_;
--+
--+  $val = string_escape($val);
--+  print_sgml($val);
--+}
--+
--+
--+###################
--+# Docline handling
--+###################
--+
--+sub handle_docline($$) {
--+  my ($line, $docstat) = @_;
--+  my $buff = "";
--+
--+  if ($line =~ /^\.pp/) {
--+    return print_docline($SP_NEWPAR, undef, $docstat);
--+  }
--+  elsif ($line =~ /^\.ts/) {
--+    return print_docline($SP_START_TAB, undef, $docstat);
--+  }
--+  elsif ($line =~ /^\.te/) {
--+    return print_docline($SP_END_TAB, undef, $docstat);
--+  }
--+  elsif ($line =~ /^\.dl/) {
--+    return print_docline($SP_START_DL, undef, $docstat);
--+  }
--+  elsif ($line =~ /^\.de/) {
--+    return print_docline($SP_END_DL, undef, $docstat);
--+  }
--+  elsif ($line =~ /^\.il/) {
--+    return print_docline($SP_START_IL, undef, $docstat);
--+  }
--+  elsif ($line =~ /^\.ie/) {
--+    return print_docline($SP_END_IL, undef, $docstat);
--+  }
--+
--+  $line =~ s/^\. /  /;
--+
--+  while ($line ne "") {
--+    if ($line =~ /^\\\(as/) {
--+      $buff .= "*";
--+      substr($line, 0, 4) = "";
--+    }
--+    elsif ($line =~ /^\\\(rs/) {
--+      $buff .= "\\";
--+      substr($line, 0, 4) = "";
--+    }
--+    elsif ($line =~ /^\\fI/) {
--+      $docstat = commit_buff(\$buff, $docstat);
--+      $docstat = print_docline($SP_START_EM, undef, $docstat);
--+      substr($line, 0, 3) = "";
--+    }
--+    elsif ($line =~ /^\\fB/) {
--+      $docstat = commit_buff(\$buff, $docstat);
--+      $docstat = print_docline($SP_START_BF, undef, $docstat);
--+      substr($line, 0, 3) = "";
--+    }
--+    elsif ($line =~ /^\\fC/) {
--+      $docstat = commit_buff(\$buff, $docstat);
--+      $docstat = print_docline($SP_START_TT, undef, $docstat);
--+      substr($line, 0, 3) = "";
--+    }
--+    elsif ($line =~ /^\\fP/) {
--+      $docstat = commit_buff(\$buff, $docstat);
--+      $docstat = print_docline($SP_END_FT, undef, $docstat);
--+      substr($line, 0, 3) = "";
--+    }
--+    elsif ($line =~ /^\.dt/) {
--+      if ($docstat & $D_DD) {
--+	$docstat = commit_buff(\$buff, $docstat);
--+	$docstat = print_docline($SP_END_DD, undef, $docstat);
--+      }
--+      $docstat = commit_buff(\$buff, $docstat);
--+      $docstat = print_docline($SP_DT, undef, $docstat);
--+      substr($line, 0, 4) = "";
--+    }
--+    elsif ($line =~ /^\.dd/) {
--+      if (($docstat & $D_IL) && ($docstat & $D_DD)) {
--+	$docstat = commit_buff(\$buff, $docstat);
--+	$docstat = print_docline($SP_END_DD, undef, $docstat);
--+      }
--+      $docstat = commit_buff(\$buff, $docstat);
--+      $docstat = print_docline($SP_DD, undef, $docstat);
--+      substr($line, 0, 4) = "";
--+    }
--+    elsif ($line =~ /^\$\$\$/) {
--+      print "\$";
--+      substr($line, 0, 3) = "";
--+    }
--+    elsif ($line =~ /^(\$(\$?)([\w\-_<>]*))/) {
--+      my $whole_ref;
--+      my $ref;
--+      my $output_dollar = 0;
--+
--+      $whole_ref = $1;
--+      if ($2) {
--+        $output_dollar = 1;
--+      }
--+      $ref = $3;
--+
--+      $docstat = commit_buff(\$buff, $docstat);
--+      print_ref($output_dollar, $ref);
--+      substr($line, 0, length($whole_ref)) = "";
--+    }
--+    else {
--+      $buff .= substr($line, 0, 1);
--+      substr($line, 0, 1) = "";
--+    }
--+  }
--+
--+  $docstat = commit_buff(\$buff, $docstat);
--+  return print_docline($SP_NEWLINE, undef, $docstat);
--+}
--+
--+sub commit_buff($$) {
--+  my ($ref_buf, $docstat) = @_;
--+
--+  if ($$ref_buf ne "") {
--+    $docstat = print_docline($SP_STR, $$ref_buf, $docstat);
--+    $$ref_buf = "";
--+  }
--+
--+  return $docstat;
--+}
--+
--+sub print_docline($$$) {
--+  my ($special, $str, $docstat) = @_;
--+  my $onl;
--+
--+  $onl = ($docstat & ($D_NL | $D_NP));
--+  $docstat &= ~($D_NL | $D_NP | $D_INIT);
--+
--+  if ($OutputFormat == $F_CONF) {
--+    return print_docline_conf($special, $str, $docstat, $onl);
--+  }
--+  elsif ($OutputFormat == $F_MAN) {
--+    return print_docline_man($special, $str, $docstat, $onl);
--+  }
--+  elsif ($OutputFormat == $F_SGML) {
--+    return print_docline_sgml($special, $str, $docstat, $onl);
--+  }
--+
--+  return $docstat;
--+}
--+
--+sub print_ref($$) {
--+  my ($output_dollar, $ref) = @_;
--+
--+  if (($OutputFormat == $F_CONF) || ($OutputFormat == $F_MAN)) {
--+    if ($output_dollar) {
--+      print "\$";
--+    }
--+    print $ref;
--+  }
--+  elsif ($OutputFormat == $F_SGML) {
--+    print "<link linkend=\"";
--+    print_sgml_id($ref);
--+    print "\">";
--+    if ($output_dollar) {
--+      print "\$";
--+    }
--+    print_sgml($ref);
--+    print "</link>";
--+  }
--+}
--+
--+my $Continuation = 0;
--+
--+sub print_docline_conf($$$$) {
--+  my ($special, $str, $docstat, $onl) = @_;
--+
--+  if ($special == $SP_END_FT) {
--+    $docstat &= ~($D_EM|$D_BF|$D_TT);
--+  }
--+  elsif ($special == $SP_START_BF) {
--+    $docstat |= $D_BF;
--+  }
--+  elsif ($special == $SP_START_EM) {
--+    $docstat |= $D_EM;
--+  }
--+  elsif ($special == $SP_START_TT) {
--+    $docstat |= $D_TT;
--+  }
--+  elsif ($special == $SP_NEWLINE) {
--+    if ($onl) {
--+      $docstat |= $onl;
--+    }
--+    else {
--+      print "\n# ";
--+      $docstat |= $D_NL;
--+    }
--+    if ($docstat & $D_DL) {
--+      $Continuation++;
--+    }
--+  }
--+  elsif ($special == $SP_NEWPAR) {
--+    if ($onl & $D_NP) {
--+      $docstat |= $onl;
--+    }
--+    else {
--+      if (!($onl & $D_NL)) {
--+        print "\n# ";
--+      }
--+      print "\n# ";
--+      $docstat |= $D_NP;
--+    }
--+  }
--+  elsif ($special == $SP_START_TAB) {
--+    if (!$onl) {
--+      print "\n# ";
--+    }
--+    $docstat |= $D_TAB;
--+  }
--+  elsif ($special == $SP_END_TAB) {
--+    $docstat &= ~$D_TAB;
--+    $docstat |= $D_NL;
--+  }
--+  elsif ($special == $SP_START_DL) {
--+    $docstat |= $D_DL;
--+  }
--+  elsif ($special == $SP_DT) {
--+    $Continuation = 0;
--+    $docstat |= $D_DT;
--+  }
--+  elsif ($special == $SP_DD) {
--+    if ($docstat & $D_IL) {
--+      print "- ";
--+    }
--+    $Continuation = 0;
--+  }
--+  elsif ($special == $SP_END_DL) {
--+    $Continuation = 0;
--+    $docstat &= ~$D_DL;
--+  }
--+  elsif ($special == $SP_START_IL) {
--+    $docstat |= $D_IL;
--+  }
--+  elsif ($special == $SP_END_IL) {
--+    $Continuation = 0;
--+    $docstat &= ~$D_IL;
--+  }
--+  elsif ($special == $SP_STR) {
--+    if ($Continuation) {
--+      $Continuation = 0;
--+      print "        ";
--+    }
--+    print $str;
--+    if ($docstat & $D_DT) {
--+      if (length($str) < 8) {
--+        print " " x (8 - length($str));
--+      }
--+      $docstat &= ~$D_DT;
--+      $docstat |= $D_NL;
--+    }
--+  }
--+
--+  return $docstat;
--+}
--+
--+sub print_docline_man($$$$) {
--+  my ($special, $str, $docstat, $onl) = @_;
--+
--+  if ($special == $SP_END_FT) {
--+    print "\\fP";
--+    $docstat &= ~($D_EM|$D_BF|$D_TT);
--+  }
--+  elsif ($special == $SP_START_BF) {
--+    print "\\fB";
--+    $docstat |= $D_BF;
--+    $docstat &= ~($D_EM|$D_TT);
--+  }
--+  elsif ($special == $SP_START_EM) {
--+    print "\\fI";
--+    $docstat |= $D_EM;
--+    $docstat &= ~($D_BF|$D_TT);
--+  }
--+  elsif ($special == $SP_START_TT) {
--+    print "\\fC";
--+    $docstat |= $D_TT;
--+    $docstat &= ~($D_BF|$D_EM);
--+  }
--+  elsif ($special == $SP_NEWLINE) {
--+    if ($onl) {
--+      $docstat |= $onl;
--+    }
--+    else {
--+      print "\n";
--+      $docstat |= $D_NL;
--+    }
--+  }
--+  elsif ($special == $SP_NEWPAR) {
--+    if ($onl & $D_NP) {
--+      $docstat |= $onl;
--+    }
--+    else {
--+      if (!($onl & $D_NL)) {
--+        print "\n";
--+      }
--+      print ".IP\n";
--+      $docstat |= $D_NP;
--+    }
--+  }
--+  elsif ($special == $SP_START_TAB) {
--+    print "\n.IP\n.EX\n";
--+    $docstat |= $D_TAB | $D_NL;
--+  }
--+  elsif ($special == $SP_END_TAB) {
--+    print "\n.EE\n";
--+    $docstat &= ~$D_TAB;
--+    $docstat |= $D_NL;
--+  }
--+  elsif ($special == $SP_START_DL) {
--+    print ".RS\n.PD 0\n";
--+    $docstat |= $D_DL;
--+  }
--+  elsif ($special == $SP_DT) {
--+    print ".TP\n";
--+  }
--+  elsif ($special == $SP_DD) {
--+    if ($docstat & $D_IL) {
--+      print ".TP\n\\(hy ";
--+    }
--+    else {
--+      print "\n";
--+    }
--+  }
--+  elsif ($special == $SP_END_DL) {
--+    print ".RE\n.PD 1";
--+    $docstat &= ~$D_DL;
--+  }
--+  elsif ($special == $SP_START_IL) {
--+    print ".RS\n.PD 0\n";
--+    $docstat |= $D_IL;
--+  }
--+  elsif ($special == $SP_END_IL) {
--+    print ".RE\n.PD 1";
--+    $docstat &= ~$D_DL;
--+  }
--+  elsif ($special == $SP_STR) {
--+    $str =~ s/\\/\\\\/g;
--+    $str =~ s/"/\\(rq/g;
--+    $str =~ s/-/\\-/g;
--+    $str =~ s/``/\\(lq/g;
--+    $str =~ s/''/\\(rq/g;
--+    print $str;
--+  }
--+
--+  return $docstat;
--+}
--+
--+sub print_docline_sgml($$$$) {
--+  my ($special, $str, $docstat, $onl) = @_;
--+
--+  if ($special == $SP_END_FT) {
--+    if ($docstat & $D_EM) {
--+      print "</emphasis>";
--+    }
--+    if ($docstat & $D_BF) {
--+      print "</emphasis>";
--+    }
--+    if ($docstat & $D_TT) {
--+      print "</literal>";
--+    }
--+    $docstat &= ~($D_EM|$D_BF|$D_TT);
--+  }
--+  elsif ($special == $SP_START_BF) {
--+    print "<emphasis role=\"bold\">";
--+    $docstat |= $D_BF;
--+    $docstat &= ~($D_EM|$D_TT);
--+  }
--+  elsif ($special == $SP_START_EM) {
--+    print "<emphasis>";
--+    $docstat |= $D_EM;
--+    $docstat &= ~($D_BF|$D_TT);
--+  }
--+  elsif ($special == $SP_START_TT) {
--+    print "<literal>";
--+    $docstat |= $D_TT;
--+    $docstat &= ~($D_BF|$D_EM);
--+  }
--+  elsif ($special == $SP_NEWLINE) {
--+    if ($onl) {
--+      $docstat |= $onl;
--+    }
--+    else {
--+      print "\n";
--+      $docstat |= $D_NL;
--+    }
--+  }
--+  elsif ($special == $SP_NEWPAR) {
--+    if ($onl & $D_NP) {
--+      $docstat |= $onl;
--+    }
--+    else {
--+      if (!($onl & $D_NL)) {
--+        print "\n";
--+      }
--+      if ($docstat & $D_PA) {
--+        print "</para>\n";
--+      }
--+      print "<para>\n";
--+      $docstat |= $D_NP;
--+      $docstat |= $D_PA;
--+    }
--+  }
--+  elsif ($special == $SP_END_PAR) {
--+    print "</para>\n";
--+    $docstat &= ~$D_PA;
--+  }
--+  elsif ($special == $SP_START_TAB) {
--+    if ($docstat & $D_PA) {
--+      print "\n</para>\n";
--+      $docstat &= ~$D_PA;
--+    }
--+    print "\n<screen>\n";
--+    $docstat |= $D_TAB | $D_NL;
--+  }
--+  elsif ($special == $SP_END_TAB) {
--+    print "</screen>";
--+    $docstat &= ~$D_TAB;
--+    $docstat |= $D_NL;
--+  }
--+  elsif ($special == $SP_START_DL) {
--+    if ($docstat & $D_PA) {
--+      print "\n</para>\n";
--+      $docstat &= ~$D_PA;
--+    }
--+    print "\n<informaltable>\n<tgroup cols=\"2\">\n<tbody>\n";
--+    $docstat |= $D_DL;
--+  }
--+  elsif ($special == $SP_DT) {
--+    print "<row><entry>";
--+  }
--+  elsif ($special == $SP_DD) {
--+    $docstat |= $D_DD;
--+    if ($docstat & $D_DL) {
--+      print "</entry><entry>";
--+    }
--+    else {
--+      print "<listitem><para>";
--+    }
--+  }
--+  elsif ($special == $SP_END_DD) {
--+    if ($docstat & $D_DL) {
--+      print "</entry></row>\n";
--+    }
--+    else {
--+      print "</para></listitem>";
--+    }
--+    $docstat &= ~$D_DD;
--+  }
--+  elsif ($special == $SP_END_DL) {
--+    print "</entry></row></tbody></tgroup></informaltable>\n";
--+    $docstat &= ~($D_DD|$D_DL);
--+  }
--+  elsif ($special == $SP_START_IL) {
--+    if ($docstat & $D_PA) {
--+      print "\n</para>\n";
--+      $docstat &= ~$D_PA;
--+    }
--+    print "\n<itemizedlist>\n";
--+    $docstat |= $D_IL;
--+  }
--+  elsif ($special == $SP_END_IL) {
--+    print "</para></listitem></itemizedlist>\n";
--+    $docstat &= ~($D_DD|$D_DL);
--+  }
--+  elsif ($special == $SP_END_SECT) {
--+    print "</sect2>";
--+  }
--+  elsif ($special == $SP_STR) {
--+    if ($docstat & $D_TAB) {
--+      print_sgml($str);
--+    }
--+    else {
--+      $str =~ s/&/&amp;/g;
--+      $str =~ s/</&lt;/g;
--+      $str =~ s/>/&gt;/g;
--+      $str =~ s/``/<quote>/g;
--+      $str =~ s/''/<\/quote>/g;
--+      print $str;
--+    }
--+  }
--+
--+  return $docstat;
--+}
--diff --git a/init.h b/init.h
--index a237cb80..b797dd1c 100644
----- a/init.h
--+++ b/init.h
--@@ -27,7 +27,7 @@
-- #include "buffy.h"
-- 
-- #ifndef _MAKEDOC
---/* If you add a data type, be sure to update doc/makedoc.c */
--+/* If you add a data type, be sure to update doc/makedoc.pl */
-- #define DT_MASK		0x0f
-- #define DT_BOOL		1 /* boolean option */
-- #define DT_NUM		2 /* a number (short) */
--diff --git a/sort.h b/sort.h
--index 0a6450e9..340ad18b 100644
----- a/sort.h
--+++ b/sort.h
--@@ -19,7 +19,7 @@
-- #define SORT_DATE	1   /* the date the mail was sent. */
-- #define SORT_SIZE	2
-- #define SORT_SUBJECT	3
---#define SORT_ALPHA	3   /* makedoc.c requires this */
--+#define SORT_ALPHA	3   /* makedoc.pl requires this */
-- #define SORT_FROM	4
-- #define SORT_ORDER	5   /* the order the messages appear in the mailbox. */
-- #define SORT_THREADS	6
---- 
--2.24.1
--
-diff --git a/package/mutt/0002-Convert-hcachever-sh-in-to-hcachever-pl.patch b/package/mutt/0002-Convert-hcachever-sh-in-to-hcachever-pl.patch
-deleted file mode 100644
-index fc68511379..0000000000
---- a/package/mutt/0002-Convert-hcachever-sh-in-to-hcachever-pl.patch
-+++ /dev/null
-@@ -1,310 +0,0 @@
--From acd49f242c867583856973fd8644a45e53f56489 Mon Sep 17 00:00:00 2001
--From: Kevin McCarthy <kevin@8t8.us>
--Date: Wed, 8 Jan 2020 19:09:33 -0800
--Subject: [PATCH] Convert hcachever.sh.in to hcachever.pl.
--
--Use Digest::MD5 to remove build-time dependency on mutt_md5, for
--cross-compilation support.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved (and slightly updated to remove .gitignore) from:
--https://gitlab.com/muttmua/mutt/commit/acd49f242c867583856973fd8644a45e53f56489]
-----
-- .gitignore      |   2 -
-- Makefile.am     |  14 +++---
-- configure.ac    |   7 +--
-- hcachever.pl    | 112 ++++++++++++++++++++++++++++++++++++++++++++++++
-- hcachever.sh.in |  89 --------------------------------------
-- 5 files changed, 118 insertions(+), 106 deletions(-)
-- create mode 100644 hcachever.pl
-- delete mode 100755 hcachever.sh.in
--
--diff --git a/Makefile.am b/Makefile.am
--index cede1adb..e46f6544 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -3,7 +3,7 @@
-- include $(top_srcdir)/flymake.am
-- 
-- AUTOMAKE_OPTIONS = 1.6 foreign
---EXTRA_PROGRAMS = mutt_dotlock mutt_pgpring pgpewrap mutt_md5
--+EXTRA_PROGRAMS = mutt_dotlock mutt_pgpring pgpewrap
-- 
-- if BUILD_IMAP
-- IMAP_SUBDIR = imap
--@@ -80,7 +80,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO UPDATING \
-- 	README.SSL smime.h group.h mutt_zstrm.h \
-- 	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh \
-- 	ChangeLog mkchangelog.sh mkreldate.sh mutt_idna.h sidebar.h OPS.SIDEBAR \
---	snprintf.c regex.c crypt-gpgme.h hcachever.sh.in \
--+	snprintf.c regex.c crypt-gpgme.h hcachever.pl \
-- 	txt2c.c txt2c.sh version.sh check_sec.sh
-- 
-- EXTRA_SCRIPTS = smime_keys
--@@ -93,14 +93,10 @@ mutt_pgpring_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5.c pgppack
-- mutt_pgpring_LDADD = $(LIBOBJS) $(INTLLIBS)
-- mutt_pgpring_DEPENDENCIES = $(LIBOBJS) $(INTLDEPS)
-- 
---mutt_md5_SOURCES = md5.c
---mutt_md5_CFLAGS = -DMD5UTIL
---mutt_md5_LDADD =
---
-- txt2c_SOURCES = txt2c.c
-- txt2c_LDADD =
-- 
---noinst_PROGRAMS = $(MUTT_MD5) txt2c
--+noinst_PROGRAMS = txt2c
-- 
-- mutt_dotlock.c: dotlock.c
-- 	cp $(srcdir)/dotlock.c mutt_dotlock.c
--@@ -166,9 +162,9 @@ reldate.h: $(srcdir)/mkreldate.sh $(srcdir)/ChangeLog
-- # If configured with --with-included-gettext this means that intl will
-- # not have generated libintl.h yet, and mutt.h -> lib.h will generate
-- # an error.
---hcversion.h: $(srcdir)/mutt.h $(srcdir)/rfc822.h hcachever.sh $(MUTT_MD5)
--+hcversion.h: $(srcdir)/mutt.h $(srcdir)/rfc822.h config.h $(srcdir)/hcachever.pl
-- 	( echo '#include "config.h"'; echo '#undef ENABLE_NLS'; echo '#include "mutt.h"'; ) \
---	| $(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) - | sh ./hcachever.sh hcversion.h
--+	| $(CPP) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) - | perl $(srcdir)/hcachever.pl > hcversion.h
-- 
-- patchlist.c: $(srcdir)/PATCHES $(srcdir)/patchlist.sh
-- 	$(srcdir)/patchlist.sh < $(srcdir)/PATCHES > patchlist.c
--diff --git a/configure.ac b/configure.ac
--index 7fe55402..7906ce35 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1283,11 +1283,6 @@ then
--   MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS md5.o"
-- fi
-- 
---if test x$db_found != xno ; then
---  MUTT_MD5="mutt_md5$EXEEXT"
---fi
---AC_SUBST(MUTT_MD5)
---
-- AC_SUBST(MUTTLIBS)
-- AC_SUBST(MUTT_LIB_OBJECTS)
-- AC_SUBST(LIBIMAP)
--@@ -1677,5 +1672,5 @@ fi
-- 
-- AC_CONFIG_FILES(Makefile contrib/Makefile doc/Makefile imap/Makefile
--         intl/Makefile m4/Makefile po/Makefile.in autocrypt/Makefile
---        hcachever.sh doc/instdoc.sh)
--+        doc/instdoc.sh)
-- AC_OUTPUT
--diff --git a/hcachever.pl b/hcachever.pl
--new file mode 100644
--index 00000000..be630a82
----- /dev/null
--+++ b/hcachever.pl
--@@ -0,0 +1,112 @@
--+#!/usr/bin/perl -w
--+#
--+# Copyright (C) 2020 Kevin J. McCarthy <kevin@8t8.us>
--+#
--+#     This program is free software; you can redistribute it and/or modify
--+#     it under the terms of the GNU General Public License as published by
--+#     the Free Software Foundation; either version 2 of the License, or
--+#     (at your option) any later version.
--+#
--+#     This program is distributed in the hope that it will be useful,
--+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
--+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--+#     GNU General Public License for more details.
--+#
--+#     You should have received a copy of the GNU General Public License
--+#     along with this program; if not, write to the Free Software
--+#     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
--+
--+# This file is a rewrite of hcachever.sh.in in perl.
--+# The rewrite removes the dependency on mutt_md5, in order to
--+# improve cross-compilation support.
--+
--+use strict;
--+use warnings;
--+# note Digest::MD5 is standard in perl since 5.8.0 (July 18, 2002)
--+use Digest::MD5;
--+
--+
--+sub read_line() {
--+  my $line;
--+
--+  while (1) {
--+    $line = <STDIN>;
--+    return "" if (!$line);
--+
--+    chomp($line);
--+    $line =~ s/^\s+//;
--+    $line =~ s/\s+$//;
--+    $line =~ s/\s{2,}//g;
--+
--+    return $line if ($line ne "");
--+  }
--+}
--+
--+
--+sub process_struct($$) {
--+  my ($line, $md5) = @_;
--+  my $struct = "";
--+  my @body;
--+  my $bodytxt;
--+  my $inbody = 0;
--+
--+  return if $line =~ /;$/;
--+  if ($line =~ /{$/) {
--+    $inbody = 1;
--+  }
--+
--+  while (($line = read_line()) ne "") {
--+      if (!$inbody) {
--+      return if $line =~ /;$/;
--+      if ($line =~ /{$/) {
--+        $inbody = 1;
--+      }
--+    }
--+
--+    if ($line =~ /^} (.*);$/) {
--+      $struct = $1;
--+      last;
--+    }
--+    elsif ($line =~ /^}/) {
--+      $struct = read_line();
--+      if ($struct ne "") {
--+        $struct =~ s/;$//;
--+      }
--+      last;
--+    }
--+    elsif (($line !~ /^#/) && ($line !~ /^{/)) {
--+      if ($inbody) {
--+        push @body, $line;
--+      }
--+    }
--+  }
--+
--+  if ($struct =~ /^(ADDRESS|LIST|BUFFER|PARAMETER|BODY|ENVELOPE|HEADER)$/) {
--+    $bodytxt = join(" ", @body);
--+    print " * ${struct}: ${bodytxt}\n";
--+
--+    $md5->add(" ${struct} {${bodytxt}}");
--+  }
--+}
--+
--+
--+my $md5;
--+my $line;
--+my $BASEVERSION = "2";
--+
--+$md5 = Digest::MD5->new;
--+
--+$md5->add($BASEVERSION);
--+print "/* base version: $BASEVERSION\n";
--+
--+while (($line = read_line()) ne "") {
--+  if ($line =~ /^typedef struct/) {
--+    process_struct($line, $md5);
--+  }
--+}
--+
--+$md5->add("\n");
--+my $digest = substr($md5->hexdigest, 0, 8);
--+
--+print " */\n";
--+print "#define HCACHEVER 0x${digest}\n";
--diff --git a/hcachever.sh.in b/hcachever.sh.in
--deleted file mode 100755
--index 730ca76b..00000000
----- a/hcachever.sh.in
--+++ /dev/null
--@@ -1,89 +0,0 @@
---#!/bin/sh
---
---BASEVERSION=2
---
---cleanstruct () {
---  echo "$1" | sed -e 's/} *//' -e 's/;$//'
---}
---
---cleanbody () {
---  echo "$1" | sed -e 's/{ *//'
---}
---
---getstruct () {
---  STRUCT=""
---  BODY=''
---  inbody=0
---  case "$1" in
---    *'{') inbody=1 ;;
---    *';') return ;;
---  esac
---
---  while read line
---  do
---    if test $inbody -eq 0
---    then
---      case "$line" in
---        '{'*) inbody=1 ;;
---        *';') return ;;
---      esac
---    fi
---
---    case "$line" in
---      '} '*)
---        STRUCT=`cleanstruct "$line"`
---        break
---      ;;
---      '}')
---        read line
---        STRUCT=`cleanstruct "$line"`
---        break
---      ;;
---      '#'*) continue ;;
---      *)
---        if test $inbody -ne 0
---        then
---          BODY="$BODY $line"
---        fi
---      ;;
---    esac
---  done
---
---  case $STRUCT in
---    ADDRESS|LIST|BUFFER|PARAMETER|BODY|ENVELOPE|HEADER)
---      BODY=`cleanbody "$BODY"`
---      echo "$STRUCT: $BODY"
---    ;;
---  esac
---  return
---}
---
---DEST="$1"
---TMPD="$DEST.tmp"
---
---TEXT="$BASEVERSION"
---
---echo "/* base version: $BASEVERSION" > $TMPD
---while read line
---do
---  case "$line" in
---    'typedef struct'*)
---       STRUCT=`getstruct "$line"`
---       if test -n "$STRUCT"
---       then
---	 NAME=`echo $STRUCT | cut -d: -f1`
---	 BODY=`echo $STRUCT | cut -d' ' -f2-`
---         echo " * $NAME:" $BODY >> $TMPD
---         TEXT="$TEXT $NAME {$BODY}"
---       fi
---    ;;
---  esac
---done
---echo " */" >> $TMPD
---
---MD5TEXT=`echo "$TEXT" | ./mutt_md5`
---echo "#define HCACHEVER 0x"`echo $MD5TEXT | cut -c-8` >> $TMPD
---
---# TODO: validate we have all structs
---
---mv $TMPD $DEST
---- 
--2.24.1
--
-diff --git a/package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch b/package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
-deleted file mode 100644
-index 913b6087b2..0000000000
---- a/package/mutt/0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From 3e88866dc60b5fa6aaba6fd7c1710c12c1c3cd01 Mon Sep 17 00:00:00 2001
--From: Kevin McCarthy <kevin@8t8.us>
--Date: Sun, 14 Jun 2020 11:30:00 -0700
--Subject: [PATCH] Prevent possible IMAP MITM via PREAUTH response.
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This is similar to CVE-2014-2567 and CVE-2020-12398.  STARTTLS is not
--allowed in the Authenticated state, so previously Mutt would
--implicitly mark the connection as authenticated and skip any
--encryption checking/enabling.
--
--No credentials are exposed, but it does allow messages to be sent to
--an attacker, via postpone or fcc'ing for instance.
--
--Reuse the $ssl_starttls quadoption "in reverse" to prompt to abort the
--connection if it is unencrypted.
--
--Thanks very much to Damian Poddebniak and Fabian Ising from the
--M?nster University of Applied Sciences for reporting this issue, and
--their help in testing the fix.
--
--[Retrieved from:
--https://gitlab.com/muttmua/mutt/commit/3e88866dc60b5fa6aaba6fd7c1710c12c1c3cd01]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- imap/imap.c | 16 ++++++++++++++++
-- 1 file changed, 16 insertions(+)
--
--diff --git a/imap/imap.c b/imap/imap.c
--index 63362176..3ca10df4 100644
----- a/imap/imap.c
--+++ b/imap/imap.c
--@@ -530,6 +530,22 @@ int imap_open_connection (IMAP_DATA* idata)
--   }
--   else if (ascii_strncasecmp ("* PREAUTH", idata->buf, 9) == 0)
--   {
--+#if defined(USE_SSL)
--+    /* An unencrypted PREAUTH response is most likely a MITM attack.
--+     * Require a confirmation. */
--+    if (!idata->conn->ssf)
--+    {
--+      if (option(OPTSSLFORCETLS) ||
--+          (query_quadoption (OPT_SSLSTARTTLS,
--+                             _("Abort unencrypted PREAUTH connection?")) != MUTT_NO))
--+      {
--+        mutt_error _("Encrypted connection unavailable");
--+        mutt_sleep (1);
--+        goto err_close_conn;
--+      }
--+    }
--+#endif
--+
--     idata->state = IMAP_AUTHENTICATED;
--     if (imap_check_capabilities (idata) != 0)
--       goto bail;
---- 
--GitLab
--
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index f822cfee6e..972d1433df 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 6cd71b5b3e6b255afef6bed3b5e1e8ee9819b3d7c9839fd95e798045882aa653  mutt-1.13.5.tar.gz
--sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-+sha256  ca8e56f8210b4fffa91ea08958b62b811cce552fe4fd7d726111cf53079ed3c3  mutt-1.14.4.tar.gz
-+sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 5d400f8b8c..b8a116aab0 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,17 +4,12 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.13.5
-+MUTT_VERSION = 1.14.4
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
- MUTT_DEPENDENCIES = ncurses
- MUTT_CONF_OPTS = --disable-doc --disable-smtp
--# We're patching configure.ac
--MUTT_AUTORECONF = YES
--
--# 0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
--MUTT_IGNORE_CVES += CVE-2020-14093
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 17  |  8  |  0  | 25  |
+  2020.05.x  | 18  |  8  |  0  | 26  |
+    master   | 103 | 75  |  1  | 179 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                iproute2-5.7.0 | 20
+                  boost-1.73.0 | 11
+              gnuradio-3.8.1.0 | 9 
+                       unknown | 4 
+                     avahi-0.8 | 3 
+               domoticz-2020.1 | 2 
+                   eigen-3.3.7 | 2 
+              host-grpc-1.25.0 | 2 
+                    mraa-2.1.0 | 2 
+                qt5base-5.15.0 | 2 
+                  zeromq-4.3.2 | 2 
+               apcupsd-3.14.14 | 1 
+               belle-sip-4.3.1 | 1 
+              bitcoin-0.19.0.1 | 1 
+                   cegui-0-8-7 | 1 
+             freeswitch-1.10.3 | 1 
+  gobject-introspection-1.64.1 | 1 
+                      icu-67-1 | 1 
+                   mimic-1.1.0 | 1 
+                       mongodb | 1 
+               qt5webkit-5.9.1 | 1 
+                 rocksdb-6.6.4 | 1 
+                  rygel-0.38.3 | 1 
+                 samba4-4.11.9 | 1 
+       shadowsocks-libev-3.3.3 | 1 
+                suricata-4.1.8 | 1 
+                      tio-1.32 | 1 
+             xscreensaver-5.43 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arc      |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/7d6ee94b636a076ee7084e6fba0d687a735a2309 |     
+   mipsel    |           avahi-0.8            | NOK | http://autobuild.buildroot.net/results/7f3bd6786d7d687d124e54296f5a72aebc42a739 | ORPH
+    mips     |           avahi-0.8            | NOK | http://autobuild.buildroot.net/results/12dbecdd546a34f5b4c1d7f24041048dc53427a1 | ORPH
+    arm      |           avahi-0.8            | NOK | http://autobuild.buildroot.net/results/b18f492ba008a9a13911640830884f688b127b58 | ORPH
+   xtensa    |        belle-sip-4.3.1         | NOK | http://autobuild.buildroot.net/results/9d0f60c3362ea3cf86dc2b64579f5793140e8a06 |     
+    arc      |        bitcoin-0.19.0.1        | NOK | http://autobuild.buildroot.net/results/090878b9e2e0fd0fe9f6390bc6424c1a6dfd555e |     
+    arc      |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/91faf4a306860395c7d50b9ff27a1bb1f41a8646 |     
+  riscv32    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/c8275739e80bb730e4e99adbf4eb3f0ea8a31bdd |     
+   x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/002188adaeb3ba18bae2c4c084991ea98306b9fc |     
+  aarch64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/a132069560e53fa73b6f2a459cba2e76ad5012f7 |     
+   x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/4fec835d5da74cffb20790334418e58edb169d85 |     
+  aarch64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/47270a1f987d05bff85c706e94d1284a488f8486 |     
+   mipsel    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/d6c79a94294f71b2b92f91331c1f2ef08b52a698 |     
+  mips64el   |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/b23bf8ea46950c2c115e042980ae63e9d478900f |     
+  powerpc    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/b13f0ff85c2115b034b4608f33bcba863b0a1396 |     
+    arm      |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/599de263a0d812b4b399477e9384b3062f06373d |     
+    arm      |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/90b879aa24a2313903c199228812f40ec6a4d095 |     
+    arm      |          cegui-0-8-7           | NOK | http://autobuild.buildroot.net/results/528b1248fa258b3f3822f6924b3650a221a67fd3 |     
+   mipsel    |        domoticz-2020.1         | NOK | http://autobuild.buildroot.net/results/0ff022c9a0958eeabc2fb3fa6fc2d2abc55a6d17 |     
+  aarch64    |        domoticz-2020.1         | NOK | http://autobuild.buildroot.net/results/b24041b98993e1a84c39a186a4b40676dff4799b |     
+    arm      |          eigen-3.3.7           | NOK | http://autobuild.buildroot.net/results/bddfbb03b20c5a25cd5dad4929cb25f2328ee128 |     
+    arm      |          eigen-3.3.7           | NOK | http://autobuild.buildroot.net/results/e1da731ec42307481ecbe2481d6c1748eda0398c |     
+   nios2     |       freeswitch-1.10.3        | NOK | http://autobuild.buildroot.net/results/2a5bd6d7d235d3f5f569c9b21d9898fae12fcbe4 |     
+    i586     |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/45843a144be80f0abcefbaae48fd4678eddf9071 |     
+  sparc64    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/203952ab91d2dfbc2eca8c191376e8fcafcd86d3 |     
+   nios2     |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/91c189d7945660477059ab177c785a69715c7d13 |     
+   xtensa    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/09b5738594ca66b7276eacf6637641eb72469ab0 |     
+  powerpc    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/3a60d73fdb60f65326d97b8d63eb31d7dbee47c1 |     
+   xtensa    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/9977db50b153ad3ce73bf5d4959b35ee719bb0dd |     
+    arc      |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/ab43b1fba708a8b7b7aceceb1aeeeb4bb24bc7c2 |     
+    arm      |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/db251011f4af433d5993c842a8ec7ef4c512908a |     
+   mipsel    |        gnuradio-3.8.1.0        | NOK | http://autobuild.buildroot.net/results/074cdde03a3a27fc4147fb76cc7b14dcc0ecc279 |     
+  riscv32    |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/1cf96f895a5ebffd553acf62eaed90ed260a3a55 |     
+   xtensa    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/3467ff0298509f1ba0e0bc9e2e4c5fb29f575454 |     
+  riscv64    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/66e511572eb3b3fb99895b535b3500534e907d60 |     
+   x86_64    |            icu-67-1            | NOK | http://autobuild.buildroot.net/results/d19cdd318ca54f3088649e368d1199a5ca25bf48 | ORPH
+    arm      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/a3d934209afb78b8ed5204af00b6b0eb9ed7af06 |     
+    arm      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/d7d509239cf042a23771dc1c86b47e970a3fc830 |     
+  powerpc    |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/071c8ff50cb501e7ddad66dfdd4f2e086b1bbda8 |     
+    or1k     |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/7ca79ff55ebf0f7d06e2896d1abba43feab2670a |     
+    arc      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/1ce3dc61c3b199918f89f3b87d0dd5db20f6b50b |     
+  mips64el   |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/fd942ed92ad70b416eaa70803fc6d8bf4473be6f |     
+   sparc     |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/79e7d8e1b947a264eb166b89ae1b3c83dcfff520 |     
+   mipsel    |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/c35c416759a03a96726f1ea5e7fef9d9d6704817 |     
+    arc      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/2616362c870392372eef1f9d9bceebbc1cfc9466 |     
+  powerpc    |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/34a30c739d247937d8773842430e64fd51cc7707 |     
+    sh4      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/372743a0052df90e8f5186fe79ef1542153ccba4 |     
+    arm      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/f643d328846c0ab1b7be378bedefeeb91b449632 |     
+   sparc     |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/2ec96ad2173ba1e9320700d452d789887c25325c |     
+    arm      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/7b46325fadd377e87f1294c433cf109a332dccd9 |     
+microblazeel |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/cf92e516461e4b6dc086dc4bb4d96f68e9f674a9 |     
+    arm      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/25d6d2f85a2d109ae4819a9a0748051da814cac9 |     
+   xtensa    |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/0334cddbfc03ca9185f52f5102ac37a8f258e5ab |     
+    arm      |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/8d421899ce66002d9b9865412cd017caf0ba4d56 |     
+    m68k     |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/c7ec1d5e56f9db4d38a6c03150ea1b7b79a3bd70 |     
+   xtensa    |         iproute2-5.7.0         | NOK | http://autobuild.buildroot.net/results/eb476999dd15a1982006f4d54c31fd4593422997 |     
+  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/e32e4a64a15db8efc5d85c35cf5b7ab03cdb7c82 |     
+    arm      |            mongodb             | TIM | http://autobuild.buildroot.net/results/8cdc71f77fecd7dd60c0d46d2bc5a9f170243c81 |     
+    arm      |           mraa-2.1.0           | NOK | http://autobuild.buildroot.net/results/cfa9211b2f1545bd27606c06bdb5292e2953d0f0 |     
+    arm      |           mraa-2.1.0           | NOK | http://autobuild.buildroot.net/results/d61a97a176b1083f3f5ef8c775132f2234faa931 |     
+   sparc     |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/6afbbd148af401338a96ca3a5aebd8a3a2dc7fe2 |     
+   mipsel    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/e5aa6f4078cc33b1e84ed7802ffc50dd3334baf7 |     
+   mipsel    |        qt5webkit-5.9.1         | NOK | http://autobuild.buildroot.net/results/4f9f939f3278eba136a2af18237ddc9587647b0e |     
+  powerpc    |         rocksdb-6.6.4          | NOK | http://autobuild.buildroot.net/results/f53344246f1bc6563ca1b990d8f03470b76c0814 |     
+    arm      |          rygel-0.38.3          | NOK | http://autobuild.buildroot.net/results/5fcecf270d15e298f89dd33b3c89bb9f62f608c7 |     
+  mips64el   |         samba4-4.11.9          | NOK | http://autobuild.buildroot.net/results/7478050ce306ec99b9efa57d58a4b0e69f9abcaf |     
+    sh4      |    shadowsocks-libev-3.3.3     | NOK | http://autobuild.buildroot.net/results/357dad67767124c270f7a366a1e06f93f2e6fc41 |     
+    m68k     |         suricata-4.1.8         | NOK | http://autobuild.buildroot.net/results/aad38b60ddaf66ccd14cd82ca27b14d6a1dd4734 |     
+  sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/9ff746862db431d50d31b210a1f40b2551aed256 |     
+    mips     |            unknown             | NOK | http://autobuild.buildroot.net/results/cd4d94d34c9716eefb09aded04c669a3e3213e45 |     
+    sh4      |            unknown             | NOK | http://autobuild.buildroot.net/results/e7b89f3b212da27d2a1c83aa8e4a5c66a3344aa8 |     
+    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/1f3b59b7ab5f782ab6aaebc2f3153aa2e4d7a941 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/208b5f8ff62ce8f9d507093d0b0e57788d015799 |     
+    arm      |       xscreensaver-5.43        | NOK | http://autobuild.buildroot.net/results/12e0df97d799208ef90534c8d3297f75e67b7bd8 |     
+    or1k     |          zeromq-4.3.2          | NOK | http://autobuild.buildroot.net/results/bb7a4848b4bed83043bb5c619ae0e9c515a33738 |     
+    or1k     |          zeromq-4.3.2          | NOK | http://autobuild.buildroot.net/results/699dc0e152a2ea19b3278812d2ea452f47b3adf7 |     
+
+
+
+
+Results for branch '2020.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                 gnutls-3.6.13 | 2 
+                 binutils-2.32 | 1 
+          host-acpica-20191018 | 1 
+             host-pango-1.44.6 | 1 
+             libopenssl-1.1.1g | 1 
+               protobuf-3.11.0 | 1 
+                 xvisor-0.2.11 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    m68k     |         binutils-2.32          | NOK | http://autobuild.buildroot.net/results/debe996be7dac391444b1cbe3bb63c13d0b1e659 |     
+    or1k     |         gnutls-3.6.13          | NOK | http://autobuild.buildroot.net/results/1682a6731264c2e9c80e2dc1d044af7ea6ed6aa6 |     
+    or1k     |         gnutls-3.6.13          | NOK | http://autobuild.buildroot.net/results/8aa4a0ddb6161044df40bf39c6037220fac2bb66 |     
+    arm      |      host-acpica-20191018      | NOK | http://autobuild.buildroot.net/results/36b9766148e372d3080cced54415de8f1896c096 |     
+  riscv32    |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/635cb631bc2ae4e982d6c83b4c0141d5e472badc | ORPH
+    m68k     |       libopenssl-1.1.1g        | NOK | http://autobuild.buildroot.net/results/30ddc17d111456cd770cba5ec1b9e9456c65fde7 |     
+    or1k     |        protobuf-3.11.0         | NOK | http://autobuild.buildroot.net/results/47d40ed6f738dc7e1cc89c34bf72d4b509b54c79 |     
+   x86_64    |         xvisor-0.2.11          | NOK | http://autobuild.buildroot.net/results/d2cf3bc044d6ab3e5e6afb34bac270c6aa1430a6 |     
+
+
+Results for branch '2020.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.14.2 | 2 
+               belle-sip-4.3.1 | 1 
+          host-acpica-20191018 | 1 
+               libgtk2-2.24.32 | 1 
+                minidlna-1.2.1 | 1 
+                 openal-1.19.1 | 1 
+                      tio-1.32 | 1 
+
+
+Detail of failures
+------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   nios2     |        belle-sip-4.3.1         | NOK | http://autobuild.buildroot.net/results/a40db9c19a53b2fd2e418f73eca2d9808c72b5a3 |     
+    arm      |      host-acpica-20191018      | NOK | http://autobuild.buildroot.net/results/f7737c0c314b240bd80e3315ab4f03821dbb05fb |     
+  sparc64    |        libgtk2-2.24.32         | NOK | http://autobuild.buildroot.net/results/5b61f71fe4331f03a4c4978928e67dfc66fe5be2 |     
+    arm      |         minidlna-1.2.1         | NOK | http://autobuild.buildroot.net/results/71218717b7bac741d567510e2dfa06b7c1924192 |     
+    or1k     |         openal-1.19.1          | NOK | http://autobuild.buildroot.net/results/57cf15f2a125e80b4de7569f80b5ba91f2dd32ec |     
+    arm      |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/3c7be16eeab010f5035a2b7165aa08e273fb88fc |     
+  riscv32    |         qt5base-5.14.2         | NOK | http://autobuild.buildroot.net/results/6b70d27be63f49d8e732d34adb3fafb415d2a3c4 |     
+  sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/f33b11c82dde32259e511bea60eb8439ef489550 |     
+
+
+
 -- 
-2.26.2
+http://autobuild.buildroot.net
