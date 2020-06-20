@@ -1,89 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jun 2020 21:54:34 +0200
-Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.3.1
-Message-ID: <20200620195247.6702182610@busybox.osuosl.org>
+Date: Sat, 20 Jun 2020 22:10:08 +0200
+Subject: [Buildroot] [git commit] package/gerbera: fix static build with
+ libmatroska
+Message-ID: <20200620200837.7D14D82983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3de8da6b695ef8028c5926f9737b702c4619fe1
+commit: https://git.buildroot.net/buildroot/commit/?id=b15e60d26b638e42e84550b13ea87ad3dffd4990
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was committed upstream.
+Fixes:
+ - http://autobuild.buildroot.org/results/ee365f792feb0fe69ed765fda625afabc91ec769
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../alsa-lib/0002-dlmisc.c-fix-uclibc-build.patch  | 37 ----------------------
- package/alsa-lib/alsa-lib.hash                     |  2 +-
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
+ ...003-cmake-FindMatroska-fix-static-linking.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/alsa-lib/0002-dlmisc.c-fix-uclibc-build.patch b/package/alsa-lib/0002-dlmisc.c-fix-uclibc-build.patch
-deleted file mode 100644
-index af629e0f6f..0000000000
---- a/package/alsa-lib/0002-dlmisc.c-fix-uclibc-build.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From eec95e69e5d0dcc16fd8872c1ad680265a96cce3 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 13 Jun 2020 17:44:45 +0200
--Subject: [PATCH] dlmisc.c: fix uclibc build
--
--RTLD_DL_LINKMAP & RTLD_DI_ORIGIN, are unsupported on uClibc:
--https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/include/dlfcn.h#n106
--
--This patch adds detection for uClibc because uClibc also defines
--__GLIBC__:
--https://lists.gnu.org/archive/html/bug-gnulib/2010-11/msg00280.html
--
--BugLink: https://github.com/alsa-project/alsa-lib/pull/58
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Jaroslav Kysela <perex@perex.cz>
-----
--Backported from upstream eec95e69e5d0dcc16fd8872c1ad680265a96cce3
-----
-- src/dlmisc.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/dlmisc.c b/src/dlmisc.c
--index 5d672146..ca94b123 100644
----- a/src/dlmisc.c
--+++ b/src/dlmisc.c
--@@ -69,7 +69,7 @@ static inline void snd_dlpath_unlock(void) {}
-- int snd_dlpath(char *path, size_t path_len, const char *name)
-- {
-- #ifdef HAVE_LIBDL
---#ifdef __GLIBC__
--+#if defined(__GLIBC__) && !defined(__UCLIBC__)
-- 	static int plugin_dir_set = 0;
-- 	snd_dlpath_lock();
-- 	if (!plugin_dir_set) {
---- 
--2.20.1
--
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 9ce8a3408e..ca36d95cfc 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  02f00922fc511eaf37b037197afa930d5ff0912c1a86f333393f91f3426f678e  alsa-lib-1.2.3.tar.bz2
-+sha256  1244585515fbebce7d0e53656c1fb614f99accb8413115ce3efb9a9309c4c892  alsa-lib-1.2.3.1.tar.bz2
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
- sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index a3b2081fdb..383f06855d 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_LIB_VERSION = 1.2.3
-+ALSA_LIB_VERSION = 1.2.3.1
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+diff --git a/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch b/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
+new file mode 100644
+index 0000000000..128d617045
+--- /dev/null
++++ b/package/gerbera/0003-cmake-FindMatroska-fix-static-linking.patch
+@@ -0,0 +1,37 @@
++From aab2eacbaad10759294f4fd74bbb5ecef3cf3a8d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Dec 2019 22:57:18 +0100
++Subject: [PATCH] cmake/FindMatroska: fix static linking
++
++Fix static linking with libmatrasoka by adding PC_EBM_LIBRARIES to
++EBML_LIBRARIES and PC_MAT_LIBRARIES to MATROSKA_LIBRARIES
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/gerbera/gerbera/commit/aab2eacbaad10759294f4fd74bbb5ecef3cf3a8d]
++---
++ cmake/FindMatroska.cmake | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/FindMatroska.cmake b/cmake/FindMatroska.cmake
++index 4b09a5ec..12ca593d 100644
++--- a/cmake/FindMatroska.cmake
+++++ b/cmake/FindMatroska.cmake
++@@ -23,7 +23,7 @@ FIND_LIBRARY(EBML_LIBRARY ebml
++ FIND_PACKAGE_HANDLE_STANDARD_ARGS(EBML
++     REQUIRED_VARS EBML_LIBRARY EBML_INCLUDE_DIR)
++ if (EBML_FOUND)
++-    set (EBML_LIBRARIES ${EBML_LIBRARY})
+++    set (EBML_LIBRARIES ${EBML_LIBRARY} ${PC_EBM_LIBRARIES})
++     set (EBML_INCLUDE_DIRS ${EBML_INCLUDE_DIR} )
++ endif ()
++ MARK_AS_ADVANCED(
++@@ -41,7 +41,7 @@ find_library(MATROSKA_LIBRARY matroska
++ FIND_PACKAGE_HANDLE_STANDARD_ARGS(MATROSKA
++     REQUIRED_VARS MATROSKA_LIBRARY MATROSKA_INCLUDE_DIR)
++ if (MATROSKA_FOUND)
++-    set (MATROSKA_LIBRARIES ${MATROSKA_LIBRARY})
+++    set (MATROSKA_LIBRARIES ${MATROSKA_LIBRARY} ${PC_MAT_LIBRARIES})
++     set (MATROSKA_INCLUDE_DIRS ${MATROSKA_INCLUDE_DIR} )
++ endif ()
++ MARK_AS_ADVANCED(
