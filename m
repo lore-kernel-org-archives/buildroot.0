@@ -1,89 +1,78 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Jun 2020 23:20:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gptfdisk: bump to version 1.0.5
-Message-ID: <20200621212038.1809952-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Jun 2020 23:23:48 +0200
+Subject: [Buildroot] [PATCHv4] boot/grub2: Fix GRUB i386-pc build with
+ Ubuntu gcc
+In-Reply-To: <20200528215015.5018-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 28 May 2020 23:50:15 +0200")
+References: <20200528215015.5018-1-yann.morin.1998@free.fr>
+Message-ID: <87zh8w8657.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version)
-- Update indentation in hash file (two spaces)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gptfdisk/0001-ldlibs.patch | 31 ------------------------------
- package/gptfdisk/gptfdisk.hash     | 10 +++++-----
- package/gptfdisk/gptfdisk.mk       |  2 +-
- 3 files changed, 6 insertions(+), 37 deletions(-)
- delete mode 100644 package/gptfdisk/0001-ldlibs.patch
+ > From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Backport a patch from upstream to fix the build on certain versions of
+ > gsc, notably:
 
-diff --git a/package/gptfdisk/0001-ldlibs.patch b/package/gptfdisk/0001-ldlibs.patch
-deleted file mode 100644
-index ca1d7fbfea..0000000000
---- a/package/gptfdisk/0001-ldlibs.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Add $(LDLIBS) support to enable clean static builds (for libintl).
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura gptfdisk-0.8.10.orig/Makefile gptfdisk-0.8.10/Makefile
----- gptfdisk-0.8.10.orig/Makefile	2015-05-01 08:45:14.667748141 -0300
--+++ gptfdisk-0.8.10/Makefile	2015-05-01 08:45:42.685699419 -0300
--@@ -14,19 +14,19 @@
-- all:	cgdisk gdisk sgdisk fixparts
-- 
-- gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
---	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
--+	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid $(LDLIBS) -o gdisk
-- #	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
-- 
-- cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
---	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw -o cgdisk
--+	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw $(LDLIBS) -o cgdisk
-- #	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
-- 
-- sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
---	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
--+	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt $(LDLIBS) -o sgdisk
-- #	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
-- 
-- fixparts: $(MBR_LIB_OBJS) fixparts.o
---	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
--+	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) $(LDLIBS) -o fixparts
-- 
-- lint:	#no pre-reqs
-- 	lint $(SRCS)
-diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
-index 0e52d9917f..bff17dcc21 100644
---- a/package/gptfdisk/gptfdisk.hash
-+++ b/package/gptfdisk/gptfdisk.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.4/
--md5 5ecc3c44913bb6b53d3708d1ac7ac295  gptfdisk-1.0.4.tar.gz
--sha1 4c2d60bedd4eac1014727e3b126de96966205410  gptfdisk-1.0.4.tar.gz
-+# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.5/
-+md5  58dac67c85e46ca87b587231549aefe6  gptfdisk-1.0.5.tar.gz
-+sha1  b642aa628cbc9fa63e9a73dad5acc588042527ac  gptfdisk-1.0.5.tar.gz
- # Locally computed
--sha256 b663391a6876f19a3cd901d862423a16e2b5ceaa2f4a3b9bb681e64b9c7ba78d  gptfdisk-1.0.4.tar.gz
--sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  0e7d3987cd0488ecaf4b48761bc97f40b1dc089e5ff53c4b37abe30bc67dcb2f  gptfdisk-1.0.5.tar.gz
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index afe4a72886..e848837b76 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GPTFDISK_VERSION = 1.0.4
-+GPTFDISK_VERSION = 1.0.5
- GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
- GPTFDISK_LICENSE = GPL-2.0+
- GPTFDISK_LICENSE_FILES = COPYING
+ >     Ubuntu 19.10 with gcc (Ubuntu 8.3.0-26ubuntu1~19.10) 8.3.0
+ >     Ubuntu 19.10 with gcc (Ubuntu 9.2.1-9ubuntu2) 9.2.1 20191008
+
+ > The upstream patch is simply a change in the gentpl.py script, which is
+ > used to generate parts of the automake machinery, so if we just backport
+ > the upstream patch, we need to call the script to regenerate those files.
+
+ > However, the modified script is a python script, so we would need to add
+ > a dependency on host-python (2 or 3), which is not so nice.
+
+ > Furthermore, calling the script is not enough: it needs a specific set
+ > of optionss for each file it is to generate. That set of options is not
+ > static; it is constructed in the convoluted autogen.sh. Calling
+ > autogen.sh is usally not so good an idea in the Buildroot context, and
+ > indeed this fails becasue it calls to autoreconf, but without our
+ > carefuly crafted options and environment variables.
+
+ > There was a little light in the tunnel, in that autogen.sh can be told
+ > not to run autoreconf, by setting the environemnt variable
+ > FROM_BOOTSTRAP to an non-=empty string, but this is fraught with various
+ > other side-effects, as in that cause, autogen.sh expects to be valled by
+ > an upper sciopt, bootstrap, which is not provided in the tarball
+ > distribution...
+
+ > So, between all those issues, autogen, bootstrap, and a host-python (2
+ > or 3) dependency, we choose another route: path the script *and* the one
+ > generated file affected by the change. Since that patched file is a .am
+ > file, we also patch the corresponding .in file
+
+ > However, we're faced with another issue: the other generated file is
+ > now older than the script, so the automake machinery will now want to
+ > re-run autoconf et al during the build step, which is still not a good
+ > idea for us. So we touch the other generated file so it is mopre recent
+ > than the script.
+
+ > This is still not sufficient, because the patched file also has a
+ > dependency on the generated file, so we need to touch as well.
+
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=12946
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > [yann.morin.1998 at free.fr:
+ >   - keep the hunk about patching gentpl.py
+ >   - make it a git-formatted patch
+ >   - add the touch
+ >   - drastically expand the commit log
+ > ]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+ > ---
+ > Changes v3 -> v4:
+ >  - changes by Yann as identified in commit log and bundled patch
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
 -- 
-2.26.2
+Bye, Peter Korsgaard
