@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jun 2020 23:21:31 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] boot/grub2: Fix GRUB
+Date: Sun, 21 Jun 2020 23:20:55 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] boot/grub2: Fix GRUB
  i386-pc build with Ubuntu gcc
-Message-ID: <20200621212157.941DD83ADC@busybox.osuosl.org>
+Message-ID: <20200621212202.D639983B3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06efc0fb4b4f0142743683ebbe97fdfe076cbeca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9b37e53e47cd278090095aed82498ec30dcd4c0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Backport a patch from upstream to fix the build on certain versions of
 gsc, notably:
