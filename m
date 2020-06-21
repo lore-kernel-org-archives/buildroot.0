@@ -1,62 +1,63 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Jun 2020 19:12:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: add http geoip support
-Message-ID: <20200621171222.1232374-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jun 2020 20:56:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: bump to version 2.3.3
+Message-ID: <20200621185624.1517932-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http geoip module is available since version 0.8.6 and
-https://github.com/nginx/nginx/commit/bc10147b9f36f1a61b96ceec016bf4d4d12e128f
+- Update indentation in hash file (two spaces)
+- Send patch upstream
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nginx/Config.in | 6 ++++++
- package/nginx/nginx.mk  | 6 +++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/cryptsetup/0001-Remove-json_object-typedef.patch | 2 ++
+ package/cryptsetup/cryptsetup.hash                       | 8 ++++----
+ package/cryptsetup/cryptsetup.mk                         | 4 ++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 5c34f11edd..0dbeaae2ff 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -75,6 +75,12 @@ config BR2_PACKAGE_NGINX_HTTP_IMAGE_FILTER_MODULE
- 	help
- 	  Enable ngx_http_image_filter_module
+diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+index fa865314a7..bbfd1aa075 100644
+--- a/package/cryptsetup/0001-Remove-json_object-typedef.patch
++++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+@@ -12,6 +12,8 @@ In file included from lib/luks2/luks2_internal.h:32,
+ lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
  
-+config BR2_PACKAGE_NGINX_HTTP_GEOIP_MODULE
-+	bool "ngx_http_geoip_module"
-+	select BR2_PACKAGE_GEOIP
-+	help
-+	  Enable ngx_http_geoip_module
-+
- config BR2_PACKAGE_NGINX_HTTP_SUB_MODULE
- 	bool "ngx_http_sub_module"
- 	help
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index c0640c87e6..c675d38ab4 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -85,7 +85,6 @@ endif
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++[Upstream status:
++https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/91]
+ ---
+  lib/luks2/luks2.h | 1 -
+  lib/setup.c       | 1 +
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 175ecf33cf..c47d701baa 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.2/sha256sums.asc
+-sha256 2af0ec9551ab9c870074cae9d3f68d82cab004f4095fa89db0e4413713424a46  cryptsetup-2.2.2.tar.xz
+-sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+-sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
++# From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
++sha256  3bca4ffe39e2f94cef50f6ea65acb873a6dbce5db34fc6bcefe38b6d095e82df  cryptsetup-2.3.3.tar.xz
++sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
++sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 197f5f25b2..587ef0a810 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- # modules disabled or not activated because of missing dependencies:
- # - google_perftools  (googleperftools)
--# - http_geoip_module (geoip)
- # - http_perl_module  (host-perl)
- # - pcre-jit          (want to rebuild pcre)
- 
-@@ -134,6 +133,11 @@ NGINX_DEPENDENCIES += gd jpeg libpng
- NGINX_CONF_OPTS += --with-http_image_filter_module
- endif
- 
-+ifeq ($(BR2_PACKAGE_NGINX_HTTP_GEOIP_MODULE),y)
-+NGINX_DEPENDENCIES += geoip
-+NGINX_CONF_OPTS += --with-http_geoip_module
-+endif
-+
- ifeq ($(BR2_PACKAGE_NGINX_HTTP_GUNZIP_MODULE),y)
- NGINX_DEPENDENCIES += zlib
- NGINX_CONF_OPTS += --with-http_gunzip_module
+-CRYPTSETUP_VERSION_MAJOR = 2.2
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
++CRYPTSETUP_VERSION_MAJOR = 2.3
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c libargon2 \
 -- 
 2.26.2
