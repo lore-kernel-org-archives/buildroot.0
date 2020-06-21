@@ -1,115 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 11:23:16 +0200
-Subject: [Buildroot] [RFC v9 02/10] cpe-info: id prefix/suffix
-In-Reply-To: <20200616170341.45098-2-matthew.weber@rockwellcollins.com>
-References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
- <20200616170341.45098-2-matthew.weber@rockwellcollins.com>
-Message-ID: <20200621092316.GC2351@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 21 Jun 2020 12:37:47 +0200
+Subject: [Buildroot] [PATCH 04/23] package/kodi-inputstream-rtmp: add
+ explicit dependencies to openssl and zlib
+In-Reply-To: <20200621103806.616133-1-bernd.kuhls@t-online.de>
+References: <20200621103806.616133-1-bernd.kuhls@t-online.de>
+Message-ID: <20200621103806.616133-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-06-16 12:03 -0500, Matt Weber spake thusly:
-> There are two types of software CPE prefixes applicable for software,
-> one for applications and one for operating systems.
-> Note: The third type is for hardware.
-> 
-> This patchset determines which should be used and stores that
-> information with the package for later use when assembling the CPE
-> report.
+Openssl and zlib are built as hard-dependencies of Kodi already. For the
+case that Kodi drops these dependencies we need to make sure that this
+package still finds its dependencies:
+https://github.com/xbmc/inputstream.rtmp/blob/Leia/CMakeLists.txt#L8
 
-So this means that the CPE manifest in patch 1 is incomplete, and indeed
-does not represent actual CPE information, right?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-inputstream-rtmp/Config.in                | 2 ++
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-In this case, I think we should not create that manifest until we have
-the full information available to generate it.
-
-I am fine with the series introducing the CPE info bit by bit, because
-it is easier to review (thanks! :-) ), but the manifest is useless if
-only parts of the series is applied.
-
-So, the series should probably be something like:
-
-  - introduce basic CPE info from pakcage metadata
-        (patch 1 without the manifest creation)
-
-  - introduce the OS / Application prefix
-
-  - introduce the generic suffix
-
-  - introduce support for the minor-version
-
-etc...
-
-See also a comment below...
-
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 1408845613..7d892ca1d6 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -976,11 +976,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
->  $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
->  $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
->  
-> +ifneq ($(filter linux linux-headers,$(1)),)
-> +$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
-> +else
-> +$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
-> +endif
-
-I think the CPE ID could be constructed as:
-
-    ifneq ($(filter linux linux-headers,$(1)),)
-    $(2)_CPE_ID = $(CPE_PREFIX_OS)
-    else
-    $(2)_CPE_ID = $(CPE_PREFIX_APP)
-    endif
-
-    $(2)_CPE_ID += $(subst $(space),_,$($(2)_CPE_ID_VENDOR))
-    $(2)_CPE_ID += $(subst $(space),_,$($(2)_CPE_ID_NAME))
-    $(2)_CPE_ID += $(subst $(space),_,$($(2)_CPE_ID_VERSION))
-
-    $(2)_CPE_ID += $(CPE_SUFFIX)
-
-... and then...
-
->  $(1)-cpe-info: PKG=$(2)
->  $(1)-cpe-info:
->  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  	@$$(call MESSAGE,"Collecting cpe info")
-> -	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-> +	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-
-... use $(subst $(space),:,$($(2)_CPE_ID))
-
-The CPE spec, chapter 5.3.2, bullet point 2, states:
-    The underscore (x5f) MAY be used, and it SHOULD be used in place of
-    whitespace characters (which SHALL NOT be used).
-
-So we know there will be no space in any of the fields, and thus any
-existing space is due to our append-assignment, so we can replace the
-spaces with a colon.
-
-Regards,
-Yann E. MORIN.
-
->  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  
->  # legal-info: declare dependencies and set values used later for the manifest
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
+index fa83926301..c4bd2e1380 100644
+--- a/package/kodi-inputstream-rtmp/Config.in
++++ b/package/kodi-inputstream-rtmp/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
+ 	bool "kodi-inputstream-rtmp"
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_RTMPDUMP
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  RTMP input stream add-on for Kodi
+ 
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index e850be40ff..a30f2e61db 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -8,6 +8,6 @@ KODI_INPUTSTREAM_RTMP_VERSION = 2.0.9-Leia
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
+-KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
++KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi openssl rtmpdump zlib
+ 
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
