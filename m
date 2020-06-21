@@ -1,114 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 10:45:40 +0200
-Subject: [Buildroot] [RFC v9 01/10] cpe-info: new make target
-In-Reply-To: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
-References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200621084540.GZ2351@scaer>
+Date: Sun, 21 Jun 2020 10:51:31 +0200
+Subject: [Buildroot] [PATCH] uclibc: add simlinks from
+ libdl/libm/libpthread/librt
+In-Reply-To: <N9GXBQ.QY2GW6T2I42F3@crapouillou.net>
+References: <20200613162001.154280-1-paul@crapouillou.net>
+ <20200614150021.GU2346@scaer>
+ <N9GXBQ.QY2GW6T2I42F3@crapouillou.net>
+Message-ID: <20200621085131.GA2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-06-16 12:03 -0500, Matt Weber spake thusly:
-> Similar to make legal-info, produce a csv delimited file containing
-> all selected packages CPE identification.
-> 
-> By default, support the pkg infra defining a set of CPE_ID_* defaults
-> using the package name for the vendor and name as most CPE IDs seem
-> to align with that assumption. Plus initially, use the pkg version as
-> the CPE ID's version field.
+Paul, All,
 
-So, as I understand it, the CPE info for host packages will also be
-stored in the generated file, but it will be a partial list.
-
-For example, if a host package has a Config.in option (e.g. aespipe,
-with BR2_PACKAGE_HOST_AESPIPE=y), then it will be listed in PACKAGES,
-and so will be present in the CPE manifest.
-
-But on the other hand, a host package that has no Config.in option but
-is oart of the dependency chain of a package (e.g. host-pkgconf) will
-not be listed in PACKAGES, and thus will not appear in the manifest.
-
-This is a bit awkward I think.
-
-As far as I understand it, the CPE info is (mostly|only) usefull to
-then query the CVE list applicable to that CPE.
-
-As such, this is (mostly|only) relevant to the target packages, I would
-think, no? Thus, host pakcages should be filtered out.
-
-If we are however interested by the CPE info for host packages, probably
-that should go to a separate manifest, like for the legal-info, no?
-
-Also, see an issue, below...
-
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
+On 2020-06-14 19:51 +0200, Paul Cercueil spake thusly:
+> Le dim. 14 juin 2020 ? 17:00, Yann E. MORIN <yann.morin.1998@free.fr> a
+> ?crit :
+> >On 2020-06-13 18:20 +0200, Paul Cercueil spake thusly:
+> >> All the symbols that were previously present in libdl.so.0, libm.so.0,
+> >> libpthread.so.0 and librt.so.0 are now all packed within uClibc.
+> >>
+> >> In order to keep binary compatibility with old executables, which were
+> >> dynamically linked with one of the libraries above, add symbolic links
+> >> to the uClibc shared library.
+> >This does not account for external toolchains.
 [--SNIP--]
-> @@ -864,6 +865,19 @@ legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all
->  		mv .legal-info.sha256 legal-info.sha256)
->  	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
->  
-> +.PHONY: cpe-info-clean
-> +cpe-info-clean:
-> +	@rm -f $(CPE_MANIFEST_CSV)
+> >I wonder how good those symlinks are anyway: uClibc has no ABI/API
+> >stability anyway, so there are no guarantee that a program linked
+> >against a version of uClibc will work against another version, or even
+> >the same version that was compiled with another configuration...
 
-This must also be removed on 'make clean'.
+We've discussed this with the other maintainers, and we agree that "we do
+not really care about binary-level compatibility, especially with uClibc
+where it is anyway not guaranteed" (quoting the conclusion from Thomas)
 
-> +.PHONY: cpe-info-prepare
-> +cpe-info-prepare:
-> +	@$(call MESSAGE,"Gathering CPE info")
-> +	@$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
-> +
-> +.PHONY: cpe-info
-> +cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
+The best bet for you is to remove those symlinks from your overlay, and
+create them from a post-build script (where you can do the globbing you
+need to find the current version string).
 
-I think this depednecy is incorrect. Indeed, you reallt want that
-cpe-info-clean be run before cpe-info-prepare, so I think you'll need
-these dependencies:
-
-    cpe-info-prepare: cpe-info-clean
-    cpe-info: cpe-info-prepare
-    cpe-info: $(foreach p,$(filter-out host-%,$(PACKAGES)),$(p)-cpe-info)
-
-(Yes, I see you modeled your dependencies on the legal-info ones, but I
-think they are broken.)
-
-[--SNIP--]
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index d88a14ab0f..9818eda12d 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -223,3 +223,11 @@ legal-deps = \
->          $(filter-out $(if $(1:host-%=),host-%),\
->              $(call non-virtual-deps,\
->                  $($(call UPPERCASE,$(1))_FINAL_RECURSIVE_DEPENDENCIES))),$(p) [$($(call UPPERCASE,$(p))_LICENSE)])
-> +
-> +#
-> +# cpe-info helper functions
-> +#
-> +
-> +define cpe-manifest # cpe, pkg name, version, url
-> +	echo '"$(1)","$(2)","$(3)","$(4)"' >>$(CPE_MANIFEST_CSV)
-> +endef
-
-If (and *if*) we need the CPE info for host packages, then we could
-change this helper to redirect to the appropriate manifest, a bit like
-is done for legal-info.
-
-But I'm not sure we want it (at least not now).
+Or to create them as symlinks to libc.so.0 which we already create as a
+sylink to the actual libuclibc-XXXX.so (but this is less flexible than a
+post-build script).
 
 Regards,
 Yann E. MORIN.
-
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
