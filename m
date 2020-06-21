@@ -1,41 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jun 2020 23:27:51 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libhttpserver:
- disable examples
-Message-ID: <20200621212712.791B38151B@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 21 Jun 2020 23:31:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.7.1
+Message-ID: <20200621213142.51615-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5961c89356981ca8083c6fb4f6b906a363801d51
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+Release notes:
+https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
 
-examples are enabled by default since version 0.17.5 and
-https://github.com/etr/libhttpserver/commit/012d014a7c52ef91a35c521d5d4f83ee11de5068
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Stephan Hoffmann <sho@relinux.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5e8fe3704a6a75c639d24dfbade469ad539e7ff1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libhttpserver/libhttpserver.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/dav1d/dav1d.hash | 2 +-
+ package/dav1d/dav1d.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
-index 1fd76519f4..2c536cf012 100644
---- a/package/libhttpserver/libhttpserver.mk
-+++ b/package/libhttpserver/libhttpserver.mk
-@@ -9,7 +9,9 @@ LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
- LIBHTTPSERVER_LICENSE = LGPL-2.1+
- LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
- LIBHTTPSERVER_INSTALL_STAGING = YES
--LIBHTTPSERVER_CONF_OPTS = --enable-same-directory-build
-+LIBHTTPSERVER_CONF_OPTS = \
-+	--disable-examples \
-+	--enable-same-directory-build
- LIBHTTPSERVER_AUTORECONF = YES
- LIBHTTPSERVER_DEPENDENCIES = libmicrohttpd
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index 812b4fb13b..3ff4b1b685 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8057149f5f08c5ca47e1344fba9046ff84ac85ca409d7adbec8268c707ec5c19  dav1d-0.7.0.tar.bz2
++sha256  9eac4f50089f54a9f562827bda4a21187d68c01d8b20055eef1d7efca9f84cf8  dav1d-0.7.1.tar.bz2
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 9243267e97..1e84c21b47 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-DAV1D_VERSION = 0.7.0
++DAV1D_VERSION = 0.7.1
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
+ DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
+-- 
+2.26.2
