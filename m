@@ -1,121 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Jun 2020 21:14:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: bump to version 2.1.2
-Message-ID: <20200621191411.1630996-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jun 2020 21:41:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/udpcast: bump to version 20200328
+Message-ID: <20200621194136.1647222-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version) and so autoreconf
-- Update indentation in hash file (two spaces)
+Drop patch (not needed anymore) as console.h has been updated with:
+ #if HAVE_SYS_SELECT_H
+ #include <sys/select.h>
+ #endif
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...lm-linker-library-flag-is-always-set.patch | 62 -------------------
- package/keepalived/keepalived.hash            |  4 +-
- package/keepalived/keepalived.mk              |  4 +-
- 3 files changed, 3 insertions(+), 67 deletions(-)
- delete mode 100644 package/keepalived/0001-Ensure-that-lm-linker-library-flag-is-always-set.patch
+ package/udpcast/0001-select-h.patch | 11 -----------
+ package/udpcast/udpcast.hash        |  2 +-
+ package/udpcast/udpcast.mk          |  2 +-
+ 3 files changed, 2 insertions(+), 13 deletions(-)
+ delete mode 100644 package/udpcast/0001-select-h.patch
 
-diff --git a/package/keepalived/0001-Ensure-that-lm-linker-library-flag-is-always-set.patch b/package/keepalived/0001-Ensure-that-lm-linker-library-flag-is-always-set.patch
+diff --git a/package/udpcast/0001-select-h.patch b/package/udpcast/0001-select-h.patch
 deleted file mode 100644
-index 3c6bc72a2a..0000000000
---- a/package/keepalived/0001-Ensure-that-lm-linker-library-flag-is-always-set.patch
+index 9a8cfc9d5e..0000000000
+--- a/package/udpcast/0001-select-h.patch
 +++ /dev/null
-@@ -1,62 +0,0 @@
--From dea6cfba122439b29cdcb833a59868dd51a4eae4 Mon Sep 17 00:00:00 2001
--From: Quentin Armitage <quentin@armitage.org.uk>
--Date: Mon, 13 May 2019 14:25:26 +0100
--Subject: [PATCH] Ensure that -lm linker library flag is always set
--
--configure was testing whether it was necessary to add the -lm option,
--but for some reason gcc adds it itself if -Os is not specified, but
--does not add it if -Os is specified. Consequently if configure was
--run without -Os, and make was run with -Os the link failed.
--
--The commit ensures that -lm is always used.
--
--Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/acassen/keepalived/commit/dea6cfba122439b29cdcb833a59868dd51a4eae4]
-----
-- configure.ac | 24 +++---------------------
-- 1 file changed, 3 insertions(+), 21 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 5023900f4..ae420d5a6 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -340,6 +340,9 @@ WARNINGS_EXTRA="aggregate-return conversion padded pedantic sign-conversion stri
-- # We want _GNU_SOURCE defined always
-- add_to_var([CFLAGS], [-D_GNU_SOURCE])
+@@ -1,11 +0,0 @@
+---- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
+-+++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
+-@@ -6,6 +6,8 @@
+- #include <winbase.h>
+- #endif /* __MINGW32__ */
 - 
--+# fpclassify() needs -lm
--+add_to_var([KA_LIBS], [-lm])
+-+#include <sys/select.h>
 -+
-- # Some sanity checks on configure options
-- AS_IF([test .$enable_vrrp = .no],
--   [
--@@ -779,27 +782,6 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([[
--     LDFLAGS=$SAV_LDFLAGS
--   ])
-- 
---# Check if fpclassify() requires -lm
---CFLAGS=
---LDFLAGS=
---AC_MSG_CHECKING([whether fpclassify() requires -lm])
---AC_LINK_IFELSE([AC_LANG_SOURCE([[
---  # include <math.h>
---  int main(int argc, char **argv)
---  {
---    double zero = 0.0;
---    if (fpclassify(zero) == FP_ZERO)
---      return 0;
---    return 1;
---  }
---  ]])],
---  AC_MSG_RESULT([no]),
---  AC_MSG_RESULT([yes])
---    add_to_var([KA_LIBS], [-lm])
---  )
---CFLAGS=$SAV_CFLAGS
---LDFLAGS=$SAV_LDFLAGS
---
-- # Checks for header files.
-- AC_CHECK_HEADERS([arpa/inet.h fcntl.h limits.h netdb.h netinet/in.h stdint.h stdlib.h string.h sys/ioctl.h sys/param.h sys/prctl.h sys/socket.h sys/time.h syslog.h unistd.h],
--   [], [AC_MSG_ERROR([Missing/unusable system header file <$ac_header>])])
-diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
-index 091821467b..feac0cce61 100644
---- a/package/keepalived/keepalived.hash
-+++ b/package/keepalived/keepalived.hash
+- #define prepareConsole udpc_prepareConsole
+- #define getConsoleFd udpc_getConsoleFd
+- #define restoreConsole udpc_restoreConsole
+diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
+index a70aa71981..9cdce0a286 100644
+--- a/package/udpcast/udpcast.hash
++++ b/package/udpcast/udpcast.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256	933ee01bc6346aa573453b998f87510d3cce4aba4537c9642b24e6dbfba5c6f4  keepalived-2.0.15.tar.gz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  fdf57a5766f52bd7f7bb917e06baede2e81efb96060b4dd1714170fbca32d58f  keepalived-2.1.2.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index 02c5a0cf39..c67eda3709 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
-@@ -4,14 +4,12 @@
+ # locally computed hash
+-sha256  ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a  udpcast-20120424.tar.gz
++sha256  9c19eebaa6e2f78127f0d59e95d0ce003b687d61e283b5963a1da6b8ac41f21a  udpcast-20200328.tar.gz
+ sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
+diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
+index e9116d2de0..34ebddd2d5 100644
+--- a/package/udpcast/udpcast.mk
++++ b/package/udpcast/udpcast.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KEEPALIVED_VERSION = 2.0.15
-+KEEPALIVED_VERSION = 2.1.2
- KEEPALIVED_SITE = http://www.keepalived.org/software
- KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
- KEEPALIVED_LICENSE = GPL-2.0+
- KEEPALIVED_LICENSE_FILES = COPYING
- KEEPALIVED_CONF_OPTS = --disable-hardening
--# We're patching configure.ac
--KEEPALIVED_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_JSON_C),y)
- KEEPALIVED_DEPENDENCIES += json-c
+-UDPCAST_VERSION = 20120424
++UDPCAST_VERSION = 20200328
+ UDPCAST_SITE = http://www.udpcast.linux.lu/download
+ UDPCAST_DEPENDENCIES = host-m4
+ UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
 -- 
 2.26.2
