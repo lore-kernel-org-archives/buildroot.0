@@ -1,43 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Jun 2020 23:31:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.7.1
-Message-ID: <20200621213142.51615-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Jun 2020 23:32:43 +0200
+Subject: [Buildroot] [git commit] package/gnutls: security bump to 3.6.14
+Message-ID: <20200621213110.6D70F815D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=16ea3ee784c5203b33c086f84474b1dba6a3e54a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the following security issue:
+
+ * CVE-2020-13777: It was found that GnuTLS 3.6.4 introduced a
+   regression in the TLS protocol implementation. This caused the TLS
+   server to not securely construct a session ticket encryption key
+   considering the application supplied secret, allowing a MitM
+   attacker to bypass authentication in TLS 1.3 and recover previous
+   conversations in TLS 1.2
+
+Release announcement:
+ https://lists.gnupg.org/pipermail/gnutls-help/2020-June/004648.html
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/gnutls.hash | 8 ++++----
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 812b4fb13b..3ff4b1b685 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8057149f5f08c5ca47e1344fba9046ff84ac85ca409d7adbec8268c707ec5c19  dav1d-0.7.0.tar.bz2
-+sha256  9eac4f50089f54a9f562827bda4a21187d68c01d8b20055eef1d7efca9f84cf8  dav1d-0.7.1.tar.bz2
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 9243267e97..1e84c21b47 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 99279bfb6b..6a4203f3a2 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.13.tar.xz.sig
+-sha256	32041df447d9f4644570cf573c9f60358e865637d69b7e59d1159b7240b52f38	gnutls-3.6.13.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.14.tar.xz.sig
++sha256  5630751adec7025b8ef955af4d141d00d252a985769f51b4059e5affa3d39d63  gnutls-3.6.14.tar.xz
+ # Locally calculated
+-sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
+-sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
++sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index a1dfce62a2..34878e97b4 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DAV1D_VERSION = 0.7.0
-+DAV1D_VERSION = 0.7.1
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
--- 
-2.26.2
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
