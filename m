@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jun 2020 23:27:59 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libhttpserver:
+Date: Sun, 21 Jun 2020 23:27:51 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libhttpserver:
  disable examples
-Message-ID: <20200621212705.5C74381092@busybox.osuosl.org>
+Message-ID: <20200621212712.791B38151B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6829734922bf59ae81cfc400830e18d34111b011
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5961c89356981ca8083c6fb4f6b906a363801d51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 examples are enabled by default since version 0.17.5 and
 https://github.com/etr/libhttpserver/commit/012d014a7c52ef91a35c521d5d4f83ee11de5068
