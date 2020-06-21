@@ -1,89 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 22:50:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/udpcast: bump to version
- 20200328
-In-Reply-To: <20200621194136.1647222-1-fontaine.fabrice@gmail.com>
-References: <20200621194136.1647222-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200621205028.GL2351@scaer>
+Date: Sun, 21 Jun 2020 22:51:31 +0200
+Subject: [Buildroot] [git commit] package/nginx: add http geoip support
+Message-ID: <20200621205524.49F2983A2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f5500cf5cfa4238c972537c005581ece2ab8625
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-21 21:41 +0200, Fabrice Fontaine spake thusly:
-> Drop patch (not needed anymore) as console.h has been updated with:
->  #if HAVE_SYS_SELECT_H
->  #include <sys/select.h>
->  #endif
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+http geoip module is available since version 0.8.6 and
+https://github.com/nginx/nginx/commit/bc10147b9f36f1a61b96ceec016bf4d4d12e128f
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/nginx/Config.in | 6 ++++++
+ package/nginx/nginx.mk  | 6 +++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/udpcast/0001-select-h.patch | 11 -----------
->  package/udpcast/udpcast.hash        |  2 +-
->  package/udpcast/udpcast.mk          |  2 +-
->  3 files changed, 2 insertions(+), 13 deletions(-)
->  delete mode 100644 package/udpcast/0001-select-h.patch
-> 
-> diff --git a/package/udpcast/0001-select-h.patch b/package/udpcast/0001-select-h.patch
-> deleted file mode 100644
-> index 9a8cfc9d5e..0000000000
-> --- a/package/udpcast/0001-select-h.patch
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> ---- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
-> -+++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
-> -@@ -6,6 +6,8 @@
-> - #include <winbase.h>
-> - #endif /* __MINGW32__ */
-> - 
-> -+#include <sys/select.h>
-> -+
-> - #define prepareConsole udpc_prepareConsole
-> - #define getConsoleFd udpc_getConsoleFd
-> - #define restoreConsole udpc_restoreConsole
-> diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-> index a70aa71981..9cdce0a286 100644
-> --- a/package/udpcast/udpcast.hash
-> +++ b/package/udpcast/udpcast.hash
-> @@ -1,3 +1,3 @@
->  # locally computed hash
-> -sha256  ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a  udpcast-20120424.tar.gz
-> +sha256  9c19eebaa6e2f78127f0d59e95d0ce003b687d61e283b5963a1da6b8ac41f21a  udpcast-20200328.tar.gz
->  sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
-> diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-> index e9116d2de0..34ebddd2d5 100644
-> --- a/package/udpcast/udpcast.mk
-> +++ b/package/udpcast/udpcast.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -UDPCAST_VERSION = 20120424
-> +UDPCAST_VERSION = 20200328
->  UDPCAST_SITE = http://www.udpcast.linux.lu/download
->  UDPCAST_DEPENDENCIES = host-m4
->  UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 5c34f11edd..0dbeaae2ff 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -75,6 +75,12 @@ config BR2_PACKAGE_NGINX_HTTP_IMAGE_FILTER_MODULE
+ 	help
+ 	  Enable ngx_http_image_filter_module
+ 
++config BR2_PACKAGE_NGINX_HTTP_GEOIP_MODULE
++	bool "ngx_http_geoip_module"
++	select BR2_PACKAGE_GEOIP
++	help
++	  Enable ngx_http_geoip_module
++
+ config BR2_PACKAGE_NGINX_HTTP_SUB_MODULE
+ 	bool "ngx_http_sub_module"
+ 	help
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 0ceed7857f..3f249096bc 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -85,7 +85,6 @@ endif
+ 
+ # modules disabled or not activated because of missing dependencies:
+ # - google_perftools  (googleperftools)
+-# - http_geoip_module (geoip)
+ # - http_perl_module  (host-perl)
+ # - pcre-jit          (want to rebuild pcre)
+ 
+@@ -134,6 +133,11 @@ NGINX_DEPENDENCIES += gd jpeg libpng
+ NGINX_CONF_OPTS += --with-http_image_filter_module
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NGINX_HTTP_GEOIP_MODULE),y)
++NGINX_DEPENDENCIES += geoip
++NGINX_CONF_OPTS += --with-http_geoip_module
++endif
++
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP_GUNZIP_MODULE),y)
+ NGINX_DEPENDENCIES += zlib
+ NGINX_CONF_OPTS += --with-http_gunzip_module
