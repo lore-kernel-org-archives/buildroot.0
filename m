@@ -1,94 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 14:35:45 +0200
-Subject: [Buildroot] [PATCH 02/23] package/kodi-platform: add explicit
- dependency to tinyxml
-In-Reply-To: <20200621103806.616133-2-bernd.kuhls@t-online.de>
-References: <20200621103806.616133-1-bernd.kuhls@t-online.de>
- <20200621103806.616133-2-bernd.kuhls@t-online.de>
-Message-ID: <20200621123545.GF2351@scaer>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 21 Jun 2020 15:10:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/irrlicht: fix libraries linking
+Message-ID: <20200621131038.1031282-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Fixes:
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XSetSelectionOwner'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glXGetProcAddress'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glXMakeCurrent'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XF86VidModeSetViewPort'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XF86VidModeSwitchToMode'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glClearDepth'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XGetVisualInfo'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XGrabKeyboard'
+ /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glMatrixMode'
 
-On 2020-06-21 12:37 +0200, Bernd Kuhls spake thusly:
-> Tinyxml is built as a hard-dependency of Kodi already. For the case that
-> Kodi drops this dependency we need to make sure that this package still
-> finds its dependencies:
-> https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L9
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-platform/Config.in        | 1 +
->  package/kodi-platform/kodi-platform.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
-> index cde1925c07..7b4226a10d 100644
-> --- a/package/kodi-platform/Config.in
-> +++ b/package/kodi-platform/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_KODI_PLATFORM
->  	bool
->  	select BR2_PACKAGE_LIBPLATFORM
-> +	select BR2_PACKAGE_TINYXML
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ .../0003-makefile-override-LDFLAGS.patch      | 29 +++++++++++++++++++
+ package/irrlicht/irrlicht.mk                  |  4 ++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
+ create mode 100644 package/irrlicht/0003-makefile-override-LDFLAGS.patch
 
-You need to propagate the dependencies of tinyxml too.
-
-Yes, the only dependency is on C++, which is already a dependency of
-Kodi, and thus is de-facto a dependency of kodi-platform.
-
-However, as you are doing in the following patches, I think it is better
-is we have correct dependency tracking all over the tree, because it
-makes updating easier (we can notice that a dependency got dropped or
-added, etc...)
-
-So, in turn, we should also propagate de dependencies of kodi-patform to
-all the packages that select it.
-
-since this impacts quite a fair number of the follwing patches, I've
-marked the series (except for the first patch) as changes requested. Can
-you please fix and respin, please?
-
-Yes, this is additional burden on your side, but I think we should take
-this opportunity to fix the current mess of implicitly inherited
-dependencies.
-
-Thanks for your continued work on the Kodi package (and elsewhere!) :-)
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  Kodi add-on platform support library
->  
-> diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-> index f1b97e3259..aab1d0dbf0 100644
-> --- a/package/kodi-platform/kodi-platform.mk
-> +++ b/package/kodi-platform/kodi-platform.mk
-> @@ -9,6 +9,6 @@ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
->  KODI_PLATFORM_LICENSE = GPL-2.0+
->  KODI_PLATFORM_LICENSE_FILES = debian/copyright
->  KODI_PLATFORM_INSTALL_STAGING = YES
-> -KODI_PLATFORM_DEPENDENCIES = libplatform kodi
-> +KODI_PLATFORM_DEPENDENCIES = kodi libplatform tinyxml
->  
->  $(eval $(cmake-package))
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/irrlicht/0003-makefile-override-LDFLAGS.patch b/package/irrlicht/0003-makefile-override-LDFLAGS.patch
+new file mode 100644
+index 0000000000..16c38d5baa
+--- /dev/null
++++ b/package/irrlicht/0003-makefile-override-LDFLAGS.patch
+@@ -0,0 +1,29 @@
++From f597ac417f0eefab8f388afe617a0d07d08d87bb Mon Sep 17 00:00:00 2001
++From: Bartosz Bilas <b.bilas@grinn-global.com>
++Date: Sun, 21 Jun 2020 12:57:47 +0200
++Subject: [PATCH] makefile: override LDFLAGS
++
++That's needed to fix proper linking to X11 libraries
++within package makefile.
++
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ source/Irrlicht/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
++index 9a1bdbc..85eb264 100644
++--- a/source/Irrlicht/Makefile
+++++ b/source/Irrlicht/Makefile
++@@ -88,7 +88,7 @@ STATIC_LIB = libIrrlicht.a
++ LIB_PATH = ../../lib/$(SYSTEM)
++ INSTALL_DIR = /usr/local/lib
++ sharedlib install: SHARED_LIB = libIrrlicht.so
++-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+++sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
++ staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
++ 
++ #OSX specific options
++-- 
++2.27.0
++
+diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
+index bd82815cde..e12d802ee7 100644
+--- a/package/irrlicht/irrlicht.mk
++++ b/package/irrlicht/irrlicht.mk
+@@ -38,12 +38,14 @@ ifeq ($(BR2_STATIC_LIBS),)
+ IRRLICHT_CONF_OPTS += sharedlib
+ endif
+ 
++# set correct path for libraries linking
++IRRLICHT_CONF_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib"
+ # Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
+ # While linking an application with libIrrlicht.so, we get an undefined reference to
+ # png_init_filter_functions_neon.
+ # Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
+ # so disable NEON support completely.
+-IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
++IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0 -I$(STAGING_DIR)/usr/include/X11"
+ 
+ define IRRLICHT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
