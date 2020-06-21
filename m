@@ -1,84 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Jun 2020 16:51:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-screensaver-matrixtrails: bump
- version to 2.2.3
-Message-ID: <20200621145130.2262-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jun 2020 19:12:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nginx: add http geoip support
+Message-ID: <20200621171222.1232374-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch which was applied upstream.
+http geoip module is available since version 0.8.6 and
+https://github.com/nginx/nginx/commit/bc10147b9f36f1a61b96ceec016bf4d4d12e128f
 
-Updated license hash due to copyright year update:
-https://github.com/xbmc/screensaver.matrixtrails/commit/c2fdf919cfa04de45ad213da7645ea435547266d
-
-Removed "v" from _SITE due to changes to github release names.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-Add-missing-stddef-include.patch     | 25 -------------------
- .../kodi-screensaver-matrixtrails.hash        |  4 +--
- .../kodi-screensaver-matrixtrails.mk          |  4 +--
- 3 files changed, 4 insertions(+), 29 deletions(-)
- delete mode 100644 package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
+ package/nginx/Config.in | 6 ++++++
+ package/nginx/nginx.mk  | 6 +++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch b/package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
-deleted file mode 100644
-index 75cadfcb1e..0000000000
---- a/package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 404763f096a312e12c0dc4764834987797411745 Mon Sep 17 00:00:00 2001
--From: Rechi <Rechi@users.noreply.github.com>
--Date: Sun, 24 Mar 2019 11:44:05 +0100
--Subject: [PATCH] [fix] add missing stddef.h include for offsetof macro
--
--Downloaded from upstream commit:
--https://github.com/xbmc/screensaver.matrixtrails/commit/404763f096a312e12c0dc4764834987797411745
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/matrixtrails.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/matrixtrails.cpp b/src/matrixtrails.cpp
--index 220855a..2817dbe 100644
----- a/src/matrixtrails.cpp
--+++ b/src/matrixtrails.cpp
--@@ -25,6 +25,7 @@
-- #include "matrixtrails.h"
-- #include "SOIL2/SOIL2.h"
-- 
--+#include <stddef.h>
-- #include <vector>
-- 
-- ////////////////////////////////////////////////////////////////////////////
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-index 9a657a10dd..26b95cbc77 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2d2c795853c5a72184bb6720247d79c48b1d9fbc97e9c2913003a707d612e3ac  kodi-screensaver-matrixtrails-2.2.1-Leia.tar.gz
--sha256  4cfbc2bc766d343a70ba0322bc7203332c232ba57b62fb57a0ee9189cca4ac27  debian/copyright
-+sha256  5a2f5bca0c197eea87f06376941c6d0ddbc81cf144d8c3854ac148fdec3400ec  kodi-screensaver-matrixtrails-2.2.3-Leia.tar.gz
-+sha256  385a17599b44aaea10537374c1991c21a5e06153878917b12f96fc1cf8bbc118  debian/copyright
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index de2d0f504c..8e619c1b7c 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 5c34f11edd..0dbeaae2ff 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -75,6 +75,12 @@ config BR2_PACKAGE_NGINX_HTTP_IMAGE_FILTER_MODULE
+ 	help
+ 	  Enable ngx_http_image_filter_module
  
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.1-Leia
--KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.3-Leia
-+KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = debian/copyright
- KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi
++config BR2_PACKAGE_NGINX_HTTP_GEOIP_MODULE
++	bool "ngx_http_geoip_module"
++	select BR2_PACKAGE_GEOIP
++	help
++	  Enable ngx_http_geoip_module
++
+ config BR2_PACKAGE_NGINX_HTTP_SUB_MODULE
+ 	bool "ngx_http_sub_module"
+ 	help
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index c0640c87e6..c675d38ab4 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -85,7 +85,6 @@ endif
+ 
+ # modules disabled or not activated because of missing dependencies:
+ # - google_perftools  (googleperftools)
+-# - http_geoip_module (geoip)
+ # - http_perl_module  (host-perl)
+ # - pcre-jit          (want to rebuild pcre)
+ 
+@@ -134,6 +133,11 @@ NGINX_DEPENDENCIES += gd jpeg libpng
+ NGINX_CONF_OPTS += --with-http_image_filter_module
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NGINX_HTTP_GEOIP_MODULE),y)
++NGINX_DEPENDENCIES += geoip
++NGINX_CONF_OPTS += --with-http_geoip_module
++endif
++
+ ifeq ($(BR2_PACKAGE_NGINX_HTTP_GUNZIP_MODULE),y)
+ NGINX_DEPENDENCIES += zlib
+ NGINX_CONF_OPTS += --with-http_gunzip_module
 -- 
 2.26.2
