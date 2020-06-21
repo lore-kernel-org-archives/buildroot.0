@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 22:48:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gpsd: drop patch
-In-Reply-To: <20200621204132.1807797-1-fontaine.fabrice@gmail.com>
-References: <20200621204132.1807797-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200621204842.GK2351@scaer>
+Date: Sun, 21 Jun 2020 22:50:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/udpcast: bump to version
+ 20200328
+In-Reply-To: <20200621194136.1647222-1-fontaine.fabrice@gmail.com>
+References: <20200621194136.1647222-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200621205028.GL2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,65 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-06-21 22:41 +0200, Fabrice Fontaine spake thusly:
-> This patch is not needed since version 3.19 and
-> https://gitlab.com/gpsd/gpsd/-/commit/e3ec42e08a08af377499551d0528fc6ddf74cc12
-> 
-> So drop this patch and set CCFLAGS
+On 2020-06-21 21:41 +0200, Fabrice Fontaine spake thusly:
+> Drop patch (not needed anymore) as console.h has been updated with:
+>  #if HAVE_SYS_SELECT_H
+>  #include <sys/select.h>
+>  #endif
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[--SNIP--]
-> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-> index 49de4b256c..0925e0340f 100644
-> --- a/package/gpsd/gpsd.mk
-> +++ b/package/gpsd/gpsd.mk
-> @@ -200,7 +200,10 @@ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
->  GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
->  endif
->  
-> -GPSD_SCONS_ENV += LDFLAGS="$(GPSD_LDFLAGS)" CFLAGS="$(GPSD_CFLAGS)"
-> +GPSD_SCONS_ENV += \
-> +	LDFLAGS="$(GPSD_LDFLAGS)" \
-> +	CFLAGS="$(GPSD_CFLAGS)" \
-> +	CCFLAGS="$(GPS_CFLAGS)"
 
-Typo: GPSD_CFLAGS, not GPS_CFLAGS, I guess?
-
-Applied to master with that fixed. thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  define GPSD_BUILD_CMDS
->  	(cd $(@D); \
+> ---
+>  package/udpcast/0001-select-h.patch | 11 -----------
+>  package/udpcast/udpcast.hash        |  2 +-
+>  package/udpcast/udpcast.mk          |  2 +-
+>  3 files changed, 2 insertions(+), 13 deletions(-)
+>  delete mode 100644 package/udpcast/0001-select-h.patch
+> 
+> diff --git a/package/udpcast/0001-select-h.patch b/package/udpcast/0001-select-h.patch
+> deleted file mode 100644
+> index 9a8cfc9d5e..0000000000
+> --- a/package/udpcast/0001-select-h.patch
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> ---- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
+> -+++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
+> -@@ -6,6 +6,8 @@
+> - #include <winbase.h>
+> - #endif /* __MINGW32__ */
+> - 
+> -+#include <sys/select.h>
+> -+
+> - #define prepareConsole udpc_prepareConsole
+> - #define getConsoleFd udpc_getConsoleFd
+> - #define restoreConsole udpc_restoreConsole
+> diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
+> index a70aa71981..9cdce0a286 100644
+> --- a/package/udpcast/udpcast.hash
+> +++ b/package/udpcast/udpcast.hash
+> @@ -1,3 +1,3 @@
+>  # locally computed hash
+> -sha256  ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a  udpcast-20120424.tar.gz
+> +sha256  9c19eebaa6e2f78127f0d59e95d0ce003b687d61e283b5963a1da6b8ac41f21a  udpcast-20200328.tar.gz
+>  sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
+> diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
+> index e9116d2de0..34ebddd2d5 100644
+> --- a/package/udpcast/udpcast.mk
+> +++ b/package/udpcast/udpcast.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -UDPCAST_VERSION = 20120424
+> +UDPCAST_VERSION = 20200328
+>  UDPCAST_SITE = http://www.udpcast.linux.lu/download
+>  UDPCAST_DEPENDENCIES = host-m4
+>  UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
 > -- 
 > 2.26.2
 > 
