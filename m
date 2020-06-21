@@ -1,49 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Jun 2020 12:37:45 +0200
-Subject: [Buildroot] [PATCH 02/23] package/kodi-platform: add explicit
- dependency to tinyxml
+Date: Sun, 21 Jun 2020 12:37:56 +0200
+Subject: [Buildroot] [PATCH 13/23] package/kodi-pvr-mythtv: fix dependencies
 In-Reply-To: <20200621103806.616133-1-bernd.kuhls@t-online.de>
 References: <20200621103806.616133-1-bernd.kuhls@t-online.de>
-Message-ID: <20200621103806.616133-2-bernd.kuhls@t-online.de>
+Message-ID: <20200621103806.616133-13-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tinyxml is built as a hard-dependency of Kodi already. For the case that
-Kodi drops this dependency we need to make sure that this package still
-finds its dependencies:
-https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L9
+Upstream updated dependencies:
+https://github.com/janbar/pvr.mythtv/commit/ff2c90b027a98db57ccc051a11faf5c5536a8b5c
+
+Please note that the previous dependency to kodi-platform was wrong
+anyway, before the forementioned commit this package needed libplatform
+which is a dependency of kodi-platform.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-platform/Config.in        | 1 +
- package/kodi-platform/kodi-platform.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/kodi-pvr-mythtv/Config.in          | 1 -
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
-index cde1925c07..7b4226a10d 100644
---- a/package/kodi-platform/Config.in
-+++ b/package/kodi-platform/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_KODI_PLATFORM
- 	bool
- 	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
+index 798ff3e911..ebdbc00487 100644
+--- a/package/kodi-pvr-mythtv/Config.in
++++ b/package/kodi-pvr-mythtv/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_KODI_PVR_MYTHTV
+ 	bool "kodi-pvr-mythtv"
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Kodi add-on platform support library
+ 	  MythTV PVR for Kodi
  
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-index f1b97e3259..aab1d0dbf0 100644
---- a/package/kodi-platform/kodi-platform.mk
-+++ b/package/kodi-platform/kodi-platform.mk
-@@ -9,6 +9,6 @@ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
- KODI_PLATFORM_LICENSE = GPL-2.0+
- KODI_PLATFORM_LICENSE_FILES = debian/copyright
- KODI_PLATFORM_INSTALL_STAGING = YES
--KODI_PLATFORM_DEPENDENCIES = libplatform kodi
-+KODI_PLATFORM_DEPENDENCIES = kodi libplatform tinyxml
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index ca1d533a57..44e5fd2a76 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -8,6 +8,6 @@ KODI_PVR_MYTHTV_VERSION = 5.10.16-Leia
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
+-KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
++KODI_PVR_MYTHTV_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
 -- 
