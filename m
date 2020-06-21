@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Jun 2020 12:37:48 +0200
-Subject: [Buildroot] [PATCH 05/23] package/kodi-pvr-argustv: add explicit
- dependencies to libplatform and kodi
+Date: Sun, 21 Jun 2020 12:37:57 +0200
+Subject: [Buildroot] [PATCH 14/23] package/kodi-pvr-nextpvr: add explicit
+ dependencies to libplatform, kodi and tinyxml
 In-Reply-To: <20200621103806.616133-1-bernd.kuhls@t-online.de>
 References: <20200621103806.616133-1-bernd.kuhls@t-online.de>
-Message-ID: <20200621103806.616133-5-bernd.kuhls@t-online.de>
+Message-ID: <20200621103806.616133-14-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Libplatform and kodi are built as hard-dependencies of kodi-platform
-already. For the case that kodi-platform drops one of these dependencies
-we need to make sure that this package still finds its dependencies:
-https://github.com/kodi-pvr/pvr.argustv/blob/Leia/CMakeLists.txt#L6
+already, tinyxml is a hard-dependency of kodi. For the case that kodi or
+kodi-platform drop one of these dependencies we need to make sure that
+this package still finds its dependencies:
+https://github.com/kodi-pvr/pvr.nextpvr/blob/Leia/CMakeLists.txt#L6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-argustv/Config.in           | 1 +
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/kodi-pvr-nextpvr/Config.in           | 2 ++
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
-index 216000aefd..b41c095dcd 100644
---- a/package/kodi-pvr-argustv/Config.in
-+++ b/package/kodi-pvr-argustv/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_KODI_PVR_ARGUSTV
- 	bool "kodi-pvr-argustv"
- 	select BR2_PACKAGE_JSONCPP
+diff --git a/package/kodi-pvr-nextpvr/Config.in b/package/kodi-pvr-nextpvr/Config.in
+index e520426796..e1567c7c98 100644
+--- a/package/kodi-pvr-nextpvr/Config.in
++++ b/package/kodi-pvr-nextpvr/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_KODI_PVR_NEXTPVR
+ 	bool "kodi-pvr-nextpvr"
  	select BR2_PACKAGE_KODI_PLATFORM
 +	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Kodi's ARGUS TV client addon
+ 	  Kodi's NextPVR client addon
  
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 73a9f1c764..b754542a3c 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-@@ -8,6 +8,6 @@ KODI_PVR_ARGUSTV_VERSION = 3.5.6-Leia
- KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
- KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
- KODI_PVR_ARGUSTV_LICENSE_FILES = debian/copyright
--KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi kodi-platform libplatform
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 59fc274583..cbcef90114 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -8,6 +8,6 @@ KODI_PVR_NEXTPVR_VERSION = 3.3.20-Leia
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = debian/copyright
+-KODI_PVR_NEXTPVR_DEPENDENCIES = kodi-platform
++KODI_PVR_NEXTPVR_DEPENDENCIES = kodi kodi-platform libplatform tinyxml
  
  $(eval $(cmake-package))
 -- 
