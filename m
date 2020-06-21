@@ -1,53 +1,104 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 21 Jun 2020 09:59:53 +0200
-Subject: [Buildroot] [PATCH v3 0/7] Container - Guest
-Message-ID: <20200621080000.180089-1-francois.perrad@gadz.org>
+Date: Sun, 21 Jun 2020 09:59:54 +0200
+Subject: [Buildroot] [PATCH v3 1/7] configs/guest_*: some new defconfig
+In-Reply-To: <20200621080000.180089-1-francois.perrad@gadz.org>
+References: <20200621080000.180089-1-francois.perrad@gadz.org>
+Message-ID: <20200621080000.180089-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot supports some OS-level virtualization tools: Docker, LXC, systemd-nspawn.
-These tools are built on an host image.
-
-This series introduces a set of defconfig in order to create a guest image.
-
-After some experiments, packages docker & systemd need some tweaks.
-
-v2 -> v3:
-  - more examples in readme.txt (including Dockerfile from SkiffOS)
-  - select BR2_PACKAGE_CGROUPFS_MOUNT conditional
-
-RFC -> v2:
-  - refactor with FOO_LINUX_CONFIG_FIXUPS (new in 2020.05)
-  - add option BR2_PACKAGE_SYSTEMD_GUEST
-
-Francois Perrad (7):
-  configs/guest_*: some new defconfig
-  board/guest: documentation and sample files
-  package/docker-engine: needs some kernel options
-  package/docker-engine: needs more runtime dependencies
-  package/systemd: needs kernel options
-  package/systemd: add an option BR2_PACKAGE_SYSTEMD_GUEST
-  configs/guest_*: use BR2_PACKAGE_SYSTEMD_GUEST
-
- DEVELOPERS                             |   2 +
- board/guest/Dockerfile                 |   2 +
- board/guest/readme.txt                 | 143 +++++++++++++++++++++++++
- configs/guest_arm_a7_defconfig         |  29 +++++
- configs/guest_arm_a9_defconfig         |  31 ++++++
- configs/guest_x86_64_defconfig         |  28 +++++
- package/docker-engine/Config.in        |   1 +
- package/docker-engine/docker-engine.mk |  67 ++++++++++++
- package/systemd/Config.in              |  14 ++-
- package/systemd/systemd.mk             |  17 ++-
- 10 files changed, 328 insertions(+), 6 deletions(-)
- create mode 100644 board/guest/Dockerfile
- create mode 100644 board/guest/readme.txt
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ DEVELOPERS                     |  1 +
+ configs/guest_arm_a7_defconfig | 16 ++++++++++++++++
+ configs/guest_arm_a9_defconfig | 18 ++++++++++++++++++
+ configs/guest_x86_64_defconfig | 15 +++++++++++++++
+ 4 files changed, 50 insertions(+)
  create mode 100644 configs/guest_arm_a7_defconfig
  create mode 100644 configs/guest_arm_a9_defconfig
  create mode 100644 configs/guest_x86_64_defconfig
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index efb97c739..035a75358 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -906,6 +906,7 @@ F:	package/ser2net/
+ N:	Francois Perrad <francois.perrad@gadz.org>
+ F:	board/olimex/a20_olinuxino
+ F:	board/olimex/imx233_olinuxino/
++F:	configs/guest_*
+ F:	configs/olimex_a20_olinuxino_*
+ F:	configs/olimex_imx233_olinuxino_defconfig
+ F:	package/4th/
+diff --git a/configs/guest_arm_a7_defconfig b/configs/guest_arm_a7_defconfig
+new file mode 100644
+index 000000000..efe9a1369
+--- /dev/null
++++ b/configs/guest_arm_a7_defconfig
+@@ -0,0 +1,16 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.15"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# System
++BR2_INIT_SYSTEMD=y
++# BR2_TARGET_GENERIC_GETTY is not set
++
++# Filesystem
++BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/guest_arm_a9_defconfig b/configs/guest_arm_a9_defconfig
+new file mode 100644
+index 000000000..02c3d302d
+--- /dev/null
++++ b/configs/guest_arm_a9_defconfig
+@@ -0,0 +1,18 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.15"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# System
++BR2_INIT_SYSTEMD=y
++# BR2_TARGET_GENERIC_GETTY is not set
++
++# Filesystem
++BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/guest_x86_64_defconfig b/configs/guest_x86_64_defconfig
+new file mode 100644
+index 000000000..42d1d659a
+--- /dev/null
++++ b/configs/guest_x86_64_defconfig
+@@ -0,0 +1,15 @@
++# Architecture
++BR2_x86_64=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.15"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# System
++BR2_INIT_SYSTEMD=y
++# BR2_TARGET_GENERIC_GETTY is not set
++
++# Filesystem
++BR2_TARGET_ROOTFS_TAR=y
 -- 
 2.25.1
