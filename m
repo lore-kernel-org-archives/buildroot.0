@@ -1,98 +1,35 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 21 Jun 2020 09:59:56 +0200
-Subject: [Buildroot] [PATCH v3 3/7] package/docker-engine: needs some kernel
- options
+Date: Sun, 21 Jun 2020 09:59:57 +0200
+Subject: [Buildroot] [PATCH v3 4/7] package/docker-engine: needs more
+ runtime dependencies
 In-Reply-To: <20200621080000.180089-1-francois.perrad@gadz.org>
 References: <20200621080000.180089-1-francois.perrad@gadz.org>
-Message-ID: <20200621080000.180089-4-francois.perrad@gadz.org>
+Message-ID: <20200621080000.180089-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-according to https://wiki.gentoo.org/wiki/Docker#Kernel
+fix error:
+	failed to start daemon: Devices cgroup isn't mounted
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/docker-engine/docker-engine.mk | 67 ++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ package/docker-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 78f6c1261..41600486c 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -79,4 +79,71 @@ define DOCKER_ENGINE_USERS
- 	- - docker -1 * - - - Docker Application Container Framework
- endef
- 
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-+define DOCKER_ENGINE_DRIVER_BTRFS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BTRFS_FS)
-+endef
-+endif
-+
-+define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG_SWAP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FAIR_GROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFS_BANDWIDTH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_RT_GROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPUSETS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_PID_CPUSET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PERF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USER_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BLOCK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_THROTTLING)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_CGROUP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_L3_MASTER_DEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_NET_PRIO)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_NETCLASSID)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MD)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_DM)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MD_THIN_PROVISIONING)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IPVLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PERSISTENT_KEYRINGS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_ENCRYPTED_KEYS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEY_DH_OPERATIONS)
-+	$(DOCKER_ENGINE_DRIVER_BTRFS_LINUX_CONFIG_FIXUPS)
-+endef
-+
- $(eval $(golang-package))
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 1fd229fcb..4fe6956ab 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
+ 	depends on BR2_USE_MMU # docker-containerd
++	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
 -- 
 2.25.1
