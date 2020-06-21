@@ -1,80 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 22:34:26 +0200
-Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
- version 20200616
-In-Reply-To: <20200621201849.30819-1-peter@korsgaard.com>
-References: <20200621201849.30819-1-peter@korsgaard.com>
-Message-ID: <20200621203426.GH2351@scaer>
+Date: Sun, 21 Jun 2020 22:34:51 +0200
+Subject: [Buildroot] [git commit] package/python-validators: fix license
+Message-ID: <20200621203314.BDBC982232@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d682a3aeb9e3cc684e2dc6c2221a820bd4c08179
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-21 22:18 +0200, Peter Korsgaard spake thusly:
-> Contains mitigations for the Special Register Buffer Data Sampling
-> (CVE-2020-0543), Vector Register Sampling (CVE-2020-0548) and L1D
-> Eviction Sampling (CVE-2020-0549) hardware vulnerabilities.
-> 
-> For more details, see the advisories:
-> https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00320.html
-> https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00329.html
-> 
-> Adjust the license hash for a change of copyright year:
-> -Copyright (c) 2018-2019 Intel Corporation.
-> +Copyright (c) 2018-2020 Intel Corporation.
-> 
-> And adjust the .hash file to use two spaces.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The LICENSE file is MIT, not BSD.  The confusion comes from the license info
+in setup.py, which stated BSD until (post-0.14.2):
 
-Applied to master, thanks.
+https://github.com/kvesteri/validators/commit/669129a3d3eb106e1b2d82bd9911faebb3287db6
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-validators/python-validators.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  package/intel-microcode/intel-microcode.hash | 4 ++--
->  package/intel-microcode/intel-microcode.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-> index f9fce28b2d..e8005bcff6 100644
-> --- a/package/intel-microcode/intel-microcode.hash
-> +++ b/package/intel-microcode/intel-microcode.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 0000f7cf96f2b07a1ba9d1fc0bcfcb49d0edb91f7d487a57a88c147e57c5873b  intel-microcode-20191112.tar.gz
-> -sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
-> +sha256  eb4f939421ac6cdea3c586c9d984ec518320f00c07eb2b3d6754309c83c93371  intel-microcode-20200616.tar.gz
-> +sha256  d9e989e1a7747f3ce93cb749aceca67a430d36c9bebc6e3205e0b3af3ca6304b  license
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index f3d05d5f58..043367770b 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -INTEL_MICROCODE_VERSION = 20191112
-> +INTEL_MICROCODE_VERSION = 20200616
->  INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
->  INTEL_MICROCODE_LICENSE = PROPRIETARY
->  INTEL_MICROCODE_LICENSE_FILES = license
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
+index e24ce35fdd..594c1d26e5 100644
+--- a/package/python-validators/python-validators.mk
++++ b/package/python-validators/python-validators.mk
+@@ -8,7 +8,7 @@ PYTHON_VALIDATORS_VERSION = 0.14.2
+ PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
+ PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/4d/56/9b48c918ef118ea12b90f227c4498ed4703b418bdd8fb49479dfcbeae4ef
+ PYTHON_VALIDATORS_SETUP_TYPE = setuptools
+-PYTHON_VALIDATORS_LICENSE = BSD
++PYTHON_VALIDATORS_LICENSE = MIT
+ PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
