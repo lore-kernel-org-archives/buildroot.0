@@ -1,140 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 23:04:49 +0200
-Subject: [Buildroot] [git commit] package/dropwatch: bump to version 1.5.3
-Message-ID: <20200621210415.36F247F9B5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jun 2020 23:20:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gptfdisk: bump to version 1.0.5
+Message-ID: <20200621212038.1809952-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6df7b51bd4499a6aff51890093edc1fccdb6b9ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 - Drop patch (already in version)
 - Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-Fix-build-on-32-bit-systems.patch         | 87 ----------------------
- package/dropwatch/dropwatch.hash                   |  4 +-
- package/dropwatch/dropwatch.mk                     |  2 +-
- 3 files changed, 3 insertions(+), 90 deletions(-)
+ package/gptfdisk/0001-ldlibs.patch | 31 ------------------------------
+ package/gptfdisk/gptfdisk.hash     | 10 +++++-----
+ package/gptfdisk/gptfdisk.mk       |  2 +-
+ 3 files changed, 6 insertions(+), 37 deletions(-)
+ delete mode 100644 package/gptfdisk/0001-ldlibs.patch
 
-diff --git a/package/dropwatch/0001-Fix-build-on-32-bit-systems.patch b/package/dropwatch/0001-Fix-build-on-32-bit-systems.patch
+diff --git a/package/gptfdisk/0001-ldlibs.patch b/package/gptfdisk/0001-ldlibs.patch
 deleted file mode 100644
-index 355a01c99f..0000000000
---- a/package/dropwatch/0001-Fix-build-on-32-bit-systems.patch
+index ca1d7fbfea..0000000000
+--- a/package/gptfdisk/0001-ldlibs.patch
 +++ /dev/null
-@@ -1,87 +0,0 @@
--From 3004f23d38400cd4a8619bcacd55a625d3bd7e1f Mon Sep 17 00:00:00 2001
--From: Alexander Dahl <post@lespocky.de>
--Date: Fri, 13 Mar 2020 13:20:27 +0100
--Subject: [PATCH] Fix build on 32-bit systems
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,31 +0,0 @@
+-Add $(LDLIBS) support to enable clean static builds (for libintl).
 -
--Because -Werror is set, some printf statements caused build errors on
--32-bit systems when printing uint64_t. This can be handled in a portable
--way by using the macros from inttypes.h ???
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--Fixes: #12
--Signed-off-by: Alexander Dahl <post@lespocky.de>
-----
--PR upstream: https://github.com/nhorman/dropwatch/pull/24
-----
-- src/dwdump.c | 3 ++-
-- src/main.c   | 9 +++++----
-- 2 files changed, 7 insertions(+), 5 deletions(-)
--
--diff --git a/src/dwdump.c b/src/dwdump.c
--index 0c3ba6f..0ea9fd0 100644
----- a/src/dwdump.c
--+++ b/src/dwdump.c
--@@ -3,6 +3,7 @@
--  */
+-diff -Nura gptfdisk-0.8.10.orig/Makefile gptfdisk-0.8.10/Makefile
+---- gptfdisk-0.8.10.orig/Makefile	2015-05-01 08:45:14.667748141 -0300
+-+++ gptfdisk-0.8.10/Makefile	2015-05-01 08:45:42.685699419 -0300
+-@@ -14,19 +14,19 @@
+- all:	cgdisk gdisk sgdisk fixparts
 - 
-- #include <errno.h>
--+#include <inttypes.h>
-- #include <getopt.h>
-- #include <pcap.h>
-- #include <signal.h>
--@@ -246,7 +247,7 @@ static void dwdump_nested_stats_print(struct nlattr *attr)
-- 		return;
+- gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
+--	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
+-+	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid $(LDLIBS) -o gdisk
+- #	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
 - 
-- 	if (attrs[NET_DM_ATTR_STATS_DROPPED])
---		printf("Tail dropped: %lu\n",
--+		printf("Tail dropped: %" PRIu64 "\n",
-- 		       nla_get_u64(attrs[NET_DM_ATTR_STATS_DROPPED]));
-- }
+- cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
+--	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw -o cgdisk
+-+	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncursesw $(LDLIBS) -o cgdisk
+- #	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
 - 
--diff --git a/src/main.c b/src/main.c
--index 1a1515c..bd87085 100644
----- a/src/main.c
--+++ b/src/main.c
--@@ -10,6 +10,7 @@
-- #include <stdlib.h>
-- #include <stdio.h>
-- #include <errno.h>
--+#include <inttypes.h>
-- #include <signal.h>
-- #include <stdint.h>
-- #include <stdbool.h>
--@@ -486,9 +487,9 @@ void handle_dm_packet_alert_msg(struct netlink_message *msg, int err)
-- 		goto out_free;
+- sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
+--	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
+-+	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt $(LDLIBS) -o sgdisk
+- #	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
 - 
-- 	if (attrs[NET_DM_ATTR_PC] && attrs[NET_DM_ATTR_SYMBOL])
---		printf("drop at: %s (%p)\n",
--+		printf("drop at: %s (0x%" PRIx64 ")\n",
-- 		       nla_get_string(attrs[NET_DM_ATTR_SYMBOL]),
---		       (void *) nla_get_u64(attrs[NET_DM_ATTR_PC]));
--+		       nla_get_u64(attrs[NET_DM_ATTR_PC]));
-- 	else if (attrs[NET_DM_ATTR_HW_TRAP_GROUP_NAME] &&
-- 		 attrs[NET_DM_ATTR_HW_TRAP_NAME])
-- 		printf("drop at: %s (%s)\n",
--@@ -524,7 +525,7 @@ void handle_dm_packet_alert_msg(struct netlink_message *msg, int err)
+- fixparts: $(MBR_LIB_OBJS) fixparts.o
+--	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
+-+	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) $(LDLIBS) -o fixparts
 - 
-- 		tstr = asctime(tm);
-- 		tstr[strlen(tstr) - 1] = 0;
---		printf("timestamp: %s %09ld nsec\n", tstr, ts % 1000000000);
--+		printf("timestamp: %s %09" PRId64 " nsec\n", tstr, ts % 1000000000);
-- 	}
-- 
-- 	if (attrs[NET_DM_ATTR_PROTO])
--@@ -599,7 +600,7 @@ void print_nested_stats(struct nlattr *attr)
-- 		return;
-- 
-- 	if (attrs[NET_DM_ATTR_STATS_DROPPED])
---		printf("Tail dropped: %lu\n",
--+		printf("Tail dropped: %" PRIu64 "\n",
-- 		       nla_get_u64(attrs[NET_DM_ATTR_STATS_DROPPED]));
-- }
-- 
---- 
--2.20.1
--
-diff --git a/package/dropwatch/dropwatch.hash b/package/dropwatch/dropwatch.hash
-index e4b687ae75..867a7f12fb 100644
---- a/package/dropwatch/dropwatch.hash
-+++ b/package/dropwatch/dropwatch.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a2049a68d2cc2f81df977c7a732f50de3ec71283bc7bd94389ba33574af9aaa6  dropwatch-1.5.2.tar.gz
--sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-+sha256  b748b66a816c1f94531446c0451da5461a4a31b0949244bb867d741c6ac0148b  dropwatch-1.5.3.tar.gz
-+sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
-index 4cebe041db..36608ad8b3 100644
---- a/package/dropwatch/dropwatch.mk
-+++ b/package/dropwatch/dropwatch.mk
+- lint:	#no pre-reqs
+- 	lint $(SRCS)
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index 0e52d9917f..bff17dcc21 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,6 +1,6 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.4/
+-md5 5ecc3c44913bb6b53d3708d1ac7ac295  gptfdisk-1.0.4.tar.gz
+-sha1 4c2d60bedd4eac1014727e3b126de96966205410  gptfdisk-1.0.4.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.5/
++md5  58dac67c85e46ca87b587231549aefe6  gptfdisk-1.0.5.tar.gz
++sha1  b642aa628cbc9fa63e9a73dad5acc588042527ac  gptfdisk-1.0.5.tar.gz
+ # Locally computed
+-sha256 b663391a6876f19a3cd901d862423a16e2b5ceaa2f4a3b9bb681e64b9c7ba78d  gptfdisk-1.0.4.tar.gz
+-sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
++sha256  0e7d3987cd0488ecaf4b48761bc97f40b1dc089e5ff53c4b37abe30bc67dcb2f  gptfdisk-1.0.5.tar.gz
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index afe4a72886..e848837b76 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPWATCH_VERSION = 1.5.2
-+DROPWATCH_VERSION = 1.5.3
- DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
- DROPWATCH_DEPENDENCIES = libnl readline libpcap host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- DROPWATCH_LICENSE = GPL-2.0+
+-GPTFDISK_VERSION = 1.0.4
++GPTFDISK_VERSION = 1.0.5
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPL-2.0+
+ GPTFDISK_LICENSE_FILES = COPYING
+-- 
+2.26.2
