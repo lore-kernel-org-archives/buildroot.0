@@ -1,65 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Jun 2020 23:39:21 +0200
-Subject: [Buildroot] [PATCH=2020.02.x] package/redis: bump version to 5.0.9
-Message-ID: <20200621213921.11923-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jun 2020 23:42:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nginx: add support for slice module
+Message-ID: <20200621214227.1824098-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a critical issue related to streams. From the release notes:
+slice module is available since version 1.9.8 and
+https://github.com/nginx/nginx/commit/8ba626ccd71cbd704c7c69928d1d6fe58fd0445f
 
-================================================================================
-Redis 5.0.9     Released Thu Apr 17 12:41:00 CET 2020
-================================================================================
-
-Upgrade urgency:CRITICAL if you use Streams with AOF ore replicas.
-                Otherwise the upgrade urgency is LOW.
-
-This release has a speed improvement and a critical fix:
-
-    * FIX: XREADGROUP when fetching data in a blocking way, would not
-           emit the XCLAIM in the AOF file and to replicas. This means
-           that the last ID is not updated, and that restarting the server
-           will have the effect of reprocessing some entries.
-    * NEW: Clients blocked on the same key are now unblocked on
-           O(1) time. Backported from Redis 6.
-
-Commits:
-
-    1fc8ef81a Fix XCLAIM propagation in AOF/replicas for blocking XREADGROUP.
-    a5e24eabc Speedup: unblock clients on keys in O(1).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nginx/Config.in | 5 +++++
+ package/nginx/nginx.mk  | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index ee15b75e08..7fd6f1b0df 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 f3c7eac42f433326a8d981b50dba0169fdfaf46abb23fcda2f933a7552ee4ed7  redis-5.0.8.tar.gz
-+sha256 53d0ae164cd33536c3d4b720ae9a128ea6166ebf04ff1add3b85f1242090cb85  redis-5.0.9.tar.gz
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 0dbeaae2ff..52711b1de3 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -134,6 +134,11 @@ config BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE
+ 	help
+ 	  Enable ngx_http_degradation_module
  
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index d3954d87ca..baef2e235f 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 5.0.8
-+REDIS_VERSION = 5.0.9
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
++config BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE
++	bool "ngx_http_slice_module"
++	help
++	  Enable ngx_http_slice_module
++
+ config BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE
+ 	bool "ngx_http_stub_status_module"
+ 	help
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index c675d38ab4..0c81c63d13 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -175,6 +175,7 @@ NGINX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_AUTH_REQUEST_MODULE),--with-http_auth_request_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_RANDOM_INDEX_MODULE),--with-http_random_index_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE),--with-http_degradation_module) \
++	$(if $(BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE),--with-http_slice_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE),--with-http_stub_status_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_CHARSET_MODULE),,--without-http_charset_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_SSI_MODULE),,--without-http_ssi_module) \
 -- 
-2.20.1
+2.26.2
