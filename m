@@ -1,34 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 21 Jun 2020 07:18:25 +0000
-Subject: [Buildroot] [Bug 12986] Mtools: Error converting to codepage 850
-In-Reply-To: <bug-12986-163@https.bugs.busybox.net/>
-References: <bug-12986-163@https.bugs.busybox.net/>
-Message-ID: <bug-12986-163-7eluGNp2zn@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Jun 2020 09:19:25 +0200
+Subject: [Buildroot] [git commit] package/nginx: remove ipv6 option
+Message-ID: <20200621071733.72EEB82975@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12986
+commit: https://git.buildroot.net/buildroot/commit/?id=963e7c717fc8a5cc427e793e120d5189013cac81
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Remove --with-ipv6 as this option does nothing since version 1.11.5 and
+https://github.com/nginx/nginx/commit/2c84f7af2c97a55bf138a5fcedeb164733dc9bea
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998 at free.fr
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/nginx/nginx.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Melanie, All,
-
-Thanks for the report. This is now supposedly fixed with the
-patch from Fabrice, applied as commit ac4a61e0ea.
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 9bbb3fc201..0ceed7857f 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -14,8 +14,7 @@ NGINX_CONF_OPTS = \
+ 	--crossbuild=Linux::$(BR2_ARCH) \
+ 	--with-cc="$(TARGET_CC)" \
+ 	--with-cpp="$(TARGET_CC)" \
+-	--with-ld-opt="$(TARGET_LDFLAGS)" \
+-	--with-ipv6
++	--with-ld-opt="$(TARGET_LDFLAGS)"
+ 
+ # www-data user and group are used for nginx. Because these user and group
+ # are already set by buildroot, it is not necessary to redefine them.
