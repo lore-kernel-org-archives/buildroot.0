@@ -1,49 +1,80 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Jun 2020 23:42:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: add support for slice module
-Message-ID: <20200621214227.1824098-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Jun 2020 23:43:15 +0200
+Subject: [Buildroot] [PATCH] pru-software-suppoer: bump to latest
+ version 5.7.0
+In-Reply-To: <20200611011226.581262-1-ashcharles@gmail.com>
+References: <20200611011226.581262-1-ashcharles@gmail.com>
+Message-ID: <20200621214315.GS2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-slice module is available since version 1.9.8 and
-https://github.com/nginx/nginx/commit/8ba626ccd71cbd704c7c69928d1d6fe58fd0445f
+Ash, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/nginx/Config.in | 5 +++++
- package/nginx/nginx.mk  | 1 +
- 2 files changed, 6 insertions(+)
+Typo in the commit title: s/suppoer/support/
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 0dbeaae2ff..52711b1de3 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -134,6 +134,11 @@ config BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE
- 	help
- 	  Enable ngx_http_degradation_module
- 
-+config BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE
-+	bool "ngx_http_slice_module"
-+	help
-+	  Enable ngx_http_slice_module
-+
- config BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE
- 	bool "ngx_http_stub_status_module"
- 	help
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index c675d38ab4..0c81c63d13 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -175,6 +175,7 @@ NGINX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_AUTH_REQUEST_MODULE),--with-http_auth_request_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_RANDOM_INDEX_MODULE),--with-http_random_index_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE),--with-http_degradation_module) \
-+	$(if $(BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE),--with-http_slice_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE),--with-http_stub_status_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_CHARSET_MODULE),,--without-http_charset_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_SSI_MODULE),,--without-http_ssi_module) \
+On 2020-06-10 21:12 -0400, Ash Charles spake thusly:
+> Update to the latest version of the PRU software support [1].
+> 
+> [1] https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package
+> 
+> Signed-off-by: Ash Charles <ashcharles@gmail.com>
+> ---
+>  package/pru-software-support/pru-software-support.hash | 2 +-
+>  package/pru-software-support/pru-software-support.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+> index 9deb3e6661..25c4c305e8 100644
+> --- a/package/pru-software-support/pru-software-support.hash
+> +++ b/package/pru-software-support/pru-software-support.hash
+> @@ -1,3 +1,3 @@
+>  # Locally-calculated hash
+> -sha256  d6d1f76ab5a50dbdf1dff834b271f9d3ffa7424e4d9615e00713f3f81ed5787e  pru-software-support-package-v5.6.0.tar.gz
+> +sha256  57e47128dc5437c5a64d4ef94f419d9ea38e894c0c31ab10cad99c0da614b296  pru-software-support-package-v5.7.0.tar.gz
+>  sha256  a68530804624227e4f2e007eacb5c2d616695426082e895ee1e2d77d3833f5f7  PRU-Package-v6.0-Manifest.html
+
+The license file has chamged, too: it has been at least renamed, and
+maybe its content has changed. You can check with:
+
+    $ make pru-software-support-legla-info
+
+Care to respin with the license hash fixed, please? Do not forget to
+explain, in the commit log, what changed about the licensing terms
+(even if only for the copyright year)
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+> index b56ac0af12..8c7156316b 100644
+> --- a/package/pru-software-support/pru-software-support.mk
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -PRU_SOFTWARE_SUPPORT_VERSION = 5.6.0
+> -# https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot/pru-software-support-package-5.6.0.tar.gz
+> +PRU_SOFTWARE_SUPPORT_VERSION = 5.7.0
+> +# https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot/pru-software-support-package-5.7.0.tar.gz
+>  PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot
+>  PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-package-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
+>  PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
