@@ -1,64 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Jun 2020 21:41:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/udpcast: bump to version 20200328
-Message-ID: <20200621194136.1647222-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Jun 2020 21:48:41 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/python-validators: fix license
+Message-ID: <20200621194842.25539-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch (not needed anymore) as console.h has been updated with:
- #if HAVE_SYS_SELECT_H
- #include <sys/select.h>
- #endif
+The LICENSE file is MIT, not BSD.  The confusion comes from the license info
+in setup.py, which stated BSD until (post-0.14.2):
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://github.com/kvesteri/validators/commit/669129a3d3eb106e1b2d82bd9911faebb3287db6
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/udpcast/0001-select-h.patch | 11 -----------
- package/udpcast/udpcast.hash        |  2 +-
- package/udpcast/udpcast.mk          |  2 +-
- 3 files changed, 2 insertions(+), 13 deletions(-)
- delete mode 100644 package/udpcast/0001-select-h.patch
+ package/python-validators/python-validators.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/udpcast/0001-select-h.patch b/package/udpcast/0001-select-h.patch
-deleted file mode 100644
-index 9a8cfc9d5e..0000000000
---- a/package/udpcast/0001-select-h.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- udpcast-20120424/console.h	2005-12-22 22:59:18.000000000 +0000
--+++ udpcast-20120424.mod/console.h	2013-05-22 22:22:19.835474140 +0100
--@@ -6,6 +6,8 @@
-- #include <winbase.h>
-- #endif /* __MINGW32__ */
-- 
--+#include <sys/select.h>
--+
-- #define prepareConsole udpc_prepareConsole
-- #define getConsoleFd udpc_getConsoleFd
-- #define restoreConsole udpc_restoreConsole
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-index a70aa71981..9cdce0a286 100644
---- a/package/udpcast/udpcast.hash
-+++ b/package/udpcast/udpcast.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a  udpcast-20120424.tar.gz
-+sha256  9c19eebaa6e2f78127f0d59e95d0ce003b687d61e283b5963a1da6b8ac41f21a  udpcast-20200328.tar.gz
- sha256  422befd3503b1f39a6027017f639874c1f274e37ec60ba3174894646b584ccbc  COPYING
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index e9116d2de0..34ebddd2d5 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
+index e24ce35fdd..594c1d26e5 100644
+--- a/package/python-validators/python-validators.mk
++++ b/package/python-validators/python-validators.mk
+@@ -8,7 +8,7 @@ PYTHON_VALIDATORS_VERSION = 0.14.2
+ PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
+ PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/4d/56/9b48c918ef118ea12b90f227c4498ed4703b418bdd8fb49479dfcbeae4ef
+ PYTHON_VALIDATORS_SETUP_TYPE = setuptools
+-PYTHON_VALIDATORS_LICENSE = BSD
++PYTHON_VALIDATORS_LICENSE = MIT
+ PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
  
--UDPCAST_VERSION = 20120424
-+UDPCAST_VERSION = 20200328
- UDPCAST_SITE = http://www.udpcast.linux.lu/download
- UDPCAST_DEPENDENCIES = host-m4
- UDPCAST_LICENSE = BSD-2-Clause, GPL-2.0+
+ $(eval $(python-package))
 -- 
-2.26.2
+2.20.1
