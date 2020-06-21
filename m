@@ -1,114 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Jun 2020 22:02:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/irrlicht: fix libraries linking
-In-Reply-To: <20200621131038.1031282-1-b.bilas@grinn-global.com>
-References: <20200621131038.1031282-1-b.bilas@grinn-global.com>
-Message-ID: <20200621200215.GG2351@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Jun 2020 22:18:48 +0200
+Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
+ version 20200616
+Message-ID: <20200621201849.30819-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bartosz, All,
+Contains mitigations for the Special Register Buffer Data Sampling
+(CVE-2020-0543), Vector Register Sampling (CVE-2020-0548) and L1D
+Eviction Sampling (CVE-2020-0549) hardware vulnerabilities.
 
-On 2020-06-21 15:10 +0200, Bartosz Bilas spake thusly:
-> Fixes:
->  /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XSetSelectionOwner'
-[--SNIP--]
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-[--SNIP--]
-> +diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
-> +index 9a1bdbc..85eb264 100644
-> +--- a/source/Irrlicht/Makefile
-> ++++ b/source/Irrlicht/Makefile
-> +@@ -88,7 +88,7 @@ STATIC_LIB = libIrrlicht.a
-> + LIB_PATH = ../../lib/$(SYSTEM)
-> + INSTALL_DIR = /usr/local/lib
-> + sharedlib install: SHARED_LIB = libIrrlicht.so
-> +-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
-> ++sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+For more details, see the advisories:
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00320.html
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00329.html
 
-That's definitely incorrect: we do not want to use a library path that
-points to the host system libraries.
+Adjust the license hash for a change of copyright year:
+-Copyright (c) 2018-2019 Intel Corporation.
++Copyright (c) 2018-2020 Intel Corporation.
 
-I wonder why our paranoid wrapper does not catches that... :-/
-So far, it would not catch it, because the LDFLAGS are from the command
-line, so the -L/usr/X11R6/lib is not used. But with your patch, it would
-be used now...
+And adjust the .hash file to use two spaces.
 
-> + staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/intel-microcode/intel-microcode.hash | 4 ++--
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ditto, we do not want to use include paths that points to the host
-system headers.
-
-Ah, I got it now: the wrapper only checks for a select list of known
-host paths, but neither /usr/X11R6/include nor /usr/X11R6/lib are in
-that list...
-
-But now I see that your second patch does fix that for the linker, but
-that's not our paranoid wrapper doing the check, but really the
-cross linker ld.
-
-Sigh... We need to expand our wrapper with those two paths...
-
-Anyway: you should merge the two patches together into a single one, and
-explain the above in thecommit log.
-
-Also, could you investigate removing the CXXINCS += -I/usr/X11R6/include
-line too? Normally, we should have the proper search paths already.
-
-Oh, and one last point: in a post-commit message (after the --- line),
-add a note that irrlicht uses CRLF line endings, and that the patch
-will have to be fixed when applying, because patchwork drops all the
-CR and keeps on LF.
-
-Care to respin, please?
-
-In the meantime, I'll send a patch to extend the list of unsafe paths in
-our toolchain wrapper...
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> + #OSX specific options
-> +-- 
-> +2.27.0
-> +
-> diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
-> index bd82815cde..e12d802ee7 100644
-> --- a/package/irrlicht/irrlicht.mk
-> +++ b/package/irrlicht/irrlicht.mk
-> @@ -38,12 +38,14 @@ ifeq ($(BR2_STATIC_LIBS),)
->  IRRLICHT_CONF_OPTS += sharedlib
->  endif
->  
-> +# set correct path for libraries linking
-> +IRRLICHT_CONF_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib"
->  # Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
->  # While linking an application with libIrrlicht.so, we get an undefined reference to
->  # png_init_filter_functions_neon.
->  # Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
->  # so disable NEON support completely.
-> -IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
-> +IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0 -I$(STAGING_DIR)/usr/include/X11"
->  
->  define IRRLICHT_BUILD_CMDS
->  	$(TARGET_MAKE_ENV)
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index f9fce28b2d..e8005bcff6 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 0000f7cf96f2b07a1ba9d1fc0bcfcb49d0edb91f7d487a57a88c147e57c5873b  intel-microcode-20191112.tar.gz
+-sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
++sha256  eb4f939421ac6cdea3c586c9d984ec518320f00c07eb2b3d6754309c83c93371  intel-microcode-20200616.tar.gz
++sha256  d9e989e1a7747f3ce93cb749aceca67a430d36c9bebc6e3205e0b3af3ca6304b  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index f3d05d5f58..043367770b 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MICROCODE_VERSION = 20191112
++INTEL_MICROCODE_VERSION = 20200616
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
