@@ -1,64 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Jun 2020 12:38:06 +0200
-Subject: [Buildroot] [PATCH 23/23] package/kodi-pvr-zattoo: fix dependencies
-In-Reply-To: <20200621103806.616133-1-bernd.kuhls@t-online.de>
-References: <20200621103806.616133-1-bernd.kuhls@t-online.de>
-Message-ID: <20200621103806.616133-23-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Jun 2020 12:41:38 +0200
+Subject: [Buildroot] [PATCH] more about package managers
+In-Reply-To: <20200621082017.182812-1-francois.perrad@gadz.org>
+References: <20200621082017.182812-1-francois.perrad@gadz.org>
+Message-ID: <20200621104138.GD2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package depends on rapidjson, not rapidxml:
-https://github.com/rbuehlma/pvr.zattoo/blob/Leia/CMakeLists.txt#L10
+Fran?ois, All,
 
-The bug was previously not noticed because kodi depends on rapidjson
-https://github.com/xbmc/xbmc/blob/Leia/CMakeLists.txt#L133
-and kodi-platform depends on kodi
-https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L8
+On 2020-06-21 10:20 +0200, Francois Perrad spake thusly:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 85d732636..a938b0d8d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2253,6 +2253,7 @@ comment "http://buildroot.org/manual.html#faq-no-binary-packages"
+>  comment "-------------------------------------------------------"
+>  	source "package/opkg/Config.in"
+>  	source "package/rpm/Config.in"
+> +comment "BusyBox could supply its own version of dpkg and rpm."
 
-The reverse dependency of rapidjson to BR2_INSTALL_LIBSTDCPP is not
-added here because kodi is written in C++ and provides the dependency.
+We do not have similar comments elsewhere in the tree. People that want
+the full-blown rpm or dpkg will have to do like we do for all other
+packages that are provided by busybox: enable BR2_PACKAGE_BUSYBOX_SHOW_OTHERS.
 
-Also add kodi as explicit dependency:
-https://github.com/rbuehlma/pvr.zattoo/blob/Leia/CMakeLists.txt#L7
+If you were concerned that the menu is empty without
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, then it is not: thetre is at least opkg
+or its dependency comment.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-zattoo/Config.in          | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
-index ab7ff70034..5dfadcadd1 100644
---- a/package/kodi-pvr-zattoo/Config.in
-+++ b/package/kodi-pvr-zattoo/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_KODI_PVR_ZATTOO
- 	bool "kodi-pvr-zattoo"
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_RAPIDXML
-+	select BR2_PACKAGE_RAPIDJSON
- 	select BR2_PACKAGE_TINYXML2
- 	help
- 	  Kodi PVR-Addon for Zattoo
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 14ac22db50..3644751034 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -8,6 +8,11 @@ KODI_PVR_ZATTOO_VERSION = 18.1.19-Leia
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
--KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidxml tinyxml2
-+KODI_PVR_ZATTOO_DEPENDENCIES = \
-+	kodi \
-+	kodi-platform \
-+	libplatform \
-+	rapidjson \
-+	tinyxml2
- 
- $(eval $(cmake-package))
+>  endmenu
+>  
+>  menu "Real-Time"
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
