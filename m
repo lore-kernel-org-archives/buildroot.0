@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jun 2020 11:12:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-screensaver-matrixtrails:
- bump version to 2.2.3
-In-Reply-To: <20200621145130.2262-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 21 Jun 2020 16:51:30 +0200")
-References: <20200621145130.2262-1-bernd.kuhls@t-online.de>
-Message-ID: <87a70v8nwt.fsf@dell.be.48ers.dk>
+Date: Mon, 22 Jun 2020 11:06:16 +0200
+Subject: [Buildroot] [git commit] package/libxmlrpc: add openssl optional
+ dependency
+Message-ID: <20200622091030.350B584034@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=32844dfd99e021e9c24b4dbc726d39ffae291b50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Removed patch which was applied upstream.
- > Updated license hash due to copyright year update:
- > https://github.com/xbmc/screensaver.matrixtrails/commit/c2fdf919cfa04de45ad213da7645ea435547266d
+Without this patch, openssl_abyss is enabled if openssl is built before
+libxmlrpc
 
- > Removed "v" from _SITE due to changes to github release names.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libxmlrpc/libxmlrpc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index 54db9f1f89..f9925b74ca 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -39,6 +39,13 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBXMLRPC_STATIC_OPTS = SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
+ endif
  
- > -KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.1-Leia
- > -KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- > +KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.3-Leia
- > +KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- >  KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- >  KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = debian/copyright
- >  KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi
-
-Notice: The patch didn't apply because we have kodi libsoil in
-_DEPENDENCIES.
-
-Local changes? Is libsoil no longer needed?
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBXMLRPC_DEPENDENCIES = host-pkgconf openssl
++LIBXMLRPC_CONF_OPTS = --enable-abyss-openssl
++else
++LIBXMLRPC_CONF_OPTS = --disable-abyss-openssl
++endif
++
+ LIBXMLRPC_MAKE_OPTS += $(LIBXMLRPC_STATIC_OPTS)
+ LIBXMLRPC_INSTALL_STAGING_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
+ 	DESTDIR=$(STAGING_DIR) install
