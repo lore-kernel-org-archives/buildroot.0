@@ -1,48 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 22:51:21 +0200
-Subject: [Buildroot] [git commit] package/apitrace: fix microblaze build
- failure
-Message-ID: <20200622204926.F2985840C2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 22 Jun 2020 22:52:09 +0200
+Subject: [Buildroot] [git commit] package/libxmlrpc: fix check-package
+ warnings
+Message-ID: <20200622205033.25DBF840C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce053a2004d089b3080a750496b3b3b21bcc224d
+commit: https://git.buildroot.net/buildroot/commit/?id=92d73f31b2ffdbbdb7049a9c25669c973766d7f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Apitrace is affected by Gcc Bug 68485 that has already been worked
-around, but after version bumping, CMakeLists.txt adds -O2 to
-CMAKE_C_FLAGS_RELWITHDEBINFO that is in order appended to
-CMAKE_C_FLAGS, making -O0 end appending to fail. To prevent this we
-need to avoid CMAKE_C_FLAGS_RELWITHDEBINFO to be appended to
-CMAKE_C_FLAGS, so let's do the same as flare-engine package that set
-CMAKE_BUILD_TYPE to a fake build type called "buildroot", this way -O2
-won't be appended after -O0 and work around restart to work as
-expected.
+Assignment in conditional blocks must use append-assignment.
 
-Fixes:
-http://autobuild.buildroot.net/results/2e3/2e31abd7b115d4c29117ca82007fd4f87f853ff7/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/apitrace/apitrace.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libxmlrpc/libxmlrpc.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
-index e4e6c41fed..b962ac01d3 100644
---- a/package/apitrace/apitrace.mk
-+++ b/package/apitrace/apitrace.mk
-@@ -27,6 +27,10 @@ APITRACE_CXXFLAGS = $(TARGET_CXXFLAGS)
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- # This works around embedded Brotli build failure
- APITRACE_CFLAGS += -O0
-+# CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
-+# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS.
-+# Override CMAKE_BUILD_TYPE so no overrides are applied.
-+APITRACE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index f9925b74ca..4b30ecd381 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -40,10 +40,10 @@ LIBXMLRPC_STATIC_OPTS = SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
  endif
  
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBXMLRPC_DEPENDENCIES = host-pkgconf openssl
+-LIBXMLRPC_CONF_OPTS = --enable-abyss-openssl
++LIBXMLRPC_DEPENDENCIES += host-pkgconf openssl
++LIBXMLRPC_CONF_OPTS += --enable-abyss-openssl
+ else
+-LIBXMLRPC_CONF_OPTS = --disable-abyss-openssl
++LIBXMLRPC_CONF_OPTS += --disable-abyss-openssl
+ endif
+ 
+ LIBXMLRPC_MAKE_OPTS += $(LIBXMLRPC_STATIC_OPTS)
