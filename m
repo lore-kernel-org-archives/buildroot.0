@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 22:45:45 +0200
-Subject: [Buildroot] [PATCH 1/4] package/nginx: add stream map option
-In-Reply-To: <20200622193114.291257-1-fontaine.fabrice@gmail.com>
-References: <20200622193114.291257-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200622224545.38c8515a@windsurf.home>
+Date: Mon, 22 Jun 2020 22:45:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.7.10
+In-Reply-To: <20200622195456.269691-1-asafka7@gmail.com>
+References: <20200622195456.269691-1-asafka7@gmail.com>
+Message-ID: <20200622224550.19107797@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Jun 2020 21:31:11 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 22 Jun 2020 22:54:56 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> stream map module has been added in version 1.11.3 with
-> https://github.com/nginx/nginx/commit/05db6ddfa1ca120c1c348cc750acded2a01b090a
-> and is enabled by default, add an option to be able to disable it
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  package/nginx/Config.in | 6 ++++++
->  package/nginx/nginx.mk  | 1 +
->  2 files changed, 7 insertions(+)
+>  package/ccache/ccache.hash | 2 +-
+>  package/ccache/ccache.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-All applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
