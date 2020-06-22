@@ -1,61 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 21:11:58 +0200
-Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.12
-Message-ID: <20200622191618.B24D38152B@busybox.osuosl.org>
+Date: Mon, 22 Jun 2020 21:26:42 +0200
+Subject: [Buildroot] [PATCH v2] package/irrlicht: fix libraries linking
+In-Reply-To: <20200622184515.312030-1-b.bilas@grinn-global.com>
+References: <20200622184515.312030-1-b.bilas@grinn-global.com>
+Message-ID: <20200622212642.1be946f3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b324450ef9baadd4b57b7216c583d9ee2b5d74a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 22 Jun 2020 20:45:15 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-This includes the following changes:
+>  .../0003-makefile-override-LDFLAGS.patch      | 29 ++++++++++++++++
+>  ...obsolete-X11R6-lib-include-directori.patch | 33 +++++++++++++++++++
+>  package/irrlicht/irrlicht.mk                  |  4 ++-
+>  3 files changed, 65 insertions(+), 1 deletion(-)
+>  create mode 100644 package/irrlicht/0003-makefile-override-LDFLAGS.patch
+>  create mode 100644 package/irrlicht/0004-makefile-remove-obsolete-X11R6-lib-include-directori.patch
+> 
+> diff --git a/package/irrlicht/0003-makefile-override-LDFLAGS.patch b/package/irrlicht/0003-makefile-override-LDFLAGS.patch
+> new file mode 100644
+> index 0000000000..16c38d5baa
+> --- /dev/null
+> +++ b/package/irrlicht/0003-makefile-override-LDFLAGS.patch
+> @@ -0,0 +1,29 @@
+> +From f597ac417f0eefab8f388afe617a0d07d08d87bb Mon Sep 17 00:00:00 2001
+> +From: Bartosz Bilas <b.bilas@grinn-global.com>
+> +Date: Sun, 21 Jun 2020 12:57:47 +0200
+> +Subject: [PATCH] makefile: override LDFLAGS
+> +
+> +That's needed to fix proper linking to X11 libraries
+> +within package makefile.
+> +
+> +Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> +---
+> + source/Irrlicht/Makefile | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
+> +index 9a1bdbc..85eb264 100644
+> +--- a/source/Irrlicht/Makefile
+> ++++ b/source/Irrlicht/Makefile
+> +@@ -88,7 +88,7 @@ STATIC_LIB = libIrrlicht.a
+> + LIB_PATH = ../../lib/$(SYSTEM)
+> + INSTALL_DIR = /usr/local/lib
+> + sharedlib install: SHARED_LIB = libIrrlicht.so
+> +-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+> ++sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
 
-9adede5 Bumped version to 1.9.12
-7487642 Merge pull request #40 from PrinterFranklin/fix_memory_leak
-cbef34b fix a memory leak in havege_destroy
-02674ae Updated ChangeLog
-1ce2092 Update README.md
-b77e7db Create README.md
-f5bd6fa Updated version to v1.9.11
-68b1d84 Merge branch 'master' of https://github.com/jirka-h/haveged
-fb12bb3 updated fedora.spec
-b162c91 Merge pull request #35 from eworm-de/private-tmp
-b839803 Merge pull request #34 from Chocobo1/gh_action
-4a0a008 Replace @SBIN_DIR@ in haveged.service file with actual path
-c216a6f Moved haveged.spec to fedora.spec
-2098470 fix ordering cycle with private tmp
-7cd68e1 Add GitHub Actions continuous integration script
-ebe97f0 Fixed time format
+Why here are you changing the LDFLAGS to override LDFLAGS.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/haveged/haveged.hash | 2 +-
- package/haveged/haveged.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index 2f1338a6a8..1394b0440a 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  13a0d81bb395c6ebde70a6474452001d9f898d786ddf4872af9f9f96f9e99ded  haveged-1.9.9.tar.gz
-+sha256  0b8642515ea7189a1772cdb8072b98a6768cf9b963faf3cd664329fd79975ffa  haveged-1.9.12.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index 40fa1c7c15..d7b5191a6f 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HAVEGED_VERSION = 1.9.9
-+HAVEGED_VERSION = 1.9.12
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
+> +diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
+> +index fed6c7e..b323237 100644
+> +--- a/source/Irrlicht/Makefile
+> ++++ b/source/Irrlicht/Makefile
+> +@@ -88,8 +88,7 @@ STATIC_LIB = libIrrlicht.a
+> + LIB_PATH = ../../lib/$(SYSTEM)
+> + INSTALL_DIR = /usr/local/lib
+> + sharedlib install: SHARED_LIB = libIrrlicht.so
+> +-sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+> +-staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
+> ++sharedlib: override LDFLAGS += -lGL -lXxf86vm
+
+And here you drop entirely the -L argument ?
+
+Or is it two consecutive patches that have been merged upstream ?
+
+> +# set correct path for libraries linking
+> +IRRLICHT_CONF_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib"
+
+This should not be necessary, STAGING_DIR/usr/lib is already the
+default search path for libraries in the Buildroot cross-compiler.
+Could you test without this ?
+
+>  # Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
+>  # While linking an application with libIrrlicht.so, we get an undefined reference to
+>  # png_init_filter_functions_neon.
+>  # Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
+>  # so disable NEON support completely.
+> -IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
+> +IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0 -I$(STAGING_DIR)/usr/include/X11"
+
+It is a bit weird to have this below the NEON related comment.
+
+Can we change that to:
+
+IRRLICHT_CPPFLAGS = $(TARGET_CPPFLAGS)
+
+# blabla about NEON
+IRRLICHT_CPPFLAGS += -DPNG_ARM_NEON_OPT=0
+
+# blabla about X11 includes
+IRRLICHT_CPPFLAGS += -I$(STAGING_DIR)/usr/include
+
+IRRLICHT_CONF_OPTS += CPPFLAGS="$(IRRLICHT_CPPFLAGS)"
+
+It is a bit sad that they don't use pkg-config, but oh well, we can
+live with this explicit -I flag.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
