@@ -1,43 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 22:44:48 +0200
-Subject: [Buildroot] [git commit] package/ccache: bump to version 3.7.10
-Message-ID: <20200622204309.5069B8429D@busybox.osuosl.org>
+Date: Mon, 22 Jun 2020 22:44:33 +0200
+Subject: [Buildroot] [git commit] package/nginx: add stream geo option
+Message-ID: <20200622204309.3AD9781312@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b943562b492b15f724ac70fb5b39f9722b56a27
+commit: https://git.buildroot.net/buildroot/commit/?id=3e9d985df7010f04b477249add9050ca8497fa29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+stream geo module has been added in version 1.11.3 with
+https://github.com/nginx/nginx/commit/bb790f5d30025b634673fcb9939ded5b0c60301f
+and is enabled by default, add an option to be able to disable it
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nginx/Config.in | 6 ++++++
+ package/nginx/nginx.mk  | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 0bd00e07d0..5d9dfdb46e 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  f893da7543bfb9172bd55e603fcbdfcd83e6def176a28689c13235695b4cf44b  ccache-3.7.9.tar.xz
-+sha256  0c9566d8eafaec2c5e5c0d9a91e921c858fcf349284a105ab524407b9b54ed28  ccache-3.7.10.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 276665c3fc..fd6e741303 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index cad5903882..09af4680ee 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -346,6 +346,12 @@ config BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE
+ 	help
+ 	  Enable ngx_stream_access_module
  
--CCACHE_VERSION = 3.7.9
-+CCACHE_VERSION = 3.7.10
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
++config BR2_PACKAGE_NGINX_STREAM_GEO_MODULE
++	bool "ngx_stream_geo_module"
++	default y
++	help
++	  Enable ngx_stream_geo_module
++
+ config BR2_PACKAGE_NGINX_STREAM_MAP_MODULE
+ 	bool "ngx_stream_map_module"
+ 	default y
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 344d41d410..9fdc53fc2a 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -232,6 +232,7 @@ endif
+ NGINX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE),,--without-stream_limit_conn_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE),,--without-stream_access_module) \
++	$(if $(BR2_PACKAGE_NGINX_STREAM_GEO_MODULE),,--without-stream_geo_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_MAP_MODULE),,--without-stream_map_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_RETURN_MODULE),,--without-stream_return_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_UPSTREAM_HASH_MODULE),,--without-stream_upstream_hash_module) \
