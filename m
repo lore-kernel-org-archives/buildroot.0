@@ -1,23 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jun 2020 11:07:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: add openssl optional
- dependency
-In-Reply-To: <20200622054708.1885805-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 22 Jun 2020 07:47:08 +0200")
-References: <20200622054708.1885805-1-fontaine.fabrice@gmail.com>
-Message-ID: <87imfj8o58.fsf@dell.be.48ers.dk>
+Date: Mon, 22 Jun 2020 11:07:36 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2020.79
+In-Reply-To: <20200622073933.236001-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Mon, 22 Jun 2020 09:39:33 +0200")
+References: <20200622073933.236001-1-francois.perrad@gadz.org>
+Message-ID: <87eeq78o4n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Without this patch, openssl_abyss is enabled if openssl is built before
- > libxmlrpc
+ > CBC ciphers, 3DES and hmac-sha1-96 are now disabled by default.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Do we expect that to cause compatibility issues?
 
 Committed, thanks.
 
