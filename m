@@ -1,59 +1,167 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 22 Jun 2020 22:11:31 +0200
-Subject: [Buildroot] [PATCH v2] package/cegui: select libglu when libgl
- is detected
-In-Reply-To: <20200622220133.0e142645@windsurf.home>
-References: <20200621131832.1036346-1-b.bilas@grinn-global.com>
- <20200622211010.64d5fb7f@windsurf.home>
- <8023dcfc-b52e-0c9b-5221-c6f1c201c7cf@grinn-global.com>
- <20200622220133.0e142645@windsurf.home>
-Message-ID: <dc148604-f0c8-112b-fb4e-ce273297e2ef@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Jun 2020 22:21:40 +0200
+Subject: [Buildroot] [git commit] package/libnids: new package
+Message-ID: <20200622201947.CC9E38227E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22.06.2020 22:01, Thomas Petazzoni wrote:
-> On Mon, 22 Jun 2020 21:37:15 +0200
-> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->
->> No, we wouldn't because libglu is selected only when we have
->> BR2_PACKAGE_HAS_LIBGL option set.
-> libepoxy is a library for handling the load of OpenGL library, and has:
->
->          depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
->
-> So basically, when you have HAS_LIBGL=y, you can have either libepoxy
-> *OR* libglew/libglu used by Irrlicht.
-Oh right, somehow I hadn't seen this line before...
->> Libepoxy doesn't provide it so even if
->> we use glew instead of libepoxy we have to select libglu because cegui
->> directly includes GL/glu.h here ->
->> https://github.com/cegui/cegui/blob/v0-8-7/cegui/include/CEGUI/RendererModules/OpenGL/GL.h#L45
-> That is exactly the code I have pasted below, please see my comments inline.
->
->>> This is confirmed by ./cegui/include/CEGUI/RendererModules/OpenGL/GL.h,
->>> which contains:
->>>
->>> #if defined CEGUI_USE_EPOXY
-> So if the OpenGL loader is libepoxy, we are here...
->
->>> #include <epoxy/gl.h>
->>>
->>> #elif defined CEGUI_USE_GLEW
-> *OR* if the OpenGL loader is glew, we are here, and we indeed include
-> GLU unconditionally.
->
-> So I stand to my position: according to the code, if you're using
-> libepoxy as the OpenGL loader, you don't need Glew, and you don't need
-> GLU.
-I agree with you now, so basically we have to select glu only when glew 
-is used and that should solve the problem discussed...
->
-> Thomas
-Best
-Bartek
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200622/1c36a348/attachment.html>
+commit: https://git.buildroot.net/buildroot/commit/?id=b6ce06cd64b0d85c9065c60fad933c8585730320
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Libnids is a C based networking library, part of networking intrusion
+detection tools.  It can watch network traffic & provide informations.
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+[Thomas:
+ - only needs libpcap as a mandatory dependency
+ - add patch to fix libpcap detection
+ - pass install_root= at installation time
+ - drop glibc dependency, it builds fine with uclibc]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                        |  1 +
+ package/Config.in                                 |  1 +
+ package/libnids/0001-libpcap-use-pkg-config.patch | 48 +++++++++++++++++++++++
+ package/libnids/Config.in                         | 14 +++++++
+ package/libnids/libnids.hash                      |  3 ++
+ package/libnids/libnids.mk                        | 22 +++++++++++
+ 6 files changed, 89 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dc9fa8a718..fb6d4cec64 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1053,6 +1053,7 @@ F:	package/c-icap-modules/
+ F:	package/sdl2/
+ 
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
++F:	package/libnids/
+ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+ F:	package/python-pybind/
+diff --git a/package/Config.in b/package/Config.in
+index dc24921e0f..e2bb004015 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1710,6 +1710,7 @@ menu "Networking"
+ 	source "package/libnfnetlink/Config.in"
+ 	source "package/libnftnl/Config.in"
+ 	source "package/libnice/Config.in"
++	source "package/libnids/Config.in"
+ 	source "package/libnl/Config.in"
+ 	source "package/liboauth/Config.in"
+ 	source "package/liboping/Config.in"
+diff --git a/package/libnids/0001-libpcap-use-pkg-config.patch b/package/libnids/0001-libpcap-use-pkg-config.patch
+new file mode 100644
+index 0000000000..8f8df478d1
+--- /dev/null
++++ b/package/libnids/0001-libpcap-use-pkg-config.patch
+@@ -0,0 +1,48 @@
++configure.in: use pkg-config for libpcap detection
++
++The detection of libpcap was based in ${prefix}, which doesn't make
++sense in a cross-compilation context and can cause host leakage into
++the target build.
++
++So instead, let's use pkg-config to detect libpcap, since it is anyway
++already use in this configure.in to detect libglib.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++
++Index: b/configure.in
++===================================================================
++--- a/configure.in
+++++ b/configure.in
++@@ -75,25 +75,13 @@
++      fi
++      ;;
++   esac ],
++-[ if test -f ${prefix}/include/pcap.h; then
++-     PCAP_CFLAGS="-I${prefix}/include"
++-     PCAPLIB="-L${exec_prefix}/lib -lpcap"
++-  elif test -f /usr/include/pcap/pcap.h; then
++-     PCAP_CFLAGS="-I/usr/include/pcap"
++-     PCAPLIB="-lpcap"
++-  else
++-	TMP=$LIBS
++-	LIBS="-lpcap $LIBS"
++-	AC_TRY_LINK([#include <pcap.h>], pcap_open_offline("",""),
++-	LIBPCAP_FOUND=1,LIBPCAP_FOUND=0)
++-	LIBS=$TMP
++-	if test $LIBPCAP_FOUND = 1 ; then
++-		PCAPLIB="-lpcap"
++-	else
++-		AC_ERROR(libpcap not found)
++-	fi
++-  fi
++-  AC_MSG_RESULT(yes) ]
+++[
+++    PKG_PROG_PKG_CONFIG
+++    PKG_CHECK_MODULES(LIBPCAP, libpcap)
+++    AC_MSG_RESULT(yes)
+++    PCAP_CFLAGS=${LIBPCAP_CFLAGS}
+++    PCAPLIB=${LIBPCAP_LIBS}
+++]
++ )
++ AC_SUBST(PCAP_CFLAGS)
++ AC_SUBST(PCAPLIB)
+diff --git a/package/libnids/Config.in b/package/libnids/Config.in
+new file mode 100644
+index 0000000000..30528f4d07
+--- /dev/null
++++ b/package/libnids/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LIBNIDS
++	bool "libnids"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  Libnids is an implementation of an E-component of Network
++	  Intrusion Detection System.
++
++	  libnids watches all local network traffic, and provides
++	  convenient information on them to perform further analysis.
++
++	  Libnids offers IP defragmentation, TCP stream assembly, TCP
++	  port scan detection.
++
++	  http://libnids.sourceforge.net/
+diff --git a/package/libnids/libnids.hash b/package/libnids/libnids.hash
+new file mode 100644
+index 0000000000..4a2949c39d
+--- /dev/null
++++ b/package/libnids/libnids.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 314b4793e0902fbf1fdb7fb659af37a3c1306ed1aad5d1c84de6c931b351d359  libnids-1.24.tar.gz
++sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+new file mode 100644
+index 0000000000..ee7c71ee88
+--- /dev/null
++++ b/package/libnids/libnids.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# libnids
++#
++################################################################################
++
++LIBNIDS_VERSION = 1.24
++LIBNIDS_SITE = https://sourceforge.net/projects/libnids/files/libnids/$(LIBNIDS_VERSION)
++LIBNIDS_LICENSE = GPL-2.0
++LIBNIDS_LICENSE_FILES = COPYING
++LIBNIDS_INSTALL_STAGING = YES
++LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
++LIBNIDS_AUTORECONF = YES
++LIBNIDS_CONF_OPTS = \
++	--disable-libglib \
++	--disable-libnet
++# hand-written Makefile.in, not using automake, needs a custom
++# variable for the installation path.
++LIBNIDS_INSTALL_STAGING_OPTS = install_prefix=$(STAGING_DIR) install
++LIBNIDS_INSTALL_TARGET_OPTS = install_prefix=$(TARGET_DIR) install
++
++$(eval $(autotools-package))
