@@ -1,47 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 21:12:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haveged: bump to version 1.9.12
-In-Reply-To: <1592848513-14831-1-git-send-email-pjtexier@koncepto.io>
-References: <1592848513-14831-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20200622211208.4bb3371a@windsurf.home>
+Date: Mon, 22 Jun 2020 21:18:12 +0200
+Subject: [Buildroot] [git commit] package/fuse-overlayfs: fix build with musl
+Message-ID: <20200622191618.BB8A38400E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Jun 2020 19:55:13 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e9f7d66f3413c55472c18eacd25ca0e5734194c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This includes the following changes:
-> 
-> 9adede5 Bumped version to 1.9.12
-> 7487642 Merge pull request #40 from PrinterFranklin/fix_memory_leak
-> cbef34b fix a memory leak in havege_destroy
-> 02674ae Updated ChangeLog
-> 1ce2092 Update README.md
-> b77e7db Create README.md
-> f5bd6fa Updated version to v1.9.11
-> 68b1d84 Merge branch 'master' of https://github.com/jirka-h/haveged
-> fb12bb3 updated fedora.spec
-> b162c91 Merge pull request #35 from eworm-de/private-tmp
-> b839803 Merge pull request #34 from Chocobo1/gh_action
-> 4a0a008 Replace @SBIN_DIR@ in haveged.service file with actual path
-> c216a6f Moved haveged.spec to fedora.spec
-> 2098470 fix ordering cycle with private tmp
-> 7cd68e1 Add GitHub Actions continuous integration script
-> ebe97f0 Fixed time format
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  package/haveged/haveged.hash | 2 +-
->  package/haveged/haveged.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/57d/57d6f6bcbf3c0f8761c924f8a69c71dee05dd6c3//
 
-Applied to master, thanks.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-direct.c-fix-compilation-with-musl.patch  | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch b/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
+new file mode 100644
+index 0000000000..17f58c8408
+--- /dev/null
++++ b/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
+@@ -0,0 +1,28 @@
++From 27a01e622e1f26b3c60137c3123c0b667b3f6579 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Mon, 22 Jun 2020 20:48:36 +0300
++Subject: [PATCH] direct.c: fix compilation with musl
++
++Upstream PR status:
++https://github.com/containers/fuse-overlayfs/pull/219
++
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++---
++ direct.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/direct.c b/direct.c
++index 67bed20..39e5c8f 100644
++--- a/direct.c
+++++ b/direct.c
++@@ -25,6 +25,7 @@
++ 
++ #include "fuse-overlayfs.h"
++ 
+++#include "limits.h"
++ #include <unistd.h>
++ #include <fcntl.h>
++ #include <errno.h>
++-- 
++2.26.2
++
