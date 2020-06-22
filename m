@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 22:55:37 +0200
-Subject: [Buildroot] [PATCH] package/apitrace: fix apitrace microblaze
- build failure
-In-Reply-To: <20200610161601.290420-1-giulio.benetti@benettiengineering.com>
-References: <20200610161601.290420-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200622225537.2d4764be@windsurf.home>
+Date: Mon, 22 Jun 2020 22:56:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.6.1
+In-Reply-To: <20200608090442.2265237-1-aperez@igalia.com>
+References: <20200608090442.2265237-1-aperez@igalia.com>
+Message-ID: <20200622225605.79efb518@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Jun 2020 18:16:01 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Mon,  8 Jun 2020 12:04:42 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> Apitrace is affected by Gcc Bug 68485 that has already been worked
-> around, but after version bumping, CMakeLists.txt adds -O2 to
-> CMAKE_C_FLAGS_RELWITHDEBINFO that is in order appended to CMAKE_C_FLAGS,
-> making -O0 end appending to fail. To prevent this we need to avoid
-> CMAKE_C_FLAGS_RELWITHDEBINFO to be appended to CMAKE_C_FLAGS, so let's
-> do the same as flare-engine package that set CMAKE_BUILD_TYPE to a fake
-> build type called "buildroot", this way -O2 won't be appended after -O0
-> and work around restart to work as expected.
+> This update brings in a few build fixes only. In particular the
+> one for EGL implementations which use oddball definitions of the
+> EGLNativeDisplayType type might be needed for some configurations.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/2e3/2e31abd7b115d4c29117ca82007fd4f87f853ff7/
+> Full release notes:
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>   https://wpewebkit.org/release/wpebackend-fdo-1.6.1.html
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/apitrace/apitrace.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+>  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied to master, thanks. I am wondering when this bug will be fixed
-in upstream gcc...
+Applied to master, thanks.
 
 Thomas
 -- 
