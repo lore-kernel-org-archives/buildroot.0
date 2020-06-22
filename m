@@ -1,34 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 22:49:34 +0200
-Subject: [Buildroot] [PATCH 3/3] package/freescale-imx/firmware-imx:
- bump version to 8.6
-In-Reply-To: <20200615130633.19909-3-sebastien.szymanski@armadeus.com>
-References: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>
- <20200615130633.19909-3-sebastien.szymanski@armadeus.com>
-Message-ID: <20200622224934.2dcd3e3b@windsurf.home>
+Date: Mon, 22 Jun 2020 22:51:21 +0200
+Subject: [Buildroot] [git commit] package/apitrace: fix microblaze build
+ failure
+Message-ID: <20200622204926.F2985840C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jun 2020 15:06:33 +0200
-S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ce053a2004d089b3080a750496b3b3b21bcc224d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This package needed to be updated to be aligned with NXP
-> BSP 5.4.3_1.0.0.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
->  package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Apitrace is affected by Gcc Bug 68485 that has already been worked
+around, but after version bumping, CMakeLists.txt adds -O2 to
+CMAKE_C_FLAGS_RELWITHDEBINFO that is in order appended to
+CMAKE_C_FLAGS, making -O0 end appending to fail. To prevent this we
+need to avoid CMAKE_C_FLAGS_RELWITHDEBINFO to be appended to
+CMAKE_C_FLAGS, so let's do the same as flare-engine package that set
+CMAKE_BUILD_TYPE to a fake build type called "buildroot", this way -O2
+won't be appended after -O0 and work around restart to work as
+expected.
 
-Applied to master with a commit extended using the details provided by
-Gary Bisson. Thanks!
+Fixes:
+http://autobuild.buildroot.net/results/2e3/2e31abd7b115d4c29117ca82007fd4f87f853ff7/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/apitrace/apitrace.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
+index e4e6c41fed..b962ac01d3 100644
+--- a/package/apitrace/apitrace.mk
++++ b/package/apitrace/apitrace.mk
+@@ -27,6 +27,10 @@ APITRACE_CXXFLAGS = $(TARGET_CXXFLAGS)
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+ # This works around embedded Brotli build failure
+ APITRACE_CFLAGS += -O0
++# CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
++# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS.
++# Override CMAKE_BUILD_TYPE so no overrides are applied.
++APITRACE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
