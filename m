@@ -1,66 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Jun 2020 22:25:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: add openssl optional
- dependency
-In-Reply-To: <20200622054708.1885805-1-fontaine.fabrice@gmail.com>
-References: <20200622054708.1885805-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200622202508.GT2351@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Jun 2020 22:27:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnids: new package
+In-Reply-To: <20200622105359.31340-1-guillaume.bressaix@gmail.com>
+References: <20200622105359.31340-1-guillaume.bressaix@gmail.com>
+Message-ID: <20200622222743.4643d71d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-06-22 07:47 +0200, Fabrice Fontaine spake thusly:
-> Without this patch, openssl_abyss is enabled if openssl is built before
-> libxmlrpc
+Hello Guillaume,
+
+On Mon, 22 Jun 2020 12:53:59 +0200
+"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+
+> Libnids is a C based networking library,
+> part of networking intrusion detection tools.
+> It can watch network traffic & provide informations.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libxmlrpc/libxmlrpc.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-> index 54db9f1f89..f9925b74ca 100644
-> --- a/package/libxmlrpc/libxmlrpc.mk
-> +++ b/package/libxmlrpc/libxmlrpc.mk
-> @@ -39,6 +39,13 @@ ifeq ($(BR2_STATIC_LIBS),y)
->  LIBXMLRPC_STATIC_OPTS = SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +LIBXMLRPC_DEPENDENCIES = host-pkgconf openssl
-> +LIBXMLRPC_CONF_OPTS = --enable-abyss-openssl
-> +else
-> +LIBXMLRPC_CONF_OPTS = --disable-abyss-openssl
-> +endif
+> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 
-These should have been append-assignment, using '+=' not '='. This would
-have been caught by rinning check-package:
+I have applied your patch, with a number of changes. See below for
+comments, and see the final commit at:
 
-    $ make check-package
-    package/libxmlrpc/libxmlrpc.mk:43: conditional override of variable LIBXMLRPC_DEPENDENCIES
-    package/libxmlrpc/libxmlrpc.mk:44: conditional override of variable LIBXMLRPC_CONF_OPTS
-    package/libxmlrpc/libxmlrpc.mk:46: conditional override of variable LIBXMLRPC_CONF_OPTS
+  https://git.buildroot.org/buildroot/commit/?id=b6ce06cd64b0d85c9065c60fad933c8585730320
 
-Regards,
-Yann E. MORIN.
 
->  LIBXMLRPC_MAKE_OPTS += $(LIBXMLRPC_STATIC_OPTS)
->  LIBXMLRPC_INSTALL_STAGING_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
->  	DESTDIR=$(STAGING_DIR) install
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +config BR2_PACKAGE_LIBNIDS
+> +	bool "libnids"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 
+glibc is not required: it builds fine with uclibc.
+
+> +	select BR2_PACKAGE_LIBGLIB2
+
+This dependency is not mandatory, so I dropped it. It should be easy to
+re-add it with a follow-up patch.
+
+> +	select BR2_PACKAGE_LIBNET
+
+This dependency is not mandatory, so I dropped it. Re-adding it is
+possible, but will need some tweaks in the configure.in script.
+
+> +	select BR2_PACKAGE_LIBPCAP
+
+This dependency is indeed mandatory.
+
+
+> +LIBNIDS_VERSION = 1.24
+> +LIBNIDS_SITE = https://sourceforge.net/projects/libnids/files/libnids/$(LIBNIDS_VERSION)
+> +LIBNIDS_LICENSE = GPL-2.0
+> +LIBNIDS_LICENSE_FILES = COPYING
+> +LIBNIDS_INSTALL_STAGING = YES
+
+You forgot the _DEPENDENCIES variable, so nothing ensured that your
+dependencies are built before this package.
+
+> +LIBNIDS_CONF_OPTS += \
+> +	prefix="$(STAGING_DIR)/usr" \
+> +	exec_prefix="$(STAGING_DIR)/usr"
+
+So, I instead fixed this by:
+
+ (1) Adding a patch for the configure.in script that changes the
+ detection of libpcap to use pkg-config
+
+ (2) Passing the appropriate install_prefix value at install time,
+ since the hand-written Makefile.in use install_prefix and not DESTDIR
+
+If you need the libglib and libnet optional dependencies, don't
+hesitate to send follow-up patches to add support for them.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
