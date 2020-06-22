@@ -1,56 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 22:44:41 +0200
-Subject: [Buildroot] [git commit] package/nginx: add stream geoip support
-Message-ID: <20200622204309.46A2D81312@busybox.osuosl.org>
+Date: Mon, 22 Jun 2020 22:44:48 +0200
+Subject: [Buildroot] [git commit] package/ccache: bump to version 3.7.10
+Message-ID: <20200622204309.5069B8429D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dee2af32d429eece214fb80c7ad783eece4034d
+commit: https://git.buildroot.net/buildroot/commit/?id=4b943562b492b15f724ac70fb5b39f9722b56a27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-stream geoip module has been added in version 1.11.3 with
-https://github.com/nginx/nginx/commit/4cf0e2848372b7566f49a9cb4b8dcf9dbad43597
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nginx/Config.in | 6 ++++++
- package/nginx/nginx.mk  | 5 +++++
- 2 files changed, 11 insertions(+)
+ package/ccache/ccache.hash | 2 +-
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 09af4680ee..9f742e3e6b 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -334,6 +334,12 @@ config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
- 	help
- 	  Enable ngx_stream_ssl_module
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 0bd00e07d0..5d9dfdb46e 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  f893da7543bfb9172bd55e603fcbdfcd83e6def176a28689c13235695b4cf44b  ccache-3.7.9.tar.xz
++sha256  0c9566d8eafaec2c5e5c0d9a91e921c858fcf349284a105ab524407b9b54ed28  ccache-3.7.10.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+ sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 276665c3fc..fd6e741303 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_NGINX_STREAM_GEOIP_MODULE
-+	bool "ngx_stream_geoip_module"
-+	select BR2_PACKAGE_GEOIP
-+	help
-+	  Enable ngx_stream_geoip_module
-+
- config BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE
- 	bool "ngx_stream_limit_conn_module"
- 	default y
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 9fdc53fc2a..8a5739cbb4 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -229,6 +229,11 @@ NGINX_DEPENDENCIES += openssl
- NGINX_CONF_OPTS += --with-stream_ssl_module
- endif
- 
-+ifeq ($(BR2_PACKAGE_NGINX_STREAM_GEOIP_MODULE),y)
-+NGINX_DEPENDENCIES += geoip
-+NGINX_CONF_OPTS += --with-stream_geoip_module
-+endif
-+
- NGINX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE),,--without-stream_limit_conn_module) \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE),,--without-stream_access_module) \
+-CCACHE_VERSION = 3.7.9
++CCACHE_VERSION = 3.7.10
+ CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
