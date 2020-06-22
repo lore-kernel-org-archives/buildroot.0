@@ -1,85 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Jun 2020 11:11:07 +0200
-Subject: [Buildroot] [git commit] package/kodi-screensaver-matrixtrails:
- bump version to 2.2.3
-Message-ID: <20200622091030.46CB082B5D@busybox.osuosl.org>
+Date: Mon, 22 Jun 2020 11:06:52 +0200
+Subject: [Buildroot] [git commit] package/dropbear: bump to version 2020.79
+Message-ID: <20200622091030.3E5327F924@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ada4f84d83668f6f085d7e37a6d81a19293dec5
+commit: https://git.buildroot.net/buildroot/commit/?id=6623560a265eff75a10a0b416d0fa077d86bc185
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream.
+CBC ciphers, 3DES and hmac-sha1-96 are now disabled by default.
 
-Updated license hash due to copyright year update:
-https://github.com/xbmc/screensaver.matrixtrails/commit/c2fdf919cfa04de45ad213da7645ea435547266d
+LICENSE: curve25519-donna under BSD-3c was replaced by curve25519.c under
+Public domain
 
-Removed "v" from _SITE due to changes to github release names.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Add-missing-stddef-include.patch          | 25 ----------------------
- .../kodi-screensaver-matrixtrails.hash             |  4 ++--
- .../kodi-screensaver-matrixtrails.mk               |  4 ++--
- 3 files changed, 4 insertions(+), 29 deletions(-)
+ package/dropbear/dropbear.hash | 4 ++--
+ package/dropbear/dropbear.mk   | 7 ++-----
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch b/package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
-deleted file mode 100644
-index 75cadfcb1e..0000000000
---- a/package/kodi-screensaver-matrixtrails/0001-Add-missing-stddef-include.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 404763f096a312e12c0dc4764834987797411745 Mon Sep 17 00:00:00 2001
--From: Rechi <Rechi@users.noreply.github.com>
--Date: Sun, 24 Mar 2019 11:44:05 +0100
--Subject: [PATCH] [fix] add missing stddef.h include for offsetof macro
--
--Downloaded from upstream commit:
--https://github.com/xbmc/screensaver.matrixtrails/commit/404763f096a312e12c0dc4764834987797411745
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/matrixtrails.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/matrixtrails.cpp b/src/matrixtrails.cpp
--index 220855a..2817dbe 100644
----- a/src/matrixtrails.cpp
--+++ b/src/matrixtrails.cpp
--@@ -25,6 +25,7 @@
-- #include "matrixtrails.h"
-- #include "SOIL2/SOIL2.h"
-- 
--+#include <stddef.h>
-- #include <vector>
-- 
-- ////////////////////////////////////////////////////////////////////////////
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-index 9a657a10dd..26b95cbc77 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2d2c795853c5a72184bb6720247d79c48b1d9fbc97e9c2913003a707d612e3ac  kodi-screensaver-matrixtrails-2.2.1-Leia.tar.gz
--sha256  4cfbc2bc766d343a70ba0322bc7203332c232ba57b62fb57a0ee9189cca4ac27  debian/copyright
-+sha256  5a2f5bca0c197eea87f06376941c6d0ddbc81cf144d8c3854ac148fdec3400ec  kodi-screensaver-matrixtrails-2.2.3-Leia.tar.gz
-+sha256  385a17599b44aaea10537374c1991c21a5e06153878917b12f96fc1cf8bbc118  debian/copyright
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index 937c43d8fc..10d3d45e08 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index aa0e80a20a..ab53197f32 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,5 +1,5 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256 525965971272270995364a0eb01f35180d793182e63dd0b0c3eb0292291644a4 dropbear-2019.78.tar.bz2
++sha256  084f00546b1610a3422a0773e2c04cbe1a220d984209e033b548b49f379cc441  dropbear-2020.79.tar.bz2
+ 
+ # License file, locally computed
+-sha256 cfa32d49e9022265375e533a4a5ef9e37d4aaa604119d612c46816aa1e59fe52 LICENSE
++sha256  2ac2be75a2232ec2473070dd791ee990253dffde6022d364809bbbcbc30f710e  LICENSE
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 1070a410b9..b32f39d647 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.1-Leia
--KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.3-Leia
-+KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = debian/copyright
- KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
+-DROPBEAR_VERSION = 2019.78
++DROPBEAR_VERSION = 2020.79
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+-DROPBEAR_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause
++DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
+ DROPBEAR_LICENSE_FILES = LICENSE
+ DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+@@ -58,9 +58,6 @@ endif
+ 
+ ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
+ define DROPBEAR_DISABLE_LEGACY_CRYPTO
+-	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
+-	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
+-	echo '#define DROPBEAR_SHA1_96_HMAC 0'          >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
+ endef
