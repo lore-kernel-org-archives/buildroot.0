@@ -1,59 +1,55 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 22 Jun 2020 19:55:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haveged: bump to version 1.9.12
-Message-ID: <1592848513-14831-1-git-send-email-pjtexier@koncepto.io>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 22 Jun 2020 20:59:55 +0300
+Subject: [Buildroot] [PATCH 1/1] fuse-overlayfs: fix build with musl
+Message-ID: <20200622175955.256750-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
+Fixes:
+http://autobuild.buildroot.net/results/57d/57d6f6bcbf3c0f8761c924f8a69c71dee05dd6c3//
 
-9adede5 Bumped version to 1.9.12
-7487642 Merge pull request #40 from PrinterFranklin/fix_memory_leak
-cbef34b fix a memory leak in havege_destroy
-02674ae Updated ChangeLog
-1ce2092 Update README.md
-b77e7db Create README.md
-f5bd6fa Updated version to v1.9.11
-68b1d84 Merge branch 'master' of https://github.com/jirka-h/haveged
-fb12bb3 updated fedora.spec
-b162c91 Merge pull request #35 from eworm-de/private-tmp
-b839803 Merge pull request #34 from Chocobo1/gh_action
-4a0a008 Replace @SBIN_DIR@ in haveged.service file with actual path
-c216a6f Moved haveged.spec to fedora.spec
-2098470 fix ordering cycle with private tmp
-7cd68e1 Add GitHub Actions continuous integration script
-ebe97f0 Fixed time format
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/haveged/haveged.hash | 2 +-
- package/haveged/haveged.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...1-direct.c-fix-compilation-with-musl.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
 
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index 2f1338a..1394b04 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  13a0d81bb395c6ebde70a6474452001d9f898d786ddf4872af9f9f96f9e99ded  haveged-1.9.9.tar.gz
-+sha256  0b8642515ea7189a1772cdb8072b98a6768cf9b963faf3cd664329fd79975ffa  haveged-1.9.12.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index 40fa1c7..d7b5191 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HAVEGED_VERSION = 1.9.9
-+HAVEGED_VERSION = 1.9.12
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
+diff --git a/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch b/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
+new file mode 100644
+index 0000000000..66b4e24346
+--- /dev/null
++++ b/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
+@@ -0,0 +1,28 @@
++From 27a01e622e1f26b3c60137c3123c0b667b3f6579 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Mon, 22 Jun 2020 20:48:36 +0300
++Subject: [PATCH 1/1] direct.c: fix compilation with musl
++
++Upstream PR status:
++https://github.com/containers/fuse-overlayfs/pull/219
++
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++---
++ direct.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/direct.c b/direct.c
++index 67bed20..39e5c8f 100644
++--- a/direct.c
+++++ b/direct.c
++@@ -25,6 +25,7 @@
++ 
++ #include "fuse-overlayfs.h"
++ 
+++#include "limits.h"
++ #include <unistd.h>
++ #include <fcntl.h>
++ #include <errno.h>
++-- 
++2.26.2
++
 -- 
-2.7.4
+2.26.2
