@@ -1,103 +1,118 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 22 Jun 2020 06:44:40 -0500
-Subject: [Buildroot] [RFC v9 01/10] cpe-info: new make target
-In-Reply-To: <20200621084540.GZ2351@scaer>
-References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
- <20200621084540.GZ2351@scaer>
-Message-ID: <CANQCQpY_PiScvzaCuebc2Fg5fE5_J3h6HxFikEmHGdQu+-oeUQ@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 22 Jun 2020 13:59:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/irrlicht: fix libraries linking
+In-Reply-To: <20200621200215.GG2351@scaer>
+References: <20200621131038.1031282-1-b.bilas@grinn-global.com>
+ <20200621200215.GG2351@scaer>
+Message-ID: <3a1c2db4-b753-a567-6bef-a85fb5b45175@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hello Yann,
 
-On Sun, Jun 21, 2020 at 3:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On 21.06.2020 22:02, Yann E. MORIN wrote:
+> Bartosz, All,
 >
-> On 2020-06-16 12:03 -0500, Matt Weber spake thusly:
-> > Similar to make legal-info, produce a csv delimited file containing
-> > all selected packages CPE identification.
-> >
-> > By default, support the pkg infra defining a set of CPE_ID_* defaults
-> > using the package name for the vendor and name as most CPE IDs seem
-> > to align with that assumption. Plus initially, use the pkg version as
-> > the CPE ID's version field.
->
-> So, as I understand it, the CPE info for host packages will also be
-> stored in the generated file, but it will be a partial list.
->
-> For example, if a host package has a Config.in option (e.g. aespipe,
-> with BR2_PACKAGE_HOST_AESPIPE=y), then it will be listed in PACKAGES,
-> and so will be present in the CPE manifest.
->
-> But on the other hand, a host package that has no Config.in option but
-> is oart of the dependency chain of a package (e.g. host-pkgconf) will
-> not be listed in PACKAGES, and thus will not appear in the manifest.
->
-> This is a bit awkward I think.
->
-> As far as I understand it, the CPE info is (mostly|only) usefull to
-> then query the CVE list applicable to that CPE.
->
-> As such, this is (mostly|only) relevant to the target packages, I would
-> think, no? Thus, host pakcages should be filtered out.
-
-Correct only target packages are really useful but I could see a host
-package list also being something that long term would be a good
-datapoint.  There are cases where those host packages could inflict
-behavior on the target that could need a CVE tagged against them.
-(Note, I saw the conclusion you had in "cpe-info: only report target
-pkgs" . )
-
->
-> If we are however interested by the CPE info for host packages, probably
-> that should go to a separate manifest, like for the legal-info, no?
->
-
-Agree.
-
-> Also, see an issue, below...
->
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > ---
+> On 2020-06-21 15:10 +0200, Bartosz Bilas spake thusly:
+>> Fixes:
+>>   /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XSetSelectionOwner'
 > [--SNIP--]
-> > @@ -864,6 +865,19 @@ legal-info: legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all
-> >               mv .legal-info.sha256 legal-info.sha256)
-> >       @echo "Legal info produced in $(LEGAL_INFO_DIR)"
-> >
-> > +.PHONY: cpe-info-clean
-> > +cpe-info-clean:
-> > +     @rm -f $(CPE_MANIFEST_CSV)
+>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> [--SNIP--]
+>> +diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
+>> +index 9a1bdbc..85eb264 100644
+>> +--- a/source/Irrlicht/Makefile
+>> ++++ b/source/Irrlicht/Makefile
+>> +@@ -88,7 +88,7 @@ STATIC_LIB = libIrrlicht.a
+>> + LIB_PATH = ../../lib/$(SYSTEM)
+>> + INSTALL_DIR = /usr/local/lib
+>> + sharedlib install: SHARED_LIB = libIrrlicht.so
+>> +-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+>> ++sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+> That's definitely incorrect: we do not want to use a library path that
+> points to the host system libraries.
 >
-> This must also be removed on 'make clean'.
-
-Sure
-
+> I wonder why our paranoid wrapper does not catches that... :-/
+> So far, it would not catch it, because the LDFLAGS are from the command
+> line, so the -L/usr/X11R6/lib is not used. But with your patch, it would
+> be used now...
 >
-> > +.PHONY: cpe-info-prepare
-> > +cpe-info-prepare:
-> > +     @$(call MESSAGE,"Gathering CPE info")
-> > +     @$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
-> > +
-> > +.PHONY: cpe-info
-> > +cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
+>> + staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
+> Ditto, we do not want to use include paths that points to the host
+> system headers.
+I didn't want to combine everything in one patch therefore there is a 
+second one there.
 >
-> I think this depednecy is incorrect. Indeed, you reallt want that
-> cpe-info-clean be run before cpe-info-prepare, so I think you'll need
-> these dependencies:
+> Ah, I got it now: the wrapper only checks for a select list of known
+> host paths, but neither /usr/X11R6/include nor /usr/X11R6/lib are in
+> that list...
 >
->     cpe-info-prepare: cpe-info-clean
->     cpe-info: cpe-info-prepare
->     cpe-info: $(foreach p,$(filter-out host-%,$(PACKAGES)),$(p)-cpe-info)
+> But now I see that your second patch does fix that for the linker, but
+> that's not our paranoid wrapper doing the check, but really the
+> cross linker ld.
 >
-> (Yes, I see you modeled your dependencies on the legal-info ones, but I
-> think they are broken.)
+> Sigh... We need to expand our wrapper with those two paths...
 >
-
-:-)  ah ok.
-
-Thanks for the review!
-
-Best regards,
-Matt
+> Anyway: you should merge the two patches together into a single one, and
+> explain the above in thecommit log.
+Should I split the makefile patches to the separate ones or just do 
+everything in one? I mean adding override flag and removing those 
+obsolete host paths.
+>
+> Also, could you investigate removing the CXXINCS += -I/usr/X11R6/include
+> line too? Normally, we should have the proper search paths already.
+Sure, I guess I did it but I've forgotten to include it in a patch :/
+>
+> Oh, and one last point: in a post-commit message (after the --- line),
+> add a note that irrlicht uses CRLF line endings, and that the patch
+> will have to be fixed when applying, because patchwork drops all the
+> CR and keeps on LF.
+>
+> Care to respin, please?
+Yes, I'll do that :)
+>
+> In the meantime, I'll send a patch to extend the list of unsafe paths in
+> our toolchain wrapper...
+Good ;)
+>
+> Thanks! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> + #OSX specific options
+>> +--
+>> +2.27.0
+>> +
+>> diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
+>> index bd82815cde..e12d802ee7 100644
+>> --- a/package/irrlicht/irrlicht.mk
+>> +++ b/package/irrlicht/irrlicht.mk
+>> @@ -38,12 +38,14 @@ ifeq ($(BR2_STATIC_LIBS),)
+>>   IRRLICHT_CONF_OPTS += sharedlib
+>>   endif
+>>   
+>> +# set correct path for libraries linking
+>> +IRRLICHT_CONF_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib"
+>>   # Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
+>>   # While linking an application with libIrrlicht.so, we get an undefined reference to
+>>   # png_init_filter_functions_neon.
+>>   # Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
+>>   # so disable NEON support completely.
+>> -IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
+>> +IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0 -I$(STAGING_DIR)/usr/include/X11"
+>>   
+>>   define IRRLICHT_BUILD_CMDS
+>>   	$(TARGET_MAKE_ENV)
+>> -- 
+>> 2.27.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+Best
+Bartek
