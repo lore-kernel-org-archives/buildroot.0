@@ -1,41 +1,59 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 22 Jun 2020 22:54:56 +0300
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.7.10
-Message-ID: <20200622195456.269691-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Jun 2020 22:01:33 +0200
+Subject: [Buildroot] [PATCH v2] package/cegui: select libglu when libgl
+ is detected
+In-Reply-To: <8023dcfc-b52e-0c9b-5221-c6f1c201c7cf@grinn-global.com>
+References: <20200621131832.1036346-1-b.bilas@grinn-global.com>
+ <20200622211010.64d5fb7f@windsurf.home>
+ <8023dcfc-b52e-0c9b-5221-c6f1c201c7cf@grinn-global.com>
+Message-ID: <20200622220133.0e142645@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 22 Jun 2020 21:37:15 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 0bd00e07d0..5d9dfdb46e 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  f893da7543bfb9172bd55e603fcbdfcd83e6def176a28689c13235695b4cf44b  ccache-3.7.9.tar.xz
-+sha256  0c9566d8eafaec2c5e5c0d9a91e921c858fcf349284a105ab524407b9b54ed28  ccache-3.7.10.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 276665c3fc..fd6e741303 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.7.9
-+CCACHE_VERSION = 3.7.10
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+> No, we wouldn't because libglu is selected only when we have 
+> BR2_PACKAGE_HAS_LIBGL option set.
+
+libepoxy is a library for handling the load of OpenGL library, and has:
+
+        depends on BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBGL
+
+So basically, when you have HAS_LIBGL=y, you can have either libepoxy
+*OR* libglew/libglu used by Irrlicht.
+
+> Libepoxy doesn't provide it so even if 
+> we use glew instead of libepoxy we have to select libglu because cegui 
+> directly includes GL/glu.h here -> 
+> https://github.com/cegui/cegui/blob/v0-8-7/cegui/include/CEGUI/RendererModules/OpenGL/GL.h#L45
+
+That is exactly the code I have pasted below, please see my comments inline.
+
+> > This is confirmed by ./cegui/include/CEGUI/RendererModules/OpenGL/GL.h,
+> > which contains:
+> >
+> > #if defined CEGUI_USE_EPOXY
+
+So if the OpenGL loader is libepoxy, we are here...
+
+> >
+> > #include <epoxy/gl.h>
+> >
+> > #elif defined CEGUI_USE_GLEW
+
+*OR* if the OpenGL loader is glew, we are here, and we indeed include
+GLU unconditionally.
+
+So I stand to my position: according to the code, if you're using
+libepoxy as the OpenGL loader, you don't need Glew, and you don't need
+GLU.
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
