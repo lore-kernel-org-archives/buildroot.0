@@ -1,56 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 21:18:12 +0200
-Subject: [Buildroot] [git commit] package/fuse-overlayfs: fix build with musl
-Message-ID: <20200622191618.BB8A38400E@busybox.osuosl.org>
+Date: Mon, 22 Jun 2020 21:10:52 +0200
+Subject: [Buildroot] [git commit] package/nginx: add support for slice module
+Message-ID: <20200622191618.A9478840DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9f7d66f3413c55472c18eacd25ca0e5734194c0
+commit: https://git.buildroot.net/buildroot/commit/?id=2d80f6fe49219da31aac0af7285d63a6fd673b68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/57d/57d6f6bcbf3c0f8761c924f8a69c71dee05dd6c3//
+slice module is available since version 1.9.8 and
+https://github.com/nginx/nginx/commit/8ba626ccd71cbd704c7c69928d1d6fe58fd0445f
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-direct.c-fix-compilation-with-musl.patch  | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/nginx/Config.in | 5 +++++
+ package/nginx/nginx.mk  | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch b/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
-new file mode 100644
-index 0000000000..17f58c8408
---- /dev/null
-+++ b/package/fuse-overlayfs/0001-direct.c-fix-compilation-with-musl.patch
-@@ -0,0 +1,28 @@
-+From 27a01e622e1f26b3c60137c3123c0b667b3f6579 Mon Sep 17 00:00:00 2001
-+From: Asaf Kahlon <asafka7@gmail.com>
-+Date: Mon, 22 Jun 2020 20:48:36 +0300
-+Subject: [PATCH] direct.c: fix compilation with musl
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 0dbeaae2ff..52711b1de3 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -134,6 +134,11 @@ config BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE
+ 	help
+ 	  Enable ngx_http_degradation_module
+ 
++config BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE
++	bool "ngx_http_slice_module"
++	help
++	  Enable ngx_http_slice_module
 +
-+Upstream PR status:
-+https://github.com/containers/fuse-overlayfs/pull/219
-+
-+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-+---
-+ direct.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/direct.c b/direct.c
-+index 67bed20..39e5c8f 100644
-+--- a/direct.c
-++++ b/direct.c
-+@@ -25,6 +25,7 @@
-+ 
-+ #include "fuse-overlayfs.h"
-+ 
-++#include "limits.h"
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-+-- 
-+2.26.2
-+
+ config BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE
+ 	bool "ngx_http_stub_status_module"
+ 	help
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 3f249096bc..81708fd32f 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -175,6 +175,7 @@ NGINX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_AUTH_REQUEST_MODULE),--with-http_auth_request_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_RANDOM_INDEX_MODULE),--with-http_random_index_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE),--with-http_degradation_module) \
++	$(if $(BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE),--with-http_slice_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE),--with-http_stub_status_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_CHARSET_MODULE),,--without-http_charset_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_HTTP_SSI_MODULE),,--without-http_ssi_module) \
