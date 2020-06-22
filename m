@@ -1,51 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Jun 2020 21:10:52 +0200
-Subject: [Buildroot] [git commit] package/nginx: add support for slice module
-Message-ID: <20200622191618.A9478840DF@busybox.osuosl.org>
+Date: Mon, 22 Jun 2020 21:11:58 +0200
+Subject: [Buildroot] [git commit] package/haveged: bump to version 1.9.12
+Message-ID: <20200622191618.B24D38152B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d80f6fe49219da31aac0af7285d63a6fd673b68
+commit: https://git.buildroot.net/buildroot/commit/?id=b324450ef9baadd4b57b7216c583d9ee2b5d74a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-slice module is available since version 1.9.8 and
-https://github.com/nginx/nginx/commit/8ba626ccd71cbd704c7c69928d1d6fe58fd0445f
+This includes the following changes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+9adede5 Bumped version to 1.9.12
+7487642 Merge pull request #40 from PrinterFranklin/fix_memory_leak
+cbef34b fix a memory leak in havege_destroy
+02674ae Updated ChangeLog
+1ce2092 Update README.md
+b77e7db Create README.md
+f5bd6fa Updated version to v1.9.11
+68b1d84 Merge branch 'master' of https://github.com/jirka-h/haveged
+fb12bb3 updated fedora.spec
+b162c91 Merge pull request #35 from eworm-de/private-tmp
+b839803 Merge pull request #34 from Chocobo1/gh_action
+4a0a008 Replace @SBIN_DIR@ in haveged.service file with actual path
+c216a6f Moved haveged.spec to fedora.spec
+2098470 fix ordering cycle with private tmp
+7cd68e1 Add GitHub Actions continuous integration script
+ebe97f0 Fixed time format
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nginx/Config.in | 5 +++++
- package/nginx/nginx.mk  | 1 +
- 2 files changed, 6 insertions(+)
+ package/haveged/haveged.hash | 2 +-
+ package/haveged/haveged.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 0dbeaae2ff..52711b1de3 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -134,6 +134,11 @@ config BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE
- 	help
- 	  Enable ngx_http_degradation_module
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index 2f1338a6a8..1394b0440a 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  13a0d81bb395c6ebde70a6474452001d9f898d786ddf4872af9f9f96f9e99ded  haveged-1.9.9.tar.gz
++sha256  0b8642515ea7189a1772cdb8072b98a6768cf9b963faf3cd664329fd79975ffa  haveged-1.9.12.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index 40fa1c7c15..d7b5191a6f 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE
-+	bool "ngx_http_slice_module"
-+	help
-+	  Enable ngx_http_slice_module
-+
- config BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE
- 	bool "ngx_http_stub_status_module"
- 	help
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 3f249096bc..81708fd32f 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -175,6 +175,7 @@ NGINX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_AUTH_REQUEST_MODULE),--with-http_auth_request_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_RANDOM_INDEX_MODULE),--with-http_random_index_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_DEGRADATION_MODULE),--with-http_degradation_module) \
-+	$(if $(BR2_PACKAGE_NGINX_HTTP_SLICE_MODULE),--with-http_slice_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_STUB_STATUS_MODULE),--with-http_stub_status_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_CHARSET_MODULE),,--without-http_charset_module) \
- 	$(if $(BR2_PACKAGE_NGINX_HTTP_SSI_MODULE),,--without-http_ssi_module) \
+-HAVEGED_VERSION = 1.9.9
++HAVEGED_VERSION = 1.9.12
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
