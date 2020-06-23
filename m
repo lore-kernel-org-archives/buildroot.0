@@ -1,52 +1,77 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Jun 2020 22:35:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: add stream split clients
- option
-Message-ID: <20200623203526.1024367-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 23 Jun 2020 23:00:17 +0200
+Subject: [Buildroot] [git commit] package/irrlicht: add patch to fix
+ libraries linking
+Message-ID: <20200623205821.6ABA681321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-stream split clients module has been added in version 1.11.3 with
-https://github.com/nginx/nginx/commit/6c2b086d0e10cab769f9321998dcb631796ec49b
-and is enabled by default, add an option to be able to disable it
+commit: https://git.buildroot.net/buildroot/commit/?id=98c57af89d90d07d91c9346acac9dfa04a6101d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This patch fix the irrlicht makefile which contains the paths
+that point to the host system libraries that are not used and
+are not available in Buildroot what's unsafe for cross-compilation.
+In addition it fixes linking to the X11 libraries and the following errors:
+
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XSetSelectionOwner'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glXGetProcAddress'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glXMakeCurrent'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XF86VidModeSetViewPort'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XF86VidModeSwitchToMode'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glClearDepth'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XGetVisualInfo'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XGrabKeyboard'
+/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glMatrixMode'
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nginx/Config.in | 6 ++++++
- package/nginx/nginx.mk  | 1 +
- 2 files changed, 7 insertions(+)
+ ...erride-LDFLAGS-and-remove-obsolete-X11R6-.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 9f742e3e6b..eba0d30329 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -364,6 +364,12 @@ config BR2_PACKAGE_NGINX_STREAM_MAP_MODULE
- 	help
- 	  Enable ngx_stream_map_module
- 
-+config BR2_PACKAGE_NGINX_STREAM_SPLIT_CLIENTS_MODULE
-+	bool "ngx_stream_split_client_module"
-+	default y
-+	help
-+	  Enable ngx_stream_split_clients_module
+diff --git a/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch b/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+new file mode 100644
+index 0000000000..51b98a4e8a
+--- /dev/null
++++ b/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+@@ -0,0 +1,36 @@
++From 0ecb59c4dc575bb902c1955d8762f91ff79290a4 Mon Sep 17 00:00:00 2001
++From: Bartosz Bilas <b.bilas@grinn-global.com>
++Date: Tue, 23 Jun 2020 19:36:27 +0200
++Subject: [PATCH] makefile: override LDFLAGS and remove obsolete X11R6
++ lib/include directories
 +
- config BR2_PACKAGE_NGINX_STREAM_RETURN_MODULE
- 	bool "ngx_stream_return_module"
- 	default y
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 52b91bcde5..db63531dd6 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -239,6 +239,7 @@ NGINX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE),,--without-stream_access_module) \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_GEO_MODULE),,--without-stream_geo_module) \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_MAP_MODULE),,--without-stream_map_module) \
-+	$(if $(BR2_PACKAGE_NGINX_STREAM_SPLIT_CLIENTS_MODULE),,--without-stream_split_clients_module) \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_RETURN_MODULE),,--without-stream_return_module) \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_UPSTREAM_HASH_MODULE),,--without-stream_upstream_hash_module) \
- 	$(if $(BR2_PACKAGE_NGINX_STREAM_UPSTREAM_LEAST_CONN_MODULE),,--without-stream_upstream_least_conn_module) \
--- 
-2.26.2
++Add "override" keyword to LDFLAGS variable in order to link libraries
++using buildroot cross-compiler correctly and remove those non-supported
++paths to lib/includes that are not used and not available in buildroot
++and in addition point to the host system libraries in a result
++cause the following warning:
++
++/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: library search path "/usr/X11R6/lib" is unsafe for cross-compilation
++
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ source/Irrlicht/Makefile | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
++index 1a8277e..b323237 100644
++--- a/source/Irrlicht/Makefile
+++++ b/source/Irrlicht/Makefile
++@@ -88,8 +88,7 @@ STATIC_LIB = libIrrlicht.a
++ LIB_PATH = ../../lib/$(SYSTEM)
++ INSTALL_DIR = /usr/local/lib
++ sharedlib install: SHARED_LIB = libIrrlicht.so
++-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
++-staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
+++sharedlib: override LDFLAGS += -lGL -lXxf86vm
++ 
++ #OSX specific options
++ staticlib_osx sharedlib_osx install_osx: SYSTEM = MacOSX
++-- 
++2.27.0
++
