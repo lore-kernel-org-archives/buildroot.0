@@ -1,178 +1,113 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Jun 2020 22:00:28 +0200
-Subject: [Buildroot] [git commit] package/gdb: fix gdb python support with
- python 3.8
-Message-ID: <20200623205821.62B2B8429A@busybox.osuosl.org>
+Date: Tue, 23 Jun 2020 23:00:54 +0200
+Subject: [Buildroot] [PATCH v3] package/irrlicht: add patch to fix
+ libraries linking
+In-Reply-To: <20200623182008.312994-1-b.bilas@grinn-global.com>
+References: <20200623182008.312994-1-b.bilas@grinn-global.com>
+Message-ID: <20200623210054.GA2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a0fa5b19b11865f2123a47903be9fabab07d988
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bartosz, All,
 
-CPython 3.8 has added a new Syntax Warning that print
-a waring at runtime while unsing gdb python support.
+On 2020-06-23 20:20 +0200, Bartosz Bilas spake thusly:
+> This patch fix the irrlicht makefile which contains the paths
+> that point to the host system libraries that are not used and
+> are not available in Buildroot what's unsafe for cross-compilation.
+> In addition it fixes linking to the X11 libraries and the following errors:
+> 
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XSetSelectionOwner'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glXGetProcAddress'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glXMakeCurrent'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XF86VidModeSetViewPort'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XF86VidModeSwitchToMode'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glClearDepth'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XGetVisualInfo'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `XGrabKeyboard'
+> /home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: /home/bartekk/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libIrrlicht.so: undefined reference to `glMatrixMode'
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-$ gdb -ex "python import os"
-/usr/share/gdb/python/gdb/command/prompt.py:48: SyntaxWarning: "is not" with a literal. Did you mean "!="?
-  if self.value is not '':
-/usr/share/gdb/python/gdb/command/prompt.py:60: SyntaxWarning: "is not" with a literal. Did you mean "!="?
-  if self.value is not '':
+Applied to master, thanks.
 
-Backport an upstream patch for this:
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=b6484282f85bf7f11451b2441599c241d302ad9d
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...ct-use-of-is-operator-for-comparison-in-p.patch | 42 ++++++++++++++++++++++
- ...ct-use-of-is-operator-for-comparison-in-p.patch | 42 ++++++++++++++++++++++
- ...ct-use-of-is-operator-for-comparison-in-p.patch | 42 ++++++++++++++++++++++
- 3 files changed, 126 insertions(+)
+> ---
+> Changes v2 -> v3:
+>  - skipped overriding LDFLAGS variable in package makefile
+>  - skipped including extra $(STAGING_DIR)/usr/include path into CPPFLAGS
+>  - combined two patches into one
+> 
+> Changes v1 -> v2:
+>  - patches merged into one
+>  - explained commit log
+>  
+> IMPORTANT NOTE:
+>  Irrlicht uses CRLF line endings so the patches must be fixed when
+>  applying because patchwork drops all the CR and keeps on LF.
+> 
+>  ...e-LDFLAGS-and-remove-obsolete-X11R6-.patch | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+> 
+> diff --git a/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch b/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+> new file mode 100644
+> index 0000000000..51b98a4e8a
+> --- /dev/null
+> +++ b/package/irrlicht/0003-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+> @@ -0,0 +1,36 @@
+> +From 0ecb59c4dc575bb902c1955d8762f91ff79290a4 Mon Sep 17 00:00:00 2001
+> +From: Bartosz Bilas <b.bilas@grinn-global.com>
+> +Date: Tue, 23 Jun 2020 19:36:27 +0200
+> +Subject: [PATCH] makefile: override LDFLAGS and remove obsolete X11R6
+> + lib/include directories
+> +
+> +Add "override" keyword to LDFLAGS variable in order to link libraries
+> +using buildroot cross-compiler correctly and remove those non-supported
+> +paths to lib/includes that are not used and not available in buildroot
+> +and in addition point to the host system libraries in a result
+> +cause the following warning:
+> +
+> +/home/bartekk/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: library search path "/usr/X11R6/lib" is unsafe for cross-compilation
+> +
+> +Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> +---
+> + source/Irrlicht/Makefile | 3 +--
+> + 1 file changed, 1 insertion(+), 2 deletions(-)
+> +
+> +diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
+> +index 1a8277e..b323237 100644
+> +--- a/source/Irrlicht/Makefile
+> ++++ b/source/Irrlicht/Makefile
+> +@@ -88,8 +88,7 @@ STATIC_LIB = libIrrlicht.a
+> + LIB_PATH = ../../lib/$(SYSTEM)
+> + INSTALL_DIR = /usr/local/lib
+> + sharedlib install: SHARED_LIB = libIrrlicht.so
+> +-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+> +-staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
+> ++sharedlib: override LDFLAGS += -lGL -lXxf86vm
+> + 
+> + #OSX specific options
+> + staticlib_osx sharedlib_osx install_osx: SYSTEM = MacOSX
+> +-- 
+> +2.27.0
+> +
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch b/package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
-new file mode 100644
-index 0000000000..989a5b1347
---- /dev/null
-+++ b/package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
-@@ -0,0 +1,42 @@
-+From e00c211d51bec301cf04719b77076a8783ef44b5 Mon Sep 17 00:00:00 2001
-+From: Raul Tambre <raul@tambre.ee>
-+Date: Sat, 4 May 2019 15:48:17 -0400
-+Subject: [PATCH] Fix incorrect use of 'is' operator for comparison in
-+ python/lib/gdb/command/prompt.py
-+
-+The 'is' operator is not meant to be used for comparisons. It currently working
-+is an implementation detail of CPython.  CPython 3.8 has added a SyntaxWarning
-+for this.
-+
-+(cherry picked from commit b6484282f85bf7f11451b2441599c241d302ad9d)
-+[Romain: backport to gdb 8.x]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/python/lib/gdb/command/prompt.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdb/python/lib/gdb/command/prompt.py b/gdb/python/lib/gdb/command/prompt.py
-+index 3d662a7d3f..04b9e49c22 100644
-+--- a/gdb/python/lib/gdb/command/prompt.py
-++++ b/gdb/python/lib/gdb/command/prompt.py
-+@@ -45,7 +45,7 @@ The currently defined substitutions are:
-+         self.hook_set = False
-+ 
-+     def get_show_string (self, pvalue):
-+-        if self.value is not '':
-++        if self.value:
-+            return "The extended prompt is: " + self.value
-+         else:
-+            return "The extended prompt is not set."
-+@@ -57,7 +57,7 @@ The currently defined substitutions are:
-+         return ""
-+ 
-+     def before_prompt_hook(self, current):
-+-        if self.value is not '':
-++        if self.value:
-+             return gdb.prompt.substitute_prompt(self.value)
-+         else:
-+             return None
-+-- 
-+2.25.4
-+
-diff --git a/package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch b/package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
-new file mode 100644
-index 0000000000..989a5b1347
---- /dev/null
-+++ b/package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
-@@ -0,0 +1,42 @@
-+From e00c211d51bec301cf04719b77076a8783ef44b5 Mon Sep 17 00:00:00 2001
-+From: Raul Tambre <raul@tambre.ee>
-+Date: Sat, 4 May 2019 15:48:17 -0400
-+Subject: [PATCH] Fix incorrect use of 'is' operator for comparison in
-+ python/lib/gdb/command/prompt.py
-+
-+The 'is' operator is not meant to be used for comparisons. It currently working
-+is an implementation detail of CPython.  CPython 3.8 has added a SyntaxWarning
-+for this.
-+
-+(cherry picked from commit b6484282f85bf7f11451b2441599c241d302ad9d)
-+[Romain: backport to gdb 8.x]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/python/lib/gdb/command/prompt.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdb/python/lib/gdb/command/prompt.py b/gdb/python/lib/gdb/command/prompt.py
-+index 3d662a7d3f..04b9e49c22 100644
-+--- a/gdb/python/lib/gdb/command/prompt.py
-++++ b/gdb/python/lib/gdb/command/prompt.py
-+@@ -45,7 +45,7 @@ The currently defined substitutions are:
-+         self.hook_set = False
-+ 
-+     def get_show_string (self, pvalue):
-+-        if self.value is not '':
-++        if self.value:
-+            return "The extended prompt is: " + self.value
-+         else:
-+            return "The extended prompt is not set."
-+@@ -57,7 +57,7 @@ The currently defined substitutions are:
-+         return ""
-+ 
-+     def before_prompt_hook(self, current):
-+-        if self.value is not '':
-++        if self.value:
-+             return gdb.prompt.substitute_prompt(self.value)
-+         else:
-+             return None
-+-- 
-+2.25.4
-+
-diff --git a/package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch b/package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
-new file mode 100644
-index 0000000000..989a5b1347
---- /dev/null
-+++ b/package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
-@@ -0,0 +1,42 @@
-+From e00c211d51bec301cf04719b77076a8783ef44b5 Mon Sep 17 00:00:00 2001
-+From: Raul Tambre <raul@tambre.ee>
-+Date: Sat, 4 May 2019 15:48:17 -0400
-+Subject: [PATCH] Fix incorrect use of 'is' operator for comparison in
-+ python/lib/gdb/command/prompt.py
-+
-+The 'is' operator is not meant to be used for comparisons. It currently working
-+is an implementation detail of CPython.  CPython 3.8 has added a SyntaxWarning
-+for this.
-+
-+(cherry picked from commit b6484282f85bf7f11451b2441599c241d302ad9d)
-+[Romain: backport to gdb 8.x]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/python/lib/gdb/command/prompt.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdb/python/lib/gdb/command/prompt.py b/gdb/python/lib/gdb/command/prompt.py
-+index 3d662a7d3f..04b9e49c22 100644
-+--- a/gdb/python/lib/gdb/command/prompt.py
-++++ b/gdb/python/lib/gdb/command/prompt.py
-+@@ -45,7 +45,7 @@ The currently defined substitutions are:
-+         self.hook_set = False
-+ 
-+     def get_show_string (self, pvalue):
-+-        if self.value is not '':
-++        if self.value:
-+            return "The extended prompt is: " + self.value
-+         else:
-+            return "The extended prompt is not set."
-+@@ -57,7 +57,7 @@ The currently defined substitutions are:
-+         return ""
-+ 
-+     def before_prompt_hook(self, current):
-+-        if self.value is not '':
-++        if self.value:
-+             return gdb.prompt.substitute_prompt(self.value)
-+         else:
-+             return None
-+-- 
-+2.25.4
-+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
