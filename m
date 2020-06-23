@@ -1,72 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Jun 2020 21:04:13 +0200
-Subject: [Buildroot] Is there a way to alter BR2_CMAKE_VERSION_MIN?
-In-Reply-To: <CALFsTFXiiOb7t0Biw30OXjVLXwfd1x-dmjtnEDQy+Ogmi4ZU-g@mail.gmail.com>
-References: <CALFsTFXiiOb7t0Biw30OXjVLXwfd1x-dmjtnEDQy+Ogmi4ZU-g@mail.gmail.com>
-Message-ID: <20200623190413.GX2351@scaer>
+Date: Tue, 23 Jun 2020 20:02:24 +0200
+Subject: [Buildroot] [git commit] package/dropbear: fix build on uclibc
+Message-ID: <20200623190233.0ED89840BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5f67f35aad23e4a30af597c356f823f007ab836d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-23 21:36 +0300, Asaf Kahlon spake thusly:
-> Currently, BR2_CMAKE_VERSION_MIN is set to 3.10.
-> On my machine I have cmake=3.12 and on my BR2_EXTERNAL tree I have
-> some private packages requiring cmake>=3.13.
-> In the current state, Buildroot won't build host-cmake since the
-> installed one is greater than 3.10, but still the compilation fails
-> because those packages need a higher version from what I have on my
-> machine.
-> 
-> Is there a reason why BR2_CMAKE_VERSION_MIN isn't set with "?=" but
-> with "="? Setting it with "?=" gives the user the option to change it
-> in case there are private packages which need a higher version of
-> CMake.
-> 
-> Any other ideas on how to overcome this issue?
+Fixes:
+ - http://autobuild.buildroot.org/results/d6d783da2fb834ce21475ff54f82c07873246826
 
-We already had the discussion a while ago on the IRC channel, and IIRC,
-the conclusion was that we wanted to move to a per-package minimum
-version, for example:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/dropbear/0001-_GNU_SOURCE-for-random.patch | 25 ++++++++++++++++
+ .../dropbear/0002-move-GNU_SOURCE-earlier.patch    | 34 ++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
 
-    LIBFOO_CMAKE_REQUIRED_VERSION = 3.12
-
-And the the cmake-package infra would automatically add host-cmake as a
-dependency of libfoo if the host cmake is not suitable. Probably with
-some code like:
-
-    $(2)_CMAKE = $$(shell support/dependencies/check-host-cmake.sh $$($(2)_CMAKE_REQUIRED_VERSION) $$(BR2_CMAKE_CANDIDATES))
-    ifeq ($$($(2)_CMAKE),)
-    $(2)_DEPENDENCIES += host-cmake
-    $(2)_CMAKE = $(HOST_DIR)/bin/cmake
-    endif
-
-And then, remove:
-
-    $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
-
-And change calls to $$(BR2_CMAKE) with calls to $$($(2)_CMAKE)
-
-Then move the definition of BR2_CMAKE_CANDIDATES to pkg-cmake.mk
-
-Expand all the packages that use cmake-package to define the version
-they need.
-
-And finally, kill support/dependencies/check-host-cmake.mk, tp keep only
-support/dependencies/check-host-cmake.sh
-
-Obviously, that will be a multi-patch, long effort...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dropbear/0001-_GNU_SOURCE-for-random.patch b/package/dropbear/0001-_GNU_SOURCE-for-random.patch
+new file mode 100644
+index 0000000000..dfb8514114
+--- /dev/null
++++ b/package/dropbear/0001-_GNU_SOURCE-for-random.patch
+@@ -0,0 +1,25 @@
++From 3f5c106a880a02b21739f2022746e6aa7672474c Mon Sep 17 00:00:00 2001
++From: Matt Johnston <matt@ucc.asn.au>
++Date: Tue, 23 Jun 2020 21:38:46 +0800
++Subject: [PATCH] _GNU_SOURCE for random
++
++[Retrieved from:
++https://github.com/mkj/dropbear/commit/3f5c106a880a02b21739f2022746e6aa7672474c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ includes.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/includes.h b/includes.h
++index e8c3e189..2789f23d 100644
++--- a/includes.h
+++++ b/includes.h
++@@ -125,6 +125,8 @@
++ #endif
++ 
++ #ifdef HAVE_SYS_RANDOM_H
+++/* uclibc needs _GNU_SOURCE */
+++#define _GNU_SOURCE
++ #include <sys/random.h>
++ #endif
++ 
+diff --git a/package/dropbear/0002-move-GNU_SOURCE-earlier.patch b/package/dropbear/0002-move-GNU_SOURCE-earlier.patch
+new file mode 100644
+index 0000000000..81282e423b
+--- /dev/null
++++ b/package/dropbear/0002-move-GNU_SOURCE-earlier.patch
+@@ -0,0 +1,34 @@
++From a7a67585cbc3fe5df85c641618b347a51a943356 Mon Sep 17 00:00:00 2001
++From: Matt Johnston <matt@ucc.asn.au>
++Date: Tue, 23 Jun 2020 22:24:58 +0800
++Subject: [PATCH] move GNU_SOURCE earlier
++
++[Retrieved from:
++https://github.com/mkj/dropbear/commit/a7a67585cbc3fe5df85c641618b347a51a943356]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ includes.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/includes.h b/includes.h
++index 2789f23d..884ebf71 100644
++--- a/includes.h
+++++ b/includes.h
++@@ -25,6 +25,8 @@
++ #ifndef DROPBEAR_INCLUDES_H_
++ #define DROPBEAR_INCLUDES_H_
++ 
+++/* uclibc needs _GNU_SOURCE, maybe other things? */
+++#define _GNU_SOURCE
++ 
++ #include "options.h"
++ #include "debug.h"
++@@ -125,8 +127,6 @@
++ #endif
++ 
++ #ifdef HAVE_SYS_RANDOM_H
++-/* uclibc needs _GNU_SOURCE */
++-#define _GNU_SOURCE
++ #include <sys/random.h>
++ #endif
++ 
