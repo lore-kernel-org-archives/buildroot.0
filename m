@@ -1,64 +1,179 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 23 Jun 2020 14:26:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnids: new package
-In-Reply-To: <CAJe0E3fg1O2n7ucLS71ZMoOrnxmSs_52KWAa_CgWhFrFMo0mnw@mail.gmail.com>
-References: <20200622105359.31340-1-guillaume.bressaix@gmail.com>
- <20200622222743.4643d71d@windsurf.home>
- <CAJe0E3dU52qyQ_=eVN+1xtD8b1Kiwe=RZ7zvjpYfhZ8CDJinfQ@mail.gmail.com>
- <CAJe0E3dTThdh+xniL4P4pF9iRaJqN0YA7-OWKPmOWscqRkbmYQ@mail.gmail.com>
- <CAJe0E3fg1O2n7ucLS71ZMoOrnxmSs_52KWAa_CgWhFrFMo0mnw@mail.gmail.com>
-Message-ID: <20200623142646.5d4bd105@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 23 Jun 2020 15:16:49 +0200
+Subject: [Buildroot] [PATCH] package/gdb: fix gdb python support with python
+ 3.8
+Message-ID: <20200623131649.632256-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Jun 2020 14:14:20 +0200
-Guillaume Bres <guillaume.bressaix@gmail.com> wrote:
+CPython 3.8 has added a new Syntax Warning that print
+a waring at runtime while unsing gdb python support.
 
-> Trying to build libnids with libnet:
-> 
->    - libnet does not have a pkg-config description file, so what I
->    previously said/thought cannot apply
+$ gdb -ex "python import os"
+/usr/share/gdb/python/gdb/command/prompt.py:48: SyntaxWarning: "is not" with a literal. Did you mean "!="?
+  if self.value is not '':
+/usr/share/gdb/python/gdb/command/prompt.py:60: SyntaxWarning: "is not" with a literal. Did you mean "!="?
+  if self.value is not '':
 
-Gah.
+Backport an upstream patch for this:
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=b6484282f85bf7f11451b2441599c241d302ad9d
 
->    - unfortunately because of that, removing --disable-libnet option from
->    configure, has LNETLIB & LNET_CFLAGS pointing to /usr/include
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...e-of-is-operator-for-comparison-in-p.patch | 42 +++++++++++++++++++
+ ...e-of-is-operator-for-comparison-in-p.patch | 42 +++++++++++++++++++
+ ...e-of-is-operator-for-comparison-in-p.patch | 42 +++++++++++++++++++
+ 3 files changed, 126 insertions(+)
+ create mode 100644 package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+ create mode 100644 package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+ create mode 100644 package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
 
-Right.
-
->    - they have a --with-libnet option, I tried something like
->    --with-libnet=$(STAGING_DIR), but they look for a very specific combination
-> 
->      if test -f $withval/include/libnet.h -a -f $withval/lib/libnet.a -a -f
-> > $withval/libnet-config ; then  (line 133 in $libnids/configure.in)
-
-Their handling of the --with-libXXX value is completely non-standard.
-They expect it to be pointed to the *build* directory of the library,
-and not to a sysroot where it has been installed. I had the same issue
-with libpcap, which is why I switched to using pkg-config.
-
->    - $withval/include/libnet.h exists, we have a $withval/lib/libnet.la but
->    that is not exactly what they want, $withval/libnet-config does not exist
->    - so at the moment I am not able to submit anything further about this
->    topic, because of the combination of files they look for. I don't think
->    messing with $libnids/configure.in is an option either, that would be
->    too dirty
-
-Well, we already mess with the configure.in script: see my patch 0001
-that changes the configure.in script to add support for using
-pkg-config to check for libpcap's availability.
-
->    - I am not familiar with pkg-config at the moment, I don't know if we
->    can "activate libnet.pc" and have pkg-config look for it
-
-If you don't need libnet support as you're saying at the beginning of
-this e-mail, then we can simply keep the --disable-libnet and that's it.
-
-Thomas
+diff --git a/package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch b/package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+new file mode 100644
+index 0000000000..989a5b1347
+--- /dev/null
++++ b/package/gdb/8.1.1/0008-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+@@ -0,0 +1,42 @@
++From e00c211d51bec301cf04719b77076a8783ef44b5 Mon Sep 17 00:00:00 2001
++From: Raul Tambre <raul@tambre.ee>
++Date: Sat, 4 May 2019 15:48:17 -0400
++Subject: [PATCH] Fix incorrect use of 'is' operator for comparison in
++ python/lib/gdb/command/prompt.py
++
++The 'is' operator is not meant to be used for comparisons. It currently working
++is an implementation detail of CPython.  CPython 3.8 has added a SyntaxWarning
++for this.
++
++(cherry picked from commit b6484282f85bf7f11451b2441599c241d302ad9d)
++[Romain: backport to gdb 8.x]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/python/lib/gdb/command/prompt.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gdb/python/lib/gdb/command/prompt.py b/gdb/python/lib/gdb/command/prompt.py
++index 3d662a7d3f..04b9e49c22 100644
++--- a/gdb/python/lib/gdb/command/prompt.py
+++++ b/gdb/python/lib/gdb/command/prompt.py
++@@ -45,7 +45,7 @@ The currently defined substitutions are:
++         self.hook_set = False
++ 
++     def get_show_string (self, pvalue):
++-        if self.value is not '':
+++        if self.value:
++            return "The extended prompt is: " + self.value
++         else:
++            return "The extended prompt is not set."
++@@ -57,7 +57,7 @@ The currently defined substitutions are:
++         return ""
++ 
++     def before_prompt_hook(self, current):
++-        if self.value is not '':
+++        if self.value:
++             return gdb.prompt.substitute_prompt(self.value)
++         else:
++             return None
++-- 
++2.25.4
++
+diff --git a/package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch b/package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+new file mode 100644
+index 0000000000..989a5b1347
+--- /dev/null
++++ b/package/gdb/8.2.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+@@ -0,0 +1,42 @@
++From e00c211d51bec301cf04719b77076a8783ef44b5 Mon Sep 17 00:00:00 2001
++From: Raul Tambre <raul@tambre.ee>
++Date: Sat, 4 May 2019 15:48:17 -0400
++Subject: [PATCH] Fix incorrect use of 'is' operator for comparison in
++ python/lib/gdb/command/prompt.py
++
++The 'is' operator is not meant to be used for comparisons. It currently working
++is an implementation detail of CPython.  CPython 3.8 has added a SyntaxWarning
++for this.
++
++(cherry picked from commit b6484282f85bf7f11451b2441599c241d302ad9d)
++[Romain: backport to gdb 8.x]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/python/lib/gdb/command/prompt.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gdb/python/lib/gdb/command/prompt.py b/gdb/python/lib/gdb/command/prompt.py
++index 3d662a7d3f..04b9e49c22 100644
++--- a/gdb/python/lib/gdb/command/prompt.py
+++++ b/gdb/python/lib/gdb/command/prompt.py
++@@ -45,7 +45,7 @@ The currently defined substitutions are:
++         self.hook_set = False
++ 
++     def get_show_string (self, pvalue):
++-        if self.value is not '':
+++        if self.value:
++            return "The extended prompt is: " + self.value
++         else:
++            return "The extended prompt is not set."
++@@ -57,7 +57,7 @@ The currently defined substitutions are:
++         return ""
++ 
++     def before_prompt_hook(self, current):
++-        if self.value is not '':
+++        if self.value:
++             return gdb.prompt.substitute_prompt(self.value)
++         else:
++             return None
++-- 
++2.25.4
++
+diff --git a/package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch b/package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+new file mode 100644
+index 0000000000..989a5b1347
+--- /dev/null
++++ b/package/gdb/8.3.1/0006-Fix-incorrect-use-of-is-operator-for-comparison-in-p.patch
+@@ -0,0 +1,42 @@
++From e00c211d51bec301cf04719b77076a8783ef44b5 Mon Sep 17 00:00:00 2001
++From: Raul Tambre <raul@tambre.ee>
++Date: Sat, 4 May 2019 15:48:17 -0400
++Subject: [PATCH] Fix incorrect use of 'is' operator for comparison in
++ python/lib/gdb/command/prompt.py
++
++The 'is' operator is not meant to be used for comparisons. It currently working
++is an implementation detail of CPython.  CPython 3.8 has added a SyntaxWarning
++for this.
++
++(cherry picked from commit b6484282f85bf7f11451b2441599c241d302ad9d)
++[Romain: backport to gdb 8.x]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/python/lib/gdb/command/prompt.py | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gdb/python/lib/gdb/command/prompt.py b/gdb/python/lib/gdb/command/prompt.py
++index 3d662a7d3f..04b9e49c22 100644
++--- a/gdb/python/lib/gdb/command/prompt.py
+++++ b/gdb/python/lib/gdb/command/prompt.py
++@@ -45,7 +45,7 @@ The currently defined substitutions are:
++         self.hook_set = False
++ 
++     def get_show_string (self, pvalue):
++-        if self.value is not '':
+++        if self.value:
++            return "The extended prompt is: " + self.value
++         else:
++            return "The extended prompt is not set."
++@@ -57,7 +57,7 @@ The currently defined substitutions are:
++         return ""
++ 
++     def before_prompt_hook(self, current):
++-        if self.value is not '':
+++        if self.value:
++             return gdb.prompt.substitute_prompt(self.value)
++         else:
++             return None
++-- 
++2.25.4
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.4
