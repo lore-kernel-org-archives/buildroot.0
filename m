@@ -1,72 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Jun 2020 18:30:19 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libupnpp: bump to version 0.19.2
+Date: Tue, 23 Jun 2020 18:30:20 +0200
+Subject: [Buildroot] [PATCH 3/3] package/upmpdcli: bump to version 1.4.12
 In-Reply-To: <20200623163020.866522-1-fontaine.fabrice@gmail.com>
 References: <20200623163020.866522-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200623163020.866522-2-fontaine.fabrice@gmail.com>
+Message-ID: <20200623163020.866522-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting from this version libupnp has been replaced with libnpupnp
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libupnpp/Config.in     | 4 ++--
- package/libupnpp/libupnpp.hash | 4 ++--
- package/libupnpp/libupnpp.mk   | 5 ++---
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
-index a71eff5423..41afa9300f 100644
---- a/package/libupnpp/Config.in
-+++ b/package/libupnpp/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LIBUPNPP
- 	bool "libupnpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpupnp
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBNPUPNP
- 	help
- 	  The libupnpp C++ library wraps libupnp for easier use by
- 	  upmpdcli and upplay.
-diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
-index 993dbc89ae..fb510236a3 100644
---- a/package/libupnpp/libupnpp.hash
-+++ b/package/libupnpp/libupnpp.hash
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 6eb6c7b9ea..83fb5cf967 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
 @@ -1,5 +1,5 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.2.tar.gz.sha256
--sha256  5abaaf353a1e9c3482d61ef2627b650285d59f27c1ee60d35b8951952261374f  libupnpp-0.17.2.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.2.tar.gz.sha256
-+sha256  c9623533271605c92dfa603f5fe0ab6d3d5b4384a0c9173800784f4aa643a190  libupnpp-0.19.2.tar.gz
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.9.tar.gz.sha256:
+-sha256  ace5a3166891109d2a874f21306986857ee2620230a77751ed6209f7b5cc9c58  upmpdcli-1.4.9.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.12.tar.gz.sha256:
++sha256  bffc78c140ad688987894ea5a1e162e6dcbc7dcae7d2cc322a894f5ea2a2f53b  upmpdcli-1.4.12.tar.gz
  
  # Hash for license file:
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index c9c103d9b5..ef1816166e 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -4,12 +4,11 @@
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index ab4b8bfd3c..1315022ee8 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNPP_VERSION = 0.17.2
-+LIBUPNPP_VERSION = 0.19.2
- LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
--LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl \
--	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
-+LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl libnpupnp
- 
- $(eval $(autotools-package))
+-UPMPDCLI_VERSION = 1.4.9
++UPMPDCLI_VERSION = 1.4.12
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
 -- 
 2.26.2
