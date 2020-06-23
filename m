@@ -1,58 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Jun 2020 23:32:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: fix typo in stream split
- clients
-In-Reply-To: <20200623212726.1039911-1-fontaine.fabrice@gmail.com>
-References: <20200623212726.1039911-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200623213212.GE2351@scaer>
+Date: Tue, 23 Jun 2020 23:35:57 +0200
+Subject: [Buildroot] [git commit] pru-software-support: bump to latest
+ version 5.7.0
+Message-ID: <20200623213516.B4B6982285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=33c05d8ef812dddf01e7c6373de299c7af763769
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-23 23:27 +0200, Fabrice Fontaine spake thusly:
-> Commit 3e6b35900f4f4aed4fd11e0187a36a7f374271aa forgot to add a 's' to
-> ngx_stream_split_client_module
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update to the latest version of the PRU software support [1].
 
-Applied to master, thanks.
+There are minor changes to the license file mostly dates and versions --
+notably pulling in several Linux kernel 5.4 header files in place of the
+4.19 versions.  As there is no longer a dependency on the kernel types.h
+  header, there's no longer a GPL-2.0 licensed component.
 
-Regards,
-Yann E. MORIN.
+Also drop the useless comment that just repeats the URL.
 
-> ---
->  package/nginx/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-> index 1cf6d41248..714ab2431d 100644
-> --- a/package/nginx/Config.in
-> +++ b/package/nginx/Config.in
-> @@ -381,7 +381,7 @@ config BR2_PACKAGE_NGINX_STREAM_MAP_MODULE
->  	  Enable ngx_stream_map_module
->  
->  config BR2_PACKAGE_NGINX_STREAM_SPLIT_CLIENTS_MODULE
-> -	bool "ngx_stream_split_client_module"
-> +	bool "ngx_stream_split_clients_module"
->  	default y
->  	help
->  	  Enable ngx_stream_split_clients_module
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+[yann.morin.1998 at free.fr: drop the URL-as-comment]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pru-software-support/pru-software-support.hash | 4 ++--
+ package/pru-software-support/pru-software-support.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+index 9deb3e6661..cd81488e1b 100644
+--- a/package/pru-software-support/pru-software-support.hash
++++ b/package/pru-software-support/pru-software-support.hash
+@@ -1,3 +1,3 @@
+ # Locally-calculated hash
+-sha256  d6d1f76ab5a50dbdf1dff834b271f9d3ffa7424e4d9615e00713f3f81ed5787e  pru-software-support-package-v5.6.0.tar.gz
+-sha256  a68530804624227e4f2e007eacb5c2d616695426082e895ee1e2d77d3833f5f7  PRU-Package-v6.0-Manifest.html
++sha256  57e47128dc5437c5a64d4ef94f419d9ea38e894c0c31ab10cad99c0da614b296  pru-software-support-package-v5.7.0.tar.gz
++sha256  62a2f56498cd1bac2d4ea6ea1c941affba1e4bb65bfdf2dcffd8e5079fa34399  PRU-Package-v6.1-Manifest.html
+diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+index b56ac0af12..91f41bcb91 100644
+--- a/package/pru-software-support/pru-software-support.mk
++++ b/package/pru-software-support/pru-software-support.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
+ 
+-PRU_SOFTWARE_SUPPORT_VERSION = 5.6.0
+-# https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot/pru-software-support-package-5.6.0.tar.gz
++PRU_SOFTWARE_SUPPORT_VERSION = 5.7.0
+ PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot
+ PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-package-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
+-PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
+-PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v6.0-Manifest.html
++PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, Public Domain
++PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v6.1-Manifest.html
+ PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+ HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
+ 
