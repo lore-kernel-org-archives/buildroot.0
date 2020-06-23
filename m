@@ -1,68 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Jun 2020 20:01:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: bump to version
- 1.51.06
-In-Reply-To: <20200623163143.866641-1-fontaine.fabrice@gmail.com>
-References: <20200623163143.866641-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200623180110.GW2351@scaer>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 23 Jun 2020 20:08:47 +0200
+Subject: [Buildroot] [PATCH v2] package/irrlicht: fix libraries linking
+In-Reply-To: <20200622223626.78bc07e1@windsurf.home>
+References: <20200622184515.312030-1-b.bilas@grinn-global.com>
+ <20200622212642.1be946f3@windsurf.home>
+ <46d65bc1-310b-c21a-22e7-11df0ef164b7@grinn-global.com>
+ <20200622223626.78bc07e1@windsurf.home>
+Message-ID: <6a29bbc7-1399-16aa-2e7b-4945f217a9b5@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello Thomas,
 
-On 2020-06-23 18:31 +0200, Fabrice Fontaine spake thusly:
-> Update indentation in hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 22.06.2020 22:36, Thomas Petazzoni wrote:
+> On Mon, 22 Jun 2020 22:23:35 +0200
+> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+>>>> +-sharedlib: LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+>>>> ++sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+>>> Why here are you changing the LDFLAGS to override LDFLAGS.
+>>>
+>>>   
+>>>> +diff --git a/source/Irrlicht/Makefile b/source/Irrlicht/Makefile
+>>>> +index fed6c7e..b323237 100644
+>>>> +--- a/source/Irrlicht/Makefile
+>>>> ++++ b/source/Irrlicht/Makefile
+>>>> +@@ -88,8 +88,7 @@ STATIC_LIB = libIrrlicht.a
+>>>> + LIB_PATH = ../../lib/$(SYSTEM)
+>>>> + INSTALL_DIR = /usr/local/lib
+>>>> + sharedlib install: SHARED_LIB = libIrrlicht.so
+>>>> +-sharedlib: override LDFLAGS += -L/usr/X11R6/lib$(LIBSELECT) -lGL -lXxf86vm
+>>>> +-staticlib sharedlib: CXXINCS += -I/usr/X11R6/include
+>>>> ++sharedlib: override LDFLAGS += -lGL -lXxf86vm
+>>> And here you drop entirely the -L argument ?
+>> Due to the fact that it points to the host system libraries. This -L
+>> argument is set correctly within package makefile.
+> Yes, of course. My question is why do you have two patches? They touch
+> exactly the same line, simply do the change in two steps instead of
+> one. Am I missing something here ?
+Ah, I didn't want to combine everything into one patch because there 
+were 2 different changes (adding keyword and removing paths) but I'm 
+gonna combine it into one patch then.
+>
+>>>> +# set correct path for libraries linking
+>>>> +IRRLICHT_CONF_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib"
+>>> This should not be necessary, STAGING_DIR/usr/lib is already the
+>>> default search path for libraries in the Buildroot cross-compiler.
+>>> Could you test without this ?
+>> It seems to work quite well without this line.
+> Yes, as I said, -L$(STAGING_DIR)/usr/lib is useless.
+>
+>>>   
+>>>>    # Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
+>>>>    # While linking an application with libIrrlicht.so, we get an undefined reference to
+>>>>    # png_init_filter_functions_neon.
+>>>>    # Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
+>>>>    # so disable NEON support completely.
+>>>> -IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
+>>>> +IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0 -I$(STAGING_DIR)/usr/include/X11"
+>>> It is a bit weird to have this below the NEON related comment.
+>>>
+>>> Can we change that to:
+>>>
+>>> IRRLICHT_CPPFLAGS = $(TARGET_CPPFLAGS)
+>>>
+>>> # blabla about NEON
+>>> IRRLICHT_CPPFLAGS += -DPNG_ARM_NEON_OPT=0
+>>>
+>>> # blabla about X11 includes
+>>> IRRLICHT_CPPFLAGS += -I$(STAGING_DIR)/usr/include
+>>>
+>>> IRRLICHT_CONF_OPTS += CPPFLAGS="$(IRRLICHT_CPPFLAGS)"
+>> Good hint, I was thinking about a bit different approach but it wasn't
+>> working as I expected therefore I did it as it's above.
+> So I guess you'll rework accordingly? If needed, you can also have a
+> preparation patch that reworks this IRRLICHT_CPPFLAGS thing for the
+> NEON stuff, and then another patch that fixes the library linking issue.
+>
+> Thomas
 
-Applied to master, thanks.
+It turned out that -I$(STAGING_DIR)/usr/include isn't necessary anymore 
+so I've decided not to touch that.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libxmlrpc/libxmlrpc.hash | 4 ++--
->  package/libxmlrpc/libxmlrpc.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
-> index 093da67bbf..13e3b0b534 100644
-> --- a/package/libxmlrpc/libxmlrpc.hash
-> +++ b/package/libxmlrpc/libxmlrpc.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 c9f5b584a42493877ae0f09ed680d94e035ab389e8fa1873b1ec42118d5cfca3 xmlrpc-c-1.43.08.tgz
-> -sha256 db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6 doc/COPYING
-> +sha256  06dcd87d9c88374559369ffbe83b3139cf41418c1a2d03f20e08808085f89fd0  xmlrpc-c-1.51.06.tgz
-> +sha256  db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6  doc/COPYING
-> diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-> index ac4688d7ce..5ac91424ca 100644
-> --- a/package/libxmlrpc/libxmlrpc.mk
-> +++ b/package/libxmlrpc/libxmlrpc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBXMLRPC_VERSION = 1.43.08
-> +LIBXMLRPC_VERSION = 1.51.06
->  LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
->  LIBXMLRPC_SITE = http://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%20Super%20Stable/$(LIBXMLRPC_VERSION)
->  LIBXMLRPC_LICENSE = BSD-3-Clause (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best
+Bartek
