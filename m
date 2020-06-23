@@ -1,108 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 23 Jun 2020 23:19:03 +0200
-Subject: [Buildroot] [git commit] package/libnpupnp: new package
-Message-ID: <20200623212717.A62BB82982@busybox.osuosl.org>
+Date: Tue, 23 Jun 2020 23:19:55 +0200
+Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.19.2
+Message-ID: <20200623212717.B1E3782982@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2f50391d79032fa3741b5d513588a511052af17
+commit: https://git.buildroot.net/buildroot/commit/?id=0b81bdac3a59d93fe34ea19eae09dbf23a4260c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-npupnp (new pupnp or not pupnp ?) is an UPnP library derived from the
-venerable pupnp (https://github.com/pupnp/pupnp), based on its 1.6.x
-branch (around 1.6.25).
-
-https://www.lesbonscomptes.com/upmpdcli/libnpupnp.html
+Starting from this version libupnp has been replaced with libnpupnp
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/libnpupnp/Config.in      | 18 ++++++++++++++++++
- package/libnpupnp/libnpupnp.hash |  5 +++++
- package/libnpupnp/libnpupnp.mk   | 14 ++++++++++++++
- 5 files changed, 39 insertions(+)
+ package/libupnpp/Config.in     | 4 ++--
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 5 ++---
+ 3 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fb6d4cec64..4b6a346a05 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -856,6 +856,7 @@ F:	package/libmatroska/
- F:	package/libmpdclient/
- F:	package/libnetfilter_conntrack/
- F:	package/libnetfilter_queue/
-+F:	package/libnpupnp/
- F:	package/liboping/
- F:	package/libpfm4/
- F:	package/libraw/
-diff --git a/package/Config.in b/package/Config.in
-index e2bb004015..6a34a895af 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1712,6 +1712,7 @@ menu "Networking"
- 	source "package/libnice/Config.in"
- 	source "package/libnids/Config.in"
- 	source "package/libnl/Config.in"
-+	source "package/libnpupnp/Config.in"
- 	source "package/liboauth/Config.in"
- 	source "package/liboping/Config.in"
- 	source "package/libosip2/Config.in"
-diff --git a/package/libnpupnp/Config.in b/package/libnpupnp/Config.in
-new file mode 100644
-index 0000000000..cea5bd5c06
---- /dev/null
-+++ b/package/libnpupnp/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBNPUPNP
-+	bool "libnpupnp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+	help
-+	  npupnp (new pupnp or not pupnp ?) is an UPnP library derived
-+	  from the venerable pupnp (https://github.com/pupnp/pupnp),
-+	  based on its 1.6.x branch (around 1.6.25).
-+
-+	  https://www.lesbonscomptes.com/upmpdcli/libnpupnp.html
-+
-+comment "libnpupnp needs a toolchain w/ C++, threads, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
-new file mode 100644
-index 0000000000..41cc41955b
---- /dev/null
-+++ b/package/libnpupnp/libnpupnp.hash
-@@ -0,0 +1,5 @@
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.7.tar.gz.sha256
-+sha256  30f15caa67dc83f76b0976438165aa4704a50c7e3e5444c50bb8cbad874877ca  libnpupnp-4.0.7.tar.gz
-+
-+# Hash for license file:
-+sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
-new file mode 100644
-index 0000000000..abd80ab63b
---- /dev/null
-+++ b/package/libnpupnp/libnpupnp.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libnpupnp
-+#
-+################################################################################
-+
-+LIBNPUPNP_VERSION = 4.0.7
-+LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
-+LIBNPUPNP_LICENSE = BSD-3-Clause
-+LIBNPUPNP_LICENSE_FILES = COPYING
-+LIBNPUPNP_INSTALL_STAGING = YES
-+LIBNPUPNP_DEPENDENCIES = expat libcurl libmicrohttpd
-+
-+$(eval $(autotools-package))
+diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
+index a71eff5423..41afa9300f 100644
+--- a/package/libupnpp/Config.in
++++ b/package/libupnpp/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_LIBUPNPP
+ 	bool "libupnpp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpupnp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBNPUPNP
+ 	help
+ 	  The libupnpp C++ library wraps libupnp for easier use by
+ 	  upmpdcli and upplay.
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index 993dbc89ae..fb510236a3 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.2.tar.gz.sha256
+-sha256  5abaaf353a1e9c3482d61ef2627b650285d59f27c1ee60d35b8951952261374f  libupnpp-0.17.2.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.2.tar.gz.sha256
++sha256  c9623533271605c92dfa603f5fe0ab6d3d5b4384a0c9173800784f4aa643a190  libupnpp-0.19.2.tar.gz
+ 
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index c9c103d9b5..ef1816166e 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.17.2
++LIBUPNPP_VERSION = 0.19.2
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
+ LIBUPNPP_INSTALL_STAGING = YES
+-LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl \
+-	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
++LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl libnpupnp
+ 
+ $(eval $(autotools-package))
