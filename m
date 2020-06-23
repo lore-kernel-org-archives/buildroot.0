@@ -1,219 +1,72 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Tue, 23 Jun 2020 16:01:53 -0400
-Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: new package
-Message-ID: <20200623200153.1112888-1-eeppeliteloop@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 23 Jun 2020 22:31:25 +0200
+Subject: [Buildroot] [PATCH v2, 2/3] package/libupnpp: bump to version 0.19.2
+In-Reply-To: <20200623203126.1024202-1-fontaine.fabrice@gmail.com>
+References: <20200623203126.1024202-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200623203126.1024202-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Babeltrace 2 is a trace manipulation toolkit.
+Starting from this version libupnp has been replaced with libnpupnp
 
-The Babeltrace 2 project offers a library with a C API, Python 3
-bindings, and a command-line tool which makes it very easy for mere
-mortals to view, convert, transform, and analyze traces.
-
-See <https://babeltrace.org/> for more details.
-
-Babeltrace 2 is a major update of Babeltrace 1 (Buildroot package
-`lttng-babeltrace`). Both projects are coinstallable. Except for the
-command-line tool (named `babeltrace2`), the Babeltrace 2 project is not
-backward compatible with Babeltrace 1.
-
-I'm naming this package `babeltrace2` instead of `lttng-babeltrace2`
-because, although it can read LTTng traces, the two projects are
-independent. All major distributions use `babeltrace2` as the
-Babeltrace 2 package's name.
-
-I'm keeping the `lttng-babeltrace` package because, as of this date, we
-still add bug and security fixes from time to time, therefore the
-project is not in EOL stage. Some external, custom packages could still
-depend on the Babeltrace 1 library, for example.
-
-As with `lttng-babeltrace`, you can build and install the host version
-of Babeltrace 2 for the workflow where you trace the target, download
-the resulting trace (or receive it during the tracing process), and then
-read and analyze it with Babeltrace 2.
-
-If you enable the `elfutils` package (`BR2_PACKAGE_ELFUTILS`), then you
-can also build and install the Babeltrace 2 project's debugging
-information filter component class for LTTng traces
-(`BR2_PACKAGE_BABELTRACE2_DEBUG_INFO_COMP_CLS`).
-
-Tested with glibc, uClibc-ng, and musl.
-
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/Config.in.host               |  1 +
- package/babeltrace2/Config.in        | 45 ++++++++++++++++++++++++++++
- package/babeltrace2/Config.in.host   | 16 ++++++++++
- package/babeltrace2/babeltrace2.hash |  8 +++++
- package/babeltrace2/babeltrace2.mk   | 28 +++++++++++++++++
- 7 files changed, 100 insertions(+)
- create mode 100644 package/babeltrace2/Config.in
- create mode 100644 package/babeltrace2/Config.in.host
- create mode 100644 package/babeltrace2/babeltrace2.hash
- create mode 100644 package/babeltrace2/babeltrace2.mk
+ package/libupnpp/Config.in     | 4 ++--
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 5 ++---
+ 3 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fb6d4cec64..cafde73db9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2062,6 +2062,7 @@ N:	Philipp Richter <richterphilipp.pops@gmail.com>
- F:	package/libtorrent-rasterbar/
+diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
+index a71eff5423..41afa9300f 100644
+--- a/package/libupnpp/Config.in
++++ b/package/libupnpp/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_LIBUPNPP
+ 	bool "libupnpp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpupnp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBNPUPNP
+ 	help
+ 	  The libupnpp C++ library wraps libupnp for easier use by
+ 	  upmpdcli and upplay.
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index 993dbc89ae..fb510236a3 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.2.tar.gz.sha256
+-sha256  5abaaf353a1e9c3482d61ef2627b650285d59f27c1ee60d35b8951952261374f  libupnpp-0.17.2.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.2.tar.gz.sha256
++sha256  c9623533271605c92dfa603f5fe0ab6d3d5b4384a0c9173800784f4aa643a190  libupnpp-0.19.2.tar.gz
  
- N:	Philippe Proulx <eeppeliteloop@gmail.com>
-+F:	package/babeltrace2/
- F:	package/lttng-babeltrace/
- F:	package/lttng-libust/
- F:	package/lttng-modules/
-diff --git a/package/Config.in b/package/Config.in
-index e2bb004015..ca23dee441 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -84,6 +84,7 @@ menu "Compressors and decompressors"
- endmenu
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index c9c103d9b5..ef1816166e 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
- menu "Debugging, profiling and benchmark"
-+	source "package/babeltrace2/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index f1246c708f..12a8a9da60 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -2,6 +2,7 @@ menu "Host utilities"
+-LIBUPNPP_VERSION = 0.17.2
++LIBUPNPP_VERSION = 0.19.2
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
+ LIBUPNPP_INSTALL_STAGING = YES
+-LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl \
+-	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
++LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl libnpupnp
  
- 	source "package/aespipe/Config.in.host"
- 	source "package/android-tools/Config.in.host"
-+	source "package/babeltrace2/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
- 	source "package/cargo/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
-diff --git a/package/babeltrace2/Config.in b/package/babeltrace2/Config.in
-new file mode 100644
-index 0000000000..4b9b423b8c
---- /dev/null
-+++ b/package/babeltrace2/Config.in
-@@ -0,0 +1,45 @@
-+config BR2_PACKAGE_BABELTRACE2
-+	bool "babeltrace2"
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Babeltrace 2 is an open-source trace manipulation toolkit.
-+
-+	  The Babeltrace 2 project offers a library with a C API, Python 3
-+	  bindings, and a command-line tool which makes it very easy for
-+	  mere mortals to view, convert, transform, and analyze traces.
-+
-+	  Babeltrace 2 is also the reference parser implementation of the
-+	  Common Trace Format (CTF), a very versatile trace format followed
-+	  by various tracers and tools such as LTTng and barectf. The
-+	  Babeltrace 2 library and its Python bindings can read and write
-+	  CTF traces.
-+
-+	  https://babeltrace.org/
-+
-+if BR2_PACKAGE_BABELTRACE2
-+
-+config BR2_PACKAGE_BABELTRACE2_DEBUG_INFO_COMP_CLS
-+	bool "Debugging information filter component class"
-+	depends on BR2_PACKAGE_ELFUTILS
-+	help
-+	  Build and install the Babeltrace 2 debugging information filter
-+	  component class.
-+
-+	  A Babeltrace 2 `filter.lttng-utils.debug-info` message iterator
-+	  creates and emits copies of upstream messages, augmenting LTTng
-+	  event messages with debugging information when it's available and
-+	  possible.
-+
-+	  https://babeltrace.org/docs/v2.0/man7/babeltrace2-filter.lttng-utils.debug-info.7/
-+
-+comment "Babeltrace 2's debug. info. filter component class needs elfutils"
-+	depends on !BR2_PACKAGE_ELFUTILS
-+
-+endif # BR2_PACKAGE_BABELTRACE2
-+
-+comment "babeltrace2 needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/babeltrace2/Config.in.host b/package/babeltrace2/Config.in.host
-new file mode 100644
-index 0000000000..fb56089eb1
---- /dev/null
-+++ b/package/babeltrace2/Config.in.host
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_HOST_BABELTRACE2
-+	bool "host babeltrace2"
-+	help
-+	  Babeltrace 2 is an open-source trace manipulation toolkit.
-+
-+	  The Babeltrace 2 project offers a library with a C API, Python 3
-+	  bindings, and a command-line tool which makes it very easy for
-+	  mere mortals to view, convert, transform, and analyze traces.
-+
-+	  Babeltrace 2 is also the reference parser implementation of the
-+	  Common Trace Format (CTF), a very versatile trace format followed
-+	  by various tracers and tools such as LTTng and barectf. The
-+	  Babeltrace 2 library and its Python bindings can read and write
-+	  CTF traces.
-+
-+	  https://babeltrace.org/
-diff --git a/package/babeltrace2/babeltrace2.hash b/package/babeltrace2/babeltrace2.hash
-new file mode 100644
-index 0000000000..27c47ba26f
---- /dev/null
-+++ b/package/babeltrace2/babeltrace2.hash
-@@ -0,0 +1,8 @@
-+# From https://www.efficios.com/files/babeltrace/babeltrace2-2.0.3.tar.bz2.sha256
-+sha256 a53625152554102d868ba8395347d0daba0bec9c4b854c3e9bd97c77b0bf04a0  babeltrace2-2.0.3.tar.bz2
-+
-+# Hash for license files
-+sha256 d919c6347409efde6dea63c6f349fb06bc060a2b721fc3df07b5f720b5f1d60e  LICENSE
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-+sha256 c68fd1ffc1623ea0dace21abf57305818e4998a4ae0c79010aaaa943eb660b55  lgpl-2.1.txt
-+sha256 2f801b7c2494850c3d91da820eb230502dc0192c9d0db024db37ec08d0be1434  mit-license.txt
-diff --git a/package/babeltrace2/babeltrace2.mk b/package/babeltrace2/babeltrace2.mk
-new file mode 100644
-index 0000000000..2ffb3493c8
---- /dev/null
-+++ b/package/babeltrace2/babeltrace2.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# babeltrace2
-+#
-+################################################################################
-+
-+BABELTRACE2_SITE = https://www.efficios.com/files/babeltrace
-+BABELTRACE2_VERSION = 2.0.3
-+BABELTRACE2_SOURCE = babeltrace2-$(BABELTRACE2_VERSION).tar.bz2
-+BABELTRACE2_LICENSE = MIT, LGPL-2.1 (src/common/list.h), GPL-2.0 (test code)
-+BABELTRACE2_LICENSE_FILES = mit-license.txt lgpl-2.1.txt gpl-2.0.txt LICENSE
-+BABELTRACE2_CONF_OPTS += --disable-man-pages
-+BABELTRACE2_DEPENDENCIES = libglib2 host-pkgconf
-+# The host-elfutils dependency is optional, but since we don't have
-+# options for host packages, just build support for it unconditionally.
-+HOST_BABELTRACE2_DEPENDENCIES = host-libglib2 host-pkgconf host-elfutils
-+HOST_BABELTRACE2_CONF_OPTS += --enable-debug-info
-+
-+ifeq ($(BR2_PACKAGE_BABELTRACE2_DEBUG_INFO_COMP_CLS),y)
-+BABELTRACE2_DEPENDENCIES += elfutils
-+BABELTRACE2_CONF_OPTS += --enable-debug-info
-+BABELTRACE2_CONF_ENV += bt_cv_lib_elfutils=yes
-+else
-+BABELTRACE2_CONF_OPTS += --disable-debug-info
-+endif
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ $(eval $(autotools-package))
 -- 
 2.26.2
