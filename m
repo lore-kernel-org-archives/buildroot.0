@@ -1,48 +1,40 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Tue, 23 Jun 2020 09:50:11 +0000
-Subject: [Buildroot] [PATCH] package/gnutls: security bump to 3.6.14
-In-Reply-To: <87r1u884ix.fsf@dell.be.48ers.dk>
-References: <20200611053151.709390-1-stefan.sorensen@spectralink.com>
- <87r1u884ix.fsf@dell.be.48ers.dk>
-Message-ID: <8c99675d35b8e58db6bcb1cae990f386be12e616.camel@spectralink.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue, 23 Jun 2020 13:38:59 +0200
+Subject: [Buildroot] [PATCH] linux: run depmod only if modules directory
+ exists
+Message-ID: <20200623113859.172177-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2020-06-21 at 23:58 +0200, Peter Korsgaard wrote:
-> > > > > > "stefan" == stefan  <stefan@astylos.dk> writes:
->
->  > From: Stefan S?rensen <stefan.sorensen@spectralink.com>
->  > Fixes the following security issue:
->
->  >  * CVE-2020-13777: It was found that GnuTLS 3.6.4 introduced a
->  >    regression in the TLS protocol implementation. This caused the
-> TLS
->  >    server to not securely construct a session ticket encryption key
->  >    considering the application supplied secret, allowing a MitM
->  >    attacker to bypass authentication in TLS 1.3 and recover
-> previous
->  >    conversations in TLS 1.2
->
->  > Release announcement:
->  >
-> https://lists.gnupg.org/pipermail/gnutls-help/2020-June/004648.html
->
->  > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
->
-> Did you test this on uClibc? I had a look at bumping the version
-> earlier
-> this month and ended up with build issues because of a gnulib update:
+If the modules directory that corresponds to the version of the kernel
+being built has been deleted, don't try to run depmod, which will
+obviously fail.
 
-I thought I did, but somehow I managed to mess it up an get a successful
-build.
+This can happen for instance when the modules are stripped from the main
+root filesystem, and placed into a separate filesystem image, so that
+the root filesystem and the kernel can be updated separately.
 
-I will look into it.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ linux/linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Stefan
-
-
-Spectralink Disclaimer:
-"The information transmitted by this email is intended only for the person or entity to which it is addressed. This email may contain proprietary, confidential and/or privileged material. If you are not the intended recipient of this message, please notify the sender by reply email immediately and delete this message without reading further or forwarding to others. The contents of this email may be protected by copyright law. This email is not intended to be a contract or other legally binding obligation".
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b90b032bb9..d31933fea1 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -490,7 +490,8 @@ endef
+ # Run depmod in a target-finalize hook, to encompass modules installed by
+ # packages.
+ define LINUX_RUN_DEPMOD
+-	if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
++	if test -d $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
++		&& grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
+ 		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED); \
+ 	fi
+ endef
+-- 
+2.27.0
