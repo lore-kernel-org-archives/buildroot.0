@@ -1,151 +1,85 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Jun 2020 23:38:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/umtprd: fix build on musl
-Message-ID: <20200623213803.1043515-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 23 Jun 2020 23:38:20 +0200
+Subject: [Buildroot] [PATCH v2] pru-software-support: bump to latest
+ version 5.7.0
+In-Reply-To: <20200623002515.9022-1-ashcharles@gmail.com>
+References: <20200621214315.GS2351@scaer>
+ <20200623002515.9022-1-ashcharles@gmail.com>
+Message-ID: <20200623213820.GF2351@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0b577a2f0582e38d33bd41a4d8e4cb7ec6eab52b
+Ash, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...uild-errors-warnings-on-some-systems.patch | 38 +++++++++
- ...finition-build-error-on-some-systems.patch | 78 +++++++++++++++++++
- 2 files changed, 116 insertions(+)
- create mode 100644 package/umtprd/0001-Fix-the-missing-definitions-build-errors-warnings-on-some-systems.patch
- create mode 100644 package/umtprd/0002-Fix-the-pthread-missing-definition-build-error-on-some-systems.patch
+On 2020-06-22 20:25 -0400, Ash Charles spake thusly:
+> Update to the latest version of the PRU software support [1].
+> 
+> There are minor changes to the license file mostly dates and versions --
+> notably pulling in several Linux kernel 5.4 header files in place of the
+> 4.19 versions.  As there is no longer a dependency on the kernel types.h
+>   header, there's no longer a GPL-2.0 licensed component.
+> 
+> [1] https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package
+> 
+> Signed-off-by: Ash Charles <ashcharles@gmail.com>
 
-diff --git a/package/umtprd/0001-Fix-the-missing-definitions-build-errors-warnings-on-some-systems.patch b/package/umtprd/0001-Fix-the-missing-definitions-build-errors-warnings-on-some-systems.patch
-new file mode 100644
-index 0000000000..78dfb3657f
---- /dev/null
-+++ b/package/umtprd/0001-Fix-the-missing-definitions-build-errors-warnings-on-some-systems.patch
-@@ -0,0 +1,38 @@
-+From b6eccf2160fd16405542249c62a87aff2fbfcd33 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jean-Fran=C3=A7ois=20DEL=20NERO?=
-+ <jeanfrancoisdelnero@free.fr>
-+Date: Sat, 16 May 2020 09:37:40 +0200
-+Subject: [PATCH] Fix the missing definitions build errors/warnings on some
-+ systems.
-+
-+[Retrieved from:
-+https://github.com/viveris/uMTP-Responder/commit/b6eccf2160fd16405542249c62a87aff2fbfcd33]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/usb_gadget.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/usb_gadget.c b/src/usb_gadget.c
-+index 856bb53..9f3896f 100644
-+--- a/src/usb_gadget.c
-++++ b/src/usb_gadget.c
-+@@ -27,7 +27,10 @@
-+ 
-+ #include "buildconf.h"
-+ 
-++#include <endian.h>
-+ #include <inttypes.h>
-++#include <pthread.h>
-++#include <sys/time.h>
-+ 
-+ #include <sys/ioctl.h>
-+ 
-+@@ -38,7 +41,7 @@
-+ #include <unistd.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+-#include <pthread.h>
-++
-+ #include <signal.h>
-+ 
-+ #include <errno.h>
-diff --git a/package/umtprd/0002-Fix-the-pthread-missing-definition-build-error-on-some-systems.patch b/package/umtprd/0002-Fix-the-pthread-missing-definition-build-error-on-some-systems.patch
-new file mode 100644
-index 0000000000..b7d211c6eb
---- /dev/null
-+++ b/package/umtprd/0002-Fix-the-pthread-missing-definition-build-error-on-some-systems.patch
-@@ -0,0 +1,78 @@
-+From 2e7aaf0c373a0e3a271f4b374bd98de8a80aefb0 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jean-Fran=C3=A7ois=20DEL=20NERO?=
-+ <jeanfrancoisdelnero@free.fr>
-+Date: Sat, 16 May 2020 09:20:01 +0200
-+Subject: [PATCH] Fix the pthread missing definition build error on some
-+ systems.
-+
-+[Retrieved from:
-+https://github.com/viveris/uMTP-Responder/commit/2e7aaf0c373a0e3a271f4b374bd98de8a80aefb0]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/fs_handles_db.c                    | 1 +
-+ src/mtp_cfg.c                          | 1 +
-+ src/mtp_datasets.c                     | 1 +
-+ src/mtp_operations/mtp_op_sendobject.c | 1 +
-+ src/mtp_properties.c                   | 1 +
-+ 5 files changed, 5 insertions(+)
-+
-+diff --git a/src/fs_handles_db.c b/src/fs_handles_db.c
-+index a91268a..178bd90 100644
-+--- a/src/fs_handles_db.c
-++++ b/src/fs_handles_db.c
-+@@ -26,6 +26,7 @@
-+ #include "buildconf.h"
-+ 
-+ #include <inttypes.h>
-++#include <pthread.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <string.h>
-+diff --git a/src/mtp_cfg.c b/src/mtp_cfg.c
-+index 30f473a..1f2302d 100644
-+--- a/src/mtp_cfg.c
-++++ b/src/mtp_cfg.c
-+@@ -26,6 +26,7 @@
-+ #include "buildconf.h"
-+ 
-+ #include <inttypes.h>
-++#include <pthread.h>
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+diff --git a/src/mtp_datasets.c b/src/mtp_datasets.c
-+index 95cec68..fbd67e2 100644
-+--- a/src/mtp_datasets.c
-++++ b/src/mtp_datasets.c
-+@@ -26,6 +26,7 @@
-+ #include "buildconf.h"
-+ 
-+ #include <inttypes.h>
-++#include <pthread.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <sys/statvfs.h>
-+diff --git a/src/mtp_operations/mtp_op_sendobject.c b/src/mtp_operations/mtp_op_sendobject.c
-+index 8af2c6b..8e1498c 100644
-+--- a/src/mtp_operations/mtp_op_sendobject.c
-++++ b/src/mtp_operations/mtp_op_sendobject.c
-+@@ -26,6 +26,7 @@
-+ #include "buildconf.h"
-+ 
-+ #include <inttypes.h>
-++#include <pthread.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <pthread.h>
-+diff --git a/src/mtp_properties.c b/src/mtp_properties.c
-+index 4500cd4..5cf6e2d 100644
-+--- a/src/mtp_properties.c
-++++ b/src/mtp_properties.c
-+@@ -26,6 +26,7 @@
-+ #include "buildconf.h"
-+ 
-+ #include <inttypes.h>
-++#include <pthread.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+ #include <sys/types.h>
+Applied to master (after I removed the useless comment that just repeats
+the URL). Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pru-software-support/pru-software-support.hash | 4 ++--
+>  package/pru-software-support/pru-software-support.mk   | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/pru-software-support/pru-software-support.hash b/package/pru-software-support/pru-software-support.hash
+> index 9deb3e6661..cd81488e1b 100644
+> --- a/package/pru-software-support/pru-software-support.hash
+> +++ b/package/pru-software-support/pru-software-support.hash
+> @@ -1,3 +1,3 @@
+>  # Locally-calculated hash
+> -sha256  d6d1f76ab5a50dbdf1dff834b271f9d3ffa7424e4d9615e00713f3f81ed5787e  pru-software-support-package-v5.6.0.tar.gz
+> -sha256  a68530804624227e4f2e007eacb5c2d616695426082e895ee1e2d77d3833f5f7  PRU-Package-v6.0-Manifest.html
+> +sha256  57e47128dc5437c5a64d4ef94f419d9ea38e894c0c31ab10cad99c0da614b296  pru-software-support-package-v5.7.0.tar.gz
+> +sha256  62a2f56498cd1bac2d4ea6ea1c941affba1e4bb65bfdf2dcffd8e5079fa34399  PRU-Package-v6.1-Manifest.html
+> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
+> index b56ac0af12..b54d2dac11 100644
+> --- a/package/pru-software-support/pru-software-support.mk
+> +++ b/package/pru-software-support/pru-software-support.mk
+> @@ -4,12 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -PRU_SOFTWARE_SUPPORT_VERSION = 5.6.0
+> -# https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot/pru-software-support-package-5.6.0.tar.gz
+> +PRU_SOFTWARE_SUPPORT_VERSION = 5.7.0
+> +# https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot/pru-software-support-package-5.7.0.tar.gz
+>  PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/snapshot
+>  PRU_SOFTWARE_SUPPORT_SOURCE = $(PRU_SOFTWARE_SUPPORT_NAME)-package-v$(PRU_SOFTWARE_SUPPORT_VERSION).tar.gz
+> -PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
+> -PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v6.0-Manifest.html
+> +PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, Public Domain
+> +PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v6.1-Manifest.html
+>  PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
+>  HOST_PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru
+>  
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
