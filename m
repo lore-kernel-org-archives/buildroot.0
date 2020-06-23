@@ -1,94 +1,107 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Jun 2020 18:18:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dropbear: fix build on uclibc
-Message-ID: <20200623161835.853790-1-fontaine.fabrice@gmail.com>
+Date: Tue, 23 Jun 2020 18:30:18 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libnpupnp: new package
+Message-ID: <20200623163020.866522-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/d6d783da2fb834ce21475ff54f82c07873246826
+npupnp (new pupnp or not pupnp ?) is an UPnP library derived from the
+venerable pupnp (https://github.com/pupnp/pupnp), based on its 1.6.x
+branch (around 1.6.25).
+
+https://www.lesbonscomptes.com/upmpdcli/libnpupnp.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-_GNU_SOURCE-for-random.patch         | 25 ++++++++++++++
- .../0002-move-GNU_SOURCE-earlier.patch        | 34 +++++++++++++++++++
- 2 files changed, 59 insertions(+)
- create mode 100644 package/dropbear/0001-_GNU_SOURCE-for-random.patch
- create mode 100644 package/dropbear/0002-move-GNU_SOURCE-earlier.patch
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libnpupnp/Config.in      | 16 ++++++++++++++++
+ package/libnpupnp/libnpupnp.hash |  5 +++++
+ package/libnpupnp/libnpupnp.mk   | 14 ++++++++++++++
+ 5 files changed, 37 insertions(+)
+ create mode 100644 package/libnpupnp/Config.in
+ create mode 100644 package/libnpupnp/libnpupnp.hash
+ create mode 100644 package/libnpupnp/libnpupnp.mk
 
-diff --git a/package/dropbear/0001-_GNU_SOURCE-for-random.patch b/package/dropbear/0001-_GNU_SOURCE-for-random.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fb6d4cec64..4b6a346a05 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -856,6 +856,7 @@ F:	package/libmatroska/
+ F:	package/libmpdclient/
+ F:	package/libnetfilter_conntrack/
+ F:	package/libnetfilter_queue/
++F:	package/libnpupnp/
+ F:	package/liboping/
+ F:	package/libpfm4/
+ F:	package/libraw/
+diff --git a/package/Config.in b/package/Config.in
+index e2bb004015..6a34a895af 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1712,6 +1712,7 @@ menu "Networking"
+ 	source "package/libnice/Config.in"
+ 	source "package/libnids/Config.in"
+ 	source "package/libnl/Config.in"
++	source "package/libnpupnp/Config.in"
+ 	source "package/liboauth/Config.in"
+ 	source "package/liboping/Config.in"
+ 	source "package/libosip2/Config.in"
+diff --git a/package/libnpupnp/Config.in b/package/libnpupnp/Config.in
 new file mode 100644
-index 0000000000..dfb8514114
+index 0000000000..71016b069e
 --- /dev/null
-+++ b/package/dropbear/0001-_GNU_SOURCE-for-random.patch
-@@ -0,0 +1,25 @@
-+From 3f5c106a880a02b21739f2022746e6aa7672474c Mon Sep 17 00:00:00 2001
-+From: Matt Johnston <matt@ucc.asn.au>
-+Date: Tue, 23 Jun 2020 21:38:46 +0800
-+Subject: [PATCH] _GNU_SOURCE for random
++++ b/package/libnpupnp/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBNPUPNP
++	bool "libnpupnp"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBMICROHTTPD
++	help
++	  npupnp (new pupnp or not pupnp ?) is an UPnP library derived
++	  from the venerable pupnp (https://github.com/pupnp/pupnp),
++	  based on its 1.6.x branch (around 1.6.25).
 +
-+[Retrieved from:
-+https://github.com/mkj/dropbear/commit/3f5c106a880a02b21739f2022746e6aa7672474c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ includes.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++	  https://www.lesbonscomptes.com/upmpdcli/libnpupnp.html
 +
-+diff --git a/includes.h b/includes.h
-+index e8c3e189..2789f23d 100644
-+--- a/includes.h
-++++ b/includes.h
-+@@ -125,6 +125,8 @@
-+ #endif
-+ 
-+ #ifdef HAVE_SYS_RANDOM_H
-++/* uclibc needs _GNU_SOURCE */
-++#define _GNU_SOURCE
-+ #include <sys/random.h>
-+ #endif
-+ 
-diff --git a/package/dropbear/0002-move-GNU_SOURCE-earlier.patch b/package/dropbear/0002-move-GNU_SOURCE-earlier.patch
++comment "libnpupnp needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
 new file mode 100644
-index 0000000000..81282e423b
+index 0000000000..41cc41955b
 --- /dev/null
-+++ b/package/dropbear/0002-move-GNU_SOURCE-earlier.patch
-@@ -0,0 +1,34 @@
-+From a7a67585cbc3fe5df85c641618b347a51a943356 Mon Sep 17 00:00:00 2001
-+From: Matt Johnston <matt@ucc.asn.au>
-+Date: Tue, 23 Jun 2020 22:24:58 +0800
-+Subject: [PATCH] move GNU_SOURCE earlier
++++ b/package/libnpupnp/libnpupnp.hash
+@@ -0,0 +1,5 @@
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.7.tar.gz.sha256
++sha256  30f15caa67dc83f76b0976438165aa4704a50c7e3e5444c50bb8cbad874877ca  libnpupnp-4.0.7.tar.gz
 +
-+[Retrieved from:
-+https://github.com/mkj/dropbear/commit/a7a67585cbc3fe5df85c641618b347a51a943356]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ includes.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++# Hash for license file:
++sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+new file mode 100644
+index 0000000000..abd80ab63b
+--- /dev/null
++++ b/package/libnpupnp/libnpupnp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libnpupnp
++#
++################################################################################
 +
-+diff --git a/includes.h b/includes.h
-+index 2789f23d..884ebf71 100644
-+--- a/includes.h
-++++ b/includes.h
-+@@ -25,6 +25,8 @@
-+ #ifndef DROPBEAR_INCLUDES_H_
-+ #define DROPBEAR_INCLUDES_H_
-+ 
-++/* uclibc needs _GNU_SOURCE, maybe other things? */
-++#define _GNU_SOURCE
-+ 
-+ #include "options.h"
-+ #include "debug.h"
-+@@ -125,8 +127,6 @@
-+ #endif
-+ 
-+ #ifdef HAVE_SYS_RANDOM_H
-+-/* uclibc needs _GNU_SOURCE */
-+-#define _GNU_SOURCE
-+ #include <sys/random.h>
-+ #endif
-+ 
++LIBNPUPNP_VERSION = 4.0.7
++LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
++LIBNPUPNP_LICENSE = BSD-3-Clause
++LIBNPUPNP_LICENSE_FILES = COPYING
++LIBNPUPNP_INSTALL_STAGING = YES
++LIBNPUPNP_DEPENDENCIES = expat libcurl libmicrohttpd
++
++$(eval $(autotools-package))
 -- 
 2.26.2
