@@ -1,68 +1,62 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue, 23 Jun 2020 21:19:07 +0200
-Subject: [Buildroot] [PATCH] package/cegui: fix selecting the default OpenGL
- renderer
-Message-ID: <20200623191907.385318-1-b.bilas@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 23 Jun 2020 21:27:27 +0200
+Subject: [Buildroot] [git commit] package/libnids: use libglib2 is available
+Message-ID: <20200623193205.D5077844F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the cegui requirements select explicit the default
-OpenGL renderer based on available possibilities.
+commit: https://git.buildroot.net/buildroot/commit/?id=8045b467349f20454316a17a7f884348fadc4fbd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+libnids can make use of libglib2 for multi-threading support, so use
+that when available.
+
+The configure.in script is flawed: passing either --enable-libglib or
+--disabel-libglib will both disable support for libglib. Only when
+neither is passed will the autodetection test be executed, at which
+point (hopefully) libglib2 will be enabled if found.
+
+So, unlike our usual practice, we can;t explcitly enable it; we can only
+explicitly disable it, and rely on autodetection to enable it.
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add missing dependency on libglib2
+  - expand commit log to explain why we don't --enable-libglib
+  - add a simmilar blurb in the .mk
+  - fix condition, use positive logic since we have an else-clause
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cegui/Config.in |  1 +
- package/cegui/cegui.mk  | 18 ++++++++++++++----
- 2 files changed, 15 insertions(+), 4 deletions(-)
+ package/libnids/libnids.mk | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/cegui/Config.in b/package/cegui/Config.in
-index f917be0cc5..1bd0ee1cc3 100644
---- a/package/cegui/Config.in
-+++ b/package/cegui/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_CEGUI
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GLM
-+	select BR2_PACKAGE_LIBGLFW if BR2_PACKAGE_HAS_LIBGL # SampleBrowser dependency
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Crazy Eddie's GUI System is a free library providing windowing
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-index 6158ef129c..505d67656a 100644
---- a/package/cegui/cegui.mk
-+++ b/package/cegui/cegui.mk
-@@ -16,15 +16,25 @@ CEGUI_DEPENDENCIES = glm \
- 		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
- 		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
- 		$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
--		$(if $(BR2_PACKAGE_LIBGLEW),libglew) \
-+		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
- 		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- # libepoxy support cannot be enabled together with libglew
--ifeq ($(BR2_PACKAGE_LIBEPOXY):$(BR2_PACKAGE_LIBGLEW),y:)
-+ifeq ($(BR2_PACKAGE_LIBGLEW)$(BR2_PACKAGE_LIBGLU),yy)
-+CEGUI_DEPENDENCIES += libglew libglu
-+CEGUI_CONF_OPTS += -DCEGUI_USE_GLEW=ON -DCEGUI_USE_EPOXY=OFF \
-+		-DCEGUI_BUILD_RENDERER_OPENGL=ON \
-+		-DCEGUI_BUILD_RENDERER_OPENGL3=ON
-+else ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
- CEGUI_DEPENDENCIES += libepoxy
--CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON
-+# old OpenGL renderer module is only supported using GLEW
-+CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON -DCEGUI_USE_GLEW=OFF \
-+		-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
-+		-DCEGUI_BUILD_RENDERER_OPENGL3=ON
- else
--CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF
-+CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF -DCEGUI_USE_GLEW=OFF \
-+		-DCEGUI_BUILD_RENDERER_OPENGL=OFF \
-+		-DCEGUI_BUILD_RENDERER_OPENGL3=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_EXPAT),y)
--- 
-2.27.0
+diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+index ee7c71ee88..f0330787c7 100644
+--- a/package/libnids/libnids.mk
++++ b/package/libnids/libnids.mk
+@@ -11,9 +11,18 @@ LIBNIDS_LICENSE_FILES = COPYING
+ LIBNIDS_INSTALL_STAGING = YES
+ LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
+ LIBNIDS_AUTORECONF = YES
+-LIBNIDS_CONF_OPTS = \
+-	--disable-libglib \
+-	--disable-libnet
++LIBNIDS_CONF_OPTS = --disable-libnet
++
++# disable libglib2 if not available
++# The test in configure.in is flawed: passing --enable-libglib would also
++# disable it. Only when neither is passed will the autodetection test be
++# executed.
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++LIBNIDS_DEPENDENCIES += libglib2
++else
++LIBNIDS_CONF_OPTS += --disable-libglib
++endif
++
+ # hand-written Makefile.in, not using automake, needs a custom
+ # variable for the installation path.
+ LIBNIDS_INSTALL_STAGING_OPTS = install_prefix=$(STAGING_DIR) install
