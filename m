@@ -1,39 +1,29 @@
-From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Date: Tue, 23 Jun 2020 20:35:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnids: disable libglib2 only if
- not available
-Message-ID: <20200623183549.12105-1-guillaume.bressaix@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 23 Jun 2020 21:36:54 +0300
+Subject: [Buildroot] Is there a way to alter BR2_CMAKE_VERSION_MIN?
+Message-ID: <CALFsTFXiiOb7t0Biw30OXjVLXwfd1x-dmjtnEDQy+Ogmi4ZU-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Take advantage of a possibly existing BR2_PACKAGE_LIBGLIB2
+Hello,
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- package/libnids/libnids.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Currently, BR2_CMAKE_VERSION_MIN is set to 3.10.
+On my machine I have cmake=3.12 and on my BR2_EXTERNAL tree I have
+some private packages requiring cmake>=3.13.
+In the current state, Buildroot won't build host-cmake since the
+installed one is greater than 3.10, but still the compilation fails
+because those packages need a higher version from what I have on my
+machine.
 
-diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
-index ee7c71ee88..83719a712f 100644
---- a/package/libnids/libnids.mk
-+++ b/package/libnids/libnids.mk
-@@ -12,8 +12,13 @@ LIBNIDS_INSTALL_STAGING = YES
- LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
- LIBNIDS_AUTORECONF = YES
- LIBNIDS_CONF_OPTS = \
--	--disable-libglib \
- 	--disable-libnet
-+
-+# disable libglib2 if not available
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),n)
-+LIBNIDS_CONF_OPTS += --disable-libglib
-+endif
-+
- # hand-written Makefile.in, not using automake, needs a custom
- # variable for the installation path.
- LIBNIDS_INSTALL_STAGING_OPTS = install_prefix=$(STAGING_DIR) install
--- 
-2.20.1
+Is there a reason why BR2_CMAKE_VERSION_MIN isn't set with "?=" but
+with "="? Setting it with "?=" gives the user the option to change it
+in case there are private packages which need a higher version of
+CMake.
+
+Any other ideas on how to overcome this issue?
+
+Thanks,
+Asaf.
