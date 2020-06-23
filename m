@@ -1,150 +1,83 @@
-From: Guillaume Bres <guillaume.bressaix@gmail.com>
-Date: Tue, 23 Jun 2020 11:07:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnids: new package
-In-Reply-To: <CAJe0E3dU52qyQ_=eVN+1xtD8b1Kiwe=RZ7zvjpYfhZ8CDJinfQ@mail.gmail.com>
-References: <20200622105359.31340-1-guillaume.bressaix@gmail.com>
- <20200622222743.4643d71d@windsurf.home>
- <CAJe0E3dU52qyQ_=eVN+1xtD8b1Kiwe=RZ7zvjpYfhZ8CDJinfQ@mail.gmail.com>
-Message-ID: <CAJe0E3dTThdh+xniL4P4pF9iRaJqN0YA7-OWKPmOWscqRkbmYQ@mail.gmail.com>
+From: stefan at astylos.dk <stefan@astylos.dk>
+Date: Tue, 23 Jun 2020 12:15:33 +0200
+Subject: [Buildroot] [PATCH] package/gnutls: Fix build with uClibc
+Message-ID: <20200623101533.1459806-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-correction:
+From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
-Let's say I introduce a "BR2_PACKAGE_LIBNIDS_WITH_LIBNET" option,
->
+Since v3.6.14 gnutls wants to use the 'e' flag with fopen to set the
+O_CLOEXEC flags. Since this is a glibc extension, it will trigger a
+gnulib override of fopen on non-glibc systems, but that override
+breaks the uClibc stdio.h header.
 
- I will rather check in the .mk script if BR2_PACKAGE_LIBNET is in use and
-adapt dependencies & configure flags,
-rather than introducing a BR2_PACKAGE_LIBNIDS_ sub option.
+Fixes:
+http://autobuild.buildroot.org/results/02f/02f2b524add307c8f7cc1af1ed0783bb1baf029a
 
-question about the patch still applies though
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ ...Fix-gnulib-stdio.h-include-on-uclibc.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
 
-Guillaume W. Bres
-Software engineer
-<guillaume.bressaix@gmail.com>
-
-
-Le mar. 23 juin 2020 ? 11:01, Guillaume Bres <guillaume.bressaix@gmail.com>
-a ?crit :
-
-> Hello Thomas,
->
-> thank you for your input
->
-> glibc is not required: it builds fine with uclibc.
->> > +     select BR2_PACKAGE_LIBGLIB2
->
-> This dependency is not mandatory, so I dropped it. It should be easy to
->> re-add it with a follow-up patch.
->
->
-> Ok, I did not see the configure script had options to disable them, it's
-> better to have a default package compatible with everyone
->
-> (2) Passing the appropriate install_prefix value at install time,
->
->  since the hand-written Makefile.in use install_prefix and not DESTDIR
->
->
-> it's cleaner to override at the given step (I'll keep that!)
->
-> if you need the libglib and libnet optional dependencies, don't
->> hesitate to send follow-up patches to add support for them.
->
->
-> I need to check whether I need libglib because it's not obvious. But I
-> certainly need libnet.
->
-> Let's say I introduce a "BR2_PACKAGE_LIBNIDS_WITH_LIBNET" option,
-> if I add a 0002-patch to also have libnet checked with pkg-config,
-> Is it fine with you having a patch always applied, even though we are in
-> the --disable-libnet context?
->
-> Guillaume W. Bres
-> Software engineer
-> <guillaume.bressaix@gmail.com>
->
->
-> Le lun. 22 juin 2020 ? 22:27, Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> a ?crit :
->
->> Hello Guillaume,
->>
->> On Mon, 22 Jun 2020 12:53:59 +0200
->> "Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
->>
->> > Libnids is a C based networking library,
->> > part of networking intrusion detection tools.
->> > It can watch network traffic & provide informations.
->> >
->> > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
->>
->> I have applied your patch, with a number of changes. See below for
->> comments, and see the final commit at:
->>
->>
->> https://git.buildroot.org/buildroot/commit/?id=b6ce06cd64b0d85c9065c60fad933c8585730320
->>
->>
->> > +config BR2_PACKAGE_LIBNIDS
->> > +     bool "libnids"
->> > +     depends on BR2_TOOLCHAIN_USES_GLIBC
->>
->> glibc is not required: it builds fine with uclibc.
->>
->> > +     select BR2_PACKAGE_LIBGLIB2
->>
->> This dependency is not mandatory, so I dropped it. It should be easy to
->> re-add it with a follow-up patch.
->>
->> > +     select BR2_PACKAGE_LIBNET
->>
->> This dependency is not mandatory, so I dropped it. Re-adding it is
->> possible, but will need some tweaks in the configure.in script.
->>
->> > +     select BR2_PACKAGE_LIBPCAP
->>
->> This dependency is indeed mandatory.
->>
->>
->> > +LIBNIDS_VERSION = 1.24
->> > +LIBNIDS_SITE =
->> https://sourceforge.net/projects/libnids/files/libnids/$(LIBNIDS_VERSION)
->> > +LIBNIDS_LICENSE = GPL-2.0
->> > +LIBNIDS_LICENSE_FILES = COPYING
->> > +LIBNIDS_INSTALL_STAGING = YES
->>
->> You forgot the _DEPENDENCIES variable, so nothing ensured that your
->> dependencies are built before this package.
->>
->> > +LIBNIDS_CONF_OPTS += \
->> > +     prefix="$(STAGING_DIR)/usr" \
->> > +     exec_prefix="$(STAGING_DIR)/usr"
->>
->> So, I instead fixed this by:
->>
->>  (1) Adding a patch for the configure.in script that changes the
->>  detection of libpcap to use pkg-config
->>
->>  (2) Passing the appropriate install_prefix value at install time,
->>  since the hand-written Makefile.in use install_prefix and not DESTDIR
->>
->> If you need the libglib and libnet optional dependencies, don't
->> hesitate to send follow-up patches to add support for them.
->>
->> Thanks!
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200623/6b1dddc0/attachment.html>
+diff --git a/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
+new file mode 100644
+index 0000000000..758e7cca73
+--- /dev/null
++++ b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
+@@ -0,0 +1,49 @@
++From 60fa934ffba3c230040328fdbbbf51f417f12871 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
++Date: Mon, 22 Jun 2020 14:11:05 +0200
++Subject: [PATCH] Fix gnulib stdio.h include on uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The __need_FILE define used by gnulib interferes with the uClibc stdio.h
++header, so move the inclusion the stdio.h to after __need_FILE has been
++undefined again.
++
++Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
++---
++ gl/fopen.c     | 2 +-
++ src/gl/fopen.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gl/fopen.c b/gl/fopen.c
++index 8d6625a..248692c 100644
++--- a/gl/fopen.c
+++++ b/gl/fopen.c
++@@ -23,8 +23,8 @@
++ #include <config.h>
++ 
++ /* Get the original definition of fopen.  It might be defined as a macro.  */
++-#include <stdio.h>
++ #undef __need_FILE
+++#include <stdio.h>
++ 
++ static FILE *
++ orig_fopen (const char *filename, const char *mode)
++diff --git a/src/gl/fopen.c b/src/gl/fopen.c
++index 47d7f19..1f22f4f 100644
++--- a/src/gl/fopen.c
+++++ b/src/gl/fopen.c
++@@ -23,8 +23,8 @@
++ #include <config.h>
++ 
++ /* Get the original definition of fopen.  It might be defined as a macro.  */
++-#include <stdio.h>
++ #undef __need_FILE
+++#include <stdio.h>
++ 
++ static FILE *
++ orig_fopen (const char *filename, const char *mode)
++-- 
++2.25.4
++
+-- 
+2.25.4
