@@ -1,155 +1,137 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 24 Jun 2020 09:36:27 -0500
-Subject: [Buildroot] [PATCH] package/resiprocate: new package
-Message-ID: <20200624143627.47941-1-ryan.barnett@rockwellcollins.com>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Wed, 24 Jun 2020 17:23:48 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/firmware-imx: Clean
+ up the image/target semantic
+In-Reply-To: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <1593012228-18959-3-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-reSIProcate is a framework that aims to fully implement the SIP
-protocol in first class C++. It is intended for use in other
-applications, such as the repro SIP proxy.
+The newly introduced BR2_PACKAGE_FREESCALE_IMX_NEED_xxx_FW symbols shall
+be used in lieue of the SoC type when installing images or binaries on
+target.
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+These new symbols let us define FIRMWARE_IMX_INSTALL_IMAGES_CMDS and
+FIRMWARE_IMX_INSTALL_TARGET_CMDS based on platform needs rather than
+SoC type.
+
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---
- package/Config.in                    |  1 +
- package/resiprocate/Config.in        | 48 ++++++++++++++++++++++++++++
- package/resiprocate/resiprocate.hash |  4 +++
- package/resiprocate/resiprocate.mk   | 46 ++++++++++++++++++++++++++
- 4 files changed, 99 insertions(+)
- create mode 100644 package/resiprocate/Config.in
- create mode 100644 package/resiprocate/resiprocate.hash
- create mode 100644 package/resiprocate/resiprocate.mk
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 70 +++++++++++++++++-----
+ 1 file changed, 54 insertions(+), 16 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6a34a895af..72e2aac7b1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1762,6 +1762,7 @@ menu "Networking"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
- 	source "package/rabbitmq-c/Config.in"
-+	source "package/resiprocate/Config.in"
- 	source "package/restclient-cpp/Config.in"
- 	source "package/rtmpdump/Config.in"
- 	source "package/slirp/Config.in"
-diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
-new file mode 100644
-index 0000000000..fc44a6a30f
---- /dev/null
-+++ b/package/resiprocate/Config.in
-@@ -0,0 +1,48 @@
-+config BR2_PACKAGE_RESIPROCATE
-+	bool "resiprocate"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_C_ARES
-+	help
-+	  reSIProcate is a framework that aims to fully implement the
-+	  SIP protocol in first class C++. It is intended for use in
-+	  other applications, such as the repro SIP proxy.
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 6beacc0..62f97e6 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -12,12 +12,13 @@ FIRMWARE_IMX_LICENSE = NXP Semiconductor Software License Agreement
+ FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
+ FIRMWARE_IMX_REDISTRIBUTE = NO
+ 
+-FIRMWARE_IMX_BLOBS = sdma vpu
+-
+ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
+ 
++# firmware-imx install images section:
++######################################
 +
-+	  By default this package provides the core libraries: librutil
-+	  (utilities), libresip (SIP stack/RFC compliant message
-+	  parsing) and libdum (SIP Dialog Usage Manager, a state
-+	  machine for SIP dialogs).
+ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW),y)
+ FIRMWARE_IMX_INSTALL_IMAGES = YES
+ 
+@@ -71,36 +72,73 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+ 		$(BINARIES_DIR)/ddr4_201810_fw.bin
+ 	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+ endef
+-endif
++endif # DDRFW_LPDDR4 || DDRFW_DDR4
++endif # NEED_DDR_FW
 +
-+	  https://www.resiprocate.org/
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_HDMI_FW),y)
++FIRMWARE_IMX_INSTALL_IMAGES = YES
+ 
+-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+ define FIRMWARE_IMX_PREPARE_HDMI_FW
+ 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+ 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+ endef
+-endif
++endif # NEED_HDMI_FW
+ 
+ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	$(FIRMWARE_IMX_PREPARE_DDR_FW)
+ 	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
+ endef
+-else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+-define FIRMWARE_IMX_INSTALL_TARGET_CMDS
 +
-+comment "resiprocate needs a toolchain w/ C++, threads, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++# firmware-imx install target section:
++######################################
 +
-+if BR2_PACKAGE_RESIPROCATE
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW),y)
++FIRMWARE_IMX_INSTALL_TARGET = YES
 +
-+config BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT
-+	bool "Enable DTLS support"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Enable DTLS support (requires OpenSSL)
++define FIRMWARE_IMX_INSTALL_TARGET_EPDC_FW
++	mkdir -p $(TARGET_DIR)/lib/firmware/imx
++	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
++	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
++		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
++endef
++endif # NEED_EPDC_FW
 +
-+config BR2_PACKAGE_RESIPROCATE_REND
-+	bool "resiprocate-rend"
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_POPT
-+	help
-+	  Rend is tool that is was created specifically to load test
-+	  gtSIP based presence servers.
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW),y)
++FIRMWARE_IMX_INSTALL_TARGET = YES
 +
-+config BR2_PACKAGE_RESIPROCATE_APPS
-+	bool "resiprocate-apps"
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  Build apps clicktocall and sipdial
++define FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW
++	mkdir -p $(TARGET_DIR)/lib/firmware/imx
++	cp -r $(@D)/firmware/vpu $(TARGET_DIR)/lib/firmware
++endef
++endif # NEED_SDMA_FW
 +
-+endif # BR2_PACKAGE_RESIPROCATE
-diff --git a/package/resiprocate/resiprocate.hash b/package/resiprocate/resiprocate.hash
-new file mode 100644
-index 0000000000..03336c64a2
---- /dev/null
-+++ b/package/resiprocate/resiprocate.hash
-@@ -0,0 +1,4 @@
-+# http://list.resiprocate.org/pipermail/resiprocate-announce/2020-May/000000.html
-+sha256  046826503d3c8682ae0e42101b28f903c5f988235f1ff4a98dbfb9066d0d3d49  resiprocate-1.12.0.tar.gz
-+# Locally Computed
-+sha256  16b0fd1938a10fcd145904cc2dad74500fef9d27fc15b44cf8e8f92011f94d35  COPYING
-diff --git a/package/resiprocate/resiprocate.mk b/package/resiprocate/resiprocate.mk
-new file mode 100644
-index 0000000000..1fd0121f52
---- /dev/null
-+++ b/package/resiprocate/resiprocate.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# resiprocate
-+#
-+################################################################################
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW),y)
++FIRMWARE_IMX_INSTALL_TARGET = YES
 +
-+RESIPROCATE_VERSION = 1.12.0
-+RESIPROCATE_SITE =  $(call github,resiprocate,resiprocate,resiprocate-$(RESIPROCATE_VERSION))
-+# For complete details see https://www.resiprocate.org/License
-+RESIPROCATE_LICENSE = VSL-1.0, BSD-3-Clause
-+RESIPROCATE_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_FIRMWARE_VPUFW_GENERIC),y)
 +
-+# Utilize c-ares from buildroot instead built in ARES library
-+# NOTE: resiprocate doesn't support --without-<feature> syntax as it will try
-+#       to build with package if specified
-+RESIPROCATE_DEPENDENCIES = c-ares
-+RESIPROCATE_CONF_OPTS = -with-c-ares \
-+	--with-sysroot="$(STAGING_DIR)"
++define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
++	mkdir -p $(TARGET_DIR)/lib/firmware/imx
++	cp -r $(@D)/firmware/vpu $(TARGET_DIR)/lib/firmware
++endef
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+RESIPROCATE_DEPENDENCIES += openssl host-pkgconf
-+RESIPROCATE_CONF_OPTS += --with-ssl
-+# Configure.ac does not include '-lz' when statically linking against openssl
-+RESIPROCATE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
 +endif
++ifeq ($(BR2_PACKAGE_FIRMWARE_VPUFW_IMX8),y)
 +
-+ifeq ($(BR2_PACKAGE_POPT),y)
-+RESIPROCATE_CONF_OPTS += --with-popt
-+RESIPROCATE_DEPENDENCIES += popt
++define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
+ 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
+ 		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_dec.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_enc.bin \
+ 		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_enc.bin
+ endef
+-else
++
 +endif
++endif # NEED_VPU_FW
 +
-+ifeq ($(BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT),y)
-+RESIPROCATE_CONF_OPTS += --with-dtls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RESIPROCATE_REND),y)
-+RESIPROCATE_CONF_OPTS += --with-rend
-+RESIPROCATE_DEPENDENCIES += boost
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RESIPROCATE_APPS),y)
-+RESIPROCATE_CONF_OPTS += --with-apps
-+RESIPROCATE_DEPENDENCIES += pcre
-+endif
-+
-+$(eval $(autotools-package))
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+-	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+-		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
+-	done
+-	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
+-	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+-		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
++	$(FIRMWARE_IMX_INSTALL_TARGET_EPDC_FW)
++	$(FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW)
++	$(FIRMWARE_IMX_INSTALL_TARGET_VPU_FW)
+ endef
+-endif
+ 
+ $(eval $(generic-package))
 -- 
-2.17.1
+2.7.4
