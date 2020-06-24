@@ -1,96 +1,67 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Wed, 24 Jun 2020 23:20:01 +0200
-Subject: [Buildroot] [PATCH] linux: run depmod only if modules directory
- exists
-In-Reply-To: <20200624201731.GJ20645@scaer>
-References: <20200623113859.172177-1-paul@crapouillou.net>
- <20200624201731.GJ20645@scaer>
-Message-ID: <DL8GCQ.K02B41685WGO1@crapouillou.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Jun 2020 23:21:28 +0200
+Subject: [Buildroot] [git commit] package/xenomai: add support to download
+ from a custom git tree
+Message-ID: <20200624212441.47FB682318@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=d0fd8c51d877d2d1a093e7b0daa2290c26bc7cbd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le mer. 24 juin 2020 ? 22:17, Yann E. MORIN <yann.morin.1998@free.fr> 
-a ?crit :
-> Paul, All,
-> 
-> On 2020-06-23 13:38 +0200, Paul Cercueil spake thusly:
->>  If the modules directory that corresponds to the version of the 
->> kernel
->>  being built has been deleted, don't try to run depmod, which will
->>  obviously fail.
->> 
->>  This can happen for instance when the modules are stripped from the 
->> main
->>  root filesystem, and placed into a separate filesystem image, so 
->> that
->>  the root filesystem and the kernel can be updated separately.
-> 
-> I fail to see how this can happen, sine:
-> 
->   - LINUX_RUN_DEPMOD is run as a TARGET_FINALIZE_HOOKS
-> 
->   - TARGET_FINALIZE_HOOKS are run ultra-early in the target-finalize
->     step, way before we run post-build scripts.
-> 
-> So, how can you end up with a /lib/modules/VERSIO/ directory missing?
-> 
-> (Note that I find your reason valid, I'm just curious to understand 
-> how
-> this can happen before I apply the patch.)
+Soem versions are tagged, but not tarballed, so we need to be able to
+retrieve them from git.
 
-In the first run, the modules folder is erased after LINUX_RUN_DEPMOD 
-is executed, yes. The problem is in successive runs, because then 
-LINUX_RUN_DEPMOD is still executed but the modules folder is gone and 
-is not re-installed unless the kernel package is rebuilt.
+Usually, we do not have a default value for the repository, but unlike
+for the kernel or the various bootloaders, the most prominent repository
+for Xeniomai is upstream's official one (for the reason above, amongst
+others), so we use that as a default.
 
-Cheers,
--Paul
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xenomai/Config.in  | 8 ++++++++
+ package/xenomai/xenomai.mk | 3 +++
+ 2 files changed, 11 insertions(+)
 
-> Regards,
-> Yann E. MORIN.
-> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   linux/linux.mk | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->> 
->>  diff --git a/linux/linux.mk b/linux/linux.mk
->>  index b90b032bb9..d31933fea1 100644
->>  --- a/linux/linux.mk
->>  +++ b/linux/linux.mk
->>  @@ -490,7 +490,8 @@ endef
->>   # Run depmod in a target-finalize hook, to encompass modules 
->> installed by
->>   # packages.
->>   define LINUX_RUN_DEPMOD
->>  -	if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
->>  +	if test -d $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
->>  +		&& grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
->>   		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) 
->> $(LINUX_VERSION_PROBED); \
->>   	fi
->>   endef
->>  --
->>  2.27.0
->> 
->>  _______________________________________________
->>  buildroot mailing list
->>  buildroot at busybox.net
->>  http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___      
->          |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  
-> There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   
-> conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 326e1be737..452b452039 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -58,8 +58,16 @@ config BR2_PACKAGE_XENOMAI_CUSTOM_VERSION
+ config BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
++config BR2_PACKAGE_XENOMAI_CUSTOM_GIT
++	bool "Custom Git repository"
++
+ endchoice
+ 
++config BR2_PACKAGE_XENOMAI_REPOSITORY
++	string "URL of custom repository"
++	default "https://gitlab.denx.de/Xenomai/xenomai.git"
++	depends on BR2_PACKAGE_XENOMAI_CUSTOM_GIT
++
+ config BR2_PACKAGE_XENOMAI_VERSION
+ 	string "Custom Xenomai version" if !BR2_PACKAGE_XENOMAI_LATEST_VERSION
+ 	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index d169c2e315..11c69000df 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -9,6 +9,9 @@ ifeq ($(BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL),y)
+ XENOMAI_TARBALL = $(call qstrip,$(BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL))
+ XENOMAI_SOURCE = $(notdir $(XENOMAI_TARBALL))
+ XENOMAI_SITE = $(patsubst %/,%,$(dir $(XENOMAI_TARBALL)))
++else ifeq ($(BR2_PACKAGE_XENOMAI_CUSTOM_GIT),y)
++XENOMAI_SITE = $(call qstrip,$(BR2_PACKAGE_XENOMAI_REPOSITORY))
++XENOMAI_SITE_METHOD = git
+ else
+ XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+ XENOMAI_SITE = http://xenomai.org/downloads/xenomai/stable
