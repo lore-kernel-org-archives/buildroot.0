@@ -1,63 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Jun 2020 21:35:11 +0200
-Subject: [Buildroot] [git commit] package/json-c: bump version to 0.14
-Message-ID: <20200624193304.5F7098454D@busybox.osuosl.org>
+From: =?UTF-8?q?St=C3=A9phane=20Veyret?= <sveyret@gmail.com>
+Date: Wed, 24 Jun 2020 21:35:31 +0200
+Subject: [Buildroot] [PATCH v2] rpi-firmware: do not rename startup files
+Message-ID: <20200624193531.27761-1-sveyret@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b4581cca8676b44dc278d391575fdc22c2ecc1f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bug: 13026
 
-Notes:
+When booting, a Raspberry Pi will load the appropriate start files,
+depending on the provided configuration. For example, if the config.txt
+file contains:
+gpu_mem=16
+the board will automatically load the cut-down startup files
+(start_cd.elf and fixup_cd.dat on non-Rpi4).
 
-- json-c now uses cmake instead of autoconf
-- This version also brings support to the much welcomed feature for
-  parsing uint64_t types
+Unfortunately, even when the appropriate version is selected in the
+configuration menu (in this example,
+BR2_PACKAGE_RPI_FIRMWARE_BOOT="_cd") if the rpi-firmware makefile takes
+the good files, it renames them to non-qualified, i.e. start.elf and
+fixup.dat. But as these are not the files searched by the Raspberry Pi,
+the board will not start.
 
-Signed-off-by: Christopher Pelloux <git@chp.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: St?phane Veyret <sveyret@gmail.com>
+
 ---
- package/json-c/json-c.hash |  2 +-
- package/json-c/json-c.mk   | 14 +++-----------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+Changes v1 -> v2:
+  - update config.txt instead of keeping firmware name, as suggested by
+    Yann E. MORIN. Note that this requires to update the name anyway
+    for RPi 4.
+---
+ package/rpi-firmware/config.txt      | 5 +++++
+ package/rpi-firmware/rpi-firmware.mk | 4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index 0e03007476..93eaff67c3 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
-+sha256 b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
- # Locally calculated
- sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 2788fe563b..3e17effdad 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,19 +4,11 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.13.1
-+JSON_C_VERSION = 0.14
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
- 
--# update config.h.in timestamp to avoid autoheader run
--define JSON_C_UPDATE_CONFIG_TIMESTAMP
--	touch $(@D)/config.h.in
--endef
--
--JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
--HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index 58cc966a87..8121624a78 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -18,3 +18,8 @@ disable_overscan=1
+ gpu_mem_256=100
+ gpu_mem_512=100
+ gpu_mem_1024=100
++
++# We always use the same name, the real used variant is selected by
++# BR2_PACKAGE_RPI_FIRMWARE_{DEFAULT,X,CD}
++start_file=start.elf
++fixup_file=fixup.dat
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 6ad67ab0e5..b412b08cff 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -44,8 +44,8 @@ endif # INSTALL_VCDBG
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
+ # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
+ define RPI_FIRMWARE_INSTALL_BOOT
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ endef
+ else
+ define RPI_FIRMWARE_INSTALL_BOOT
+-- 
+2.26.2
