@@ -1,72 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 18:59:50 +0200
-Subject: [Buildroot] [PATCH] package/wireguard-tools: bump version to
- 1.0.20200513
-In-Reply-To: <20200624055525.13352-1-peter@korsgaard.com>
-References: <20200624055525.13352-1-peter@korsgaard.com>
-Message-ID: <20200624165950.GC20645@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 24 Jun 2020 21:09:20 +0300
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.71.0
+Message-ID: <59cdc3789225ac3861f527311661488be9e532d8.1593022160.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+CVE-2020-8177: curl overwrite local file with -J.
 
-On 2020-06-24 07:55 +0200, Peter Korsgaard spake thusly:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+CVE-2020-8169: Partial password leak over DNS on HTTP redirect.
 
-Applied to master, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I wonder on much hand-in-hand tools and linux-compat need to be in sync,
-though.... Probably not much, I guess, as tools are also supposed to
-work on a wide range of kernels, now that wireguard has been upstreamed,
-right?
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/wireguard-tools/wireguard-tools.hash | 4 ++--
->  package/wireguard-tools/wireguard-tools.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
-> index 475a7450a9..96134074f3 100644
-> --- a/package/wireguard-tools/wireguard-tools.hash
-> +++ b/package/wireguard-tools/wireguard-tools.hash
-> @@ -1,4 +1,4 @@
-> -# https://lists.zx2c4.com/pipermail/wireguard/2020-March/005191.html
-> -sha256  757ed31d4d48d5fd7853bfd9bfa6a3a1b53c24a94fe617439948784a2c0ed987  wireguard-tools-1.0.20200319.tar.xz
-> +# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005431.html
-> +sha256  e73409a9fb8c90506db241d1e1a4e7372a60dbfa400e37f4ab2fd70a92ba495f  wireguard-tools-1.0.20200513.tar.xz
->  # Locally calculated
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
-> index fc2ec876b3..c4890f9337 100644
-> --- a/package/wireguard-tools/wireguard-tools.mk
-> +++ b/package/wireguard-tools/wireguard-tools.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WIREGUARD_TOOLS_VERSION = 1.0.20200319
-> +WIREGUARD_TOOLS_VERSION = 1.0.20200513
->  WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
->  WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
->  WIREGUARD_TOOLS_LICENSE = GPL-2.0
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 2157f3d2d21d..104d603f3e0f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
+-sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
++sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index cc2ca0aa65a2..11748924ffae 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.70.0
++LIBCURL_VERSION = 7.71.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
