@@ -1,69 +1,88 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 21:24:18 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version
- 7.71.0
-In-Reply-To: <59cdc3789225ac3861f527311661488be9e532d8.1593022160.git.baruch@tkos.co.il>
-References: <59cdc3789225ac3861f527311661488be9e532d8.1593022160.git.baruch@tkos.co.il>
-Message-ID: <20200624192418.GF20645@scaer>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Wed, 24 Jun 2020 12:16:46 -0700
+Subject: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 0.8
+In-Reply-To: <20200624131510.27380-1-mark@dibsco.co.uk>
+References: <20200624131510.27380-1-mark@dibsco.co.uk>
+Message-ID: <CAKmqyKNrWeeXpPpkC6ZmKq+Z+RxNPLV1w_wHzo=7tnqOuBoABw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+On Wed, Jun 24, 2020 at 6:17 AM Mark Corbin <mark@dibsco.co.uk> wrote:
+>
+> The OpenSBI platform 'qemu/virt' has been removed in v0.8. Builds for
+> the QEMU 'virt' machine can use the 'generic' platform instead.
+>
+> Tested with qemu_riscv32_virt_defconfig and
+> qemu_riscv64_virt_defconfig using Buildroot host-qemu 5.0.0.
+>
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
-On 2020-06-24 21:09 +0300, Baruch Siach spake thusly:
-> CVE-2020-8177: curl overwrite local file with -J.
-> 
-> CVE-2020-8169: Partial password leak over DNS on HTTP redirect.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-Applied to master, thanks!
-
-Regards,
-Yann E. MORIN.
+Alistair
 
 > ---
->  package/libcurl/libcurl.hash | 2 +-
->  package/libcurl/libcurl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-> index 2157f3d2d21d..104d603f3e0f 100644
-> --- a/package/libcurl/libcurl.hash
-> +++ b/package/libcurl/libcurl.hash
+>  boot/opensbi/opensbi.hash           | 2 +-
+>  boot/opensbi/opensbi.mk             | 2 +-
+>  configs/qemu_riscv32_virt_defconfig | 2 +-
+>  configs/qemu_riscv64_virt_defconfig | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+> index 6e69d512dd..b25a435ee5 100644
+> --- a/boot/opensbi/opensbi.hash
+> +++ b/boot/opensbi/opensbi.hash
 > @@ -1,3 +1,3 @@
->  # Locally calculated
->  sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-> -sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
-> +sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index cc2ca0aa65a2..11748924ffae 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
+>  # locally computed
+> -sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
+> +sha256 17e048ac765e92e15f7436b604452614cf88dc2bcbbaab18cdc024f3fdd4c575 opensbi-0.8.tar.gz
+>  sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 00e3b05dd0..60b87c268d 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
->  
-> -LIBCURL_VERSION = 7.70.0
-> +LIBCURL_VERSION = 7.71.0
->  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
->  LIBCURL_SITE = https://curl.haxx.se/download
->  LIBCURL_DEPENDENCIES = host-pkgconf \
-> -- 
-> 2.27.0
-> 
+>
+> -OPENSBI_VERSION = 0.6
+> +OPENSBI_VERSION = 0.8
+>  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+>  OPENSBI_LICENSE = BSD-2-Clause
+>  OPENSBI_LICENSE_FILES = COPYING.BSD
+> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+> index dc1a5b1295..166c41f1f0 100644
+> --- a/configs/qemu_riscv32_virt_defconfig
+> +++ b/configs/qemu_riscv32_virt_defconfig
+> @@ -26,7 +26,7 @@ BR2_LINUX_KERNEL_IMAGE=y
+>
+>  # Bootloader
+>  BR2_TARGET_OPENSBI=y
+> -BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+> +BR2_TARGET_OPENSBI_PLAT="generic"
+>
+>  # host-qemu for gitlab testing
+>  BR2_PACKAGE_HOST_QEMU=y
+> diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+> index dbe6107b62..2887cf5f22 100644
+> --- a/configs/qemu_riscv64_virt_defconfig
+> +++ b/configs/qemu_riscv64_virt_defconfig
+> @@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_IMAGE=y
+>
+>  # Bootloader
+>  BR2_TARGET_OPENSBI=y
+> -BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+> +BR2_TARGET_OPENSBI_PLAT="generic"
+>
+>  # host-qemu for gitlab testing
+>  BR2_PACKAGE_HOST_QEMU=y
+> --
+> 2.17.1
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
