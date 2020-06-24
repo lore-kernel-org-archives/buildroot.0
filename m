@@ -1,33 +1,41 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 24 Jun 2020 16:57:09 -0300
-Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/firmware-imx:
- Clean up the image/target semantic
-In-Reply-To: <1593012228-18959-3-git-send-email-stephane.viau@oss.nxp.com>
-References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
- <1593012228-18959-3-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <CAOMZO5AiPKpTDnwDo8KWriwWawq+YFSgjTiw8xJscdG+YvkijQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Jun 2020 21:57:44 +0200
+Subject: [Buildroot] [git commit] package/gcc: switch to gcc 9.x as the
+ default
+Message-ID: <20200624195533.2188583FD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephane,
+commit: https://git.buildroot.net/buildroot/commit/?id=cbcf6174f5fee80bd824f81fccfa52477fea076f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Jun 24, 2020 at 12:39 PM Stephane Viau
-<stephane.viau@oss.nxp.com> wrote:
->
-> The newly introduced BR2_PACKAGE_FREESCALE_IMX_NEED_xxx_FW symbols shall
-> be used in lieue of the SoC type when installing images or binaries on
-> target.
->
-> These new symbols let us define FIRMWARE_IMX_INSTALL_IMAGES_CMDS and
-> FIRMWARE_IMX_INSTALL_TARGET_CMDS based on platform needs rather than
-> SoC type.
->
-> Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Even if gcc 8 is still maintained for some time (gcc 8.5 is pending),
+switch to gcc 9.x since it has been released since 2019-05-03 and
+gcc 10.x is available since 2020-05-07.
 
-This looks like a nice solution, thanks:
+We have been having toolchains in the autobuilders with gcc
+9.x for a while, so the vast majority of the problems should have
+already been solved.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index c7444e243b..f417712b52 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_CSKY if BR2_csky
+-	default BR2_GCC_VERSION_8_X
++	default BR2_GCC_VERSION_9_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
