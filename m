@@ -1,52 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 24 Jun 2020 22:41:39 +0200
-Subject: [Buildroot] [PATCH 5/5] package/gcc: switch to gcc 9.x as the
- default
-In-Reply-To: <20200624215654.1ccffabd@windsurf>
-References: <20200608221347.2639059-1-romain.naour@gmail.com>
- <20200608221347.2639059-5-romain.naour@gmail.com>
- <20200624215654.1ccffabd@windsurf>
-Message-ID: <3b1056c1-67c6-48b2-94c2-5f0d2dea24b7@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 24 Jun 2020 22:43:40 +0200
+Subject: [Buildroot] [PATCH v3 0/7] Cups revamp
+Message-ID: <20200624204347.797088-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+s series fixes various nitpicks we found using cups and do some
+bumps.
 
-Le 24/06/2020 ? 21:56, Thomas Petazzoni a ?crit?:
-> On Tue,  9 Jun 2020 00:13:47 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> Even if gcc 8 is still maintained for some time (gcc 8.5 is pending),
->> switch to gcc 9.x since it has been released since 2019-05-03 and
->> gcc 10.x is available since 2020-05-07.
->>
->> We have been having toolchains in the autobuilders with gcc
->> 9.x for a while, so the vast majority of the problems should have
->> already been solved.
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/gcc/Config.in.host | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Applied to master, thanks.
-> 
-> Following this, we should drop gcc 7.x support. However, one defconfig
-> (roseapplepi) still uses gcc 7.x. I've notified Peter Korsgaard on IRC,
-> and I am doing it here as well: if this defconfig is not updated to a
-> newer kernel that builds with gcc >= 8.x, we will have to drop support
-> for this defconfig.
+Changelog:
+v1->v2:
+* Adding missing patch "Add lp user as default cups user" 
+v1->v2:
+* Fixes to Signed-of
+* Decoupling service file fixing from bumps
+* Better explaining backported patches
 
-Yes, I would like to avoid the mess like for beagleboneblack defconfig for qt5
-when it was using gcc 5 only.
+Angelo Compagnucci (7):
+  package/cups-filters: fix cups-browsed service
+  package/cups-filters: bump to version 1.27.5
+  package/cups: fix cups service
+  package/cups: bump to version 2.3.3
+  package/cups: Add lp user as default cups user
+  package/cups: Add udev rules to assign usb printers group to lp
+  package/cups: adding python support
 
-Best regards,
-Romain
+ package/cups-filters/S82cups-browsed          | 48 +++++++++++++++++++
+ package/cups-filters/cups-filters.hash        |  2 +-
+ package/cups-filters/cups-filters.mk          | 15 +++++-
+ ...move-man-from-BUILDDIRS-in-configure.patch |  8 ++--
+ package/cups/0002-Do-not-use-genstrings.patch | 14 +++---
+ ...0004-Remove-PIE-flags-from-the-build.patch |  8 ++--
+ package/cups/70-usb-printers.rules            |  3 ++
+ package/cups/S81cupsd                         | 48 +++++++++++++++++++
+ package/cups/cups.hash                        |  2 +-
+ package/cups/cups.mk                          | 37 +++++++++++++-
+ 10 files changed, 167 insertions(+), 18 deletions(-)
+ create mode 100644 package/cups-filters/S82cups-browsed
+ create mode 100644 package/cups/70-usb-printers.rules
+ create mode 100644 package/cups/S81cupsd
 
-
-> 
-> Thomas
-> 
+-- 
+2.25.1
