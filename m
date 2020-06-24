@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Jun 2020 21:53:42 +0200
-Subject: [Buildroot] [PATCH 1/5] toolchain: add gcc 10 entry
-In-Reply-To: <20200608221347.2639059-1-romain.naour@gmail.com>
-References: <20200608221347.2639059-1-romain.naour@gmail.com>
-Message-ID: <20200624215342.2ad58b6c@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Jun 2020 19:55:01 +0000
+Subject: [Buildroot] [Bug 13031] New: nodejs: RangeError at new ArrayBuffer()
+Message-ID: <bug-13031-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  9 Jun 2020 00:13:43 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=13031
 
-> In order to add gcc 10 support for internal and external toolchain in
-> follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_10 symbol.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  toolchain/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+            Bug ID: 13031
+           Summary: nodejs: RangeError at new ArrayBuffer()
+           Product: buildroot
+           Version: 2020.05
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sveyret at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Applied to master, thanks.
+There is a bug on NodeJS which seems to come from the cross-compilation x64 ->
+arm. NodeJS fails on the target as soon as an ArrayBuffer is created somewhere.
 
-Thomas
+Please see https://github.com/nodejs/node/issues/31370
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
