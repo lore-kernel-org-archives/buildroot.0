@@ -1,80 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 21:20:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnids: disable libnet only if
- not available
-In-Reply-To: <20200624121742.20034-1-guillaume.bressaix@gmail.com>
-References: <20200624121742.20034-1-guillaume.bressaix@gmail.com>
-Message-ID: <20200624192033.GD20645@scaer>
+Date: Wed, 24 Jun 2020 21:22:24 +0200
+Subject: [Buildroot] [PATCH 0/2] package/freescale-imx: clean-up proposal
+In-Reply-To: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <20200624192224.GE20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guillaume, All,
+St?phane, All,
 
-On 2020-06-24 14:17 +0200, Guillaume W. Bres spake thusly:
-> libnids can be built against an existing libnet lib,
-> take advantage of that.
-> 
-> Unfortunately, pkg-config is not available for libnet,
-> so configure --with-libnet is our only option at the
-> moment.
-> 
-> --with-libnet expects a build directory,
-> not an installation path like in our context.
-> We use --with-libnet=yes to skip tests that would fail.
-> In this situation, 'LIBNET' goes undefined, so we
-> need to define it ourselves.
-> This works because we make sure -lnet is installed
-> prior anything related to libnids.
-> 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/libnids/libnids.mk | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
-> index f0330787c7..01d50879b6 100644
-> --- a/package/libnids/libnids.mk
-> +++ b/package/libnids/libnids.mk
-> @@ -11,7 +11,21 @@ LIBNIDS_LICENSE_FILES = COPYING
->  LIBNIDS_INSTALL_STAGING = YES
->  LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
->  LIBNIDS_AUTORECONF = YES
-> -LIBNIDS_CONF_OPTS = --disable-libnet
-> +
-> +# disable libnet if not available
-> +# Tests in configure.in expect --with-libnet=$build_dir
-> +# not an installation patch like in our context.
-> +# We use with-libnet=yes to skip the unusual paths tests.
-> +# But 'LNETLIB' gets left out, so we need to define it ourselves.
-> +ifeq ($(BR2_PACKAGE_LIBNET),y)
-> +LIBNIDS_DEPENDENCIES += libnet
-> +
-> +LIBNIDS_CONF_OPTS += --with-libnet=yes \
-> +	LNETLIB=-lnet \
-> +	--enable-libnet
+On 2020-06-24 17:23 +0200, Stephane Viau spake thusly:
+> Here is - as promised [1] - a patch set whose aim is to clean up the
+> firmware-imx package. I believe this may help installing EPDC fw, SDMA FW
+> and so on based on the actual need from each platform and respond to [2].
 
-I've reordered the options in a more logical way. Additionally, when an
-assignment (or any other statement) fits on a 80-char line, we don't
-split it on multiple lines, so I;ve changed to:
-
-    LIBNIDS_CONF_OPTS += --enable-libnet --with-libnet=yes LNETLIB=-lnet
-
-and applied to master, thanks.
+On principle, I like what you've proposed in this series. I haven't
+looked the details, though, and I will let the imx experts chime-in to
+validate the conditions udner which each firmware files are installed.
 
 Regards,
 Yann E. MORIN.
 
-> +else
-> +LIBNIDS_CONF_OPTS += --disable-libnet
-> +endif
->  
->  # disable libglib2 if not available
->  # The test in configure.in is flawed: passing --enable-libglib would also
+> BR,
+> Stephane.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-June/284032.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-June/285218.html
+> 
+> Stephane Viau (2):
+>   package/freescale-imx: Add option for all i.MX FW needs
+>   package/freescale-imx/firmware-imx: Clean up the image/target semantic
+> 
+>  package/freescale-imx/Config.in                    | 39 ++++++++++++
+>  package/freescale-imx/firmware-imx/firmware-imx.mk | 70 +++++++++++++++++-----
+>  2 files changed, 93 insertions(+), 16 deletions(-)
+> 
 > -- 
-> 2.20.1
+> 2.7.4
 > 
 > _______________________________________________
 > buildroot mailing list
