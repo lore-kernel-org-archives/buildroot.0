@@ -1,46 +1,105 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 24 Jun 2020 22:43:42 +0200
-Subject: [Buildroot] [PATCH v3 2/7] package/cups-filters: bump to version
- 1.27.5
+Date: Wed, 24 Jun 2020 22:43:43 +0200
+Subject: [Buildroot] [PATCH v3 3/7] package/cups: fix cups service
 In-Reply-To: <20200624204347.797088-1-angelo@amarulasolutions.com>
 References: <20200624204347.797088-1-angelo@amarulasolutions.com>
-Message-ID: <20200624204347.797088-3-angelo@amarulasolutions.com>
+Message-ID: <20200624204347.797088-4-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps cups-filters to version 1.27.5.
+Cups service for systemv was erroneously installed in /etc/rcX.d and
+therefore not working.
+This patch adds also a buildroot style systemv init script instead of
+using the example provided by the package.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
- package/cups-filters/cups-filters.hash | 2 +-
- package/cups-filters/cups-filters.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cups/S81cupsd | 48 +++++++++++++++++++++++++++++++++++++++++++
+ package/cups/cups.mk  |  9 +++++++-
+ 2 files changed, 56 insertions(+), 1 deletion(-)
+ create mode 100644 package/cups/S81cupsd
 
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 9e24abe393..61cb42a438 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 ff8679fcd0c31c25d229262c7ad100ba161ef6b2aa455a2df673dd74ef93f488  cups-filters-1.26.0.tar.gz
-+sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
- sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 0a2622b87b..c622fb68af 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cups/S81cupsd b/package/cups/S81cupsd
+new file mode 100644
+index 0000000000..13b43ded5e
+--- /dev/null
++++ b/package/cups/S81cupsd
+@@ -0,0 +1,48 @@
++#!/bin/sh
++
++DAEMON="cupsd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++		-- -C /etc/cups/cupsd.conf -s /etc/cups/cups-files
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 18f01d8484..cff198b06a 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -21,7 +21,8 @@ CUPS_CONF_OPTS = \
+ 	--with-docdir=/usr/share/cups/doc-root \
+ 	--disable-gssapi \
+ 	--disable-pam \
+-	--libdir=/usr/lib
++	--libdir=/usr/lib \
++	--with-rcdir=no
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
+ 	host-autoconf \
+@@ -71,4 +72,10 @@ else
+ CUPS_CONF_OPTS += --disable-avahi
+ endif
  
--CUPS_FILTERS_VERSION = 1.26.0
-+CUPS_FILTERS_VERSION = 1.27.5
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
++define CUPS_INSTALL_INIT_SYSV
++	$(RM) $(TARGET_DIR)/etc/init.d/cups
++	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
++		$(TARGET_DIR)/etc/init.d/S81cupsd
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.25.1
