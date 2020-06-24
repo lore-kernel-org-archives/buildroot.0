@@ -1,130 +1,83 @@
-From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Wed, 24 Jun 2020 17:23:47 +0200
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Add option for all
- i.MX FW needs
-In-Reply-To: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <1593012228-18959-2-git-send-email-stephane.viau@oss.nxp.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 24 Jun 2020 18:06:40 +0200
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on microblaze
+Message-ID: <20200624160640.1892981-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some SoC need a HDMI FW for their bootloader, some other require EPDC,
-SDMA and/or VPU.
-Instead of trying to "guess" what firmware images need to be installed
-in firmware-imx.mk, let the Config framework do the job and allow each
-SoC to actually 'select' what firmware they need.
+By mistake seed.o has been added to public library too, but this way its
+dependencies are not taken into account(stubs.o), this way build fails
+complaining on missing functions from stubs.o file. Let's fix it by
+adding upstream patch:
+https://hg.mozilla.org/projects/nss/rev/f46fca8ced7fca6aa6de60e3170b2a3b6b2df565
 
-Note that this patch should also help introducing an eventual DP FW, as
-Gary mentioned in a separate thread [1].
+Fixes:
+http://autobuild.buildroot.net/results/4cb/4cbf4c35549a3bfba06222ba509d0263f23a3a2e/
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-May/283181.html
-
-Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/freescale-imx/Config.in | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ ...-seed.o-back-into-freeblpriv3.-r-bbe.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 0be37ce..2cac650 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -12,40 +12,63 @@ choice
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
- 	bool "imx25-3stack"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
- 	bool "imx27ads"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
- 	bool "imx37-3stack"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
- 	bool "imx50"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
- 	bool "imx51"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
- 	bool "imx53"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 	bool "imx6q/imx6dl"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
- 	bool "imx6sl/imx6sx"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 	bool "imx6ul/imx6ull"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
- 	bool "imx7d/imx7ulp"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
- 	bool "imx8"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 	bool "imx8m"
- 	select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_HDMI_FW
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
- 	bool "imx8mm"
-@@ -57,6 +80,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 	bool "imx8x"
-+	select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
- endchoice
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-@@ -102,6 +126,21 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
- 	bool
- 
-+config BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW
-+	bool
+diff --git a/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
+new file mode 100644
+index 0000000000..c9321658fd
+--- /dev/null
++++ b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
+@@ -0,0 +1,50 @@
++From 0841ebe3c85bfb12ecf080efb2e28ac18f55ed41 Mon Sep 17 00:00:00 2001
++From: Mike Hommey <mh@glandium.org>
++Date: Mon, 15 Jun 2020 18:12:09 +0000
++Subject: [PATCH] Bug 1642146 - Move seed.o back into freeblpriv3.
++ r=bbeurdouche
 +
-+config BR2_PACKAGE_FREESCALE_IMX_NEED_HDMI_FW
-+	bool
++Differential Revision: https://phabricator.services.mozilla.com/D77595
 +
-+config BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
-+	bool
++--HG--
++extra : moz-landing-system : lando
 +
-+config BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
-+	bool
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/Makefile    | 4 ----
++ nss/lib/freebl/manifest.mn | 4 ++++
++ 2 files changed, 4 insertions(+), 4 deletions(-)
 +
-+config BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
-+	bool
++diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
++index 29dc940a3..52d827c6a 100644
++--- a/nss/lib/freebl/Makefile
+++++ b/nss/lib/freebl/Makefile
++@@ -545,10 +545,6 @@ ifndef HAVE_INT128_SUPPORT
++     DEFINES += -DKRML_VERIFIED_UINT128
++ endif
++ 
++-ifndef NSS_DISABLE_DEPRECATED_SEED
++-	CSRCS += deprecated/seed.c
++-endif
++-
++ ifndef NSS_DISABLE_CHACHAPOLY
++     ifeq ($(CPU_ARCH),x86_64)
++         ifndef NSS_DISABLE_AVX2
++diff --git a/nss/lib/freebl/manifest.mn b/nss/lib/freebl/manifest.mn
++index 5efb48520..8dd8ddb53 100644
++--- a/nss/lib/freebl/manifest.mn
+++++ b/nss/lib/freebl/manifest.mn
++@@ -160,6 +160,10 @@ CSRCS = \
++ 	$(EXTRA_SRCS) \
++ 	$(NULL)
++ 
+++ifndef NSS_DISABLE_DEPRECATED_SEED
+++	CSRCS += deprecated/seed.c
+++endif
+++
++ ALL_CSRCS := $(CSRCS)
++ 
++ ALL_HDRS =  \
++-- 
++2.25.1
 +
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
- source "package/freescale-imx/imx-kobs/Config.in"
 -- 
-2.7.4
+2.25.1
