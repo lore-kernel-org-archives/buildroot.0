@@ -1,108 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 22:03:27 +0200
-Subject: [Buildroot] [PATCH] package/gqrx: fix build with boost 1.73.0
-In-Reply-To: <20200624054609.25448-1-gwenj@trabucayre.com>
-References: <20200624054609.25448-1-gwenj@trabucayre.com>
-Message-ID: <20200624200327.GH20645@scaer>
+Date: Wed, 24 Jun 2020 22:05:57 +0200
+Subject: [Buildroot] [git commit] package/libnss: fix build failure on
+ microblaze
+Message-ID: <20200624200700.6490981516@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=99fda2fa9507eeed68b79e45ae99c3d590cd0c17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-24 07:46 +0200, Gwenhael Goavec-Merou spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> With boost >= 1.73, placeholders must be qualified by using the full namespace.
-> 
-> Without the namespace, the build fails with:
-> gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
-> gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
-> set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
-> 
-> backport Pull Request https://github.com/csete/gqrx/pull/811
-> 
-> fix:
-> - http://autobuild.buildroot.net/results/73c490ba361dd6040720442bcbf332f1c3cc4882/
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+By mistake seed.o has been added to public library too, but this way its
+dependencies are not taken into account(stubs.o), this way build fails
+complaining on missing functions from stubs.o file. Let's fix it by
+adding upstream patch:
+https://hg.mozilla.org/projects/nss/rev/f46fca8ced7fca6aa6de60e3170b2a3b6b2df565
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/4cb/4cbf4c35549a3bfba06222ba509d0263f23a3a2e/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-> ---
->  ...aceholders_with_their_full_namespace.patch | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-> 
-> diff --git a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-> new file mode 100644
-> index 0000000000..919dc2da01
-> --- /dev/null
-> +++ b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-> @@ -0,0 +1,46 @@
-> +From 0510f6ffee646171bb105e0e8d016ac35e606cd4 Mon Sep 17 00:00:00 2001
-> +From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> +Date: Mon, 22 Jun 2020 15:45:20 +0200
-> +Subject: [PATCH] qualify placeholders with their full namespace
-> +
-> +With boost >= 1.73, placeholders must be qualified by using the full namespace.
-> +
-> +Without the namespace, the build fails with:
-> +gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
-> +gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
-> +set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
-> +
-> +[Upstream status: https://github.com/csete/gqrx/pull/811]
-> +
-> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> +---
-> + src/dsp/rds/parser_impl.cc | 2 +-
-> + src/dsp/rx_rds.cpp         | 2 +-
-> + 2 files changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/dsp/rds/parser_impl.cc b/src/dsp/rds/parser_impl.cc
-> +index b10fdb01..07dae038 100644
-> +--- a/src/dsp/rds/parser_impl.cc
-> ++++ b/src/dsp/rds/parser_impl.cc
-> +@@ -40,7 +40,7 @@ parser_impl::parser_impl(bool log, bool debug, unsigned char pty_locale)
-> + 	pty_locale(pty_locale)
-> + {
-> + 	message_port_register_in(pmt::mp("in"));
-> +-	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
-> ++	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, boost::placeholders::_1));
-> + 	message_port_register_out(pmt::mp("out"));
-> + 	reset();
-> + }
-> +diff --git a/src/dsp/rx_rds.cpp b/src/dsp/rx_rds.cpp
-> +index c4a541f3..c09835b0 100644
-> +--- a/src/dsp/rx_rds.cpp
-> ++++ b/src/dsp/rx_rds.cpp
-> +@@ -97,7 +97,7 @@ rx_rds_store::rx_rds_store() : gr::block ("rx_rds_store",
-> +                                 gr::io_signature::make (0, 0, 0))
-> + {
-> +         message_port_register_in(pmt::mp("store"));
-> +-        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, _1));
-> ++        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, boost::placeholders::_1));
-> +         d_messages.set_capacity(100);
-> + }
-> + 
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
+new file mode 100644
+index 0000000000..c9321658fd
+--- /dev/null
++++ b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
+@@ -0,0 +1,50 @@
++From 0841ebe3c85bfb12ecf080efb2e28ac18f55ed41 Mon Sep 17 00:00:00 2001
++From: Mike Hommey <mh@glandium.org>
++Date: Mon, 15 Jun 2020 18:12:09 +0000
++Subject: [PATCH] Bug 1642146 - Move seed.o back into freeblpriv3.
++ r=bbeurdouche
++
++Differential Revision: https://phabricator.services.mozilla.com/D77595
++
++--HG--
++extra : moz-landing-system : lando
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/Makefile    | 4 ----
++ nss/lib/freebl/manifest.mn | 4 ++++
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
++index 29dc940a3..52d827c6a 100644
++--- a/nss/lib/freebl/Makefile
+++++ b/nss/lib/freebl/Makefile
++@@ -545,10 +545,6 @@ ifndef HAVE_INT128_SUPPORT
++     DEFINES += -DKRML_VERIFIED_UINT128
++ endif
++ 
++-ifndef NSS_DISABLE_DEPRECATED_SEED
++-	CSRCS += deprecated/seed.c
++-endif
++-
++ ifndef NSS_DISABLE_CHACHAPOLY
++     ifeq ($(CPU_ARCH),x86_64)
++         ifndef NSS_DISABLE_AVX2
++diff --git a/nss/lib/freebl/manifest.mn b/nss/lib/freebl/manifest.mn
++index 5efb48520..8dd8ddb53 100644
++--- a/nss/lib/freebl/manifest.mn
+++++ b/nss/lib/freebl/manifest.mn
++@@ -160,6 +160,10 @@ CSRCS = \
++ 	$(EXTRA_SRCS) \
++ 	$(NULL)
++ 
+++ifndef NSS_DISABLE_DEPRECATED_SEED
+++	CSRCS += deprecated/seed.c
+++endif
+++
++ ALL_CSRCS := $(CSRCS)
++ 
++ ALL_HDRS =  \
++-- 
++2.25.1
++
