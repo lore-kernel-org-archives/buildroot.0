@@ -1,55 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 21:22:24 +0200
-Subject: [Buildroot] [PATCH 0/2] package/freescale-imx: clean-up proposal
-In-Reply-To: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <20200624192224.GE20645@scaer>
+Date: Wed, 24 Jun 2020 21:22:34 +0200
+Subject: [Buildroot] [git commit] package/libcurl: security bump to version
+ 7.71.0
+Message-ID: <20200624192141.3D88A83243@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-St?phane, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8370769d4a5e62e7054872053eafdd99419fef36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-24 17:23 +0200, Stephane Viau spake thusly:
-> Here is - as promised [1] - a patch set whose aim is to clean up the
-> firmware-imx package. I believe this may help installing EPDC fw, SDMA FW
-> and so on based on the actual need from each platform and respond to [2].
+CVE-2020-8177: curl overwrite local file with -J.
 
-On principle, I like what you've proposed in this series. I haven't
-looked the details, though, and I will let the imx experts chime-in to
-validate the conditions udner which each firmware files are installed.
+CVE-2020-8169: Partial password leak over DNS on HTTP redirect.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> BR,
-> Stephane.
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-June/284032.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2020-June/285218.html
-> 
-> Stephane Viau (2):
->   package/freescale-imx: Add option for all i.MX FW needs
->   package/freescale-imx/firmware-imx: Clean up the image/target semantic
-> 
->  package/freescale-imx/Config.in                    | 39 ++++++++++++
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 70 +++++++++++++++++-----
->  2 files changed, 93 insertions(+), 16 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 2157f3d2d2..104d603f3e 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
+-sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
++sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index cc2ca0aa65..11748924ff 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.70.0
++LIBCURL_VERSION = 7.71.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
