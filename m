@@ -1,11 +1,12 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 24 Jun 2020 22:38:59 +0200
-Subject: [Buildroot] [PATCH 2/5] package/gcc: add support for gcc 10
-In-Reply-To: <20200624215539.078dfb99@windsurf>
+Date: Wed, 24 Jun 2020 22:41:39 +0200
+Subject: [Buildroot] [PATCH 5/5] package/gcc: switch to gcc 9.x as the
+ default
+In-Reply-To: <20200624215654.1ccffabd@windsurf>
 References: <20200608221347.2639059-1-romain.naour@gmail.com>
- <20200608221347.2639059-2-romain.naour@gmail.com>
- <20200624215539.078dfb99@windsurf>
-Message-ID: <718461ba-d2b5-68a6-7f2a-82410f5e7740@gmail.com>
+ <20200608221347.2639059-5-romain.naour@gmail.com>
+ <20200624215654.1ccffabd@windsurf>
+Message-ID: <3b1056c1-67c6-48b2-94c2-5f0d2dea24b7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,70 +15,38 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Le 24/06/2020 ? 21:55, Thomas Petazzoni a ?crit?:
-> On Tue,  9 Jun 2020 00:13:44 +0200
+Le 24/06/2020 ? 21:56, Thomas Petazzoni a ?crit?:
+> On Tue,  9 Jun 2020 00:13:47 +0200
 > Romain Naour <romain.naour@gmail.com> wrote:
 > 
->> Keep the same patch as for gcc 9.x fixing a parallel build issue:
->> 58ecbbc3ef18c43ae1c02a5c4bf30aa7ef2d8092.
+>> Even if gcc 8 is still maintained for some time (gcc 8.5 is pending),
+>> switch to gcc 9.x since it has been released since 2019-05-03 and
+>> gcc 10.x is available since 2020-05-07.
 >>
->> Keep libzstd support disabled for now, it could be used to LTO bytecode.
+>> We have been having toolchains in the autobuilders with gcc
+>> 9.x for a while, so the vast majority of the problems should have
+>> already been solved.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  package/gcc/Config.in.host | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> "... it could be used for LTO bytecode compression", otherwise it
-> doesn't make a lot of sense.
+> Applied to master, thanks.
 > 
-> I've applied, but I have some comments/questions below.
-> 
->> +config BR2_GCC_VERSION_10_X
->> +	bool "gcc 10.x"
->> +	# or1k needs binutils >= 2.32
->> +	depends on !(BR2_or1k && BR2_BINUTILS_VERSION_2_31_X)
-> 
-> Why are we doing this here, instead of in the binutils package ? This
-> looks strange.
+> Following this, we should drop gcc 7.x support. However, one defconfig
+> (roseapplepi) still uses gcc 7.x. I've notified Peter Korsgaard on IRC,
+> and I am doing it here as well: if this defconfig is not updated to a
+> newer kernel that builds with gcc >= 8.x, we will have to drop support
+> for this defconfig.
 
-This dependency was added by [1] when we had a gcc 5 fork for or1k.
-
-[1]
-https://git.buildroot.net/buildroot/commit/?id=e0ba09768eb27872e8685754952601bdac9ac75b
-
-It here because it's gcc that require a recent enough binutils version.
-Maybe we should consider adding BR2_TOOLCHAIN_BINUTILS_AT_LEAST_xxxx.
-I think we already have a problem with new cpu variant that require the latest
-binutils version.
-
-> 
->> +	# powerpc spe support has been deprecated since gcc 8.x.
->> +	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
->> +	depends on !BR2_powerpc_SPE
-> 
-> Should we now drop support for PowerPC SPE ?
-
-If every body is ok, then we can drop it.
-
-> 
->> +	# C-SKY sk610 needs abiv1, which is not supported in
->> +	# upstream gcc. C-SKY gcc upstream support not tested
->> +	# with upstream binutils and glibc.
->> +	depends on !BR2_csky
-> 
-> We haven't had any news/contribution for C-SKY people for quite a
-> while. I know in recent SoC they have used RISC-V cores, but they were
-> supposed to continue making C-SKY based SoCs. I am fearing that this
-> looks like yet another abandoned CPU architecture :-/
-
-I'm not sure about this, their gitlab is still active:
-https://gitlab.com/c-sky/buildroot/-/pipelines
-
-IIRC we had some news from Guo Ren about the upstream qemu support for csky cpus
-
-http://lists.busybox.net/pipermail/buildroot/2020-May/283411.html
+Yes, I would like to avoid the mess like for beagleboneblack defconfig for qt5
+when it was using gcc 5 only.
 
 Best regards,
 Romain
 
-> 
-> Best regards,
+
 > 
 > Thomas
 > 
