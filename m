@@ -1,84 +1,43 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 24 Jun 2020 07:46:09 +0200
-Subject: [Buildroot] [PATCH] package/gqrx: fix build with boost 1.73.0
-Message-ID: <20200624054609.25448-1-gwenj@trabucayre.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Jun 2020 07:55:24 +0200
+Subject: [Buildroot] [PATCH] package/wireguard-tools: bump version to
+ 1.0.20200513
+Message-ID: <20200624055525.13352-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-
-With boost >= 1.73, placeholders must be qualified by using the full namespace.
-
-Without the namespace, the build fails with:
-gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
-gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
-set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
-
-backport Pull Request https://github.com/csete/gqrx/pull/811
-
-fix:
-- http://autobuild.buildroot.net/results/73c490ba361dd6040720442bcbf332f1c3cc4882/
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...aceholders_with_their_full_namespace.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
+ package/wireguard-tools/wireguard-tools.hash | 4 ++--
+ package/wireguard-tools/wireguard-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-new file mode 100644
-index 0000000000..919dc2da01
---- /dev/null
-+++ b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-@@ -0,0 +1,46 @@
-+From 0510f6ffee646171bb105e0e8d016ac35e606cd4 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Mon, 22 Jun 2020 15:45:20 +0200
-+Subject: [PATCH] qualify placeholders with their full namespace
-+
-+With boost >= 1.73, placeholders must be qualified by using the full namespace.
-+
-+Without the namespace, the build fails with:
-+gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
-+gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
-+set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
-+
-+[Upstream status: https://github.com/csete/gqrx/pull/811]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ src/dsp/rds/parser_impl.cc | 2 +-
-+ src/dsp/rx_rds.cpp         | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/dsp/rds/parser_impl.cc b/src/dsp/rds/parser_impl.cc
-+index b10fdb01..07dae038 100644
-+--- a/src/dsp/rds/parser_impl.cc
-++++ b/src/dsp/rds/parser_impl.cc
-+@@ -40,7 +40,7 @@ parser_impl::parser_impl(bool log, bool debug, unsigned char pty_locale)
-+ 	pty_locale(pty_locale)
-+ {
-+ 	message_port_register_in(pmt::mp("in"));
-+-	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
-++	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, boost::placeholders::_1));
-+ 	message_port_register_out(pmt::mp("out"));
-+ 	reset();
-+ }
-+diff --git a/src/dsp/rx_rds.cpp b/src/dsp/rx_rds.cpp
-+index c4a541f3..c09835b0 100644
-+--- a/src/dsp/rx_rds.cpp
-++++ b/src/dsp/rx_rds.cpp
-+@@ -97,7 +97,7 @@ rx_rds_store::rx_rds_store() : gr::block ("rx_rds_store",
-+                                 gr::io_signature::make (0, 0, 0))
-+ {
-+         message_port_register_in(pmt::mp("store"));
-+-        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, _1));
-++        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, boost::placeholders::_1));
-+         d_messages.set_capacity(100);
-+ }
-+ 
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index 475a7450a9..96134074f3 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-March/005191.html
+-sha256  757ed31d4d48d5fd7853bfd9bfa6a3a1b53c24a94fe617439948784a2c0ed987  wireguard-tools-1.0.20200319.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005431.html
++sha256  e73409a9fb8c90506db241d1e1a4e7372a60dbfa400e37f4ab2fd70a92ba495f  wireguard-tools-1.0.20200513.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index fc2ec876b3..c4890f9337 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_TOOLS_VERSION = 1.0.20200319
++WIREGUARD_TOOLS_VERSION = 1.0.20200513
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
 -- 
-2.26.2
+2.20.1
