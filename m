@@ -1,58 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 24 Jun 2020 21:35:11 +0200
-Subject: [Buildroot] [git commit] package/wpebackend-fdo: bump to version
- 1.6.1
-Message-ID: <20200624193304.563A98454D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/json-c: bump version to 0.14
+Message-ID: <20200624193304.5F7098454D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbada0c2ecb2ce04d3054cdbfb9efb79c11ee6ed
+commit: https://git.buildroot.net/buildroot/commit/?id=7b4581cca8676b44dc278d391575fdc22c2ecc1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This update brings in a few build fixes only. In particular the
-one for EGL implementations which use oddball definitions of the
-EGLNativeDisplayType type might be needed for some configurations.
+Notes:
 
-Full release notes:
+- json-c now uses cmake instead of autoconf
+- This version also brings support to the much welcomed feature for
+  parsing uint64_t types
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.6.1.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Christopher Pelloux <git@chp.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/json-c/json-c.hash |  2 +-
+ package/json-c/json-c.mk   | 14 +++-----------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 1380934af3..0b821f3443 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.0.tar.xz.sums
--md5  456afeed22f6749f7b2a97c11660835d  wpebackend-fdo-1.6.0.tar.xz
--sha1  d128e2c7ff273d9b9f31217f6ac25be3b266d805  wpebackend-fdo-1.6.0.tar.xz
--sha256  7f5bd7b9d8f97b1655f4dcd39fad92719d0fb3985b251da5802df13aaa09f567  wpebackend-fdo-1.6.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.1.tar.xz.sums
-+md5  ea6c2a13e6c2423f2c2b0b31fcf9567b  wpebackend-fdo-1.6.1.tar.xz
-+sha1  53e38189324d9c0c87f40164d8349a827663aabd  wpebackend-fdo-1.6.1.tar.xz
-+sha256  740eee3327acfb462b8460519a219e30dc0a870326e88e2ddc4fe2c8de20b1c9  wpebackend-fdo-1.6.1.tar.xz
- 
- # Hashes for license files:
- sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 99e10c5a01..5bc2d3ed37 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+index 0e03007476..93eaff67c3 100644
+--- a/package/json-c/json-c.hash
++++ b/package/json-c/json-c.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/json-c/json-c/wiki
+-sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
++sha256 b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
+ # Locally calculated
+ sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index 2788fe563b..3e17effdad 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,19 +4,11 @@
  #
  ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.6.0
-+WPEBACKEND_FDO_VERSION = 1.6.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+-JSON_C_VERSION = 0.13.1
++JSON_C_VERSION = 0.14
+ JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
+ JSON_C_INSTALL_STAGING = YES
+ JSON_C_LICENSE = MIT
+ JSON_C_LICENSE_FILES = COPYING
+ 
+-# update config.h.in timestamp to avoid autoheader run
+-define JSON_C_UPDATE_CONFIG_TIMESTAMP
+-	touch $(@D)/config.h.in
+-endef
+-
+-JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
+-HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
