@@ -1,44 +1,48 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 24 Jun 2020 13:05:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version 86bd30a
-Message-ID: <1592996759-31938-1-git-send-email-pjtexier@koncepto.io>
+From: =?UTF-8?q?St=C3=A9phane=20Veyret?= <sveyret@gmail.com>
+Date: Wed, 24 Jun 2020 13:50:09 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi-firmware: do not rename startup files
+Message-ID: <20200624115009.15561-1-sveyret@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
+Bug: 13026
 
-86bd30a Restore ability to feed script file via stdin, using `-s -`.
+When booting, a Raspberry Pi will load the appropriate start files, depending on the provided configuration. For example, if the config.txt file contains:
+gpu_mem=16
+the board will automatically load the cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
+Unfortunately, even when the appropriate version is selected in the configuration menu (in this example, BR2_PACKAGE_RPI_FIRMWARE_BOOT="_cd") if the rpi-firmware makefile takes the good files, it renames them to non-qualified, i.e. start.elf and fixup.dat. But as these are not the files searched by the Raspberry Pi, the board will not start.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: St?phane Veyret <sveyret@gmail.com>
 ---
- package/libubootenv/libubootenv.hash | 2 +-
- package/libubootenv/libubootenv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rpi-firmware/rpi-firmware.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 753f8f5..6ef2aa7 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9a905431113db379900e862e8175575ecda21b3c63a87389ffc4a65122dfec9e  libubootenv-c91dccab34294b5ea9c6502d01bfdaa49639fd90.tar.gz
-+sha256  15fe743c661e19e0fba6a91cad6e8e295e6358cb917f3752a0bf6e742027252c  libubootenv-86bd30a14e153a18f670b25708795253d8736f0f.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 1b6f116..65260b7 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 6ad67ab0e5..2f4b2b05bf 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -44,14 +44,14 @@ endif # INSTALL_VCDBG
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
+ # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
+ define RPI_FIRMWARE_INSTALL_BOOT
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
+ endef
+ else
+ define RPI_FIRMWARE_INSTALL_BOOT
+-	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/
++	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
+ endef
+ endif
  
--LIBUBOOTENV_VERSION = c91dccab34294b5ea9c6502d01bfdaa49639fd90
-+LIBUBOOTENV_VERSION = 86bd30a14e153a18f670b25708795253d8736f0f
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
 -- 
-2.7.4
+2.26.2
