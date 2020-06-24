@@ -1,96 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 18:54:05 +0200
-Subject: [Buildroot] [PATCH 1/1] rpi-firmware: do not rename startup
- files
-In-Reply-To: <20200624115009.15561-1-sveyret@gmail.com>
-References: <20200624115009.15561-1-sveyret@gmail.com>
-Message-ID: <20200624165405.GA20645@scaer>
+Date: Wed, 24 Jun 2020 18:56:20 +0200
+Subject: [Buildroot] [git commit] package/wireguard-tools: bump version to
+ 1.0.20200513
+Message-ID: <20200624165537.3909D8454D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-St?phane, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b9e8e2fd36c18a04c7b14e919bf59e463d928313
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please wrap your commit logs properly, at a 72-or-so boundary.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wireguard-tools/wireguard-tools.hash | 4 ++--
+ package/wireguard-tools/wireguard-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2020-06-24 13:50 +0200, St?phane Veyret spake thusly:
-> Bug: 13026
-> 
-> When booting, a Raspberry Pi will load the appropriate start files, depending on the provided configuration. For example, if the config.txt file contains:
-> gpu_mem=16
-> the board will automatically load the cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
-
-So, the startup file loaded depends on the amount of memory the user
-enables, and maybe other configurations, who knows?
-
-This somewhat goes directly agains the user selecting a specific startup
-file to use. See below...
-
-> Unfortunately, even when the appropriate version is selected in the configuration menu (in this example, BR2_PACKAGE_RPI_FIRMWARE_BOOT="_cd") if the rpi-firmware makefile takes the good files, it renames them to non-qualified, i.e. start.elf and fixup.dat. But as these are not the files searched by the Raspberry Pi, the board will not start.
-> 
-> Signed-off-by: St?phane Veyret <sveyret@gmail.com>
-> ---
->  package/rpi-firmware/rpi-firmware.mk | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 6ad67ab0e5..2f4b2b05bf 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -44,14 +44,14 @@ endif # INSTALL_VCDBG
->  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
->  # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
->  define RPI_FIRMWARE_INSTALL_BOOT
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
->  endef
->  else
->  define RPI_FIRMWARE_INSTALL_BOOT
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-> -	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
-> +	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
-
-I think we should instead force the name of the startup files in the
-config.txt (in package/rpi-firmware/config.txt):
-
-    start_file=start.elf
-    fixup_file=fixup.dat
-
-Which will always be exactly what to load. I was pretty farn sure that's
-what we already did, but I remembered wrong...
-
-See: https://github.com/raspberrypi/documentation/blob/master/configuration/config-txt/boot.md
-
-Can you respin a patch to that effect, please?
-
-Regards,
-Yann E. MORIN.
-
-Regards,
-Yann E. MORIN.
-
->  endef
->  endif
->  
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index 475a7450a9..96134074f3 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-March/005191.html
+-sha256  757ed31d4d48d5fd7853bfd9bfa6a3a1b53c24a94fe617439948784a2c0ed987  wireguard-tools-1.0.20200319.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005431.html
++sha256  e73409a9fb8c90506db241d1e1a4e7372a60dbfa400e37f4ab2fd70a92ba495f  wireguard-tools-1.0.20200513.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index fc2ec876b3..c4890f9337 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_TOOLS_VERSION = 1.0.20200319
++WIREGUARD_TOOLS_VERSION = 1.0.20200513
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
