@@ -1,83 +1,96 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 24 Jun 2020 18:06:40 +0200
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure on microblaze
-Message-ID: <20200624160640.1892981-1-giulio.benetti@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 24 Jun 2020 18:54:05 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi-firmware: do not rename startup
+ files
+In-Reply-To: <20200624115009.15561-1-sveyret@gmail.com>
+References: <20200624115009.15561-1-sveyret@gmail.com>
+Message-ID: <20200624165405.GA20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By mistake seed.o has been added to public library too, but this way its
-dependencies are not taken into account(stubs.o), this way build fails
-complaining on missing functions from stubs.o file. Let's fix it by
-adding upstream patch:
-https://hg.mozilla.org/projects/nss/rev/f46fca8ced7fca6aa6de60e3170b2a3b6b2df565
+St?phane, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/4cb/4cbf4c35549a3bfba06222ba509d0263f23a3a2e/
+Please wrap your commit logs properly, at a 72-or-so boundary.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...-seed.o-back-into-freeblpriv3.-r-bbe.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
+On 2020-06-24 13:50 +0200, St?phane Veyret spake thusly:
+> Bug: 13026
+> 
+> When booting, a Raspberry Pi will load the appropriate start files, depending on the provided configuration. For example, if the config.txt file contains:
+> gpu_mem=16
+> the board will automatically load the cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
 
-diff --git a/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
-new file mode 100644
-index 0000000000..c9321658fd
---- /dev/null
-+++ b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
-@@ -0,0 +1,50 @@
-+From 0841ebe3c85bfb12ecf080efb2e28ac18f55ed41 Mon Sep 17 00:00:00 2001
-+From: Mike Hommey <mh@glandium.org>
-+Date: Mon, 15 Jun 2020 18:12:09 +0000
-+Subject: [PATCH] Bug 1642146 - Move seed.o back into freeblpriv3.
-+ r=bbeurdouche
-+
-+Differential Revision: https://phabricator.services.mozilla.com/D77595
-+
-+--HG--
-+extra : moz-landing-system : lando
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/Makefile    | 4 ----
-+ nss/lib/freebl/manifest.mn | 4 ++++
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
-+index 29dc940a3..52d827c6a 100644
-+--- a/nss/lib/freebl/Makefile
-++++ b/nss/lib/freebl/Makefile
-+@@ -545,10 +545,6 @@ ifndef HAVE_INT128_SUPPORT
-+     DEFINES += -DKRML_VERIFIED_UINT128
-+ endif
-+ 
-+-ifndef NSS_DISABLE_DEPRECATED_SEED
-+-	CSRCS += deprecated/seed.c
-+-endif
-+-
-+ ifndef NSS_DISABLE_CHACHAPOLY
-+     ifeq ($(CPU_ARCH),x86_64)
-+         ifndef NSS_DISABLE_AVX2
-+diff --git a/nss/lib/freebl/manifest.mn b/nss/lib/freebl/manifest.mn
-+index 5efb48520..8dd8ddb53 100644
-+--- a/nss/lib/freebl/manifest.mn
-++++ b/nss/lib/freebl/manifest.mn
-+@@ -160,6 +160,10 @@ CSRCS = \
-+ 	$(EXTRA_SRCS) \
-+ 	$(NULL)
-+ 
-++ifndef NSS_DISABLE_DEPRECATED_SEED
-++	CSRCS += deprecated/seed.c
-++endif
-++
-+ ALL_CSRCS := $(CSRCS)
-+ 
-+ ALL_HDRS =  \
-+-- 
-+2.25.1
-+
+So, the startup file loaded depends on the amount of memory the user
+enables, and maybe other configurations, who knows?
+
+This somewhat goes directly agains the user selecting a specific startup
+file to use. See below...
+
+> Unfortunately, even when the appropriate version is selected in the configuration menu (in this example, BR2_PACKAGE_RPI_FIRMWARE_BOOT="_cd") if the rpi-firmware makefile takes the good files, it renames them to non-qualified, i.e. start.elf and fixup.dat. But as these are not the files searched by the Raspberry Pi, the board will not start.
+> 
+> Signed-off-by: St?phane Veyret <sveyret@gmail.com>
+> ---
+>  package/rpi-firmware/rpi-firmware.mk | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index 6ad67ab0e5..2f4b2b05bf 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -44,14 +44,14 @@ endif # INSTALL_VCDBG
+>  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
+>  # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
+>  define RPI_FIRMWARE_INSTALL_BOOT
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
+>  endef
+>  else
+>  define RPI_FIRMWARE_INSTALL_BOOT
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
+
+I think we should instead force the name of the startup files in the
+config.txt (in package/rpi-firmware/config.txt):
+
+    start_file=start.elf
+    fixup_file=fixup.dat
+
+Which will always be exactly what to load. I was pretty farn sure that's
+what we already did, but I remembered wrong...
+
+See: https://github.com/raspberrypi/documentation/blob/master/configuration/config-txt/boot.md
+
+Can you respin a patch to that effect, please?
+
+Regards,
+Yann E. MORIN.
+
+Regards,
+Yann E. MORIN.
+
+>  endef
+>  endif
+>  
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
