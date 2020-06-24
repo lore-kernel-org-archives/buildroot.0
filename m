@@ -1,69 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 22:21:40 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/uboot/: Name U-Boot boot script
- image
-In-Reply-To: <LRqYEr-8n8UCFItcyNs3C7MB6QE2qjqOzG6oeXtPjF0qV_bhTXsJ2-mD4NDoS9Ro4UsvpwIh8HK5vcnjj87xxjS8QVNoFCyX9WMEBOu17As=@protonmail.com>
-References: <LRqYEr-8n8UCFItcyNs3C7MB6QE2qjqOzG6oeXtPjF0qV_bhTXsJ2-mD4NDoS9Ro4UsvpwIh8HK5vcnjj87xxjS8QVNoFCyX9WMEBOu17As=@protonmail.com>
-Message-ID: <20200624202140.GK20645@scaer>
+Date: Wed, 24 Jun 2020 22:26:40 +0200
+Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Add option for
+ all i.MX FW needs
+In-Reply-To: <CAOMZO5Bw4O+mDhVB1x2itxW3pXqdRW=-yU9SCucS0bsa-RhLUQ@mail.gmail.com>
+References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1593012228-18959-2-git-send-email-stephane.viau@oss.nxp.com>
+ <CAOMZO5Bw4O+mDhVB1x2itxW3pXqdRW=-yU9SCucS0bsa-RhLUQ@mail.gmail.com>
+Message-ID: <20200624202640.GL20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yair, All,
+Fabio, St?phane, All,
 
-On 2020-06-23 23:04 +0000, Yair Ben-Avraham spake thusly:
-> Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
-> ---
->  boot/uboot/Config.in | 5 +++++
->  boot/uboot/uboot.mk  | 1 +
->  2 files changed, 6 insertions(+)
+On 2020-06-24 17:11 -0300, Fabio Estevam spake thusly:
+> Forgot to add one more comment:
 > 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 8cce9b1bae..310c4f8186 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -568,6 +568,11 @@ config BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE
->         help
->           Source file to generate the U-Boot boot script.
+> On Wed, Jun 24, 2020 at 12:57 PM Stephane Viau
+> <stephane.viau@oss.nxp.com> wrote:
 > 
-> +config BR2_TARGET_UBOOT_BOOT_SCRIPT_IMAGE_NAME
-> +       string "U-Boot boot script image name"
-> +       help
-> +         Image (*not* file) name.
-> +
->  endif
+> > +config BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
 > 
->  if BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 71689207e3..ab945eb159 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -340,6 +340,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
->         $(UBOOT_GENERATE_ENV_IMAGE)
->         $(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
->                 $(MKIMAGE) -C none -A $(MKIMAGE_ARCH) -T script \
-> +                       -n $(BR2_TARGET_UBOOT_BOOT_SCRIPT_IMAGE_NAME) \
+> Should we name this after the VPU IP name instead? Something like this:
+> BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_CODA
+> 
+> > +config BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
+> BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_MALONE
 
-So, when the user does not set the option, we will end up passing:
-
-    -n ""
-
-Is that correct?
+If the VPU code names are pretty commonly known, then yes, that looks
+better, indeed.
 
 Regards,
 Yann E. MORIN.
-
->                         -d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
->                         $(BINARIES_DIR)/boot.scr)
->  endef
-> --
-> 2.20.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
