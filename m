@@ -1,59 +1,43 @@
-From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
-Date: Wed, 24 Jun 2020 10:27:35 +0200
-Subject: [Buildroot] [PATCH v2] package/irrlicht: fix libraries linking
-In-Reply-To: <20200624100502.0f899606@windsurf>
-References: <20200622184515.312030-1-b.bilas@grinn-global.com>
- <20200622212642.1be946f3@windsurf.home>
- <46d65bc1-310b-c21a-22e7-11df0ef164b7@grinn-global.com>
- <20200622223626.78bc07e1@windsurf.home>
- <6a29bbc7-1399-16aa-2e7b-4945f217a9b5@grinn-global.com>
- <20200624100502.0f899606@windsurf>
-Message-ID: <241a0520-a68d-03ff-0f94-c35b96f3e8f4@grinn-global.com>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Wed, 24 Jun 2020 08:50:02 +0000
+Subject: [Buildroot] [PATCH 1/3] package/freescale-imx/firmware-imx:
+ install sdma firmware for i.MX8M{, M, N}
+In-Reply-To: <20200622224918.0bda44c3@windsurf.home>
+References: <20200615130633.19909-1-sebastien.szymanski@armadeus.com>,
+ <20200622224918.0bda44c3@windsurf.home>
+Message-ID: <DB8PR04MB575507EABBF0E715F8E2B919A7950@DB8PR04MB5755.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On 6/24/20 10:05 AM, Thomas Petazzoni wrote:
-> On Tue, 23 Jun 2020 20:08:47 +0200
-> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+<snip>
 >
->>>> Due to the fact that it points to the host system libraries. This -L
->>>> argument is set correctly within package makefile.
->>> Yes, of course. My question is why do you have two patches? They touch
->>> exactly the same line, simply do the change in two steps instead of
->>> one. Am I missing something here ?
->> Ah, I didn't want to combine everything into one patch because there
->> were 2 different changes (adding keyword and removing paths) but I'm
->> gonna combine it into one patch then.
-> OK, it's true you can see it as: one allows to override the LDFLAGS,
-> the other drops a bogus hardcoded path.
->
->
->>>>> IRRLICHT_CONF_OPTS += CPPFLAGS="$(IRRLICHT_CPPFLAGS)"
->>>> Good hint, I was thinking about a bit different approach but it wasn't
->>>> working as I expected therefore I did it as it's above.
->>> So I guess you'll rework accordingly? If needed, you can also have a
->>> preparation patch that reworks this IRRLICHT_CPPFLAGS thing for the
->>> NEON stuff, and then another patch that fixes the library linking issue.
->>>
->>> Thomas
->> It turned out that -I$(STAGING_DIR)/usr/include isn't necessary anymore
->> so I've decided not to touch that.
-> -I$(STAGING_DIR)/usr/include is definitely useless as it's the default 
-> search path for headers for the Buildroot cross-compiler, but that's 
-> not what you were adding: you were adding 
-> -I$(STAGING_DIR)/usr/include/X11R6, which is not in the default search 
-> path for headers. Best regards, Thomas
-No, previously I was adding -I$(STAGING_DIR)/usr/include/X11 but this 
-path wasn't necessary therefore in the v3 there is no this path anymore.
-This -I$(STAGING_DIR)/usr/include/X11R6 path was the default one which 
-I've removed from the makefile.
+>Overall, I think firmware-imx.mk is pretty messy in terms of how it
+>describes what needs to be installed for each platform. It probably
+>needs to be cleaned up to allow to more easily support more
+>capabilities on more platforms.
 
-I hope that everything is clear now ;)
+Hi Thomas, Sebastien,
 
-Best
-Bartek
+As mentioned to Yann in another thread [1], I'm working on a patch that will hopefully clear things up (currently in review internally).
+
+BR,
+Stephane.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2020-June/284032.html
+
+>
+>Thanks!
+>
+>Thomas
+>--
+>Thomas Petazzoni, CTO, Bootlin
+>Embedded Linux and Kernel engineering
+>https://bootlin.com
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
+>
