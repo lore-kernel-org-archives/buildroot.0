@@ -1,46 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Jun 2020 08:41:44 +0200
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
- 1.0.20200623
-Message-ID: <20200624064144.27566-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Jun 2020 10:05:02 +0200
+Subject: [Buildroot] [PATCH v2] package/irrlicht: fix libraries linking
+In-Reply-To: <6a29bbc7-1399-16aa-2e7b-4945f217a9b5@grinn-global.com>
+References: <20200622184515.312030-1-b.bilas@grinn-global.com>
+ <20200622212642.1be946f3@windsurf.home>
+ <46d65bc1-310b-c21a-22e7-11df0ef164b7@grinn-global.com>
+ <20200622223626.78bc07e1@windsurf.home>
+ <6a29bbc7-1399-16aa-2e7b-4945f217a9b5@grinn-global.com>
+Message-ID: <20200624100502.0f899606@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes a number of bugfixes and updates to build against newer stable
-kernels.
+On Tue, 23 Jun 2020 20:08:47 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> >> Due to the fact that it points to the host system libraries. This -L
+> >> argument is set correctly within package makefile.  
+> > Yes, of course. My question is why do you have two patches? They touch
+> > exactly the same line, simply do the change in two steps instead of
+> > one. Am I missing something here ?  
+> Ah, I didn't want to combine everything into one patch because there 
+> were 2 different changes (adding keyword and removing paths) but I'm 
+> gonna combine it into one patch then.
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 54af5af956..ac160cdf9d 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005408.html
--sha256  98a99f2b825a82d57a7213e666f1ee4f7cc02bddb09bf4908b4b09447a8f121e  wireguard-linux-compat-1.0.20200506.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-June/005597.html
-+sha256  130937724515799edf05ff8216bc837df8acda879428f3a7f96a3287758f9445  wireguard-linux-compat-1.0.20200623.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index f1b117d258..5e8636072c 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200506
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200623
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+OK, it's true you can see it as: one allows to override the LDFLAGS,
+the other drops a bogus hardcoded path.
+
+
+> >>> IRRLICHT_CONF_OPTS += CPPFLAGS="$(IRRLICHT_CPPFLAGS)"  
+> >> Good hint, I was thinking about a bit different approach but it wasn't
+> >> working as I expected therefore I did it as it's above.  
+> > So I guess you'll rework accordingly? If needed, you can also have a
+> > preparation patch that reworks this IRRLICHT_CPPFLAGS thing for the
+> > NEON stuff, and then another patch that fixes the library linking issue.
+> >
+> > Thomas  
+> 
+> It turned out that -I$(STAGING_DIR)/usr/include isn't necessary anymore 
+> so I've decided not to touch that.
+
+-I$(STAGING_DIR)/usr/include is definitely useless as it's the default
+search path for headers for the Buildroot cross-compiler, but that's
+not what you were adding: you were adding
+-I$(STAGING_DIR)/usr/include/X11R6, which is not in the default search
+path for headers.
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
