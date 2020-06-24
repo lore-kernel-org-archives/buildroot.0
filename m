@@ -1,68 +1,98 @@
-From: =?UTF-8?q?St=C3=A9phane=20Veyret?= <sveyret@gmail.com>
-Date: Wed, 24 Jun 2020 21:35:31 +0200
-Subject: [Buildroot] [PATCH v2] rpi-firmware: do not rename startup files
-Message-ID: <20200624193531.27761-1-sveyret@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 24 Jun 2020 21:37:03 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 0.8
+In-Reply-To: <20200624131510.27380-1-mark@dibsco.co.uk>
+References: <20200624131510.27380-1-mark@dibsco.co.uk>
+Message-ID: <20200624193703.GG20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bug: 13026
+Mark, All,
 
-When booting, a Raspberry Pi will load the appropriate start files,
-depending on the provided configuration. For example, if the config.txt
-file contains:
-gpu_mem=16
-the board will automatically load the cut-down startup files
-(start_cd.elf and fixup_cd.dat on non-Rpi4).
+On 2020-06-24 14:15 +0100, Mark Corbin spake thusly:
+> The OpenSBI platform 'qemu/virt' has been removed in v0.8. Builds for
+> the QEMU 'virt' machine can use the 'generic' platform instead.
+> 
+> Tested with qemu_riscv32_virt_defconfig and
+> qemu_riscv64_virt_defconfig using Buildroot host-qemu 5.0.0.
+> 
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
-Unfortunately, even when the appropriate version is selected in the
-configuration menu (in this example,
-BR2_PACKAGE_RPI_FIRMWARE_BOOT="_cd") if the rpi-firmware makefile takes
-the good files, it renames them to non-qualified, i.e. start.elf and
-fixup.dat. But as these are not the files searched by the Raspberry Pi,
-the board will not start.
+Applied to master, thanks.
 
-Signed-off-by: St?phane Veyret <sveyret@gmail.com>
+Regards,
+Yann E. MORIN.
 
----
-Changes v1 -> v2:
-  - update config.txt instead of keeping firmware name, as suggested by
-    Yann E. MORIN. Note that this requires to update the name anyway
-    for RPi 4.
----
- package/rpi-firmware/config.txt      | 5 +++++
- package/rpi-firmware/rpi-firmware.mk | 4 ++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+> ---
+>  boot/opensbi/opensbi.hash           | 2 +-
+>  boot/opensbi/opensbi.mk             | 2 +-
+>  configs/qemu_riscv32_virt_defconfig | 2 +-
+>  configs/qemu_riscv64_virt_defconfig | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+> index 6e69d512dd..b25a435ee5 100644
+> --- a/boot/opensbi/opensbi.hash
+> +++ b/boot/opensbi/opensbi.hash
+> @@ -1,3 +1,3 @@
+>  # locally computed
+> -sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
+> +sha256 17e048ac765e92e15f7436b604452614cf88dc2bcbbaab18cdc024f3fdd4c575 opensbi-0.8.tar.gz
+>  sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 00e3b05dd0..60b87c268d 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -OPENSBI_VERSION = 0.6
+> +OPENSBI_VERSION = 0.8
+>  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+>  OPENSBI_LICENSE = BSD-2-Clause
+>  OPENSBI_LICENSE_FILES = COPYING.BSD
+> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+> index dc1a5b1295..166c41f1f0 100644
+> --- a/configs/qemu_riscv32_virt_defconfig
+> +++ b/configs/qemu_riscv32_virt_defconfig
+> @@ -26,7 +26,7 @@ BR2_LINUX_KERNEL_IMAGE=y
+>  
+>  # Bootloader
+>  BR2_TARGET_OPENSBI=y
+> -BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+> +BR2_TARGET_OPENSBI_PLAT="generic"
+>  
+>  # host-qemu for gitlab testing
+>  BR2_PACKAGE_HOST_QEMU=y
+> diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+> index dbe6107b62..2887cf5f22 100644
+> --- a/configs/qemu_riscv64_virt_defconfig
+> +++ b/configs/qemu_riscv64_virt_defconfig
+> @@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_IMAGE=y
+>  
+>  # Bootloader
+>  BR2_TARGET_OPENSBI=y
+> -BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+> +BR2_TARGET_OPENSBI_PLAT="generic"
+>  
+>  # host-qemu for gitlab testing
+>  BR2_PACKAGE_HOST_QEMU=y
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
-index 58cc966a87..8121624a78 100644
---- a/package/rpi-firmware/config.txt
-+++ b/package/rpi-firmware/config.txt
-@@ -18,3 +18,8 @@ disable_overscan=1
- gpu_mem_256=100
- gpu_mem_512=100
- gpu_mem_1024=100
-+
-+# We always use the same name, the real used variant is selected by
-+# BR2_PACKAGE_RPI_FIRMWARE_{DEFAULT,X,CD}
-+start_file=start.elf
-+fixup_file=fixup.dat
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 6ad67ab0e5..b412b08cff 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -44,8 +44,8 @@ endif # INSTALL_VCDBG
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
- # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
- define RPI_FIRMWARE_INSTALL_BOOT
--	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
--	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
- endef
- else
- define RPI_FIRMWARE_INSTALL_BOOT
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
