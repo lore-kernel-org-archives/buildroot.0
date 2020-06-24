@@ -1,48 +1,60 @@
-From: =?UTF-8?q?St=C3=A9phane=20Veyret?= <sveyret@gmail.com>
-Date: Wed, 24 Jun 2020 13:50:09 +0200
-Subject: [Buildroot] [PATCH 1/1] rpi-firmware: do not rename startup files
-Message-ID: <20200624115009.15561-1-sveyret@gmail.com>
+From: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Date: Wed, 24 Jun 2020 14:17:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnids: disable libnet only if not
+ available
+Message-ID: <20200624121742.20034-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bug: 13026
+libnids can be built against an existing libnet lib,
+take advantage of that.
 
-When booting, a Raspberry Pi will load the appropriate start files, depending on the provided configuration. For example, if the config.txt file contains:
-gpu_mem=16
-the board will automatically load the cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
-Unfortunately, even when the appropriate version is selected in the configuration menu (in this example, BR2_PACKAGE_RPI_FIRMWARE_BOOT="_cd") if the rpi-firmware makefile takes the good files, it renames them to non-qualified, i.e. start.elf and fixup.dat. But as these are not the files searched by the Raspberry Pi, the board will not start.
+Unfortunately, pkg-config is not available for libnet,
+so configure --with-libnet is our only option at the
+moment.
 
-Signed-off-by: St?phane Veyret <sveyret@gmail.com>
+--with-libnet expects a build directory,
+not an installation path like in our context.
+We use --with-libnet=yes to skip tests that would fail.
+In this situation, 'LIBNET' goes undefined, so we
+need to define it ourselves.
+This works because we make sure -lnet is installed
+prior anything related to libnids.
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- package/rpi-firmware/rpi-firmware.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/libnids/libnids.mk | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 6ad67ab0e5..2f4b2b05bf 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -44,14 +44,14 @@ endif # INSTALL_VCDBG
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
- # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
- define RPI_FIRMWARE_INSTALL_BOOT
--	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
--	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
- endef
- else
- define RPI_FIRMWARE_INSTALL_BOOT
--	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
--	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
--	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/
- endef
- endif
+diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
+index f0330787c7..01d50879b6 100644
+--- a/package/libnids/libnids.mk
++++ b/package/libnids/libnids.mk
+@@ -11,7 +11,21 @@ LIBNIDS_LICENSE_FILES = COPYING
+ LIBNIDS_INSTALL_STAGING = YES
+ LIBNIDS_DEPENDENCIES = host-pkgconf libpcap
+ LIBNIDS_AUTORECONF = YES
+-LIBNIDS_CONF_OPTS = --disable-libnet
++
++# disable libnet if not available
++# Tests in configure.in expect --with-libnet=$build_dir
++# not an installation patch like in our context.
++# We use with-libnet=yes to skip the unusual paths tests.
++# But 'LNETLIB' gets left out, so we need to define it ourselves.
++ifeq ($(BR2_PACKAGE_LIBNET),y)
++LIBNIDS_DEPENDENCIES += libnet
++
++LIBNIDS_CONF_OPTS += --with-libnet=yes \
++	LNETLIB=-lnet \
++	--enable-libnet
++else
++LIBNIDS_CONF_OPTS += --disable-libnet
++endif
  
+ # disable libglib2 if not available
+ # The test in configure.in is flawed: passing --enable-libglib would also
 -- 
-2.26.2
+2.20.1
