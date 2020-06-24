@@ -1,98 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Jun 2020 21:37:03 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 0.8
-In-Reply-To: <20200624131510.27380-1-mark@dibsco.co.uk>
-References: <20200624131510.27380-1-mark@dibsco.co.uk>
-Message-ID: <20200624193703.GG20645@scaer>
+Date: Wed, 24 Jun 2020 21:40:17 +0200
+Subject: [Buildroot] [git commit] package/gqrx: fix build with boost 1.73.0
+Message-ID: <20200624193834.EE83D821B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d041f0db8a159dcbada201be864f290fda3592aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-24 14:15 +0100, Mark Corbin spake thusly:
-> The OpenSBI platform 'qemu/virt' has been removed in v0.8. Builds for
-> the QEMU 'virt' machine can use the 'generic' platform instead.
-> 
-> Tested with qemu_riscv32_virt_defconfig and
-> qemu_riscv64_virt_defconfig using Buildroot host-qemu 5.0.0.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+With boost >= 1.73, placeholders must be qualified by using the full namespace.
 
-Applied to master, thanks.
+Without the namespace, the build fails with:
+gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
+gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
+set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
 
-Regards,
-Yann E. MORIN.
+backport Pull Request https://github.com/csete/gqrx/pull/811
 
-> ---
->  boot/opensbi/opensbi.hash           | 2 +-
->  boot/opensbi/opensbi.mk             | 2 +-
->  configs/qemu_riscv32_virt_defconfig | 2 +-
->  configs/qemu_riscv64_virt_defconfig | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-> index 6e69d512dd..b25a435ee5 100644
-> --- a/boot/opensbi/opensbi.hash
-> +++ b/boot/opensbi/opensbi.hash
-> @@ -1,3 +1,3 @@
->  # locally computed
-> -sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
-> +sha256 17e048ac765e92e15f7436b604452614cf88dc2bcbbaab18cdc024f3fdd4c575 opensbi-0.8.tar.gz
->  sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
-> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-> index 00e3b05dd0..60b87c268d 100644
-> --- a/boot/opensbi/opensbi.mk
-> +++ b/boot/opensbi/opensbi.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -OPENSBI_VERSION = 0.6
-> +OPENSBI_VERSION = 0.8
->  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
->  OPENSBI_LICENSE = BSD-2-Clause
->  OPENSBI_LICENSE_FILES = COPYING.BSD
-> diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-> index dc1a5b1295..166c41f1f0 100644
-> --- a/configs/qemu_riscv32_virt_defconfig
-> +++ b/configs/qemu_riscv32_virt_defconfig
-> @@ -26,7 +26,7 @@ BR2_LINUX_KERNEL_IMAGE=y
->  
->  # Bootloader
->  BR2_TARGET_OPENSBI=y
-> -BR2_TARGET_OPENSBI_PLAT="qemu/virt"
-> +BR2_TARGET_OPENSBI_PLAT="generic"
->  
->  # host-qemu for gitlab testing
->  BR2_PACKAGE_HOST_QEMU=y
-> diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-> index dbe6107b62..2887cf5f22 100644
-> --- a/configs/qemu_riscv64_virt_defconfig
-> +++ b/configs/qemu_riscv64_virt_defconfig
-> @@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_IMAGE=y
->  
->  # Bootloader
->  BR2_TARGET_OPENSBI=y
-> -BR2_TARGET_OPENSBI_PLAT="qemu/virt"
-> +BR2_TARGET_OPENSBI_PLAT="generic"
->  
->  # host-qemu for gitlab testing
->  BR2_PACKAGE_HOST_QEMU=y
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+fix:
+- http://autobuild.buildroot.net/results/73c490ba361dd6040720442bcbf332f1c3cc4882/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...fy_placeholders_with_their_full_namespace.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
+new file mode 100644
+index 0000000000..919dc2da01
+--- /dev/null
++++ b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
+@@ -0,0 +1,46 @@
++From 0510f6ffee646171bb105e0e8d016ac35e606cd4 Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Mon, 22 Jun 2020 15:45:20 +0200
++Subject: [PATCH] qualify placeholders with their full namespace
++
++With boost >= 1.73, placeholders must be qualified by using the full namespace.
++
++Without the namespace, the build fails with:
++gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
++gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
++set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
++
++[Upstream status: https://github.com/csete/gqrx/pull/811]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ src/dsp/rds/parser_impl.cc | 2 +-
++ src/dsp/rx_rds.cpp         | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/dsp/rds/parser_impl.cc b/src/dsp/rds/parser_impl.cc
++index b10fdb01..07dae038 100644
++--- a/src/dsp/rds/parser_impl.cc
+++++ b/src/dsp/rds/parser_impl.cc
++@@ -40,7 +40,7 @@ parser_impl::parser_impl(bool log, bool debug, unsigned char pty_locale)
++ 	pty_locale(pty_locale)
++ {
++ 	message_port_register_in(pmt::mp("in"));
++-	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
+++	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, boost::placeholders::_1));
++ 	message_port_register_out(pmt::mp("out"));
++ 	reset();
++ }
++diff --git a/src/dsp/rx_rds.cpp b/src/dsp/rx_rds.cpp
++index c4a541f3..c09835b0 100644
++--- a/src/dsp/rx_rds.cpp
+++++ b/src/dsp/rx_rds.cpp
++@@ -97,7 +97,7 @@ rx_rds_store::rx_rds_store() : gr::block ("rx_rds_store",
++                                 gr::io_signature::make (0, 0, 0))
++ {
++         message_port_register_in(pmt::mp("store"));
++-        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, _1));
+++        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, boost::placeholders::_1));
++         d_messages.set_capacity(100);
++ }
++ 
