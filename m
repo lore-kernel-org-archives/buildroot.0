@@ -1,44 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 24 Jun 2020 21:09:20 +0300
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.71.0
-Message-ID: <59cdc3789225ac3861f527311661488be9e532d8.1593022160.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Jun 2020 20:55:19 +0200
+Subject: [Buildroot] [PATCH] package/wireguard-tools: bump version to
+ 1.0.20200513
+In-Reply-To: <20200624165950.GC20645@scaer> (Yann E. MORIN's message of "Wed, 
+ 24 Jun 2020 18:59:50 +0200")
+References: <20200624055525.13352-1-peter@korsgaard.com>
+ <20200624165950.GC20645@scaer>
+Message-ID: <87sgek70q0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2020-8177: curl overwrite local file with -J.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-CVE-2020-8169: Partial password leak over DNS on HTTP redirect.
+ > Peter, All,
+ > On 2020-06-24 07:55 +0200, Peter Korsgaard spake thusly:
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Applied to master, thanks.
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 2157f3d2d21d..104d603f3e0f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
--sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
-+sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index cc2ca0aa65a2..11748924ffae 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.70.0
-+LIBCURL_VERSION = 7.71.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ > I wonder on much hand-in-hand tools and linux-compat need to be in sync,
+ > though.... Probably not much, I guess, as tools are also supposed to
+ > work on a wide range of kernels, now that wireguard has been upstreamed,
+ > right?
+
+Indeed, there shouldn't be any hard version dependency between them,
+which is also why they are now split up in two different repos /
+released at different moments.
+
 -- 
-2.27.0
+Bye, Peter Korsgaard
