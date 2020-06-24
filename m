@@ -1,57 +1,158 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Jun 2020 10:05:02 +0200
-Subject: [Buildroot] [PATCH v2] package/irrlicht: fix libraries linking
-In-Reply-To: <6a29bbc7-1399-16aa-2e7b-4945f217a9b5@grinn-global.com>
-References: <20200622184515.312030-1-b.bilas@grinn-global.com>
- <20200622212642.1be946f3@windsurf.home>
- <46d65bc1-310b-c21a-22e7-11df0ef164b7@grinn-global.com>
- <20200622223626.78bc07e1@windsurf.home>
- <6a29bbc7-1399-16aa-2e7b-4945f217a9b5@grinn-global.com>
-Message-ID: <20200624100502.0f899606@windsurf>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Wed, 24 Jun 2020 09:27:18 +0100
+Subject: [Buildroot] Fwd: [autobuild.buildroot.net] Your daily results for
+ 2020-06-23
+In-Reply-To: <5ef2f432.1c69fb81.a5cd0.f985SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5ef2f432.1c69fb81.a5cd0.f985SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <b0717fe9-df31-7e18-6d38-96a312eec677@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Jun 2020 20:08:47 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-
-> >> Due to the fact that it points to the host system libraries. This -L
-> >> argument is set correctly within package makefile.  
-> > Yes, of course. My question is why do you have two patches? They touch
-> > exactly the same line, simply do the change in two steps instead of
-> > one. Am I missing something here ?  
-> Ah, I didn't want to combine everything into one patch because there 
-> were 2 different changes (adding keyword and removing paths) but I'm 
-> gonna combine it into one patch then.
-
-OK, it's true you can see it as: one allows to override the LDFLAGS,
-the other drops a bogus hardcoded path.
+Hi all (libcamera, and buildroot lists joined).
 
 
-> >>> IRRLICHT_CONF_OPTS += CPPFLAGS="$(IRRLICHT_CPPFLAGS)"  
-> >> Good hint, I was thinking about a bit different approach but it wasn't
-> >> working as I expected therefore I did it as it's above.  
-> > So I guess you'll rework accordingly? If needed, you can also have a
-> > preparation patch that reworks this IRRLICHT_CPPFLAGS thing for the
-> > NEON stuff, and then another patch that fixes the library linking issue.
-> >
-> > Thomas  
-> 
-> It turned out that -I$(STAGING_DIR)/usr/include isn't necessary anymore 
-> so I've decided not to touch that.
+Buildroot build-bots are reporting some compilation failures for libcamera.
 
--I$(STAGING_DIR)/usr/include is definitely useless as it's the default
-search path for headers for the Buildroot cross-compiler, but that's
-not what you were adding: you were adding
--I$(STAGING_DIR)/usr/include/X11R6, which is not in the default search
-path for headers.
+The Nios2 one is some architecture-specific 8-byte alignment issue?
+I'd be tempted to disable builds on Nios2...
 
-Best regards,
+Then there are also two build failures for x86_64 and mipsel64...
 
-Thomas
+> http://autobuild.buildroot.net/results/03a83b88d0f541f567e54cb2b29ed4bca58a52ad/build-end.log
+
+
+The configuration is:
+
+> The Meson build system
+> Version: 0.54.2
+> Source dir: /home/naourr/work/instance-1/output-1/build/libcamera-96fab38e02792a109c0d35ca2154e95a7b4c8fcb
+> Build dir: /home/naourr/work/instance-1/output-1/build/libcamera-96fab38e02792a109c0d35ca2154e95a7b4c8fcb/build
+> Build type: cross build
+> Project name: libcamera
+> Project version: 0.0.0
+> C compiler for the build machine: cc (gcc 10.1.1 "cc (GCC) 10.1.1 20200507 (Red Hat 10.1.1-1)")
+> C linker for the build machine: cc ld.bfd 2.34-3
+> C++ compiler for the build machine: c++ (gcc 10.1.1 "c++ (GCC) 10.1.1 20200507 (Red Hat 10.1.1-1)")
+> C++ linker for the build machine: c++ ld.bfd 2.34-3
+> C compiler for the host machine: /home/naourr/work/instance-1/output-1/host/bin/x86_64-amd-linux-gnu-gcc (gcc 6.2.0 "x86_64-amd-linux-gnu-gcc (Sourcery CodeBench Lite 2016.11-19) 6.2.0")
+> C linker for the host machine: /home/naourr/work/instance-1/output-1/host/bin/x86_64-amd-linux-gnu-gcc ld.bfd 2.26.51
+> C++ compiler for the host machine: /home/naourr/work/instance-1/output-1/host/bin/x86_64-amd-linux-gnu-g++ (gcc 6.2.0 "x86_64-amd-linux-gnu-g++ (Sourcery CodeBench Lite 2016.11-19) 6.2.0")
+> C++ linker for the host machine: /home/naourr/work/instance-1/output-1/host/bin/x86_64-amd-linux-gnu-g++ ld.bfd 2.26.51
+> Build machine cpu family: x86_64
+> Build machine cpu: x86_64
+> Host machine cpu family: x86_64
+> Host machine cpu: 
+> Target machine cpu family: x86_64
+> Target machine cpu: 
+> Header <execinfo.h> has symbol "backtrace" : YES 
+> Header <stdlib.h> has symbol "secure_getenv" : YES 
+> Compiler for C supports arguments -Wno-c99-designator -Wc99-designator: NO 
+> Configuring version.h using configuration
+> Program openssl found: YES (/home/naourr/work/instance-1/output-1/host/bin/openssl)
+> Library atomic found: YES
+> Library dl found: YES
+> Library gnutls found: YES
+> Found pkg-config: /home/naourr/work/instance-1/output-1/host/bin/pkgconf (1.6.1)
+> Found CMake: NO
+> Run-time dependency libudev found: NO (tried pkgconfig and cmake)
+> Run-time dependency threads found: YES
+> Run-time dependency Boost found: YES 1.73.0 (/home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr)
+> Program ipa-sign-install.sh found: YES (/home/naourr/work/instance-1/output-1/build/libcamera-96fab38e02792a109c0d35ca2154e95a7b4c8fcb/src/ipa/ipa-sign-install.sh)
+> WARNING: rcc dependencies will not work reliably until this upstream issue is fixed: https://bugreports.qt.io/browse/QTBUG-45460
+> Run-time dependency qt5 (modules: Core, Gui, Widgets) found: NO (tried pkgconfig)
+> Run-time dependency glib-2.0 found: YES 2.64.3
+> Run-time dependency gstreamer-video-1.0 found: YES 1.16.2
+> Run-time dependency gstreamer-allocators-1.0 found: YES 1.16.2
+> Configuring config.h using configuration
+> Build targets in project: 20
+
+And failure :
+
+> ../src/gstreamer/gstlibcamerapad.cpp: In function 'GType gst_libcamera_pad_get_type()':
+> /home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gatomic.h:128:15: error: variable 'gapg_temp_atomic' set but not used [-Werror=unused-but-set-variable]
+>      gpointer *gapg_temp_atomic = (gpointer *)(atomic);                       \
+>                ^
+> /home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gthread.h:251:7: note: in expansion of macro 'g_atomic_pointer_get'
+>      (!g_atomic_pointer_get (location) &&                             \
+>        ^~~~~~~~~~~~~~~~~~~~
+> /home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/gobject/gtype.h:2004:7: note: in expansion of macro 'g_once_init_enter'
+>    if (g_once_init_enter (&g_define_type_id__volatile))  \
+>        ^~~~~~~~~~~~~~~~~
+> /home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/gobject/gtype.h:2036:3: note: in expansion of macro '_G_DEFINE_TYPE_EXTENDED_BEGIN_REGISTER'
+>    _G_DEFINE_TYPE_EXTENDED_BEGIN_REGISTER(TypeName, type_name, TYPE_PARENT, flags) \
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> /home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/gobject/gtype.h:1763:60: note: in expansion of macro '_G_DEFINE_TYPE_EXTENDED_BEGIN'
+>  #define G_DEFINE_TYPE_EXTENDED(TN, t_n, T_P, _f_, _C_)     _G_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, _f_) {_C_;} _G_DEFINE_TYPE_EXTENDED_END()
+>                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> /home/naourr/work/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/gobject/gtype.h:1604:43: note: in expansion of macro 'G_DEFINE_TYPE_EXTENDED'
+>  #define G_DEFINE_TYPE(TN, t_n, T_P)       G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, 0, {})
+>                                            ^~~~~~~~~~~~~~~~~~~~~~
+> ../src/gstreamer/gstlibcamerapad.cpp:30:1: note: in expansion of macro 'G_DEFINE_TYPE'
+>  G_DEFINE_TYPE(GstLibcameraPad, gst_libcamera_pad, GST_TYPE_PAD);
+>  ^~~~~~~~~~~~~
+> cc1plus: all warnings being treated as errors
+
+
+Looks like we're hitting compile warnings in external glib, which we're
+treating as errors ;-(
+
+
+That's annoying...
+
+In terms of 'buildroot', I expect we could wait for that to be 'fixed'
+upstream in glib-2.0 (this build was using 2.64.3)
+
+
+Generally I'd really like to keep -Werror enabled, as it will help catch
+issues faster, and specifically keep our build warning clean.
+
+I guess we can't easily say '"But ignore warnings in externally included
+files"' ...
+
+--
+
+Kieran
+
+
+
+
+-------- Forwarded Message --------
+Subject: [autobuild.buildroot.net] Your daily results for 2020-06-23
+Date: Wed, 24 Jun 2020 06:26:32 -0000
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Kieran Bingham <kieran.bingham@ideasonboard.com>
+
+Hello,
+
+Recent build failures and runtime-tests failures
+================================================
+
+This is the list of Buildroot build failures that occurred on
+2020-06-23, and for which you are a registered architecture developer,
+package developer or defconfig developer. This list also include
+runtime tests failures. Please help us improving the quality of
+Buildroot by investigating those build failures and sending patches to
+fix them. Thanks!
+
+Results for the 'master' branch
+-------------------------------
+
+Build failures related to your packages:
+
+    arch     |             reason             |
+              url
+-------------+--------------------------------+---------------------------------------------------------------------------------
+   nios2     | libcamera-96fab38e02792a109... |
+http://autobuild.buildroot.net/results/0c6647e0df1c531d278c5c099a33469304ecf640
+   x86_64    | libcamera-96fab38e02792a109... |
+http://autobuild.buildroot.net/results/03a83b88d0f541f567e54cb2b29ed4bca58a52ad
+  mips64el   | libcamera-96fab38e02792a109... |
+http://autobuild.buildroot.net/results/e0fad5835baaaa2d86f355385dbd68e92287e495
+
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+http://autobuild.buildroot.net
