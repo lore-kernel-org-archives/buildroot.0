@@ -1,100 +1,130 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 22:54:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fwup: bump to v1.8.0
-In-Reply-To: <20200625151533.1673400-1-fhunleth@troodon-software.com>
-References: <20200625151533.1673400-1-fhunleth@troodon-software.com>
-Message-ID: <20200625205415.GS20645@scaer>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 25 Jun 2020 22:54:56 +0200
+Subject: [Buildroot] [PATCH 1/1] uboot: zynqmp: Support loading a PMU
+ config
+In-Reply-To: <20200625192925.182477-1-brandon.maier@rockwellcollins.com>
+References: <20200625192925.182477-1-brandon.maier@rockwellcollins.com>
+Message-ID: <6bcc3630-562d-f9b0-f8c4-34cc4b29e31b@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Hi Brandon,
 
-On 2020-06-25 11:15 -0400, Frank Hunleth spake thusly:
-> The libsodium dependency is no longer needed so this patch also drops
-> that requirement from host and target builds.
+On 25/06/20 21:29, Brandon Maier wrote:
+> Before now, U-Boot SPL could only load the Platform Management Unit
+> (PMU) by patching the board-specific pm_cfg_obj.c file into the generic
+> PMU firmware, but that then requires generating a new PMU firmware for
+> every board configuration. To fix that, Luca Ceresoli added support to
+> U-Boot to load the pm_cfg_obj[1].
 > 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> Like the PMU firmware, we need a way to pass the PMU cfg to U-Boot
+> during build. U-Boot only accepts the binary format of the cfg, so we
+> must convert the source file with the tool provided with U-Boot.
+> 
+> [1] https://lucaceresoli.net/zynqmp-uboot-spl-pmufw-cfg-load/
+> 
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 
-Applied to master, thanks.
-
-Note that fwup was the only in-tree user of host-libsodium, which had
-been introduced just for it:
-
-    4fe8f3974f fwup: new package
-    333531f9fd libsodium: add host variant
-
-There is no user-selectable option to build host-=libsodium.
-
-So, host-libsodium will niw never be built in our autobuilder infra, and
-we will not catch any build issue.
-
-Consequently, I wonder if we should keep it...
-
-Regards,
-Yann E. MORIN.
+Thanks for your patch! It looks generally pretty good to me, but see
+below for some remarks.
 
 > ---
->  package/fwup/Config.in | 1 -
->  package/fwup/fwup.hash | 2 +-
->  package/fwup/fwup.mk   | 6 +++---
->  3 files changed, 4 insertions(+), 5 deletions(-)
+>  boot/uboot/Config.in | 22 ++++++++++++++++++++++
+>  boot/uboot/uboot.mk  | 17 +++++++++++++++++
+>  2 files changed, 39 insertions(+)
 > 
-> diff --git a/package/fwup/Config.in b/package/fwup/Config.in
-> index fd40cf3261..0e3c57d33d 100644
-> --- a/package/fwup/Config.in
-> +++ b/package/fwup/Config.in
-> @@ -6,7 +6,6 @@ config BR2_PACKAGE_FWUP
->  	# required by libarchive to include zip compression
->  	select BR2_PACKAGE_ZLIB
->  	select BR2_PACKAGE_LIBCONFUSE
-> -	select BR2_PACKAGE_LIBSODIUM
->  	help
->  	  Fwup is a scriptable embedded Linux firmware update creator
->  	  and runner.
-> diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
-> index 337883f9a8..cd3f3bcefd 100644
-> --- a/package/fwup/fwup.hash
-> +++ b/package/fwup/fwup.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 20302dc96cef88438034e15551e178bb0652c28d99aa7ca5260100cb3bebbc2a  fwup-1.2.5.tar.gz
-> +sha256 9890f0328796f4315e6c1188df5c103855c530fbc14fbc8c12f4b24066c975f1  fwup-1.8.0.tar.gz
->  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-> index e1e5467765..77eaa528f3 100644
-> --- a/package/fwup/fwup.mk
-> +++ b/package/fwup/fwup.mk
-> @@ -4,12 +4,12 @@
->  #
->  ################################################################################
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 8cce9b1bae..5fa3b5942e 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -458,6 +458,28 @@ config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
 >  
-> -FWUP_VERSION = 1.2.5
-> +FWUP_VERSION = 1.8.0
->  FWUP_SITE = $(call github,fhunleth,fwup,v$(FWUP_VERSION))
->  FWUP_LICENSE = Apache-2.0
->  FWUP_LICENSE_FILES = LICENSE
-> -FWUP_DEPENDENCIES = host-pkgconf libconfuse libarchive libsodium
-> -HOST_FWUP_DEPENDENCIES = host-pkgconf host-libconfuse host-libarchive host-libsodium
-> +FWUP_DEPENDENCIES = host-pkgconf libconfuse libarchive
-> +HOST_FWUP_DEPENDENCIES = host-pkgconf host-libconfuse host-libarchive
->  FWUP_AUTORECONF = YES
->  FWUP_CONF_ENV = ac_cv_path_HELP2MAN=""
+>  	  This feature requires U-Boot >= 2018.07.
 >  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +config BR2_TARGET_UBOOT_ZYNQMP_PM_CFG
+> +	string "PMU configuration location"
+> +	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> +	help
+> +	  Location of a PMU configuration file.
+> +
+> +	  If not empty, Buildroot will convert the PMU configuration
+> +	  file into a loadable blob and pass it to U-Boot. The blob gets
+> +	  embedded into the U-Boot SPL and is used to configure the PMU
+> +	  during board initialization.
+> +
+> +	  Unlike the PMU firmware, the PMU configuration file is unique
+> +	  to each board configuration. A PMU configuration file can be
+> +	  generated by building your Xilinx SDK BSP. It can be found in
+> +	  the BSP source, for example at
+> +	  > ./psu_cortexa53_0/libsrc/xilpm_v2_4/src/pm_cfg_obj.c
+> +
+> +	  Leave this option empty if your PMU firmware has a hard-coded
+> +	  configuration object or you are loading it by any other means.
+> +
+> +	  This feature requires U-Boot >= v2019.10.
+> +
+>  config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
+>  	string "Custom psu_init_gpl file"
+>  	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 71689207e3..67d153189d 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -293,6 +293,11 @@ define UBOOT_BUILD_CMDS
+>  	$(if $(UBOOT_CUSTOM_DTS_PATH),
+>  		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+>  	)
+> +	$(if $(UBOOT_ZYNQMP_PM_CFG_PATH),
+> +		$(UBOOT_DIR)/tools/zynqmp_pm_cfg_obj_convert.py \
+> +			"$(UBOOT_ZYNQMP_PM_CFG_PATH)" \
+> +			"$(UBOOT_ZYNQMP_PM_CFG_BIN)"
+> +	)
 
+Even though this works, I find it a bit weird that you read the
+UBOOT_ZYNQMP_PM_CFG_PATH variable here but you assign it below. I think
+you could move the invocation of zynqmp_pm_cfg_obj_convert.py to a
+pre-build hook (or a post-configure hook? hum), which in turn would
+allow you to move the code inside the 'ifeq
+($(BR2_TARGET_UBOOT_ZYNQMP),y)' stanza, keeping all the zynqmp-specific
+code together.
+
+>  	$(TARGET_CONFIGURE_OPTS) \
+>  		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+>  		$(UBOOT_MAKE_TARGET)
+> @@ -360,6 +365,17 @@ define UBOOT_ZYNQMP_KCONFIG_PMUFW
+>  	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)")
+>  endef
+>  
+> +UBOOT_ZYNQMP_PM_CFG = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
+> +UBOOT_ZYNQMP_PM_CFG_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PM_CFG))
+
+I find the _PATH suffix kind of vague: all these variables contain
+paths. I'd rather call it UBOOT_ZYNQMP_PM_CFG_C or
+UBOOT_ZYNQMP_PM_CFG_SRC. But it's a matter of taste, not a big issue.
+
+> +
+> +ifneq ($(UBOOT_ZYNQMP_PM_CFG_PATH),)
+> +UBOOT_ZYNQMP_PM_CFG_BIN = $(UBOOT_DIR)/pm_cfg_obj.bin
+> +define UBOOT_ZYNQMP_KCONFIG_PM_CFG
+> +	$(call KCONFIG_SET_OPT,CONFIG_ZYNQMP_SPL_PM_CFG_OBJ_FILE,"$(UBOOT_ZYNQMP_PM_CFG_BIN)", \
+> +		$(@D)/.config)
+> +endef
+> +endif
+> +
+>  UBOOT_ZYNQMP_PSU_INIT = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))
+>  UBOOT_ZYNQMP_PSU_INIT_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PSU_INIT))
+>  
+> @@ -422,6 +438,7 @@ endif
+>  
+>  define UBOOT_KCONFIG_FIXUP_CMDS
+>  	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
+> +	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
+>  	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
+>  endef
+>  
+> 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Luca
