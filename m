@@ -1,52 +1,41 @@
-From: stefan at astylos.dk <stefan@astylos.dk>
-Date: Thu, 25 Jun 2020 09:09:52 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.11.20
-Message-ID: <20200625070952.3005722-1-stefan.sorensen@spectralink.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 25 Jun 2020 09:58:41 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: restore full
+ BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO behaviour
+Message-ID: <20200625075841.317226-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+now, BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO works like with version 2019.78
+and as described in Config.in
 
-Fixes the following security issue:
- * CVE-2020-8619: It was possible to trigger an INSIST failure when a
-   zone with an interior wildcard label was queried in a certain
-   pattern.
-
-Release notes:
-https://ftp.isc.org/isc/bind9/cur/9.11/RELEASE-NOTES-bind-9.11.20.txt
-
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dropbear/dropbear.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 4eb3aff3b1..282b2aeba3 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.19/bind-9.11.19.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
- # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
--sha256  0dee554a4caa368948b32da9a0c97b516c19103bc13ff5b3762c5d8552f52329  bind-9.11.19.tar.gz
-+sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
- sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 362a26dce6..80f8defca8 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index b32f39d64..b7342cef5 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -56,7 +56,14 @@ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
+ endif
  
--BIND_VERSION = 9.11.19
-+BIND_VERSION = 9.11.20
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
++ifeq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
++define DROPBEAR_ENABLE_LEGACY_CRYPTO
++	echo '#define DROPBEAR_3DES 1'                  >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_ENABLE_CBC_MODE 1'       >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
++endef
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
++else
+ define DROPBEAR_DISABLE_LEGACY_CRYPTO
+ 	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
 -- 
-2.25.4
+2.25.1
