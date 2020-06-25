@@ -1,111 +1,92 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 23:24:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/smstools3: bump to version
- 3.1.21
-In-Reply-To: <20200625205728.1275517-1-fontaine.fabrice@gmail.com>
-References: <20200625205728.1275517-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200625212415.GV20645@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 25 Jun 2020 23:25:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with headers
+ >= 4.15
+Message-ID: <20200625212521.1495141-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
 
-On 2020-06-25 22:57 +0200, Fabrice Fontaine spake thusly:
-> - Update patch
-> - Add link to upstream hashes
-> - Update hash of doc/license.html (web link update)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...uild-with-Linux-kernel-headers-v4.15.patch | 64 +++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
 
-Applied to master, thanks.
-
-Could you try and send the patch upstream, please? I forgot to do that
-back in the day, when we had less stringent rules...
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/smstools3/0001-fix-Makefile.patch | 8 +++++---
->  package/smstools3/smstools3.hash          | 9 ++++++---
->  package/smstools3/smstools3.mk            | 2 +-
->  3 files changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/smstools3/0001-fix-Makefile.patch b/package/smstools3/0001-fix-Makefile.patch
-> index 5842357451..338a53e745 100644
-> --- a/package/smstools3/0001-fix-Makefile.patch
-> +++ b/package/smstools3/0001-fix-Makefile.patch
-> @@ -7,6 +7,8 @@ Although make-3.81 is happy about it, make-4.0 (and probably 3.82 too)
->  do whine loudly.
->  
->  Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +[Fabrice: update for 3.1.21]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  
->  diff -durN smstools3-3.1.15.orig/src/Makefile smstools3-3.1.15/src/Makefile
->  --- smstools3-3.1.15.orig/src/Makefile	2010-09-21 13:29:14.000000000 +0200
-> @@ -15,15 +17,15 @@ diff -durN smstools3-3.1.15.orig/src/Makefile smstools3-3.1.15/src/Makefile
->   
->   all: smsd 
->   
-> --smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o
-> +-smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o charshift.o
->  -
->   ifneq (,$(findstring SOLARIS,$(CFLAGS)))
->   ifeq (,$(findstring DISABLE_INET_SOCKET,$(CFLAGS)))
-> - override LFLAGS += -lsocket -lnsl
-> + 	override LFLAGS += -lsocket -lnsl
->   endif
->   endif
->   
-> -+smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o
-> ++smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o charshift.o
->   ifneq (,$(findstring NOSTATS,$(CFLAGS)))
->   	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
->   else 
-> diff --git a/package/smstools3/smstools3.hash b/package/smstools3/smstools3.hash
-> index 9eb73e9380..27eda2af96 100644
-> --- a/package/smstools3/smstools3.hash
-> +++ b/package/smstools3/smstools3.hash
-> @@ -1,4 +1,7 @@
-> -# Locally calculated
-> -sha256  ed00ffaeaa312a5b4f969f4e97a64603a866bbe16e393ea02f5bf05234814d59  smstools3-3.1.15.tar.gz
-> -sha256  61ae4d83c30236cc7df40b1ccbbe6be07d334f9579b8d0facecc34334fe15b61  doc/license.html
-> +# From http://smstools3.kekekasvi.com/packages/
-> +md5  6a9f038fb38a49cc3a4f8f14a88fb8af smstools-3.1.21.tar.gz
-> +sha256  a26ba4c02b16f6cf13177bffca6c9230dc5fefaeba8e3030cd4e4905f6a92084  smstools3-3.1.21.tar.gz
-> +
-> +# Hash for license files
-> +sha256  884d8f0377259f291432f4fa31d5a9720eefa0e0d797652ae686b6325a434624  doc/license.html
->  sha256  786b4da4dd900cad87a7dc17769458607bdeae575d62e6e98ad7144e9225f8d3  LICENSE
-> diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
-> index 2dfd11b8c5..87d189baa8 100644
-> --- a/package/smstools3/smstools3.mk
-> +++ b/package/smstools3/smstools3.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SMSTOOLS3_VERSION = 3.1.15
-> +SMSTOOLS3_VERSION = 3.1.21
->  SMSTOOLS3_SITE = http://smstools3.kekekasvi.com/packages
->  SMSTOOLS3_LICENSE = GPL-2.0+
->  SMSTOOLS3_LICENSE_FILES = doc/license.html LICENSE
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch b/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
+new file mode 100644
+index 0000000000..4a20520ae0
+--- /dev/null
++++ b/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
+@@ -0,0 +1,64 @@
++From 6ad62a612ade0a9cbfe5f9d3ad3473141816fb9a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 25 Jun 2020 23:14:22 +0200
++Subject: [PATCH] Fix build with Linux kernel headers v4.15
++
++Same issue that was fixed by 947248af144bcab6376ccddab8dc40f313b14281
++but raised again when bumping keepalived from version 2.0.15 to 2.1.2 in
++buildroot
++
++Fixes:
++ - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/acassen/keepalived/pull/1654]
++---
++ keepalived/vrrp/vrrp_arp.c   | 1 +
++ keepalived/vrrp/vrrp_ndisc.c | 2 +-
++ keepalived/vrrp/vrrp_vmac.c  | 1 +
++ 3 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/keepalived/vrrp/vrrp_arp.c b/keepalived/vrrp/vrrp_arp.c
++index c06904a7..888f1d5f 100644
++--- a/keepalived/vrrp/vrrp_arp.c
+++++ b/keepalived/vrrp/vrrp_arp.c
++@@ -23,6 +23,7 @@
++ #include "config.h"
++ 
++ /* system includes */
+++#include <netinet/in.h>
++ #include <unistd.h>
++ #include <net/ethernet.h>
++ #include <net/if_arp.h>
++diff --git a/keepalived/vrrp/vrrp_ndisc.c b/keepalived/vrrp/vrrp_ndisc.c
++index 0f5569bc..0a4fffc6 100644
++--- a/keepalived/vrrp/vrrp_ndisc.c
+++++ b/keepalived/vrrp/vrrp_ndisc.c
++@@ -23,11 +23,11 @@
++ #include "config.h"
++ 
++ /* system includes */
+++#include <netinet/in.h>
++ #include <unistd.h>
++ #include <net/ethernet.h>
++ #include <linux/if_packet.h>
++ #include <netinet/icmp6.h>
++-#include <netinet/in.h>
++ #include <stdint.h>
++ #include <errno.h>
++ 
++diff --git a/keepalived/vrrp/vrrp_vmac.c b/keepalived/vrrp/vrrp_vmac.c
++index 2a59aee3..7afbf604 100644
++--- a/keepalived/vrrp/vrrp_vmac.c
+++++ b/keepalived/vrrp/vrrp_vmac.c
++@@ -23,6 +23,7 @@
++ #include "config.h"
++ 
++ /* global include */
+++#include <netinet/in.h>
++ #ifdef NETLINK_H_NEEDS_SYS_SOCKET_H
++ #include <sys/socket.h>
++ #endif
++-- 
++2.26.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
