@@ -1,68 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 22:33:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Add option for
- all i.MX FW needs
-In-Reply-To: <DB8PR04MB5755C99B335ACE9AFC7552CDA7920@DB8PR04MB5755.eurprd04.prod.outlook.com>
-References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
- <1593012228-18959-2-git-send-email-stephane.viau@oss.nxp.com>
- <20200624225831.2183d1b0@windsurf>
- <DB8PR04MB5755C99B335ACE9AFC7552CDA7920@DB8PR04MB5755.eurprd04.prod.outlook.com>
-Message-ID: <20200625203307.GP20645@scaer>
+Date: Thu, 25 Jun 2020 22:37:09 +0200
+Subject: [Buildroot] [git commit] package/wireless-regdb: bump version to
+ 2020.04.29
+Message-ID: <20200625203516.0F96B84BD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stephane, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c8175568e716d40b10e30df919407e1c6c1843b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-25 06:33 +0000, Stephane Viau (OSS) spake thusly:
-> Thomas wrote:
-> >However, I am wondering if package/freescale-imx/Config.in is the right
-> >place for all this logic. After all, this is only related to the
-> >firmware-imx package.
-> >
-> >Shouldn't we instead move that to
-> >package/freescale-imx/firmware-imx/Config.in, with the following form:
-> >
-> >config BR2_PACKAGE_FREESCALE_IMX_NEEDS_DDR_FW
-> >        bool
-> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
-> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
-> >
-> >and ditto the other options ? Here as well, it would require a
-> >preparation patch to take care of the NEEDS_DDR_FW case, and then your
-> >patch that handles all other FW files.
-> 
-> I'd like to have Yann's and/or Gary's feedback on this. I'm using 'select' based on this comment:
-> "
->   As Yann mentioned on IRC:
->   "Usually, when we introduce such option, it does not 'default y' based
->   on some other options. Instead, the other options 'select' it."
-> "
-> from http://lists.busybox.net/pipermail/buildroot/2020-May/283180.html
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wireless-regdb/wireless-regdb.hash | 4 ++--
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-True, that's what I said. That was based on the assumption that the
-options would be in package/freescale-imx/Config.in.
-
-But now, seeing the reasonning by Thomas, I agree with him: those are
-better suited to live in package/freescale-imx/firmware-imx/Config.in/
-
-And thus it is less clean that the variant selection in the generic
-choice would have to catter with options specific to a package.
-
-Hence, the "default y if ..." is indeed better.
-
-Sorry I did not have that insight to begin with...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index d6cb72ee79..9271073fd9 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256 cd917ed86b63ce8d93947979f1f18948f03a4ac0ad89ec25227b36ac00dc54bf  wireless-regdb-2019.06.03.tar.xz
++sha256  89fd031aed5977c219a71501e144375a10e7c90d1005d5d086ea7972886a2c7a  wireless-regdb-2020.04.29.tar.xz
+ # Locally computed
+-sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
++sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 31b62e36e1..52a0e0cffc 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2019.06.03
++WIRELESS_REGDB_VERSION = 2020.04.29
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
