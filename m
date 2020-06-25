@@ -1,83 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 25 Jun 2020 22:57:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/smstools3: bump to version 3.1.21
-Message-ID: <20200625205728.1275517-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Jun 2020 22:55:16 +0200
+Subject: [Buildroot] [git commit] package/stellarium: bump version to 0.20.2
+Message-ID: <20200625205908.34BD9820FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update patch
-- Add link to upstream hashes
-- Update hash of doc/license.html (web link update)
+commit: https://git.buildroot.net/buildroot/commit/?id=b9fa269a087c791de0c830189e9e904feb1ce54b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/smstools3/0001-fix-Makefile.patch | 8 +++++---
- package/smstools3/smstools3.hash          | 9 ++++++---
- package/smstools3/smstools3.mk            | 2 +-
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ package/stellarium/stellarium.hash | 6 +++---
+ package/stellarium/stellarium.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/smstools3/0001-fix-Makefile.patch b/package/smstools3/0001-fix-Makefile.patch
-index 5842357451..338a53e745 100644
---- a/package/smstools3/0001-fix-Makefile.patch
-+++ b/package/smstools3/0001-fix-Makefile.patch
-@@ -7,6 +7,8 @@ Although make-3.81 is happy about it, make-4.0 (and probably 3.82 too)
- do whine loudly.
- 
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+[Fabrice: update for 3.1.21]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- diff -durN smstools3-3.1.15.orig/src/Makefile smstools3-3.1.15/src/Makefile
- --- smstools3-3.1.15.orig/src/Makefile	2010-09-21 13:29:14.000000000 +0200
-@@ -15,15 +17,15 @@ diff -durN smstools3-3.1.15.orig/src/Makefile smstools3-3.1.15/src/Makefile
-  
-  all: smsd 
-  
---smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o
-+-smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o charshift.o
- -
-  ifneq (,$(findstring SOLARIS,$(CFLAGS)))
-  ifeq (,$(findstring DISABLE_INET_SOCKET,$(CFLAGS)))
-- override LFLAGS += -lsocket -lnsl
-+ 	override LFLAGS += -lsocket -lnsl
-  endif
-  endif
-  
--+smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o
-++smsd: smsd.c extras.o locking.o cfgfile.o logging.o alarm.o smsd_cfg.o charset.o stats.o blacklist.o whitelist.o modeminit.o pdu.o charshift.o
-  ifneq (,$(findstring NOSTATS,$(CFLAGS)))
-  	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
-  else 
-diff --git a/package/smstools3/smstools3.hash b/package/smstools3/smstools3.hash
-index 9eb73e9380..27eda2af96 100644
---- a/package/smstools3/smstools3.hash
-+++ b/package/smstools3/smstools3.hash
-@@ -1,4 +1,7 @@
--# Locally calculated
--sha256  ed00ffaeaa312a5b4f969f4e97a64603a866bbe16e393ea02f5bf05234814d59  smstools3-3.1.15.tar.gz
--sha256  61ae4d83c30236cc7df40b1ccbbe6be07d334f9579b8d0facecc34334fe15b61  doc/license.html
-+# From http://smstools3.kekekasvi.com/packages/
-+md5  6a9f038fb38a49cc3a4f8f14a88fb8af smstools-3.1.21.tar.gz
-+sha256  a26ba4c02b16f6cf13177bffca6c9230dc5fefaeba8e3030cd4e4905f6a92084  smstools3-3.1.21.tar.gz
-+
-+# Hash for license files
-+sha256  884d8f0377259f291432f4fa31d5a9720eefa0e0d797652ae686b6325a434624  doc/license.html
- sha256  786b4da4dd900cad87a7dc17769458607bdeae575d62e6e98ad7144e9225f8d3  LICENSE
-diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
-index 2dfd11b8c5..87d189baa8 100644
---- a/package/smstools3/smstools3.mk
-+++ b/package/smstools3/smstools3.mk
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index 76da2d0b3b..7f29290aee 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-md5  19422ba4800fbede0a71a723cf3df10f  stellarium-0.20.1.tar.gz
+-sha1  20d89ff8e26bb8cef71796d138176be2602e6327   stellarium-0.20.0.tar.gz
+-sha256  154e7bd9d4b914a99c40eab86d05b78e43040d657844ee665ebb2aa55a9e920c  stellarium-0.20.0.tar.gz
++md5  12b87785efdc52c1682bb6f3c37bd85d  stellarium-0.20.2.tar.gz
++sha1  308fd0878d2126878d769d66cac1f00b3dccf819   stellarium-0.20.2.tar.gz
++sha256 400ef964c2a1612157a4b219464ea919b4e330322a0db894835b6e11c4af5e9b  stellarium-0.20.2.tar.gz
+ # Locally computed
+ sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 72e762b65e..543e6fa23d 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SMSTOOLS3_VERSION = 3.1.15
-+SMSTOOLS3_VERSION = 3.1.21
- SMSTOOLS3_SITE = http://smstools3.kekekasvi.com/packages
- SMSTOOLS3_LICENSE = GPL-2.0+
- SMSTOOLS3_LICENSE_FILES = doc/license.html LICENSE
--- 
-2.26.2
+-STELLARIUM_VERSION = 0.20.1
++STELLARIUM_VERSION = 0.20.2
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+ STELLARIUM_LICENSE_FILES = COPYING
