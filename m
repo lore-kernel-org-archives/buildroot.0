@@ -1,45 +1,27 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Thu, 25 Jun 2020 20:09:12 +0200
-Subject: [Buildroot] [PATCH 3/3] wireless-regdb: omit author info from
- private key in home directory
-In-Reply-To: <20200618222836.5384fe64@windsurf.home>
-References: <20200612053110.15316-1-dev.kurt@vandijck-laurijssen.be>
- <20200612053110.15316-4-dev.kurt@vandijck-laurijssen.be>
- <20200618222836.5384fe64@windsurf.home>
-Message-ID: <20200625180912.GB23969@x1.vandijck-laurijssen.be>
+From: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
+Date: Thu, 25 Jun 2020 14:11:38 -0400 (EDT)
+Subject: [Buildroot] [PATCH] packages/pkg-download.mk: fix file locking over
+ NFS
+Message-ID: <1993147260.30143.1593108698133.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas,
+Hello,
 
-On do, 18 jun 2020 22:28:36 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 12 Jun 2020 07:31:10 +0200
-> Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
-> 
-...
-> > +-REGDB_PRIVKEY ?= ~/.wireless-regdb-$(REGDB_AUTHOR).key.priv.pem
-> > ++REGDB_PRIVKEY ?= ~/.wireless-regdb.key.priv.pem
-> > + REGDB_PUBKEY ?= $(REGDB_AUTHOR).key.pub.pem
-> > + 
-> > + REGDB_UPSTREAM_PUBKEY ?= sforshee.key.pub.pem
-> 
-> All patches need a description and Signed-off-by line. But what about
-> passing REGDB_AUTHOR=buildroot from wireless-regdb.mk, or something
-> like that ?
+The attached patch fixes the NFS lock mechanism not working.
 
-I'm in the process of discovering that the crda-less system
-requires the keys in the kernel (a good choice) which can best
-be accomplished by your suggestion here.
+Tested using NFS 4.2 and multiple build machines caching the same source artifacts in parallel to an empty NFS directory.
 
-I have a few things for a rework
-1. put some more comments
-2. avoid a python3 patch and use python-m2crypto.
-3. prepare for an explicit priv key for both wireless-regdb and kernel
+Thank you,
 
-Thanks for the review.
-Kurt
+Maxim
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-packages-pkg-download.mk-fix-file-locking-over-NFS.patch
+Type: text/x-patch
+Size: 1274 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200625/7ed64a2c/attachment.bin>
