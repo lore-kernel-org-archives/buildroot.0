@@ -1,66 +1,85 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Thu, 25 Jun 2020 12:38:10 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: restore full
- BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO behaviour
-In-Reply-To: <20200625075841.317226-1-francois.perrad@gadz.org>
-References: <20200625075841.317226-1-francois.perrad@gadz.org>
-Message-ID: <20200625102945.rticthskdr4q32z7@falbala.internal.home.lespocky.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 25 Jun 2020 13:00:55 +0200
+Subject: [Buildroot] [RFC v9 01/10] cpe-info: new make target
+In-Reply-To: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
+References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200625130055.5062a0a0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Hello Matt,
 
-On Thu, Jun 25, 2020 at 09:58:41AM +0200, Francois Perrad wrote:
-> now, BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO works like with version 2019.78
-> and as described in Config.in
+On Tue, 16 Jun 2020 12:03:32 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-Thanks for your effort.
-
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/dropbear/dropbear.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+> Similar to make legal-info, produce a csv delimited file containing
+> all selected packages CPE identification.
 > 
-> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> index b32f39d64..b7342cef5 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -56,7 +56,14 @@ endef
->  DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
->  endif
->  
-> -ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
-> +ifeq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
-> +define DROPBEAR_ENABLE_LEGACY_CRYPTO
-> +	echo '#define DROPBEAR_3DES 1'                  >> $(@D)/localoptions.h
-> +	echo '#define DROPBEAR_ENABLE_CBC_MODE 1'       >> $(@D)/localoptions.h
-> +	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
-> +endef
-> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
-> +else
->  define DROPBEAR_DISABLE_LEGACY_CRYPTO
->  	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
->  	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
+> By default, support the pkg infra defining a set of CPE_ID_* defaults
+> using the package name for the vendor and name as most CPE IDs seem
+> to align with that assumption. Plus initially, use the pkg version as
+> the CPE ID's version field.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-LGTM
+This patch really does two things:
 
-Acked-by: Alexander Dahl <post@lespocky.de>
+ - Add some CPE_* variables into the package infrastructure
 
-Greets
-Alex
+ - Add a cpe-info make target
 
+These are two separate things, should be two separate patches. However,
+see below.
+
+> +.PHONY: cpe-info-clean
+> +cpe-info-clean:
+> +	@rm -f $(CPE_MANIFEST_CSV)
+> +
+> +.PHONY: cpe-info-prepare
+> +cpe-info-prepare:
+> +	@$(call MESSAGE,"Gathering CPE info")
+> +	@$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
+> +
+> +.PHONY: cpe-info
+> +cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
+> +	@echo "CPE info produced in $(CPE_MANIFEST_CSV)"
+
+I don't think we need/want an additional make target. We have "make
+show-info" already, it outputs a JSON blurb, which we can extend with
+additional information from the packages.
+
+> +$(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
+> +$(2)_CPE_ID_NAME ?= $$($(2)_NAME)
+> +$(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
+> +$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
+
+These variables should be documented in the Buildroot manual.
+
+I see you set some default values for those CPE_ID values, but I am
+wondering if that's how we want to do this. Indeed a big question,
+which was discussed in a thread earlier this year between Michael
+Walle, Akshay Bhat and me is that how do we then distinguish packages
+for which the CPE information in Buildroot has been verified and is
+known to be correct, from packages that have the CPE information not
+verified, and even further from packages that don't have any CPE
+information because this specific package is not known in the NVD
+database.
+
+So I'd like to see a proposal that clarifies how we are going to handle
+this. One way is to *not* have any default value for those CPE
+variables, and add them to packages progressively, so that we know that
+when the CPE information is there, it _has_ been verified.
+
+It's not great because it means adding gazillions of CPE_ID information
+in packages. But is there any other option ?
+
+Best regards,
+
+Thomas
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200625/1d81463a/attachment.asc>
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
