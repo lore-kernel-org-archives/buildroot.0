@@ -1,165 +1,52 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Thu, 25 Jun 2020 06:33:59 +0000
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Add option for
- all i.MX FW needs
-In-Reply-To: <20200624225831.2183d1b0@windsurf>
-References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
- <1593012228-18959-2-git-send-email-stephane.viau@oss.nxp.com>,
- <20200624225831.2183d1b0@windsurf>
-Message-ID: <DB8PR04MB5755C99B335ACE9AFC7552CDA7920@DB8PR04MB5755.eurprd04.prod.outlook.com>
+From: stefan at astylos.dk <stefan@astylos.dk>
+Date: Thu, 25 Jun 2020 09:09:52 +0200
+Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.11.20
+Message-ID: <20200625070952.3005722-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
->Hello,
+Fixes the following security issue:
+ * CVE-2020-8619: It was possible to trigger an INSIST failure when a
+   zone with an interior wildcard label was queried in a certain
+   pattern.
 
-Hello Thomas, Yann/Gary,
+Release notes:
+https://ftp.isc.org/isc/bind9/cur/9.11/RELEASE-NOTES-bind-9.11.20.txt
 
->
->Thanks for doing this work! It's definitely bringing some good sanity
->into this firmware-imx mess! See below some comments.
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Glad you like it & thank you for your comments.
-
->
->> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
->> index 0be37ce..2cac650 100644
->> --- a/package/freescale-imx/Config.in
->> +++ b/package/freescale-imx/Config.in
->> @@ -12,40 +12,63 @@ choice
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
->>        bool "imx25-3stack"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
->>        bool "imx27ads"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
->>        bool "imx37-3stack"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
->>        bool "imx50"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
->>        bool "imx51"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
->>        bool "imx53"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
->>        bool "imx6q/imx6dl"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
->>        bool "imx6sl/imx6sx"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
->>        bool "imx6ul/imx6ull"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
->>        bool "imx7d/imx7ulp"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
->>        bool "imx8"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
->>        bool "imx8m"
->>        select BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_HDMI_FW
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
->>        bool "imx8mm"
->> @@ -57,6 +80,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
->>        bool "imx8x"
->> +     select BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
->>  endchoice
->>  
->>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
->> @@ -102,6 +126,21 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
->>  config BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->>        bool
->>  
->> +config BR2_PACKAGE_FREESCALE_IMX_NEED_EPDC_FW
->> +     bool
->> +
->> +config BR2_PACKAGE_FREESCALE_IMX_NEED_HDMI_FW
->> +     bool
->> +
->> +config BR2_PACKAGE_FREESCALE_IMX_NEED_SDMA_FW
->> +     bool
->> +
->> +config BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_LEGACY
->> +     bool
->> +
->> +config BR2_PACKAGE_FREESCALE_IMX_NEED_VPU_FW_IMX8_IMX8X
->> +     bool
->
->It would be nicer to use "NEEDS" instead of "NEED". That would require
->a preparation patch that renames BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW
->to BR2_PACKAGE_FREESCALE_IMX_NEEDS_DDR_FW.
-
-Agreed.
-
->
->However, I am wondering if package/freescale-imx/Config.in is the right
->place for all this logic. After all, this is only related to the
->firmware-imx package.
->
->Shouldn't we instead move that to
->package/freescale-imx/firmware-imx/Config.in, with the following form:
->
->config BR2_PACKAGE_FREESCALE_IMX_NEEDS_DDR_FW
->        bool
->        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
->        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
->        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
->
->and ditto the other options ? Here as well, it would require a
->preparation patch to take care of the NEEDS_DDR_FW case, and then your
->patch that handles all other FW files.
-
-I'd like to have Yann's and/or Gary's feedback on this. I'm using 'select' based on this comment:
-"
-  As Yann mentioned on IRC:
-  "Usually, when we introduce such option, it does not 'default y' based
-  on some other options. Instead, the other options 'select' it."
-"
-from http://lists.busybox.net/pipermail/buildroot/2020-May/283180.html
-
-BR,
-Stephane.
-
->
->Best regards,
->
->Thomas
->-- 
->Thomas Petazzoni, CTO, Bootlin
->Embedded Linux and Kernel engineering
->https://bootlin.com
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 4eb3aff3b1..282b2aeba3 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.19/bind-9.11.19.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
+ # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
+-sha256  0dee554a4caa368948b32da9a0c97b516c19103bc13ff5b3762c5d8552f52329  bind-9.11.19.tar.gz
++sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
+ sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 362a26dce6..80f8defca8 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.19
++BIND_VERSION = 9.11.20
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+-- 
+2.25.4
