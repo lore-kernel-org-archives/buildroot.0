@@ -1,80 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 22:27:18 +0200
-Subject: [Buildroot] [PATCH] packages/pkg-download.mk: fix file locking
- over NFS
-In-Reply-To: <1993147260.30143.1593108698133.JavaMail.zimbra@savoirfairelinux.com>
-References: <1993147260.30143.1593108698133.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <20200625202718.GO20645@scaer>
+Date: Thu, 25 Jun 2020 22:33:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Add option for
+ all i.MX FW needs
+In-Reply-To: <DB8PR04MB5755C99B335ACE9AFC7552CDA7920@DB8PR04MB5755.eurprd04.prod.outlook.com>
+References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1593012228-18959-2-git-send-email-stephane.viau@oss.nxp.com>
+ <20200624225831.2183d1b0@windsurf>
+ <DB8PR04MB5755C99B335ACE9AFC7552CDA7920@DB8PR04MB5755.eurprd04.prod.outlook.com>
+Message-ID: <20200625203307.GP20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxim, All,
+Stephane, All,
 
-On 2020-06-25 14:11 -0400, Maxim Cournoyer spake thusly:
-> The attached patch fixes the NFS lock mechanism not working.
+On 2020-06-25 06:33 +0000, Stephane Viau (OSS) spake thusly:
+> Thomas wrote:
+> >However, I am wondering if package/freescale-imx/Config.in is the right
+> >place for all this logic. After all, this is only related to the
+> >firmware-imx package.
+> >
+> >Shouldn't we instead move that to
+> >package/freescale-imx/firmware-imx/Config.in, with the following form:
+> >
+> >config BR2_PACKAGE_FREESCALE_IMX_NEEDS_DDR_FW
+> >        bool
+> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+> >
+> >and ditto the other options ? Here as well, it would require a
+> >preparation patch to take care of the NEEDS_DDR_FW case, and then your
+> >patch that handles all other FW files.
+> 
+> I'd like to have Yann's and/or Gary's feedback on this. I'm using 'select' based on this comment:
+> "
+>   As Yann mentioned on IRC:
+>   "Usually, when we introduce such option, it does not 'default y' based
+>   on some other options. Instead, the other options 'select' it."
+> "
+> from http://lists.busybox.net/pipermail/buildroot/2020-May/283180.html
 
-You should talk to your Savoir-faire Linux colleagues: they manage to
-send patches to the list.
+True, that's what I said. That was based on the assumption that the
+options would be in package/freescale-imx/Config.in.
 
-> Tested using NFS 4.2 and multiple build machines caching the same source artifacts in parallel to an empty NFS directory.
-> 
-> Thank you,
-> 
-> Maxim
+But now, seeing the reasonning by Thomas, I agree with him: those are
+better suited to live in package/freescale-imx/firmware-imx/Config.in/
 
-> From 0f2dcace04d7c386b25888a4c851feddd187588f Mon Sep 17 00:00:00 2001
-> From: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
-> Date: Thu, 4 Jun 2020 16:14:26 -0400
-> Subject: [PATCH] packages/pkg-download.mk: fix file locking over NFS
-> 
-> BSD style locks such as implemented by flock are translated to POSIX
-> advisory file locks (implemented by the fcntl system call on Linux).  It
-> is not possible to lock a directory using POSIX advisory file locks.
-> Hence, the lock strategy used by Buildroot doesn't work when used over
-> NFS.
-> 
-> Using flock on a simple file works correctly though, so use a '.lock'
-> file inside the download directory instead.
-> 
-> Tested using NFS v4.2 and Linux 5.4.43.
-> 
-> Signed-off-by: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
+And thus it is less clean that the variant selection in the generic
+choice would have to catter with options specific to a package.
 
-I've added a blurb about the creation of the lock file when it is
-missing, and applied to master. Thanks.
+Hence, the "default y if ..." is indeed better.
+
+Sorry I did not have that insight to begin with...
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/pkg-download.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index de619ba90a..951d2fb554 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -99,7 +99,7 @@ endif
->  
->  define DOWNLOAD
->  	$(Q)mkdir -p $($(2)_DL_DIR)
-> -	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/ $(DL_WRAPPER) \
-> +	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
->  		-c '$($(2)_DL_VERSION)' \
->  		-d '$($(2)_DL_DIR)' \
->  		-D '$(DL_DIR)' \
-> -- 
-> 2.26.2
-> 
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
