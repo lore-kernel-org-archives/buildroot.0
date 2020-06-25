@@ -1,74 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 22:39:59 +0200
-Subject: [Buildroot] [PATCH v2] package/wireless-regdb: bump version to
- 2020.04.29
-In-Reply-To: <20200625194955.21944-1-ps.report@gmx.net>
-References: <20200625194955.21944-1-ps.report@gmx.net>
-Message-ID: <20200625203959.GQ20645@scaer>
+Date: Thu, 25 Jun 2020 22:40:08 +0200
+Subject: [Buildroot] [git commit] package/libconfuse: bump version to 3.3
+Message-ID: <20200625203937.CE759846C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2747d967144a641bccd143bd2e6ccd878dec321c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-25 21:49 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+This fixes a possible loop-forever bug.
 
-Applied to master. thanks.
+Release notes:
+https://github.com/martinh/libconfuse/releases/tag/v3.3
 
-BTW, when re-sending a patch, do not forget to mark previous iterations
-as superseded in patchwork (that helps keep the number of pending
-patches lower, even oh-so-slightly-lower... ;-] )
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libconfuse/libconfuse.hash | 6 +++---
+ package/libconfuse/libconfuse.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - add missing s-o-b
-> ---
->  package/wireless-regdb/wireless-regdb.hash | 4 ++--
->  package/wireless-regdb/wireless-regdb.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-> index d6cb72ee79..9271073fd9 100644
-> --- a/package/wireless-regdb/wireless-regdb.hash
-> +++ b/package/wireless-regdb/wireless-regdb.hash
-> @@ -1,4 +1,4 @@
->  # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
-> -sha256 cd917ed86b63ce8d93947979f1f18948f03a4ac0ad89ec25227b36ac00dc54bf  wireless-regdb-2019.06.03.tar.xz
-> +sha256  89fd031aed5977c219a71501e144375a10e7c90d1005d5d086ea7972886a2c7a  wireless-regdb-2020.04.29.tar.xz
->  # Locally computed
-> -sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-> +sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-> index 31b62e36e1..52a0e0cffc 100644
-> --- a/package/wireless-regdb/wireless-regdb.mk
-> +++ b/package/wireless-regdb/wireless-regdb.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WIRELESS_REGDB_VERSION = 2019.06.03
-> +WIRELESS_REGDB_VERSION = 2020.04.29
->  WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
->  WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
->  WIRELESS_REGDB_LICENSE = ISC
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
+index adc93f99a3..bb968f7a52 100644
+--- a/package/libconfuse/libconfuse.hash
++++ b/package/libconfuse/libconfuse.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/martinh/libconfuse/releases/download/v3.2.2/confuse-3.2.2.tar.xz.md5
+-md5  978996e421e5005e6a9f6f84948fac44  confuse-3.2.2.tar.xz
++# From https://github.com/martinh/libconfuse/releases/download/v3.3/confuse-3.3.tar.xz.md5
++md5  a183cef2cecdd3783436ff8de500d274  confuse-3.3.tar.xz
+ # Locally computed
+-sha256  a9240b653d02e8cfc52db48e8c4224426e528e1faa09b65e8ca08a197fad210b  confuse-3.2.2.tar.xz
++sha256  1dd50a0320e135a55025b23fcdbb3f0a81913b6d0b0a9df8cc2fdf3b3dc67010  confuse-3.3.tar.xz
+ sha256  dc3ff4b62f851dd2e94a151061ffeb7d28ddfc880a442068dc5283dbaa927306  LICENSE
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index b16bc9b7a7..516c0056d1 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCONFUSE_VERSION = 3.2.2
++LIBCONFUSE_VERSION = 3.3
+ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
+ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
+ LIBCONFUSE_INSTALL_STAGING = YES
