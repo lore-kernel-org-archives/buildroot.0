@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 25 Jun 2020 13:04:57 +0200
-Subject: [Buildroot] [RFC v9 02/10] cpe-info: id prefix/suffix
-In-Reply-To: <20200616170341.45098-2-matthew.weber@rockwellcollins.com>
+Date: Thu, 25 Jun 2020 13:09:06 +0200
+Subject: [Buildroot] [RFC v9 05/10] toolchain/toolchain-ext: glibc
+ cpe-info support
+In-Reply-To: <20200616170341.45098-5-matthew.weber@rockwellcollins.com>
 References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
- <20200616170341.45098-2-matthew.weber@rockwellcollins.com>
-Message-ID: <20200625130457.44b04fcd@windsurf>
+ <20200616170341.45098-5-matthew.weber@rockwellcollins.com>
+Message-ID: <20200625130906.322fd564@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Jun 2020 12:03:33 -0500
+On Tue, 16 Jun 2020 12:03:36 -0500
 Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> +CPE_PREFIX_OS = cpe:2.3:o
-> +CPE_PREFIX_APP = cpe:2.3:a
-> +CPE_SUFFIX = *:*:*:*:*:*:*
-> +
->  ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
->  NLS_OPTS = --enable-nls
->  TARGET_NLS_DEPENDENCIES = host-gettext
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 1408845613..7d892ca1d6 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -976,11 +976,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
->  $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
->  $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
->  
-> +ifneq ($(filter linux linux-headers,$(1)),)
-> +$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
-> +else
-> +$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
+>  $(1)-cpe-info: PKG=$(2)
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+> +$(1)-cpe-info: toolchain
 > +endif
+>  $(1)-cpe-info:
+>  ifeq ($$($(2)_TYPE),target)
+> +ifneq ($$($(2)_NAME),toolchain-external)
+> +ifneq ($(findstring TOOLCHAIN_EXTERNAL, $(2)),)
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+> +	$$(eval $(2)_VERSION = $$(shell $$(call TOOLCHAIN_CPE_INFO)))
+> +	$$(eval $(2)_CPE_ID_VENDOR = gnu)
+> +	$$(eval $(2)_CPE_ID_NAME = glibc)
+> +	$$(eval $(2)_ACTUAL_SOURCE_SITE = https://github.com/bminor/glibc/releases)
+> +	$$(eval $(2)_RAWNAME = glibc)
 
-Shouldn't the CPE_ID be directly defined with those, i.e in PATCH
-01/10, and the type be overridden by the packages which are not
-"application" packages, i.e:
+It is absolutely atrocious to have this stuff directly in the middle of
+pkg-generic.mk, and even further only within the $(1)-cpe-info target.
 
-$(2)_CPE_TYPE ?= a
-$(2)_CPE_ID ?= cpe:2.3:$$($(2)_CPE_TYPE):$$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):*:*:*:*:*:*:*
+Why isn't this been done inside the external toolchain package itself,
+or the external toolchain package infrastructure ?
 
-Of course, the linux package would have to set LINUX_CPE_TYPE = o.
+I think this specific issue of having proper tracking of the target
+elements (C library, gcc runtime) of the toolchain is global, and not
+just for CPE/CVE tracking: we already do not properly track this in
+terms of legal-info for example.
 
-Best regards,
+So rather than this one-off hack that solves just the specific case of
+CPE tracking for glibc in external toolchains, we need a more global
+solution.
 
 Thomas
 -- 
