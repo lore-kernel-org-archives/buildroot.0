@@ -1,49 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Jun 2020 23:51:11 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/sdl2: remove
- sdl2-config.cmake
-In-Reply-To: <20200505184303.609201-1-romain.naour@gmail.com>
-References: <20200505184303.609201-1-romain.naour@gmail.com>
-Message-ID: <20200624235111.0e70178b@windsurf>
+From: Urja Rannikko <urjaman@gmail.com>
+Date: Thu, 25 Jun 2020 03:58:36 +0300
+Subject: [Buildroot] [PATCH] package/cdrkit: fix build with GCC 10
+Message-ID: <20200625005836.2232591-1-urjaman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 May 2020 20:43:02 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+This patch adds a missing extern on the outfile
+variable in genisoimage.h.
 
-> We are using autotools build system for sdl2, so the sdl2-config.cmake
-> include path are not resolved like for sdl2-config script [1].
-> Remove sdl2-config.cmake file and avoid unsafe include path if this
-> file is used by a cmake based package.
-> 
-> This trigger an issue with ogre 1.12.6 package that replaced
-> FindSDL2.cmake by sdl2-config.cmake [2].
-> 
-> Thanks to Pavel Rojtberg for the help [3].
-> 
-> [1] https://bugzilla.libsdl.org/show_bug.cgi?id=4597
-> [2] https://github.com/OGRECave/ogre/commit/6de6f9b4081a07c911932441700c54b72ec1ee1f
-> [3] https://github.com/OGRECave/ogre/issues/1568
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> v2: new patch
-> ---
->  package/sdl2/sdl2.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+---
+Note: I would like to see this applied to the LTS 2020.02
+branch too, since it fixes building host-cdrkit for ISO9660
+generation with a host GCC 10.
 
-I've applied to master. However, this would really need to be fixed
-upstream: if the sdl2-config.cmake is not "prepared" properly when the
-autotools build system is used, then why is it installed by the
-autotools build system ?
+ .../cdrkit/0003-genisoimage-outfile-extern.patch    | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+ create mode 100644 package/cdrkit/0003-genisoimage-outfile-extern.patch
 
-Thanks,
-
-Thomas
+diff --git a/package/cdrkit/0003-genisoimage-outfile-extern.patch b/package/cdrkit/0003-genisoimage-outfile-extern.patch
+new file mode 100644
+index 0000000000..5a9f0363c9
+--- /dev/null
++++ b/package/cdrkit/0003-genisoimage-outfile-extern.patch
+@@ -0,0 +1,13 @@
++diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
++index bbedfb0..82c859b 100644
++--- a/genisoimage/genisoimage.h
+++++ b/genisoimage/genisoimage.h
++@@ -376,7 +376,7 @@ extern int	use_fileversion;
++ extern int	split_SL_component;
++ extern int	split_SL_field;
++ extern char	*trans_tbl;
++-char		*outfile;
+++extern char	*outfile;
++ 
++ #define	JMAX		64	/* maximum Joliet file name length (spec) */
++ #define	JLONGMAX	103	/* out of spec Joliet file name length */
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
