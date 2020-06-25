@@ -1,44 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 23:06:31 +0200
-Subject: [Buildroot] [git commit] package/dropbear: restore full
- BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO behaviour
-Message-ID: <20200625210433.A143E86089@busybox.osuosl.org>
+From: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
+Date: Thu, 25 Jun 2020 17:07:38 -0400 (EDT)
+Subject: [Buildroot] [PATCH] packages/pkg-download.mk: fix file locking
+ over NFS
+In-Reply-To: <20200625202718.GO20645@scaer>
+References: <1993147260.30143.1593108698133.JavaMail.zimbra@savoirfairelinux.com>
+ <20200625202718.GO20645@scaer>
+Message-ID: <1222816932.36161.1593119258691.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98967b5193c3d5fed510cf85f781b59739cf88f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yann,
 
-now, BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO works like with version 2019.78
-and as described in Config.in
+----- Original Message -----
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Maxim Cournoyer" <maxim.cournoyer@savoirfairelinux.com>
+> Cc: "buildroot" <buildroot@buildroot.org>
+> Sent: Thursday, June 25, 2020 4:27:18 PM
+> Subject: Re: [Buildroot] [PATCH] packages/pkg-download.mk: fix file locking over NFS
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/dropbear/dropbear.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> Maxim, All,
+> 
+> On 2020-06-25 14:11 -0400, Maxim Cournoyer spake thusly:
+>> The attached patch fixes the NFS lock mechanism not working.
+> 
+> You should talk to your Savoir-faire Linux colleagues: they manage to
+> send patches to the list.
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index b32f39d647..b7342cef51 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -56,7 +56,14 @@ endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
- endif
- 
--ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
-+ifeq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
-+define DROPBEAR_ENABLE_LEGACY_CRYPTO
-+	echo '#define DROPBEAR_3DES 1'                  >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_ENABLE_CBC_MODE 1'       >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
-+endef
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
-+else
- define DROPBEAR_DISABLE_LEGACY_CRYPTO
- 	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
+I'll definitly look into it prior to my next contribution :-).
+
+> I've added a blurb about the creation of the lock file when it is
+> missing, and applied to master. Thanks.
+
+That was quick! Thank you for the prompt resolution.
+
+Cheers,
+
+Maxim
