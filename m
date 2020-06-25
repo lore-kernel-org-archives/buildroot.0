@@ -1,55 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 21:59:46 +0200
-Subject: [Buildroot] [PATCH 0/5 v4] package/xenomai: add alternate
- download locations (branch yem/xenomai-custom)
-In-Reply-To: <20200624232745.548bdf7a@windsurf>
-References: <cover.1579035147.git.yann.morin.1998@free.fr>
- <20200624232745.548bdf7a@windsurf>
-Message-ID: <20200625195946.GN20645@scaer>
+Date: Thu, 25 Jun 2020 22:12:24 +0200
+Subject: [Buildroot] [git commit] packages/pkg-download.mk: fix file locking
+ over NFS
+Message-ID: <20200625201757.DA91181453@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2e9d6565fcc10268b7db6d44d74f9b48d2c2354c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-24 23:27 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 14 Jan 2020 21:55:20 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > Jan Kiszka (1):
-> >       package/xenomai: add support to download from a custom git tree
-> Applied.
-> > Yann E. MORIN (4):
-> >       package/xenomai: move the version setting to Kconfig
-> >       package/xenomai: add support to download a custom tarball
-> Both applied.
+BSD style locks such as implemented by flock are translated to POSIX
+advisory file locks (implemented by the fcntl system call on Linux).  It
+is not possible to lock a directory using POSIX advisory file locks.
+Hence, the lock strategy used by Buildroot doesn't work when used over
+NFS.
 
-Thanks! :-)
+Using flock on a simple file works correctly though, so use a '.lock'
+file inside the download directory instead. If the lockfile does not
+exist, flock will create it (in a race-free fashion).
 
-> >       package/xenomai: add support to download from a custom Hg tree
-> >       package/xenomai: add support to download from a custom svn tree
-> I have not applied those ones, I think it's too unlikely to ever be
-> needed.
+Tested using NFS v4.2 and Linux 5.4.43.
 
-I agree, but then how often are people expected to use hg or svn to
-store their kernel trees? Their Uboot trees?
+Signed-off-by: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
+[yann.morin.1998 at free.fr:
+  - slightly expand commit log about creation of the lockfile
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Against all odds, some people are willing to go to those extremities and
-suffer every day... ;-]
-
-That's what I modeled xenomai after (the kernel and uboot, not the
-suffering!). But OK, I don't care enough. ;-)
-
-Thanks for applying the rest of the series.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index de619ba90a..951d2fb554 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -99,7 +99,7 @@ endif
+ 
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(2)_DL_DIR)
+-	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/ $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+ 		-c '$($(2)_DL_VERSION)' \
+ 		-d '$($(2)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
