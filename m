@@ -1,60 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 25 Jun 2020 13:12:42 +0200
-Subject: [Buildroot] [RFC v9 06/10] cpe-info: update manual for new pkg
- vars
-In-Reply-To: <20200616170341.45098-6-matthew.weber@rockwellcollins.com>
+Date: Thu, 25 Jun 2020 13:14:24 +0200
+Subject: [Buildroot] [RFC v9 07/10] support/scripts/cpedb.py: new CPE
+ XML helper
+In-Reply-To: <20200616170341.45098-7-matthew.weber@rockwellcollins.com>
 References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
- <20200616170341.45098-6-matthew.weber@rockwellcollins.com>
-Message-ID: <20200625131242.07bf9831@windsurf>
+ <20200616170341.45098-7-matthew.weber@rockwellcollins.com>
+Message-ID: <20200625131424.62fb9ea9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Jun 2020 12:03:37 -0500
+Hello,
+
+On Tue, 16 Jun 2020 12:03:38 -0500
 Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> Provide guidance on setting up the *_CPE_* and *_CVE_* variables.
+> Python class which consumes a NIST CPE XML and provides helper
+> functions to access and search the db's data.
+> 
+>  - Defines the CPE as a object with operations / formats
+>  - Processing of CPE dictionary
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-There are only _CPE_ variables, no _CVE_ variable is documented here.
-
-> +* +LIBFOO_CPE_ID_VENDOR+
-> +  This variable is optional. It only must be defined if the package name
-> +  does not match what the CPE ID uses for the vendor. By default it's set
-> +  to <pkg-name>_project.
-> +
-> +* +LIBFOO_CPE_ID_NAME+
-> +  This variable is optional. It only must be defined if the package name
-> +  does not match what the CPE ID uses for the name. By default it's set
-> +  to <pkg-name>.
-> +
-> +* +LIBFOO_CPE_ID_VERSION+
-> +  This variable is optional. By default it's set to <pkg-version>.
-> +
-> +* +LIBFOO_CPE_ID_VERSION_MINOR+
-> +  This variable is optional. By default it's set to *.
-
-None of this documentation describes *what* those variables must
-contain. It says it's optional, what is the default value, but does not
-explain what value it should be set to. This is especially true for
-VERSION vs. VERSION_MINOR.
-
-> +* +LIBFOO_CPE_ID+ is optional, as the package infrastructure hangles the
-> +  default case of a single package's Common Product Enumeration (CPE)
-> +  identification string. +make cpe-info+ copies all of these into a
-> +  +cpe-manifest.csv+ file. To identify a package's possible CPE,
-> +  the National Vunerability Database can be searched at
-> +  https://nvd.nist.gov/products/cpe/search.
-
-This explanation could be extended a bit to explain clearly that a
-default _CPE_ID value will be defined based on the other CPE_ID_*
-variables, and that this should be used to override the overall value
-only in special situations.
-
-However, in practice, do we have such cases ? Do you have situation
-where customizing VENDOR, NAME, VERSION, VERSION_MINOR is not enough,
-and you have to set a package-specific CPE_ID value directly ?
+The pkg-stats script now has some logic to use the NVD database in JSON
+format. I guess it doesn't make much sense to duplicate this logic and
+use the XML variant of the same database. I believe Gr?gory has already
+worked on moving this pkg-stats NVD/CVE logic into a separate library
+so that it can be used elsewhere.
 
 Thomas
 -- 
