@@ -1,45 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 25 Jun 2020 20:48:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 0.20.2
-Message-ID: <20200625184851.79173-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 25 Jun 2020 21:24:45 +0200
+Subject: [Buildroot] [PATCH v1] package/wireless-regdb: bump version to
+ 2020.04.29
+Message-ID: <20200625192445.18349-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/stellarium/stellarium.hash | 6 +++---
- package/stellarium/stellarium.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash | 4 ++--
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index 76da2d0b3b..7f29290aee 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/Stellarium/stellarium/releases
--md5  19422ba4800fbede0a71a723cf3df10f  stellarium-0.20.1.tar.gz
--sha1  20d89ff8e26bb8cef71796d138176be2602e6327   stellarium-0.20.0.tar.gz
--sha256  154e7bd9d4b914a99c40eab86d05b78e43040d657844ee665ebb2aa55a9e920c  stellarium-0.20.0.tar.gz
-+md5  12b87785efdc52c1682bb6f3c37bd85d  stellarium-0.20.2.tar.gz
-+sha1  308fd0878d2126878d769d66cac1f00b3dccf819   stellarium-0.20.2.tar.gz
-+sha256 400ef964c2a1612157a4b219464ea919b4e330322a0db894835b6e11c4af5e9b  stellarium-0.20.2.tar.gz
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index d6cb72ee79..9271073fd9 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256 cd917ed86b63ce8d93947979f1f18948f03a4ac0ad89ec25227b36ac00dc54bf  wireless-regdb-2019.06.03.tar.xz
++sha256  89fd031aed5977c219a71501e144375a10e7c90d1005d5d086ea7972886a2c7a  wireless-regdb-2020.04.29.tar.xz
  # Locally computed
- sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 72e762b65e..543e6fa23d 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
+-sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
++sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 31b62e36e1..52a0e0cffc 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STELLARIUM_VERSION = 0.20.1
-+STELLARIUM_VERSION = 0.20.2
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
+-WIRELESS_REGDB_VERSION = 2019.06.03
++WIRELESS_REGDB_VERSION = 2020.04.29
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 -- 
-2.26.2
+2.27.0
