@@ -1,62 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Jun 2020 21:50:38 +0200
-Subject: [Buildroot] [PATCH 1/1] rpi-firmware: do not rename startup
- files
-In-Reply-To: <20200625192003.59506a9c@gmx.net>
-References: <20200624115009.15561-1-sveyret@gmail.com>
- <20200624165405.GA20645@scaer> <20200625182319.4cec8d94@gmx.net>
- <CAFs+hh6EffMsZFsMQAXF-Lk-cRmbjtHqii2zDogRrJAMUjw9iw@mail.gmail.com>
- <20200625192003.59506a9c@gmx.net>
-Message-ID: <20200625195038.GM20645@scaer>
+Date: Thu, 25 Jun 2020 21:59:46 +0200
+Subject: [Buildroot] [PATCH 0/5 v4] package/xenomai: add alternate
+ download locations (branch yem/xenomai-custom)
+In-Reply-To: <20200624232745.548bdf7a@windsurf>
+References: <cover.1579035147.git.yann.morin.1998@free.fr>
+ <20200624232745.548bdf7a@windsurf>
+Message-ID: <20200625195946.GN20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, St?phane, All,
+Thomas, All,
 
-On 2020-06-25 19:20 +0200, Peter Seiderer spake thusly:
-> On Thu, 25 Jun 2020 18:38:02 +0200, St?phane Veyret <sveyret@gmail.com> wrote:
-> > Le jeu. 25 juin 2020 ? 18:23, Peter Seiderer <ps.report@gmx.net> a ?crit :
-> > > > I think we should instead force the name of the startup files in the
-> > > > config.txt (in package/rpi-firmware/config.txt):
-> > > >     start_file=start.elf
-> > > >     fixup_file=fixup.dat  
-> > > Or one step further, copy the start/fixup file verbatim and only change the
-> > > start_file/fixup_file entry in config.txt (with the advantage to make it
-> > > transparent which files are installed/in-use)...  
-> > If the file name is already the appropriate one (this is the first
-> > version of my patch), using start_file and fixup_file is useless. And
-> > I don't feel it is a good idea to set start_file and fixup_file if the
-> > files already have expected names, because using these options is
-> > discouraged: https://www.raspberrypi.org/documentation/configuration/config-txt/boot.md.
-> 
-> The options are not discouraged, but 'advanced options' and should be
-> handled with care ;-)
-> 
-> The advantage of the explicit start_file/fixup_file entries is that it
-> is clear/determined which files are used (instead of relaying on the
-> RPi 'magic' depending on the combination of other options)....
+On 2020-06-24 23:27 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 14 Jan 2020 21:55:20 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Jan Kiszka (1):
+> >       package/xenomai: add support to download from a custom git tree
+> Applied.
+> > Yann E. MORIN (4):
+> >       package/xenomai: move the version setting to Kconfig
+> >       package/xenomai: add support to download a custom tarball
+> Both applied.
 
-That.
+Thanks! :-)
 
-So, we force the files to load. We have two options:
+> >       package/xenomai: add support to download from a custom Hg tree
+> >       package/xenomai: add support to download from a custom svn tree
+> I have not applied those ones, I think it's too unlikely to ever be
+> needed.
 
-  - always load the same known filenames, and copy the appropriate files
-    and name them to those known filenames, or
+I agree, but then how often are people expected to use hg or svn to
+store their kernel trees? Their Uboot trees?
 
-  - always copy the appropriate files and keep their original filenames,
-    and tweak config.txt to load the appropriate filenames, risking
-    hitting some corner cases in the opaque binary blobs.
+Against all odds, some people are willing to go to those extremities and
+suffer every day... ;-]
 
-The first option has the advantage of just caring about the source of
-the copy; the destiantion filenames and filenames to load are constant.
+That's what I modeled xenomai after (the kernel and uboot, not the
+suffering!). But OK, I don't care enough. ;-)
 
-The second soltuion needs to care about the source filenames, the
-destination filenames and change config.txt.
-
-Guess which is the easiest to implement, review, and maintain? ;-)
+Thanks for applying the rest of the series.
 
 Regards,
 Yann E. MORIN.
