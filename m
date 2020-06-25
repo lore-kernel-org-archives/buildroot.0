@@ -1,92 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 25 Jun 2020 23:25:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: fix build with headers
- >= 4.15
-Message-ID: <20200625212521.1495141-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Jun 2020 23:31:57 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi-firmware: do not rename startup
+ files
+In-Reply-To: <CAFs+hh6XDH80-Sk9DG95ez7vEF4XJR=DrqAgjzZK7xcm42SrzQ@mail.gmail.com>
+References: <20200624115009.15561-1-sveyret@gmail.com>
+ <20200624165405.GA20645@scaer> <20200625182319.4cec8d94@gmx.net>
+ <CAFs+hh6EffMsZFsMQAXF-Lk-cRmbjtHqii2zDogRrJAMUjw9iw@mail.gmail.com>
+ <20200625192003.59506a9c@gmx.net>
+ <CAFs+hh6XDH80-Sk9DG95ez7vEF4XJR=DrqAgjzZK7xcm42SrzQ@mail.gmail.com>
+Message-ID: <20200625213157.GW20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
+St?phane, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...uild-with-Linux-kernel-headers-v4.15.patch | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
+On 2020-06-25 19:30 +0200, St?phane Veyret spake thusly:
+> > > Le jeu. 25 juin 2020 ? 18:23, Peter Seiderer <ps.report@gmx.net> a ?crit :
+> > > > > I think we should instead force the name of the startup files in the
+> > > > > config.txt (in package/rpi-firmware/config.txt):
+> > > > >     start_file=start.elf
+> > > > >     fixup_file=fixup.dat
+> > > > Or one step further, copy the start/fixup file verbatim and only change the
+> > > > start_file/fixup_file entry in config.txt (with the advantage to make it
+> > > > transparent which files are installed/in-use)...
+> > > If the file name is already the appropriate one (this is the first
+> > > version of my patch), using start_file and fixup_file is useless. And
+> > > I don't feel it is a good idea to set start_file and fixup_file if the
+> > > files already have expected names, because using these options is
+> > > discouraged: https://www.raspberrypi.org/documentation/configuration/config-txt/boot.md.
+> > The options are not discouraged, but 'advanced options' and should be handled with care ;-)
+> > The advantage of the explicit start_file/fixup_file entries is that it is clear/determined
+> > which files are used (instead of relaying on the RPi 'magic' depending on the combination
+> > of other options)....
+> OK, I understand. Yann, do you agree? Shall I create a v3 patch?
 
-diff --git a/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch b/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
-new file mode 100644
-index 0000000000..4a20520ae0
---- /dev/null
-+++ b/package/keepalived/0001-Fix-build-with-Linux-kernel-headers-v4.15.patch
-@@ -0,0 +1,64 @@
-+From 6ad62a612ade0a9cbfe5f9d3ad3473141816fb9a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 25 Jun 2020 23:14:22 +0200
-+Subject: [PATCH] Fix build with Linux kernel headers v4.15
-+
-+Same issue that was fixed by 947248af144bcab6376ccddab8dc40f313b14281
-+but raised again when bumping keepalived from version 2.0.15 to 2.1.2 in
-+buildroot
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/acassen/keepalived/pull/1654]
-+---
-+ keepalived/vrrp/vrrp_arp.c   | 1 +
-+ keepalived/vrrp/vrrp_ndisc.c | 2 +-
-+ keepalived/vrrp/vrrp_vmac.c  | 1 +
-+ 3 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/keepalived/vrrp/vrrp_arp.c b/keepalived/vrrp/vrrp_arp.c
-+index c06904a7..888f1d5f 100644
-+--- a/keepalived/vrrp/vrrp_arp.c
-++++ b/keepalived/vrrp/vrrp_arp.c
-+@@ -23,6 +23,7 @@
-+ #include "config.h"
-+ 
-+ /* system includes */
-++#include <netinet/in.h>
-+ #include <unistd.h>
-+ #include <net/ethernet.h>
-+ #include <net/if_arp.h>
-+diff --git a/keepalived/vrrp/vrrp_ndisc.c b/keepalived/vrrp/vrrp_ndisc.c
-+index 0f5569bc..0a4fffc6 100644
-+--- a/keepalived/vrrp/vrrp_ndisc.c
-++++ b/keepalived/vrrp/vrrp_ndisc.c
-+@@ -23,11 +23,11 @@
-+ #include "config.h"
-+ 
-+ /* system includes */
-++#include <netinet/in.h>
-+ #include <unistd.h>
-+ #include <net/ethernet.h>
-+ #include <linux/if_packet.h>
-+ #include <netinet/icmp6.h>
-+-#include <netinet/in.h>
-+ #include <stdint.h>
-+ #include <errno.h>
-+ 
-+diff --git a/keepalived/vrrp/vrrp_vmac.c b/keepalived/vrrp/vrrp_vmac.c
-+index 2a59aee3..7afbf604 100644
-+--- a/keepalived/vrrp/vrrp_vmac.c
-++++ b/keepalived/vrrp/vrrp_vmac.c
-+@@ -23,6 +23,7 @@
-+ #include "config.h"
-+ 
-+ /* global include */
-++#include <netinet/in.h>
-+ #ifdef NETLINK_H_NEEDS_SYS_SOCKET_H
-+ #include <sys/socket.h>
-+ #endif
-+-- 
-+2.26.2
-+
+I do agree that we better force the names of the file to load, yes.
+
+No, you do not need to send a v3, as I explained in my reply to Peter.
+
+I'll will probably apply your v2 patch as-is shortly...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
