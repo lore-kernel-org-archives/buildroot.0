@@ -1,23 +1,19 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Jun 2020 11:52:54 +0000
-Subject: [Buildroot] [Bug 13041] unable to build opus when using thumb
- instructions on arm926t
-In-Reply-To: <bug-13041-163@https.bugs.busybox.net/>
-References: <bug-13041-163@https.bugs.busybox.net/>
-Message-ID: <bug-13041-163-UeHvVDIan5@https.bugs.busybox.net/>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Fri, 26 Jun 2020 14:30:47 +0200
+Subject: [Buildroot] [PATCH v2] Allow to recompile wireless-regdb
+Message-ID: <20200626123053.30626-1-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13041
+changes since v1:
+* more info in commit messages
+* started python3-m2crypto from previously removed python-m2crypto
+* no magic with local files, but explicit control to buildroot
+  for the signing key to use
+* add the public key for signing to linux kernel
 
---- Comment #2 from Evgeny <s404.gordon@gmail.com> ---
-Thanks, didn't notice that.
-
-libavcodec also blocks build process btw.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Kind regards
+Kurt
