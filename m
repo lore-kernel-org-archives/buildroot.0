@@ -1,71 +1,74 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 26 Jun 2020 14:30:48 +0200
-Subject: [Buildroot] [PATCH 1/6] Revert "python-m2crypto: remove"
-In-Reply-To: <20200626123053.30626-1-dev.kurt@vandijck-laurijssen.be>
-References: <20200626123053.30626-1-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200626123053.30626-2-dev.kurt@vandijck-laurijssen.be>
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Date: Fri, 26 Jun 2020 10:37:49 -0500
+Subject: [Buildroot] [PATCH 1/1] uboot: zynqmp: Support loading a PMU
+ config
+In-Reply-To: <6bcc3630-562d-f9b0-f8c4-34cc4b29e31b@lucaceresoli.net>
+References: <20200625192925.182477-1-brandon.maier@rockwellcollins.com>
+ <6bcc3630-562d-f9b0-f8c4-34cc4b29e31b@lucaceresoli.net>
+Message-ID: <CA+fik53QJscy8oJJ4UkKiOvYz+Jua7YUD73BLjuiO_SikJQPYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 484c04878e5e76cdc0cc33c7646f98ab41698a7e.
-python-m2crypto becomes needed for recompiling wireless-regdb.
+On Thu, Jun 25, 2020 at 3:57 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> > +     $(if $(UBOOT_ZYNQMP_PM_CFG_PATH),
+> > +             $(UBOOT_DIR)/tools/zynqmp_pm_cfg_obj_convert.py \
+> > +                     "$(UBOOT_ZYNQMP_PM_CFG_PATH)" \
+> > +                     "$(UBOOT_ZYNQMP_PM_CFG_BIN)"
+> > +     )
+>
+> Even though this works, I find it a bit weird that you read the
+> UBOOT_ZYNQMP_PM_CFG_PATH variable here but you assign it below. I think
+> you could move the invocation of zynqmp_pm_cfg_obj_convert.py to a
+> pre-build hook (or a post-configure hook? hum), which in turn would
+> allow you to move the code inside the 'ifeq
+> ($(BR2_TARGET_UBOOT_ZYNQMP),y)' stanza, keeping all the zynqmp-specific
+> code together.
 
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
----
- package/python-m2crypto/python-m2crypto.hash |  3 ++
- package/python-m2crypto/python-m2crypto.mk   | 31 ++++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 package/python-m2crypto/python-m2crypto.hash
- create mode 100644 package/python-m2crypto/python-m2crypto.mk
+I did it this way because the "dts" command was here too, but I can
+move it to a pre-build hook.
 
-diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
-new file mode 100644
-index 0000000000..4ac180f870
---- /dev/null
-+++ b/package/python-m2crypto/python-m2crypto.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/M2Crypto/, sha256 locally computed
-+md5 8e87235942c76d1ba9f999ee33764fdb M2Crypto-0.24.0.tar.gz
-+sha256 80a56441a1d2c0cf27e725be7554c92598b938fc8767ee2c71fdbc2fdc055ee8 M2Crypto-0.24.0.tar.gz
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-new file mode 100644
-index 0000000000..3d0e54eb4e
---- /dev/null
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# python-m2crypto
-+#
-+################################################################################
-+
-+PYTHON_M2CRYPTO_VERSION = 0.24.0
-+PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
-+PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
-+PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
-+HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
-+
-+PYTHON_M2CRYPTO_LICENSE = MIT
-+PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
-+
-+# We need to use python2 because m2crypto is not python3 compliant.
-+HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
-+
-+# The --openssl option that allows to specify a custom path to OpenSSL
-+# can only be used with the non-default build_ext setup.py command,
-+# and calling this command directly fails. To work around this, simply
-+# hardcode the path to OpenSSL in setup.py.
-+# Bug reported at https://gitlab.com/m2crypto/m2crypto/issues/89
-+define HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
-+	$(SED) "s%self.openssl = '/usr'%self.openssl = '$(HOST_DIR)/usr'%" \
-+		$(@D)/setup.py
-+endef
-+
-+HOST_PYTHON_M2CRYPTO_POST_PATCH_HOOKS += HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
-+
-+$(eval $(host-python-package))
--- 
-2.25.0
+>
+> >       $(TARGET_CONFIGURE_OPTS) \
+> >               $(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+> >               $(UBOOT_MAKE_TARGET)
+> > @@ -360,6 +365,17 @@ define UBOOT_ZYNQMP_KCONFIG_PMUFW
+> >       $(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)")
+> >  endef
+> >
+> > +UBOOT_ZYNQMP_PM_CFG = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PM_CFG))
+> > +UBOOT_ZYNQMP_PM_CFG_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PM_CFG))
+>
+> I find the _PATH suffix kind of vague: all these variables contain
+> paths. I'd rather call it UBOOT_ZYNQMP_PM_CFG_C or
+> UBOOT_ZYNQMP_PM_CFG_SRC. But it's a matter of taste, not a big issue.
+>
+
+I agree it's vague, I was trying to remain consistent with
+UBOOT_ZYNQMP_PSU_INIT which does it this way.
+
+> > +
+> > +ifneq ($(UBOOT_ZYNQMP_PM_CFG_PATH),)
+> > +UBOOT_ZYNQMP_PM_CFG_BIN = $(UBOOT_DIR)/pm_cfg_obj.bin
+> > +define UBOOT_ZYNQMP_KCONFIG_PM_CFG
+> > +     $(call KCONFIG_SET_OPT,CONFIG_ZYNQMP_SPL_PM_CFG_OBJ_FILE,"$(UBOOT_ZYNQMP_PM_CFG_BIN)", \
+> > +             $(@D)/.config)
+> > +endef
+> > +endif
+> > +
+> >  UBOOT_ZYNQMP_PSU_INIT = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))
+> >  UBOOT_ZYNQMP_PSU_INIT_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PSU_INIT))
+> >
+> > @@ -422,6 +438,7 @@ endif
+> >
+> >  define UBOOT_KCONFIG_FIXUP_CMDS
+> >       $(UBOOT_ZYNQMP_KCONFIG_PMUFW)
+> > +     $(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
+> >       $(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
+> >  endef
+> >
+> >
+> --
+> Luca
