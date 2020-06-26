@@ -1,101 +1,84 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 26 Jun 2020 14:30:52 +0200
-Subject: [Buildroot] [PATCH 5/6] wireless-regdb: add explicit signing key
- config
+Date: Fri, 26 Jun 2020 14:30:50 +0200
+Subject: [Buildroot] [PATCH 3/6] python3-m2crypto: move from python-m2crypto
 In-Reply-To: <20200626123053.30626-1-dev.kurt@vandijck-laurijssen.be>
 References: <20200626123053.30626-1-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200626123053.30626-6-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200626123053.30626-4-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit allows to set an explicit file with signing key to use.
+wireless-regdb does not compile using python2.
 
 Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- package/wireless-regdb/Config.in         | 18 ++++++++++++++++++
- package/wireless-regdb/wireless-regdb.mk | 24 +++++++++++++++++++++---
- 2 files changed, 39 insertions(+), 3 deletions(-)
+ package/python-m2crypto/python-m2crypto.mk    | 21 -------------------
+ .../python3-m2crypto.hash}                    |  0
+ package/python3-m2crypto/python3-m2crypto.mk  | 21 +++++++++++++++++++
+ 3 files changed, 21 insertions(+), 21 deletions(-)
+ delete mode 100644 package/python-m2crypto/python-m2crypto.mk
+ rename package/{python-m2crypto/python-m2crypto.hash => python3-m2crypto/python3-m2crypto.hash} (100%)
+ create mode 100644 package/python3-m2crypto/python3-m2crypto.mk
 
-diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
-index 55347b5e8c..be2c421438 100644
---- a/package/wireless-regdb/Config.in
-+++ b/package/wireless-regdb/Config.in
-@@ -26,4 +26,22 @@ config BR2_WIRELESS_REGDB_REBUILD
- 	  outdoor and indoor regulations differ.
- 	  Make sure to deploy your wireless-regdb public key if you use crda
- 	  or compile them into the kernel.
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+deleted file mode 100644
+index b98a2f4040..0000000000
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# python-m2crypto
+-#
+-################################################################################
+-
+-PYTHON_M2CRYPTO_VERSION = 0.35.2
+-PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/74/18/3beedd4ac48b52d1a4d12f2a8c5cf0ae342ce974859fba838cbbc1580249
+-PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+-HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
+-
+-PYTHON_M2CRYPTO_LICENSE = MIT
+-PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
+-
+-HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
+-
+-
+-HOST_PYTHON_M2CRYPTO_BUILD_OPTS = --openssl $(HOST_DIR)
+-
+-$(eval $(host-python-package))
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python3-m2crypto/python3-m2crypto.hash
+similarity index 100%
+rename from package/python-m2crypto/python-m2crypto.hash
+rename to package/python3-m2crypto/python3-m2crypto.hash
+diff --git a/package/python3-m2crypto/python3-m2crypto.mk b/package/python3-m2crypto/python3-m2crypto.mk
+new file mode 100644
+index 0000000000..17b36fa9aa
+--- /dev/null
++++ b/package/python3-m2crypto/python3-m2crypto.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python3-m2crypto
++#
++################################################################################
 +
-+if BR2_WIRELESS_REGDB_REBUILD
++PYTHON3_M2CRYPTO_VERSION = 0.35.2
++PYTHON3_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/74/18/3beedd4ac48b52d1a4d12f2a8c5cf0ae342ce974859fba838cbbc1580249
++PYTHON3_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON3_M2CRYPTO_VERSION).tar.gz
++PYTHON3_M2CRYPTO_SETUP_TYPE = setuptools
++HOST_PYTHON3_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
 +
-+config BR2_WIRELESS_REGDB_COMMONNAME
-+	string "CommonName for x509 cert"
-+	default "buildroot"
++PYTHON3_M2CRYPTO_LICENSE = MIT
++PYTHON3_M2CRYPTO_LICENSE_FILES = LICENCE
 +
-+config BR2_WIRELESS_REGDB_PRIVKEY
-+	string "private key for signing wireless-regdb"
-+	default "~/.buildroot"
-+	help
-+	  Path to file containing private key to sign wireless-regdb.
-+	  The key should be in .pem format.
++HOST_PYTHON3_M2CRYPTO_NEEDS_HOST_PYTHON = python3
 +
-+	  If the file does not exist, a new key will be generated
 +
-+endif
++HOST_PYTHON3_M2CRYPTO_BUILD_OPTS = --openssl $(HOST_DIR)
 +
- endif
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 7c6b140a4a..af54d2c0f4 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -13,16 +13,34 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
- 
-+WIRELESS_REGDB_PRIVKEY = $(call qstrip,$(BR2_WIRELESS_REGDB_PRIVKEY))
-+# make sure PRIVKEYNAME is set
-+ifeq ($(WIRELESS_REGDB_PRIVKEYNAME),)
-+WIRELESS_REGDB_PRIVKEY=~/.buildroot
-+endif
-+WIRELESS_REGDB_PRIVKEYNAME = $(patsubst .%,%,$(notdir $(WIRELESS_REGDB_PRIVKEY)))
-+
-+ifeq ($(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME)),)
-+BR2_WIRELESS_REGDB_COMMONNAME = "buildroot"
-+endif
-+
- define WIRELESS_REGDB_PATCH_PYTHON3
- 	sed -i -e '1 s/python$$/python3/' $(@D)/*.py
-+	sed -i -e 's/= sforshee$$/= $(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME))/' $(@D)/gen-pubcert.sh
- endef
- 
- WIRELESS_REGDB_POST_PATCH_HOOKS += WIRELESS_REGDB_PATCH_PYTHON3
- 
- WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
-+
- define WIRELESS_REGDB_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		REGDB_AUTHOR=buildroot
-+		REGDB_PRIVKEY=$(WIRELESS_REGDB_PRIVKEY) \
-+		REGDB_PUBKEY=$(WIRELESS_REGDB_PRIVKEYNAME).pub \
-+		REGDB_PUBCERT=$(WIRELESS_REGDB_PRIVKEYNAME).x509.pem
-+	openssl x509 -in $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509.pem \
-+		-outform DER \
-+		-out $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509
- endef
- endif
- 
-@@ -32,8 +50,8 @@ define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
- 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
- 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
--	$(INSTALL) -m 644 -D -T ~/.wireless-regdb-buildroot.key.pub.pem \
--		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/buildroot.key.pub.pem
-+	$(INSTALL) -m 644 -D -T $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).pub \
-+		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/$(WIRELESS_REGDB_PRIVKEYNAME).pub
- endef
- endif
- 
++$(eval $(host-python-package))
 -- 
 2.25.0
