@@ -1,88 +1,124 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 26 Jun 2020 12:58:59 +0300
-Subject: [Buildroot] [PATCH] package/libcurl: fix build with mbedtls,
- no proxy
-Message-ID: <08a9738f883fd1df067847ffb38ddf2e35222828.1593165539.git.baruch@tkos.co.il>
+From: =?UTF-8?q?St=C3=A9phane=20Veyret?= <sveyret@gmail.com>
+Date: Fri, 26 Jun 2020 12:41:16 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/rpi-firmware: bad startup file
+ names
+Message-ID: <20200626104116.3412-1-sveyret@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch fixing build with BR2_PACKAGE_LIBCURL_PROXY_SUPPORT disabled
-and mbedtls enabled.
+When booting, a Raspberry Pi will load the appropriate start files,
+depending on the provided configuration. For example, if the config.txt
+file contains ?gpu_mem=16? the board will automatically load the
+cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
 
-Fixes:
-http://autobuild.buildroot.net/results/f32b6ab927560839cacaa1b9e6b64ced92b9ffe3/
+Unfortunately, even when the appropriate version is selected in the
+configuration menu, if the rpi-firmware makefile takes the good files,
+it renames them to non-qualified, i.e. start.elf and fixup.dat. But as
+these are not the files searched by the Raspberry Pi, the board will not
+start.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This patch will set the names of the files to load as constant in the
+config.txt file. This guarantees that the rpi firmware blobs do not take
+any other corner-case decision based on any other as-yet unknown
+conditions.
+
+This eases the maintenance, as only the names of the source files
+matter; the destination filenames are constants, and so are the
+filenames in config.txt.
+
+Fixes: #13026
+
+Signed-off-by: St?phane Veyret <sveyret@gmail.com>
+
 ---
- ...ix-build-with-disabled-proxy-support.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/libcurl/0001-mbedtls-fix-build-with-disabled-proxy-support.patch
+Changes v2 -> v3:
+  - factorization of start file copy, rework on code (suggested by
+    Yann E. MORIN).
+Changes v1 -> v2:
+  - update config.txt instead of keeping firmware name (suggested by
+    Yann E. MORIN).
+---
+---
+ package/rpi-firmware/Config.in       |  7 ++++---
+ package/rpi-firmware/config.txt      |  5 +++++
+ package/rpi-firmware/rpi-firmware.mk | 17 ++++++++---------
+ 3 files changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/package/libcurl/0001-mbedtls-fix-build-with-disabled-proxy-support.patch b/package/libcurl/0001-mbedtls-fix-build-with-disabled-proxy-support.patch
-new file mode 100644
-index 000000000000..7ae23e852061
---- /dev/null
-+++ b/package/libcurl/0001-mbedtls-fix-build-with-disabled-proxy-support.patch
-@@ -0,0 +1,57 @@
-+From ee6e38c7f42c7e1f0f8a610ff5ae8e2a66eca435 Mon Sep 17 00:00:00 2001
-+Message-Id: <ee6e38c7f42c7e1f0f8a610ff5ae8e2a66eca435.1593164704.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 26 Jun 2020 12:40:43 +0300
-+Subject: [PATCH] mbedtls: fix build with disabled proxy support
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index cced53f017..cbd3a6471a 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -62,11 +62,12 @@ endchoice
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_BOOT
+ 	string
+-	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
++	default "4"      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "x"     if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
++	default "4x"     if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "cd"    if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
++	default "4cd"    if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+ 	bool "Install Device Tree Blobs (DTBs)"
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index 58cc966a87..4a92a4dd95 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -4,6 +4,11 @@
+ # See http://buildroot.org/manual.html#rootfs-custom
+ # and http://elinux.org/RPiconfig for a description of config.txt syntax
+ 
++# We always use the same names, the real used variant is selected by
++# BR2_PACKAGE_RPI_FIRMWARE_{DEFAULT,X,CD} choice
++start_file=start.elf
++fixup_file=fixup.dat
 +
-+Don't reference fields that do not exist. Fixes build failure:
+ kernel=zImage
+ 
+ # To use an external initramfs file
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 6ad67ab0e5..4179a26b87 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -41,24 +41,23 @@ define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+ endef
+ endif # INSTALL_VCDBG
+ 
+-ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
+ # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
+-define RPI_FIRMWARE_INSTALL_BOOT
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
+-endef
+-else
+-define RPI_FIRMWARE_INSTALL_BOOT
++define RPI_FIRMWARE_INSTALL_BOOTCODE_BIN
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
++endef
++endif
 +
-+vtls/mbedtls.c: In function 'mbed_connect_step1':
-+vtls/mbedtls.c:249:54: error: 'struct connectdata' has no member named 'http_proxy'
-+   const char * const hostname = SSL_IS_PROXY() ? conn->http_proxy.host.name :
-+                                                      ^~
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/curl/curl/pull/5615
-+
-+ lib/vtls/mbedtls.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
-+index ba31b8e78845..545f824c62c2 100644
-+--- a/lib/vtls/mbedtls.c
-++++ b/lib/vtls/mbedtls.c
-+@@ -246,9 +246,14 @@ mbed_connect_step1(struct connectdata *conn,
-+   const char * const ssl_capath = SSL_CONN_CONFIG(CApath);
-+   char * const ssl_cert = SSL_SET_OPTION(cert);
-+   const char * const ssl_crlfile = SSL_SET_OPTION(CRLfile);
-++#ifndef CURL_DISABLE_PROXY
-+   const char * const hostname = SSL_IS_PROXY() ? conn->http_proxy.host.name :
-+     conn->host.name;
-+   const long int port = SSL_IS_PROXY() ? conn->port : conn->remote_port;
-++#else
-++  const char * const hostname = conn->host.name;
-++  const long int port = conn->remote_port;
-++#endif
-+   int ret = -1;
-+   char errorbuf[128];
-+   errorbuf[0] = 0;
-+@@ -538,9 +543,14 @@ mbed_connect_step2(struct connectdata *conn,
-+   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
-+   struct ssl_backend_data *backend = connssl->backend;
-+   const mbedtls_x509_crt *peercert;
-++#ifndef CURL_DISABLE_PROXY
-+   const char * const pinnedpubkey = SSL_IS_PROXY() ?
-+     data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY] :
-+     data->set.str[STRING_SSL_PINNEDPUBLICKEY_ORIG];
-++#else
-++  const char * const pinnedpubkey =
-++    data->set.str[STRING_SSL_PINNEDPUBLICKEY_ORIG];
-++#endif
-+ 
-+   conn->recv[sockindex] = mbed_recv;
-+   conn->send[sockindex] = mbed_send;
-+-- 
-+2.27.0
-+
++define RPI_FIRMWARE_INSTALL_START_FILES
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ endef
+-endif
+ 
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+-	$(RPI_FIRMWARE_INSTALL_BOOT)
++	$(RPI_FIRMWARE_INSTALL_BOOTCODE_BIN)
++	$(RPI_FIRMWARE_INSTALL_START_FILES)
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
+ 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+ endef
 -- 
-2.27.0
+2.26.2
