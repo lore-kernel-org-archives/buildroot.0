@@ -1,7 +1,9 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 27 Jun 2020 00:05:59 +0200
-Subject: [Buildroot] [PATCH 1/4] package/liburcu: bump version to 0.12.1
-Message-ID: <20200626220603.29561-1-nolange79@gmail.com>
+Date: Sat, 27 Jun 2020 00:06:00 +0200
+Subject: [Buildroot] [PATCH 2/4] package/lttng-libust: bump version to 2.12.0
+In-Reply-To: <20200626220603.29561-1-nolange79@gmail.com>
+References: <20200626220603.29561-1-nolange79@gmail.com>
+Message-ID: <20200626220603.29561-2-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +14,35 @@ Also update hash file formatting (2 spaces).
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/liburcu/liburcu.hash | 12 ++++++------
- package/liburcu/liburcu.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/lttng-libust/lttng-libust.hash | 6 +++---
+ package/lttng-libust/lttng-libust.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-index 5c2f7e52a8..da7d12a76c 100644
---- a/package/liburcu/liburcu.hash
-+++ b/package/liburcu/liburcu.hash
-@@ -1,8 +1,8 @@
--# http://www.lttng.org/files/urcu/userspace-rcu-0.11.1.tar.bz2.sha256
--sha256 92b9971bf3f1c443edd6c09e7bf5ff3b43531e778841f16377a812c8feeb3350  userspace-rcu-0.11.1.tar.bz2
-+# http://www.lttng.org/files/urcu/userspace-rcu-0.12.1.tar.bz2.sha256
-+sha256  bbfaead0345642b97e0de90f889dfbab4b2643a6a5e5c6bb59cd0d26fc0bcd0e  userspace-rcu-0.12.1.tar.bz2
+diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+index 85e1acc261..62a65897f4 100644
+--- a/package/lttng-libust/lttng-libust.hash
++++ b/package/lttng-libust/lttng-libust.hash
+@@ -1,5 +1,5 @@
+-# From https://lttng.org/files/lttng-ust/lttng-ust-2.11.0.tar.bz2.sha256
+-sha256 683280cfe5e12021e64c32cef9eeb0128f1f23dec32ba28adb5a2074be37c4d8  lttng-ust-2.11.0.tar.bz2
++# From https://lttng.org/files/lttng-ust/lttng-ust-2.12.0.tar.bz2.sha256
++sha256  1983edb525f3f27e3494088d8d5389b4c71af66bbfe63c6f1df2ad95aa44a528  lttng-ust-2.12.0.tar.bz2
  
- # Hash for license files
--sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
--sha256 8ef8121eddd2fc0779d94331a1d0f1ead9c796343d845e564cd8c8c4ae3d6f6e  lgpl-relicensing.txt
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
--sha256 e8c070cb093be4b2eaf938a5f1c11621163b2d9cfa2790460cf925d81e442fa7  LICENSE
-+sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
-+sha256  8ef8121eddd2fc0779d94331a1d0f1ead9c796343d845e564cd8c8c4ae3d6f6e  lgpl-relicensing.txt
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  gpl-2.0.txt
-+sha256  e8c070cb093be4b2eaf938a5f1c11621163b2d9cfa2790460cf925d81e442fa7  LICENSE
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index 217e90a1b1..fa2ad0de83 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -4,7 +4,7 @@
- #
+ # Hash for license file
+-sha256 74125a84c2166300776980166e29de40d5f98d1a75e487f0bbc0c03b4cd2342e  COPYING
++sha256  74125a84c2166300776980166e29de40d5f98d1a75e487f0bbc0c03b4cd2342e  COPYING
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 0c2fdb57ef..8e6537690b 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBURCU_VERSION = 0.11.1
-+LIBURCU_VERSION = 0.12.1
- LIBURCU_SITE = http://lttng.org/files/urcu
- LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
+ LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+-LTTNG_LIBUST_VERSION = 2.11.0
++LTTNG_LIBUST_VERSION = 2.12.0
+ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
 -- 
 2.27.0
