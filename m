@@ -1,199 +1,303 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Sat, 27 Jun 2020 13:44:03 +0200
-Subject: [Buildroot] [PATCH 3/3] package/python-scipy: new package
-In-Reply-To: <20200627114403.25017-1-guillaume.bressaix@gmail.com>
-References: <20200627114403.25017-1-guillaume.bressaix@gmail.com>
-Message-ID: <20200627114403.25017-3-guillaume.bressaix@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Jun 2020 14:14:45 +0200
+Subject: [Buildroot] Fwd: [PATCH v2 01/14] package/systemd: configure
+ nss plugins in nsswitch.conf
+In-Reply-To: <CADYdroN1mjpXYfYN+rxE21S6+tiMGqK53xWVn1bqS_XS6Uwp9A@mail.gmail.com>
+References: <20200615072055.2083-1-nolange79@gmail.com>
+ <20200615072055.2083-2-nolange79@gmail.com>
+ <20200615114825.GZ2346@scaer>
+ <CADYdroNsfJ1dvjzRyoG6vEamVdNbDqhBtv9qrGXUm-jqSysakw@mail.gmail.com>
+ <20200615165410.GB2346@scaer>
+ <CADYdroPsOpAcuBAmNe1H=N2of1PAZSBjq4=TyO+6hdFniNorTA@mail.gmail.com>
+ <CADYdroN1mjpXYfYN+rxE21S6+tiMGqK53xWVn1bqS_XS6Uwp9A@mail.gmail.com>
+Message-ID: <20200627121445.GA20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Norbert, All,
 
-Scipy is a powerful python library built on top
-of Numpy, for statictics, equations solving &
-system optimization.
+On 2020-06-26 00:27 +0200, Norbert Lange spake thusly:
+> Seems I missed the reply all,
+> would like to know if I can add something like this in *systemd.mk*,
+> or if this is against buildroots policy:
+> 
+> GLIBC_NSS_PLUGIN_RESOLVE = resolve
 
-depends on BR2_TOOLCHAIN_HAS_FORTRAN:
-unlike python-numpy, this is not an option.
-Unfortunately we also must pass
-'F90=$(TARGET_FC)' to configure step, for gfortran
-to be known (see down below for precise error messages).
-python-numpy disregards BR2_TOOLCHAIN_HAS_FORTRAN,
-I can confirm scipy does not require numpy
-to be compiled using gfortran to work properly.
+No, this is not acceptable. Packages must not mess with other packages.
 
-depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS:
-I followed what is done in python-matplolib
-for this topic, I should be close what you expect.
+As I already explained, tweaking the nsswitch,conf file *must* be done
+as target-finalize hooks, like is already used in systemd to generate
+the hwdb for example.
 
-select BR2_PACKAGE_CLAPACK + OPENBLAS
-Unlike python-numpy, these libraries
-are not an option.
+Additionally, if you really want to have the factory nsswitch.conf to be
+up-to-date with the one in ./etc, then copy if from the one in /etc
+after it has been tweaked.
 
-PYTHON_SCIPY_DEPENDENCIES: current ordering
-will have numpy use clapack & openblas,
-but I can confirm it does not matter to have
-numpy use these libraries for scipy to work fine.
+Regards,
+Yann E. MORIN.
 
-PYTHON_SCIPY_DEPENDENCIES += clapack & openblas
-is not enough. In this setup, 'configure'
-fails when searching for those packages.
-See down below for exact error message.
-The only way I found to pass this step
-is to customize the 'site.cfg' file, like it
-is done in python-numpy.mk for instance.
+> Norbert
+> 
+> ---------- Forwarded message ---------
+> Von: Norbert Lange <nolange79@gmail.com>
+> Date: Mo., 15. Juni 2020 um 20:12 Uhr
+> Subject: Re: [PATCH v2 01/14] package/systemd: configure nss plugins
+> in nsswitch.conf
+> To: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> 
+> Am Mo., 15. Juni 2020 um 18:54 Uhr schrieb Yann E. MORIN
+> <yann.morin.1998@free.fr>:
+> >
+> > Norbert, All,
+> >
+> > On 2020-06-15 14:14 +0200, Norbert Lange spake thusly:
+> > > Am Mo., 15. Juni 2020 um 13:48 Uhr schrieb Yann E. MORIN
+> > > <yann.morin.1998@free.fr>:
+> > > >
+> > > > Norbert, All,
+> > > >
+> > > > On 2020-06-15 09:20 +0200, Norbert Lange spake thusly:
+> > > > > This adds configuration of the nsswitch.conf file,
+> > > > > it does so by pathing the template provided by systemd.
+> > > > >
+> > > > > The template is fully populated, the services that are
+> > > > > not available are removed.
+> > > > >
+> > > > > If the plugin nss-compat is not available, the entries
+> > > > > will be replaced with nss-files.
+> > > >
+> > > > systemd is glibc-only, and libnss_compat.so* is provided by glibc. What
+> > > > glibc does not provide it?
+> > > see: toolchain/toolchain-external/pkg-toolchain-external.mk
+> > > you only copy over ibnss_files there.
+> >
+> > Aha. But then I think this is more an oversight than a deliberate
+> > filtering. In my opinion, the list should include libnss_*.so.*.
+> >
+> > > > > nss-systemd is used for the DynamicUser features,
+> > > > > which is a defacto necessity for systemd.
+> > > > > It handles transient users/groups without
+> > > > > touching the /etc/{passwd,group} files on disk.
+> > > > >
+> > > > > nss-myhostname allows resolving the hostname,
+> > > > > again without touching files in /etc.
+> > > > > Enabling this feature requires configuring the plugin.
+> > > > >
+> > > > > nss-resolve is part of resolved, and required for
+> > > > > consistent dns lookups.
+> > > > >
+> > > > > nss-mymachines adds name resolution from
+> > > > > containers.
+> > > > >
+> > > > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > > > > ---
+> > > > >  package/systemd/systemd.mk | 16 ++++++++++++++++
+> > > > >  1 file changed, 16 insertions(+)
+> > > > >
+> > > > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > > > > index e61cec80f0..cf6c0f9576 100644
+> > > > > --- a/package/systemd/systemd.mk
+> > > > > +++ b/package/systemd/systemd.mk
+> > > > > @@ -472,7 +472,23 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+> > > > >       touch $(TARGET_DIR)/etc/machine-id
+> > > > >  endef
+> > > > >
+> > > > > +define SYSTEMD_NSSCONFIG_HOOK
+> > > > > +     [ -r "$$(find $(TARGET_DIR)/usr/lib -name libnss_compat.so.*)" ] || \
+> > > >
+> > > > As said above, this is supposed to always exist in a glibc-based
+> > > > toolchain, which is all that systemd supports, so I don;t see why we
+> > > > would want to replace the 'compat' plugin by the 'files' one.
+> > >
+> > > Well, until now, buildroot did use nothing but 'files'. I am not
+> > > against changing that,
+> > > but I dont complain about having the choice.
+> > > the 'compat' plugin doesn't add anything I care about, if it adds IPC
+> > > then I would
+> > > actually prefer not using it.
+> >
+> > So I had a look at the nsswitch.conf man page, and the 'compat' plugin
+> > is described as:
+> >
+> >     The NSS "compat" service is similar to "files" except that it
+> >     additionally permits special entries in corresponding files for
+> >     granting users or members of netgroups access to the system.
+> >
+> > So, in the context of Buildroot, we can just plain replace 'compat' with
+> > 'files' uncondtionally.
+> >
+> > > > > +             sed 's,\bcompat\b,files,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
+> > > >
+> > > > We already have a variable that does 'sed -i' :
+> > > >
+> > > >     $(SED) 's,\bcompat\b,files,g' $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
+> > > >
+> > > > > +     [ "$(BR2_PACKAGE_SYSTEMD_RESOLVED)" = "y" ] || \
+> > > >
+> > > > Usually, we do not test configuration-level conditions in shell, but in
+> > > > Makefile:
+> > > >
+> > > >     ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+> > > >     define SYSTEMD_NSSWITCH_CONF_RESOLVED
+> > > >         sed blablabla...
+> > > >     endef
+> > > >     SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_NSSWITCH_CONF_RESOLVED   # See below, point 3...
+> > > >     endif
+> > > That's overly fragmented IHMO,
+> >
+> > ... but much more in line with how we do it elsewhere.
+> >
+> > > I thought about $(if $(BR2_PACKAGE_SYSTEMD_RESOLVED),sed blahblah),
+> > > that would need replacing of the commas.
+> >
+> > Alternatively, that could be used, yes, but I still prefer the one-hook
+> > per option, even if it is still fragmented.
+> >
+> > But the conditional options already exist elsewhere in the file, so the
+> > corresponding conditional blocks can be re-used and extended. For example,
+> > there is already a conditional block for BR2_PACKAGE_SYSTEMD_RESOLVED:
+> >
+> >     https://git.buildroot.org/buildroot/tree/package/systemd/systemd.mk#n394
+> >
+> >      ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
+> >      define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+> >          ln -sf ../run/systemd/resolve/resolv.conf \
+> >              $(TARGET_DIR)/etc/resolv.conf
+> >      endef
+> >      SYSTEMD_CONF_OPTS += -Dnss-resolve=true -Dresolve=true
+> >      SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - systemd Resolver
+> >     +define SYSTEMD_NSSWITCH_CONF_RESOLVED
+> >     +    sed blablabla...
+> >     +endef
+> >     +SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_NSSWITCH_CONF_RESOLVED
+> >      else
+> >      SYSTEMD_CONF_OPTS += -Dnss-resolve=false -Dresolve=false
+> >      endif
+> >
+> > > > > +             sed -e 's,\bresolve[[:space:]][[:space:]]*\[[^]]*\][[:space:]]*,,g' \
+> > > >
+> > > > "[[:space:]][:space:]]*" is equivalent to "[[:space:]]+".
+> > > >
+> > > > > +             -e 's,\bresolve\b[[:space:]]*,,g' -i $(TARGET_DIR)/usr/share/factory/etc/nsswitch.conf
+> > > >
+> > > > As I understand it, you are trying to remove the 'resolve' plugin,
+> > > > whether it has a follwing "[action]" or not, right? If so, here's my
+> > > > proposal of a simpler regexp that cactches both cases:
+> > > >
+> > > >     's,\bresolve[[:space:]]+(\[[^]]+\])?[[:space:]],,g'
+> > > I suppose $(SED) enables extended regex?
+> >
+> > Unfortunately, it does not (so it matches your usage):
+> >
+> >     https://git.buildroot.org/buildroot/tree/Makefile#n313
+> >
+> > Hmm... But see below, using $(SED) might not be a good idea.
+> 
+> The "below" seems missing, dont see where this is picked up again.
+> 
+> >
+> > [--SNIP--]
+> > > >  1. /etc/nsswitch.conf is already provided by the glibc package, so
+> > > >     overwriting it will not play nicely with per-package directories,
+> > > using a separate default for systemd might make sense in the glibc package?
+> > > what about your arguments about 'compat' vs 'files' here?
+> >
+> > Moot now: switch to using 'files' unconditionally.
+> >
+> > > At any rate, the file in /usr/share/factory/etc/nsswitch.conf should
+> > > prolly be kept in sync or removed.
+> >
+> > Not sure I understand that one...
+> 
+> The files should be identical on the rootfs, or just
+> /etc/nsswitch.conf should remain.
+> 
+> >
+> > > >  2. we already have other packages that may tweak that file, like:
+> > > >     package/nss-mdns/nss-mdns.mk
+> > > >     package/nss-myhostname/nss-myhostname.mk
+> > > >
+> > > >  3. which brings us to the point that this file should be tweaked as a
+> > > >     target-finalize hook
+> > >
+> > > kinda like this ?:
+> > > https://github.com/nolange/buildroot/commit/237eebe9c29c3b8ab68d3abead52e1b7b08e1649
+> >
+> > I still think it should be made to be target-finalize hooks, one for
+> > each option.
+> >
+> > Also, I don;t get why you want to use the one in factory, rather than
+> > tweak the existing /etc/nsswitch.conf that has already been installed,
+> > like the other nss plugins do.
+> 
+> I did not know about other nss plugins, I blindly assumed buildroot consequently
+> ignored nsswitch.conf.
+> I use the one in the factory to use a known template, instead potentially
+> messing up after multiple target installs (I know, not official supported,
+> but I bet its common to dir-clean a package and make again).
+> 
+> >
+> > And then, at the end. copy the one from /etc/nsswitch.conf over to the
+> > one in factory. That last one is a bit more tricky to come up with
+> > correctly, as this must be done after all nss plugins have had a chance
+> > to tweak nsswitch.conf. So I guess we should extend SYSTEMD_ROOTFS_PRE_CMD_HOOKS
+> > with a new hook that copies /etc/nsswitch.conf over to the factory.
+> 
+> I brought this up before, what about adding a full featured
+> /etc/nsswitch.conf in
+> either glibc or one of the skeletons?
+> 
+> Or even crazier, add one with placeholders for *all* packages in buildroot
+> in package glibc, and packages wanting to hook
+> a nss plugin would set a variable, in the form:
+> 
+> # (this is in systemd.mk, hope a variable with GLIBC prefix is allowed?)
+> GLIBC_NSS_PLUGIN_RESOLVE = resolve
+> 
+> # this is in glibc.mk
+> define GLIBC_INSTALL_NSSWITCH_HOOK
+>   sed $(SYSTEMD_PKGDIR)/nsswitch.tmp > $(TARGET_DIR)/etc/nsswitch.conf \
+>     -e 's, at resolve@,$(GLIBC_NSS_PLUGIN_RESOLVE),g'
+>     ......
+> endef
+> GLIBC_TARGET_FINALIZE_HOOKS += GLIBC_INSTALL_NSSWITCH_HOOK
+> 
+> I'd work out the details, so tell me if that's a viable solution.
+> The advantages would be that you can have a consistent order of nss
+> plugins in the template,
+> and that the file is generated at one place, instead in a potentially
+> changing order of
+> sed's
+> 
+> The downside of course would be that this place would need to know
+> about all nss plugins,
+> but if you want to hook up a new plugin you should need to think about
+> the correct order
+> relative to all other plugins.
+> 
+> 
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > Note that I am missing the line for mymachines, my sed-foo is too weak
+> > > to add that at the correct position.
+> 
+> Case in point.
+> 
+> (I hope its not this line you meant with "using $(SED) might not be a
+> good idea")
+> 
+> Norbert
 
-Technicallly, host-python-cython is also a requirement
-(see setup.py). But it is in host-python-numpy
-list of requirement. Therefore
-!! I did not put it in PYTHON_SCIPY_DEPENDECIES !!
-please correct me on this
-
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-
----
-
-All my tests were made using the current
-raspberrypi3 & raspberrypi0w defconfig environments.
-
-I am not able to use the ./util-test-pkg against
-a python-numpy requirement, maybe I'm missing something here,
-i would have liked to test this against several glibc/musl toolchains.
-
-This is what we get if F90=$(TARGET_FC) is not passed
-to configure: build fails half way through, even though
-gfortran does exists, it's not able to find it:
-
-building 'mach' library
-error: library mach has Fortran sources but no Fortran compiler found
-
-This is what we get if we remove the 'site.cfg' customization,
-that is, even though clapack & blas have already been installed,
-setup.py is not able to locate them.
-
-numpy.distutils.system_info.NotFoundError: No lapack/blas resources found.
-
-This is the linker error message we get if we remove
-the extra linker flag pointing to numpy staging dir:
-
-[..]/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/8.4.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld:
-[..]/buildroot/output/host/lib/python3.8/site-packages/numpy/core/lib/libnpymath.a: error
-adding symbols: file format not recognized
-collect2: error: ld returned 1 exit status
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-scipy/Config.in         | 24 ++++++++++++++++++++
- package/python-scipy/python-scipy.hash |  4 ++++
- package/python-scipy/python-scipy.mk   | 31 ++++++++++++++++++++++++++
- 5 files changed, 61 insertions(+)
- create mode 100644 package/python-scipy/Config.in
- create mode 100644 package/python-scipy/python-scipy.hash
- create mode 100644 package/python-scipy/python-scipy.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4b6a346a05..c26cb813e5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1058,6 +1058,7 @@ F:	package/libnids/
- F:	package/liquid-dsp/
- F:	package/pixiewps/
- F:	package/python-pybind/
-+F:	package/python-scipy/
- F:	package/reaver/
- 
- N:	Guo Ren <ren_guo@c-sky.com>
-diff --git a/package/Config.in b/package/Config.in
-index 6a34a895af..1bb2876867 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1134,6 +1134,7 @@ menu "External python modules"
- 	source "package/python-scandir/Config.in"
- 	source "package/python-scapy/Config.in"
- 	source "package/python-schedule/Config.in"
-+	source "package/python-scipy/Config.in"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
- 	source "package/python-see/Config.in"
-diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
-new file mode 100644
-index 0000000000..a9d9fa181e
---- /dev/null
-+++ b/package/python-scipy/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_PYTHON_SCIPY
-+	bool "python-scipy"
-+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # build
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-+	select BR2_PACKAGE_OPENBLAS # build
-+	select BR2_PACKAGE_CLAPACK # build
-+	select BR2_PACKAGE_PYTHON_NUMPY # runtime
-+	help
-+	  Scipy is a Python package that includes modules for
-+	  statistics, optimization, linear algebra and much
-+	  more.
-+
-+	  http://www.scipy.org/
-+
-+comment "python-scipy needs toolchain with fortran"
-+	  depends on !BR2_TOOLCHAIN_HAS_FORTRAN
-+
-+comment "python-scipy needs lib openblas"
-+	  depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
-+
-+comment "python-scipy needs python-numpy"
-+	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-new file mode 100644
-index 0000000000..22075fb85e
---- /dev/null
-+++ b/package/python-scipy/python-scipy.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256 fd8c7b907c3fc4df1830cdce1608057248deb30afa34ac4f8f31c3784b3e4e53  v1.4.1.tar.gz
-+# License files, locally calculated
-+sha256 0615c3b553439d39155885fedd7078a923974e84330f8d5d7660074e7c8826a3  LICENSE.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-new file mode 100644
-index 0000000000..46de1993a8
---- /dev/null
-+++ b/package/python-scipy/python-scipy.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# python-scipy
-+#
-+################################################################################
-+
-+PYTHON_SCIPY_VERSION = 1.4.1
-+PYTHON_SCIPY_SOURCE = v$(PYTHON_SCIPY_VERSION).tar.gz
-+PYTHON_SCIPY_SITE = https://github.com/scipy/scipy/archive
-+PYTHON_SCIPY_LICENSE = BSD-3-Clause
-+PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
-+			doc/scipy-sphinx-theme/LICENSE.txt
-+PYTHON_SCIPY_SETUP_TYPE = setuptools
-+PYTHON_SCIPY_DEPENDENCIES = clapack openblas host-python-numpy \
-+			host-python-pip host-python-pybind
-+
-+PYTHON_SCIPY_ENV += LDFLAGS="$(TARGET_LDFLAGS) -shared \
-+			-L$(PYTHON3_PATH)/site-packages/numpy/core/lib"
-+
-+# must be used to locate 'gfortran'
-+PYTHON_SCIPY_ENV += F90="$(TARGET_FC)"
-+
-+# trick to locate 'lapack' and 'blas'
-+define PYTHON_SCIPY_CONFIGURE_CMDS
-+	rm -f $(@D)/site.cfg
-+	echo "[DEFAULT]" >> $(@D)/site.cfg
-+	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
-+	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
-+endef
-+
-+$(eval $(python-package))
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
