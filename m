@@ -1,122 +1,145 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Sat, 27 Jun 2020 19:41:16 +0200
-Subject: [Buildroot] [PATCH] package/swupdate: bump version to 2020.04
-Message-ID: <20200627174116.130018-1-offougajoris@gmail.com>
+From: Vladimir Oltean <olteanv@gmail.com>
+Date: Sat, 27 Jun 2020 21:51:39 +0300
+Subject: [Buildroot] [PATCH 1/1] package/linuxptp: remove hardcoded
+ interface from config to args
+In-Reply-To: <89e579fc7a07bf8d78b8c70568e08ffa@walle.cc>
+References: <20200520051647.18530-1-heiko.thiery@gmail.com>
+ <20200521153619.5466d4e6@windsurf.home>
+ <244d4bb9817b608fa5f994a05c8c70c5@walle.cc>
+ <CAEyMn7bo79XgZ9UkM8_BKMqDovs=eiDUa8c+A4StYnt2+zq92w@mail.gmail.com>
+ <CAEyMn7b+6qyGd9xtJz3qp8HKB0Pv_83R9GQzCyg4g8kRv2gcKA@mail.gmail.com>
+ <CA+h21hoGiGWg6O+yO93AcPhJ=zcpR62a6MntA5WRVGeX1yEpUQ@mail.gmail.com>
+ <194bafdcc96278a159a155a55104e25e@walle.cc>
+ <CA+h21ho5ie-sGZ=-SsV=WTSS1VgGKFnQfg+3es+ykJf-ziDacg@mail.gmail.com>
+ <89e579fc7a07bf8d78b8c70568e08ffa@walle.cc>
+Message-ID: <CA+h21ho_dweJUgV4jvcyy1p_Oa5d6n37S+u6KP=t4VJMquhO=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See full changelog : https://github.com/sbabic/swupdate/releases/tag/2020.04
+Hi Michael,
 
-Also:
-Drop select BR2_PACKAGE_UBOOT_TOOLS, since commit https://github.com/sbabic/swupdate/commit/82a157e35e9d01599e3c5818caa568899c17e6d2
-,swupdate only support libubootenv
+On Fri, 19 Jun 2020 at 00:20, Michael Walle <michael@walle.cc> wrote:
+>
+> Hi Vladimir,
+>
+> Am 2020-06-18 19:00, schrieb Vladimir Oltean:
+> > On Thu, 18 Jun 2020 at 19:09, Michael Walle <michael@walle.cc> wrote:
+> >>
+> >> Am 2020-06-16 21:07, schrieb Vladimir Oltean:
+> [..]
+> >> > I've thought many times about changing the default ptp4l config file
+> >> > shipped by buildroot (due to that inconvenient eth0), but at the end
+> >> > of the day, buildroot is meant to be customized for each and every
+> >> > embedded target (which makes the comparison to debian not so
+> >> > relevant). So providing a default config doesn't make a lot of sense
+> >> > in the first place, except for those users who have never used it
+> >> > before, and have no idea where to start.
+> >>
+> >> _BUT_ a customized config file which fits one board doesn't make
+> >> sense either.
+> >
+> > For that board, sure it makes sense. For the rest, not so much.
+>
+> Then this config should go into the board specific fs overlay.
+>
+> >> So buildroot should really stick to the default ones
+> >> provided by the upstream. Like every other distro does. Esp if it
+> >> "just works".
+> >>
+> >
+> > And it does. To my knowledge, linuxptp.cfg from buildroot is
+> > default.cfg from upstream, just with this extra [eth0] at the end.
+>
+> It is not even close:
+> https://github.com/buildroot/buildroot/blob/master/package/linuxptp/linuxptp.cfg
+> https://github.com/openil/linuxptp/blob/master/configs/default.cfg
+>
+> >> > But apart from that, as you
+> >> > said, interface names are going to differ, and let me add another one:
+> >> > PTP profiles are going to differ (automotive, AVB, telecom, etc):
+> >> > https://github.com/richardcochran/linuxptp/tree/master/configs
+> >> > So what do you do, ship them all? That's a little bit _not_ in the
+> >> > spirit of buildroot where you are only supposed to install what the
+> >> > end appliance will use.
+> >> > So I guess I'm back to Thomas's question: what do you win if you move
+> >> > "eth0" from /etc/linuxptp.cfg to /etc/defaults/ptp4l?
+> >>
+> >> Having an empty [<interface>] section in linuxptp.cfg is strange.
+> >
+> > Why is it strange to have no interfaces defined in linuxptp.cfg?
+> > That's how upstream configurations are shipped.
+>
+> I mean an empty [eth0] section, which is the equivalent of having
+> the "-i" command line option.
+>
+> >> Why
+> >> are there the "-i" options for the binary? Because you can then have
+> >> one config which can be used for multiple instances on different
+> >> interfaces.
+> >>
+> >
+> > Yes.
+> >
+> >> > The default
+> >> > configuration will remain just as useless for somebody who needs to
+> >> > customize ptp4l for a particular set of ports and PTP profile.
+> >>
+> >> Right, but as a starting point it is sufficient.
+> >>
+> >
+> > And what do you gain if you move that "eth0" to just some other file?
+>
+> the default.cfg contains all variables which can changed by the user, so
+> you won't need to look at the manual page to figure out the different
+> options. the buildroot one, doesn't; I don't know who and why choose
+> these options.
+>
+> > Isn't the current starting point just as sufficient?
+>
+> No, its a board specific configuration, ie. slave-only enabled etc.
+>
+> I give you another example: lets say I want to provide sensible defaults
+> to my board supported in buildroot. As you already pointed out, it is
+> intended behavior to change the configuration for a final board config.
+> But the board in buildroot should also contain a good template. So right
+> now, I'd have to make an own copy of the and put it into the overlay.
+> Which means duplicating the configuration, even worse, I'd have to
+> track upstream default config. Instead, a package could copy the default
+> config from the tarball/git repository. This doesn't only apply to
+> linuxptp, but IMHO for all packages which provide a sane upstream
+> default config.
+>
+> If I would put port 2222 into dropbear config installed by buildroot,
+> I doubt anyone would argue in favor of that.
+>
+> To go a bit further, I'd like to see that the manual suggests that
+> any package should install the upstream default config (if there
+> is a _sensible_ one). Even if that is just because there will never
+> be an agreement on what the config installed by buildroot should look
+> like.
+>
+> -michael
+>
+> >> > The furthest I got was to have some advanced Kconfig-based system
+> >> > where you could specify in the defconfig which profile you want, and
+> >> > on which ports, and the build system would automatically make things
+> >> > happen. Sadly it was so complicated that I just tossed it away. Note
+> >> > that some hardware also needs hardware-specific settings (such as
+> >> > increasing the tx_timestamp_timeout), which makes Thomas's suggestion
+> >> > of providing rootfs overlays the only viable path in the general case.
+> >> >
+> >> > What do you think?
+> >> >
+> >> > -Vladimir
+> >
+> > Thanks,
+> > -Vladimir
 
-Regenarated the default .config
+I agree it would make more sense for buildroot to ship default.cfg or
+something equivalent to it (no configuration file).
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
----
- package/swupdate/Config.in       | 4 +---
- package/swupdate/swupdate.config | 4 +++-
- package/swupdate/swupdate.hash   | 2 +-
- package/swupdate/swupdate.mk     | 9 +++------
- 4 files changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index c0081032b6..e87f695861 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -32,14 +32,12 @@ config BR2_PACKAGE_SWUPDATE
- 	    compressed archives.
- 	  * Select BR2_PACKAGE_ZSTD if you want to deal with zstd
- 	    compressed archives.
--	  * Select BR2_PACKAGE_UBOOT_TOOLS and BR2_PACKAGE_ZLIB to add
--	    support for setting the U-Boot environment.
- 	  * Select BR2_PACKAGE_ZEROMQ to add support for using a
- 	    remote handler.
- 	  * Select BR2_PACKAGE_LIBRSYNC to add support for using
- 	    rdiff handler.
- 	  * Select BR2_PACKAGE_LIBUBOOTENV to add support for setting
--	    the U-Boot environment with the new API.
-+	    the U-Boot environment.
- 	  * Select BR2_PACKAGE_LIBGPIOD to add support for
- 	    microcontroller firmware update.
- 	  * Select BR2_PACKAGE_EFIBOOTMGR to add support for EFI Boot
-diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
-index 9d255c8ee4..a6b7a74948 100644
---- a/package/swupdate/swupdate.config
-+++ b/package/swupdate/swupdate.config
-@@ -14,6 +14,7 @@ CONFIG_HAVE_DOT_CONFIG=y
- # CONFIG_CURL is not set
- # CONFIG_CURL_SSL is not set
- # CONFIG_SYSTEMD is not set
-+CONFIG_DEFAULT_CONFIG_FILE="/etc/swupdate.cfg"
- CONFIG_SCRIPTS=y
- # CONFIG_HW_COMPATIBILITY is not set
- CONFIG_SW_VERSIONS_FILE="/etc/sw-versions"
-@@ -82,7 +83,7 @@ CONFIG_MONGOOSE=y
- CONFIG_MONGOOSEIPV6=y
- 
- #
--# SSL support needs libcrypto, libssl
-+# SSL support needs an SSL implementation
- #
- 
- #
-@@ -103,6 +104,7 @@ CONFIG_PARSERROOT=""
- #
- # ubivol support needs libubi
- #
-+# CONFIG_DISKPART is not set
- CONFIG_RAW=y
- # CONFIG_RDIFFHANDLER is not set
- # CONFIG_SHELLSCRIPTHANDLER is not set
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 3de8d25f46..40f978d225 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  31b2561c9c91ab1e8b6f73704f9a3560816961c2cade4f5d5fc15f55c77ec819  swupdate-2019.11.tar.gz
-+sha256  132df2ff1ad41c7aabd0fbef6a23d28607cbd5cad52aab050c4822977a107486  swupdate-2020.04.tar.gz
- sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  Licenses/Exceptions
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 62bff30df1..d96a0c2e07 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2019.11
-+SWUPDATE_VERSION = 2020.04
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT
- SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
-@@ -15,7 +15,7 @@ SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
- # TARGET_CC is used for both.
- SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)"
- 
--# swupdate bundles its own version of mongoose (version 6.11)
-+# swupdate bundles its own version of mongoose (version 6.16)
- 
- ifeq ($(BR2_PACKAGE_EFIBOOTMGR),y)
- SWUPDATE_DEPENDENCIES += efibootmgr
-@@ -114,10 +114,7 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- SWUPDATE_DEPENDENCIES += systemd
- endif
- 
--ifeq ($(BR2_PACKAGE_UBOOT_TOOLS),y)
--SWUPDATE_DEPENDENCIES += uboot-tools
--SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
--else ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
-+ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
- SWUPDATE_DEPENDENCIES += libubootenv
- SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
- else
--- 
-2.25.1
+Thanks,
+-Vladimir
