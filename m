@@ -1,36 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 27 Jun 2020 16:49:06 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2020.80
-In-Reply-To: <20200627045016.335661-1-francois.perrad@gadz.org>
-References: <20200627045016.335661-1-francois.perrad@gadz.org>
-Message-ID: <20200627164906.4f48ad8f@windsurf>
+Date: Sat, 27 Jun 2020 17:12:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: Fix FTBFS with gcc10
+In-Reply-To: <20200627114314.2391692-1-bernd.kuhls@t-online.de>
+References: <20200627114314.2391692-1-bernd.kuhls@t-online.de>
+Message-ID: <20200627171227.1ed12967@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 27 Jun 2020 06:50:16 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Sat, 27 Jun 2020 13:43:14 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> remove merged patches.
-> 
-> LICENSE diff:
-> - Copyright (c) 2002-2015 Matt Johnston
-> + Copyright (c) 2002-2020 Matt Johnston
-> - LibTomCrypt and LibTomMath are written by Tom St Denis, and are Public Domain.
-> + LibTomCrypt and LibTomMath are written by Tom St Denis and others, see
-> + libtomcrypt/LICENSE and libtommath/LICENSE.
-> 
-> and now, handles legal-info when LibTomMath & LibTomCrypt and bundled.
+> Bug was reported upstream:
+> https://sourceforge.net/p/minidlna/patches/182/
 
-Thanks! Could you split the license information fix (for the "small"
-configuration) from the version bump in two separate patches ? Indeed
-the license information fix is really a fix that already applies to the
-currently packaged Dropbear version, and we will want to backport this
-to our LTS version.
-
-Thanks!
+This bug doesn't seem at all to match this gcc10 build issue. Am I
+missing something?
 
 Thomas
 -- 
