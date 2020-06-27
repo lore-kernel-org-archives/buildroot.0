@@ -1,73 +1,57 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 27 Jun 2020 21:32:11 +0200
-Subject: [Buildroot] [PATCH 4/4] package/lttng-{libust,
- tools}: use proper systemd rundir
-In-Reply-To: <20200627164657.6847d67e@windsurf>
-References: <20200626220603.29561-1-nolange79@gmail.com>
- <20200626220603.29561-4-nolange79@gmail.com>
- <20200627164657.6847d67e@windsurf>
-Message-ID: <CADYdroNsRHXbPe88YReyMvW0qoqH=XrmuySGWsX+58=w6JC4Mw@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 27 Jun 2020 23:35:30 +0200
+Subject: [Buildroot] Cannot build glibc for ARM with GCC10
+In-Reply-To: <CAGm1_ku8d5Gy5haB5CQow=kntoyboQ5SZBmYUp51kpggjxKZng@mail.gmail.com>
+References: <CAGm1_kti3EuVpDUMKcuHfLfpKoRhBwKbzxte9NncjNgmpn7qyg@mail.gmail.com>
+ <20200627164322.79ff2cad@windsurf>
+ <CAGm1_ku8d5Gy5haB5CQow=kntoyboQ5SZBmYUp51kpggjxKZng@mail.gmail.com>
+Message-ID: <2d032ef9-149c-29f2-5311-e21af074fcdd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am Sa., 27. Juni
-2020, 16:46:
+Hi, Yegor, Thomas,
 
-> On Sat, 27 Jun 2020 00:06:02 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > Set the rundir to /run/lttng, if systemd is the init system.
-> > /var/run is "legacy" in systemd's view.
-> >
-> > Perhaps a better way would be to define a variable
-> > BR2_PACKAGE_RUNDIR to /var/run or /run depending on ini system.
-> > (systemd will for example issue warnings for the dbus service,
-> > using a socket in /var/run)
->
-> I've dropped this paragraph, since it doesn't really belong in the
-> commit message itself.
->
-> Is there a reason to still use /var/run in non-systemd systems ?
->
+Le 27/06/2020 ? 19:18, Yegor Yefremov a ?crit?:
+> Hi Thomas,
+> 
+> On Sat, Jun 27, 2020 at 4:43 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> On Fri, 26 Jun 2020 18:51:57 +0200
+>> Yegor Yefremov <yegorslists@googlemail.com> wrote:
+>>
+>>> I just wanted to test GCC10 with glibc and encountered the following error:
+>>
+>> Did you try with the updated glibc version, provided by the following
+>> patch series:
+>>
+>> https://patchwork.ozlabs.org/project/buildroot/list/?series=182049
+> 
+> The patch series has solved my problem.
 
-Not that i know of, it is still the default in packages, but I believe this
-it paranoid compatibility for ancient systems. Not something you should
-care about on new ones.
+Indeed, glibc 2.30 doesn't contain fixes for gcc 10, only glibc 2.31 build with
+gcc 10.
 
->
-> >  ifeq ($(BR2_PACKAGE_PYTHON),y)
-> >  LTTNG_LIBUST_DEPENDENCIES += python
-> >  LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
-> > diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/
-> lttng-tools.mk
-> > index b1b0a24a4f..0f3dc84ebd 100644
-> > --- a/package/lttng-tools/lttng-tools.mk
-> > +++ b/package/lttng-tools/lttng-tools.mk
-> > @@ -13,6 +13,10 @@ LTTNG_TOOLS_LICENSE_FILES = LICENSE $(addprefix
-> LICENSES/,BSD-2-Clause BSD-3-Cla
-> >  LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
-> >  LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
-> >
-> > +ifeq ($(BR2_INIT_SYSTEMD),y)
-> > +LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
->
-> You're using LTTNG_LIBUST_CONF_OPTS, but it should have been
-> LTTNG_TOOLS_CONF_OPTS.
->
-> I fixed that when applying. Thanks!
->
-Ok, thanks
+We are up-to-date on the glibc 2.30 stable branch, so even glibc upstream didn't
+backported gcc 10 fixes.
 
+I currently backported 6 patches from glibc 2.31 to start fixing the build but
+glibc still doesn't build. I'm not sure it's worth the effort... I would suggest
+to disable glibc 2.30 with gcc 10.
 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200627/f1f3c3f8/attachment.html>
+Best regards,
+Romain
+
+> 
+> Thanks.
+> 
+> Regards,
+> Yegor
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
