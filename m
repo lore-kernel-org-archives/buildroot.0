@@ -1,48 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Jun 2020 21:26:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: Fix FTBFS with gcc10
-In-Reply-To: <8e4ksgxalv.ln2@ID-313208.user.individual.net>
-References: <20200627114314.2391692-1-bernd.kuhls@t-online.de>
- <20200627171227.1ed12967@windsurf>
- <8e4ksgxalv.ln2@ID-313208.user.individual.net>
-Message-ID: <20200627192624.GC20645@scaer>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sat, 27 Jun 2020 21:32:11 +0200
+Subject: [Buildroot] [PATCH 4/4] package/lttng-{libust,
+ tools}: use proper systemd rundir
+In-Reply-To: <20200627164657.6847d67e@windsurf>
+References: <20200626220603.29561-1-nolange79@gmail.com>
+ <20200626220603.29561-4-nolange79@gmail.com>
+ <20200627164657.6847d67e@windsurf>
+Message-ID: <CADYdroNsRHXbPe88YReyMvW0qoqH=XrmuySGWsX+58=w6JC4Mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-06-27 17:15 +0200, Bernd Kuhls spake thusly:
-> Am Sat, 27 Jun 2020 17:12:27 +0200 schrieb Thomas Petazzoni:
-> > On Sat, 27 Jun 2020 13:43:14 +0200 Bernd Kuhls
-> > <bernd.kuhls@t-online.de> wrote:
-> >> Bug was reported upstream:
-> >> https://sourceforge.net/p/minidlna/patches/182/
-> > This bug doesn't seem at all to match this gcc10 build issue. Am I
-> > missing something?
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am Sa., 27. Juni
+2020, 16:46:
 
-That's because setjmp_buffer is also declared in image_utils.c, and this
-triggers the infamous gcc-10 -fno-common error.
+> On Sat, 27 Jun 2020 00:06:02 +0200
+> Norbert Lange <nolange79@gmail.com> wrote:
+>
+> > Set the rundir to /run/lttng, if systemd is the init system.
+> > /var/run is "legacy" in systemd's view.
+> >
+> > Perhaps a better way would be to define a variable
+> > BR2_PACKAGE_RUNDIR to /var/run or /run depending on ini system.
+> > (systemd will for example issue warnings for the dbus service,
+> > using a socket in /var/run)
+>
+> I've dropped this paragraph, since it doesn't really belong in the
+> commit message itself.
+>
+> Is there a reason to still use /var/run in non-systemd systems ?
+>
 
-> oops, added the wrong link, this is the right one:
-> https://sourceforge.net/p/minidlna/support-requests/70/
+Not that i know of, it is still the default in packages, but I believe this
+it paranoid compatibility for ancient systems. Not something you should
+care about on new ones.
 
-Ah, but as I see it, both the proposal in that bug repot (addign extern
-in front of one of them), or renaming the variable in metadata.c or in 
-mage_utils.c, are wrong.
+>
+> >  ifeq ($(BR2_PACKAGE_PYTHON),y)
+> >  LTTNG_LIBUST_DEPENDENCIES += python
+> >  LTTNG_LIBUST_CONF_OPTS += --enable-python-agent
+> > diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/
+> lttng-tools.mk
+> > index b1b0a24a4f..0f3dc84ebd 100644
+> > --- a/package/lttng-tools/lttng-tools.mk
+> > +++ b/package/lttng-tools/lttng-tools.mk
+> > @@ -13,6 +13,10 @@ LTTNG_TOOLS_LICENSE_FILES = LICENSE $(addprefix
+> LICENSES/,BSD-2-Clause BSD-3-Cla
+> >  LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
+> >  LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
+> >
+> > +ifeq ($(BR2_INIT_SYSTEMD),y)
+> > +LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
+>
+> You're using LTTNG_LIBUST_CONF_OPTS, but it should have been
+> LTTNG_TOOLS_CONF_OPTS.
+>
+> I fixed that when applying. Thanks!
+>
+Ok, thanks
 
-The real fix is to turn both variables as static, so their scope is
-limited to the file they are defined and use in.
 
-Care to take that with upstream (and debian), please?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200627/f1f3c3f8/attachment.html>
