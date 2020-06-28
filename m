@@ -1,108 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Jun 2020 11:13:00 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/dropbear: fix license infos
-In-Reply-To: <20200628044455.336639-2-francois.perrad@gadz.org>
-References: <20200628044455.336639-1-francois.perrad@gadz.org>
- <20200628044455.336639-2-francois.perrad@gadz.org>
-Message-ID: <20200628091300.GD20645@scaer>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sun, 28 Jun 2020 11:16:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haveged: bump to version 1.9.13
+Message-ID: <1593335819-10120-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Changes:
 
-On 2020-06-28 06:44 +0200, Francois Perrad spake thusly:
-> this package allows to use optionally bundled libraries (which is exceptional in BR).
-> so, license infos must be conditional.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ - Added support for --version
+ - Updated systemd SystemCallFilter settings
 
-Since this is a fix, it should go in before the version bump. That way,
-we can easily backport the fix to the stable branch (as Thomas already
-pointed out).
+See https://github.com/jirka-h/haveged/releases/tag/v1.9.13
 
-If you do the fix after the version bump, ten the backport is les
-trivial, because there will be merge-conflicts due to version mismatch.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/haveged/haveged.hash | 2 +-
+ package/haveged/haveged.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-There are a few other issues with it; see below. Care to address them
-and respin please?
-
-> ---
->  package/dropbear/dropbear.hash | 2 ++
->  package/dropbear/dropbear.mk   | 5 +++++
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-> index 4b22e0ddd..af69cec53 100644
-> --- a/package/dropbear/dropbear.hash
-> +++ b/package/dropbear/dropbear.hash
-> @@ -3,3 +3,5 @@ sha256  d927941b91f2da150b2033f1a88b6a47999bf0afb1493a73e9216cffdb5d7949  dropbe
->  
->  # License file, locally computed
->  sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-> +sha256  8f196cb13afd271f5e267fd29543fc454596382ad580e7592709492843996ac8  libtomcrypt/LICENSE
-> +sha256  2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  libtommath/LICENSE
-> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> index 3120943c0..d0158f022 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -7,8 +7,13 @@
->  DROPBEAR_VERSION = 2020.80
->  DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
->  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
-> +ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
-> +DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain, Unlicense, WTFPL
-> +DROPBEAR_LICENSE_FILES = LICENSE, libtommath/LICENSE, libtomcrypt/LICENSE
-
-This has not been tested: this list is not comma-separated, otherwise
-legal-info fails:
-
-    $ make dropbear-legal-info
-    ERROR: No hash found for LICENSE,
-    cp: cannot stat '/home/ymorin/dev/buildroot/O/build/dropbear-2020.79/LICENSE,': No such file or directory
-
-> +else
->  DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
->  DROPBEAR_LICENSE_FILES = LICENSE
-> +endif
-
-The way we uasually do that, is to unconditionally define the "base"
-licensing information, and conditionally append to it. And since we
-already have a condition for _SMAL, you should re-use it, like:
-
-    DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
-    DROPBEAR_LICENSE_FILES = LICENSE
-
-    [...]
-
-    ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
-    DROPBEAR_LICENSE += , Unlicense, WTFPL
-    DROPBEAR_LICENSE_FILES += libtommath/LICENSE libtomcrypt/LICENSE
-    DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
-    else
-    [...]
-    endif
-
-Regards,
-Yann E. MORIN.
-
->  DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
->  DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
->  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index 1394b04..df8c48e 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0b8642515ea7189a1772cdb8072b98a6768cf9b963faf3cd664329fd79975ffa  haveged-1.9.12.tar.gz
++sha256  d17bd22fa1745daca5ac72e014ed3b0fe5720da4c115953124b1bf2a0aa2b04b  haveged-1.9.13.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index d7b5191..924b499 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HAVEGED_VERSION = 1.9.12
++HAVEGED_VERSION = 1.9.13
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
