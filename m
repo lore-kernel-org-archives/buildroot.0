@@ -1,84 +1,91 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 28 Jun 2020 12:23:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfribidi: bump to version 1.0.9
-Message-ID: <20200628102313.268227-1-fontaine.fabrice@gmail.com>
+Date: Sun, 28 Jun 2020 12:26:47 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/bridge-utils: bump to version 1.7
+Message-ID: <20200628102647.268917-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version)
+- Update site to get latest release
+- Add a deprecated note in Config.in:
+  https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git/commit/?id=ab8a2cc330253321be7bc69dea88bfaa3d48415e
+- Drop patch, not needed since:
+  https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git/commit/?id=7b421143d1427e17380ff5bf93ef8fc718428c83
 - Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ..._level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch | 30 -------------------
- package/libfribidi/libfribidi.hash            |  4 +--
- package/libfribidi/libfribidi.mk              |  4 +--
- 3 files changed, 4 insertions(+), 34 deletions(-)
- delete mode 100644 package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch
+Changes v1 -> v2:
+ - Fix help text in Config.in
 
-diff --git a/package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch b/package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch
+ package/bridge-utils/0001-build-system.patch | 11 -----------
+ package/bridge-utils/Config.in               |  4 ++++
+ package/bridge-utils/bridge-utils.hash       |  6 ++----
+ package/bridge-utils/bridge-utils.mk         |  6 +++---
+ 4 files changed, 9 insertions(+), 18 deletions(-)
+ delete mode 100644 package/bridge-utils/0001-build-system.patch
+
+diff --git a/package/bridge-utils/0001-build-system.patch b/package/bridge-utils/0001-build-system.patch
 deleted file mode 100644
-index b78f9b2111..0000000000
---- a/package/libfribidi/0001-Truncate-isolate_level-to-FRIBIDI_BIDI_MAX_EXPLICIT_.patch
+index f44737750b..0000000000
+--- a/package/bridge-utils/0001-build-system.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From 034c6e9a1d296286305f4cfd1e0072b879f52568 Mon Sep 17 00:00:00 2001
--From: Dov Grobgeld <dov.grobgeld@gmail.com>
--Date: Thu, 24 Oct 2019 09:37:29 +0300
--Subject: [PATCH] Truncate isolate_level to FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
--
--CVE-2019-18397
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- lib/fribidi-bidi.c | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/lib/fribidi-bidi.c b/lib/fribidi-bidi.c
--index 6c84392..d384878 100644
----- a/lib/fribidi-bidi.c
--+++ b/lib/fribidi-bidi.c
--@@ -747,7 +747,9 @@ fribidi_get_par_embedding_levels_ex (
--             }
+@@ -1,11 +0,0 @@
+---- bridge-utils-0.9.6/libbridge/Makefile.in.dist	2004-03-01 20:55:52.000000000 -0600
+-+++ bridge-utils-0.9.6/libbridge/Makefile.in	2004-03-01 20:56:23.000000000 -0600
+-@@ -5,7 +5,7 @@
+- RANLIB=@RANLIB@
 - 
-- 	  RL_LEVEL (pp) = level;
---          RL_ISOLATE_LEVEL (pp) = isolate_level++;
--+          RL_ISOLATE_LEVEL (pp) = isolate_level;
--+          if (isolate_level < FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1)
--+              isolate_level++;
--           base_level_per_iso_level[isolate_level] = new_level;
+- CC=@CC@
+--CFLAGS = -Wall -g $(KERNEL_HEADERS)
+-+CFLAGS = -Wall -g @CFLAGS@ $(KERNEL_HEADERS)
 - 
-- 	  if (!FRIBIDI_IS_NEUTRAL (override))
---- 
--2.20.1
+- prefix=@prefix@
+- exec_prefix=@exec_prefix@
+diff --git a/package/bridge-utils/Config.in b/package/bridge-utils/Config.in
+index bc614b0758..de5883f063 100644
+--- a/package/bridge-utils/Config.in
++++ b/package/bridge-utils/Config.in
+@@ -4,4 +4,8 @@ config BR2_PACKAGE_BRIDGE_UTILS
+ 	  Manage ethernet bridging; a way to connect networks together
+ 	  to form a larger network.
+ 
++	  This utility is DEPRECATED. No new features will ever be
++	  added. Instead use the bridge command from the iproute2
++	  package which supports more features.
++
+ 	  https://git.kernel.org/cgit/linux/kernel/git/shemminger/bridge-utils.git/
+diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
+index 5658116f88..ccf71704b8 100644
+--- a/package/bridge-utils/bridge-utils.hash
++++ b/package/bridge-utils/bridge-utils.hash
+@@ -1,5 +1,3 @@
+-# From https://www.kernel.org/pub/linux/utils/net/bridge-utils/sha256sums.asc
+-sha256 cc67efb5d5fb8928a6569b3fade2b4042ec17da04678dab127d96b46489e26c8 bridge-utils-1.6.tar.xz
 -
-diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
-index eba767668d..9856f4eaa2 100644
---- a/package/libfribidi/libfribidi.hash
-+++ b/package/libfribidi/libfribidi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 5ab5f21e9f2fc57b4b40f8ea8f14dba78a5cc46d9cf94bc5e00a58e6886a935d  fribidi-1.0.7.tar.bz2
--sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-+sha256  c5e47ea9026fb60da1944da9888b4e0a18854a0e2410bbfe7ad90a054d36e0c7  fribidi-1.0.9.tar.xz
-+sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 0e17be6db0..6818b13425 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -4,8 +4,8 @@
+ # locally computed
+-sha256 995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  COPYING
++sha256  4b9b12f31d147320dea931f1041b8a69d84741ddb92cf35ea1f896b67da98b7c  bridge-utils-1.7.tar.gz
++sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  COPYING
+diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
+index 2519227471..9d63b3ef30 100644
+--- a/package/bridge-utils/bridge-utils.mk
++++ b/package/bridge-utils/bridge-utils.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBFRIBIDI_VERSION = 1.0.7
--LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
-+LIBFRIBIDI_VERSION = 1.0.9
-+LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
- LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
- LIBFRIBIDI_LICENSE = LGPL-2.1+
- LIBFRIBIDI_LICENSE_FILES = COPYING
+-BRIDGE_UTILS_VERSION = 1.6
+-BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
+-BRIDGE_UTILS_SOURCE = bridge-utils-1.6.tar.xz
++BRIDGE_UTILS_VERSION = 1.7
++BRIDGE_UTILS_SITE = \
++	https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git/snapshot
+ BRIDGE_UTILS_AUTORECONF = YES
+ BRIDGE_UTILS_LICENSE = GPL-2.0+
+ BRIDGE_UTILS_LICENSE_FILES = COPYING
 -- 
 2.26.2
