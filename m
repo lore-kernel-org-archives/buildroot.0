@@ -1,47 +1,39 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 28 Jun 2020 11:16:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haveged: bump to version 1.9.13
-Message-ID: <1593335819-10120-1-git-send-email-pjtexier@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 28 Jun 2020 12:01:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: drop --{en,
+ dis}able-libiptc option
+Message-ID: <20200628100122.257040-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes:
+--{en,dis}able-libiptc has been dropped since version 2.1.0 and
+https://github.com/acassen/keepalived/commit/05443e1efa3569fcd39a548c6c78b832b79bcf4e
 
- - Added support for --version
- - Updated systemd SystemCallFilter settings
+So replace it by --{en,dis}able-iptables
 
-See https://github.com/jirka-h/haveged/releases/tag/v1.9.13
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haveged/haveged.hash | 2 +-
- package/haveged/haveged.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/keepalived/keepalived.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
-index 1394b04..df8c48e 100644
---- a/package/haveged/haveged.hash
-+++ b/package/haveged/haveged.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0b8642515ea7189a1772cdb8072b98a6768cf9b963faf3cd664329fd79975ffa  haveged-1.9.12.tar.gz
-+sha256  d17bd22fa1745daca5ac72e014ed3b0fe5720da4c115953124b1bf2a0aa2b04b  haveged-1.9.13.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index d7b5191..924b499 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index f2b5206419..803d111293 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -41,9 +41,9 @@ endif
  
--HAVEGED_VERSION = 1.9.12
-+HAVEGED_VERSION = 1.9.13
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
+ ifeq ($(BR2_PACKAGE_IPTABLES),y)
+ KEEPALIVED_DEPENDENCIES += iptables
+-KEEPALIVED_CONF_OPTS += --enable-libiptc
++KEEPALIVED_CONF_OPTS += --enable-iptables
+ else
+-KEEPALIVED_CONF_OPTS += --disable-libiptc
++KEEPALIVED_CONF_OPTS += --disable-iptables
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBNFTNL),y)
 -- 
-2.7.4
+2.26.2
