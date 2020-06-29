@@ -1,31 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jun 2020 22:46:31 +0200
-Subject: [Buildroot] [PATCH 1/3] package/binutils: add version 2.34
-In-Reply-To: <20200625121302.2286527-1-romain.naour@gmail.com>
-References: <20200625121302.2286527-1-romain.naour@gmail.com>
-Message-ID: <20200629224631.2ed07bda@windsurf>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 29 Jun 2020 15:50:00 -0500
+Subject: [Buildroot] [PATCH v1 1/3] package/qemu: add spice support
+Message-ID: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 25 Jun 2020 14:13:00 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+update to add qemu spice support
 
-> From: Romain Naour <romain.naour@smile.fr>
-> 
-> Rebase existing patches.
-> 
-> Keep BR2_BINFMT_FLAT disabled for binutils 2.34 since elf2flt issue
-> is not fixed [1] [2].
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ package/qemu/Config.in | 9 +++++++++
+ package/qemu/qemu.mk   | 8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-This is really going to be a problem soon: 2.32 is the last working
-version. We need to fix that issue otherwise we'll have to drop support
-for FLAT binaries :-/
-
-Thomas
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 33d4cccd7b..3de73b69ec 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -127,6 +127,15 @@ config BR2_PACKAGE_QEMU_SDL
+ comment "SDL frontend needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 
++config BR2_PACKAGE_QEMU_SPICE
++	bool "Enable Spice frontend"
++	depends on BR2_PACKAGE_SPICE
++	help
++	  Say 'y' here to have QEMU support Spice as a (VNC-like) frontend.
++
++comment "Spice support requires spice-server"
++	depends on !BR2_PACKAGE_SPICE
++
+ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_FDT
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index cb138fd488..0b76e432e0 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -112,6 +112,13 @@ else
+ QEMU_OPTS += --disable-numa
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_SPICE),y)
++QEMU_OPTS += --enable-spice
++QEMU_DEPENDENCIES += spice
++else
++QEMU_OPTS += --disable-spice
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
+@@ -143,7 +150,6 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-linux-io-uring \
+ 			--disable-cap-ng \
+ 			--disable-docs \
+-			--disable-spice \
+ 			--disable-rbd \
+ 			--disable-libiscsi \
+ 			--disable-usb-redir \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
