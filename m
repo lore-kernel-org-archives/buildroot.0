@@ -1,97 +1,91 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 29 Jun 2020 17:17:16 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/haveged: Change service file
- to run early
-In-Reply-To: <20200629124147.v2uthqmkms5tthk5@falbala.internal.home.lespocky.de>
-References: <20200609224116.13607-1-nolange79@gmail.com>
- <20200609224116.13607-2-nolange79@gmail.com>
- <CADYdroMM5zNtnQ8J7soZo+Vnv6eSuZFVj6Bq+GyZ4UyB4xkEgg@mail.gmail.com>
- <CAFvCimVKi8eTQHnO6t0ZhcT86X74hqyM4JzQTJ_XWyxNVSFAWA@mail.gmail.com>
- <CADYdroNxW-em_kbTZ8iYOuc=6WOkoOWoDOvdCohVbfCU4T74oA@mail.gmail.com>
- <20200629093044.eurgl7qjx4xkd3vv@falbala.internal.home.lespocky.de>
- <CADYdroNwfd6XJT+TRUV+_uR6qhYDwxGRpNSTFdd-e5xNi6gEFQ@mail.gmail.com>
- <20200629124147.v2uthqmkms5tthk5@falbala.internal.home.lespocky.de>
-Message-ID: <CADYdroOmtQ8q7vKXAAxxoDQwD_OViWGk_SkJRmJtF+4yyBML4g@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 29 Jun 2020 17:30:49 +0200
+Subject: [Buildroot] [PATCH=2020.02.x] package/redis: bump version to
+ 5.0.9
+In-Reply-To: <20200629140738.7dd4749d@windsurf>
+References: <20200621213921.11923-1-peter@korsgaard.com>
+ <8cb0702e-2c5d-553b-5793-681ddc619130@railnova.eu>
+ <CAAXf6LWhoLwig3i8FNjC3OQ65h27y50cbu5ROZkBHKnnXsjSUw@mail.gmail.com>
+ <20200629140738.7dd4749d@windsurf>
+Message-ID: <b3cda0d9-b347-09ce-8b45-4ed29b500e48@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mo., 29. Juni 2020 um 14:41 Uhr schrieb Alexander Dahl <post@lespocky.de>:
->
-> Hello Norbert,
->
-> On Mon, Jun 29, 2020 at 11:55:26AM +0200, Norbert Lange wrote:
-> > Am Mo., 29. Juni 2020 um 11:30 Uhr schrieb Alexander Dahl <post@lespocky.de>:
-> > > On Mon, Jun 29, 2020 at 10:29:38AM +0200, Norbert Lange wrote:
-> > > > Haveged is not entropy, it's a substitute. I dont know how many times I
-> > > > need to point that out.
-> > >
-> > > As far as I understood the source for the entropy haveged collects is
-> > > random timing jitter from the CPU. Could you explain, why that is not
-> > > real entropy, although it passes the FIPS tests? Or point to an
-> > > explanation to learn from?
-> >
-> > This is already round 2 of the argumentation, see
-> > http://lists.busybox.net/pipermail/buildroot/2020-June/284465.html
-> >
-> > But yes. haveged is still not tapping any entropy the kernel has not available,
-> > it just blows up the low entropy available with a random number generator.
->
-> So, I read http://www.issihosts.com/haveged/history.html (again) and
-> as far as I understand it is a not a pseudo random number generator.
-> According to its own documentation
-> https://www.chronox.de/jent/doc/CPU-Jitter-NPTRNG.html#toc-Subsection-1.1
-> it is a random generator based on CPU timing jitter, measured by high
-> precision timers.  That randomness is fed to the kernel pools the same
-> way one would fed randomness from a true hwrng.  Right?
+Hello Thomas and Thomas,
 
-random generator *based* on CPU timing jitter, just like you typically
-seed a PRNG
-system time.
-Its not just entropy, you dont have any measure on how much entropy
-you get from jitter,
-especially on embedded systems or VMs where you would haveged in the
-first place.
+On 29/06/20 14:07, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 29 Jun 2020 12:51:02 +0200
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+> 
+>> Which reminds me of the fact that the package stats and associated CVE
+>> detection is currently only running on the master branch (that I know of).
+>> Which means that we are missing the CVE detection on the LTS branch.
+>> Does it take a lot of resources / Is it hard to do, enabling this on the
+>> LTS branch too (mostly the CVE part) ?
+> 
+> Running pkg-stats on other branches is really easy, I can make it
+> generate autobuild.buildroot/stats/2020.02.x.{html,json} for example.
+> 
+> However, what needs a bit more effort is to modify the e-mail
+> notification script to make use of that.
+> 
+> Note that my colleague Gr?gory is working on improving the CVE
+> infrastructure so that you can run a script on your specific Buildroot
+> version and configuration, and get the list of CVEs you are affected
+> by. I.e the same results as pkg-stats, but really tailored to your
+> Buildroot version/configuration. Hopefully Gr?gory will send the
+> patches soon.
 
->
-> > I am not up to speed with FIPS tests, but from a really really long way back
-> > it wasn't a big issue to pass most tests with the Mersenne Twister and a few
-> > bits of true entropy.
-> >
-> > Basically it feeds PRNG back to kernel and lets it account as entropy source.
->
-> I could not find any backup for that claim.  If I understood
-> correctly, haveged does not read from the kernel PRNG.
+Generally speaking, pkg-stats does 2 different things:
 
-The kernel has an entropy pool, it taps alot sources (inkl jitter, see
-https://lwn.net/Articles/642166/).
-what haveged does is overaccounting the very little true entropy it
-fetches (by using a PRNG on top AFAIU).
+1. Collect information about the packages in the Buildroot tree 
+(version, number of patches, developers, ...). This information changes 
+with the Buildroot tree, and is therefore *STATIC* for a given version 
+of Buildroot.
 
->
-> > In short:
-> >
-> > Want better/faster entropy, use rng-tools, or choose to "trust" the
-> > CPU vendor if instructions are available.
->
-> rng-tools is useless without a hwrng or jitterentropy-rngd, which does
-> the same thing as haveged.  So for a system without a hwrng, how
-> should that recommendation help an user?
+2. Matching the packages against CVEs and release-monitoring. This 
+information is *DYNAMIC* and can change anytime, because it is based on 
+services that are independent of Buildroot.
 
-Maybe you should understand that not everyone needs that kinda level
-of entropy.
-If you are that concerned, use a TPM Module + rng-tools.
-haveged's primary concern is to speed up boot, *not* improve the random numbers,
-it does not tap entropy that the kernel is not using already.
 
->
-> > A good PRNG is still not entropy.
->
-> I think we can agree on that one.
->
-> Greets
-> Alex
+Therefore, we could split this process in two distinct parts:
 
-Norbert
+First, collecting the packages information into a static JSON file (or 
+any other format you like), like some kind of "manifest". This could be 
+done once for each release of Buildroot, and in a nightly job for 
+master/next/<whatever dev branch>. Maybe we could even reuse (some parts 
+of) `make show-info` for that purpose ?
+
+Secondly, check the CVEs and new pkg versions using as input the static 
+"manifest" file obtained above. This could be done in a nightly job for 
+all the active releases of Buildroot (latest LTS and "regular" release, 
+master, next, ...).
+
+
+This would provide the following advantages:
+
+- No need to have a full BR tree to generate the CVEs/outdated packages 
+list (only the "manifest") => easier to run for multiple BR versions and 
+to run in parallel
+
+- The "manifest" can be stripped down to the list of packages used in a 
+particular BR config, such as to customize the pkg-stat output to what 
+is relevant to the user (what your colleague Gregory is working on if I 
+understand correctly ?)
+
+- This makes it easier to plug a frontend (like the one Heiko was 
+working on) describing the packages available in a certain BR release, 
+and optionally the daily regenerated stats of these packages.
+
+- This would slightly reduce the runtime of pkg-stat (a non-negligeable 
+part is spent collecting pkg data).
+
+
+Kind regards,
+
+Titouan
