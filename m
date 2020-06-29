@@ -1,100 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2020 22:42:58 +0200
-Subject: [Buildroot] [PATCH] package/glibc: disable Werror for gcc 10
- build
-In-Reply-To: <CAGm1_ks2OvgNqDJXXEHuGZCZWERQ2wxbaTYjfup+6A8AeqgvXw@mail.gmail.com>
-References: <20200628201612.3130899-1-romain.naour@gmail.com>
- <CAGm1_ks2OvgNqDJXXEHuGZCZWERQ2wxbaTYjfup+6A8AeqgvXw@mail.gmail.com>
-Message-ID: <20200629204258.GS20645@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 29 Jun 2020 22:43:36 +0200
+Subject: [Buildroot] [git commit] package/binutils: switch to use 2.33.1 as
+ the default version
+Message-ID: <20200629204103.7034A80749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f8eea310564d299897d0bd31eb91d886c086cb39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-29 14:26 +0200, Yegor Yefremov spake thusly:
-> On Sun, Jun 28, 2020 at 10:16 PM Romain Naour <romain.naour@gmail.com> wrote:
-> >
-> > Currently glibc 2.30 is build by default with Werror enabled but it
-> > has only been tested with compiler version available at the time of
-> > the release [1] (gcc 6.2 up to gcc 9.2.1). It's recommended to use
-> > those version with glibc 2.30.
-> >
-> > For the same reason why we remove Werror in packages's compiler
-> > flags. Building with Werror is not bulletproof when we start
-> > using a newer compiler that introduce new warnings.
-> > This is the case here with gcc 10, as reported by Yegor Yefremov
-> > [2].
-> >
-> > Fixing compiler warnings would require backporting many patches [3]
-> > not even backported by Glibc maintainers to the 2.30 stable
-> > branch. Instead, disable Werror by using --disable-werror.
-> > Most (if not all) gcc 10 warnings will be fixed with Glibc 2.31.
-> >
-> > [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=INSTALL;h=62e78725f57080a1cb638cccd28ca3c2ffc5a22c#l466
+Now that binutils 2.34 has been released, it is time to move to
+binutils 2.33.1 as the default binutils version, instead of 2.32.
 
-OK, but then we have another exception: glibc on ppc64le, gcc 7.4 or
-above is required, with the execption of gcc 7.5.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/Config.in.host | 2 +-
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-However, when BR2_GCC_VERSION_7_X=y, we do build gcc 7.5.
-
-So, glibc should probably have: depends on !BR2_GCC_VERSION_7_X
-
-Thoughts?
-
-Also, in that same file. line 544:
-
-  * Python 3.4 or later
-    Python is required to build the GNU C Library. [...]
-
-Wut?!?
-
-Regards,
-Yann E. MORIN.
-
-> > [2] http://lists.busybox.net/pipermail/buildroot/2020-June/285715.html
-> > [3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=cba932a5a9e91cffd7f4172d7e91f9b2efb1f84b
-> >     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=de18a7061c9bdff73d66502c55d6a3ea671fc6d9
-> >     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=49348beafe9ba150c9bd48595b3f372299bddbb0
-> >     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=70c6e15654928c603c6d24bd01cf62e7a8e2ce9b
-> >     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=c7bf5ceab6ec776ac7350d3b0190776bf532ac54
-> >     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=e1d559f337de2c8ab68a6749dfe873477c883807
-> >
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> > ---
-> >  package/glibc/glibc.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> > index 76fae1f9f7..1881cf0cdc 100644
-> > --- a/package/glibc/glibc.mk
-> > +++ b/package/glibc/glibc.mk
-> > @@ -131,6 +131,7 @@ define GLIBC_CONFIGURE_CMDS
-> >                 $(if $(BR2_x86_64),--enable-lock-elision) \
-> >                 --with-pkgversion="Buildroot" \
-> >                 --disable-profile \
-> > +               --disable-werror \
-> >                 --without-gd \
-> >                 --enable-obsolete-rpc \
-> >                 --enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
-> > --
-> > 2.25.4
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index ab646eea26..dfe7d548f1 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 
+ choice
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_32_X if !BR2_arc && !BR2_csky
++	default BR2_BINUTILS_VERSION_2_33_X if !BR2_arc && !BR2_csky
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	default BR2_BINUTILS_VERSION_CSKY if BR2_csky
+ 	help
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 6e4687aeeb..326e6e2639 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2020.03-release
+ else
+-BINUTILS_VERSION = 2.32
++BINUTILS_VERSION = 2.33.1
+ endif
+ endif # BINUTILS_VERSION
+ 
