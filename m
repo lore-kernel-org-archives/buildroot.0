@@ -1,31 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jun 2020 23:17:25 +0200
-Subject: [Buildroot] [PATCH 1/4] package/poco: fix the comment
- dependencies about riscv
-In-Reply-To: <20200629210735.179913-1-juju@cotds.org>
+Date: Mon, 29 Jun 2020 23:18:28 +0200
+Subject: [Buildroot] [PATCH 2/4] package/poco: bump to version 1.10.1
+In-Reply-To: <20200629210735.179913-2-juju@cotds.org>
 References: <20200629210735.179913-1-juju@cotds.org>
-Message-ID: <20200629231725.170ed988@windsurf>
+ <20200629210735.179913-2-juju@cotds.org>
+Message-ID: <20200629231828.2222716b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 29 Jun 2020 23:07:32 +0200
+On Mon, 29 Jun 2020 23:07:33 +0200
 Julien Olivain <juju@cotds.org> wrote:
 
-> Commit 0737f48c5f "package/poco: disable build for riscv"
-> changed the Kconfig package dependency, without updating the dependency
-> of the comment. This patch set the comment dependency to the same
-> condition as the package.
-> 
-> Signed-off-by: Julien Olivain <juju@cotds.org>
+> +Subject: [PATCH 1/3] poco: add the staging path to search path
 
-We really want to introduce a BR2_PACKAGE_POCO_ARCH_SUPPORTS option so
-that those architecture dependencies are not repeated.
-
-You can grep for BR2_PACKAGE_.*_ARCH_SUPPORTS to see other uses of that
-pattern.
+Please generate patches with "git format-patch -N" to not have the 1/3,
+2/3, 3/3 part. "make check-package" normally warns about this.
 
 Thanks!
 
