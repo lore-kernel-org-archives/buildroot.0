@@ -1,82 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2020 22:53:10 +0200
-Subject: [Buildroot] [PATCH] package/glibc: disable Werror for gcc 10
- build
-In-Reply-To: <20200628201612.3130899-1-romain.naour@gmail.com>
-References: <20200628201612.3130899-1-romain.naour@gmail.com>
-Message-ID: <20200629205310.GU20645@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 29 Jun 2020 22:59:12 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/qemu: add spice support
+In-Reply-To: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
+References: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
+Message-ID: <20200629225912.6934261e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+On Mon, 29 Jun 2020 15:50:00 -0500
+Jared Bents <jared.bents@rockwellcollins.com> wrote:
 
-On 2020-06-28 22:16 +0200, Romain Naour spake thusly:
-> Currently glibc 2.30 is build by default with Werror enabled but it
-> has only been tested with compiler version available at the time of
-> the release [1] (gcc 6.2 up to gcc 9.2.1). It's recommended to use
-> those version with glibc 2.30.
+> update to add qemu spice support
 > 
-> For the same reason why we remove Werror in packages's compiler
-> flags. Building with Werror is not bulletproof when we start
-> using a newer compiler that introduce new warnings.
-> This is the case here with gcc 10, as reported by Yegor Yefremov
-> [2].
-> 
-> Fixing compiler warnings would require backporting many patches [3]
-> not even backported by Glibc maintainers to the 2.30 stable
-> branch. Instead, disable Werror by using --disable-werror.
-> Most (if not all) gcc 10 warnings will be fixed with Glibc 2.31.
-> 
-> [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=INSTALL;h=62e78725f57080a1cb638cccd28ca3c2ffc5a22c#l466
-> [2] http://lists.busybox.net/pipermail/buildroot/2020-June/285715.html
-> [3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=cba932a5a9e91cffd7f4172d7e91f9b2efb1f84b
->     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=de18a7061c9bdff73d66502c55d6a3ea671fc6d9
->     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=49348beafe9ba150c9bd48595b3f372299bddbb0
->     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=70c6e15654928c603c6d24bd01cf62e7a8e2ce9b
->     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=c7bf5ceab6ec776ac7350d3b0190776bf532ac54
->     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=e1d559f337de2c8ab68a6749dfe873477c883807
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-
-Applied to master, thanks.
-
-Please also see my reply to Yegor, later in the thread...
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 > ---
->  package/glibc/glibc.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/qemu/Config.in | 9 +++++++++
+>  package/qemu/qemu.mk   | 8 +++++++-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 76fae1f9f7..1881cf0cdc 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -131,6 +131,7 @@ define GLIBC_CONFIGURE_CMDS
->  		$(if $(BR2_x86_64),--enable-lock-elision) \
->  		--with-pkgversion="Buildroot" \
->  		--disable-profile \
-> +		--disable-werror \
->  		--without-gd \
->  		--enable-obsolete-rpc \
->  		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
-> -- 
-> 2.25.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index 33d4cccd7b..3de73b69ec 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+> @@ -127,6 +127,15 @@ config BR2_PACKAGE_QEMU_SDL
+>  comment "SDL frontend needs a toolchain w/ dynamic library"
+>  	depends on BR2_STATIC_LIBS
+>  
+> +config BR2_PACKAGE_QEMU_SPICE
+> +	bool "Enable Spice frontend"
+> +	depends on BR2_PACKAGE_SPICE
 
+I am wondering why for this one we are adding a sub-option and not
+using automatic detection of BR2_PACKAGE_SPICE=y in the .mk file, like
+you've done for VNC and usb-redir.
+
+On the other hand, we do have already a bunch of sub-options to
+configure Qemu. We're not very consistent here :/
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
