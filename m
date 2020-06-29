@@ -1,120 +1,257 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 29 Jun 2020 16:11:28 +0200
-Subject: [Buildroot] [PATCH] package/gr-osmosdr: fix build with boost 1.7.3
-Message-ID: <20200629141128.853220-1-gwenj@trabucayre.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 29 Jun 2020 17:08:36 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/haveged: Change service file
+ to run early
+In-Reply-To: <CAFvCimUG6xcKsLC3ufhc3FVuwXj3Www2YH+sRUFtX8w0jVfvMQ@mail.gmail.com>
+References: <20200609224116.13607-1-nolange79@gmail.com>
+ <20200609224116.13607-2-nolange79@gmail.com>
+ <CADYdroMM5zNtnQ8J7soZo+Vnv6eSuZFVj6Bq+GyZ4UyB4xkEgg@mail.gmail.com>
+ <CAFvCimVKi8eTQHnO6t0ZhcT86X74hqyM4JzQTJ_XWyxNVSFAWA@mail.gmail.com>
+ <CADYdroNxW-em_kbTZ8iYOuc=6WOkoOWoDOvdCohVbfCU4T74oA@mail.gmail.com>
+ <CAFvCimUG6xcKsLC3ufhc3FVuwXj3Www2YH+sRUFtX8w0jVfvMQ@mail.gmail.com>
+Message-ID: <CADYdroOSf2=5vj8cQawmnpiSsS_d2KcBvp5Ljka6nn6_68NZuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Am Mo., 29. Juni 2020 um 14:04 Uhr schrieb J?r?my ROSEN <
+jeremy.rosen@smile.fr>:
 
-boost/detail/endian.hpp has been marked as deprecated since boost 1.69.0.
-This file and boost/predef/detail/endian_compat.h are no more available.
+>
+>
+> Le lun. 29 juin 2020 ? 10:29, Norbert Lange <nolange79@gmail.com> a
+> ?crit :
+>
+>>
+>>
+>> Am Mo., 29. Juni 2020 um 09:31 Uhr schrieb J?r?my ROSEN <
+>> jeremy.rosen at smile.fr>:
+>>
+>>> Well
+>>> I still think you need Before=systemd-random-seed.service and I don't
+>>> understand why you are reluctant to add it.
+>>> (Honestly, I think the Before= and your work to make it an early boot
+>>> service should be upstreamed)
+>>>
+>>> So, i'm a bit reluctant to give my reviewed-by. Again, it's not worse
+>>> than it was, but if you want
+>>> to make sure that all services that need randomness are correctly
+>>> started after haveged, then
+>>> you have to add that Before=
+>>>
+>>
+>> Again, this doesn't help, and might actually hurt.
+>>
+>> -   systemd-random-seed.service could actually add better (real) entropy.
+>>      (Upstream actually had an After systemd-random-seed.service for that
+>> reason).
+>> -   a before on a "persistent" service does not really block, while
+>> accessing the kernels random source when it's not uninitialised will,
+>>     so random consumers are already implicitly waiting for haveged - when
+>> they need entropy and not a moment before.
+>>
+>>
+> I'm not sure what you mean by "persistent" in that context.
+> I also think there is a confusion on what Before= does....
+> Before=systemd-random-seed.service means that systemd-random-seed will be
+> spawned after haveged is READY (in
+> the Type= sense of READY)
+>
+> unfortunately, it seems haveged does not synchronize with systemd at all
+> and indeed, in the case of haveged,
+> Before= will only sync the point where systemd spawns the coresponding
+> processes.
+>
 
-This patch suppress this header in some file, where not needed and move
-to correct header and new constants. It's retrocompatible for at least all boost release > 1.69.0
+So you agree it's pointless?
+It does not make haveged start faster, it will delay systemd-random-seed a
+ridiculous small amount.
 
-[Upstream status: http://lists.osmocom.org/pipermail/osmocom-sdr/2020-June/002080.html]
+I am not very convinced on what you said about another source being
+> "better". Either you are OK with the value
+> proposition of haveged and you count it as good entropy or you are not and
+> you don't use haveged at all...
+>
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- .../0001-fix-build-with-boost-1.7.3.patch     | 86 +++++++++++++++++++
- 1 file changed, 86 insertions(+)
- create mode 100644 package/gr-osmosdr/0001-fix-build-with-boost-1.7.3.patch
+I don't use haveged as good source for entropy, I use it because otherwise
+the system won't boot for ages.
+You don't even have a measure on how much entropy the jitter adds.
 
-diff --git a/package/gr-osmosdr/0001-fix-build-with-boost-1.7.3.patch b/package/gr-osmosdr/0001-fix-build-with-boost-1.7.3.patch
-new file mode 100644
-index 0000000000..fb10914531
---- /dev/null
-+++ b/package/gr-osmosdr/0001-fix-build-with-boost-1.7.3.patch
-@@ -0,0 +1,86 @@
-+From 9d5a21f2900e3ffb07c1f163b6ba4e036f6c16a8 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Thu, 25 Jun 2020 16:46:34 +0200
-+Subject: [PATCH] gr-osmosdr: fix build with boost > 1.73.0
-+
-+boost/detail/endian.hpp has been marked as deprecated since boost 1.69.0.
-+This file and boost/predef/detail/endian_compat.h are no more available.
-+
-+This patch suppress this header in some file, where not needed and move
-+to correct header and new constants. It's retrocompatible for at least all boost release > 1.69.0
-+
-+[Upstream status: http://lists.osmocom.org/pipermail/osmocom-sdr/2020-June/002080.html]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ lib/airspy/airspy_source_c.cc     | 1 -
-+ lib/airspyhf/airspyhf_source_c.cc | 1 -
-+ lib/hackrf/hackrf_source_c.cc     | 6 +++---
-+ lib/rtl/rtl_source_c.cc           | 1 -
-+ 4 files changed, 3 insertions(+), 6 deletions(-)
-+
-+diff --git a/lib/airspy/airspy_source_c.cc b/lib/airspy/airspy_source_c.cc
-+index 50150e5..f833588 100644
-+--- a/lib/airspy/airspy_source_c.cc
-++++ b/lib/airspy/airspy_source_c.cc
-+@@ -33,7 +33,6 @@
-+ 
-+ #include <boost/assign.hpp>
-+ #include <boost/format.hpp>
-+-#include <boost/detail/endian.hpp>
-+ #include <boost/algorithm/string.hpp>
-+ #include <boost/thread/thread.hpp>
-+ 
-+diff --git a/lib/airspyhf/airspyhf_source_c.cc b/lib/airspyhf/airspyhf_source_c.cc
-+index 327fe19..b7494a8 100644
-+--- a/lib/airspyhf/airspyhf_source_c.cc
-++++ b/lib/airspyhf/airspyhf_source_c.cc
-+@@ -33,7 +33,6 @@
-+ 
-+ #include <boost/assign.hpp>
-+ #include <boost/format.hpp>
-+-#include <boost/detail/endian.hpp>
-+ #include <boost/algorithm/string.hpp>
-+ #include <boost/thread/thread.hpp>
-+ 
-+diff --git a/lib/hackrf/hackrf_source_c.cc b/lib/hackrf/hackrf_source_c.cc
-+index eea5caa..fc48171 100644
-+--- a/lib/hackrf/hackrf_source_c.cc
-++++ b/lib/hackrf/hackrf_source_c.cc
-+@@ -31,7 +31,7 @@
-+ #include <stdexcept>
-+ #include <iostream>
-+ 
-+-#include <boost/detail/endian.hpp>
-++#include <boost/predef/other/endian.h>
-+ 
-+ #include <gnuradio/io_signature.h>
-+ 
-+@@ -90,10 +90,10 @@ hackrf_source_c::hackrf_source_c (const std::string &args)
-+ 
-+   // create a lookup table for gr_complex values
-+   for (unsigned int i = 0; i <= 0xffff; i++) {
-+-#ifdef BOOST_LITTLE_ENDIAN
-++#ifdef BOOST_ENDIAN_LITTLE_BYTE
-+     _lut.push_back( gr_complex( (float(int8_t(i & 0xff))) * (1.0f/128.0f),
-+                                 (float(int8_t(i >> 8))) * (1.0f/128.0f) ) );
-+-#else // BOOST_BIG_ENDIAN
-++#else // BOOST_ENDIAN_BIG_BYTE
-+     _lut.push_back( gr_complex( (float(int8_t(i >> 8))) * (1.0f/128.0f),
-+                                 (float(int8_t(i & 0xff))) * (1.0f/128.0f) ) );
-+ #endif
-+diff --git a/lib/rtl/rtl_source_c.cc b/lib/rtl/rtl_source_c.cc
-+index a371464..7f2e648 100644
-+--- a/lib/rtl/rtl_source_c.cc
-++++ b/lib/rtl/rtl_source_c.cc
-+@@ -32,7 +32,6 @@
-+ 
-+ #include <boost/assign.hpp>
-+ #include <boost/format.hpp>
-+-#include <boost/detail/endian.hpp>
-+ #include <boost/algorithm/string.hpp>
-+ 
-+ #include <stdexcept>
-+-- 
-+2.27.0
-+
--- 
-2.27.0
+
+> now... my main point is that services that need good entopy will
+> synchronize after systemd-random-seed.service.
+> This is documented by systemd and means that the processes will only be
+> spawned after the RNG is ready and
+> will not wait for entropy at all. That's the whole point of syncing after
+> systemd-random-seed.
+>
+
+Yes, and none of this is affected by adding a Before dependency.
+
+
+> So i understand your point about the implicit sync point added by the
+> kernel's "RGN is ready" bit, but I still think
+> that adding my sync point is "the way it's meant to be"
+>
+
+Some concrete example of where this "actually" helps would be needed, let
+alone an explanation why upstream, debian and
+AFAIR fedora had haveged ordered *after* systemd-random-seed (likely before
+they figured out this could deadlock with the
+seed being on an network drive).
+
+So it:
+-   Wont help
+-   the sync point is already systemd-random-seed
+-   arguably if you are paranoid about secure random numbers you will
+disable haveged in favor of true entropy,
+    then can consider blocking on systemd-random-seed.
+
+Norbert
+
+Anyway, at this point I think we should just agree to disagree and it's not
+> that relevant.
+> I still don't consider that the proper approch, but I still don't think
+> this should block that patch. Everything else is fine by me.
+>
+
+>
+>> I won't block the patch going in if a BR maintainer want to commit it,
+>>> but i'd like to understand why you are reluctant
+>>> to add that
+>>>
+>>
+>> Haveged is not entropy, it's a substitute. I dont know how many times I
+>> need to point that out.
+>> The less dependencies, the faster the system can startup (and lesser
+>> chances of some stoopid deadlocks).
+>>
+>> Look at the history for service.fedora [1], which is now the blueprint
+>> for the v2 patch,
+>> I considered just adding a switch to install the upstream service file,
+>> but this adds several heavy isolation options that are overkill for most
+>> uses,
+>> and add dependencies (upstream just removed one of these, because it
+>> created a cycle).
+>>
+>> [1] -
+>> https://github.com/jirka-h/haveged/commits/master/init.d/service.fedora
+>>
+>> Norbert
+>>
+>>
+>>> Regards
+>>> Jeremy
+>>>
+>>> Le ven. 26 juin 2020 ? 00:39, Norbert Lange <nolange79@gmail.com> a
+>>> ?crit :
+>>>
+>>>> Jeremy,
+>>>>
+>>>> Can you have a look and add your reviewed-by pls?
+>>>> No drastic changes from v1, except adding a few isolation options from
+>>>> the upstream fedora service file.
+>>>>
+>>>> Am Mi., 10. Juni 2020 um 00:42 Uhr schrieb Norbert Lange <
+>>>> nolange79 at gmail.com>:
+>>>> >
+>>>> > Drop default dependencies, haveged needs nothing but
+>>>> > local sockets and /dev/random.
+>>>> >
+>>>> > The service file now mostly matches the upstream fedora file,
+>>>> > except alot of isolation options have been dropped.
+>>>> > The benefit for a completely controlled system is small,
+>>>> > and those option would pull in dependencies, delaying
+>>>> > entropy being filled up.
+>>>> >
+>>>> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>>> > ---
+>>>> >  package/haveged/haveged.service | 22 +++++++++++++++++-----
+>>>> >  1 file changed, 17 insertions(+), 5 deletions(-)
+>>>> >
+>>>> > diff --git a/package/haveged/haveged.service
+>>>> b/package/haveged/haveged.service
+>>>> > index 91035c6711..cfdaa93a37 100644
+>>>> > --- a/package/haveged/haveged.service
+>>>> > +++ b/package/haveged/haveged.service
+>>>> > @@ -1,10 +1,22 @@
+>>>> >  [Unit]
+>>>> > -Description=Entropy Harvesting Daemon
+>>>> > -Documentation=man:haveged(8)
+>>>> > +# inspiration from upstream init.d/service.fedora
+>>>> > +Description=Entropy Daemon based on the HAVEGE algorithm
+>>>> > +Documentation=man:haveged(8) http://www.issihosts.com/haveged/
+>>>> > +DefaultDependencies=no
+>>>> > +# This would wait for filesystems, but we only need /dev/random,
+>>>> > +# which is certainly available after systemd initialised
+>>>> > +# After=systemd-tmpfiles-setup-dev.service
+>>>> > +Before=sysinit.target shutdown.target systemd-journald.service
+>>>> >
+>>>> >  [Service]
+>>>> > -ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
+>>>> > -SuccessExitStatus=143
+>>>> > +ExecStart=/usr/sbin/haveged -w 1024 -v 1 --Foreground
+>>>> > +Restart=always
+>>>> > +SuccessExitStatus=137 143
+>>>> > +
+>>>> > +# Only simple isolation methods that dont pull in dependencies
+>>>> > +CapabilityBoundingSet=CAP_SYS_ADMIN
+>>>> > +SecureBits=noroot-locked
+>>>> > +ProtectSystem=full
+>>>> >
+>>>> >  [Install]
+>>>> > -WantedBy=multi-user.target
+>>>> > +WantedBy=sysinit.target
+>>>> > --
+>>>> > 2.26.2
+>>>> >
+>>>>
+>>>
+>>>
+>>> --
+>>> [image: SMILE]  <http://www.smile.eu/>
+>>>
+>>> 20 rue des Jardins
+>>> 92600 Asni?res-sur-Seine
+>>> *J?r?my ROSEN*
+>>> Architecte technique
+>>>
+>>> [image: email] jeremy.rosen at smile.fr
+>>> [image: phone]  +33 6 88 25 87 42
+>>> [image: url] http://www.smile.eu
+>>>
+>>> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+>>> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+>>> <https://www.linkedin.com/company/smile> [image: Github]
+>>> <https://github.com/Smile-SA>
+>>>
+>>> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+>>> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>>
+>>
+>
+> --
+> [image: SMILE]  <http://www.smile.eu/>
+>
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+> *J?r?my ROSEN*
+> Architecte technique
+>
+> [image: email] jeremy.rosen at smile.fr
+> [image: phone]  +33 6 88 25 87 42
+> [image: url] http://www.smile.eu
+>
+> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+> <https://www.linkedin.com/company/smile> [image: Github]
+> <https://github.com/Smile-SA>
+>
+> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200629/17151b53/attachment.html>
