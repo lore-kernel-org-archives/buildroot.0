@@ -1,78 +1,44 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Mon, 29 Jun 2020 06:38:36 +0000
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx: Add option for
- all i.MX FW needs
-In-Reply-To: <20200625203307.GP20645@scaer>
-References: <1593012228-18959-1-git-send-email-stephane.viau@oss.nxp.com>
- <1593012228-18959-2-git-send-email-stephane.viau@oss.nxp.com>
- <20200624225831.2183d1b0@windsurf>
- <DB8PR04MB5755C99B335ACE9AFC7552CDA7920@DB8PR04MB5755.eurprd04.prod.outlook.com>,
- <20200625203307.GP20645@scaer>
-Message-ID: <DB8PR04MB575585960BB8ED2EB33E9556A7930@DB8PR04MB5755.eurprd04.prod.outlook.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 29 Jun 2020 09:16:55 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/dropbear: fix license infos
+Message-ID: <20200629071656.367833-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Sebastien, all,
+this package allows to use optionally bundled libraries (which is exceptional in BR).
+so, license infos must be conditional.
 
->> Thomas wrote:                                                                 
->> >However, I am wondering if package/freescale-imx/Config.in is the right      
->> >place for all this logic. After all, this is only related to the             
->> >firmware-imx package.                                                        
->> >                                                                             
->> >Shouldn't we instead move that to                                            
->> >package/freescale-imx/firmware-imx/Config.in, with the following form:       
->> >                                                                             
->> >config BR2_PACKAGE_FREESCALE_IMX_NEEDS_DDR_FW                                
->> >        bool                                                                 
->> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M                
->> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM               
->> >        default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN               
->> >                                                                             
->> >and ditto the other options ? Here as well, it would require a               
->> >preparation patch to take care of the NEEDS_DDR_FW case, and then your       
->> >patch that handles all other FW files.                                       
->>                                                                               
->> I'd like to have Yann's and/or Gary's feedback on this. I'm using 'select' based on this comment:
->> "                                                                             
->>   As Yann mentioned on IRC:                                                   
->>   "Usually, when we introduce such option, it does not 'default y' based      
->>   on some other options. Instead, the other options 'select' it."             
->> "                                                                             
->> from http://lists.busybox.net/pipermail/buildroot/2020-May/283180.html        
->                                                                                
->True, that's what I said. That was based on the assumption that the             
->options would be in package/freescale-imx/Config.in.                            
->                                                                                
->But now, seeing the reasonning by Thomas, I agree with him: those are           
->better suited to live in package/freescale-imx/firmware-imx/Config.in/          
->                                                                                
->And thus it is less clean that the variant selection in the generic             
->choice would have to catter with options specific to a package.                 
->                                                                                
->Hence, the "default y if ..." is indeed better.                                 
->                                                                                
->Sorry I did not have that insight to begin with...                              
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/dropbear/dropbear.hash | 2 ++
+ package/dropbear/dropbear.mk   | 2 ++
+ 2 files changed, 4 insertions(+)
 
-No worries ; thank you all for your comments!
-Will send out a v2 soon..
-
-BTW, I'm also thinking of embedding the 'install path' fix proposed by Sebastien here:
-http://lists.busybox.net/pipermail/buildroot/2020-June/284875.html 
-
-BR,
-Stephane. 
-                                                                                 
->                                                                                
->Regards,                                                                        
->Yann E. MORIN.                                                                  
->                                                                                
->--                                                                              
->.-----------------.--------------------.------------------.--------------------.
->|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index ab53197f3..39a116ede 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -3,3 +3,5 @@ sha256  084f00546b1610a3422a0773e2c04cbe1a220d984209e033b548b49f379cc441  dropbe
+ 
+ # License file, locally computed
+ sha256  2ac2be75a2232ec2473070dd791ee990253dffde6022d364809bbbcbc30f710e  LICENSE
++sha256  8f196cb13afd271f5e267fd29543fc454596382ad580e7592709492843996ac8  libtomcrypt/LICENSE
++sha256  2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  libtommath/LICENSE
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index b7342cef5..bca79da45 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -79,6 +79,8 @@ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
++DROPBEAR_LICENSE +=, Unlicense, WTFPL
++DROPBEAR_LICENSE_FILES += libtommath/LICENSE libtomcrypt/LICENSE
+ DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
+ else
+ define DROPBEAR_BUILD_FEATURED
+-- 
+2.25.1
