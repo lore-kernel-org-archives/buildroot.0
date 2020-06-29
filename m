@@ -1,49 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2020 17:57:12 +0200
-Subject: [Buildroot] [git commit] fs/cpio: generate reproducible archives
-Message-ID: <20200629160110.4F4E086164@busybox.osuosl.org>
+Date: Mon, 29 Jun 2020 18:05:56 +0200
+Subject: [Buildroot] [1/1] fs/cpio: sort 'find' utility output
+ (reproducible builds)
+In-Reply-To: <20200629153701.7c2c5ca4@monakov-y.xu>
+References: <20200629153701.7c2c5ca4@monakov-y.xu>
+Message-ID: <20200629160556.GE20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4728fdd4c06be07883e59eeb148c86cb74e10d73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yurii, All,
 
-The output of 'find' depends on the directory entries, and is not
-ordered. As a consequence, the cpio archive is not reproducible.
+On 2020-06-29 15:37 +0300, Yurii Monakov spake thusly:
+> Order of find utility results are not sorted and depend on items
+> attributes, so cpio produces different results across machines.
+> 
+> This patch sorts find output before piping to cpio to make
+> builds reproducible.
+> 
+> Signed-off-by: Yurii Monakov <monakov.y@gmail.com>
 
-Fix that by sorting the output of find. Use the 'C' locale to enforce
-reproducibility that does not depend on the locale.
+Thanks for the ptatch, but see below...
 
-The command line is now pretty long, so we wrap it.
+> ---
+>  fs/cpio/cpio.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index 28a435dd5e..73837ddecb 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -37,7 +37,7 @@ ROOTFS_CPIO_OPTS += --reproducible
+>  endif
+>  
+>  define ROOTFS_CPIO_CMD
+> -	cd $(TARGET_DIR) && find . | cpio $(ROOTFS_CPIO_OPTS) --quiet -o -H newc > $@
+> +	cd $(TARGET_DIR) && find . | sort | cpio $(ROOTFS_CPIO_OPTS) --quiet -o -H newc > $@
 
-Signed-off-by: Yurii Monakov <monakov.y@gmail.com>
-[yann.morin.1998 at free.fr:
-  - use LC_ALL=C when sorting
-  - wrap long line
-  - reword commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- fs/cpio/cpio.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+sort order depends on the locale, so you also have to enforce the locale
+to guarantee reproducibility; this is usually done with:
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index 28a435dd5e..81f8c393d1 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -37,7 +37,11 @@ ROOTFS_CPIO_OPTS += --reproducible
- endif
- 
- define ROOTFS_CPIO_CMD
--	cd $(TARGET_DIR) && find . | cpio $(ROOTFS_CPIO_OPTS) --quiet -o -H newc > $@
-+	cd $(TARGET_DIR) && \
-+	find . \
-+	| LC_ALL=C sort \
-+	| cpio $(ROOTFS_CPIO_OPTS) --quiet -o -H newc \
-+	> $@
- endef
- 
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
+    ... |LC_ALL=C sort |...
+
+So I've fixed that, wrapped the line that is now too long, and reworded
+the commit log slightly.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+>  endef
+>  
+>  ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
