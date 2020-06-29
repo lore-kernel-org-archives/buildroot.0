@@ -1,69 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jun 2020 22:08:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ncmpc: bump to version 0.38
-In-Reply-To: <20200629055827.196775-1-joerg.krause@embedded.rocks>
-References: <20200629055827.196775-1-joerg.krause@embedded.rocks>
-Message-ID: <20200629200853.GO20645@scaer>
+Date: Mon, 29 Jun 2020 22:09:55 +0200
+Subject: [Buildroot] [git commit] package/unrar: bump version to 5.9.3
+Message-ID: <20200629200734.5FFB6860D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d1b7657462a708f38dba5f448655a40f861ba87f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-06-29 07:58 +0200, J?rg Krause spake thusly:
-> Also fix formatting of hash file using two spaces as separator.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Switched _SITE to https.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/ncmpc/ncmpc.hash | 4 ++--
->  package/ncmpc/ncmpc.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
-> index 963c6d2601..f31c15bd9e 100644
-> --- a/package/ncmpc/ncmpc.hash
-> +++ b/package/ncmpc/ncmpc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -sha256 7c8eb727f6e12d8f97a53915b1b5632898b4afb335a1121c5e01c81df695615c  ncmpc-0.37.tar.xz
-> +sha256  2bc1aa38aacd23131895cd9aa3abd9d1ca5700857034d9f35209e13e061e27a2  ncmpc-0.38.tar.xz
->  
->  # Hash for license file:
-> -sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-> index 29675f2256..d4dfceae36 100644
-> --- a/package/ncmpc/ncmpc.mk
-> +++ b/package/ncmpc/ncmpc.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  NCMPC_VERSION_MAJOR = 0
-> -NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).37
-> +NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).38
->  NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
->  NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
->  NCMPC_DEPENDENCIES = \
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 9bfc32d325..a15bcc704a 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  73d3baf18cf0a197976af2794a848893c35e7d42cee0ff364c89d2e476ebdaa6  unrarsrc-5.9.2.tar.gz
++sha256  28c176c29da86d7efe3cb9a227255d8340f761ba95969195982ec87c8eb2dd69  unrarsrc-5.9.3.tar.gz
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index 5c6f4b58da..9903c55d09 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-UNRAR_VERSION = 5.9.2
++UNRAR_VERSION = 5.9.3
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+-UNRAR_SITE = http://www.rarlab.com/rar
++UNRAR_SITE = https://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
+ UNRAR_LICENSE_FILES = license.txt
+ 
