@@ -1,131 +1,52 @@
-From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Mon, 29 Jun 2020 10:25:47 +0200
-Subject: [Buildroot] [PATCH v2 3/4] package/freescale-imx/firmware-imx:
- Clean up the image/target semantic
-In-Reply-To: <1593419148-26821-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1593419148-26821-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <1593419148-26821-4-git-send-email-stephane.viau@oss.nxp.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 29 Jun 2020 11:30:45 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/haveged: Change service file
+ to run early
+In-Reply-To: <CADYdroNxW-em_kbTZ8iYOuc=6WOkoOWoDOvdCohVbfCU4T74oA@mail.gmail.com>
+References: <20200609224116.13607-1-nolange79@gmail.com>
+ <20200609224116.13607-2-nolange79@gmail.com>
+ <CADYdroMM5zNtnQ8J7soZo+Vnv6eSuZFVj6Bq+GyZ4UyB4xkEgg@mail.gmail.com>
+ <CAFvCimVKi8eTQHnO6t0ZhcT86X74hqyM4JzQTJ_XWyxNVSFAWA@mail.gmail.com>
+ <CADYdroNxW-em_kbTZ8iYOuc=6WOkoOWoDOvdCohVbfCU4T74oA@mail.gmail.com>
+Message-ID: <20200629093044.eurgl7qjx4xkd3vv@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The newly introduced BR2_PACKAGE_FIRMWARE_IMX_xxx symbols shall be
-used in lieue of the SoC type when installing images or binaries on
-target.
+Hei hei,
 
-These new symbols let us define FIRMWARE_IMX_INSTALL_IMAGES_CMDS and
-FIRMWARE_IMX_INSTALL_TARGET_CMDS based on platform needs rather than
-SoC type.
+On Mon, Jun 29, 2020 at 10:29:38AM +0200, Norbert Lange wrote:
+> Haveged is not entropy, it's a substitute. I dont know how many times I
+> need to point that out.
 
-Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
----
-v2:
-- Name VPU FW after IP name (Fabio)
-- Rename symbols using the "_NEED_" in their name (Thomas)
-- Remove unnecessary comments & move INSTALL_IMAGES down (Thomas)
+As far as I understood the source for the entropy haveged collects is
+random timing jitter from the CPU. Could you explain, why that is not
+real entropy, although it passes the FIPS tests? Or point to an
+explanation to learn from?
 
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.mk | 63 ++++++++++++++++------
- 1 file changed, 46 insertions(+), 17 deletions(-)
+> The less dependencies, the faster the system can startup (and lesser
+> chances of some stoopid deadlocks).
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 55ca6fc..d227eb2 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -12,8 +12,6 @@ FIRMWARE_IMX_LICENSE = NXP Semiconductor Software License Agreement
- FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
- FIRMWARE_IMX_REDISTRIBUTE = NO
- 
--FIRMWARE_IMX_BLOBS = sdma vpu
--
- define FIRMWARE_IMX_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
- endef
-@@ -72,35 +70,66 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
- 	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
- endef
- endif
-+endif # IMX_NEEDS_DDR_FW
-+
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_HDMI),y)
-+FIRMWARE_IMX_INSTALL_IMAGES = YES
- 
--ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
- define FIRMWARE_IMX_PREPARE_HDMI_FW
- 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
- 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
- endef
- endif
- 
--define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
--	$(FIRMWARE_IMX_PREPARE_DDR_FW)
--	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_EPDC),y)
-+FIRMWARE_IMX_INSTALL_TARGET = YES
-+
-+define FIRMWARE_IMX_INSTALL_TARGET_EPDC_FW
-+	mkdir -p $(TARGET_DIR)/lib/firmware/imx
-+	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
-+	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
-+		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
- endef
--else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
--define FIRMWARE_IMX_INSTALL_TARGET_CMDS
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_SDMA),y)
-+FIRMWARE_IMX_INSTALL_TARGET = YES
-+
-+define FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW
-+	mkdir -p $(TARGET_DIR)/lib/firmware/imx
-+	cp -r $(@D)/firmware/vpu $(TARGET_DIR)/lib/firmware
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_VPU_CODA),y)
-+FIRMWARE_IMX_INSTALL_TARGET = YES
-+
-+define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
-+	mkdir -p $(TARGET_DIR)/lib/firmware/imx
-+	cp -r $(@D)/firmware/vpu $(TARGET_DIR)/lib/firmware
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_VPU_MALONE),y)
-+FIRMWARE_IMX_INSTALL_TARGET = YES
-+
-+define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
- 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
- 		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_dec.bin
- 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_enc.bin \
- 		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_enc.bin
- endef
--else
-+endif
-+
-+define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
-+	$(FIRMWARE_IMX_PREPARE_DDR_FW)
-+	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
-+endef
-+
- define FIRMWARE_IMX_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/lib/firmware/imx
--	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
--		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
--	done
--	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
--	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
--		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
-+	$(FIRMWARE_IMX_INSTALL_TARGET_EPDC_FW)
-+	$(FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW)
-+	$(FIRMWARE_IMX_INSTALL_TARGET_VPU_FW)
- endef
--endif
- 
- $(eval $(generic-package))
+This might be true in general, but it is not necessarily on embedded
+systems waiting for the kernel's crng to be initialized. If that
+initialization is a requirement and the system has very few entropy
+sources only (think of an embedded device with no network initialized,
+no HID, no sensors, ?) the boot can actually hours or days, seriously.
+
+Greets
+Alex
+
 -- 
-2.7.4
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200629/1c8abc01/attachment.asc>
