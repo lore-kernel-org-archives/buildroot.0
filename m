@@ -1,67 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 29 Jun 2020 12:51:02 +0200
-Subject: [Buildroot] [PATCH=2020.02.x] package/redis: bump version to
- 5.0.9
-In-Reply-To: <8cb0702e-2c5d-553b-5793-681ddc619130@railnova.eu>
-References: <20200621213921.11923-1-peter@korsgaard.com>
- <8cb0702e-2c5d-553b-5793-681ddc619130@railnova.eu>
-Message-ID: <CAAXf6LWhoLwig3i8FNjC3OQ65h27y50cbu5ROZkBHKnnXsjSUw@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 29 Jun 2020 12:52:43 +0200
+Subject: [Buildroot] [PATCH] system/skeleton: make /var/run a symlink to
+ /run
+In-Reply-To: <20200629104749.46938-1-nolange79@gmail.com>
+References: <20200629104749.46938-1-nolange79@gmail.com>
+Message-ID: <CADYdroNQhEHTV4=9m_EOZ_mVpx1C9Eewn1J9wqDh+0RsWZGarQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-El lun., 22 jun. 2020 a las 9:49, Titouan Christophe (<
-titouan.christophe@railnova.eu>) escribi?:
-
-> Hello Peter and all,
+Am Mo., 29. Juni 2020 um 12:47 Uhr schrieb Norbert Lange <nolange79@gmail.com>:
 >
-> On 21/06/20 23:39, Peter Korsgaard wrote:
-> > Fixes a critical issue related to streams. From the release notes:
-> >
-> >
-> ================================================================================
-> > Redis 5.0.9     Released Thu Apr 17 12:41:00 CET 2020
-> >
-> ================================================================================
-> >
-> > Upgrade urgency:CRITICAL if you use Streams with AOF ore replicas.
-> >                  Otherwise the upgrade urgency is LOW.
-> >
-> > This release has a speed improvement and a critical fix:
-> >
-> >      * FIX: XREADGROUP when fetching data in a blocking way, would not
-> >             emit the XCLAIM in the AOF file and to replicas. This means
-> >             that the last ID is not updated, and that restarting the
-> server
-> >             will have the effect of reprocessing some entries.
-> >      * NEW: Clients blocked on the same key are now unblocked on
-> >             O(1) time. Backported from Redis 6.
-> >
-> > Commits:
-> >
-> >      1fc8ef81a Fix XCLAIM propagation in AOF/replicas for blocking
-> XREADGROUP.
-> >      a5e24eabc Speedup: unblock clients on keys in O(1).
-> >
-> > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>Acked-by: Titouan
-> Christophe <titouan.christophe@railnova.eu>
+> both systemd and FHS3 denote /var/run as a compatibility directory,
+> new systems should use /run.
 >
+> There seems to be little reason to not switch to the new FHS layout
+> with buildroot, and adding the compatibility symlink.
 >
-Just want to highlight that also the 5.0.8 turns out to have a security
-fix: http://cve.circl.lu/cve/CVE-2020-14147
+> [1] - https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s13.html
+>
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/skeleton-init-systemd/skeleton-init-systemd.mk | 2 --
+>  system/skeleton/var/run                                | 1 +
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+>  create mode 120000 system/skeleton/var/run
+>
+> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> index 5d6b716f7a..528cf43e61 100644
+> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> @@ -60,8 +60,6 @@ endif
+>  define SKELETON_INIT_SYSTEMD_INSTALL_TARGET_CMDS
+>         mkdir -p $(TARGET_DIR)/home
+>         mkdir -p $(TARGET_DIR)/srv
+> -       mkdir -p $(TARGET_DIR)/var
+> -       ln -s ../run $(TARGET_DIR)/var/run
+>         $(SKELETON_INIT_SYSTEMD_ROOT_RO_OR_RW)
+>  endef
+>
+> diff --git a/system/skeleton/var/run b/system/skeleton/var/run
+> new file mode 120000
+> index 0000000000..84ba55b912
+> --- /dev/null
+> +++ b/system/skeleton/var/run
+> @@ -0,0 +1 @@
+> +../run
+> \ No newline at end of file
+> --
+> 2.27.0
+>
 
-Which reminds me of the fact that the package stats and associated CVE
-detection is currently only running on the master branch (that I know of).
-Which means that we are missing the CVE detection on the LTS branch.
-Does it take a lot of resources / Is it hard to do, enabling this on the
-LTS branch too (mostly the CVE part) ?
+Some future change would be to change relative symlinks touching the
+target root to absolutes.
+potentially as last step after the fakeroot scripts.
+Reasoning can be found at the debian manual (allowing symlinks in root).
 
-Thanks,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200629/c8f3d5e7/attachment.html>
+Norbert
+
+[1] - https://www.debian.org/doc/debian-policy/ch-files.html#symbolic-links
