@@ -1,66 +1,46 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Mon, 29 Jun 2020 23:07:35 +0200
-Subject: [Buildroot] [PATCH 4/4] package/poco: add new option for the Poco
- JWT component
-In-Reply-To: <20200629210735.179913-1-juju@cotds.org>
-References: <20200629210735.179913-1-juju@cotds.org>
-Message-ID: <20200629210735.179913-4-juju@cotds.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 29 Jun 2020 23:01:20 +0200
+Subject: [Buildroot] [git commit] package/cups-filters: bump to version
+ 1.27.5
+Message-ID: <20200629210600.A0B478615C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Poco 1.10.0 introduced a new JWT (JSON Web Tokens). See:
-https://pocoproject.org/docs/Poco.JWT.Token.html
+commit: https://git.buildroot.net/buildroot/commit/?id=bbcd6b6554a70b12552e1043817e312788c88696
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch add the option to build this component.
+This patch bumps cups-filters to version 1.27.5.
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/poco/Config.in | 6 ++++++
- package/poco/poco.mk   | 5 +++--
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ package/cups-filters/cups-filters.hash | 2 +-
+ package/cups-filters/cups-filters.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index a3d19d5640..1a3b0ceeed 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -82,6 +82,12 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
- 	select BR2_PACKAGE_POCO_DATA
- 	select BR2_PACKAGE_MYSQL
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index 9e24abe393..61cb42a438 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 ff8679fcd0c31c25d229262c7ad100ba161ef6b2aa455a2df673dd74ef93f488  cups-filters-1.26.0.tar.gz
++sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
+ sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index ffd1fd8945..dc4e89b52e 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_POCO_JWT
-+	bool "jwt"
-+	select BR2_PACKAGE_POCO_JSON
-+	select BR2_PACKAGE_POCO_CRYPTO
-+	select BR2_PACKAGE_OPENSSL
-+
- endif # BR2_PACKAGE_POCO
- 
- comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 5 w/ C++14"
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 915d0dc400..c605044ba3 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -17,7 +17,7 @@ POCO_DEPENDENCIES = zlib pcre \
- 	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql)
- 
--POCO_OMIT = Data/ODBC JWT PageCompiler \
-+POCO_OMIT = Data/ODBC PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_JSON),,JSON) \
- 	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
- 	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
-@@ -31,7 +31,8 @@ POCO_OMIT = Data/ODBC JWT PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_MONGODB),,MongoDB) \
- 	$(if $(BR2_PACKAGE_POCO_DATA),,Data) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL) \
--	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite)
-+	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite) \
-+	$(if $(BR2_PACKAGE_POCO_JWT),,JWT)
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- POCO_CONF_OPTS += --no-fpenvironment --no-wstring
--- 
-2.26.2
+-CUPS_FILTERS_VERSION = 1.26.0
++CUPS_FILTERS_VERSION = 1.27.5
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
