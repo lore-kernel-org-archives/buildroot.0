@@ -1,49 +1,64 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 29 Jun 2020 14:16:55 +0200
-Subject: [Buildroot] [PATCH=2020.02.x] package/redis: bump version to
- 5.0.9
-In-Reply-To: <20200629140738.7dd4749d@windsurf>
-References: <20200621213921.11923-1-peter@korsgaard.com>
- <8cb0702e-2c5d-553b-5793-681ddc619130@railnova.eu>
- <CAAXf6LWhoLwig3i8FNjC3OQ65h27y50cbu5ROZkBHKnnXsjSUw@mail.gmail.com>
- <20200629140738.7dd4749d@windsurf>
-Message-ID: <CAAXf6LUU13bLkYuNFWb7suK5b4mb8ppysKaAM=oLS5FxmN=Q6Q@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 29 Jun 2020 14:26:23 +0200
+Subject: [Buildroot] [PATCH] package/glibc: disable Werror for gcc 10
+ build
+In-Reply-To: <20200628201612.3130899-1-romain.naour@gmail.com>
+References: <20200628201612.3130899-1-romain.naour@gmail.com>
+Message-ID: <CAGm1_ks2OvgNqDJXXEHuGZCZWERQ2wxbaTYjfup+6A8AeqgvXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 29 jun. 2020 a las 14:07, Thomas Petazzoni (<
-thomas.petazzoni@bootlin.com>) escribi?:
+On Sun, Jun 28, 2020 at 10:16 PM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> Currently glibc 2.30 is build by default with Werror enabled but it
+> has only been tested with compiler version available at the time of
+> the release [1] (gcc 6.2 up to gcc 9.2.1). It's recommended to use
+> those version with glibc 2.30.
+>
+> For the same reason why we remove Werror in packages's compiler
+> flags. Building with Werror is not bulletproof when we start
+> using a newer compiler that introduce new warnings.
+> This is the case here with gcc 10, as reported by Yegor Yefremov
+> [2].
+>
+> Fixing compiler warnings would require backporting many patches [3]
+> not even backported by Glibc maintainers to the 2.30 stable
+> branch. Instead, disable Werror by using --disable-werror.
+> Most (if not all) gcc 10 warnings will be fixed with Glibc 2.31.
+>
+> [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=INSTALL;h=62e78725f57080a1cb638cccd28ca3c2ffc5a22c#l466
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-June/285715.html
+> [3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=cba932a5a9e91cffd7f4172d7e91f9b2efb1f84b
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=de18a7061c9bdff73d66502c55d6a3ea671fc6d9
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=49348beafe9ba150c9bd48595b3f372299bddbb0
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=70c6e15654928c603c6d24bd01cf62e7a8e2ce9b
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=c7bf5ceab6ec776ac7350d3b0190776bf532ac54
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=e1d559f337de2c8ab68a6749dfe873477c883807
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
-> Hello,
->
-> On Mon, 29 Jun 2020 12:51:02 +0200
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->
-> > Which reminds me of the fact that the package stats and associated CVE
-> > detection is currently only running on the master branch (that I know
-> of).
-> > Which means that we are missing the CVE detection on the LTS branch.
-> > Does it take a lot of resources / Is it hard to do, enabling this on the
-> > LTS branch too (mostly the CVE part) ?
->
-> Running pkg-stats on other branches is really easy, I can make it
-> generate autobuild.buildroot/stats/2020.02.x.{html,json} for example.
->
-> However, what needs a bit more effort is to modify the e-mail
-> notification script to make use of that.
->
-> Note that my colleague Gr?gory is working on improving the CVE
-> infrastructure so that you can run a script on your specific Buildroot
-> version and configuration, and get the list of CVEs you are affected
-> by. I.e the same results as pkg-stats, but really tailored to your
-> Buildroot version/configuration. Hopefully Gr?gory will send the
-> patches soon.
->
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-That sounds great, this will be very useful!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200629/a7ff9c57/attachment.html>
+> ---
+>  package/glibc/glibc.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 76fae1f9f7..1881cf0cdc 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -131,6 +131,7 @@ define GLIBC_CONFIGURE_CMDS
+>                 $(if $(BR2_x86_64),--enable-lock-elision) \
+>                 --with-pkgversion="Buildroot" \
+>                 --disable-profile \
+> +               --disable-werror \
+>                 --without-gd \
+>                 --enable-obsolete-rpc \
+>                 --enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+> --
+> 2.25.4
+>
