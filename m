@@ -1,131 +1,120 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 29 Jun 2020 09:16:56 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/dropbear: bump to version 2020.80
-In-Reply-To: <20200629071656.367833-1-francois.perrad@gadz.org>
-References: <20200629071656.367833-1-francois.perrad@gadz.org>
-Message-ID: <20200629071656.367833-2-francois.perrad@gadz.org>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Mon, 29 Jun 2020 09:31:09 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/haveged: Change service file
+ to run early
+In-Reply-To: <CADYdroMM5zNtnQ8J7soZo+Vnv6eSuZFVj6Bq+GyZ4UyB4xkEgg@mail.gmail.com>
+References: <20200609224116.13607-1-nolange79@gmail.com>
+ <20200609224116.13607-2-nolange79@gmail.com>
+ <CADYdroMM5zNtnQ8J7soZo+Vnv6eSuZFVj6Bq+GyZ4UyB4xkEgg@mail.gmail.com>
+Message-ID: <CAFvCimVKi8eTQHnO6t0ZhcT86X74hqyM4JzQTJ_XWyxNVSFAWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-remove merged patches.
+Well
+I still think you need Before=systemd-random-seed.service and I don't
+understand why you are reluctant to add it.
+(Honestly, I think the Before= and your work to make it an early boot
+service should be upstreamed)
 
-LICENSE diff:
-- Copyright (c) 2002-2015 Matt Johnston
-+ Copyright (c) 2002-2020 Matt Johnston
-- LibTomCrypt and LibTomMath are written by Tom St Denis, and are Public Domain.
-+ LibTomCrypt and LibTomMath are written by Tom St Denis and others, see
-+ libtomcrypt/LICENSE and libtommath/LICENSE.
+So, i'm a bit reluctant to give my reviewed-by. Again, it's not worse than
+it was, but if you want
+to make sure that all services that need randomness are correctly started
+after haveged, then
+you have to add that Before=
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- .../0001-_GNU_SOURCE-for-random.patch         | 25 --------------
- .../0002-move-GNU_SOURCE-earlier.patch        | 34 -------------------
- package/dropbear/dropbear.hash                |  4 +--
- package/dropbear/dropbear.mk                  |  2 +-
- 4 files changed, 3 insertions(+), 62 deletions(-)
- delete mode 100644 package/dropbear/0001-_GNU_SOURCE-for-random.patch
- delete mode 100644 package/dropbear/0002-move-GNU_SOURCE-earlier.patch
+I won't block the patch going in if a BR maintainer want to commit it, but
+i'd like to understand why you are reluctant
+to add that
 
-diff --git a/package/dropbear/0001-_GNU_SOURCE-for-random.patch b/package/dropbear/0001-_GNU_SOURCE-for-random.patch
-deleted file mode 100644
-index dfb851411..000000000
---- a/package/dropbear/0001-_GNU_SOURCE-for-random.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 3f5c106a880a02b21739f2022746e6aa7672474c Mon Sep 17 00:00:00 2001
--From: Matt Johnston <matt@ucc.asn.au>
--Date: Tue, 23 Jun 2020 21:38:46 +0800
--Subject: [PATCH] _GNU_SOURCE for random
--
--[Retrieved from:
--https://github.com/mkj/dropbear/commit/3f5c106a880a02b21739f2022746e6aa7672474c]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- includes.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/includes.h b/includes.h
--index e8c3e189..2789f23d 100644
----- a/includes.h
--+++ b/includes.h
--@@ -125,6 +125,8 @@
-- #endif
-- 
-- #ifdef HAVE_SYS_RANDOM_H
--+/* uclibc needs _GNU_SOURCE */
--+#define _GNU_SOURCE
-- #include <sys/random.h>
-- #endif
-- 
-diff --git a/package/dropbear/0002-move-GNU_SOURCE-earlier.patch b/package/dropbear/0002-move-GNU_SOURCE-earlier.patch
-deleted file mode 100644
-index 81282e423..000000000
---- a/package/dropbear/0002-move-GNU_SOURCE-earlier.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From a7a67585cbc3fe5df85c641618b347a51a943356 Mon Sep 17 00:00:00 2001
--From: Matt Johnston <matt@ucc.asn.au>
--Date: Tue, 23 Jun 2020 22:24:58 +0800
--Subject: [PATCH] move GNU_SOURCE earlier
--
--[Retrieved from:
--https://github.com/mkj/dropbear/commit/a7a67585cbc3fe5df85c641618b347a51a943356]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- includes.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/includes.h b/includes.h
--index 2789f23d..884ebf71 100644
----- a/includes.h
--+++ b/includes.h
--@@ -25,6 +25,8 @@
-- #ifndef DROPBEAR_INCLUDES_H_
-- #define DROPBEAR_INCLUDES_H_
-- 
--+/* uclibc needs _GNU_SOURCE, maybe other things? */
--+#define _GNU_SOURCE
-- 
-- #include "options.h"
-- #include "debug.h"
--@@ -125,8 +127,6 @@
-- #endif
-- 
-- #ifdef HAVE_SYS_RANDOM_H
---/* uclibc needs _GNU_SOURCE */
---#define _GNU_SOURCE
-- #include <sys/random.h>
-- #endif
-- 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 39a116ede..af69cec53 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,7 +1,7 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  084f00546b1610a3422a0773e2c04cbe1a220d984209e033b548b49f379cc441  dropbear-2020.79.tar.bz2
-+sha256  d927941b91f2da150b2033f1a88b6a47999bf0afb1493a73e9216cffdb5d7949  dropbear-2020.80.tar.bz2
- 
- # License file, locally computed
--sha256  2ac2be75a2232ec2473070dd791ee990253dffde6022d364809bbbcbc30f710e  LICENSE
-+sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
- sha256  8f196cb13afd271f5e267fd29543fc454596382ad580e7592709492843996ac8  libtomcrypt/LICENSE
- sha256  2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  libtommath/LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bca79da45..2d0bd52ef 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2020.79
-+DROPBEAR_VERSION = 2020.80
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
+Regards
+Jeremy
+
+Le ven. 26 juin 2020 ? 00:39, Norbert Lange <nolange79@gmail.com> a ?crit :
+
+> Jeremy,
+>
+> Can you have a look and add your reviewed-by pls?
+> No drastic changes from v1, except adding a few isolation options from
+> the upstream fedora service file.
+>
+> Am Mi., 10. Juni 2020 um 00:42 Uhr schrieb Norbert Lange <
+> nolange79 at gmail.com>:
+> >
+> > Drop default dependencies, haveged needs nothing but
+> > local sockets and /dev/random.
+> >
+> > The service file now mostly matches the upstream fedora file,
+> > except alot of isolation options have been dropped.
+> > The benefit for a completely controlled system is small,
+> > and those option would pull in dependencies, delaying
+> > entropy being filled up.
+> >
+> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> > ---
+> >  package/haveged/haveged.service | 22 +++++++++++++++++-----
+> >  1 file changed, 17 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/package/haveged/haveged.service
+> b/package/haveged/haveged.service
+> > index 91035c6711..cfdaa93a37 100644
+> > --- a/package/haveged/haveged.service
+> > +++ b/package/haveged/haveged.service
+> > @@ -1,10 +1,22 @@
+> >  [Unit]
+> > -Description=Entropy Harvesting Daemon
+> > -Documentation=man:haveged(8)
+> > +# inspiration from upstream init.d/service.fedora
+> > +Description=Entropy Daemon based on the HAVEGE algorithm
+> > +Documentation=man:haveged(8) http://www.issihosts.com/haveged/
+> > +DefaultDependencies=no
+> > +# This would wait for filesystems, but we only need /dev/random,
+> > +# which is certainly available after systemd initialised
+> > +# After=systemd-tmpfiles-setup-dev.service
+> > +Before=sysinit.target shutdown.target systemd-journald.service
+> >
+> >  [Service]
+> > -ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
+> > -SuccessExitStatus=143
+> > +ExecStart=/usr/sbin/haveged -w 1024 -v 1 --Foreground
+> > +Restart=always
+> > +SuccessExitStatus=137 143
+> > +
+> > +# Only simple isolation methods that dont pull in dependencies
+> > +CapabilityBoundingSet=CAP_SYS_ADMIN
+> > +SecureBits=noroot-locked
+> > +ProtectSystem=full
+> >
+> >  [Install]
+> > -WantedBy=multi-user.target
+> > +WantedBy=sysinit.target
+> > --
+> > 2.26.2
+> >
+>
+
+
 -- 
-2.25.1
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200629/c2145c44/attachment.html>
