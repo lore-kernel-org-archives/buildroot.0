@@ -1,33 +1,98 @@
 From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Mon, 29 Jun 2020 10:25:44 +0200
-Subject: [Buildroot] [PATCH v2 0/4] package/freescale-imx: clean-up proposal
-Message-ID: <1593419148-26821-1-git-send-email-stephane.viau@oss.nxp.com>
+Date: Mon, 29 Jun 2020 10:25:46 +0200
+Subject: [Buildroot] [PATCH v2 2/4] package/freescale-imx/firmware-imx: Add
+ option for all i.MX FW needs
+In-Reply-To: <1593419148-26821-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1593419148-26821-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <1593419148-26821-3-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In reponse to the comments received on the first version [1], here is
-a second attempt for the firmware-imx package clean up.
-Feedback is welcome.
+Some SoC need a HDMI FW for their bootloader, some other require EPDC,
+SDMA and/or VPU.
+Instead of trying to "guess" what firmware images need to be installed
+in firmware-imx.mk, let the Config framework do the job and allow each
+SoC to pick what firmware they need.
 
-BR,
-Stephane.
+Note that this patch should also help introducing an eventual DP FW, as
+Gary mentioned in a separate thread [1].
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-June/285571.html
+[1] http://lists.busybox.net/pipermail/buildroot/2020-May/283181.html
 
-Stephane Viau (4):
-  package/freescale-imx: Move DDR FW choice down to firmware-imx package
-  package/freescale-imx/firmware-imx: Add option for all i.MX FW needs
-  package/freescale-imx/firmware-imx: Clean up the image/target semantic
-  package/freescale-imx/firmware-imx: Fix sdma/vpu firmware install path
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+---
+v2:
+- Do not embed VPU FW for i.MX 6S/6UL/7 (Fabio)
+- Name VPU FW after IP name (Fabio)
+- Rename symbols using the "_NEED_" in their name (Thomas)
 
- configs/freescale_imx8mnevk_defconfig              |  2 +-
- package/freescale-imx/Config.in                    |  6 --
- package/freescale-imx/firmware-imx/Config.in       | 58 ++++++++++++++++--
- package/freescale-imx/firmware-imx/firmware-imx.mk | 69 +++++++++++++++-------
- 4 files changed, 103 insertions(+), 32 deletions(-)
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+---
+ package/freescale-imx/firmware-imx/Config.in | 43 +++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
 
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index d6310e6..2ac5dfa 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -4,11 +4,52 @@ config BR2_PACKAGE_FIRMWARE_IMX
+ 	help
+ 	  Firmware blobs for the Freescale i.MX SoCs.
+ 
+-	  It contains blobs for SDMA and VPU.
++	  It contains blobs for SDMA, VPU, etc...
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
+ 
++config BR2_PACKAGE_FIRMWARE_IMX_SDMA
++	bool
++	depends on BR2_PACKAGE_FIRMWARE_IMX
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++
++config BR2_PACKAGE_FIRMWARE_IMX_VPU_CODA
++	bool
++	depends on BR2_PACKAGE_FIRMWARE_IMX
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++
++config BR2_PACKAGE_FIRMWARE_IMX_VPU_MALONE
++	bool
++	depends on BR2_PACKAGE_FIRMWARE_IMX
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++
++config BR2_PACKAGE_FIRMWARE_IMX_HDMI
++	bool
++	depends on BR2_PACKAGE_FIRMWARE_IMX
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++
++config BR2_PACKAGE_FIRMWARE_IMX_EPDC
++	bool
++	depends on BR2_PACKAGE_FIRMWARE_IMX
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++
+ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+ 	bool
+ 	depends on BR2_PACKAGE_FIRMWARE_IMX
 -- 
 2.7.4
