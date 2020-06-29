@@ -1,437 +1,1850 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 29 Jun 2020 22:43:36 +0200
-Subject: [Buildroot] [git commit] package/binutils: add version 2.34
-Message-ID: <20200629204103.6536D844D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/binutils: remove version 2.31.1
+Message-ID: <20200629204103.8135980749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64be43e66b095fcdeea5b22f8ae122a92c5c506d
+commit: https://git.buildroot.net/buildroot/commit/?id=25129ad3c26577e476a1be0daa3cf8259e570b7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebase existing patches.
+Now that binutils 2.34 has been introduced, and we have moved to
+2.33.1 as the default version, it is time to drop support for binutils
+2.31.1.
 
-Keep BR2_BINFMT_FLAT disabled for binutils 2.34 since elf2flt issue
-is not fixed [1] [2].
-
-[1] https://github.com/uclinux-dev/elf2flt/pull/16
-[2] https://github.com/uclinux-dev/elf2flt/issues/12
-
-See announce:
-https://lists.gnu.org/archive/html/info-gnu/2020-02/msg00000.html
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/binutils/2.34/0001-sh-conf.patch           |  48 ++++
- .../2.34/0002-poison-system-directories.patch      | 306 +++++++++++++++++++++
- package/binutils/Config.in.host                    |   8 +
- package/binutils/binutils.hash                     |   1 +
- 4 files changed, 363 insertions(+)
+ Config.in.legacy                                   |   8 +
+ package/binutils/2.31.1/0001-sh-conf.patch         |  48 --
+ .../2.31.1/0005-poison-system-directories.patch    | 306 -----------
+ ...location-where-GOT-information-is-collect.patch | 198 -------
+ ...bustness.-Return-FALSE-in-case-of-NULL-po.patch |  35 --
+ ...lobal-symbol-is-not-an-indirect-or-warnin.patch |  43 --
+ ...tion-was-still-being-generated-when-symbo.patch |  37 --
+ ...relaxation-of-undefined-weak-references-i.patch |  48 --
+ ...-dynamic-relocations-sections-consistency.patch |  90 ----
+ ...NU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch | 568 --------------------
+ ...roperly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch | 588 ---------------------
+ ...86-Properly-add-X86_ISA_1_NEEDED-property.patch | 140 -----
+ ...fix-shrink_dynamic_reloc_sections-for-exp.patch |  41 --
+ ...terals-const16-for-xtensa-loop-relaxation.patch | 294 -----------
+ ...as-put-.literal_position-at-section-start.patch |  96 ----
+ .../2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch   |  37 --
+ .../2.31.1/0019-xtensa-fix-PR-ld-25861.patch       | 376 -------------
+ ...fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 -----
+ package/binutils/Config.in.host                    |   5 -
+ package/binutils/binutils.hash                     |   1 -
+ package/gcc/Config.in.host                         |   4 -
+ 21 files changed, 8 insertions(+), 3083 deletions(-)
 
-diff --git a/package/binutils/2.34/0001-sh-conf.patch b/package/binutils/2.34/0001-sh-conf.patch
-new file mode 100644
-index 0000000000..6f873691fe
---- /dev/null
-+++ b/package/binutils/2.34/0001-sh-conf.patch
-@@ -0,0 +1,48 @@
-+From a4292f2852027008714c5ccdbab77af0b36f3928 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 25 Dec 2015 11:38:13 +0100
-+Subject: [PATCH] sh-conf
-+
-+Likewise, binutils has no idea about any of these new targets either, so we
-+fix that up too.. now we're able to actually build a real toolchain for
-+sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more
-+inept targets than that one, really. Go look, I promise).
-+
-+[Romain: rebase on top of 2.32]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure    | 2 +-
-+ configure.ac | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 91dc42f6c7..92f70a4ce6 100755
-+--- a/configure
-++++ b/configure
-+@@ -3915,7 +3915,7 @@ case "${target}" in
-+   nvptx*-*-*)
-+     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
-+     ;;
-+-  sh-*-*)
-++  sh*-*-*)
-+     case "${target}" in
-+       sh*-*-elf)
-+          ;;
-+diff --git a/configure.ac b/configure.ac
-+index 4bd869a63a..139e0aa6ab 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1159,7 +1159,7 @@ case "${target}" in
-+   nvptx*-*-*)
-+     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
-+     ;;
-+-  sh-*-*)
-++  sh*-*-*)
-+     case "${target}" in
-+       sh*-*-elf)
-+          ;;
-+-- 
-+2.24.1
-+
-diff --git a/package/binutils/2.34/0002-poison-system-directories.patch b/package/binutils/2.34/0002-poison-system-directories.patch
-new file mode 100644
-index 0000000000..fc0c69841c
---- /dev/null
-+++ b/package/binutils/2.34/0002-poison-system-directories.patch
-@@ -0,0 +1,306 @@
-+From 9952aec22006cfd0e1f5dd0106523e2b93ad20a8 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 25 Dec 2015 11:45:38 +0100
-+Subject: [PATCH] poison-system-directories
-+
-+Patch adapted to binutils 2.23.2 and extended to use
-+BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
-+
-+[Romain: rebase on top of 2.33.1]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Gustavo: adapt to binutils 2.25]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+Upstream-Status: Inappropriate [distribution: codesourcery]
-+
-+Patch originally created by Mark Hatle, forward-ported to
-+binutils 2.21 by Scott Garman.
-+
-+purpose:  warn for uses of system directories when cross linking
-+
-+Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
-+
-+2008-07-02  Joseph Myers  <joseph@codesourcery.com>
-+
-+    ld/
-+    * ld.h (args_type): Add error_poison_system_directories.
-+    * ld.texinfo (--error-poison-system-directories): Document.
-+    * ldfile.c (ldfile_add_library_path): Check
-+    command_line.error_poison_system_directories.
-+    * ldmain.c (main): Initialize
-+    command_line.error_poison_system_directories.
-+    * lexsup.c (enum option_values): Add
-+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
-+    (ld_options): Add --error-poison-system-directories.
-+    (parse_args): Handle new option.
-+
-+2007-06-13  Joseph Myers  <joseph@codesourcery.com>
-+
-+    ld/
-+    * config.in: Regenerate.
-+    * ld.h (args_type): Add poison_system_directories.
-+    * ld.texinfo (--no-poison-system-directories): Document.
-+    * ldfile.c (ldfile_add_library_path): Check
-+    command_line.poison_system_directories.
-+    * ldmain.c (main): Initialize
-+    command_line.poison_system_directories.
-+    * lexsup.c (enum option_values): Add
-+    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
-+    (ld_options): Add --no-poison-system-directories.
-+    (parse_args): Handle new option.
-+
-+2007-04-20  Joseph Myers  <joseph@codesourcery.com>
-+
-+    Merge from Sourcery G++ binutils 2.17:
-+
-+    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
-+    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
-+    ld/
-+    * configure.ac (--enable-poison-system-directories): New option.
-+    * configure, config.in: Regenerate.
-+    * ldfile.c (ldfile_add_library_path): If
-+    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
-+    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
-+
-+Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
-+Signed-off-by: Scott Garman <scott.a.garman@intel.com>
-+---
-+ ld/config.in    |  3 +++
-+ ld/configure    | 14 ++++++++++++++
-+ ld/configure.ac | 10 ++++++++++
-+ ld/ld.h         |  8 ++++++++
-+ ld/ld.texi      | 12 ++++++++++++
-+ ld/ldfile.c     | 17 +++++++++++++++++
-+ ld/ldlex.h      |  2 ++
-+ ld/ldmain.c     |  2 ++
-+ ld/lexsup.c     | 21 +++++++++++++++++++++
-+ 9 files changed, 89 insertions(+)
-+
-+diff --git a/ld/config.in b/ld/config.in
-+index d93c9b0830..5da2742bea 100644
-+--- a/ld/config.in
-++++ b/ld/config.in
-+@@ -31,6 +31,9 @@
-+    language is requested. */
-+ #undef ENABLE_NLS
-+ 
-++/* Define to warn for use of native system library directories */
-++#undef ENABLE_POISON_SYSTEM_DIRECTORIES
-++
-+ /* Additional extension a shared object might have. */
-+ #undef EXTRA_SHLIB_EXTENSION
-+ 
-+diff --git a/ld/configure b/ld/configure
-+index d55a6a779f..7e5314d24a 100755
-+--- a/ld/configure
-++++ b/ld/configure
-+@@ -826,6 +826,7 @@ with_lib_path
-+ enable_targets
-+ enable_64_bit_bfd
-+ with_sysroot
-++enable_poison_system_directories
-+ enable_gold
-+ enable_got
-+ enable_compressed_debug_sections
-+@@ -1491,6 +1492,8 @@ Optional Features:
-+   --disable-largefile     omit support for large files
-+   --enable-targets        alternative target configurations
-+   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
-++  --enable-poison-system-directories
-++                          warn for use of native system library directories
-+   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
-+   --enable-got=<type>     GOT handling scheme (target, single, negative,
-+                           multigot)
-+@@ -15809,7 +15812,18 @@ else
-+ fi
-+ 
-+ 
-++# Check whether --enable-poison-system-directories was given.
-++if test "${enable_poison_system_directories+set}" = set; then :
-++  enableval=$enable_poison_system_directories;
-++else
-++  enable_poison_system_directories=no
-++fi
-++
-++if test "x${enable_poison_system_directories}" = "xyes"; then
-+ 
-++$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
-++
-++fi
-+ 
-+ # Check whether --enable-got was given.
-+ if test "${enable_got+set}" = set; then :
-+diff --git a/ld/configure.ac b/ld/configure.ac
-+index b5e849d84a..22e022ec03 100644
-+--- a/ld/configure.ac
-++++ b/ld/configure.ac
-+@@ -94,6 +94,16 @@ AC_SUBST(use_sysroot)
-+ AC_SUBST(TARGET_SYSTEM_ROOT)
-+ AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
-+ 
-++AC_ARG_ENABLE([poison-system-directories],
-++         AS_HELP_STRING([--enable-poison-system-directories],
-++                [warn for use of native system library directories]),,
-++         [enable_poison_system_directories=no])
-++if test "x${enable_poison_system_directories}" = "xyes"; then
-++  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
-++       [1],
-++       [Define to warn for use of native system library directories])
-++fi
-++
-+ dnl Use --enable-gold to decide if this linker should be the default.
-+ dnl "install_as_default" is set to false if gold is the default linker.
-+ dnl "installed_linker" is the installed BFD linker name.
-+diff --git a/ld/ld.h b/ld/ld.h
-+index 71fd781267..5c7843100b 100644
-+--- a/ld/ld.h
-++++ b/ld/ld.h
-+@@ -166,6 +166,14 @@ typedef struct
-+      in the linker script.  */
-+   bfd_boolean force_group_allocation;
-+ 
-++  /* If TRUE (the default) warn for uses of system directories when
-++     cross linking.  */
-++  bfd_boolean poison_system_directories;
-++
-++  /* If TRUE (default FALSE) give an error for uses of system
-++     directories when cross linking instead of a warning.  */
-++  bfd_boolean error_poison_system_directories;
-++
-+   /* Big or little endian as set on command line.  */
-+   enum endian_enum endian;
-+ 
-+diff --git a/ld/ld.texi b/ld/ld.texi
-+index eb7bcb9933..3c73d445a0 100644
-+--- a/ld/ld.texi
-++++ b/ld/ld.texi
-+@@ -2551,6 +2551,18 @@ string identifying the original linked file does not change.
-+ 
-+ Passing @code{none} for @var{style} disables the setting from any
-+ @code{--build-id} options earlier on the command line.
-++
-++ at kindex --no-poison-system-directories
-++ at item --no-poison-system-directories
-++Do not warn for @option{-L} options using system directories such as
-++ at file{/usr/lib} when cross linking.  This option is intended for use
-++in chroot environments when such directories contain the correct
-++libraries for the target system rather than the host.
-++
-++ at kindex --error-poison-system-directories
-++ at item --error-poison-system-directories
-++Give an error instead of a warning for @option{-L} options using
-++system directories when cross linking.
-+ @end table
-+ 
-+ @c man end
-+diff --git a/ld/ldfile.c b/ld/ldfile.c
-+index 411f7ddf97..17db16c2cc 100644
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -117,6 +117,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
-+     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
-+   else
-+     new_dirs->name = xstrdup (name);
-++
-++#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
-++  if (command_line.poison_system_directories
-++  && ((!strncmp (name, "/lib", 4))
-++      || (!strncmp (name, "/usr/lib", 8))
-++      || (!strncmp (name, "/usr/local/lib", 14))
-++      || (!strncmp (name, "/usr/X11R6/lib", 14))))
-++   {
-++     if (command_line.error_poison_system_directories)
-++       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
-++            "cross-compilation\n"), name);
-++     else
-++       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
-++            "cross-compilation\n"), name);
-++   }
-++#endif
-++
-+ }
-+ 
-+ /* Try to open a BFD for a lang_input_statement.  */
-+diff --git a/ld/ldlex.h b/ld/ldlex.h
-+index 5287f19a7f..55096e4fc9 100644
-+--- a/ld/ldlex.h
-++++ b/ld/ldlex.h
-+@@ -150,6 +150,8 @@ enum option_values
-+   OPTION_FORCE_GROUP_ALLOCATION,
-+   OPTION_PRINT_MAP_DISCARDED,
-+   OPTION_NO_PRINT_MAP_DISCARDED,
-++  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
-++  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
-+ };
-+ 
-+ /* The initial parser states.  */
-+diff --git a/ld/ldmain.c b/ld/ldmain.c
-+index c4af10f4e9..95b56b2d2d 100644
-+--- a/ld/ldmain.c
-++++ b/ld/ldmain.c
-+@@ -273,6 +273,8 @@ main (int argc, char **argv)
-+   command_line.warn_mismatch = TRUE;
-+   command_line.warn_search_mismatch = TRUE;
-+   command_line.check_section_addresses = -1;
-++  command_line.poison_system_directories = TRUE;
-++  command_line.error_poison_system_directories = FALSE;
-+ 
-+   /* We initialize DEMANGLING based on the environment variable
-+      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
-+diff --git a/ld/lexsup.c b/ld/lexsup.c
-+index 3d15cc491d..54f52dc72f 100644
-+--- a/ld/lexsup.c
-++++ b/ld/lexsup.c
-+@@ -550,6 +550,14 @@ static const struct ld_option ld_options[] =
-+   { {"no-print-map-discarded", no_argument, NULL, OPTION_NO_PRINT_MAP_DISCARDED},
-+     '\0', NULL, N_("Do not show discarded sections in map file output"),
-+     TWO_DASHES },
-++  { {"no-poison-system-directories", no_argument, NULL,
-++    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
-++    '\0', NULL, N_("Do not warn for -L options using system directories"),
-++    TWO_DASHES },
-++  { {"error-poison-system-directories", no_argument, NULL,
-++    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
-++    '\0', NULL, N_("Give an error for -L options using system directories"),
-++    TWO_DASHES },
-+ };
-+ 
-+ #define OPTION_COUNT ARRAY_SIZE (ld_options)
-+@@ -562,6 +570,7 @@ parse_args (unsigned argc, char **argv)
-+   int ingroup = 0;
-+   char *default_dirlist = NULL;
-+   char *shortopts;
-++  char *BR_paranoid_env;
-+   struct option *longopts;
-+   struct option *really_longopts;
-+   int last_optind;
-+@@ -1562,6 +1571,14 @@ parse_args (unsigned argc, char **argv)
-+ 	  }
-+ 	  break;
-+ 
-++	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
-++	  command_line.poison_system_directories = FALSE;
-++	  break;
-++
-++	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
-++	  command_line.error_poison_system_directories = TRUE;
-++	  break;
-++
-+ 	case OPTION_PUSH_STATE:
-+ 	  input_flags.pushed = xmemdup (&input_flags,
-+ 					sizeof (input_flags),
-+@@ -1613,6 +1630,10 @@ parse_args (unsigned argc, char **argv)
-+       command_line.soname = NULL;
-+     }
-+ 
-++  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-++  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
-++    command_line.error_poison_system_directories = TRUE;
-++
-+   while (ingroup)
-+     {
-+       einfo (_("%P: missing --end-group; added as last command line option\n"));
-+-- 
-+2.24.1
-+
+---
+-2.9.3
+-
+diff --git a/package/binutils/2.31.1/0013-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch b/package/binutils/2.31.1/0013-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
+deleted file mode 100644
+index a4c48985d9..0000000000
+--- a/package/binutils/2.31.1/0013-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
++++ /dev/null
+@@ -1,588 +0,0 @@
+-From d55c3e36094f06bb1fb02f5eac19fdccf1d91f7e Mon Sep 17 00:00:00 2001
+-From: "H.J. Lu" <hjl.tools@gmail.com>
+-Date: Wed, 8 Aug 2018 06:09:15 -0700
+-Subject: [PATCH] x86: Properly merge GNU_PROPERTY_X86_ISA_1_USED
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=utf8
+-Content-Transfer-Encoding: 8bit
+-
+-Without the GNU_PROPERTY_X86_ISA_1_USED property, all ISAs may be used.
+-If a bit in the GNU_PROPERTY_X86_ISA_1_USED property is unset, the
+-corresponding x86 instruction set isn??????t used.  When merging properties
+-from 2 input files and one input file doesn't have the
+-GNU_PROPERTY_X86_ISA_1_USED property, the output file shouldn't have
+-it neither.  This patch removes the GNU_PROPERTY_X86_ISA_1_USED
+-property if an input file doesn't have it.
+-
+-This patch replaces the GNU_PROPERTY_X86_ISA_1_USED property with the
+-GNU_PROPERTY_X86_ISA_1_NEEDED property which is the minimum ISA
+-requirement.
+-
+-bfd/
+-
+-	PR ld/23486
+-	* elfxx-x86.c (_bfd_x86_elf_merge_gnu_properties): Remove
+-	GNU_PROPERTY_X86_ISA_1_USED if an input file doesn't have it.
+-	(_bfd_x86_elf_link_setup_gnu_properties): Adding the
+-	GNU_PROPERTY_X86_ISA_1_NEEDED, instead of
+-	GNU_PROPERTY_X86_ISA_1_USED, property.
+-
+-ld/
+-
+-	PR ld/23486
+-	* testsuite/ld-i386/i386.exp: Run PR ld/23486 tests.
+-	* testsuite/ld-x86-64/x86-64.exp: Likewise.
+-	* testsuite/ld-i386/pr23486a.d: New file.
+-	* testsuite/ld-i386/pr23486b.d: Likewise.
+-	* testsuite/ld-x86-64/pr23486a-x32.d: Likewise.
+-	* testsuite/ld-x86-64/pr23486a.d: Likewise.
+-	* testsuite/ld-x86-64/pr23486a.s: Likewise.
+-	* testsuite/ld-x86-64/pr23486b-x32.d: Likewise.
+-	* testsuite/ld-x86-64/pr23486b.d: Likewise.
+-	* testsuite/ld-x86-64/pr23486b.s: Likewise.
+-	* testsuite/ld-i386/property-3.r: Remove "x86 ISA used".
+-	* testsuite/ld-i386/property-4.r: Likewise.
+-	* testsuite/ld-i386/property-5.r: Likewise.
+-	* testsuite/ld-i386/property-x86-ibt3a.d: Likewise.
+-	* testsuite/ld-i386/property-x86-ibt3b.d: Likewise.
+-	* testsuite/ld-i386/property-x86-shstk3a.d: Likewise.
+-	* testsuite/ld-i386/property-x86-shstk3b.d: Likewise.
+-	* testsuite/ld-x86-64/property-3.r: Likewise.
+-	* testsuite/ld-x86-64/property-4.r: Likewise.
+-	* testsuite/ld-x86-64/property-5.r: Likewise.
+-	* testsuite/ld-x86-64/property-x86-ibt3a-x32.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-ibt3a.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-ibt3b-x32.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-ibt3b.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-shstk3a-x32.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-shstk3a.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-shstk3b-x32.d: Likewise.
+-	* testsuite/ld-x86-64/property-x86-shstk3b.d: Likewise.
+-
+-(cherry picked from commit f7309df20c4e787041cedc4a6aced89c15259e54)
+-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+----
+- bfd/ChangeLog                                     |  9 +++++++
+- bfd/elfxx-x86.c                                   | 25 ++++++++++++++----
+- ld/ChangeLog                                      | 32 +++++++++++++++++++++++
+- ld/testsuite/ld-i386/i386.exp                     |  2 ++
+- ld/testsuite/ld-i386/pr23486a.d                   | 10 +++++++
+- ld/testsuite/ld-i386/pr23486b.d                   | 10 +++++++
+- ld/testsuite/ld-i386/property-3.r                 |  1 -
+- ld/testsuite/ld-i386/property-4.r                 |  1 -
+- ld/testsuite/ld-i386/property-5.r                 |  1 -
+- ld/testsuite/ld-i386/property-x86-ibt3a.d         |  5 ++--
+- ld/testsuite/ld-i386/property-x86-ibt3b.d         |  5 ++--
+- ld/testsuite/ld-i386/property-x86-shstk3a.d       |  5 ++--
+- ld/testsuite/ld-i386/property-x86-shstk3b.d       |  5 ++--
+- ld/testsuite/ld-x86-64/pr23486a-x32.d             | 10 +++++++
+- ld/testsuite/ld-x86-64/pr23486a.d                 | 10 +++++++
+- ld/testsuite/ld-x86-64/pr23486a.s                 | 30 +++++++++++++++++++++
+- ld/testsuite/ld-x86-64/pr23486b-x32.d             | 10 +++++++
+- ld/testsuite/ld-x86-64/pr23486b.d                 | 10 +++++++
+- ld/testsuite/ld-x86-64/pr23486b.s                 | 30 +++++++++++++++++++++
+- ld/testsuite/ld-x86-64/property-3.r               |  1 -
+- ld/testsuite/ld-x86-64/property-4.r               |  1 -
+- ld/testsuite/ld-x86-64/property-5.r               |  1 -
+- ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d   |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-ibt3a.d       |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d   |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-ibt3b.d       |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-shstk3a.d     |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d |  5 ++--
+- ld/testsuite/ld-x86-64/property-x86-shstk3b.d     |  5 ++--
+- ld/testsuite/ld-x86-64/x86-64.exp                 |  4 +++
+- 31 files changed, 211 insertions(+), 47 deletions(-)
+- create mode 100644 ld/testsuite/ld-i386/pr23486a.d
+- create mode 100644 ld/testsuite/ld-i386/pr23486b.d
+- create mode 100644 ld/testsuite/ld-x86-64/pr23486a-x32.d
+- create mode 100644 ld/testsuite/ld-x86-64/pr23486a.d
+- create mode 100644 ld/testsuite/ld-x86-64/pr23486a.s
+- create mode 100644 ld/testsuite/ld-x86-64/pr23486b-x32.d
+- create mode 100644 ld/testsuite/ld-x86-64/pr23486b.d
+- create mode 100644 ld/testsuite/ld-x86-64/pr23486b.s
+-
+-diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
+-index 2e4ff88..7ccfd25 100644
+---- a/bfd/elfxx-x86.c
+-+++ b/bfd/elfxx-x86.c
+-@@ -2407,12 +2407,27 @@ _bfd_x86_elf_merge_gnu_properties (struct bfd_link_info *info,
+-   switch (pr_type)
+-     {
+-     case GNU_PROPERTY_X86_ISA_1_USED:
+-+      if (aprop == NULL || bprop == NULL)
+-+	{
+-+	  /* Only one of APROP and BPROP can be NULL.  */
+-+	  if (aprop != NULL)
+-+	    {
+-+	      /* Remove this property since the other input file doesn't
+-+		 have it.  */
+-+	      aprop->pr_kind = property_remove;
+-+	      updated = TRUE;
+-+	    }
+-+	  break;
+-+	}
+-+      goto or_property;
+-+
+-     case GNU_PROPERTY_X86_ISA_1_NEEDED:
+-       if (aprop != NULL && bprop != NULL)
+- 	{
+-+or_property:
+- 	  number = aprop->u.number;
+- 	  aprop->u.number = number | bprop->u.number;
+--	  /* Remove the property if ISA bits are empty.  */
+-+	  /* Remove the property if all bits are empty.  */
+- 	  if (aprop->u.number == 0)
+- 	    {
+- 	      aprop->pr_kind = property_remove;
+-@@ -2428,14 +2443,14 @@ _bfd_x86_elf_merge_gnu_properties (struct bfd_link_info *info,
+- 	    {
+- 	      if (aprop->u.number == 0)
+- 		{
+--		  /* Remove APROP if ISA bits are empty.  */
+-+		  /* Remove APROP if all bits are empty.  */
+- 		  aprop->pr_kind = property_remove;
+- 		  updated = TRUE;
+- 		}
+- 	    }
+- 	  else
+- 	    {
+--	      /* Return TRUE if APROP is NULL and ISA bits of BPROP
+-+	      /* Return TRUE if APROP is NULL and all bits of BPROP
+- 		 aren't empty to indicate that BPROP should be added
+- 		 to ABFD.  */
+- 	      updated = bprop->u.number != 0;
+-@@ -2582,9 +2597,9 @@ _bfd_x86_elf_link_setup_gnu_properties
+- 	{
+- 	  /* If the separate code program header is needed, make sure
+- 	     that the first read-only PT_LOAD segment has no code by
+--	     adding a GNU_PROPERTY_X86_ISA_1_USED note.  */
+-+	     adding a GNU_PROPERTY_X86_ISA_1_NEEDED note.  */
+- 	  prop = _bfd_elf_get_property (ebfd,
+--					GNU_PROPERTY_X86_ISA_1_USED,
+-+					GNU_PROPERTY_X86_ISA_1_NEEDED,
+- 					4);
+- 	  prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
+- 	  prop->pr_kind = property_number;
+-diff --git a/ld/testsuite/ld-i386/i386.exp b/ld/testsuite/ld-i386/i386.exp
+-index 6d794fe..78dad02 100644
+---- a/ld/testsuite/ld-i386/i386.exp
+-+++ b/ld/testsuite/ld-i386/i386.exp
+-@@ -462,6 +462,8 @@ run_dump_test "pr23189"
+- run_dump_test "pr23194"
+- run_dump_test "pr23372a"
+- run_dump_test "pr23372b"
+-+run_dump_test "pr23486a"
+-+run_dump_test "pr23486b"
+-
+- if { !([istarget "i?86-*-linux*"]
+-        || [istarget "i?86-*-gnu*"]
+-diff --git a/ld/testsuite/ld-i386/pr23486a.d b/ld/testsuite/ld-i386/pr23486a.d
+-new file mode 100644
+-index 0000000..41a6dcf
+---- /dev/null
+-+++ b/ld/testsuite/ld-i386/pr23486a.d
+-@@ -0,0 +1,10 @@
+-+#source: ../ld-x86-64/pr23486a.s
+-+#source: ../ld-x86-64/pr23486b.s
+-+#as: --32
+-+#ld: -r -m elf_i386
+-+#readelf: -n
+-+
+-+Displaying notes found in: .note.gnu.property
+-+  Owner                 Data size	Description
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586
+-diff --git a/ld/testsuite/ld-i386/pr23486b.d b/ld/testsuite/ld-i386/pr23486b.d
+-new file mode 100644
+-index 0000000..08019b7
+---- /dev/null
+-+++ b/ld/testsuite/ld-i386/pr23486b.d
+-@@ -0,0 +1,10 @@
+-+#source: ../ld-x86-64/pr23486b.s
+-+#source: ../ld-x86-64/pr23486a.s
+-+#as: --32
+-+#ld: -r -m elf_i386
+-+#readelf: -n
+-+
+-+Displaying notes found in: .note.gnu.property
+-+  Owner                 Data size	Description
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586
+-diff --git a/ld/testsuite/ld-i386/property-3.r b/ld/testsuite/ld-i386/property-3.r
+-index 0ed91f5..d03203c 100644
+---- a/ld/testsuite/ld-i386/property-3.r
+-+++ b/ld/testsuite/ld-i386/property-3.r
+-@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+-   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+-       Properties: stack size: 0x800000
+--	x86 ISA used: 586, SSE
+- 	x86 ISA needed: i486, 586
+- #pass
+-diff --git a/ld/testsuite/ld-i386/property-4.r b/ld/testsuite/ld-i386/property-4.r
+-index cb2bc15..da295eb 100644
+---- a/ld/testsuite/ld-i386/property-4.r
+-+++ b/ld/testsuite/ld-i386/property-4.r
+-@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+-   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+-       Properties: stack size: 0x800000
+--	x86 ISA used: i486, 586, SSE
+- 	x86 ISA needed: i486, 586, SSE
+- #pass
+-diff --git a/ld/testsuite/ld-i386/property-5.r b/ld/testsuite/ld-i386/property-5.r
+-index 5529650..e414159 100644
+---- a/ld/testsuite/ld-i386/property-5.r
+-+++ b/ld/testsuite/ld-i386/property-5.r
+-@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+-   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+-       Properties: stack size: 0x900000
+--	x86 ISA used: i486, 586, SSE
+- 	x86 ISA needed: i486, 586, SSE
+- #pass
+-diff --git a/ld/testsuite/ld-i386/property-x86-ibt3a.d b/ld/testsuite/ld-i386/property-x86-ibt3a.d
+-index 4bb35b0..0aedea1 100644
+---- a/ld/testsuite/ld-i386/property-x86-ibt3a.d
+-+++ b/ld/testsuite/ld-i386/property-x86-ibt3a.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+--	x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-diff --git a/ld/testsuite/ld-i386/property-x86-ibt3b.d b/ld/testsuite/ld-i386/property-x86-ibt3b.d
+-index 418d58a..bd69ac6 100644
+---- a/ld/testsuite/ld-i386/property-x86-ibt3b.d
+-+++ b/ld/testsuite/ld-i386/property-x86-ibt3b.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+--	x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-diff --git a/ld/testsuite/ld-i386/property-x86-shstk3a.d b/ld/testsuite/ld-i386/property-x86-shstk3a.d
+-index e261038..76d2a39 100644
+---- a/ld/testsuite/ld-i386/property-x86-shstk3a.d
+-+++ b/ld/testsuite/ld-i386/property-x86-shstk3a.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+--	x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-diff --git a/ld/testsuite/ld-i386/property-x86-shstk3b.d b/ld/testsuite/ld-i386/property-x86-shstk3b.d
+-index 25f3d23..e770ecf 100644
+---- a/ld/testsuite/ld-i386/property-x86-shstk3b.d
+-+++ b/ld/testsuite/ld-i386/property-x86-shstk3b.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: i486, 586, SSE2, SSE3
+--	x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: 586, SSE, SSE3, SSE4_1
+-diff --git a/ld/testsuite/ld-x86-64/pr23486a-x32.d b/ld/testsuite/ld-x86-64/pr23486a-x32.d
+-new file mode 100644
+-index 0000000..6d9fa68
+---- /dev/null
+-+++ b/ld/testsuite/ld-x86-64/pr23486a-x32.d
+-@@ -0,0 +1,10 @@
+-+#source: pr23486a.s
+-+#source: pr23486b.s
+-+#as: --x32
+-+#ld: -r -m elf32_x86_64
+-+#readelf: -n
+-+
+-+Displaying notes found in: .note.gnu.property
+-+  Owner                 Data size	Description
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586
+-diff --git a/ld/testsuite/ld-x86-64/pr23486a.d b/ld/testsuite/ld-x86-64/pr23486a.d
+-new file mode 100644
+-index 0000000..dc2b7bf
+---- /dev/null
+-+++ b/ld/testsuite/ld-x86-64/pr23486a.d
+-@@ -0,0 +1,10 @@
+-+#source: pr23486a.s
+-+#source: pr23486b.s
+-+#as: --64 -defsym __64_bit__=1
+-+#ld: -r -m elf_x86_64
+-+#readelf: -n
+-+
+-+Displaying notes found in: .note.gnu.property
+-+  Owner                 Data size	Description
+-+  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586
+-diff --git a/ld/testsuite/ld-x86-64/pr23486a.s b/ld/testsuite/ld-x86-64/pr23486a.s
+-new file mode 100644
+-index 0000000..a07d0c7
+---- /dev/null
+-+++ b/ld/testsuite/ld-x86-64/pr23486a.s
+-@@ -0,0 +1,30 @@
+-+	.section ".note.gnu.property", "a"
+-+.ifdef __64_bit__
+-+	.p2align 3
+-+.else
+-+	.p2align 2
+-+.endif
+-+	.long 1f - 0f		/* name length.  */
+-+	.long 4f - 1f		/* data length.  */
+-+	/* NT_GNU_PROPERTY_TYPE_0 */
+-+	.long 5			/* note type.  */
+-+0:
+-+	.asciz "GNU"		/* vendor name.  */
+-+1:
+-+.ifdef __64_bit__
+-+	.p2align 3
+-+.else
+-+	.p2align 2
+-+.endif
+-+	/* GNU_PROPERTY_X86_ISA_1_USED */
+-+	.long 0xc0000000	/* pr_type.  */
+-+	.long 3f - 2f		/* pr_datasz.  */
+-+2:
+-+	.long 0xa
+-+3:
+-+.ifdef __64_bit__
+-+	.p2align 3
+-+.else
+-+	.p2align 2
+-+.endif
+-+4:
+-diff --git a/ld/testsuite/ld-x86-64/pr23486b-x32.d b/ld/testsuite/ld-x86-64/pr23486b-x32.d
+-new file mode 100644
+-index 0000000..0445e69
+---- /dev/null
+-+++ b/ld/testsuite/ld-x86-64/pr23486b-x32.d
+-@@ -0,0 +1,10 @@
+-+#source: pr23486b.s
+-+#source: pr23486a.s
+-+#as: --x32
+-+#ld: -r -m elf32_x86_64
+-+#readelf: -n
+-+
+-+Displaying notes found in: .note.gnu.property
+-+  Owner                 Data size	Description
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586
+-diff --git a/ld/testsuite/ld-x86-64/pr23486b.d b/ld/testsuite/ld-x86-64/pr23486b.d
+-new file mode 100644
+-index 0000000..dc2b7bf
+---- /dev/null
+-+++ b/ld/testsuite/ld-x86-64/pr23486b.d
+-@@ -0,0 +1,10 @@
+-+#source: pr23486a.s
+-+#source: pr23486b.s
+-+#as: --64 -defsym __64_bit__=1
+-+#ld: -r -m elf_x86_64
+-+#readelf: -n
+-+
+-+Displaying notes found in: .note.gnu.property
+-+  Owner                 Data size	Description
+-+  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586
+-diff --git a/ld/testsuite/ld-x86-64/pr23486b.s b/ld/testsuite/ld-x86-64/pr23486b.s
+-new file mode 100644
+-index 0000000..c5167ee
+---- /dev/null
+-+++ b/ld/testsuite/ld-x86-64/pr23486b.s
+-@@ -0,0 +1,30 @@
+-+	.section ".note.gnu.property", "a"
+-+.ifdef __64_bit__
+-+	.p2align 3
+-+.else
+-+	.p2align 2
+-+.endif
+-+	.long 1f - 0f		/* name length.  */
+-+	.long 4f - 1f		/* data length.  */
+-+	/* NT_GNU_PROPERTY_TYPE_0 */
+-+	.long 5			/* note type.  */
+-+0:
+-+	.asciz "GNU"		/* vendor name.  */
+-+1:
+-+.ifdef __64_bit__
+-+	.p2align 3
+-+.else
+-+	.p2align 2
+-+.endif
+-+	/* GNU_PROPERTY_X86_ISA_1_NEEDED */
+-+	.long 0xc0000001	/* pr_type.  */
+-+	.long 3f - 2f		/* pr_datasz.  */
+-+2:
+-+	.long 0x3
+-+3:
+-+.ifdef __64_bit__
+-+	.p2align 3
+-+.else
+-+	.p2align 2
+-+.endif
+-+4:
+-diff --git a/ld/testsuite/ld-x86-64/property-3.r b/ld/testsuite/ld-x86-64/property-3.r
+-index 0ed91f5..d03203c 100644
+---- a/ld/testsuite/ld-x86-64/property-3.r
+-+++ b/ld/testsuite/ld-x86-64/property-3.r
+-@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+-   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+-       Properties: stack size: 0x800000
+--	x86 ISA used: 586, SSE
+- 	x86 ISA needed: i486, 586
+- #pass
+-diff --git a/ld/testsuite/ld-x86-64/property-4.r b/ld/testsuite/ld-x86-64/property-4.r
+-index cb2bc15..da295eb 100644
+---- a/ld/testsuite/ld-x86-64/property-4.r
+-+++ b/ld/testsuite/ld-x86-64/property-4.r
+-@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+-   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+-       Properties: stack size: 0x800000
+--	x86 ISA used: i486, 586, SSE
+- 	x86 ISA needed: i486, 586, SSE
+- #pass
+-diff --git a/ld/testsuite/ld-x86-64/property-5.r b/ld/testsuite/ld-x86-64/property-5.r
+-index 5529650..e414159 100644
+---- a/ld/testsuite/ld-x86-64/property-5.r
+-+++ b/ld/testsuite/ld-x86-64/property-5.r
+-@@ -3,6 +3,5 @@ Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+-   GNU                  0x[0-9a-f]+	NT_GNU_PROPERTY_TYPE_0
+-       Properties: stack size: 0x900000
+--	x86 ISA used: i486, 586, SSE
+- 	x86 ISA needed: i486, 586, SSE
+- #pass
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d b/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d
+-index 011426f..4cec728 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-ibt3a-x32.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3a.d b/ld/testsuite/ld-x86-64/property-x86-ibt3a.d
+-index 1b4229a..a8df49a 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-ibt3a.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-ibt3a.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d b/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d
+-index 290ed6a..c112626 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-ibt3b-x32.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-ibt3b.d b/ld/testsuite/ld-x86-64/property-x86-ibt3b.d
+-index 1142e03..f10dffd 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-ibt3b.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-ibt3b.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d b/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d
+-index 819542d..0147a3c 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-shstk3a-x32.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3a.d b/ld/testsuite/ld-x86-64/property-x86-shstk3a.d
+-index 4c5d0e0..1f8c2dc 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-shstk3a.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-shstk3a.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d b/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d
+-index ba181e0..7ca2539 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-shstk3b-x32.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000018	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x0000000c	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/property-x86-shstk3b.d b/ld/testsuite/ld-x86-64/property-x86-shstk3b.d
+-index 5216f38..f66a40e 100644
+---- a/ld/testsuite/ld-x86-64/property-x86-shstk3b.d
+-+++ b/ld/testsuite/ld-x86-64/property-x86-shstk3b.d
+-@@ -6,6 +6,5 @@
+-
+- Displaying notes found in: .note.gnu.property
+-   Owner                 Data size	Description
+--  GNU                  0x00000020	NT_GNU_PROPERTY_TYPE_0
+--      Properties: x86 ISA used: 586, SSE, SSE3, SSE4_1
+--	x86 ISA needed: i486, 586, SSE2, SSE3
+-+  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0
+-+      Properties: x86 ISA needed: i486, 586, SSE2, SSE3
+-diff --git a/ld/testsuite/ld-x86-64/x86-64.exp b/ld/testsuite/ld-x86-64/x86-64.exp
+-index 6edb9e8..ae21e55 100644
+---- a/ld/testsuite/ld-x86-64/x86-64.exp
+-+++ b/ld/testsuite/ld-x86-64/x86-64.exp
+-@@ -403,6 +403,10 @@ run_dump_test "pr23372a"
+- run_dump_test "pr23372a-x32"
+- run_dump_test "pr23372b"
+- run_dump_test "pr23372b-x32"
+-+run_dump_test "pr23486a"
+-+run_dump_test "pr23486a-x32"
+-+run_dump_test "pr23486b"
+-+run_dump_test "pr23486b-x32"
+-
+- if { ![istarget "x86_64-*-linux*"] && ![istarget "x86_64-*-nacl*"]} {
+-     return
+---
+-2.9.3
+-
+diff --git a/package/binutils/2.31.1/0014-x86-Properly-add-X86_ISA_1_NEEDED-property.patch b/package/binutils/2.31.1/0014-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
+deleted file mode 100644
+index 356914c999..0000000000
+--- a/package/binutils/2.31.1/0014-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
++++ /dev/null
+@@ -1,140 +0,0 @@
+-From 28a27bdbb9500797e6767f80c8128b09112aeed5 Mon Sep 17 00:00:00 2001
+-From: "H.J. Lu" <hjl.tools@gmail.com>
+-Date: Sat, 11 Aug 2018 06:41:33 -0700
+-Subject: [PATCH] x86: Properly add X86_ISA_1_NEEDED property
+-
+-Existing properties may be removed during property merging.  We avoid
+-adding X86_ISA_1_NEEDED property only if existing properties won't be
+-removed.
+-
+-bfd/
+-
+-	PR ld/23428
+-	* elfxx-x86.c (_bfd_x86_elf_link_setup_gnu_properties): Don't
+-	add X86_ISA_1_NEEDED property only if existing properties won't
+-	be removed.
+-
+-ld/
+-
+-	PR ld/23428
+-	* testsuite/ld-elf/dummy.s: New file.
+-	* testsuite/ld-elf/linux-x86.S: Add X86_FEATURE_1_AND property.
+-	* testsuite/ld-elf/linux-x86.exp: Add dummy.s to pr23428.
+-
+-(cherry picked from commit ab9e342807d132182892de1be1a92d6e91a5c1da)
+-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+----
+- bfd/ChangeLog                     |  7 +++++++
+- bfd/elfxx-x86.c                   | 28 ++++++++++++++++++++++------
+- ld/ChangeLog                      |  7 +++++++
+- ld/testsuite/ld-elf/dummy.s       |  1 +
+- ld/testsuite/ld-elf/linux-x86.S   | 28 ++++++++++++++++++++++++++++
+- ld/testsuite/ld-elf/linux-x86.exp |  2 +-
+- 6 files changed, 66 insertions(+), 7 deletions(-)
+- create mode 100644 ld/testsuite/ld-elf/dummy.s
+-
+-diff --git a/bfd/elfxx-x86.c b/bfd/elfxx-x86.c
+-index 7ccfd25..2d8f7b6 100644
+---- a/bfd/elfxx-x86.c
+-+++ b/bfd/elfxx-x86.c
+-@@ -2588,7 +2588,6 @@ _bfd_x86_elf_link_setup_gnu_properties
+- 	  prop->pr_kind = property_number;
+- 	}
+-       else if (has_text
+--	       && elf_properties (ebfd) == NULL
+- 	       && elf_tdata (info->output_bfd)->o->build_id.sec == NULL
+- 	       && !htab->elf.dynamic_sections_created
+- 	       && !info->traditional_format
+-@@ -2598,11 +2597,28 @@ _bfd_x86_elf_link_setup_gnu_properties
+- 	  /* If the separate code program header is needed, make sure
+- 	     that the first read-only PT_LOAD segment has no code by
+- 	     adding a GNU_PROPERTY_X86_ISA_1_NEEDED note.  */
+--	  prop = _bfd_elf_get_property (ebfd,
+--					GNU_PROPERTY_X86_ISA_1_NEEDED,
+--					4);
+--	  prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
+--	  prop->pr_kind = property_number;
+-+	  elf_property_list *list;
+-+	  bfd_boolean need_property = TRUE;
+-+
+-+	  for (list = elf_properties (ebfd); list; list = list->next)
+-+	    switch (list->property.pr_type)
+-+	      {
+-+	      case GNU_PROPERTY_STACK_SIZE:
+-+	      case GNU_PROPERTY_NO_COPY_ON_PROTECTED:
+-+	      case GNU_PROPERTY_X86_ISA_1_NEEDED:
+-+		/* These properties won't be removed during merging.  */
+-+		need_property = FALSE;
+-+		break;
+-+	      }
+-+
+-+	  if (need_property)
+-+	    {
+-+	      prop = _bfd_elf_get_property (ebfd,
+-+					    GNU_PROPERTY_X86_ISA_1_NEEDED,
+-+					    4);
+-+	      prop->u.number = GNU_PROPERTY_X86_ISA_1_486;
+-+	      prop->pr_kind = property_number;
+-+	    }
+- 	}
+-
+-       /* Create the GNU property note section if needed.  */
+-diff --git a/ld/testsuite/ld-elf/dummy.s b/ld/testsuite/ld-elf/dummy.s
+-new file mode 100644
+-index 0000000..403f980
+---- /dev/null
+-+++ b/ld/testsuite/ld-elf/dummy.s
+-@@ -0,0 +1 @@
+-+# Dummy
+-diff --git a/ld/testsuite/ld-elf/linux-x86.S b/ld/testsuite/ld-elf/linux-x86.S
+-index bdf40c6..d94abc1 100644
+---- a/ld/testsuite/ld-elf/linux-x86.S
+-+++ b/ld/testsuite/ld-elf/linux-x86.S
+-@@ -61,3 +61,31 @@ syscall:
+- 	ret			/* Return to caller.  */
+- 	.size syscall, .-syscall
+- 	.section .note.GNU-stack,"", at progbits
+-+
+-+	.section ".note.gnu.property", "a"
+-+#ifdef __LP64__
+-+	.p2align 3
+-+#else
+-+	.p2align 2
+-+#endif
+-+	.long 1f - 0f		/* name length */
+-+	.long 5f - 2f		/* data length */
+-+	.long 5			/* note type */
+-+0:	.asciz "GNU"		/* vendor name */
+-+1:
+-+#ifdef __LP64__
+-+	.p2align 3
+-+#else
+-+	.p2align 2
+-+#endif
+-+2:	.long 0xc0000002	/* pr_type.  */
+-+	.long 4f - 3f		/* pr_datasz.  */
+-+3:
+-+	.long 0x2
+-+4:
+-+#ifdef __LP64__
+-+	.p2align 3
+-+#else
+-+	.p2align 2
+-+#endif
+-+5:
+-diff --git a/ld/testsuite/ld-elf/linux-x86.exp b/ld/testsuite/ld-elf/linux-x86.exp
+-index 36217c6..f6f5a80 100644
+---- a/ld/testsuite/ld-elf/linux-x86.exp
+-+++ b/ld/testsuite/ld-elf/linux-x86.exp
+-@@ -37,7 +37,7 @@ run_ld_link_exec_tests [list \
+- 	"Run PR ld/23428 test" \
+- 	"--no-dynamic-linker -z separate-code" \
+- 	"" \
+--	{ linux-x86.S pr23428.c } \
+-+	{ linux-x86.S pr23428.c dummy.s } \
+- 	"pr23428" \
+- 	"pass.out" \
+- 	"$NOPIE_CFLAGS -fno-asynchronous-unwind-tables" \
+---
+-2.9.3
+-
+diff --git a/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch b/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
+deleted file mode 100644
+index b80e1fa7ce..0000000000
+--- a/package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 278989f23735aa501be1052e085540c75c126dbb Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Thu, 28 Mar 2019 17:03:57 -0700
+-Subject: [PATCH] bfd: xtensa: fix shrink_dynamic_reloc_sections for
+- export-dynamic
+-
+-shrink_dynamic_reloc_sections must remove PLT entry that was created for
+-an undefined weak symbol in the presence of --export-dynamic option when
+-relaxation coalesces literals pointing to that symbol. This fixes the
+-following assertion:
+-
+-  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
+-  elf32-xtensa.c:3292 in elf_xtensa_finish_dynamic_sections
+-
+-2019-03-28  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Add
+-	info->export_dynamic to the conditional.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- bfd/elf32-xtensa.c                                         |  3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index c3df3d6db756..37ea200eea74 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -10083,7 +10083,8 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
+-       && (input_section->flags & SEC_ALLOC) != 0
+-       && (dynamic_symbol || bfd_link_pic (info))
+-       && (!h || h->root.type != bfd_link_hash_undefweak
+--	  || (dynamic_symbol && bfd_link_dll (info))))
+-+	  || (dynamic_symbol
+-+	      && (bfd_link_dll (info) || info->export_dynamic))))
+-     {
+-       asection *srel;
+-       bfd_boolean is_plt = FALSE;
+--- 
+-2.11.0
+-
+diff --git a/package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch b/package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
+deleted file mode 100644
+index ed617bcaf7..0000000000
+--- a/package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
++++ /dev/null
+@@ -1,294 +0,0 @@
+-From 0dbdfb7918d0b0cfcb8883b24c1291574bf5bb7c Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 2 Apr 2019 14:32:42 -0700
+-Subject: [PATCH] gas: use literals/const16 for xtensa loop relaxation
+-
+-Loop opcode relaxation that uses addi/addmi doesn't work well with other
+-relaxations that may cause code movement. Instead of encoding fixed loop
+-end offset in the relaxed sequence use l32r or a pair of const16 to load
+-loop end address. This way the address of the loop end gets a relocation
+-record and it gets updated appropriately.
+-
+-gas/
+-2019-04-02  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/tc-xtensa.c (convert_frag_immed): Drop
+-	convert_frag_immed_finish_loop invocation.
+-	(convert_frag_immed_finish_loop): Drop declaration and
+-	definition.
+-	* config/xtensa-relax.c (widen_spec_list): Replace loop
+-	widening that uses addi/addmi with widening that uses l32r
+-	and const16.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- gas/config/tc-xtensa.c    | 120 ----------------------------------------------
+- gas/config/xtensa-relax.c |  77 ++++++++++++++++++++---------
+- 2 files changed, 55 insertions(+), 142 deletions(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 3bdbbc931cfc..0cc06361cf6f 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -10668,7 +10668,6 @@ convert_frag_fill_nop (fragS *fragP)
+- static fixS *fix_new_exp_in_seg
+-   (segT, subsegT, fragS *, int, int, expressionS *, int,
+-    bfd_reloc_code_real_type);
+--static void convert_frag_immed_finish_loop (segT, fragS *, TInsn *);
+- 
+- static void
+- convert_frag_immed (segT segP,
+-@@ -10910,9 +10909,6 @@ convert_frag_immed (segT segP,
+- 	}
+-     }
+- 
+--  if (expanded && xtensa_opcode_is_loop (isa, orig_tinsn.opcode) == 1)
+--    convert_frag_immed_finish_loop (segP, fragP, &orig_tinsn);
+--
+-   if (expanded && is_direct_call_opcode (orig_tinsn.opcode))
+-     {
+-       /* Add an expansion note on the expanded instruction.  */
+-@@ -10949,122 +10945,6 @@ fix_new_exp_in_seg (segT new_seg,
+- }
+- 
+- 
+--/* Relax a loop instruction so that it can span loop >256 bytes.
+--
+--                  loop    as, .L1
+--          .L0:
+--                  rsr     as, LEND
+--                  wsr     as, LBEG
+--                  addi    as, as, lo8 (label-.L1)
+--                  addmi   as, as, mid8 (label-.L1)
+--                  wsr     as, LEND
+--                  isync
+--                  rsr     as, LCOUNT
+--                  addi    as, as, 1
+--          .L1:
+--                  <<body>>
+--          label:
+--*/
+--
+--static void
+--convert_frag_immed_finish_loop (segT segP, fragS *fragP, TInsn *tinsn)
+--{
+--  TInsn loop_insn;
+--  TInsn addi_insn;
+--  TInsn addmi_insn;
+--  unsigned long target;
+--  static xtensa_insnbuf insnbuf = NULL;
+--  unsigned int loop_length, loop_length_hi, loop_length_lo;
+--  xtensa_isa isa = xtensa_default_isa;
+--  addressT loop_offset;
+--  addressT addi_offset = 9;
+--  addressT addmi_offset = 12;
+--  fragS *next_fragP;
+--  int target_count;
+--
+--  if (!insnbuf)
+--    insnbuf = xtensa_insnbuf_alloc (isa);
+--
+--  /* Get the loop offset.  */
+--  loop_offset = get_expanded_loop_offset (tinsn->opcode);
+--
+--  /* Validate that there really is a LOOP at the loop_offset.  Because
+--     loops are not bundleable, we can assume that the instruction will be
+--     in slot 0.  */
+--  tinsn_from_chars (&loop_insn, fragP->fr_opcode + loop_offset, 0);
+--  tinsn_immed_from_frag (&loop_insn, fragP, 0);
+--
+--  gas_assert (xtensa_opcode_is_loop (isa, loop_insn.opcode) == 1);
+--  addi_offset += loop_offset;
+--  addmi_offset += loop_offset;
+--
+--  gas_assert (tinsn->ntok == 2);
+--  if (tinsn->tok[1].X_op == O_constant)
+--    target = tinsn->tok[1].X_add_number;
+--  else if (tinsn->tok[1].X_op == O_symbol)
+--    {
+--      /* Find the fragment.  */
+--      symbolS *sym = tinsn->tok[1].X_add_symbol;
+--      gas_assert (S_GET_SEGMENT (sym) == segP
+--	      || S_GET_SEGMENT (sym) == absolute_section);
+--      target = (S_GET_VALUE (sym) + tinsn->tok[1].X_add_number);
+--    }
+--  else
+--    {
+--      as_bad (_("invalid expression evaluation type %d"), tinsn->tok[1].X_op);
+--      target = 0;
+--    }
+--
+--  loop_length = target - (fragP->fr_address + fragP->fr_fix);
+--  loop_length_hi = loop_length & ~0x0ff;
+--  loop_length_lo = loop_length & 0x0ff;
+--  if (loop_length_lo >= 128)
+--    {
+--      loop_length_lo -= 256;
+--      loop_length_hi += 256;
+--    }
+--
+--  /* Because addmi sign-extends the immediate, 'loop_length_hi' can be at most
+--     32512.  If the loop is larger than that, then we just fail.  */
+--  if (loop_length_hi > 32512)
+--    as_bad_where (fragP->fr_file, fragP->fr_line,
+--		  _("loop too long for LOOP instruction"));
+--
+--  tinsn_from_chars (&addi_insn, fragP->fr_opcode + addi_offset, 0);
+--  gas_assert (addi_insn.opcode == xtensa_addi_opcode);
+--
+--  tinsn_from_chars (&addmi_insn, fragP->fr_opcode + addmi_offset, 0);
+--  gas_assert (addmi_insn.opcode == xtensa_addmi_opcode);
+--
+--  set_expr_const (&addi_insn.tok[2], loop_length_lo);
+--  tinsn_to_insnbuf (&addi_insn, insnbuf);
+--
+--  fragP->tc_frag_data.is_insn = TRUE;
+--  xtensa_insnbuf_to_chars
+--    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addi_offset, 0);
+--
+--  set_expr_const (&addmi_insn.tok[2], loop_length_hi);
+--  tinsn_to_insnbuf (&addmi_insn, insnbuf);
+--  xtensa_insnbuf_to_chars
+--    (isa, insnbuf, (unsigned char *) fragP->fr_opcode + addmi_offset, 0);
+--
+--  /* Walk through all of the frags from here to the loop end
+--     and mark them as no_transform to keep them from being modified
+--     by the linker.  If we ever have a relocation for the
+--     addi/addmi of the difference of two symbols we can remove this.  */
+--
+--  target_count = 0;
+--  for (next_fragP = fragP; next_fragP != NULL;
+--       next_fragP = next_fragP->fr_next)
+--    {
+--      next_fragP->tc_frag_data.is_no_transform = TRUE;
+--      if (next_fragP->tc_frag_data.is_loop_target)
+--	target_count++;
+--      if (target_count == 2)
+--	break;
+--    }
+--}
+--
+- 
+- /* A map that keeps information on a per-subsegment basis.  This is
+-    maintained during initial assembly, but is invalid once the
+-diff --git a/gas/config/xtensa-relax.c b/gas/config/xtensa-relax.c
+-index cb296ed85ed2..daf15d52c259 100644
+---- a/gas/config/xtensa-relax.c
+-+++ b/gas/config/xtensa-relax.c
+-@@ -87,13 +87,7 @@
+-    when the first and second operands are not the same as specified
+-    by the "| %at!=%as" precondition clause.
+-    {"l32i %at,%as,%imm | %at!=%as",
+--   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}
+--
+--   There is special case for loop instructions here, but because we do
+--   not currently have the ability to represent the difference of two
+--   symbols, the conversion requires special code in the assembler to
+--   write the operands of the addi/addmi pair representing the
+--   difference of the old and new loop end label.  */
+-+   "LITERAL %imm; l32r %at,%LITERAL; add %at,%at,%as; l32i %at,%at,0"}  */
+- 
+- #include "as.h"
+- #include "xtensa-isa.h"
+-@@ -306,44 +300,83 @@ static string_pattern_pair widen_spec_list[] =
+-   {"l32i %at,%as,%imm | %at!=%as ? IsaUseConst16",
+-    "const16 %at,HI16U(%imm); const16 %at,LOW16U(%imm); add %at,%at,%as; l32i %at,%at,0"},
+- 
+--  /* This is only PART of the loop instruction.  In addition,
+--     hardcoded into its use is a modification of the final operand in
+--     the instruction in bytes 9 and 12.  */
+--  {"loop %as,%label | %as!=1 ? IsaUseLoops",
+-+  /* Widening loops with literals.  */
+-+  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+-+   "loop %as,%LABEL;"
+-+   "rsr.lend    %as;"		/* LEND */
+-+   "wsr.lbeg    %as;"		/* LBEG */
+-+   "LITERAL     %label;"
+-+   "l32r        %as, %LITERAL;"
+-+   "nop;"
+-+   "wsr.lend    %as;"
+-+   "isync;"
+-+   "rsr.lcount    %as;"		/* LCOUNT */
+-+   "addi    %as, %as, 1;"
+-+   "LABEL"},
+-+  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+-+   "beqz    %as,%label;"
+-+   "bltz    %as,%label;"
+-+   "loopgtz %as,%LABEL;"
+-+   "rsr.lend    %as;"		/* LEND */
+-+   "wsr.lbeg    %as;"		/* LBEG */
+-+   "LITERAL     %label;"
+-+   "l32r        %as, %LITERAL;"
+-+   "nop;"
+-+   "wsr.lend    %as;"
+-+   "isync;"
+-+   "rsr.lcount    %as;"		/* LCOUNT */
+-+   "addi    %as, %as, 1;"
+-+   "LABEL"},
+-+  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseL32R",
+-+   "beqz     %as,%label;"
+-+   "loopnez %as,%LABEL;"
+-+   "rsr.lend    %as;"		/* LEND */
+-+   "wsr.lbeg    %as;"		/* LBEG */
+-+   "LITERAL     %label;"
+-+   "l32r        %as, %LITERAL;"
+-+   "nop;"
+-+   "wsr.lend    %as;"
+-+   "isync;"
+-+   "rsr.lcount    %as;"		/* LCOUNT */
+-+   "addi    %as, %as, 1;"
+-+   "LABEL"},
+-+
+-+  /* Widening loops with const16.  */
+-+  {"loop %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
+-    "loop %as,%LABEL;"
+-    "rsr.lend    %as;"		/* LEND */
+-    "wsr.lbeg    %as;"		/* LBEG */
+--   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
+--   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+-+   "const16     %as,HI16U(%label);"
+-+   "const16     %as,LOW16U(%label);"
+-    "wsr.lend    %as;"
+-    "isync;"
+-    "rsr.lcount    %as;"		/* LCOUNT */
+--   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+-+   "addi    %as, %as, 1;"
+-    "LABEL"},
+--  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops",
+-+  {"loopgtz %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
+-    "beqz    %as,%label;"
+-    "bltz    %as,%label;"
+-    "loopgtz %as,%LABEL;"
+-    "rsr.lend    %as;"		/* LEND */
+-    "wsr.lbeg    %as;"		/* LBEG */
+--   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
+--   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+-+   "const16     %as,HI16U(%label);"
+-+   "const16     %as,LOW16U(%label);"
+-    "wsr.lend    %as;"
+-    "isync;"
+-    "rsr.lcount    %as;"		/* LCOUNT */
+--   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+-+   "addi    %as, %as, 1;"
+-    "LABEL"},
+--  {"loopnez %as,%label | %as!=1 ? IsaUseLoops",
+-+  {"loopnez %as,%label | %as!=1 ? IsaUseLoops ? IsaUseConst16",
+-    "beqz     %as,%label;"
+-    "loopnez %as,%LABEL;"
+-    "rsr.lend    %as;"		/* LEND */
+-    "wsr.lbeg    %as;"		/* LBEG */
+--   "addi    %as, %as, 0;"	/* lo8(%label-%LABEL1) */
+--   "addmi   %as, %as, 0;"	/* mid8(%label-%LABEL1) */
+-+   "const16     %as,HI16U(%label);"
+-+   "const16     %as,LOW16U(%label);"
+-    "wsr.lend    %as;"
+-    "isync;"
+-    "rsr.lcount    %as;"		/* LCOUNT */
+--   "addi    %as, %as, 1;"	/* density -> addi.n %as, %as, 1 */
+-+   "addi    %as, %as, 1;"
+-    "LABEL"},
+- 
+-   /* Relaxing to wide branches.  Order is important here.  With wide
+--- 
+-2.11.0
+-
+diff --git a/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch b/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
+deleted file mode 100644
+index b4bbc27b37..0000000000
+--- a/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
++++ /dev/null
+@@ -1,96 +0,0 @@
+-From 471702ac4a57878a06e8167f063274cf413e548d Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Mon, 8 Apr 2019 13:47:18 -0700
+-Subject: [PATCH] xtensa: gas: put .literal_position at section start
+-
+-Provide literal position at the beginning of each section for literal
+-space reserved by relaxations when text-section-literals or
+-auto-litpools options are used. Remove code that adds fill frag to the
+-literal section for every .literal_position directive to avoid creation
+-of empty literal sections.
+-
+-Fix auto-litpools tests that got literal pool address changes.
+-
+-gas/
+-2019-04-11  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/tc-xtensa.c (xtensa_is_init_fini): Add declaration.
+-	(xtensa_mark_literal_pool_location): Don't add fill frag to literal
+-	section that records literal pool location.
+-	(md_begin): Call xtensa_mark_literal_pool_location when text
+-	section literals or auto litpools are used.
+-	(xtensa_elf_section_change_hook): Call
+-	xtensa_mark_literal_pool_location when text section literals or
+-	auto litpools are used, there's no literal pool location defined
+-	for the current section and it's not .init or .fini.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- gas/config/tc-xtensa.c                          | 22 +++++++++-------------
+- 1 file changed, 9 insertions(+), 13 deletions(-)
+-
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 0cc06361cf6f..6a80e76fed8c 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -497,6 +497,7 @@ static fixS *xg_append_jump (fragS *fragP, symbolS *sym, offsetT offset);
+- static void xtensa_maybe_create_literal_pool_frag (bfd_boolean, bfd_boolean);
+- static bfd_boolean auto_litpools = FALSE;
+- static int auto_litpool_limit = 0;
+-+static bfd_boolean xtensa_is_init_fini (segT seg);
+- 
+- /* Alignment Functions.  */
+- 
+-@@ -4797,7 +4798,6 @@ xtensa_mark_literal_pool_location (void)
+- {
+-   /* Any labels pointing to the current location need
+-      to be adjusted to after the literal pool.  */
+--  emit_state s;
+-   fragS *pool_location;
+- 
+-   if (use_literal_section)
+-@@ -4818,19 +4818,7 @@ xtensa_mark_literal_pool_location (void)
+- 		RELAX_LITERAL_POOL_END, NULL, 0, NULL);
+-   xtensa_set_frag_assembly_state (frag_now);
+- 
+--  /* Now put a frag into the literal pool that points to this location.  */
+-   set_literal_pool_location (now_seg, pool_location);
+--  xtensa_switch_to_non_abs_literal_fragment (&s);
+--  frag_align (2, 0, 0);
+--  record_alignment (now_seg, 2);
+--
+--  /* Close whatever frag is there.  */
+--  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
+--  xtensa_set_frag_assembly_state (frag_now);
+--  frag_now->tc_frag_data.literal_frag = pool_location;
+--  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
+--  xtensa_restore_emit_state (&s);
+--  xtensa_set_frag_assembly_state (frag_now);
+- }
+- 
+- 
+-@@ -5334,6 +5322,9 @@ md_begin (void)
+-   /* Set up the assembly state.  */
+-   if (!frag_now->tc_frag_data.is_assembly_state_set)
+-     xtensa_set_frag_assembly_state (frag_now);
+-+
+-+  if (!use_literal_section)
+-+    xtensa_mark_literal_pool_location ();
+- }
+- 
+- 
+-@@ -5933,6 +5924,11 @@ xtensa_elf_section_change_hook (void)
+-   /* Set up the assembly state.  */
+-   if (!frag_now->tc_frag_data.is_assembly_state_set)
+-     xtensa_set_frag_assembly_state (frag_now);
+-+
+-+  if (!use_literal_section
+-+      && seg_info (now_seg)->tc_segment_info_data.literal_pool_loc == NULL
+-+      && !xtensa_is_init_fini (now_seg))
+-+    xtensa_mark_literal_pool_location ();
+- }
+- 
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
+deleted file mode 100644
+index f499426b70..0000000000
+--- a/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Wed, 4 Mar 2020 14:54:27 -0800
+-Subject: [PATCH] bfd: xtensa: fix PR ld/25630
+-
+-bfd/
+-2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
+-	relocation sections for any removed reference to a dynamic symbol.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- bfd/elf32-xtensa.c | 7 +++----
+- 1 file changed, 3 insertions(+), 4 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 12ff9f772aaf..65e14d87940c 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
+- 
+-   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
+-       && (input_section->flags & SEC_ALLOC) != 0
+--      && (dynamic_symbol || bfd_link_pic (info))
+--      && (!h || h->root.type != bfd_link_hash_undefweak
+--	  || (dynamic_symbol
+--	      && (bfd_link_dll (info) || info->export_dynamic))))
+-+      && (dynamic_symbol
+-+	  || (bfd_link_pic (info)
+-+	      && (!h || h->root.type != bfd_link_hash_undefweak))))
+-     {
+-       asection *srel;
+-       bfd_boolean is_plt = FALSE;
+--- 
+-2.20.1
+-
+diff --git a/package/binutils/2.31.1/0019-xtensa-fix-PR-ld-25861.patch b/package/binutils/2.31.1/0019-xtensa-fix-PR-ld-25861.patch
+deleted file mode 100644
+index 8ca8c965d2..0000000000
+--- a/package/binutils/2.31.1/0019-xtensa-fix-PR-ld-25861.patch
++++ /dev/null
+@@ -1,376 +0,0 @@
+-From c7a1d1f656c717394937a92cb970f0f4cecce128 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sun, 19 Apr 2020 19:04:41 -0700
+-Subject: [PATCH] xtensa: fix PR ld/25861
+-
+-Introduce new relaxations XTENSA_PDIFF{8,16,32} for positive differences
+-(subtracted symbol precedes diminished symbol) and XTENSA_NDIFF{8,16,32}
+-for negative differences (subtracted symbol follows diminished symbol).
+-Don't generate XTENSA_DIFF relocations in the assembler, generate
+-XTENSA_PDIFF or XTENSA_NDIFF based on relative symbol position.
+-
+-Handle XTENSA_DIFF in BFD for compatibility with old object files.
+-Handle XTENSA_PDIFF and XTENSA_NDIFF in BFD, treating difference value
+-as unsigned.
+-
+-2020-04-22  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* bfd-in2.h: Regenerated.
+-	* elf32-xtensa.c (elf_howto_table): New entries for
+-	R_XTENSA_PDIFF{8,16,32} and R_XTENSA_NDIFF{8,16,32}.
+-	(elf_xtensa_reloc_type_lookup, elf_xtensa_do_reloc)
+-	(relax_section): Add cases for R_XTENSA_PDIFF{8,16,32} and
+-	R_XTENSA_NDIFF{8,16,32}.
+-	* libbfd.h (bfd_reloc_code_real_names): Add names for
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-	* reloc.c: Add documentation for BFD_RELOC_XTENSA_PDIFF{8,16,32}
+-	and BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-
+-binutils/
+-	* readelf.c (is_none_reloc): Recognize
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-
+-gas/
+-	* config/tc-xtensa.c (md_apply_fix): Replace
+-	BFD_RELOC_XTENSA_DIFF{8,16,32} generation with
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32} generation.
+-	* testsuite/gas/xtensa/loc.d: Replace BFD_RELOC_XTENSA_DIFF16
+-	with BFD_RELOC_XTENSA_PDIFF16 in the expected output.
+-
+-include/
+-	* elf/xtensa.h (elf_xtensa_reloc_type): New entries for
+-	R_XTENSA_PDIFF{8,16,32} and R_XTENSA_NDIFF{8,16,32}.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: 30ce8e47fad9b057b6d7af9e1d43061126d34d20
+-
+- bfd/bfd-in2.h                      | 20 ++++++-
+- bfd/elf32-xtensa.c                 | 89 +++++++++++++++++++++++++++++-
+- bfd/libbfd.h                       |  6 ++
+- bfd/reloc.c                        | 24 ++++++++
+- binutils/readelf.c                 |  8 ++-
+- gas/config/tc-xtensa.c             | 12 +++-
+- gas/testsuite/gas/xtensa/loc.d     |  2 +-
+- include/elf/xtensa.h               |  6 ++
+- 11 files changed, 160 insertions(+), 7 deletions(-)
+-
+-diff --git a/bfd/bfd-in2.h b/bfd/bfd-in2.h
+-index 37114607b515..be6a30f57955 100644
+---- a/bfd/bfd-in2.h
+-+++ b/bfd/bfd-in2.h
+-@@ -5217,7 +5217,9 @@ to one of its own internal functions or data structures.  */
+- PLT entries.  Otherwise, this is just a generic 32-bit relocation.  */
+-   BFD_RELOC_XTENSA_PLT,
+- 
+--/* Xtensa relocations to mark the difference of two local symbols.
+-+/* Xtensa relocations for backward compatibility.  These have been replaced
+-+by BFD_RELOC_XTENSA_PDIFF and BFD_RELOC_XTENSA_NDIFF.
+-+Xtensa relocations to mark the difference of two local symbols.
+- These are only needed to support linker relaxation and can be ignored
+- when not relaxing.  The field is set to the value of the difference
+- assuming no relaxation.  The relocation encodes the position of the
+-@@ -5291,6 +5293,22 @@ BFD_RELOC_XTENSA_ASM_EXPAND.  */
+-   BFD_RELOC_XTENSA_TLS_ARG,
+-   BFD_RELOC_XTENSA_TLS_CALL,
+- 
+-+/* Xtensa relocations to mark the difference of two local symbols.
+-+These are only needed to support linker relaxation and can be ignored
+-+when not relaxing.  The field is set to the value of the difference
+-+assuming no relaxation.  The relocation encodes the position of the
+-+subtracted symbol so the linker can determine whether to adjust the field
+-+value.  PDIFF relocations are used for positive differences, NDIFF
+-+relocations are used for negative differences.  The difference value
+-+is treated as unsigned with these relocation types, giving full
+-+8/16 value ranges.  */
+-+  BFD_RELOC_XTENSA_PDIFF8,
+-+  BFD_RELOC_XTENSA_PDIFF16,
+-+  BFD_RELOC_XTENSA_PDIFF32,
+-+  BFD_RELOC_XTENSA_NDIFF8,
+-+  BFD_RELOC_XTENSA_NDIFF16,
+-+  BFD_RELOC_XTENSA_NDIFF32,
+-+
+- /* 8 bit signed offset in (ix+d) or (iy+d).  */
+-   BFD_RELOC_Z80_DISP8,
+- 
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 473a9d76f289..fded42d52a9a 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -325,6 +325,20 @@ static reloc_howto_type elf_howto_table[] =
+-   HOWTO (R_XTENSA_TLS_CALL, 0, 0, 0, FALSE, 0, complain_overflow_dont,
+- 	 bfd_elf_xtensa_reloc, "R_XTENSA_TLS_CALL",
+- 	 FALSE, 0, 0, FALSE),
+-+
+-+  HOWTO (R_XTENSA_PDIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF8", FALSE, 0, 0xff, FALSE),
+-+  HOWTO (R_XTENSA_PDIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF16", FALSE, 0, 0xffff, FALSE),
+-+  HOWTO (R_XTENSA_PDIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF32", FALSE, 0, 0xffffffff, FALSE),
+-+
+-+  HOWTO (R_XTENSA_NDIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF8", FALSE, 0, 0xff, FALSE),
+-+  HOWTO (R_XTENSA_NDIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF16", FALSE, 0, 0xffff, FALSE),
+-+  HOWTO (R_XTENSA_NDIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF32", FALSE, 0, 0xffffffff, FALSE),
+- };
+- 
+- #if DEBUG_GEN_RELOC
+-@@ -364,6 +378,30 @@ elf_xtensa_reloc_type_lookup (bfd *abfd ATTRIBUTE_UNUSED,
+-       TRACE ("BFD_RELOC_XTENSA_DIFF32");
+-       return &elf_howto_table[(unsigned) R_XTENSA_DIFF32 ];
+- 
+-+    case BFD_RELOC_XTENSA_PDIFF8:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF8");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF8 ];
+-+
+-+    case BFD_RELOC_XTENSA_PDIFF16:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF16");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF16 ];
+-+
+-+    case BFD_RELOC_XTENSA_PDIFF32:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF32");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF32 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF8:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF8");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF8 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF16:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF16");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF16 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF32:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF32");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF32 ];
+-+
+-     case BFD_RELOC_XTENSA_RTLD:
+-       TRACE ("BFD_RELOC_XTENSA_RTLD");
+-       return &elf_howto_table[(unsigned) R_XTENSA_RTLD ];
+-@@ -1851,6 +1889,12 @@ elf_xtensa_do_reloc (reloc_howto_type *howto,
+-     case R_XTENSA_DIFF8:
+-     case R_XTENSA_DIFF16:
+-     case R_XTENSA_DIFF32:
+-+    case R_XTENSA_PDIFF8:
+-+    case R_XTENSA_PDIFF16:
+-+    case R_XTENSA_PDIFF32:
+-+    case R_XTENSA_NDIFF8:
+-+    case R_XTENSA_NDIFF16:
+-+    case R_XTENSA_NDIFF32:
+-     case R_XTENSA_TLS_FUNC:
+-     case R_XTENSA_TLS_ARG:
+-     case R_XTENSA_TLS_CALL:
+-@@ -9604,7 +9648,13 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 
+- 	      if (r_type == R_XTENSA_DIFF8
+- 		  || r_type == R_XTENSA_DIFF16
+--		  || r_type == R_XTENSA_DIFF32)
+-+		  || r_type == R_XTENSA_DIFF32
+-+		  || r_type == R_XTENSA_PDIFF8
+-+		  || r_type == R_XTENSA_PDIFF16
+-+		  || r_type == R_XTENSA_PDIFF32
+-+		  || r_type == R_XTENSA_NDIFF8
+-+		  || r_type == R_XTENSA_NDIFF16
+-+		  || r_type == R_XTENSA_NDIFF32)
+- 		{
+- 		  bfd_signed_vma diff_value = 0;
+- 		  bfd_vma new_end_offset, diff_mask = 0;
+-@@ -9631,8 +9681,27 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		      diff_value =
+- 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+-+		    case R_XTENSA_PDIFF8:
+-+		    case R_XTENSA_NDIFF8:
+-+		      diff_value =
+-+			bfd_get_8 (abfd, &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF16:
+-+		    case R_XTENSA_NDIFF16:
+-+		      diff_value =
+-+			bfd_get_16 (abfd, &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF32:
+-+		    case R_XTENSA_NDIFF32:
+-+		      diff_value =
+-+			bfd_get_32 (abfd, &contents[old_source_offset]);
+-+		      break;
+- 		    }
+- 
+-+		  if (r_type >= R_XTENSA_NDIFF8
+-+		      && r_type <= R_XTENSA_NDIFF32)
+-+		    diff_value = -diff_value;
+-+
+- 		  new_end_offset = offset_with_removed_text_map
+- 		    (&target_relax_info->action_list,
+- 		     r_rel.target_offset + diff_value);
+-@@ -9655,6 +9724,24 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+-+		    case R_XTENSA_PDIFF8:
+-+		    case R_XTENSA_NDIFF8:
+-+		      diff_mask = 0xff;
+-+		      bfd_put_8 (abfd, diff_value,
+-+				 &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF16:
+-+		    case R_XTENSA_NDIFF16:
+-+		      diff_mask = 0xffff;
+-+		      bfd_put_16 (abfd, diff_value,
+-+				  &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF32:
+-+		    case R_XTENSA_NDIFF32:
+-+		      diff_mask = 0xffffffff;
+-+		      bfd_put_32 (abfd, diff_value,
+-+				  &contents[old_source_offset]);
+-+		      break;
+- 		    }
+- 
+- 		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+-diff --git a/bfd/libbfd.h b/bfd/libbfd.h
+-index 3c184fcadadf..989f4bc0b595 100644
+---- a/bfd/libbfd.h
+-+++ b/bfd/libbfd.h
+-@@ -2919,6 +2919,12 @@ static const char *const bfd_reloc_code_real_names[] = { "@@uninitialized@@",
+-   "BFD_RELOC_XTENSA_TLS_FUNC",
+-   "BFD_RELOC_XTENSA_TLS_ARG",
+-   "BFD_RELOC_XTENSA_TLS_CALL",
+-+  "BFD_RELOC_XTENSA_PDIFF8",
+-+  "BFD_RELOC_XTENSA_PDIFF16",
+-+  "BFD_RELOC_XTENSA_PDIFF32",
+-+  "BFD_RELOC_XTENSA_NDIFF8",
+-+  "BFD_RELOC_XTENSA_NDIFF16",
+-+  "BFD_RELOC_XTENSA_NDIFF32",
+-   "BFD_RELOC_Z80_DISP8",
+-   "BFD_RELOC_Z80_BYTE0",
+-   "BFD_RELOC_Z80_BYTE1",
+-diff --git a/bfd/reloc.c b/bfd/reloc.c
+-index c4dec86d1d46..f5df8e2ab3eb 100644
+---- a/bfd/reloc.c
+-+++ b/bfd/reloc.c
+-@@ -6556,6 +6556,8 @@ ENUMX
+- ENUMX
+-   BFD_RELOC_XTENSA_DIFF32
+- ENUMDOC
+-+  Xtensa relocations for backward compatibility.  These have been replaced
+-+  by BFD_RELOC_XTENSA_PDIFF and BFD_RELOC_XTENSA_NDIFF.
+-   Xtensa relocations to mark the difference of two local symbols.
+-   These are only needed to support linker relaxation and can be ignored
+-   when not relaxing.  The field is set to the value of the difference
+-@@ -6668,6 +6670,28 @@ ENUMX
+-   BFD_RELOC_XTENSA_TLS_CALL
+- ENUMDOC
+-   Xtensa TLS relocations.
+-+ENUM
+-+  BFD_RELOC_XTENSA_PDIFF8
+-+ENUMX
+-+  BFD_RELOC_XTENSA_PDIFF16
+-+ENUMX
+-+  BFD_RELOC_XTENSA_PDIFF32
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF8
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF16
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF32
+-+ENUMDOC
+-+  Xtensa relocations to mark the difference of two local symbols.
+-+  These are only needed to support linker relaxation and can be ignored
+-+  when not relaxing.  The field is set to the value of the difference
+-+  assuming no relaxation.  The relocation encodes the position of the
+-+  subtracted symbol so the linker can determine whether to adjust the field
+-+  value.  PDIFF relocations are used for positive differences, NDIFF
+-+  relocations are used for negative differences.  The difference value
+-+  is treated as unsigned with these relocation types, giving full
+-+  8/16 value ranges.
+- 
+- ENUM
+-   BFD_RELOC_Z80_DISP8
+-diff --git a/binutils/readelf.c b/binutils/readelf.c
+-index d4756c93b345..800918f901c8 100644
+---- a/binutils/readelf.c
+-+++ b/binutils/readelf.c
+-@@ -13262,7 +13262,13 @@ is_none_reloc (Filedata * filedata, unsigned int reloc_type)
+-       return (reloc_type == 0      /* R_XTENSA_NONE.  */
+- 	      || reloc_type == 17  /* R_XTENSA_DIFF8.  */
+- 	      || reloc_type == 18  /* R_XTENSA_DIFF16.  */
+--	      || reloc_type == 19  /* R_XTENSA_DIFF32.  */);
+-+	      || reloc_type == 19  /* R_XTENSA_DIFF32.  */
+-+	      || reloc_type == 57  /* R_XTENSA_PDIFF8.  */
+-+	      || reloc_type == 58  /* R_XTENSA_PDIFF16.  */
+-+	      || reloc_type == 59  /* R_XTENSA_PDIFF32.  */
+-+	      || reloc_type == 60  /* R_XTENSA_NDIFF8.  */
+-+	      || reloc_type == 61  /* R_XTENSA_NDIFF16.  */
+-+	      || reloc_type == 62  /* R_XTENSA_NDIFF32.  */);
+-     }
+-   return FALSE;
+- }
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 71d4d94a8d7d..ee75c13548ff 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -5974,18 +5974,24 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
+-     case BFD_RELOC_8:
+-       if (fixP->fx_subsy)
+- 	{
+-+	  bfd_boolean neg = S_GET_VALUE (fixP->fx_addsy) + fixP->fx_offset
+-+	    < S_GET_VALUE (fixP->fx_subsy);
+-+
+- 	  switch (fixP->fx_r_type)
+- 	    {
+- 	    case BFD_RELOC_8:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF8 : BFD_RELOC_XTENSA_PDIFF8;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    case BFD_RELOC_16:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF16 : BFD_RELOC_XTENSA_PDIFF16;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    case BFD_RELOC_32:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF32 : BFD_RELOC_XTENSA_PDIFF32;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    default:
+-diff --git a/gas/testsuite/gas/xtensa/loc.d b/gas/testsuite/gas/xtensa/loc.d
+-index 71983cc90055..8fb3425999d5 100644
+---- a/gas/testsuite/gas/xtensa/loc.d
+-+++ b/gas/testsuite/gas/xtensa/loc.d
+-@@ -6,5 +6,5 @@
+- 
+- RELOCATION RECORDS FOR \[\.debug_line\]:
+- #...
+--.*R_XTENSA_DIFF16.*\.text\+0x00009c42
+-+.*R_XTENSA_PDIFF16.*\.text\+0x00009c42
+- #...
+-diff --git a/include/elf/xtensa.h b/include/elf/xtensa.h
+-index 2eb5e4e52941..bd5c80d13777 100644
+---- a/include/elf/xtensa.h
+-+++ b/include/elf/xtensa.h
+-@@ -87,6 +87,12 @@ START_RELOC_NUMBERS (elf_xtensa_reloc_type)
+-      RELOC_NUMBER (R_XTENSA_TLS_FUNC, 54)
+-      RELOC_NUMBER (R_XTENSA_TLS_ARG, 55)
+-      RELOC_NUMBER (R_XTENSA_TLS_CALL, 56)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF8, 57)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF16, 58)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF32, 59)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF8, 60)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF16, 61)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF32, 62)
+- END_RELOC_NUMBERS (R_XTENSA_max)
+- 
+- /* Processor-specific flags for the ELF header e_flags field.  */
+--- 
+-2.20.1
+-
+diff --git a/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch b/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+deleted file mode 100644
+index 28f17d7c56..0000000000
+--- a/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
++++ /dev/null
+@@ -1,128 +0,0 @@
+-From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sat, 25 Apr 2020 00:40:25 -0700
+-Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+-
+-Fields marked with XTENSA_NDIFF relocations are not negated, they only
+-have sign bits removed. Don't negate their values when relaxation is
+-performed. Don't add sign bits when the value is zero. Report overflow
+-when the result has negative sign but all significant bits are zero.
+-
+-2020-04-29  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* elf32-xtensa.c (relax_section): Don't negate diff_value for
+-	XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+-	equals 0. Report overflow when the result has negative sign but
+-	all significant bits are zero.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+----
+-
+- bfd/elf32-xtensa.c                   | 26 +++++++++++++++-----------
+- 1 file changed, 15 insertions(+), 11 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index fded42d52a9a..4327b027911f 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+-+		      diff_mask = 0x7f;
+- 		      diff_value =
+- 			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+-+		      diff_mask = 0x7fff;
+- 		      diff_value =
+- 			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+-+		      diff_mask = 0x7fffffff;
+- 		      diff_value =
+- 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF8:
+- 		    case R_XTENSA_NDIFF8:
+-+		      diff_mask = 0xff;
+- 		      diff_value =
+- 			bfd_get_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF16:
+- 		    case R_XTENSA_NDIFF16:
+-+		      diff_mask = 0xffff;
+- 		      diff_value =
+- 			bfd_get_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF32:
+- 		    case R_XTENSA_NDIFF32:
+-+		      diff_mask = 0xffffffff;
+- 		      diff_value =
+- 			bfd_get_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+- 		  if (r_type >= R_XTENSA_NDIFF8
+--		      && r_type <= R_XTENSA_NDIFF32)
+--		    diff_value = -diff_value;
+-+		      && r_type <= R_XTENSA_NDIFF32
+-+		      && diff_value)
+-+		    diff_value |= ~diff_mask;
+- 
+- 		  new_end_offset = offset_with_removed_text_map
+- 		    (&target_relax_info->action_list,
+-@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+--		      diff_mask = 0x7f;
+- 		      bfd_put_signed_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+--		      diff_mask = 0x7fff;
+- 		      bfd_put_signed_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+--		      diff_mask = 0x7fffffff;
+- 		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF8:
+- 		    case R_XTENSA_NDIFF8:
+--		      diff_mask = 0xff;
+- 		      bfd_put_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF16:
+- 		    case R_XTENSA_NDIFF16:
+--		      diff_mask = 0xffff;
+- 		      bfd_put_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF32:
+- 		    case R_XTENSA_NDIFF32:
+--		      diff_mask = 0xffffffff;
+- 		      bfd_put_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+--		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+--		  if ((diff_value & ~diff_mask) != 0 &&
+--		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+-+		  /* Check for overflow. Sign bits must be all zeroes or
+-+		     all ones.  When sign bits are all ones diff_value
+-+		     may not be zero.  */
+-+		  if (((diff_value & ~diff_mask) != 0
+-+		       && (diff_value & ~diff_mask) != ~diff_mask)
+-+		      || (diff_value && (bfd_vma) diff_value == ~diff_mask))
+- 		    {
+- 		      (*link_info->callbacks->reloc_dangerous)
+- 			(link_info, _("overflow after relaxation"),
+--- 
+-2.20.1
+-
 diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 378d16a931..ab646eea26 100644
+index dfe7d548f1..8fdff2cda3 100644
 --- a/package/binutils/Config.in.host
 +++ b/package/binutils/Config.in.host
-@@ -28,6 +28,13 @@ config BR2_BINUTILS_VERSION_2_33_X
- 	# https://github.com/uclinux-dev/elf2flt/issues/12
- 	depends on !BR2_BINFMT_FLAT
+@@ -13,10 +13,6 @@ choice
+ 	help
+ 	  Select the version of binutils you wish to use.
  
-+config BR2_BINUTILS_VERSION_2_34_X
-+	bool "binutils 2.34"
-+	depends on !BR2_csky
-+	# https://github.com/uclinux-dev/elf2flt/pull/16
-+	# https://github.com/uclinux-dev/elf2flt/issues/12
-+	depends on !BR2_BINFMT_FLAT
-+
- config BR2_BINUTILS_VERSION_ARC
- 	bool "binutils arc (2.31)"
- 	depends on BR2_arc
-@@ -45,6 +52,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
+-config BR2_BINUTILS_VERSION_2_31_X
+-	bool "binutils 2.31.1"
+-	depends on !BR2_csky
+-
+ config BR2_BINUTILS_VERSION_2_32_X
+ 	bool "binutils 2.32"
+ 	depends on !BR2_csky
+@@ -49,7 +45,6 @@ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "arc-2020.03-release"	if BR2_BINUTILS_VERSION_ARC
+ 	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
+-	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
  	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
  	default "2.33.1"	if BR2_BINUTILS_VERSION_2_33_X
-+	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
- 
- config BR2_BINUTILS_ENABLE_LTO
- 	bool
+ 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
 diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 2e93dd0576..dcc2b08db3 100644
+index dcc2b08db3..b202771449 100644
 --- a/package/binutils/binutils.hash
 +++ b/package/binutils/binutils.hash
-@@ -2,6 +2,7 @@
- sha512  0fca326feb1d5f5fe505a827b20237fe3ec9c13eaf7ec7e35847fd71184f605ba1cefe1314b1b8f8a29c0aa9d88162849ee1c1a3e70c2f7407d88339b17edb30  binutils-2.31.1.tar.xz
+@@ -1,5 +1,4 @@
+ # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+-sha512  0fca326feb1d5f5fe505a827b20237fe3ec9c13eaf7ec7e35847fd71184f605ba1cefe1314b1b8f8a29c0aa9d88162849ee1c1a3e70c2f7407d88339b17edb30  binutils-2.31.1.tar.xz
  sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
  sha512  b7a6767c6c7ca6b5cafa7080e6820b7bb3a53b7148348c438d99905defbdf0d30c9744a484ee01c9441a8153901808513366b15ba9533e20c9673c262ade36ac  binutils-2.33.1.tar.xz
-+sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
+ sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index f417712b52..5bbb5b3ad4 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -40,8 +40,6 @@ config BR2_GCC_VERSION_8_X
+ config BR2_GCC_VERSION_9_X
+ 	bool "gcc 9.x"
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+-	# or1k needs binutils >= 2.32
+-	depends on !(BR2_or1k && BR2_BINUTILS_VERSION_2_31_X)
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_powerpc_SPE
+@@ -53,8 +51,6 @@ config BR2_GCC_VERSION_9_X
  
- # Locally calculated (fetched from Github)
- sha512  99c87ea97b43719dd9ce8193d60a5a6f0abc0479e8ebabbd32876f54807cd02d1280c691ef19e12cb79946280d2a4c1562bbb1a175a31ff1533720a623c3059a  binutils-gdb-arc-2020.03-release.tar.gz
+ config BR2_GCC_VERSION_10_X
+ 	bool "gcc 10.x"
+-	# or1k needs binutils >= 2.32
+-	depends on !(BR2_or1k && BR2_BINUTILS_VERSION_2_31_X)
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
