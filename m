@@ -1,69 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jun 2020 22:51:25 +0200
-Subject: [Buildroot] [PATCH 3/3] package/binutils: remove version 2.31.1
-In-Reply-To: <20200625121302.2286527-3-romain.naour@gmail.com>
-References: <20200625121302.2286527-1-romain.naour@gmail.com>
- <20200625121302.2286527-3-romain.naour@gmail.com>
-Message-ID: <20200629225125.45784206@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 29 Jun 2020 22:53:10 +0200
+Subject: [Buildroot] [PATCH] package/glibc: disable Werror for gcc 10
+ build
+In-Reply-To: <20200628201612.3130899-1-romain.naour@gmail.com>
+References: <20200628201612.3130899-1-romain.naour@gmail.com>
+Message-ID: <20200629205310.GU20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 25 Jun 2020 14:13:02 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Romain, All,
 
-> Now that binutils 2.34 has been introduced, and we have moved to
-> 2.33.1 as the default version, it is time to drop support for binutils
-> 2.31.1.
+On 2020-06-28 22:16 +0200, Romain Naour spake thusly:
+> Currently glibc 2.30 is build by default with Werror enabled but it
+> has only been tested with compiler version available at the time of
+> the release [1] (gcc 6.2 up to gcc 9.2.1). It's recommended to use
+> those version with glibc 2.30.
+> 
+> For the same reason why we remove Werror in packages's compiler
+> flags. Building with Werror is not bulletproof when we start
+> using a newer compiler that introduce new warnings.
+> This is the case here with gcc 10, as reported by Yegor Yefremov
+> [2].
+> 
+> Fixing compiler warnings would require backporting many patches [3]
+> not even backported by Glibc maintainers to the 2.30 stable
+> branch. Instead, disable Werror by using --disable-werror.
+> Most (if not all) gcc 10 warnings will be fixed with Glibc 2.31.
+> 
+> [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=INSTALL;h=62e78725f57080a1cb638cccd28ca3c2ffc5a22c#l466
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-June/285715.html
+> [3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=cba932a5a9e91cffd7f4172d7e91f9b2efb1f84b
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=de18a7061c9bdff73d66502c55d6a3ea671fc6d9
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=49348beafe9ba150c9bd48595b3f372299bddbb0
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=70c6e15654928c603c6d24bd01cf62e7a8e2ce9b
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=c7bf5ceab6ec776ac7350d3b0190776bf532ac54
+>     https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=e1d559f337de2c8ab68a6749dfe873477c883807
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  Config.in.legacy                              |   8 +
->  package/binutils/2.31.1/0001-sh-conf.patch    |  48 --
->  .../0005-poison-system-directories.patch      | 306 ---------
->  ...ion-where-GOT-information-is-collect.patch | 198 ------
->  ...ess.-Return-FALSE-in-case-of-NULL-po.patch |  35 --
->  ...-symbol-is-not-an-indirect-or-warnin.patch |  43 --
->  ...was-still-being-generated-when-symbo.patch |  37 --
->  ...ation-of-undefined-weak-references-i.patch |  48 --
->  ...mic-relocations-sections-consistency.patch |  90 ---
->  ...OPERTY_X86_ISA_1_USED-note-if-needed.patch | 568 -----------------
->  ...ly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch | 588 ------------------
->  ...operly-add-X86_ISA_1_NEEDED-property.patch | 140 -----
->  ...hrink_dynamic_reloc_sections-for-exp.patch |  41 --
->  ...s-const16-for-xtensa-loop-relaxation.patch | 294 ---------
->  ...t-.literal_position-at-section-start.patch |  96 ---
->  .../0018-bfd-xtensa-fix-PR-ld-25630.patch     |  37 --
->  .../2.31.1/0019-xtensa-fix-PR-ld-25861.patch  | 376 -----------
->  ...TENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 ----
->  package/binutils/Config.in.host               |   5 -
->  package/binutils/binutils.hash                |   1 -
->  package/gcc/Config.in.host                    |   4 -
->  21 files changed, 8 insertions(+), 3083 deletions(-)
->  delete mode 100644 package/binutils/2.31.1/0001-sh-conf.patch
->  delete mode 100644 package/binutils/2.31.1/0005-poison-system-directories.patch
->  delete mode 100644 package/binutils/2.31.1/0006-Refactored-location-where-GOT-information-is-collect.patch
->  delete mode 100644 package/binutils/2.31.1/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
->  delete mode 100644 package/binutils/2.31.1/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
->  delete mode 100644 package/binutils/2.31.1/0009-PLT-information-was-still-being-generated-when-symbo.patch
->  delete mode 100644 package/binutils/2.31.1/0010-xtensa-fix-relaxation-of-undefined-weak-references-i.patch
->  delete mode 100644 package/binutils/2.31.1/0011-xtensa-move-dynamic-relocations-sections-consistency.patch
->  delete mode 100644 package/binutils/2.31.1/0012-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
->  delete mode 100644 package/binutils/2.31.1/0013-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
->  delete mode 100644 package/binutils/2.31.1/0014-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
->  delete mode 100644 package/binutils/2.31.1/0015-bfd-xtensa-fix-shrink_dynamic_reloc_sections-for-exp.patch
->  delete mode 100644 package/binutils/2.31.1/0016-gas-use-literals-const16-for-xtensa-loop-relaxation.patch
->  delete mode 100644 package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
->  delete mode 100644 package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
->  delete mode 100644 package/binutils/2.31.1/0019-xtensa-fix-PR-ld-25861.patch
->  delete mode 100644 package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to master, thanks.
 
-Thomas
+Please also see my reply to Yegor, later in the thread...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/glibc/glibc.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 76fae1f9f7..1881cf0cdc 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -131,6 +131,7 @@ define GLIBC_CONFIGURE_CMDS
+>  		$(if $(BR2_x86_64),--enable-lock-elision) \
+>  		--with-pkgversion="Buildroot" \
+>  		--disable-profile \
+> +		--disable-werror \
+>  		--without-gd \
+>  		--enable-obsolete-rpc \
+>  		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
+> -- 
+> 2.25.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
