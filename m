@@ -1,47 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jun 2020 22:59:12 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/qemu: add spice support
-In-Reply-To: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
-References: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
-Message-ID: <20200629225912.6934261e@windsurf>
+Date: Mon, 29 Jun 2020 23:00:51 +0200
+Subject: [Buildroot] [git commit] package/cups-filters: improve cups-browsed
+ init integration
+Message-ID: <20200629205830.DD6E1861A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 29 Jun 2020 15:50:00 -0500
-Jared Bents <jared.bents@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2fe54a4536c87a757c75b3bd4dfe0f11b819bdc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> update to add qemu spice support
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  package/qemu/Config.in | 9 +++++++++
->  package/qemu/qemu.mk   | 8 +++++++-
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> index 33d4cccd7b..3de73b69ec 100644
-> --- a/package/qemu/Config.in
-> +++ b/package/qemu/Config.in
-> @@ -127,6 +127,15 @@ config BR2_PACKAGE_QEMU_SDL
->  comment "SDL frontend needs a toolchain w/ dynamic library"
->  	depends on BR2_STATIC_LIBS
->  
-> +config BR2_PACKAGE_QEMU_SPICE
-> +	bool "Enable Spice frontend"
-> +	depends on BR2_PACKAGE_SPICE
+cups-browsed service is compiled and installed by the package,
+but the corresponding services file were not installed for
+systemv and systemd.
 
-I am wondering why for this one we are adding a sub-option and not
-using automatic detection of BR2_PACKAGE_SPICE=y in the .mk file, like
-you've done for VNC and usb-redir.
+Specifying --without-rcdir allows to not install the init script
+provided with cups-filters, and we provide our own,
+Buildroot-compatible init script.
 
-On the other hand, we do have already a bunch of sub-options to
-configure Qemu. We're not very consistent here :/
+For systemd, we install the upstream-provided service file.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cups-filters/S82cups-browsed | 48 ++++++++++++++++++++++++++++++++++++
+ package/cups-filters/cups-filters.mk | 13 +++++++++-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
+
+diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+new file mode 100644
+index 0000000000..08909c7f98
+--- /dev/null
++++ b/package/cups-filters/S82cups-browsed
+@@ -0,0 +1,48 @@
++#!/bin/sh
++
++DAEMON="cups-browsed"
++PIDFILE="/var/run/$DAEMON.pid"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++		-- -c /etc/cups/cups-browsed.conf
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 1f17018bc5..ffd1fd8945 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -19,7 +19,8 @@ CUPS_FILTERS_CONF_OPTS = \
+ 	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--with-pdftops=pdftops \
+-	--with-jpeg
++	--with-jpeg \
++	--without-rcdir
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ CUPS_FILTERS_CONF_OPTS += --with-png
+@@ -71,4 +72,14 @@ else
+ CUPS_FILTERS_CONF_OPTS += --disable-poppler
+ endif
+ 
++define CUPS_FILTERS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/cups-filters/S82cups-browsed \
++		$(TARGET_DIR)/etc/init.d/S82cups-browsed
++endef
++
++define CUPS_FILTERS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 $(@D)/utils/cups-browsed.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/cups-browsed.service
++endef
++
+ $(eval $(autotools-package))
