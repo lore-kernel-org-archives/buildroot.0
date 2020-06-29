@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jun 2020 23:19:35 +0200
-Subject: [Buildroot] [PATCH 3/4] package/poco: enable build for riscv64
-In-Reply-To: <20200629210735.179913-3-juju@cotds.org>
+Date: Mon, 29 Jun 2020 23:21:23 +0200
+Subject: [Buildroot] [PATCH 4/4] package/poco: add new option for the
+ Poco JWT component
+In-Reply-To: <20200629210735.179913-4-juju@cotds.org>
 References: <20200629210735.179913-1-juju@cotds.org>
- <20200629210735.179913-3-juju@cotds.org>
-Message-ID: <20200629231935.17662626@windsurf>
+ <20200629210735.179913-4-juju@cotds.org>
+Message-ID: <20200629232123.276062d2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 29 Jun 2020 23:07:34 +0200
+On Mon, 29 Jun 2020 23:07:35 +0200
 Julien Olivain <juju@cotds.org> wrote:
 
-> diff --git a/package/poco/Config.in b/package/poco/Config.in
-> index b6914539e3..a3d19d5640 100644
-> --- a/package/poco/Config.in
-> +++ b/package/poco/Config.in
-> @@ -7,7 +7,8 @@ config BR2_PACKAGE_POCO
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on !BR2_STATIC_LIBS # dlopen()
->  	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
-> -		|| BR2_or1k || BR2_riscv || BR2_xtensa)
-> +		|| BR2_or1k || (BR2_riscv && !BR2_RISCV_64) \
+> +config BR2_PACKAGE_POCO_JWT
+> +	bool "jwt"
+> +	select BR2_PACKAGE_POCO_JSON
+> +	select BR2_PACKAGE_POCO_CRYPTO
+> +	select BR2_PACKAGE_OPENSSL
 
-You could also just change:
-
-	|| BR2_riscv
-
-by:
-
-	|| BR2_RISCV_32
-
-Best regards,
+Do you need to select BR2_PACKAGE_OPENSSL here ? It's already implied
+by selecting POCO_CRYPTO. In fact, what made me look in more details is
+that you have a "select BR2_PACKAGE_OPENSSL", but "openssl" is not
+added to POCO_DEPENDENCIES. It happens to work because you select
+POCO_CRYPTO, which already adds "openssl" to POCO_DEPENDENCIES.
 
 Thomas
 -- 
