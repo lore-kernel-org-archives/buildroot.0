@@ -1,56 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Jun 2020 19:43:30 +0200
-Subject: [Buildroot] NFS-root boot problem
-In-Reply-To: <CAOiXNkBxAvePRB5zCCcPdyyBarM_4w_8hvc15nWhuK=15W6ptg@mail.gmail.com>
-References: <CAOiXNkBxAvePRB5zCCcPdyyBarM_4w_8hvc15nWhuK=15W6ptg@mail.gmail.com>
-Message-ID: <20200630194330.554815c0@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Jun 2020 22:11:11 +0200
+Subject: [Buildroot] [git commit] package/poco: add
+ BR2_PACKAGE_POCO_ARCH_SUPPORTS
+Message-ID: <20200630200854.ECAE186175@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 30 Jun 2020 19:23:30 +0200
-Andrey Nechypurenko <andreynech@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4f733a4de7da15f207cb1b20815d5abaf67f7b5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> [    8.349831] stm32-dwmac 5800a000.ethernet eth0: Link is Up -
-> 1Gbps/Full - flow control rx/tx
-> [    8.369852] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-> [    8.399809] Sending DHCP requests ., OK
-> [    8.445835] IP-Config: Got DHCP answer from 192.168.10.1, my
-> address is 192.168.10.2
-> [    8.459285] IP-Config: Complete:
-> [    8.464607]      device=eth0, hwaddr=00:80:e1:42:63:27,
-> ipaddr=192.168.10.2, mask=255.255.255.0, gw=192.168.10.1
-> [    8.480546]      host=devboard, domain=dev.local, nis-domain=(none)
-> [    8.492540]      bootserver=192.168.10.1, rootserver=192.168.10.1,
-> rootpath=/srv/nfs/rootfs,wsize=1024,rsize=1024,v3
-> [    8.492546]      nameserver0=8.8.8.8
-> [    8.515305] ALSA device list:
-> [    8.520550]   No soundcards found.
-> [    8.569520] VFS: Mounted root (nfs filesystem) on device 0:16.
-> [    8.583574] devtmpfs: mounted
-> [    8.590867] Freeing unused kernel memory: 1024K
-> [    8.630042] Run /sbin/init as init process
-> Starting syslogd: OK
-> Starting klogd: OK
-> Running sysctl: OK
-> Initializing random number generator: OK
-> Saving random seed: OK
-> Starting rpcbind: OK
-> Starting network: ip: RTNETLINK answers: File exists
-> udhcpc: started, v1.31.1
-> [   19.379804] nfs: server 192.168.10.1 not responding, still trying
-> [   28.199820] nfs: server 192.168.10.1 not responding, still trying
+Commit 0737f48c5f (package/poco: disable build for riscv) did not
+propagate the new dependency on BR2_riscv to the comment.
 
-When your DHCP client in userspace runs, it turns the network interface
-down, and because you're doing root-over-NFS, this means you're cutting
-the tree branch on which you're sitting!
+Introduce BR2_PACKAGE_POCO_ARCH_SUPPORTS to solve this issue.
 
-Disable your DHCP client in userspace will solve your problem.
+Signed-off-by: Julien Olivain <juju@cotds.org>
+[yann.morin.1998 at free.fr:
+  - reword the commit log
+  - use separate 'depend on !arch'
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/poco/Config.in | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index f8f921de04..05e56eb6b8 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -1,3 +1,13 @@
++config BR2_PACKAGE_POCO_ARCH_SUPPORTS
++	bool
++	default y
++	depends on !BR2_arc
++	depends on !BR2_microblaze
++	depends on !BR2_mipsel
++	depends on !BR2_or1k
++	depends on !BR2_riscv
++	depends on !BR2_xtensa
++
+ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -5,8 +15,7 @@ config BR2_PACKAGE_POCO
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+-	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+-		|| BR2_or1k || BR2_riscv || BR2_xtensa)
++	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -85,5 +94,4 @@ endif # BR2_PACKAGE_POCO
+ comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+-	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+-		|| BR2_or1k || BR2_xtensa)
++	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
