@@ -1,71 +1,56 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Tue, 30 Jun 2020 19:34:35 +0200
-Subject: [Buildroot] [PATCH v2 4/4] package/poco: add new option for the
- Poco JWT component
-In-Reply-To: <20200630173435.7828-1-juju@cotds.org>
-References: <20200629210735.179913-1-juju@cotds.org>
- <20200630173435.7828-1-juju@cotds.org>
-Message-ID: <20200630173435.7828-4-juju@cotds.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Jun 2020 19:43:30 +0200
+Subject: [Buildroot] NFS-root boot problem
+In-Reply-To: <CAOiXNkBxAvePRB5zCCcPdyyBarM_4w_8hvc15nWhuK=15W6ptg@mail.gmail.com>
+References: <CAOiXNkBxAvePRB5zCCcPdyyBarM_4w_8hvc15nWhuK=15W6ptg@mail.gmail.com>
+Message-ID: <20200630194330.554815c0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Poco 1.10.0 introduced a new JWT (JSON Web Tokens). See:
-https://pocoproject.org/docs/Poco.JWT.Token.html
+On Tue, 30 Jun 2020 19:23:30 +0200
+Andrey Nechypurenko <andreynech@gmail.com> wrote:
 
-This patch add the option to build this component.
+> [    8.349831] stm32-dwmac 5800a000.ethernet eth0: Link is Up -
+> 1Gbps/Full - flow control rx/tx
+> [    8.369852] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+> [    8.399809] Sending DHCP requests ., OK
+> [    8.445835] IP-Config: Got DHCP answer from 192.168.10.1, my
+> address is 192.168.10.2
+> [    8.459285] IP-Config: Complete:
+> [    8.464607]      device=eth0, hwaddr=00:80:e1:42:63:27,
+> ipaddr=192.168.10.2, mask=255.255.255.0, gw=192.168.10.1
+> [    8.480546]      host=devboard, domain=dev.local, nis-domain=(none)
+> [    8.492540]      bootserver=192.168.10.1, rootserver=192.168.10.1,
+> rootpath=/srv/nfs/rootfs,wsize=1024,rsize=1024,v3
+> [    8.492546]      nameserver0=8.8.8.8
+> [    8.515305] ALSA device list:
+> [    8.520550]   No soundcards found.
+> [    8.569520] VFS: Mounted root (nfs filesystem) on device 0:16.
+> [    8.583574] devtmpfs: mounted
+> [    8.590867] Freeing unused kernel memory: 1024K
+> [    8.630042] Run /sbin/init as init process
+> Starting syslogd: OK
+> Starting klogd: OK
+> Running sysctl: OK
+> Initializing random number generator: OK
+> Saving random seed: OK
+> Starting rpcbind: OK
+> Starting network: ip: RTNETLINK answers: File exists
+> udhcpc: started, v1.31.1
+> [   19.379804] nfs: server 192.168.10.1 not responding, still trying
+> [   28.199820] nfs: server 192.168.10.1 not responding, still trying
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
----
-Changes v1 -> v2:
-Suggested by Thomas:
-  - Remove "select BR2_PACKAGE_OPENSSL" which is already selected
-    by POCO_CRYPTO.
----
- package/poco/Config.in | 5 +++++
- package/poco/poco.mk   | 5 +++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+When your DHCP client in userspace runs, it turns the network interface
+down, and because you're doing root-over-NFS, this means you're cutting
+the tree branch on which you're sitting!
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index cfc4f6c0aa..b7dbe3629c 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -85,6 +85,11 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
- 	select BR2_PACKAGE_POCO_DATA
- 	select BR2_PACKAGE_MYSQL
- 
-+config BR2_PACKAGE_POCO_JWT
-+	bool "jwt"
-+	select BR2_PACKAGE_POCO_JSON
-+	select BR2_PACKAGE_POCO_CRYPTO
-+
- endif # BR2_PACKAGE_POCO
- 
- comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library, gcc >= 5 w/ C++14"
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 915d0dc400..c605044ba3 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -17,7 +17,7 @@ POCO_DEPENDENCIES = zlib pcre \
- 	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql)
- 
--POCO_OMIT = Data/ODBC JWT PageCompiler \
-+POCO_OMIT = Data/ODBC PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_JSON),,JSON) \
- 	$(if $(BR2_PACKAGE_POCO_XML),,XML) \
- 	$(if $(BR2_PACKAGE_POCO_UTIL),,Util) \
-@@ -31,7 +31,8 @@ POCO_OMIT = Data/ODBC JWT PageCompiler \
- 	$(if $(BR2_PACKAGE_POCO_MONGODB),,MongoDB) \
- 	$(if $(BR2_PACKAGE_POCO_DATA),,Data) \
- 	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL) \
--	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite)
-+	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite) \
-+	$(if $(BR2_PACKAGE_POCO_JWT),,JWT)
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- POCO_CONF_OPTS += --no-fpenvironment --no-wstring
+Disable your DHCP client in userspace will solve your problem.
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
