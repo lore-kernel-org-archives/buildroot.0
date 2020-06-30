@@ -1,130 +1,90 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 29 Jun 2020 23:37:56 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/haveged: Change service file
- to run early
-In-Reply-To: <CADYdroOmtQ8q7vKXAAxxoDQwD_OViWGk_SkJRmJtF+4yyBML4g@mail.gmail.com>
-References: <20200609224116.13607-1-nolange79@gmail.com>
- <20200609224116.13607-2-nolange79@gmail.com>
- <CADYdroMM5zNtnQ8J7soZo+Vnv6eSuZFVj6Bq+GyZ4UyB4xkEgg@mail.gmail.com>
- <CAFvCimVKi8eTQHnO6t0ZhcT86X74hqyM4JzQTJ_XWyxNVSFAWA@mail.gmail.com>
- <CADYdroNxW-em_kbTZ8iYOuc=6WOkoOWoDOvdCohVbfCU4T74oA@mail.gmail.com>
- <20200629093044.eurgl7qjx4xkd3vv@falbala.internal.home.lespocky.de>
- <CADYdroNwfd6XJT+TRUV+_uR6qhYDwxGRpNSTFdd-e5xNi6gEFQ@mail.gmail.com>
- <20200629124147.v2uthqmkms5tthk5@falbala.internal.home.lespocky.de>
- <CADYdroOmtQ8q7vKXAAxxoDQwD_OViWGk_SkJRmJtF+4yyBML4g@mail.gmail.com>
-Message-ID: <20200629213755.hodf6swoeo6z5thb@falbala.internal.home.lespocky.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 30 Jun 2020 07:30:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/waylandpp: bump version to 0.2.8
+Message-ID: <20200630053024.264873-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Norbert,
+Removed patch which was applied upstream, reformatted hashes.
 
-On Mon, Jun 29, 2020 at 05:17:16PM +0200, Norbert Lange wrote:
-> Am Mo., 29. Juni 2020 um 14:41 Uhr schrieb Alexander Dahl <post@lespocky.de>:
-> > On Mon, Jun 29, 2020 at 11:55:26AM +0200, Norbert Lange wrote:
-> > > Am Mo., 29. Juni 2020 um 11:30 Uhr schrieb Alexander Dahl <post@lespocky.de>:
-> > > > On Mon, Jun 29, 2020 at 10:29:38AM +0200, Norbert Lange wrote:
-> > > > > Haveged is not entropy, it's a substitute. I dont know how many times I
-> > > > > need to point that out.
-> > > >
-> > > > As far as I understood the source for the entropy haveged collects is
-> > > > random timing jitter from the CPU. Could you explain, why that is not
-> > > > real entropy, although it passes the FIPS tests? Or point to an
-> > > > explanation to learn from?
-> > >
-> > > This is already round 2 of the argumentation, see
-> > > http://lists.busybox.net/pipermail/buildroot/2020-June/284465.html
-> > >
-> > > But yes. haveged is still not tapping any entropy the kernel has not available,
-> > > it just blows up the low entropy available with a random number generator.
-> >
-> > So, I read http://www.issihosts.com/haveged/history.html (again) and
-> > as far as I understand it is a not a pseudo random number generator.
-> > According to its own documentation
-> > https://www.chronox.de/jent/doc/CPU-Jitter-NPTRNG.html#toc-Subsection-1.1
-> > it is a random generator based on CPU timing jitter, measured by high
-> > precision timers.  That randomness is fed to the kernel pools the same
-> > way one would fed randomness from a true hwrng.  Right?
-> 
-> random generator *based* on CPU timing jitter, just like you typically
-> seed a PRNG
-> system time.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...ke-Make-target_link_options-optional.patch | 37 -------------------
+ package/waylandpp/waylandpp.hash              |  6 +--
+ package/waylandpp/waylandpp.mk                |  2 +-
+ 3 files changed, 4 insertions(+), 41 deletions(-)
+ delete mode 100644 package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
 
-I just took some time and read the havege source.  It's not just
-seeding with one timestamp or something, the jitter is the noise
-source, and new jitter data is gathered by doing calculations, and
-measuring timings (and doing some calculations on top) on each read to
-the havege rng.
-
-> Its not just entropy, you dont have any measure on how much entropy
-> you get from jitter,
-> especially on embedded systems or VMs where you would haveged in the
-> first place.
-
-I'm no expert on RNG, not at all.  But how is an embedded system or a
-virtual machine CPU different from other systems here, if the noise
-source is the CPU itself only?
-
-> > > I am not up to speed with FIPS tests, but from a really really long way back
-> > > it wasn't a big issue to pass most tests with the Mersenne Twister and a few
-> > > bits of true entropy.
-> > >
-> > > Basically it feeds PRNG back to kernel and lets it account as entropy source.
-> >
-> > I could not find any backup for that claim.  If I understood
-> > correctly, haveged does not read from the kernel PRNG.
-> 
-> The kernel has an entropy pool, it taps alot sources (inkl jitter, see
-> https://lwn.net/Articles/642166/).
-
-Yes, but according to Stephan M?ller, the author of the
-jitterentropy-rng, the kernel uses the CPU timing jitter internally
-only in the crypto subsystem, that's not fed to the pool /dev/random
-uses [1].  There's a patch series for a redesigned random number
-subsystem by him, which would make that possible, but that never got
-merged. 
-
-> what haveged does is overaccounting the very little true entropy it
-> fetches (by using a PRNG on top AFAIU).
-
-That may be, I did not read and understood the haveged source good
-enough to prove or disprove that.
-
-> > > In short:
-> > >
-> > > Want better/faster entropy, use rng-tools, or choose to "trust" the
-> > > CPU vendor if instructions are available.
-> >
-> > rng-tools is useless without a hwrng or jitterentropy-rngd, which does
-> > the same thing as haveged.  So for a system without a hwrng, how
-> > should that recommendation help an user?
-> 
-> Maybe you should understand that not everyone needs that kinda level
-> of entropy.
-> If you are that concerned, use a TPM Module + rng-tools.
-> haveged's primary concern is to speed up boot, *not* improve the random numbers,
-> it does not tap entropy that the kernel is not using already.
-
-I think this is wrong.  According to [1] the kernel does not feed CPU
-timing jitter based entropy to the entropy pool for the rng available
-to userspace, which haveged does.
-
-Greets
-Alex
-
-[1] https://lore.kernel.org/linux-crypto/6708214.Ppv1U3N1OP at tauon.chronox.de/T/#t
-
+diff --git a/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch b/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
+deleted file mode 100644
+index a7746c1f36..0000000000
+--- a/package/waylandpp/0001-cmake-Make-target_link_options-optional.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From a39c0c115e19150551c01b04a5e903376633e771 Mon Sep 17 00:00:00 2001
+-From: Nils Christopher Brause <nilschrbrause@googlemail.com>
+-Date: Fri, 22 Nov 2019 17:39:20 +0100
+-Subject: [PATCH] [cmake] Make target_link_options optional, lowering the
+- required cmake version to 3.4.
+-
+-[Retrieved from:
+-https://github.com/NilsBrause/waylandpp/commit/a39c0c115e19150551c01b04a5e903376633e771]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- CMakeLists.txt | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 386f8d8..47a412c 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -21,7 +21,7 @@
+- # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+- # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- 
+--cmake_minimum_required(VERSION 3.13)
+-+cmake_minimum_required(VERSION 3.4)
+- project(waylandpp VERSION 0.2.7 LANGUAGES CXX)
+- 
+- # packages
+-@@ -160,7 +160,9 @@ if(BUILD_LIBRARIES)
+-     "include/wayland-client.hpp;include/wayland-util.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol.hpp;${CMAKE_CURRENT_BINARY_DIR}/wayland-version.hpp"
+-     src/wayland-client.cpp src/wayland-util.cpp wayland-client-protocol.cpp wayland-client-protocol.hpp)
+-   # Report undefined references only for the base library.
+--  target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
+-+  if(${CMAKE_VERSION} VERSION_GREATER "3.14.0")
+-+    target_link_options(wayland-client++ PRIVATE "-Wl,--no-undefined")
+-+  endif()
+-   define_library(wayland-client-extra++ "${WAYLAND_CLIENT_CFLAGS}" "${WAYLAND_CLIENT_LIBRARIES}"
+-     "${CMAKE_CURRENT_BINARY_DIR}/wayland-client-protocol-extra.hpp"
+-     wayland-client-protocol-extra.cpp wayland-client-protocol-extra.hpp wayland-client-protocol.hpp)
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+index 39ea3e1708..1b806af9b0 100644
+--- a/package/waylandpp/waylandpp.hash
++++ b/package/waylandpp/waylandpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 fa31b659a6bb93b322e1068831c9a0135a4687d8ef9ceb2e7660c909ce10bfa6  waylandpp-0.2.7.tar.gz
+-sha256 8ff91f682a38f8a603b173222a60e8dc71754a79a522a316fb6b76ce138c542c  LICENSE
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
++sha256  e7f486165d3568c3558b5c7099133aea4a285b82820eeafad329fc10271c654d  waylandpp-0.2.8.tar.gz
++sha256  8ff91f682a38f8a603b173222a60e8dc71754a79a522a316fb6b76ce138c542c  LICENSE
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+index 8630b05bb3..45d9ccd528 100644
+--- a/package/waylandpp/waylandpp.mk
++++ b/package/waylandpp/waylandpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLANDPP_VERSION = 0.2.7
++WAYLANDPP_VERSION = 0.2.8
+ WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
+ WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
+ WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200629/b22c1046/attachment.asc>
+2.26.2
