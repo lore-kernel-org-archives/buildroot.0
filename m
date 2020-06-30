@@ -1,47 +1,86 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 30 Jun 2020 08:52:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-ugly: fix
- static build with libdvdcss
-Message-ID: <20200630065228.1594953-1-fontaine.fabrice@gmail.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Tue, 30 Jun 2020 09:04:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/putty: security bump version to
+ 0.74
+In-Reply-To: <20200630054929.439626-1-bernd.kuhls@t-online.de>
+References: <20200630054929.439626-1-bernd.kuhls@t-online.de>
+Message-ID: <20200630070433.jwkwggacs5gm6dcu@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The double quotes from GST1_PLUGINS_UGLY_LDFLAGS += "-ldvdcss"
-raise the following build failure:
+Hello Bernd,
 
-sed -e 's%@TARGET_CROSS@%/home/buildroot/autobuild/run/instance-2/output-1/host/bin/arm-linux-%g' -e 's%@TARGET_ARCH@%arm%g' -e 's%@TARGET_CPU@%arm926ej-s%g' -e 's%@TARGET_ENDIAN@%little%g' -e 's%@TARGET_CFLAGS@%"-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE", "-D_FILE_OFFSET_BITS=64", "-Os", "-g2", "-static"%g' -e 's%@TARGET_LDFLAGS@%"-static", ""-ldvdcss""%g' -e 's%@TARGET_CXXFLAGS@%"-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE", "-D_FILE_OFFSET_BITS=64", "-Os", "-g2", "-static", "-static"%g' -e 's%@HOST_DIR@%/home/buildroot/autobuild/run/instance-2/output-1/host%g' -e 's%@STAGING_DIR@%/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot%g' -e 's%@STATIC@%true%g' -e "/^\[binaries\]$/s:$::" -e "/^\[properties\]$/s:$::" package/meson/cross-compilation.conf.in > /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build/cross-compilation.conf
-PATH="/home/buildroot/autobuild/run/instance-2/output-1/host/bin:/home/buildroot/autobuild/run/instance-2/output-1/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  PYTHONNOUSERSITE=y /home/buildroot/autobuild/run/instance-2/output-1/host/bin/meson --prefix=/usr --libdir=lib --default-library=static --buildtype=debug --cross-file=/home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build/cross-compilation.conf -Dbuild.pkg_config_path=/home/buildroot/autobuild/run/instance-2/output-1/host/lib/pkgconfig -Dexamples=disabled -Dtests=disabled -Da52dec=disabled -Damrnb=disabled -Damrwbdec=disabled -Dcdio=disabled -Dsidplay=disabled -Dorc=disabled -Dasfdemux=enabled -Ddvdlpcmdec=disabled -Ddvdsub=disabled -Dxingmux=disabled -Drealmedia=disabled -Ddvdread=enabled -Dmpeg2dec=disabled -Dx264=disabled /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2/ /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build
+On Tue, Jun 30, 2020 at 07:49:29AM +0200, Bernd Kuhls wrote:
+> Reformatted hashes, added md5 hash provided by upstream.
+> 
+> Release notes:
+> https://lists.tartarus.org/pipermail/putty-announce/2020/000030.html
+> 
+> Fixes CVE-2020-14002:
+> https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14002
+> 
+> Updated license hash due to upstream commits adding copyright holders
+> and bumping the copyright year:
+> https://git.tartarus.org/?p=simon/putty.git;a=history;f=LICENCE;h=3e1d146289644749b3578f610c74715fa1c6bf0d;hb=HEAD
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-ERROR: Malformed value in cross file variable c_link_args.
+Reviewed-by: Alexander Dahl <post@lespocky.de>
 
-However since the switch to messon, this workaround is not needed so
-drop it
+Thanks 
+Alex
 
-Fixes:
- - http://autobuild.buildroot.org/results/56a830625cf6e6b0d63b6e7e2761496abc146152
+> ---
+>  package/putty/putty.hash | 11 ++++++-----
+>  package/putty/putty.mk   |  2 +-
+>  2 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+> index 8600281efc..3885cef9b8 100644
+> --- a/package/putty/putty.hash
+> +++ b/package/putty/putty.hash
+> @@ -1,7 +1,8 @@
+> -# Hashes from: http://the.earth.li/~sgtatham/putty/0.73/{sha1,sha256,sha512}sums
+> -sha1 17daebb82e476adfd578f6934c28f4d2c209b7d8  putty-0.73.tar.gz
+> -sha256 3db0b5403fb41aecd3aa506611366650d927650b6eb3d839ad4dcc782519df1c  putty-0.73.tar.gz
+> -sha512 4ada4b8c6d68be44afede2676bc661fedfd1ea0b574b8232ad9aaa6f3a48baa9f4f0ded2955b3f2677a14db85a508f53c965cb00fcd7538a1ed9844031f0c5e5  putty-0.73.tar.gz
+> +# Hashes from: http://the.earth.li/~sgtatham/putty/0.74/{md5,sha1,sha256,sha512}sums
+> +md5  dbfa58f22a91b22b7489173e9dd09e30  putty-0.74.tar.gz
+> +sha1  17b160e9720f67f9af9399d7d185b913b81f18fe  putty-0.74.tar.gz
+> +sha256  ddd5d388e51dd9e6e294005b30037f6ae802239a44c9dc9808c779e6d11b847d  putty-0.74.tar.gz
+> +sha512  0da86849ea764cd88643bd2c1984ac7211ae72dd7c41232307b1960a29ca9518044b022d87c60272d6db71a3357026862a112bedb90ee732b41494fca3acde9b  putty-0.74.tar.gz
+>  
+>  # Locally calculated
+> -sha256 b517b4a9504ba0f651d5e590245197b88d9a81d073905cc798cc9464c5ca7ba8  LICENCE
+> +sha256  92028b6d56212bd3e4ce6a36bd2e2454851dca7e8ffe4c6ab51385ca214ca322  LICENCE
+> diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+> index 5313a4f8be..8f9564bc38 100644
+> --- a/package/putty/putty.mk
+> +++ b/package/putty/putty.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PUTTY_VERSION = 0.73
+> +PUTTY_VERSION = 0.74
+>  PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+>  PUTTY_LICENSE = MIT
+>  PUTTY_LICENSE_FILES = LICENCE
+> -- 
+> 2.26.2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 284516f7d1..9f8b1d3359 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -64,10 +64,6 @@ GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
--# configure does not use pkg-config to detect libdvdread
--ifeq ($(BR2_PACKAGE_LIBDVDCSS)$(BR2_STATIC_LIBS),yy)
--GST1_PLUGINS_UGLY_LDFLAGS += "-ldvdcss"
--endif
- GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=enabled
- GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
- GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
 -- 
-2.26.2
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200630/d49b4866/attachment.asc>
