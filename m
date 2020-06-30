@@ -1,102 +1,113 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 30 Jun 2020 13:53:41 +0200
-Subject: [Buildroot] [PATCH v2 2/4] package/freescale-imx/firmware-imx:
- Add option for all i.MX FW needs
-In-Reply-To: <1593419148-26821-3-git-send-email-stephane.viau@oss.nxp.com>
+Date: Tue, 30 Jun 2020 13:59:10 +0200
+Subject: [Buildroot] [PATCH v2 3/4] package/freescale-imx/firmware-imx:
+ Clean up the image/target semantic
+In-Reply-To: <1593419148-26821-4-git-send-email-stephane.viau@oss.nxp.com>
 References: <1593419148-26821-1-git-send-email-stephane.viau@oss.nxp.com>
- <1593419148-26821-3-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <20200630115341.GA791671@p1g2>
+ <1593419148-26821-4-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <20200630115910.GB791671@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephane
+Hi Stephane,
 
-On Mon, Jun 29, 2020 at 10:25:46AM +0200, Stephane Viau wrote:
-> Some SoC need a HDMI FW for their bootloader, some other require EPDC,
-> SDMA and/or VPU.
-> Instead of trying to "guess" what firmware images need to be installed
-> in firmware-imx.mk, let the Config framework do the job and allow each
-> SoC to pick what firmware they need.
+On Mon, Jun 29, 2020 at 10:25:47AM +0200, Stephane Viau wrote:
+> The newly introduced BR2_PACKAGE_FIRMWARE_IMX_xxx symbols shall be
+> used in lieue of the SoC type when installing images or binaries on
+> target.
 > 
-> Note that this patch should also help introducing an eventual DP FW, as
-> Gary mentioned in a separate thread [1].
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-May/283181.html
+> These new symbols let us define FIRMWARE_IMX_INSTALL_IMAGES_CMDS and
+> FIRMWARE_IMX_INSTALL_TARGET_CMDS based on platform needs rather than
+> SoC type.
 > 
 > Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 > ---
 > v2:
-> - Do not embed VPU FW for i.MX 6S/6UL/7 (Fabio)
 > - Name VPU FW after IP name (Fabio)
 > - Rename symbols using the "_NEED_" in their name (Thomas)
+> - Remove unnecessary comments & move INSTALL_IMAGES down (Thomas)
 > 
 > Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 > ---
->  package/freescale-imx/firmware-imx/Config.in | 43 +++++++++++++++++++++++++++-
->  1 file changed, 42 insertions(+), 1 deletion(-)
+>  package/freescale-imx/firmware-imx/firmware-imx.mk | 63 ++++++++++++++++------
+>  1 file changed, 46 insertions(+), 17 deletions(-)
 > 
-> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-> index d6310e6..2ac5dfa 100644
-> --- a/package/freescale-imx/firmware-imx/Config.in
-> +++ b/package/freescale-imx/firmware-imx/Config.in
-> @@ -4,11 +4,52 @@ config BR2_PACKAGE_FIRMWARE_IMX
->  	help
->  	  Firmware blobs for the Freescale i.MX SoCs.
+> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> index 55ca6fc..d227eb2 100644
+> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> @@ -12,8 +12,6 @@ FIRMWARE_IMX_LICENSE = NXP Semiconductor Software License Agreement
+>  FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
+>  FIRMWARE_IMX_REDISTRIBUTE = NO
 >  
-> -	  It contains blobs for SDMA and VPU.
-> +	  It contains blobs for SDMA, VPU, etc...
->  
->  	  This library is provided by Freescale as-is and doesn't have
->  	  an upstream.
->  
-> +config BR2_PACKAGE_FIRMWARE_IMX_SDMA
-> +	bool
-> +	depends on BR2_PACKAGE_FIRMWARE_IMX
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+> -FIRMWARE_IMX_BLOBS = sdma vpu
+> -
+>  define FIRMWARE_IMX_EXTRACT_CMDS
+>  	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+>  endef
+> @@ -72,35 +70,66 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+>  	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+>  endef
+>  endif
+> +endif # IMX_NEEDS_DDR_FW
 > +
-> +config BR2_PACKAGE_FIRMWARE_IMX_VPU_CODA
-> +	bool
-> +	depends on BR2_PACKAGE_FIRMWARE_IMX
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_HDMI),y)
+> +FIRMWARE_IMX_INSTALL_IMAGES = YES
+>  
+> -ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
+>  define FIRMWARE_IMX_PREPARE_HDMI_FW
+>  	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+>  		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+>  endef
+>  endif
+>  
+> -define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+> -	$(FIRMWARE_IMX_PREPARE_DDR_FW)
+> -	$(FIRMWARE_IMX_PREPARE_HDMI_FW)
+> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_EPDC),y)
+> +FIRMWARE_IMX_INSTALL_TARGET = YES
 > +
-> +config BR2_PACKAGE_FIRMWARE_IMX_VPU_MALONE
-> +	bool
-> +	depends on BR2_PACKAGE_FIRMWARE_IMX
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
-> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+> +define FIRMWARE_IMX_INSTALL_TARGET_EPDC_FW
+> +	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+> +	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
+> +	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+> +		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+>  endef
+> -else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+> -define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_SDMA),y)
+> +FIRMWARE_IMX_INSTALL_TARGET = YES
+> +
+> +define FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW
+> +	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+> +	cp -r $(@D)/firmware/vpu $(TARGET_DIR)/lib/firmware
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_VPU_CODA),y)
+> +FIRMWARE_IMX_INSTALL_TARGET = YES
+> +
+> +define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
+> +	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+> +	cp -r $(@D)/firmware/vpu $(TARGET_DIR)/lib/firmware
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_VPU_MALONE),y)
+> +FIRMWARE_IMX_INSTALL_TARGET = YES
 
-So here you are either copying all the VPU Malone blob or all the VPU
-CODA blob no matter the platform being used?
+Instead of setting FIRMWARE_IMX_INSTALL_TARGET at multiple places,
+wouldn't it be ok to have it set to YES at the beginning, and worst case
+scenario none of the macros are defined and it does nothing?
 
-Since we cleaning things up, I'd rather have a generic
-BR2_PACKAGE_FIRMWARE_IMX_VPU config for all the platforms that require a
-VPU blob (from firmware-imx).
-Then in the .mk I'd only copy the VPU blob associated to the platform
-selected (mx27, mx6, mx8 etc).
-That way we don't embed imx27 blob when we build for imx6. As someone
-mentioned in the previous, there's no need to embeds blobs we know are
-useless.
-
-What do you think?
+Just trying to simplify the package even more. Same goes for
+FIRMWARE_IMX_INSTALL_IMAGES_CMDS.
 
 Regards,
 Gary
