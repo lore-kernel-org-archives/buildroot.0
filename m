@@ -1,119 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jul 2020 21:01:05 +0200
-Subject: [Buildroot] [PATCH v6 19/28] core/pkg-infra: Add per-package
- support in qmake infra
-In-Reply-To: <20200217212350.29750-20-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-20-anaumann@ultratronik.de>
-Message-ID: <20200701190105.GW20645@scaer>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed,  1 Jul 2020 17:42:52 -0300
+Subject: [Buildroot] [PATCH] package/stella: bump version to 6.2.1
+Message-ID: <20200701204252.481-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/stella/stella.hash | 2 +-
+ package/stella/stella.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry for the long delay in looking (again) at this complex series...
-I'll try and apply as much as I can in the following days...
-
-On 2020-02-17 22:23 +0100, Andreas Naumann spake thusly:
-> Qmake configured packages will, by default, use the absolute HostPrefix/Sysroot
-> pathes set during configuration/building of qt5base for their install
-> destinations.
-> For the per-package host/staging infrastructure, this causes non-qt5base
-> packages to litter the qt5base folders. In addition, buildroots target-install
-> step subsequently fails because the respective files are missing from the
-> per-package sysroot of the package itself.
-> 
-> Fortunately, qmake's built-in pathes can be overridden by placing a custom
-> qt.conf next to the qmake binary. This is already used to facilitate SDK
-> relocation. So for per-package path manipulation we can reuse that method, but
-> need to change the host/sysroot values according to each per-package
-> path.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-
-I did the slight ammendment I already pointed out earlier, and applied
-to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-qmake.mk           |  1 +
->  package/qt5/qt5.mk             | 15 +++++++++++++++
->  package/qt5/qt5base/qt5base.mk |  9 +--------
->  3 files changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-> index 53ac3e4a1c..3aa0dd7101 100644
-> --- a/package/pkg-qmake.mk
-> +++ b/package/pkg-qmake.mk
-> @@ -46,6 +46,7 @@ $(2)_INSTALL_TARGET_OPTS	?= $$($(2)_INSTALL_STAGING_OPTS)
->  #
->  ifndef $(2)_CONFIGURE_CMDS
->  define $(2)_CONFIGURE_CMDS
-> +	$$(QT5_QT_CONF_FIXUP)
->  	cd $$($(2)_BUILDDIR) && \
->  	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
->  endef
-> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-> index d94d9cc99f..eb2a749678 100644
-> --- a/package/qt5/qt5.mk
-> +++ b/package/qt5/qt5.mk
-> @@ -17,5 +17,20 @@ QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)
->  
->  include $(sort $(wildcard package/qt5/*/*.mk))
->  
-> +# The file "qt.conf" can be used to override the hard-coded paths that are
-> +# compiled into the Qt library. We need it to make "qmake" relocatable and
-> +# tweak the per-package install pathes
-> +define QT5_INSTALL_QT_CONF
-> +	rm -f $(HOST_DIR)/bin/qt.conf && \
-> +	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
-> +		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
-> +endef
-> +
-> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> +define QT5_QT_CONF_FIXUP
-> +        $(QT5_INSTALL_QT_CONF)
-> +endef
-> +endif
-> +
->  # Variable for other Qt applications to use
->  QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 03f984ef8c..960a802b3b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -352,13 +352,6 @@ define QT5BASE_CONFIGURE_CMDS
->  	)
->  endef
->  
-> -# The file "qt.conf" can be used to override the hard-coded paths that are
-> -# compiled into the Qt library. We need it to make "qmake" relocatable.
-> -define QT5BASE_INSTALL_QT_CONF
-> -	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
-> -		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
-> -endef
-> -
-> -QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_INSTALL_QT_CONF
-> +QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
->  
->  $(eval $(qmake-package))
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index 0b50636a00e5..31a3bef1e5af 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  8086e57c231625f0b840ca361f493969247d20476cbb53609d778d37bda17c34  stella-6.1.2-src.tar.xz
++sha256  47b991af880b1699614c081d602c197942cfbdcbf52e3d738617923d5df23dc7  stella-6.2.1-src.tar.xz
+ sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
+ sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 53a1050cd8fa..1a071cb0a9d8 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STELLA_VERSION = 6.1.2
++STELLA_VERSION = 6.2.1
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
