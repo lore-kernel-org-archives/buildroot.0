@@ -1,42 +1,60 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 30 Jun 2020 22:36:05 -0600
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to version 6.0.5
-Message-ID: <20200701043605.3842956-1-james.hilliard1@gmail.com>
+Date: Tue, 30 Jun 2020 22:42:12 -0600
+Subject: [Buildroot] [PATCH 1/1] package/zlib-ng: bump to version
+ 9609cb56a8f62868ccf264493bc9c3b4d5762fcf
+Message-ID: <20200701044212.11378-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We need to update the location to point to the current maintained
+upstream repo as well since the existing one is unmaintained.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zlib-ng/zlib-ng.hash | 2 +-
+ package/zlib-ng/zlib-ng.mk   | 4 ++--
+ package/zlib/Config.in       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index cf13bb9c0a..97e8d451e6 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256  3337005a1e0c3aa293c87c313467ea8ac11984921fab08807998ba765c9943de  redis-6.0.4.tar.gz
-+sha256  42cf86a114d2a451b898fcda96acd4d01062a7dbaaad2801d9164a36f898f596  redis-6.0.5.tar.gz
- 
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index 2e89a8d7a6..1aacecbeac 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 262f6cd1f4..192e6fa9f8 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
+-sha256	2ec78c8c13530bffaebfc10be2f4695c47cf50fe2fbc2104606467703836fa0e zlib-ng-a17fefa147942edbf80ab22a16bcbc2419def12d.tar.gz
++sha256	bc95d2a23b572478769b5e12aa2e775df717ba9ff0f44a3a941987c8b997c84a zlib-ng-9609cb56a8f62868ccf264493bc9c3b4d5762fcf.tar.gz
+ sha256	d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436 LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index 3d9651c08f..098dfcb28a 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--REDIS_VERSION = 6.0.4
-+REDIS_VERSION = 6.0.5
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-ZLIB_NG_VERSION = a17fefa147942edbf80ab22a16bcbc2419def12d
+-ZLIB_NG_SITE = $(call github,mtl1979,zlib-ng,$(ZLIB_NG_VERSION))
++ZLIB_NG_VERSION = 9609cb56a8f62868ccf264493bc9c3b4d5762fcf
++ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
+ ZLIB_NG_INSTALL_STAGING = YES
+diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+index 0f6179f537..4c41ea9fe9 100644
+--- a/package/zlib/Config.in
++++ b/package/zlib/Config.in
+@@ -35,7 +35,7 @@ config BR2_PACKAGE_ZLIB_NG
+ 	  Zlib replacement with optimizations for
+ 	  "next generation" systems.
+ 
+-	  https://github.com/mtl1979/zlib-ng/tree/renamelib
++	  https://github.com/zlib-ng/zlib-ng
+ 
+ endchoice
+ 
 -- 
 2.25.1
