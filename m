@@ -1,51 +1,93 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed, 1 Jul 2020 15:23:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to version 6.0.5
-In-Reply-To: <20200701043605.3842956-1-james.hilliard1@gmail.com>
-References: <20200701043605.3842956-1-james.hilliard1@gmail.com>
-Message-ID: <ace6aa51-b8c5-6bba-1625-39ea71ab5937@railnova.eu>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 1 Jul 2020 19:39:56 +0200
+Subject: [Buildroot] [git commit] core/pkg-infra: Add per-package support in
+ qmake infra
+Message-ID: <20200701173934.4E18E843E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James and all,
+commit: https://git.buildroot.net/buildroot/commit/?id=60e3a09693703f0c923322d39ce1210baf154983
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the version bump !
+Qmake configured packages will, by default, use the absolute HostPrefix/Sysroot
+pathes set during configuration/building of qt5base for their install
+destinations.
+For the per-package host/staging infrastructure, this causes non-qt5base
+packages to litter the qt5base folders. In addition, buildroots target-install
+step subsequently fails because the respective files are missing from the
+per-package sysroot of the package itself.
 
-On 1/07/20 06:36, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fortunately, qmake's built-in pathes can be overridden by placing a custom
+qt.conf next to the qmake binary. This is already used to facilitate SDK
+relocation. So for per-package path manipulation we can reuse that method, but
+need to change the host/sysroot values according to each per-package
+path.
 
-Acked-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: drop useless 'rm -f' of generated file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-qmake.mk           |  1 +
+ package/qt5/qt5.mk             | 14 ++++++++++++++
+ package/qt5/qt5base/qt5base.mk |  9 +--------
+ 3 files changed, 16 insertions(+), 8 deletions(-)
 
-> ---
->   package/redis/redis.hash | 2 +-
->   package/redis/redis.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-> index cf13bb9c0a..97e8d451e6 100644
-> --- a/package/redis/redis.hash
-> +++ b/package/redis/redis.hash
-> @@ -1,5 +1,5 @@
->   # From https://github.com/antirez/redis-hashes/blob/master/README
-> -sha256  3337005a1e0c3aa293c87c313467ea8ac11984921fab08807998ba765c9943de  redis-6.0.4.tar.gz
-> +sha256  42cf86a114d2a451b898fcda96acd4d01062a7dbaaad2801d9164a36f898f596  redis-6.0.5.tar.gz
->   
->   # Locally calculated
->   sha256  cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-> index 262f6cd1f4..192e6fa9f8 100644
-> --- a/package/redis/redis.mk
-> +++ b/package/redis/redis.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -REDIS_VERSION = 6.0.4
-> +REDIS_VERSION = 6.0.5
->   REDIS_SITE = http://download.redis.io/releases
->   REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
->   REDIS_LICENSE_FILES = COPYING
-> 
+diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+index 46d2b22d04..27727119d7 100644
+--- a/package/pkg-qmake.mk
++++ b/package/pkg-qmake.mk
+@@ -50,6 +50,7 @@ endif
+ #
+ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
++	$$(QT5_QT_CONF_FIXUP)
+ 	cd $$($(2)_BUILDDIR) && \
+ 	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
+ endef
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index e540ebcf85..4fa687fd58 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -11,5 +11,19 @@ QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)
+ 
+ include $(sort $(wildcard package/qt5/*/*.mk))
+ 
++# The file "qt.conf" can be used to override the hard-coded paths that are
++# compiled into the Qt library. We need it to make "qmake" relocatable and
++# tweak the per-package install pathes
++define QT5_INSTALL_QT_CONF
++	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
++		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
++endef
++
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++define QT5_QT_CONF_FIXUP
++        $(QT5_INSTALL_QT_CONF)
++endef
++endif
++
+ # Variable for other Qt applications to use
+ QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index c6b459a0e1..359a380075 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -314,13 +314,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 	)
+ endef
+ 
+-# The file "qt.conf" can be used to override the hard-coded paths that are
+-# compiled into the Qt library. We need it to make "qmake" relocatable.
+-define QT5BASE_INSTALL_QT_CONF
+-	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
+-		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
+-endef
+-
+-QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_INSTALL_QT_CONF
++QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
+ 
+ $(eval $(qmake-package))
