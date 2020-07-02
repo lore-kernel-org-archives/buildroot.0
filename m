@@ -1,45 +1,20 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  2 Jul 2020 07:35:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.11.10
-Message-ID: <20200702053556.281003-1-bernd.kuhls@t-online.de>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Thu, 2 Jul 2020 13:53:39 +0800
+Subject: [Buildroot] [PATCH] package/ttyd: bump to version 1.6.1
+In-Reply-To: <eab89c77-b2b5-7f1f-0351-a34a52ca06b0@aliyun.com>
+References: <eab89c77-b2b5-7f1f-0351-a34a52ca06b0@aliyun.com>
+Message-ID: <733eebb2-7274-7a7d-c0ad-b8d85e82ac66@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://www.samba.org/samba/history/samba-4.11.10.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index ad34489317..34ae6f84bc 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
--sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
-+sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4124032264..b6fe1a827c 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.11.9
-+SAMBA4_VERSION = 4.11.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.26.2
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-package-ttyd-bump-to-version-1.6.1.patch
+Type: text/x-patch
+Size: 2993 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200702/844083fa/attachment.bin>
