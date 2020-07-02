@@ -1,92 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Jul 2020 23:51:09 +0200
-Subject: [Buildroot] [PATCH v3] package/gstreamer1/gst1-plugins-good:
- Enable GUDEV for V4L2 if available
-In-Reply-To: <20200608000026.4237-1-ezequiel@vanguardiasur.com.ar>
-References: <20200608000026.4237-1-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20200702215109.GB20645@scaer>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Thu,  2 Jul 2020 20:27:22 -0300
+Subject: [Buildroot] [PATCH] package/execline: bump version to 2.6.1.0
+Message-ID: <20200702232722.20960-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicolas, Ezequiel, All,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/execline/execline.hash | 2 +-
+ package/execline/execline.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-06-07 21:00 -0300, Ezequiel Garcia spake thusly:
-> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> 
-> Video4Linux2 plugins can udev for device probing and monitor.
-> This greatly improves load time and monitoring performance.
-> 
-> It also enables hotplug monitoring for cameras.
-
-Here, I've added a blurb explaining why we do not propagate the
-dependencies from libgudev eventhough we select it.
-
-I am always a bit conflicted that we don't do that explicitly, even if
-superfluous.
-
-But heck, the libglib2 world is not ready to drop the existing
-dependencies (MMU, wchar, and threads) anytime soon, so this ought
-to be enough for everybody (famous last words).
-
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v3:
-> * Apply the dependency only if V4L2 plugins are enabled
-> v2:
-> * Enable/disable v4l2-gudev explicitly
-> 
->  package/gstreamer1/gst1-plugins-good/Config.in            | 1 +
->  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 7 +++++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-> index 20aebc473e89..be77f5a82e3d 100644
-> --- a/package/gstreamer1/gst1-plugins-good/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
-> @@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
->  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
->  	bool "v4l2"
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
->  	help
->  	  elements for Video 4 Linux
->  
-> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> index 223af9850897..7bb2fa5f3720 100644
-> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> @@ -355,6 +355,13 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
->  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2=enabled
-> +# Enable use of gudev if available, for device probing and monitoring.
-> +ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-> +GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
-> +GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=enabled
-> +else
-> +GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=disabled
-> +endif
->  else
->  GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2=disabled
->  endif
-> -- 
-> 2.26.0.rc2
-> 
-
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index cef4959bda93..0f928aeef3bd 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 05205c6869ae65a51c63d0e805572573806f6474aa21e12c49dd5654d3ceed33  execline-2.5.3.0.tar.gz
++sha256 a24c76f097ff44fe50b63b89bcde5d6ba9a481aecddbe88ee01b0e5a7b314556  execline-2.6.1.0.tar.gz
+ sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index 74ad91e4a8a2..e2423e9536df 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXECLINE_VERSION = 2.5.3.0
++EXECLINE_VERSION = 2.6.1.0
+ EXECLINE_SITE = http://skarnet.org/software/execline
+ EXECLINE_LICENSE = ISC
+ EXECLINE_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
