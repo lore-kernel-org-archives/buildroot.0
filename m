@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  2 Jul 2020 22:22:21 +0200
-Subject: [Buildroot] [PATCH 02/11] package/luabitop: unsupport of Lua 5.4,
- as 5.3
+Date: Thu,  2 Jul 2020 22:22:22 +0200
+Subject: [Buildroot] [PATCH 03/11] package/lua-compat53: unsupport of Lua
+ 5.4, as 5.3
 In-Reply-To: <20200702202230.1531929-1-francois.perrad@gadz.org>
 References: <20200702202230.1531929-1-francois.perrad@gadz.org>
-Message-ID: <20200702202230.1531929-3-francois.perrad@gadz.org>
+Message-ID: <20200702202230.1531929-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luabitop/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lua-compat53/Config.in | 2 +-
+ package/lua-http/Config.in     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
-index a819fe8ae..51b12486d 100644
---- a/package/luabitop/Config.in
-+++ b/package/luabitop/Config.in
+diff --git a/package/lua-compat53/Config.in b/package/lua-compat53/Config.in
+index 76c5b3fd7..38a6b12f8 100644
+--- a/package/lua-compat53/Config.in
++++ b/package/lua-compat53/Config.in
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_LUABITOP
- 	bool "luabitop"
+ config BR2_PACKAGE_LUA_COMPAT53
+ 	bool "lua-compat53"
 -	depends on !BR2_PACKAGE_LUA_5_3
 +	depends on !BR2_PACKAGE_LUA_5_3 && !BR2_PACKAGE_LUA_5_4
  	help
- 	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds
- 	  bitwise operations on numbers.
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LUABITOP
- 	  http://bitop.luajit.org
- 
- comment "luabitop needs a Lua 5.1/5.2 interpreter"
--	depends on BR2_PACKAGE_LUA_5_3
-+	depends on BR2_PACKAGE_LUA_5_3 || BR2_PACKAGE_LUA_5_4
+ 	  Compatibility module providing Lua-5.3-style APIs for Lua 5.2
+ 	  and 5.1.
+diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
+index cbf71563b..19a77f107 100644
+--- a/package/lua-http/Config.in
++++ b/package/lua-http/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LUA_HTTP
+ 	select BR2_PACKAGE_LPEG # runtime
+ 	select BR2_PACKAGE_LUA_BASEXX # runtime
+ 	select BR2_PACKAGE_LUA_BINARYHEAP # runtime
+-	select BR2_PACKAGE_LUA_COMPAT53 if !BR2_PACKAGE_LUA_5_3 # runtime
++	select BR2_PACKAGE_LUA_COMPAT53 if !BR2_PACKAGE_LUA_5_3 && !BR2_PACKAGE_LUA_5_4 # runtime
+ 	select BR2_PACKAGE_LUA_CQUEUES # runtime
+ 	select BR2_PACKAGE_LUA_FIFO # runtime
+ 	select BR2_PACKAGE_LUA_LPEG_PATTERNS # runtime
 -- 
 2.25.1
