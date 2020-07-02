@@ -1,71 +1,64 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Thu,  2 Jul 2020 12:36:13 +0200
-Subject: [Buildroot] [PATCH 1/6] Revert "python-m2crypto: remove"
+Date: Thu,  2 Jul 2020 12:36:18 +0200
+Subject: [Buildroot] [PATCH 6/6] wireless-regdb: add signing key to linux
+ kernel
 In-Reply-To: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
 References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200702103618.5147-2-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200702103618.5147-7-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 484c04878e5e76cdc0cc33c7646f98ab41698a7e.
-python-m2crypto becomes needed for recompiling wireless-regdb.
+When rebuilding wireless-regdb, linux kernel needs the signing
+public key to validate the database.
 
 Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- package/python-m2crypto/python-m2crypto.hash |  3 ++
- package/python-m2crypto/python-m2crypto.mk   | 31 ++++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 package/python-m2crypto/python-m2crypto.hash
- create mode 100644 package/python-m2crypto/python-m2crypto.mk
+ linux/linux.mk                           |  4 ++++
+ package/wireless-regdb/wireless-regdb.mk | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
-new file mode 100644
-index 0000000000..4ac180f870
---- /dev/null
-+++ b/package/python-m2crypto/python-m2crypto.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/M2Crypto/, sha256 locally computed
-+md5 8e87235942c76d1ba9f999ee33764fdb M2Crypto-0.24.0.tar.gz
-+sha256 80a56441a1d2c0cf27e725be7554c92598b938fc8767ee2c71fdbc2fdc055ee8 M2Crypto-0.24.0.tar.gz
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-new file mode 100644
-index 0000000000..3d0e54eb4e
---- /dev/null
-+++ b/package/python-m2crypto/python-m2crypto.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# python-m2crypto
-+#
-+################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b9f2052ee7..8366afaa03 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -367,6 +367,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+ endef
+ 
++ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
++LINUX_DEPENDENCIES += wireless-regdb
++endif
 +
-+PYTHON_M2CRYPTO_VERSION = 0.24.0
-+PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
-+PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
-+PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
-+HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+ # Starting with 4.17, the generated dtc parser code is no longer
+ # shipped with the kernel sources, so we need flex and bison. For
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index d60428a8f0..74fdfbea20 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -42,6 +42,20 @@ define WIRELESS_REGDB_BUILD_CMDS
+ 		-outform DER \
+ 		-out $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509
+ endef
 +
-+PYTHON_M2CRYPTO_LICENSE = MIT
-+PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
++# Sarting with 4.15, the kernel can hold public keys for validating
++# regulatory.db file.
++# make sure wireless-regdb is rebuilt before linux
++# and fixup kernel to include the signing key
 +
-+# We need to use python2 because m2crypto is not python3 compliant.
-+HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
-+
-+# The --openssl option that allows to specify a custom path to OpenSSL
-+# can only be used with the non-default build_ext setup.py command,
-+# and calling this command directly fails. To work around this, simply
-+# hardcode the path to OpenSSL in setup.py.
-+# Bug reported at https://gitlab.com/m2crypto/m2crypto/issues/89
-+define HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
-+	$(SED) "s%self.openssl = '/usr'%self.openssl = '$(HOST_DIR)/usr'%" \
-+		$(@D)/setup.py
++define WIRELESS_REGDB_LINUX_FIXUP
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211_CERTIFICATION_ONUS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS)
++	$(call KCONFIG_SET_OPT,CONFIG_CFG80211_EXTRA_REGDB_KEYDIR,"$(WIRELESS_REGDB_DIR)")
 +endef
 +
-+HOST_PYTHON_M2CRYPTO_POST_PATCH_HOOKS += HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
++PACKAGES_LINUX_CONFIG_FIXUPS += $(call WIRELESS_REGDB_LINUX_FIXUP)
 +
-+$(eval $(host-python-package))
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_CRDA),y)
 -- 
 2.25.0
