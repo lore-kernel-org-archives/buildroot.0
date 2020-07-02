@@ -1,35 +1,56 @@
-From: Srijan Nandi - Gmail <srijan.nandi@gmail.com>
-Date: Fri, 3 Jul 2020 09:59:08 +0530
-Subject: [Buildroot] New user creation
-Message-ID: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  2 Jul 2020 22:22:19 +0200
+Subject: [Buildroot] [PATCH 00/11] Lua 5.4
+Message-ID: <20200702202230.1531929-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am facing issues creating a new users. I already have the following set:
+This pacthset introduces Lua 5.4 serie.
+Lua 5.4.0 is the first release of this new serie.
 
-BR2_ROOTFS_USERS_TABLES="x86_64/users"
+Packages which don't support Lua 5.3, don't support Lua 5.4 too.
 
-/opt/buildroot-2020.05$ cat x86_64/users 
-# <username> <uid> <group> <gid> <password> <home> <shell> <groups> <comment>
-test       8000  wheel    -1    =           -                /bin/bash    -    Test user
+Packages which need big change, are temporarily disabled (waiting for upstream).
 
-But when I check under passwd, I am not able to see the new user
+Francois Perrad (11):
+  lua: add 5.4.0 version
+  package/luabitop: unsupport of Lua 5.4, as 5.3
+  package/lua-compat53: unsupport of Lua 5.4, as 5.3
+  package/prosody: unsupport of Lua 5.4, as 5.3
+  package/lua-messagepack: add support of Lua 5.4
+  package/luaossl: add support of Lua 5.4
+  package/easybus: temporarily disabled with Lua 5.4
+  package/lua-cqueues: temporarily disabled with Lua 5.4
+  package/lua-flu: temporarily disabled with Lua 5.4
+  package/lua-sdl2: temporarily disabled with Lua 5.4
+  package/luv: temporarily disabled with Lua 5.4
 
-/opt/buildroot-2020.05$ cat output/target/etc/passwd 
-root:x:0:0:root:/root:/bin/bash
-daemon:x:1:1:daemon:/usr/sbin:/bin/false
-bin:x:2:2:bin:/bin:/bin/false
-sys:x:3:3:sys:/dev:/bin/false
-sync:x:4:100:sync:/bin:/bin/sync
-mail:x:8:8:mail:/var/spool/mail:/bin/false
-www-data:x:33:33:www-data:/var/www:/bin/false
-operator:x:37:37:Operator:/var:/bin/false
-nobody:x:65534:65534:nobody:/home:/bin/false
+ package/easydbus/Config.in                    |  1 +
+ package/lua-compat53/Config.in                |  2 +-
+ package/lua-cqueues/Config.in                 |  1 +
+ package/lua-flu/Config.in                     |  1 +
+ package/lua-http/Config.in                    |  3 +-
+ package/lua-messagepack/lua-messagepack.mk    |  2 +-
+ package/lua-sdl2/Config.in                    |  1 +
+ package/lua/5.4.0/0001-root-path.patch        | 17 ++++
+ .../lua/5.4.0/0002-shared-libs-for-lua.patch  | 78 +++++++++++++++++++
+ package/lua/5.4.0/0011-linenoise.patch        | 25 ++++++
+ package/lua/Config.in                         |  6 +-
+ package/lua/lua.hash                          |  3 +
+ package/lua/lua.mk                            | 10 ++-
+ package/luabitop/Config.in                    |  4 +-
+ package/luaossl/0001-add-support-Lua54.patch  | 25 ++++++
+ package/luv/Config.in                         |  1 +
+ package/pkg-luarocks.mk                       |  6 +-
+ package/prosody/Config.in                     |  4 +-
+ 18 files changed, 178 insertions(+), 12 deletions(-)
+ create mode 100644 package/lua/5.4.0/0001-root-path.patch
+ create mode 100644 package/lua/5.4.0/0002-shared-libs-for-lua.patch
+ create mode 100644 package/lua/5.4.0/0011-linenoise.patch
+ create mode 100644 package/luaossl/0001-add-support-Lua54.patch
 
-Is there something I am missing
-
-
--=Srijan Nandi
+-- 
+2.25.1
