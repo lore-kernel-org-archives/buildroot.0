@@ -1,33 +1,47 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  2 Jul 2020 22:22:24 +0200
-Subject: [Buildroot] [PATCH 05/11] package/lua-messagepack: add support of
- Lua 5.4
+Date: Thu,  2 Jul 2020 22:22:27 +0200
+Subject: [Buildroot] [PATCH 08/11] package/lua-cqueues: temporarily disabled
+ with Lua 5.4
 In-Reply-To: <20200702202230.1531929-1-francois.perrad@gadz.org>
 References: <20200702202230.1531929-1-francois.perrad@gadz.org>
-Message-ID: <20200702202230.1531929-6-francois.perrad@gadz.org>
+Message-ID: <20200702202230.1531929-9-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+and its reverse dependency
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-messagepack/lua-messagepack.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lua-cqueues/Config.in | 1 +
+ package/lua-http/Config.in    | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
-index f393a8d02..33d460b4f 100644
---- a/package/lua-messagepack/lua-messagepack.mk
-+++ b/package/lua-messagepack/lua-messagepack.mk
-@@ -6,7 +6,7 @@
- 
- LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
- LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
- else
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack
+diff --git a/package/lua-cqueues/Config.in b/package/lua-cqueues/Config.in
+index 60f022848..de2aa4692 100644
+--- a/package/lua-cqueues/Config.in
++++ b/package/lua-cqueues/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_CQUEUES
+ 	bool "lua-cqueues"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PACKAGE_LUA_5_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Continuation Queues: Embeddable asynchronous networking,
+diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
+index 19a77f107..bf1129901 100644
+--- a/package/lua-http/Config.in
++++ b/package/lua-http/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_HTTP
+ 	bool "lua-http"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS    # luaossl & lua-cqueues
++	depends on !BR2_PACKAGE_LUA_5_4 # lua-cqueues
+ 	select BR2_PACKAGE_LPEG # runtime
+ 	select BR2_PACKAGE_LUA_BASEXX # runtime
+ 	select BR2_PACKAGE_LUA_BINARYHEAP # runtime
 -- 
 2.25.1
