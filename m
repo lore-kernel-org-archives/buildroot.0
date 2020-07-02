@@ -1,40 +1,43 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu,  2 Jul 2020 20:27:22 -0300
-Subject: [Buildroot] [PATCH] package/execline: bump version to 2.6.1.0
-Message-ID: <20200702232722.20960-1-sergio.prado@e-labworks.com>
+Date: Thu,  2 Jul 2020 20:39:33 -0300
+Subject: [Buildroot] [PATCH] package/exempi: bump version to 2.5.2
+Message-ID: <20200702233933.22423-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also change the hash file to separate the fields by two spaces.
+
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/execline/execline.hash | 2 +-
- package/execline/execline.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/exempi/exempi.hash | 4 ++--
+ package/exempi/exempi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index cef4959bda93..0f928aeef3bd 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/exempi/exempi.hash b/package/exempi/exempi.hash
+index e8b71a483ea8..5ea968305386 100644
+--- a/package/exempi/exempi.hash
++++ b/package/exempi/exempi.hash
 @@ -1,3 +1,3 @@
- # Locally generated
--sha256 05205c6869ae65a51c63d0e805572573806f6474aa21e12c49dd5654d3ceed33  execline-2.5.3.0.tar.gz
-+sha256 a24c76f097ff44fe50b63b89bcde5d6ba9a481aecddbe88ee01b0e5a7b314556  execline-2.6.1.0.tar.gz
- sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 74ad91e4a8a2..e2423e9536df 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
+ # Locally calculated
+-sha256 100b3d5b1b3370bc2e31c0978991716c4a4478246a2ac2df6382054a0ae89bc8  exempi-2.5.1.tar.bz2
+-sha256 3d3c3593c15e0d35bdae0df7c642106250f6be3adc61477419413900f23ae607  COPYING
++sha256  52f54314aefd45945d47a6ecf4bd21f362e6467fa5d0538b0d45a06bc6eaaed5  exempi-2.5.2.tar.bz2
++sha256  3d3c3593c15e0d35bdae0df7c642106250f6be3adc61477419413900f23ae607  COPYING
+diff --git a/package/exempi/exempi.mk b/package/exempi/exempi.mk
+index 2b6bd4fa81fb..3790b16b3287 100644
+--- a/package/exempi/exempi.mk
++++ b/package/exempi/exempi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXECLINE_VERSION = 2.5.3.0
-+EXECLINE_VERSION = 2.6.1.0
- EXECLINE_SITE = http://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
+-EXEMPI_VERSION = 2.5.1
++EXEMPI_VERSION = 2.5.2
+ EXEMPI_SOURCE = exempi-$(EXEMPI_VERSION).tar.bz2
+ EXEMPI_SITE = https://libopenraw.freedesktop.org/download
+ EXEMPI_INSTALL_STAGING = YES
 -- 
 2.17.1
