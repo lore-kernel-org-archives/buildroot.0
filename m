@@ -1,64 +1,101 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Thu,  2 Jul 2020 12:36:18 +0200
-Subject: [Buildroot] [PATCH 6/6] wireless-regdb: add signing key to linux
- kernel
+Date: Thu,  2 Jul 2020 12:36:17 +0200
+Subject: [Buildroot] [PATCH 5/6] wireless-regdb: add explicit signing key
+ config
 In-Reply-To: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
 References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200702103618.5147-7-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200702103618.5147-6-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When rebuilding wireless-regdb, linux kernel needs the signing
-public key to validate the database.
+This commit allows to set an explicit file with signing key to use.
 
 Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- linux/linux.mk                           |  4 ++++
- package/wireless-regdb/wireless-regdb.mk | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
+ package/wireless-regdb/Config.in         | 18 ++++++++++++++++++
+ package/wireless-regdb/wireless-regdb.mk | 24 +++++++++++++++++++++---
+ 2 files changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index b9f2052ee7..8366afaa03 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -367,6 +367,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
- endef
- 
-+ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
-+LINUX_DEPENDENCIES += wireless-regdb
+diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
+index 55347b5e8c..be2c421438 100644
+--- a/package/wireless-regdb/Config.in
++++ b/package/wireless-regdb/Config.in
+@@ -26,4 +26,22 @@ config BR2_WIRELESS_REGDB_REBUILD
+ 	  outdoor and indoor regulations differ.
+ 	  Make sure to deploy your wireless-regdb public key if you use crda
+ 	  or compile them into the kernel.
++
++if BR2_WIRELESS_REGDB_REBUILD
++
++config BR2_WIRELESS_REGDB_COMMONNAME
++	string "CommonName for x509 cert"
++	default "buildroot"
++
++config BR2_WIRELESS_REGDB_PRIVKEY
++	string "private key for signing wireless-regdb"
++	default "~/.buildroot"
++	help
++	  Path to file containing private key to sign wireless-regdb.
++	  The key should be in .pem format.
++
++	  If the file does not exist, a new key will be generated
++
 +endif
 +
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- # Starting with 4.17, the generated dtc parser code is no longer
- # shipped with the kernel sources, so we need flex and bison. For
+ endif
 diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index d60428a8f0..74fdfbea20 100644
+index 7c6b140a4a..d60428a8f0 100644
 --- a/package/wireless-regdb/wireless-regdb.mk
 +++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -42,6 +42,20 @@ define WIRELESS_REGDB_BUILD_CMDS
- 		-outform DER \
- 		-out $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509
+@@ -13,16 +13,34 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
+ 
++WIRELESS_REGDB_PRIVKEY = $(call qstrip,$(BR2_WIRELESS_REGDB_PRIVKEY))
++WIRELESS_REGDB_PRIVKEYNAME = $(patsubst .%,%,$(notdir $(WIRELESS_REGDB_PRIVKEY)))
++# make sure PRIVKEYNAME is set
++ifeq ($(WIRELESS_REGDB_PRIVKEYNAME),)
++WIRELESS_REGDB_PRIVKEY=~/.buildroot
++endif
++
++ifeq ($(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME)),)
++BR2_WIRELESS_REGDB_COMMONNAME = "buildroot"
++endif
++
+ define WIRELESS_REGDB_PATCH_PYTHON3
+ 	sed -i -e '1 s/python$$/python3/' $(@D)/*.py
++	sed -i -e 's/= sforshee$$/= $(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME))/' $(@D)/gen-pubcert.sh
  endef
+ 
+ WIRELESS_REGDB_POST_PATCH_HOOKS += WIRELESS_REGDB_PATCH_PYTHON3
+ 
+ WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
 +
-+# Sarting with 4.15, the kernel can hold public keys for validating
-+# regulatory.db file.
-+# make sure wireless-regdb is rebuilt before linux
-+# and fixup kernel to include the signing key
-+
-+define WIRELESS_REGDB_LINUX_FIXUP
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211_CERTIFICATION_ONUS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS)
-+	$(call KCONFIG_SET_OPT,CONFIG_CFG80211_EXTRA_REGDB_KEYDIR,"$(WIRELESS_REGDB_DIR)")
-+endef
-+
-+PACKAGES_LINUX_CONFIG_FIXUPS += $(call WIRELESS_REGDB_LINUX_FIXUP)
-+
+ define WIRELESS_REGDB_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		REGDB_AUTHOR=buildroot
++		REGDB_PRIVKEY=$(WIRELESS_REGDB_PRIVKEY) \
++		REGDB_PUBKEY=$(WIRELESS_REGDB_PRIVKEYNAME).pub \
++		REGDB_PUBCERT=$(WIRELESS_REGDB_PRIVKEYNAME).x509.pem
++	openssl x509 -in $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509.pem \
++		-outform DER \
++		-out $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509
+ endef
  endif
  
- ifeq ($(BR2_PACKAGE_CRDA),y)
+@@ -32,8 +50,8 @@ define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+ 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+ 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+-	$(INSTALL) -m 644 -D -T ~/.wireless-regdb-buildroot.key.pub.pem \
+-		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/buildroot.key.pub.pem
++	$(INSTALL) -m 644 -D -T $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).pub \
++		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/$(WIRELESS_REGDB_PRIVKEYNAME).pub
+ endef
+ endif
+ 
 -- 
 2.25.0
