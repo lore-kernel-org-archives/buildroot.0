@@ -1,85 +1,71 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Thu,  2 Jul 2020 12:36:16 +0200
-Subject: [Buildroot] [PATCH 4/6] wireless-regdb: add option to rebuild
+Date: Thu,  2 Jul 2020 12:36:13 +0200
+Subject: [Buildroot] [PATCH 1/6] Revert "python-m2crypto: remove"
 In-Reply-To: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
 References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200702103618.5147-5-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200702103618.5147-2-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some countries, different regulations apply for indoor and outdoor use.
-The precompiled binary of wireless-regdb is for indoor use only.
-If your product is for outdoor use, or for other deviations,
-you may need to rebuild the patched or modified wireless-regdb.
-
-Building is done explicitely using python3
+This reverts commit 484c04878e5e76cdc0cc33c7646f98ab41698a7e.
+python-m2crypto becomes needed for recompiling wireless-regdb.
 
 Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 ---
- package/wireless-regdb/Config.in         | 15 +++++++++++++++
- package/wireless-regdb/wireless-regdb.mk | 18 ++++++++++++++++++
- 2 files changed, 33 insertions(+)
+ package/python-m2crypto/python-m2crypto.hash |  3 ++
+ package/python-m2crypto/python-m2crypto.mk   | 31 ++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
+ create mode 100644 package/python-m2crypto/python-m2crypto.hash
+ create mode 100644 package/python-m2crypto/python-m2crypto.mk
 
-diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
-index 17350a41d8..55347b5e8c 100644
---- a/package/wireless-regdb/Config.in
-+++ b/package/wireless-regdb/Config.in
-@@ -12,3 +12,18 @@ config BR2_PACKAGE_WIRELESS_REGDB
- 	  application is needed.
- 
- 	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+new file mode 100644
+index 0000000000..4ac180f870
+--- /dev/null
++++ b/package/python-m2crypto/python-m2crypto.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/M2Crypto/, sha256 locally computed
++md5 8e87235942c76d1ba9f999ee33764fdb M2Crypto-0.24.0.tar.gz
++sha256 80a56441a1d2c0cf27e725be7554c92598b938fc8767ee2c71fdbc2fdc055ee8 M2Crypto-0.24.0.tar.gz
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+new file mode 100644
+index 0000000000..3d0e54eb4e
+--- /dev/null
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# python-m2crypto
++#
++################################################################################
 +
-+if BR2_PACKAGE_WIRELESS_REGDB
++PYTHON_M2CRYPTO_VERSION = 0.24.0
++PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
++PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
++PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
++HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
 +
-+config BR2_WIRELESS_REGDB_REBUILD
-+	bool "rebuild wireless-regdb"
-+	help
-+	  Say no to use the pre-built wireless regdb.
++PYTHON_M2CRYPTO_LICENSE = MIT
++PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
 +
-+	  Say yes if you need to deploy a modified wireless-regdb.
-+	  Deviations to the precompiled upstream wireless-regdb may be required
-+	  e.g. if you plan to deploy your product outdoor in countries where
-+	  outdoor and indoor regulations differ.
-+	  Make sure to deploy your wireless-regdb public key if you use crda
-+	  or compile them into the kernel.
-+endif
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 31b62e36e1..7c6b140a4a 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -10,12 +10,30 @@ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
- WIRELESS_REGDB_LICENSE_FILES = LICENSE
- 
++# We need to use python2 because m2crypto is not python3 compliant.
++HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
 +
-+ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
-+
-+define WIRELESS_REGDB_PATCH_PYTHON3
-+	sed -i -e '1 s/python$$/python3/' $(@D)/*.py
++# The --openssl option that allows to specify a custom path to OpenSSL
++# can only be used with the non-default build_ext setup.py command,
++# and calling this command directly fails. To work around this, simply
++# hardcode the path to OpenSSL in setup.py.
++# Bug reported at https://gitlab.com/m2crypto/m2crypto/issues/89
++define HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
++	$(SED) "s%self.openssl = '/usr'%self.openssl = '$(HOST_DIR)/usr'%" \
++		$(@D)/setup.py
 +endef
 +
-+WIRELESS_REGDB_POST_PATCH_HOOKS += WIRELESS_REGDB_PATCH_PYTHON3
++HOST_PYTHON_M2CRYPTO_POST_PATCH_HOOKS += HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
 +
-+WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
-+define WIRELESS_REGDB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		REGDB_AUTHOR=buildroot
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_CRDA),y)
- define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
- 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
- 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
- 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
-+	$(INSTALL) -m 644 -D -T ~/.wireless-regdb-buildroot.key.pub.pem \
-+		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/buildroot.key.pub.pem
- endef
- endif
- 
++$(eval $(host-python-package))
 -- 
 2.25.0
