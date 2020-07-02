@@ -1,235 +1,359 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 Jul 2020 19:38:12 +0200
-Subject: [Buildroot] [PATCH v6 20/28] qt5: Fix pkgconfig search path for
- per-package infrastructure
-In-Reply-To: <20200701215442.GY20645@scaer>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-21-anaumann@ultratronik.de>
- <a339f273-33f3-f232-eac4-6e50427abf6d@cordier.org>
- <20200701211513.GX20645@scaer> <20200701215442.GY20645@scaer>
-Message-ID: <20200702173812.GA20645@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu,  2 Jul 2020 13:11:25 -0700
+Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-{km,
+ um}: bump to SDK 06.01.00.08 versions
+Message-ID: <20200702201125.3639873-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Louis-Paul, Andreas, All,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On 2020-07-01 23:54 +0200, Yann E. MORIN spake thusly:
-> On 2020-07-01 23:15 +0200, Yann E. MORIN spake thusly:
-[--SNIP--]
-> So, patch 19 in the series is in master now, but patch 20 (this one)
-> not yet. So, on master, I did a build with PPD, and right after qt5base,
-> was built, I applied Louis-Paul's tweaks [0], marked the qt5base PPD
-> directory read-only, and built qt5declarative. It worked. :-)
-> 
->     $ make qt5base-depends
->     $ sed magic from L-P's patch
->     $ chmod -R a-w per-package/qt5base/
->     $ make qt5dceclarative
-> 
-> Woot! :-)
+Currently, the ti-sgx packages and the beaglebone_qt5_defconfig do not
+work with KMS nor Weston. What's worse, is the latest SDK version
+06.03.00.106 (as of this commit) of these packages is broken and
+does not correctly support KMS, and attempting to run KMS applications results
+in eglfs initialization failures. As such, bumping these packages to the
+version before 06.03.00.106 is the best option.
 
-So I was a bit too tired yesterday evening. This chmod can't work,
-otherwise the per-package directory for qt5declarative would also be
-read-only.
+Because of the above problems, several packages must change at the same time
+to ensure this patch does not break any other packages.
 
-And it worked because I had a hack that restores the +w on the current
-per-package directory. And since this is a rsync --link-dest, then we
-only have hard-links, and thus the ppd of dependencies are turned back
-to read-write...
+Changes include:
 
-Damn...
+board/beaglebone/rootfs_overlay:
+  - The TI SDK 06.01.00.08 provides a eglfs_kms_cfg.json file in /etc/qt5.
+    This file configures eglfs_kms needed to run QT applications.
 
-Still this is a nice set of patches.
+board/beaglebone/readme.txt:
+  - Update SDK version information
+  - Add help text on how to run the QT5 hellowindow OpenGL demo.
+  - Add me to the bottom of the file.
 
-That gave me an idea for a paranoid PPD, though... hack-hack-hack...
+configs/beaglebone_qt5_defconfig:
+  - Remove QT5Wayland and set the default QPA to eglfs.
+    Even with the above fixes, the SDK packages do not yet support Weston
+    versions greater than 5.0. Changing the default QPA from Wayland to eglfs
+    allows a user to run QT in KMS mode by default.
+  - Add board/beaglebone/rootfs_overlay as an overlay directory.
 
-Regards,
-Yann E. MORIN.
+ti-sgx-um:
+  - Bump the version that matches TI SDK 06.01.00.08.
+  - Remove select BR2_PACKAGE_TI_SGX_LIBGBM in Config.in, as the libgbm
+    package merges ti-sgx-libgbm with this package.
 
-> So, yeath it looks like this patch 20 is not needed if the .pri and .pc
-> (and .cmake) are properly fixed.
-> 
-> Still, I'll let you guys validate that point, and maybe repost the
-> agregated series.
-> 
-> Thanks again! :-)
-> 
-> [0] I did not apply the patch from Louis-Paul, because I wanted to
-> observe the build step by step, and see how the files were before/after
-> the fixes.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > As for the .pc files, I think the fix should be generalised out of the
-> > Qt world, maybe... Fopr example, we already fix the /la files in
-> > package/pkg-generic at 324
-> > 
-> > So, as far as I can see (which can be quite short, in some cases), we
-> > should introduce a similar generic .pc fixup.
-> > 
-> > Also, please see a little comment below...
-> > 
-> > > 2. The second one is fixing .cmake files that also contains absolute paths
-> > > after qt5base installation
-> > 
-> > Ditto, maybe all .cmake files should be fixed, not just the ones by
-> > Qt5, no?
-> > 
-> > > I'm now able to use full parallel build with per-package with Qt5.
-> > 
-> > This is really sounding good! :-)
-> > 
-> > Andreas, Louis-Paul, I know I may be asking a lot, but I'd love to see
-> > an updated and consolidated series reposted to the list, that aggregates
-> > both your developments.
-> > 
-> > Would you be willing to do that, please?
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> > > 
-> > > Thank you for your hard work Andreas,
-> > > 
-> > > BR,
-> > > Louis-Paul CORDIER
-> > 
-> > > From bc08430ebb5d76bdd0b45b8339761c85c7a48800 Mon Sep 17 00:00:00 2001
-> > > From: Louis-Paul Cordier <lpdev@cordier.org>
-> > > Date: Fri, 19 Jun 2020 11:01:21 +0200
-> > > Subject: [PATCH 1/2] core/pkg-infra: Fix pkg-config and .pri absolute path
-> > > 
-> > > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> > > ---
-> > >  package/pkg-qmake.mk | 19 +++++++++++++++++++
-> > >  1 file changed, 19 insertions(+)
-> > > 
-> > > diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-> > > index 27727119d7..49fe185d4a 100644
-> > > --- a/package/pkg-qmake.mk
-> > > +++ b/package/pkg-qmake.mk
-> > > @@ -20,6 +20,22 @@
-> > >  #
-> > >  ################################################################################
-> > >  
-> > > +# When per-package is enabled, and qmake project is configured to generate 
-> > > +# pkg-config compatible package, absolute path are generated for "prefix" field 
-> > > +# of .pc files. In order to keep per-package isolation with sysroot'in, it is 
-> > > +# needed to remove those absolute path. Same apply for mkspecs files.
-> > > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> > > +define PKG_QMAKE_FIXUP_ABSOLUTE_PATH
-> > > +	$(Q)find $(STAGING_DIR)/ -name "*.pc" \
-> > > +	| xargs --no-run-if-empty \
-> > > +	$(SED) "s:$(STAGING_DIR)::g"
-> > > +
-> > > +	$(Q)find $(HOST_DIR)/ -name "*.pri" \
-> > > +		| xargs --no-run-if-empty \
-> > > +		$(SED) "s:$(STAGING_DIR):\$$\$$\[QT_SYSROOT\]:g"
-> > > +endef
-> > > +endif
-> > > +
-> > >  ################################################################################
-> > >  # inner-qmake-package -- defines how the configuration, compilation and
-> > >  # installation of a qmake package should be done, implements a few hooks
-> > > @@ -66,6 +82,7 @@ define $(2)_BUILD_CMDS
-> > >  endef
-> > >  endif
-> > >  
-> > > +
-> > 
-> > Spurious empty line.
-> > 
-> > >  #
-> > >  # Staging installation step. Only define it if not already defined by
-> > >  # the package .mk file.
-> > > @@ -76,6 +93,8 @@ define $(2)_INSTALL_STAGING_CMDS
-> > >  endef
-> > >  endif
-> > >  
-> > > +$(2)_POST_INSTALL_STAGING_HOOKS += PKG_QMAKE_FIXUP_ABSOLUTE_PATH
-> > > +
-> > >  #
-> > >  # Target installation step. Only define it if not already defined by
-> > >  # the package .mk file.
-> > > -- 
-> > > 2.26.2
-> > > 
-> > 
-> > > From 517307628cd76079952e606061990c2fd8df0d84 Mon Sep 17 00:00:00 2001
-> > > From: Louis-Paul Cordier <lpdev@cordier.org>
-> > > Date: Fri, 19 Jun 2020 12:05:19 +0200
-> > > Subject: [PATCH 2/2] package/qt5base: fix absolute path generated in .cmake
-> > >  config files
-> > > 
-> > > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> > > ---
-> > >  package/qt5/qt5base/qt5base.mk | 13 +++++++++++++
-> > >  1 file changed, 13 insertions(+)
-> > > 
-> > > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> > > index ec56287ed0..3d30c41d0e 100644
-> > > --- a/package/qt5/qt5base/qt5base.mk
-> > > +++ b/package/qt5/qt5base/qt5base.mk
-> > > @@ -310,4 +310,17 @@ endef
-> > >  
-> > >  QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
-> > >  
-> > > +
-> > > +# CMake config files generated by Qt5 might break per-package isolation because
-> > > +# of absolute path generated.
-> > > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> > > +define QT5BASE_CMAKECONFIG_FIXUP
-> > > +	$(Q)find $(STAGING_DIR)/ -name "*.cmake" \
-> > > +		| xargs --no-run-if-empty \
-> > > +		$(SED) "s:$(STAGING_DIR)::g"
-> > > +endef
-> > > +endif
-> > > +
-> > > +QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_CMAKECONFIG_FIXUP
-> > > +
-> > >  $(eval $(qmake-package))
-> > > -- 
-> > > 2.26.2
-> > > 
-> > 
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> > 
-> > -- 
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ti-sgx-demos:
+  - Because weston does not work, change the installation path from
+    "$(@D)/targetfs/arm/Examples/Advanced/Wayland/" to
+    "$(@D)/targetfs/arm/Examples/Advanced/NullWS/"
+    These demos are designed to work with KMS output.
 
+ti-sgx-km:
+  - Bump the version that matches TI SDK 06.01.00.08.
+
+package/qt5/qt5base/qt5base.mk:
+  - Change the check for BR2_PACKAGE_TI_SGX_LIBGBM to BR2_PACKAGE_TI_SGX_UM
+
+Config.in.legacy:
+  - Add an entry for BR2_PACKAGE_TI_SGX_LIBGBM.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ Config.in.legacy                              |  6 ++++
+ board/beaglebone/readme.txt                   | 12 ++++++-
+ .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json | 15 +++++++++
+ configs/beaglebone_qt5_defconfig              |  5 +--
+ package/Config.in                             |  1 -
+ package/ti-sgx-demos/ti-sgx-demos.mk          |  2 +-
+ package/ti-sgx-km/ti-sgx-km.hash              |  4 +--
+ package/ti-sgx-km/ti-sgx-km.mk                |  4 +--
+ ...-Add-missing-sys-sysmacros.h-include.patch | 25 ---------------
+ package/ti-sgx-libgbm/Config.in               | 12 -------
+ package/ti-sgx-libgbm/ti-sgx-libgbm.hash      |  3 --
+ package/ti-sgx-libgbm/ti-sgx-libgbm.mk        | 32 -------------------
+ package/ti-sgx-um/Config.in                   |  1 -
+ package/ti-sgx-um/ti-sgx-um.hash              |  4 +--
+ package/ti-sgx-um/ti-sgx-um.mk                |  4 +--
+ 15 files changed, 42 insertions(+), 88 deletions(-)
+ create mode 100644 board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+ delete mode 100644 package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch
+ delete mode 100644 package/ti-sgx-libgbm/Config.in
+ delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.hash
+ delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7a5435188b..151715b461 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2020.08"
+ 
++config BR2_PACKAGE_TI_SGX_LIBGBM
++	bool "ti-sgx-libgbm support removed"
++	help
++	  TI has merged the ti-sgx-libgbm package with the ti-sgx-um
++	  package
++
+ config BR2_BINUTILS_VERSION_2_31_X
+ 	bool "binutils version 2.31.1 support removed"
+ 	select BR2_LEGACY
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index e6647dad2a..231e977a89 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -7,7 +7,7 @@ Description
+ This configuration will build a complete image for the beaglebone and
+ the TI AM335x-EVM, the board type is identified by the on-board
+ EEPROM. The configuration is based on the
+-ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
++ti-processor-sdk-06.01.00.08. Device tree blobs for beaglebone
+ variants and the evm-sk are built too.
+ 
+ For Qt5 support support use the beaglebone_qt5_defconfig.
+@@ -43,10 +43,20 @@ output/images/
+ To copy the image file to the sdcard use dd:
+ $ dd if=output/images/sdcard.img of=/dev/XXX
+ 
++
++Running Qt5 hellowindow opengl demo:
++===================
++# export QT_QPA_EGLFS_KMS_CONFIG=/etc/qt5/eglfs_kms_cfg.json
++# export QT_QPA_PLATFORM=eglfs
++# export QT_QPA_EGLFS_INTEGRATION=none
++# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
++
++
+ Tested hardware
+ ===============
+ am335x-evm (rev. 1.1A)
+ beagleboneblack (rev. A5A)
+ beaglebone (rev. A6)
+ 
++2020, Adam Duskett <aduskett@gmail.com>
+ 2016, Lothar Felten <lothar.felten@gmail.com>
+diff --git a/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+new file mode 100644
+index 0000000000..76f5e7d379
+--- /dev/null
++++ b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+@@ -0,0 +1,15 @@
++{
++  "device": "/dev/dri/card0",
++  "hwcursor": false,
++  "pbuffers": true,
++  "outputs": [
++    {
++      "name": "VGA1",
++      "mode": "off"
++    },
++    {
++      "name": "HDMI1",
++      "mode": "1024x768"
++    }
++  ]
++}
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 5f7b911e5d..6e0371a7d3 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -20,11 +20,8 @@ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5BASE_EXAMPLES=y
+ BR2_PACKAGE_QT5BASE_EGLFS=y
+-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
++BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+ BR2_PACKAGE_QT5QUICKCONTROLS=y
+-BR2_PACKAGE_QT5WAYLAND=y
+-BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
+-BR2_PACKAGE_WESTON=y
+ BR2_PACKAGE_TI_SGX_DEMOS=y
+ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
+diff --git a/package/Config.in b/package/Config.in
+index 6a34a895af..6abd138f45 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -551,7 +551,6 @@ endmenu
+ 	source "package/ti-gfx/Config.in"
+ 	source "package/ti-sgx-demos/Config.in"
+ 	source "package/ti-sgx-km/Config.in"
+-	source "package/ti-sgx-libgbm/Config.in"
+ 	source "package/ti-sgx-um/Config.in"
+ 	source "package/ti-uim/Config.in"
+ 	source "package/ti-utils/Config.in"
+diff --git a/package/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx-demos/ti-sgx-demos.mk
+index 8599e88e9b..ea6c6c6b08 100644
+--- a/package/ti-sgx-demos/ti-sgx-demos.mk
++++ b/package/ti-sgx-demos/ti-sgx-demos.mk
+@@ -12,7 +12,7 @@ TI_SGX_DEMOS_LICENSE = Imagination Technologies License Agreement
+ TI_SGX_DEMOS_LICENSE_FILES = LegalNotice.txt
+ 
+ define TI_SGX_DEMOS_INSTALL_TARGET_CMDS
+-	cp -dpfr $(@D)/targetfs/arm/Examples/Advanced/Wayland/OGLES* \
++	cp -dpfr $(@D)/targetfs/arm/Examples/Advanced/NullWS/OGLES* \
+ 		$(TARGET_DIR)/usr/bin/
+ endef
+ 
+diff --git a/package/ti-sgx-km/ti-sgx-km.hash b/package/ti-sgx-km/ti-sgx-km.hash
+index 1fd07d7467..2fd3b56b1e 100644
+--- a/package/ti-sgx-km/ti-sgx-km.hash
++++ b/package/ti-sgx-km/ti-sgx-km.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 f1505f38f9e82f958673bb1755e65090bdbc513a68d41640561d9d491bc4b0e3  ti-sgx-km-4519ed3b83d1d72207ddc2874c7eb5e5a7f20d8d.tar.gz
+-sha256 e9d660547691b2a9232850fd43aac16d40fd063023166fd27162020c30dc2bd4  eurasia_km/GPL-COPYING
++sha256  ea70356dd0fd7f904f6d6046c4090c7d6d0126e13039db746c75bb6e666864d8  ti-sgx-km-cf7f48cb30abfd5df7a60c9bf4bbb1dde0d496d9.tar.gz
++sha256  e9d660547691b2a9232850fd43aac16d40fd063023166fd27162020c30dc2bd4  eurasia_km/GPL-COPYING
+diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
+index ae294c300a..25f1f83ca7 100644
+--- a/package/ti-sgx-km/ti-sgx-km.mk
++++ b/package/ti-sgx-km/ti-sgx-km.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-# This correpsonds to SDK 06.00.00.07
+-TI_SGX_KM_VERSION = 4519ed3b83d1d72207ddc2874c7eb5e5a7f20d8d
++# This correpsonds to SDK 06.01.00.08
++TI_SGX_KM_VERSION = cf7f48cb30abfd5df7a60c9bf4bbb1dde0d496d9
+ TI_SGX_KM_SITE = http://git.ti.com/git/graphics/omap5-sgx-ddk-linux.git
+ TI_SGX_KM_SITE_METHOD = git
+ TI_SGX_KM_LICENSE = GPL-2.0
+diff --git a/package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch b/package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch
+deleted file mode 100644
+index 2863c93bed..0000000000
+--- a/package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From e3a3f3655956265eb4f3b866d445a9d19e613594 Mon Sep 17 00:00:00 2001
+-From: Lothar Felten <lothar.felten@gmail.com>
+-Date: Thu, 14 Nov 2019 23:37:07 -0300
+-Subject: [PATCH] Add missing sys/sysmacros.h include
+-
+-Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+----
+- gbm.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/gbm.c b/gbm.c
+-index 7bc5880..e360da7 100644
+---- a/gbm.c
+-+++ b/gbm.c
+-@@ -36,6 +36,7 @@
+- 
+- #include <sys/types.h>
+- #include <sys/stat.h>
+-+#include <sys/sysmacros.h>
+- #include <unistd.h>
+- #include <errno.h>
+- 
+--- 
+-2.18.1
+-
+diff --git a/package/ti-sgx-libgbm/Config.in b/package/ti-sgx-libgbm/Config.in
+deleted file mode 100644
+index 2c679e2046..0000000000
+--- a/package/ti-sgx-libgbm/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_TI_SGX_LIBGBM
+-	bool "ti-sgx-libgbm"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_LIBDRM
+-	help
+-	  TI SGX libgbm variant.
+-
+-	  https://git.ti.com/cgit/glsdk/libgbm
+-
+-comment "ti-sgx-libgbm needs udev and a toolchain w/ threads"
+-	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/ti-sgx-libgbm/ti-sgx-libgbm.hash b/package/ti-sgx-libgbm/ti-sgx-libgbm.hash
+deleted file mode 100644
+index 32af5ad5ae..0000000000
+--- a/package/ti-sgx-libgbm/ti-sgx-libgbm.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256 85e3eafcd06caccd8c4cea3081b1406ae51c07e19541ac19b9c33a5b41fec82d  ti-sgx-libgbm-c5ddc6a37bb78ac753b317b17d890d1f7338dea6.tar.gz
+-sha256 58fe00de76ae5d533e1c562950e1848682c03155a653d76870cf0a3c59be8b4c  gbm.h
+diff --git a/package/ti-sgx-libgbm/ti-sgx-libgbm.mk b/package/ti-sgx-libgbm/ti-sgx-libgbm.mk
+deleted file mode 100644
+index 00a0716e21..0000000000
+--- a/package/ti-sgx-libgbm/ti-sgx-libgbm.mk
++++ /dev/null
+@@ -1,32 +0,0 @@
+-################################################################################
+-#
+-# ti-sgx-libgbm
+-#
+-################################################################################
+-
+-# This correpsonds to SDK 06.00.00.07
+-TI_SGX_LIBGBM_VERSION = c5ddc6a37bb78ac753b317b17d890d1f7338dea6
+-TI_SGX_LIBGBM_SITE = http://git.ti.com/git/glsdk/libgbm.git
+-TI_SGX_LIBGBM_SITE_METHOD = git
+-TI_SGX_LIBGBM_LICENSE = MIT
+-TI_SGX_LIBGBM_LICENSE_FILES = gbm.h
+-TI_SGX_LIBGBM_INSTALL_STAGING = YES
+-TI_SGX_LIBGBM_AUTORECONF = YES
+-
+-TI_SGX_LIBGBM_DEPENDENCIES = libdrm udev
+-
+-define TI_SGX_LIBGBM_INSTALL_TARGET_OPTS
+-	PREFIX=/usr \
+-	STRIP=/bin/true \
+-	DESTDIR=$(TARGET_DIR) \
+-	install
+-endef
+-
+-define TI_SGX_LIBGBM_INSTALL_STAGING_OPTS
+-	PREFIX=/usr \
+-	STRIP=/bin/true \
+-	DESTDIR=$(STAGING_DIR) \
+-	install
+-endef
+-
+-$(eval $(autotools-package))
+diff --git a/package/ti-sgx-um/Config.in b/package/ti-sgx-um/Config.in
+index ee87d46aa4..6a8b7e87e3 100644
+--- a/package/ti-sgx-um/Config.in
++++ b/package/ti-sgx-um/Config.in
+@@ -17,7 +17,6 @@ config BR2_PACKAGE_TI_SGX_UM
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_POWERVR
+-	select BR2_PACKAGE_TI_SGX_LIBGBM
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_WAYLAND
+ 	help
+diff --git a/package/ti-sgx-um/ti-sgx-um.hash b/package/ti-sgx-um/ti-sgx-um.hash
+index ff54ecbd6d..8e8c5ff328 100644
+--- a/package/ti-sgx-um/ti-sgx-um.hash
++++ b/package/ti-sgx-um/ti-sgx-um.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 cb1373a6335af3d3741c6b11cf217afc8bdbe182642229df359c38e3ccfc5866  ti-sgx-um-2a2e5bb090ced870d73ed4edbc54793e952cc6d8.tar.gz
+-sha256 368c306246c9130b5c90a6fef2f80085f70b6225b3f552654a288c0f39fc1531  TI-Linux-Graphics-DDK-UM-Manifest.doc
++sha256  4d293a4170e2fd28852680830dacd8f575b12037f3e15bcf599232f6ccbf6deb  ti-sgx-um-909e237baf47d0bde006ff25552f5403fd7e359d.tar.gz
++sha256  368c306246c9130b5c90a6fef2f80085f70b6225b3f552654a288c0f39fc1531  TI-Linux-Graphics-DDK-UM-Manifest.doc
+diff --git a/package/ti-sgx-um/ti-sgx-um.mk b/package/ti-sgx-um/ti-sgx-um.mk
+index 0e26d057c1..30d1ef81f0 100644
+--- a/package/ti-sgx-um/ti-sgx-um.mk
++++ b/package/ti-sgx-um/ti-sgx-um.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-# This correpsonds to SDK 06.00.00.07 plus one pull request
+-TI_SGX_UM_VERSION = 2a2e5bb090ced870d73ed4edbc54793e952cc6d8
++# This correpsonds to SDK 06.01.00.08
++TI_SGX_UM_VERSION = 909e237baf47d0bde006ff25552f5403fd7e359d
+ TI_SGX_UM_SITE = http://git.ti.com/git/graphics/omap5-sgx-ddk-um-linux.git
+ TI_SGX_UM_SITE_METHOD = git
+ TI_SGX_UM_LICENSE = TI TSPA License
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
