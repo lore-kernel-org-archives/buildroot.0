@@ -1,120 +1,43 @@
-From: Owen Walpole <owen@walpole.dev>
-Date: Wed,  1 Jul 2020 22:53:27 -0500
-Subject: [Buildroot] [PATCH 1/1] parprouted: new package
-Message-ID: <20200702035327.1733341-1-owen@walpole.dev>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  2 Jul 2020 07:19:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libudfread: bump version to 1.1.0
+Message-ID: <20200702051950.7102-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-parprouted is a daemon for transparent IP (Layer 3) proxy ARP
-bridging. This is useful for creation of transparent firewalls
-and bridging networks with different MAC protocols. Also,
-unlike standard bridging, proxy ARP bridging allows to bridge
-Ethernet networks behind wireless nodes without using WDS or
-layer 2 bridging.
+Changelog:
+https://code.videolan.org/videolan/libudfread/-/blob/master/ChangeLog
 
-https://www.hazard.maks.net/parprouted
-
-Signed-off-by: Owen Walpole <owen@walpole.dev>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/parprouted/Config.in       | 16 ++++++++++++++++
- package/parprouted/parprouted.hash |  7 +++++++
- package/parprouted/parprouted.mk   | 20 ++++++++++++++++++++
- 5 files changed, 47 insertions(+)
- create mode 100644 package/parprouted/Config.in
- create mode 100644 package/parprouted/parprouted.hash
- create mode 100644 package/parprouted/parprouted.mk
+ package/libudfread/libudfread.hash | 2 +-
+ package/libudfread/libudfread.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4b6a346a05..c43e80193e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1924,6 +1924,9 @@ F:	package/openjpeg/
- N:	Olivier Singla <olivier.singla@gmail.com>
- F:	package/shellinabox/
+diff --git a/package/libudfread/libudfread.hash b/package/libudfread/libudfread.hash
+index 9a68f62089..71ee60b39a 100644
+--- a/package/libudfread/libudfread.hash
++++ b/package/libudfread/libudfread.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c4c5ee6b65be051fb1f2a738f726f2afc8601620e8f013d087769dc13aab6d4c  libudfread-1.0.0.tar.bz2
++sha256  93231b5b2158548481e6a129d27d3fb75518cc44a49ad27a2a229340a49e8c08  libudfread-1.1.0.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libudfread/libudfread.mk b/package/libudfread/libudfread.mk
+index 53ee4a578e..1861a15562 100644
+--- a/package/libudfread/libudfread.mk
++++ b/package/libudfread/libudfread.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:  Owen Walpole <owen@walpole.dev>
-+F:  package/parprouted/
-+
- N:	Parnell Springmeyer <parnell@digitalmentat.com>
- F:	package/scrypt/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 6a34a895af..7186134a0e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2150,6 +2150,7 @@ endif
- 	source "package/openswan/Config.in"
- 	source "package/openvpn/Config.in"
- 	source "package/p910nd/Config.in"
-+    source "package/parprouted/Config.in"
- 	source "package/phidgetwebservice/Config.in"
- 	source "package/phytool/Config.in"
- 	source "package/pimd/Config.in"
-diff --git a/package/parprouted/Config.in b/package/parprouted/Config.in
-new file mode 100644
-index 0000000000..fddd8de7d4
---- /dev/null
-+++ b/package/parprouted/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PARPROUTED
-+	bool "parprouted"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  parprouted is a daemon for transparent IP (Layer 3) proxy ARP
-+	  bridging. This is useful for creation of transparent firewalls
-+	  and bridging networks with different MAC protocols. Also,
-+	  unlike standard bridging, proxy ARP bridging allows to bridge
-+	  Ethernet networks behind wireless nodes without using WDS or
-+	  layer 2 bridging.
-+
-+	  https://www.hazard.maks.net/parprouted
-+
-+comment "parprouted needs a toolchain w/ NPTL"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/parprouted/parprouted.hash b/package/parprouted/parprouted.hash
-new file mode 100644
-index 0000000000..4ac46a9230
---- /dev/null
-+++ b/package/parprouted/parprouted.hash
-@@ -0,0 +1,7 @@
-+# Locally computed:
-+sha256  4b8cb2c801047f26b63aefaa8d69adc8552fb7c8a8f5d851798a48f841948d36  parprouted-0.65.tar.gz
-+sha512 801e5caf02960acfcea1729d146ac6f9e181873be6880f4433ea897119aa127f75809c6bfbffe6dc6fde5fd08e5f092e799925552ec8d5d289958383d0f9695a  parprouted-0.65.tar.gz
-+
-+# Hash for license files:
-+sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-+sha512  4113ed89fc91f55762e1deeb2b7e43af124eba2e037e13b7fe794ee33f40a8b218112b8ab167b5d8778cd5532d6f2c19058df7a24799ba29ff0be2d4004262e4  COPYING
-diff --git a/package/parprouted/parprouted.mk b/package/parprouted/parprouted.mk
-new file mode 100644
-index 0000000000..fdc595d515
---- /dev/null
-+++ b/package/parprouted/parprouted.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# parprouted
-+#
-+################################################################################
-+
-+PARPROUTED_VERSION = 0.65
-+PARPROUTED_SITE = https://www.hazard.maks.net/parprouted
-+PARPROUTED_LICENSE = GPL-2.0
-+PARPROUTED_LICENSE_FILES = COPYING
-+
-+define PARPROUTED_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+endef
-+
-+define PARPROUTED_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/parprouted $(TARGET_DIR)/usr/sbin
-+endef
-+
-+$(eval $(generic-package))
+-LIBUDFREAD_VERSION = 1.0.0
++LIBUDFREAD_VERSION = 1.1.0
+ LIBUDFREAD_SOURCE = libudfread-$(LIBUDFREAD_VERSION).tar.bz2
+ LIBUDFREAD_SITE = https://code.videolan.org/videolan/libudfread/-/archive/$(LIBUDFREAD_VERSION)
+ LIBUDFREAD_AUTORECONF = YES
 -- 
 2.26.2
