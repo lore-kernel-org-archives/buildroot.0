@@ -1,66 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Jul 2020 23:56:31 +0200
-Subject: [Buildroot] [PATCH v6 21/28] package/python-sip: Fix qmake
- usage for per-package build
-In-Reply-To: <20200217212350.29750-22-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-22-anaumann@ultratronik.de>
-Message-ID: <20200701215631.GZ20645@scaer>
+From: Owen Walpole <owen@walpole.dev>
+Date: Wed,  1 Jul 2020 22:53:27 -0500
+Subject: [Buildroot] [PATCH 1/1] parprouted: new package
+Message-ID: <20200702035327.1733341-1-owen@walpole.dev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+parprouted is a daemon for transparent IP (Layer 3) proxy ARP
+bridging. This is useful for creation of transparent firewalls
+and bridging networks with different MAC protocols. Also,
+unlike standard bridging, proxy ARP bridging allows to bridge
+Ethernet networks behind wireless nodes without using WDS or
+layer 2 bridging.
 
-On 2020-02-17 22:23 +0100, Andreas Naumann spake thusly:
-> Since python-sip is not built by the qmake infra, we need to explicitly
-> integrate the qt.conf fixup needed for successful per-package build and
-> consistently use qmake via QT5_QMAKE variable.
+https://www.hazard.maks.net/parprouted
 
-And why can't we make it use the qmake infra now that we have it?
+Signed-off-by: Owen Walpole <owen@walpole.dev>
+---
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/parprouted/Config.in       | 16 ++++++++++++++++
+ package/parprouted/parprouted.hash |  7 +++++++
+ package/parprouted/parprouted.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 47 insertions(+)
+ create mode 100644 package/parprouted/Config.in
+ create mode 100644 package/parprouted/parprouted.hash
+ create mode 100644 package/parprouted/parprouted.mk
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-sip/python-sip.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-> index 1d6c205396..7ae2d43e1e 100644
-> --- a/package/python-sip/python-sip.mk
-> +++ b/package/python-sip/python-sip.mk
-> @@ -38,6 +38,7 @@ define HOST_PYTHON_SIP_INSTALL_CMDS
->  endef
->  
->  define PYTHON_SIP_CONFIGURE_CMDS
-> +	$(QT5_QT_CONF_FIXUP)
->  	(cd $(@D); \
->  		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/bin/python configure.py \
->  			--bindir $(TARGET_DIR)/usr/bin \
-> @@ -46,7 +47,7 @@ define PYTHON_SIP_CONFIGURE_CMDS
->  			--sipdir $(TARGET_DIR)/usr/share/sip \
->  			--sysroot $(STAGING_DIR)/usr \
->  			--use-qmake && \
-> -		$(HOST_DIR)/bin/qmake)
-> +		$(QT5_QMAKE))
->  endef
->  
->  define PYTHON_SIP_BUILD_CMDS
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4b6a346a05..c43e80193e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1924,6 +1924,9 @@ F:	package/openjpeg/
+ N:	Olivier Singla <olivier.singla@gmail.com>
+ F:	package/shellinabox/
+ 
++N:  Owen Walpole <owen@walpole.dev>
++F:  package/parprouted/
++
+ N:	Parnell Springmeyer <parnell@digitalmentat.com>
+ F:	package/scrypt/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 6a34a895af..7186134a0e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2150,6 +2150,7 @@ endif
+ 	source "package/openswan/Config.in"
+ 	source "package/openvpn/Config.in"
+ 	source "package/p910nd/Config.in"
++    source "package/parprouted/Config.in"
+ 	source "package/phidgetwebservice/Config.in"
+ 	source "package/phytool/Config.in"
+ 	source "package/pimd/Config.in"
+diff --git a/package/parprouted/Config.in b/package/parprouted/Config.in
+new file mode 100644
+index 0000000000..fddd8de7d4
+--- /dev/null
++++ b/package/parprouted/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PARPROUTED
++	bool "parprouted"
++	depends on BR2_USE_MMU # fork()
++	help
++	  parprouted is a daemon for transparent IP (Layer 3) proxy ARP
++	  bridging. This is useful for creation of transparent firewalls
++	  and bridging networks with different MAC protocols. Also,
++	  unlike standard bridging, proxy ARP bridging allows to bridge
++	  Ethernet networks behind wireless nodes without using WDS or
++	  layer 2 bridging.
++
++	  https://www.hazard.maks.net/parprouted
++
++comment "parprouted needs a toolchain w/ NPTL"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/parprouted/parprouted.hash b/package/parprouted/parprouted.hash
+new file mode 100644
+index 0000000000..4ac46a9230
+--- /dev/null
++++ b/package/parprouted/parprouted.hash
+@@ -0,0 +1,7 @@
++# Locally computed:
++sha256  4b8cb2c801047f26b63aefaa8d69adc8552fb7c8a8f5d851798a48f841948d36  parprouted-0.65.tar.gz
++sha512 801e5caf02960acfcea1729d146ac6f9e181873be6880f4433ea897119aa127f75809c6bfbffe6dc6fde5fd08e5f092e799925552ec8d5d289958383d0f9695a  parprouted-0.65.tar.gz
++
++# Hash for license files:
++sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
++sha512  4113ed89fc91f55762e1deeb2b7e43af124eba2e037e13b7fe794ee33f40a8b218112b8ab167b5d8778cd5532d6f2c19058df7a24799ba29ff0be2d4004262e4  COPYING
+diff --git a/package/parprouted/parprouted.mk b/package/parprouted/parprouted.mk
+new file mode 100644
+index 0000000000..fdc595d515
+--- /dev/null
++++ b/package/parprouted/parprouted.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# parprouted
++#
++################################################################################
++
++PARPROUTED_VERSION = 0.65
++PARPROUTED_SITE = https://www.hazard.maks.net/parprouted
++PARPROUTED_LICENSE = GPL-2.0
++PARPROUTED_LICENSE_FILES = COPYING
++
++define PARPROUTED_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++endef
++
++define PARPROUTED_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/parprouted $(TARGET_DIR)/usr/sbin
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
