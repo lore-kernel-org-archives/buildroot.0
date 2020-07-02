@@ -1,147 +1,235 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu,  2 Jul 2020 18:05:00 +0200
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.54
-Message-ID: <20200702160500.3374986-1-giulio.benetti@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Jul 2020 19:38:12 +0200
+Subject: [Buildroot] [PATCH v6 20/28] qt5: Fix pkgconfig search path for
+ per-package infrastructure
+In-Reply-To: <20200701215442.GY20645@scaer>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-21-anaumann@ultratronik.de>
+ <a339f273-33f3-f232-eac4-6e50427abf6d@cordier.org>
+ <20200701211513.GX20645@scaer> <20200701215442.GY20645@scaer>
+Message-ID: <20200702173812.GA20645@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 3.54 and remove 0002[1] and 0003[2] local patches that
-has been upstreamed.
+Louis-Paul, Andreas, All,
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.54_release_notes
+On 2020-07-01 23:54 +0200, Yann E. MORIN spake thusly:
+> On 2020-07-01 23:15 +0200, Yann E. MORIN spake thusly:
+[--SNIP--]
+> So, patch 19 in the series is in master now, but patch 20 (this one)
+> not yet. So, on master, I did a build with PPD, and right after qt5base,
+> was built, I applied Louis-Paul's tweaks [0], marked the qt5base PPD
+> directory read-only, and built qt5declarative. It worked. :-)
+> 
+>     $ make qt5base-depends
+>     $ sed magic from L-P's patch
+>     $ chmod -R a-w per-package/qt5base/
+>     $ make qt5dceclarative
+> 
+> Woot! :-)
 
-[1]: https://hg.mozilla.org/projects/nss/rev/e955ece90b050e9da67528f09648945156d2bcea
-[2]: https://hg.mozilla.org/projects/nss/rev/f46fca8ced7fca6aa6de60e3170b2a3b6b2df565
+So I was a bit too tired yesterday evening. This chmod can't work,
+otherwise the per-package directory for qt5declarative would also be
+read-only.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...d-infinite-recursion-when-CHECKLOC-i.patch | 30 -----------
- ...-seed.o-back-into-freeblpriv3.-r-bbe.patch | 50 -------------------
- package/libnss/libnss.hash                    |  4 +-
- package/libnss/libnss.mk                      |  2 +-
- 4 files changed, 3 insertions(+), 83 deletions(-)
- delete mode 100644 package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch
- delete mode 100644 package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
+And it worked because I had a hack that restores the +w on the current
+per-package directory. And since this is a rsync --link-dest, then we
+only have hard-links, and thus the ppd of dependencies are turned back
+to read-write...
 
-diff --git a/package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch b/package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch
-deleted file mode 100644
-index c8bdfd7a3f..0000000000
---- a/package/libnss/0002-Bug-1642153-Avoid-infinite-recursion-when-CHECKLOC-i.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From b0e9408ea779b37e97e706d037e497d2bf807593 Mon Sep 17 00:00:00 2001
--From: Mike Hommey <mh@glandium.org>
--Date: Wed, 3 Jun 2020 03:04:49 +0000
--Subject: [PATCH] Bug 1642153 - Avoid infinite recursion when CHECKLOC is not
-- set. r=jcj
--
--Differential Revision: https://phabricator.services.mozilla.com/D77596
--
----HG--
--extra : moz-landing-system : lando
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- nss/cmd/shlibsign/Makefile | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/nss/cmd/shlibsign/Makefile b/cmd/shlibsign/Makefile
--index 73641d996..a1192055c 100644
----- a/nss/cmd/shlibsign/Makefile
--+++ b/nss/cmd/shlibsign/Makefile
--@@ -96,4 +96,6 @@ else
-- endif
-- 
-- libs: install
--+ifdef CHECKLOC
-- 	$(MAKE) $(CHECKLOC)
--+endif
---- 
--2.25.1
--
-diff --git a/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch b/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
-deleted file mode 100644
-index c9321658fd..0000000000
---- a/package/libnss/0003-Bug-1642146-Move-seed.o-back-into-freeblpriv3.-r-bbe.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 0841ebe3c85bfb12ecf080efb2e28ac18f55ed41 Mon Sep 17 00:00:00 2001
--From: Mike Hommey <mh@glandium.org>
--Date: Mon, 15 Jun 2020 18:12:09 +0000
--Subject: [PATCH] Bug 1642146 - Move seed.o back into freeblpriv3.
-- r=bbeurdouche
--
--Differential Revision: https://phabricator.services.mozilla.com/D77595
--
----HG--
--extra : moz-landing-system : lando
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- nss/lib/freebl/Makefile    | 4 ----
-- nss/lib/freebl/manifest.mn | 4 ++++
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
--index 29dc940a3..52d827c6a 100644
----- a/nss/lib/freebl/Makefile
--+++ b/nss/lib/freebl/Makefile
--@@ -545,10 +545,6 @@ ifndef HAVE_INT128_SUPPORT
--     DEFINES += -DKRML_VERIFIED_UINT128
-- endif
-- 
---ifndef NSS_DISABLE_DEPRECATED_SEED
---	CSRCS += deprecated/seed.c
---endif
---
-- ifndef NSS_DISABLE_CHACHAPOLY
--     ifeq ($(CPU_ARCH),x86_64)
--         ifndef NSS_DISABLE_AVX2
--diff --git a/nss/lib/freebl/manifest.mn b/nss/lib/freebl/manifest.mn
--index 5efb48520..8dd8ddb53 100644
----- a/nss/lib/freebl/manifest.mn
--+++ b/nss/lib/freebl/manifest.mn
--@@ -160,6 +160,10 @@ CSRCS = \
-- 	$(EXTRA_SRCS) \
-- 	$(NULL)
-- 
--+ifndef NSS_DISABLE_DEPRECATED_SEED
--+	CSRCS += deprecated/seed.c
--+endif
--+
-- ALL_CSRCS := $(CSRCS)
-- 
-- ALL_HDRS =  \
---- 
--2.25.1
--
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 5f76bffd00..aedc0669de 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_53_1_RTM/src/SHA256SUMS
--sha256	2dccde67079b25c4e95ac3121f11b2819c37cf8c48ca263a45d8f83f7a315316  nss-3.53.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_54_RTM/src/SHA256SUMS
-+sha256	dab18bbfcf5e347934cda664df75ce9fd912a5772686c40d3c805e53c08d6e43  nss-3.54.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 8b31892353..adebaa6173 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.53.1
-+LIBNSS_VERSION = 3.54
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+Damn...
+
+Still this is a nice set of patches.
+
+That gave me an idea for a paranoid PPD, though... hack-hack-hack...
+
+Regards,
+Yann E. MORIN.
+
+> So, yeath it looks like this patch 20 is not needed if the .pri and .pc
+> (and .cmake) are properly fixed.
+> 
+> Still, I'll let you guys validate that point, and maybe repost the
+> agregated series.
+> 
+> Thanks again! :-)
+> 
+> [0] I did not apply the patch from Louis-Paul, because I wanted to
+> observe the build step by step, and see how the files were before/after
+> the fixes.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > As for the .pc files, I think the fix should be generalised out of the
+> > Qt world, maybe... Fopr example, we already fix the /la files in
+> > package/pkg-generic at 324
+> > 
+> > So, as far as I can see (which can be quite short, in some cases), we
+> > should introduce a similar generic .pc fixup.
+> > 
+> > Also, please see a little comment below...
+> > 
+> > > 2. The second one is fixing .cmake files that also contains absolute paths
+> > > after qt5base installation
+> > 
+> > Ditto, maybe all .cmake files should be fixed, not just the ones by
+> > Qt5, no?
+> > 
+> > > I'm now able to use full parallel build with per-package with Qt5.
+> > 
+> > This is really sounding good! :-)
+> > 
+> > Andreas, Louis-Paul, I know I may be asking a lot, but I'd love to see
+> > an updated and consolidated series reposted to the list, that aggregates
+> > both your developments.
+> > 
+> > Would you be willing to do that, please?
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> > 
+> > > 
+> > > Thank you for your hard work Andreas,
+> > > 
+> > > BR,
+> > > Louis-Paul CORDIER
+> > 
+> > > From bc08430ebb5d76bdd0b45b8339761c85c7a48800 Mon Sep 17 00:00:00 2001
+> > > From: Louis-Paul Cordier <lpdev@cordier.org>
+> > > Date: Fri, 19 Jun 2020 11:01:21 +0200
+> > > Subject: [PATCH 1/2] core/pkg-infra: Fix pkg-config and .pri absolute path
+> > > 
+> > > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+> > > ---
+> > >  package/pkg-qmake.mk | 19 +++++++++++++++++++
+> > >  1 file changed, 19 insertions(+)
+> > > 
+> > > diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+> > > index 27727119d7..49fe185d4a 100644
+> > > --- a/package/pkg-qmake.mk
+> > > +++ b/package/pkg-qmake.mk
+> > > @@ -20,6 +20,22 @@
+> > >  #
+> > >  ################################################################################
+> > >  
+> > > +# When per-package is enabled, and qmake project is configured to generate 
+> > > +# pkg-config compatible package, absolute path are generated for "prefix" field 
+> > > +# of .pc files. In order to keep per-package isolation with sysroot'in, it is 
+> > > +# needed to remove those absolute path. Same apply for mkspecs files.
+> > > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> > > +define PKG_QMAKE_FIXUP_ABSOLUTE_PATH
+> > > +	$(Q)find $(STAGING_DIR)/ -name "*.pc" \
+> > > +	| xargs --no-run-if-empty \
+> > > +	$(SED) "s:$(STAGING_DIR)::g"
+> > > +
+> > > +	$(Q)find $(HOST_DIR)/ -name "*.pri" \
+> > > +		| xargs --no-run-if-empty \
+> > > +		$(SED) "s:$(STAGING_DIR):\$$\$$\[QT_SYSROOT\]:g"
+> > > +endef
+> > > +endif
+> > > +
+> > >  ################################################################################
+> > >  # inner-qmake-package -- defines how the configuration, compilation and
+> > >  # installation of a qmake package should be done, implements a few hooks
+> > > @@ -66,6 +82,7 @@ define $(2)_BUILD_CMDS
+> > >  endef
+> > >  endif
+> > >  
+> > > +
+> > 
+> > Spurious empty line.
+> > 
+> > >  #
+> > >  # Staging installation step. Only define it if not already defined by
+> > >  # the package .mk file.
+> > > @@ -76,6 +93,8 @@ define $(2)_INSTALL_STAGING_CMDS
+> > >  endef
+> > >  endif
+> > >  
+> > > +$(2)_POST_INSTALL_STAGING_HOOKS += PKG_QMAKE_FIXUP_ABSOLUTE_PATH
+> > > +
+> > >  #
+> > >  # Target installation step. Only define it if not already defined by
+> > >  # the package .mk file.
+> > > -- 
+> > > 2.26.2
+> > > 
+> > 
+> > > From 517307628cd76079952e606061990c2fd8df0d84 Mon Sep 17 00:00:00 2001
+> > > From: Louis-Paul Cordier <lpdev@cordier.org>
+> > > Date: Fri, 19 Jun 2020 12:05:19 +0200
+> > > Subject: [PATCH 2/2] package/qt5base: fix absolute path generated in .cmake
+> > >  config files
+> > > 
+> > > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+> > > ---
+> > >  package/qt5/qt5base/qt5base.mk | 13 +++++++++++++
+> > >  1 file changed, 13 insertions(+)
+> > > 
+> > > diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> > > index ec56287ed0..3d30c41d0e 100644
+> > > --- a/package/qt5/qt5base/qt5base.mk
+> > > +++ b/package/qt5/qt5base/qt5base.mk
+> > > @@ -310,4 +310,17 @@ endef
+> > >  
+> > >  QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
+> > >  
+> > > +
+> > > +# CMake config files generated by Qt5 might break per-package isolation because
+> > > +# of absolute path generated.
+> > > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> > > +define QT5BASE_CMAKECONFIG_FIXUP
+> > > +	$(Q)find $(STAGING_DIR)/ -name "*.cmake" \
+> > > +		| xargs --no-run-if-empty \
+> > > +		$(SED) "s:$(STAGING_DIR)::g"
+> > > +endef
+> > > +endif
+> > > +
+> > > +QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_CMAKECONFIG_FIXUP
+> > > +
+> > >  $(eval $(qmake-package))
+> > > -- 
+> > > 2.26.2
+> > > 
+> > 
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > 
+> > 
+> > -- 
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
