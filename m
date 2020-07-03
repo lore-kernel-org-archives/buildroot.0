@@ -1,32 +1,42 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  2 Jul 2020 22:22:30 +0200
-Subject: [Buildroot] [PATCH 11/11] package/luv: temporarily disabled with
- Lua 5.4
-In-Reply-To: <20200702202230.1531929-1-francois.perrad@gadz.org>
-References: <20200702202230.1531929-1-francois.perrad@gadz.org>
-Message-ID: <20200702202230.1531929-12-francois.perrad@gadz.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri,  3 Jul 2020 09:00:57 +0200
+Subject: [Buildroot] [PATCH] package/python-pyparted: bump version to 3.11.6
+Message-ID: <20200703070057.25911-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luv/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-index 434cb3b45..1be189977 100644
---- a/package/luv/Config.in
-+++ b/package/luv/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LUV
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_LIBUV
- 	help
- 	  libuv bindings for LuaJIT and Lua.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-pyparted/python-pyparted.hash | 2 +-
+ package/python-pyparted/python-pyparted.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-pyparted/python-pyparted.hash b/package/python-pyparted/python-pyparted.hash
+index 61960f469d..0c3e4a15fd 100644
+--- a/package/python-pyparted/python-pyparted.hash
++++ b/package/python-pyparted/python-pyparted.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a9ec181bf3c7c0635862413fc86cb0950b5af957541535f530ea86a0f9d14e73  python-pyparted-3.11.0.tar.gz
++sha256  d214288ae1a70b5925861ce01b3352378eb6b1419aa3b786f509e9ef2a501c02  python-pyparted-3.11.6.tar.gz
+ sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/python-pyparted/python-pyparted.mk b/package/python-pyparted/python-pyparted.mk
+index c4783459ab..9d48fd9351 100644
+--- a/package/python-pyparted/python-pyparted.mk
++++ b/package/python-pyparted/python-pyparted.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYPARTED_VERSION = 3.11.0
++PYTHON_PYPARTED_VERSION = 3.11.6
+ PYTHON_PYPARTED_SITE = $(call github,rhinstaller,pyparted,v$(PYTHON_PYPARTED_VERSION))
+ PYTHON_PYPARTED_SETUP_TYPE = distutils
+ PYTHON_PYPARTED_LICENSE = GPL-2.0+
 -- 
-2.25.1
+2.17.0
