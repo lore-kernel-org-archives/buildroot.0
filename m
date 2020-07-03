@@ -1,42 +1,62 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  3 Jul 2020 09:00:57 +0200
-Subject: [Buildroot] [PATCH] package/python-pyparted: bump version to 3.11.6
-Message-ID: <20200703070057.25911-1-yegorslists@googlemail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Fri, 3 Jul 2020 13:39:13 +0530
+Subject: [Buildroot] [PATCH v8 0/5] package/python-scipy: new package
+In-Reply-To: <CAMty3ZAA7Zo-iPg19TXjmcJGAgtaRvsgLKK9XLXfLWt9o+qSew@mail.gmail.com>
+References: <20200407111515.21131-1-jagan@amarulasolutions.com>
+ <20200407134946.7b333d99@windsurf.home>
+ <CAMty3ZCQ8qmZY9f=Lqv71fMYX3ej1eDxvL00w42B9fxSsagmjA@mail.gmail.com>
+ <20200407150111.GP22325@scaer>
+ <CAMty3ZAA7Zo-iPg19TXjmcJGAgtaRvsgLKK9XLXfLWt9o+qSew@mail.gmail.com>
+Message-ID: <CAMty3ZAZZ9s1-iUx6t3JeiCUnohhaQyLkPq+oLrVkyqUF2QT+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Yann,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-pyparted/python-pyparted.hash | 2 +-
- package/python-pyparted/python-pyparted.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, Apr 7, 2020 at 9:48 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
+>
+> Hi Yann,
+>
+> On Tue, Apr 7, 2020 at 8:31 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > Jagan, All,
+> >
+> > On 2020-04-07 19:13 +0530, Jagan Teki spake thusly:
+> > > On Tue, Apr 7, 2020 at 5:19 PM Thomas Petazzoni
+> > > <thomas.petazzoni@bootlin.com> wrote:
+> > > > On Tue,  7 Apr 2020 16:45:10 +0530
+> > > > Jagan Teki <jagan@amarulasolutions.com> wrote:
+> > > > > This is v8 changes for python-scipy, here is the previous
+> > > > > version series[1].
+> > > > Thanks for this new iteration. Could you have a look at the backlog of
+> > > > patches at http://patchwork.ozlabs.org/project/buildroot/list/ and
+> > > > update any patch that is no longer relevant due to this new iteration
+> > > > to the state "Superseded" ? You can do that yourself for the patches
+> > > > that you have sent (provided that you have a patchwork account matching
+> > > > the e-mail used to send the patches). For the other patches, you can
+> > > > simply let us know, and we'll update the patch status.
+> > > >
+> > > > This helps us keep a patchwork backlog that makes sense.
+> > >
+> > > Yes, I've updated all my previous version changes. regarding pybind11,
+> > > adam has this series [2]. I already incorporated test patch in my
+> > > series as per his request.
+> > > [2] http://patchwork.ozlabs.org/project/buildroot/list/?series=145831
+> >
+> > So I've marked the seriers from Adam as superseded.
+> >
+> > However, there was a review of his pybind11 patch: since it installs
+> > only a header, it should be _INSTALL_TARGET = NO
+>
+> The main difference between Adam vs my patch is I'm trying to build
+> pybind11 as a host package as it has dependency with scipy. If Adam is
+> required to use even for target, maybe he can add a patch on top of
+> this to support the target package. Let me know if it makes sense or
+> any other thoughts?
 
-diff --git a/package/python-pyparted/python-pyparted.hash b/package/python-pyparted/python-pyparted.hash
-index 61960f469d..0c3e4a15fd 100644
---- a/package/python-pyparted/python-pyparted.hash
-+++ b/package/python-pyparted/python-pyparted.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a9ec181bf3c7c0635862413fc86cb0950b5af957541535f530ea86a0f9d14e73  python-pyparted-3.11.0.tar.gz
-+sha256  d214288ae1a70b5925861ce01b3352378eb6b1419aa3b786f509e9ef2a501c02  python-pyparted-3.11.6.tar.gz
- sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/python-pyparted/python-pyparted.mk b/package/python-pyparted/python-pyparted.mk
-index c4783459ab..9d48fd9351 100644
---- a/package/python-pyparted/python-pyparted.mk
-+++ b/package/python-pyparted/python-pyparted.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYPARTED_VERSION = 3.11.0
-+PYTHON_PYPARTED_VERSION = 3.11.6
- PYTHON_PYPARTED_SITE = $(call github,rhinstaller,pyparted,v$(PYTHON_PYPARTED_VERSION))
- PYTHON_PYPARTED_SETUP_TYPE = distutils
- PYTHON_PYPARTED_LICENSE = GPL-2.0+
--- 
-2.17.0
+Any update on this?
+
+Jagan.
