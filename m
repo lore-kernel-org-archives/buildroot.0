@@ -1,62 +1,79 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Fri, 3 Jul 2020 13:39:13 +0530
-Subject: [Buildroot] [PATCH v8 0/5] package/python-scipy: new package
-In-Reply-To: <CAMty3ZAA7Zo-iPg19TXjmcJGAgtaRvsgLKK9XLXfLWt9o+qSew@mail.gmail.com>
-References: <20200407111515.21131-1-jagan@amarulasolutions.com>
- <20200407134946.7b333d99@windsurf.home>
- <CAMty3ZCQ8qmZY9f=Lqv71fMYX3ej1eDxvL00w42B9fxSsagmjA@mail.gmail.com>
- <20200407150111.GP22325@scaer>
- <CAMty3ZAA7Zo-iPg19TXjmcJGAgtaRvsgLKK9XLXfLWt9o+qSew@mail.gmail.com>
-Message-ID: <CAMty3ZAZZ9s1-iUx6t3JeiCUnohhaQyLkPq+oLrVkyqUF2QT+Q@mail.gmail.com>
+From: Srijan Nandi - Gmail <srijan.nandi@gmail.com>
+Date: Fri, 3 Jul 2020 13:41:51 +0530
+Subject: [Buildroot] New user creation
+In-Reply-To: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
+References: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
+Message-ID: <5E7DB804-CAA1-4B54-8414-F13B3C7C8AF2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+I created a new user and renamed the table. Now my .config reads as:
 
-On Tue, Apr 7, 2020 at 9:48 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> Hi Yann,
->
-> On Tue, Apr 7, 2020 at 8:31 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Jagan, All,
-> >
-> > On 2020-04-07 19:13 +0530, Jagan Teki spake thusly:
-> > > On Tue, Apr 7, 2020 at 5:19 PM Thomas Petazzoni
-> > > <thomas.petazzoni@bootlin.com> wrote:
-> > > > On Tue,  7 Apr 2020 16:45:10 +0530
-> > > > Jagan Teki <jagan@amarulasolutions.com> wrote:
-> > > > > This is v8 changes for python-scipy, here is the previous
-> > > > > version series[1].
-> > > > Thanks for this new iteration. Could you have a look at the backlog of
-> > > > patches at http://patchwork.ozlabs.org/project/buildroot/list/ and
-> > > > update any patch that is no longer relevant due to this new iteration
-> > > > to the state "Superseded" ? You can do that yourself for the patches
-> > > > that you have sent (provided that you have a patchwork account matching
-> > > > the e-mail used to send the patches). For the other patches, you can
-> > > > simply let us know, and we'll update the patch status.
-> > > >
-> > > > This helps us keep a patchwork backlog that makes sense.
-> > >
-> > > Yes, I've updated all my previous version changes. regarding pybind11,
-> > > adam has this series [2]. I already incorporated test patch in my
-> > > series as per his request.
-> > > [2] http://patchwork.ozlabs.org/project/buildroot/list/?series=145831
-> >
-> > So I've marked the seriers from Adam as superseded.
-> >
-> > However, there was a review of his pybind11 patch: since it installs
-> > only a header, it should be _INSTALL_TARGET = NO
->
-> The main difference between Adam vs my patch is I'm trying to build
-> pybind11 as a host package as it has dependency with scipy. If Adam is
-> required to use even for target, maybe he can add a patch on top of
-> this to support the target package. Let me know if it makes sense or
-> any other thoughts?
+BR2_ROOTFS_USERS_TABLES="x86_64/users_table.txt"
 
-Any update on this?
+The user table is:
 
-Jagan.
+/opt/buildroot-2020.05$ cat x86_64/users_table.txt 
+gladmin -1 wheel -1 =a**** /home/gladmin /bin/sh - Builtin User
+
+Then I also checked the following file and it looks the users is getting listed here:
+
+/opt/buildroot-2020.05$ cat /opt/buildroot-2020.05/output/build/buildroot-fs/full_users_table.txt
+   	named -1 named -1 * /etc/bind - - BIND daemon
+ 	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
+ 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ 	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
+ 	- - sudo -1 - - - -
+ 	- - input -1 * - - - Input device group
+	- - systemd-journal -1 * - - - Journal
+	- - render -1 * - - - DRI rendering nodes
+	- - kvm -1 * - - - kvm nodes
+	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+	systemd-journal-upload -1 systemd-journal-upload -1 * - - - Journal Upload
+	
+	systemd-network -1 systemd-network -1 * - - - Network Manager
+	systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
+	systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
+
+gladmin -1 wheel -1 =a**** /home/gladmin /bin/sh - Builtin User
+
+But then when I look under output/target/etc/passwd or output/target/etc/shadow, I do not see the new user getting created.
+
+Any assistance will be appreciated.
+
+
+Thanks and Regards,
+-=Srijan Nandi
+
+> On 3 Jul 2020, at 9:59 am, Srijan Nandi - Gmail <srijan.nandi@gmail.com> wrote:
+> 
+> I am facing issues creating a new users. I already have the following set:
+> 
+> BR2_ROOTFS_USERS_TABLES="x86_64/users"
+> 
+> /opt/buildroot-2020.05$ cat x86_64/users 
+> # <username> <uid> <group> <gid> <password> <home> <shell> <groups> <comment>
+> test       8000  wheel    -1    =           -                /bin/bash    -    Test user
+> 
+> But when I check under passwd, I am not able to see the new user
+> 
+> /opt/buildroot-2020.05$ cat output/target/etc/passwd 
+> root:x:0:0:root:/root:/bin/bash
+> daemon:x:1:1:daemon:/usr/sbin:/bin/false
+> bin:x:2:2:bin:/bin:/bin/false
+> sys:x:3:3:sys:/dev:/bin/false
+> sync:x:4:100:sync:/bin:/bin/sync
+> mail:x:8:8:mail:/var/spool/mail:/bin/false
+> www-data:x:33:33:www-data:/var/www:/bin/false
+> operator:x:37:37:Operator:/var:/bin/false
+> nobody:x:65534:65534:nobody:/home:/bin/false
+> 
+> Is there something I am missing
+> 
+> 
+> -=Srijan Nandi
