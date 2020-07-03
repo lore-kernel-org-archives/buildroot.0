@@ -1,53 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  3 Jul 2020 07:12:34 +0300
-Subject: [Buildroot] [PATCH] package/libcurl: bump to version 7.71.1
-Message-ID: <4387744d39413cd4a6c9e4470fdb1e63b7a90ed5.1593749554.git.baruch@tkos.co.il>
+From: Srijan Nandi - Gmail <srijan.nandi@gmail.com>
+Date: Fri, 3 Jul 2020 09:59:08 +0530
+Subject: [Buildroot] New user creation
+Message-ID: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release fixes build with BR2_PACKAGE_LIBCURL_PROXY_SUPPORT disabled
-and mbedtls enabled.
+I am facing issues creating a new users. I already have the following set:
 
-Add reference to upstream tarball signature.
+BR2_ROOTFS_USERS_TABLES="x86_64/users"
 
-Fixes:
-http://autobuild.buildroot.net/results/f32b6ab927560839cacaa1b9e6b64ced92b9ffe3/
-http://autobuild.buildroot.net/results/566f0db496f6d1feefd9d3e6b6955a2539670735/
-http://autobuild.buildroot.net/results/19de1111318aea863118c9b0b44dc282f011918f/
+/opt/buildroot-2020.05$ cat x86_64/users 
+# <username> <uid> <group> <gid> <password> <home> <shell> <groups> <comment>
+test       8000  wheel    -1    =           -                /bin/bash    -    Test user
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libcurl/libcurl.hash | 6 ++++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+But when I check under passwd, I am not able to see the new user
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 104d603f3e0f..46f72c1eafda 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
-+# Locally calculated after checking pgp signature
-+# https://curl.haxx.se/download/curl-7.71.1.tar.xz.asc
-+# signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-+sha256  40f83eda27cdbeb25cd4da48cefb639af1b9395d6026d2da1825bf059239658c  curl-7.71.1.tar.xz
- sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
--sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 11748924ffae..6f053f00a823 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.71.0
-+LIBCURL_VERSION = 7.71.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
--- 
-2.27.0
+/opt/buildroot-2020.05$ cat output/target/etc/passwd 
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/false
+bin:x:2:2:bin:/bin:/bin/false
+sys:x:3:3:sys:/dev:/bin/false
+sync:x:4:100:sync:/bin:/bin/sync
+mail:x:8:8:mail:/var/spool/mail:/bin/false
+www-data:x:33:33:www-data:/var/www:/bin/false
+operator:x:37:37:Operator:/var:/bin/false
+nobody:x:65534:65534:nobody:/home:/bin/false
+
+Is there something I am missing
+
+
+-=Srijan Nandi
