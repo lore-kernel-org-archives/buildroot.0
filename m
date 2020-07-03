@@ -1,45 +1,55 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Fri,  3 Jul 2020 15:19:22 +0200
-Subject: [Buildroot] [PATCH] package/refpolicy: enable systemd support
-Message-ID: <20200703131922.1999898-1-antoine.tenart@bootlin.com>
+From: Julien Olivain <julien.olivain@oss.nxp.com>
+Date: Fri,  3 Jul 2020 18:57:44 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/freescale_imx7dsabresd: bump BSP
+ components to 5.4.24_2.1.0
+In-Reply-To: <20200703165744.3192656-1-julien.olivain@oss.nxp.com>
+References: <20200703165744.3192656-1-julien.olivain@oss.nxp.com>
+Message-ID: <20200703165744.3192656-2-julien.olivain@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch enables systemd support in the refpolicy by turning on the
-'SYSTEMD' policy build option when systemd is enabled in Buildroot. This
-enables conditional rules in SELinux policy modules (by defining
-'init_systemd'), to better support systemd.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Tested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+[Julien: tested on i.MX7D Sabre Rev D1]
+Signed-off-by: Julien Olivain <julien.olivain@oss.nxp.com>
 ---
- package/refpolicy/refpolicy.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ configs/freescale_imx7dsabresd_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index a5716f5fcebb..9346649b2c57 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -29,11 +29,18 @@ REFPOLICY_POLICY_VERSION = $(BR2_PACKAGE_LIBSEPOL_POLICY_VERSION)
- REFPOLICY_POLICY_STATE = \
- 	$(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_STATE))
+diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
+index 7c5fc0cb64..d7119ef5a7 100644
+--- a/configs/freescale_imx7dsabresd_defconfig
++++ b/configs/freescale_imx7dsabresd_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
  
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+define REFPOLICY_CONFIGURE_SYSTEMD
-+	$(SED) "/SYSTEMD/c\SYSTEMD = y" $(@D)/build.conf
-+endef
-+endif
-+
- define REFPOLICY_CONFIGURE_CMDS
- 	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
- 		$(@D)/build.conf
- 	$(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
- 	$(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
-+	$(REFPOLICY_CONFIGURE_SYSTEMD)
- endef
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
  
- define REFPOLICY_BUILD_CMDS
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
+@@ -27,7 +27,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ 
 -- 
 2.26.2
