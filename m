@@ -1,29 +1,41 @@
 From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Sun, 5 Jul 2020 01:13:10 +0530
-Subject: [Buildroot] [PATCH 2/4] configs/orangepi_rk3399: new defconfig
-In-Reply-To: <CAMty3ZAWPjRmpHYhpbPMufEq2F7_KyYMmQZMV_LcSne4y-OvJg@mail.gmail.com>
+Date: Sun, 5 Jul 2020 01:13:49 +0530
+Subject: [Buildroot] [PATCH 4/4] configs/nanopc_t4: new defconfig
+In-Reply-To: <CAMty3ZCBMbkrx8f0cpaSUTyKp2YBBgC_B4qx1RrLwzZDijND0A@mail.gmail.com>
 References: <1592073154-13731-1-git-send-email-sunil@amarulasolutions.com>
- <1592073154-13731-3-git-send-email-sunil@amarulasolutions.com>
- <CAMty3ZAWPjRmpHYhpbPMufEq2F7_KyYMmQZMV_LcSne4y-OvJg@mail.gmail.com>
-Message-ID: <CAM+7aWuBkFX6T4i+GfLJvWP=PELvgJ+yocC4RqEdLMi=sv3xLg@mail.gmail.com>
+ <1592073154-13731-5-git-send-email-sunil@amarulasolutions.com>
+ <CAMty3ZCBMbkrx8f0cpaSUTyKp2YBBgC_B4qx1RrLwzZDijND0A@mail.gmail.com>
+Message-ID: <CAM+7aWuWOrcukzVsXO0C+HXw75zfC22AAYROZCP-JqaOPtS+VA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 15, 2020 at 11:59 AM Jagan Teki <jagan@amarulasolutions.com>
+On Mon, Jun 15, 2020 at 11:58 AM Jagan Teki <jagan@amarulasolutions.com>
 wrote:
 
-> On Sun, Jun 14, 2020 at 12:02 AM <sunil@amarulasolutions.com> wrote:
+> On Sun, Jun 14, 2020 at 12:03 AM <sunil@amarulasolutions.com> wrote:
 > >
 > > From: Suniel Mahesh <sunil@amarulasolutions.com>
 > >
-> > Add initial support for Orangepi RK3399 target with below features:
+> > A defconfig for the friendlyarm nanopc-t4 was added in
+> > c23895f06e0988319a1959764a402b57bc21ffaf, but then removed
+> > in 8efd4463f78fd68c85b45cc0da347dfb805abb7e because an ARM32
+> > compiler was needed to build ATF, and this was not supported
+> > back then.
 > >
-> >   - U-Boot 2020.04
-> >   - Linux 5.4.46
-> >   - Default packages from buildroot
+> > Now, since package/arm-gnu-a-toolchain/ has been added, this
+> > defconfig can be re-introduced.
+> >
+> > Following new changes are introduced in comparision with the
+> > older changeset:
+> >
+> >         - updated readme
+> >         - GPT partition layout is being used
+> >         - update defconfig to build ATF
+> >         - bump u-boot to 2020.04
+> >         - bump linux to 5.4.46
 > >
 > > Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 > > ---
@@ -41,4 +53,4 @@ Regards
 Suniel
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200705/b2b73b8b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200705/a0808eb2/attachment.html>
