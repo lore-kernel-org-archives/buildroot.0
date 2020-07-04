@@ -1,279 +1,117 @@
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Sun,  5 Jul 2020 01:46:45 +0530
-Subject: [Buildroot] [PATCH v3 2/2] configs/rock_pi_4: new defconfig
-In-Reply-To: <1593893805-8430-1-git-send-email-sunil@amarulasolutions.com>
-References: <1593893805-8430-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <1593893805-8430-3-git-send-email-sunil@amarulasolutions.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sat, 4 Jul 2020 22:49:39 +0200
+Subject: [Buildroot] [PATCH v3] package/systemd: register NSS plugins in
+ nsswitch.conf
+In-Reply-To: <20200704192738.GD2273@scaer>
+References: <20200703234923.174320-1-nolange79@gmail.com>
+ <20200704080025.GC2273@scaer>
+ <CADYdroMZwKBuzNKxXvj7muHNMWDAiDNCOXBzEMbq_mkONFf1uw@mail.gmail.com>
+ <20200704192738.GD2273@scaer>
+Message-ID: <CADYdroNeoJmoR770sFVVhokGRqhnp8nNYEw_E4Hr7fPN1FGahw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for RK3399 based rockpi-4 targets (model A, B, C)
-with below features:
+Am Sa., 4. Juli 2020 um 21:27 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Norbert, All,
+>
+> On 2020-07-04 19:15 +0200, Norbert Lange spake thusly:
+> > Am Sa., 4. Juli 2020 um 10:00 Uhr schrieb Yann E. MORIN
+> > <yann.morin.1998@free.fr>:
+> > > On 2020-07-04 01:49 +0200, Norbert Lange spake thusly:
+> > > > This supports 4 plugins, each will be added at the right
+> > > > spot if enabled, based on the template coming with systemd.
+> [--SNIP--]
+> > > >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+> > > > +     SYSTEMD_ADD_NSSCONFIG_HOOK \
+> > > As I already said: ths must be a target-finalize hook, not a
+> > > post-install hook.
+> > I missed that, but I still don't see the argument for that,
+> > did post a v4 as I dont want to get stuck on that.
+> >
+> > If the NSSCONFIG_HOOK needs to run after glibc is installed,
+> > this could and IMHO should be done by a dependency to glibc?
+>
+> This has nothing to do on a dependency to glibc: glibc is part of the
+> toolchain, and the dependency to the toolchain is a given for all target
+> packages: it is enfirced by the infrastructure. And so, glibc is always
+> built and installed before any target package.
+>
+> However, there are three other nss plugins, and they already do the
+> nsswith.conf tweaks as a target-finalize hook.
+>
+> So, for consistency with those, systemd must also do the tweaking as a
+> target-finalize hook. But that is not the main reason...
+>
+> The main reason is per-paclkage directories and top-level parallel build.
+>
+> nsswitch.conf is a file installed by one package, so opther packages
+> should not modify it during their build/install steps, otherwise this
+> will play badly with per-package directories, which is needed for
+> top-level parallel build.
+>
+> Indeed, systemd and nss-pam-ldap (for example) have no dependency one on
+> the other (and that's OK, because there actually is no dependency,
+> runtime or build time, so we don't want to introduce it).
+>
+> So, they would each get their own private copy of nsswitch.conf, and the
+> one seen and modified by systemd will not contain the changes in the one
+> seen and modified by nss-pam-ldap, and conversely.
+>
+> But at the end, each per-package target/ dir are collected to eventually
+> form the final and complete target/ directory.
+>
+> And now we have an issue: the nsswitch.conf from two packages are
+> different, and the last to be copied will win, thus anihilating the
+> changes from a previous package.
 
-	- Custom U-Boot 2020.07-rc4
-	  https://github.com/amarula/u-boot-amarula.git
-	  branch rock-pi
-	- Linux 5.4.46
-	- GPT partition layout is being used
-	- Default packages from buildroot
+Ok, thanks for clearing that up.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
-Changes for v3:
-- no changes
+> But the target-finalize hooks are called after this gathering of ppd
+> target/ is done, so it works on the final and definitive nsswitch.conf.
+>
+> TL;DR: if you need to modify the file of another package, do it in a
+> target-finalize hook.
+>
+> > There aren't that much "phases" in buildroot, if you want to operate on
+> > the final nsswitch.cfg you now only have PRE_CMD_HOOKS left.
+>
+> No, that is exactly what target-finalize is for. ROOTFS_PRE_CMD_HOOKS
+> are not here to modify the files, but to fixup the layout is some very
+> rare corner cases (and the rare corner case I am talking about, was
+> exactly having systemd run on a read-only filesystem with a working
+> factory; go check the commit logs for the gory details ;-) ).
 
-Changes for v2:
-- renamed and updated defconfig from rockpi_4c to rock_pi_4 and board folder
-  from rockpi-4c to rockpi-4, so that this will be valid to board Models A, B, C.
-- Changed commit description.
-- updated gitlab-ci.yml.
-- updated DEVELOPERS.
-- updated readme.
-- updated extlinux.conf.
----
- .gitlab-ci.yml                     |  1 +
- DEVELOPERS                         |  2 ++
- board/radxa/rockpi-4/extlinux.conf |  4 +++
- board/radxa/rockpi-4/genimage.cfg  | 39 ++++++++++++++++++++++++
- board/radxa/rockpi-4/post-build.sh |  5 ++++
- board/radxa/rockpi-4/readme.txt    | 61 ++++++++++++++++++++++++++++++++++++++
- configs/rock_pi_4_defconfig        | 57 +++++++++++++++++++++++++++++++++++
- 7 files changed, 169 insertions(+)
- create mode 100644 board/radxa/rockpi-4/extlinux.conf
- create mode 100644 board/radxa/rockpi-4/genimage.cfg
- create mode 100755 board/radxa/rockpi-4/post-build.sh
- create mode 100644 board/radxa/rockpi-4/readme.txt
- create mode 100644 configs/rock_pi_4_defconfig
+I meant if you need an order like
+systemd (fixup nsswitch.conf) -> mdns4 (fixup nsswitch.conf) ->
+systemd (pickup nsswitch.conf *after all modifications*)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index e271770..ac4288b 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -323,6 +323,7 @@ riotboard_defconfig: { extends: .defconfig }
- roc_pc_rk3399_defconfig: { extends: .defconfig }
- rock64_defconfig: { extends: .defconfig }
- rockpro64_defconfig: { extends: .defconfig }
-+rock_pi_4_defconfig: { extends: .defconfig }
- rock_pi_n10_defconfig: { extends: .defconfig }
- roseapplepi_defconfig: { extends: .defconfig }
- s6lx9_microboard_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 05e435d..50fffda 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2403,12 +2403,14 @@ F:	board/firefly/
- F:	board/friendlyarm/nanopc-t4
- F:	board/friendlyarm/nanopi-m4
- F:	board/orangepi/orangepi-rk3399
-+F:	board/radxa/rockpi-4
- F:	board/radxa/rockpi-n10
- F:	board/pine64/rockpro64
- F: 	configs/nanopc_t4_defconfig
- F: 	configs/nanopi_m4_defconfig
- F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
-+F:	configs/rock_pi_4_defconfig
- F:	configs/rock_pi_n10_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-a-toolchain/
-diff --git a/board/radxa/rockpi-4/extlinux.conf b/board/radxa/rockpi-4/extlinux.conf
-new file mode 100644
-index 0000000..83374f1
---- /dev/null
-+++ b/board/radxa/rockpi-4/extlinux.conf
-@@ -0,0 +1,4 @@
-+label RK3399_ROCK_PI_4 linux
-+  kernel /Image
-+  devicetree /rk3399-rock-pi-4.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/board/radxa/rockpi-4/genimage.cfg b/board/radxa/rockpi-4/genimage.cfg
-new file mode 100644
-index 0000000..88986df
---- /dev/null
-+++ b/board/radxa/rockpi-4/genimage.cfg
-@@ -0,0 +1,39 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image",
-+			"rk3399-rock-pi-4.dtb",
-+			"extlinux"
-+		}
-+	}
-+	size = 112M
-+}
-+
-+image sdcard.img {
-+
-+	hdimage {
-+		gpt = true
-+	}
-+
-+	partition loader1 {
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
-+
-+	partition loader2 {
-+		image = "u-boot.itb"
-+		offset = 8M
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 16M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/radxa/rockpi-4/post-build.sh b/board/radxa/rockpi-4/post-build.sh
-new file mode 100755
-index 0000000..ba29375
---- /dev/null
-+++ b/board/radxa/rockpi-4/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/radxa/rockpi-4/readme.txt b/board/radxa/rockpi-4/readme.txt
-new file mode 100644
-index 0000000..1db7569
---- /dev/null
-+++ b/board/radxa/rockpi-4/readme.txt
-@@ -0,0 +1,61 @@
-+RADXA ROCK_PI_4
-+================
-+https://rockpi.org/rockpi4
-+
-+ROCK Pi 4 is a Single Board Computer (SBC) from radxa. This guide is valid
-+for the below models:
-+- ROCK PI 4 Model A
-+- ROCK PI 4 Model B
-+- ROCK PI 4 Model C
-+
-+Build:
-+======
-+  $ make rock_pi_4_defconfig
-+  $ make
-+
-+Files created in output directory
-+=================================
-+
-+output/images
-+
-+????????? bl31.elf
-+????????? boot.vfat
-+????????? extlinux
-+????????? idbloader.img
-+????????? Image
-+????????? rk3399-rock-pi-4.dtb
-+????????? rootfs.ext2
-+????????? rootfs.ext4 -> rootfs.ext2
-+????????? rootfs.tar
-+????????? sdcard.img
-+????????? u-boot.bin
-+????????? u-boot.itb
-+
-+Creating bootable SD card:
-+==========================
-+
-+Simply invoke (as root)
-+
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
-+
-+Where X is your SD card device.
-+
-+Booting:
-+========
-+
-+Serial console:
-+---------------
-+RockPi4 has a 40-pin GPIO header. The pin layout is as follows:
-+
-+pin 6:  gnd
-+pin 8:  tx
-+pin 10: rx
-+
-+Baudrate for this board is 1500000.
-+
-+Login:
-+------
-+Enter 'root' as login user, and the prompt is ready.
-+
-+Wiki link:
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/rock-pi-4.html
-diff --git a/configs/rock_pi_4_defconfig b/configs/rock_pi_4_defconfig
-new file mode 100644
-index 0000000..2c1737a
---- /dev/null
-+++ b/configs/rock_pi_4_defconfig
-@@ -0,0 +1,57 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.46"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-pi-4"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="rockpi4"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ROCK_PI_4..!!"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="96M"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-4/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-4/post-build.sh"
--- 
-2.7.4
+then you are out of luck, and need to use ROOTFS_PRE_CMD_HOOKS,
+or use some weird tricks like in [1], where I re-add PURGE_LOCALES.
+(I will redo those patches, doing that cleanup in systemd.mk).
+
+Yeah, I see'n that trickery with tmpfiles.d ;)
+But I guess multiple lists of PRE_CMD / TARGET_FINALIZE HOOKS would ease
+some pains (like adding _EARLY and _LATE variants).
+
+Btw, I use a different approach by pre-creating all used directories,
+and mounting /var/tmp as tmpfs. This allows startup without any errors,
+intended for when it's not possible to mount the usual overlayfs for RW access.
+
+>
+> Thanks for your v4! :-)  I'll handle itm soonish.
+>
+> BTW, I have a new version of dbus-broker that is working and clean; I'll
+> send it later too (test running while I write this email).
+
+Great, I hope I'll get my stuff upstream in time for systemd 246,
+should be able to build a pretty lean systemd rootfs with ~16MB size
+(~23MB today) then.
+
+Norbert
+
+[1] - https://patchwork.ozlabs.org/project/buildroot/patch/20200206093633.251413-9-nolange79 at gmail.com/
