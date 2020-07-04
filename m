@@ -1,32 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Jul 2020 10:34:46 +0200
-Subject: [Buildroot] Missing autobuild daily reports
-In-Reply-To: <87sgea6tp1.fsf@tarshish>
-References: <87sgea6tp1.fsf@tarshish>
-Message-ID: <20200704103446.6c9215f4@windsurf.home>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat,  4 Jul 2020 06:48:40 -0300
+Subject: [Buildroot] [PATCH] package/libyaml: bump version to 0.2.5
+Message-ID: <20200704094840.30590-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 02 Jul 2020 14:29:46 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Also:
+- License file renamed LICENSE -> License
+- Change license hash because copyright year changed 2019 -> 2020
+- Separate the fields in the hash file by two spaces
 
-> The last autobuild report was sent on June 26:
-> 
->   http://lists.busybox.net/pipermail/buildroot/2020-June/285725.html
-> 
-> I find these daily reports useful.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/libyaml/libyaml.hash | 4 ++--
+ package/libyaml/libyaml.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I had a look: I updated my server on June 27 to a newer Ubuntu version,
-and the _mysql Python module that the script is using is no longer
-available. I haven't immediately seen if _mysql was still available in
-some other package, so I'll probably have to adjust the code to use
-another MySQL Python module.
-
-Thomas
+diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
+index 49693b507bc0..0de9e527a513 100644
+--- a/package/libyaml/libyaml.hash
++++ b/package/libyaml/libyaml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 4a9100ab61047fd9bd395bcef3ce5403365cafd55c1e0d0299cde14958e47be9  yaml-0.2.2.tar.gz
+-sha256 a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
++sha256  c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4  yaml-0.2.5.tar.gz
++sha256  c40112449f254b9753045925248313e9270efa36d226b22d82d4cc6c43c57f29  License
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index 1ba069a1b27e..f65317aab7ee 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBYAML_VERSION = 0.2.2
++LIBYAML_VERSION = 0.2.5
+ LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
+ LIBYAML_SITE = http://pyyaml.org/download/libyaml
+ LIBYAML_INSTALL_STAGING = YES
+ LIBYAML_LICENSE = MIT
+-LIBYAML_LICENSE_FILES = LICENSE
++LIBYAML_LICENSE_FILES = License
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
