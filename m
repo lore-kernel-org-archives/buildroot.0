@@ -1,54 +1,83 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 4 Jul 2020 17:51:07 +0200
-Subject: [Buildroot] [PATCH] qemu_aarch64_virt: bump to Linux 5.7.7
-In-Reply-To: <20200704142656.1587689-1-masahiroy@kernel.org>
-References: <20200704142656.1587689-1-masahiroy@kernel.org>
-Message-ID: <9d073d28-f4ff-24e4-1139-85adf1159112@gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sat,  4 Jul 2020 19:06:10 +0200
+Subject: [Buildroot] [PATCH v4] package/systemd: register NSS plugins in
+ nsswitch.conf
+Message-ID: <20200704170611.2624-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Masahiro,
+This supports 4 plugins, each will be added at the right
+spot if enabled, based on the template coming with systemd.
 
-Le 04/07/2020 ? 16:26, Masahiro Yamada a ?crit?:
-> The latest Linux version works.
+The sed replacements are carefully written to be idempotent,
+and to be robust enough to be combined with the other
+available packages (nss_mdns4) in any installation order.
 
-We are using the same kernel LTS version 5.4.x for all defconfig for Qemu, we
-want to keep them in sync.
+nss-systemd is used for the DynamicUser features,
+which is a defacto necessity for systemd.
+It handles transient users/groups without
+touching the /etc/{passwd,group} files on disk.
 
-What is the motivation to make this update to the kernel 5.7 ?
+nss-myhostname allows resolving the hostname,
+again without touching files in /etc.
 
-Best regards,
-Romain
+nss-mymachines adds name resolution from containers
+supported by machined.
+users from the containers might end up in system groups,
+so groups should be merged.
 
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  configs/qemu_aarch64_virt_defconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-> index 5ca15f55b3..f924377191 100644
-> --- a/configs/qemu_aarch64_virt_defconfig
-> +++ b/configs/qemu_aarch64_virt_defconfig
-> @@ -15,13 +15,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
->  
-> -# Linux headers same as kernel, a 5.4 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-> +# Linux headers same as kernel, a 5.7 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
->  
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.7"
->  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
->  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  
-> 
+nss-resolve is part of resolved, and required for
+consistent dns lookups.
+
+we anchor nss_resolve to appear after files, if mymachines is also
+used, remove that first (and add it back later). Other packages
+(mdns4) move around the dns entry, so replacing that is not a
+good option.
+
+if mdns4 is installed aswell, then resolved will take precedence
+for host lookups.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+v3:
+*   basically a rewrite
+*   tested together with nss_mdns4 replacements
+v4:
+*   use target install hook
+---
+ package/systemd/systemd.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8e01a0db5b..4bb668fa64 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -494,6 +494,23 @@ define SYSTEMD_USERS
+ 	$(SYSTEMD_TIMESYNCD_USER)
+ endef
+ 
++define SYSTEMD_INSTALL_NSSCONFIG_HOOK
++	$(SED) '/^passwd:/ {/systemd/! s/$$/ systemd/}' \
++		-e '/^group:/ {/systemd/! s/$$/ systemd/}' \
++		$(if $(BR2_PACKAGE_SYSTEMD_RESOLVED), \
++			-e '/^hosts:/ s/[[:space:]]*mymachines//' \
++			-e '/^hosts:/ {/resolve/! s/files/files resolve [!UNAVAIL=return]/}' ) \
++		$(if $(BR2_PACKAGE_SYSTEMD_MYHOSTNAME), \
++			-e '/^hosts:/ {/myhostname/! s/$$/ myhostname/}' ) \
++		$(if $(BR2_PACKAGE_SYSTEMD_MACHINED), \
++			-e '/^passwd:/ {/mymachines/! s/files/files mymachines/}' \
++			-e '/^group:/ {/mymachines/! s/files/files [SUCCESS=merge] mymachines [SUCCESS=merge]/}' \
++			-e '/^hosts:/ {/mymachines/! s/files/files mymachines/}' ) \
++		$(TARGET_DIR)/etc/nsswitch.conf
++endef
++
++SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
++
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd provides multiple units to autospawn getty as neede
+ # * getty at .service to start a getty on normal TTY
+-- 
+2.27.0
