@@ -1,45 +1,97 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat,  4 Jul 2020 07:42:48 -0300
-Subject: [Buildroot] [PATCH] package/lm-sensors: bump version to 3-6-0
-Message-ID: <20200704104248.12419-1-sergio.prado@e-labworks.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat,  4 Jul 2020 23:18:02 +0900
+Subject: [Buildroot] [PATCH] qemu_aarch64_virt: use the in-kernel defconfig
+Message-ID: <20200704141802.1586504-1-masahiroy@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also separate the fields in the hash file by two spaces.
+The defconfig file from the kernel tree works enough for the
+qemu-system-aarch64 virt machine. Remove the custom config file.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- package/lm-sensors/lm-sensors.hash | 6 +++---
- package/lm-sensors/lm-sensors.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.hash b/package/lm-sensors/lm-sensors.hash
-index d41af2745fe0..0ca07b7e690d 100644
---- a/package/lm-sensors/lm-sensors.hash
-+++ b/package/lm-sensors/lm-sensors.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256	f671c1d63a4cd8581b3a4a775fd7864a740b15ad046fe92038bcff5c5134d7e0	lm-sensors-3-5-0.tar.gz
--sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	COPYING
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LGPL
-+sha256  0591f9fa0339f0d15e75326d0365871c2d4e2ed8aa1ff759b3a55d3734b7d197  lm-sensors-3-6-0.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index f8059be47e76..a69ca6e2bf1c 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ board/qemu/aarch64-virt/linux.config | 54 ----------------------------
+ configs/qemu_aarch64_virt_defconfig  |  3 +-
+ 2 files changed, 1 insertion(+), 56 deletions(-)
+ delete mode 100644 board/qemu/aarch64-virt/linux.config
+
+diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
+deleted file mode 100644
+index c9f2708ad5..0000000000
+--- a/board/qemu/aarch64-virt/linux.config
++++ /dev/null
+@@ -1,54 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_NO_HZ_IDLE=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_TASKSTATS=y
+-CONFIG_SCHED_AUTOGROUP=y
+-CONFIG_PROFILING=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_BLK_DEV_BSGLIB=y
+-CONFIG_ARCH_VEXPRESS=y
+-CONFIG_TRANSPARENT_HUGEPAGE=y
+-CONFIG_BINFMT_MISC=y
+-CONFIG_COMPAT=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_PACKET_DIAG=y
+-CONFIG_UNIX=y
+-CONFIG_NET_KEY=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_ADVANCED_ROUTER=y
+-CONFIG_BRIDGE=m
+-CONFIG_NET_SCHED=y
+-CONFIG_VSOCKETS=y
+-CONFIG_DEVTMPFS=y
+-CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_VIRTIO_BLK=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_CONSTANTS=y
+-CONFIG_SCSI_LOGGING=y
+-CONFIG_SCSI_SCAN_ASYNC=y
+-CONFIG_SCSI_VIRTIO=y
+-CONFIG_ATA=y
+-CONFIG_NETDEVICES=y
+-CONFIG_DUMMY=y
+-CONFIG_MACVLAN=y
+-CONFIG_VIRTIO_NET=y
+-CONFIG_NLMON=y
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_VIRTIO_CONSOLE=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_HW_RANDOM_VIRTIO=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_VIRTIO_MMIO=y
+-CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+-CONFIG_MAILBOX=y
+-CONFIG_PL320_MBOX=y
+-CONFIG_EXT4_FS=y
+-CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 9f22987694..5ca15f55b3 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -22,8 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
--LM_SENSORS_VERSION = 3-5-0
-+LM_SENSORS_VERSION = 3-6-0
- LM_SENSORS_SITE = $(call github,lm-sensors,lm-sensors,V$(LM_SENSORS_VERSION))
- LM_SENSORS_INSTALL_STAGING = YES
- LM_SENSORS_DEPENDENCIES = host-bison host-flex
+ # host-qemu for gitlab testing
 -- 
-2.17.1
+2.25.1
