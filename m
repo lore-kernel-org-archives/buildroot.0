@@ -1,97 +1,36 @@
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat,  4 Jul 2020 23:18:02 +0900
-Subject: [Buildroot] [PATCH] qemu_aarch64_virt: use the in-kernel defconfig
-Message-ID: <20200704141802.1586504-1-masahiroy@kernel.org>
+Date: Sat,  4 Jul 2020 23:09:09 +0900
+Subject: [Buildroot] [PATCH] arm_foundationv8_defconfig: use
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
+Message-ID: <20200704140909.1584989-1-masahiroy@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The defconfig file from the kernel tree works enough for the
-qemu-system-aarch64 virt machine. Remove the custom config file.
+Commit 53ced1f6d3da ("linux: allow the selection of the architecture's
+default configuration") allows us to specify the Linux defconfig cleanly.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- board/qemu/aarch64-virt/linux.config | 54 ----------------------------
- configs/qemu_aarch64_virt_defconfig  |  3 +-
- 2 files changed, 1 insertion(+), 56 deletions(-)
- delete mode 100644 board/qemu/aarch64-virt/linux.config
+ configs/arm_foundationv8_defconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-deleted file mode 100644
-index c9f2708ad5..0000000000
---- a/board/qemu/aarch64-virt/linux.config
-+++ /dev/null
-@@ -1,54 +0,0 @@
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_NO_HZ_IDLE=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_TASKSTATS=y
--CONFIG_SCHED_AUTOGROUP=y
--CONFIG_PROFILING=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_BLK_DEV_BSGLIB=y
--CONFIG_ARCH_VEXPRESS=y
--CONFIG_TRANSPARENT_HUGEPAGE=y
--CONFIG_BINFMT_MISC=y
--CONFIG_COMPAT=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_PACKET_DIAG=y
--CONFIG_UNIX=y
--CONFIG_NET_KEY=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_BRIDGE=m
--CONFIG_NET_SCHED=y
--CONFIG_VSOCKETS=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_VIRTIO_BLK=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_CONSTANTS=y
--CONFIG_SCSI_LOGGING=y
--CONFIG_SCSI_SCAN_ASYNC=y
--CONFIG_SCSI_VIRTIO=y
--CONFIG_ATA=y
--CONFIG_NETDEVICES=y
--CONFIG_DUMMY=y
--CONFIG_MACVLAN=y
--CONFIG_VIRTIO_NET=y
--CONFIG_NLMON=y
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_SERIAL_AMBA_PL011=y
--CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
--CONFIG_VIRTIO_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_HW_RANDOM_VIRTIO=y
--CONFIG_RTC_CLASS=y
--CONFIG_VIRTIO_MMIO=y
--CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
--CONFIG_MAILBOX=y
--CONFIG_PL320_MBOX=y
--CONFIG_EXT4_FS=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 9f22987694..5ca15f55b3 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -22,8 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index d31f69d3ac..ea19f35502 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -5,8 +5,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
 -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(LINUX_DIR)/arch/arm64/configs/defconfig"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
- # host-qemu for gitlab testing
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
+ BR2_TARGET_ROOTFS_EXT2=y
 -- 
 2.25.1
