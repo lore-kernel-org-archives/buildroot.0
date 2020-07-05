@@ -1,43 +1,47 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun,  5 Jul 2020 15:27:53 -0300
-Subject: [Buildroot] [PATCH] package/ccid: bump version to 1.4.33
-Message-ID: <20200705182753.24187-1-sergio.prado@e-labworks.com>
+From: lylejfranklin at gmail.com <lylejfranklin@gmail.com>
+Date: Sun,  5 Jul 2020 14:28:45 -0400
+Subject: [Buildroot] [PATCH 1/1] package/jq: bump version to a17dd32
+Message-ID: <20200705182845.42885-1-lylejfranklin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also separate the fields in the hash file by two spaces.
+From: Lyle Franklin <lylejfranklin@gmail.com>
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+- Bumps jq package to latest to fix seg fault errors
+- https://github.com/stedolan/jq/issues/2003
+- I saw this on ARM64 compiled with uclibc, issue mentions MIPS, so
+  might only be an issue for non-x86
+
+Signed-off-by: Lyle Franklin <lylejfranklin@gmail.com>
 ---
- package/ccid/ccid.hash | 4 ++--
- package/ccid/ccid.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/jq/jq.hash | 2 +-
+ package/jq/jq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
-index f29f5b3f93dc..f129d2ae903d 100644
---- a/package/ccid/ccid.hash
-+++ b/package/ccid/ccid.hash
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index 2cddda32c6..e9f15afa78 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 6b48d7b6e4390e038d25630f8664fe81618ab00f232d6efbe0e3cc6df28ce8f7  ccid-1.4.31.tar.bz2
--sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-+sha256  5256da939711deb42b74d05d2bd6bd0c73c4d564feb0c1a50212609eb680e424  ccid-1.4.33.tar.bz2
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
-index a5f9f00473c8..570c3907e887 100644
---- a/package/ccid/ccid.mk
-+++ b/package/ccid/ccid.mk
+ # Locally calculated
+-sha256  3002cf80d871728562989b4a47d90a7301fe049a4e1d69836b99108f198dac06  jq-a97638713ad30653d424f136018098c4b0e5c71b.tar.gz
++sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
+ sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index 3d22306537..297a608b12 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCID_VERSION = 1.4.31
-+CCID_VERSION = 1.4.33
- CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
- CCID_SITE = https://ccid.apdu.fr/files
- CCID_LICENSE = LGPL-2.1+
+-JQ_VERSION = a97638713ad30653d424f136018098c4b0e5c71b
++JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
+ JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
+ JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
 -- 
-2.17.1
+2.27.0
