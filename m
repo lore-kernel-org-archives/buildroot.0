@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jul 2020 00:13:12 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/syslog-ng: drop
+Date: Mon, 6 Jul 2020 00:13:03 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/syslog-ng: drop
  unused systemd file
-Message-ID: <20200705221007.D0B2A844F5@busybox.osuosl.org>
+Message-ID: <20200705221012.4528C846C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91904424ee0101c66f7a3eb8cbf0d1b51e3d38ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a434b3b416fc0ce338f8854ac3efbf018bc1410e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Commit 54ea03ccd7d68bcf846a7cb8fa58b9fb3ac0b914 ("package/syslog-ng:
 implement systemd enablement using DefaultInstance") replaced the lines
