@@ -1,47 +1,44 @@
-From: lylejfranklin at gmail.com <lylejfranklin@gmail.com>
-Date: Sun,  5 Jul 2020 14:28:45 -0400
-Subject: [Buildroot] [PATCH 1/1] package/jq: bump version to a17dd32
-Message-ID: <20200705182845.42885-1-lylejfranklin@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun,  5 Jul 2020 15:36:59 -0300
+Subject: [Buildroot] [PATCH] package/check: bump version to 0.15.0
+Message-ID: <20200705183659.7007-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lyle Franklin <lylejfranklin@gmail.com>
+Also separate the fields in the hash file by two spaces.
 
-- Bumps jq package to latest to fix seg fault errors
-- https://github.com/stedolan/jq/issues/2003
-- I saw this on ARM64 compiled with uclibc, issue mentions MIPS, so
-  might only be an issue for non-x86
-
-Signed-off-by: Lyle Franklin <lylejfranklin@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/jq/jq.hash | 2 +-
- package/jq/jq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/check/check.hash | 4 ++--
+ package/check/check.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-index 2cddda32c6..e9f15afa78 100644
---- a/package/jq/jq.hash
-+++ b/package/jq/jq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3002cf80d871728562989b4a47d90a7301fe049a4e1d69836b99108f198dac06  jq-a97638713ad30653d424f136018098c4b0e5c71b.tar.gz
-+sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
- sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index 3d22306537..297a608b12 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
+diff --git a/package/check/check.hash b/package/check/check.hash
+index 52839a68b467..6287ddd1045e 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256	bd0f0ca1be65b70238b32f8e9fe5d36dc2fbf7a759b7edf28e75323a7d74f30b	check-0.14.0.tar.gz
++sha256  aea2e3c68fa6e1e92378e744b1c0db350ccda4b6bd0d19530d0ae185b3d1ac60  check-0.15.0.tar.gz
+ # License files, locally calculated
+-sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index 6bec07adbdd5..bd3a1e6e06c4 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JQ_VERSION = a97638713ad30653d424f136018098c4b0e5c71b
-+JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
- JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
- JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
+-CHECK_VERSION = 0.14.0
++CHECK_VERSION = 0.15.0
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
 -- 
-2.27.0
+2.17.1
