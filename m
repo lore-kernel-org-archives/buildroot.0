@@ -1,57 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jul 2020 23:15:47 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/pango: add
- gobject-introspection support
-Message-ID: <20200705211259.00BCE7F8CD@busybox.osuosl.org>
+Date: Sun, 5 Jul 2020 23:16:28 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ docs/manual/adding-packages-generic.txt: fix typo
+Message-ID: <20200705211324.AA1D083FE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27e6597ccc1f331a38b18cb911c8120353e2f69a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a23115004d52a4b7d5825f0c962d39049db6ca48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This will fix the following build failure when enabling introspection on
-libgtk2:
-
-Couldn't find include 'Pango-1.0.gir' (search path: '['/home/fabrice/buildroot/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/home/fabrice/buildroot/output/host/share', '/usr/share/gnome/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/fabrice/buildroot/output/host/share/gir-1.0', '/usr/share/gir-1.0']')
-
-Fixes:
- - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
+LIBTOO_SOURCE -> LIBFOO_SOURCE
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit abefa5a54abede7c9d7b846fd8cfab1f476282b4)
+(cherry picked from commit 31e6e05f7236bea4eba7825c6e78bdd1d41af66b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pango/pango.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 48edd18b05..1b12c09b22 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -12,7 +12,7 @@ PANGO_INSTALL_STAGING = YES
- PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index ed1e6acf57..f2969e9a13 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -452,7 +452,7 @@ not and can not work as people would expect it should:
+   of the manifest file for this package.
  
--PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
-+PANGO_CONF_OPTS = -Duse_fontconfig=true
- HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
- 
- PANGO_DEPENDENCIES = \
-@@ -33,6 +33,13 @@ HOST_PANGO_DEPENDENCIES = \
- 	host-fontconfig \
- 	host-freetype
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+PANGO_CONF_OPTS += -Dintrospection=true
-+PANGO_DEPENDENCIES += gobject-introspection
-+else
-+PANGO_CONF_OPTS += -Dintrospection=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
- PANGO_DEPENDENCIES += xlib_libX11
- endif
+ * +LIBFOO_ACTUAL_SOURCE_TARBALL+ only applies to packages whose
+-  +LIBFOO_SITE+ / +LIBTOO_SOURCE+ pair points to an archive that does
++  +LIBFOO_SITE+ / +LIBFOO_SOURCE+ pair points to an archive that does
+   not actually contain source code, but binary code. This a very
+   uncommon case, only known to apply to external toolchains which come
+   already compiled, although theoretically it might apply to other
