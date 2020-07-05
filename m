@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jul 2020 22:48:57 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/redis: bump
+Date: Sun, 5 Jul 2020 22:48:45 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/redis: bump
  version to 5.0.9
-Message-ID: <20200705204553.13ACE864DD@busybox.osuosl.org>
+Message-ID: <20200705204734.DF4DF864DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d605a9ab64f9dea5a68dbef88272c15a06524982
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=780e894314370ff7b41089cb1bd6353947cd0a1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes a critical issue related to streams. From the release notes:
 
