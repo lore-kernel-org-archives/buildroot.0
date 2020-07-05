@@ -1,123 +1,266 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2020 14:26:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with
+Date: Sun, 5 Jul 2020 14:27:39 +0200
+Subject: [Buildroot] [git commit] package/libhttpserver: fix build with
  libmicrohttpd 0.9.71
-In-Reply-To: <20200705111513.1298364-1-bernd.kuhls@t-online.de>
-References: <20200705111513.1298364-1-bernd.kuhls@t-online.de>
-Message-ID: <20200705122617.GG2273@scaer>
+Message-ID: <20200705122755.3E488815E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=470fc1f86f0139e08df0072d4e0522e56b6fa5ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-05 13:15 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...1-Compatibility-with-libmicrohttpd-0.9.71.patch | 240 +++++++++++++++++++++
+ 1 file changed, 240 insertions(+)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> This patch belongs to series
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=187620
-> 
->  ...-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
-> 
-> diff --git a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
-> new file mode 100644
-> index 0000000000..7c1cfe939b
-> --- /dev/null
-> +++ b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
-> @@ -0,0 +1,71 @@
-> +From d17eabb1052e7c8c432331a7a782845e36164f01 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-> +Date: Tue, 30 Jun 2020 09:56:10 +0200
-> +Subject: [PATCH] =?UTF-8?q?Fix=20build=20with=20=C2=B5httpd=200.9.71?=
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +The return type of callbacks was changed from int to an enum.
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +[downloaded from upstream commit
-> + https://github.com/systemd/systemd/commit/d17eabb1052e7c8c432331a7a782845e36164f01]
-> +---
-> + src/journal-remote/journal-gatewayd.c    | 4 ++--
-> + src/journal-remote/journal-remote-main.c | 2 +-
-> + src/journal-remote/microhttpd-util.h     | 6 ++++++
-> + 3 files changed, 9 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/src/journal-remote/journal-gatewayd.c b/src/journal-remote/journal-gatewayd.c
-> +index 5177e0d1577..3ab7c98b0b5 100644
-> +--- a/src/journal-remote/journal-gatewayd.c
-> ++++ b/src/journal-remote/journal-gatewayd.c
-> +@@ -349,7 +349,7 @@ static int request_parse_range(
-> +         return 0;
-> + }
-> + 
-> +-static int request_parse_arguments_iterator(
-> ++static mhd_result request_parse_arguments_iterator(
-> +                 void *cls,
-> +                 enum MHD_ValueKind kind,
-> +                 const char *key,
-> +@@ -796,7 +796,7 @@ static int request_handler_machine(
-> +         return MHD_queue_response(connection, MHD_HTTP_OK, response);
-> + }
-> + 
-> +-static int request_handler(
-> ++static mhd_result request_handler(
-> +                 void *cls,
-> +                 struct MHD_Connection *connection,
-> +                 const char *url,
-> +diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
-> +index 69a111afead..f82d188a8c6 100644
-> +--- a/src/journal-remote/journal-remote-main.c
-> ++++ b/src/journal-remote/journal-remote-main.c
-> +@@ -253,7 +253,7 @@ static int process_http_upload(
-> +         return mhd_respond(connection, MHD_HTTP_ACCEPTED, "OK.");
-> + };
-> + 
-> +-static int request_handler(
-> ++static mhd_result request_handler(
-> +                 void *cls,
-> +                 struct MHD_Connection *connection,
-> +                 const char *url,
-> +diff --git a/src/journal-remote/microhttpd-util.h b/src/journal-remote/microhttpd-util.h
-> +index d90c6bbd4f1..4ca9a5c4f16 100644
-> +--- a/src/journal-remote/microhttpd-util.h
-> ++++ b/src/journal-remote/microhttpd-util.h
-> +@@ -47,6 +47,12 @@
-> + #  define MHD_create_response_from_fd_at_offset64 MHD_create_response_from_fd_at_offset
-> + #endif
-> + 
-> ++#if MHD_VERSION >= 0x00097002
-> ++#  define mhd_result enum MHD_Result
-> ++#else
-> ++#  define mhd_result int
-> ++#endif
-> ++
-> + void microhttpd_logger(void *arg, const char *fmt, va_list ap) _printf_(2, 0);
-> + 
-> + /* respond_oom() must be usable with return, hence this form. */
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch b/package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch
+new file mode 100644
+index 0000000000..f982ee7a82
+--- /dev/null
++++ b/package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch
+@@ -0,0 +1,240 @@
++From cfcd8a8f73aa337e8f45d287a79cd9b8e5c51dcd Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 5 Jul 2020 11:42:23 +0200
++Subject: [PATCH] Compatibility with libmicrohttpd 0.9.71
++
++From the libmicrohttpd 0.9.71 release notes:
++
++Furthermore, the release introduces an 'enum MHD_Result' instead of
++defines for MHD_YES/MHD_NO. This is intended to make it easier to check
++for certain API misuse bugs by providing better types (not everything is
++an 'int').  While this does NOT change the binary API, this change
++_will_ cause compiler warnings for all legacy code -- until 'int' is
++replaced with 'enum MHD_Result'
++
++Patch sent upstream: https://github.com/etr/libhttpserver/pull/199
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/http_request.cpp            |  6 +++---
++ src/httpserver/http_request.hpp |  6 +++---
++ src/httpserver/http_utils.hpp   |  4 ++++
++ src/httpserver/webserver.hpp    | 14 +++++++-------
++ src/webserver.cpp               | 22 +++++++++++++---------
++ 5 files changed, 30 insertions(+), 22 deletions(-)
++
++diff --git a/src/http_request.cpp b/src/http_request.cpp
++index 5703663..be342c7 100644
++--- a/src/http_request.cpp
+++++ b/src/http_request.cpp
++@@ -88,7 +88,7 @@ const std::string http_request::get_connection_value(const std::string& key, enu
++     return header_c;
++ }
++ 
++-int http_request::build_request_header(
+++MHD_Result http_request::build_request_header(
++         void *cls,
++         enum MHD_ValueKind kind,
++         const char *key,
++@@ -189,7 +189,7 @@ const std::string http_request::get_querystring() const
++     return querystring;
++ }
++ 
++-int http_request::build_request_args(
+++MHD_Result http_request::build_request_args(
++         void *cls,
++         enum MHD_ValueKind kind,
++         const char *key,
++@@ -204,7 +204,7 @@ int http_request::build_request_args(
++     return MHD_YES;
++ }
++ 
++-int http_request::build_request_querystring(
+++MHD_Result http_request::build_request_querystring(
++         void *cls,
++         enum MHD_ValueKind kind,
++         const char *key,
++diff --git a/src/httpserver/http_request.hpp b/src/httpserver/http_request.hpp
++index 139272b..62e5275 100644
++--- a/src/httpserver/http_request.hpp
+++++ b/src/httpserver/http_request.hpp
++@@ -247,15 +247,15 @@ class http_request
++ 
++         unescaper_ptr unescaper = 0x0;
++ 
++-        static int build_request_header(void *cls, enum MHD_ValueKind kind,
+++        static MHD_Result build_request_header(void *cls, enum MHD_ValueKind kind,
++                 const char *key, const char *value
++         );
++ 
++-        static int build_request_args(void *cls, enum MHD_ValueKind kind,
+++        static MHD_Result build_request_args(void *cls, enum MHD_ValueKind kind,
++                 const char *key, const char *value
++         );
++ 
++-        static int build_request_querystring(void *cls, enum MHD_ValueKind kind,
+++        static MHD_Result build_request_querystring(void *cls, enum MHD_ValueKind kind,
++                 const char *key, const char *value
++         );
++ 
++diff --git a/src/httpserver/http_utils.hpp b/src/httpserver/http_utils.hpp
++index 9ad89b4..a812197 100644
++--- a/src/httpserver/http_utils.hpp
+++++ b/src/httpserver/http_utils.hpp
++@@ -53,6 +53,10 @@
++ 
++ #define DEFAULT_MASK_VALUE 0xFFFF
++ 
+++#if MHD_VERSION < 0x00097002
+++typedef int MHD_Result;
+++#endif
+++
++ namespace httpserver {
++ 
++ typedef void(*unescaper_ptr)(std::string&);
++diff --git a/src/httpserver/webserver.hpp b/src/httpserver/webserver.hpp
++index 1ff472b..661b6ee 100644
++--- a/src/httpserver/webserver.hpp
+++++ b/src/httpserver/webserver.hpp
++@@ -195,14 +195,14 @@ class webserver
++                 enum MHD_RequestTerminationCode toe
++         );
++ 
++-        static int answer_to_connection
+++        static MHD_Result answer_to_connection
++         (
++             void* cls, MHD_Connection* connection,
++             const char* url, const char* method,
++             const char* version, const char* upload_data,
++             size_t* upload_data_size, void** con_cls
++         );
++-        static int post_iterator
+++        static MHD_Result post_iterator
++         (
++             void *cls,
++             enum MHD_ValueKind kind,
++@@ -219,25 +219,25 @@ class webserver
++             void **con_cls, int upgrade_socket
++         );
++ 
++-        int requests_answer_first_step(MHD_Connection* connection,
+++        MHD_Result requests_answer_first_step(MHD_Connection* connection,
++                 struct details::modded_request* mr
++         );
++ 
++-        int requests_answer_second_step(MHD_Connection* connection,
+++        MHD_Result requests_answer_second_step(MHD_Connection* connection,
++             const char* method, const char* version, const char* upload_data,
++             size_t* upload_data_size, struct details::modded_request* mr
++         );
++ 
++-        int finalize_answer(MHD_Connection* connection,
+++        MHD_Result finalize_answer(MHD_Connection* connection,
++                 struct details::modded_request* mr, const char* method
++         );
++ 
++-        int complete_request(MHD_Connection* connection,
+++        MHD_Result complete_request(MHD_Connection* connection,
++                 struct details::modded_request* mr,
++                 const char* version, const char* method
++         );
++ 
++-        friend int policy_callback (void *cls,
+++        friend MHD_Result policy_callback (void *cls,
++                 const struct sockaddr* addr, socklen_t addrlen
++         );
++         friend void error_log(void* cls, const char* fmt, va_list ap);
++diff --git a/src/webserver.cpp b/src/webserver.cpp
++index a3104e9..3340eb0 100644
++--- a/src/webserver.cpp
+++++ b/src/webserver.cpp
++@@ -75,6 +75,10 @@
++ #define SOCK_CLOEXEC 02000000
++ #endif
++ 
+++#if MHD_VERSION < 0x00097002
+++typedef int MHD_Result;
+++#endif
+++
++ using namespace std;
++ 
++ namespace httpserver
++@@ -82,7 +86,7 @@ namespace httpserver
++ 
++ using namespace http;
++ 
++-int policy_callback (void *, const struct sockaddr*, socklen_t);
+++MHD_Result policy_callback (void *, const struct sockaddr*, socklen_t);
++ void error_log(void*, const char*, va_list);
++ void* uri_log(void*, const char*);
++ void access_log(webserver*, string);
++@@ -421,7 +425,7 @@ void webserver::disallow_ip(const string& ip)
++     allowances.erase(ip);
++ }
++ 
++-int policy_callback (void *cls, const struct sockaddr* addr, socklen_t addrlen)
+++MHD_Result policy_callback (void *cls, const struct sockaddr* addr, socklen_t addrlen)
++ {
++     if(!(static_cast<webserver*>(cls))->ban_system_enabled) return MHD_YES;
++ 
++@@ -468,7 +472,7 @@ size_t unescaper_func(void * cls, struct MHD_Connection *c, char *s)
++     return std::string(s).size();
++ }
++ 
++-int webserver::post_iterator (void *cls, enum MHD_ValueKind kind,
+++MHD_Result webserver::post_iterator (void *cls, enum MHD_ValueKind kind,
++     const char *key,
++     const char *filename,
++     const char *content_type,
++@@ -522,7 +526,7 @@ const std::shared_ptr<http_response> webserver::internal_error_page(details::mod
++     }
++ }
++ 
++-int webserver::requests_answer_first_step(
+++MHD_Result webserver::requests_answer_first_step(
++         MHD_Connection* connection,
++         struct details::modded_request* mr
++ )
++@@ -574,7 +578,7 @@ int webserver::requests_answer_first_step(
++     return MHD_YES;
++ }
++ 
++-int webserver::requests_answer_second_step(
+++MHD_Result webserver::requests_answer_second_step(
++     MHD_Connection* connection, const char* method,
++     const char* version, const char* upload_data,
++     size_t* upload_data_size, struct details::modded_request* mr
++@@ -597,7 +601,7 @@ int webserver::requests_answer_second_step(
++     return MHD_YES;
++ }
++ 
++-int webserver::finalize_answer(
+++MHD_Result webserver::finalize_answer(
++         MHD_Connection* connection,
++         struct details::modded_request* mr,
++         const char* method
++@@ -731,10 +735,10 @@ int webserver::finalize_answer(
++     mr->dhrs->decorate_response(raw_response);
++     to_ret = mr->dhrs->enqueue_response(connection, raw_response);
++     MHD_destroy_response(raw_response);
++-    return to_ret;
+++    return (MHD_Result) to_ret;
++ }
++ 
++-int webserver::complete_request(
+++MHD_Result webserver::complete_request(
++         MHD_Connection* connection,
++         struct details::modded_request* mr,
++         const char* version,
++@@ -750,7 +754,7 @@ int webserver::complete_request(
++     return finalize_answer(connection, mr, method);
++ }
++ 
++-int webserver::answer_to_connection(void* cls, MHD_Connection* connection,
+++MHD_Result webserver::answer_to_connection(void* cls, MHD_Connection* connection,
++     const char* url, const char* method,
++     const char* version, const char* upload_data,
++     size_t* upload_data_size, void** con_cls
++-- 
++2.26.2
++
