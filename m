@@ -1,65 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2020 14:31:21 +0200
-Subject: [Buildroot] [PATCH 1/5] package/libhttpserver: bump version to
- 0.18.1
-In-Reply-To: <20200705101217.630684-1-bernd.kuhls@t-online.de>
-References: <20200705101217.630684-1-bernd.kuhls@t-online.de>
-Message-ID: <20200705123121.GH2273@scaer>
+From: Srijan Nandi - Gmail <srijan.nandi@gmail.com>
+Date: Sun, 5 Jul 2020 18:18:49 +0530
+Subject: [Buildroot] New user creation
+In-Reply-To: <5E7DB804-CAA1-4B54-8414-F13B3C7C8AF2@gmail.com>
+References: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
+ <5E7DB804-CAA1-4B54-8414-F13B3C7C8AF2@gmail.com>
+Message-ID: <00E7C720-2916-4AB0-8DC5-EB9DF91799B9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+I even did a make clean and make, but still facing the same issue. Can't figure out what I am missing here.
 
-On 2020-07-05 12:12 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Series applied to master, thanks.
+Thanks and Regards,
+-=Srijan Nandi
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libhttpserver/libhttpserver.hash | 2 +-
->  package/libhttpserver/libhttpserver.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> On 3 Jul 2020, at 1:41 pm, Srijan Nandi - Gmail <srijan.nandi@gmail.com> wrote:
 > 
-> diff --git a/package/libhttpserver/libhttpserver.hash b/package/libhttpserver/libhttpserver.hash
-> index 0791d800b8..038e9f6b77 100644
-> --- a/package/libhttpserver/libhttpserver.hash
-> +++ b/package/libhttpserver/libhttpserver.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256  b4a745a9f32a1ac02b545c062fc85342a655c3770cd8d4d7218f34509ea27d98  libhttpserver-0.18.0.tar.gz
-> +sha256  c830cb40b448a44cfc9000713aefff15d4ab1f6ebd6b47280a3cb64cb020f326  libhttpserver-0.18.1.tar.gz
->  sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LESSER
-> diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
-> index 170d46b06a..37943bc497 100644
-> --- a/package/libhttpserver/libhttpserver.mk
-> +++ b/package/libhttpserver/libhttpserver.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBHTTPSERVER_VERSION = 0.18.0
-> +LIBHTTPSERVER_VERSION = 0.18.1
->  LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
->  LIBHTTPSERVER_LICENSE = LGPL-2.1+
->  LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
-> -- 
-> 2.26.2
+> I created a new user and renamed the table. Now my .config reads as:
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> BR2_ROOTFS_USERS_TABLES="x86_64/users_table.txt"
+> 
+> The user table is:
+> 
+> /opt/buildroot-2020.05$ cat x86_64/users_table.txt 
+> gladmin -1 wheel -1 =a**** /home/gladmin /bin/sh - Builtin User
+> 
+> Then I also checked the following file and it looks the users is getting listed here:
+> 
+> /opt/buildroot-2020.05$ cat /opt/buildroot-2020.05/output/build/buildroot-fs/full_users_table.txt
+>   	named -1 named -1 * /etc/bind - - BIND daemon
+> 	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
+> 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+> 	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
+> 	- - sudo -1 - - - -
+> 	- - input -1 * - - - Input device group
+> 	- - systemd-journal -1 * - - - Journal
+> 	- - render -1 * - - - DRI rendering nodes
+> 	- - kvm -1 * - - - kvm nodes
+> 	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
+> 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+> 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+> 	systemd-journal-upload -1 systemd-journal-upload -1 * - - - Journal Upload
+> 	
+> 	systemd-network -1 systemd-network -1 * - - - Network Manager
+> 	systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
+> 	systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
+> 
+> gladmin -1 wheel -1 =a**** /home/gladmin /bin/sh - Builtin User
+> 
+> But then when I look under output/target/etc/passwd or output/target/etc/shadow, I do not see the new user getting created.
+> 
+> Any assistance will be appreciated.
+> 
+> 
+> Thanks and Regards,
+> -=Srijan Nandi
+> 
+>> On 3 Jul 2020, at 9:59 am, Srijan Nandi - Gmail <srijan.nandi@gmail.com> wrote:
+>> 
+>> I am facing issues creating a new users. I already have the following set:
+>> 
+>> BR2_ROOTFS_USERS_TABLES="x86_64/users"
+>> 
+>> /opt/buildroot-2020.05$ cat x86_64/users 
+>> # <username> <uid> <group> <gid> <password> <home> <shell> <groups> <comment>
+>> test       8000  wheel    -1    =           -                /bin/bash    -    Test user
+>> 
+>> But when I check under passwd, I am not able to see the new user
+>> 
+>> /opt/buildroot-2020.05$ cat output/target/etc/passwd 
+>> root:x:0:0:root:/root:/bin/bash
+>> daemon:x:1:1:daemon:/usr/sbin:/bin/false
+>> bin:x:2:2:bin:/bin:/bin/false
+>> sys:x:3:3:sys:/dev:/bin/false
+>> sync:x:4:100:sync:/bin:/bin/sync
+>> mail:x:8:8:mail:/var/spool/mail:/bin/false
+>> www-data:x:33:33:www-data:/var/www:/bin/false
+>> operator:x:37:37:Operator:/var:/bin/false
+>> nobody:x:65534:65534:nobody:/home:/bin/false
+>> 
+>> Is there something I am missing
+>> 
+>> 
+>> -=Srijan Nandi
+> 
