@@ -1,43 +1,132 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2020 14:27:38 +0200
-Subject: [Buildroot] [git commit] package/libhttpserver: bump version to
- 0.18.1
-Message-ID: <20200705122755.2E6A5815E8@busybox.osuosl.org>
+Date: Sun, 5 Jul 2020 14:29:43 +0200
+Subject: [Buildroot] [git commit] package/upmpdcli: fix build with
+ libmicrohttpd 0.9.71
+Message-ID: <20200705122755.76FBB815E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9019e1e39670c97c8963d5e9ff2aeffa114365d
+commit: https://git.buildroot.net/buildroot/commit/?id=17b80efd6bfd3abe5637d1b7962b89a894efa9ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libhttpserver/libhttpserver.hash | 2 +-
- package/libhttpserver/libhttpserver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...001-Adapt-streamproxy-to-newer-microhttpd.patch | 106 +++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
-diff --git a/package/libhttpserver/libhttpserver.hash b/package/libhttpserver/libhttpserver.hash
-index 0791d800b8..038e9f6b77 100644
---- a/package/libhttpserver/libhttpserver.hash
-+++ b/package/libhttpserver/libhttpserver.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b4a745a9f32a1ac02b545c062fc85342a655c3770cd8d4d7218f34509ea27d98  libhttpserver-0.18.0.tar.gz
-+sha256  c830cb40b448a44cfc9000713aefff15d4ab1f6ebd6b47280a3cb64cb020f326  libhttpserver-0.18.1.tar.gz
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LESSER
-diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
-index 170d46b06a..37943bc497 100644
---- a/package/libhttpserver/libhttpserver.mk
-+++ b/package/libhttpserver/libhttpserver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHTTPSERVER_VERSION = 0.18.0
-+LIBHTTPSERVER_VERSION = 0.18.1
- LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
- LIBHTTPSERVER_LICENSE = LGPL-2.1+
- LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
+diff --git a/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
+new file mode 100644
+index 0000000000..55c691b86a
+--- /dev/null
++++ b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
+@@ -0,0 +1,106 @@
++From 4fd8a07b560dcd4ad5706684d512d33707de3da0 Mon Sep 17 00:00:00 2001
++From: Jean-Francois Dockes <jf@dockes.org>
++Date: Fri, 3 Jul 2020 19:26:37 +0200
++Subject: [PATCH] Adapt streamproxy to newer microhttpd where results are now
++ an enum
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream commit
++ https://framagit.org/medoc92/upmpdcli/-/commit/4fd8a07b560dcd4ad5706684d512d33707de3da0]
++---
++ src/mediaserver/cdplugins/streamproxy.cpp | 23 ++++++++++++++---------
++ 1 file changed, 14 insertions(+), 9 deletions(-)
++
++diff --git a/src/mediaserver/cdplugins/streamproxy.cpp b/src/mediaserver/cdplugins/streamproxy.cpp
++index abc57915..8d283834 100644
++--- a/src/mediaserver/cdplugins/streamproxy.cpp
+++++ b/src/mediaserver/cdplugins/streamproxy.cpp
++@@ -28,6 +28,11 @@
++ #include <fcntl.h>
++ #include <microhttpd.h>
++ 
+++
+++#if MHD_VERSION < 0x00097002
+++typedef int MHD_Result;
+++#endif
+++
++ #include <mutex>
++ #include <condition_variable>
++ #include <unordered_map>
++@@ -155,7 +160,7 @@ public:
++     ~Internal();
++     bool startMHD();
++ 
++-    int answerConn(
+++    MHD_Result answerConn(
++         struct MHD_Connection *connection, const char *url, 
++         const char *method, const char *version, 
++         const char *upload_data, size_t *upload_data_size,
++@@ -202,7 +207,7 @@ StreamProxy::Internal::Internal(int _listenport, UrlTransFunc _urltrans)
++ }
++ 
++ 
++-static int answer_to_connection(
+++static MHD_Result answer_to_connection(
++     void *cls, struct MHD_Connection *conn, 
++     const char *url, const char *method, const char *version, 
++     const char *upload_data, size_t *upload_data_size,
++@@ -214,7 +219,7 @@ static int answer_to_connection(
++         return internal->answerConn(
++             conn, url, method, version, upload_data, upload_data_size, con_cls);
++     } else {
++-        return -1;
+++        return MHD_NO;
++     }
++ }
++ 
++@@ -238,8 +243,8 @@ static int print_out_key (void *cls, enum MHD_ValueKind kind,
++ }
++ #endif /* PRINT_KEYS */
++ 
++-static int mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
++-                        const char *key, const char *value)
+++static MHD_Result mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
+++                               const char *key, const char *value)
++ {
++     unordered_map<string,string> *mp = (unordered_map<string,string> *)cls;
++     if (mp) {
++@@ -307,7 +312,7 @@ static bool processRange(struct MHD_Connection *mhdconn, uint64_t& offset)
++     return true;
++ }
++ 
++-int StreamProxy::Internal::answerConn(
+++MHD_Result StreamProxy::Internal::answerConn(
++     struct MHD_Connection *mhdconn, const char *_url,
++     const char *method, const char *version, 
++     const char *upload_data, size_t *upload_data_size,
++@@ -352,7 +357,7 @@ int StreamProxy::Internal::answerConn(
++                 return MHD_NO;
++             }
++             MHD_add_response_header (response, "Location", url.c_str());
++-            int ret = MHD_queue_response(mhdconn, 302, response);
+++            MHD_Result ret = MHD_queue_response(mhdconn, 302, response);
++             MHD_destroy_response(response);
++             return ret;
++         }
++@@ -393,7 +398,7 @@ int StreamProxy::Internal::answerConn(
++         int code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
++         struct MHD_Response *response =
++             MHD_create_response_from_buffer(0, 0, MHD_RESPMEM_PERSISTENT);
++-        int ret = MHD_queue_response(mhdconn, code, response);
+++        MHD_Result ret = MHD_queue_response(mhdconn, code, response);
++         MHD_destroy_response(response);
++         LOGINF("StreamProxy::answerConn (1): return with http code: " <<
++                code << endl);
++@@ -434,7 +439,7 @@ int StreamProxy::Internal::answerConn(
++     if (reader->fetcher->fetchDone(&fetchcode, &httpcode)) {
++         code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
++     }
++-    int ret = MHD_queue_response(mhdconn, code, response);
+++    MHD_Result ret = MHD_queue_response(mhdconn, code, response);
++     MHD_destroy_response(response);
++     return ret;
++ }
++-- 
++GitLab
++
