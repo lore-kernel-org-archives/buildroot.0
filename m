@@ -1,105 +1,495 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2020 14:30:38 +0200
-Subject: [Buildroot] [git commit] package/libmicrohttpd: security bump
- version to 0.9.71
-Message-ID: <20200705122755.82FA7815E8@busybox.osuosl.org>
+Date: Sun, 5 Jul 2020 14:25:25 +0200
+Subject: [Buildroot] [git commit] package/kodi: fix build with libmicrohttpd
+ 0.9.71
+Message-ID: <20200705122755.25477844F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a9a554cfce7a713fc58b52075d1cf3bb7ef4279
+commit: https://git.buildroot.net/buildroot/commit/?id=468118ff816d0aa3253434c0564ec8cc85d17613
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Removed patch which was applied upstream, reformatted hashes.
-
-Release notes:
-https://lists.gnu.org/archive/html/libmicrohttpd/2020-06/msg00013.html
-
-"This release fixes a potential buffer overflow and is thus considered a
-security release. Please upgrade as soon as possible."
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmicrohttpd/0001-fix-6135.patch | 46 -------------------------------
- package/libmicrohttpd/libmicrohttpd.hash  |  4 +--
- package/libmicrohttpd/libmicrohttpd.mk    |  2 +-
- 3 files changed, 3 insertions(+), 49 deletions(-)
+ ...r-Compatibility-with-libmicrohttpd-0.9.71.patch | 469 +++++++++++++++++++++
+ 1 file changed, 469 insertions(+)
 
-diff --git a/package/libmicrohttpd/0001-fix-6135.patch b/package/libmicrohttpd/0001-fix-6135.patch
-deleted file mode 100644
-index af410284aa..0000000000
---- a/package/libmicrohttpd/0001-fix-6135.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 6702e6202368720d7a381669c03eedc318f225ca Mon Sep 17 00:00:00 2001
--From: Christian Grothoff <christian@grothoff.org>
--Date: Thu, 26 Mar 2020 19:08:30 +0100
--Subject: [PATCH] fix #6135
--
--Downloaded from upstream commit to fix non-threaded build:
--https://git.gnunet.org/libmicrohttpd.git/commit/?id=6702e6202368720d7a381669c03eedc318f225ca
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/microhttpd/internal.h | 12 ++++++------
-- 1 file changed, 6 insertions(+), 6 deletions(-)
--
--diff --git a/src/microhttpd/internal.h b/src/microhttpd/internal.h
--index 211eed9f..ad16535e 100644
----- a/src/microhttpd/internal.h
--+++ b/src/microhttpd/internal.h
--@@ -1462,12 +1462,6 @@ struct MHD_Daemon
--    */
--   size_t thread_stack_size;
-- 
---  /**
---   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
---   * which sanity checks are off.
---   */
---  enum MHD_DisableSanityCheck insanity_level;
---
--   /**
--    * Number of worker daemons
--    */
--@@ -1490,6 +1484,12 @@ struct MHD_Daemon
--   MHD_mutex_ cleanup_connection_mutex;
-- #endif
-- 
--+  /**
--+   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
--+   * which sanity checks are off.
--+   */
--+  enum MHD_DisableSanityCheck insanity_level;
--+
--   /**
--    * Listen socket.
--    */
---- 
--2.25.0
--
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 0fc451fcde..d853f67a76 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 90d0a3d396f96f9bc41eb0f7e8187796049285fabef82604acd4879590977307  libmicrohttpd-0.9.70.tar.gz
--sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-+sha256  e8f445e85faf727b89e9f9590daea4473ae00ead38b237cf1eda55172b89b182  libmicrohttpd-0.9.71.tar.gz
-+sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index ea2de55804..4cb9dbcbfd 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMICROHTTPD_VERSION = 0.9.70
-+LIBMICROHTTPD_VERSION = 0.9.71
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+diff --git a/package/kodi/0003-webserver-Compatibility-with-libmicrohttpd-0.9.71.patch b/package/kodi/0003-webserver-Compatibility-with-libmicrohttpd-0.9.71.patch
+new file mode 100644
+index 0000000000..04f57b41fc
+--- /dev/null
++++ b/package/kodi/0003-webserver-Compatibility-with-libmicrohttpd-0.9.71.patch
+@@ -0,0 +1,469 @@
++From 206f55e78f3a5ad39fad17526d01558677f9477a Mon Sep 17 00:00:00 2001
++From: Craig Andrews <candrews@integralblue.com>
++Date: Sat, 4 Jul 2020 11:01:37 +0200
++Subject: [PATCH] [webserver] Compatibility with libmicrohttpd 0.9.71
++
++From the libmicrohttpd 0.9.71 release notes:
++
++The release introduces an 'enum MHD_Result' instead of
++for certain API misuse bugs by providing better types (not everything is
++an 'int').  While this does NOT change the binary API, this change
++_will_ cause compiler warnings for all legacy code -- until 'int' is
++replaced with 'enum MHD_Result'.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream PR 18134]
++---
++ xbmc/network/WebServer.cpp                    | 42 +++++++++----------
++ xbmc/network/WebServer.h                      | 30 ++++++-------
++ .../httprequesthandler/HTTPFileHandler.cpp    |  2 +-
++ .../httprequesthandler/HTTPFileHandler.h      |  2 +-
++ .../HTTPImageTransformationHandler.cpp        |  2 +-
++ .../HTTPImageTransformationHandler.h          |  2 +-
++ .../httprequesthandler/HTTPJsonRpcHandler.cpp |  2 +-
++ .../httprequesthandler/HTTPJsonRpcHandler.h   |  2 +-
++ .../httprequesthandler/HTTPPythonHandler.cpp  |  2 +-
++ .../httprequesthandler/HTTPPythonHandler.h    |  2 +-
++ .../HTTPRequestHandlerUtils.cpp               |  4 +-
++ .../HTTPRequestHandlerUtils.h                 |  4 +-
++ .../HTTPWebinterfaceAddonsHandler.cpp         |  2 +-
++ .../HTTPWebinterfaceAddonsHandler.h           |  2 +-
++ .../httprequesthandler/IHTTPRequestHandler.h  | 10 ++++-
++ 15 files changed, 59 insertions(+), 51 deletions(-)
++
++diff --git a/xbmc/network/WebServer.cpp b/xbmc/network/WebServer.cpp
++index 783404227785..be507131092b 100644
++--- a/xbmc/network/WebServer.cpp
+++++ b/xbmc/network/WebServer.cpp
++@@ -86,7 +86,7 @@ static MHD_Response* create_response(size_t size, const void* data, int free, in
++   return MHD_create_response_from_buffer(size, const_cast<void*>(data), mode);
++ }
++ 
++-int CWebServer::AskForAuthentication(const HTTPRequest& request) const
+++MHD_RESULT CWebServer::AskForAuthentication(const HTTPRequest& request) const
++ {
++   struct MHD_Response *response = create_response(0, nullptr, MHD_NO, MHD_NO);
++   if (!response)
++@@ -95,7 +95,7 @@ int CWebServer::AskForAuthentication(const HTTPRequest& request) const
++     return MHD_NO;
++   }
++ 
++-  int ret = AddHeader(response, MHD_HTTP_HEADER_CONNECTION, "close");
+++  MHD_RESULT ret = AddHeader(response, MHD_HTTP_HEADER_CONNECTION, "close");
++   if (!ret)
++   {
++     CLog::Log(LOGERROR, "CWebServer[%hu]: unable to prepare HTTP Unauthorized response", m_port);
++@@ -105,7 +105,7 @@ int CWebServer::AskForAuthentication(const HTTPRequest& request) const
++ 
++   LogResponse(request, MHD_HTTP_UNAUTHORIZED);
++ 
++-  ret = MHD_queue_basic_auth_fail_response(request.connection, "XBMC", response);
+++  ret = (MHD_RESULT) MHD_queue_basic_auth_fail_response(request.connection, "XBMC", response);
++   MHD_destroy_response(response);
++ 
++   return ret;
++@@ -135,7 +135,7 @@ bool CWebServer::IsAuthenticated(const HTTPRequest& request) const
++   return authenticated;
++ }
++ 
++-int CWebServer::AnswerToConnection(void *cls, struct MHD_Connection *connection,
+++MHD_RESULT CWebServer::AnswerToConnection(void *cls, struct MHD_Connection *connection,
++                       const char *url, const char *method,
++                       const char *version, const char *upload_data,
++                       size_t *upload_data_size, void **con_cls)
++@@ -163,7 +163,7 @@ int CWebServer::AnswerToConnection(void *cls, struct MHD_Connection *connection,
++   return webServer->HandlePartialRequest(connection, connectionHandler, request, upload_data, upload_data_size, con_cls);
++ }
++ 
++-int CWebServer::HandlePartialRequest(struct MHD_Connection *connection, ConnectionHandler* connectionHandler, const HTTPRequest& request, const char *upload_data, size_t *upload_data_size, void **con_cls)
+++MHD_RESULT CWebServer::HandlePartialRequest(struct MHD_Connection *connection, ConnectionHandler* connectionHandler, const HTTPRequest& request, const char *upload_data, size_t *upload_data_size, void **con_cls)
++ {
++   std::unique_ptr<ConnectionHandler> conHandler(connectionHandler);
++ 
++@@ -276,7 +276,7 @@ int CWebServer::HandlePartialRequest(struct MHD_Connection *connection, Connecti
++   return SendErrorResponse(request, MHD_HTTP_NOT_FOUND, request.method);
++ }
++ 
++-int CWebServer::HandlePostField(void *cls, enum MHD_ValueKind kind, const char *key,
+++MHD_RESULT CWebServer::HandlePostField(void *cls, enum MHD_ValueKind kind, const char *key,
++                                 const char *filename, const char *content_type,
++                                 const char *transfer_encoding, const char *data, uint64_t off,
++                                 size_t size)
++@@ -294,13 +294,13 @@ int CWebServer::HandlePostField(void *cls, enum MHD_ValueKind kind, const char *
++   return MHD_YES;
++ }
++ 
++-int CWebServer::HandleRequest(const std::shared_ptr<IHTTPRequestHandler>& handler)
+++MHD_RESULT CWebServer::HandleRequest(const std::shared_ptr<IHTTPRequestHandler>& handler)
++ {
++   if (handler == nullptr)
++     return MHD_NO;
++ 
++   HTTPRequest request = handler->GetRequest();
++-  int ret = handler->HandleRequest();
+++  MHD_RESULT ret = handler->HandleRequest();
++   if (ret == MHD_NO)
++   {
++     CLog::Log(LOGERROR, "CWebServer[%hu]: failed to handle HTTP request for %s", m_port, request.pathUrl.c_str());
++@@ -348,7 +348,7 @@ int CWebServer::HandleRequest(const std::shared_ptr<IHTTPRequestHandler>& handle
++   return FinalizeRequest(handler, responseDetails.status, response);
++ }
++ 
++-int CWebServer::FinalizeRequest(const std::shared_ptr<IHTTPRequestHandler>& handler, int responseStatus, struct MHD_Response *response)
+++MHD_RESULT CWebServer::FinalizeRequest(const std::shared_ptr<IHTTPRequestHandler>& handler, int responseStatus, struct MHD_Response *response)
++ {
++   if (handler == nullptr || response == nullptr)
++     return MHD_NO;
++@@ -562,7 +562,7 @@ void CWebServer::FinalizePostDataProcessing(ConnectionHandler *connectionHandler
++   MHD_destroy_post_processor(connectionHandler->postprocessor);
++ }
++ 
++-int CWebServer::CreateMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const
+++MHD_RESULT CWebServer::CreateMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const
++ {
++   if (handler == nullptr)
++     return MHD_NO;
++@@ -620,7 +620,7 @@ int CWebServer::CreateMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestH
++   return CreateRangedMemoryDownloadResponse(handler, response);
++ }
++ 
++-int CWebServer::CreateRangedMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const
+++MHD_RESULT CWebServer::CreateRangedMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const
++ {
++   if (handler == nullptr)
++     return MHD_NO;
++@@ -700,7 +700,7 @@ int CWebServer::CreateRangedMemoryDownloadResponse(const std::shared_ptr<IHTTPRe
++   return CreateMemoryDownloadResponse(request.connection, result.c_str(), result.size(), false, true, response);
++ }
++ 
++-int CWebServer::CreateRedirect(struct MHD_Connection *connection, const std::string &strURL, struct MHD_Response *&response) const
+++MHD_RESULT CWebServer::CreateRedirect(struct MHD_Connection *connection, const std::string &strURL, struct MHD_Response *&response) const
++ {
++   response = create_response(0, nullptr, MHD_NO, MHD_NO);
++   if (response == nullptr)
++@@ -713,7 +713,7 @@ int CWebServer::CreateRedirect(struct MHD_Connection *connection, const std::str
++   return MHD_YES;
++ }
++ 
++-int CWebServer::CreateFileDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const
+++MHD_RESULT CWebServer::CreateFileDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const
++ {
++   if (handler == nullptr)
++     return MHD_NO;
++@@ -850,7 +850,7 @@ int CWebServer::CreateFileDownloadResponse(const std::shared_ptr<IHTTPRequestHan
++   return MHD_YES;
++ }
++ 
++-int CWebServer::CreateErrorResponse(struct MHD_Connection *connection, int responseType, HTTPMethod method, struct MHD_Response *&response) const
+++MHD_RESULT CWebServer::CreateErrorResponse(struct MHD_Connection *connection, int responseType, HTTPMethod method, struct MHD_Response *&response) const
++ {
++   size_t payloadSize = 0;
++   const void *payload = nullptr;
++@@ -881,7 +881,7 @@ int CWebServer::CreateErrorResponse(struct MHD_Connection *connection, int respo
++   return MHD_YES;
++ }
++ 
++-int CWebServer::CreateMemoryDownloadResponse(struct MHD_Connection *connection, const void *data, size_t size, bool free, bool copy, struct MHD_Response *&response) const
+++MHD_RESULT CWebServer::CreateMemoryDownloadResponse(struct MHD_Connection *connection, const void *data, size_t size, bool free, bool copy, struct MHD_Response *&response) const
++ {
++   response = create_response(size, const_cast<void*>(data), free ? MHD_YES : MHD_NO, copy ? MHD_YES : MHD_NO);
++   if (response == nullptr)
++@@ -893,20 +893,20 @@ int CWebServer::CreateMemoryDownloadResponse(struct MHD_Connection *connection,
++   return MHD_YES;
++ }
++ 
++-int CWebServer::SendResponse(const HTTPRequest& request, int responseStatus, MHD_Response *response) const
+++MHD_RESULT CWebServer::SendResponse(const HTTPRequest& request, int responseStatus, MHD_Response *response) const
++ {
++   LogResponse(request, responseStatus);
++ 
++-  int ret = MHD_queue_response(request.connection, responseStatus, response);
+++  MHD_RESULT ret = MHD_queue_response(request.connection, responseStatus, response);
++   MHD_destroy_response(response);
++ 
++   return ret;
++ }
++ 
++-int CWebServer::SendErrorResponse(const HTTPRequest& request, int errorType, HTTPMethod method) const
+++MHD_RESULT CWebServer::SendErrorResponse(const HTTPRequest& request, int errorType, HTTPMethod method) const
++ {
++   struct MHD_Response *response = nullptr;
++-  int ret = CreateErrorResponse(request.connection, errorType, method, response);
+++  MHD_RESULT ret = CreateErrorResponse(request.connection, errorType, method, response);
++   if (ret == MHD_NO)
++     return MHD_NO;
++ 
++@@ -1296,10 +1296,10 @@ std::string CWebServer::CreateMimeTypeFromExtension(const char *ext)
++   return CMime::GetMimeType(ext);
++ }
++ 
++-int CWebServer::AddHeader(struct MHD_Response *response, const std::string &name, const std::string &value) const
+++MHD_RESULT CWebServer::AddHeader(struct MHD_Response *response, const std::string &name, const std::string &value) const
++ {
++   if (response == nullptr || name.empty())
++-    return 0;
+++    return MHD_NO;
++ 
++   CLog::Log(LOGDEBUG, LOGWEBSERVER, "CWebServer[%hu] [OUT] %s: %s", m_port, name.c_str(), value.c_str());
++ 
++diff --git a/xbmc/network/WebServer.h b/xbmc/network/WebServer.h
++index c7a909304a21..1274a2e0ed40 100644
++--- a/xbmc/network/WebServer.h
+++++ b/xbmc/network/WebServer.h
++@@ -56,17 +56,17 @@ class CWebServer
++ 
++   virtual void LogRequest(const char* uri) const;
++ 
++-  virtual int HandlePartialRequest(struct MHD_Connection *connection, ConnectionHandler* connectionHandler, const HTTPRequest& request,
+++  virtual MHD_RESULT HandlePartialRequest(struct MHD_Connection *connection, ConnectionHandler* connectionHandler, const HTTPRequest& request,
++                                    const char *upload_data, size_t *upload_data_size, void **con_cls);
++-  virtual int HandleRequest(const std::shared_ptr<IHTTPRequestHandler>& handler);
++-  virtual int FinalizeRequest(const std::shared_ptr<IHTTPRequestHandler>& handler, int responseStatus, struct MHD_Response *response);
+++  virtual MHD_RESULT HandleRequest(const std::shared_ptr<IHTTPRequestHandler>& handler);
+++  virtual MHD_RESULT FinalizeRequest(const std::shared_ptr<IHTTPRequestHandler>& handler, int responseStatus, struct MHD_Response *response);
++ 
++ private:
++   struct MHD_Daemon* StartMHD(unsigned int flags, int port);
++ 
++   std::shared_ptr<IHTTPRequestHandler> FindRequestHandler(const HTTPRequest& request) const;
++ 
++-  int AskForAuthentication(const HTTPRequest& request) const;
+++  MHD_RESULT AskForAuthentication(const HTTPRequest& request) const;
++   bool IsAuthenticated(const HTTPRequest& request) const;
++ 
++   bool IsRequestCacheable(const HTTPRequest& request) const;
++@@ -76,18 +76,18 @@ class CWebServer
++   bool ProcessPostData(const HTTPRequest& request, ConnectionHandler *connectionHandler, const char *upload_data, size_t *upload_data_size, void **con_cls) const;
++   void FinalizePostDataProcessing(ConnectionHandler *connectionHandler) const;
++ 
++-  int CreateMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const;
++-  int CreateRangedMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const;
+++  MHD_RESULT CreateMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const;
+++  MHD_RESULT CreateRangedMemoryDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const;
++ 
++-  int CreateRedirect(struct MHD_Connection *connection, const std::string &strURL, struct MHD_Response *&response) const;
++-  int CreateFileDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const;
++-  int CreateErrorResponse(struct MHD_Connection *connection, int responseType, HTTPMethod method, struct MHD_Response *&response) const;
++-  int CreateMemoryDownloadResponse(struct MHD_Connection *connection, const void *data, size_t size, bool free, bool copy, struct MHD_Response *&response) const;
+++  MHD_RESULT CreateRedirect(struct MHD_Connection *connection, const std::string &strURL, struct MHD_Response *&response) const;
+++  MHD_RESULT CreateFileDownloadResponse(const std::shared_ptr<IHTTPRequestHandler>& handler, struct MHD_Response *&response) const;
+++  MHD_RESULT CreateErrorResponse(struct MHD_Connection *connection, int responseType, HTTPMethod method, struct MHD_Response *&response) const;
+++  MHD_RESULT CreateMemoryDownloadResponse(struct MHD_Connection *connection, const void *data, size_t size, bool free, bool copy, struct MHD_Response *&response) const;
++ 
++-  int SendResponse(const HTTPRequest& request, int responseStatus, MHD_Response *response) const;
++-  int SendErrorResponse(const HTTPRequest& request, int errorType, HTTPMethod method) const;
+++  MHD_RESULT SendResponse(const HTTPRequest& request, int responseStatus, MHD_Response *response) const;
+++  MHD_RESULT SendErrorResponse(const HTTPRequest& request, int errorType, HTTPMethod method) const;
++ 
++-  int AddHeader(struct MHD_Response *response, const std::string &name, const std::string &value) const;
+++  MHD_RESULT AddHeader(struct MHD_Response *response, const std::string &name, const std::string &value) const;
++ 
++   void LogRequest(const HTTPRequest& request) const;
++   void LogResponse(const HTTPRequest& request, int responseStatus) const;
++@@ -100,11 +100,11 @@ class CWebServer
++   static ssize_t ContentReaderCallback (void *cls, uint64_t pos, char *buf, size_t max);
++   static void ContentReaderFreeCallback(void *cls);
++ 
++-  static int AnswerToConnection (void *cls, struct MHD_Connection *connection,
+++  static MHD_RESULT AnswerToConnection (void *cls, struct MHD_Connection *connection,
++                         const char *url, const char *method,
++                         const char *version, const char *upload_data,
++                         size_t *upload_data_size, void **con_cls);
++-  static int HandlePostField(void *cls, enum MHD_ValueKind kind, const char *key,
+++  static MHD_RESULT HandlePostField(void *cls, enum MHD_ValueKind kind, const char *key,
++                              const char *filename, const char *content_type,
++                              const char *transfer_encoding, const char *data, uint64_t off,
++                              size_t size);
++diff --git a/xbmc/network/httprequesthandler/HTTPFileHandler.cpp b/xbmc/network/httprequesthandler/HTTPFileHandler.cpp
++index 2101d49f0911..26e53901dbfa 100644
++--- a/xbmc/network/httprequesthandler/HTTPFileHandler.cpp
+++++ b/xbmc/network/httprequesthandler/HTTPFileHandler.cpp
++@@ -23,7 +23,7 @@ CHTTPFileHandler::CHTTPFileHandler(const HTTPRequest &request)
++     m_lastModified()
++ { }
++ 
++-int CHTTPFileHandler::HandleRequest()
+++MHD_RESULT CHTTPFileHandler::HandleRequest()
++ {
++   return !m_url.empty() ? MHD_YES : MHD_NO;
++ }
++diff --git a/xbmc/network/httprequesthandler/HTTPFileHandler.h b/xbmc/network/httprequesthandler/HTTPFileHandler.h
++index 3c74b5275092..6121315c6f5f 100644
++--- a/xbmc/network/httprequesthandler/HTTPFileHandler.h
+++++ b/xbmc/network/httprequesthandler/HTTPFileHandler.h
++@@ -19,7 +19,7 @@ class CHTTPFileHandler : public IHTTPRequestHandler
++ public:
++   ~CHTTPFileHandler() override = default;
++ 
++-  int HandleRequest() override;
+++  MHD_RESULT HandleRequest() override;
++ 
++   bool CanHandleRanges() const override { return m_canHandleRanges; }
++   bool CanBeCached() const override { return m_canBeCached; }
++diff --git a/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.cpp b/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.cpp
++index de42e7fd3017..6902be012532 100644
++--- a/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.cpp
+++++ b/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.cpp
++@@ -104,7 +104,7 @@ bool CHTTPImageTransformationHandler::CanHandleRequest(const HTTPRequest &reques
++           options.find(TRANSFORMATION_OPTION_HEIGHT) != options.end());
++ }
++ 
++-int CHTTPImageTransformationHandler::HandleRequest()
+++MHD_RESULT CHTTPImageTransformationHandler::HandleRequest()
++ {
++   if (m_response.type == HTTPError)
++     return MHD_YES;
++diff --git a/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.h b/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.h
++index c55015ec4eb0..0d17afc3250a 100644
++--- a/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.h
+++++ b/xbmc/network/httprequesthandler/HTTPImageTransformationHandler.h
++@@ -23,7 +23,7 @@ class CHTTPImageTransformationHandler : public IHTTPRequestHandler
++   IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPImageTransformationHandler(request); }
++   bool CanHandleRequest(const HTTPRequest &request)const  override;
++ 
++-  int HandleRequest() override;
+++  MHD_RESULT HandleRequest() override;
++ 
++   bool CanHandleRanges() const override { return true; }
++   bool CanBeCached() const override { return true; }
++diff --git a/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.cpp b/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.cpp
++index e8e2fa36924b..a4c3c198eba3 100644
++--- a/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.cpp
+++++ b/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.cpp
++@@ -25,7 +25,7 @@ bool CHTTPJsonRpcHandler::CanHandleRequest(const HTTPRequest &request) const
++   return (request.pathUrl.compare("/jsonrpc") == 0);
++ }
++ 
++-int CHTTPJsonRpcHandler::HandleRequest()
+++MHD_RESULT CHTTPJsonRpcHandler::HandleRequest()
++ {
++   CHTTPClient client(m_request.method);
++   bool isRequest = false;
++diff --git a/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.h b/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.h
++index 67c14b666ef6..2659fd549c25 100644
++--- a/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.h
+++++ b/xbmc/network/httprequesthandler/HTTPJsonRpcHandler.h
++@@ -24,7 +24,7 @@ class CHTTPJsonRpcHandler : public IHTTPRequestHandler
++   IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPJsonRpcHandler(request); }
++   bool CanHandleRequest(const HTTPRequest &request) const override;
++ 
++-  int HandleRequest() override;
+++  MHD_RESULT HandleRequest() override;
++ 
++   HttpResponseRanges GetResponseData() const override;
++ 
++diff --git a/xbmc/network/httprequesthandler/HTTPPythonHandler.cpp b/xbmc/network/httprequesthandler/HTTPPythonHandler.cpp
++index 5f9aeef10f2e..a07ef0d3ac31 100644
++--- a/xbmc/network/httprequesthandler/HTTPPythonHandler.cpp
+++++ b/xbmc/network/httprequesthandler/HTTPPythonHandler.cpp
++@@ -112,7 +112,7 @@ bool CHTTPPythonHandler::CanHandleRequest(const HTTPRequest &request) const
++   return true;
++ }
++ 
++-int CHTTPPythonHandler::HandleRequest()
+++MHD_RESULT CHTTPPythonHandler::HandleRequest()
++ {
++   if (m_response.type == HTTPError || m_response.type == HTTPRedirect)
++     return MHD_YES;
++diff --git a/xbmc/network/httprequesthandler/HTTPPythonHandler.h b/xbmc/network/httprequesthandler/HTTPPythonHandler.h
++index 03c150693ff4..166430e68d51 100644
++--- a/xbmc/network/httprequesthandler/HTTPPythonHandler.h
+++++ b/xbmc/network/httprequesthandler/HTTPPythonHandler.h
++@@ -25,7 +25,7 @@ class CHTTPPythonHandler : public IHTTPRequestHandler
++   bool CanBeCached() const override { return false; }
++   bool GetLastModifiedDate(CDateTime &lastModified) const override;
++ 
++-  int HandleRequest() override;
+++  MHD_RESULT HandleRequest() override;
++ 
++   HttpResponseRanges GetResponseData() const override { return m_responseRanges; }
++ 
++diff --git a/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.cpp b/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.cpp
++index 80d1d6733475..f2ea1f2e51ed 100644
++--- a/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.cpp
+++++ b/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.cpp
++@@ -61,7 +61,7 @@ bool HTTPRequestHandlerUtils::GetRequestedRanges(struct MHD_Connection *connecti
++   return ranges.Parse(GetRequestHeaderValue(connection, MHD_HEADER_KIND, MHD_HTTP_HEADER_RANGE), totalLength);
++ }
++ 
++-int HTTPRequestHandlerUtils::FillArgumentMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value)
+++MHD_RESULT HTTPRequestHandlerUtils::FillArgumentMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value)
++ {
++   if (cls == nullptr || key == nullptr)
++     return MHD_NO;
++@@ -72,7 +72,7 @@ int HTTPRequestHandlerUtils::FillArgumentMap(void *cls, enum MHD_ValueKind kind,
++   return MHD_YES;
++ }
++ 
++-int HTTPRequestHandlerUtils::FillArgumentMultiMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value)
+++MHD_RESULT HTTPRequestHandlerUtils::FillArgumentMultiMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value)
++ {
++   if (cls == nullptr || key == nullptr)
++     return MHD_NO;
++diff --git a/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.h b/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.h
++index 9a07801914e4..0ec5ed1bf706 100644
++--- a/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.h
+++++ b/xbmc/network/httprequesthandler/HTTPRequestHandlerUtils.h
++@@ -25,6 +25,6 @@ class HTTPRequestHandlerUtils
++ private:
++   HTTPRequestHandlerUtils() = delete;
++ 
++-  static int FillArgumentMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
++-  static int FillArgumentMultiMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
+++  static MHD_RESULT FillArgumentMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
+++  static MHD_RESULT FillArgumentMultiMap(void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
++ };
++diff --git a/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.cpp b/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.cpp
++index 01a6b503bdf6..0716a5df96ca 100644
++--- a/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.cpp
+++++ b/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.cpp
++@@ -18,7 +18,7 @@ bool CHTTPWebinterfaceAddonsHandler::CanHandleRequest(const HTTPRequest &request
++   return (request.pathUrl.compare("/addons") == 0 || request.pathUrl.compare("/addons/") == 0);
++ }
++ 
++-int CHTTPWebinterfaceAddonsHandler::HandleRequest()
+++MHD_RESULT CHTTPWebinterfaceAddonsHandler::HandleRequest()
++ {
++   m_responseData = ADDON_HEADER;
++   ADDON::VECADDONS addons;
++diff --git a/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.h b/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.h
++index e9b1c6d29a41..23cea36d1436 100644
++--- a/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.h
+++++ b/xbmc/network/httprequesthandler/HTTPWebinterfaceAddonsHandler.h
++@@ -21,7 +21,7 @@ class CHTTPWebinterfaceAddonsHandler : public IHTTPRequestHandler
++   IHTTPRequestHandler* Create(const HTTPRequest &request) const override { return new CHTTPWebinterfaceAddonsHandler(request); }
++   bool CanHandleRequest(const HTTPRequest &request) const override;
++ 
++-  int HandleRequest() override;
+++  MHD_RESULT HandleRequest() override;
++ 
++   HttpResponseRanges GetResponseData() const override;
++ 
++diff --git a/xbmc/network/httprequesthandler/IHTTPRequestHandler.h b/xbmc/network/httprequesthandler/IHTTPRequestHandler.h
++index 4b1e40a587a7..b3e19f34d3dd 100644
++--- a/xbmc/network/httprequesthandler/IHTTPRequestHandler.h
+++++ b/xbmc/network/httprequesthandler/IHTTPRequestHandler.h
++@@ -22,6 +22,14 @@
++ 
++ #include "utils/HttpRangeUtils.h"
++ 
+++#include <microhttpd.h>
+++
+++#if MHD_VERSION >= 0x00097002
+++#define MHD_RESULT enum MHD_Result
+++#else
+++#define MHD_RESULT int
+++#endif
+++
++ class CDateTime;
++ class CWebServer;
++ 
++@@ -114,7 +122,7 @@ class IHTTPRequestHandler
++    *
++    * \return MHD_NO if a severe error has occurred otherwise MHD_YES.
++    */
++-  virtual int HandleRequest() = 0;
+++  virtual MHD_RESULT HandleRequest() = 0;
++ 
++   /*!
++    * \brief Whether the HTTP response could also be provided in ranges.
