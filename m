@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Jul 2020 15:26:14 +0200
-Subject: [Buildroot] [git commit] package/execline: bump version to 2.6.1.0
-Message-ID: <20200705135158.1D26D861A6@busybox.osuosl.org>
+Date: Sun, 5 Jul 2020 15:27:41 +0200
+Subject: [Buildroot] [git commit] package/python-pyparted: bump version to
+ 3.11.6
+Message-ID: <20200705135158.2E6B3805F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58fa2386562fb353c19dfb07f8990d7a7b4b3ed5
+commit: https://git.buildroot.net/buildroot/commit/?id=3c8759afcf30dc862e21417a0bd422459458cde9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also change the hash file to separate the fields by two spaces and
-change the hash of the license (copyright year changed from 2019 to
-2020).
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/execline/execline.hash | 4 ++--
- package/execline/execline.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyparted/python-pyparted.hash | 2 +-
+ package/python-pyparted/python-pyparted.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index cef4959bda..ac6239e86d 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/python-pyparted/python-pyparted.hash b/package/python-pyparted/python-pyparted.hash
+index 61960f469d..0c3e4a15fd 100644
+--- a/package/python-pyparted/python-pyparted.hash
++++ b/package/python-pyparted/python-pyparted.hash
 @@ -1,3 +1,3 @@
- # Locally generated
--sha256 05205c6869ae65a51c63d0e805572573806f6474aa21e12c49dd5654d3ceed33  execline-2.5.3.0.tar.gz
--sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
-+sha256  a24c76f097ff44fe50b63b89bcde5d6ba9a481aecddbe88ee01b0e5a7b314556  execline-2.6.1.0.tar.gz
-+sha256  5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 74ad91e4a8..e2423e9536 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
+ # Locally computed
+-sha256  a9ec181bf3c7c0635862413fc86cb0950b5af957541535f530ea86a0f9d14e73  python-pyparted-3.11.0.tar.gz
++sha256  d214288ae1a70b5925861ce01b3352378eb6b1419aa3b786f509e9ef2a501c02  python-pyparted-3.11.6.tar.gz
+ sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/python-pyparted/python-pyparted.mk b/package/python-pyparted/python-pyparted.mk
+index c4783459ab..9d48fd9351 100644
+--- a/package/python-pyparted/python-pyparted.mk
++++ b/package/python-pyparted/python-pyparted.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXECLINE_VERSION = 2.5.3.0
-+EXECLINE_VERSION = 2.6.1.0
- EXECLINE_SITE = http://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
+-PYTHON_PYPARTED_VERSION = 3.11.0
++PYTHON_PYPARTED_VERSION = 3.11.6
+ PYTHON_PYPARTED_SITE = $(call github,rhinstaller,pyparted,v$(PYTHON_PYPARTED_VERSION))
+ PYTHON_PYPARTED_SETUP_TYPE = distutils
+ PYTHON_PYPARTED_LICENSE = GPL-2.0+
