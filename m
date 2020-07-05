@@ -1,24 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Jul 2020 15:09:16 +0200
-Subject: [Buildroot] [PATCH] arm_foundationv8_defconfig: use
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
-In-Reply-To: <20200704140909.1584989-1-masahiroy@kernel.org>
-References: <20200704140909.1584989-1-masahiroy@kernel.org>
-Message-ID: <20200705150916.03b8e85c@windsurf.home>
+Date: Sun, 5 Jul 2020 15:09:23 +0200
+Subject: [Buildroot] [PATCH] package/libyaml: bump version to 0.2.5
+In-Reply-To: <20200704094840.30590-1-sergio.prado@e-labworks.com>
+References: <20200704094840.30590-1-sergio.prado@e-labworks.com>
+Message-ID: <20200705150923.2b326125@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  4 Jul 2020 23:09:09 +0900
-Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat,  4 Jul 2020 06:48:40 -0300
+Sergio Prado <sergio.prado@e-labworks.com> wrote:
 
-> Commit 53ced1f6d3da ("linux: allow the selection of the architecture's
-> default configuration") allows us to specify the Linux defconfig cleanly.
+> Also:
+> - License file renamed LICENSE -> License
+> - Change license hash because copyright year changed 2019 -> 2020
+> - Separate the fields in the hash file by two spaces
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 > ---
+>  package/libyaml/libyaml.hash | 4 ++--
+>  package/libyaml/libyaml.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
