@@ -1,37 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2020 12:23:36 +0200
-Subject: [Buildroot] [PATCH 2/4 v4] package/systemd: do not force dbus if
- dbus-broker is available
-In-Reply-To: <cover.1593944605.git.yann.morin.1998@free.fr>
-References: <cover.1593944605.git.yann.morin.1998@free.fr>
-Message-ID: <dcfe5ad0c5510abed76f9dd777ba2687f86e3868.1593944605.git.yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Jul 2020 13:15:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with
+ libmicrohttpd 0.9.71
+Message-ID: <20200705111513.1298364-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dbus-broker fits the bill as a message bus daemon, so only enable the
-original dbus if dbus-broker is not enabled.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/systemd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch belongs to series
+http://patchwork.ozlabs.org/project/buildroot/list/?series=187620
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index dd3b8c534d..37f9d04850 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -25,7 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
- 	select BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_DBUS # runtime dependency only
-+	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ ...-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
+
+diff --git a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
+new file mode 100644
+index 0000000000..7c1cfe939b
+--- /dev/null
++++ b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
+@@ -0,0 +1,71 @@
++From d17eabb1052e7c8c432331a7a782845e36164f01 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
++Date: Tue, 30 Jun 2020 09:56:10 +0200
++Subject: [PATCH] =?UTF-8?q?Fix=20build=20with=20=C2=B5httpd=200.9.71?=
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The return type of callbacks was changed from int to an enum.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream commit
++ https://github.com/systemd/systemd/commit/d17eabb1052e7c8c432331a7a782845e36164f01]
++---
++ src/journal-remote/journal-gatewayd.c    | 4 ++--
++ src/journal-remote/journal-remote-main.c | 2 +-
++ src/journal-remote/microhttpd-util.h     | 6 ++++++
++ 3 files changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/src/journal-remote/journal-gatewayd.c b/src/journal-remote/journal-gatewayd.c
++index 5177e0d1577..3ab7c98b0b5 100644
++--- a/src/journal-remote/journal-gatewayd.c
+++++ b/src/journal-remote/journal-gatewayd.c
++@@ -349,7 +349,7 @@ static int request_parse_range(
++         return 0;
++ }
++ 
++-static int request_parse_arguments_iterator(
+++static mhd_result request_parse_arguments_iterator(
++                 void *cls,
++                 enum MHD_ValueKind kind,
++                 const char *key,
++@@ -796,7 +796,7 @@ static int request_handler_machine(
++         return MHD_queue_response(connection, MHD_HTTP_OK, response);
++ }
++ 
++-static int request_handler(
+++static mhd_result request_handler(
++                 void *cls,
++                 struct MHD_Connection *connection,
++                 const char *url,
++diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
++index 69a111afead..f82d188a8c6 100644
++--- a/src/journal-remote/journal-remote-main.c
+++++ b/src/journal-remote/journal-remote-main.c
++@@ -253,7 +253,7 @@ static int process_http_upload(
++         return mhd_respond(connection, MHD_HTTP_ACCEPTED, "OK.");
++ };
++ 
++-static int request_handler(
+++static mhd_result request_handler(
++                 void *cls,
++                 struct MHD_Connection *connection,
++                 const char *url,
++diff --git a/src/journal-remote/microhttpd-util.h b/src/journal-remote/microhttpd-util.h
++index d90c6bbd4f1..4ca9a5c4f16 100644
++--- a/src/journal-remote/microhttpd-util.h
+++++ b/src/journal-remote/microhttpd-util.h
++@@ -47,6 +47,12 @@
++ #  define MHD_create_response_from_fd_at_offset64 MHD_create_response_from_fd_at_offset
++ #endif
++ 
+++#if MHD_VERSION >= 0x00097002
+++#  define mhd_result enum MHD_Result
+++#else
+++#  define mhd_result int
+++#endif
+++
++ void microhttpd_logger(void *arg, const char *fmt, va_list ap) _printf_(2, 0);
++ 
++ /* respond_oom() must be usable with return, hence this form. */
 -- 
-2.20.1
+2.26.2
