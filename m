@@ -1,36 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Jul 2020 15:26:31 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/freescale_imx6*: bump BSP
- components to 5.4.24_2.1.0
-In-Reply-To: <20200703165744.3192656-1-julien.olivain@oss.nxp.com>
-References: <20200703165744.3192656-1-julien.olivain@oss.nxp.com>
-Message-ID: <20200705152631.58d0afd4@windsurf.home>
+Date: Sun, 5 Jul 2020 15:26:49 +0200
+Subject: [Buildroot] [PATCH v2] package/execline: bump version to 2.6.1.0
+In-Reply-To: <20200703220418.21396-1-sergio.prado@e-labworks.com>
+References: <20200703220418.21396-1-sergio.prado@e-labworks.com>
+Message-ID: <20200705152649.7ea05684@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 Jul 2020 18:57:43 +0200
-Julien Olivain <julien.olivain@oss.nxp.com> wrote:
+On Fri,  3 Jul 2020 19:04:18 -0300
+Sergio Prado <sergio.prado@e-labworks.com> wrote:
 
-> And rebase uboot patch.
+> Also change the hash file to separate the fields by two spaces and
+> change the hash of the license (copyright year changed from 2019 to
+> 2020).
 > 
-> Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-> [Maeva: Tested on i.MX6Quad SabreAuto CPU1]
-> Signed-off-by: Julien Olivain <julien.olivain@oss.nxp.com>
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> 
 > ---
->  ...abre_common-boot-Linux-to-init-in-mfgtools-mode.patch} | 8 ++++----
->  configs/freescale_imx6dlsabreauto_defconfig               | 8 ++++----
->  configs/freescale_imx6dlsabresd_defconfig                 | 8 ++++----
->  configs/freescale_imx6qsabreauto_defconfig                | 8 ++++----
->  configs/freescale_imx6qsabresd_defconfig                  | 8 ++++----
->  configs/freescale_imx6sxsabresd_defconfig                 | 8 ++++----
->  configs/freescale_imx6ullevk_defconfig                    | 6 +++---
->  7 files changed, 27 insertions(+), 27 deletions(-)
->  rename board/freescale/imx6sabre/patches/uboot/{uboot-0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch => 0001-mx6qsabre_common-boot-Linux-to-init-in-mfgtools-mode.patch} (89%)
+> Changes v1 -> v2:
+> - change the hash file to separate the fields by two spaces
+> - change the hash of the license (copyright year changed from 2019
+>   to 2020).
 
-Both applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
