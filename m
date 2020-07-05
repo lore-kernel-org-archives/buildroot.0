@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Jul 2020 15:35:36 +0200
-Subject: [Buildroot] [git commit] package/refpolicy: enable systemd support
-Message-ID: <20200705135158.5330186385@busybox.osuosl.org>
+Date: Sun, 5 Jul 2020 15:27:53 +0200
+Subject: [Buildroot] [git commit] package/refpolicy: bump to 2.20200229
+Message-ID: <20200705135158.48416861A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19063d043c11e40cd2fb3f66347fa84ecfc1b1d3
+commit: https://git.buildroot.net/buildroot/commit/?id=a734a600bae82b8d881fc4533985290e427d98f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch enables systemd support in the refpolicy by turning on the
-'SYSTEMD' policy build option when systemd is enabled in Buildroot. This
-enables conditional rules in SELinux policy modules (by defining
-'init_systemd'), to better support systemd.
+Changelog:
+https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20200229
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/refpolicy/refpolicy.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/refpolicy/refpolicy.hash | 2 +-
+ package/refpolicy/refpolicy.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+index 0c77b626cc..8605d07c08 100644
+--- a/package/refpolicy/refpolicy.hash
++++ b/package/refpolicy/refpolicy.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/SELinuxProject/refpolicy/releases
+-sha256 67bd1213e9d014ada15512028bb7f35ef6610c2d209cc5117b8577474aa6147f  refpolicy-2.20190609.tar.bz2
++sha256 dec854512ed00cd057408f330c2cea4de7a4405f7a147458f59c994bf578e4b0  refpolicy-2.20200229.tar.bz2
+ 
+ # Locally computed
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
 diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index a5716f5fce..9346649b2c 100644
+index 1a5fefff06..a5716f5fce 100644
 --- a/package/refpolicy/refpolicy.mk
 +++ b/package/refpolicy/refpolicy.mk
-@@ -29,11 +29,18 @@ REFPOLICY_POLICY_VERSION = $(BR2_PACKAGE_LIBSEPOL_POLICY_VERSION)
- REFPOLICY_POLICY_STATE = \
- 	$(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_STATE))
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+define REFPOLICY_CONFIGURE_SYSTEMD
-+	$(SED) "/SYSTEMD/c\SYSTEMD = y" $(@D)/build.conf
-+endef
-+endif
-+
- define REFPOLICY_CONFIGURE_CMDS
- 	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
- 		$(@D)/build.conf
- 	$(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
- 	$(SED) "/NAME/c\NAME = targeted" $(@D)/build.conf
-+	$(REFPOLICY_CONFIGURE_SYSTEMD)
- endef
- 
- define REFPOLICY_BUILD_CMDS
+-REFPOLICY_VERSION = 2.20190609
++REFPOLICY_VERSION = 2.20200229
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+-REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20190609
++REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20200229
+ REFPOLICY_LICENSE = GPL-2.0
+ REFPOLICY_LICENSE_FILES = COPYING
+ REFPOLICY_INSTALL_STAGING = YES
