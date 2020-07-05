@@ -1,54 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jul 2020 08:55:05 +0200
-Subject: [Buildroot] [PATCH v3] package/systemd: register NSS plugins in
- nsswitch.conf
-In-Reply-To: <CADYdroOJgin2EPUN7N9=8SVN06gPeKezrAjudnbg5GgCvOMkHA@mail.gmail.com>
-References: <20200703234923.174320-1-nolange79@gmail.com>
- <20200704080025.GC2273@scaer>
- <CADYdroMZwKBuzNKxXvj7muHNMWDAiDNCOXBzEMbq_mkONFf1uw@mail.gmail.com>
- <20200704192738.GD2273@scaer>
- <CADYdroNeoJmoR770sFVVhokGRqhnp8nNYEw_E4Hr7fPN1FGahw@mail.gmail.com>
- <20200704213839.GE2273@scaer>
- <CADYdroOJgin2EPUN7N9=8SVN06gPeKezrAjudnbg5GgCvOMkHA@mail.gmail.com>
-Message-ID: <20200705065505.GF2273@scaer>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun,  5 Jul 2020 06:43:06 -0300
+Subject: [Buildroot] [PATCH] package/adwaita-icon-theme: bump version to
+ 3.37.2
+Message-ID: <20200705094306.17996-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/adwaita-icon-theme/adwaita-icon-theme.hash | 2 +-
+ package/adwaita-icon-theme/adwaita-icon-theme.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2020-07-05 00:17 +0200, Norbert Lange spake thusly:
-> Am Sa., 4. Juli 2020 um 23:38 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-[--SNIP--]
-> > It was my understanding that, should /var be read-only, systemd would
-> > automatically mount a tmpfs on it and populate it with its counterpart
-> > from the factory.
-> Nope, not to my knowlegde.
-
-Right, it is us mounting a tmpfs on /var when / is on a read-only
-filesystem, but then as /var is then empty, then systemd populates it
-with the content from the factory.
-
-[--SNIP--]
-> > Rather, I think the "surface attack", unused components or unwanted
-> > components, is a better approach to sell these changes.
-> Size is a bad but easy to sell measurement for exactly that
-> (especially for non-techs).
-
-Hey! You're not speaking top non-tech people here! ;-)
-
-Or so I hope... [snicker] r-]
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+index 0daef24db5ef..ce6acb8d9ae7 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
+@@ -1,5 +1,5 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.22/adwaita-icon-theme-3.22.0.sha256sum
+-sha256  c18bf6e26087d9819a962c77288b291efab25d0419b73d909dd771716a45dcb7  adwaita-icon-theme-3.22.0.tar.xz
++sha256  a594e7440971f860cc61b1b8291be15ffc1b8dd06a9f11485a5a7faf189bcf6b  adwaita-icon-theme-3.37.2.tar.xz
+ # locally computed
+ sha256  51f83b2b4e9ed2beebc9b8eed2ecad29314a58ed8c5184b22ad8f9df703d3ce5  COPYING
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING_LGPL
+diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+index 8c9dec14f5c4..3950cfa63648 100644
+--- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
++++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ADWAITA_ICON_THEME_VERSION_MAJOR = 3.22
+-ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
++ADWAITA_ICON_THEME_VERSION_MAJOR = 3.37
++ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).2
+ ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
+ ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
+ ADWAITA_ICON_THEME_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
