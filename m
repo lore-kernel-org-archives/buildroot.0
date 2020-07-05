@@ -1,22 +1,22 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jul 2020 13:15:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Jul 2020 14:17:28 +0200
+Subject: [Buildroot] [git commit] package/systemd: fix build with
  libmicrohttpd 0.9.71
-Message-ID: <20200705111513.1298364-1-bernd.kuhls@t-online.de>
+Message-ID: <20200705121540.5576E86332@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-This patch belongs to series
-http://patchwork.ozlabs.org/project/buildroot/list/?series=187620
+commit: https://git.buildroot.net/buildroot/commit/?id=c3a50eeae2ed661415e99ca0d0f26ee8dc6d40bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- ...-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 +++++++++++++++++++
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 ++++++++++++++++++++++
  1 file changed, 71 insertions(+)
- create mode 100644 package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
 
 diff --git a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
 new file mode 100644
@@ -95,5 +95,3 @@ index 0000000000..7c1cfe939b
 + void microhttpd_logger(void *arg, const char *fmt, va_list ap) _printf_(2, 0);
 + 
 + /* respond_oom() must be usable with return, hence this form. */
--- 
-2.26.2
