@@ -1,119 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  5 Jul 2020 12:23:38 +0200
-Subject: [Buildroot] [PATCH 4/4 v4] support/run-test: add test for systemd
- using dbus-broker
+Date: Sun,  5 Jul 2020 12:23:36 +0200
+Subject: [Buildroot] [PATCH 2/4 v4] package/systemd: do not force dbus if
+ dbus-broker is available
 In-Reply-To: <cover.1593944605.git.yann.morin.1998@free.fr>
 References: <cover.1593944605.git.yann.morin.1998@free.fr>
-Message-ID: <94085071b1b7f791c88674c1d419fe5c60b06de1.1593944605.git.yann.morin.1998@free.fr>
+Message-ID: <dcfe5ad0c5510abed76f9dd777ba2687f86e3868.1593944605.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add four new tests for systemd (rw and ro in each case):
-  - use dbus-broker instead of the original dbus
-  - use the original dbus, with dbus-broker installed
-
-The first two extend the existing IfUpDown test cases by just enabling
-dbus-broker; the second ones extend this further, by explicitly enabling
-the original dbus.
-
-For one of the tests, we overload the test_run() function to test that
-the dbus-broker daemon is indeed running as root. We need not replicate
-that check in the other dbus-broker-only test, and it does not make
-sense to test that in tests that have the original dbus enabled.
-
-Presence of the original dbus and dbus-broker on the same system is
-valid: the original dbus is used as the default system bus daemon. We do
-not test switching between the two at runtime, though as this is really
-too corner-case specific. We just test to ensure the original dbus
-system bus daemon is not impacted by the presence of dbus-broker.
-
-Note: the 'full' test-case enables all systemd options, and some of them
-do pull the original dbus package, so we can't use that to test the
-integration of dbus-broker; instead, we extend the ifupdown case, which
-does not enable the original dbus.
+dbus-broker fits the bill as a message bus daemon, so only enable the
+original dbus if dbus-broker is not enabled.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Norbert Lange <nolange79@gmail.com>
 ---
- .gitlab-ci.yml                             |  4 +++
- support/testing/tests/init/test_systemd.py | 37 ++++++++++++++++++++++
- 2 files changed, 41 insertions(+)
+ package/systemd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ac4c826fb7..23da723e9e 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -394,9 +394,13 @@ tests.init.test_openrc.TestInitSystemOpenrcRoFull: { extends: .runtime_test }
- tests.init.test_openrc.TestInitSystemOpenrcRwFull: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRoFull: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: { extends: .runtime_test }
-+tests.init.test_systemd.TestInitSystemSystemdRoIfupdownDbusbroker: { extends: .runtime_test }
-+tests.init.test_systemd.TestInitSystemSystemdRoIfupdownDbusbrokerDbus: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRwFull: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: { extends: .runtime_test }
-+tests.init.test_systemd.TestInitSystemSystemdRwIfupdownDbusbroker: { extends: .runtime_test }
-+tests.init.test_systemd.TestInitSystemSystemdRwIfupdownDbusbrokerDbus: { extends: .runtime_test }
- tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: { extends: .runtime_test }
- tests.package.test_atop.TestAtop: { extends: .runtime_test }
- tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index cf952bef44..276165f742 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -84,6 +84,29 @@ class TestInitSystemSystemdRoIfupdown(InitSystemSystemdBase):
-         self.check_systemd("squashfs")
- 
- 
-+class TestInitSystemSystemdRoIfupdownDbusbroker(TestInitSystemSystemdRoIfupdown):
-+    config = TestInitSystemSystemdRoIfupdown.config + \
-+        """
-+        BR2_PACKAGE_DBUS_BROKER=y
-+        """
-+
-+    def test_run(self):
-+        # Parent class' test_run() method does exactly that, no more:
-+        self.check_systemd("squashfs")
-+
-+        # Check that the dbus-broker daemon is running as non-root
-+        cmd = "find /proc/$(pidof dbus-broker) -maxdepth 1 -name exe -user dbus"
-+        out, _ = self.emulator.run(cmd)
-+        self.assertEqual(len(out), 1)
-+
-+
-+class TestInitSystemSystemdRoIfupdownDbusbrokerDbus(TestInitSystemSystemdRoIfupdownDbusbroker):
-+    config = TestInitSystemSystemdRoIfupdownDbusbroker.config + \
-+        """
-+        BR2_PACKAGE_DBUS=y
-+        """
-+
-+
- class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-@@ -97,6 +120,20 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-         self.check_systemd("ext2")
- 
- 
-+class TestInitSystemSystemdRwIfupdownDbusbroker(TestInitSystemSystemdRwIfupdown):
-+    config = TestInitSystemSystemdRwIfupdown.config + \
-+        """
-+        BR2_PACKAGE_DBUS_BROKER=y
-+        """
-+
-+
-+class TestInitSystemSystemdRwIfupdownDbusbrokerDbus(TestInitSystemSystemdRwIfupdownDbusbroker):
-+    config = TestInitSystemSystemdRwIfupdownDbusbroker.config + \
-+        """
-+        BR2_PACKAGE_DBUS=y
-+        """
-+
-+
- class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index dd3b8c534d..37f9d04850 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -25,7 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+ 	select BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_DBUS # runtime dependency only
++	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
 -- 
 2.20.1
