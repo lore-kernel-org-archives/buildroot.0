@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jul 2020 12:12:15 +0200
-Subject: [Buildroot] [PATCH 3/5] package/libhttpserver: fix build with
+Date: Sun,  5 Jul 2020 12:12:16 +0200
+Subject: [Buildroot] [PATCH 4/5] package/upmpdcli: fix build with
  libmicrohttpd 0.9.71
 In-Reply-To: <20200705101217.630684-1-bernd.kuhls@t-online.de>
 References: <20200705101217.630684-1-bernd.kuhls@t-online.de>
-Message-ID: <20200705101217.630684-3-bernd.kuhls@t-online.de>
+Message-ID: <20200705101217.630684-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,255 +13,121 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...patibility-with-libmicrohttpd-0.9.71.patch | 240 ++++++++++++++++++
- 1 file changed, 240 insertions(+)
- create mode 100644 package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch
+ ...dapt-streamproxy-to-newer-microhttpd.patch | 106 ++++++++++++++++++
+ 1 file changed, 106 insertions(+)
+ create mode 100644 package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
 
-diff --git a/package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch b/package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch
+diff --git a/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
 new file mode 100644
-index 0000000000..f982ee7a82
+index 0000000000..55c691b86a
 --- /dev/null
-+++ b/package/libhttpserver/0001-Compatibility-with-libmicrohttpd-0.9.71.patch
-@@ -0,0 +1,240 @@
-+From cfcd8a8f73aa337e8f45d287a79cd9b8e5c51dcd Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 5 Jul 2020 11:42:23 +0200
-+Subject: [PATCH] Compatibility with libmicrohttpd 0.9.71
-+
-+From the libmicrohttpd 0.9.71 release notes:
-+
-+Furthermore, the release introduces an 'enum MHD_Result' instead of
-+defines for MHD_YES/MHD_NO. This is intended to make it easier to check
-+for certain API misuse bugs by providing better types (not everything is
-+an 'int').  While this does NOT change the binary API, this change
-+_will_ cause compiler warnings for all legacy code -- until 'int' is
-+replaced with 'enum MHD_Result'
-+
-+Patch sent upstream: https://github.com/etr/libhttpserver/pull/199
++++ b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
+@@ -0,0 +1,106 @@
++From 4fd8a07b560dcd4ad5706684d512d33707de3da0 Mon Sep 17 00:00:00 2001
++From: Jean-Francois Dockes <jf@dockes.org>
++Date: Fri, 3 Jul 2020 19:26:37 +0200
++Subject: [PATCH] Adapt streamproxy to newer microhttpd where results are now
++ an enum
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream commit
++ https://framagit.org/medoc92/upmpdcli/-/commit/4fd8a07b560dcd4ad5706684d512d33707de3da0]
 +---
-+ src/http_request.cpp            |  6 +++---
-+ src/httpserver/http_request.hpp |  6 +++---
-+ src/httpserver/http_utils.hpp   |  4 ++++
-+ src/httpserver/webserver.hpp    | 14 +++++++-------
-+ src/webserver.cpp               | 22 +++++++++++++---------
-+ 5 files changed, 30 insertions(+), 22 deletions(-)
++ src/mediaserver/cdplugins/streamproxy.cpp | 23 ++++++++++++++---------
++ 1 file changed, 14 insertions(+), 9 deletions(-)
 +
-+diff --git a/src/http_request.cpp b/src/http_request.cpp
-+index 5703663..be342c7 100644
-+--- a/src/http_request.cpp
-++++ b/src/http_request.cpp
-+@@ -88,7 +88,7 @@ const std::string http_request::get_connection_value(const std::string& key, enu
-+     return header_c;
-+ }
++diff --git a/src/mediaserver/cdplugins/streamproxy.cpp b/src/mediaserver/cdplugins/streamproxy.cpp
++index abc57915..8d283834 100644
++--- a/src/mediaserver/cdplugins/streamproxy.cpp
+++++ b/src/mediaserver/cdplugins/streamproxy.cpp
++@@ -28,6 +28,11 @@
++ #include <fcntl.h>
++ #include <microhttpd.h>
 + 
-+-int http_request::build_request_header(
-++MHD_Result http_request::build_request_header(
-+         void *cls,
-+         enum MHD_ValueKind kind,
-+         const char *key,
-+@@ -189,7 +189,7 @@ const std::string http_request::get_querystring() const
-+     return querystring;
-+ }
-+ 
-+-int http_request::build_request_args(
-++MHD_Result http_request::build_request_args(
-+         void *cls,
-+         enum MHD_ValueKind kind,
-+         const char *key,
-+@@ -204,7 +204,7 @@ int http_request::build_request_args(
-+     return MHD_YES;
-+ }
-+ 
-+-int http_request::build_request_querystring(
-++MHD_Result http_request::build_request_querystring(
-+         void *cls,
-+         enum MHD_ValueKind kind,
-+         const char *key,
-+diff --git a/src/httpserver/http_request.hpp b/src/httpserver/http_request.hpp
-+index 139272b..62e5275 100644
-+--- a/src/httpserver/http_request.hpp
-++++ b/src/httpserver/http_request.hpp
-+@@ -247,15 +247,15 @@ class http_request
-+ 
-+         unescaper_ptr unescaper = 0x0;
-+ 
-+-        static int build_request_header(void *cls, enum MHD_ValueKind kind,
-++        static MHD_Result build_request_header(void *cls, enum MHD_ValueKind kind,
-+                 const char *key, const char *value
-+         );
-+ 
-+-        static int build_request_args(void *cls, enum MHD_ValueKind kind,
-++        static MHD_Result build_request_args(void *cls, enum MHD_ValueKind kind,
-+                 const char *key, const char *value
-+         );
-+ 
-+-        static int build_request_querystring(void *cls, enum MHD_ValueKind kind,
-++        static MHD_Result build_request_querystring(void *cls, enum MHD_ValueKind kind,
-+                 const char *key, const char *value
-+         );
-+ 
-+diff --git a/src/httpserver/http_utils.hpp b/src/httpserver/http_utils.hpp
-+index 9ad89b4..a812197 100644
-+--- a/src/httpserver/http_utils.hpp
-++++ b/src/httpserver/http_utils.hpp
-+@@ -53,6 +53,10 @@
-+ 
-+ #define DEFAULT_MASK_VALUE 0xFFFF
-+ 
+++
 ++#if MHD_VERSION < 0x00097002
 ++typedef int MHD_Result;
 ++#endif
 ++
-+ namespace httpserver {
++ #include <mutex>
++ #include <condition_variable>
++ #include <unordered_map>
++@@ -155,7 +160,7 @@ public:
++     ~Internal();
++     bool startMHD();
 + 
-+ typedef void(*unescaper_ptr)(std::string&);
-+diff --git a/src/httpserver/webserver.hpp b/src/httpserver/webserver.hpp
-+index 1ff472b..661b6ee 100644
-+--- a/src/httpserver/webserver.hpp
-++++ b/src/httpserver/webserver.hpp
-+@@ -195,14 +195,14 @@ class webserver
-+                 enum MHD_RequestTerminationCode toe
-+         );
-+ 
-+-        static int answer_to_connection
-++        static MHD_Result answer_to_connection
-+         (
-+             void* cls, MHD_Connection* connection,
-+             const char* url, const char* method,
-+             const char* version, const char* upload_data,
-+             size_t* upload_data_size, void** con_cls
-+         );
-+-        static int post_iterator
-++        static MHD_Result post_iterator
-+         (
-+             void *cls,
-+             enum MHD_ValueKind kind,
-+@@ -219,25 +219,25 @@ class webserver
-+             void **con_cls, int upgrade_socket
-+         );
-+ 
-+-        int requests_answer_first_step(MHD_Connection* connection,
-++        MHD_Result requests_answer_first_step(MHD_Connection* connection,
-+                 struct details::modded_request* mr
-+         );
-+ 
-+-        int requests_answer_second_step(MHD_Connection* connection,
-++        MHD_Result requests_answer_second_step(MHD_Connection* connection,
-+             const char* method, const char* version, const char* upload_data,
-+             size_t* upload_data_size, struct details::modded_request* mr
-+         );
-+ 
-+-        int finalize_answer(MHD_Connection* connection,
-++        MHD_Result finalize_answer(MHD_Connection* connection,
-+                 struct details::modded_request* mr, const char* method
-+         );
-+ 
-+-        int complete_request(MHD_Connection* connection,
-++        MHD_Result complete_request(MHD_Connection* connection,
-+                 struct details::modded_request* mr,
-+                 const char* version, const char* method
-+         );
-+ 
-+-        friend int policy_callback (void *cls,
-++        friend MHD_Result policy_callback (void *cls,
-+                 const struct sockaddr* addr, socklen_t addrlen
-+         );
-+         friend void error_log(void* cls, const char* fmt, va_list ap);
-+diff --git a/src/webserver.cpp b/src/webserver.cpp
-+index a3104e9..3340eb0 100644
-+--- a/src/webserver.cpp
-++++ b/src/webserver.cpp
-+@@ -75,6 +75,10 @@
-+ #define SOCK_CLOEXEC 02000000
-+ #endif
-+ 
-++#if MHD_VERSION < 0x00097002
-++typedef int MHD_Result;
-++#endif
-++
-+ using namespace std;
-+ 
-+ namespace httpserver
-+@@ -82,7 +86,7 @@ namespace httpserver
-+ 
-+ using namespace http;
-+ 
-+-int policy_callback (void *, const struct sockaddr*, socklen_t);
-++MHD_Result policy_callback (void *, const struct sockaddr*, socklen_t);
-+ void error_log(void*, const char*, va_list);
-+ void* uri_log(void*, const char*);
-+ void access_log(webserver*, string);
-+@@ -421,7 +425,7 @@ void webserver::disallow_ip(const string& ip)
-+     allowances.erase(ip);
++-    int answerConn(
+++    MHD_Result answerConn(
++         struct MHD_Connection *connection, const char *url, 
++         const char *method, const char *version, 
++         const char *upload_data, size_t *upload_data_size,
++@@ -202,7 +207,7 @@ StreamProxy::Internal::Internal(int _listenport, UrlTransFunc _urltrans)
 + }
 + 
-+-int policy_callback (void *cls, const struct sockaddr* addr, socklen_t addrlen)
-++MHD_Result policy_callback (void *cls, const struct sockaddr* addr, socklen_t addrlen)
-+ {
-+     if(!(static_cast<webserver*>(cls))->ban_system_enabled) return MHD_YES;
 + 
-+@@ -468,7 +472,7 @@ size_t unescaper_func(void * cls, struct MHD_Connection *c, char *s)
-+     return std::string(s).size();
-+ }
-+ 
-+-int webserver::post_iterator (void *cls, enum MHD_ValueKind kind,
-++MHD_Result webserver::post_iterator (void *cls, enum MHD_ValueKind kind,
-+     const char *key,
-+     const char *filename,
-+     const char *content_type,
-+@@ -522,7 +526,7 @@ const std::shared_ptr<http_response> webserver::internal_error_page(details::mod
++-static int answer_to_connection(
+++static MHD_Result answer_to_connection(
++     void *cls, struct MHD_Connection *conn, 
++     const char *url, const char *method, const char *version, 
++     const char *upload_data, size_t *upload_data_size,
++@@ -214,7 +219,7 @@ static int answer_to_connection(
++         return internal->answerConn(
++             conn, url, method, version, upload_data, upload_data_size, con_cls);
++     } else {
++-        return -1;
+++        return MHD_NO;
 +     }
 + }
 + 
-+-int webserver::requests_answer_first_step(
-++MHD_Result webserver::requests_answer_first_step(
-+         MHD_Connection* connection,
-+         struct details::modded_request* mr
-+ )
-+@@ -574,7 +578,7 @@ int webserver::requests_answer_first_step(
-+     return MHD_YES;
++@@ -238,8 +243,8 @@ static int print_out_key (void *cls, enum MHD_ValueKind kind,
++ }
++ #endif /* PRINT_KEYS */
++ 
++-static int mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
++-                        const char *key, const char *value)
+++static MHD_Result mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
+++                               const char *key, const char *value)
++ {
++     unordered_map<string,string> *mp = (unordered_map<string,string> *)cls;
++     if (mp) {
++@@ -307,7 +312,7 @@ static bool processRange(struct MHD_Connection *mhdconn, uint64_t& offset)
++     return true;
 + }
 + 
-+-int webserver::requests_answer_second_step(
-++MHD_Result webserver::requests_answer_second_step(
-+     MHD_Connection* connection, const char* method,
-+     const char* version, const char* upload_data,
-+     size_t* upload_data_size, struct details::modded_request* mr
-+@@ -597,7 +601,7 @@ int webserver::requests_answer_second_step(
-+     return MHD_YES;
++-int StreamProxy::Internal::answerConn(
+++MHD_Result StreamProxy::Internal::answerConn(
++     struct MHD_Connection *mhdconn, const char *_url,
++     const char *method, const char *version, 
++     const char *upload_data, size_t *upload_data_size,
++@@ -352,7 +357,7 @@ int StreamProxy::Internal::answerConn(
++                 return MHD_NO;
++             }
++             MHD_add_response_header (response, "Location", url.c_str());
++-            int ret = MHD_queue_response(mhdconn, 302, response);
+++            MHD_Result ret = MHD_queue_response(mhdconn, 302, response);
++             MHD_destroy_response(response);
++             return ret;
++         }
++@@ -393,7 +398,7 @@ int StreamProxy::Internal::answerConn(
++         int code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
++         struct MHD_Response *response =
++             MHD_create_response_from_buffer(0, 0, MHD_RESPMEM_PERSISTENT);
++-        int ret = MHD_queue_response(mhdconn, code, response);
+++        MHD_Result ret = MHD_queue_response(mhdconn, code, response);
++         MHD_destroy_response(response);
++         LOGINF("StreamProxy::answerConn (1): return with http code: " <<
++                code << endl);
++@@ -434,7 +439,7 @@ int StreamProxy::Internal::answerConn(
++     if (reader->fetcher->fetchDone(&fetchcode, &httpcode)) {
++         code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
++     }
++-    int ret = MHD_queue_response(mhdconn, code, response);
+++    MHD_Result ret = MHD_queue_response(mhdconn, code, response);
++     MHD_destroy_response(response);
++     return ret;
 + }
-+ 
-+-int webserver::finalize_answer(
-++MHD_Result webserver::finalize_answer(
-+         MHD_Connection* connection,
-+         struct details::modded_request* mr,
-+         const char* method
-+@@ -731,10 +735,10 @@ int webserver::finalize_answer(
-+     mr->dhrs->decorate_response(raw_response);
-+     to_ret = mr->dhrs->enqueue_response(connection, raw_response);
-+     MHD_destroy_response(raw_response);
-+-    return to_ret;
-++    return (MHD_Result) to_ret;
-+ }
-+ 
-+-int webserver::complete_request(
-++MHD_Result webserver::complete_request(
-+         MHD_Connection* connection,
-+         struct details::modded_request* mr,
-+         const char* version,
-+@@ -750,7 +754,7 @@ int webserver::complete_request(
-+     return finalize_answer(connection, mr, method);
-+ }
-+ 
-+-int webserver::answer_to_connection(void* cls, MHD_Connection* connection,
-++MHD_Result webserver::answer_to_connection(void* cls, MHD_Connection* connection,
-+     const char* url, const char* method,
-+     const char* version, const char* upload_data,
-+     size_t* upload_data_size, void** con_cls
 +-- 
-+2.26.2
++GitLab
 +
 -- 
 2.26.2
