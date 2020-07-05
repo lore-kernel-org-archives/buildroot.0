@@ -1,23 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jul 2020 23:16:49 +0200
-Subject: [Buildroot] [PATCH 1/1]
+Date: Sun, 5 Jul 2020 23:16:17 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
  docs/manual/adding-packages-generic.txt: fix typo
-In-Reply-To: <20200606123638.2747300-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 6 Jun 2020 14:36:38 +0200")
-References: <20200606123638.2747300-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kql64se.fsf@dell.be.48ers.dk>
+Message-ID: <20200705211351.4C12B81233@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a75c75c569e234f0c462de3dad3cfeb78e25aa79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > LIBTOO_SOURCE -> LIBFOO_SOURCE
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+LIBTOO_SOURCE -> LIBFOO_SOURCE
 
-Committed to 2020.02.x and 2020.05.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 31e6e05f7236bea4eba7825c6e78bdd1d41af66b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-packages-generic.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 568daaeb8d..b8bfcb4aff 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -452,7 +452,7 @@ not and can not work as people would expect it should:
+   of the manifest file for this package.
+ 
+ * +LIBFOO_ACTUAL_SOURCE_TARBALL+ only applies to packages whose
+-  +LIBFOO_SITE+ / +LIBTOO_SOURCE+ pair points to an archive that does
++  +LIBFOO_SITE+ / +LIBFOO_SOURCE+ pair points to an archive that does
+   not actually contain source code, but binary code. This a very
+   uncommon case, only known to apply to external toolchains which come
+   already compiled, although theoretically it might apply to other
