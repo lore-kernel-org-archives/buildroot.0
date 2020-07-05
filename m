@@ -1,133 +1,106 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jul 2020 12:12:16 +0200
-Subject: [Buildroot] [PATCH 4/5] package/upmpdcli: fix build with
- libmicrohttpd 0.9.71
+Date: Sun,  5 Jul 2020 12:12:17 +0200
+Subject: [Buildroot] [PATCH 5/5] package/libmicrohttpd: security bump
+ version to 0.9.71
 In-Reply-To: <20200705101217.630684-1-bernd.kuhls@t-online.de>
 References: <20200705101217.630684-1-bernd.kuhls@t-online.de>
-Message-ID: <20200705101217.630684-4-bernd.kuhls@t-online.de>
+Message-ID: <20200705101217.630684-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Removed patch which was applied upstream, reformatted hashes.
+
+Release notes:
+https://lists.gnu.org/archive/html/libmicrohttpd/2020-06/msg00013.html
+
+"This release fixes a potential buffer overflow and is thus considered a
+security release. Please upgrade as soon as possible."
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...dapt-streamproxy-to-newer-microhttpd.patch | 106 ++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
+ package/libmicrohttpd/0001-fix-6135.patch | 46 -----------------------
+ package/libmicrohttpd/libmicrohttpd.hash  |  4 +-
+ package/libmicrohttpd/libmicrohttpd.mk    |  2 +-
+ 3 files changed, 3 insertions(+), 49 deletions(-)
+ delete mode 100644 package/libmicrohttpd/0001-fix-6135.patch
 
-diff --git a/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
-new file mode 100644
-index 0000000000..55c691b86a
---- /dev/null
-+++ b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
-@@ -0,0 +1,106 @@
-+From 4fd8a07b560dcd4ad5706684d512d33707de3da0 Mon Sep 17 00:00:00 2001
-+From: Jean-Francois Dockes <jf@dockes.org>
-+Date: Fri, 3 Jul 2020 19:26:37 +0200
-+Subject: [PATCH] Adapt streamproxy to newer microhttpd where results are now
-+ an enum
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[downloaded from upstream commit
-+ https://framagit.org/medoc92/upmpdcli/-/commit/4fd8a07b560dcd4ad5706684d512d33707de3da0]
-+---
-+ src/mediaserver/cdplugins/streamproxy.cpp | 23 ++++++++++++++---------
-+ 1 file changed, 14 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/mediaserver/cdplugins/streamproxy.cpp b/src/mediaserver/cdplugins/streamproxy.cpp
-+index abc57915..8d283834 100644
-+--- a/src/mediaserver/cdplugins/streamproxy.cpp
-++++ b/src/mediaserver/cdplugins/streamproxy.cpp
-+@@ -28,6 +28,11 @@
-+ #include <fcntl.h>
-+ #include <microhttpd.h>
-+ 
-++
-++#if MHD_VERSION < 0x00097002
-++typedef int MHD_Result;
-++#endif
-++
-+ #include <mutex>
-+ #include <condition_variable>
-+ #include <unordered_map>
-+@@ -155,7 +160,7 @@ public:
-+     ~Internal();
-+     bool startMHD();
-+ 
-+-    int answerConn(
-++    MHD_Result answerConn(
-+         struct MHD_Connection *connection, const char *url, 
-+         const char *method, const char *version, 
-+         const char *upload_data, size_t *upload_data_size,
-+@@ -202,7 +207,7 @@ StreamProxy::Internal::Internal(int _listenport, UrlTransFunc _urltrans)
-+ }
-+ 
-+ 
-+-static int answer_to_connection(
-++static MHD_Result answer_to_connection(
-+     void *cls, struct MHD_Connection *conn, 
-+     const char *url, const char *method, const char *version, 
-+     const char *upload_data, size_t *upload_data_size,
-+@@ -214,7 +219,7 @@ static int answer_to_connection(
-+         return internal->answerConn(
-+             conn, url, method, version, upload_data, upload_data_size, con_cls);
-+     } else {
-+-        return -1;
-++        return MHD_NO;
-+     }
-+ }
-+ 
-+@@ -238,8 +243,8 @@ static int print_out_key (void *cls, enum MHD_ValueKind kind,
-+ }
-+ #endif /* PRINT_KEYS */
-+ 
-+-static int mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
-+-                        const char *key, const char *value)
-++static MHD_Result mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
-++                               const char *key, const char *value)
-+ {
-+     unordered_map<string,string> *mp = (unordered_map<string,string> *)cls;
-+     if (mp) {
-+@@ -307,7 +312,7 @@ static bool processRange(struct MHD_Connection *mhdconn, uint64_t& offset)
-+     return true;
-+ }
-+ 
-+-int StreamProxy::Internal::answerConn(
-++MHD_Result StreamProxy::Internal::answerConn(
-+     struct MHD_Connection *mhdconn, const char *_url,
-+     const char *method, const char *version, 
-+     const char *upload_data, size_t *upload_data_size,
-+@@ -352,7 +357,7 @@ int StreamProxy::Internal::answerConn(
-+                 return MHD_NO;
-+             }
-+             MHD_add_response_header (response, "Location", url.c_str());
-+-            int ret = MHD_queue_response(mhdconn, 302, response);
-++            MHD_Result ret = MHD_queue_response(mhdconn, 302, response);
-+             MHD_destroy_response(response);
-+             return ret;
-+         }
-+@@ -393,7 +398,7 @@ int StreamProxy::Internal::answerConn(
-+         int code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
-+         struct MHD_Response *response =
-+             MHD_create_response_from_buffer(0, 0, MHD_RESPMEM_PERSISTENT);
-+-        int ret = MHD_queue_response(mhdconn, code, response);
-++        MHD_Result ret = MHD_queue_response(mhdconn, code, response);
-+         MHD_destroy_response(response);
-+         LOGINF("StreamProxy::answerConn (1): return with http code: " <<
-+                code << endl);
-+@@ -434,7 +439,7 @@ int StreamProxy::Internal::answerConn(
-+     if (reader->fetcher->fetchDone(&fetchcode, &httpcode)) {
-+         code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
-+     }
-+-    int ret = MHD_queue_response(mhdconn, code, response);
-++    MHD_Result ret = MHD_queue_response(mhdconn, code, response);
-+     MHD_destroy_response(response);
-+     return ret;
-+ }
-+-- 
-+GitLab
-+
+diff --git a/package/libmicrohttpd/0001-fix-6135.patch b/package/libmicrohttpd/0001-fix-6135.patch
+deleted file mode 100644
+index af410284aa..0000000000
+--- a/package/libmicrohttpd/0001-fix-6135.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 6702e6202368720d7a381669c03eedc318f225ca Mon Sep 17 00:00:00 2001
+-From: Christian Grothoff <christian@grothoff.org>
+-Date: Thu, 26 Mar 2020 19:08:30 +0100
+-Subject: [PATCH] fix #6135
+-
+-Downloaded from upstream commit to fix non-threaded build:
+-https://git.gnunet.org/libmicrohttpd.git/commit/?id=6702e6202368720d7a381669c03eedc318f225ca
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/microhttpd/internal.h | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/microhttpd/internal.h b/src/microhttpd/internal.h
+-index 211eed9f..ad16535e 100644
+---- a/src/microhttpd/internal.h
+-+++ b/src/microhttpd/internal.h
+-@@ -1462,12 +1462,6 @@ struct MHD_Daemon
+-    */
+-   size_t thread_stack_size;
+- 
+--  /**
+--   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
+--   * which sanity checks are off.
+--   */
+--  enum MHD_DisableSanityCheck insanity_level;
+--
+-   /**
+-    * Number of worker daemons
+-    */
+-@@ -1490,6 +1484,12 @@ struct MHD_Daemon
+-   MHD_mutex_ cleanup_connection_mutex;
+- #endif
+- 
+-+  /**
+-+   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
+-+   * which sanity checks are off.
+-+   */
+-+  enum MHD_DisableSanityCheck insanity_level;
+-+
+-   /**
+-    * Listen socket.
+-    */
+--- 
+-2.25.0
+-
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index 0fc451fcde..d853f67a76 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 90d0a3d396f96f9bc41eb0f7e8187796049285fabef82604acd4879590977307  libmicrohttpd-0.9.70.tar.gz
+-sha256 7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
++sha256  e8f445e85faf727b89e9f9590daea4473ae00ead38b237cf1eda55172b89b182  libmicrohttpd-0.9.71.tar.gz
++sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index ea2de55804..4cb9dbcbfd 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.70
++LIBMICROHTTPD_VERSION = 0.9.71
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
 -- 
 2.26.2
