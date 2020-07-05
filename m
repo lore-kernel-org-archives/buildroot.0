@@ -1,45 +1,41 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun,  5 Jul 2020 06:43:06 -0300
-Subject: [Buildroot] [PATCH] package/adwaita-icon-theme: bump version to
- 3.37.2
-Message-ID: <20200705094306.17996-1-sergio.prado@e-labworks.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Jul 2020 12:12:13 +0200
+Subject: [Buildroot] [PATCH 1/5] package/libhttpserver: bump version to
+ 0.18.1
+Message-ID: <20200705101217.630684-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/adwaita-icon-theme/adwaita-icon-theme.hash | 2 +-
- package/adwaita-icon-theme/adwaita-icon-theme.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libhttpserver/libhttpserver.hash | 2 +-
+ package/libhttpserver/libhttpserver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.hash b/package/adwaita-icon-theme/adwaita-icon-theme.hash
-index 0daef24db5ef..ce6acb8d9ae7 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.hash
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.hash
-@@ -1,5 +1,5 @@
- # From http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/3.22/adwaita-icon-theme-3.22.0.sha256sum
--sha256  c18bf6e26087d9819a962c77288b291efab25d0419b73d909dd771716a45dcb7  adwaita-icon-theme-3.22.0.tar.xz
-+sha256  a594e7440971f860cc61b1b8291be15ffc1b8dd06a9f11485a5a7faf189bcf6b  adwaita-icon-theme-3.37.2.tar.xz
- # locally computed
- sha256  51f83b2b4e9ed2beebc9b8eed2ecad29314a58ed8c5184b22ad8f9df703d3ce5  COPYING
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING_LGPL
-diff --git a/package/adwaita-icon-theme/adwaita-icon-theme.mk b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-index 8c9dec14f5c4..3950cfa63648 100644
---- a/package/adwaita-icon-theme/adwaita-icon-theme.mk
-+++ b/package/adwaita-icon-theme/adwaita-icon-theme.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libhttpserver/libhttpserver.hash b/package/libhttpserver/libhttpserver.hash
+index 0791d800b8..038e9f6b77 100644
+--- a/package/libhttpserver/libhttpserver.hash
++++ b/package/libhttpserver/libhttpserver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  b4a745a9f32a1ac02b545c062fc85342a655c3770cd8d4d7218f34509ea27d98  libhttpserver-0.18.0.tar.gz
++sha256  c830cb40b448a44cfc9000713aefff15d4ab1f6ebd6b47280a3cb64cb020f326  libhttpserver-0.18.1.tar.gz
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LESSER
+diff --git a/package/libhttpserver/libhttpserver.mk b/package/libhttpserver/libhttpserver.mk
+index 170d46b06a..37943bc497 100644
+--- a/package/libhttpserver/libhttpserver.mk
++++ b/package/libhttpserver/libhttpserver.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ADWAITA_ICON_THEME_VERSION_MAJOR = 3.22
--ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).0
-+ADWAITA_ICON_THEME_VERSION_MAJOR = 3.37
-+ADWAITA_ICON_THEME_VERSION = $(ADWAITA_ICON_THEME_VERSION_MAJOR).2
- ADWAITA_ICON_THEME_SITE = http://ftp.gnome.org/pub/gnome/sources/adwaita-icon-theme/$(ADWAITA_ICON_THEME_VERSION_MAJOR)
- ADWAITA_ICON_THEME_SOURCE = adwaita-icon-theme-$(ADWAITA_ICON_THEME_VERSION).tar.xz
- ADWAITA_ICON_THEME_INSTALL_STAGING = YES
+-LIBHTTPSERVER_VERSION = 0.18.0
++LIBHTTPSERVER_VERSION = 0.18.1
+ LIBHTTPSERVER_SITE = $(call github,etr,libhttpserver,$(LIBHTTPSERVER_VERSION))
+ LIBHTTPSERVER_LICENSE = LGPL-2.1+
+ LIBHTTPSERVER_LICENSE_FILES = COPYING.LESSER
 -- 
-2.17.1
+2.26.2
