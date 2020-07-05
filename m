@@ -1,41 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jul 2020 23:01:23 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/upx: use
- HOST_CONFIGURE_OPTS
-Message-ID: <20200705205915.054EF825FA@busybox.osuosl.org>
+Date: Sun, 05 Jul 2020 23:15:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gdk-pixbuf: add
+ gobject-introspection support
+In-Reply-To: <20200606083438.1317261-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 6 Jun 2020 10:34:37 +0200")
+References: <20200606083438.1317261-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d05964uh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a20806812ec6de3dc77ed6b1eca7bda3ee29fa2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Use HOST_CONFIGURE_OPTS to pass CPPFLAGS and LDFLAGS
+ > This will fix the following build failure when enabling introspection on
+ > libgtk2:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1e0c0055d77fdc6cd3655dbe88bd18c3231b5694)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/upx/upx.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ > Couldn't find include 'GdkPixbuf-2.0.gir' (search path: '['/tmp/instance-0/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/tmp/instance-0/output-1/host/share', 'gir-1.0', '/tmp/instance-0/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
 
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-index 1fe7162c21..c554553ce9 100644
---- a/package/upx/upx.mk
-+++ b/package/upx/upx.mk
-@@ -15,10 +15,8 @@ HOST_UPX_DEPENDENCIES = host-ucl host-zlib
- # We need to specify all, otherwise the default target only prints a message
- # stating to "please choose a target for 'make'"... :-(
- define HOST_UPX_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
--		LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR) \
--		CXXFLAGS_WERROR= \
--		-C $(@D) all
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+		UPX_UCLDIR=$(HOST_DIR) CXXFLAGS_WERROR= -C $(@D) all
- endef
- 
- # UPX has no install procedure, so install it manually.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results//86c6f55e0bd1a0fe3b70c9e97193aaad94d72a7f
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
