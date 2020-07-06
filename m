@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jul 2020 09:17:35 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/openssh: add
- optional dependency on audit
-Message-ID: <20200712201453.33AD585B06@busybox.osuosl.org>
+Date: Mon, 6 Jul 2020 09:16:23 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libxml2: remove
+ helper script from target
+Message-ID: <20200712201459.430D085B06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e5351212ceaa29de8c9d36208ce4f48dcac152c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1cf301eaf227c82d6fed145dfb8c505cee5c0d37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f10a7e0fb82cb44d98cc79fcda7260175de30b7f)
+(cherry picked from commit 89a0b73aed88990b81ce67d65bc03cdd046558e1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libxml2/libxml2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index d50572128a..b4651b5971 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -39,6 +39,13 @@ else
- OPENSSH_CONF_OPTS += --without-ssl-engine
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ea6a8c1f6d..acbdfb7728 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -49,6 +49,11 @@ else
+ LIBXML2_CONF_OPTS += --without-iconv
  endif
  
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+OPENSSH_DEPENDENCIES += audit
-+OPENSSH_CONF_OPTS += --with-audit=linux
-+else
-+OPENSSH_CONF_OPTS += --without-audit
-+endif
++define LIBXML2_CLEANUP_XML2CONF
++	rm -f $(TARGET_DIR)/usr/lib/xml2Conf.sh
++endef
++LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_CLEANUP_XML2CONF
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- define OPENSSH_INSTALL_PAM_CONF
- 	$(INSTALL) -D -m 644 $(@D)/contrib/sshd.pam.generic $(TARGET_DIR)/etc/pam.d/sshd
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
