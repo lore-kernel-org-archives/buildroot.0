@@ -1,49 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Jul 2020 21:01:04 +0200
-Subject: [Buildroot] [PATCH 1/4 v4] package/dbus-broker: new package
-In-Reply-To: <20200706173416.GK2273@scaer>
-References: <cover.1593944605.git.yann.morin.1998@free.fr>
- <c3acda1646617e0642559d2586e2801961a665b5.1593944605.git.yann.morin.1998@free.fr>
- <CADYdroMfyP9rbtEWTOwoGnPe4qKES+f4=Sg7Zm6ZKkjPorzJ0A@mail.gmail.com>
- <20200706173416.GK2273@scaer>
-Message-ID: <20200706190104.GL2273@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 6 Jul 2020 21:03:05 +0200
+Subject: [Buildroot] New user creation
+In-Reply-To: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
+References: <5AE4C154-18AF-43FA-A345-E048486EAC37@gmail.com>
+Message-ID: <20200706210305.2df462c5@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Hello Srijan Nandi,
 
-On 2020-07-06 19:34 +0200, Yann E. MORIN spake thusly:
-> On 2020-07-06 01:21 +0200, Norbert Lange spake thusly:
-> > Am So., 5. Juli 2020 um 12:23 Uhr schrieb Yann E. MORIN
-> > <yann.morin.1998@free.fr>:
-[--SNIP--]
-> > > dbus-broker code does not have a provision, like the original dbus has,
-> > > to specify the user to run as, and does not interpret the <user>
-> > > directive in the system.conf file. Since running the bus daemon as root
-> > > is not so safe, we create a systemd unit drop-in to complement the unit
-> > > provided by the package and defione the user to run as.
-> > I thought we both agreed last time that dbus-broker does read the config and
-> > switch to the uid  (you did convince me of that ! ;) ) ? see [1]
-> So I too was pretty much surprised by this, because that was indeed what
-> I remembered. But the run time test did not work. Maybe it was too late
-> in the night again, so I'll double check once more to be extra sure.
+On Fri, 3 Jul 2020 09:59:08 +0530, Srijan Nandi - Gmail <srijan.nandi@gmail.com> wrote:
 
-So thanks for having me double-and-triple check: this drop-in to specify
-the user is not needed, indeed. I'll drop it in a followup respin.
+> I am facing issues creating a new users. I already have the following set:
+>
+> BR2_ROOTFS_USERS_TABLES="x86_64/users"
+>
+> /opt/buildroot-2020.05$ cat x86_64/users
+> # <username> <uid> <group> <gid> <password> <home> <shell> <groups> <comment>
+> test       8000  wheel    -1    =           -                /bin/bash    -    Test user
+>
+> But when I check under passwd, I am not able to see the new user
+>
+> /opt/buildroot-2020.05$ cat output/target/etc/passwd
+> root:x:0:0:root:/root:/bin/bash
+> daemon:x:1:1:daemon:/usr/sbin:/bin/false
+> bin:x:2:2:bin:/bin:/bin/false
+> sys:x:3:3:sys:/dev:/bin/false
+> sync:x:4:100:sync:/bin:/bin/sync
+> mail:x:8:8:mail:/var/spool/mail:/bin/false
+> www-data:x:33:33:www-data:/var/www:/bin/false
+> operator:x:37:37:Operator:/var:/bin/false
+> nobody:x:65534:65534:nobody:/home:/bin/false
+>
+> Is there something I am missing
 
-Not sure what hapenned; probably late-at-night hacking is not good
-anymore for me...
+The evaluation of the users table is a late buildstep, you do not find
+the users in the target directory but in all filesystem images (e.g.
+the 'tar root filesyste' - BR2_TARGET_ROOTFS_TAR=y), if you enable
+this one and untar it you will find your configured users...
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+>
+> -=Srijan Nandi
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
