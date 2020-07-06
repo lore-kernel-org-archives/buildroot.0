@@ -1,88 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 22:04:41 +0200
-Subject: [Buildroot] [PATCH v3 1/2] configs/rock_pi_n10: new defconfig
-In-Reply-To: <1593893805-8430-2-git-send-email-sunil@amarulasolutions.com>
-References: <1593893805-8430-1-git-send-email-sunil@amarulasolutions.com>
- <1593893805-8430-2-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <20200712220441.0ca413bb@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Jul 2020 09:16:30 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libxml2: remove
+ helper script from target
+Message-ID: <20200712201453.2782185B06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7a3c50ebf47daa300206888e64e9c5c23e667c33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-On Sun,  5 Jul 2020 01:46:44 +0530
-Suniel Mahesh <sunil@amarulasolutions.com> wrote:
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 89a0b73aed88990b81ce67d65bc03cdd046558e1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libxml2/libxml2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> Add initial support for RK3399PRO SOM based rockpi-n10 target
-> with below features:
-> 
-> 	- Custom U-Boot 2020.07-rc4
-> 	  https://github.com/amarula/u-boot-amarula.git
-> 	  branch rock-pi
-> 	- Linux 5.7.2
-> 	- GPT partition layout is being used
-> 	- Default packages from buildroot
-> 
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-
-I've applied, after doing some minor changes, see below.
-
-> diff --git a/board/radxa/rockpi-n10/genimage.cfg b/board/radxa/rockpi-n10/genimage.cfg
-> new file mode 100644
-> index 0000000..8fbf562
-> --- /dev/null
-> +++ b/board/radxa/rockpi-n10/genimage.cfg
-> @@ -0,0 +1,39 @@
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"Image",
-> +			"rk3399pro-rock-pi-n10.dtb",
-> +			"extlinux"
-> +		}
-> +	}
-> +	size = 112M
-
-To be honest, it was not clear why you had this 112MB here. I kept it,
-but it feels weird. Why 112MB ?
-
-> diff --git a/configs/rock_pi_n10_defconfig b/configs/rock_pi_n10_defconfig
-> new file mode 100644
-> index 0000000..96b14bb
-> --- /dev/null
-> +++ b/configs/rock_pi_n10_defconfig
-> @@ -0,0 +1,57 @@
-> +# Architecture
-> +BR2_aarch64=y
-> +BR2_cortex_a72_a53=y
-> +
-> +# Linux headers same as kernel, a 5.4 series
-
-You're using a 5.7 kernel :-)
-
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.2"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399pro-rock-pi-n10"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-
-I dropped this line. Indeed, the kernel is loaded by U-Boot from the
-FAT partition, not from the root filesystem, so it is useless to
-install it in the rootfs.
-
-Let me know if there was a reason for this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index ea6a8c1f6d..acbdfb7728 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -49,6 +49,11 @@ else
+ LIBXML2_CONF_OPTS += --without-iconv
+ endif
+ 
++define LIBXML2_CLEANUP_XML2CONF
++	rm -f $(TARGET_DIR)/usr/lib/xml2Conf.sh
++endef
++LIBXML2_POST_INSTALL_TARGET_HOOKS += LIBXML2_CLEANUP_XML2CONF
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
