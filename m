@@ -1,21 +1,105 @@
 From: Ramon Fried <rfried.dev@gmail.com>
-Date: Mon, 6 Jul 2020 11:24:15 +0300
-Subject: [Buildroot] [PATCH] package/bitwise: add package
-In-Reply-To: <20200706093646.00e954e9@windsurf.home>
-References: <20200706041904.1518500-1-rfried.dev@gmail.com>
- <20200706093646.00e954e9@windsurf.home>
-Message-ID: <CAGi-RUL7VDR1cXtR3v5p00XQfH7+Vs1iEsZU8Qzeuu5Bb7bZTg@mail.gmail.com>
+Date: Mon,  6 Jul 2020 11:25:55 +0300
+Subject: [Buildroot] [PATCH v2] package/bitwise: new package
+Message-ID: <20200706082555.1651841-1-rfried.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 6, 2020 at 10:36 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Thanks for your contribution! The commit title should be
-> "package/bitwise: new package".
-Thanks, Fixed everything. sending v2.
+Bitwise is multi base interactive calculator supporting dynamic
+base conversion and bit manipulation.
+It's a handy tool for low level hackers,
+kernel developers and device drivers developers.
+
+Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+---
+v2:
+* Fixed commit message.
+* Added Developers entry
+* Fixed "make check-package" errors
+* Fixed versioning.
+
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/bitwise/Config.in    | 11 +++++++++++
+ package/bitwise/bitwise.hash |  1 +
+ package/bitwise/bitwise.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/bitwise/Config.in
+ create mode 100644 package/bitwise/bitwise.hash
+ create mode 100644 package/bitwise/bitwise.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d67c75033f..a56f2d0165 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2132,6 +2132,9 @@ N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+ F:	package/freescale-imx/
+ F:	package/paho-mqtt-cpp/
+ 
++N:  Ramon Fried <rfried.dev@gmail.com>
++F:  package/bitwise/
++
+ N:	Rapha?l M?lotte <raphael.melotte@essensium.com>
+ F:	package/jbig2dec/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 6a34a895af..b4b2a86a67 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -148,6 +148,7 @@ endmenu
+ menu "Development tools"
+ 	source "package/bats-core/Config.in"
+ 	source "package/binutils/Config.in"
++	source "package/bitwise/Config.in"
+ 	source "package/bsdiff/Config.in"
+ 	source "package/bustle/Config.in"
+ 	source "package/check/Config.in"
+diff --git a/package/bitwise/Config.in b/package/bitwise/Config.in
+new file mode 100644
+index 0000000000..e955da374b
+--- /dev/null
++++ b/package/bitwise/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BITWISE
++	bool "bitwise"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	help
++	  Bitwise is multi base interactive calculator
++	  supporting dynamic base conversion and bit manipulation.
++	  It's a handy tool for low level hackers,
++	  kernel developers and device drivers developers.
++
++	  https://github.com/mellowcandle/bitwise
+diff --git a/package/bitwise/bitwise.hash b/package/bitwise/bitwise.hash
+new file mode 100644
+index 0000000000..35a1109b93
+--- /dev/null
++++ b/package/bitwise/bitwise.hash
+@@ -0,0 +1 @@
++sha256 33ce934fb99dadf7652224152cc135a0abf6a211adde53d96e9be7067567749c  bitwise-v0.41.tar.gz
+diff --git a/package/bitwise/bitwise.mk b/package/bitwise/bitwise.mk
+new file mode 100644
+index 0000000000..bd3adc6ec5
+--- /dev/null
++++ b/package/bitwise/bitwise.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# bitwise
++#
++################################################################################
++
++BITWISE_VERSION = 0.41
++BITWISE_SITE = https://github.com/mellowcandle/bitwise/releases/download/$(BITWISE_VERSION)
++BITWISE_SOURCE = bitwise-v$(BITWISE_VERSION).tar.gz
++BITWISE_DEPENDENCIES = ncurses readline
++BITWISE_LICENSE = GPL-2.0
++BITWISE_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+-- 
+2.27.0
