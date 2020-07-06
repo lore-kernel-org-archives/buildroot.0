@@ -1,72 +1,48 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  7 Jul 2020 01:41:47 +0200
-Subject: [Buildroot] [PATCH 4/8] board/qemu/aarch64-virt/linux.config:
- enable VIRTIO_GPU driver
+Date: Tue,  7 Jul 2020 01:41:49 +0200
+Subject: [Buildroot] [PATCH 6/8] board/qemu/aarch64-virt/linux.config:
+ enable ARM_SMMU_V3
 In-Reply-To: <20200706234151.2940865-1-romain.naour@gmail.com>
 References: <20200706234151.2940865-1-romain.naour@gmail.com>
-Message-ID: <20200706234151.2940865-4-romain.naour@gmail.com>
+Message-ID: <20200706234151.2940865-6-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This driver is intended to be used by mesa virgl Gallium on the guest.
-virtio-gpu is enabled by adding "-device virtio-gpu-pci" on the qemu
-command line.
+From [1]:
+Support for implementations of the ARM System MMU architecture
+version 3 providing translation support to a PCIe root complex.
 
-It's detected by lspci and dmesg log:
+ARM SMMU is supported since Qemu v3.0.0 [2].
 
-$ lspci
-00:01.0 Display controller: Red Hat, Inc. Virtio GPU (rev 01)
+ARM_SMMU_V3 can be enabled with: -M virt,iommu=smmuv3
 
-$ dmesg
-virtio-pci 0000:00:01.0: enabling device (0000 -> 0002)
-[drm] pci: virtio-gpu-pci detected at 0000:00:01.0
-[drm] virgl 3d acceleration not supported by host
-[drm] EDID support available.
-[TTM] Zone  kernel: Available graphics memory: 51876 KiB
-[TTM] Initializing pool allocator
-[TTM] Initializing DMA pool allocator
-[drm] number of scanouts: 1
-[drm] number of cap sets: 0
-[drm] Initialized virtio_gpu 0.1.0 0 for virtio2 on minor 0
+dmesg:
+arm-smmu-v3 9050000.smmuv3: ias 44-bit, oas 44-bit (features 0x00000305)
+arm-smmu-v3 9050000.smmuv3: allocated 262144 entries for cmdq
+arm-smmu-v3 9050000.smmuv3: allocated 131072 entries for evtq
 
-The framebuffer interface fb0 is now present in /dev
-
-$ ls /dev/fb*
-/dev/fb0
-
-See:
-https://www.kraxel.org/blog/2019/09/display-devices-in-qemu/
-https://at.projects.genivi.org/wiki/display/WIK4/GENIVI+Technical+Summit+Session+Content+2018?preview=%2F28412356%2F28412481%2F2018-10-11_GeniviBangalorTechSummit_Virtio_GPU.pdf
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/iommu/Kconfig?h=v5.4.42#n390
+[2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=527773eeef9f2225370f9c17c35074b2ed0ced92
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- board/qemu/aarch64-virt/linux.config | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ board/qemu/aarch64-virt/linux.config | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-index 295bf19a7c..129a200ab0 100644
+index c21994076a..88f4c43c9e 100644
 --- a/board/qemu/aarch64-virt/linux.config
 +++ b/board/qemu/aarch64-virt/linux.config
-@@ -40,14 +40,16 @@ CONFIG_DUMMY=y
- CONFIG_MACVLAN=y
- CONFIG_VIRTIO_NET=y
- CONFIG_NLMON=y
--CONFIG_VT_HW_CONSOLE_BINDING=y
- CONFIG_SERIAL_AMBA_PL011=y
- CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_HW_RANDOM=y
- CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_DRM=y
-+CONFIG_DRM_VIRTIO_GPU=y
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_PL031=y
-+CONFIG_VIRTIO_PCI=y
- CONFIG_VIRTIO_MMIO=y
+@@ -56,6 +56,7 @@ CONFIG_VIRTIO_MMIO=y
  CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
  CONFIG_MAILBOX=y
+ CONFIG_PL320_MBOX=y
++CONFIG_ARM_SMMU_V3=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
 -- 
 2.25.4
