@@ -1,22 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 Jul 2020 09:16:52 +0200
-Subject: [Buildroot] [PATCH] package/libxml2: remove helper script from
- target
-In-Reply-To: <20200605225719.13836-1-nolange79@gmail.com> (Norbert Lange's
- message of "Sat, 6 Jun 2020 00:57:18 +0200")
-References: <20200605225719.13836-1-nolange79@gmail.com>
-Message-ID: <87r1tp3yfv.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 6 Jul 2020 09:32:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-greenlet: add x86_64 as
+ supported arch
+In-Reply-To: <20200705215435.148058-1-james.hilliard1@gmail.com>
+References: <20200705215435.148058-1-james.hilliard1@gmail.com>
+Message-ID: <20200706093221.33e16540@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
+On Sun,  5 Jul 2020 15:54:34 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
- > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> -	default y if BR2_x86
+> +	default y if BR2_x86 || BR2_x86_64
 
-Committed to 2020.02.x and 2020.05.x, thanks.
+In fact BR2_x86 doesn't even exist in Buildroot, it's BR2_i386 for the
+x86 32 bit architecture.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
