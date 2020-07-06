@@ -1,59 +1,110 @@
-From: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Date: Mon,  6 Jul 2020 11:10:44 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/freescale_imx8qmmek: Bump BSP
- components to version 5.4.24_2.1.0
-Message-ID: <20200706091045.30918-1-maeva.manuel@oss.nxp.com>
+From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+Date: Mon,  6 Jul 2020 05:17:15 -0600
+Subject: [Buildroot] [PATCH 1/1] package/cli11: new package
+Message-ID: <20200706111715.46462-1-aleksandr.o.makarov@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
----
- configs/freescale_imx8qmmek_defconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+CLI11 is a command line parser for C++11 and beyond
+that provides a rich feature set with a simple and
+intuitive interface.
 
-diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
-index c9fc3a781c..2c55b3cd9f 100644
---- a/configs/freescale_imx8qmmek_defconfig
-+++ b/configs/freescale_imx8qmmek_defconfig
-@@ -1,15 +1,15 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8qm-mek"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_FREESCALE_IMX=y
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+https://github.com/CLIUtils/CLI11
+
+Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+---
+ package/Config.in        |  1 +
+ package/cli11/Config.in  | 26 ++++++++++++++++++++++++++
+ package/cli11/cli11.hash |  3 +++
+ package/cli11/cli11.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/cli11/Config.in
+ create mode 100644 package/cli11/cli11.hash
+ create mode 100644 package/cli11/cli11.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 6a34a895af..940bd1542f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1914,6 +1914,7 @@ endmenu
+ 
+ menu "Text and terminal handling"
+ 	source "package/augeas/Config.in"
++	source "package/cli11/Config.in"
+ 	source "package/enchant/Config.in"
+ 	source "package/fmt/Config.in"
+ 	source "package/fstrcmp/Config.in"
+diff --git a/package/cli11/Config.in b/package/cli11/Config.in
+new file mode 100644
+index 0000000000..77619a1366
+--- /dev/null
++++ b/package/cli11/Config.in
+@@ -0,0 +1,26 @@
++comment "cli11 needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++config BR2_PACKAGE_CLI11
++	bool "CLI11"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	help
++	  CLI11 is a command line parser for C++11 and beyond that
++	  provides a rich feature set with a simple and intuitive
++	  interface.
++
++	  https://github.com/CLIUtils/CLI11
++
++if BR2_PACKAGE_CLI11
++
++config BR2_PACKAGE_CLI11_SINGLE_FILE
++	bool "generate single header"
++	select BR2_PACKAGE_HOST_PYTHON
++	help
++	  Generate a single header file.
++
++endif # BR2_PACKAGE_CLI11
+diff --git a/package/cli11/cli11.hash b/package/cli11/cli11.hash
+new file mode 100644
+index 0000000000..2781098bb7
+--- /dev/null
++++ b/package/cli11/cli11.hash
+@@ -0,0 +1,3 @@
++sha256  c780cf8cf3ba5ec2648a7eeb20a47e274493258f38a9b417628e0576f473a50b  cli11-1.9.1.tar.gz
++sha256  51c69badd1cd4ffb036fb2a2efc4d7db8dd8c89905526e7193d57912968efae1  LICENSE
++
+diff --git a/package/cli11/cli11.mk b/package/cli11/cli11.mk
+new file mode 100644
+index 0000000000..1ada08127f
+--- /dev/null
++++ b/package/cli11/cli11.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# cli11
++#
++################################################################################
++
++CLI11_VERSION = 1.9.1
++CLI11_SITE = $(call github,CLIUtils,CLI11,v$(CLI11_VERSION))
++CLI11_LICENSE = BSD-3-Clause
++CLI11_LICENSE_FILES = LICENCE
++CLI11_INSTALL_STAGING = YES
++CLI11_INSTALL_TARGET = NO
++CLI11_CONF_OPTS = -DCLI11_BUILD_EXAMPLES=OFF \
++                  -DCLI11_BUILD_DOCS=OFF
++
++ifeq ($(BR2_PACKAGE_CLI11_SINGLE_FILE),y)
++CLI11_CONF_OPTS += -DCLI11_SINGLE_FILE=ON \
++                   -DCLI11_INSTALL=OFF
++CLI11_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++endif
++
++$(eval $(cmake-package))
 -- 
-2.17.1
+2.26.0
