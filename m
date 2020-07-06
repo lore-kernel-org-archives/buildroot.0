@@ -1,105 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Jul 2020 09:36:46 +0200
-Subject: [Buildroot] [PATCH] package/bitwise: add package
-In-Reply-To: <20200706041904.1518500-1-rfried.dev@gmail.com>
-References: <20200706041904.1518500-1-rfried.dev@gmail.com>
-Message-ID: <20200706093646.00e954e9@windsurf.home>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Mon, 6 Jul 2020 16:13:46 +0800
+Subject: [Buildroot] [PATCH v3 2/2] configs/rock_pi_4: new defconfig
+In-Reply-To: <CAM+7aWur5oFNZVCV5HddosWLVysbD9=heXYeY2QsbpN7JL=WjA@mail.gmail.com>
+References: <1593893805-8430-1-git-send-email-sunil@amarulasolutions.com>
+ <1593893805-8430-3-git-send-email-sunil@amarulasolutions.com>
+ <f6046092-3cc2-7414-8741-612fddb1145f@aliyun.com>
+ <CAM+7aWur5oFNZVCV5HddosWLVysbD9=heXYeY2QsbpN7JL=WjA@mail.gmail.com>
+Message-ID: <8aab0e4a-af19-b988-be50-cce219b429a0@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I deleted some content for easy reading.
+>> Hi Suniel,
+>>> Add initial support for RK3399 based rockpi-4 targets (model A, B, C)
+>>> with below features:
+>>> ??? - Custom U-Boot 2020.07-rc4
+>>> ????? https://github.com/amarula/u-boot-amarula.git
+>>> ????? branch rock-pi
+>>> ??? - Linux 5.4.46
+>>> ??? - GPT partition layout is being used
+>>> ??? - Default packages from buildroot
+>>> ...
+>>> +??? partition loader1 {
+>>> +??????? image = "idbloader.img"
+>>> +??????? offset = 32K
+>>> +??? }
+>>> +
+>>> +??? partition loader2 {
+>>> +??????? image = "u-boot.itb"
+>>> +??????? offset = 8M
+>>> +??? }
+>> I think using u-boot-rockchip.bin is simpler.
+>> ??? partition u-boot {
+>> ??????? offset = "32K"
+>> ??????? image = "u-boot-rockchip.bin"
+>> ??????? in-partition-table = false
+>> ??? } 
+> Hi Tian,
+> Rockchip uses unified GPT as its main partition table. We are just
+> following that.
+> doc/README.rockchip (GPT partition layout)
+> http://rockchip.wikidot.com/partitions
+See https://patchwork.kernel.org/patch/11326313/
+u-boot-rockchip.bin consists of idbloader.img and u-boot.itb,
+and contains a gap of 8355840 bytes.
+The result is the same as yours, and more simple.
 
-Thanks for your contribution! The commit title should be
-"package/bitwise: new package".
-
-On Mon,  6 Jul 2020 07:19:04 +0300
-Ramon Fried <rfried.dev@gmail.com> wrote:
-
-> Bitwise is multi base interactive calculator supporting dynamic
-> base conversion and bit manipulation.
-> It's a handy tool for low level hackers,
-> kernel developers and device drivers developers.
-> 
-> Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
-> ---
->  package/Config.in            |  1 +
->  package/bitwise/Config.in    | 10 ++++++++++
->  package/bitwise/bitwise.hash |  1 +
->  package/bitwise/bitwise.mk   | 12 ++++++++++++
->  4 files changed, 24 insertions(+)
-
-You need to update the DEVELOPERS file.
-
-
-> diff --git a/package/bitwise/Config.in b/package/bitwise/Config.in
-> new file mode 100644
-> index 0000000000..07e6580d14
-> --- /dev/null
-> +++ b/package/bitwise/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_BITWISE
-> +	bool "bitwise"
-> +	select BR2_PACKAGE_NCURSES
-> +	select BR2_PACKAGE_READLINE
-> +	help
-> +	  Bitwise is multi base interactive calculator supporting dynamic base
-> +	  conversion and bit manipulation. It's a handy tool for low level hackers,
-> +	  kernel developers and device drivers developers.
-
-I think some of those lines are too long. Could you run "make
-check-package" ?
-
-> diff --git a/package/bitwise/bitwise.hash b/package/bitwise/bitwise.hash
-> new file mode 100644
-> index 0000000000..35a1109b93
-> --- /dev/null
-> +++ b/package/bitwise/bitwise.hash
-> @@ -0,0 +1 @@
-> +sha256 33ce934fb99dadf7652224152cc135a0abf6a211adde53d96e9be7067567749c  bitwise-v0.41.tar.gz
-> diff --git a/package/bitwise/bitwise.mk b/package/bitwise/bitwise.mk
-> new file mode 100644
-> index 0000000000..2bc21da4b2
-> --- /dev/null
-> +++ b/package/bitwise/bitwise.mk
-> @@ -0,0 +1,12 @@
-> +#
-> +# bitwise
-> +#
-> +################################################################################
-
-The comment header is not complete, the first line full of #### is
-missing.
-
-> +BITWISE_VERSION = v0.41
-
-This should be just 0.41
-
-> +BITWISE_SITE = https://github.com/mellowcandle/bitwise/releases/download/$(BITWISE_VERSION)
-> +BITWISE_SOURCE = bitwise-$(BITWISE_VERSION).tar.gz
-
-So this should be:
-
-BITWISE_SOURCE = bitwise-v$(BITWISE_VERSION).tar.gz
-
-> +BITWISE_DEPENDENCIES= ncurses readline
-
-Space before =. This is reported by "make check-package" as well I
-believe.
-
-> +BITWISE_LICENSE = GPL-2.0
-> +BITWISE_LICENSE_FILES = COPYING
-
-We need an empty line before the eval autotools-package line.
-
-> +$(eval $(autotools-package))
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Yuanhao
