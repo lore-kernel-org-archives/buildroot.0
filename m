@@ -1,57 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jul 2020 23:05:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: fix install staging
- typo
-In-Reply-To: <20200706010952.848810-1-james.hilliard1@gmail.com>
-References: <20200706010952.848810-1-james.hilliard1@gmail.com>
-Message-ID: <20200707210532.GY2273@scaer>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue,  7 Jul 2020 18:19:47 -0300
+Subject: [Buildroot] [PATCH v2] package/dvb-apps: add hash file
+Message-ID: <20200707211947.3886-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 
-On 2020-07-05 19:09 -0600, James Hilliard spake thusly:
-> This won't enable install to staging unless capitalized.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - fix source code hash (it will only build if the archive available on
+    sources.buildroot.net is removed, see discussion in [1]).
 
-Applied to master, thanks.
+[1] http://lists.busybox.net/pipermail/buildroot/2020-July/285982.html
 
-Regards,
-Yann E. MORIN.
+---
+ package/dvb-apps/dvb-apps.hash | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 package/dvb-apps/dvb-apps.hash
 
-> ---
->  package/libcamera/libcamera.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-> index ebdf2dba34..a39e9f1c3e 100644
-> --- a/package/libcamera/libcamera.mk
-> +++ b/package/libcamera/libcamera.mk
-> @@ -16,7 +16,7 @@ LIBCAMERA_CONF_OPTS = \
->  	-Dandroid=false \
->  	-Ddocumentation=false \
->  	-Dtest=false
-> -LIBCAMERA_INSTALL_STAGING = yes
-> +LIBCAMERA_INSTALL_STAGING = YES
->  LIBCAMERA_LICENSE = \
->  	LGPL-2.1+ (library), \
->  	GPL-2.0+ (utils), \
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/dvb-apps/dvb-apps.hash b/package/dvb-apps/dvb-apps.hash
+new file mode 100644
+index 000000000000..d394ced131df
+--- /dev/null
++++ b/package/dvb-apps/dvb-apps.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256  926208b7e711b4bab1a909ff9bf4e6ae54acdd30a46f5d5bd700ecb088fe1f57  dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz
++
++# Hash for license files:
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
