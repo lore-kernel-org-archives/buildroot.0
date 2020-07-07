@@ -1,67 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jul 2020 21:56:15 +0200
-Subject: [Buildroot] [PATCH] syslog-ng: version bump to 3.28.1
-In-Reply-To: <20200707094611.29145-1-judge.packham@gmail.com>
-References: <20200707094611.29145-1-judge.packham@gmail.com>
-Message-ID: <20200707195615.GP2273@scaer>
+Date: Tue, 7 Jul 2020 21:59:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/valijson: bump version to 0.3
+In-Reply-To: <1594127214-26135-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+References: <1594127214-26135-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+Message-ID: <20200707195933.GQ2273@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris, All,
+Santosh, All,
 
-On 2020-07-07 21:46 +1200, Chris Packham spake thusly:
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+On 2020-07-07 18:36 +0530, Santosh Multhalli spake thusly:
+> - Updated hash of valijson tar file in valijson.hash file
 
-Applied to master, thanks.
+It was not very interesting to have that in the commit log, because it
+is obvious that you had to update the hash file, just by reading the
+diff.
+
+So I just dropped that sentence, and applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
 > ---
->  package/syslog-ng/syslog-ng.conf | 2 +-
->  package/syslog-ng/syslog-ng.hash | 2 +-
->  package/syslog-ng/syslog-ng.mk   | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+>  package/valijson/valijson.hash | 2 +-
+>  package/valijson/valijson.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-> index cad1d9c94d..87861ba414 100644
-> --- a/package/syslog-ng/syslog-ng.conf
-> +++ b/package/syslog-ng/syslog-ng.conf
-> @@ -1,4 +1,4 @@
-> - at version: 3.27
-> + at version: 3.28
+> diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
+> index 6f11000..e184ccb 100644
+> --- a/package/valijson/valijson.hash
+> +++ b/package/valijson/valijson.hash
+> @@ -1,3 +1,3 @@
+>  # Locally Computed:
+> -sha256  77dbebb40dab2e834557c2fcc39122cdb2d0fe26bf591c2b3e0df5a316a45592  valijson-0.2.tar.gz
+> +sha256  2ac881a36f90810b41b66511502dea1e7886137ad31bcfb4e917d929c5028c35  valijson-0.3.tar.gz
+>  sha256  1a0f99926a2dbec30eba3db820236d9953fbe3048976923ac24980e655fbe991  LICENSE
+> diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+> index 31efeed..b38c631 100644
+> --- a/package/valijson/valijson.mk
+> +++ b/package/valijson/valijson.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  source s_sys {
->  	file("/proc/kmsg" program_override("kernel"));
-> diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-> index ca4b59cd4e..0e81927cee 100644
-> --- a/package/syslog-ng/syslog-ng.hash
-> +++ b/package/syslog-ng/syslog-ng.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed
-> -sha256 c54c633c97f7fd8dd68261cfd784a76211e6e52965178e3aa4d0e32b899d61b3  syslog-ng-3.27.1.tar.gz
-> +sha256 af4ef43c41e05759ce6f20f344563f1cbb00622399263fa0c6b9e96426c2a6e8  syslog-ng-3.28.1.tar.gz
->  sha256 e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
->  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-> index 8c19fe74a3..428404f73a 100644
-> --- a/package/syslog-ng/syslog-ng.mk
-> +++ b/package/syslog-ng/syslog-ng.mk
-> @@ -6,7 +6,7 @@
->  
->  # When updating the version, please check at runtime if the version in
->  # syslog-ng.conf header needs to be updated
-> -SYSLOG_NG_VERSION = 3.27.1
-> +SYSLOG_NG_VERSION = 3.28.1
->  SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
->  SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
->  SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+> -VALIJSON_VERSION = 0.2
+> +VALIJSON_VERSION = 0.3
+>  VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
+>  VALIJSON_LICENSE = BSD-2-Clause
+>  VALIJSON_LICENSE_FILES = LICENSE
 > -- 
-> 2.27.0
+> 2.5.0
 > 
 > _______________________________________________
 > buildroot mailing list
