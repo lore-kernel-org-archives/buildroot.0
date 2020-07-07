@@ -1,77 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jul 2020 21:54:26 +0200
-Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
- version
-In-Reply-To: <20200707160857.645197-1-giulio.benetti@benettiengineering.com>
-References: <20200707160857.645197-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200707195426.GO2273@scaer>
+Date: Tue, 7 Jul 2020 21:55:39 +0200
+Subject: [Buildroot] [git commit] syslog-ng: version bump to 3.28.1
+Message-ID: <20200707195240.D40D486592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=52c6f3f084ed774f02a76321dff0f1a5ef800ee1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-07 18:08 +0200, Giulio Benetti spake thusly:
-> For 5.6 and 5.7 support.
-> 
-> git shortlog --invert-grep --grep=Travis --no-merges ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2..
-> Jonathan Liu (2):
->       mali: Fix build for 5.6
->       mali: Fix build for 5.7
-> 
-> Maxime Ripard (3):
->       Create travis.yml
->       actions: Add feedparser to the host
->       travis: Try to fix the push code
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ package/syslog-ng/syslog-ng.hash | 8 ++++----
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash  | 2 +-
->  .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-> index 7c01d07d20..ff5bc050b1 100644
-> --- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-> +++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 98abeb8ff2e7e824ec89c7be9984ff298db1f35e48d79092238799ff5a239e91  sunxi-mali-mainline-driver-ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2.tar.gz
-> +sha256 a2bb43ed2e64cb081e3bc814941c4de02e785f9984783061cf486d2b0b92407b  sunxi-mali-mainline-driver-a588b22f6b3d40ad18070c699f90f36ed21c9f7d.tar.gz
->  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-> index 40ea450b31..3bb899041e 100644
-> --- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-> +++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SUNXI_MALI_MAINLINE_DRIVER_VERSION = ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2
-> +SUNXI_MALI_MAINLINE_DRIVER_VERSION = a588b22f6b3d40ad18070c699f90f36ed21c9f7d
->  SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
->  SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
->  SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index cad1d9c94d..87861ba414 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.27
++ at version: 3.28
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index ca4b59cd4e..a4ecfaacc0 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 c54c633c97f7fd8dd68261cfd784a76211e6e52965178e3aa4d0e32b899d61b3  syslog-ng-3.27.1.tar.gz
+-sha256 e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
+-sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
++sha256  af4ef43c41e05759ce6f20f344563f1cbb00622399263fa0c6b9e96426c2a6e8  syslog-ng-3.28.1.tar.gz
++sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
++sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 8c19fe74a3..428404f73a 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 3.27.1
++SYSLOG_NG_VERSION = 3.28.1
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
