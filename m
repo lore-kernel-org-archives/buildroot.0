@@ -1,54 +1,52 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 7 Jul 2020 10:51:39 -0500
-Subject: [Buildroot] [PATCH 1/3 v2] package/kmod: explicitly disable
- compression when not enabled
-In-Reply-To: <7067f36377f52c1a5022a9988be2ee7e70ce48ac.1588511382.git.yann.morin.1998@free.fr>
-References: <cover.1588511382.git.yann.morin.1998@free.fr>
- <7067f36377f52c1a5022a9988be2ee7e70ce48ac.1588511382.git.yann.morin.1998@free.fr>
-Message-ID: <CANQCQpYwWseH-9LFoOceLqyAgVYF_Mm7EHs379q0VAB+Rdfisw@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  7 Jul 2020 18:08:57 +0200
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump version
+Message-ID: <20200707160857.645197-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kris,
+For 5.6 and 5.7 support.
 
+git shortlog --invert-grep --grep=Travis --no-merges ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2..
+Jonathan Liu (2):
+      mali: Fix build for 5.6
+      mali: Fix build for 5.7
 
-On Sun, May 3, 2020 at 8:12 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/kmod/kmod.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-> index e2dfea5c7b..cdbfc5a469 100644
-> --- a/package/kmod/kmod.mk
-> +++ b/package/kmod/kmod.mk
-> @@ -35,11 +35,15 @@ endif
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  KMOD_DEPENDENCIES += zlib
->  KMOD_CONF_OPTS += --with-zlib
-> +else
-> +KMOD_CONF_OPTS += --without-zlib
->  endif
->
->  ifeq ($(BR2_PACKAGE_XZ),y)
->  KMOD_DEPENDENCIES += xz
->  KMOD_CONF_OPTS += --with-xz
-> +else
-> +KMOD_CONF_OPTS += --without-xz
->  endif
->
->  ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Maxime Ripard (3):
+      Create travis.yml
+      actions: Add feedparser to the host
+      travis: Try to fix the push code
 
-Reflecting this for your review
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash  | 2 +-
+ .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+index 7c01d07d20..ff5bc050b1 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 98abeb8ff2e7e824ec89c7be9984ff298db1f35e48d79092238799ff5a239e91  sunxi-mali-mainline-driver-ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2.tar.gz
++sha256 a2bb43ed2e64cb081e3bc814941c4de02e785f9984783061cf486d2b0b92407b  sunxi-mali-mainline-driver-a588b22f6b3d40ad18070c699f90f36ed21c9f7d.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index 40ea450b31..3bb899041e 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = a588b22f6b3d40ad18070c699f90f36ed21c9f7d
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
+-- 
+2.25.1
