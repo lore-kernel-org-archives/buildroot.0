@@ -1,69 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 7 Jul 2020 14:56:23 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/qemu: add vnc support
-In-Reply-To: <20200629205002.8087-2-jared.bents@rockwellcollins.com>
-References: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
- <20200629205002.8087-2-jared.bents@rockwellcollins.com>
-Message-ID: <c7e7fad0-f1dd-f0ad-37e9-07d7a4b32dd8@gmail.com>
+From: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+Date: Tue,  7 Jul 2020 18:36:54 +0530
+Subject: [Buildroot] [PATCH 1/1]   package/valijson: bump version to 0.3
+Message-ID: <1594127214-26135-1-git-send-email-santosh.multhalli@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jared,
+- Updated hash of valijson tar file in valijson.hash file
 
-Le 29/06/2020 ? 22:50, Jared Bents a ?crit?:
-> update to add vnc support to qemu if libvncserver is
-> selected
-> 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> ---
->  package/qemu/qemu.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 0b76e432e0..520547e94e 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -98,6 +98,13 @@ else
->  QEMU_OPTS += --disable-libusb
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBVNCSERVER),y)
-> +QEMU_OPTS += --enable-vnc
-> +QEMU_DEPENDENCIES += libvncserver
-> +else
-> +QEMU_OPTS += --disable-vnc
-> +endif
+Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+---
+ package/valijson/valijson.hash | 2 +-
+ package/valijson/valijson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-When vnc support is enabled, vnc suboption will try to detect automatically some
-dependencies (like libpng see [1][2]).
-
-vnc-sasl        SASL encryption for VNC server
-vnc-jpeg        JPEG lossy compression for VNC server
-vnc-png         PNG compression for VNC server
-
-Either disable them explicitly or handle the optional dependencies.
-
-[1]
-https://git.buildroot.net/buildroot/commit/?id=ece36b9a46583315fe0d607099e16949ed6c2b0b
-[2]
-https://git.qemu.org/?p=qemu.git;a=blob;f=configure;h=23b5e93752b6a2597b2099b502184bc5fc352bf1;hb=fdd76fecdde1ad444ff4deb7f1c4f7e4a1ef97d6#l1818
-
-Best regards,
-Romain
-
-> +
->  ifeq ($(BR2_PACKAGE_NETTLE),y)
->  QEMU_OPTS += --enable-nettle
->  QEMU_DEPENDENCIES += nettle
-> @@ -140,7 +147,6 @@ define QEMU_CONFIGURE_CMDS
->  			--disable-bsd-user \
->  			--disable-containers \
->  			--disable-xen \
-> -			--disable-vnc \
->  			--disable-virtfs \
->  			--disable-brlapi \
->  			--disable-curses \
-> 
+diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
+index 6f11000..e184ccb 100644
+--- a/package/valijson/valijson.hash
++++ b/package/valijson/valijson.hash
+@@ -1,3 +1,3 @@
+ # Locally Computed:
+-sha256  77dbebb40dab2e834557c2fcc39122cdb2d0fe26bf591c2b3e0df5a316a45592  valijson-0.2.tar.gz
++sha256  2ac881a36f90810b41b66511502dea1e7886137ad31bcfb4e917d929c5028c35  valijson-0.3.tar.gz
+ sha256  1a0f99926a2dbec30eba3db820236d9953fbe3048976923ac24980e655fbe991  LICENSE
+diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+index 31efeed..b38c631 100644
+--- a/package/valijson/valijson.mk
++++ b/package/valijson/valijson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VALIJSON_VERSION = 0.2
++VALIJSON_VERSION = 0.3
+ VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
+ VALIJSON_LICENSE = BSD-2-Clause
+ VALIJSON_LICENSE_FILES = LICENSE
+-- 
+2.5.0
