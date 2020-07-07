@@ -1,68 +1,77 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue, 7 Jul 2020 16:55:54 -0300
-Subject: [Buildroot] [PATCH] package/dvb-apps: add hash file
-In-Reply-To: <20200707122125.102c9bea@windsurf>
-References: <20200704010533.1854-1-sergio.prado@e-labworks.com>
- <20200705145430.20cc4911@windsurf.home> <20200705173702.GI2273@scaer>
- <20200707122125.102c9bea@windsurf>
-Message-ID: <CANu7NGvdi41J+4LeG8pxz4TCSrrfq+YKkAt66yc103YmDvY=Vw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Jul 2020 21:56:15 +0200
+Subject: [Buildroot] [PATCH] syslog-ng: version bump to 3.28.1
+In-Reply-To: <20200707094611.29145-1-judge.packham@gmail.com>
+References: <20200707094611.29145-1-judge.packham@gmail.com>
+Message-ID: <20200707195615.GP2273@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Chris, All,
 
-Em ter., 7 de jul. de 2020 ?s 07:21, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> escreveu:
->
-> Hello,
->
-> On Sun, 5 Jul 2020 19:37:02 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->
-> > I too got that 926208 sha256 here, with two different hg versions: 3.7.3
-> > and 4.8.2.
-> >
-> > > --2020-07-05 14:51:38--
-http://sources.buildroot.net/dvb-apps/dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz
-> >
-> > dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz  2014-Sep-01
-16:03:23 442.7K application/x-gtar-compressed
-> >
-> > So, this file was created before the commit that made the archives
-> > reproducible. So, no surprise that the sha256 does not match the
-> > locally-created archive but that from s.b.o.
->
-> Here, since there is no hash file for dvb-apps in Buildroot in any
-> Buildroot version, we could change the tarball on sources.b.o.
->
-> It would of course be nicer if we could bump the version of dvb-apps,
-> so that we can keep this older tarball unchanged. But that's not
-> strictly required as we have never had any hash file for this package.
+On 2020-07-07 21:46 +1200, Chris Packham spake thusly:
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 
-Unfortunately there is no new version available. We are already using the
-last commit from the repo:
+Applied to master, thanks.
 
-$ hg clone https://linuxtv.org/hg/dvb-apps
-destination directory: dvb-apps
-requesting all changes
-adding changesets
-adding manifests
-adding file changes
-added 1506 changesets with 6093 changes to 2111 files
-new changesets d9fe7e17226f:3d43b280298c
-updating to branch default
-$ cd dvb-apps/
-$ hg branches
-default                     1505:3d43b280298c
-$ hg --debug id -i
-3d43b280298c39a67d1d889e01e173f52c12da35
+Regards,
+Yann E. MORIN.
 
-Best regards,
+> ---
+>  package/syslog-ng/syslog-ng.conf | 2 +-
+>  package/syslog-ng/syslog-ng.hash | 2 +-
+>  package/syslog-ng/syslog-ng.mk   | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+> index cad1d9c94d..87861ba414 100644
+> --- a/package/syslog-ng/syslog-ng.conf
+> +++ b/package/syslog-ng/syslog-ng.conf
+> @@ -1,4 +1,4 @@
+> - at version: 3.27
+> + at version: 3.28
+>  
+>  source s_sys {
+>  	file("/proc/kmsg" program_override("kernel"));
+> diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+> index ca4b59cd4e..0e81927cee 100644
+> --- a/package/syslog-ng/syslog-ng.hash
+> +++ b/package/syslog-ng/syslog-ng.hash
+> @@ -1,5 +1,5 @@
+>  # Locally computed
+> -sha256 c54c633c97f7fd8dd68261cfd784a76211e6e52965178e3aa4d0e32b899d61b3  syslog-ng-3.27.1.tar.gz
+> +sha256 af4ef43c41e05759ce6f20f344563f1cbb00622399263fa0c6b9e96426c2a6e8  syslog-ng-3.28.1.tar.gz
+>  sha256 e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
+>  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+> index 8c19fe74a3..428404f73a 100644
+> --- a/package/syslog-ng/syslog-ng.mk
+> +++ b/package/syslog-ng/syslog-ng.mk
+> @@ -6,7 +6,7 @@
+>  
+>  # When updating the version, please check at runtime if the version in
+>  # syslog-ng.conf header needs to be updated
+> -SYSLOG_NG_VERSION = 3.27.1
+> +SYSLOG_NG_VERSION = 3.28.1
+>  SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+>  SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+>  SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Sergio Prado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200707/06a1f43f/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
