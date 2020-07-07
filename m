@@ -1,59 +1,41 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  7 Jul 2020 10:06:44 +0200
-Subject: [Buildroot] [PATCH] package/luaposix: bump to version 35.0
-Message-ID: <20200707080644.1643879-1-francois.perrad@gadz.org>
+From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Date: Tue, 7 Jul 2020 11:33:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/angularjs: bump version to 1.8.0
+Message-ID: <20200707093357.47qao64bbwoe6hcb@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LICENSE diff:
-- Copyright (C) 2006-2019 luaposix authors
-+ Copyright (C) 2006-2020 luaposix authors
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
 ---
- package/luaposix/Config.in     | 2 +-
- package/luaposix/luaposix.hash | 4 ++--
- package/luaposix/luaposix.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/angularjs/angularjs.hash | 4 ++--
+ package/angularjs/angularjs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index 1e2291b3f..fb346429c 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LUAPOSIX
- 	# doesn't find it.
- 	select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT # runtime
- 	help
--	  This is a POSIX binding for LuaJIT, Lua 5.1, 5.2 and 5.3;
-+	  This is a POSIX binding for LuaJIT, Lua 5.1, 5.2, 5.3 and 5.4;
- 	  like most libraries it simply binds to C APIs on the
- 	  underlying system, so it won't work on non-POSIX systems.
- 	  However, it does try to detect the level of POSIX conformance
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index ee72bfe32..54617853a 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
+diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
+index 4f0f36b2a1..abfb36dd1c 100644
+--- a/package/angularjs/angularjs.hash
++++ b/package/angularjs/angularjs.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7948f4ac8b953172e928753632e37ad97cc3014df74b524fe7839f71216a7e90  luaposix-34.1.1.tar.gz
--sha256  a868e95dd14f832eb63c4580c5fed42d78a6bd11785e3605211f446b05904a18  LICENSE
-+sha256  a4edf2f715feff65acb009e8d1689e57ec665eb79bc36a6649fae55eafd56809  luaposix-35.0.tar.gz
-+sha256  e5d496c903dc3989bb2f6f175cda52d26e3494ad1fdd67ae1c3b3e5f76ffb86f  LICENSE
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index ab6b030fc..d04881dfd 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
+ # Locally computed:
+-sha256	7182e7f39b921469157971d9e0783745758df4b625322d606ec7d9abf2b28af2	angular-1.7.9.zip
+-sha256	2420c59374dcdc1ca9721c334a32afee92f0610280cae0d1b3952b1279bc2b24	angular.js
++sha256	c4098f594dc24cc4c8ad469c6d5785a65c0df812afe9f56ea0e4d3490c2fd46d angular-1.8.0.zip
++sha256	c7df41bc00628bec220b0378dc1f2f5041980758403b6f24b9774ac43a9186d8  angular.js
+diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
+index 295be5400a..53b837e59f 100644
+--- a/package/angularjs/angularjs.mk
++++ b/package/angularjs/angularjs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAPOSIX_VERSION = 34.1.1
-+LUAPOSIX_VERSION = 35.0
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
+-ANGULARJS_VERSION = 1.7.9
++ANGULARJS_VERSION = 1.8.0
+ ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+ ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
+ ANGULARJS_LICENSE = MIT
 -- 
 2.25.1
