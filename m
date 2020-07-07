@@ -1,968 +1,192 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 7 Jul 2020 08:32:42 +0200
-Subject: [Buildroot] [PATCH] package/swig: enable support for Node.js >=
- 12.x
-In-Reply-To: <20200707051023.19992-1-yegorslists@googlemail.com>
-References: <20200707051023.19992-1-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kttTiV5hFL04tcXoUpLqzEDuyRb4BggJoyrCPfcdfxwew@mail.gmail.com>
+From: Kamel Bouhara <kamel.bouhara@bootlin.com>
+Date: Tue, 7 Jul 2020 09:36:17 +0200
+Subject: [Buildroot] [PATCH] package/cryptopp: add a target build
+ configuration
+In-Reply-To: <20200706182458.033bd268@windsurf>
+References: <20200706153128.428098-1-kamel.bouhara@bootlin.com>
+ <20200706182458.033bd268@windsurf>
+Message-ID: <20200707073617.GF2116@kb-xps>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 7, 2020 at 7:10 AM <yegorslists@googlemail.com> wrote:
+On Mon, Jul 06, 2020 at 06:24:58PM +0200, Thomas Petazzoni wrote:
+> Hello,
 >
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+
+Hello,
+
+> Thanks for the patch! See below for some comments.
 >
-> Recent Node.js versions have removed some depreciated API calls,
-> that swig still relies on. Patches taken from this PR [1] fix
-> this issue.
+> On Mon,  6 Jul 2020 17:31:28 +0200
+> Kamel Bouhara <kamel.bouhara@bootlin.com> wrote:
 >
-> [1] https://github.com/swig/swig/pull/1746
+> >  package/Config.in                             |  1 +
+> >  ...ied-SONAME-to-shared-object-for-Linu.patch | 27 ++++++++++++++
+> >  package/cryptopp/Config.in                    |  4 +++
+> >  package/cryptopp/Config.in.host               |  4 +++
 >
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  ...-to-support-both-Handle-and-Local-ty.patch |  53 ++
->  ...ith-Local-depending-on-Node.js-versi.patch | 649 ++++++++++++++++++
->  .../0003-Add-support-for-Node.js-v12.patch    | 207 ++++++
->  3 files changed, 909 insertions(+)
->  create mode 100644 package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
->  create mode 100644 package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
->  create mode 100644 package/swig/0003-Add-support-for-Node.js-v12.patch
+> This file is added, but not used anywhere. In fact, we don't need it at
+> all.
 >
-> diff --git a/package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch b/package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
-> new file mode 100644
-> index 0000000000..f52d599723
-> --- /dev/null
-> +++ b/package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
-> @@ -0,0 +1,53 @@
-> +From a40f8b18b31cc882c8fb9cf8b6b3fd597adc1745 Mon Sep 17 00:00:00 2001
-> +From: Tom Leavy <tom@wickr.com>
-> +Date: Wed, 25 Mar 2020 17:10:51 -0400
-> +Subject: [PATCH] Introduce macros to support both Handle and Local types
-> +
-> +The old Node.js versions don't treat v8::Handle and v8::Local as
-> +the same types, and the latest versions (v12 and newer) have
-> +removed v8::Handle at all.
-> +
-> +This patch introduces the following macros that use v8::Handle or
-> +v8::Local depending on the selected Node.js version:
-> +
-> +- SWIGV8_ARRAY
-> +- SWIGV8_FUNCTION_TEMPLATE
-> +- SWIGV8_OBJECT
-> +- SWIGV8_OBJECT_TEMPLATE
-> +- SWIGV8_VALUE
-> +
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +---
-> + Lib/javascript/v8/javascriptrun.swg | 10 ++++++++++
-> + 1 file changed, 10 insertions(+)
-> +
-> +diff --git a/Lib/javascript/v8/javascriptrun.swg b/Lib/javascript/v8/javascriptrun.swg
-> +index 2452f4040..cf3215334 100644
-> +--- a/Lib/javascript/v8/javascriptrun.swg
-> ++++ b/Lib/javascript/v8/javascriptrun.swg
-> +@@ -67,6 +67,11 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
-> + #define SWIGV8_NUMBER_NEW(num) v8::Number::New(num)
-> + #define SWIGV8_OBJECT_NEW() v8::Object::New()
-> + #define SWIGV8_UNDEFINED() v8::Undefined()
-> ++#define SWIGV8_ARRAY v8::Handle<v8::Array>
-> ++#define SWIGV8_FUNCTION_TEMPLATE v8::Handle<v8::FunctionTemplate>
-> ++#define SWIGV8_OBJECT v8::Handle<v8::Object>
-> ++#define SWIGV8_OBJECT_TEMPLATE v8::Handle<v8::ObjectTemplate>
-> ++#define SWIGV8_VALUE v8::Handle<v8::Value>
-> + #define SWIGV8_NULL() v8::Null()
-> + #else
-> + #define SWIGV8_ARRAY_NEW() v8::Array::New(v8::Isolate::GetCurrent())
-> +@@ -80,6 +85,11 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
-> + #define SWIGV8_NUMBER_NEW(num) v8::Number::New(v8::Isolate::GetCurrent(), num)
-> + #define SWIGV8_OBJECT_NEW() v8::Object::New(v8::Isolate::GetCurrent())
-> + #define SWIGV8_UNDEFINED() v8::Undefined(v8::Isolate::GetCurrent())
-> ++#define SWIGV8_ARRAY v8::Local<v8::Array>
-> ++#define SWIGV8_FUNCTION_TEMPLATE v8::Local<v8::FunctionTemplate>
-> ++#define SWIGV8_OBJECT v8::Local<v8::Object>
-> ++#define SWIGV8_OBJECT_TEMPLATE v8::Local<v8::ObjectTemplate>
-> ++#define SWIGV8_VALUE v8::Local<v8::Value>
-> + #define SWIGV8_NULL() v8::Null(v8::Isolate::GetCurrent())
-> + #endif
-> +
-> +--
-> +2.17.0
-> diff --git a/package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch b/package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
-> new file mode 100644
-> index 0000000000..86b7b04c6c
-> --- /dev/null
-> +++ b/package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
-> @@ -0,0 +1,649 @@
-> +From 9f245da9b6dd4c9e874fa1fd1a576ea550983dbe Mon Sep 17 00:00:00 2001
-> +From: Yegor Yefremov <yegorslists@googlemail.com>
-> +Date: Wed, 26 Feb 2020 15:55:18 +0100
-> +Subject: [PATCH] Replace Handle with Local depending on Node.js version
-> +
-> +Use newly introduced macros like SWIGV8_VALUE to use v8::Handle or
-> +v8::Local depending on the selected Node.js version where possible.
-> +
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +---
-> + Examples/javascript/native/example.i      |  2 +-
-> + Examples/test-suite/native_directive.i    |  2 +-
-> + Lib/javascript/v8/javascriptcode.swg      | 24 +++++++-----
-> + Lib/javascript/v8/javascriptcomplex.swg   | 10 ++---
-> + Lib/javascript/v8/javascripthelpers.swg   | 21 +++++-----
-> + Lib/javascript/v8/javascriptinit.swg      |  6 +--
-> + Lib/javascript/v8/javascriptprimtypes.swg | 29 +++++++-------
-> + Lib/javascript/v8/javascriptrun.swg       | 48 ++++++++++-------------
-> + Lib/javascript/v8/javascriptstrings.swg   | 14 +++++--
-> + Lib/javascript/v8/javascripttypemaps.swg  |  2 +-
-> + 10 files changed, 82 insertions(+), 76 deletions(-)
-> +
-> +diff --git a/Examples/javascript/native/example.i b/Examples/javascript/native/example.i
-> +index 8c6160060..a9ca094a7 100644
-> +--- a/Examples/javascript/native/example.i
-> ++++ b/Examples/javascript/native/example.i
-> +@@ -15,7 +15,7 @@ int placeholder() { return 0; }
-> +     static SwigV8ReturnValue JavaScript_do_work(const SwigV8Arguments &args) {
-> +         SWIGV8_HANDLESCOPE();
-> +         const int MY_MAGIC_NUMBER = 5;
-> +-        v8::Handle<v8::Value> jsresult =
-> ++        SWIGV8_VALUE jsresult =
-> +             SWIG_From_int(static_cast< int >(MY_MAGIC_NUMBER));
-> +         if (args.Length() != 0)
-> +             SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments.");
-> +diff --git a/Examples/test-suite/native_directive.i b/Examples/test-suite/native_directive.i
-> +index 9ae76e0b7..3d4858032 100644
-> +--- a/Examples/test-suite/native_directive.i
-> ++++ b/Examples/test-suite/native_directive.i
-> +@@ -53,7 +53,7 @@ extern "C" JNIEXPORT jint JNICALL Java_native_1directive_native_1directiveJNI_Co
-> +
-> + static SwigV8ReturnValue JavaScript_alpha_count(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   char *arg1 = (char *)0;
-> +   int res1;
-> +   char *buf1 = 0;
-> +diff --git a/Lib/javascript/v8/javascriptcode.swg b/Lib/javascript/v8/javascriptcode.swg
-> +index c4aaf3db0..65e0d39d1 100644
-> +--- a/Lib/javascript/v8/javascriptcode.swg
-> ++++ b/Lib/javascript/v8/javascriptcode.swg
-> +@@ -11,7 +11,7 @@
-> + static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Object> self = args.Holder();
-> ++  SWIGV8_OBJECT self = args.Holder();
-> +   $jslocals
-> +   if(args.Length() != $jsargcount) SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments for $jswrapper.");
-> +   $jscode
-> +@@ -53,7 +53,7 @@ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +   OverloadErrorHandler errorHandler;
-> +-  v8::Handle<v8::Value> self;
-> ++  SWIGV8_VALUE self;
-> +
-> +   // switch all cases by means of series of if-returns.
-> +   $jsdispatchcases
-> +@@ -78,7 +78,7 @@ fail:
-> + static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args, V8ErrorHandler &SWIGV8_ErrorHandler) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Object> self = args.Holder();
-> ++  SWIGV8_OBJECT self = args.Holder();
-> +   $jslocals
-> +   if(args.Length() != $jsargcount) SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments for $jswrapper.");
-> +   $jscode
-> +@@ -226,7 +226,7 @@ static SwigV8ReturnValue $jswrapper(v8::Local<v8::Name> property, const SwigV8Pr
-> + #endif
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   $jslocals
-> +   $jscode
-> +   SWIGV8_RETURN_INFO(jsresult, info);
-> +@@ -271,7 +271,7 @@ fail:
-> + static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   $jslocals
-> +   if(args.Length() != $jsargcount) SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments for $jswrapper.");
-> +
-> +@@ -296,7 +296,7 @@ fail:
-> + static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   OverloadErrorHandler errorHandler;
-> +   $jscode
-> +
-> +@@ -320,7 +320,7 @@ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args, V8ErrorHandler
-> + {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   $jslocals
-> +   $jscode
-> +   SWIGV8_RETURN(jsresult);
-> +@@ -374,7 +374,7 @@ fail:
-> + %fragment("jsv8_define_class_template", "templates")
-> + %{
-> +   /* Name: $jsmangledname, Type: $jsmangledtype, Dtor: $jsdtor */
-> +-  v8::Handle<v8::FunctionTemplate> $jsmangledname_class = SWIGV8_CreateClassTemplate("$jsmangledname");
-> ++  SWIGV8_FUNCTION_TEMPLATE $jsmangledname_class = SWIGV8_CreateClassTemplate("$jsmangledname");
-> +   SWIGV8_SET_CLASS_TEMPL($jsmangledname_clientData.class_templ, $jsmangledname_class);
-> +   $jsmangledname_clientData.dtor = $jsdtor;
-> +   if (SWIGTYPE_$jsmangledtype->clientdata == 0) {
-> +@@ -420,11 +420,15 @@ fail:
-> + %fragment("jsv8_create_class_instance", "templates")
-> + %{
-> +   /* Class: $jsname ($jsmangledname) */
-> +-  v8::Handle<v8::FunctionTemplate> $jsmangledname_class_0 = SWIGV8_CreateClassTemplate("$jsname");
-> ++  SWIGV8_FUNCTION_TEMPLATE $jsmangledname_class_0 = SWIGV8_CreateClassTemplate("$jsname");
-> +   $jsmangledname_class_0->SetCallHandler($jsctor);
-> +   $jsmangledname_class_0->Inherit($jsmangledname_class);
-> +   $jsmangledname_class_0->SetHiddenPrototype(true);
-> ++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +   v8::Handle<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
-> ++#else
-> ++  v8::Local<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
-> ++#endif
-> + %}
-> +
-> + /* -----------------------------------------------------------------------------
-> +@@ -444,7 +448,7 @@ fail:
-> +  * ----------------------------------------------------------------------------- */
-> + %fragment("jsv8_create_namespace", "templates")
-> + %{
-> +-  v8::Handle<v8::Object> $jsmangledname_obj = SWIGV8_OBJECT_NEW();
-> ++  SWIGV8_OBJECT $jsmangledname_obj = SWIGV8_OBJECT_NEW();
-> + %}
-> +
-> + /* -----------------------------------------------------------------------------
-> +diff --git a/Lib/javascript/v8/javascriptcomplex.swg b/Lib/javascript/v8/javascriptcomplex.swg
-> +index d3b4aaffa..b894d7389 100644
-> +--- a/Lib/javascript/v8/javascriptcomplex.swg
-> ++++ b/Lib/javascript/v8/javascriptcomplex.swg
-> +@@ -12,7 +12,7 @@
-> + %fragment(SWIG_From_frag(Type),"header",
-> +           fragment=SWIG_From_frag(double))
-> + {
-> +-SWIGINTERNINLINE v8::Handle<v8::Value>
-> ++SWIGINTERNINLINE SWIGV8_VALUE
-> + SWIG_From_dec(Type)(%ifcplusplus(const Type&, Type) c)
-> + {
-> +   SWIGV8_HANDLESCOPE_ESC();
-> +@@ -32,12 +32,12 @@ SWIG_From_dec(Type)(%ifcplusplus(const Type&, Type) c)
-> +         fragment=SWIG_AsVal_frag(double))
-> + {
-> + SWIGINTERN int
-> +-SWIG_AsVal_dec(Type) (v8::Handle<v8::Value> o, Type* val)
-> ++SWIG_AsVal_dec(Type) (SWIGV8_VALUE o, Type* val)
-> + {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +   if (o->IsArray()) {
-> +-    v8::Handle<v8::Array> array = v8::Handle<v8::Array>::Cast(o);
-> ++    SWIGV8_ARRAY array = SWIGV8_ARRAY::Cast(o);
-> +
-> +     if(array->Length() != 2) SWIG_Error(SWIG_TypeError, "Illegal argument for complex: must be array[2].");
-> +     double re, im;
-> +@@ -74,12 +74,12 @@ SWIG_AsVal_dec(Type) (v8::Handle<v8::Value> o, Type* val)
-> + %fragment(SWIG_AsVal_frag(Type),"header",
-> +           fragment=SWIG_AsVal_frag(float)) {
-> + SWIGINTERN int
-> +-SWIG_AsVal_dec(Type) (v8::Handle<v8::Value> o, Type* val)
-> ++SWIG_AsVal_dec(Type) (SWIGV8_VALUE o, Type* val)
-> + {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +   if (o->IsArray()) {
-> +-    v8::Handle<v8::Array> array = v8::Handle<v8::Array>::Cast(o);
-> ++    SWIGV8_ARRAY array = SWIGV8_ARRAY::Cast(o);
-> +
-> +     if(array->Length() != 2) SWIG_Error(SWIG_TypeError, "Illegal argument for complex: must be array[2].");
-> +     double re, im;
-> +diff --git a/Lib/javascript/v8/javascripthelpers.swg b/Lib/javascript/v8/javascripthelpers.swg
-> +index 80fbd7aa1..465d3ee48 100644
-> +--- a/Lib/javascript/v8/javascripthelpers.swg
-> ++++ b/Lib/javascript/v8/javascripthelpers.swg
-> +@@ -21,19 +21,19 @@ typedef v8::PropertyCallbackInfo<void>  SwigV8PropertyCallbackInfoVoid;
-> + /**
-> +  * Creates a class template for a class with specified initialization function.
-> +  */
-> +-SWIGRUNTIME v8::Handle<v8::FunctionTemplate> SWIGV8_CreateClassTemplate(const char* symbol) {
-> ++SWIGRUNTIME SWIGV8_FUNCTION_TEMPLATE SWIGV8_CreateClassTemplate(const char* symbol) {
-> +     SWIGV8_HANDLESCOPE_ESC();
-> +
-> +     v8::Local<v8::FunctionTemplate> class_templ = SWIGV8_FUNCTEMPLATE_NEW_VOID();
-> +     class_templ->SetClassName(SWIGV8_SYMBOL_NEW(symbol));
-> +
-> +-    v8::Handle<v8::ObjectTemplate> inst_templ = class_templ->InstanceTemplate();
-> ++    SWIGV8_OBJECT_TEMPLATE inst_templ = class_templ->InstanceTemplate();
-> +     inst_templ->SetInternalFieldCount(1);
-> +
-> +-    v8::Handle<v8::ObjectTemplate> equals_templ = class_templ->PrototypeTemplate();
-> ++    SWIGV8_OBJECT_TEMPLATE equals_templ = class_templ->PrototypeTemplate();
-> +     equals_templ->Set(SWIGV8_SYMBOL_NEW("equals"), SWIGV8_FUNCTEMPLATE_NEW(_SWIGV8_wrap_equals));
-> +
-> +-    v8::Handle<v8::ObjectTemplate> cptr_templ = class_templ->PrototypeTemplate();
-> ++    SWIGV8_OBJECT_TEMPLATE cptr_templ = class_templ->PrototypeTemplate();
-> +     cptr_templ->Set(SWIGV8_SYMBOL_NEW("getCPtr"), SWIGV8_FUNCTEMPLATE_NEW(_wrap_getCPtr));
-> +
-> +     SWIGV8_ESCAPE(class_templ);
-> +@@ -42,33 +42,34 @@ SWIGRUNTIME v8::Handle<v8::FunctionTemplate> SWIGV8_CreateClassTemplate(const ch
-> + /**
-> +  * Registers a class method with given name for a given class template.
-> +  */
-> +-SWIGRUNTIME void SWIGV8_AddMemberFunction(v8::Handle<v8::FunctionTemplate> class_templ, const char* symbol,
-> ++SWIGRUNTIME void SWIGV8_AddMemberFunction(SWIGV8_FUNCTION_TEMPLATE class_templ, const char* symbol,
-> +   SwigV8FunctionCallback _func) {
-> +-    v8::Handle<v8::ObjectTemplate> proto_templ = class_templ->PrototypeTemplate();
-> ++    SWIGV8_OBJECT_TEMPLATE proto_templ = class_templ->PrototypeTemplate();
-> +     proto_templ->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func));
-> + }
-> +
-> + /**
-> +  * Registers a class property with given name for a given class template.
-> +  */
-> +-SWIGRUNTIME void SWIGV8_AddMemberVariable(v8::Handle<v8::FunctionTemplate> class_templ, const char* symbol,
-> ++SWIGRUNTIME void SWIGV8_AddMemberVariable(SWIGV8_FUNCTION_TEMPLATE class_templ, const char* symbol,
-> +   SwigV8AccessorGetterCallback getter, SwigV8AccessorSetterCallback setter) {
-> +-  v8::Handle<v8::ObjectTemplate> proto_templ = class_templ->InstanceTemplate();
-> ++  SWIGV8_OBJECT_TEMPLATE proto_templ = class_templ->InstanceTemplate();
-> +   proto_templ->SetAccessor(SWIGV8_SYMBOL_NEW(symbol), getter, setter);
-> + }
-> +
-> + /**
-> +  * Registers a class method with given name for a given object.
-> +  */
-> +-SWIGRUNTIME void SWIGV8_AddStaticFunction(v8::Handle<v8::Object> obj, const char* symbol,
-> ++SWIGRUNTIME void SWIGV8_AddStaticFunction(SWIGV8_OBJECT obj, const char* symbol,
-> +   const SwigV8FunctionCallback& _func) {
-> ++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0705)
-> +   obj->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction());
-> + }
-> +
-> + /**
-> +  * Registers a class method with given name for a given object.
-> +  */
-> +-SWIGRUNTIME void SWIGV8_AddStaticVariable(v8::Handle<v8::Object> obj, const char* symbol,
-> ++SWIGRUNTIME void SWIGV8_AddStaticVariable(SWIGV8_OBJECT obj, const char* symbol,
-> +   SwigV8AccessorGetterCallback getter, SwigV8AccessorSetterCallback setter) {
-> + #if (V8_MAJOR_VERSION-0) < 5
-> +   obj->SetAccessor(SWIGV8_SYMBOL_NEW(symbol), getter, setter);
-> +diff --git a/Lib/javascript/v8/javascriptinit.swg b/Lib/javascript/v8/javascriptinit.swg
-> +index 8faf2dd8e..401f9ae1f 100644
-> +--- a/Lib/javascript/v8/javascriptinit.swg
-> ++++ b/Lib/javascript/v8/javascriptinit.swg
-> +@@ -68,16 +68,16 @@ SWIG_V8_GetModule(void *) {
-> + // TODO: is it ok to do that?
-> + extern "C"
-> + #if (NODE_MODULE_VERSION < 0x000C)
-> +-void SWIGV8_INIT (v8::Handle<v8::Object> exports)
-> ++void SWIGV8_INIT (SWIGV8_OBJECT exports)
-> + #else
-> +-void SWIGV8_INIT (v8::Handle<v8::Object> exports, v8::Handle<v8::Object> /*module*/)
-> ++void SWIGV8_INIT (SWIGV8_OBJECT exports, SWIGV8_OBJECT /*module*/)
-> + #endif
-> + {
-> +   SWIG_InitializeModule(static_cast<void *>(&exports));
-> +
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Object> exports_obj = exports;
-> ++  SWIGV8_OBJECT exports_obj = exports;
-> + %}
-> +
-> +
-> +diff --git a/Lib/javascript/v8/javascriptprimtypes.swg b/Lib/javascript/v8/javascriptprimtypes.swg
-> +index f76be983b..a6577ded2 100644
-> +--- a/Lib/javascript/v8/javascriptprimtypes.swg
-> ++++ b/Lib/javascript/v8/javascriptprimtypes.swg
-> +@@ -6,7 +6,7 @@
-> +
-> + %fragment(SWIG_From_frag(bool),"header") {
-> + SWIGINTERNINLINE
-> +-v8::Handle<v8::Value>
-> ++SWIGV8_VALUE
-> + SWIG_From_dec(bool)(bool value)
-> + {
-> +   return SWIGV8_BOOLEAN_NEW(value);
-> +@@ -16,7 +16,7 @@ SWIG_From_dec(bool)(bool value)
-> + %fragment(SWIG_AsVal_frag(bool),"header",
-> +           fragment=SWIG_AsVal_frag(long)) {
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(bool)(v8::Handle<v8::Value> obj, bool *val)
-> ++int SWIG_AsVal_dec(bool)(SWIGV8_VALUE obj, bool *val)
-> + {
-> +   if(!obj->IsBoolean()) {
-> +     return SWIG_ERROR;
-> +@@ -31,7 +31,7 @@ int SWIG_AsVal_dec(bool)(v8::Handle<v8::Value> obj, bool *val)
-> +
-> + %fragment(SWIG_From_frag(int),"header") {
-> + SWIGINTERNINLINE
-> +-v8::Handle<v8::Value> SWIG_From_dec(int)(int value)
-> ++SWIGV8_VALUE SWIG_From_dec(int)(int value)
-> + {
-> +   return SWIGV8_INT32_NEW(value);
-> + }
-> +@@ -39,7 +39,7 @@ v8::Handle<v8::Value> SWIG_From_dec(int)(int value)
-> +
-> + %fragment(SWIG_AsVal_frag(int),"header") {
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(int)(v8::Handle<v8::Value> valRef, int* val)
-> ++int SWIG_AsVal_dec(int)(SWIGV8_VALUE valRef, int* val)
-> + {
-> +   if (!valRef->IsNumber()) {
-> +     return SWIG_TypeError;
-> +@@ -54,7 +54,7 @@ int SWIG_AsVal_dec(int)(v8::Handle<v8::Value> valRef, int* val)
-> +
-> + %fragment(SWIG_From_frag(long),"header") {
-> + SWIGINTERNINLINE
-> +-v8::Handle<v8::Value> SWIG_From_dec(long)(long value)
-> ++SWIGV8_VALUE SWIG_From_dec(long)(long value)
-> + {
-> +   return SWIGV8_NUMBER_NEW(value);
-> + }
-> +@@ -63,7 +63,7 @@ v8::Handle<v8::Value> SWIG_From_dec(long)(long value)
-> + %fragment(SWIG_AsVal_frag(long),"header",
-> +           fragment="SWIG_CanCastAsInteger") {
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(long)(v8::Handle<v8::Value> obj, long* val)
-> ++int SWIG_AsVal_dec(long)(SWIGV8_VALUE obj, long* val)
-> + {
-> +   if (!obj->IsNumber()) {
-> +     return SWIG_TypeError;
-> +@@ -79,7 +79,7 @@ int SWIG_AsVal_dec(long)(v8::Handle<v8::Value> obj, long* val)
-> + %fragment(SWIG_From_frag(unsigned long),"header",
-> +           fragment=SWIG_From_frag(long)) {
-> + SWIGINTERNINLINE
-> +-v8::Handle<v8::Value> SWIG_From_dec(unsigned long)(unsigned long value)
-> ++SWIGV8_VALUE SWIG_From_dec(unsigned long)(unsigned long value)
-> + {
-> +   return (value > LONG_MAX) ?
-> +     SWIGV8_INTEGER_NEW_UNS(value) : SWIGV8_INTEGER_NEW(%numeric_cast(value,long));
-> +@@ -89,7 +89,7 @@ v8::Handle<v8::Value> SWIG_From_dec(unsigned long)(unsigned long value)
-> + %fragment(SWIG_AsVal_frag(unsigned long),"header",
-> +           fragment="SWIG_CanCastAsInteger") {
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(unsigned long)(v8::Handle<v8::Value> obj, unsigned long *val)
-> ++int SWIG_AsVal_dec(unsigned long)(SWIGV8_VALUE obj, unsigned long *val)
-> + {
-> +   if(!obj->IsNumber()) {
-> +     return SWIG_TypeError;
-> +@@ -115,7 +115,7 @@ int SWIG_AsVal_dec(unsigned long)(v8::Handle<v8::Value> obj, unsigned long *val)
-> +     fragment="SWIG_LongLongAvailable") {
-> + %#ifdef SWIG_LONG_LONG_AVAILABLE
-> + SWIGINTERNINLINE
-> +-v8::Handle<v8::Value> SWIG_From_dec(long long)(long long value)
-> ++SWIGV8_VALUE SWIG_From_dec(long long)(long long value)
-> + {
-> +   return SWIGV8_NUMBER_NEW(value);
-> + }
-> +@@ -128,7 +128,7 @@ v8::Handle<v8::Value> SWIG_From_dec(long long)(long long value)
-> +     fragment="SWIG_LongLongAvailable") {
-> + %#ifdef SWIG_LONG_LONG_AVAILABLE
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(long long)(v8::Handle<v8::Value> obj, long long* val)
-> ++int SWIG_AsVal_dec(long long)(SWIGV8_VALUE obj, long long* val)
-> + {
-> +   if (!obj->IsNumber()) {
-> +     return SWIG_TypeError;
-> +@@ -148,7 +148,7 @@ int SWIG_AsVal_dec(long long)(v8::Handle<v8::Value> obj, long long* val)
-> +     fragment="SWIG_LongLongAvailable") {
-> + %#ifdef SWIG_LONG_LONG_AVAILABLE
-> + SWIGINTERNINLINE
-> +-v8::Handle<v8::Value> SWIG_From_dec(unsigned long long)(unsigned long long value)
-> ++SWIGV8_VALUE SWIG_From_dec(unsigned long long)(unsigned long long value)
-> + {
-> +   return (value > LONG_MAX) ?
-> +     SWIGV8_INTEGER_NEW_UNS(value) : SWIGV8_INTEGER_NEW(%numeric_cast(value,long));
-> +@@ -162,7 +162,7 @@ v8::Handle<v8::Value> SWIG_From_dec(unsigned long long)(unsigned long long value
-> +     fragment="SWIG_LongLongAvailable") {
-> + %#ifdef SWIG_LONG_LONG_AVAILABLE
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(unsigned long long)(v8::Handle<v8::Value> obj, unsigned long long *val)
-> ++int SWIG_AsVal_dec(unsigned long long)(SWIGV8_VALUE obj, unsigned long long *val)
-> + {
-> +   if(!obj->IsNumber()) {
-> +     return SWIG_TypeError;
-> +@@ -185,7 +185,7 @@ int SWIG_AsVal_dec(unsigned long long)(v8::Handle<v8::Value> obj, unsigned long
-> +
-> + %fragment(SWIG_From_frag(double),"header") {
-> + SWIGINTERN
-> +-v8::Handle<v8::Value> SWIG_From_dec(double) (double val)
-> ++SWIGV8_VALUE SWIG_From_dec(double) (double val)
-> + {
-> +   return SWIGV8_NUMBER_NEW(val);
-> + }
-> +@@ -193,7 +193,7 @@ v8::Handle<v8::Value> SWIG_From_dec(double) (double val)
-> +
-> + %fragment(SWIG_AsVal_frag(double),"header") {
-> + SWIGINTERN
-> +-int SWIG_AsVal_dec(double)(v8::Handle<v8::Value> obj, double *val)
-> ++int SWIG_AsVal_dec(double)(SWIGV8_VALUE obj, double *val)
-> + {
-> +   if(!obj->IsNumber()) {
-> +     return SWIG_TypeError;
-> +@@ -203,4 +203,3 @@ int SWIG_AsVal_dec(double)(v8::Handle<v8::Value> obj, double *val)
-> +   return SWIG_OK;
-> + }
-> + }
-> +-
-> +diff --git a/Lib/javascript/v8/javascriptrun.swg b/Lib/javascript/v8/javascriptrun.swg
-> +index cf3215334..1d74e3747 100644
-> +--- a/Lib/javascript/v8/javascriptrun.swg
-> ++++ b/Lib/javascript/v8/javascriptrun.swg
-> +@@ -173,7 +173,7 @@ public:
-> +         SWIGV8_THROW_EXCEPTION(err);
-> +     }
-> +   }
-> +-  v8::Handle<v8::Value> err;
-> ++  SWIGV8_VALUE err;
-> + };
-> +
-> + /* ---------------------------------------------------------------------------
-> +@@ -238,7 +238,7 @@ public:
-> +
-> + SWIGRUNTIME v8::Persistent<v8::FunctionTemplate> SWIGV8_SWIGTYPE_Proxy_class_templ;
-> +
-> +-SWIGRUNTIME int SWIG_V8_ConvertInstancePtr(v8::Handle<v8::Object> objRef, void **ptr, swig_type_info *info, int flags) {
-> ++SWIGRUNTIME int SWIG_V8_ConvertInstancePtr(SWIGV8_OBJECT objRef, void **ptr, swig_type_info *info, int flags) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +   if(objRef->InternalFieldCount() < 1) return SWIG_ERROR;
-> +@@ -290,11 +290,11 @@ SWIGRUNTIME void SWIGV8_Proxy_DefaultDtor(const v8::WeakCallbackInfo<SWIGV8_Prox
-> +   delete proxy;
-> + }
-> +
-> +-SWIGRUNTIME int SWIG_V8_GetInstancePtr(v8::Handle<v8::Value> valRef, void **ptr) {
-> ++SWIGRUNTIME int SWIG_V8_GetInstancePtr(SWIGV8_VALUE valRef, void **ptr) {
-> +   if(!valRef->IsObject()) {
-> +     return SWIG_TypeError;
-> +   }
-> +-  v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
-> ++  SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
-> +
-> +   if(objRef->InternalFieldCount() < 1) return SWIG_ERROR;
-> +
-> +@@ -314,7 +314,7 @@ SWIGRUNTIME int SWIG_V8_GetInstancePtr(v8::Handle<v8::Value> valRef, void **ptr)
-> +   return SWIG_OK;
-> + }
-> +
-> +-SWIGRUNTIME void SWIGV8_SetPrivateData(v8::Handle<v8::Object> obj, void *ptr, swig_type_info *info, int flags) {
-> ++SWIGRUNTIME void SWIGV8_SetPrivateData(SWIGV8_OBJECT obj, void *ptr, swig_type_info *info, int flags) {
-> +   SWIGV8_Proxy *cdata = new SWIGV8_Proxy();
-> +   cdata->swigCObject = ptr;
-> +   cdata->swigCMemOwn = (flags & SWIG_POINTER_OWN) ? 1 : 0;
-> +@@ -377,7 +377,7 @@ SWIGRUNTIME void SWIGV8_SetPrivateData(v8::Handle<v8::Object> obj, void *ptr, sw
-> +
-> + }
-> +
-> +-SWIGRUNTIME int SWIG_V8_ConvertPtr(v8::Handle<v8::Value> valRef, void **ptr, swig_type_info *info, int flags) {
-> ++SWIGRUNTIME int SWIG_V8_ConvertPtr(SWIGV8_VALUE valRef, void **ptr, swig_type_info *info, int flags) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +   /* special case: JavaScript null => C NULL pointer */
-> +@@ -388,14 +388,14 @@ SWIGRUNTIME int SWIG_V8_ConvertPtr(v8::Handle<v8::Value> valRef, void **ptr, swi
-> +   if(!valRef->IsObject()) {
-> +     return SWIG_TypeError;
-> +   }
-> +-  v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
-> ++  SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
-> +   return SWIG_V8_ConvertInstancePtr(objRef, ptr, info, flags);
-> + }
-> +
-> +-SWIGRUNTIME v8::Handle<v8::Value> SWIG_V8_NewPointerObj(void *ptr, swig_type_info *info, int flags) {
-> ++SWIGRUNTIME SWIGV8_VALUE SWIG_V8_NewPointerObj(void *ptr, swig_type_info *info, int flags) {
-> +   SWIGV8_HANDLESCOPE_ESC();
-> +
-> +-  v8::Handle<v8::FunctionTemplate> class_templ;
-> ++  SWIGV8_FUNCTION_TEMPLATE class_templ;
-> +
-> +   if (ptr == NULL) {
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +@@ -443,7 +443,7 @@ SWIGRUNTIME v8::Handle<v8::Value> SWIG_V8_NewPointerObj(void *ptr, swig_type_inf
-> + SWIGRUNTIME SwigV8ReturnValue _SWIGV8_wrap_equals(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   void *arg1 = (void *) 0 ;
-> +   void *arg2 = (void *) 0 ;
-> +   bool result;
-> +@@ -473,7 +473,7 @@ fail:
-> + SWIGRUNTIME SwigV8ReturnValue _wrap_getCPtr(const SwigV8Arguments &args) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Value> jsresult;
-> ++  SWIGV8_VALUE jsresult;
-> +   void *arg1 = (void *) 0 ;
-> +   long result;
-> +   int res1;
-> +@@ -512,10 +512,10 @@ public:
-> + };
-> +
-> + SWIGRUNTIMEINLINE
-> +-int SwigV8Packed_Check(v8::Handle<v8::Value> valRef) {
-> ++int SwigV8Packed_Check(SWIGV8_VALUE valRef) {
-> +   SWIGV8_HANDLESCOPE();
-> +
-> +-  v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
-> ++  SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
-> +   if(objRef->InternalFieldCount() < 1) return false;
-> + #if (V8_MAJOR_VERSION-0) < 5
-> +   v8::Handle<v8::Value> flag = objRef->GetHiddenValue(SWIGV8_STRING_NEW("__swig__packed_data__"));
-> +@@ -529,13 +529,13 @@ int SwigV8Packed_Check(v8::Handle<v8::Value> valRef) {
-> + }
-> +
-> + SWIGRUNTIME
-> +-swig_type_info *SwigV8Packed_UnpackData(v8::Handle<v8::Value> valRef, void *ptr, size_t size) {
-> ++swig_type_info *SwigV8Packed_UnpackData(SWIGV8_VALUE valRef, void *ptr, size_t size) {
-> +   if (SwigV8Packed_Check(valRef)) {
-> +     SWIGV8_HANDLESCOPE();
-> +
-> +     SwigV8PackedData *sobj;
-> +
-> +-    v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
-> ++    SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
-> +
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031511)
-> +     v8::Handle<v8::Value> cdataRef = objRef->GetInternalField(0);
-> +@@ -552,7 +552,7 @@ swig_type_info *SwigV8Packed_UnpackData(v8::Handle<v8::Value> valRef, void *ptr,
-> + }
-> +
-> + SWIGRUNTIME
-> +-int SWIGV8_ConvertPacked(v8::Handle<v8::Value> valRef, void *ptr, size_t sz, swig_type_info *ty) {
-> ++int SWIGV8_ConvertPacked(SWIGV8_VALUE valRef, void *ptr, size_t sz, swig_type_info *ty) {
-> +   swig_type_info *to = SwigV8Packed_UnpackData(valRef, ptr, sz);
-> +   if (!to) return SWIG_ERROR;
-> +   if (ty) {
-> +@@ -600,7 +600,7 @@ SWIGRUNTIME void _wrap_SwigV8PackedData_delete(const v8::WeakCallbackInfo<SwigV8
-> + }
-> +
-> + SWIGRUNTIME
-> +-v8::Handle<v8::Value> SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type) {
-> ++SWIGV8_VALUE SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type) {
-> +   SWIGV8_HANDLESCOPE_ESC();
-> +
-> +   SwigV8PackedData *cdata = new SwigV8PackedData(data, size, type);
-> +@@ -664,21 +664,15 @@ v8::Handle<v8::Value> SWIGV8_NewPackedObj(void *data, size_t size, swig_type_inf
-> +
-> + SWIGRUNTIME
-> +
-> +-#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +-v8::Handle<v8::Value> SWIGV8_AppendOutput(v8::Handle<v8::Value> result, v8::Handle<v8::Value> obj) {
-> +-#else
-> +-v8::Handle<v8::Value> SWIGV8_AppendOutput(v8::Local<v8::Value> result, v8::Handle<v8::Value> obj) {
-> +-#endif
-> ++SWIGV8_VALUE SWIGV8_AppendOutput(SWIGV8_VALUE result, SWIGV8_VALUE obj) {
-> +   SWIGV8_HANDLESCOPE_ESC();
-> +
-> +   if (result->IsUndefined()) {
-> +     result = SWIGV8_ARRAY_NEW();
-> +   }
-> +-#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(result);
-> +-#else
-> +-  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(result);
-> +-#endif
-> ++  SWIGV8_ARRAY arr = SWIGV8_ARRAY::Cast(result);
-> ++
-> ++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0706)
-> +   arr->Set(arr->Length(), obj);
-> +
-> +   SWIGV8_ESCAPE(arr);
-> +diff --git a/Lib/javascript/v8/javascriptstrings.swg b/Lib/javascript/v8/javascriptstrings.swg
-> +index e767a6d66..9c0919172 100644
-> +--- a/Lib/javascript/v8/javascriptstrings.swg
-> ++++ b/Lib/javascript/v8/javascriptstrings.swg
-> +@@ -4,10 +4,14 @@
-> +  * ------------------------------------------------------------ */
-> + %fragment("SWIG_AsCharPtrAndSize", "header", fragment="SWIG_pchar_descriptor") {
-> + SWIGINTERN int
-> +-SWIG_AsCharPtrAndSize(v8::Handle<v8::Value> valRef, char** cptr, size_t* psize, int *alloc)
-> ++SWIG_AsCharPtrAndSize(SWIGV8_VALUE valRef, char** cptr, size_t* psize, int *alloc)
-> + {
-> +   if(valRef->IsString()) {
-> ++%#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +     v8::Handle<v8::String> js_str = SWIGV8_TO_STRING(valRef);
-> ++%#else
-> ++    v8::Local<v8::String> js_str = SWIGV8_TO_STRING(valRef);
-> ++%#endif
-> +
-> +     size_t len = SWIGV8_UTF8_LENGTH(js_str) + 1;
-> +     char* cstr = new char[len];
-> +@@ -20,7 +24,7 @@ SWIG_AsCharPtrAndSize(v8::Handle<v8::Value> valRef, char** cptr, size_t* psize,
-> +     return SWIG_OK;
-> +   } else {
-> +     if(valRef->IsObject()) {
-> +-      v8::Handle<v8::Object> obj = SWIGV8_TO_OBJECT(valRef);
-> ++      SWIGV8_OBJECT obj = SWIGV8_TO_OBJECT(valRef);
-> +       // try if the object is a wrapped char[]
-> +       swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-> +       if (pchar_descriptor) {
-> +@@ -41,7 +45,7 @@ SWIG_AsCharPtrAndSize(v8::Handle<v8::Value> valRef, char** cptr, size_t* psize,
-> + }
-> +
-> + %fragment("SWIG_FromCharPtrAndSize","header",fragment="SWIG_pchar_descriptor") {
-> +-SWIGINTERNINLINE v8::Handle<v8::Value>
-> ++SWIGINTERNINLINE SWIGV8_VALUE
-> + SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-> + {
-> +   if (carray) {
-> +@@ -49,7 +53,11 @@ SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-> +       // TODO: handle extra long strings
-> +       return SWIGV8_UNDEFINED();
-> +     } else {
-> ++%#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +       v8::Handle<v8::String> js_str = SWIGV8_STRING_NEW2(carray, size);
-> ++%#else
-> ++      v8::Local<v8::String> js_str = SWIGV8_STRING_NEW2(carray, size);
-> ++%#endif
-> +       return js_str;
-> +     }
-> +   } else {
-> +diff --git a/Lib/javascript/v8/javascripttypemaps.swg b/Lib/javascript/v8/javascripttypemaps.swg
-> +index 4601698e0..cb31100c5 100644
-> +--- a/Lib/javascript/v8/javascripttypemaps.swg
-> ++++ b/Lib/javascript/v8/javascripttypemaps.swg
-> +@@ -25,7 +25,7 @@
-> +
-> + /* Javascript types */
-> +
-> +-#define SWIG_Object                     v8::Handle<v8::Value>
-> ++#define SWIG_Object                     SWIGV8_VALUE
-> + #define VOID_Object                     SWIGV8_UNDEFINED()
-> +
-> + /* Overload of the output/constant/exception/dirout handling */
-> +--
-> +2.17.0
-> diff --git a/package/swig/0003-Add-support-for-Node.js-v12.patch b/package/swig/0003-Add-support-for-Node.js-v12.patch
-> new file mode 100644
-> index 0000000000..9dd9f949f4
-> --- /dev/null
-> +++ b/package/swig/0003-Add-support-for-Node.js-v12.patch
-> @@ -0,0 +1,207 @@
-> +From 789da9ead59a8fbbc727d2be38cee3ad4e118603 Mon Sep 17 00:00:00 2001
-> +From: Yegor Yefremov <yegorslists@googlemail.com>
-> +Date: Mon, 2 Mar 2020 14:44:04 +0100
-> +Subject: [PATCH] Add support for Node.js v12
-> +
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +---
-> + Lib/javascript/v8/javascriptcode.swg    | 16 +++++++--
-> + Lib/javascript/v8/javascripthelpers.swg |  5 +++
-> + Lib/javascript/v8/javascriptrun.swg     | 43 ++++++++++++++++++++-----
-> + Lib/javascript/v8/javascriptruntime.swg |  5 +++
-> + 4 files changed, 59 insertions(+), 10 deletions(-)
-> +
-> +diff --git a/Lib/javascript/v8/javascriptcode.swg b/Lib/javascript/v8/javascriptcode.swg
-> +index 65e0d39d1..edcc1fd90 100644
-> +--- a/Lib/javascript/v8/javascriptcode.swg
-> ++++ b/Lib/javascript/v8/javascriptcode.swg
-> +@@ -423,11 +423,14 @@ fail:
-> +   SWIGV8_FUNCTION_TEMPLATE $jsmangledname_class_0 = SWIGV8_CreateClassTemplate("$jsname");
-> +   $jsmangledname_class_0->SetCallHandler($jsctor);
-> +   $jsmangledname_class_0->Inherit($jsmangledname_class);
-> +-  $jsmangledname_class_0->SetHiddenPrototype(true);
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> ++  $jsmangledname_class_0->SetHiddenPrototype(true);
-> +   v8::Handle<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
-> +-#else
-> ++#elif (SWIG_V8_VERSION < 0x0705)
-> ++  $jsmangledname_class_0->SetHiddenPrototype(true);
-> +   v8::Local<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
-> ++#else
-> ++  v8::Local<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked();
-> + #endif
-> + %}
-> +
-> +@@ -439,7 +442,12 @@ fail:
-> +  * ----------------------------------------------------------------------------- */
-> + %fragment("jsv8_register_class", "templates")
-> + %{
-> ++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +   $jsparent_obj->Set(SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
-> ++#else
-> ++  $jsparent_obj->Set(SWIGV8_CURRENT_CONTEXT(), SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
-> ++#endif
-> ++
-> + %}
-> +
-> + /* -----------------------------------------------------------------------------
-> +@@ -459,7 +467,11 @@ fail:
-> +  * ----------------------------------------------------------------------------- */
-> + %fragment("jsv8_register_namespace", "templates")
-> + %{
-> ++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +   $jsparent_obj->Set(SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
-> ++#else
-> ++  $jsparent_obj->Set(SWIGV8_CURRENT_CONTEXT(), SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
-> ++#endif
-> + %}
-> +
-> + /* -----------------------------------------------------------------------------
-> +diff --git a/Lib/javascript/v8/javascripthelpers.swg b/Lib/javascript/v8/javascripthelpers.swg
-> +index 465d3ee48..cbb43b56d 100644
-> +--- a/Lib/javascript/v8/javascripthelpers.swg
-> ++++ b/Lib/javascript/v8/javascripthelpers.swg
-> +@@ -64,6 +64,11 @@ SWIGRUNTIME void SWIGV8_AddStaticFunction(SWIGV8_OBJECT obj, const char* symbol,
-> +   const SwigV8FunctionCallback& _func) {
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0705)
-> +   obj->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction());
-> ++#elif (SWIG_V8_VERSION < 0x0706)
-> ++  obj->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked());
-> ++#else
-> ++  obj->Set(SWIGV8_CURRENT_CONTEXT(), SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked());
-> ++#endif
-> + }
-> +
-> + /**
-> +diff --git a/Lib/javascript/v8/javascriptrun.swg b/Lib/javascript/v8/javascriptrun.swg
-> +index 1d74e3747..8ce8ff567 100644
-> +--- a/Lib/javascript/v8/javascriptrun.swg
-> ++++ b/Lib/javascript/v8/javascriptrun.swg
-> +@@ -9,8 +9,10 @@
-> +
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031803)
-> + #define SWIGV8_STRING_NEW2(cstr, len) v8::String::New(cstr, len)
-> +-#else
-> ++#elif (SWIG_V8_VERSION < 0x0706)
-> + #define SWIGV8_STRING_NEW2(cstr, len) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), cstr, v8::String::kNormalString, len)
-> ++#else
-> ++#define SWIGV8_STRING_NEW2(cstr, len) (v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), cstr, v8::NewStringType::kNormal, len)).ToLocalChecked()
-> + #endif
-> +
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
-> +@@ -47,12 +49,18 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
-> + #define SWIGV8_THROW_EXCEPTION(err) v8::ThrowException(err)
-> + #define SWIGV8_STRING_NEW(str) v8::String::New(str)
-> + #define SWIGV8_SYMBOL_NEW(sym) v8::String::NewSymbol(sym)
-> ++#elif (SWIG_V8_VERSION < 0x0706)
-> ++#define SWIGV8_ADJUST_MEMORY(size) v8::Isolate::GetCurrent()->AdjustAmountOfExternalAllocatedMemory(size)
-> ++#define SWIGV8_CURRENT_CONTEXT() v8::Isolate::GetCurrent()->GetCurrentContext()
-> ++#define SWIGV8_THROW_EXCEPTION(err) v8::Isolate::GetCurrent()->ThrowException(err)
-> ++#define SWIGV8_STRING_NEW(str) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), str, v8::String::kNormalString)
-> ++#define SWIGV8_SYMBOL_NEW(sym) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), sym, v8::String::kNormalString)
-> + #else
-> + #define SWIGV8_ADJUST_MEMORY(size) v8::Isolate::GetCurrent()->AdjustAmountOfExternalAllocatedMemory(size)
-> + #define SWIGV8_CURRENT_CONTEXT() v8::Isolate::GetCurrent()->GetCurrentContext()
-> + #define SWIGV8_THROW_EXCEPTION(err) v8::Isolate::GetCurrent()->ThrowException(err)
-> +-#define SWIGV8_STRING_NEW(str) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), str)
-> +-#define SWIGV8_SYMBOL_NEW(sym) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), sym)
-> ++#define SWIGV8_STRING_NEW(str) (v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), str, v8::NewStringType::kNormal)).ToLocalChecked()
-> ++#define SWIGV8_SYMBOL_NEW(sym) (v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), sym, v8::NewStringType::kNormal)).ToLocalChecked()
-> + #endif
-> +
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x032318)
-> +@@ -117,7 +125,7 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
-> + #define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue()
-> + #define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(buffer, len)
-> + #define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length()
-> +-#else
-> ++#elif (SWIG_V8_VERSION < 0x0706)
-> + #define SWIGV8_TO_OBJECT(handle) (handle)->ToObject(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
-> + #define SWIGV8_TO_STRING(handle) (handle)->ToString(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
-> + #define SWIGV8_NUMBER_VALUE(handle) (handle)->NumberValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
-> +@@ -125,8 +133,17 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
-> + #define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
-> + #define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(v8::Isolate::GetCurrent(), buffer, len)
-> + #define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length(v8::Isolate::GetCurrent())
-> ++#else
-> ++#define SWIGV8_TO_OBJECT(handle) (handle)->ToObject(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
-> ++#define SWIGV8_TO_STRING(handle) (handle)->ToString(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
-> ++#define SWIGV8_NUMBER_VALUE(handle) (handle)->NumberValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
-> ++#define SWIGV8_INTEGER_VALUE(handle) (handle)->IntegerValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
-> ++#define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue(v8::Isolate::GetCurrent())
-> ++#define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(v8::Isolate::GetCurrent(), buffer, len)
-> ++#define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length(v8::Isolate::GetCurrent())
-> + #endif
-> +
-> ++
-> + /* ---------------------------------------------------------------------------
-> +  * Error handling
-> +  *
-> +@@ -371,10 +388,11 @@ SWIGRUNTIME void SWIGV8_SetPrivateData(SWIGV8_OBJECT obj, void *ptr, swig_type_i
-> +   cdata->handle.MarkIndependent();
-> + #elif (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x032100)
-> +   cdata->handle.MarkIndependent(v8::Isolate::GetCurrent());
-> +-#else
-> ++#elif (SWIG_V8_VERSION < 0x0706)
-> +   cdata->handle.MarkIndependent();
-> ++// Looks like future versions do not require that anymore:
-> ++// https://monorail-prod.appspot.com/p/chromium/issues/detail?id=923361#c11
-> + #endif
-> +-
-> + }
-> +
-> + SWIGRUNTIME int SWIG_V8_ConvertPtr(SWIGV8_VALUE valRef, void **ptr, swig_type_info *info, int flags) {
-> +@@ -422,8 +440,12 @@ SWIGRUNTIME SWIGV8_VALUE SWIG_V8_NewPointerObj(void *ptr, swig_type_info *info,
-> +   }
-> + #endif
-> +
-> +-//  v8::Handle<v8::Object> result = class_templ->InstanceTemplate()->NewInstance();
-> ++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0705)
-> +   v8::Local<v8::Object> result = class_templ->InstanceTemplate()->NewInstance();
-> ++#else
-> ++  v8::Local<v8::Object> result = class_templ->InstanceTemplate()->NewInstance(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked();
-> ++#endif
-> ++
-> +   SWIGV8_SetPrivateData(result, ptr, info, flags);
-> +
-> +   SWIGV8_ESCAPE(result);
-> +@@ -646,8 +668,10 @@ SWIGV8_VALUE SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type)
-> +   cdata->handle.MarkIndependent();
-> + #elif (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x032100)
-> +   cdata->handle.MarkIndependent(v8::Isolate::GetCurrent());
-> +-#else
-> ++#elif (SWIG_V8_VERSION < 0x0706)
-> +   cdata->handle.MarkIndependent();
-> ++// Looks like future versions do not require that anymore:
-> ++// https://monorail-prod.appspot.com/p/chromium/issues/detail?id=923361#c11
-> + #endif
-> +
-> +   SWIGV8_ESCAPE(obj);
-> +@@ -674,6 +698,9 @@ SWIGV8_VALUE SWIGV8_AppendOutput(SWIGV8_VALUE result, SWIGV8_VALUE obj) {
-> +
-> + #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0706)
-> +   arr->Set(arr->Length(), obj);
-> ++#else
-> ++  arr->Set(SWIGV8_CURRENT_CONTEXT(), arr->Length(), obj);
-> ++#endif
-> +
-> +   SWIGV8_ESCAPE(arr);
-> + }
-> +diff --git a/Lib/javascript/v8/javascriptruntime.swg b/Lib/javascript/v8/javascriptruntime.swg
-> +index c78e04efb..773014f2a 100644
-> +--- a/Lib/javascript/v8/javascriptruntime.swg
-> ++++ b/Lib/javascript/v8/javascriptruntime.swg
-> +@@ -56,6 +56,11 @@
-> + %insert(runtime) %{
-> + #include <v8.h>
-> +
-> ++#if defined(V8_MAJOR_VERSION) && defined(V8_MINOR_VERSION)
-> ++#undef SWIG_V8_VERSION
-> ++#define SWIG_V8_VERSION (V8_MAJOR_VERSION * 256 + V8_MINOR_VERSION)
-> ++#endif
-> ++
-> + #include <errno.h>
-> + #include <limits.h>
-> + #include <stdlib.h>
-> +--
-> +2.17.0
+
+Ok thanks.
+
+>
+> > diff --git a/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
+> > new file mode 100644
+> > index 0000000000..e7edc76313
+> > --- /dev/null
+> > +++ b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
+> > @@ -0,0 +1,27 @@
+> > +From 78eb43f50978ffd780cf31b1cea6736dadc6b155 Mon Sep 17 00:00:00 2001
+> > +From: Kamel Bouhara <kamel.bouhara@bootlin.com>
+> > +Date: Mon, 6 Jul 2020 17:10:55 +0200
+> > +Subject: [PATCH] Add fully-qualified SONAME to shared object for Linux
+> > +
+> > +From: http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
+> > +
+> > +Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+> > +---
+> > + GNUmakefile | 1 +
+> > + 1 file changed, 1 insertion(+)
+> > +
+> > +diff --git a/GNUmakefile b/GNUmakefile
+> > +index e7b7b3a6..730e2a6f 100755
+> > +--- a/GNUmakefile
+> > ++++ b/GNUmakefile
+> > +@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
+> > + 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
+> > + ifeq ($(HAS_SOLIB_VERSION),1)
+> > + 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
+> > ++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
+>
+> Is there something creating the .so symlink then ?
+>
+
+Actually the .so is the realname here which is not the way it should be
+as I understand the shared libs conventions, here it should be:
+
+ - libcryptopp.so$(SOLIB_VERSION_SUFFIX} -> realname, not a symlink
+ - libcryptopp.so -> symlink to realname
+ - libcryptopp.so$(SOLIB_COMPAT_SUFFIX) -> symlink to realname
+
+Is it right ?
+
+>
+> > +	  A free C++ class library of cryptographic schemes
+> > diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+> > index f1d19386ab..f62713a2cd 100644
+> > --- a/package/cryptopp/cryptopp.mk
+> > +++ b/package/cryptopp/cryptopp.mk
+> > @@ -12,26 +12,46 @@ CRYPTOPP_LICENSE_FILES = License.txt
+> >  CRYPTOPP_INSTALL_STAGING = YES
+> >
+> >  define HOST_CRYPTOPP_EXTRACT_CMDS
+> > -	$(UNZIP) $(HOST_CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
+> > +       $(UNZIP) $(HOST_CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
+>
+> You've broken the indentation here: a TAB is correct, your change to
+> spaces is not. This is an issue globally.
+
+Sorry, I'll fix that.
+
+>
+> >  endef
+> >
+> > -HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
+> > -
+> >  # _mm256_broadcastsi128_si256 has been added only in gcc 4.9
+> >  ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
+>
+> So you're testing the host compiler capabilities...
+>
+> > -HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
+> > +	CRYPTOPP_CXXFLAGS = -DCRYPTOPP_DISABLE_AVX2
+>
+> ... to then decide something compiled for the target ? Not good.
+>
+> >  endif
+>
+> You need to keep separate HOST_CRYPTOPP_CXXFLAGS and CRYPTOPP_CXXFLAGS,
+> and test on the compiler version separately, as the host compiler and
+> target compiler can be different.
+>
+
+Indeed, I missed that for the target
+
+> Note that on the target variant, you need to test a configuration with
+> static libraries only, because you're passing unconditionally -fPIC and
+> the Makefile seems to be building only shared libraries, so that will
+> likely fail on static only configuration. Perhaps a "depends on
+> !BR2_STATIC_LIBS" is needed in the Config.in.
+>
+> >  HOST_CRYPTOPP_MAKE_OPTS = \
+> > -	$(HOST_CONFIGURE_OPTS) \
+> > -	CXXFLAGS="$(HOST_CRYPTOPP_CXXFLAGS)"
+> > +       $(HOST_CONFIGURE_OPTS) \
+> > +       CXXFLAGS="$(HOST_CFLAGS) -fPIC $(CRYPTOPP_CXXFLAGS)"
+> >
+> >  define HOST_CRYPTOPP_BUILD_CMDS
+> > -	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
+> > +       $(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
+> >  endef
+> >
+> >  define HOST_CRYPTOPP_INSTALL_CMDS
+> > -	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-lib
+> > +       $(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-lib
+> > +endef
+>
+> Please fix the indentation. It seems like you didn't review the diff
+> you're sending.
+>
+> > +CRYPTOPP_MAKE_OPTS = \
+> > +	$(TARGET_CONFIGURE_OPTS) \
+> > +	CXXFLAGS="$(TARGET_CFLAGS) -fPIC $(CRYPTOPP_CXXFLAGS)"
+> > +
+> > +define CRYPTOPP_EXTRACT_CMDS
+> > +       $(UNZIP) $(CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
+> > +endef
+> > +
+> > +define CRYPTOPP_BUILD_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CRYPTOPP_MAKE_OPTS) shared
+>
+> Ah, there's a "shared" target, so in fact perhaps it can also build a
+> static library ?
+>
+
+Yes, by default the static library is built.
+
+> > +define CRYPTOPP_INSTALL_TARGET_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install-lib
+> > +endef
+> > +
+> > +define CRYPTOPP_INSTALL_STAGING_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(STAGING_DIR)/usr libcryptopp.pc
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(STAGING_DIR)/usr install-lib
+>
+> It is strange that the PREFIX is just $(TARGET_DIR) in one case, and
+> $(STAGING_DIR)/usr in the other. Could you explain ?
+>
+
+This shall be "/usr" in any case.
+
+Thanks for the review,
+
+Best regards,
+Kamel
+
+> Best regards,
+>
+> Thomas
 > --
-> 2.17.0
->
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Ignore this. Will send v2.
-
-Regards,
-Yegor
+--
+Kamel Bouhara, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
