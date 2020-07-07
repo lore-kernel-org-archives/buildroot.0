@@ -1,38 +1,62 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue,  7 Jul 2020 14:04:31 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/python-greenlet: fix build for
- i386 and x86_64 archs
-Message-ID: <20200707200431.181733-1-james.hilliard1@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Jul 2020 22:06:28 +0200
+Subject: [Buildroot] [git commit] package/luaposix: bump to version 35.0
+Message-ID: <20200707200353.A603686596@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_x86 doesn't exist in buildroot which should be BR2_i386.
+commit: https://git.buildroot.net/buildroot/commit/?id=e08fdf9bb05d707ff472135e6568c8202be67a0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-BR2_x86_64 was missed in 30f1decec2ca190deea072f4d490a8de830ac9a3.
+LICENSE diff:
+- Copyright (C) 2006-2019 luaposix authors
++ Copyright (C) 2006-2020 luaposix authors
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998 at free.fr: simplify help entry]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2:
-  - also fix BR2_i386
----
- package/python-greenlet/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luaposix/Config.in     | 2 +-
+ package/luaposix/luaposix.hash | 4 ++--
+ package/luaposix/luaposix.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-greenlet/Config.in b/package/python-greenlet/Config.in
-index 44ab96b488..c73eeb7b15 100644
---- a/package/python-greenlet/Config.in
-+++ b/package/python-greenlet/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_PYTHON_GREENLET_ARCH_SUPPORTS
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_riscv
- 	default y if BR2_sparc || BR2_sparc64
--	default y if BR2_x86
-+	default y if BR2_i386 || BR2_x86_64
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index 1e2291b3f5..cedb3a6654 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LUAPOSIX
+ 	# doesn't find it.
+ 	select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT # runtime
+ 	help
+-	  This is a POSIX binding for LuaJIT, Lua 5.1, 5.2 and 5.3;
++	  This is a POSIX binding for LuaJIT, Lua 5.1 through 5.4;
+ 	  like most libraries it simply binds to C APIs on the
+ 	  underlying system, so it won't work on non-POSIX systems.
+ 	  However, it does try to detect the level of POSIX conformance
+diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
+index ee72bfe321..54617853a8 100644
+--- a/package/luaposix/luaposix.hash
++++ b/package/luaposix/luaposix.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7948f4ac8b953172e928753632e37ad97cc3014df74b524fe7839f71216a7e90  luaposix-34.1.1.tar.gz
+-sha256  a868e95dd14f832eb63c4580c5fed42d78a6bd11785e3605211f446b05904a18  LICENSE
++sha256  a4edf2f715feff65acb009e8d1689e57ec665eb79bc36a6649fae55eafd56809  luaposix-35.0.tar.gz
++sha256  e5d496c903dc3989bb2f6f175cda52d26e3494ad1fdd67ae1c3b3e5f76ffb86f  LICENSE
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index ab6b030fca..d04881dfd9 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_PYTHON_GREENLET
- 	bool "python-greenlet"
--- 
-2.25.1
+-LUAPOSIX_VERSION = 34.1.1
++LUAPOSIX_VERSION = 35.0
+ LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = LICENSE
