@@ -1,99 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jul 2020 21:51:58 +0200
-Subject: [Buildroot] [PATCH 0/3] board: Add support for LePotato
-In-Reply-To: <20200707075339.389528-1-mylene.josserand@collabora.com>
-References: <20200707075339.389528-1-mylene.josserand@collabora.com>
-Message-ID: <20200707195158.GN2273@scaer>
+Date: Tue, 7 Jul 2020 21:53:23 +0200
+Subject: [Buildroot] [git commit] package/sunxi-mali-mainline-driver: bump
+ version
+Message-ID: <20200707195029.1A291846F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Myl?ne, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=23e3cffa75b022a21088be9ec0af73a676f570f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-07 09:53 +0200, Myl?ne Josserand spake thusly:
-> Here is my first version of this series that adds the support of the
-> board LePotato SBC from LibreComputer [1].
-> 
-> This board uses FIP utilities [2][3] from AMLogic to sign u-boot.
+For 5.6 and 5.7 support.
 
-Following the issues raised by Romain, I've marked patches 2-3 as
-"changes requested". Hopefully, gslimg is an interesting trail to follow
-as a free/libre replacement for the vendor stuff.
+git shortlog --invert-grep --grep=Travis --no-merges ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2..
+Jonathan Liu (2):
+      mali: Fix build for 5.6
+      mali: Fix build for 5.7
 
-I've applied patch 1 to master, thanks.
+Maxime Ripard (3):
+      Create travis.yml
+      actions: Add feedparser to the host
+      travis: Try to fix the push code
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash | 4 ++--
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> The patch 02 is adding these FIP utilities as a host package. It is
-> available for different boards such as khadas-vim, some odroids, etc.
-> This package will copy the corresponding utilities, only for LePotato for
-> the moment, into the HOST_DIR/usr/bin. Currently, LePotato's ones are the
-> default ones. This should be updating once more boards are added.
-> 
-> The patch 03 is adding the support of this board from LibreComputer:
->    - one defconfig including a u-boot, kernel and minimal rootfs.
->    The configuration is also enabling the FIP package for LePotato.
->    - one post-build script that is using the FIP utilities to sign
->    u-boot binary.
->    - one post-image script to generate a sd-card image and flashing the
->    signed u-boot on it.
->    - a readme file to explain how to configure, compile and flash image
->    for this board.
->    - a boot.scr file including booti commands to run.
-> 
-> Let me know if you have any comments on this series.
-> 
-> Best regards,
-> 
-> Myl?ne
-> 
-> [1]: https://libre.computer/products/boards/aml-s905x-cc/
-> [2]: https://github.com/LibreELEC/amlogic-boot-fip
-> [3]: https://github.com/BayLibre/u-boot
-> 
-> Myl?ne Josserand (3):
->   DEVELOPERS: Update Mylene's email
->   package: Add new fip package
->   configs/lepotato: Add new defconfig
-> 
->  .gitlab-ci.yml                             |  1 +
->  DEVELOPERS                                 |  4 +-
->  board/librecomputer/lepotato/boot.cmd      |  6 +++
->  board/librecomputer/lepotato/genimage.cfg  | 28 ++++++++++
->  board/librecomputer/lepotato/post-build.sh | 61 ++++++++++++++++++++++
->  board/librecomputer/lepotato/post-image.sh | 17 ++++++
->  board/librecomputer/lepotato/readme.txt    | 35 +++++++++++++
->  configs/lepotato_defconfig                 | 29 ++++++++++
->  package/Config.in.host                     |  1 +
->  package/fip/Config.in.host                 | 17 ++++++
->  package/fip/fip.hash                       |  2 +
->  package/fip/fip.mk                         | 30 +++++++++++
->  12 files changed, 230 insertions(+), 1 deletion(-)
->  create mode 100644 board/librecomputer/lepotato/boot.cmd
->  create mode 100644 board/librecomputer/lepotato/genimage.cfg
->  create mode 100755 board/librecomputer/lepotato/post-build.sh
->  create mode 100755 board/librecomputer/lepotato/post-image.sh
->  create mode 100644 board/librecomputer/lepotato/readme.txt
->  create mode 100644 configs/lepotato_defconfig
->  create mode 100644 package/fip/Config.in.host
->  create mode 100644 package/fip/fip.hash
->  create mode 100644 package/fip/fip.mk
-> 
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+index 7c01d07d20..9f4b1a6694 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 98abeb8ff2e7e824ec89c7be9984ff298db1f35e48d79092238799ff5a239e91  sunxi-mali-mainline-driver-ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2.tar.gz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
++sha256  a2bb43ed2e64cb081e3bc814941c4de02e785f9984783061cf486d2b0b92407b  sunxi-mali-mainline-driver-a588b22f6b3d40ad18070c699f90f36ed21c9f7d.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index 40ea450b31..3bb899041e 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = a588b22f6b3d40ad18070c699f90f36ed21c9f7d
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
