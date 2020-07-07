@@ -1,265 +1,957 @@
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Tue,  7 Jul 2020 10:28:07 +0530
-Subject: [Buildroot] [PATCH] configs/rock_pi_n8: new defconfig
-Message-ID: <1594097887-25563-1-git-send-email-sunil@amarulasolutions.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  7 Jul 2020 07:10:23 +0200
+Subject: [Buildroot] [PATCH] package/swig: enable support for Node.js >= 12.x
+Message-ID: <20200707051023.19992-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for RK3288 SOM based radxa rockpi-n8
-target with below features:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-	- Custom U-Boot 2020.07-rc4
-	  https://github.com/amarula/u-boot-amarula.git
-	  branch rock-pi
-	- Custom Linux 5.7.0-rc1
-	  https://github.com/amarula/linux-amarula.git
-	  branch rockpi
-	- GPT partition layout is being used
-	- Default packages from buildroot
+Recent Node.js versions have removed some depreciated API calls,
+that swig still relies on. Patches taken from this PR [1] fix
+this issue.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+[1] https://github.com/swig/swig/pull/1746
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-NOTE:
-- patches for this target are submitted to Linux and u-boot
-  mainline, once accepted and merged, we use mainline Linux
-  and u-boot.
----
- .gitlab-ci.yml                      |  1 +
- DEVELOPERS                          |  2 ++
- board/radxa/rockpi-n8/extlinux.conf |  4 +++
- board/radxa/rockpi-n8/genimage.cfg  | 39 ++++++++++++++++++++++++
- board/radxa/rockpi-n8/post-build.sh |  5 +++
- board/radxa/rockpi-n8/readme.txt    | 61 +++++++++++++++++++++++++++++++++++++
- configs/rock_pi_n8_defconfig        | 49 +++++++++++++++++++++++++++++
- 7 files changed, 161 insertions(+)
- create mode 100644 board/radxa/rockpi-n8/extlinux.conf
- create mode 100644 board/radxa/rockpi-n8/genimage.cfg
- create mode 100755 board/radxa/rockpi-n8/post-build.sh
- create mode 100644 board/radxa/rockpi-n8/readme.txt
- create mode 100644 configs/rock_pi_n8_defconfig
+ ...-to-support-both-Handle-and-Local-ty.patch |  53 ++
+ ...ith-Local-depending-on-Node.js-versi.patch | 649 ++++++++++++++++++
+ .../0003-Add-support-for-Node.js-v12.patch    | 207 ++++++
+ 3 files changed, 909 insertions(+)
+ create mode 100644 package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
+ create mode 100644 package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
+ create mode 100644 package/swig/0003-Add-support-for-Node.js-v12.patch
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ac4288b..119f98e 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -324,6 +324,7 @@ roc_pc_rk3399_defconfig: { extends: .defconfig }
- rock64_defconfig: { extends: .defconfig }
- rockpro64_defconfig: { extends: .defconfig }
- rock_pi_4_defconfig: { extends: .defconfig }
-+rock_pi_n8_defconfig: { extends: .defconfig }
- rock_pi_n10_defconfig: { extends: .defconfig }
- roseapplepi_defconfig: { extends: .defconfig }
- s6lx9_microboard_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9f93d3a..7738847 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2405,6 +2405,7 @@ F:	board/friendlyarm/nanopc-t4
- F:	board/friendlyarm/nanopi-m4
- F:	board/orangepi/orangepi-rk3399
- F:	board/radxa/rockpi-4
-+F:	board/radxa/rockpi-n8
- F:	board/radxa/rockpi-n10
- F:	board/pine64/rockpro64
- F: 	configs/nanopc_t4_defconfig
-@@ -2412,6 +2413,7 @@ F: 	configs/nanopi_m4_defconfig
- F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
- F:	configs/rock_pi_4_defconfig
-+F:	configs/rock_pi_n8_defconfig
- F:	configs/rock_pi_n10_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-a-toolchain/
-diff --git a/board/radxa/rockpi-n8/extlinux.conf b/board/radxa/rockpi-n8/extlinux.conf
+diff --git a/package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch b/package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
 new file mode 100644
-index 0000000..3b05d78
+index 0000000000..f52d599723
 --- /dev/null
-+++ b/board/radxa/rockpi-n8/extlinux.conf
-@@ -0,0 +1,4 @@
-+label RK3399_ROCKPI_N8 linux
-+  kernel /uImage
-+  devicetree /rk3288-rock-pi-n8.dtb
-+  append console=ttyS2,115200n8 root=/dev/mmcblk0p4 rw rootwait
-diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
++++ b/package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
+@@ -0,0 +1,53 @@
++From a40f8b18b31cc882c8fb9cf8b6b3fd597adc1745 Mon Sep 17 00:00:00 2001
++From: Tom Leavy <tom@wickr.com>
++Date: Wed, 25 Mar 2020 17:10:51 -0400
++Subject: [PATCH] Introduce macros to support both Handle and Local types
++
++The old Node.js versions don't treat v8::Handle and v8::Local as
++the same types, and the latest versions (v12 and newer) have
++removed v8::Handle at all.
++
++This patch introduces the following macros that use v8::Handle or
++v8::Local depending on the selected Node.js version:
++
++- SWIGV8_ARRAY
++- SWIGV8_FUNCTION_TEMPLATE
++- SWIGV8_OBJECT
++- SWIGV8_OBJECT_TEMPLATE
++- SWIGV8_VALUE
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ Lib/javascript/v8/javascriptrun.swg | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/Lib/javascript/v8/javascriptrun.swg b/Lib/javascript/v8/javascriptrun.swg
++index 2452f4040..cf3215334 100644
++--- a/Lib/javascript/v8/javascriptrun.swg
+++++ b/Lib/javascript/v8/javascriptrun.swg
++@@ -67,6 +67,11 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
++ #define SWIGV8_NUMBER_NEW(num) v8::Number::New(num)
++ #define SWIGV8_OBJECT_NEW() v8::Object::New()
++ #define SWIGV8_UNDEFINED() v8::Undefined()
+++#define SWIGV8_ARRAY v8::Handle<v8::Array>
+++#define SWIGV8_FUNCTION_TEMPLATE v8::Handle<v8::FunctionTemplate>
+++#define SWIGV8_OBJECT v8::Handle<v8::Object>
+++#define SWIGV8_OBJECT_TEMPLATE v8::Handle<v8::ObjectTemplate>
+++#define SWIGV8_VALUE v8::Handle<v8::Value>
++ #define SWIGV8_NULL() v8::Null()
++ #else
++ #define SWIGV8_ARRAY_NEW() v8::Array::New(v8::Isolate::GetCurrent())
++@@ -80,6 +85,11 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
++ #define SWIGV8_NUMBER_NEW(num) v8::Number::New(v8::Isolate::GetCurrent(), num)
++ #define SWIGV8_OBJECT_NEW() v8::Object::New(v8::Isolate::GetCurrent())
++ #define SWIGV8_UNDEFINED() v8::Undefined(v8::Isolate::GetCurrent())
+++#define SWIGV8_ARRAY v8::Local<v8::Array>
+++#define SWIGV8_FUNCTION_TEMPLATE v8::Local<v8::FunctionTemplate>
+++#define SWIGV8_OBJECT v8::Local<v8::Object>
+++#define SWIGV8_OBJECT_TEMPLATE v8::Local<v8::ObjectTemplate>
+++#define SWIGV8_VALUE v8::Local<v8::Value>
++ #define SWIGV8_NULL() v8::Null(v8::Isolate::GetCurrent())
++ #endif
++
++--
++2.17.0
+diff --git a/package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch b/package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
 new file mode 100644
-index 0000000..36d7906
+index 0000000000..86b7b04c6c
 --- /dev/null
-+++ b/board/radxa/rockpi-n8/genimage.cfg
-@@ -0,0 +1,39 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"uImage",
-+			"rk3288-rock-pi-n8.dtb",
-+			"extlinux"
-+		}
-+	}
-+	size = 112M
-+}
++++ b/package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
+@@ -0,0 +1,649 @@
++From 9f245da9b6dd4c9e874fa1fd1a576ea550983dbe Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 26 Feb 2020 15:55:18 +0100
++Subject: [PATCH] Replace Handle with Local depending on Node.js version
 +
-+image sdcard.img {
++Use newly introduced macros like SWIGV8_VALUE to use v8::Handle or
++v8::Local depending on the selected Node.js version where possible.
 +
-+	hdimage {
-+		gpt = true
-+	}
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ Examples/javascript/native/example.i      |  2 +-
++ Examples/test-suite/native_directive.i    |  2 +-
++ Lib/javascript/v8/javascriptcode.swg      | 24 +++++++-----
++ Lib/javascript/v8/javascriptcomplex.swg   | 10 ++---
++ Lib/javascript/v8/javascripthelpers.swg   | 21 +++++-----
++ Lib/javascript/v8/javascriptinit.swg      |  6 +--
++ Lib/javascript/v8/javascriptprimtypes.swg | 29 +++++++-------
++ Lib/javascript/v8/javascriptrun.swg       | 48 ++++++++++-------------
++ Lib/javascript/v8/javascriptstrings.swg   | 14 +++++--
++ Lib/javascript/v8/javascripttypemaps.swg  |  2 +-
++ 10 files changed, 82 insertions(+), 76 deletions(-)
 +
-+	partition loader1 {
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
++diff --git a/Examples/javascript/native/example.i b/Examples/javascript/native/example.i
++index 8c6160060..a9ca094a7 100644
++--- a/Examples/javascript/native/example.i
+++++ b/Examples/javascript/native/example.i
++@@ -15,7 +15,7 @@ int placeholder() { return 0; }
++     static SwigV8ReturnValue JavaScript_do_work(const SwigV8Arguments &args) {
++         SWIGV8_HANDLESCOPE();
++         const int MY_MAGIC_NUMBER = 5;
++-        v8::Handle<v8::Value> jsresult =
+++        SWIGV8_VALUE jsresult =
++             SWIG_From_int(static_cast< int >(MY_MAGIC_NUMBER));
++         if (args.Length() != 0)
++             SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments.");
++diff --git a/Examples/test-suite/native_directive.i b/Examples/test-suite/native_directive.i
++index 9ae76e0b7..3d4858032 100644
++--- a/Examples/test-suite/native_directive.i
+++++ b/Examples/test-suite/native_directive.i
++@@ -53,7 +53,7 @@ extern "C" JNIEXPORT jint JNICALL Java_native_1directive_native_1directiveJNI_Co
 +
-+	partition loader2 {
-+		image = "u-boot-dtb.img"
-+		offset = 8M
-+	}
++ static SwigV8ReturnValue JavaScript_alpha_count(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   char *arg1 = (char *)0;
++   int res1;
++   char *buf1 = 0;
++diff --git a/Lib/javascript/v8/javascriptcode.swg b/Lib/javascript/v8/javascriptcode.swg
++index c4aaf3db0..65e0d39d1 100644
++--- a/Lib/javascript/v8/javascriptcode.swg
+++++ b/Lib/javascript/v8/javascriptcode.swg
++@@ -11,7 +11,7 @@
++ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 16M
-+	}
++-  v8::Handle<v8::Object> self = args.Holder();
+++  SWIGV8_OBJECT self = args.Holder();
++   $jslocals
++   if(args.Length() != $jsargcount) SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments for $jswrapper.");
++   $jscode
++@@ -53,7 +53,7 @@ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/radxa/rockpi-n8/post-build.sh b/board/radxa/rockpi-n8/post-build.sh
-new file mode 100755
-index 0000000..ba29375
---- /dev/null
-+++ b/board/radxa/rockpi-n8/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
++   OverloadErrorHandler errorHandler;
++-  v8::Handle<v8::Value> self;
+++  SWIGV8_VALUE self;
 +
-+BOARD_DIR="$(dirname $0)"
++   // switch all cases by means of series of if-returns.
++   $jsdispatchcases
++@@ -78,7 +78,7 @@ fail:
++ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args, V8ErrorHandler &SWIGV8_ErrorHandler) {
++   SWIGV8_HANDLESCOPE();
 +
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/radxa/rockpi-n8/readme.txt b/board/radxa/rockpi-n8/readme.txt
++-  v8::Handle<v8::Object> self = args.Holder();
+++  SWIGV8_OBJECT self = args.Holder();
++   $jslocals
++   if(args.Length() != $jsargcount) SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments for $jswrapper.");
++   $jscode
++@@ -226,7 +226,7 @@ static SwigV8ReturnValue $jswrapper(v8::Local<v8::Name> property, const SwigV8Pr
++ #endif
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   $jslocals
++   $jscode
++   SWIGV8_RETURN_INFO(jsresult, info);
++@@ -271,7 +271,7 @@ fail:
++ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   $jslocals
++   if(args.Length() != $jsargcount) SWIG_exception_fail(SWIG_ERROR, "Illegal number of arguments for $jswrapper.");
++
++@@ -296,7 +296,7 @@ fail:
++ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   OverloadErrorHandler errorHandler;
++   $jscode
++
++@@ -320,7 +320,7 @@ static SwigV8ReturnValue $jswrapper(const SwigV8Arguments &args, V8ErrorHandler
++ {
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   $jslocals
++   $jscode
++   SWIGV8_RETURN(jsresult);
++@@ -374,7 +374,7 @@ fail:
++ %fragment("jsv8_define_class_template", "templates")
++ %{
++   /* Name: $jsmangledname, Type: $jsmangledtype, Dtor: $jsdtor */
++-  v8::Handle<v8::FunctionTemplate> $jsmangledname_class = SWIGV8_CreateClassTemplate("$jsmangledname");
+++  SWIGV8_FUNCTION_TEMPLATE $jsmangledname_class = SWIGV8_CreateClassTemplate("$jsmangledname");
++   SWIGV8_SET_CLASS_TEMPL($jsmangledname_clientData.class_templ, $jsmangledname_class);
++   $jsmangledname_clientData.dtor = $jsdtor;
++   if (SWIGTYPE_$jsmangledtype->clientdata == 0) {
++@@ -420,11 +420,15 @@ fail:
++ %fragment("jsv8_create_class_instance", "templates")
++ %{
++   /* Class: $jsname ($jsmangledname) */
++-  v8::Handle<v8::FunctionTemplate> $jsmangledname_class_0 = SWIGV8_CreateClassTemplate("$jsname");
+++  SWIGV8_FUNCTION_TEMPLATE $jsmangledname_class_0 = SWIGV8_CreateClassTemplate("$jsname");
++   $jsmangledname_class_0->SetCallHandler($jsctor);
++   $jsmangledname_class_0->Inherit($jsmangledname_class);
++   $jsmangledname_class_0->SetHiddenPrototype(true);
+++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++   v8::Handle<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
+++#else
+++  v8::Local<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
+++#endif
++ %}
++
++ /* -----------------------------------------------------------------------------
++@@ -444,7 +448,7 @@ fail:
++  * ----------------------------------------------------------------------------- */
++ %fragment("jsv8_create_namespace", "templates")
++ %{
++-  v8::Handle<v8::Object> $jsmangledname_obj = SWIGV8_OBJECT_NEW();
+++  SWIGV8_OBJECT $jsmangledname_obj = SWIGV8_OBJECT_NEW();
++ %}
++
++ /* -----------------------------------------------------------------------------
++diff --git a/Lib/javascript/v8/javascriptcomplex.swg b/Lib/javascript/v8/javascriptcomplex.swg
++index d3b4aaffa..b894d7389 100644
++--- a/Lib/javascript/v8/javascriptcomplex.swg
+++++ b/Lib/javascript/v8/javascriptcomplex.swg
++@@ -12,7 +12,7 @@
++ %fragment(SWIG_From_frag(Type),"header",
++           fragment=SWIG_From_frag(double))
++ {
++-SWIGINTERNINLINE v8::Handle<v8::Value>
+++SWIGINTERNINLINE SWIGV8_VALUE
++ SWIG_From_dec(Type)(%ifcplusplus(const Type&, Type) c)
++ {
++   SWIGV8_HANDLESCOPE_ESC();
++@@ -32,12 +32,12 @@ SWIG_From_dec(Type)(%ifcplusplus(const Type&, Type) c)
++	  fragment=SWIG_AsVal_frag(double))
++ {
++ SWIGINTERN int
++-SWIG_AsVal_dec(Type) (v8::Handle<v8::Value> o, Type* val)
+++SWIG_AsVal_dec(Type) (SWIGV8_VALUE o, Type* val)
++ {
++   SWIGV8_HANDLESCOPE();
++
++   if (o->IsArray()) {
++-    v8::Handle<v8::Array> array = v8::Handle<v8::Array>::Cast(o);
+++    SWIGV8_ARRAY array = SWIGV8_ARRAY::Cast(o);
++
++     if(array->Length() != 2) SWIG_Error(SWIG_TypeError, "Illegal argument for complex: must be array[2].");
++     double re, im;
++@@ -74,12 +74,12 @@ SWIG_AsVal_dec(Type) (v8::Handle<v8::Value> o, Type* val)
++ %fragment(SWIG_AsVal_frag(Type),"header",
++           fragment=SWIG_AsVal_frag(float)) {
++ SWIGINTERN int
++-SWIG_AsVal_dec(Type) (v8::Handle<v8::Value> o, Type* val)
+++SWIG_AsVal_dec(Type) (SWIGV8_VALUE o, Type* val)
++ {
++   SWIGV8_HANDLESCOPE();
++
++   if (o->IsArray()) {
++-    v8::Handle<v8::Array> array = v8::Handle<v8::Array>::Cast(o);
+++    SWIGV8_ARRAY array = SWIGV8_ARRAY::Cast(o);
++
++     if(array->Length() != 2) SWIG_Error(SWIG_TypeError, "Illegal argument for complex: must be array[2].");
++     double re, im;
++diff --git a/Lib/javascript/v8/javascripthelpers.swg b/Lib/javascript/v8/javascripthelpers.swg
++index 80fbd7aa1..465d3ee48 100644
++--- a/Lib/javascript/v8/javascripthelpers.swg
+++++ b/Lib/javascript/v8/javascripthelpers.swg
++@@ -21,19 +21,19 @@ typedef v8::PropertyCallbackInfo<void>  SwigV8PropertyCallbackInfoVoid;
++ /**
++  * Creates a class template for a class with specified initialization function.
++  */
++-SWIGRUNTIME v8::Handle<v8::FunctionTemplate> SWIGV8_CreateClassTemplate(const char* symbol) {
+++SWIGRUNTIME SWIGV8_FUNCTION_TEMPLATE SWIGV8_CreateClassTemplate(const char* symbol) {
++     SWIGV8_HANDLESCOPE_ESC();
++
++     v8::Local<v8::FunctionTemplate> class_templ = SWIGV8_FUNCTEMPLATE_NEW_VOID();
++     class_templ->SetClassName(SWIGV8_SYMBOL_NEW(symbol));
++
++-    v8::Handle<v8::ObjectTemplate> inst_templ = class_templ->InstanceTemplate();
+++    SWIGV8_OBJECT_TEMPLATE inst_templ = class_templ->InstanceTemplate();
++     inst_templ->SetInternalFieldCount(1);
++
++-    v8::Handle<v8::ObjectTemplate> equals_templ = class_templ->PrototypeTemplate();
+++    SWIGV8_OBJECT_TEMPLATE equals_templ = class_templ->PrototypeTemplate();
++     equals_templ->Set(SWIGV8_SYMBOL_NEW("equals"), SWIGV8_FUNCTEMPLATE_NEW(_SWIGV8_wrap_equals));
++
++-    v8::Handle<v8::ObjectTemplate> cptr_templ = class_templ->PrototypeTemplate();
+++    SWIGV8_OBJECT_TEMPLATE cptr_templ = class_templ->PrototypeTemplate();
++     cptr_templ->Set(SWIGV8_SYMBOL_NEW("getCPtr"), SWIGV8_FUNCTEMPLATE_NEW(_wrap_getCPtr));
++
++     SWIGV8_ESCAPE(class_templ);
++@@ -42,33 +42,34 @@ SWIGRUNTIME v8::Handle<v8::FunctionTemplate> SWIGV8_CreateClassTemplate(const ch
++ /**
++  * Registers a class method with given name for a given class template.
++  */
++-SWIGRUNTIME void SWIGV8_AddMemberFunction(v8::Handle<v8::FunctionTemplate> class_templ, const char* symbol,
+++SWIGRUNTIME void SWIGV8_AddMemberFunction(SWIGV8_FUNCTION_TEMPLATE class_templ, const char* symbol,
++   SwigV8FunctionCallback _func) {
++-    v8::Handle<v8::ObjectTemplate> proto_templ = class_templ->PrototypeTemplate();
+++    SWIGV8_OBJECT_TEMPLATE proto_templ = class_templ->PrototypeTemplate();
++     proto_templ->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func));
++ }
++
++ /**
++  * Registers a class property with given name for a given class template.
++  */
++-SWIGRUNTIME void SWIGV8_AddMemberVariable(v8::Handle<v8::FunctionTemplate> class_templ, const char* symbol,
+++SWIGRUNTIME void SWIGV8_AddMemberVariable(SWIGV8_FUNCTION_TEMPLATE class_templ, const char* symbol,
++   SwigV8AccessorGetterCallback getter, SwigV8AccessorSetterCallback setter) {
++-  v8::Handle<v8::ObjectTemplate> proto_templ = class_templ->InstanceTemplate();
+++  SWIGV8_OBJECT_TEMPLATE proto_templ = class_templ->InstanceTemplate();
++   proto_templ->SetAccessor(SWIGV8_SYMBOL_NEW(symbol), getter, setter);
++ }
++
++ /**
++  * Registers a class method with given name for a given object.
++  */
++-SWIGRUNTIME void SWIGV8_AddStaticFunction(v8::Handle<v8::Object> obj, const char* symbol,
+++SWIGRUNTIME void SWIGV8_AddStaticFunction(SWIGV8_OBJECT obj, const char* symbol,
++   const SwigV8FunctionCallback& _func) {
+++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0705)
++   obj->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction());
++ }
++
++ /**
++  * Registers a class method with given name for a given object.
++  */
++-SWIGRUNTIME void SWIGV8_AddStaticVariable(v8::Handle<v8::Object> obj, const char* symbol,
+++SWIGRUNTIME void SWIGV8_AddStaticVariable(SWIGV8_OBJECT obj, const char* symbol,
++   SwigV8AccessorGetterCallback getter, SwigV8AccessorSetterCallback setter) {
++ #if (V8_MAJOR_VERSION-0) < 5
++   obj->SetAccessor(SWIGV8_SYMBOL_NEW(symbol), getter, setter);
++diff --git a/Lib/javascript/v8/javascriptinit.swg b/Lib/javascript/v8/javascriptinit.swg
++index 8faf2dd8e..401f9ae1f 100644
++--- a/Lib/javascript/v8/javascriptinit.swg
+++++ b/Lib/javascript/v8/javascriptinit.swg
++@@ -68,16 +68,16 @@ SWIG_V8_GetModule(void *) {
++ // TODO: is it ok to do that?
++ extern "C"
++ #if (NODE_MODULE_VERSION < 0x000C)
++-void SWIGV8_INIT (v8::Handle<v8::Object> exports)
+++void SWIGV8_INIT (SWIGV8_OBJECT exports)
++ #else
++-void SWIGV8_INIT (v8::Handle<v8::Object> exports, v8::Handle<v8::Object> /*module*/)
+++void SWIGV8_INIT (SWIGV8_OBJECT exports, SWIGV8_OBJECT /*module*/)
++ #endif
++ {
++   SWIG_InitializeModule(static_cast<void *>(&exports));
++
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Object> exports_obj = exports;
+++  SWIGV8_OBJECT exports_obj = exports;
++ %}
++
++
++diff --git a/Lib/javascript/v8/javascriptprimtypes.swg b/Lib/javascript/v8/javascriptprimtypes.swg
++index f76be983b..a6577ded2 100644
++--- a/Lib/javascript/v8/javascriptprimtypes.swg
+++++ b/Lib/javascript/v8/javascriptprimtypes.swg
++@@ -6,7 +6,7 @@
++
++ %fragment(SWIG_From_frag(bool),"header") {
++ SWIGINTERNINLINE
++-v8::Handle<v8::Value>
+++SWIGV8_VALUE
++ SWIG_From_dec(bool)(bool value)
++ {
++   return SWIGV8_BOOLEAN_NEW(value);
++@@ -16,7 +16,7 @@ SWIG_From_dec(bool)(bool value)
++ %fragment(SWIG_AsVal_frag(bool),"header",
++           fragment=SWIG_AsVal_frag(long)) {
++ SWIGINTERN
++-int SWIG_AsVal_dec(bool)(v8::Handle<v8::Value> obj, bool *val)
+++int SWIG_AsVal_dec(bool)(SWIGV8_VALUE obj, bool *val)
++ {
++   if(!obj->IsBoolean()) {
++     return SWIG_ERROR;
++@@ -31,7 +31,7 @@ int SWIG_AsVal_dec(bool)(v8::Handle<v8::Value> obj, bool *val)
++
++ %fragment(SWIG_From_frag(int),"header") {
++ SWIGINTERNINLINE
++-v8::Handle<v8::Value> SWIG_From_dec(int)(int value)
+++SWIGV8_VALUE SWIG_From_dec(int)(int value)
++ {
++   return SWIGV8_INT32_NEW(value);
++ }
++@@ -39,7 +39,7 @@ v8::Handle<v8::Value> SWIG_From_dec(int)(int value)
++
++ %fragment(SWIG_AsVal_frag(int),"header") {
++ SWIGINTERN
++-int SWIG_AsVal_dec(int)(v8::Handle<v8::Value> valRef, int* val)
+++int SWIG_AsVal_dec(int)(SWIGV8_VALUE valRef, int* val)
++ {
++   if (!valRef->IsNumber()) {
++     return SWIG_TypeError;
++@@ -54,7 +54,7 @@ int SWIG_AsVal_dec(int)(v8::Handle<v8::Value> valRef, int* val)
++
++ %fragment(SWIG_From_frag(long),"header") {
++ SWIGINTERNINLINE
++-v8::Handle<v8::Value> SWIG_From_dec(long)(long value)
+++SWIGV8_VALUE SWIG_From_dec(long)(long value)
++ {
++   return SWIGV8_NUMBER_NEW(value);
++ }
++@@ -63,7 +63,7 @@ v8::Handle<v8::Value> SWIG_From_dec(long)(long value)
++ %fragment(SWIG_AsVal_frag(long),"header",
++           fragment="SWIG_CanCastAsInteger") {
++ SWIGINTERN
++-int SWIG_AsVal_dec(long)(v8::Handle<v8::Value> obj, long* val)
+++int SWIG_AsVal_dec(long)(SWIGV8_VALUE obj, long* val)
++ {
++   if (!obj->IsNumber()) {
++     return SWIG_TypeError;
++@@ -79,7 +79,7 @@ int SWIG_AsVal_dec(long)(v8::Handle<v8::Value> obj, long* val)
++ %fragment(SWIG_From_frag(unsigned long),"header",
++           fragment=SWIG_From_frag(long)) {
++ SWIGINTERNINLINE
++-v8::Handle<v8::Value> SWIG_From_dec(unsigned long)(unsigned long value)
+++SWIGV8_VALUE SWIG_From_dec(unsigned long)(unsigned long value)
++ {
++   return (value > LONG_MAX) ?
++     SWIGV8_INTEGER_NEW_UNS(value) : SWIGV8_INTEGER_NEW(%numeric_cast(value,long));
++@@ -89,7 +89,7 @@ v8::Handle<v8::Value> SWIG_From_dec(unsigned long)(unsigned long value)
++ %fragment(SWIG_AsVal_frag(unsigned long),"header",
++           fragment="SWIG_CanCastAsInteger") {
++ SWIGINTERN
++-int SWIG_AsVal_dec(unsigned long)(v8::Handle<v8::Value> obj, unsigned long *val)
+++int SWIG_AsVal_dec(unsigned long)(SWIGV8_VALUE obj, unsigned long *val)
++ {
++   if(!obj->IsNumber()) {
++     return SWIG_TypeError;
++@@ -115,7 +115,7 @@ int SWIG_AsVal_dec(unsigned long)(v8::Handle<v8::Value> obj, unsigned long *val)
++     fragment="SWIG_LongLongAvailable") {
++ %#ifdef SWIG_LONG_LONG_AVAILABLE
++ SWIGINTERNINLINE
++-v8::Handle<v8::Value> SWIG_From_dec(long long)(long long value)
+++SWIGV8_VALUE SWIG_From_dec(long long)(long long value)
++ {
++   return SWIGV8_NUMBER_NEW(value);
++ }
++@@ -128,7 +128,7 @@ v8::Handle<v8::Value> SWIG_From_dec(long long)(long long value)
++     fragment="SWIG_LongLongAvailable") {
++ %#ifdef SWIG_LONG_LONG_AVAILABLE
++ SWIGINTERN
++-int SWIG_AsVal_dec(long long)(v8::Handle<v8::Value> obj, long long* val)
+++int SWIG_AsVal_dec(long long)(SWIGV8_VALUE obj, long long* val)
++ {
++   if (!obj->IsNumber()) {
++     return SWIG_TypeError;
++@@ -148,7 +148,7 @@ int SWIG_AsVal_dec(long long)(v8::Handle<v8::Value> obj, long long* val)
++     fragment="SWIG_LongLongAvailable") {
++ %#ifdef SWIG_LONG_LONG_AVAILABLE
++ SWIGINTERNINLINE
++-v8::Handle<v8::Value> SWIG_From_dec(unsigned long long)(unsigned long long value)
+++SWIGV8_VALUE SWIG_From_dec(unsigned long long)(unsigned long long value)
++ {
++   return (value > LONG_MAX) ?
++     SWIGV8_INTEGER_NEW_UNS(value) : SWIGV8_INTEGER_NEW(%numeric_cast(value,long));
++@@ -162,7 +162,7 @@ v8::Handle<v8::Value> SWIG_From_dec(unsigned long long)(unsigned long long value
++     fragment="SWIG_LongLongAvailable") {
++ %#ifdef SWIG_LONG_LONG_AVAILABLE
++ SWIGINTERN
++-int SWIG_AsVal_dec(unsigned long long)(v8::Handle<v8::Value> obj, unsigned long long *val)
+++int SWIG_AsVal_dec(unsigned long long)(SWIGV8_VALUE obj, unsigned long long *val)
++ {
++   if(!obj->IsNumber()) {
++     return SWIG_TypeError;
++@@ -185,7 +185,7 @@ int SWIG_AsVal_dec(unsigned long long)(v8::Handle<v8::Value> obj, unsigned long
++
++ %fragment(SWIG_From_frag(double),"header") {
++ SWIGINTERN
++-v8::Handle<v8::Value> SWIG_From_dec(double) (double val)
+++SWIGV8_VALUE SWIG_From_dec(double) (double val)
++ {
++   return SWIGV8_NUMBER_NEW(val);
++ }
++@@ -193,7 +193,7 @@ v8::Handle<v8::Value> SWIG_From_dec(double) (double val)
++
++ %fragment(SWIG_AsVal_frag(double),"header") {
++ SWIGINTERN
++-int SWIG_AsVal_dec(double)(v8::Handle<v8::Value> obj, double *val)
+++int SWIG_AsVal_dec(double)(SWIGV8_VALUE obj, double *val)
++ {
++   if(!obj->IsNumber()) {
++     return SWIG_TypeError;
++@@ -203,4 +203,3 @@ int SWIG_AsVal_dec(double)(v8::Handle<v8::Value> obj, double *val)
++   return SWIG_OK;
++ }
++ }
++-
++diff --git a/Lib/javascript/v8/javascriptrun.swg b/Lib/javascript/v8/javascriptrun.swg
++index cf3215334..1d74e3747 100644
++--- a/Lib/javascript/v8/javascriptrun.swg
+++++ b/Lib/javascript/v8/javascriptrun.swg
++@@ -173,7 +173,7 @@ public:
++         SWIGV8_THROW_EXCEPTION(err);
++     }
++   }
++-  v8::Handle<v8::Value> err;
+++  SWIGV8_VALUE err;
++ };
++
++ /* ---------------------------------------------------------------------------
++@@ -238,7 +238,7 @@ public:
++
++ SWIGRUNTIME v8::Persistent<v8::FunctionTemplate> SWIGV8_SWIGTYPE_Proxy_class_templ;
++
++-SWIGRUNTIME int SWIG_V8_ConvertInstancePtr(v8::Handle<v8::Object> objRef, void **ptr, swig_type_info *info, int flags) {
+++SWIGRUNTIME int SWIG_V8_ConvertInstancePtr(SWIGV8_OBJECT objRef, void **ptr, swig_type_info *info, int flags) {
++   SWIGV8_HANDLESCOPE();
++
++   if(objRef->InternalFieldCount() < 1) return SWIG_ERROR;
++@@ -290,11 +290,11 @@ SWIGRUNTIME void SWIGV8_Proxy_DefaultDtor(const v8::WeakCallbackInfo<SWIGV8_Prox
++   delete proxy;
++ }
++
++-SWIGRUNTIME int SWIG_V8_GetInstancePtr(v8::Handle<v8::Value> valRef, void **ptr) {
+++SWIGRUNTIME int SWIG_V8_GetInstancePtr(SWIGV8_VALUE valRef, void **ptr) {
++   if(!valRef->IsObject()) {
++     return SWIG_TypeError;
++   }
++-  v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
+++  SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
++
++   if(objRef->InternalFieldCount() < 1) return SWIG_ERROR;
++
++@@ -314,7 +314,7 @@ SWIGRUNTIME int SWIG_V8_GetInstancePtr(v8::Handle<v8::Value> valRef, void **ptr)
++   return SWIG_OK;
++ }
++
++-SWIGRUNTIME void SWIGV8_SetPrivateData(v8::Handle<v8::Object> obj, void *ptr, swig_type_info *info, int flags) {
+++SWIGRUNTIME void SWIGV8_SetPrivateData(SWIGV8_OBJECT obj, void *ptr, swig_type_info *info, int flags) {
++   SWIGV8_Proxy *cdata = new SWIGV8_Proxy();
++   cdata->swigCObject = ptr;
++   cdata->swigCMemOwn = (flags & SWIG_POINTER_OWN) ? 1 : 0;
++@@ -377,7 +377,7 @@ SWIGRUNTIME void SWIGV8_SetPrivateData(v8::Handle<v8::Object> obj, void *ptr, sw
++
++ }
++
++-SWIGRUNTIME int SWIG_V8_ConvertPtr(v8::Handle<v8::Value> valRef, void **ptr, swig_type_info *info, int flags) {
+++SWIGRUNTIME int SWIG_V8_ConvertPtr(SWIGV8_VALUE valRef, void **ptr, swig_type_info *info, int flags) {
++   SWIGV8_HANDLESCOPE();
++
++   /* special case: JavaScript null => C NULL pointer */
++@@ -388,14 +388,14 @@ SWIGRUNTIME int SWIG_V8_ConvertPtr(v8::Handle<v8::Value> valRef, void **ptr, swi
++   if(!valRef->IsObject()) {
++     return SWIG_TypeError;
++   }
++-  v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
+++  SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
++   return SWIG_V8_ConvertInstancePtr(objRef, ptr, info, flags);
++ }
++
++-SWIGRUNTIME v8::Handle<v8::Value> SWIG_V8_NewPointerObj(void *ptr, swig_type_info *info, int flags) {
+++SWIGRUNTIME SWIGV8_VALUE SWIG_V8_NewPointerObj(void *ptr, swig_type_info *info, int flags) {
++   SWIGV8_HANDLESCOPE_ESC();
++
++-  v8::Handle<v8::FunctionTemplate> class_templ;
+++  SWIGV8_FUNCTION_TEMPLATE class_templ;
++
++   if (ptr == NULL) {
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++@@ -443,7 +443,7 @@ SWIGRUNTIME v8::Handle<v8::Value> SWIG_V8_NewPointerObj(void *ptr, swig_type_inf
++ SWIGRUNTIME SwigV8ReturnValue _SWIGV8_wrap_equals(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   void *arg1 = (void *) 0 ;
++   void *arg2 = (void *) 0 ;
++   bool result;
++@@ -473,7 +473,7 @@ fail:
++ SWIGRUNTIME SwigV8ReturnValue _wrap_getCPtr(const SwigV8Arguments &args) {
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Value> jsresult;
+++  SWIGV8_VALUE jsresult;
++   void *arg1 = (void *) 0 ;
++   long result;
++   int res1;
++@@ -512,10 +512,10 @@ public:
++ };
++
++ SWIGRUNTIMEINLINE
++-int SwigV8Packed_Check(v8::Handle<v8::Value> valRef) {
+++int SwigV8Packed_Check(SWIGV8_VALUE valRef) {
++   SWIGV8_HANDLESCOPE();
++
++-  v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
+++  SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
++   if(objRef->InternalFieldCount() < 1) return false;
++ #if (V8_MAJOR_VERSION-0) < 5
++   v8::Handle<v8::Value> flag = objRef->GetHiddenValue(SWIGV8_STRING_NEW("__swig__packed_data__"));
++@@ -529,13 +529,13 @@ int SwigV8Packed_Check(v8::Handle<v8::Value> valRef) {
++ }
++
++ SWIGRUNTIME
++-swig_type_info *SwigV8Packed_UnpackData(v8::Handle<v8::Value> valRef, void *ptr, size_t size) {
+++swig_type_info *SwigV8Packed_UnpackData(SWIGV8_VALUE valRef, void *ptr, size_t size) {
++   if (SwigV8Packed_Check(valRef)) {
++     SWIGV8_HANDLESCOPE();
++
++     SwigV8PackedData *sobj;
++
++-    v8::Handle<v8::Object> objRef = SWIGV8_TO_OBJECT(valRef);
+++    SWIGV8_OBJECT objRef = SWIGV8_TO_OBJECT(valRef);
++
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031511)
++     v8::Handle<v8::Value> cdataRef = objRef->GetInternalField(0);
++@@ -552,7 +552,7 @@ swig_type_info *SwigV8Packed_UnpackData(v8::Handle<v8::Value> valRef, void *ptr,
++ }
++
++ SWIGRUNTIME
++-int SWIGV8_ConvertPacked(v8::Handle<v8::Value> valRef, void *ptr, size_t sz, swig_type_info *ty) {
+++int SWIGV8_ConvertPacked(SWIGV8_VALUE valRef, void *ptr, size_t sz, swig_type_info *ty) {
++   swig_type_info *to = SwigV8Packed_UnpackData(valRef, ptr, sz);
++   if (!to) return SWIG_ERROR;
++   if (ty) {
++@@ -600,7 +600,7 @@ SWIGRUNTIME void _wrap_SwigV8PackedData_delete(const v8::WeakCallbackInfo<SwigV8
++ }
++
++ SWIGRUNTIME
++-v8::Handle<v8::Value> SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type) {
+++SWIGV8_VALUE SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type) {
++   SWIGV8_HANDLESCOPE_ESC();
++
++   SwigV8PackedData *cdata = new SwigV8PackedData(data, size, type);
++@@ -664,21 +664,15 @@ v8::Handle<v8::Value> SWIGV8_NewPackedObj(void *data, size_t size, swig_type_inf
++
++ SWIGRUNTIME
++
++-#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++-v8::Handle<v8::Value> SWIGV8_AppendOutput(v8::Handle<v8::Value> result, v8::Handle<v8::Value> obj) {
++-#else
++-v8::Handle<v8::Value> SWIGV8_AppendOutput(v8::Local<v8::Value> result, v8::Handle<v8::Value> obj) {
++-#endif
+++SWIGV8_VALUE SWIGV8_AppendOutput(SWIGV8_VALUE result, SWIGV8_VALUE obj) {
++   SWIGV8_HANDLESCOPE_ESC();
++
++   if (result->IsUndefined()) {
++     result = SWIGV8_ARRAY_NEW();
++   }
++-#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++-  v8::Handle<v8::Array> arr = v8::Handle<v8::Array>::Cast(result);
++-#else
++-  v8::Local<v8::Array> arr = v8::Local<v8::Array>::Cast(result);
++-#endif
+++  SWIGV8_ARRAY arr = SWIGV8_ARRAY::Cast(result);
+++
+++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0706)
++   arr->Set(arr->Length(), obj);
++
++   SWIGV8_ESCAPE(arr);
++diff --git a/Lib/javascript/v8/javascriptstrings.swg b/Lib/javascript/v8/javascriptstrings.swg
++index e767a6d66..9c0919172 100644
++--- a/Lib/javascript/v8/javascriptstrings.swg
+++++ b/Lib/javascript/v8/javascriptstrings.swg
++@@ -4,10 +4,14 @@
++  * ------------------------------------------------------------ */
++ %fragment("SWIG_AsCharPtrAndSize", "header", fragment="SWIG_pchar_descriptor") {
++ SWIGINTERN int
++-SWIG_AsCharPtrAndSize(v8::Handle<v8::Value> valRef, char** cptr, size_t* psize, int *alloc)
+++SWIG_AsCharPtrAndSize(SWIGV8_VALUE valRef, char** cptr, size_t* psize, int *alloc)
++ {
++   if(valRef->IsString()) {
+++%#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++     v8::Handle<v8::String> js_str = SWIGV8_TO_STRING(valRef);
+++%#else
+++    v8::Local<v8::String> js_str = SWIGV8_TO_STRING(valRef);
+++%#endif
++
++     size_t len = SWIGV8_UTF8_LENGTH(js_str) + 1;
++     char* cstr = new char[len];
++@@ -20,7 +24,7 @@ SWIG_AsCharPtrAndSize(v8::Handle<v8::Value> valRef, char** cptr, size_t* psize,
++     return SWIG_OK;
++   } else {
++     if(valRef->IsObject()) {
++-      v8::Handle<v8::Object> obj = SWIGV8_TO_OBJECT(valRef);
+++      SWIGV8_OBJECT obj = SWIGV8_TO_OBJECT(valRef);
++       // try if the object is a wrapped char[]
++       swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
++       if (pchar_descriptor) {
++@@ -41,7 +45,7 @@ SWIG_AsCharPtrAndSize(v8::Handle<v8::Value> valRef, char** cptr, size_t* psize,
++ }
++
++ %fragment("SWIG_FromCharPtrAndSize","header",fragment="SWIG_pchar_descriptor") {
++-SWIGINTERNINLINE v8::Handle<v8::Value>
+++SWIGINTERNINLINE SWIGV8_VALUE
++ SWIG_FromCharPtrAndSize(const char* carray, size_t size)
++ {
++   if (carray) {
++@@ -49,7 +53,11 @@ SWIG_FromCharPtrAndSize(const char* carray, size_t size)
++       // TODO: handle extra long strings
++       return SWIGV8_UNDEFINED();
++     } else {
+++%#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++       v8::Handle<v8::String> js_str = SWIGV8_STRING_NEW2(carray, size);
+++%#else
+++      v8::Local<v8::String> js_str = SWIGV8_STRING_NEW2(carray, size);
+++%#endif
++       return js_str;
++     }
++   } else {
++diff --git a/Lib/javascript/v8/javascripttypemaps.swg b/Lib/javascript/v8/javascripttypemaps.swg
++index 4601698e0..cb31100c5 100644
++--- a/Lib/javascript/v8/javascripttypemaps.swg
+++++ b/Lib/javascript/v8/javascripttypemaps.swg
++@@ -25,7 +25,7 @@
++
++ /* Javascript types */
++
++-#define SWIG_Object                     v8::Handle<v8::Value>
+++#define SWIG_Object                     SWIGV8_VALUE
++ #define VOID_Object                     SWIGV8_UNDEFINED()
++
++ /* Overload of the output/constant/exception/dirout handling */
++--
++2.17.0
+diff --git a/package/swig/0003-Add-support-for-Node.js-v12.patch b/package/swig/0003-Add-support-for-Node.js-v12.patch
 new file mode 100644
-index 0000000..dd81474
+index 0000000000..9dd9f949f4
 --- /dev/null
-+++ b/board/radxa/rockpi-n8/readme.txt
-@@ -0,0 +1,61 @@
-+RADXA ROCKPI-N8
-+================
-+https://wiki.radxa.com/RockpiN8
++++ b/package/swig/0003-Add-support-for-Node.js-v12.patch
+@@ -0,0 +1,207 @@
++From 789da9ead59a8fbbc727d2be38cee3ad4e118603 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Mon, 2 Mar 2020 14:44:04 +0100
++Subject: [PATCH] Add support for Node.js v12
 +
-+Build:
-+======
-+  $ make rock_pi_n8_defconfig
-+  $ make
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ Lib/javascript/v8/javascriptcode.swg    | 16 +++++++--
++ Lib/javascript/v8/javascripthelpers.swg |  5 +++
++ Lib/javascript/v8/javascriptrun.swg     | 43 ++++++++++++++++++++-----
++ Lib/javascript/v8/javascriptruntime.swg |  5 +++
++ 4 files changed, 59 insertions(+), 10 deletions(-)
 +
-+Files created in output directory
-+=================================
++diff --git a/Lib/javascript/v8/javascriptcode.swg b/Lib/javascript/v8/javascriptcode.swg
++index 65e0d39d1..edcc1fd90 100644
++--- a/Lib/javascript/v8/javascriptcode.swg
+++++ b/Lib/javascript/v8/javascriptcode.swg
++@@ -423,11 +423,14 @@ fail:
++   SWIGV8_FUNCTION_TEMPLATE $jsmangledname_class_0 = SWIGV8_CreateClassTemplate("$jsname");
++   $jsmangledname_class_0->SetCallHandler($jsctor);
++   $jsmangledname_class_0->Inherit($jsmangledname_class);
++-  $jsmangledname_class_0->SetHiddenPrototype(true);
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
+++  $jsmangledname_class_0->SetHiddenPrototype(true);
++   v8::Handle<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
++-#else
+++#elif (SWIG_V8_VERSION < 0x0705)
+++  $jsmangledname_class_0->SetHiddenPrototype(true);
++   v8::Local<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction();
+++#else
+++  v8::Local<v8::Object> $jsmangledname_obj = $jsmangledname_class_0->GetFunction(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked();
++ #endif
++ %}
 +
-+output/images
-+.
-+????????? boot.vfat
-+????????? extlinux
-+????????? idbloader.img
-+????????? rk3288-rock-pi-n8.dtb
-+????????? rootfs.ext2
-+????????? rootfs.ext4 -> rootfs.ext2
-+????????? rootfs.tar
-+????????? sdcard.img
-+????????? u-boot.bin
-+????????? u-boot-dtb.bin
-+????????? u-boot-dtb.img
-+????????? uImage
++@@ -439,7 +442,12 @@ fail:
++  * ----------------------------------------------------------------------------- */
++ %fragment("jsv8_register_class", "templates")
++ %{
+++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++   $jsparent_obj->Set(SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
+++#else
+++  $jsparent_obj->Set(SWIGV8_CURRENT_CONTEXT(), SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
+++#endif
+++
++ %}
 +
-+Creating bootable SD card:
-+==========================
++ /* -----------------------------------------------------------------------------
++@@ -459,7 +467,11 @@ fail:
++  * ----------------------------------------------------------------------------- */
++ %fragment("jsv8_register_namespace", "templates")
++ %{
+++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++   $jsparent_obj->Set(SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
+++#else
+++  $jsparent_obj->Set(SWIGV8_CURRENT_CONTEXT(), SWIGV8_SYMBOL_NEW("$jsname"), $jsmangledname_obj);
+++#endif
++ %}
 +
-+Simply invoke (as root)
++ /* -----------------------------------------------------------------------------
++diff --git a/Lib/javascript/v8/javascripthelpers.swg b/Lib/javascript/v8/javascripthelpers.swg
++index 465d3ee48..cbb43b56d 100644
++--- a/Lib/javascript/v8/javascripthelpers.swg
+++++ b/Lib/javascript/v8/javascripthelpers.swg
++@@ -64,6 +64,11 @@ SWIGRUNTIME void SWIGV8_AddStaticFunction(SWIGV8_OBJECT obj, const char* symbol,
++   const SwigV8FunctionCallback& _func) {
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0705)
++   obj->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction());
+++#elif (SWIG_V8_VERSION < 0x0706)
+++  obj->Set(SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked());
+++#else
+++  obj->Set(SWIGV8_CURRENT_CONTEXT(), SWIGV8_SYMBOL_NEW(symbol), SWIGV8_FUNCTEMPLATE_NEW(_func)->GetFunction(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked());
+++#endif
++ }
 +
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
++ /**
++diff --git a/Lib/javascript/v8/javascriptrun.swg b/Lib/javascript/v8/javascriptrun.swg
++index 1d74e3747..8ce8ff567 100644
++--- a/Lib/javascript/v8/javascriptrun.swg
+++++ b/Lib/javascript/v8/javascriptrun.swg
++@@ -9,8 +9,10 @@
 +
-+Where X is your SD card device.
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031803)
++ #define SWIGV8_STRING_NEW2(cstr, len) v8::String::New(cstr, len)
++-#else
+++#elif (SWIG_V8_VERSION < 0x0706)
++ #define SWIGV8_STRING_NEW2(cstr, len) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), cstr, v8::String::kNormalString, len)
+++#else
+++#define SWIGV8_STRING_NEW2(cstr, len) (v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), cstr, v8::NewStringType::kNormal, len)).ToLocalChecked()
++ #endif
 +
-+Booting:
-+========
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903)
++@@ -47,12 +49,18 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
++ #define SWIGV8_THROW_EXCEPTION(err) v8::ThrowException(err)
++ #define SWIGV8_STRING_NEW(str) v8::String::New(str)
++ #define SWIGV8_SYMBOL_NEW(sym) v8::String::NewSymbol(sym)
+++#elif (SWIG_V8_VERSION < 0x0706)
+++#define SWIGV8_ADJUST_MEMORY(size) v8::Isolate::GetCurrent()->AdjustAmountOfExternalAllocatedMemory(size)
+++#define SWIGV8_CURRENT_CONTEXT() v8::Isolate::GetCurrent()->GetCurrentContext()
+++#define SWIGV8_THROW_EXCEPTION(err) v8::Isolate::GetCurrent()->ThrowException(err)
+++#define SWIGV8_STRING_NEW(str) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), str, v8::String::kNormalString)
+++#define SWIGV8_SYMBOL_NEW(sym) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), sym, v8::String::kNormalString)
++ #else
++ #define SWIGV8_ADJUST_MEMORY(size) v8::Isolate::GetCurrent()->AdjustAmountOfExternalAllocatedMemory(size)
++ #define SWIGV8_CURRENT_CONTEXT() v8::Isolate::GetCurrent()->GetCurrentContext()
++ #define SWIGV8_THROW_EXCEPTION(err) v8::Isolate::GetCurrent()->ThrowException(err)
++-#define SWIGV8_STRING_NEW(str) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), str)
++-#define SWIGV8_SYMBOL_NEW(sym) v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), sym)
+++#define SWIGV8_STRING_NEW(str) (v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), str, v8::NewStringType::kNormal)).ToLocalChecked()
+++#define SWIGV8_SYMBOL_NEW(sym) (v8::String::NewFromUtf8(v8::Isolate::GetCurrent(), sym, v8::NewStringType::kNormal)).ToLocalChecked()
++ #endif
 +
-+Serial console:
-+---------------
-+RockPi-N8 has a 40-pin GPIO header. The pin layout is as follows:
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x032318)
++@@ -117,7 +125,7 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
++ #define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue()
++ #define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(buffer, len)
++ #define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length()
++-#else
+++#elif (SWIG_V8_VERSION < 0x0706)
++ #define SWIGV8_TO_OBJECT(handle) (handle)->ToObject(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
++ #define SWIGV8_TO_STRING(handle) (handle)->ToString(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
++ #define SWIGV8_NUMBER_VALUE(handle) (handle)->NumberValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
++@@ -125,8 +133,17 @@ typedef v8::PropertyCallbackInfo<v8::Value> SwigV8PropertyCallbackInfo;
++ #define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
++ #define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(v8::Isolate::GetCurrent(), buffer, len)
++ #define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length(v8::Isolate::GetCurrent())
+++#else
+++#define SWIGV8_TO_OBJECT(handle) (handle)->ToObject(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
+++#define SWIGV8_TO_STRING(handle) (handle)->ToString(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked()
+++#define SWIGV8_NUMBER_VALUE(handle) (handle)->NumberValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
+++#define SWIGV8_INTEGER_VALUE(handle) (handle)->IntegerValue(SWIGV8_CURRENT_CONTEXT()).ToChecked()
+++#define SWIGV8_BOOLEAN_VALUE(handle) (handle)->BooleanValue(v8::Isolate::GetCurrent())
+++#define SWIGV8_WRITE_UTF8(handle, buffer, len) (handle)->WriteUtf8(v8::Isolate::GetCurrent(), buffer, len)
+++#define SWIGV8_UTF8_LENGTH(handle) (handle)->Utf8Length(v8::Isolate::GetCurrent())
++ #endif
 +
-+pin 6:  gnd
-+pin 8:  tx
-+pin 10: rx
+++
++ /* ---------------------------------------------------------------------------
++  * Error handling
++  *
++@@ -371,10 +388,11 @@ SWIGRUNTIME void SWIGV8_SetPrivateData(SWIGV8_OBJECT obj, void *ptr, swig_type_i
++   cdata->handle.MarkIndependent();
++ #elif (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x032100)
++   cdata->handle.MarkIndependent(v8::Isolate::GetCurrent());
++-#else
+++#elif (SWIG_V8_VERSION < 0x0706)
++   cdata->handle.MarkIndependent();
+++// Looks like future versions do not require that anymore:
+++// https://monorail-prod.appspot.com/p/chromium/issues/detail?id=923361#c11
++ #endif
++-
++ }
 +
-+Baudrate for this board is 115200.
++ SWIGRUNTIME int SWIG_V8_ConvertPtr(SWIGV8_VALUE valRef, void **ptr, swig_type_info *info, int flags) {
++@@ -422,8 +440,12 @@ SWIGRUNTIME SWIGV8_VALUE SWIG_V8_NewPointerObj(void *ptr, swig_type_info *info,
++   }
++ #endif
 +
-+The boot order on rockpi-n8 is emmc, sd. If emmc contains a valid Image, the board
-+always boots from emmc. To boot from SD, erase emmc as per the guide:
++-//  v8::Handle<v8::Object> result = class_templ->InstanceTemplate()->NewInstance();
+++#if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0705)
++   v8::Local<v8::Object> result = class_templ->InstanceTemplate()->NewInstance();
+++#else
+++  v8::Local<v8::Object> result = class_templ->InstanceTemplate()->NewInstance(SWIGV8_CURRENT_CONTEXT()).ToLocalChecked();
+++#endif
+++
++   SWIGV8_SetPrivateData(result, ptr, info, flags);
 +
-+https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
++   SWIGV8_ESCAPE(result);
++@@ -646,8 +668,10 @@ SWIGV8_VALUE SWIGV8_NewPackedObj(void *data, size_t size, swig_type_info *type)
++   cdata->handle.MarkIndependent();
++ #elif (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x032100)
++   cdata->handle.MarkIndependent(v8::Isolate::GetCurrent());
++-#else
+++#elif (SWIG_V8_VERSION < 0x0706)
++   cdata->handle.MarkIndependent();
+++// Looks like future versions do not require that anymore:
+++// https://monorail-prod.appspot.com/p/chromium/issues/detail?id=923361#c11
++ #endif
 +
-+Login:
-+------
-+Enter 'root' as login user, and the prompt is ready.
++   SWIGV8_ESCAPE(obj);
++@@ -674,6 +698,9 @@ SWIGV8_VALUE SWIGV8_AppendOutput(SWIGV8_VALUE result, SWIGV8_VALUE obj) {
 +
-+wiki link:
-+----------
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3288/rock-pi-n8.html
-diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
-new file mode 100644
-index 0000000..291fa18
---- /dev/null
-+++ b/configs/rock_pi_n8_defconfig
-@@ -0,0 +1,49 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a17=y
-+BR2_ARM_FPU_NEON_VFPV4=y
++ #if (V8_MAJOR_VERSION-0) < 4 && (SWIG_V8_VERSION < 0x031903) || (SWIG_V8_VERSION < 0x0706)
++   arr->Set(arr->Length(), obj);
+++#else
+++  arr->Set(SWIGV8_CURRENT_CONTEXT(), arr->Length(), obj);
+++#endif
 +
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
++   SWIGV8_ESCAPE(arr);
++ }
++diff --git a/Lib/javascript/v8/javascriptruntime.swg b/Lib/javascript/v8/javascriptruntime.swg
++index c78e04efb..773014f2a 100644
++--- a/Lib/javascript/v8/javascriptruntime.swg
+++++ b/Lib/javascript/v8/javascriptruntime.swg
++@@ -56,6 +56,11 @@
++ %insert(runtime) %{
++ #include <v8.h>
 +
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rock-pi"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
-+BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/amarula/linux-amarula.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rockpi"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-+BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-rock-pi-n8"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="rockpi-n8"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N8..!!"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-n8/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-n8/post-build.sh"
+++#if defined(V8_MAJOR_VERSION) && defined(V8_MINOR_VERSION)
+++#undef SWIG_V8_VERSION
+++#define SWIG_V8_VERSION (V8_MAJOR_VERSION * 256 + V8_MINOR_VERSION)
+++#endif
+++
++ #include <errno.h>
++ #include <limits.h>
++ #include <stdlib.h>
++--
++2.17.0
 -- 
-2.7.4
+2.17.0
