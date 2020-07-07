@@ -1,70 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 7 Jul 2020 12:21:25 +0200
-Subject: [Buildroot] [PATCH] package/dvb-apps: add hash file
-In-Reply-To: <20200705173702.GI2273@scaer>
-References: <20200704010533.1854-1-sergio.prado@e-labworks.com>
- <20200705145430.20cc4911@windsurf.home>
- <20200705173702.GI2273@scaer>
-Message-ID: <20200707122125.102c9bea@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 7 Jul 2020 07:01:02 -0500
+Subject: [Buildroot] To stop a systemd service from starting by default
+In-Reply-To: <BF61AD00-EF73-4CA4-89D4-2F9C21D9B185@gmail.com>
+References: <BF61AD00-EF73-4CA4-89D4-2F9C21D9B185@gmail.com>
+Message-ID: <CANQCQpbHc2FUtr7PM78gsS3O8N9oR5Tj2X4GU2uCnUh7SGi+1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Srijan,
 
-On Sun, 5 Jul 2020 19:37:02 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sun, Jul 5, 2020 at 7:59 AM Srijan Nandi - Gmail
+<srijan.nandi@gmail.com> wrote:
+>
+> Hello All,
+>
+> I am trying to stop certain systemd services from starting up by default. I have added the following lines in 80-buildroot.preset,
+>
+> disable dhcpcd.service
+> disable nginx.service
+> disable ntpd.service
+> disable org.cups.cupsd.service
+> disable org.cups.cups-lpd at .service
+> disable postgresql.service
+> disable redis.service
+> disable rsyslog.service
+> disable sshd.service
+> disable strongswan.service
+> disable suricata.service
 
-> I too got that 926208 sha256 here, with two different hg versions: 3.7.3
-> and 4.8.2.
-> 
-> > --2020-07-05 14:51:38--  http://sources.buildroot.net/dvb-apps/dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz  
-> 
-> dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz  2014-Sep-01 16:03:23 442.7K application/x-gtar-compressed
-> 
-> So, this file was created before the commit that made the archives
-> reproducible. So, no surprise that the sha256 does not match the
-> locally-created archive but that from s.b.o.
+I've CC'd Jeremy to see if he's ran into this use case.  I know you
+can use post scripts to fixup the target symlinks to disable the
+services but that doesn't seem like it is the cleanest method.
 
-Here, since there is no hash file for dvb-apps in Buildroot in any
-Buildroot version, we could change the tarball on sources.b.o.
+Jeremy, have you ran into this use case where it might make sense to
+include a preset disable file?  Is it as easy as including it in the
+overlay so that it gets picked up after the  80-buildroot.preset when
+the symlinks for targets are offline generated?  Or would a new
+buildroot option under systemd make sense to allow the user to point
+at a set of preset files that get pulled into the build?
 
-It would of course be nicer if we could bump the version of dvb-apps,
-so that we can keep this older tarball unchanged. But that's not
-strictly required as we have never had any hash file for this package.
-
-> The python-pygame archive was however created after commit 76b51f90c0e...
-> 
-> > requesting all changes
-> > adding changesets
-> > adding manifests
-> > adding file changes
-> > added 3652 changesets with 15404 changes to 1890 files (+17 heads)                                
-> > new changesets 4609a0076cda:48e19c7b9ee9
-> > ERROR: pygame-d61ea8eabd56.tar.gz has wrong sha256 hash:
-> > ERROR: expected: f95a7dd68ea294d415e36e068d2f533c5a01c67773452d14a535c5c7455681fe
-> > ERROR: got     : d5e0a43a4e338de4cb282af0ddd6e671055d6b9290030c27cfac41b1f7801232  
-> 
-> I too git d5e0a43a4e33.
-> 
-> What machine is pushing the archives to s.b.o. ?
-
-I've added Peter in Cc, as he is taking care of the sources.b.o
-maintenance. I think it is done on the OSUOSL machine, because Peter
-has a script update-br-mirror.sh on this machine.
-
-This machine has:
-
-$ hg --version
-Mercurial Distributed SCM (version 2.6.2)
-
-So it is even older than the 3.x and 4.x Mercurial versions you have
-tested.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Matt
