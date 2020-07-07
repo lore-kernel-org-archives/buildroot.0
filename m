@@ -1,61 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jul 2020 22:26:44 +0200
-Subject: [Buildroot] [PATCH] package/swig: enable support for Node.js >=
- 12.x
-In-Reply-To: <20200707051023.19992-1-yegorslists@googlemail.com>
-References: <20200707051023.19992-1-yegorslists@googlemail.com>
-Message-ID: <20200707202644.GU2273@scaer>
+Date: Tue, 7 Jul 2020 22:32:24 +0200
+Subject: [Buildroot] [git commit] package/libevent: bump to version 2.1.12
+Message-ID: <20200707202931.1181186586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b572e1478fad494e5854cab2d1497a0b208677eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-07 07:10 +0200, yegorslists at googlemail.com spake thusly:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Recent Node.js versions have removed some depreciated API calls,
-> that swig still relies on. Patches taken from this PR [1] fix
-> this issue.
-> 
-> [1] https://github.com/swig/swig/pull/1746
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  ...-to-support-both-Handle-and-Local-ty.patch |  53 ++
->  ...ith-Local-depending-on-Node.js-versi.patch | 649 ++++++++++++++++++
->  .../0003-Add-support-for-Node.js-v12.patch    | 207 ++++++
->  3 files changed, 909 insertions(+)
->  create mode 100644 package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
->  create mode 100644 package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
->  create mode 100644 package/swig/0003-Add-support-for-Node.js-v12.patch
+See full changelog https://raw.githubusercontent.com/libevent/libevent/release-2.1.12-stable/ChangeLog
 
-So, few things:
+And update hash file formatting (2 spaces).
 
- 1. I don't see how swig can use or detect nodejs, as you are not adding
-    a build dependency to host-nodejs;
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+[yann.morin.1998 at free.fr: drop md5, add sha256]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libevent/libevent.hash | 6 +++---
+ package/libevent/libevent.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- 2. this is a feature patch IMHO, and upstream has not even applied it
-    yet;
-
- 3. swig is a host-only package; why would we want it to have proper
-    nodejs support in Buildroot?
-
-As such, this is a not for me so far. If upstream were to apply it, we
-may consider a backport, as long as there is a use-case for it.
-
-Consequently, I haven't even looked at that spacing problem you
-noticed...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libevent/libevent.hash b/package/libevent/libevent.hash
+index 7bcb381dd3..77574e784b 100644
+--- a/package/libevent/libevent.hash
++++ b/package/libevent/libevent.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-md5	7f35cfe69b82d879111ec0d7b7b1c531	libevent-2.1.11-stable.tar.gz
+-sha1	a76bba0a281da9384d4be5b40f3907c07e21428c	libevent-2.1.11-stable.tar.gz
+-sha256	ff02effc9b331edcdac387d198691bfa3e575e7d244ad10cb826aa51ef085670	LICENSE
++sha1  cd55656a9b5bed630b08f05495230affb7996b21  libevent-2.1.12-stable.tar.gz
++sha256  92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb  libevent-2.1.12-stable.tar.gz
++sha256  ff02effc9b331edcdac387d198691bfa3e575e7d244ad10cb826aa51ef085670  LICENSE
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index d604559313..5d02191a58 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVENT_VERSION = 2.1.11
++LIBEVENT_VERSION = 2.1.12
+ LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)-stable
+ LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+ LIBEVENT_INSTALL_STAGING = YES
