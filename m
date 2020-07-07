@@ -1,82 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jul 2020 22:10:23 +0200
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump
- Linux and U-Boot versions
-In-Reply-To: <20200707053552.4051-1-francois.perrad@gadz.org>
-References: <20200707053552.4051-1-francois.perrad@gadz.org>
-Message-ID: <20200707201023.GT2273@scaer>
+Date: Tue, 7 Jul 2020 22:26:44 +0200
+Subject: [Buildroot] [PATCH] package/swig: enable support for Node.js >=
+ 12.x
+In-Reply-To: <20200707051023.19992-1-yegorslists@googlemail.com>
+References: <20200707051023.19992-1-yegorslists@googlemail.com>
+Message-ID: <20200707202644.GU2273@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Yegor, All,
 
-On 2020-07-07 07:35 +0200, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On 2020-07-07 07:10 +0200, yegorslists at googlemail.com spake thusly:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Recent Node.js versions have removed some depreciated API calls,
+> that swig still relies on. Patches taken from this PR [1] fix
+> this issue.
+> 
+> [1] https://github.com/swig/swig/pull/1746
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  ...-to-support-both-Handle-and-Local-ty.patch |  53 ++
+>  ...ith-Local-depending-on-Node.js-versi.patch | 649 ++++++++++++++++++
+>  .../0003-Add-support-for-Node.js-v12.patch    | 207 ++++++
+>  3 files changed, 909 insertions(+)
+>  create mode 100644 package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
+>  create mode 100644 package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
+>  create mode 100644 package/swig/0003-Add-support-for-Node.js-v12.patch
 
-Applied to master, thanks.
+So, few things:
+
+ 1. I don't see how swig can use or detect nodejs, as you are not adding
+    a build dependency to host-nodejs;
+
+ 2. this is a feature patch IMHO, and upstream has not even applied it
+    yet;
+
+ 3. swig is a host-only package; why would we want it to have proper
+    nodejs support in Buildroot?
+
+As such, this is a not for me so far. If upstream were to apply it, we
+may consider a backport, as long as there is a use-case for it.
+
+Consequently, I haven't even looked at that spacing problem you
+noticed...
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
->  configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-> index 243a5a96f..81777056e 100644
-> --- a/configs/olimex_a20_olinuxino_lime2_defconfig
-> +++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-> @@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.32"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.50"
->  BR2_LINUX_KERNEL_USE_DEFCONFIG=y
->  BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> @@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-> index ec909ebf1..8e2b4feda 100644
-> --- a/configs/olimex_a20_olinuxino_lime_defconfig
-> +++ b/configs/olimex_a20_olinuxino_lime_defconfig
-> @@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.32"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.50"
->  BR2_LINUX_KERNEL_USE_DEFCONFIG=y
->  BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> @@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
