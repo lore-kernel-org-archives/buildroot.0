@@ -1,47 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Jul 2020 15:13:40 +0200
-Subject: [Buildroot] [PATCH 5/5] package/gcc: switch to gcc 9.x as the
- default
-In-Reply-To: <20200624215654.1ccffabd@windsurf> (Thomas Petazzoni's message of
- "Wed, 24 Jun 2020 21:56:54 +0200")
-References: <20200608221347.2639059-1-romain.naour@gmail.com>
- <20200608221347.2639059-5-romain.naour@gmail.com>
- <20200624215654.1ccffabd@windsurf>
-Message-ID: <87imez4ge3.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 7 Jul 2020 15:30:10 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/qemu: add spice support
+In-Reply-To: <CAM=7fbdQx1Ezsag--jz-RNSmxnr0zbVYz5J_xjmx=jDOs8KasA@mail.gmail.com>
+References: <20200629205002.8087-1-jared.bents@rockwellcollins.com>
+ <20200629225912.6934261e@windsurf>
+ <CAM=7fbdQx1Ezsag--jz-RNSmxnr0zbVYz5J_xjmx=jDOs8KasA@mail.gmail.com>
+Message-ID: <4578bcf3-b023-b16d-4d20-c537c380709a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi Jared, Thomas,
 
- > On Tue,  9 Jun 2020 00:13:47 +0200
- > Romain Naour <romain.naour@gmail.com> wrote:
+Le 29/06/2020 ? 23:05, Jared Bents a ?crit?:
+> Hi Thomas,
+> 
+> 
+> On Mon, Jun 29, 2020 at 3:59 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> On Mon, 29 Jun 2020 15:50:00 -0500
+>> Jared Bents <jared.bents@rockwellcollins.com> wrote:
+>>
+>>> update to add qemu spice support
+>>>
+>>> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+>>> ---
+>>>  package/qemu/Config.in | 9 +++++++++
+>>>  package/qemu/qemu.mk   | 8 +++++++-
+>>>  2 files changed, 16 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+>>> index 33d4cccd7b..3de73b69ec 100644
+>>> --- a/package/qemu/Config.in
+>>> +++ b/package/qemu/Config.in
+>>> @@ -127,6 +127,15 @@ config BR2_PACKAGE_QEMU_SDL
+>>>  comment "SDL frontend needs a toolchain w/ dynamic library"
+>>>       depends on BR2_STATIC_LIBS
+>>>
+>>> +config BR2_PACKAGE_QEMU_SPICE
+>>> +     bool "Enable Spice frontend"
+>>> +     depends on BR2_PACKAGE_SPICE
+>>
+>> I am wondering why for this one we are adding a sub-option and not
+>> using automatic detection of BR2_PACKAGE_SPICE=y in the .mk file, like
+>> you've done for VNC and usb-redir.
+>>
+>> On the other hand, we do have already a bunch of sub-options to
+>> configure Qemu. We're not very consistent here :/
 
- >> Even if gcc 8 is still maintained for some time (gcc 8.5 is pending),
- >> switch to gcc 9.x since it has been released since 2019-05-03 and
- >> gcc 10.x is available since 2020-05-07.
- >> 
- >> We have been having toolchains in the autobuilders with gcc
- >> 9.x for a while, so the vast majority of the problems should have
- >> already been solved.
- >> 
- >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
- >> ---
- >> package/gcc/Config.in.host | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
+How to enable systems emulation or user-land emulation without sub-options?
+What about removing BR2_PACKAGE_QEMU_SDL and BR2_PACKAGE_QEMU_FDT options and
+handle the dependencies automatically?
 
- > Applied to master, thanks.
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+> 
+> I based the handling of the --enable-spice option off of an old
+> upstream attempt from Yann that I had found at
+> http://lists.buildroot.org/pipermail/buildroot/2012-December/063058.html
+> . I don't have a preference either way so let me know if you'd prefer
+> a suboption or have it automatically enabled if BR2_PACKAGE_SPICE is
+> enabled similarly to the other options I've added.
 
- > Following this, we should drop gcc 7.x support. However, one defconfig
- > (roseapplepi) still uses gcc 7.x. I've notified Peter Korsgaard on IRC,
- > and I am doing it here as well: if this defconfig is not updated to a
- > newer kernel that builds with gcc >= 8.x, we will have to drop support
- > for this defconfig.
+I guess we should enable spice only when spice package is enabled by the user
+(automatic detection).
 
-I'll take a look at updating it next weekend, otherwise we can just drop
-it.
+Best regards,
+Romain
 
--- 
-Bye, Peter Korsgaard
+> 
+> Thank you,
+> Jared
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
