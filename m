@@ -1,87 +1,77 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 8 Jul 2020 14:20:48 +0200
-Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/imx-gpu-viv: fix
- build issue with Wayland backend
-In-Reply-To: <20200402151026.GA934730@p1g2>
-References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
- <20200402130842.918696-3-gary.bisson@boundarydevices.com>
- <20200402162543.595ed9e7@windsurf.home>
- <20200402151026.GA934730@p1g2>
-Message-ID: <20200708122048.GB331830@p1g2>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 8 Jul 2020 16:34:49 +0200
+Subject: [Buildroot] [PATCH] package/swig: enable support for Node.js >=
+ 12.x
+In-Reply-To: <20200707202644.GU2273@scaer>
+References: <20200707051023.19992-1-yegorslists@googlemail.com>
+ <20200707202644.GU2273@scaer>
+Message-ID: <CAGm1_ktTn=yw4U2M7cfHw4qsQVkiODiTHYxtH5=x73gTMrgCCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Yann,
 
-Gentle ping on this, let me know if you see another approach that would
-be better, I'm open to suggestions.
+On Tue, Jul 7, 2020 at 10:26 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Yegor, All,
+>
+> On 2020-07-07 07:10 +0200, yegorslists at googlemail.com spake thusly:
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > Recent Node.js versions have removed some depreciated API calls,
+> > that swig still relies on. Patches taken from this PR [1] fix
+> > this issue.
+> >
+> > [1] https://github.com/swig/swig/pull/1746
+> >
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  ...-to-support-both-Handle-and-Local-ty.patch |  53 ++
+> >  ...ith-Local-depending-on-Node.js-versi.patch | 649 ++++++++++++++++++
+> >  .../0003-Add-support-for-Node.js-v12.patch    | 207 ++++++
+> >  3 files changed, 909 insertions(+)
+> >  create mode 100644 package/swig/0001-Introduce-macros-to-support-both-Handle-and-Local-ty.patch
+> >  create mode 100644 package/swig/0002-Replace-Handle-with-Local-depending-on-Node.js-versi.patch
+> >  create mode 100644 package/swig/0003-Add-support-for-Node.js-v12.patch
+>
+> So, few things:
+>
+>  1. I don't see how swig can use or detect nodejs, as you are not adding
+>     a build dependency to host-nodejs;
 
-I'd love to have Weston support for i.MX8M* fixed for next release and
-my other series [1] depends on this patch.
+SWIG will be invoked in the build process of an application that uses
+it. So the application's build script is responsible for finding
+Nodejs, python etc. There are some packages in BR that use it. For
+example libftdi1 (there is even a run-time test for this use case)
 
-Then I am preparing patches to have VPU support using GStreamer-imx V2
-for i.MX8M* as well.
+>  2. this is a feature patch IMHO, and upstream has not even applied it
+>     yet;
+
+This is a long and a sad story. If you look at package/swig history,
+you'll see that similar patch was already applied for version 7.x. Now
+it is time to support Node.js 12. I have made even two PRs but none of
+them made it into the 4.0.2. But I have a hope that it will make it
+into 4.1.0.
+
+We also have such a package as mraa. Though its *.mk doesn't use it
+yet, it uses SWIG to create Python and Node.js bindings. If this would
+be the case and BR updates Node.js to 12 then we would have real build
+errors. In this case it is no longer a feature patch :-)
+
+>
+>  3. swig is a host-only package; why would we want it to have proper
+>     nodejs support in Buildroot?
+
+See above.
+
+> As such, this is a not for me so far. If upstream were to apply it, we
+> may consider a backport, as long as there is a use-case for it.
+>
+> Consequently, I haven't even looked at that spacing problem you
+> noticed...
 
 Regards,
-Gary
-
-[1] http://patchwork.ozlabs.org/project/buildroot/list/?series=184556
-
-On Thu, Apr 02, 2020 at 05:10:26PM +0200, Gary Bisson wrote:
-> Hi Thomas,
-> 
-> On Thu, Apr 02, 2020 at 04:25:43PM +0200, Thomas Petazzoni wrote:
-> > Hello Gary,
-> > 
-> > As usual, thanks for your work maintaining good support for i.MX
-> > platforms in Buildroot. One question below.
-> 
-> No problem.
-> 
-> > On Thu,  2 Apr 2020 15:08:42 +0200
-> > Gary Bisson <gary.bisson@boundarydevices.com> wrote:
-> > 
-> > >  ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
-> > > -define IMX_GPU_VIV_FIXUP_FB_HEADERS
-> > > +define IMX_GPU_VIV_FIXUP_HEADERS
-> > >  	$(SED) '39i\
-> > > -		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
-> > > +		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) && !defined(WL_EGL_PLATFORM) \n\
-> > >  		#define EGL_API_FB \n\
-> > >  		#endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
-> > >  endef
-> > > @@ -77,6 +77,12 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
-> > >  define IMX_GPU_VIV_FIXUP_PKGCONFIG
-> > >  	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
-> > >  endef
-> > > +define IMX_GPU_VIV_FIXUP_HEADERS
-> > > +	$(SED) '39i\
-> > > +		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) && !defined(WL_EGL_PLATFORM) \n\
-> > > +		#define WL_EGL_PLATFORM\n\
-> > > +		#endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
-> > > +endef
-> > >  endif
-> > 
-> > Can we use a proper patch instead of these horrible SED calls ?
-> 
-> I know it isn't an elegant solution and I am open to discussion.
-> However modifying eglplatform.h still seems like the less intrusive
-> solution.
-> 
-> Do you have anything in mind?
-> 
-> What Yocto does is to patch packages that break by appending CFLAGS
-> [1][2], I'd like to avoid such approach.
-> 
-> Especially since in my case it happened building standard Weston
-> package... It works in their case because they use a Weston fork (along
-> with a libdrm fork, and wayland-protocols fork).
-> 
-> Regards,
-> Gary
-> 
-> [1] https://github.com/Freescale/meta-freescale/blob/zeus/recipes-graphics/libsdl2/libsdl2_%25.bbappend
-> [2] https://github.com/Freescale/meta-freescale/blob/zeus/recipes-graphics/libepoxy/libepoxy_1.5.%25.bbappend
+Yegor
