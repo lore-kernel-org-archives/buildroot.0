@@ -1,139 +1,76 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 8 Jul 2020 15:37:56 +0530
-Subject: [Buildroot] [PATCH] configs/rock_pi_n8: new defconfig
-In-Reply-To: <1594097887-25563-1-git-send-email-sunil@amarulasolutions.com>
-References: <1594097887-25563-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <CAMty3ZCa-Rn-60Sw=SbQnkBjQvhW6U3jSUyZwxB2+D7PwLrPAg@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 8 Jul 2020 14:14:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
+ version to 3.6.3
+In-Reply-To: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
+References: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
+Message-ID: <20200708121459.GA331830@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 7, 2020 at 10:28 AM Suniel Mahesh
-<sunil@amarulasolutions.com> wrote:
->
-> Add initial support for RK3288 SOM based radxa rockpi-n8
-> target with below features:
->
->         - Custom U-Boot 2020.07-rc4
->           https://github.com/amarula/u-boot-amarula.git
->           branch rock-pi
->         - Custom Linux 5.7.0-rc1
->           https://github.com/amarula/linux-amarula.git
->           branch rockpi
->         - GPT partition layout is being used
->         - Default packages from buildroot
->
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+Hi Maeva,
+
+Thank you for your contribution, please see my comments below.
+
+On Wed, Jul 08, 2020 at 09:43:52AM +0200, Maeva Manuel wrote:
+> This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
+> Firmware file names now include the SoC revision.
+> 
+> Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+> [Maeva: tested on i.MX8QXP MEK (Board rev D1, SoC rev B0)
+> and on i.MX8QM MEK (SoC rev B0)]
+> Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
 > ---
-> NOTE:
-> - patches for this target are submitted to Linux and u-boot
->   mainline, once accepted and merged, we use mainline Linux
->   and u-boot.
-> ---
->  .gitlab-ci.yml                      |  1 +
->  DEVELOPERS                          |  2 ++
->  board/radxa/rockpi-n8/extlinux.conf |  4 +++
->  board/radxa/rockpi-n8/genimage.cfg  | 39 ++++++++++++++++++++++++
->  board/radxa/rockpi-n8/post-build.sh |  5 +++
->  board/radxa/rockpi-n8/readme.txt    | 61 +++++++++++++++++++++++++++++++++++++
->  configs/rock_pi_n8_defconfig        | 49 +++++++++++++++++++++++++++++
->  7 files changed, 161 insertions(+)
->  create mode 100644 board/radxa/rockpi-n8/extlinux.conf
->  create mode 100644 board/radxa/rockpi-n8/genimage.cfg
->  create mode 100755 board/radxa/rockpi-n8/post-build.sh
->  create mode 100644 board/radxa/rockpi-n8/readme.txt
->  create mode 100644 configs/rock_pi_n8_defconfig
->
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index ac4288b..119f98e 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -324,6 +324,7 @@ roc_pc_rk3399_defconfig: { extends: .defconfig }
->  rock64_defconfig: { extends: .defconfig }
->  rockpro64_defconfig: { extends: .defconfig }
->  rock_pi_4_defconfig: { extends: .defconfig }
-> +rock_pi_n8_defconfig: { extends: .defconfig }
->  rock_pi_n10_defconfig: { extends: .defconfig }
->  roseapplepi_defconfig: { extends: .defconfig }
->  s6lx9_microboard_defconfig: { extends: .defconfig }
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 9f93d3a..7738847 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2405,6 +2405,7 @@ F:        board/friendlyarm/nanopc-t4
->  F:     board/friendlyarm/nanopi-m4
->  F:     board/orangepi/orangepi-rk3399
->  F:     board/radxa/rockpi-4
-> +F:     board/radxa/rockpi-n8
->  F:     board/radxa/rockpi-n10
->  F:     board/pine64/rockpro64
->  F:     configs/nanopc_t4_defconfig
-> @@ -2412,6 +2413,7 @@ F:        configs/nanopi_m4_defconfig
->  F:     configs/orangepi_rk3399_defconfig
->  F:     configs/roc_pc_rk3399_defconfig
->  F:     configs/rock_pi_4_defconfig
-> +F:     configs/rock_pi_n8_defconfig
->  F:     configs/rock_pi_n10_defconfig
->  F:     configs/rockpro64_defconfig
->  F:     package/arm-gnu-a-toolchain/
-> diff --git a/board/radxa/rockpi-n8/extlinux.conf b/board/radxa/rockpi-n8/extlinux.conf
-> new file mode 100644
-> index 0000000..3b05d78
-> --- /dev/null
-> +++ b/board/radxa/rockpi-n8/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label RK3399_ROCKPI_N8 linux
-> +  kernel /uImage
-> +  devicetree /rk3288-rock-pi-n8.dtb
-> +  append console=ttyS2,115200n8 root=/dev/mmcblk0p4 rw rootwait
+>  package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
+>  package/freescale-imx/imx-seco/imx-seco.mk   | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+> index 56f56369d4..930801e839 100644
+> --- a/package/freescale-imx/imx-seco/imx-seco.hash
+> +++ b/package/freescale-imx/imx-seco/imx-seco.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated
+> -sha256  b429ac58b2ea1771b3fdf7ae87bf1d37ccaf596bde01a5ecccae27b2145f6824  imx-seco-2.3.1.bin
+> -sha256  69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
+> -sha256  6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
+> +sha256  52ba07633e0f8707d8c26724b5cd03ef96444c8de1e0e134acac50acacf3e7dd  imx-seco-3.6.3.bin
+> +sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
+> +sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
 
-Better replace this root device into PARTUUID you can add GPT part ID
-for rootfs.
+Usually when EULA/COPYING is updated it means there are new terms, can
+you drop a line on this in your commit log?
 
-> diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
-> new file mode 100644
-> index 0000000..36d7906
-> --- /dev/null
-> +++ b/board/radxa/rockpi-n8/genimage.cfg
-> @@ -0,0 +1,39 @@
-> +image boot.vfat {
-> +       vfat {
-> +               files = {
-> +                       "uImage",
-> +                       "rk3288-rock-pi-n8.dtb",
-> +                       "extlinux"
-> +               }
-> +       }
-> +       size = 112M
-> +}
-> +
-> +image sdcard.img {
-> +
-> +       hdimage {
-> +               gpt = true
-> +       }
-> +
-> +       partition loader1 {
-> +               image = "idbloader.img"
-> +               offset = 32K
-> +       }
-> +
-> +       partition loader2 {
-> +               image = "u-boot-dtb.img"
-> +               offset = 8M
-> +       }
-> +
-> +       partition boot {
-> +               partition-type = 0xC
-> +               bootable = "true"
-> +               image = "boot.vfat"
-> +               offset = 16M
-> +       }
-> +
-> +       partition rootfs {
-> +               partition-type = 0x83
-> +               image = "rootfs.ext4"
+> diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+> index d06bf4c5cc..be3f3c4419 100644
+> --- a/package/freescale-imx/imx-seco/imx-seco.mk
+> +++ b/package/freescale-imx/imx-seco/imx-seco.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -IMX_SECO_VERSION = 2.3.1
+> +IMX_SECO_VERSION = 3.6.3
+>  IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+>  IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+>  
+> @@ -22,12 +22,12 @@ IMX_SECO_INSTALL_IMAGES = YES
+>  # is done in post-image script.
+>  ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+>  define IMX_SECO_INSTALL_IMAGES_CMDS
+> -	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
+> +	cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
+>  		$(BINARIES_DIR)/ahab-container.img
 
-partid here.
+What about C0 firmware? Are C0 CPU already available? If so, maybe there
+should be a way to select which version we want to use.
+Or another approach would be to copy them all without renaming and have
+the final script pick the right one depending on some configuration.
+
+Let me know your thoughts.
+
+Regards,
+Gary
