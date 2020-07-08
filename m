@@ -1,43 +1,65 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue,  7 Jul 2020 20:35:23 -0300
-Subject: [Buildroot] [PATCH] package/cutelyst: bump version to 2.11.0
-Message-ID: <20200707233523.16435-1-sergio.prado@e-labworks.com>
+From: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Date: Wed,  8 Jul 2020 09:43:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
+ version to 3.6.3
+Message-ID: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also separate the fields in the hash file by two spaces.
+This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
+Firmware file names now include the SoC revision.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+[Maeva: tested on i.MX8QXP MEK (Board rev D1, SoC rev B0)
+and on i.MX8QM MEK (SoC rev B0)]
+Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
 ---
- package/cutelyst/cutelyst.hash | 4 ++--
- package/cutelyst/cutelyst.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
+ package/freescale-imx/imx-seco/imx-seco.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
-index e9c116196976..d35fdcc890c4 100644
---- a/package/cutelyst/cutelyst.hash
-+++ b/package/cutelyst/cutelyst.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  5036378d0d8242da68f61bc2f51fc37b881b720311073b6f6cfb113cbae18a40    cutelyst-2.9.0.tar.gz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551    COPYING
-+sha256  b0e3d658a60d68906f7255b78bad64af1aa07cb3b785fbf61629b7355f089baa  cutelyst-2.11.0.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index f2129312d5c2..952092245467 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
+diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+index 56f56369d4..930801e839 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.hash
++++ b/package/freescale-imx/imx-seco/imx-seco.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b429ac58b2ea1771b3fdf7ae87bf1d37ccaf596bde01a5ecccae27b2145f6824  imx-seco-2.3.1.bin
+-sha256  69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
+-sha256  6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
++sha256  52ba07633e0f8707d8c26724b5cd03ef96444c8de1e0e134acac50acacf3e7dd  imx-seco-3.6.3.bin
++sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
++sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
+diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+index d06bf4c5cc..be3f3c4419 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.mk
++++ b/package/freescale-imx/imx-seco/imx-seco.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUTELYST_VERSION = 2.9.0
-+CUTELYST_VERSION = 2.11.0
- CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
- CUTELYST_INSTALL_STAGING = YES
- CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
+-IMX_SECO_VERSION = 2.3.1
++IMX_SECO_VERSION = 3.6.3
+ IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+ 
+@@ -22,12 +22,12 @@ IMX_SECO_INSTALL_IMAGES = YES
+ # is done in post-image script.
+ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+ define IMX_SECO_INSTALL_IMAGES_CMDS
+-	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
++	cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
+ 		$(BINARIES_DIR)/ahab-container.img
+ endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+ define IMX_SECO_INSTALL_IMAGES_CMDS
+-	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
++	cp $(@D)/firmware/seco/mx8qmb0-ahab-container.img \
+ 		$(BINARIES_DIR)/ahab-container.img
+ endef
+ endif
 -- 
 2.17.1
