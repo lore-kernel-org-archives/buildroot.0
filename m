@@ -1,78 +1,139 @@
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Wed, 01 Jul 2020 09:43:10 +0200
-Subject: [Buildroot] [RFC v9 01/10] cpe-info: new make target
-In-Reply-To: <20200625130055.5062a0a0@windsurf>
-References: <20200616170341.45098-1-matthew.weber@rockwellcollins.com>
- <20200625130055.5062a0a0@windsurf>
-Message-ID: <87ftabbrzl.fsf@FE-laptop>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Wed, 8 Jul 2020 15:37:56 +0530
+Subject: [Buildroot] [PATCH] configs/rock_pi_n8: new defconfig
+In-Reply-To: <1594097887-25563-1-git-send-email-sunil@amarulasolutions.com>
+References: <1594097887-25563-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <CAMty3ZCa-Rn-60Sw=SbQnkBjQvhW6U3jSUyZwxB2+D7PwLrPAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
->> +$(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
->> +$(2)_CPE_ID_NAME ?= $$($(2)_NAME)
->> +$(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
->> +$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
+On Tue, Jul 7, 2020 at 10:28 AM Suniel Mahesh
+<sunil@amarulasolutions.com> wrote:
 >
-> These variables should be documented in the Buildroot manual.
+> Add initial support for RK3288 SOM based radxa rockpi-n8
+> target with below features:
 >
-> I see you set some default values for those CPE_ID values, but I am
-> wondering if that's how we want to do this. Indeed a big question,
-> which was discussed in a thread earlier this year between Michael
-> Walle, Akshay Bhat and me is that how do we then distinguish packages
-> for which the CPE information in Buildroot has been verified and is
-> known to be correct, from packages that have the CPE information not
-> verified, and even further from packages that don't have any CPE
-> information because this specific package is not known in the NVD
-> database.
+>         - Custom U-Boot 2020.07-rc4
+>           https://github.com/amarula/u-boot-amarula.git
+>           branch rock-pi
+>         - Custom Linux 5.7.0-rc1
+>           https://github.com/amarula/linux-amarula.git
+>           branch rockpi
+>         - GPT partition layout is being used
+>         - Default packages from buildroot
 >
-> So I'd like to see a proposal that clarifies how we are going to handle
-> this. One way is to *not* have any default value for those CPE
-> variables, and add them to packages progressively, so that we know that
-> when the CPE information is there, it _has_ been verified.
+> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+> ---
+> NOTE:
+> - patches for this target are submitted to Linux and u-boot
+>   mainline, once accepted and merged, we use mainline Linux
+>   and u-boot.
+> ---
+>  .gitlab-ci.yml                      |  1 +
+>  DEVELOPERS                          |  2 ++
+>  board/radxa/rockpi-n8/extlinux.conf |  4 +++
+>  board/radxa/rockpi-n8/genimage.cfg  | 39 ++++++++++++++++++++++++
+>  board/radxa/rockpi-n8/post-build.sh |  5 +++
+>  board/radxa/rockpi-n8/readme.txt    | 61 +++++++++++++++++++++++++++++++++++++
+>  configs/rock_pi_n8_defconfig        | 49 +++++++++++++++++++++++++++++
+>  7 files changed, 161 insertions(+)
+>  create mode 100644 board/radxa/rockpi-n8/extlinux.conf
+>  create mode 100644 board/radxa/rockpi-n8/genimage.cfg
+>  create mode 100755 board/radxa/rockpi-n8/post-build.sh
+>  create mode 100644 board/radxa/rockpi-n8/readme.txt
+>  create mode 100644 configs/rock_pi_n8_defconfig
 >
-> It's not great because it means adding gazillions of CPE_ID information
-> in packages. But is there any other option ?
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index ac4288b..119f98e 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -324,6 +324,7 @@ roc_pc_rk3399_defconfig: { extends: .defconfig }
+>  rock64_defconfig: { extends: .defconfig }
+>  rockpro64_defconfig: { extends: .defconfig }
+>  rock_pi_4_defconfig: { extends: .defconfig }
+> +rock_pi_n8_defconfig: { extends: .defconfig }
+>  rock_pi_n10_defconfig: { extends: .defconfig }
+>  roseapplepi_defconfig: { extends: .defconfig }
+>  s6lx9_microboard_defconfig: { extends: .defconfig }
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9f93d3a..7738847 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2405,6 +2405,7 @@ F:        board/friendlyarm/nanopc-t4
+>  F:     board/friendlyarm/nanopi-m4
+>  F:     board/orangepi/orangepi-rk3399
+>  F:     board/radxa/rockpi-4
+> +F:     board/radxa/rockpi-n8
+>  F:     board/radxa/rockpi-n10
+>  F:     board/pine64/rockpro64
+>  F:     configs/nanopc_t4_defconfig
+> @@ -2412,6 +2413,7 @@ F:        configs/nanopi_m4_defconfig
+>  F:     configs/orangepi_rk3399_defconfig
+>  F:     configs/roc_pc_rk3399_defconfig
+>  F:     configs/rock_pi_4_defconfig
+> +F:     configs/rock_pi_n8_defconfig
+>  F:     configs/rock_pi_n10_defconfig
+>  F:     configs/rockpro64_defconfig
+>  F:     package/arm-gnu-a-toolchain/
+> diff --git a/board/radxa/rockpi-n8/extlinux.conf b/board/radxa/rockpi-n8/extlinux.conf
+> new file mode 100644
+> index 0000000..3b05d78
+> --- /dev/null
+> +++ b/board/radxa/rockpi-n8/extlinux.conf
+> @@ -0,0 +1,4 @@
+> +label RK3399_ROCKPI_N8 linux
+> +  kernel /uImage
+> +  devicetree /rk3288-rock-pi-n8.dtb
+> +  append console=ttyS2,115200n8 root=/dev/mmcblk0p4 rw rootwait
 
-I am working on a adding a tool allowing to check the cve status of a
-given configuration. I am about to submit it. For now I base my check on
-the buildroot package name as it is done in pkg-stat, but as you know
-there are some mismatch. At a point there will be the need to use the
-CPE information, so I have already had to think on how to manage it.
+Better replace this root device into PARTUUID you can add GPT part ID
+for rootfs.
 
-I already have to deal with failure when checking if a version was
-affected by a CVE. And for this situation I choose to report that
-failure instead of considering the package being affected or not by
-default. The idea is to, later, be able to fix the failure but in the
-meantime being aware of it.
+> diff --git a/board/radxa/rockpi-n8/genimage.cfg b/board/radxa/rockpi-n8/genimage.cfg
+> new file mode 100644
+> index 0000000..36d7906
+> --- /dev/null
+> +++ b/board/radxa/rockpi-n8/genimage.cfg
+> @@ -0,0 +1,39 @@
+> +image boot.vfat {
+> +       vfat {
+> +               files = {
+> +                       "uImage",
+> +                       "rk3288-rock-pi-n8.dtb",
+> +                       "extlinux"
+> +               }
+> +       }
+> +       size = 112M
+> +}
+> +
+> +image sdcard.img {
+> +
+> +       hdimage {
+> +               gpt = true
+> +       }
+> +
+> +       partition loader1 {
+> +               image = "idbloader.img"
+> +               offset = 32K
+> +       }
+> +
+> +       partition loader2 {
+> +               image = "u-boot-dtb.img"
+> +               offset = 8M
+> +       }
+> +
+> +       partition boot {
+> +               partition-type = 0xC
+> +               bootable = "true"
+> +               image = "boot.vfat"
+> +               offset = 16M
+> +       }
+> +
+> +       partition rootfs {
+> +               partition-type = 0x83
+> +               image = "rootfs.ext4"
 
-For package name I would use a similar approach: if there is no CPE_ID
-provided then try to use the package name but in this case report that
-it has to be checked manually, while if there is a CPE_ID then use it as
-a reliable name. So I am clearly in favor on the second option proposed
-by Thomas. The ultimate goal is to have a CPE_ID information in each
-package but in the meantime there is a path to achieve this.
-
-Gregory
-
->
-> Best regards,
->
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+partid here.
