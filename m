@@ -1,41 +1,53 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Wed,  8 Jul 2020 18:40:00 +0200
-Subject: [Buildroot] [PATCH 3/9] package/pkg-utils: show-info: report the
- list of the CVEs ignored
+Date: Wed,  8 Jul 2020 18:40:03 +0200
+Subject: [Buildroot] [PATCH 6/9] package/pkg-utils: cve.py: Handle exception
+ when version comparison fails
 In-Reply-To: <20200708164006.859021-1-gregory.clement@bootlin.com>
 References: <20200708164006.859021-1-gregory.clement@bootlin.com>
-Message-ID: <20200708164006.859021-4-gregory.clement@bootlin.com>
+Message-ID: <20200708164006.859021-7-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the list of the CVEs to ignore for each package because they
-already have a fix for it.
+With python 3, when a package has a version number x-y-z instead of
+x.y.z, then the version returned by LooseVersion can't be compared
+which raises an exception.
 
-This information will be useful for a cve-checker.
+This patch handles this exception by adding a new return value when
+the comparison can't be done.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- package/pkg-utils.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ support/scripts/cve.py | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index d88a14ab0f..49ce6dc6f1 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -117,7 +117,10 @@ define _json-info-pkg
- 		$(call make-comma-list,$(sort $($(1)_FINAL_ALL_DEPENDENCIES)))
- 	],
- 	"reverse_dependencies": [
--		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES)))
-+		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES))),
-+	],
-+	"ignored_cves": [
-+		$(call make-comma-list,$(sort $($(1)_IGNORE_CVES)))
- 	]
- endef
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index b754a17991..03afdeb54a 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -203,12 +203,21 @@ class CVE:
+                 continue
  
+             if cpe['v_start']:
++                try:
+                     cve_affected_version = distutils.version.LooseVersion(cpe['v_start'])
+                     affected = ops.get(cpe['op_start'])(pkg_version, cve_affected_version)
++                    break
++                except:
++                    return 'Unknown'
+ 
+             if (affected and cpe['v_end']):
++                try:
+                     cve_affected_version = distutils.version.LooseVersion(cpe['v_end'])
+                     affected = ops.get(cpe['op_end'])(pkg_version, cve_affected_version)
++                    break
++                except:
++                    return 'Unknown'
++
+             if (affected):
+                 return True
+         return False
 -- 
 2.27.0
