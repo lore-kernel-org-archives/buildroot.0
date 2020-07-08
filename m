@@ -1,52 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jul 2020 18:53:01 +0200
-Subject: [Buildroot] [PATCH 3/9] package/pkg-utils: show-info: report
- the list of the CVEs ignored
-In-Reply-To: <20200708164006.859021-4-gregory.clement@bootlin.com>
+Date: Wed, 8 Jul 2020 18:54:27 +0200
+Subject: [Buildroot] [PATCH 1/9] support/scripts: Turn CVE check into a
+ module
+In-Reply-To: <20200708164006.859021-2-gregory.clement@bootlin.com>
 References: <20200708164006.859021-1-gregory.clement@bootlin.com>
- <20200708164006.859021-4-gregory.clement@bootlin.com>
-Message-ID: <20200708185301.2bbd12bf@windsurf>
+ <20200708164006.859021-2-gregory.clement@bootlin.com>
+Message-ID: <20200708185427.6f536ad6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Jul 2020 18:40:00 +0200
+On Wed,  8 Jul 2020 18:39:58 +0200
 Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
 
-> Add the list of the CVEs to ignore for each package because they
-> already have a fix for it.
-> 
-> This information will be useful for a cve-checker.
+> In order to be able to do CVE checking outside of pkg-stat, move the
+> CVE class in a module that can be used by other scripts.
 > 
 > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 > ---
->  package/pkg-utils.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  support/scripts/cve.py    | 141 ++++++++++++++++++++++++++++++++++++++
+>  support/scripts/pkg-stats | 115 +------------------------------
+>  2 files changed, 144 insertions(+), 112 deletions(-)
+>  create mode 100755 support/scripts/cve.py
 > 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index d88a14ab0f..49ce6dc6f1 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -117,7 +117,10 @@ define _json-info-pkg
->  		$(call make-comma-list,$(sort $($(1)_FINAL_ALL_DEPENDENCIES)))
->  	],
->  	"reverse_dependencies": [
-> -		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES)))
-> +		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES))),
-> +	],
-> +	"ignored_cves": [
-> +		$(call make-comma-list,$(sort $($(1)_IGNORE_CVES)))
+> diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+> new file mode 100755
+> index 0000000000..874ab4482d
+> --- /dev/null
+> +++ b/support/scripts/cve.py
+> @@ -0,0 +1,141 @@
+> +#!/usr/bin/env python
+> +
+> +# Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +# Copyright (C) 2020 by Gregory CLEMENT <gregory.clement@bootlin.com>
+> +#
+> +# This program is free software; you can redistribute it and/or modify
+> +# it under the terms of the GNU General Public License as published by
+> +# the Free Software Foundation; either version 2 of the License, or
+> +# (at your option) any later version.
+> +#
+> +# This program is distributed in the hope that it will be useful,
+> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
+> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> +# General Public License for more details.
+> +#
+> +# You should have received a copy of the GNU General Public License
+> +# along with this program; if not, write to the Free Software
+> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+> +
+> +import datetime
+> +import os
+> +import re
+> +import requests  # URL checking
+> +import json
+> +import ijson
+> +import distutils.version
+> +import time
+> +import gzip
+> +import sys
 
-While I understand the idea of labelling the property "ignored_cves", I
-think it makes more sense to have a 1:1 mapping with the package
-variable, i.e "ignore_cves".
-
-This is a nitpick: do not resend the full series just for that, we can
-fix it when applying.
-
-Thanks!
+Are you able to drop some of these imports from the pkg-stats script ?
+For example, isn't ijson only used by cve.py now ? Same for gzip, for
+distutils.version. Perhaps others ?
 
 Thomas
 -- 
