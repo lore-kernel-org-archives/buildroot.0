@@ -1,72 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Jul 2020 18:54:27 +0200
-Subject: [Buildroot] [PATCH 1/9] support/scripts: Turn CVE check into a
- module
-In-Reply-To: <20200708164006.859021-2-gregory.clement@bootlin.com>
-References: <20200708164006.859021-1-gregory.clement@bootlin.com>
- <20200708164006.859021-2-gregory.clement@bootlin.com>
-Message-ID: <20200708185427.6f536ad6@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 08 Jul 2020 18:59:49 +0200
+Subject: [Buildroot] [PATCH] package/dvb-apps: add hash file
+In-Reply-To: <20200708163500.GZ2273@scaer> (Yann E. MORIN's message of "Wed, 8
+ Jul 2020 18:35:00 +0200")
+References: <20200704010533.1854-1-sergio.prado@e-labworks.com>
+ <20200705145430.20cc4911@windsurf.home> <20200705173702.GI2273@scaer>
+ <20200707122125.102c9bea@windsurf> <20200708163500.GZ2273@scaer>
+Message-ID: <87eepm3ptm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Jul 2020 18:39:58 +0200
-Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> In order to be able to do CVE checking outside of pkg-stat, move the
-> CVE class in a module that can be used by other scripts.
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  support/scripts/cve.py    | 141 ++++++++++++++++++++++++++++++++++++++
->  support/scripts/pkg-stats | 115 +------------------------------
->  2 files changed, 144 insertions(+), 112 deletions(-)
->  create mode 100755 support/scripts/cve.py
-> 
-> diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-> new file mode 100755
-> index 0000000000..874ab4482d
-> --- /dev/null
-> +++ b/support/scripts/cve.py
-> @@ -0,0 +1,141 @@
-> +#!/usr/bin/env python
-> +
-> +# Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +# Copyright (C) 2020 by Gregory CLEMENT <gregory.clement@bootlin.com>
-> +#
-> +# This program is free software; you can redistribute it and/or modify
-> +# it under the terms of the GNU General Public License as published by
-> +# the Free Software Foundation; either version 2 of the License, or
-> +# (at your option) any later version.
-> +#
-> +# This program is distributed in the hope that it will be useful,
-> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
-> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> +# General Public License for more details.
-> +#
-> +# You should have received a copy of the GNU General Public License
-> +# along with this program; if not, write to the Free Software
-> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-> +
-> +import datetime
-> +import os
-> +import re
-> +import requests  # URL checking
-> +import json
-> +import ijson
-> +import distutils.version
-> +import time
-> +import gzip
-> +import sys
+ > Thomas, Peter, All,
+ > On 2020-07-07 12:21 +0200, Thomas Petazzoni spake thusly:
+ >> On Sun, 5 Jul 2020 19:37:02 +0200
+ >> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ >> > I too got that 926208 sha256 here, with two different hg versions: 3.7.3
+ >> > and 4.8.2.
+ > [--SNIP--]
+ >> Here, since there is no hash file for dvb-apps in Buildroot in any
+ >> Buildroot version, we could change the tarball on sources.b.o.
 
-Are you able to drop some of these imports from the pkg-stats script ?
-For example, isn't ijson only used by cve.py now ? Same for gzip, for
-distutils.version. Perhaps others ?
+ > Yup. I'd like to push the v2 from Sergio shortly. Peter, will you be in
+ > a position to remove the archives, the one in the per-package sub-dir,m
+ > and the one in the main dir, once the patch is applied?
 
-Thomas
+Sure!
+
+ >> > What machine is pushing the archives to s.b.o. ?
+ >> This machine has:
+ >> $ hg --version
+ >> Mercurial Distributed SCM (version 2.6.2)
+ >> So it is even older than the 3.x and 4.x Mercurial versions you have
+ >> tested.
+
+ > That should not really matter, because the output of hg-archive has been
+ > pretty stable. I also tested 2.8.2 (the one in my autobuilder), and it
+ > too generated reproducible archives; I don;t expect 2.6 to be any
+ > different (but I'm often wrong).
+
+;)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
