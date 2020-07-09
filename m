@@ -1,57 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Jul 2020 22:00:58 +0200
-Subject: [Buildroot] [PATCH v2] package/dvb-apps: add hash file
-In-Reply-To: <20200707211947.3886-1-sergio.prado@e-labworks.com>
-References: <20200707211947.3886-1-sergio.prado@e-labworks.com>
-Message-ID: <20200709200058.GB2273@scaer>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  9 Jul 2020 22:12:35 +0200
+Subject: [Buildroot] [PATCH] package/luaossl: bump to version 20200709
+Message-ID: <20200709201235.1780503-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergio, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luaossl/luaossl.hash | 4 ++--
+ package/luaossl/luaossl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2020-07-07 18:19 -0300, Sergio Prado spake thusly:
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - fix source code hash (it will only build if the archive available on
->     sources.buildroot.net is removed, see discussion in [1]).
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-July/285982.html
-> 
-> ---
->  package/dvb-apps/dvb-apps.hash | 6 ++++++
->  1 file changed, 6 insertions(+)
->  create mode 100644 package/dvb-apps/dvb-apps.hash
-> 
-> diff --git a/package/dvb-apps/dvb-apps.hash b/package/dvb-apps/dvb-apps.hash
-> new file mode 100644
-> index 000000000000..d394ced131df
-> --- /dev/null
-> +++ b/package/dvb-apps/dvb-apps.hash
-> @@ -0,0 +1,6 @@
-> +# Locally computed:
-> +sha256  926208b7e711b4bab1a909ff9bf4e6ae54acdd30a46f5d5bd700ecb088fe1f57  dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz
-> +
-> +# Hash for license files:
-> +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> +sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
-> -- 
-> 2.17.1
-> 
-
+diff --git a/package/luaossl/luaossl.hash b/package/luaossl/luaossl.hash
+index 9b959f6fc..c8fa7942e 100644
+--- a/package/luaossl/luaossl.hash
++++ b/package/luaossl/luaossl.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 b558790c0d1c965bd98b98a91a44eef9f72a0b784dbb4978810a1e52206d593d  luaossl-20190731-0.src.rock
+-sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20190731/LICENSE
++sha256 ea6d624e557939e30b93355dd1dc11465e81aa38a5542ab3c04b48608ac3cd78  luaossl-20200709-0.src.rock
++sha256 7bd585fba3ae52943e0915e4c8ca049acde9f1e5cea101ef6b294427c8f0ee7d  luaossl-rel-20200709/LICENSE
+diff --git a/package/luaossl/luaossl.mk b/package/luaossl/luaossl.mk
+index 128c320d1..d241bce85 100644
+--- a/package/luaossl/luaossl.mk
++++ b/package/luaossl/luaossl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAOSSL_VERSION_UPSTREAM = 20190731
++LUAOSSL_VERSION_UPSTREAM = 20200709
+ LUAOSSL_VERSION = $(LUAOSSL_VERSION_UPSTREAM)-0
+ LUAOSSL_SUBDIR = luaossl-rel-$(LUAOSSL_VERSION_UPSTREAM)
+ LUAOSSL_LICENSE = MIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
