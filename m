@@ -1,48 +1,121 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 9 Jul 2020 09:44:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
- version to 3.6.3
-In-Reply-To: <VI1PR04MB4976F0AF13CBBEC145861FE09D640@VI1PR04MB4976.eurprd04.prod.outlook.com>
-References: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
- <20200708121459.GA331830@p1g2>
- <VI1PR04MB4976F0AF13CBBEC145861FE09D640@VI1PR04MB4976.eurprd04.prod.outlook.com>
-Message-ID: <20200709074440.GA464714@p1g2>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Thu, 09 Jul 2020 10:41:10 +0200
+Subject: [Buildroot] [PATCH 5/9] support/scripts: Add a per
+ configuration CVE checker
+In-Reply-To: <CANQCQpbA7pSBTPgf0__OX5KAeVYU75KZ=3ZE4LoT49FFa-zWdg@mail.gmail.com>
+References: <20200708164006.859021-1-gregory.clement@bootlin.com>
+ <20200708164006.859021-6-gregory.clement@bootlin.com>
+ <CANQCQpbA7pSBTPgf0__OX5KAeVYU75KZ=3ZE4LoT49FFa-zWdg@mail.gmail.com>
+Message-ID: <87eepl5bdl.fsf@FE-laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maeva,
+Hi Matt,
 
-On Thu, Jul 09, 2020 at 06:54:12AM +0000, Maeva Manuel (OSS) wrote:
-> Hello Gary,
-> 
-> License was updated from:
-> LA_OPT_NXP_Software_License v10 December 2019
-> to:
-> LA_OPT_NXP_Software_License v11 February 2020
-> which explain the change of EULA/COPYING license files.
-> 
-> This LA_OPT_NXP_Software_License is used by a wide range proprietary
-> binaries/firmwares, from NXP and also 3rd parties (e.g. DDR firmwares,
-> VPU firmwares, ...). It is periodically updated with the introduction
-> of new products. It's recommended to review it in detail with, if a
-> system uses it in production.
+> Gregory,
+>> +# Used to make multiple requests to the same host. It is global
+>> +# because it's used by sub-processes.
+>> +http_pool = None
+>> +
+>> +
+>> +class Package:
+>> +    def __init__(self, name, version, ignored_cves):
+>> +        self.name = name
+>> +        self.version = version
+>> +        self.cves = list()
+>> +        self.ignored_cves = ignored_cves
+>> +
+>> +def check_package_cves(nvd_path, packages):
+>> +    if not os.path.isdir(nvd_path):
+>> +        os.makedirs(nvd_path)
+>> +
+>> +    for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+>
+> This read_nvd_dir call that does the dictionary download has a whole
+> bunch of parsing package output  "Cannot parse package 'openssl'
+> version ''".  I assume some of that output will get cleaned up when we
+> add the additional CPE matching
 
-Yes that's fine, a simple line to explain the EULA was updated to its
-Feb. 2020 version is sufficient, but it should be there.
+Yes. Before this series, pkg-stat considered a pacakge as non- affected
+by a CVE if it didn't manage to get the version of the package. Since
+patch "package/pkg-utils/cve.py: Manage case when package version
+doesn't exist" it is no more the case and the CVEs related to the package
+are output in the colunm 'CVEs to check'.
 
-> Regarding the C0 revision of i.MX8QXP:
-> 
-> 1) The QXP C0 chip exists publicly, it's on the latest revisions of EVK boards.
-> 2) The imx-seco 3.6.3 package (just like the rest of the BSP 5.4.24_2.1.0) adds support for this chip.
-> 3) In order not to break the compatibility with the BR imx-seco 2.3.1 package, it remains with B0 support.
-> 4) I think it's not a good idea that it's the final script that chooses the right file, because the names often change. This could mean that the script would have to be updated every time the package is updated too. By being in the recipe it collects all the changes in the recipe.
-> 5) C0 support should introduce a Kconfig, and this will be done in a future patch.
+However we might be less verbose during the parsing.
 
-Fair enough, but same it then should be in the commit log so that people
-using C0 firmware know it is coming.
+>
+>> +def parse_args():
+>> +    parser = argparse.ArgumentParser()
+>> +    output = parser.add_argument_group('output', 'Output file(s)')
+>> +    output.add_argument('--html', dest='html', type=resolvepath,
+>> +                        help='HTML output file')
+>> +    output.add_argument('--json', dest='json', type=resolvepath,
+>> +                        help='JSON output file')
+>> +    packages = parser.add_mutually_exclusive_group()
+>> +    packages.add_argument('-n', dest='npackages', type=int, action='store',
+>> +                          help='Number of packages')
+>> +    packages.add_argument('-p', dest='packages', action='store',
+>> +                          help='List of packages (comma separated)')
+>
+> Are the -n and -p options left over from pulling this tool out of
+> pkg-stats?  Since this report is based on a specific defconfig,
 
-Regards,
-Gary
+Indeed they are left over and I will remove them
+
+>
+>> +    parser.add_argument('--nvd-path', dest='nvd_path',
+>> +                        help='Path to the local NVD database', type=resolvepath)
+>
+> I noticed this was a required item, maybe default to a folder name in
+> the current folder when one isn't provided?
+
+I will also add a default value.
+
+>
+>> +    args = parser.parse_args()
+>> +    if not args.html and not args.json:
+>> +        parser.error('at least one of --html or --json (or both) is required')
+>
+> plus nvd path unless you add a default
+>
+>> +    return args
+>> +
+>> +
+>> +def __main__():
+>> +    packages = list()
+>> +    exclude_pacakges = ["linux", "gcc"]
+>> +    content = json.load(sys.stdin)
+>> +    for item in content:
+>> +        if item in exclude_pacakges:
+>> +            continue
+>> +        pkg = content[item]
+>> +        p = Package(item, pkg.get('version', ''), pkg.get('ignored_cves', ''))
+>> +        packages.append(p)
+>> +
+>> +    args = parse_args()
+>> +    date = datetime.datetime.utcnow()
+>> +    commit = subprocess.check_output(['git', 'rev-parse',
+>> +                                      'HEAD']).splitlines()[0].decode()
+>
+> This git commit check doesn't work when the tools are used with out of
+> tree buildroot builds.
+>
+> To reproduce from within Buildroot clone:
+> make O=../foobar  qemu_x86_64_defconfig
+> cd ../foobar
+> make show-info | support/scripts/cve-checker --html report.html
+> --nvd-path nvd
+
+
+Thanks for the report I will check it.
+
+Gregory
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
