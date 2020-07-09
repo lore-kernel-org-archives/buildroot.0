@@ -1,13 +1,10 @@
 From: Mylene Josserand <mylene.josserand@collabora.com>
-Date: Thu, 9 Jul 2020 13:51:39 +0200
-Subject: [Buildroot] [PATCH 2/3] package: Add new fip package
-In-Reply-To: <12cd860d-2ae9-9041-e034-dad495cc23f1@gmail.com>
+Date: Thu, 9 Jul 2020 13:58:29 +0200
+Subject: [Buildroot] [PATCH 0/3] board: Add support for LePotato
+In-Reply-To: <20200707195158.GN2273@scaer>
 References: <20200707075339.389528-1-mylene.josserand@collabora.com>
- <20200707075339.389528-3-mylene.josserand@collabora.com>
- <6788c3c4-14c6-5f97-323c-e588fc954198@gmail.com>
- <8f1e1697-6a8d-0c8f-fd0d-eade62d95940@collabora.com>
- <12cd860d-2ae9-9041-e034-dad495cc23f1@gmail.com>
-Message-ID: <ccd1f6e3-5701-a2db-f72e-c18c565eebb8@collabora.com>
+ <20200707195158.GN2273@scaer>
+Message-ID: <e62ab57b-173b-016b-c170-7c8223abaaab@collabora.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,168 +13,93 @@ To: buildroot@busybox.net
 
 Hello,
 
-On 7/7/20 4:29 PM, Romain Naour wrote:
-> Hi Myl?ne,
+On 7/7/20 9:51 PM, Yann E. MORIN wrote:
+> Myl?ne, All,
 > 
-> Le 07/07/2020 ? 16:18, Mylene Josserand a ?crit?:
->> Hi Romain,
+> On 2020-07-07 09:53 +0200, Myl?ne Josserand spake thusly:
+>> Here is my first version of this series that adds the support of the
+>> board LePotato SBC from LibreComputer [1].
 >>
->> Thank you for the review!
+>> This board uses FIP utilities [2][3] from AMLogic to sign u-boot.
 > 
-> You're welcome.
-> 
->>
->> On 7/7/20 2:37 PM, Romain Naour wrote:
->>> Hi Myl?ne,
->>>
->>> Le 07/07/2020 ? 09:53, Myl?ne Josserand a ?crit?:
->>>> Firmware Image Pacakge (FIP) is used to sign Amlogic u-boot binaries.
->>>> It is a host package as it is only binaries to call on u-boot image
->>>> to sign it. One tool is a python script that needs to be called with
->>>> 'python' command, otherwise, it is not working. That is why there is
->>>> a dependency on host-python.
->>>>
->>>> For the moment, only LePotato's board is supported. Other ones
->>>> may be added later, if needed.
->>>
->>> We had a previous contribution about LePotato board from Baylibre [1].
->>> There are several concerns about licensing, aml_encrypt_gxl and acs_tool.py.
->>
->> oh, indeed, I missed that one.
-> 
-> No problem, those patches date from August 2018.
-> 
->>
->>>
->>> What about gxlimg to replace aml_encrypt_gxl?
->>
->> Thanks for the link, I will try it, indeed but I guess my patches are lapsed
->> because of these license issues, right?
-> 
-> I'm afraid yes. LibreELEC doesn't provide any licensing information in their
-> repository. I'm not sure if we should use LibreELEC or Baylibre repository...
+> Following the issues raised by Romain, I've marked patches 2-3 as
+> "changes requested". Hopefully, gslimg is an interesting trail to follow
+> as a free/libre replacement for the vendor stuff.
 
-okay, thank you
+Sure, make sense, thanks!
 
-Yes, I am not sure too, I thought that LibreElec was more appropriate 
-but without any conviction :)
+> 
+> I've applied patch 1 to master, thanks.
+
+Thank you,
 
 Best regards,
 Myl?ne
 
 > 
-> Best regards,
-> Romain
+> Regards,
+> Yann E. MORIN.
 > 
+>> The patch 02 is adding these FIP utilities as a host package. It is
+>> available for different boards such as khadas-vim, some odroids, etc.
+>> This package will copy the corresponding utilities, only for LePotato for
+>> the moment, into the HOST_DIR/usr/bin. Currently, LePotato's ones are the
+>> default ones. This should be updating once more boards are added.
 >>
->>>
->>> [1]
->>> http://patchwork.ozlabs.org/project/buildroot/patch/1533545408-11248-2-git-send-email-narmstrong at baylibre.com/
->>>
->>> [2] https://github.com/repk/gxlimg
->>>
->>> Best regards,
->>> Romain
+>> The patch 03 is adding the support of this board from LibreComputer:
+>>     - one defconfig including a u-boot, kernel and minimal rootfs.
+>>     The configuration is also enabling the FIP package for LePotato.
+>>     - one post-build script that is using the FIP utilities to sign
+>>     u-boot binary.
+>>     - one post-image script to generate a sd-card image and flashing the
+>>     signed u-boot on it.
+>>     - a readme file to explain how to configure, compile and flash image
+>>     for this board.
+>>     - a boot.scr file including booti commands to run.
+>>
+>> Let me know if you have any comments on this series.
 >>
 >> Best regards,
+>>
 >> Myl?ne
 >>
->>>
->>>>
->>>> Signed-off-by: Myl?ne Josserand <mylene.josserand@collabora.com>
->>>> ---
->>>>  ? package/Config.in.host???? |? 1 +
->>>>  ? package/fip/Config.in.host | 17 +++++++++++++++++
->>>>  ? package/fip/fip.hash?????? |? 2 ++
->>>>  ? package/fip/fip.mk???????? | 30 ++++++++++++++++++++++++++++++
->>>>  ? 4 files changed, 50 insertions(+)
->>>>  ? create mode 100644 package/fip/Config.in.host
->>>>  ? create mode 100644 package/fip/fip.hash
->>>>  ? create mode 100644 package/fip/fip.mk
->>>>
->>>> diff --git a/package/Config.in.host b/package/Config.in.host
->>>> index f1246c708f..21d2bc4072 100644
->>>> --- a/package/Config.in.host
->>>> +++ b/package/Config.in.host
->>>> @@ -24,6 +24,7 @@ menu "Host utilities"
->>>>  ????? source "package/f2fs-tools/Config.in.host"
->>>>  ????? source "package/faketime/Config.in.host"
->>>>  ????? source "package/fatcat/Config.in.host"
->>>> +??? source "package/fip/Config.in.host"
->>>>  ????? source "package/fwup/Config.in.host"
->>>>  ????? source "package/genext2fs/Config.in.host"
->>>>  ????? source "package/genimage/Config.in.host"
->>>> diff --git a/package/fip/Config.in.host b/package/fip/Config.in.host
->>>> new file mode 100644
->>>> index 0000000000..914020a1b3
->>>> --- /dev/null
->>>> +++ b/package/fip/Config.in.host
->>>> @@ -0,0 +1,17 @@
->>>> +config BR2_PACKAGE_HOST_FIP
->>>> +??? bool "host Amlogic FIP binaries"
->>>> +??? help
->>>> +????? This package contains the FIP utilities, that is
->>>> +????? used to create U-Boot final binary.
->>>> +
->>>> +if BR2_PACKAGE_HOST_FIP
->>>> +
->>>> +config BR2_PACKAGE_HOST_FIP_LEPOTATO
->>>> +??? bool "FIP lepotato version"
->>>> +??? default y
->>>> +??? select BR2_PACKAGE_HOST_PYTHON3
->>>> +??? help
->>>> +????? This option will download the latest libretech-cc's version
->>>> +????? of the fip utility for the board "lepotato".
->>>> +
->>>> +endif
->>>> diff --git a/package/fip/fip.hash b/package/fip/fip.hash
->>>> new file mode 100644
->>>> index 0000000000..547fff8534
->>>> --- /dev/null
->>>> +++ b/package/fip/fip.hash
->>>> @@ -0,0 +1,2 @@
->>>> +# Locally computed
->>>> +sha256 7a59dc36c89b02c38f9b630b4abb7056869ff76ca6152b6c3ce797ddd1349a64
->>>> fip-bfdad4cc520b254813536ebfba8b9749386cd57c.tar.gz
->>>> diff --git a/package/fip/fip.mk b/package/fip/fip.mk
->>>> new file mode 100644
->>>> index 0000000000..d1fb43ad13
->>>> --- /dev/null
->>>> +++ b/package/fip/fip.mk
->>>> @@ -0,0 +1,30 @@
->>>> +################################################################################
->>>>
->>>> +#
->>>> +# fip
->>>> +#
->>>> +################################################################################
->>>>
->>>> +
->>>> +FIP_VERSION = bfdad4cc520b254813536ebfba8b9749386cd57c
->>>> +FIP_SITE = $(call github,LibreELEC,amlogic-boot-fip,$(FIP_VERSION))
->>>> +FIP_LICENSE = PROPRIETARY
->>>> +FIP_DEPENDENCIES = host-python3
->>>> +
->>>> +ifeq ($(BR2_PACKAGE_HOST_FIP_LEPOTATO),y)
->>>> +HOST_FIP_LEPOTATO_BINARIES += lepotato/bl2.bin lepotato/acs.bin \
->>>> +??????????? lepotato/bl21.bin lepotato/bl30.bin \
->>>> +??????????? lepotato/bl301.bin lepotato/bl31.img \
->>>> +??????????? lepotato/blx_fix.sh lepotato/acs_tool.py lepotato/aml_encrypt_gxl
->>>> +endif
->>>> +
->>>> +define HOST_FIP_INSTALL_SUBDIR
->>>> +??? $(INSTALL) -m 0755 -d $(HOST_DIR)/usr/bin/fip/
->>>> +endef
->>>> +
->>>> +define HOST_FIP_INSTALL_CMDS
->>>> +??? $(foreach b,$(HOST_FIP_LEPOTATO_BINARIES),
->>>> +??????? $(INSTALL) -D -m 755 $(@D)/$(b) $(HOST_DIR)/usr/bin/fip/)
->>>> +endef
->>>> +
->>>> +HOST_FIP_PRE_INSTALL_HOOKS += HOST_FIP_INSTALL_SUBDIR
->>>> +
->>>> +$(eval $(host-generic-package))
->>>>
->>>
+>> [1]: https://libre.computer/products/boards/aml-s905x-cc/
+>> [2]: https://github.com/LibreELEC/amlogic-boot-fip
+>> [3]: https://github.com/BayLibre/u-boot
 >>
+>> Myl?ne Josserand (3):
+>>    DEVELOPERS: Update Mylene's email
+>>    package: Add new fip package
+>>    configs/lepotato: Add new defconfig
+>>
+>>   .gitlab-ci.yml                             |  1 +
+>>   DEVELOPERS                                 |  4 +-
+>>   board/librecomputer/lepotato/boot.cmd      |  6 +++
+>>   board/librecomputer/lepotato/genimage.cfg  | 28 ++++++++++
+>>   board/librecomputer/lepotato/post-build.sh | 61 ++++++++++++++++++++++
+>>   board/librecomputer/lepotato/post-image.sh | 17 ++++++
+>>   board/librecomputer/lepotato/readme.txt    | 35 +++++++++++++
+>>   configs/lepotato_defconfig                 | 29 ++++++++++
+>>   package/Config.in.host                     |  1 +
+>>   package/fip/Config.in.host                 | 17 ++++++
+>>   package/fip/fip.hash                       |  2 +
+>>   package/fip/fip.mk                         | 30 +++++++++++
+>>   12 files changed, 230 insertions(+), 1 deletion(-)
+>>   create mode 100644 board/librecomputer/lepotato/boot.cmd
+>>   create mode 100644 board/librecomputer/lepotato/genimage.cfg
+>>   create mode 100755 board/librecomputer/lepotato/post-build.sh
+>>   create mode 100755 board/librecomputer/lepotato/post-image.sh
+>>   create mode 100644 board/librecomputer/lepotato/readme.txt
+>>   create mode 100644 configs/lepotato_defconfig
+>>   create mode 100644 package/fip/Config.in.host
+>>   create mode 100644 package/fip/fip.hash
+>>   create mode 100644 package/fip/fip.mk
+>>
+>> -- 
+>> 2.27.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
