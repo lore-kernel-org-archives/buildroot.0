@@ -1,273 +1,196 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Jul 2020 22:19:16 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: fix no-proxy build with
- bearssl and nss
-In-Reply-To: <c4509d9911d8202601895685017a1295768a1871.1594274810.git.baruch@tkos.co.il>
-References: <c4509d9911d8202601895685017a1295768a1871.1594274810.git.baruch@tkos.co.il>
-Message-ID: <20200709201916.GC2273@scaer>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Thu,  9 Jul 2020 16:57:59 -0500
+Subject: [Buildroot] [PATCH] package/sqlite: bump version 3.32.3
+Message-ID: <20200709215759.53406-1-sam.voss@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Fixes the following CVEs:
 
-On 2020-07-09 09:06 +0300, Baruch Siach spake thusly:
-> Add two patches fixing build against BearSSL and NSS TLS implementations
-> when BR2_PACKAGE_LIBCURL_PROXY_SUPPORT is disabled.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/4d37d9163bfece536974f15f16b2ebfc5fabc539/
-> http://autobuild.buildroot.net/results/387e8baa13d0f07ed4dfd5b6ee3b933d4843c0e8/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+- CVE-2019-19923 (Fixed in 3.31.0)
 
-Applied to master, thanks.
+SQLite is vulnerable to denial-of-service condition because of a NULL
+pointer dereferencing while handling `SELECT DISTINCT`statements.
 
-Regards,
-Yann E. MORIN.
+- CVE-2019-19924 (Fixed in 3.31.0)
 
-> ---
->  ...ix-build-with-disabled-proxy-support.patch |  50 ++++++
->  ...ix-build-with-disabled-proxy-support.patch | 159 ++++++++++++++++++
->  2 files changed, 209 insertions(+)
->  create mode 100644 package/libcurl/0001-bearssl-fix-build-with-disabled-proxy-support.patch
->  create mode 100644 package/libcurl/0002-nss-fix-build-with-disabled-proxy-support.patch
-> 
-> diff --git a/package/libcurl/0001-bearssl-fix-build-with-disabled-proxy-support.patch b/package/libcurl/0001-bearssl-fix-build-with-disabled-proxy-support.patch
-> new file mode 100644
-> index 000000000000..b6d89859b93c
-> --- /dev/null
-> +++ b/package/libcurl/0001-bearssl-fix-build-with-disabled-proxy-support.patch
-> @@ -0,0 +1,50 @@
-> +From 3a46be47cad5a3498b5f6d6007b7d1fe5b8dff78 Mon Sep 17 00:00:00 2001
-> +Message-Id: <3a46be47cad5a3498b5f6d6007b7d1fe5b8dff78.1594274321.git.baruch@tkos.co.il>
-> +From: Baruch Siach <baruch@tkos.co.il>
-> +Date: Thu, 9 Jul 2020 08:14:49 +0300
-> +Subject: [PATCH] bearssl: fix build with disabled proxy support
-> +
-> +Avoid reference to fields that do not exist when CURL_DISABLE_PROXY is
-> +defined.
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: https://github.com/curl/curl/pull/5666
-> +
-> + lib/vtls/bearssl.c | 11 +++++++++--
-> + 1 file changed, 9 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/lib/vtls/bearssl.c b/lib/vtls/bearssl.c
-> +index 628e16a124a9..44e7406e8e39 100644
-> +--- a/lib/vtls/bearssl.c
-> ++++ b/lib/vtls/bearssl.c
-> +@@ -300,8 +300,12 @@ static CURLcode bearssl_connect_step1(struct connectdata *conn, int sockindex)
-> +   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
-> +   struct ssl_backend_data *backend = connssl->backend;
-> +   const char * const ssl_cafile = SSL_CONN_CONFIG(CAfile);
-> ++#ifndef CURL_DISABLE_PROXY
-> +   const char *hostname = SSL_IS_PROXY() ? conn->http_proxy.host.name :
-> +     conn->host.name;
-> ++#else
-> ++  const char *hostname = conn->host.name;
-> ++#endif
-> +   const bool verifypeer = SSL_CONN_CONFIG(verifypeer);
-> +   const bool verifyhost = SSL_CONN_CONFIG(verifyhost);
-> +   CURLcode ret;
-> +@@ -386,8 +390,11 @@ static CURLcode bearssl_connect_step1(struct connectdata *conn, int sockindex)
-> +      */
-> + 
-> + #ifdef USE_NGHTTP2
-> +-    if(data->set.httpversion >= CURL_HTTP_VERSION_2 &&
-> +-       (!SSL_IS_PROXY() || !conn->bits.tunnel_proxy)) {
-> ++    if(data->set.httpversion >= CURL_HTTP_VERSION_2
-> ++#ifndef CURL_DISABLE_PROXY
-> ++      && (!SSL_IS_PROXY() || !conn->bits.tunnel_proxy)
-> ++#endif
-> ++      ) {
-> +       backend->protocols[cur++] = NGHTTP2_PROTO_VERSION_ID;
-> +       infof(data, "ALPN, offering %s\n", NGHTTP2_PROTO_VERSION_ID);
-> +     }
-> +-- 
-> +2.27.0
-> +
-> diff --git a/package/libcurl/0002-nss-fix-build-with-disabled-proxy-support.patch b/package/libcurl/0002-nss-fix-build-with-disabled-proxy-support.patch
-> new file mode 100644
-> index 000000000000..0d1286338e41
-> --- /dev/null
-> +++ b/package/libcurl/0002-nss-fix-build-with-disabled-proxy-support.patch
-> @@ -0,0 +1,159 @@
-> +From d040da28f57d0b3fcd6f63809a8c85a600f87a62 Mon Sep 17 00:00:00 2001
-> +Message-Id: <d040da28f57d0b3fcd6f63809a8c85a600f87a62.1594274337.git.baruch@tkos.co.il>
-> +From: Baruch Siach <baruch@tkos.co.il>
-> +Date: Thu, 9 Jul 2020 08:14:49 +0300
-> +Subject: [PATCH] nss: fix build with disabled proxy support
-> +
-> +Avoid reference to fields that do not exist when CURL_DISABLE_PROXY is
-> +defined.
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: https://github.com/curl/curl/pull/5667
-> +
-> + lib/vtls/nss.c | 44 +++++++++++++++++++++++++++++++++++---------
-> + 1 file changed, 35 insertions(+), 9 deletions(-)
-> +
-> +diff --git a/lib/vtls/nss.c b/lib/vtls/nss.c
-> +index fca292613815..0f0d1ee6c80f 100644
-> +--- a/lib/vtls/nss.c
-> ++++ b/lib/vtls/nss.c
-> +@@ -1027,9 +1027,11 @@ static SECStatus BadCertHandler(void *arg, PRFileDesc *sock)
-> +   CERTCertificate *cert;
-> + 
-> +   /* remember the cert verification result */
-> ++#ifndef CURL_DISABLE_PROXY
-> +   if(SSL_IS_PROXY())
-> +     data->set.proxy_ssl.certverifyresult = err;
-> +   else
-> ++#endif
-> +     data->set.ssl.certverifyresult = err;
-> + 
-> +   if(err == SSL_ERROR_BAD_CERT_DOMAIN && !SSL_CONN_CONFIG(verifyhost))
-> +@@ -1553,24 +1555,32 @@ static void nss_close(struct ssl_connect_data *connssl)
-> + static void Curl_nss_close(struct connectdata *conn, int sockindex)
-> + {
-> +   struct ssl_connect_data *connssl = &conn->ssl[sockindex];
-> ++#ifndef CURL_DISABLE_PROXY
-> +   struct ssl_connect_data *connssl_proxy = &conn->proxy_ssl[sockindex];
-> ++#endif
-> +   struct ssl_backend_data *backend = connssl->backend;
-> + 
-> +-  if(backend->handle || connssl_proxy->backend->handle) {
-> ++  if(backend->handle
-> ++#ifndef CURL_DISABLE_PROXY
-> ++    || connssl_proxy->backend->handle
-> ++#endif
-> ++    ) {
-> +     /* NSS closes the socket we previously handed to it, so we must mark it
-> +        as closed to avoid double close */
-> +     fake_sclose(conn->sock[sockindex]);
-> +     conn->sock[sockindex] = CURL_SOCKET_BAD;
-> +   }
-> + 
-> ++#ifndef CURL_DISABLE_PROXY
-> +   if(backend->handle)
-> +     /* nss_close(connssl) will transitively close also
-> +        connssl_proxy->backend->handle if both are used. Clear it to avoid
-> +        a double close leading to crash. */
-> +     connssl_proxy->backend->handle = NULL;
-> + 
-> +-  nss_close(connssl);
-> +   nss_close(connssl_proxy);
-> ++#endif
-> ++  nss_close(connssl);
-> + }
-> + 
-> + /* return true if NSS can provide error code (and possibly msg) for the
-> +@@ -1828,6 +1838,12 @@ static CURLcode nss_setup_connect(struct connectdata *conn, int sockindex)
-> +   CURLcode result;
-> +   bool second_layer = FALSE;
-> +   SSLVersionRange sslver_supported;
-> ++#ifndef CURL_DISABLE_PROXY
-> ++  const char *hostname = SSL_IS_PROXY() ? conn->http_proxy.host.name :
-> ++    conn->host.name;
-> ++#else
-> ++  const char *hostname = conn->host.name;
-> ++#endif
-> + 
-> +   SSLVersionRange sslver = {
-> +     SSL_LIBRARY_VERSION_TLS_1_0,  /* min */
-> +@@ -1932,9 +1948,11 @@ static CURLcode nss_setup_connect(struct connectdata *conn, int sockindex)
-> +     goto error;
-> + 
-> +   /* not checked yet */
-> ++#ifndef CURL_DISABLE_PROXY
-> +   if(SSL_IS_PROXY())
-> +     data->set.proxy_ssl.certverifyresult = 0;
-> +   else
-> ++#endif
-> +     data->set.ssl.certverifyresult = 0;
-> + 
-> +   if(SSL_BadCertHook(model, BadCertHandler, conn) != SECSuccess)
-> +@@ -1991,12 +2009,14 @@ static CURLcode nss_setup_connect(struct connectdata *conn, int sockindex)
-> +     goto error;
-> +   }
-> + 
-> ++#ifndef CURL_DISABLE_PROXY
-> +   if(conn->proxy_ssl[sockindex].use) {
-> +     DEBUGASSERT(ssl_connection_complete == conn->proxy_ssl[sockindex].state);
-> +     DEBUGASSERT(conn->proxy_ssl[sockindex].backend->handle != NULL);
-> +     nspr_io = conn->proxy_ssl[sockindex].backend->handle;
-> +     second_layer = TRUE;
-> +   }
-> ++#endif
-> +   else {
-> +     /* wrap OS file descriptor by NSPR's file descriptor abstraction */
-> +     nspr_io = PR_ImportTCPSocket(sockfd);
-> +@@ -2077,8 +2097,11 @@ static CURLcode nss_setup_connect(struct connectdata *conn, int sockindex)
-> +     unsigned char protocols[128];
-> + 
-> + #ifdef USE_NGHTTP2
-> +-    if(data->set.httpversion >= CURL_HTTP_VERSION_2 &&
-> +-       (!SSL_IS_PROXY() || !conn->bits.tunnel_proxy)) {
-> ++    if(data->set.httpversion >= CURL_HTTP_VERSION_2
-> ++#ifndef CURL_DISABLE_PROXY
-> ++      && (!SSL_IS_PROXY() || !conn->bits.tunnel_proxy)
-> ++#endif
-> ++      ) {
-> +       protocols[cur++] = NGHTTP2_PROTO_VERSION_ID_LEN;
-> +       memcpy(&protocols[cur], NGHTTP2_PROTO_VERSION_ID,
-> +           NGHTTP2_PROTO_VERSION_ID_LEN);
-> +@@ -2101,14 +2124,11 @@ static CURLcode nss_setup_connect(struct connectdata *conn, int sockindex)
-> +     goto error;
-> + 
-> +   /* propagate hostname to the TLS layer */
-> +-  if(SSL_SetURL(backend->handle, SSL_IS_PROXY() ? conn->http_proxy.host.name :
-> +-                conn->host.name) != SECSuccess)
-> ++  if(SSL_SetURL(backend->handle, hostname) != SECSuccess)
-> +     goto error;
-> + 
-> +   /* prevent NSS from re-using the session for a different hostname */
-> +-  if(SSL_SetSockPeerID(backend->handle, SSL_IS_PROXY() ?
-> +-                       conn->http_proxy.host.name : conn->host.name)
-> +-     != SECSuccess)
-> ++  if(SSL_SetSockPeerID(backend->handle, hostname) != SECSuccess)
-> +     goto error;
-> + 
-> +   return CURLE_OK;
-> +@@ -2127,11 +2147,17 @@ static CURLcode nss_do_connect(struct connectdata *conn, int sockindex)
-> +   struct Curl_easy *data = conn->data;
-> +   CURLcode result = CURLE_SSL_CONNECT_ERROR;
-> +   PRUint32 timeout;
-> ++#ifndef CURL_DISABLE_PROXY
-> +   long * const certverifyresult = SSL_IS_PROXY() ?
-> +     &data->set.proxy_ssl.certverifyresult : &data->set.ssl.certverifyresult;
-> +   const char * const pinnedpubkey = SSL_IS_PROXY() ?
-> +               data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY] :
-> +               data->set.str[STRING_SSL_PINNEDPUBLICKEY_ORIG];
-> ++#else
-> ++  long * const certverifyresult = &data->set.ssl.certverifyresult;
-> ++  const char * const pinnedpubkey =
-> ++              data->set.str[STRING_SSL_PINNEDPUBLICKEY_ORIG];
-> ++#endif
-> + 
-> + 
-> +   /* check timeout situation */
-> +-- 
-> +2.27.0
-> +
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The SQLite mishandles certain SQL commands due to improper error
+handling by ` sqlite3WindowRewrite() ` function.
 
+- CVE-2020-13435 (Fixed in 3.32.1)
+
+SQLite is vulnerable to denial-of-service (DoS) due to improper handling
+of query rewriting. An attacker could exploit this vulnerability by
+supplying a system with maliciously crafted input.
+
+- CVE-2020-13632 (Fixed in 3.32.0)
+
+SQLite is vulnerable to denial-of-service (DoS) due to improper pointer
+management in the FTS3 virtual table module. An attacker could exploit
+this vulnerability by supplying a system with maliciously crafted input.
+
+- CVE-2020-13434 (Fixed in 3.32.1)
+
+SQLite is vulnerable to denial-of-service (DoS) due to improper handling
+of floating-point operations. An attacker could exploit this
+vulnerability by supplying a system with maliciously crafted input.
+
+- CVE-2020-13871 (Fixed in 3.32.3)
+
+SQLite 3.32.2 has a use-after-free in resetAccumulator in select.c
+because the parse tree rewrite for window functions is too late.
+
+- CVE-2020-13630 (Fixed in 3.32.0)
+
+SQLite is vulnerable to denial-of-service (DoS) due to a use after free
+issue in the FTS3 virtual table module. An attacker could exploit this
+vulnerability by supplying a system with maliciously crafted input.
+
+- CVE-2020-15358 (Fixed in 3.32.3)
+
+SQLite is vulnerable to a heap-based buffer overflow flaw in part of an
+optimization feature. An attacker able to issue specially crafted
+queries could cause the application to crash, resulting in a
+denial-of-service (DoS).
+
+- CVE-2020-9327 (Fixed in 3.32.0)
+
+SQLite is vulnerable to a Null pointer dereference flaw. A remote
+attacker able to issue specially crafted SQL statements may be able to
+cause a segmentation fault and application crash, resulting in a
+denial-of-service (DoS).
+
+- CVE-2019-19645 (Fixed in 3.31.0)
+
+It was discovered that SQLite contains an denial-of-service (DoS)
+vulnerability. An attacker could exploit this to trigger an infinite
+recursion resulting in excessive resource consumption leading to a DoS
+condition.
+
+- CVE-2019-19926 (Fixed in 3.31.0)
+
+The SQLite allows denial-of-service attack due to improper input
+validation of user-supplied input.
+
+- CVE-2020-11655 (Fixed in 3.32.0)
+
+SQLite contains a memory corruption vulnerability. Successfully
+exploiting this issue may allow attackers to cause a denial-of-service
+(DoS). This allows an attacker to cause SQLite to crash by issuing a
+crafted SQL query to the database.
+
+- CVE-2019-19925 (Fixed in 3.31.0)
+
+The INSERT statement fails when the zip file path is `NULL`.
+
+- CVE-2019-19242 (Fixed in 3.31.0)
+
+SQLite is vulnerable to a denial-of-service (DoS). An attacker could
+exploit this vulnerability by supplying a maliciously crafted query to
+cause an application crash.
+
+- CVE-2019-19244 (Fixed in 3.31.0)
+
+SQLite is vulnerable to a denial-of-service. An attacker could exploit
+this vulnerability by providing a crafted SELECT statement to the SQL
+server, resulting in an application crash.
+
+- CVE-2020-13631 (Fixed in 3.32.0)
+
+SQLite is vulnerable to data manipulation due to improper management of
+virtual tables. An attacker could exploit this vulnerability by
+supplying a system with maliciously crafted input.
+
+- CVE-2020-11656 (Fixed in 3.32.0)
+
+SQLite contains a Use-After-Free vulnerability. Successfully exploiting
+this issue may allow attackers to cause a denial-of-service (DoS). This
+allows an attacker to cause SQLite to crash by issuing a crafted SQL
+query to the database.
+
+- CVE-2019-19880 (Fixed in 3.31.0)
+
+SQLite is vulnerable to denial-of-service (DoS) due to the mismanagement
+of memory resources. A remote attacker could cause a victim's instance
+of the application to crash by submitting crafted request that will lead
+to the application parsing problematic integer values.
+
+- CVE-2019-20218 (Fixed in 3.31.0)
+
+SQLite is vulnerable to denial-of-service (DoS) due to improper
+exception handling which could lead to unwinding of the `WITH` stack
+following parsing errors. An attacker could exploit this vulnerability
+by supplying a system with maliciously crafted input.
+
+- CVE-2019-19603 (Fixed in 3.31.0)
+
+It was discovered that SQLite contains a denial-of-service (DoS)
+vulnerability. An authenticated attacker could exploit this
+vulnerability by creating tables with the same name as shadow table
+names.
+
+- CVE-2019-19959 (Fixed in 3.31.0)
+
+SQLite is vulnerable to denial-of-service (DoS) due to the mismanagement
+of system memory resources. A remote attacker could cause a victim's
+instance of the application to crash by causing it to process a SQL
+statement that references a maliciously crafted file name.
+
+- CVE-2019-19646 (Fixed in 3.31.0)
+
+SQLite is vulnerable to a denial-of-service (DoS). An attacker could
+exploit this vulnerability by supplying malicious SQL in order to crash
+the application.
+
+- CVE-2019-19317 (Fixed in 3.31.0)
+
+SQLite contains a denial-of-service (DoS) vulnerability due to incorrect
+logic in name lookups. An attacker could exploit this to cause a
+application crash.
+
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+CC: Peter Korsgard <peter@korsgaard.com>
+
+---
+
+Peter: Can this be put onto the 2020.02 LTS as it carries a lot of
+security fixes?
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 1d4bd03eda..4edf84f18b 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 8383f29d53fa1d4383e4c8eb3e087f2ed940a9e0  sqlite-autoconf-3300100.tar.gz
++sha1 ea14ef2dc4cc7fcbc5ebbb018d3a03faa3a41cb4  sqlite-autoconf-3320300.tar.gz
+ # Calculated based on the hash above
+-sha256 8c5a50db089bd2a1b08dbc5b00d2027602ca7ff238ba7658fabca454d4298e60  sqlite-autoconf-3300100.tar.gz
++sha256 a31507123c1c2e3a210afec19525fd7b5bb1e19a6a34ae5b998fbd7302568b66  sqlite-autoconf-3320300.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index c5cf9607a4..c8b9ba3150 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3300100
++SQLITE_VERSION = 3320300
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = https://www.sqlite.org/2019
++SQLITE_SITE = https://www.sqlite.org/2020
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
