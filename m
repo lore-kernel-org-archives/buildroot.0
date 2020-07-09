@@ -1,153 +1,86 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 9 Jul 2020 09:30:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
- version to 3.6.3
-In-Reply-To: <VI1PR04MB4976F0AF13CBBEC145861FE09D640@VI1PR04MB4976.eurprd04.prod.outlook.com>
-References: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
- <20200708121459.GA331830@p1g2>
- <VI1PR04MB4976F0AF13CBBEC145861FE09D640@VI1PR04MB4976.eurprd04.prod.outlook.com>
-Message-ID: <CAEyMn7b8GFBsxvnLNnTV+a1HuKFu7XnwZbKOUc-1W4bQAx9z0g@mail.gmail.com>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Thu, 09 Jul 2020 09:34:08 +0200
+Subject: [Buildroot] [PATCH 1/9] support/scripts: Turn CVE check into a
+ module
+In-Reply-To: <20200708185427.6f536ad6@windsurf>
+References: <20200708164006.859021-1-gregory.clement@bootlin.com>
+ <20200708164006.859021-2-gregory.clement@bootlin.com>
+ <20200708185427.6f536ad6@windsurf>
+Message-ID: <871rll9m6n.fsf@FE-laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas,
 
-Maeva Manuel (OSS) <maeva.manuel@oss.nxp.com> schrieb am Do., 9. Juli 2020,
-08:54:
+> On Wed,  8 Jul 2020 18:39:58 +0200
+> Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
+>
+>> In order to be able to do CVE checking outside of pkg-stat, move the
+>> CVE class in a module that can be used by other scripts.
+>> 
+>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>> ---
+>>  support/scripts/cve.py    | 141 ++++++++++++++++++++++++++++++++++++++
+>>  support/scripts/pkg-stats | 115 +------------------------------
+>>  2 files changed, 144 insertions(+), 112 deletions(-)
+>>  create mode 100755 support/scripts/cve.py
+>> 
+>> diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+>> new file mode 100755
+>> index 0000000000..874ab4482d
+>> --- /dev/null
+>> +++ b/support/scripts/cve.py
+>> @@ -0,0 +1,141 @@
+>> +#!/usr/bin/env python
+>> +
+>> +# Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> +# Copyright (C) 2020 by Gregory CLEMENT <gregory.clement@bootlin.com>
+>> +#
+>> +# This program is free software; you can redistribute it and/or modify
+>> +# it under the terms of the GNU General Public License as published by
+>> +# the Free Software Foundation; either version 2 of the License, or
+>> +# (at your option) any later version.
+>> +#
+>> +# This program is distributed in the hope that it will be useful,
+>> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+>> +# General Public License for more details.
+>> +#
+>> +# You should have received a copy of the GNU General Public License
+>> +# along with this program; if not, write to the Free Software
+>> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+>> +
+>> +import datetime
+>> +import os
+>> +import re
+>> +import requests  # URL checking
+>> +import json
+>> +import ijson
+>> +import distutils.version
+>> +import time
+>> +import gzip
+>> +import sys
+>
+> Are you able to drop some of these imports from the pkg-stats script ?
+> For example, isn't ijson only used by cve.py now ? Same for gzip, for
+> distutils.version. Perhaps others ?
 
-> Hello Gary,
->
-> License was updated from:
-> LA_OPT_NXP_Software_License v10 December 2019
-> to:
-> LA_OPT_NXP_Software_License v11 February 2020
-> which explain the change of EULA/COPYING license files.
->
-> This LA_OPT_NXP_Software_License is used by a wide range proprietary
-> binaries/firmwares, from NXP and also 3rd parties (e.g. DDR firmwares,
-> VPU firmwares, ...). It is periodically updated with the introduction
-> of new products. It's recommended to review it in detail with, if a
-> system uses it in production.
->
-> Regarding the C0 revision of i.MX8QXP:
->
-> 1) The QXP C0 chip exists publicly, it's on the latest revisions of EVK
-> boards.
-> 2) The imx-seco 3.6.3 package (just like the rest of the BSP 5.4.24_2.1.0)
-> adds support for this chip.
-> 3) In order not to break the compatibility with the BR imx-seco 2.3.1
-> package, it remains with B0 support.
-> 4) I think it's not a good idea that it's the final script that chooses
-> the right file, because the names often change. This could mean that the
-> script would have to be updated every time the package is updated too. By
-> being in the recipe it collects all the changes in the recipe.
->
+I removed some import in the cve.py but not in this file. I can do it,
+indeed.
 
-What about other boards that rely on e.g. the C0 Firmware. Shouln't we
-export all variants and create a link to the one used for the EVK board?
+Gregory
 
-5) C0 support should introduce a Kconfig, and this will be done in a future
-> patch.
 >
-> Regards,
->
-> Maeva
->
-> -----Original Message-----
-> From: Gary Bisson <gary.bisson@boundarydevices.com>
-> Sent: Wednesday, July 8, 2020 2:15 PM
-> To: Maeva Manuel (OSS) <maeva.manuel@oss.nxp.com>
-> Cc: buildroot at buildroot.org; Gary Bisson <bisson.gary@gmail.com>; Refik
-> Tuzakli <tuzakli.refik@gmail.com>
-> Subject: Re: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
-> version to 3.6.3
->
-> Hi Maeva,
->
-> Thank you for your contribution, please see my comments below.
->
-> On Wed, Jul 08, 2020 at 09:43:52AM +0200, Maeva Manuel wrote:
-> > This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
-> > Firmware file names now include the SoC revision.
-> >
-> > Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-> > [Maeva: tested on i.MX8QXP MEK (Board rev D1, SoC rev B0) and on
-> > i.MX8QM MEK (SoC rev B0)]
-> > Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-> > ---
-> >  package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
-> >  package/freescale-imx/imx-seco/imx-seco.mk   | 6 +++---
-> >  2 files changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/package/freescale-imx/imx-seco/imx-seco.hash
-> > b/package/freescale-imx/imx-seco/imx-seco.hash
-> > index 56f56369d4..930801e839 100644
-> > --- a/package/freescale-imx/imx-seco/imx-seco.hash
-> > +++ b/package/freescale-imx/imx-seco/imx-seco.hash
-> > @@ -1,4 +1,4 @@
-> >  # Locally calculated
-> > -sha256
-> > b429ac58b2ea1771b3fdf7ae87bf1d37ccaf596bde01a5ecccae27b2145f6824
-> > imx-seco-2.3.1.bin
-> > -sha256
-> > 69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
-> > -sha256
-> > 6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46
-> > COPYING
-> > +sha256
-> > +52ba07633e0f8707d8c26724b5cd03ef96444c8de1e0e134acac50acacf3e7dd
-> > +imx-seco-3.6.3.bin
-> > +sha256
-> > +7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
-> > +EULA
-> > +sha256
-> > +2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
-> > +COPYING
->
-> Usually when EULA/COPYING is updated it means there are new terms, can you
-> drop a line on this in your commit log?
->
-> > diff --git a/package/freescale-imx/imx-seco/imx-seco.mk
-> > b/package/freescale-imx/imx-seco/imx-seco.mk
-> > index d06bf4c5cc..be3f3c4419 100644
-> > --- a/package/freescale-imx/imx-seco/imx-seco.mk
-> > +++ b/package/freescale-imx/imx-seco/imx-seco.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >
-> > ######################################################################
-> > ##########
-> >
-> > -IMX_SECO_VERSION = 2.3.1
-> > +IMX_SECO_VERSION = 3.6.3
-> >  IMX_SECO_SITE = $(FREESCALE_IMX_SITE)  IMX_SECO_SOURCE =
-> > imx-seco-$(IMX_SECO_VERSION).bin
-> >
-> > @@ -22,12 +22,12 @@ IMX_SECO_INSTALL_IMAGES = YES  # is done in
-> > post-image script.
-> >  ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
-> >  define IMX_SECO_INSTALL_IMAGES_CMDS
-> > -     cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
-> > +     cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
-> >               $(BINARIES_DIR)/ahab-container.img
->
-> What about C0 firmware? Are C0 CPU already available? If so, maybe there
-> should be a way to select which version we want to use.
-> Or another approach would be to copy them all without renaming and have
-> the final script pick the right one depending on some configuration.
->
-> Let me know your thoughts.
->
-> Regards,
-> Gary
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200709/747d7473/attachment.html>
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
