@@ -1,46 +1,43 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu,  9 Jul 2020 19:38:11 -0300
-Subject: [Buildroot] [PATCH] package/dhcpcd: bump version to 9.1.4
-Message-ID: <20200709223811.12432-1-sergio.prado@e-labworks.com>
+Date: Thu,  9 Jul 2020 20:37:40 -0300
+Subject: [Buildroot] [PATCH] package/babeld: bump version to 1.9.2
+Message-ID: <20200709233740.27036-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also separate the fields in the hash file by two spaces and change the
-hash of the license file (copyright message changed from 2019 to 2020).
+Also separate the fields in the hash file by two spaces.
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/dhcpcd/dhcpcd.hash | 6 +++---
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/babeld/babeld.hash | 4 ++--
+ package/babeld/babeld.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index c0d68036f3f9..6991e736801b 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
--# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-8.0.3.tar.xz.distinfo
--sha256	9674971fcd5acd5a3401a0ad8eba7f0b816fec9abb4a2520332b4d8dae068f1d	dhcpcd-8.0.3.tar.xz
-+# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-9.1.4.tar.xz.distinfo
-+sha256  5fe133e5497d8af6d26bd6e6b8dd48ab12d124d6cc4cefe6de6536ff97f76820  dhcpcd-9.1.4.tar.xz
- # Locally calculated
--sha256	213fc1a704cecdb322276fa7c95891fd1c23137d9ab572af1fc5e91b48762303	LICENSE
-+sha256  9cce1077bad23544349788ec750ec6e5aee106fc437fd6b5d73c0d8510426578  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 63dbbee86c86..a40696924c89 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
+diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
+index 510fe2bc95eb..2e0513efa010 100644
+--- a/package/babeld/babeld.hash
++++ b/package/babeld/babeld.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 98070dc418c190f047b8d69eb47987df30ded8f0fca353c49427d3137ad08b87  babeld-1.8.4.tar.gz
+-sha256 b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
++sha256  154f00e0a8bf35d6ea9028886c3dc5c3c342dd1a367df55ef29a547b75867f07  babeld-1.9.2.tar.gz
++sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
+diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
+index f864b5db26d9..785fa2bce9f1 100644
+--- a/package/babeld/babeld.mk
++++ b/package/babeld/babeld.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DHCPCD_VERSION = 8.0.3
-+DHCPCD_VERSION = 9.1.4
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
- DHCPCD_DEPENDENCIES = host-pkgconf
+-BABELD_VERSION = 1.8.4
++BABELD_VERSION = 1.9.2
+ BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
+ BABELD_LICENSE = MIT
+ BABELD_LICENSE_FILES = LICENCE
 -- 
 2.17.1
