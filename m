@@ -1,42 +1,31 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 9 Jul 2020 17:12:03 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-seco: bump
- version to 3.6.3
-In-Reply-To: <20200709144457.5682-1-maeva.manuel@oss.nxp.com>
-References: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
- <20200709144457.5682-1-maeva.manuel@oss.nxp.com>
-Message-ID: <20200709151203.GA762644@p1g2>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 9 Jul 2020 21:59:10 +0200
+Subject: [Buildroot] [git commit] package/dvb-apps: add hash file
+Message-ID: <20200709195652.E97F18666D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maeva,
+commit: https://git.buildroot.net/buildroot/commit/?id=aaf689903c1e7e874664063b7c828c1c13a79b6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Jul 09, 2020 at 04:44:57PM +0200, Maeva Manuel wrote:
-> This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
-> Firmware file names now include the SoC revision.
-> 
-> In order not to break the compatibility with the imx-seco 2.3.1 package,
-> it remains B0 support for i.MX8QXP MEK.
-> C0 support should introduce a Kconfig and this will be done in a future
-> patch.
-> 
-> License was updated from:
-> LA_OPT_NXP_Software_License v10 December 2019
-> to:
-> LA_OPT_NXP_Software_License v11 February 2020
-> which explains the change of EULA/COPYING license files.
-> 
-> Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-> [Maeva: tested on i.MX8QXP MEK (Board rev D1, SoC rev B0)
-> and on i.MX8QM MEK (SoC rev B0)]
-> Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/dvb-apps/dvb-apps.hash | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-
-Thanks for spinning the v2 quickly and for the contribution.
-
-Regards,
-Gary
+diff --git a/package/dvb-apps/dvb-apps.hash b/package/dvb-apps/dvb-apps.hash
+new file mode 100644
+index 0000000000..d394ced131
+--- /dev/null
++++ b/package/dvb-apps/dvb-apps.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256  926208b7e711b4bab1a909ff9bf4e6ae54acdd30a46f5d5bd700ecb088fe1f57  dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz
++
++# Hash for license files:
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
