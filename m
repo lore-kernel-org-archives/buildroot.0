@@ -1,82 +1,153 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Jul 2020 09:16:35 +0200
-Subject: [Buildroot] [git commit] package/gnutls: fix build with uClibc
-Message-ID: <20200709071326.E537E8632D@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 9 Jul 2020 09:30:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
+ version to 3.6.3
+In-Reply-To: <VI1PR04MB4976F0AF13CBBEC145861FE09D640@VI1PR04MB4976.eurprd04.prod.outlook.com>
+References: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
+ <20200708121459.GA331830@p1g2>
+ <VI1PR04MB4976F0AF13CBBEC145861FE09D640@VI1PR04MB4976.eurprd04.prod.outlook.com>
+Message-ID: <CAEyMn7b8GFBsxvnLNnTV+a1HuKFu7XnwZbKOUc-1W4bQAx9z0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=838f67c27f0cf1f3c363e2156d5c4813b9cac9eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Since v3.6.14 gnutls wants to use the 'e' flag with fopen to set the
-O_CLOEXEC flags. Since this is a glibc extension, it will trigger a
-gnulib override of fopen on non-glibc systems, but that override
-breaks the uClibc stdio.h header.
+Maeva Manuel (OSS) <maeva.manuel@oss.nxp.com> schrieb am Do., 9. Juli 2020,
+08:54:
 
-Fixes:
-http://autobuild.buildroot.org/results/02f/02f2b524add307c8f7cc1af1ed0783bb1baf029a
+> Hello Gary,
+>
+> License was updated from:
+> LA_OPT_NXP_Software_License v10 December 2019
+> to:
+> LA_OPT_NXP_Software_License v11 February 2020
+> which explain the change of EULA/COPYING license files.
+>
+> This LA_OPT_NXP_Software_License is used by a wide range proprietary
+> binaries/firmwares, from NXP and also 3rd parties (e.g. DDR firmwares,
+> VPU firmwares, ...). It is periodically updated with the introduction
+> of new products. It's recommended to review it in detail with, if a
+> system uses it in production.
+>
+> Regarding the C0 revision of i.MX8QXP:
+>
+> 1) The QXP C0 chip exists publicly, it's on the latest revisions of EVK
+> boards.
+> 2) The imx-seco 3.6.3 package (just like the rest of the BSP 5.4.24_2.1.0)
+> adds support for this chip.
+> 3) In order not to break the compatibility with the BR imx-seco 2.3.1
+> package, it remains with B0 support.
+> 4) I think it's not a good idea that it's the final script that chooses
+> the right file, because the names often change. This could mean that the
+> script would have to be updated every time the package is updated too. By
+> being in the recipe it collects all the changes in the recipe.
+>
 
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...0001-Fix-gnulib-stdio.h-include-on-uclibc.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+What about other boards that rely on e.g. the C0 Firmware. Shouln't we
+export all variants and create a link to the one used for the EVK board?
 
-diff --git a/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
-new file mode 100644
-index 0000000000..758e7cca73
---- /dev/null
-+++ b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
-@@ -0,0 +1,49 @@
-+From 60fa934ffba3c230040328fdbbbf51f417f12871 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-+Date: Mon, 22 Jun 2020 14:11:05 +0200
-+Subject: [PATCH] Fix gnulib stdio.h include on uclibc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The __need_FILE define used by gnulib interferes with the uClibc stdio.h
-+header, so move the inclusion the stdio.h to after __need_FILE has been
-+undefined again.
-+
-+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-+---
-+ gl/fopen.c     | 2 +-
-+ src/gl/fopen.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gl/fopen.c b/gl/fopen.c
-+index 8d6625a..248692c 100644
-+--- a/gl/fopen.c
-++++ b/gl/fopen.c
-+@@ -23,8 +23,8 @@
-+ #include <config.h>
-+ 
-+ /* Get the original definition of fopen.  It might be defined as a macro.  */
-+-#include <stdio.h>
-+ #undef __need_FILE
-++#include <stdio.h>
-+ 
-+ static FILE *
-+ orig_fopen (const char *filename, const char *mode)
-+diff --git a/src/gl/fopen.c b/src/gl/fopen.c
-+index 47d7f19..1f22f4f 100644
-+--- a/src/gl/fopen.c
-++++ b/src/gl/fopen.c
-+@@ -23,8 +23,8 @@
-+ #include <config.h>
-+ 
-+ /* Get the original definition of fopen.  It might be defined as a macro.  */
-+-#include <stdio.h>
-+ #undef __need_FILE
-++#include <stdio.h>
-+ 
-+ static FILE *
-+ orig_fopen (const char *filename, const char *mode)
-+-- 
-+2.25.4
-+
+5) C0 support should introduce a Kconfig, and this will be done in a future
+> patch.
+>
+> Regards,
+>
+> Maeva
+>
+> -----Original Message-----
+> From: Gary Bisson <gary.bisson@boundarydevices.com>
+> Sent: Wednesday, July 8, 2020 2:15 PM
+> To: Maeva Manuel (OSS) <maeva.manuel@oss.nxp.com>
+> Cc: buildroot at buildroot.org; Gary Bisson <bisson.gary@gmail.com>; Refik
+> Tuzakli <tuzakli.refik@gmail.com>
+> Subject: Re: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-seco: bump
+> version to 3.6.3
+>
+> Hi Maeva,
+>
+> Thank you for your contribution, please see my comments below.
+>
+> On Wed, Jul 08, 2020 at 09:43:52AM +0200, Maeva Manuel wrote:
+> > This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
+> > Firmware file names now include the SoC revision.
+> >
+> > Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+> > [Maeva: tested on i.MX8QXP MEK (Board rev D1, SoC rev B0) and on
+> > i.MX8QM MEK (SoC rev B0)]
+> > Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+> > ---
+> >  package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
+> >  package/freescale-imx/imx-seco/imx-seco.mk   | 6 +++---
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/package/freescale-imx/imx-seco/imx-seco.hash
+> > b/package/freescale-imx/imx-seco/imx-seco.hash
+> > index 56f56369d4..930801e839 100644
+> > --- a/package/freescale-imx/imx-seco/imx-seco.hash
+> > +++ b/package/freescale-imx/imx-seco/imx-seco.hash
+> > @@ -1,4 +1,4 @@
+> >  # Locally calculated
+> > -sha256
+> > b429ac58b2ea1771b3fdf7ae87bf1d37ccaf596bde01a5ecccae27b2145f6824
+> > imx-seco-2.3.1.bin
+> > -sha256
+> > 69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
+> > -sha256
+> > 6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46
+> > COPYING
+> > +sha256
+> > +52ba07633e0f8707d8c26724b5cd03ef96444c8de1e0e134acac50acacf3e7dd
+> > +imx-seco-3.6.3.bin
+> > +sha256
+> > +7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0
+> > +EULA
+> > +sha256
+> > +2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d
+> > +COPYING
+>
+> Usually when EULA/COPYING is updated it means there are new terms, can you
+> drop a line on this in your commit log?
+>
+> > diff --git a/package/freescale-imx/imx-seco/imx-seco.mk
+> > b/package/freescale-imx/imx-seco/imx-seco.mk
+> > index d06bf4c5cc..be3f3c4419 100644
+> > --- a/package/freescale-imx/imx-seco/imx-seco.mk
+> > +++ b/package/freescale-imx/imx-seco/imx-seco.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >
+> > ######################################################################
+> > ##########
+> >
+> > -IMX_SECO_VERSION = 2.3.1
+> > +IMX_SECO_VERSION = 3.6.3
+> >  IMX_SECO_SITE = $(FREESCALE_IMX_SITE)  IMX_SECO_SOURCE =
+> > imx-seco-$(IMX_SECO_VERSION).bin
+> >
+> > @@ -22,12 +22,12 @@ IMX_SECO_INSTALL_IMAGES = YES  # is done in
+> > post-image script.
+> >  ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+> >  define IMX_SECO_INSTALL_IMAGES_CMDS
+> > -     cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
+> > +     cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
+> >               $(BINARIES_DIR)/ahab-container.img
+>
+> What about C0 firmware? Are C0 CPU already available? If so, maybe there
+> should be a way to select which version we want to use.
+> Or another approach would be to copy them all without renaming and have
+> the final script pick the right one depending on some configuration.
+>
+> Let me know your thoughts.
+>
+> Regards,
+> Gary
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200709/747d7473/attachment.html>
