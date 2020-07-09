@@ -1,105 +1,83 @@
-From: Mylene Josserand <mylene.josserand@collabora.com>
-Date: Thu, 9 Jul 2020 13:58:29 +0200
-Subject: [Buildroot] [PATCH 0/3] board: Add support for LePotato
-In-Reply-To: <20200707195158.GN2273@scaer>
-References: <20200707075339.389528-1-mylene.josserand@collabora.com>
- <20200707195158.GN2273@scaer>
-Message-ID: <e62ab57b-173b-016b-c170-7c8223abaaab@collabora.com>
+From: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Date: Thu,  9 Jul 2020 16:44:57 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-seco: bump
+ version to 3.6.3
+In-Reply-To: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
+References: <20200708074353.8169-1-maeva.manuel@oss.nxp.com>
+Message-ID: <20200709144457.5682-1-maeva.manuel@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
+Firmware file names now include the SoC revision.
 
-On 7/7/20 9:51 PM, Yann E. MORIN wrote:
-> Myl?ne, All,
-> 
-> On 2020-07-07 09:53 +0200, Myl?ne Josserand spake thusly:
->> Here is my first version of this series that adds the support of the
->> board LePotato SBC from LibreComputer [1].
->>
->> This board uses FIP utilities [2][3] from AMLogic to sign u-boot.
-> 
-> Following the issues raised by Romain, I've marked patches 2-3 as
-> "changes requested". Hopefully, gslimg is an interesting trail to follow
-> as a free/libre replacement for the vendor stuff.
+In order not to break the compatibility with the imx-seco 2.3.1 package,
+it remains B0 support for i.MX8QXP MEK.
+C0 support should introduce a Kconfig and this will be done in a future
+patch.
 
-Sure, make sense, thanks!
+License was updated from:
+LA_OPT_NXP_Software_License v10 December 2019
+to:
+LA_OPT_NXP_Software_License v11 February 2020
+which explains the change of EULA/COPYING license files.
 
-> 
-> I've applied patch 1 to master, thanks.
+Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+[Maeva: tested on i.MX8QXP MEK (Board rev D1, SoC rev B0)
+and on i.MX8QM MEK (SoC rev B0)]
+Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+---
+Changes v1 -> v2:
+Suggested by Gary:
+  - Add a commit log comment about license change
+  - Add a commit log comment about the rev C0 support of i.MX8QXP MEK
+---
+ package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
+ package/freescale-imx/imx-seco/imx-seco.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Thank you,
-
-Best regards,
-Myl?ne
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> The patch 02 is adding these FIP utilities as a host package. It is
->> available for different boards such as khadas-vim, some odroids, etc.
->> This package will copy the corresponding utilities, only for LePotato for
->> the moment, into the HOST_DIR/usr/bin. Currently, LePotato's ones are the
->> default ones. This should be updating once more boards are added.
->>
->> The patch 03 is adding the support of this board from LibreComputer:
->>     - one defconfig including a u-boot, kernel and minimal rootfs.
->>     The configuration is also enabling the FIP package for LePotato.
->>     - one post-build script that is using the FIP utilities to sign
->>     u-boot binary.
->>     - one post-image script to generate a sd-card image and flashing the
->>     signed u-boot on it.
->>     - a readme file to explain how to configure, compile and flash image
->>     for this board.
->>     - a boot.scr file including booti commands to run.
->>
->> Let me know if you have any comments on this series.
->>
->> Best regards,
->>
->> Myl?ne
->>
->> [1]: https://libre.computer/products/boards/aml-s905x-cc/
->> [2]: https://github.com/LibreELEC/amlogic-boot-fip
->> [3]: https://github.com/BayLibre/u-boot
->>
->> Myl?ne Josserand (3):
->>    DEVELOPERS: Update Mylene's email
->>    package: Add new fip package
->>    configs/lepotato: Add new defconfig
->>
->>   .gitlab-ci.yml                             |  1 +
->>   DEVELOPERS                                 |  4 +-
->>   board/librecomputer/lepotato/boot.cmd      |  6 +++
->>   board/librecomputer/lepotato/genimage.cfg  | 28 ++++++++++
->>   board/librecomputer/lepotato/post-build.sh | 61 ++++++++++++++++++++++
->>   board/librecomputer/lepotato/post-image.sh | 17 ++++++
->>   board/librecomputer/lepotato/readme.txt    | 35 +++++++++++++
->>   configs/lepotato_defconfig                 | 29 ++++++++++
->>   package/Config.in.host                     |  1 +
->>   package/fip/Config.in.host                 | 17 ++++++
->>   package/fip/fip.hash                       |  2 +
->>   package/fip/fip.mk                         | 30 +++++++++++
->>   12 files changed, 230 insertions(+), 1 deletion(-)
->>   create mode 100644 board/librecomputer/lepotato/boot.cmd
->>   create mode 100644 board/librecomputer/lepotato/genimage.cfg
->>   create mode 100755 board/librecomputer/lepotato/post-build.sh
->>   create mode 100755 board/librecomputer/lepotato/post-image.sh
->>   create mode 100644 board/librecomputer/lepotato/readme.txt
->>   create mode 100644 configs/lepotato_defconfig
->>   create mode 100644 package/fip/Config.in.host
->>   create mode 100644 package/fip/fip.hash
->>   create mode 100644 package/fip/fip.mk
->>
->> -- 
->> 2.27.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+index 56f56369d4..930801e839 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.hash
++++ b/package/freescale-imx/imx-seco/imx-seco.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b429ac58b2ea1771b3fdf7ae87bf1d37ccaf596bde01a5ecccae27b2145f6824  imx-seco-2.3.1.bin
+-sha256  69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
+-sha256  6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
++sha256  52ba07633e0f8707d8c26724b5cd03ef96444c8de1e0e134acac50acacf3e7dd  imx-seco-3.6.3.bin
++sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
++sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
+diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+index d06bf4c5cc..be3f3c4419 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.mk
++++ b/package/freescale-imx/imx-seco/imx-seco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_SECO_VERSION = 2.3.1
++IMX_SECO_VERSION = 3.6.3
+ IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+ 
+@@ -22,12 +22,12 @@ IMX_SECO_INSTALL_IMAGES = YES
+ # is done in post-image script.
+ ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+ define IMX_SECO_INSTALL_IMAGES_CMDS
+-	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
++	cp $(@D)/firmware/seco/mx8qxb0-ahab-container.img \
+ 		$(BINARIES_DIR)/ahab-container.img
+ endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+ define IMX_SECO_INSTALL_IMAGES_CMDS
+-	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
++	cp $(@D)/firmware/seco/mx8qmb0-ahab-container.img \
+ 		$(BINARIES_DIR)/ahab-container.img
+ endef
+ endif
+-- 
+2.17.1
