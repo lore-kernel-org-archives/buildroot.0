@@ -1,10 +1,10 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 10 Jul 2020 13:22:34 +0200
-Subject: [Buildroot] [PATCH 8/9] support/script/cve-checker: Manage the CVEs
+Date: Fri, 10 Jul 2020 13:22:33 +0200
+Subject: [Buildroot] [PATCH 7/9] support/script/pkg-stats: Manage the CVEs
  that need to be check
 In-Reply-To: <20200710112245.1044073-1-gregory.clement@bootlin.com>
 References: <20200710112245.1044073-1-gregory.clement@bootlin.com>
-Message-ID: <20200710112245.1044073-9-gregory.clement@bootlin.com>
+Message-ID: <20200710112245.1044073-8-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,37 +19,58 @@ This patch exposes this new information in json and html format.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- support/scripts/cve-checker | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 34 ++++++++++++++++++++++++++++++----
+ 1 file changed, 30 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-index db8497d7aa..2a8a2b4d18 100755
---- a/support/scripts/cve-checker
-+++ b/support/scripts/cve-checker
-@@ -59,6 +59,7 @@ class Package:
-         self.name = name
-         self.version = version
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 883a5bd2be..e033e15e07 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -106,9 +106,11 @@ class Package:
+         self.patch_files = []
+         self.warnings = 0
+         self.current_version = None
++        self.unknown_cve = False
+         self.url = None
+         self.url_worker = None
          self.cves = list()
 +        self.cves_to_check = list()
-         self.ignored_cves = ignored_cves
+         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
+         self.status = {}
  
- def check_package_cves(nvd_path, packages):
-@@ -68,8 +69,12 @@ def check_package_cves(nvd_path, packages):
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+@@ -504,7 +506,12 @@ def check_package_cves(nvd_path, packages):
          for pkg_name in cve.pkg_names:
-             pkg = packages.get(pkg_name, '')
--            if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves):
--                pkg.cves.append(cve.identifier)
-+            if pkg:
-+                affected = cve.affects(pkg.name, pkg.version, pkg.ignored_cves)
+             if pkg_name in packages:
+                 pkg = packages[pkg_name]
+-                if cve.affects(pkg.name, pkg.current_version, pkg.cve_ignored_list()):
++                affected = cve.affects(pkg.name, pkg.current_version, pkg.cve_ignored_list())
++                print(affected)
 +                if (affected == 'Unknown'):
 +                    pkg.cves_to_check.append(cve.identifier)
 +                elif affected == True:
-+                    pkg.cves.append(cve.identifier)
++                    print(cve.identifier)
+                     pkg.cves.append(cve.identifier)
  
- html_header = """
- <head>
-@@ -188,6 +193,17 @@ def dump_html_pkg(f, pkg):
+ def calculate_stats(packages):
+@@ -544,8 +551,11 @@ def calculate_stats(packages):
+             stats["version-not-uptodate"] += 1
+         stats["patches"] += pkg.patch_count
+         stats["total-cves"] += len(pkg.cves)
++        stats["total-cves-to-check"] += len(pkg.cves_to_check)
+         if len(pkg.cves) != 0:
+             stats["pkg-cves"] += 1
++        if len(pkg.cves_to_check) != 0:
++            stats["pkg-cves_to_check"] += 1
+     return stats
+ 
+ 
+@@ -763,11 +773,22 @@ def dump_html_pkg(f, pkg):
+         td_class.append("correct")
+     else:
+         td_class.append("wrong")
+-    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
++        f.write("  <td class=\"%s\">\n" % " ".join(td_class))
+     for cve in pkg.cves:
          f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
      f.write("  </td>\n")
  
@@ -67,13 +88,30 @@ index db8497d7aa..2a8a2b4d18 100755
      f.write(" </tr>\n")
  
  
-@@ -198,6 +214,7 @@ def dump_html_all_pkgs(f, packages):
- <td>Package</td>
- <td class=\"centered\">Version</td>
+@@ -786,6 +807,7 @@ def dump_html_all_pkgs(f, packages):
+ <td class=\"centered\">Warnings</td>
+ <td class=\"centered\">Upstream URL</td>
  <td class=\"centered\">CVEs</td>
 +<td class=\"centered\">CVEs to check</td>
  </tr>
  """)
-     for pkg in packages:
+     for pkg in sorted(packages):
+@@ -824,10 +846,14 @@ def dump_html_stats(f, stats):
+             stats["version-not-uptodate"])
+     f.write("<tr><td>Packages with no known upstream version</td><td>%s</td></tr>\n" %
+             stats["version-unknown"])
+-    f.write("<tr><td>Packages affected by CVEs</td><td>%s</td></tr>\n" %
++    f.write("<tr><td>Packages might affected by CVEs, where version needed to be checked</td><td>%s</td></tr>\n" %
+             stats["pkg-cves"])
+-    f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
++    f.write("<tr><td>Total number of CVEs that might affect all packages, where version needed to be checked</td><td>%s</td></tr>\n" %
+             stats["total-cves"])
++    f.write("<tr><td>Packages affected by CVEs</td><td>%s</td></tr>\n" %
++            stats["pkg-cves_to_check"])
++    f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
++            stats["total-cves_to_check"])
+     f.write("</table>\n")
+ 
+ 
 -- 
 2.27.0
