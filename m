@@ -1,8 +1,8 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 11 Jul 2020 00:18:40 +0200
-Subject: [Buildroot] [PATCH] package/systemd: use current tool for
+Date: Sat, 11 Jul 2020 00:26:55 +0200
+Subject: [Buildroot] [PATCH v2] package/systemd: use current tool for
  generating HWDB
-Message-ID: <20200710221840.5739-1-nolange79@gmail.com>
+Message-ID: <20200710222656.6885-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,15 +20,19 @@ Also remove the config files from both paths
 from the target fs.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
+
 ---
- package/systemd/systemd.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+v1 -> v2
+-   fix removal of service
+---
+ package/systemd/systemd.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1a8eb86e53..8718e0cf01 100644
+index 1a8eb86e53..05c1d1ff9a 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -229,11 +229,13 @@ endif
+@@ -229,11 +229,14 @@ endif
  ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
  SYSTEMD_CONF_OPTS += -Dhwdb=true
  define SYSTEMD_BUILD_HWDB
@@ -40,11 +44,12 @@ index 1a8eb86e53..8718e0cf01 100644
 -	rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
 +	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/ \
 +		$(TARGET_DIR)/usr/lib/systemd/system/systemd-hwdb-update.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/*/systemd-hwdb-update.service \
 +		$(TARGET_DIR)/usr/bin/systemd-hwdb
  endef
  SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_HWDB_SRV
  else
-@@ -633,7 +635,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+@@ -633,7 +636,7 @@ HOST_SYSTEMD_CONF_OPTS = \
  	-Dsysusers=false \
  	-Dtmpfiles=false \
  	-Dimportd=false \
