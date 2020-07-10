@@ -1,62 +1,43 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 11 Jul 2020 00:26:55 +0200
-Subject: [Buildroot] [PATCH v2] package/systemd: use current tool for
- generating HWDB
-Message-ID: <20200710222656.6885-1-nolange79@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 11 Jul 2020 01:02:01 +0200
+Subject: [Buildroot] Rename aarch64_efi_defconfig to
+ qemu_aarch64_virt_efi_defconfig
+Message-ID: <9693c61b-610e-9371-8ecf-a45a9f1f22e4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-udevadm has been deprecated for a while(for bulding the DB),
-systemd-hwdb should be used in its place.
+Hi Erico, All,
 
-this tool further has a switch to generate the database in
-/usr which is a better place for a one-time created file.
+I would like to rename the aarch64_efi_defconfig to
+qemu_aarch64_virt_efi_defconfig  in order to do a runtime test in the Buildroot
+gitlab-ci.
 
-Also remove the config files from both paths
-(rootfs overlay could add stuff) aswell as the service and tool
-from the target fs.
+See the gitlab-ci job for the qemu_aarch64_virt_defconfig:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/623442197
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Note: There is no ACPI table while booting the kernel built with
+qemu_aarch64_virt_defconfig since there is no bootloader.
 
----
-v1 -> v2
--   fix removal of service
----
- package/systemd/systemd.mk | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+But we need to build or download the aarch64 UEFI firmware image (QEMU_EFI.fd)
+also called Open Virtual Machine Firmware (OVMF).
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1a8eb86e53..05c1d1ff9a 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -229,11 +229,14 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
- SYSTEMD_CONF_OPTS += -Dhwdb=true
- define SYSTEMD_BUILD_HWDB
--	$(HOST_DIR)/bin/udevadm hwdb --update --root $(TARGET_DIR)
-+	$(HOST_DIR)/bin/systemd-hwdb update --root $(TARGET_DIR) --usr
- endef
- SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_BUILD_HWDB
- define SYSTEMD_RM_HWDB_SRV
--	rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
-+	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/ \
-+		$(TARGET_DIR)/usr/lib/systemd/system/systemd-hwdb-update.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/*/systemd-hwdb-update.service \
-+		$(TARGET_DIR)/usr/bin/systemd-hwdb
- endef
- SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_HWDB_SRV
- else
-@@ -633,7 +636,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dsysusers=false \
- 	-Dtmpfiles=false \
- 	-Dimportd=false \
--	-Dhwdb=false \
-+	-Dhwdb=true \
- 	-Drfkill=false \
- 	-Dman=false \
- 	-Dhtml=false \
--- 
-2.27.0
+Building QEMU_EFI.fd would require to package Tianocore's edk2 [1] for the host
+and deal with the specific buildsystem (bash + Makefiles).
+
+But since it's only for testing, I'm wondering if we should use a prebuilt
+QEMU_EFI.fd instead building it.
+
+I propose to use the one provided by Linaro [2] that is periodically released
+(~once a year) and probably well tested.
+
+What do you think?
+
+[1] https://github.com/tianocore/edk2.git
+[2]
+http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/
+
+Best regards,
+Romain
