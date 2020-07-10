@@ -1,96 +1,57 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 10 Jul 2020 13:22:41 +0200
-Subject: [Buildroot] [PATCH v2 5/9] support/script: Make CVE class
- independent of the Pacakage class
+Date: Fri, 10 Jul 2020 13:22:45 +0200
+Subject: [Buildroot] [PATCH v2 9/9] package/pkg-utils/cve.py: Manage case
+ when package version doesn't exist
 In-Reply-To: <20200710112245.1044073-1-gregory.clement@bootlin.com>
 References: <20200710112245.1044073-1-gregory.clement@bootlin.com>
-Message-ID: <20200710112245.1044073-16-gregory.clement@bootlin.com>
+Message-ID: <20200710112245.1044073-20-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The affects method of the CVE use the Package class defined in
-pkg-stats. The purpose of migrating the CVE class outside of pkg-stats
-was to be able to reuse it from other scripts. So let's remove the
-Package dependency and only use the needed information.
+Until now, when a package didn't report a version, then the CVE
+comparison was just skipped. It leads most of the time to declare the
+package not affected by the CVE.
+
+Instead of it, report the CVE_UNKNOWN status in order to be aware that
+the CVE related to this package has to be checked.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- support/scripts/cve.py    | 10 +++++-----
- support/scripts/pkg-stats | 14 ++++++++------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ support/scripts/cve.py | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 4d47d2f768..8b3712af98 100755
+index 8b3712af98..d7248ec2be 100755
 --- a/support/scripts/cve.py
 +++ b/support/scripts/cve.py
-@@ -187,26 +187,26 @@ class CVE:
-         """The set of package names referred by this CVE definition"""
-         return set(p['product'] for p in self.each_cpe())
- 
--    def affects(self, br_pkg):
-+    def affects(self, name, version, cve_ignore_list):
-         """
-         True if the Buildroot Package object passed as argument is affected
-         by this CVE.
-         """
--        if br_pkg.is_cve_ignored(self.identifier):
-+        if (self.identifier in cve_ignore_list):
+@@ -195,6 +195,7 @@ class CVE:
+         if (self.identifier in cve_ignore_list):
              return self.CVE_DOESNT_AFFECT
  
++        unknown_pkg_version = False
          for cpe in self.each_cpe():
              affected = True
--            if cpe['product'] != br_pkg.name:
-+            if cpe['product'] != name:
-                 continue
-             if cpe['v_start'] == '-':
-                 return self.CVE_AFFECTS
-             if not (cpe['v_start'] or cpe['v_end']):
-                 print("No CVE affected version")
-                 continue
--            pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
-+            pkg_version = distutils.version.LooseVersion(version)
+             if cpe['product'] != name:
+@@ -207,6 +208,7 @@ class CVE:
+             pkg_version = distutils.version.LooseVersion(version)
              if not hasattr(pkg_version, "version"):
--                print("Cannot parse package '%s' version '%s'" % (br_pkg.name, br_pkg.current_version))
-+                print("Cannot parse package '%s' version '%s'" % (name, version))
+                 print("Cannot parse package '%s' version '%s'" % (name, version))
++                unknown_pkg_version = True
                  continue
  
              if cpe['v_start']:
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 988dca7749..7a0eafe0a6 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -242,11 +242,12 @@ class Package:
-                     self.status['pkg-check'] = ("error", "{} warnings".format(self.warnings))
-                 return
- 
--    def is_cve_ignored(self, cve):
-+    def cve_ignored_list(self):
-         """
--        Tells if the CVE is ignored by the package
-+        Give the list of CVEs ignored by the package
-         """
--        return cve in self.all_ignored_cves.get(self.pkgvar(), [])
-+        print(self.all_ignored_cves.get(self.pkgvar(), []))
-+        return list(self.all_ignored_cves.get(self.pkgvar(), []))
- 
-     def set_developers(self, developers):
-         """
-@@ -498,9 +499,10 @@ def check_package_cves(nvd_path, packages):
- 
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
--            if pkg_name in packages and cve.affects(packages[pkg_name]) == cve.CVE_AFFECTS:
--                packages[pkg_name].cves.append(cve.identifier)
--
-+            if pkg_name in packages:
-+                pkg = packages[pkg_name]
-+                if cve.affects(pkg.name, pkg.current_version, pkg.cve_ignored_list()) == cve.CVE_AFFECTS :
-+                    pkg.cves.append(cve.identifier)
- 
- def calculate_stats(packages):
-     stats = defaultdict(int)
+@@ -226,4 +228,8 @@ class CVE:
+                         return self.CVE_UNKNOWN
+             if (affected):
+                 return self.CVE_AFFECTS
+-        return self.CVE_DOESNT_AFFECT
++
++        if unknown_pkg_version:
++            return self.CVE_UNKNOWN
++        else:
++            return self.CVE_DOESNT_AFFECT
 -- 
 2.27.0
