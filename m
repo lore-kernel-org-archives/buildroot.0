@@ -1,58 +1,78 @@
-From: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Date: Fri, 10 Jul 2020 10:16:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx: bump
- version to 8.8
-Message-ID: <20200710081655.23056-1-maeva.manuel@oss.nxp.com>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Fri, 10 Jul 2020 13:22:26 +0200
+Subject: [Buildroot] [PATCH 0/9]  Improving CVE reporting
+Message-ID: <20200710112245.1044073-1-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version is aligned with 5.4.24_2.1.0 NXP Linux BSP.
+Hello,
 
-License was updated from:
-LA_OPT_NXP_Software_License v10 December 2019
-to:
-LA_OPT_NXP_Software_License v11 February 2020
-which explains the change of EULA/COPYING license files.
+The purpose of this series is to improve the CVE reporting in order to
+be usable for a project.
 
-Tested-by: Julien Olivain <julien.olivain@oss.nxp.com>
-[Julien: tested on i.MX8M Mini EVK Rev A with LPDDR4]
-Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
-[Stephane: tested on i.MX8MQ and i.MX8MN]
-Tested-by : Maeva Manuel <maeva.manuel@oss.nxp.com>
-[Maeva: tested on i.MX8QM MEK rev B0 and i.MX8QXP MEK rev B0]
-Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
- package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Until know the CVE affecting the packages were reported for the
+buildroot project using pkg-stat. With this series it is now possible
+to report the packages affected by CVEs for a given configuration.
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index 54a3dafcc0..b0a150205c 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  a7f4a22c05a990aad43a616e312847ab9d85ce00691b34fa8590d5c7c1d722e9  firmware-imx-8.6.bin
--sha256  1360edf65a32b66d28bcf2d53a1a1c2dc88d4e254c15da3d8e37bf1b6f1f19a1  EULA
--sha256  30ba26ae82fba4033513b67c2c3a00b00e78908d278568a7d648d3430875123a  COPYING
-+sha256  5ca1f8b6e6b191594d17ac7b51c38cdbc2ff808d15568ab4b0bbeb5dc6c621f6  firmware-imx-8.8.bin
-+sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
-+sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 6beacc0913..957ccfe959 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIRMWARE_IMX_VERSION = 8.6
-+FIRMWARE_IMX_VERSION = 8.8
- FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- 
+While I was on CVE I switched to the support of the JSON 1.1 for the
+NVDE database.
+
+In this series I also added a new state for the CVE status of the
+packages. This new state will be used to emphasize that the automatic
+check has failed and it was needed to be verified manually. The idea
+behind this was to be as much accurate as possible to avoid any false
+positive. It will also help to improve the meta-data of the package.
+
+The next step will be to reuse the works done by Matthew Weber [1] to
+use the cpeid and only use the package name and the package version as
+fall back.
+
+In this series there is at least one open point about the packages
+excluded from the cve check. For now I excluded the kernel and gcc as
+there are also excluded by the pkg-stats script but this list could
+(should ?) be extended or modified.
+
+changelog: 
+ remove commit info
+pick bf89a711a3 cve-checker: add default path for nvd database
+pick 3940917b4a cve-checker: remove unused argument
+use macro
+move fix first
+s/ignored/ignore/
+
+TODO: remove import
+remove debug message
+
+
+
+
+Gregory
+
+[1]: http://patchwork.ozlabs.org/project/buildroot/list/?series=183798
+
+Gregory CLEMENT (9):
+  support/scripts: Turn CVE check into a module
+  support/scripts/cve.py: Switch to JSON 1.1
+  package/pkg-utils: show-info: report the list of the CVEs ignored
+  package/pkg-utils: Make CVE class independent of the Pacakage class
+  support/scripts: Add a per configuration CVE checker
+  package/pkg-utils: cve.py: Handle exception when version comparison
+    fails
+  support/script/pkg-stats: Manage the CVEs that need to be check
+  support/script/cve-checker: Manage the CVEs that need to be check
+  package/pkg-utils/cve.py: Manage case when package version doesn't
+    exist
+
+ package/pkg-utils.mk        |   5 +-
+ support/scripts/cve-checker | 308 ++++++++++++++++++++++++++++++++++++
+ support/scripts/cve.py      | 229 +++++++++++++++++++++++++++
+ support/scripts/pkg-stats   | 161 +++++--------------
+ 4 files changed, 581 insertions(+), 122 deletions(-)
+ create mode 100755 support/scripts/cve-checker
+ create mode 100755 support/scripts/cve.py
+
 -- 
-2.17.1
+2.27.0
