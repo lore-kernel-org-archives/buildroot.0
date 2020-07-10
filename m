@@ -1,57 +1,62 @@
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 10 Jul 2020 13:22:45 +0200
-Subject: [Buildroot] [PATCH v2 9/9] package/pkg-utils/cve.py: Manage case
- when package version doesn't exist
-In-Reply-To: <20200710112245.1044073-1-gregory.clement@bootlin.com>
-References: <20200710112245.1044073-1-gregory.clement@bootlin.com>
-Message-ID: <20200710112245.1044073-20-gregory.clement@bootlin.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 10 Jul 2020 14:47:30 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
+ 2.28.3
+Message-ID: <20200710114730.805297-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, when a package didn't report a version, then the CVE
-comparison was just skipped. It leads most of the time to declare the
-package not affected by the CVE.
+This is a minor release which provides fixes for CVE-2020-9800,
+CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
+CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
 
-Instead of it, report the CVE_UNKNOWN status in order to be aware that
-the CVE related to this package has to be checked.
+Updating from 2.28.2 also brings in the usual batch of fixes, including
+important improvements to threading in the media player. Full release
+notes can be found at:
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+  https://wpewebkit.org/release/wpewebkit-2.28.3.html
+
+A detailed security advisory can be found at:
+
+  https://wpewebkit.org/security/WSA-2020-0006.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- support/scripts/cve.py | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 8b3712af98..d7248ec2be 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -195,6 +195,7 @@ class CVE:
-         if (self.identifier in cve_ignore_list):
-             return self.CVE_DOESNT_AFFECT
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 8c660d3003..fcc35c5024 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.28.2.tar.xz.sums
+-md5  c1f17d4b031e9462692443e3c089789c  wpewebkit-2.28.2.tar.xz
+-sha1  b109cfec921eb466227ab3b8d21c5f5717311c8e  wpewebkit-2.28.2.tar.xz
+-sha256  6929d28744702ead3574484ca02645c457a6fdcd6b43ccc9766d98dc3664e8dc  wpewebkit-2.28.2.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.28.3.tar.xz.sums
++md5  0b3655598f340a5c83cc26423fefcf36  wpewebkit-2.28.3.tar.xz
++sha1  ea03d365584ef5e86ca28cec6ca072a4674e9312  wpewebkit-2.28.3.tar.xz
++sha256  2539263a4d73c00abfe0205f54770dc1f6d2b635edbe41e748b507254f21e98b  wpewebkit-2.28.3.tar.xz
  
-+        unknown_pkg_version = False
-         for cpe in self.each_cpe():
-             affected = True
-             if cpe['product'] != name:
-@@ -207,6 +208,7 @@ class CVE:
-             pkg_version = distutils.version.LooseVersion(version)
-             if not hasattr(pkg_version, "version"):
-                 print("Cannot parse package '%s' version '%s'" % (name, version))
-+                unknown_pkg_version = True
-                 continue
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index a6124d3529..22c3d96460 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-             if cpe['v_start']:
-@@ -226,4 +228,8 @@ class CVE:
-                         return self.CVE_UNKNOWN
-             if (affected):
-                 return self.CVE_AFFECTS
--        return self.CVE_DOESNT_AFFECT
-+
-+        if unknown_pkg_version:
-+            return self.CVE_UNKNOWN
-+        else:
-+            return self.CVE_DOESNT_AFFECT
+-WPEWEBKIT_VERSION = 2.28.2
++WPEWEBKIT_VERSION = 2.28.3
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 -- 
 2.27.0
