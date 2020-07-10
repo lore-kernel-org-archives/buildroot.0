@@ -1,90 +1,202 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 10 Jul 2020 13:22:36 +0200
-Subject: [Buildroot] [PATCH v2 0/9] Improving CVE reporting
+Date: Fri, 10 Jul 2020 13:22:39 +0200
+Subject: [Buildroot] [PATCH v2 3/9] support/scripts/cve.py: Switch to JSON
+ 1.1
 In-Reply-To: <20200710112245.1044073-1-gregory.clement@bootlin.com>
 References: <20200710112245.1044073-1-gregory.clement@bootlin.com>
-Message-ID: <20200710112245.1044073-11-gregory.clement@bootlin.com>
+Message-ID: <20200710112245.1044073-14-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In 2019, the JSON vulnerability feeds switched from version 1.0 to
+1.1.
 
-The purpose of this series is to improve the CVE reporting in order to
-be usable for a project.
+The main difference is the removal of the affects element that was
+used to check if a package was affected by a CVE.
 
-Until know the CVE affecting the packages were reported for the
-buildroot project using pkg-stat. With this series it is now possible
-to report the packages affected by CVEs for a given configuration.
+This information is duplicated in the configuration element which
+contains in the end the cpeid as well as properties about the versions
+affected. Instead of having a list of the versions affected, with
+these properties, it is possible to have a range of versions.
 
-While I was on CVE I switched to the support of the JSON 1.1 for the
-NVDE database.
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+---
+ support/scripts/cve.py | 127 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 100 insertions(+), 27 deletions(-)
 
-In this series I also added a new state for the CVE status of the
-packages. This new state will be used to emphasize that the automatic
-check has failed and it was needed to be verified manually. The idea
-behind this was to be as much accurate as possible to avoid any false
-positive. It will also help to improve the meta-data of the package.
-
-The next step will be to reuse the works done by Matthew Weber [1] to
-use the cpeid and only use the package name and the package version as
-fall back.
-
-In this series there is at least one open point about the packages
-excluded from the cve check. For now I excluded the kernel and gcc as
-there are also excluded by the pkg-stats script but this list could
-(should ?) be extended or modified.
-
-In this second version the following changes have been done:
-v1 -> v2
-
- - Port the version fix to pkg-stat from cve.py and move this patch as
-   the first one
-
- - Remove debug message
-
- - Remove unused argument -p and -n in cve-checker
-
- - Remove the information about the commit used in the output for the
-   cve-checker
-
- - Remove all the unnecessary import
-
- - Add a default path to the download directory for nvd for the
-   cve-checker
-
- - Do not use boolean anymore for the affected status
-
- - Use ignore_cves instead of ignored_cves in pkg-utils
-
- - Fix the html output for cve-checker and pkg-stat
-
- - Check if ijson is present on the host
-
-Gregory
-
-Gregory CLEMENT (9):
-  support/script/pkg-stat: Handle exception when version comparison
-    fails
-  support/scripts: Turn CVE check into a module
-  support/scripts/cve.py: Switch to JSON 1.1
-  package/pkg-utils: show-info: report the list of the CVEs ignored
-  support/script: Make CVE class independent of the Pacakage class
-  support/scripts: Add a per configuration CVE checker
-  support/script/pkg-stats: Manage the CVEs that need to be check
-  support/script/cve-checker: Manage the CVEs that need to be check
-  package/pkg-utils/cve.py: Manage case when package version doesn't
-    exist
-
- package/pkg-utils.mk        |   5 +-
- support/scripts/cve-checker | 275 ++++++++++++++++++++++++++++++++++++
- support/scripts/cve.py      | 235 ++++++++++++++++++++++++++++++
- support/scripts/pkg-stats   | 159 +++++----------------
- 4 files changed, 550 insertions(+), 124 deletions(-)
- create mode 100755 support/scripts/cve-checker
- create mode 100755 support/scripts/cve.py
-
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 8fc552b74d..4d47d2f768 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -34,9 +34,19 @@ except ImportError:
+ sys.path.append('utils/')
+ 
+ NVD_START_YEAR = 2002
+-NVD_JSON_VERSION = "1.0"
++NVD_JSON_VERSION = "1.1"
+ NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+ 
++import operator
++
++ops = {
++    '>=' : operator.ge,
++    '>' : operator.gt,
++    '<=' : operator.le,
++    '<' : operator.lt,
++    '=' : operator.eq
++}
++
+ class CVE:
+     """An accessor class for CVE Items in NVD files"""
+     CVE_AFFECTS = 1
+@@ -99,23 +109,83 @@ class CVE:
+                 print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
+                 raise
+             for cve in content:
+-                yield cls(cve['cve'])
++                yield cls(cve)
+ 
+     def each_product(self):
+         """Iterate over each product section of this cve"""
+-        for vendor in self.nvd_cve['affects']['vendor']['vendor_data']:
++        for vendor in self.nvd_cve['cve']['affects']['vendor']['vendor_data']:
+             for product in vendor['product']['product_data']:
+                 yield product
+ 
++    def parse_node(self, node):
++        """
++        Parse the node inside the configurations section to extract the
++        cpe information usefull to know if a product is affected by
++        the CVE. Actually only the product name and the version
++        descriptor are needed, but we also provide the vendor name.
++        """
++
++        # The node containing the cpe entries matching the CVE can also
++        # contain sub-nodes, so we need to manage it.
++        for child in node.get('children', ()):
++            self.parse_node(child)
++
++        for cpe in node.get('cpe_match', ()):
++            if not cpe['vulnerable']:
++                return
++            cpe23 = cpe['cpe23Uri'].split(':')
++            vendor = cpe23[3]
++            product = cpe23[4]
++            version = cpe23[5]
++            op_start = ''
++            op_end = ''
++            v_start = ''
++            v_end = ''
++
++            if version != '*' and version != '-':
++                # Version is defined, this is a '=' match
++                op_start = '='
++                v_start = version
++            elif version == '-':
++                # no version information is available
++                op_start = '='
++                v_start = version
++            else:
++                # Parse start version, end version and operators
++                if 'versionStartIncluding' in cpe:
++                    op_start = '>='
++                    v_start = cpe['versionStartIncluding']
++
++                if 'versionStartExcluding' in cpe:
++                    op_start = '>'
++                    v_start = cpe['versionStartExcluding']
++
++                if 'versionEndIncluding' in cpe:
++                    op_end = '<='
++                    v_end = cpe['versionEndIncluding']
++
++                if 'versionEndExcluding' in cpe:
++                    op_end = '<'
++                    v_end = cpe['versionEndExcluding']
++
++            key =['vendor', 'product', 'v_start', 'op_start', 'v_end', 'op_end']
++            val = [vendor, product, v_start, op_start, v_end, op_end]
++            yield dict(zip(key, val))
++
++    def each_cpe(self):
++        for node in self.nvd_cve['configurations']['nodes']:
++            for cpe in self.parse_node(node):
++                yield cpe
++
+     @property
+     def identifier(self):
+         """The CVE unique identifier"""
+-        return self.nvd_cve['CVE_data_meta']['ID']
++        return self.nvd_cve['cve']['CVE_data_meta']['ID']
+ 
+     @property
+     def pkg_names(self):
+         """The set of package names referred by this CVE definition"""
+-        return set(p['product_name'] for p in self.each_product())
++        return set(p['product'] for p in self.each_cpe())
+ 
+     def affects(self, br_pkg):
+         """
+@@ -125,32 +195,35 @@ class CVE:
+         if br_pkg.is_cve_ignored(self.identifier):
+             return self.CVE_DOESNT_AFFECT
+ 
+-        for product in self.each_product():
+-            if product['product_name'] != br_pkg.name:
++        for cpe in self.each_cpe():
++            affected = True
++            if cpe['product'] != br_pkg.name:
++                continue
++            if cpe['v_start'] == '-':
++                return self.CVE_AFFECTS
++            if not (cpe['v_start'] or cpe['v_end']):
++                print("No CVE affected version")
+                 continue
++            pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
++            if not hasattr(pkg_version, "version"):
++                print("Cannot parse package '%s' version '%s'" % (br_pkg.name, br_pkg.current_version))
++                continue
++
++            if cpe['v_start']:
++                    try:
++                        cve_affected_version = distutils.version.LooseVersion(cpe['v_start'])
++                        affected = ops.get(cpe['op_start'])(pkg_version, cve_affected_version)
++                        break
++                    except:
++                        return self.CVE_UNKNOWN
+ 
+-            for v in product['version']['version_data']:
+-                if v["version_affected"] == "=":
+-                    if br_pkg.current_version == v["version_value"]:
+-                        return self.CVE_AFFECTS
+-                elif v["version_affected"] == "<=":
+-                    pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
+-                    if not hasattr(pkg_version, "version"):
+-                        print("Cannot parse package '%s' version '%s'" % (br_pkg.name, br_pkg.current_version))
+-                        continue
+-                    cve_affected_version = distutils.version.LooseVersion(v["version_value"])
+-                    if not hasattr(cve_affected_version, "version"):
+-                        print("Cannot parse CVE affected version '%s'" % v["version_value"])
+-                        continue
++            if (affected and cpe['v_end']):
+                     try:
+-                        affected = pkg_version <= cve_affected_version
++                        cve_affected_version = distutils.version.LooseVersion(cpe['v_end'])
++                        affected = ops.get(cpe['op_end'])(pkg_version, cve_affected_version)
+                         break
+                     except:
+                         return self.CVE_UNKNOWN
+-                    if affected:
+-                        return self.CVE_AFFECTS
+-                    else:
+-                        return self.CVE_DOESNT_AFFECT
+-                else:
+-                    print("version_affected: %s" % v['version_affected'])
++            if (affected):
++                return self.CVE_AFFECTS
+         return self.CVE_DOESNT_AFFECT
 -- 
 2.27.0
