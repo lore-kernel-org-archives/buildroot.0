@@ -1,87 +1,57 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 11 Jul 2020 00:12:20 +0200
-Subject: [Buildroot] [PATCH v5] package/systemd: register NSS plugins in
- nsswitch.conf
-Message-ID: <20200710221221.4444-1-nolange79@gmail.com>
+Date: Sat, 11 Jul 2020 00:18:40 +0200
+Subject: [Buildroot] [PATCH] package/systemd: use current tool for
+ generating HWDB
+Message-ID: <20200710221840.5739-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This supports 4 plugins, each will be added at the right
-spot if enabled, based on the template coming with systemd.
+udevadm has been deprecated for a while(for bulding the DB),
+systemd-hwdb should be used in its place.
 
-The sed replacements are carefully written to be idempotent,
-and to be robust enough to be combined with the other
-available packages (nss_mdns4) in any installation order.
+this tool further has a switch to generate the database in
+/usr which is a better place for a one-time created file.
 
-nss-systemd is used for the DynamicUser features,
-which is a defacto necessity for systemd.
-It handles transient users/groups without
-touching the /etc/{passwd,group} files on disk.
-To support the 'SupplementaryGroups' feature,
-groups should be merged.
-
-nss-myhostname allows resolving the hostname,
-again without touching files in /etc.
-
-nss-mymachines adds name resolution from containers
-supported by machined.
-users from the containers might end up in system groups,
-so groups should be merged.
-
-nss-resolve is part of resolved, and required for
-consistent dns lookups.
-
-we anchor nss_resolve to appear after files, if mymachines is also
-used, remove that first (and add it back later). Other packages
-(mdns4) move around the dns entry, so replacing that is not a
-good option.
-
-if mdns4 is installed aswell, then resolved will take precedence
-for host lookups.
+Also remove the config files from both paths
+(rootfs overlay could add stuff) aswell as the service and tool
+from the target fs.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
-v3:
-*   basically a rewrite
-*   tested together with nss_mdns4 replacements
-v4:
-*   use target install hook
-v5:
-*   also merge groups if nss-mymachines is disabled
----
- package/systemd/systemd.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/systemd/systemd.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8e01a0db5b..1a8eb86e53 100644
+index 1a8eb86e53..8718e0cf01 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -494,6 +494,23 @@ define SYSTEMD_USERS
- 	$(SYSTEMD_TIMESYNCD_USER)
+@@ -229,11 +229,13 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
+ SYSTEMD_CONF_OPTS += -Dhwdb=true
+ define SYSTEMD_BUILD_HWDB
+-	$(HOST_DIR)/bin/udevadm hwdb --update --root $(TARGET_DIR)
++	$(HOST_DIR)/bin/systemd-hwdb update --root $(TARGET_DIR) --usr
  endef
- 
-+define SYSTEMD_INSTALL_NSSCONFIG_HOOK
-+	$(SED) '/^passwd:/ {/systemd/! s/$$/ systemd/}' \
-+		-e '/^group:/ {/systemd/! s/$$/ [SUCCESS=merge] systemd/}' \
-+		$(if $(BR2_PACKAGE_SYSTEMD_RESOLVED), \
-+			-e '/^hosts:/ s/[[:space:]]*mymachines//' \
-+			-e '/^hosts:/ {/resolve/! s/files/files resolve [!UNAVAIL=return]/}' ) \
-+		$(if $(BR2_PACKAGE_SYSTEMD_MYHOSTNAME), \
-+			-e '/^hosts:/ {/myhostname/! s/$$/ myhostname/}' ) \
-+		$(if $(BR2_PACKAGE_SYSTEMD_MACHINED), \
-+			-e '/^passwd:/ {/mymachines/! s/files/files mymachines/}' \
-+			-e '/^group:/ {/mymachines/! s/files/files [SUCCESS=merge] mymachines/}' \
-+			-e '/^hosts:/ {/mymachines/! s/files/files mymachines/}' ) \
-+		$(TARGET_DIR)/etc/nsswitch.conf
-+endef
-+
-+SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
-+
- ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # systemd provides multiple units to autospawn getty as neede
- # * getty at .service to start a getty on normal TTY
+ SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_BUILD_HWDB
+ define SYSTEMD_RM_HWDB_SRV
+-	rm -rf $(TARGET_DIR)/$(HOST_EUDEV_SYSCONFDIR)/udev/hwdb.d/
++	rm -rf $(TARGET_DIR)/usr/lib/udev/hwdb.d/ $(TARGET_DIR)/etc/udev/hwdb.d/ \
++		$(TARGET_DIR)/usr/lib/systemd/system/systemd-hwdb-update.service \
++		$(TARGET_DIR)/usr/bin/systemd-hwdb
+ endef
+ SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_HWDB_SRV
+ else
+@@ -633,7 +635,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dsysusers=false \
+ 	-Dtmpfiles=false \
+ 	-Dimportd=false \
+-	-Dhwdb=false \
++	-Dhwdb=true \
+ 	-Drfkill=false \
+ 	-Dman=false \
+ 	-Dhtml=false \
 -- 
 2.27.0
