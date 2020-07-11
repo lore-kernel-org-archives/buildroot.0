@@ -1,48 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:53:51 +0200
+Date: Sat, 11 Jul 2020 15:54:17 +0200
 Subject: [Buildroot] [git commit] board/qemu/aarch64-virt/linux.config:
- enable ARM_SMMU_V3
-Message-ID: <20200711135056.5089F81763@busybox.osuosl.org>
+ enable VIRTIO_FS driver
+Message-ID: <20200711135056.635F6866FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e69b87ae386053cef7c4b8289834faf5efe1462a
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb0bae4bf7dc15c27d6a162881ae47dc724e82d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From [1]:
-Support for implementations of the ARM System MMU architecture
-version 3 providing translation support to a PCIe root complex.
+virtio-fs allow sharing a directory between the host and the guest.
+It require virtiofsd daemon running before starting Qemu.
 
-ARM SMMU is supported since Qemu v3.0.0 [2].
+The wiki [1] recommand to enable the following kernel options:
 
-ARM_SMMU_V3 can be enabled with: -M virt,iommu=smmuv3
+      CONFIG_VIRTIO
+      CONFIG_VIRTIO_FS
+      CONFIG_DAX
+      CONFIG_FS_DAX
+      CONFIG_DAX_DRIVER
+      CONFIG_ZONE_DEVICE
 
-dmesg:
-arm-smmu-v3 9050000.smmuv3: ias 44-bit, oas 44-bit (features 0x00000305)
-arm-smmu-v3 9050000.smmuv3: allocated 262144 entries for cmdq
-arm-smmu-v3 9050000.smmuv3: allocated 131072 entries for evtq
+But virtio-fs works fine with only VIRTIO_FS.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/iommu/Kconfig?h=v5.4.42#n390
-[2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=527773eeef9f2225370f9c17c35074b2ed0ced92
+Note: ZONE_DEVICE can only be enabled on aarch64 since kernel >= 5.7.
+ARCH_ENABLE_MEMORY_HOTREMOVE support is missing for previous kernel [2].
+
+[1] https://virtio-fs.gitlab.io/howto-qemu.html
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=bbd6ec605c0fc286c3f8ce60b4ed44635361d58b
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/qemu/aarch64-virt/linux.config | 1 +
- 1 file changed, 1 insertion(+)
+ board/qemu/aarch64-virt/linux.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-index c21994076a..88f4c43c9e 100644
+index 227723f855..02e0812ffd 100644
 --- a/board/qemu/aarch64-virt/linux.config
 +++ b/board/qemu/aarch64-virt/linux.config
-@@ -56,6 +56,7 @@ CONFIG_VIRTIO_MMIO=y
- CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
- CONFIG_MAILBOX=y
+@@ -60,5 +60,7 @@ CONFIG_MAILBOX=y
  CONFIG_PL320_MBOX=y
-+CONFIG_ARM_SMMU_V3=y
+ CONFIG_ARM_SMMU_V3=y
  CONFIG_EXT4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_VIRTIO_FS=y
  CONFIG_TMPFS=y
  CONFIG_TMPFS_POSIX_ACL=y
