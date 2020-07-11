@@ -1,52 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 22:53:37 +0200
-Subject: [Buildroot] [PATCH v3 4/4] package/freescale-imx/firmware-imx:
- Clean up the image/target semantic
-In-Reply-To: <1594382445-4464-5-git-send-email-stephane.viau@oss.nxp.com>
-References: <1594382445-4464-1-git-send-email-stephane.viau@oss.nxp.com>
- <1594382445-4464-5-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <20200711225337.579a2569@windsurf.home>
+Date: Sat, 11 Jul 2020 23:42:38 +0200
+Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: refactor
+ DDR firmware preparation
+Message-ID: <20200711214239.1179211-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Jul 2020 14:00:45 +0200
-Stephane Viau <stephane.viau@oss.nxp.com> wrote:
+The logic doing the padding and concatenation of DDR firmware was
+duplicated between the DDR4 and LPDDR4 cases. This commit refactors
+this logic into a single function FIRMWARE_IMX_PREPARE_DDR_FW.
 
-> The newly introduced BR2_PACKAGE_FIRMWARE_IMX_xxx symbols shall be
-> used in lieue of the SoC type when installing images or binaries on
-> target.
-> 
-> These new symbols let us define FIRMWARE_IMX_INSTALL_IMAGES_CMDS and
-> FIRMWARE_IMX_INSTALL_TARGET_CMDS based on platform needs rather than
-> SoC type.
-> 
-> Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../firmware-imx/firmware-imx.mk              | 44 ++++++++-----------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
 
-I've applied, with some changes:
-
-- I dropped the BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW conditional, and
-  instead just use conditions on BR2_PACKAGE_FIRMWARE_IMX_LPDDR4 and
-  BR2_PACKAGE_FIRMWARE_IMX_DDR4
-
-- I renamed FIRMWARE_IMX_PREPARE_DDR_FW to
-  FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW, because what it does is really
-  install the firmware.
-
-- I've used the correct option names after my changes on PATCH 3/4.
-
-- I simplified the VPU installation tweak for i.MX8X.
-
-I've done a few tests, but if you can have a second look at what I
-committed, it would be useful.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index ed8a81bcc5..351fe3f63a 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -24,26 +24,29 @@ endef
+ # DDR firmware
+ #
+ 
+-ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+-FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+-define FIRMWARE_IMX_PREPARE_LPDDR4_FW
++define FIRMWARE_IMX_PREPARE_DDR_FW
+ 	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem_pad.bin
++		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
+ 	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem_pad.bin
+-	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem_pad.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem_pad.bin > \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_fw.bin
++		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin > \
++		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+ endef
+ 
++ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
++FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
++
+ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
+ 	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+-	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,1d)
+-	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,2d)
++	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
++		lpddr4_pmu_train_1d_imem,lpddr4_pmu_train_1d_dmem,lpddr4_pmu_train_1d_fw)
++	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
++		lpddr4_pmu_train_2d_imem,lpddr4_pmu_train_2d_dmem,lpddr4_pmu_train_2d_fw)
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+@@ -53,24 +56,15 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR4),y)
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+-define FIRMWARE_IMX_PREPARE_DDR4_FW
+-	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin
+-	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin
+-	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin > \
+-		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_$(1)_201810_fw.bin
+-endef
+ 
+ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 	# Create padded versions of ddr4_* and generate ddr4_fw.bin.
+ 	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
+ 	# which is done in post-image script.
+-	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,1d)
+-	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,2d)
++	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
++		ddr4_imem_1d_201810,ddr4_dmem_1d_201810,ddr4_1d_201810_fw)
++	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
++		ddr4_imem_2d_201810,ddr4_dmem_2d_201810,ddr4_2d_201810_fw)
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+ 		$(BINARIES_DIR)/ddr4_201810_fw.bin
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
