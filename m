@@ -1,15 +1,17 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jul 2020 20:06:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.3.6
-Message-ID: <20200711180616.34382-1-bernd.kuhls@t-online.de>
+Date: Sat, 11 Jul 2020 20:12:44 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tor: bump version to 0.4.3.6
+Message-ID: <20200711181244.34680-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://blog.torproject.org/new-release-tor-03511-0428-0436-security-fixes
+Release notes for 0.4.3.5: https://blog.torproject.org/node/1872
+"Tor 0.4.3.5 is the first stable release in the 0.4.3.x series."
+
+Release notes for 0.4.3.6: https://blog.torproject.org/node/1900
 
 The fix for CVE-2020-15572 "Fix a crash due to an out-of-bound memory
 access when Tor is compiled with NSS support" does not affect buildroot
@@ -19,6 +21,9 @@ Rebased patch 0001.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: squashed with 0.4.3.5 bump:
+    http://patchwork.ozlabs.org/project/buildroot/patch/20200516125004.1228983-1-bernd.kuhls at t-online.de/
+
  .../tor/0001-Fix-static-linking-with-OpenSSL.patch   | 12 ++++++------
  package/tor/tor.hash                                 |  2 +-
  package/tor/tor.mk                                   |  2 +-
@@ -83,23 +88,23 @@ index e4cd24e138..942f913465 100644
           $(TOR_CRYPTO_LIBS) \
           $(TOR_UTIL_LIBS) \
 diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index f5b5fb0e49..47c2dd49b4 100644
+index e55f3ea3c2..47c2dd49b4 100644
 --- a/package/tor/tor.hash
 +++ b/package/tor/tor.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  616a0e4ae688d0e151d46e3e4258565da4d443d1ddbd316db0b90910e2d5d868  tor-0.4.3.5.tar.gz
+-sha256  06a1d835ddf382f6bca40a62e8fb40b71b2f73d56f0d53523c8bd5caf9b3026d  tor-0.4.2.7.tar.gz
 +sha256  6a2d0637d4e514be2ec574723a05065245cce51da78a21cec1dc831be5ccac62  tor-0.4.3.6.tar.gz
  sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
 diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 024fb1ad5d..050114ccac 100644
+index 09f780d3f5..050114ccac 100644
 --- a/package/tor/tor.mk
 +++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.3.5
+-TOR_VERSION = 0.4.2.7
 +TOR_VERSION = 0.4.3.6
  TOR_SITE = https://dist.torproject.org
  TOR_LICENSE = BSD-3-Clause
