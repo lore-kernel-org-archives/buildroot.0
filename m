@@ -1,67 +1,81 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 11 Jul 2020 14:25:23 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
- version 20.6.2
-In-Reply-To: <20200711154808.6df46498@windsurf.home>
-References: <20200707213252.627579-1-james.hilliard1@gmail.com>
- <20200711154808.6df46498@windsurf.home>
-Message-ID: <CADvTj4r8N0UcTgt5vQrOzyQiZF6mhXQouskFd6ESvv+GUgXKFA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Jul 2020 22:38:58 +0200
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: add
+ options for all i.MX FW needs
+Message-ID: <20200711204122.796F57FAEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jul 11, 2020 at 7:48 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> On Tue,  7 Jul 2020 15:32:52 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > -PYTHON_AUTOBAHN_VERSION = 20.4.3
-> > +PYTHON_AUTOBAHN_VERSION = 20.6.2
-> >  PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-> > -PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
-> > +PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/43/ba/926d323decdce0341f6f60dce45ea5553b08113dddb9ca482554d3db11eb
-> >  PYTHON_AUTOBAHN_LICENSE = MIT
-> >  PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-> >  PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
-> > +PYTHON_AUTOBAHN_DEPENDENCIES = host-python-cffi
-> > +PYTHON_AUTOBAHN_ENV = AUTOBAHN_USE_NVX=1 AUTOBAHN_STRIP_XBR=1
-> > +
-> > +define PYTHON_AUTOBAHN_STRIP_XBR_CONTRACTS
-> > +     rm -rf $(@D)/autobahn/xbr/contracts
-> > +endef
-> > +
-> > +PYTHON_AUTOBAHN_POST_EXTRACT_HOOKS = PYTHON_AUTOBAHN_STRIP_XBR_CONTRACTS
->
-> But isn't AUTOBAHN_STRIP_XBR=1 already taking care of this ? I see:
->
-> if 'AUTOBAHN_STRIP_XBR' in os.environ:
->     # force regeneration of egg-info manifest for stripped install
->     shutil.rmtree('autobahn.egg-info', ignore_errors=True)
-> else:
->     extras_require_all += extras_require_xbr
->     packages += ['autobahn.xbr', 'autobahn.asyncio.xbr', 'autobahn.twisted.xbr']
->     package_data['xbr'] = ['./xbr/contracts/*.json']
->     entry_points['console_scripts'] += ["xbrnetwork = autobahn.xbr._cli:_main"]
->
-> I.e, the xbr/contracts/*.json files are only added to package_data when
-> AUTOBAHN_STRIP_XBR is *not* defined.
-Nope, because there's a bug, I have an in progress upstream fix but it
-changes a few other things as well.
-https://github.com/crossbario/autobahn-python/pull/1400
->
-> Also, in general, we do this kind of removal in a post-install target
-> hook. If there's a reason to do that in a post-extract hook, a comment
-> to explain why would be good.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=00cb4267a1cced9ae650cb9dcb08984cd16a4377
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Some SoCs need a HDMI FW for their bootloader, some other require
+EPDC, SDMA and/or VPU.
+
+Instead of trying to "guess" what firmware images need to be installed
+in firmware-imx.mk, let the Config framework do the job and allow each
+SoC to pick what firmware they need.
+
+Note that this patch should also help introducing an eventual DP FW,
+as Gary mentioned in a separate thread [1].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2020-May/283181.html
+
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/firmware-imx/Config.in | 30 +++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 2cedff5485..aae552177f 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -4,13 +4,41 @@ config BR2_PACKAGE_FIRMWARE_IMX
+ 	help
+ 	  Firmware blobs for the Freescale i.MX SoCs.
+ 
+-	  It contains blobs for SDMA and VPU.
++	  It contains blobs for SDMA, VPU, HDMI, EDPC, and DDR
++	  training.
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
+ 
+ if BR2_PACKAGE_FIRMWARE_IMX
+ 
++config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW
++	bool
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++
++config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_VPU_FW
++	bool
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++
++config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
++	bool
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++
++config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_EPDC_FW
++	bool
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
++
+ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+ 	bool
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
