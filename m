@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 16:00:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.4.8
-In-Reply-To: <20200710145316.156434-1-bernd.kuhls@t-online.de>
-References: <20200710145316.156434-1-bernd.kuhls@t-online.de>
-Message-ID: <20200711160022.33cdf749@windsurf.home>
+Date: Sat, 11 Jul 2020 16:00:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
+ version 2.28.3
+In-Reply-To: <20200710114730.805297-1-aperez@igalia.com>
+References: <20200710114730.805297-1-aperez@igalia.com>
+Message-ID: <20200711160028.1e1608ca@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Jul 2020 16:53:16 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Fri, 10 Jul 2020 14:47:30 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> Quoting https://www.php.net/
-> "For windows users running an official build, this release contains a
->  patched version of libcurl addressing CVE-2020-8159.
+> This is a minor release which provides fixes for CVE-2020-9800,
+> CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
+> CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
 > 
-> For all other consumers of PHP, this is a bug fix release."
+> Updating from 2.28.2 also brings in the usual batch of fixes, including
+> important improvements to threading in the media player. Full release
+> notes can be found at:
 > 
-> Changelog: https://www.php.net/ChangeLog-7.php#7.4.8
+>   https://wpewebkit.org/release/wpewebkit-2.28.3.html
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> A detailed security advisory can be found at:
+> 
+>   https://wpewebkit.org/security/WSA-2020-0006.html
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/wpewebkit/wpewebkit.hash | 8 ++++----
+>  package/wpewebkit/wpewebkit.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
