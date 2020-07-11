@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:51:39 +0200
+Date: Sat, 11 Jul 2020 15:53:51 +0200
 Subject: [Buildroot] [git commit] board/qemu/aarch64-virt/linux.config:
- regenerate after kernel version bump
-Message-ID: <20200711135056.14479866FD@busybox.osuosl.org>
+ enable ARM_SMMU_V3
+Message-ID: <20200711135056.5089F81763@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e933fd5f8fb1f64ab92fd6c006a1f13f51cc5a05
+commit: https://git.buildroot.net/buildroot/commit/?id=e69b87ae386053cef7c4b8289834faf5efe1462a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Regenerate the with savedefconfig.
+From [1]:
+Support for implementations of the ARM System MMU architecture
+version 3 providing translation support to a PCIe root complex.
+
+ARM SMMU is supported since Qemu v3.0.0 [2].
+
+ARM_SMMU_V3 can be enabled with: -M virt,iommu=smmuv3
+
+dmesg:
+arm-smmu-v3 9050000.smmuv3: ias 44-bit, oas 44-bit (features 0x00000305)
+arm-smmu-v3 9050000.smmuv3: allocated 262144 entries for cmdq
+arm-smmu-v3 9050000.smmuv3: allocated 131072 entries for evtq
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/iommu/Kconfig?h=v5.4.42#n390
+[2] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=527773eeef9f2225370f9c17c35074b2ed0ced92
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/qemu/aarch64-virt/linux.config | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/qemu/aarch64-virt/linux.config | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-index c9f2708ad5..948b06b0a2 100644
+index c21994076a..88f4c43c9e 100644
 --- a/board/qemu/aarch64-virt/linux.config
 +++ b/board/qemu/aarch64-virt/linux.config
-@@ -5,13 +5,13 @@ CONFIG_HIGH_RES_TIMERS=y
- CONFIG_TASKSTATS=y
- CONFIG_SCHED_AUTOGROUP=y
- CONFIG_PROFILING=y
-+CONFIG_ARCH_VEXPRESS=y
-+CONFIG_COMPAT=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_BLK_DEV_BSGLIB=y
--CONFIG_ARCH_VEXPRESS=y
--CONFIG_TRANSPARENT_HUGEPAGE=y
- CONFIG_BINFMT_MISC=y
--CONFIG_COMPAT=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_PACKET_DIAG=y
+@@ -56,6 +56,7 @@ CONFIG_VIRTIO_MMIO=y
+ CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+ CONFIG_MAILBOX=y
+ CONFIG_PL320_MBOX=y
++CONFIG_ARM_SMMU_V3=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
