@@ -1,93 +1,40 @@
-From: Thomas W. <thomas.chiantia@gmail.com>
-Date: Sat, 11 Jul 2020 13:32:22 -0400
-Subject: [Buildroot] [PATCH] Fix swupdate build by installing mtd
- headers as expected
-In-Reply-To: <CAPxu4wcB6NeoVrsGFKfZ1nGdRq7b1gouFTG=_aRkBHm3pvYySA@mail.gmail.com>
-References: <CAPxu4wfxL4rCL2Q-CKUwHS+rbvUdwjhY=b0x5CV-OkBh--qBDQ@mail.gmail.com>
- <20200711130555.3a1aea7d@windsurf.home>
- <CAPxu4wcB6NeoVrsGFKfZ1nGdRq7b1gouFTG=_aRkBHm3pvYySA@mail.gmail.com>
-Message-ID: <CAPxu4wfPtUrYspORihyQ9Bd7kRxJ0OsuCE_HJXjKpaLDLd8z0A@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Jul 2020 20:00:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcec: bump version to 4.0.7
+Message-ID: <20200711180029.4453-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Your patch is badly line-wrapped by your e-mail client. Could you send
-> your patches using git send-email ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry, I will try to send it again if you want to update swupdate (and
-it is found that other packages will not be broken with this patch).
-
-On Sat, Jul 11, 2020 at 1:26 PM Thomas W. <thomas.chiantia@gmail.com> wrote:
->
-> > Which problem is this fixing ? Is there a build issue today ? We have
-> > had mtd + swupdate for quite some time. Why suddenly should we change
-> > this ?
->
-> Hello,
->
-> There is no issue with the current Buildroot. Swupdate-2019.11 expects
-> MTD headers in /include/mtd folder, and swupdate-2020.4 expects MTD
-> headers in /include folder.  I upgraded my swupdate to 2020.4 and
-> found that the MTD header installation must change. I tried sending PR
-> to swupdate to include MTD headers in the original /include/mtd folder
-> but they said it should change in buildroot. I don't know if other
-> projects depend on the mtd headers. If other projects depend on the
-> MTD headers then they might break with this patch unless they are
-> aware of this change.
->
-> On Sat, Jul 11, 2020 at 7:05 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello Thomas,
-> >
-> > Thanks for your contribution!
-> >
-> > On Fri, 10 Jul 2020 15:41:37 -0400
-> > "Thomas W." <thomas.chiantia@gmail.com> wrote:
-> >
-> > > swupdate expects libmtd.h and libubi.h to be in the include folder and
-> > > not in the mtd namespace.
-> > > (see also:
-> > > https://groups.google.com/forum/#!topic/swupdate/Apv_yRLmgzY
-> > > https://groups.google.com/forum/#!topic/swupdate/gd25RIPa00w
-> > > https://groups.google.com/forum/#!topic/swupdate/gei0Gc_5j8M)
-> > >
-> > > Signed-off-by: Thomas Chiantia <thomas.chiantia@gmail.com>
-> >
-> > Which problem is this fixing ? Is there a build issue today ? We have
-> > had mtd + swupdate for quite some time. Why suddenly should we change
-> > this ?
-> >
-> > > diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> > > index 3477460200..76ede98879 100644
-> > > --- a/package/mtd/mtd.mk
-> > > +++ b/package/mtd/mtd.mk
-> > > @@ -119,8 +119,8 @@ endef
-> > >  # Those libraries are not installed by "make install", but are needed
-> > >  # by other packages, such as swupdate.
-> > >  define MTD_INSTALL_LIBS
-> > > -    $(INSTALL) -D -m 0755 $(@D)/include/libmtd.h
-> > > $(STAGING_DIR)/usr/include/mtd/libmtd.h
-> > > -    $(INSTALL) -D -m 0755 $(@D)/include/libubi.h
-> > > $(STAGING_DIR)/usr/include/mtd/libubi.h
-> > > +    $(INSTALL) -D -m 0755 $(@D)/include/libmtd.h
-> > > $(STAGING_DIR)/usr/include/libmtd.h
-> > > +    $(INSTALL) -D -m 0755 $(@D)/include/libubi.h
-> > > $(STAGING_DIR)/usr/include/libubi.h
-> > >      $(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h
-> > > $(STAGING_DIR)/usr/include/mtd/ubi-media.h
-> > >      $(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
-> > >      $(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
-> >
-> > Your patch is badly line-wrapped by your e-mail client. Could you send
-> > your patches using git send-email ?
-> >
-> > Thanks!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index aa09b36bd8..36b6bad861 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e4d749430ebcf3a35ec3a3f6675afcc5755afc1e5801c12121e54d80eb187743  libcec-4.0.5.tar.gz
++sha256  bcd92c376993a5721d346edcc09eb17289451f9156b1d1d113c9663c2046315a  libcec-4.0.7.tar.gz
+ sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index d5f1caf7c5..7c37d05c7f 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCEC_VERSION = 4.0.5
++LIBCEC_VERSION = 4.0.7
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
+-- 
+2.26.2
