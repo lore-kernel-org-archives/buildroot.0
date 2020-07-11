@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:12:14 +0200
-Subject: [Buildroot] Rename aarch64_efi_defconfig to
- qemu_aarch64_virt_efi_defconfig
-In-Reply-To: <39be97c6-9569-e206-ebe5-a49ca65015af@gmail.com>
-References: <9693c61b-610e-9371-8ecf-a45a9f1f22e4@gmail.com>
- <20200711125919.6e484aef@windsurf.home>
- <39be97c6-9569-e206-ebe5-a49ca65015af@gmail.com>
-Message-ID: <20200711151214.44b2b74a@windsurf.home>
+Date: Sat, 11 Jul 2020 15:14:04 +0200
+Subject: [Buildroot] [PATCH 1/3] package/systemd: add option to enable
+ SysV and utmp compatibility
+In-Reply-To: <CADYdroMeuavdAXpZVy40kEiSoeQfqnTav9UqzR+rpSnEVtkZtA@mail.gmail.com>
+References: <20200710234150.185609-1-nolange79@gmail.com>
+ <20200711125654.4fcb48d9@windsurf.home>
+ <CADYdroMeuavdAXpZVy40kEiSoeQfqnTav9UqzR+rpSnEVtkZtA@mail.gmail.com>
+Message-ID: <20200711151404.73f486b6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Jul 2020 15:08:27 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+On Sat, 11 Jul 2020 13:25:08 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-> Not really just testing this defconfig under Qemu, but having ACPI tables and
-> other features enabled by EFI and grub when booting the system under Qemu.
+> > > +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSV),y)
+> > > +SYSTEMD_CONF_OPTS += -Dsysvinit-path=/etc/init.d  
+> > -Dsysvrcnd-path=/etc/rc.d
+> >
+> > We don't have any /etc/rc.d directory in Buildroot, and when systemd is
+> > selected as the init system, we don't install init scripts in
+> > /etc/init.d. So I'm wondering what is the use case for this option ?
+> >  
 > 
-> The current qemu_aarch64_virt_defconfig boot with just the kernel, so ACPI
-> tables are missing and the plig and play support is disabled.
-> 
-> dmesg:
-> ACPI: Interpreter disabled.
-> [...]
-> pnp: PnP ACPI: disabled
-> 
-> For example, ACPI and hotplug support is required to use QEMU Virtual NVDIMM
-> 
-> -device nvdimm,id=nvdimm1,memdev=mem1
-> 
-> Instead of renaming aarch64_efi_defconfig, we can enable UEFI and grub in the
-> qemu_aarch64_virt_defconfig itself.
+> Removing *support for unit scripts*. those scripts, as you said, don't
+> exist.
 
-Seems like a good idea.
+Yes, but your patch also keeps support for init scripts enabled when
+BR2_PACKAGE_SYSTEMD_SYSV=y, and I don't understand what is the use case.
 
-> But it still require the QEMU_EFI.fd firmware, either built by
-> Buildroot (complex hand written build system) or fetched from Linaro.
+When systemd is enabled, there will be nothing in /etc/init.d, because
+Buildroot only executes the <pkg>_INIT_SYSV commands (that install init
+scripts) when the init system is Busybox or SysVinit.
 
-Of course, it's always better to build things from source, but if it's
-really too horrible, we can have a package that fetches pre-compiled
-binaries from Linaro.
+Or do you want to support use cases where some users may install their
+own init scripts in /etc/init.d, but are using systemd ?
 
 Thomas
 -- 
