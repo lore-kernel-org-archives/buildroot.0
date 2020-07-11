@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:51:44 +0200
-Subject: [Buildroot] [git commit] board/qemu/aarch64-virt/linux.config: add
- RTC PL031 driver
-Message-ID: <20200711135056.1FC3C81763@busybox.osuosl.org>
+Date: Sat, 11 Jul 2020 15:53:47 +0200
+Subject: [Buildroot] [git commit] board/qemu/aarch64-virt/linux.config:
+ enable QEMU firmware configuration (fw_cfg)
+Message-ID: <20200711135056.446BC81763@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3bf3399079e4a69b4ef1f22b044ce7358ff0de2
+commit: https://git.buildroot.net/buildroot/commit/?id=61f60debcb71798cfa56bed8e5e115c3afca7847
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Qemu for the aarch64 virt emulate an RTC PL031 device.
-Enable the kernel support to allow setting the system time.
+From [1]:
+This kernel option allow exporting of the QEMU firmware configuration (fw_cfg)
+file entries via sysfs. Entries are found under /sys/firmware/fw_cfg when this
+option is enabled and loaded.
 
-"date" now return the current time:
-Sun Jul  5 20:38:50 UTC 2020
+Enable the suboption to allow the qemu_fw_cfg device to be initialized via the
+kernel command line or using a module parameter.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/firmware/Kconfig?h=v5.4.42#n187
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/qemu/aarch64-virt/linux.config | 1 +
- 1 file changed, 1 insertion(+)
+ board/qemu/aarch64-virt/linux.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
-index 948b06b0a2..49018efe95 100644
+index 129a200ab0..c21994076a 100644
 --- a/board/qemu/aarch64-virt/linux.config
 +++ b/board/qemu/aarch64-virt/linux.config
-@@ -45,6 +45,7 @@ CONFIG_VIRTIO_CONSOLE=y
- CONFIG_HW_RANDOM=y
- CONFIG_HW_RANDOM_VIRTIO=y
- CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_PL031=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
- CONFIG_MAILBOX=y
+@@ -7,6 +7,8 @@ CONFIG_SCHED_AUTOGROUP=y
+ CONFIG_PROFILING=y
+ CONFIG_ARCH_VEXPRESS=y
+ CONFIG_COMPAT=y
++CONFIG_FW_CFG_SYSFS=y
++CONFIG_FW_CFG_SYSFS_CMDLINE=y
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_BLK_DEV_BSGLIB=y
