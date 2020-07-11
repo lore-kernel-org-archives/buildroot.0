@@ -1,48 +1,38 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 11 Jul 2020 01:41:48 +0200
-Subject: [Buildroot] [PATCH 2/3] package/systemd: fix telinit-path and add
- missing pat options
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Jul 2020 12:56:54 +0200
+Subject: [Buildroot] [PATCH 1/3] package/systemd: add option to enable
+ SysV and utmp compatibility
 In-Reply-To: <20200710234150.185609-1-nolange79@gmail.com>
 References: <20200710234150.185609-1-nolange79@gmail.com>
-Message-ID: <20200710234150.185609-2-nolange79@gmail.com>
+Message-ID: <20200711125654.4fcb48d9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If paths are not set, then meson will search the host system for the
-binaries (or the target, where those binaries are not yet installed).
-So add the missing paths.
+On Sat, 11 Jul 2020 01:41:47 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-Also fixup the path to telinit (nice way to get a build path into the binary).
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 05c1d1ff9a..05d8cb4934 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -199,6 +199,18 @@ else
+>  SYSTEMD_CONF_OPTS += -Dpcre2=false
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSV),y)
+> +SYSTEMD_CONF_OPTS += -Dsysvinit-path=/etc/init.d -Dsysvrcnd-path=/etc/rc.d
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/systemd/systemd.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+We don't have any /etc/rc.d directory in Buildroot, and when systemd is
+selected as the init system, we don't install init scripts in
+/etc/init.d. So I'm wondering what is the use case for this option ?
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 05d8cb4934..176adb434a 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -32,12 +32,16 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsplit-usr=false \
- 	-Dsystem-uid-max=999 \
- 	-Dsystem-gid-max=999 \
--	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
-+	-Dquotaon-path=/usr/sbin/quotaon \
-+	-Dquotacheck-path=/usr/sbin/quotacheck \
- 	-Dkmod-path=/usr/bin/kmod \
- 	-Dkexec-path=/usr/sbin/kexec \
- 	-Dsulogin-path=/usr/sbin/sulogin \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount \
-+	-Dloadkeys-path=/usr/bin/loadkeys \
-+	-Dsetfont-path=/usr/bin/setfont \
-+	-Dtelinit-path=/sbin/telinit \
- 	-Dnobody-group=nogroup \
- 	-Didn=true \
- 	-Dnss-systemd=true
+Best regards,
+
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
