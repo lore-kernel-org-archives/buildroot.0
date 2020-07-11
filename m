@@ -1,69 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Jul 2020 18:56:01 +0200
-Subject: [Buildroot] Virtual/online Buildroot Developers meeting ?
-In-Reply-To: <20200711165315.0c2b5079@windsurf.home>
-References: <20200711165315.0c2b5079@windsurf.home>
-Message-ID: <20200711165601.GA15448@scaer>
+From: Thomas W. <thomas.chiantia@gmail.com>
+Date: Sat, 11 Jul 2020 13:26:53 -0400
+Subject: [Buildroot] [PATCH] Fix swupdate build by installing mtd
+ headers as expected
+In-Reply-To: <20200711130555.3a1aea7d@windsurf.home>
+References: <CAPxu4wfxL4rCL2Q-CKUwHS+rbvUdwjhY=b0x5CV-OkBh--qBDQ@mail.gmail.com>
+ <20200711130555.3a1aea7d@windsurf.home>
+Message-ID: <CAPxu4wcB6NeoVrsGFKfZ1nGdRq7b1gouFTG=_aRkBHm3pvYySA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+> Which problem is this fixing ? Is there a build issue today ? We have
+> had mtd + swupdate for quite some time. Why suddenly should we change
+> this ?
 
-On 2020-07-11 16:53 +0200, Thomas Petazzoni spake thusly:
-> We had our last Buildroot Developers Meeting in February, but it is now
-> becoming pretty clear that the next physical Buildroot Developers
-> Meeting is not going to happen in the near future. The traditional
-> "Buildroot summer camp" organized by the core maintainers/developers is
-> not going to happen this year. And the Buildroot Developers Meeting
-> that traditionally takes place before ELC-E will not happen either, as
-> ELC-E 2020 will be a virtual event.
+Hello,
 
-Yes, this whole situation is sad.
+There is no issue with the current Buildroot. Swupdate-2019.11 expects
+MTD headers in /include/mtd folder, and swupdate-2020.4 expects MTD
+headers in /include folder.  I upgraded my swupdate to 2020.4 and
+found that the MTD header installation must change. I tried sending PR
+to swupdate to include MTD headers in the original /include/mtd folder
+but they said it should change in buildroot. I don't know if other
+projects depend on the mtd headers. If other projects depend on the
+MTD headers then they might break with this patch unless they are
+aware of this change.
 
-> The issue I see with this is that those meetings have always been very
-> useful in making progress through the backlog of patches, especially by
-> having discussions on some of complex topics and taking decisions.
-> 
-> As all those physical things (work, conferences, meetings) are now
-> replaced by virtual/online ones, I'm wondering if we should do the same
-> for the Buildroot Developers Meeting.
-> 
-> Questions are:
->  - Who would be interested ?
-
-I would.
-
->  - What format should it take ? One full day once in a while ? Just a
->    few hours here and there ? Multiple days in a row ?
-
-My preference would be to block two or more days in a row. Sun-Mon ro
-Sun-Tue would be ideal for me, but I can adapt.
-
->  - What technical solution do we use ? Is it just about agreeing to all
->    be on IRC at the same time ? Or do we need a video conferencing
->    solution ? Most of our meetings are multiple side discussions taking
->    place at the same time, which doesn't really map well with a single
->    video conference.
-
-This is indeed very tricky. We will probably have to adapt depending on
-how many of us are attending.
-
-Also, maybe just audio would be enough (I find video to not be that
-interesting in the end, when all we need is discussion).
-
-However, a way to share one's desktop (or an application) would be most
-important. A white board too, maybe...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Sat, Jul 11, 2020 at 7:05 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Thomas,
+>
+> Thanks for your contribution!
+>
+> On Fri, 10 Jul 2020 15:41:37 -0400
+> "Thomas W." <thomas.chiantia@gmail.com> wrote:
+>
+> > swupdate expects libmtd.h and libubi.h to be in the include folder and
+> > not in the mtd namespace.
+> > (see also:
+> > https://groups.google.com/forum/#!topic/swupdate/Apv_yRLmgzY
+> > https://groups.google.com/forum/#!topic/swupdate/gd25RIPa00w
+> > https://groups.google.com/forum/#!topic/swupdate/gei0Gc_5j8M)
+> >
+> > Signed-off-by: Thomas Chiantia <thomas.chiantia@gmail.com>
+>
+> Which problem is this fixing ? Is there a build issue today ? We have
+> had mtd + swupdate for quite some time. Why suddenly should we change
+> this ?
+>
+> > diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> > index 3477460200..76ede98879 100644
+> > --- a/package/mtd/mtd.mk
+> > +++ b/package/mtd/mtd.mk
+> > @@ -119,8 +119,8 @@ endef
+> >  # Those libraries are not installed by "make install", but are needed
+> >  # by other packages, such as swupdate.
+> >  define MTD_INSTALL_LIBS
+> > -    $(INSTALL) -D -m 0755 $(@D)/include/libmtd.h
+> > $(STAGING_DIR)/usr/include/mtd/libmtd.h
+> > -    $(INSTALL) -D -m 0755 $(@D)/include/libubi.h
+> > $(STAGING_DIR)/usr/include/mtd/libubi.h
+> > +    $(INSTALL) -D -m 0755 $(@D)/include/libmtd.h
+> > $(STAGING_DIR)/usr/include/libmtd.h
+> > +    $(INSTALL) -D -m 0755 $(@D)/include/libubi.h
+> > $(STAGING_DIR)/usr/include/libubi.h
+> >      $(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h
+> > $(STAGING_DIR)/usr/include/mtd/ubi-media.h
+> >      $(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
+> >      $(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
+>
+> Your patch is badly line-wrapped by your e-mail client. Could you send
+> your patches using git send-email ?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
