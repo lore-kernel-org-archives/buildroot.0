@@ -1,26 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 23:52:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.3.1
-In-Reply-To: <20200711184008.206423-1-bernd.kuhls@t-online.de>
-References: <20200711184008.206423-1-bernd.kuhls@t-online.de>
-Message-ID: <20200711235214.5322913e@windsurf.home>
+Date: Sat, 11 Jul 2020 23:52:21 +0200
+Subject: [Buildroot] [PATCH] package/vsftpd: add systemd init
+In-Reply-To: <20200711135843.1789746-1-francois.perrad@gadz.org>
+References: <20200711135843.1789746-1-francois.perrad@gadz.org>
+Message-ID: <20200711235221.6c886519@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Jul 2020 20:40:08 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 11 Jul 2020 15:58:43 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Changelog:
-> http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=be7588bbbf6d0568282a057e858d9aa694388e85;hb=refs/heads/release/4.3
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/ffmpeg/ffmpeg.hash | 2 +-
->  package/ffmpeg/ffmpeg.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/vsftpd/vsftpd.mk      |  5 +++++
+>  package/vsftpd/vsftpd.service | 12 ++++++++++++
+>  2 files changed, 17 insertions(+)
+>  create mode 100644 package/vsftpd/vsftpd.service
 
 Applied to master, thanks.
 
