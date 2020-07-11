@@ -1,52 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:58:00 +0200
-Subject: [Buildroot] [git commit] package/php: bump version to 7.4.8
-Message-ID: <20200711135539.D83F784496@busybox.osuosl.org>
+Date: Sat, 11 Jul 2020 16:00:00 +0200
+Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
+ version 2.28.3
+Message-ID: <20200711135630.A2DCD84319@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6a500bb990fe6b9302e762adbd5e440329e99d9
+commit: https://git.buildroot.net/buildroot/commit/?id=fa1185412e215c1eea6743e5c1d64ef7f239c967
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoting https://www.php.net/
-"For windows users running an official build, this release contains a
- patched version of libcurl addressing CVE-2020-8159.
+This is a minor release which provides fixes for CVE-2020-9800,
+CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
+CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
 
-For all other consumers of PHP, this is a bug fix release."
+Updating from 2.28.2 also brings in the usual batch of fixes, including
+important improvements to threading in the media player. Full release
+notes can be found at:
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.8
+  https://webkitgtk.org/2020/07/09/webkitgtk2.28.3-released.html
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+A detailed security advisory can be found at:
+
+  https://webkitgtk.org/security/WSA-2020-0006.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 9789a99988..47879eecca 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf  php-7.4.7.tar.xz
-+sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index a76cc925a1..44263745e4 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.28.2.tar.xz.sums
+-md5  ec0ef870ca37e3a5ebbead2f268a28ec  webkitgtk-2.28.2.tar.xz
+-sha1  0aba97beba7b2677ed2d28aac51e429cb26c3fe6  webkitgtk-2.28.2.tar.xz
+-sha256  b9d23525cfd8d22c37b5d964a9fe9a8ce7583042a2f8d3922e71e6bbc68c30bd  webkitgtk-2.28.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.28.3.tar.xz.sums
++md5  a03a4dcd2819baca14fdec5af68b4356  webkitgtk-2.28.3.tar.xz
++sha1  af1d845d373e67fd666105e798a44e2cadaef83c  webkitgtk-2.28.3.tar.xz
++sha256  f0898ac072c220e13a4aee819408421a6cb56a6eb89170ceafe52468b0903522  webkitgtk-2.28.3.tar.xz
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ed71404c7b..48af0f6fdc 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 2abb083fc6..f38ea5d20a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.7
-+PHP_VERSION = 7.4.8
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-WEBKITGTK_VERSION = 2.28.2
++WEBKITGTK_VERSION = 2.28.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
