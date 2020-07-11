@@ -1,45 +1,67 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jul 2020 20:40:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.3.1
-Message-ID: <20200711184008.206423-1-bernd.kuhls@t-online.de>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 11 Jul 2020 14:25:23 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
+ version 20.6.2
+In-Reply-To: <20200711154808.6df46498@windsurf.home>
+References: <20200707213252.627579-1-james.hilliard1@gmail.com>
+ <20200711154808.6df46498@windsurf.home>
+Message-ID: <CADvTj4r8N0UcTgt5vQrOzyQiZF6mhXQouskFd6ESvv+GUgXKFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=be7588bbbf6d0568282a057e858d9aa694388e85;hb=refs/heads/release/4.3
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 1572285cd6..959a562b8d 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1d0ad06484f44bcb97eba5e93c40bcb893890f9f64aeb43e46cd9bb4cbd6795d  ffmpeg-4.3.tar.xz
-+sha256  ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb  ffmpeg-4.3.1.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index aeebc0effc..1b311ebaea 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 4.3
-+FFMPEG_VERSION = 4.3.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
--- 
-2.26.2
+On Sat, Jul 11, 2020 at 7:48 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello James,
+>
+> On Tue,  7 Jul 2020 15:32:52 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > -PYTHON_AUTOBAHN_VERSION = 20.4.3
+> > +PYTHON_AUTOBAHN_VERSION = 20.6.2
+> >  PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+> > -PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
+> > +PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/43/ba/926d323decdce0341f6f60dce45ea5553b08113dddb9ca482554d3db11eb
+> >  PYTHON_AUTOBAHN_LICENSE = MIT
+> >  PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+> >  PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+> > +PYTHON_AUTOBAHN_DEPENDENCIES = host-python-cffi
+> > +PYTHON_AUTOBAHN_ENV = AUTOBAHN_USE_NVX=1 AUTOBAHN_STRIP_XBR=1
+> > +
+> > +define PYTHON_AUTOBAHN_STRIP_XBR_CONTRACTS
+> > +     rm -rf $(@D)/autobahn/xbr/contracts
+> > +endef
+> > +
+> > +PYTHON_AUTOBAHN_POST_EXTRACT_HOOKS = PYTHON_AUTOBAHN_STRIP_XBR_CONTRACTS
+>
+> But isn't AUTOBAHN_STRIP_XBR=1 already taking care of this ? I see:
+>
+> if 'AUTOBAHN_STRIP_XBR' in os.environ:
+>     # force regeneration of egg-info manifest for stripped install
+>     shutil.rmtree('autobahn.egg-info', ignore_errors=True)
+> else:
+>     extras_require_all += extras_require_xbr
+>     packages += ['autobahn.xbr', 'autobahn.asyncio.xbr', 'autobahn.twisted.xbr']
+>     package_data['xbr'] = ['./xbr/contracts/*.json']
+>     entry_points['console_scripts'] += ["xbrnetwork = autobahn.xbr._cli:_main"]
+>
+> I.e, the xbr/contracts/*.json files are only added to package_data when
+> AUTOBAHN_STRIP_XBR is *not* defined.
+Nope, because there's a bug, I have an in progress upstream fix but it
+changes a few other things as well.
+https://github.com/crossbario/autobahn-python/pull/1400
+>
+> Also, in general, we do this kind of removal in a post-install target
+> hook. If there's a reason to do that in a post-extract hook, a comment
+> to explain why would be good.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
