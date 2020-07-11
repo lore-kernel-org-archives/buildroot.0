@@ -1,30 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:55:11 +0200
-Subject: [Buildroot] [PATCH 1/8] board/qemu/aarch64-virt/linux.config:
- regenerate after kernel version bump
-In-Reply-To: <20200706234151.2940865-1-romain.naour@gmail.com>
-References: <20200706234151.2940865-1-romain.naour@gmail.com>
-Message-ID: <20200711155511.25276666@windsurf.home>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 11 Jul 2020 15:58:43 +0200
+Subject: [Buildroot] [PATCH] package/vsftpd: add systemd init
+Message-ID: <20200711135843.1789746-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  7 Jul 2020 01:41:44 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/vsftpd/vsftpd.mk      |  5 +++++
+ package/vsftpd/vsftpd.service | 12 ++++++++++++
+ 2 files changed, 17 insertions(+)
+ create mode 100644 package/vsftpd/vsftpd.service
 
-> Regenerate the with savedefconfig.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  board/qemu/aarch64-virt/linux.config | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-
-Series applied. Thanks!
-
-Thomas
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 2f86d91ba..8a9aac2d2 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -47,6 +47,11 @@ define VSFTPD_USERS
+ 	ftp -1 ftp -1 * /home/ftp - - Anonymous FTP User
+ endef
+ 
++define VSFTPD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/vsftpd/vsftpd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/vsftpd.service
++endef
++
+ define VSFTPD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/vsftpd/S70vsftpd $(TARGET_DIR)/etc/init.d/S70vsftpd
+ endef
+diff --git a/package/vsftpd/vsftpd.service b/package/vsftpd/vsftpd.service
+new file mode 100644
+index 000000000..eba61adda
+--- /dev/null
++++ b/package/vsftpd/vsftpd.service
+@@ -0,0 +1,12 @@
++[Unit]
++Description=vsftpd FTP server
++After=network.target
++
++[Service]
++Type=simple
++ExecStart=/usr/sbin/vsftpd /etc/vsftpd.conf
++ExecReload=/bin/kill -HUP $MAINPID
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
