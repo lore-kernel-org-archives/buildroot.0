@@ -1,60 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 15:48:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
- version 20.6.2
-In-Reply-To: <20200707213252.627579-1-james.hilliard1@gmail.com>
-References: <20200707213252.627579-1-james.hilliard1@gmail.com>
-Message-ID: <20200711154808.6df46498@windsurf.home>
+Date: Sat, 11 Jul 2020 15:51:44 +0200
+Subject: [Buildroot] [git commit] board/qemu/aarch64-virt/linux.config: add
+ RTC PL031 driver
+Message-ID: <20200711135056.1FC3C81763@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=a3bf3399079e4a69b4ef1f22b044ce7358ff0de2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Jul 2020 15:32:52 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Qemu for the aarch64 virt emulate an RTC PL031 device.
+Enable the kernel support to allow setting the system time.
 
-> -PYTHON_AUTOBAHN_VERSION = 20.4.3
-> +PYTHON_AUTOBAHN_VERSION = 20.6.2
->  PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-> -PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
-> +PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/43/ba/926d323decdce0341f6f60dce45ea5553b08113dddb9ca482554d3db11eb
->  PYTHON_AUTOBAHN_LICENSE = MIT
->  PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
->  PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
-> +PYTHON_AUTOBAHN_DEPENDENCIES = host-python-cffi
-> +PYTHON_AUTOBAHN_ENV = AUTOBAHN_USE_NVX=1 AUTOBAHN_STRIP_XBR=1
-> +
-> +define PYTHON_AUTOBAHN_STRIP_XBR_CONTRACTS
-> +	rm -rf $(@D)/autobahn/xbr/contracts
-> +endef
-> +
-> +PYTHON_AUTOBAHN_POST_EXTRACT_HOOKS = PYTHON_AUTOBAHN_STRIP_XBR_CONTRACTS
+"date" now return the current time:
+Sun Jul  5 20:38:50 UTC 2020
 
-But isn't AUTOBAHN_STRIP_XBR=1 already taking care of this ? I see:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/qemu/aarch64-virt/linux.config | 1 +
+ 1 file changed, 1 insertion(+)
 
-if 'AUTOBAHN_STRIP_XBR' in os.environ:
-    # force regeneration of egg-info manifest for stripped install
-    shutil.rmtree('autobahn.egg-info', ignore_errors=True)
-else:
-    extras_require_all += extras_require_xbr
-    packages += ['autobahn.xbr', 'autobahn.asyncio.xbr', 'autobahn.twisted.xbr']
-    package_data['xbr'] = ['./xbr/contracts/*.json']
-    entry_points['console_scripts'] += ["xbrnetwork = autobahn.xbr._cli:_main"]
-
-I.e, the xbr/contracts/*.json files are only added to package_data when
-AUTOBAHN_STRIP_XBR is *not* defined.
-
-Also, in general, we do this kind of removal in a post-install target
-hook. If there's a reason to do that in a post-extract hook, a comment
-to explain why would be good.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/qemu/aarch64-virt/linux.config b/board/qemu/aarch64-virt/linux.config
+index 948b06b0a2..49018efe95 100644
+--- a/board/qemu/aarch64-virt/linux.config
++++ b/board/qemu/aarch64-virt/linux.config
+@@ -45,6 +45,7 @@ CONFIG_VIRTIO_CONSOLE=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_HW_RANDOM_VIRTIO=y
+ CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_PL031=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
+ CONFIG_MAILBOX=y
