@@ -1,36 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 12:59:19 +0200
-Subject: [Buildroot] Rename aarch64_efi_defconfig to
- qemu_aarch64_virt_efi_defconfig
-In-Reply-To: <9693c61b-610e-9371-8ecf-a45a9f1f22e4@gmail.com>
-References: <9693c61b-610e-9371-8ecf-a45a9f1f22e4@gmail.com>
-Message-ID: <20200711125919.6e484aef@windsurf.home>
+Date: Sat, 11 Jul 2020 13:05:55 +0200
+Subject: [Buildroot] [PATCH] Fix swupdate build by installing mtd
+ headers as expected
+In-Reply-To: <CAPxu4wfxL4rCL2Q-CKUwHS+rbvUdwjhY=b0x5CV-OkBh--qBDQ@mail.gmail.com>
+References: <CAPxu4wfxL4rCL2Q-CKUwHS+rbvUdwjhY=b0x5CV-OkBh--qBDQ@mail.gmail.com>
+Message-ID: <20200711130555.3a1aea7d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Jul 2020 01:02:01 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Hello Thomas,
 
-> I would like to rename the aarch64_efi_defconfig to
-> qemu_aarch64_virt_efi_defconfig  in order to do a runtime test in the Buildroot
-> gitlab-ci.
+Thanks for your contribution!
 
-The thing is that the idea of the aarch64_efi_defconfig is that it is a
-generic AArch64 image that should work on all EFI compliant AArch64
-systems, not just Qemu.
+On Fri, 10 Jul 2020 15:41:37 -0400
+"Thomas W." <thomas.chiantia@gmail.com> wrote:
 
-Renaming it with a "qemu_" prefix kind of losses that implicit
-"documentation" that it is a generic AArch64 configuration.
+> swupdate expects libmtd.h and libubi.h to be in the include folder and
+> not in the mtd namespace.
+> (see also:
+> https://groups.google.com/forum/#!topic/swupdate/Apv_yRLmgzY
+> https://groups.google.com/forum/#!topic/swupdate/gd25RIPa00w
+> https://groups.google.com/forum/#!topic/swupdate/gei0Gc_5j8M)
+> 
+> Signed-off-by: Thomas Chiantia <thomas.chiantia@gmail.com>
 
-If your goal is to have this defconfig tested under Qemu, then I would
-rather suggest that we improve the logic that decides which defconfig
-can be tested under Qemu, and not just rely on a qemu_ prefix, but
-maybe some kind of explicit list ?
+Which problem is this fixing ? Is there a build issue today ? We have
+had mtd + swupdate for quite some time. Why suddenly should we change
+this ?
 
-Best regards,
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 3477460200..76ede98879 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -119,8 +119,8 @@ endef
+>  # Those libraries are not installed by "make install", but are needed
+>  # by other packages, such as swupdate.
+>  define MTD_INSTALL_LIBS
+> -    $(INSTALL) -D -m 0755 $(@D)/include/libmtd.h
+> $(STAGING_DIR)/usr/include/mtd/libmtd.h
+> -    $(INSTALL) -D -m 0755 $(@D)/include/libubi.h
+> $(STAGING_DIR)/usr/include/mtd/libubi.h
+> +    $(INSTALL) -D -m 0755 $(@D)/include/libmtd.h
+> $(STAGING_DIR)/usr/include/libmtd.h
+> +    $(INSTALL) -D -m 0755 $(@D)/include/libubi.h
+> $(STAGING_DIR)/usr/include/libubi.h
+>      $(INSTALL) -D -m 0755 $(@D)/include/mtd/ubi-media.h
+> $(STAGING_DIR)/usr/include/mtd/ubi-media.h
+>      $(INSTALL) -D -m 0755 $(@D)/libmtd.a $(STAGING_DIR)/usr/lib/libmtd.a
+>      $(INSTALL) -D -m 0755 $(@D)/libubi.a $(STAGING_DIR)/usr/lib/libubi.a
+
+Your patch is badly line-wrapped by your e-mail client. Could you send
+your patches using git send-email ?
+
+Thanks!
 
 Thomas
 -- 
