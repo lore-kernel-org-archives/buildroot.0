@@ -1,53 +1,52 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 11 Jul 2020 15:58:43 +0200
-Subject: [Buildroot] [PATCH] package/vsftpd: add systemd init
-Message-ID: <20200711135843.1789746-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Jul 2020 15:58:00 +0200
+Subject: [Buildroot] [git commit] package/php: bump version to 7.4.8
+Message-ID: <20200711135539.D83F784496@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/vsftpd/vsftpd.mk      |  5 +++++
- package/vsftpd/vsftpd.service | 12 ++++++++++++
- 2 files changed, 17 insertions(+)
- create mode 100644 package/vsftpd/vsftpd.service
+commit: https://git.buildroot.net/buildroot/commit/?id=a6a500bb990fe6b9302e762adbd5e440329e99d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index 2f86d91ba..8a9aac2d2 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -47,6 +47,11 @@ define VSFTPD_USERS
- 	ftp -1 ftp -1 * /home/ftp - - Anonymous FTP User
- endef
+Quoting https://www.php.net/
+"For windows users running an official build, this release contains a
+ patched version of libcurl addressing CVE-2020-8159.
+
+For all other consumers of PHP, this is a bug fix release."
+
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.8
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 9789a99988..47879eecca 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf  php-7.4.7.tar.xz
++sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
  
-+define VSFTPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/vsftpd/vsftpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/vsftpd.service
-+endef
-+
- define VSFTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/vsftpd/S70vsftpd $(TARGET_DIR)/etc/init.d/S70vsftpd
- endef
-diff --git a/package/vsftpd/vsftpd.service b/package/vsftpd/vsftpd.service
-new file mode 100644
-index 000000000..eba61adda
---- /dev/null
-+++ b/package/vsftpd/vsftpd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=vsftpd FTP server
-+After=network.target
-+
-+[Service]
-+Type=simple
-+ExecStart=/usr/sbin/vsftpd /etc/vsftpd.conf
-+ExecReload=/bin/kill -HUP $MAINPID
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
--- 
-2.25.1
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ed71404c7b..48af0f6fdc 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.7
++PHP_VERSION = 7.4.8
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
