@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Jul 2020 23:52:53 +0200
-Subject: [Buildroot] [PATCH] package/ccid: bump version to 1.4.33
-In-Reply-To: <20200705182753.24187-1-sergio.prado@e-labworks.com>
-References: <20200705182753.24187-1-sergio.prado@e-labworks.com>
-Message-ID: <20200711235253.676f0874@windsurf.home>
+Date: Sun, 12 Jul 2020 00:00:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jq: bump version to a17dd32
+In-Reply-To: <20200705182845.42885-1-lylejfranklin@gmail.com>
+References: <20200705182845.42885-1-lylejfranklin@gmail.com>
+Message-ID: <20200712000021.552c4f8d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 Jul 2020 15:27:53 -0300
-Sergio Prado <sergio.prado@e-labworks.com> wrote:
+On Sun,  5 Jul 2020 14:28:45 -0400
+lylejfranklin at gmail.com wrote:
 
-> Also separate the fields in the hash file by two spaces.
+> From: Lyle Franklin <lylejfranklin@gmail.com>
 > 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> - Bumps jq package to latest to fix seg fault errors
+> - https://github.com/stedolan/jq/issues/2003
+> - I saw this on ARM64 compiled with uclibc, issue mentions MIPS, so
+>   might only be an issue for non-x86
+> 
+> Signed-off-by: Lyle Franklin <lylejfranklin@gmail.com>
 > ---
->  package/ccid/ccid.hash | 4 ++--
->  package/ccid/ccid.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/jq/jq.hash | 2 +-
+>  package/jq/jq.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Applied to master with a simplified commit log. Thanks!
 
 Thomas
 -- 
