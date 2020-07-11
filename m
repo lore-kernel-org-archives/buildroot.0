@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 00:09:47 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-greenlet: bump to
- version 0.4.16
-In-Reply-To: <20200705215435.148058-2-james.hilliard1@gmail.com>
-References: <20200705215435.148058-1-james.hilliard1@gmail.com>
- <20200705215435.148058-2-james.hilliard1@gmail.com>
-Message-ID: <20200712000947.2752347e@windsurf.home>
+Date: Sun, 12 Jul 2020 00:10:29 +0200
+Subject: [Buildroot] [PATCH 1/2] package/snmppp: bump version to 3.4.1
+In-Reply-To: <20200705165242.13930-2-sergio.prado@e-labworks.com>
+References: <20200705165242.13930-1-sergio.prado@e-labworks.com>
+ <20200705165242.13930-2-sergio.prado@e-labworks.com>
+Message-ID: <20200712001029.5028a9ab@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 Jul 2020 15:54:35 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sun,  5 Jul 2020 13:52:41 -0300
+Sergio Prado <sergio.prado@e-labworks.com> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Also separate the fields in the hash file by two spaces.
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 > ---
->  package/python-greenlet/python-greenlet.hash | 6 +++---
->  package/python-greenlet/python-greenlet.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/snmppp/snmppp.hash | 4 ++--
+>  package/snmppp/snmppp.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
