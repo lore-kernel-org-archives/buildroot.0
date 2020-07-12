@@ -1,147 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 21:35:46 +0200
-Subject: [Buildroot] [git commit] package/bluez-alsa: add patch for fixing
- build failure with gcc 10
-Message-ID: <20200712193213.F252686A7A@busybox.osuosl.org>
+Date: Sun, 12 Jul 2020 21:36:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez-alsa: add patch for
+ fixing build failure with gcc 10
+In-Reply-To: <20200712145825.9316-1-heiko.thiery@gmail.com>
+References: <20200712145825.9316-1-heiko.thiery@gmail.com>
+Message-ID: <20200712213656.4732f44e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42e93310c00cf21b799ebb1d9c0152a485061f76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 12 Jul 2020 16:58:25 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-A fix is available upstream but does not apply on the used version by
-buildroot.
+> A fix is available upstream but does not apply on the used version by
+> buildroot.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  .../0001-fix-build-issue-with-gcc-10.patch    | 118 ++++++++++++++++++
+>  1 file changed, 118 insertions(+)
+>  create mode 100644 package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-fix-build-issue-with-gcc-10.patch         | 118 +++++++++++++++++++++
- 1 file changed, 118 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
-new file mode 100644
-index 0000000000..65a67c35c5
---- /dev/null
-+++ b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
-@@ -0,0 +1,118 @@
-+From 72324e9415d2757a5f0f028865f841de70e1d0c4 Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Sun, 12 Jul 2020 14:18:09 +0200
-+Subject: [PATCH] fix build issue with gcc 10
-+
-+This patch is created on top of tagged version v2.1.0.
-+An upstream fix commit [1] for this issue is already in upstream master but
-+does not apply on current used version in buildroot.
-+
-+[1] https://github.com/Arkq/bluez-alsa/commit/30a23dd7ce9b00c702fa48545f6b03038f9e17c6
-+
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ src/bluealsa-dbus.c  | 4 ++++
-+ src/bluealsa-iface.c | 2 ++
-+ src/bluealsa-iface.h | 4 ----
-+ src/bluealsa.c       | 3 +++
-+ src/bluez-a2dp.h     | 3 ---
-+ src/bluez-iface.h    | 3 ---
-+ src/bluez.c          | 3 +++
-+ 7 files changed, 12 insertions(+), 10 deletions(-)
-+
-+diff --git a/src/bluealsa-dbus.c b/src/bluealsa-dbus.c
-+index 5e748e3..4c9cd3d 100644
-+--- a/src/bluealsa-dbus.c
-++++ b/src/bluealsa-dbus.c
-+@@ -33,6 +33,10 @@
-+ #include "shared/defs.h"
-+ #include "shared/log.h"
-+ 
-++extern const GDBusInterfaceInfo bluealsa_iface_manager;
-++extern const GDBusInterfaceInfo bluealsa_iface_pcm;
-++extern const GDBusInterfaceInfo bluealsa_iface_rfcomm;
-++
-+ static GVariant *ba_variant_new_device_path(const struct ba_device *d) {
-+ 	return g_variant_new_object_path(d->bluez_dbus_path);
-+ }
-+diff --git a/src/bluealsa-iface.c b/src/bluealsa-iface.c
-+index 71810c7..55b79c9 100644
-+--- a/src/bluealsa-iface.c
-++++ b/src/bluealsa-iface.c
-+@@ -10,6 +10,8 @@
-+ 
-+ #include "bluealsa-iface.h"
-+ 
-++#define BLUEALAS_IFACE_C
-++
-+ static const GDBusArgInfo arg_codec = {
-+ 	-1, "codec", "q", NULL
-+ };
-+diff --git a/src/bluealsa-iface.h b/src/bluealsa-iface.h
-+index 262fb76..4f3e85b 100644
-+--- a/src/bluealsa-iface.h
-++++ b/src/bluealsa-iface.h
-+@@ -32,8 +32,4 @@
-+ #define BLUEALSA_RFCOMM_MODE_HSP_AG "HSP-AG"
-+ #define BLUEALSA_RFCOMM_MODE_HSP_HS "HSP-HS"
-+ 
-+-const GDBusInterfaceInfo bluealsa_iface_manager;
-+-const GDBusInterfaceInfo bluealsa_iface_pcm;
-+-const GDBusInterfaceInfo bluealsa_iface_rfcomm;
-+-
-+ #endif
-+diff --git a/src/bluealsa.c b/src/bluealsa.c
-+index 929f9ed..690c407 100644
-+--- a/src/bluealsa.c
-++++ b/src/bluealsa.c
-+@@ -20,6 +20,9 @@
-+ #include "bluez-a2dp.h"
-+ #include "hfp.h"
-+ 
-++/* NULL-terminated list of available A2DP codecs */
-++extern const struct bluez_a2dp_codec **bluez_a2dp_codecs;
-++
-+ /* Initialize global configuration variable. */
-+ struct ba_config config = {
-+ 
-+diff --git a/src/bluez-a2dp.h b/src/bluez-a2dp.h
-+index 7c0e33b..127dbd9 100644
-+--- a/src/bluez-a2dp.h
-++++ b/src/bluez-a2dp.h
-+@@ -57,7 +57,4 @@ struct bluez_a2dp_codec {
-+ 	size_t samplings_size;
-+ };
-+ 
-+-/* NULL-terminated list of available A2DP codecs */
-+-const struct bluez_a2dp_codec **bluez_a2dp_codecs;
-+-
-+ #endif
-+diff --git a/src/bluez-iface.h b/src/bluez-iface.h
-+index 34269c5..250267e 100644
-+--- a/src/bluez-iface.h
-++++ b/src/bluez-iface.h
-+@@ -27,7 +27,4 @@
-+ #define BLUEZ_TRANSPORT_STATE_PENDING "pending"
-+ #define BLUEZ_TRANSPORT_STATE_ACTIVE  "active"
-+ 
-+-const GDBusInterfaceInfo bluez_iface_endpoint;
-+-const GDBusInterfaceInfo bluez_iface_profile;
-+-
-+ #endif
-+diff --git a/src/bluez.c b/src/bluez.c
-+index cfdbff8..190101e 100644
-+--- a/src/bluez.c
-++++ b/src/bluez.c
-+@@ -45,6 +45,9 @@
-+ # define G_DBUS_ERROR_UNKNOWN_OBJECT G_DBUS_ERROR_FAILED
-+ #endif
-+ 
-++extern const GDBusInterfaceInfo bluez_iface_endpoint;
-++extern const GDBusInterfaceInfo bluez_iface_profile;
-++
-+ /**
-+  * Structure describing registered D-Bus object. */
-+ struct dbus_object_data {
-+-- 
-+2.20.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
