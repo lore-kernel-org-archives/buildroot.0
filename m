@@ -1,138 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 23:13:34 +0200
-Subject: [Buildroot] [git commit] package/nfs-utils: bump version to 2.5.1
-Message-ID: <20200712210959.8143F802D1@busybox.osuosl.org>
+Date: Sun, 12 Jul 2020 23:13:11 +0200
+Subject: [Buildroot] [git commit] package/zlib-ng: bump to version
+ 9609cb56a8f62868ccf264493bc9c3b4d5762fcf
+Message-ID: <20200712210959.74ADE802D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ebb476aa225320a2541e78214eb5df0024dcb71
+commit: https://git.buildroot.net/buildroot/commit/?id=fe27c305175ee0823b20f61026544e61d155b85d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to version 2.5.1 and remove local already upstreamed patch.
+We need to update the location to point to the current maintained
+upstream repo as well since the existing one is unmaintained.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-nfs-utils-print-time-in-64-bit.patch      | 84 ----------------------
- package/nfs-utils/nfs-utils.hash                   |  4 +-
- package/nfs-utils/nfs-utils.mk                     |  2 +-
- 3 files changed, 3 insertions(+), 87 deletions(-)
+ package/zlib-ng/zlib-ng.hash | 2 +-
+ package/zlib-ng/zlib-ng.mk   | 4 ++--
+ package/zlib/Config.in       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nfs-utils/0001-nfs-utils-print-time-in-64-bit.patch b/package/nfs-utils/0001-nfs-utils-print-time-in-64-bit.patch
-deleted file mode 100644
-index 5cee989885..0000000000
---- a/package/nfs-utils/0001-nfs-utils-print-time-in-64-bit.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--From cb75ec49c0a92f55b2241eb1cd95a3fdf63f0dac Mon Sep 17 00:00:00 2001
--From: Rosen Penev <rosenp@gmail.com>
--Date: Mon, 13 Apr 2020 14:14:45 -0400
--Subject: [PATCH] nfs-utils: print time in 64-bit
--
--musl 1.2.0 defines time_t as 64-bit, even under 32-bit OSes.
--
--Fixes -Wformat errors.
--
--Signed-off-by: Rosen Penev <rosenp@gmail.com>
--Signed-off-by: Steve Dickson <steved@redhat.com>
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- support/nfs/cacheio.c |  3 ++-
-- utils/idmapd/idmapd.c | 11 ++++++-----
-- 2 files changed, 8 insertions(+), 6 deletions(-)
--
--diff --git a/support/nfs/cacheio.c b/support/nfs/cacheio.c
--index 7c4cf373..126c1283 100644
----- a/support/nfs/cacheio.c
--+++ b/support/nfs/cacheio.c
--@@ -20,6 +20,7 @@
-- #endif
-- 
-- #include <nfslib.h>
--+#include <inttypes.h>
-- #include <stdio.h>
-- #include <stdio_ext.h>
-- #include <string.h>
--@@ -238,7 +239,7 @@ cache_flush(int force)
-- 	    stb.st_mtime > now)
-- 		stb.st_mtime = time(0);
-- 	
---	sprintf(stime, "%ld\n", stb.st_mtime);
--+	sprintf(stime, "%" PRId64 "\n", (int64_t)stb.st_mtime);
-- 	for (c=0; cachelist[c]; c++) {
-- 		int fd;
-- 		sprintf(path, "/proc/net/rpc/%s/flush", cachelist[c]);
--diff --git a/utils/idmapd/idmapd.c b/utils/idmapd/idmapd.c
--index c187e7d7..893159f1 100644
----- a/utils/idmapd/idmapd.c
--+++ b/utils/idmapd/idmapd.c
--@@ -54,6 +54,7 @@
-- #include <dirent.h>
-- #include <unistd.h>
-- #include <netdb.h>
--+#include <inttypes.h>
-- #include <signal.h>
-- #include <stdio.h>
-- #include <stdlib.h>
--@@ -172,7 +173,7 @@ flush_nfsd_cache(char *path, time_t now)
-- 	int fd;
-- 	char stime[32];
-- 
---	sprintf(stime, "%ld\n", now);
--+	sprintf(stime, "%" PRId64 "\n", (int64_t)now);
-- 	fd = open(path, O_RDWR);
-- 	if (fd == -1)
-- 		return -1;
--@@ -625,8 +626,8 @@ nfsdcb(int UNUSED(fd), short which, void *data)
-- 		/* Name */
-- 		addfield(&bp, &bsiz, im.im_name);
-- 		/* expiry */
---		snprintf(buf1, sizeof(buf1), "%lu",
---			 time(NULL) + cache_entry_expiration);
--+		snprintf(buf1, sizeof(buf1), "%" PRId64,
--+			 (int64_t)time(NULL) + cache_entry_expiration);
-- 		addfield(&bp, &bsiz, buf1);
-- 		/* Note that we don't want to write the id if the mapping
-- 		 * failed; instead, by leaving it off, we write a negative
--@@ -653,8 +654,8 @@ nfsdcb(int UNUSED(fd), short which, void *data)
-- 		snprintf(buf1, sizeof(buf1), "%u", im.im_id);
-- 		addfield(&bp, &bsiz, buf1);
-- 		/* expiry */
---		snprintf(buf1, sizeof(buf1), "%lu",
---			 time(NULL) + cache_entry_expiration);
--+		snprintf(buf1, sizeof(buf1), "%" PRId64,
--+			 (int64_t)time(NULL) + cache_entry_expiration);
-- 		addfield(&bp, &bsiz, buf1);
-- 		/* Note we're ignoring the status field in this case; we'll
-- 		 * just map to nobody instead. */
---- 
--2.20.1
--
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index a30013af93..266752071a 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.4.3/sha256sums.asc
--sha256 af65fce5dd8370cff9ead67baac5a6cd69c376dcadfef264dc2c78c904f26599  nfs-utils-2.4.3.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.1/sha256sums.asc
-+sha256 0f1c8170e16a07d9836bbf0836d48d0c842b6f0e0e8b18748f099751851d30c4  nfs-utils-2.5.1.tar.xz
- # Locally computed
- sha256 576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 7af229a57e..da85cb178f 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index 2e89a8d7a6..1aacecbeac 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	2ec78c8c13530bffaebfc10be2f4695c47cf50fe2fbc2104606467703836fa0e zlib-ng-a17fefa147942edbf80ab22a16bcbc2419def12d.tar.gz
++sha256	bc95d2a23b572478769b5e12aa2e775df717ba9ff0f44a3a941987c8b997c84a zlib-ng-9609cb56a8f62868ccf264493bc9c3b4d5762fcf.tar.gz
+ sha256	d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436 LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index 3d9651c08f..098dfcb28a 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NFS_UTILS_VERSION = 2.4.3
-+NFS_UTILS_VERSION = 2.5.1
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
+-ZLIB_NG_VERSION = a17fefa147942edbf80ab22a16bcbc2419def12d
+-ZLIB_NG_SITE = $(call github,mtl1979,zlib-ng,$(ZLIB_NG_VERSION))
++ZLIB_NG_VERSION = 9609cb56a8f62868ccf264493bc9c3b4d5762fcf
++ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
+ ZLIB_NG_INSTALL_STAGING = YES
+diff --git a/package/zlib/Config.in b/package/zlib/Config.in
+index 0f6179f537..4c41ea9fe9 100644
+--- a/package/zlib/Config.in
++++ b/package/zlib/Config.in
+@@ -35,7 +35,7 @@ config BR2_PACKAGE_ZLIB_NG
+ 	  Zlib replacement with optimizations for
+ 	  "next generation" systems.
+ 
+-	  https://github.com/mtl1979/zlib-ng/tree/renamelib
++	  https://github.com/zlib-ng/zlib-ng
+ 
+ endchoice
+ 
