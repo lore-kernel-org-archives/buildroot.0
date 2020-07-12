@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 10:30:56 +0200
-Subject: [Buildroot] [git commit] package/moarvm: bump to version 2020.06
-Message-ID: <20200712082727.61F5684E16@busybox.osuosl.org>
+Date: Sun, 12 Jul 2020 10:53:41 +0200
+Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2020.06
+In-Reply-To: <20200712065407.1791496-1-francois.perrad@gadz.org>
+References: <20200712065407.1791496-1-francois.perrad@gadz.org>
+Message-ID: <20200712105341.06616eea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af57e6a05000f9df03110057103ef9e9f3fb685c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 12 Jul 2020 08:54:07 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/moarvm/moarvm.hash | 2 +-
+>  package/moarvm/moarvm.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 05e21c0ea8..fc915944f9 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9368d2c691ea8710459a48c323915df6648c4a67d2ce24c27fc74f6b084a824b  MoarVM-2020.05.tar.gz
-+sha256  db9759f16f76cb6d3b1f4baff9616c5ddb99fbb47ea62f54a5cc251b6ea99dc2  MoarVM-2020.06.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 4e8ca91904..d2f1a01c70 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOARVM_VERSION = 2020.05
-+MOARVM_VERSION = 2020.06
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
