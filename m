@@ -1,60 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:27:37 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/asterisk:
- security bump version to 16.10.0
-Message-ID: <20200712202922.2450583FF7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jul 2020 22:33:34 +0200
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.11.10
+Message-ID: <20200712203000.77C99800CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a97d54b81cadd6ecc027e2b595c653c250039ca1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4e813db5335fe256b44e51b5873f7f417310dce8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixed the following security issues (16.7.0):
+Changelog:
+https://www.samba.org/samba/history/samba-4.11.10.html
 
-- ASTERISK-28580: Bypass SYSTEM write permission in manager action allows
-  system commands execution
-
-- ASTERISK-28589: chan_sip: Depending on configuration an INVITE can alter
-  Addr of a peer
-
-In addition, 16.8..16.10 contains a large number of bugfixes.
-
-Release Notes:
-https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current-summary.html
-
-Signed-off-by: Felix Vollmer <FelixVollmer@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0152c0553a5ef4bc4252948a0f6b14b51e5c1b87)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 26aa4b89b7..50457ba8f5 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  474cbc6f9dddee94616f8af8e097bc4d340dc9698c4165dc45be6e0be80ff725  asterisk-16.6.2.tar.gz
-+sha256  f0ba5e3c4ef46f6657dd3a7167190f9b6cd6bbf4af09ecc291a9d5868b477609  asterisk-16.10.0.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index cea287f0d7..97e97c14c8 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index ad34489317..34ae6f84bc 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
+-sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
++sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4124032264..b6fe1a827c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 16.6.2
-+ASTERISK_VERSION = 16.10.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-SAMBA4_VERSION = 4.11.9
++SAMBA4_VERSION = 4.11.10
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
