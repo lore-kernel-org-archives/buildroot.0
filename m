@@ -1,59 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 23:28:59 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/nodejs: security
- bump to 12.18.0
-Message-ID: <20200712212910.3F2D986ABC@busybox.osuosl.org>
+Date: Sun, 12 Jul 2020 23:31:05 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/nghttp2: security
+ bump version to 1.41.0
+Message-ID: <20200712212910.49ED9869AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc7596496083d70a1a4ef60ecf258871ed226120
+commit: https://git.buildroot.net/buildroot/commit/?id=94547c30d30821ce6ce995b19acb6b47724b578a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This is a security release.
-
-Vulnerabilities fixed:
-
-CVE-2020-8172: TLS session reuse can lead to host certificate verification bypass (High).
-CVE-2020-11080: HTTP/2 Large Settings Frame DoS (Low).
-CVE-2020-8174: napi_get_value_string_*() allows various kinds of memory corruption (High).
-
-See https://nodejs.org/en/blog/release/v12.18.0/
+Fix CVE-2020-11080 Denial of service: Overly large SETTINGS frames
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
+[yann.morin.1998 at free.fr: two spaces in hash files]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 06decad41bcf187ad88fde1fe8039e6fb65fabc7)
+(cherry picked from commit e500367ea44adffcfc3132099bedf550d9913313)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 6 +++---
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nghttp2/nghttp2.hash | 4 ++--
+ package/nghttp2/nghttp2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 411b4d52b9..60d69a8638 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.16.3/SHASUMS256.txt
--sha256  f0559b0829c7f2ac10bf5b3e157e498227e95e26cdb6af814969c49f367359a3  node-v12.16.3.tar.xz
-+# From https://nodejs.org/dist/v12.18.0/SHASUMS256.txt
-+sha256  d4688636a378367f5157f02bd5c13902f5c193356f8f7a35c99dfa383b03b13f  node-v12.18.0.tar.xz
- 
- # Hash for license file
--sha256  3f5749f7a58edaadd77843057a90063a18067f472d8b26c0a76905cafa1063e3  LICENSE
-+sha256  cd2e5817a25d7d28efba927b01056cae04a616b673014159f9eafeb008a0e747  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 7abba4e746..3f35ac7c33 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
+diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
+index e0512e891b..3702a91b5e 100644
+--- a/package/nghttp2/nghttp2.hash
++++ b/package/nghttp2/nghttp2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 fc820a305e2f410fade1a3260f09229f15c0494fc089b0100312cd64a33a38c0  nghttp2-1.39.2.tar.gz
+-sha256 6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
++sha256  eacc6f0f8543583ecd659faf0a3f906ed03826f1d4157b536b4b385fe47c5bb8  nghttp2-1.41.0.tar.gz
++sha256  6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
+diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
+index 6a5ec72847..7b611c88fd 100644
+--- a/package/nghttp2/nghttp2.mk
++++ b/package/nghttp2/nghttp2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 12.16.3
-+NODEJS_VERSION = 12.18.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-NGHTTP2_VERSION = 1.39.2
++NGHTTP2_VERSION = 1.41.0
+ NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
+ NGHTTP2_LICENSE = MIT
+ NGHTTP2_LICENSE_FILES = COPYING
