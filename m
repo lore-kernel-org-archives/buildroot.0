@@ -1,57 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 23:23:00 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/nodejs: install
- to staging
-Message-ID: <20200712212910.2CF09869AA@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 12 Jul 2020 23:35:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: bump to version 2.1.4
+Message-ID: <20200712213543.64986-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bb5762c4112e704cf4576aa93a49d2336f03058
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+This will fix a build failure with kernel 4.15 thanks to:
+https://github.com/acassen/keepalived/commit/d47ae3b1c853adefb9680ba31cf05c037d844445
 
-Install header files and libraries into the staging area. Some
-packages like mraa (if enabled for Node.js) search for node.h
-and v8.h. Hence, Node.js development file must be installed to
-the staging area.
+Fixes:
+ - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f6e6e648cef2a1678d9ece72559301848caf08b1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nodejs/nodejs.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/keepalived/keepalived.hash | 2 +-
+ package/keepalived/keepalived.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 7f875058b3..e291939981 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -11,6 +11,7 @@ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
- 	libuv zlib nghttp2 \
- 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
- HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
-+NODEJS_INSTALL_STAGING = YES
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
+diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
+index feac0cce61..94af43c3e6 100644
+--- a/package/keepalived/keepalived.hash
++++ b/package/keepalived/keepalived.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fdf57a5766f52bd7f7bb917e06baede2e81efb96060b4dd1714170fbca32d58f  keepalived-2.1.2.tar.gz
++sha256  245bf399e4320064996ac5507236a8896f545d005f6c4c3b91701bcbc5728c60  keepalived-2.1.4.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index c67eda3709..2c78b2d811 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -215,6 +216,17 @@ define NODEJS_INSTALL_MODULES
- endef
- endif
- 
-+define NODEJS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
-+		$(MAKE) -C $(@D) install \
-+		DESTDIR=$(STAGING_DIR) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		NO_LOAD=cctest.target.mk \
-+		PATH=$(@D)/bin:$(BR_PATH) \
-+		LDFLAGS="$(NODEJS_LDFLAGS)" \
-+		LD="$(TARGET_CXX)"
-+endef
-+
- define NODEJS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
- 		$(MAKE) -C $(@D) install \
+-KEEPALIVED_VERSION = 2.1.2
++KEEPALIVED_VERSION = 2.1.4
+ KEEPALIVED_SITE = http://www.keepalived.org/software
+ KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
+ KEEPALIVED_LICENSE = GPL-2.0+
+-- 
+2.27.0
