@@ -1,33 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Jul 2020 23:23:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xvisor: needs host-dtc
-Message-ID: <20200712212340.53036-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Jul 2020 23:30:32 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: install to staging
+In-Reply-To: <20200608103210.23757-1-yegorslists@googlemail.com>
+ (yegorslists's message of "Mon, 8 Jun 2020 12:32:10 +0200")
+References: <20200608103210.23757-1-yegorslists@googlemail.com>
+Message-ID: <87zh84l8uf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-dtc is a mandatory dependency since version 0.3.0 and
-https://github.com/xvisor/xvisor/commit/e31344c9b5835c8a12bfffb3a359f343b273fab5
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/xvisor/xvisor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Install header files and libraries into the staging area. Some
+ > packages like mraa (if enabled for Node.js) search for node.h
+ > and v8.h. Hence, Node.js development file must be installed to
+ > the staging area.
 
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index fe3ec05855..394ff7c80b 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -11,7 +11,7 @@ XVISOR_LICENSE = GPL-2.0+
- XVISOR_LICENSE_FILES = COPYING
- XVISOR_INSTALL_IMAGES = YES
- XVISOR_INSTALL_TARGET = NO
--XVISOR_DEPENDENCIES = host-bison host-flex
-+XVISOR_DEPENDENCIES = host-bison host-dtc host-flex
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+ > ---
+ >  package/nodejs/nodejs.mk | 12 ++++++++++++
+ >  1 file changed, 12 insertions(+)
+
+ > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+ > index 37d7877226..3f35ac7c33 100644
+ > --- a/package/nodejs/nodejs.mk
+ > +++ b/package/nodejs/nodejs.mk
+ > @@ -11,6 +11,7 @@ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+ >  	libuv zlib nghttp2 \
+ >  	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+ >  HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
+ > +NODEJS_INSTALL_STAGING = YES
+ >  NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+ >  NODEJS_LICENSE_FILES = LICENSE
  
- XVISOR_MAKE_TARGETS = all
+ > @@ -215,6 +216,17 @@ define NODEJS_INSTALL_MODULES
+ >  endef
+ >  endif
  
+ > +define NODEJS_INSTALL_STAGING_CMDS
+ > +	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ > +		$(MAKE) -C $(@D) install \
+ > +		DESTDIR=$(STAGING_DIR) \
+ > +		$(TARGET_CONFIGURE_OPTS) \
+ > +		NO_LOAD=cctest.target.mk \
+ > +		PATH=$(@D)/bin:$(BR_PATH) \
+ > +		LDFLAGS="$(NODEJS_LDFLAGS)" \
+ > +		LD="$(TARGET_CXX)"
+ > +endef
+ > +
+ >  define NODEJS_INSTALL_TARGET_CMDS
+ >  	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ >  		$(MAKE) -C $(@D) install \
+ > -- 
+ > 2.17.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.27.0
+Bye, Peter Korsgaard
