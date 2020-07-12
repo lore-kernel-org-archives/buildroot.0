@@ -1,39 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Jul 2020 23:32:05 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/xvisor: needs host-dtc
-Message-ID: <20200712213205.64850-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Jul 2020 23:32:22 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/nodejs: bump to
+ version 12.16.3
+Message-ID: <20200712212856.E9484869AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-dtc is a mandatory dependency since version 0.3.0 and
-https://github.com/xvisor/xvisor/commit/e31344c9b5835c8a12bfffb3a359f343b273fab5
+commit: https://git.buildroot.net/buildroot/commit/?id=cb22b4cb3d811ca21fd163373b9f75483f03700c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/3f49302e7d05d666a51db0cb51365620a63e3b40
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b90ab938b83b701073bfd4edd8a6cff2625dcb6c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
- - Add link on autobuilder failure
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/xvisor/xvisor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/xvisor/xvisor.mk b/package/xvisor/xvisor.mk
-index fe3ec05855..394ff7c80b 100644
---- a/package/xvisor/xvisor.mk
-+++ b/package/xvisor/xvisor.mk
-@@ -11,7 +11,7 @@ XVISOR_LICENSE = GPL-2.0+
- XVISOR_LICENSE_FILES = COPYING
- XVISOR_INSTALL_IMAGES = YES
- XVISOR_INSTALL_TARGET = NO
--XVISOR_DEPENDENCIES = host-bison host-flex
-+XVISOR_DEPENDENCIES = host-bison host-dtc host-flex
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 992040d391..411b4d52b9 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.16.1/SHASUMS256.txt
+-sha256  0a95845ba02c46102b5671d0c5732460073f2d397488337e18d1fc30146d412d  node-v12.16.1.tar.xz
++# From https://nodejs.org/dist/v12.16.3/SHASUMS256.txt
++sha256  f0559b0829c7f2ac10bf5b3e157e498227e95e26cdb6af814969c49f367359a3  node-v12.16.3.tar.xz
  
- XVISOR_MAKE_TARGETS = all
+ # Hash for license file
+ sha256  3f5749f7a58edaadd77843057a90063a18067f472d8b26c0a76905cafa1063e3  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e291939981..7abba4e746 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--- 
-2.27.0
+-NODEJS_VERSION = 12.16.1
++NODEJS_VERSION = 12.16.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
