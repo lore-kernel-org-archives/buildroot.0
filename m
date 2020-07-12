@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 23:41:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: bump to version
- 2.1.4
-In-Reply-To: <20200712213543.64986-1-fontaine.fabrice@gmail.com>
-References: <20200712213543.64986-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200712234147.67d04da8@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 Jul 2020 23:44:50 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/brltty: fix input_event
+ related compile failure
+In-Reply-To: <20200607181116.29433-1-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Sun, 7 Jun 2020 20:11:17 +0200")
+References: <20200607181116.29433-1-heiko.thiery@gmail.com>
+Message-ID: <87mu44l86l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Jul 2020 23:35:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
-> This will fix a build failure with kernel 4.15 thanks to:
-> https://github.com/acassen/keepalived/commit/d47ae3b1c853adefb9680ba31cf05c037d844445
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/keepalived/keepalived.hash | 2 +-
->  package/keepalived/keepalived.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Add a patch to fix input_event time related compile failure. The problem
+ > is reported and fixed upstream.
 
-Applied to master, thanks.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/7c5278c0ff2b2d8f88803e256803b31a75904efe/build-end.log
 
-Thomas
+ > ./system_linux.c: In function 'writeInputEvent':
+ > ./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+ >    gettimeofday(&event.time, NULL);
+ >                        ^~~~
+ >                        type
+
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+Committed to 2020.05.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
