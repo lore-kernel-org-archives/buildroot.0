@@ -1,52 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jul 2020 08:10:11 +0200
-Subject: [Buildroot] [PATCH v3 1/4] package/freescale-imx: Move DDR FW
- choice down to firmware-imx package
-In-Reply-To: <20200711224833.339c7f96@windsurf.home>
-References: <1594382445-4464-1-git-send-email-stephane.viau@oss.nxp.com>
- <1594382445-4464-2-git-send-email-stephane.viau@oss.nxp.com>
- <20200711224833.339c7f96@windsurf.home>
-Message-ID: <20200712061011.GA18825@scaer>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 12 Jul 2020 08:54:07 +0200
+Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2020.06
+Message-ID: <20200712065407.1791496-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-07-11 22:48 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 10 Jul 2020 14:00:42 +0200
-> Stephane Viau <stephane.viau@oss.nxp.com> wrote:
-[--SNIP--]
-> > -config BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
-> > +config BR2_PACKAGE_FIRMWARE_IMX_LPDDR4
-> 
-> When renaming options, we need to keep the old option name in
-> Config.in.legacy so that it doesn't get silently dropped when users
-> update to a newer Buildroot version.
-
-That was not necessary, because BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4 was
-only introduced after 2020.05, so we have no release with the symbol.
-
-> >  	bool "lpddr4"
-> >  	help
-> >  	  Use LPDDR4 binaries (i.e.: lpddr4_pmu_train_*.bin)
-> >  
-> > -config BR2_PACKAGE_FIRMWARE_DDRFW_DDR4
-> > +config BR2_PACKAGE_FIRMWARE_IMX_DDR4
-> 
-> Same here.
-
-Ditto.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 05e21c0ea..fc915944f 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  9368d2c691ea8710459a48c323915df6648c4a67d2ce24c27fc74f6b084a824b  MoarVM-2020.05.tar.gz
++sha256  db9759f16f76cb6d3b1f4baff9616c5ddb99fbb47ea62f54a5cc251b6ea99dc2  MoarVM-2020.06.tar.gz
+ sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 4e8ca9190..d2f1a01c7 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOARVM_VERSION = 2020.05
++MOARVM_VERSION = 2020.06
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
