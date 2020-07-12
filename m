@@ -1,47 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 22:33:34 +0200
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.11.10
-Message-ID: <20200712203000.77C99800CB@busybox.osuosl.org>
+Date: Sun, 12 Jul 2020 22:33:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.11.10
+In-Reply-To: <20200702053556.281003-1-bernd.kuhls@t-online.de>
+References: <20200702053556.281003-1-bernd.kuhls@t-online.de>
+Message-ID: <20200712223349.1f5831a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e813db5335fe256b44e51b5873f7f417310dce8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  2 Jul 2020 07:35:56 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Changelog:
-https://www.samba.org/samba/history/samba-4.11.10.html
+> Changelog:
+> https://www.samba.org/samba/history/samba-4.11.10.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/samba4/samba4.hash | 4 ++--
+>  package/samba4/samba4.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index ad34489317..34ae6f84bc 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
--sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
-+sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4124032264..b6fe1a827c 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.11.9
-+SAMBA4_VERSION = 4.11.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
