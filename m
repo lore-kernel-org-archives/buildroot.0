@@ -1,168 +1,128 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 12 Jul 2020 18:34:21 +0200
-Subject: [Buildroot] [PATCH 3/4] configs/qemu_aarch64_virt_defconfig: boot
- with grub bootloader with efi
-In-Reply-To: <20200712163422.1162187-1-romain.naour@gmail.com>
-References: <20200712163422.1162187-1-romain.naour@gmail.com>
-Message-ID: <20200712163422.1162187-3-romain.naour@gmail.com>
+Date: Sun, 12 Jul 2020 18:34:19 +0200
+Subject: [Buildroot] [PATCH 1/4] package/edk2-aarch64-bin: new package
+Message-ID: <20200712163422.1162187-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current qemu_aarch64_virt_defconfig boot with just the kernel, so ACPI
-tables are missing and the plug and play support is disabled.
+Linaro provide pre-built versions of the binary firmware images of
+UEFI [1] based on the TianoCore edk2 project [2].
 
-dmesg:
-ACPI: Interpreter disabled.
-[...]
-pnp: PnP ACPI: disabled
+The qemu_aarch64_virt_defconfig will be updated by a follow up commit to
+use those firmware to test Aarch64 efi system under Qemu.
 
-The ACPI support is already available in the kernel defconfig, the
-memory hotplug support will be added by the next patch.
+Building edk2 firmware from source require to build edk2 package for
+the host using a script based buildsystem. Instead we use firmware
+provided by Linaro to avoid the maintainance burden.
+There is a limited added value to build them just for Qemu testing
+purpose.
 
-Borrow the post image script, genimage and bootloader configuration from
-aarch64_efi_defconfig to build the disk image used to boot the system
-in efi mode.
+Building edk2 firmware could be intersting for secure boot or for
+other target than Qemu.
 
-As a side effect, the bootloader grub2 is now runtime tested in the
-Buildroot gitlab-ci while testing this defconfig.
+We need to package the edk2 Aarch64 and ARM firmware in two separate
+packages since the downloaded files are using the same name
+(QEMU_EFI.fd and QEMU_VARS.fd). The ARM firmware will be added by
+a follow up patch.
+
+[1] http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/
+[2] https://github.com/tianocore/edk2
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- board/qemu/aarch64-virt/genimage-efi.cfg  | 30 +++++++++++++++++++++++
- board/qemu/aarch64-virt/grub.cfg          |  6 +++++
- board/qemu/aarch64-virt/post-image-efi.sh | 11 +++++++++
- board/qemu/aarch64-virt/readme.txt        |  2 +-
- configs/qemu_aarch64_virt_defconfig       | 19 +++++++++++++-
- 5 files changed, 66 insertions(+), 2 deletions(-)
- create mode 100644 board/qemu/aarch64-virt/genimage-efi.cfg
- create mode 100644 board/qemu/aarch64-virt/grub.cfg
- create mode 100755 board/qemu/aarch64-virt/post-image-efi.sh
+ DEVELOPERS                                    |  1 +
+ package/Config.in.host                        |  1 +
+ package/edk2-aarch64-bin/Config.in.host       | 12 ++++++++++
+ .../edk2-aarch64-bin/edk2-aarch64-bin.hash    |  3 +++
+ package/edk2-aarch64-bin/edk2-aarch64-bin.mk  | 24 +++++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/edk2-aarch64-bin/Config.in.host
+ create mode 100644 package/edk2-aarch64-bin/edk2-aarch64-bin.hash
+ create mode 100644 package/edk2-aarch64-bin/edk2-aarch64-bin.mk
 
-diff --git a/board/qemu/aarch64-virt/genimage-efi.cfg b/board/qemu/aarch64-virt/genimage-efi.cfg
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed9f1388a3..0cb76226bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2191,6 +2191,7 @@ F:	package/binutils/
+ F:	package/bullet/
+ F:	package/clang/
+ F:	package/clinfo/
++F:	package/edk2-aarch64-bin/
+ F:	package/efl/
+ F:	package/enet/
+ F:	package/enlightenment/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 647fc24841..28ccc33037 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -18,6 +18,7 @@ menu "Host utilities"
+ 	source "package/dtc/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
++	source "package/edk2-aarch64-bin/Config.in.host"
+ 	source "package/erofs-utils/Config.in.host"
+ 	source "package/eudev/Config.in.host"
+ 	source "package/exfatprogs/Config.in.host"
+diff --git a/package/edk2-aarch64-bin/Config.in.host b/package/edk2-aarch64-bin/Config.in.host
 new file mode 100644
-index 0000000000..f93ab9d64f
+index 0000000000..b4ec08cb48
 --- /dev/null
-+++ b/board/qemu/aarch64-virt/genimage-efi.cfg
-@@ -0,0 +1,30 @@
-+image efi-part.vfat {
-+  vfat {
-+    file startup.nsh {
-+      image = "efi-part/startup.nsh"
-+    }
-+    file EFI {
-+      image = "efi-part/EFI"
-+    }
-+    file Image {
-+      image = "Image"
-+    }
-+  }
-+  size = 32M
-+}
++++ b/package/edk2-aarch64-bin/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_EDK2_AARCH64_BIN
++	bool "host-edk2-aarch64-bin"
++	depends on BR2_aarch64
++	help
++	  This package will install pre-built versions of the binary
++	  firmware images of UEFI based on the TianoCore project.
 +
-+image disk.img {
++	  This image is intended to be used by host-qemu to boot UEFI
++	  images for Aarch64 target.
 +
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xEF
-+    image = "efi-part.vfat"
-+  }
-+
-+  partition root {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/qemu/aarch64-virt/grub.cfg b/board/qemu/aarch64-virt/grub.cfg
++	  https://github.com/tianocore/edk2
++	  http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/
+diff --git a/package/edk2-aarch64-bin/edk2-aarch64-bin.hash b/package/edk2-aarch64-bin/edk2-aarch64-bin.hash
 new file mode 100644
-index 0000000000..ab88da91b9
+index 0000000000..3166b09dae
 --- /dev/null
-+++ b/board/qemu/aarch64-virt/grub.cfg
-@@ -0,0 +1,6 @@
-+set default="0"
-+set timeout="5"
-+
-+menuentry "Buildroot" {
-+	linux /Image root=/dev/vda2 rootwait console=ttyAMA0
-+}
-diff --git a/board/qemu/aarch64-virt/post-image-efi.sh b/board/qemu/aarch64-virt/post-image-efi.sh
-new file mode 100755
-index 0000000000..d781f3368e
++++ b/package/edk2-aarch64-bin/edk2-aarch64-bin.hash
+@@ -0,0 +1,3 @@
++# From http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/19.03/release/qemu-aarch64/SHA256SUMS
++sha256  43301ef5f620945a082c5f47ae933e154e0cff0976ed22a8cff66033020f6020  QEMU_EFI.fd
++sha256  8b634c1e6bd11607850b69111f6c4dbd1583dbbd1460dac72dbacbdc1a4a130a  QEMU_VARS.fd
+diff --git a/package/edk2-aarch64-bin/edk2-aarch64-bin.mk b/package/edk2-aarch64-bin/edk2-aarch64-bin.mk
+new file mode 100644
+index 0000000000..78818cdc81
 --- /dev/null
-+++ b/board/qemu/aarch64-virt/post-image-efi.sh
-@@ -0,0 +1,11 @@
-+#!/bin/sh
++++ b/package/edk2-aarch64-bin/edk2-aarch64-bin.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# edk2-aarch64-bin
++#
++################################################################################
 +
-+set -e
++EDK2_AARCH64_BIN_VERSION = 19.03
++EDK2_AARCH64_BIN_SITE = http://releases.linaro.org/reference-platform/enterprise/firmware/open-source/$(EDK2_AARCH64_BIN_VERSION)/release/qemu-aarch64
++EDK2_AARCH64_BIN_LICENSE = BSD-2-Clause (edk2), ISC (uefi-tools), BSD-3-Clause (ATF)
 +
-+BOARD_DIR="$(dirname $0)"
++HOST_EDK2_AARCH64_BIN_SOURCE = QEMU_EFI.fd
++HOST_EDK2_AARCH64_BIN_EXTRA_DOWNLOADS = $(EDK2_AARCH64_BIN_SITE)/QEMU_VARS.fd
 +
-+cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
++define HOST_EDK2_AARCH64_BIN_EXTRACT_CMDS
++	cp $(HOST_EDK2_AARCH64_BIN_DL_DIR)/QEMU_EFI.fd $(@D)/QEMU_EFI.fd
++	cp $(HOST_EDK2_AARCH64_BIN_DL_DIR)/QEMU_VARS.fd $(@D)/QEMU_VARS.fd
++endef
 +
-+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
++define HOST_EDK2_AARCH64_BIN_INSTALL_CMDS
++	$(INSTALL) -D -m 644 $(@D)/QEMU_EFI.fd $(HOST_DIR)/usr/share/edk2/aarch64/QEMU_EFI.fd
++	$(INSTALL) -D -m 644 $(@D)/QEMU_VARS.fd $(HOST_DIR)/usr/share/edk2/aarch64/QEMU_VARS.fd
++endef
 +
-+cp ${HOST_DIR}/usr/share/edk2/aarch64/QEMU_EFI.fd ${BINARIES_DIR}/QEMU_EFI.fd
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index db35a3a7a8..53df3f4380 100644
---- a/board/qemu/aarch64-virt/readme.txt
-+++ b/board/qemu/aarch64-virt/readme.txt
-@@ -1,5 +1,5 @@
- Run the emulation with:
- 
--  qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "rootwait root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 # qemu_aarch64_virt_defconfig
-+  qemu-system-aarch64 -M virt -m 512 -cpu cortex-a53 -nographic -smp 1 -bios output/images/QEMU_EFI.fd -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/disk.img,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 # qemu_aarch64_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 9f22987694..6901da505d 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -2,17 +2,30 @@
- BR2_aarch64=y
- BR2_cortex_a53=y
- 
-+# Toolchain, required for eudev and grub
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+
- # System
- BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+
-+## Required tools to create bootable media
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+
-+# Bootloader
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_ARM64_EFI=y
-+BR2_PACKAGE_HOST_EDK2_AARCH64_BIN=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
- # BR2_TARGET_ROOTFS_TAR is not set
- 
- # Image
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh board/qemu/aarch64-virt/post-image-efi.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
- # Linux headers same as kernel, a 5.4 series
-@@ -26,6 +39,10 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-+# Host tools for genimage
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
- # host-qemu for gitlab testing
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
++$(eval $(host-generic-package))
 -- 
 2.25.4
