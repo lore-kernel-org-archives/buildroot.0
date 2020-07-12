@@ -1,73 +1,146 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 16:10:29 +0200
-Subject: [Buildroot] [PATCH v3] package/bitwise: new package
-In-Reply-To: <20200706093743.2176995-1-rfried.dev@gmail.com>
-References: <20200706093743.2176995-1-rfried.dev@gmail.com>
-Message-ID: <20200712161029.34a9d83b@windsurf.home>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 12 Jul 2020 16:58:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez-alsa: add patch for fixing
+ build failure with gcc 10
+Message-ID: <20200712145825.9316-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shalom Ramon,
+A fix is available upstream but does not apply on the used version by
+buildroot.
 
-On Mon,  6 Jul 2020 12:37:43 +0300
-Ramon Fried <rfried.dev@gmail.com> wrote:
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ .../0001-fix-build-issue-with-gcc-10.patch    | 118 ++++++++++++++++++
+ 1 file changed, 118 insertions(+)
+ create mode 100644 package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
 
-> Bitwise is multi base interactive calculator supporting dynamic
-> base conversion and bit manipulation.
-> It's a handy tool for low level hackers,
-> kernel developers and device drivers developers.
-> 
-> Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
-
-I was not totally sure of the value of this for the target system, this
-is not normally where you would need a tool like this. But OK, that's a
-simple package, so why not. I've applied after doing some changes, see
-below.
-
-> diff --git a/package/bitwise/bitwise.hash b/package/bitwise/bitwise.hash
-> new file mode 100644
-> index 0000000000..b31b640ecd
-> --- /dev/null
-> +++ b/package/bitwise/bitwise.hash
-> @@ -0,0 +1,2 @@
-
-We normally put a comment that says where the hash comes from. When it
-was simply calculated locally, we add:
-
-# Locally calculated
-
-so I just did this.
-
-> +sha256  33ce934fb99dadf7652224152cc135a0abf6a211adde53d96e9be7067567749c  bitwise-v0.41.tar.gz
-> +sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-> diff --git a/package/bitwise/bitwise.mk b/package/bitwise/bitwise.mk
-> new file mode 100644
-> index 0000000000..2ef183c1a0
-> --- /dev/null
-> +++ b/package/bitwise/bitwise.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# bitwise
-> +#
-> +################################################################################
-> +
-> +BITWISE_VERSION = 0.41
-> +BITWISE_SITE = https://github.com/mellowcandle/bitwise/releases/download/v$(BITWISE_VERSION)
-> +BITWISE_SOURCE = bitwise-v$(BITWISE_VERSION).tar.gz
-> +BITWISE_DEPENDENCIES = ncurses readline
-> +BITWISE_LICENSE = GPL-2.0
-
-Well, this is your project, and your COPYING file says it's under
-GPL-3.0, so I changed this value as well.
-
-Applied with those two changes. Toda!
-
-Thomas
+diff --git a/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
+new file mode 100644
+index 0000000000..346b51c29f
+--- /dev/null
++++ b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
+@@ -0,0 +1,118 @@
++From 72324e9415d2757a5f0f028865f841de70e1d0c4 Mon Sep 17 00:00:00 2001
++From: Heiko Thiery <heiko.thiery@gmail.com>
++Date: Sun, 12 Jul 2020 14:18:09 +0200
++Subject: [PATCH] fix build issue with gcc 10
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++
++This patch is created on top of tagged version v2.1.0.
++An upstream fix commit [1] for this issue is already in upstream master but
++does not apply on current used version in buildroot.
++
++[1] https://github.com/Arkq/bluez-alsa/commit/30a23dd7ce9b00c702fa48545f6b03038f9e17c6
++---
++ src/bluealsa-dbus.c  | 4 ++++
++ src/bluealsa-iface.c | 2 ++
++ src/bluealsa-iface.h | 4 ----
++ src/bluealsa.c       | 3 +++
++ src/bluez-a2dp.h     | 3 ---
++ src/bluez-iface.h    | 3 ---
++ src/bluez.c          | 3 +++
++ 7 files changed, 12 insertions(+), 10 deletions(-)
++
++diff --git a/src/bluealsa-dbus.c b/src/bluealsa-dbus.c
++index 5e748e3..4c9cd3d 100644
++--- a/src/bluealsa-dbus.c
+++++ b/src/bluealsa-dbus.c
++@@ -33,6 +33,10 @@
++ #include "shared/defs.h"
++ #include "shared/log.h"
++ 
+++extern const GDBusInterfaceInfo bluealsa_iface_manager;
+++extern const GDBusInterfaceInfo bluealsa_iface_pcm;
+++extern const GDBusInterfaceInfo bluealsa_iface_rfcomm;
+++
++ static GVariant *ba_variant_new_device_path(const struct ba_device *d) {
++ 	return g_variant_new_object_path(d->bluez_dbus_path);
++ }
++diff --git a/src/bluealsa-iface.c b/src/bluealsa-iface.c
++index 71810c7..55b79c9 100644
++--- a/src/bluealsa-iface.c
+++++ b/src/bluealsa-iface.c
++@@ -10,6 +10,8 @@
++ 
++ #include "bluealsa-iface.h"
++ 
+++#define BLUEALAS_IFACE_C
+++
++ static const GDBusArgInfo arg_codec = {
++ 	-1, "codec", "q", NULL
++ };
++diff --git a/src/bluealsa-iface.h b/src/bluealsa-iface.h
++index 262fb76..4f3e85b 100644
++--- a/src/bluealsa-iface.h
+++++ b/src/bluealsa-iface.h
++@@ -32,8 +32,4 @@
++ #define BLUEALSA_RFCOMM_MODE_HSP_AG "HSP-AG"
++ #define BLUEALSA_RFCOMM_MODE_HSP_HS "HSP-HS"
++ 
++-const GDBusInterfaceInfo bluealsa_iface_manager;
++-const GDBusInterfaceInfo bluealsa_iface_pcm;
++-const GDBusInterfaceInfo bluealsa_iface_rfcomm;
++-
++ #endif
++diff --git a/src/bluealsa.c b/src/bluealsa.c
++index 929f9ed..690c407 100644
++--- a/src/bluealsa.c
+++++ b/src/bluealsa.c
++@@ -20,6 +20,9 @@
++ #include "bluez-a2dp.h"
++ #include "hfp.h"
++ 
+++/* NULL-terminated list of available A2DP codecs */
+++extern const struct bluez_a2dp_codec **bluez_a2dp_codecs;
+++
++ /* Initialize global configuration variable. */
++ struct ba_config config = {
++ 
++diff --git a/src/bluez-a2dp.h b/src/bluez-a2dp.h
++index 7c0e33b..127dbd9 100644
++--- a/src/bluez-a2dp.h
+++++ b/src/bluez-a2dp.h
++@@ -57,7 +57,4 @@ struct bluez_a2dp_codec {
++ 	size_t samplings_size;
++ };
++ 
++-/* NULL-terminated list of available A2DP codecs */
++-const struct bluez_a2dp_codec **bluez_a2dp_codecs;
++-
++ #endif
++diff --git a/src/bluez-iface.h b/src/bluez-iface.h
++index 34269c5..250267e 100644
++--- a/src/bluez-iface.h
+++++ b/src/bluez-iface.h
++@@ -27,7 +27,4 @@
++ #define BLUEZ_TRANSPORT_STATE_PENDING "pending"
++ #define BLUEZ_TRANSPORT_STATE_ACTIVE  "active"
++ 
++-const GDBusInterfaceInfo bluez_iface_endpoint;
++-const GDBusInterfaceInfo bluez_iface_profile;
++-
++ #endif
++diff --git a/src/bluez.c b/src/bluez.c
++index cfdbff8..190101e 100644
++--- a/src/bluez.c
+++++ b/src/bluez.c
++@@ -45,6 +45,9 @@
++ # define G_DBUS_ERROR_UNKNOWN_OBJECT G_DBUS_ERROR_FAILED
++ #endif
++ 
+++extern const GDBusInterfaceInfo bluez_iface_endpoint;
+++extern const GDBusInterfaceInfo bluez_iface_profile;
+++
++ /**
++  * Structure describing registered D-Bus object. */
++ struct dbus_object_data {
++-- 
++2.20.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
