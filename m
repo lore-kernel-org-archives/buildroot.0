@@ -1,50 +1,257 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:21:10 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/dbus: fix group
- and mode for the launcher
-Message-ID: <20200712202016.E16F186130@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jul 2020 22:28:14 +0200
+Subject: [Buildroot] [git commit] configs/rock_pi_4: new defconfig
+Message-ID: <20200712202443.3F62C86846@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceedbee8f1f37ffd04f0ed0cdc29ca2f3b1a9a97
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5c3febd2b1a4694626215c3ffe1f39ae9e8977c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The D-Bus installation process installs dbus-daemon-launch-helper as
-follows:
+Add initial support for RK3399 based rockpi-4 targets (model A, B, C)
+with below features:
 
-  chown root:$(DBUS_USER) $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper$(EXEEXT); \
-  chmod 4750 $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper$(EXEEXT); \
+- Custom U-Boot 2020.07-rc4
+  https://github.com/amarula/u-boot-amarula.git
+  branch rock-pi
+- Linux 5.4.46
+- GPT partition layout is being used
+- Default packages from buildroot
 
-And when the installation does not take place as root (like is the
-case in the context of Buildroot), it prints:
-
-  echo "Not installing $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper binary setuid!"; \
-  echo "You'll need to manually set permissions to root:$(DBUS_USER) and permissions 4750"; \
-
-So let's adjust the installation logic of dbus-daemon-launch-helper to
-match these requirements.
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ac245a0cb76f270b28860936245ca1abba0804a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .gitlab-ci.yml                     |  1 +
+ DEVELOPERS                         |  2 ++
+ board/radxa/rockpi-4/extlinux.conf |  4 +++
+ board/radxa/rockpi-4/genimage.cfg  | 39 ++++++++++++++++++++++++
+ board/radxa/rockpi-4/post-build.sh |  5 ++++
+ board/radxa/rockpi-4/readme.txt    | 61 ++++++++++++++++++++++++++++++++++++++
+ configs/rock_pi_4_defconfig        | 56 ++++++++++++++++++++++++++++++++++
+ 7 files changed, 168 insertions(+)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index a4043864d1..bb9f17a5e0 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -11,7 +11,7 @@ DBUS_LICENSE_FILES = COPYING
- DBUS_INSTALL_STAGING = YES
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index c194eb6186..f65549f4dc 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -319,6 +319,7 @@ raspberrypi_defconfig: { extends: .defconfig }
+ riotboard_defconfig: { extends: .defconfig }
+ roc_pc_rk3399_defconfig: { extends: .defconfig }
+ rock64_defconfig: { extends: .defconfig }
++rock_pi_4_defconfig: { extends: .defconfig }
+ rock_pi_n10_defconfig: { extends: .defconfig }
+ roseapplepi_defconfig: { extends: .defconfig }
+ s6lx9_microboard_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b2b3a2a211..0723fe24f0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2412,8 +2412,10 @@ F:	package/powertop/
  
- define DBUS_PERMISSIONS
--	/usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
-+	/usr/libexec/dbus-daemon-launch-helper f 4750 0 dbus - - - - -
- endef
+ N:	Suniel Mahesh <sunil@amarulasolutions.com>
+ F:	board/firefly/
++F:	board/radxa/rockpi-4
+ F:	board/radxa/rockpi-n10
+ F:	configs/roc_pc_rk3399_defconfig
++F:	configs/rock_pi_4_defconfig
+ F:	configs/rock_pi_n10_defconfig
+ F:	package/arm-gnu-a-toolchain/
  
- define DBUS_USERS
+diff --git a/board/radxa/rockpi-4/extlinux.conf b/board/radxa/rockpi-4/extlinux.conf
+new file mode 100644
+index 0000000000..83374f174a
+--- /dev/null
++++ b/board/radxa/rockpi-4/extlinux.conf
+@@ -0,0 +1,4 @@
++label RK3399_ROCK_PI_4 linux
++  kernel /Image
++  devicetree /rk3399-rock-pi-4.dtb
++  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
+diff --git a/board/radxa/rockpi-4/genimage.cfg b/board/radxa/rockpi-4/genimage.cfg
+new file mode 100644
+index 0000000000..88986df34d
+--- /dev/null
++++ b/board/radxa/rockpi-4/genimage.cfg
+@@ -0,0 +1,39 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"Image",
++			"rk3399-rock-pi-4.dtb",
++			"extlinux"
++		}
++	}
++	size = 112M
++}
++
++image sdcard.img {
++
++	hdimage {
++		gpt = true
++	}
++
++	partition loader1 {
++		image = "idbloader.img"
++		offset = 32K
++	}
++
++	partition loader2 {
++		image = "u-boot.itb"
++		offset = 8M
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 16M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/radxa/rockpi-4/post-build.sh b/board/radxa/rockpi-4/post-build.sh
+new file mode 100755
+index 0000000000..ba29375c05
+--- /dev/null
++++ b/board/radxa/rockpi-4/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/radxa/rockpi-4/readme.txt b/board/radxa/rockpi-4/readme.txt
+new file mode 100644
+index 0000000000..1db7569ed9
+--- /dev/null
++++ b/board/radxa/rockpi-4/readme.txt
+@@ -0,0 +1,61 @@
++RADXA ROCK_PI_4
++================
++https://rockpi.org/rockpi4
++
++ROCK Pi 4 is a Single Board Computer (SBC) from radxa. This guide is valid
++for the below models:
++- ROCK PI 4 Model A
++- ROCK PI 4 Model B
++- ROCK PI 4 Model C
++
++Build:
++======
++  $ make rock_pi_4_defconfig
++  $ make
++
++Files created in output directory
++=================================
++
++output/images
++
++????????? bl31.elf
++????????? boot.vfat
++????????? extlinux
++????????? idbloader.img
++????????? Image
++????????? rk3399-rock-pi-4.dtb
++????????? rootfs.ext2
++????????? rootfs.ext4 -> rootfs.ext2
++????????? rootfs.tar
++????????? sdcard.img
++????????? u-boot.bin
++????????? u-boot.itb
++
++Creating bootable SD card:
++==========================
++
++Simply invoke (as root)
++
++sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
++
++Where X is your SD card device.
++
++Booting:
++========
++
++Serial console:
++---------------
++RockPi4 has a 40-pin GPIO header. The pin layout is as follows:
++
++pin 6:  gnd
++pin 8:  tx
++pin 10: rx
++
++Baudrate for this board is 1500000.
++
++Login:
++------
++Enter 'root' as login user, and the prompt is ready.
++
++Wiki link:
++https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/rock-pi-4.html
+diff --git a/configs/rock_pi_4_defconfig b/configs/rock_pi_4_defconfig
+new file mode 100644
+index 0000000000..22ef74be82
+--- /dev/null
++++ b/configs/rock_pi_4_defconfig
+@@ -0,0 +1,56 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a72_a53=y
++
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.46"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-pi-4"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_GENERIC_HOSTNAME="rockpi4"
++BR2_TARGET_GENERIC_ISSUE="Welcome to ROCK_PI_4"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="96M"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rockpi-4/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rockpi-4/post-build.sh"
