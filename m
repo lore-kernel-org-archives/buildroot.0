@@ -1,49 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jul 2020 00:06:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jq: fix license
-Message-ID: <20200712220657.67801-1-fontaine.fabrice@gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Mon, 13 Jul 2020 00:41:35 +0200
+Subject: [Buildroot] [PATCH 1/3] package/systemd: add option to enable
+ SysV and utmp compatibility
+In-Reply-To: <20200711151404.73f486b6@windsurf.home>
+References: <20200710234150.185609-1-nolange79@gmail.com>
+ <20200711125654.4fcb48d9@windsurf.home>
+ <CADYdroMeuavdAXpZVy40kEiSoeQfqnTav9UqzR+rpSnEVtkZtA@mail.gmail.com>
+ <20200711151404.73f486b6@windsurf.home>
+Message-ID: <CADYdroNqmM4K+5fZcVEB51zE0x6OtX9zGnxGXgR=+zj598rGpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit c94794175fab58823fde539eac83ec0234768f36 forgot to update hash of
-COPYING
+Am Sa., 11. Juli 2020 um 15:14 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Sat, 11 Jul 2020 13:25:08 +0200
+> Norbert Lange <nolange79@gmail.com> wrote:
+>
+> > > > +ifeq ($(BR2_PACKAGE_SYSTEMD_SYSV),y)
+> > > > +SYSTEMD_CONF_OPTS += -Dsysvinit-path=/etc/init.d
+> > > -Dsysvrcnd-path=/etc/rc.d
+> > >
+> > > We don't have any /etc/rc.d directory in Buildroot, and when systemd is
+> > > selected as the init system, we don't install init scripts in
+> > > /etc/init.d. So I'm wondering what is the use case for this option ?
+> > >
+> >
+> > Removing *support for unit scripts*. those scripts, as you said, don't
+> > exist.
+>
+> Yes, but your patch also keeps support for init scripts enabled when
+> BR2_PACKAGE_SYSTEMD_SYSV=y, and I don't understand what is the use case.
+>
+> When systemd is enabled, there will be nothing in /etc/init.d, because
+> Buildroot only executes the <pkg>_INIT_SYSV commands (that install init
+> scripts) when the init system is Busybox or SysVinit.
+>
+> Or do you want to support use cases where some users may install their
+> own init scripts in /etc/init.d, but are using systemd ?
 
-ICU license has been added for decNumber library since
-https://github.com/stedolan/jq/commit/b6be13d5de6dd7d8aad5fd871eb6b0b30fc7d7f6
+I accounted for such usecases, because I thought that's expected with buildroot.
+No trouble removing the option from my side.
+This goes for utmp aswell (not sure Id want logged in users exposed in
+a file amyway)
 
-Fixes:
- - http://autobuild.buildroot.org/results/569aa7ba86a022d3c32a65fb8b58f558aba7ae4c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jq/jq.hash | 2 +-
- package/jq/jq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-index e9f15afa78..125781385c 100644
---- a/package/jq/jq.hash
-+++ b/package/jq/jq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
--sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
-+sha256  c8437d414ca5b394718784c3bf5bdff7f01fee417625fabf1fb722ca263037da  COPYING
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index 297a608b12..78de3951a8 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -6,7 +6,7 @@
- 
- JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
- JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
--JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
-+JQ_LICENSE = MIT (code), ICU License (decNumber), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
- JQ_INSTALL_STAGING = YES
- 
--- 
-2.27.0
+Norbert
