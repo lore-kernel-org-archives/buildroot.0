@@ -1,47 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 21:28:26 +0200
-Subject: [Buildroot] [PATCH 3/4] configs/qemu_aarch64_virt_defconfig:
- boot with grub bootloader with efi
-In-Reply-To: <20200712163422.1162187-3-romain.naour@gmail.com>
-References: <20200712163422.1162187-1-romain.naour@gmail.com>
- <20200712163422.1162187-3-romain.naour@gmail.com>
-Message-ID: <20200712212826.4025d0d5@windsurf.home>
+Date: Sun, 12 Jul 2020 21:31:26 +0200
+Subject: [Buildroot] start-stop-daemon failing due to option -q
+In-Reply-To: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
+References: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
+Message-ID: <20200712213126.59c57981@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 12 Jul 2020 09:16:00 -0400
+William Tambe <tambewilliam@gmail.com> wrote:
 
-On Sun, 12 Jul 2020 18:34:21 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+> I am seeing the following failure when start-stop-daemon is used
+> during services starting; the failure goes away when I remove from
+> start-stop-daemon the use of the option -q in the service scripts
+> under /etc/init.d/ .
+> Is this a known issue ?
+> 
+> Starting syslogd: start-stop-daemon: option requires an argument -- 'x'
 
-> The current qemu_aarch64_virt_defconfig boot with just the kernel, so ACPI
-> tables are missing and the plug and play support is disabled.
-> 
-> dmesg:
-> ACPI: Interpreter disabled.
-> [...]
-> pnp: PnP ACPI: disabled
-> 
-> The ACPI support is already available in the kernel defconfig, the
-> memory hotplug support will be added by the next patch.
-> 
-> Borrow the post image script, genimage and bootloader configuration from
-> aarch64_efi_defconfig to build the disk image used to boot the system
-> in efi mode.
-> 
-> As a side effect, the bootloader grub2 is now runtime tested in the
-> Buildroot gitlab-ci while testing this defconfig.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+This has something to do with -q. -q is always supported in
+start-stop-daemon, it's even listed in the help text of
+start-stop-daemon you provide:
 
-But isn't this making qemu_aarch64_virt_defconfig too similar to
-aarch64_efi_defconfig ?
+>         -q              Quiet
 
-Shouldn't we keep qemu_aarch64_virt_defconfig as-is, and simply add
-runtime testing for aarch64_efi_defconfig ?
+The S01syslogd script looks like this:
+
+        start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
+                -- -n $SYSLOGD_ARGS
+
+So I don't see how the -x argument can be empty.
+
+Did you customize the SYSLOGD_ARGS in /etc/default/syslogd perhaps ?
 
 Thomas
 -- 
