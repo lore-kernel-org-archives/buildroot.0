@@ -1,92 +1,116 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 23:43:38 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/brltty: fix
- input_event related compile failure
-Message-ID: <20200712214112.9907986A01@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jul 2020 23:47:06 +0200
+Subject: [Buildroot] [git commit] package/parprouted: new package
+Message-ID: <20200712215008.50B6D86BA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66f6e1451f5c2c2134c963e380d70722475b7ff4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fce71d09fb139ed2b29ad1f3158da50731c7ca48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to fix input_event time related compile failure. The problem
-is reported and fixed upstream.
+parprouted is a daemon for transparent IP (Layer 3) proxy ARP
+bridging. This is useful for creation of transparent firewalls
+and bridging networks with different MAC protocols. Also,
+unlike standard bridging, proxy ARP bridging allows to bridge
+Ethernet networks behind wireless nodes without using WDS or
+layer 2 bridging.
 
-Fixes:
-http://autobuild.buildroot.net/results/7c5278c0ff2b2d8f88803e256803b31a75904efe/build-end.log
+https://www.hazard.maks.net/parprouted
 
-./system_linux.c: In function 'writeInputEvent':
-./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
-   gettimeofday(&event.time, NULL);
-                       ^~~~
-                       type
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Owen Walpole <owen@walpole.dev>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 69e8b09c4f4b5ede4183f6aa85ee481dd0d866ca)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fix-input_event-time-related-compile-fail.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/parprouted/Config.in       | 17 +++++++++++++++++
+ package/parprouted/parprouted.hash |  3 +++
+ package/parprouted/parprouted.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 44 insertions(+)
 
-diff --git a/package/brltty/0002-fix-input_event-time-related-compile-fail.patch b/package/brltty/0002-fix-input_event-time-related-compile-fail.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0723fe24f0..efbb676b48 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1932,6 +1932,9 @@ F:	package/openjpeg/
+ N:	Olivier Singla <olivier.singla@gmail.com>
+ F:	package/shellinabox/
+ 
++N:	Owen Walpole <owen@walpole.dev>
++F:	package/parprouted/
++
+ N:	Parnell Springmeyer <parnell@digitalmentat.com>
+ F:	package/scrypt/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 1cab73d122..aafaa312a1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2155,6 +2155,7 @@ endif
+ 	source "package/openswan/Config.in"
+ 	source "package/openvpn/Config.in"
+ 	source "package/p910nd/Config.in"
++	source "package/parprouted/Config.in"
+ 	source "package/phidgetwebservice/Config.in"
+ 	source "package/phytool/Config.in"
+ 	source "package/pimd/Config.in"
+diff --git a/package/parprouted/Config.in b/package/parprouted/Config.in
 new file mode 100644
-index 0000000000..249d420ca9
+index 0000000000..7cf839da3c
 --- /dev/null
-+++ b/package/brltty/0002-fix-input_event-time-related-compile-fail.patch
-@@ -0,0 +1,52 @@
-+From 43390f9906a8c663872e0eab56c1173032d1bd6c Mon Sep 17 00:00:00 2001
-+From: Heiko Thiery <heiko.thiery@gmail.com>
-+Date: Sun, 7 Jun 2020 12:58:38 +0200
-+Subject: [PATCH] fix input_event time related compile fail
++++ b/package/parprouted/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PARPROUTED
++	bool "parprouted"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  parprouted is a daemon for transparent IP (Layer 3) proxy ARP
++	  bridging. This is useful for creation of transparent firewalls
++	  and bridging networks with different MAC protocols. Also,
++	  unlike standard bridging, proxy ARP bridging allows to bridge
++	  Ethernet networks behind wireless nodes without using WDS or
++	  layer 2 bridging.
 +
-+./system_linux.c: In function 'writeInputEvent':
-+./system_linux.c:962:23: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
-+   gettimeofday(&event.time, NULL);
-+                       ^~~~
-+                       type
++	  https://www.hazard.maks.net/parprouted
 +
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ Programs/system_linux.c | 13 ++++++++++++-
-+ 1 file changed, 12 insertions(+), 1 deletion(-)
++comment "parprouted needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/parprouted/parprouted.hash b/package/parprouted/parprouted.hash
+new file mode 100644
+index 0000000000..ec73f92168
+--- /dev/null
++++ b/package/parprouted/parprouted.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  4b8cb2c801047f26b63aefaa8d69adc8552fb7c8a8f5d851798a48f841948d36  parprouted-0.65.tar.gz
++sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/parprouted/parprouted.mk b/package/parprouted/parprouted.mk
+new file mode 100644
+index 0000000000..09565787c2
+--- /dev/null
++++ b/package/parprouted/parprouted.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# parprouted
++#
++################################################################################
 +
-+diff --git a/Programs/system_linux.c b/Programs/system_linux.c
-+index a97ee7ff6..77052d32f 100644
-+--- a/Programs/system_linux.c
-++++ b/Programs/system_linux.c
-+@@ -40,6 +40,14 @@
-+ #ifdef HAVE_LINUX_INPUT_H
-+ #include <linux/input.h>
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#endif
-++
-++#ifndef input_event_usec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ #include "kbd_keycodes.h"
-+ 
-+ LINUX_KEY_MAP(xt00) = {
-+@@ -957,9 +965,12 @@ int
-+ writeInputEvent (UinputObject *uinput, uint16_t type, uint16_t code, int32_t value) {
-+ #ifdef HAVE_LINUX_UINPUT_H
-+   struct input_event event;
-++  struct timeval tv;
-+ 
-+   memset(&event, 0, sizeof(event));
-+-  gettimeofday(&event.time, NULL);
-++  gettimeofday(&tv, NULL);
-++  event.input_event_sec = tv.tv_sec;
-++  event.input_event_usec = tv.tv_usec;
-+   event.type = type;
-+   event.code = code;
-+   event.value = value;
-+-- 
-+2.20.1
++PARPROUTED_VERSION = 0.65
++PARPROUTED_SITE = https://www.hazard.maks.net/parprouted
++PARPROUTED_LICENSE = GPL-2.0
++PARPROUTED_LICENSE_FILES = COPYING
 +
++define PARPROUTED_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++endef
++
++define PARPROUTED_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/parprouted $(TARGET_DIR)/usr/sbin/parprouted
++endef
++
++$(eval $(generic-package))
