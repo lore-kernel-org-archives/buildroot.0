@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:38:19 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/go: bump version
+Date: Sun, 12 Jul 2020 22:37:57 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/go: bump version
  to 1.13.12
-Message-ID: <20200712203503.A82D286A44@busybox.osuosl.org>
+Message-ID: <20200712203508.F107B86A44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c27380ee9531c0d651dfcfee5c2fb367ab7d521e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c7123a4956ae16cf0b06e1cabec695d3e34ed18c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 go1.13.9 (released 2020/03/19) includes fixes to the go command, tools, the
 runtime, the toolchain, and the crypto/cypher package.
