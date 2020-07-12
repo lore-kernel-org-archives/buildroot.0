@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:39:19 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/docker-engine:
+Date: Sun, 12 Jul 2020 22:39:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/docker-engine:
  security bump to version 19.03.11
-Message-ID: <20200712203604.772D683ACB@busybox.osuosl.org>
+Message-ID: <20200712203609.C0E4883ACB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f82dba70e1dea4ef54b3de660829f0f1c130d1ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c7b06e5c91c228c76a3813bdbbc985bff0c0b57f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issues:
 
