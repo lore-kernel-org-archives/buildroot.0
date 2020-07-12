@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:29:46 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/asterisk:
+Date: Sun, 12 Jul 2020 22:27:37 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/asterisk:
  security bump version to 16.10.0
-Message-ID: <20200712202917.B43E283FF7@busybox.osuosl.org>
+Message-ID: <20200712202922.2450583FF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58bd7a5ef92f3f493c378b14a7a8240ba79fa8d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a97d54b81cadd6ecc027e2b595c653c250039ca1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixed the following security issues (16.7.0):
 
