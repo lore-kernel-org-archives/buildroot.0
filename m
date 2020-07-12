@@ -1,108 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 21:22:55 +0200
-Subject: [Buildroot] [git commit] support/script/pkg-stats: handle exception
- when version comparison fails
-Message-ID: <20200712192003.B0FFA869C1@busybox.osuosl.org>
+Date: Sun, 12 Jul 2020 21:27:04 +0200
+Subject: [Buildroot] [PATCH 4/4] board/qemu/aarch64-virt/linux.config:
+ enable memory hotplug
+In-Reply-To: <20200712163422.1162187-4-romain.naour@gmail.com>
+References: <20200712163422.1162187-1-romain.naour@gmail.com>
+ <20200712163422.1162187-4-romain.naour@gmail.com>
+Message-ID: <20200712212704.43b4671a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d2779ecbb142b62f8913d30352b11058f922b2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 12 Jul 2020 18:34:22 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-With python 3, when a package has a version number x-y-z instead of
-x.y.z, then the version returned by LooseVersion can't be compared
-which raises a TypeError exception:
+> To test memory hotplug [1], add -m 1G,slots=3,maxmem=4G to the qemu command
+> line, boot the system and enter the following command in the Qemu monitor
+> to add another 1GB to the guest:
+> (use ctrl+a c to switch from the serial port and Qemu monitor):
+> 
+>    (qemu) object_add memory-backend-ram,id=mem1,size=1G
+>    (qemu) device_add pc-dimm,id=dimm1,memdev=mem1
+> 
+> [1] https://git.qemu.org/?p=qemu.git;a=blob;f=docs/memory-hotplug.txt;h=6aa5e17e26090f619787de7b71888093fb9d0117;hb=fdd76fecdde1ad444ff4deb7f1c4f7e4a1ef97d6#l9
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Traceback (most recent call last):
-  File "./support/scripts/pkg-stats", line 1062, in <module>
-    __main__()
-  File "./support/scripts/pkg-stats", line 1051, in __main__
-    check_package_cves(args.nvd_path, {p.name: p for p in packages})
-  File "./support/scripts/pkg-stats", line 613, in check_package_cves
-    if pkg_name in packages and cve.affects(packages[pkg_name]):
-  File "./support/scripts/pkg-stats", line 386, in affects
-    return pkg_version <= cve_affected_version
-  File "/usr/lib64/python3.8/distutils/version.py", line 58, in __le__
-    c = self._cmp(other)
-  File "/usr/lib64/python3.8/distutils/version.py", line 337, in _cmp
-    if self.version < other.version:
-TypeError: '<' not supported between instances of 'str' and 'int'
+Is this really something we want to enable in a defconfig ? It feels
+like a very advanced/specific feature, not really relevant for a
+demo/test defconfig IMO.
 
-This patch handles this exception by adding a new return value when
-the comparison can't be done. The code is adjusted to take of this
-change. For now, a return value of CVE_UNKNOWN is handled the same way
-as a CVE_DOESNT_AFFECT return value, but this can be improved later
-on.
-
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/pkg-stats | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
-
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index c1f41fc9e8..170f99e7fc 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -50,6 +50,10 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
- RM_API_STATUS_FOUND_BY_PATTERN = 3
- RM_API_STATUS_NOT_FOUND = 4
- 
-+CVE_AFFECTS = 1
-+CVE_DOESNT_AFFECT = 2
-+CVE_UNKNOWN = 3
-+
- # Used to make multiple requests to the same host. It is global
- # because it's used by sub-processes.
- http_pool = None
-@@ -364,7 +368,7 @@ class CVE:
-         by this CVE.
-         """
-         if br_pkg.is_cve_ignored(self.identifier):
--            return False
-+            return CVE_DOESNT_AFFECT
- 
-         for product in self.each_product():
-             if product['product_name'] != br_pkg.name:
-@@ -373,7 +377,7 @@ class CVE:
-             for v in product['version']['version_data']:
-                 if v["version_affected"] == "=":
-                     if br_pkg.current_version == v["version_value"]:
--                        return True
-+                        return CVE_AFFECTS
-                 elif v["version_affected"] == "<=":
-                     pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
-                     if not hasattr(pkg_version, "version"):
-@@ -383,10 +387,18 @@ class CVE:
-                     if not hasattr(cve_affected_version, "version"):
-                         print("Cannot parse CVE affected version '%s'" % v["version_value"])
-                         continue
--                    return pkg_version <= cve_affected_version
-+                    try:
-+                        affected = pkg_version <= cve_affected_version
-+                        break
-+                    except TypeError:
-+                        return CVE_UNKNOWN
-+                    if affected:
-+                        return CVE_AFFECTS
-+                    else:
-+                        return CVE_DOESNT_AFFECT
-                 else:
-                     print("version_affected: %s" % v['version_affected'])
--        return False
-+        return CVE_DOESNT_AFFECT
- 
- 
- def get_pkglist(npackages, package_list):
-@@ -610,7 +622,7 @@ def check_package_cves(nvd_path, packages):
- 
-     for cve in CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
--            if pkg_name in packages and cve.affects(packages[pkg_name]):
-+            if pkg_name in packages and cve.affects(packages[pkg_name]) == CVE_AFFECTS:
-                 packages[pkg_name].cves.append(cve.identifier)
- 
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
