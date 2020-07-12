@@ -1,23 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 23:13:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to version 6.0.5
-In-Reply-To: <20200701043605.3842956-1-james.hilliard1@gmail.com>
-References: <20200701043605.3842956-1-james.hilliard1@gmail.com>
-Message-ID: <20200712231303.273bbc28@windsurf.home>
+Date: Sun, 12 Jul 2020 23:13:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zlib-ng: bump to version
+ 9609cb56a8f62868ccf264493bc9c3b4d5762fcf
+In-Reply-To: <20200701044212.11378-1-james.hilliard1@gmail.com>
+References: <20200701044212.11378-1-james.hilliard1@gmail.com>
+Message-ID: <20200712231316.5aa689f3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 30 Jun 2020 22:36:05 -0600
+On Tue, 30 Jun 2020 22:42:12 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
+> We need to update the location to point to the current maintained
+> upstream repo as well since the existing one is unmaintained.
+> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/zlib-ng/zlib-ng.hash | 2 +-
+>  package/zlib-ng/zlib-ng.mk   | 4 ++--
+>  package/zlib/Config.in       | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
