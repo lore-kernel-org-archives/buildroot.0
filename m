@@ -1,23 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:22:09 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dbus: fix group and mode for
- the launcher
-In-Reply-To: <20200605225247.13350-1-nolange79@gmail.com> (Norbert Lange's
- message of "Sat, 6 Jun 2020 00:52:45 +0200")
-References: <20200605225247.13350-1-nolange79@gmail.com>
-Message-ID: <87wo38mqku.fsf@dell.be.48ers.dk>
+Date: Sun, 12 Jul 2020 22:21:39 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/dbus: fix group
+ and mode for the launcher
+Message-ID: <20200712201956.D82E2869BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ac0c841739fef3c859458678b9507de976d3b710
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > see bus/Makefile.am
- > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+The D-Bus installation process installs dbus-daemon-launch-helper as
+follows:
 
-Committed to 2020.02.x and 2020.05.x, thanks.
+  chown root:$(DBUS_USER) $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper$(EXEEXT); \
+  chmod 4750 $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper$(EXEEXT); \
 
--- 
-Bye, Peter Korsgaard
+And when the installation does not take place as root (like is the
+case in the context of Buildroot), it prints:
+
+  echo "Not installing $(DESTDIR)$(libexecdir)/dbus-daemon-launch-helper binary setuid!"; \
+  echo "You'll need to manually set permissions to root:$(DBUS_USER) and permissions 4750"; \
+
+So let's adjust the installation logic of dbus-daemon-launch-helper to
+match these requirements.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7ac245a0cb76f270b28860936245ca1abba0804a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index a4043864d1..bb9f17a5e0 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -11,7 +11,7 @@ DBUS_LICENSE_FILES = COPYING
+ DBUS_INSTALL_STAGING = YES
+ 
+ define DBUS_PERMISSIONS
+-	/usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
++	/usr/libexec/dbus-daemon-launch-helper f 4750 0 dbus - - - - -
+ endef
+ 
+ define DBUS_USERS
