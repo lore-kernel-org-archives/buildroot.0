@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 22:32:09 +0200
-Subject: [Buildroot] [PATCH] package/gensio: bump to version 2.1.1
-In-Reply-To: <20200702052547.31769-1-yegorslists@googlemail.com>
-References: <20200702052547.31769-1-yegorslists@googlemail.com>
-Message-ID: <20200712223209.476a4d3b@windsurf.home>
+Date: Sun, 12 Jul 2020 22:32:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 2.0.5
+In-Reply-To: <20200518073712.1415646-1-james.hilliard1@gmail.com>
+References: <20200518073712.1415646-1-james.hilliard1@gmail.com>
+Message-ID: <20200712223245.07112ab7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  2 Jul 2020 07:25:47 +0200
-yegorslists at googlemail.com wrote:
+On Mon, 18 May 2020 01:37:12 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
 >  package/gensio/gensio.hash | 6 +++---
 >  package/gensio/gensio.mk   | 2 +-
 >  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+Gah, sorry, Yegor sent a more recent patch, which bumps to 2.1.1, so I
+applied Yegor's patch.
 
 Thomas
 -- 
