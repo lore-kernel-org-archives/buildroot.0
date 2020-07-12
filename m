@@ -1,79 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:54:07 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 6, 7}.x series
-Message-ID: <20200712205052.0861F86A44@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jul 2020 22:34:41 +0200
+Subject: [Buildroot] [git commit] package/ttyd: bump to version 1.6.1
+Message-ID: <20200712205248.F048886BA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc58d1bf084053e028a062d21040a4a672cd69bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c3b28bfb0ec1918693a603252c59a20dece24e53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8db0c3472bd4f97671fa65f8d2bda755cab5daa7)
-[Peter: drop 5.6.x / 5.7.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Removed patches applied upstream.
+
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ package/ttyd/0001-cmake-fix-build-without-C.patch | 41 -----------------------
+ package/ttyd/ttyd.hash                            |  2 +-
+ package/ttyd/ttyd.mk                              |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4d18038e92..c19ccb70a8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/ttyd/0001-cmake-fix-build-without-C.patch b/package/ttyd/0001-cmake-fix-build-without-C.patch
+deleted file mode 100644
+index 8d5d35ca19..0000000000
+--- a/package/ttyd/0001-cmake-fix-build-without-C.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From cec921a680576865847d98552ded2a67efd8eb50 Mon Sep 17 00:00:00 2001
+-From: Bartosz Bilas <b.bilas@grinn-global.com>
+-Date: Mon, 15 Jun 2020 17:32:26 +0200
+-Subject: [PATCH] cmake: fix build without C++
+-
+-Specify that ttyd is a C project to avoid the
+-following build failure if a C++ compiler isn't found.
+-
+-CMake Error at CMakeLists.txt:3 (project):
+-  The CMAKE_CXX_COMPILER:
+-
+-    /home/bartekk/Projects/buildroots/buildroot-dev/buildroot/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-g++
+-
+-  is not a full path to an existing compiler tool.
+-
+-  Tell CMake where to find the compiler by setting either the environment
+-  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
+-  to the compiler, or to the compiler name if it is in the PATH.
+-
+-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+----
+- Upstream status: https://github.com/tsl0922/ttyd/pull/382
+-
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 8061f47..efd76d2 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,6 +1,6 @@
+- cmake_minimum_required(VERSION 2.8)
+- 
+--project(ttyd)
+-+project(ttyd C)
+- set(PROJECT_VERSION "1.6.0")
+- 
+- find_package(Git)
+--- 
+-2.27.0
+-
+diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
+index c73af44af3..8810282618 100644
+--- a/package/ttyd/ttyd.hash
++++ b/package/ttyd/ttyd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d14740bc82be0d0760dd0a3c97acbcbde490412a4edc61edabe46d311b068f83  ttyd-1.6.0.tar.gz
++sha256  d72dcca3dec00cda87b80a0a25ae4fee2f8b9098c1cdb558508dcb14fbb6fafc  ttyd-1.6.1.tar.gz
+ sha256  711762f081c180ade3d09d7b0b7537eaf35eca8d1671e47bc66eaa39376edb12  LICENSE
+diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
+index a7e2ee9bb5..91b650c49e 100644
+--- a/package/ttyd/ttyd.mk
++++ b/package/ttyd/ttyd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.43" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.45" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.115-cip24-rt9" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 8c0a7a813b..39a75711db 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  2667b90a42d42557aca9e3d37bba1b4e71809b9523958e6870ada311c4790744  linux-5.4.43.tar.xz
-+sha256  103f039f34a9009c42ea643b4f473bda6bb9607d5ad7f63b56b3e2351615fe2e  linux-5.4.45.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  49474956a6149c16cbcba862d1f4db54835a32d336063c75094f669f1c34c65e  linux-4.4.225.tar.xz
--sha256  e547748c548b0f55f665bc78cfec322e7b96f41527b5e4b5d79430fdaa57c3e8  linux-4.9.225.tar.xz
--sha256  671d1f1d5ad0ae74fb21ee70a5544400e7d6270098d3f8b134484ded2c3e5b90  linux-4.14.182.tar.xz
--sha256  9843f40efb37491770688810d153d0779daed8eb097773a0de5abf2cb0d1bd7e  linux-4.19.125.tar.xz
-+sha256  418299385195f09b27e371a35f305f3aff148e7557a341b53460091303aa9bb7  linux-4.4.226.tar.xz
-+sha256  460a8c168fe5c60ce5b30015a4e4bf348d93a89f8b949de1f90779567ef345ca  linux-4.9.226.tar.xz
-+sha256  4265afef56819b04656107a5abecde205c5bc5fb04b2e81447955e7e45db8085  linux-4.14.183.tar.xz
-+sha256  82af886bc588b5c8d7474beb2bac13810ee3ed07da356a2553c81ae8e52e586f  linux-4.19.127.tar.xz
- # Locally computed
- sha256  ea53913813cb5a9069608532b327de7a7ed0fdc8fed8c6f10cd55d1ac6a58ffb  linux-cip-4.19.118-cip25.tar.gz
- sha256  7f0a0db0e1cfb14053523f4432f1ad1468b5bd42305b44905c4b103466c8d655  linux-cip-4.19.115-cip24-rt9.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 901e626eb2..7fbd070152 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -318,11 +318,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.225"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.225"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.182"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.125"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.43"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.226"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.226"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.183"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.127"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.45"	if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-TTYD_VERSION = 1.6.0
++TTYD_VERSION = 1.6.1
+ TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
+ TTYD_LICENSE = MIT
+ TTYD_LICENSE_FILES = LICENSE
