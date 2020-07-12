@@ -1,27 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Jul 2020 21:36:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez-alsa: add patch for
- fixing build failure with gcc 10
-In-Reply-To: <20200712145825.9316-1-heiko.thiery@gmail.com>
-References: <20200712145825.9316-1-heiko.thiery@gmail.com>
-Message-ID: <20200712213656.4732f44e@windsurf.home>
+Date: Sun, 12 Jul 2020 21:37:03 +0200
+Subject: [Buildroot] [PATCH] package/batctl: bump version to 2020.2
+In-Reply-To: <20200712161334.24439-1-sergio.prado@e-labworks.com>
+References: <20200712161334.24439-1-sergio.prado@e-labworks.com>
+Message-ID: <20200712213703.66f48a4a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Jul 2020 16:58:25 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Sun, 12 Jul 2020 13:13:34 -0300
+Sergio Prado <sergio.prado@e-labworks.com> wrote:
 
-> A fix is available upstream but does not apply on the used version by
-> buildroot.
+> Also separate the fields in the hash file by two spaces.
 > 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 > ---
->  .../0001-fix-build-issue-with-gcc-10.patch    | 118 ++++++++++++++++++
->  1 file changed, 118 insertions(+)
->  create mode 100644 package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
+>  package/batctl/batctl.hash | 10 +++++-----
+>  package/batctl/batctl.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
