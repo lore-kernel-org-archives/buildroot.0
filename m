@@ -1,46 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Jul 2020 23:35:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: bump to version 2.1.4
-Message-ID: <20200712213543.64986-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Jul 2020 23:20:13 +0200
+Subject: [Buildroot] [git commit] package/pigpio: bump to version 77
+Message-ID: <20200712213423.D2AAC86A99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a build failure with kernel 4.15 thanks to:
-https://github.com/acassen/keepalived/commit/d47ae3b1c853adefb9680ba31cf05c037d844445
+commit: https://git.buildroot.net/buildroot/commit/?id=522fa295597d4c66facbe6d01f52200b61bc5386
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/db7f149f63e9180b22460caa74850673362aa17c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/keepalived/keepalived.hash | 2 +-
- package/keepalived/keepalived.mk   | 2 +-
+ package/pigpio/pigpio.hash | 2 +-
+ package/pigpio/pigpio.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/keepalived/keepalived.hash b/package/keepalived/keepalived.hash
-index feac0cce61..94af43c3e6 100644
---- a/package/keepalived/keepalived.hash
-+++ b/package/keepalived/keepalived.hash
+diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+index b29e71c139..4c8205ea4c 100644
+--- a/package/pigpio/pigpio.hash
++++ b/package/pigpio/pigpio.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  fdf57a5766f52bd7f7bb917e06baede2e81efb96060b4dd1714170fbca32d58f  keepalived-2.1.2.tar.gz
-+sha256  245bf399e4320064996ac5507236a8896f545d005f6c4c3b91701bcbc5728c60  keepalived-2.1.4.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
-index c67eda3709..2c78b2d811 100644
---- a/package/keepalived/keepalived.mk
-+++ b/package/keepalived/keepalived.mk
+-sha256  871677cf94152e1caf43088047c3b3eec6b325e568b2e3017d60af2463e5ebd6  pigpio-76.tar.gz
++sha256  fe0cd66c0277a71fbbde1adff196a570870dad1de8dfe51f7e35f5b8d545206f  pigpio-77.tar.gz
+ sha256  6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index 4b7abf7c20..9075274de1 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KEEPALIVED_VERSION = 2.1.2
-+KEEPALIVED_VERSION = 2.1.4
- KEEPALIVED_SITE = http://www.keepalived.org/software
- KEEPALIVED_DEPENDENCIES = host-pkgconf openssl
- KEEPALIVED_LICENSE = GPL-2.0+
--- 
-2.27.0
+-PIGPIO_VERSION = 76
++PIGPIO_VERSION = 77
+ PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
+ PIGPIO_LICENSE = Unlicense
+ PIGPIO_LICENSE_FILES = UNLICENCE
