@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 12 Jul 2020 22:21:39 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/dbus: fix group
+Date: Sun, 12 Jul 2020 22:21:10 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dbus: fix group
  and mode for the launcher
-Message-ID: <20200712201956.D82E2869BE@busybox.osuosl.org>
+Message-ID: <20200712202016.E16F186130@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac0c841739fef3c859458678b9507de976d3b710
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ceedbee8f1f37ffd04f0ed0cdc29ca2f3b1a9a97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 The D-Bus installation process installs dbus-daemon-launch-helper as
 follows:
