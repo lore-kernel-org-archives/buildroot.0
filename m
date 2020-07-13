@@ -1,59 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jul 2020 14:46:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups-filters: add dejavu mandatory
- dependency
-Message-ID: <20200713124642.741955-1-fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 14:59:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.2.5
+Message-ID: <20200713125952.824272-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.27.3, cups-filters needs dejavu (even if it is only used
-for test programs):
-https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
+Fix CVE-2020-15466: It may be possible to make Wireshark consume
+excessive CPU resources by injecting a malformed packet onto the wire or
+by convincing someone to read a malformed packet trace file.
 
-Fixes:
- - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
+https://www.wireshark.org/security/wnpa-sec-2020-09.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cups-filters/Config.in       | 1 +
- package/cups-filters/cups-filters.mk | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-index 9e4e37ca6b..d62a791ed6 100644
---- a/package/cups-filters/Config.in
-+++ b/package/cups-filters/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_CUPS_FILTERS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_CUPS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	select BR2_PACKAGE_DEJAVU
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index dc4e89b52e..dd78f4b7f7 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -9,7 +9,7 @@ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 57b496282f..b74b69244d 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.4.txt
+-sha1  bb4157b57c1bcdbac948a1282dafad027d57be9b  wireshark-3.2.4.tar.xz
+-sha256  d17d461e849e2d0b033431c45f71d8ee8ec3c8faa232a6ad63069a47927db8aa  wireshark-3.2.4.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.5.txt
++sha1  468c547ad13df805322e0979b348dcc602904017  wireshark-3.2.5.tar.xz
++sha256  bd89052a5766cce08b1090df49628567e48cdd24bbaa47667c851bac6aaac940  wireshark-3.2.5.tar.xz
  
--CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
-+CUPS_FILTERS_DEPENDENCIES = cups dejavu libglib2 lcms2 qpdf fontconfig freetype jpeg
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 0d72f9dd91..638a8a249e 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- CUPS_FILTERS_CONF_OPTS = \
- 	--disable-mutool \
-@@ -20,6 +20,7 @@ CUPS_FILTERS_CONF_OPTS = \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--with-pdftops=pdftops \
- 	--with-jpeg \
-+	--with-test-font-path=$(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf \
- 	--without-rcdir
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
+-WIRESHARK_VERSION = 3.2.4
++WIRESHARK_VERSION = 3.2.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
 2.27.0
