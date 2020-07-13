@@ -1,49 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jul 2020 18:20:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.0
-Message-ID: <20200713162024.1352570-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Jul 2020 18:29:14 +0200
+Subject: [Buildroot] [git commit] package/gupnp: security bump to version
+ 1.2.3
+Message-ID: <20200713162707.73FC286CB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the new LTS branch (EOL in 2025-Q2)
+commit: https://git.buildroot.net/buildroot/commit/?id=4420af7c3b70ca2c7a04d8f2bb9c819f53554762
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.mail-archive.com/haproxy at formilux.org/msg37852.html
+It includes the following commits:
+https://github.com/GNOME/gupnp/commit/66a73e96f5a733a149803a985686a4e4e196f90b
+https://github.com/GNOME/gupnp/commit/f943904e2d7f21601337b90058faf74b49c02796
+which mitigate CVE-2020-12695
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index b89bda834b..4d880ef653 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 24a0d36631..6baf105318 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
 @@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.4.tar.gz.sha256
--sha256  51030ff696d7067162b4d24d354044293aecfbb36d7acc2f840c8d928bfe91cd  haproxy-2.1.4.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.0.tar.gz.sha256
-+sha256  3c1a87160eea40e067f1e2813bfe692280a10c455beb17a8ee7fae11e4223274  haproxy-2.2.0.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index e59896b485..6f97840f6d 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -4,8 +4,8 @@
- #
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.2.sha256sum:
+-sha256  9a80bd953e5c8772ad26b72f8da01cbe7241a113edd6084903f413ce751c9989  gupnp-1.2.2.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.3.sha256sum:
++sha256  d447e54d88e4a8fab84ad1766070e9208e21166fc7e2ce95df6e33e49e8d29b1  gupnp-1.2.3.tar.xz
+ 
+ # Hash for license file:
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index dfe25e16c5..953beb2559 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HAPROXY_VERSION_MAJOR = 2.1
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
-+HAPROXY_VERSION_MAJOR = 2.2
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).0
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
--- 
-2.27.0
+ GUPNP_VERSION_MAJOR = 1.2
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
