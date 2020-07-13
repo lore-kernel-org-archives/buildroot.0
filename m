@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jul 2020 09:06:31 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/dbus: security
+Date: Mon, 13 Jul 2020 09:06:23 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dbus: security
  bump to version 1.12.18
-Message-ID: <20200713070250.0830C8614F@busybox.osuosl.org>
+Message-ID: <20200713070254.E251D86849@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa0687fe791d826b05723981e809bec9192ec542
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b534493de0cb45cf7cacf7633eb49346a9c4883
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 - Fix CVE-2020-12049: An issue was discovered in dbus >= 1.3.0 before
   1.12.18. The DBusServer in libdbus, as used in dbus-daemon, leaks file
