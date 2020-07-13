@@ -1,42 +1,28 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 12 Jul 2020 21:13:21 -0400
-Subject: [Buildroot] [PATCH 1/1] Makefile: use order-only dependency so
- symlinks are made only once
-Message-ID: <20200713011321.6905-1-danomimanchego123@gmail.com>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Mon, 13 Jul 2020 09:15:25 +0800
+Subject: [Buildroot] [PATCH] package/ttyd: bump to version 1.6.1
+In-Reply-To: <20200712225804.730df6e7@windsurf.home>
+References: <eab89c77-b2b5-7f1f-0351-a34a52ca06b0@aliyun.com>
+ <733eebb2-7274-7a7d-c0ad-b8d85e82ac66@aliyun.com>
+ <20200712225804.730df6e7@windsurf.home>
+Message-ID: <fe8c2485-0767-11f4-9029-897c61646035@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The staging symlink is being created on every invocation of "make" as it
-depends on its destination directory, which is modified when the symlink
-is created.  This is prevented by changing the destination directory
-dependency to be order-only.
+Sorry, this is the first time I have submitted a patch using email.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Regards,
+Yuanhao
 
-diff --git a/Makefile b/Makefile
-index 04c29b1c71..a8e0ee02c5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -457,12 +457,12 @@ endif
- 
- ifneq ($(HOST_DIR),$(BASE_DIR)/host)
- HOST_DIR_SYMLINK = $(BASE_DIR)/host
--$(HOST_DIR_SYMLINK): $(BASE_DIR)
-+$(HOST_DIR_SYMLINK): | $(BASE_DIR)
- 	ln -snf $(HOST_DIR) $(HOST_DIR_SYMLINK)
- endif
- 
- STAGING_DIR_SYMLINK = $(BASE_DIR)/staging
--$(STAGING_DIR_SYMLINK): $(BASE_DIR)
-+$(STAGING_DIR_SYMLINK): | $(BASE_DIR)
- 	ln -snf $(STAGING_DIR) $(STAGING_DIR_SYMLINK)
- 
- # Quotes are needed for spaces and all in the original PATH content.
--- 
-2.17.1
+On 2020/7/13 ??4:58, Thomas Petazzoni wrote:
+> Hello,
+>
+> Thanks, applied. However, next time, could you send your patch with
+> "git send-email" ?
+>
+> Thanks!
+>
+> Thomas
