@@ -1,33 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:41:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyparted: needs python3
-In-Reply-To: <20200713091003.155280-1-fontaine.fabrice@gmail.com>
-References: <20200713091003.155280-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200713214126.5fc81155@windsurf.home>
+Date: Mon, 13 Jul 2020 21:49:50 +0200
+Subject: [Buildroot] [git commit] package/dhcpcd: fix build without fork
+Message-ID: <20200713194803.5146286D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 11:10:03 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=91c1cb0881fdbdc4b1e3fe68a9f56941abc87bf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> python3 is a mandatory dependency since version 3.11.5 and
-> https://github.com/dcantrell/pyparted/commit/c4949263538784036a5917195f956f8fcda9cf20
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/7d93b4e5c3afebef8c4c19d1c6a0c26e71423191
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-pyparted/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+- Add a patch to fix build without fork in src/dhcpcd.c. This
+  regression was introduced in upstream commit
+  3063ebb6c8ac7c96196fa923cdd5f7c0384de23b, which was merged in dhcpcd
+  9.0.0. Therefore, Buildroot is affected since we bumped from 8.0.3
+  to 9.1.4 in commit 809f548e79c6c099f1fa3e3728d90842be7059a7, which
+  was applied after 2020.05
 
-Applied to master, thanks.
+- Disable privsep as it unconditionally uses fork (privsep has been
+  enabled by default since version 9.0.0 and
+  https://github.com/rsmarples/dhcpcd/commit/3a4c2e5604d72151b06ed365aa71493740a3ad75)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+
+ - http://autobuild.buildroot.org/results/9fcc88abedcb8a02946f37837dcf4fff02f66c23
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-src-dhcpcd.c-fix-build-without-fork.patch | 36 ++++++++++++++++++++++
+ package/dhcpcd/dhcpcd.mk                           |  2 +-
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch b/package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch
+new file mode 100644
+index 0000000000..07e6d642a7
+--- /dev/null
++++ b/package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch
+@@ -0,0 +1,36 @@
++From 13e475d9847bf7d6a6af62397f67eb269e27613e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 13 Jul 2020 10:43:51 +0200
++Subject: [PATCH] src/dhcpcd.c: fix build without fork
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/rsmarples/dhcpcd/pull/17]
++---
++ src/dhcpcd.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/dhcpcd.c b/src/dhcpcd.c
++index ee585aa4..b597a5c0 100644
++--- a/src/dhcpcd.c
+++++ b/src/dhcpcd.c
++@@ -336,7 +336,7 @@ dhcpcd_daemonise(struct dhcpcd_ctx *ctx)
++ #ifdef THERE_IS_NO_FORK
++ 	eloop_timeout_delete(ctx->eloop, handle_exit_timeout, ctx);
++ 	errno = ENOSYS;
++-	return 0;
+++	return;
++ #else
++ 	int i;
++ 	unsigned int logopts = loggetopts();
++@@ -2211,7 +2211,7 @@ printpidfile:
++ 	ps_init(&ctx);
++ #endif
++ 
++-#ifdef USE_SIGNALS
+++#if defined(USE_SIGNALS) && !defined(THERE_IS_NO_FORK)
++ 	if (pipe(sigpipe) == -1) {
++ 		logerr("pipe");
++ 		goto exit_failure;
++-- 
++2.27.0
++
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index a40696924c..0dcd36f369 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -16,7 +16,7 @@ DHCPCD_CONFIG_OPTS += --enable-static
+ endif
+ 
+ ifeq ($(BR2_USE_MMU),)
+-DHCPCD_CONFIG_OPTS += --disable-fork
++DHCPCD_CONFIG_OPTS += --disable-fork --disable-privsep
+ endif
+ 
+ define DHCPCD_CONFIGURE_CMDS
