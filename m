@@ -1,36 +1,61 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jul 2020 23:59:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libodb-mysql: fix static build
-Message-ID: <20200713215943.2240412-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 14 Jul 2020 00:06:11 +0200
+Subject: [Buildroot] [PATCH v2 3/3] support/config-fragments: use
+ external riscv64 musl toolchain
+In-Reply-To: <20200510154347.5711-3-mark@dibsco.co.uk>
+References: <20200510154347.5711-1-mark@dibsco.co.uk>
+ <20200510154347.5711-3-mark@dibsco.co.uk>
+Message-ID: <2f4b6be3-fafb-df6e-2270-86048d9940c4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mysql needs -lz for static build
+Hi Mark,
 
-Fixes:
- - http://autobuild.buildroot.org/results/a5447c5105f15606ed562b39ca84c06e7e6b78c0
+Le 10/05/2020 ? 17:43, Mark Corbin a ?crit?:
+> Move to an external RISC-V 64 bit musl toolchain to ease the load
+> on the autobuilders.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libodb-mysql/libodb-mysql.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+[toolchain downloaded and busybox built with this toolchain]
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
-diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
-index 97cbcddf93..1a12220222 100644
---- a/package/libodb-mysql/libodb-mysql.mk
-+++ b/package/libodb-mysql/libodb-mysql.mk
-@@ -13,4 +13,9 @@ LIBODB_MYSQL_LICENSE = GPL-2.0
- LIBODB_MYSQL_LICENSE_FILES = LICENSE
- LIBODB_MYSQL_DEPENDENCIES = libodb mysql
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+# mysql needs -lz, so we need to specify it for static builds
-+LIBODB_MYSQL_CONF_ENV += LIBS=-lz
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.27.0
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+> ---
+>  .../autobuild/br-riscv64-internal-musl.config            | 3 ---
+>  .../config-fragments/autobuild/br-riscv64-musl.config    | 9 +++++++++
+>  2 files changed, 9 insertions(+), 3 deletions(-)
+>  delete mode 100644 support/config-fragments/autobuild/br-riscv64-internal-musl.config
+>  create mode 100644 support/config-fragments/autobuild/br-riscv64-musl.config
+> 
+> diff --git a/support/config-fragments/autobuild/br-riscv64-internal-musl.config b/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> deleted file mode 100644
+> index 89e7afb276..0000000000
+> --- a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -BR2_riscv=y
+> -BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+> -BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-riscv64-musl.config b/support/config-fragments/autobuild/br-riscv64-musl.config
+> new file mode 100644
+> index 0000000000..fd6ef822aa
+> --- /dev/null
+> +++ b/support/config-fragments/autobuild/br-riscv64-musl.config
+> @@ -0,0 +1,9 @@
+> +BR2_riscv=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-musl-2020.02.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
+> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+> +BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> 
