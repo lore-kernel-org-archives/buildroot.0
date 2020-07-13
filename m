@@ -1,82 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 13 Jul 2020 09:45:43 +0200
-Subject: [Buildroot] Virtual/online Buildroot Developers meeting ?
-In-Reply-To: <20200711165601.GA15448@scaer>
-References: <20200711165315.0c2b5079@windsurf.home>
- <20200711165601.GA15448@scaer>
-Message-ID: <197f53b1-9c94-2697-0aff-4b80fdbc3a9c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jul 2020 10:17:08 +0200
+Subject: [Buildroot] [git commit] package/python-pybind: new package
+In-Reply-To: <20200712234050.14cb61d9@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 12 Jul 2020 23:40:50 +0200")
+References: <20200610205210.71B2481F5F@busybox.osuosl.org>
+ <874kqcmnti.fsf@dell.be.48ers.dk>
+ <20200712234050.14cb61d9@windsurf.home>
+Message-ID: <87sgdvkewr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- [Yes, I'm still alive :-) ]
+ > On Sun, 12 Jul 2020 23:21:45 +0200
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
- Mostly +1 to everything here.
+ >> > diff --git a/package/python-pybind/Config.in b/package/python-pybind/Config.in
+ >> > new file mode 100644
+ >> > index 0000000000..604cb9ee67
+ >> > --- /dev/null
+ >> > +++ b/package/python-pybind/Config.in
+ >> > @@ -0,0 +1,8 @@
+ >> > +config BR2_PACKAGE_PYTHON_PYBIND
+ >> > +	bool "python-pybind"
+ >> > +	help
+ >> > +	  PyBind is a lightweight header-only library that exposes C++
+ >> > +	  types in Python and vice versa, mainly to create Python
+ >> > +	  bindings of existing C++ code.  
+ >> 
+ >> If this is C++ code then it should presumably depend on
+ >> BR2_INSTALL_LIBSTDCPP?
 
-On 11/07/2020 18:56, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2020-07-11 16:53 +0200, Thomas Petazzoni spake thusly:
-[snip]
->> Questions are:
->>  - Who would be interested ?
-> 
-> I would.
+ > It's a header-only library, so by itself, it doesn't need C++ to build,
+ > at least that was my understanding.
 
- +1
+True, but you cannot actually do anything with it unless you have C++
+support in the toolchain - So I don't think it makes any sense to show
+it then.
 
->>  - What format should it take ? One full day once in a while ? Just a
->>    few hours here and there ? Multiple days in a row ?
-> 
-> My preference would be to block two or more days in a row. Sun-Mon ro
-> Sun-Tue would be ideal for me, but I can adapt.
+ > But I think we got some other comments that say additional work is
+ > needed for this package to be fully useful. I haven't had the chance
+ > to look into them in detail though.
 
- I also think it's easier to organise at least one and maybe several days in a
-row. For that, you clear your calendar, while if it's just for a couple of hours
-you tend not to do the effort.
+Ok.
 
-
->>  - What technical solution do we use ? Is it just about agreeing to all
->>    be on IRC at the same time ? Or do we need a video conferencing
->>    solution ? Most of our meetings are multiple side discussions taking
->>    place at the same time, which doesn't really map well with a single
->>    video conference.
-> 
-> This is indeed very tricky. We will probably have to adapt depending on
-> how many of us are attending.
-
- Not so tricky at all. Zoom has breakout rooms, and in the other technologies
-you can easily create a new room and switch to it. I have even done two meetings
-in parallel once, but that eats away CPU like there's no tomorrow.
-
-
-> Also, maybe just audio would be enough (I find video to not be that
-> interesting in the end, when all we need is discussion).
-
- +1. I don't mind the video, but I don't feel it's really necessary. The only
-advantage is that people can see when you go away for a minute and you don't
-need to announce it.
-
-
-> However, a way to share one's desktop (or an application) would be most
-> important. A white board too, maybe...
-
- Shared desktop is absolutely required. But all meeting software supports that.
-
-
- Here are the candidates that I've used and think are suitable (in no particular
-order):
-
-- jitsi
-- zoom
-- Google meet
-- discord
-- whereby
-
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
