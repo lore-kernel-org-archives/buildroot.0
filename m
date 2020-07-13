@@ -1,41 +1,51 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jul 2020 11:10:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyparted: needs python3
-Message-ID: <20200713091003.155280-1-fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 11:37:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lm-sensors: always pass
+ TARGET_CONFIGURE_OPTS
+Message-ID: <20200713093729.203008-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python3 is a mandatory dependency since version 3.11.5 and
-https://github.com/dcantrell/pyparted/commit/c4949263538784036a5917195f956f8fcda9cf20
+lm-sensors dropped MACHINE variable since version 3.6.0 and
+https://github.com/lm-sensors/lm-sensors/commit/0863eff8fa1d32797e3aec19672878aff893b0ae
+instead it uses $(CC) -dumpmachine to guess the architecture
+
+However, as $(TARGET_CONFIGURE_OPTS) is only passed to build step and
+not to install steps, this result in some binaries being built for the
+host during install step and raising a build failure on some autobuilders
 
 Fixes:
- - http://autobuild.buildroot.org/results/7d93b4e5c3afebef8c4c19d1c6a0c26e71423191
+ - http://autobuild.buildroot.org/results/0180989afdd9272ecd5010a787931e0b10a6cdcf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pyparted/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lm-sensors/lm-sensors.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyparted/Config.in b/package/python-pyparted/Config.in
-index 6e3bde2030..0e27ce1d2e 100644
---- a/package/python-pyparted/Config.in
-+++ b/package/python-pyparted/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYPARTED
- 	bool "python-pyparted"
-+	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_ENABLE_LOCALE # parted
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # parted
-@@ -10,5 +11,6 @@ config BR2_PACKAGE_PYTHON_PYPARTED
- 	  https://github.com/rhinstaller/pyparted
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index a69ca6e2bf..8975efaffa 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -20,7 +20,7 @@ LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_PWMCONFIG) += sbin/pwmconfig
+ LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_SENSORS_DETECT) += sbin/sensors-detect
  
- comment "pyparted needs a glibc or musl toolchain w/ locale, wchar"
-+	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
- 		!BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
+ LM_SENSORS_MAKE_OPTS = \
+-	MACHINE=$(KERNEL_ARCH) \
++	$(TARGET_CONFIGURE_OPTS) \
+ 	PREFIX=/usr
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -36,7 +36,7 @@ LM_SENSORS_MAKE_OPTS += BUILD_STATIC_LIB=1
+ endif
+ 
+ define LM_SENSORS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(LM_SENSORS_MAKE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LM_SENSORS_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define LM_SENSORS_INSTALL_STAGING_CMDS
 -- 
 2.27.0
