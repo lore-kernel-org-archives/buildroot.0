@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:40:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.0
-In-Reply-To: <20200713162024.1352570-1-fontaine.fabrice@gmail.com>
-References: <20200713162024.1352570-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200713214044.591c96c7@windsurf.home>
+Date: Mon, 13 Jul 2020 21:40:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libebml: bump to version 1.4.0
+In-Reply-To: <20200713163830.1452178-1-fontaine.fabrice@gmail.com>
+References: <20200713163830.1452178-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200713214054.0f3cd531@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 18:20:24 +0200
+On Mon, 13 Jul 2020 18:38:29 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> This is the new LTS branch (EOL in 2025-Q2)
-> 
-> https://www.mail-archive.com/haproxy at formilux.org/msg37852.html
+> Update indentation in hash file (two spaces)
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/haproxy/haproxy.hash | 4 ++--
->  package/haproxy/haproxy.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/libebml/libebml.hash | 4 ++--
+>  package/libebml/libebml.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
