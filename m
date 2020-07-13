@@ -1,59 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 23:34:18 +0200
-Subject: [Buildroot] [PATCH] package/cdrkit: fix build with GCC 10
-In-Reply-To: <20200625005836.2232591-1-urjaman@gmail.com>
-References: <20200625005836.2232591-1-urjaman@gmail.com>
-Message-ID: <20200713233418.4f232caf@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 23:40:22 +0200
+Subject: [Buildroot] [PATCH 1/2] package/exiv2: really disable samples
+Message-ID: <20200713214023.2094574-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Urja,
+EXIV2_ENABLE_BUILD_SAMPLES has been renamed into EXIV2_BUILD_SAMPLES
+since version 0.27 and
+https://github.com/Exiv2/exiv2/commit/60d436c96960fa314e2d12d017440253ce280d51
 
-Thanks for your contribution!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/exiv2/exiv2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 25 Jun 2020 03:58:36 +0300
-Urja Rannikko <urjaman@gmail.com> wrote:
-
-> This patch adds a missing extern on the outfile
-> variable in genisoimage.h.
-> 
-> Signed-off-by: Urja Rannikko <urjaman@gmail.com>
-> ---
-> Note: I would like to see this applied to the LTS 2020.02
-> branch too, since it fixes building host-cdrkit for ISO9660
-> generation with a host GCC 10.
-> 
->  .../cdrkit/0003-genisoimage-outfile-extern.patch    | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 package/cdrkit/0003-genisoimage-outfile-extern.patch
-> 
-> diff --git a/package/cdrkit/0003-genisoimage-outfile-extern.patch b/package/cdrkit/0003-genisoimage-outfile-extern.patch
-> new file mode 100644
-> index 0000000000..5a9f0363c9
-> --- /dev/null
-> +++ b/package/cdrkit/0003-genisoimage-outfile-extern.patch
-> @@ -0,0 +1,13 @@
-> +diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
-> +index bbedfb0..82c859b 100644
-> +--- a/genisoimage/genisoimage.h
-> ++++ b/genisoimage/genisoimage.h
-
-Thanks a lot for your patch! However, we need the cdrkit patch to have
-a proper commit title, commit description and Signed-off-by.
-
-See
-https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-for more details.
-
-Could you adjust your patch accordingly ?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 7f38473609..fa19a76282 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -10,7 +10,7 @@ EXIV2_INSTALL_STAGING = YES
+ EXIV2_LICENSE = GPL-2.0+
+ EXIV2_LICENSE_FILES = COPYING
+ 
+-EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
++EXIV2_CONF_OPTS += -DEXIV2_BUILD_SAMPLES=OFF
+ 
+ # The following CMake variable disables a TRY_RUN call in the -pthread
+ # test which is not allowed when cross-compiling.
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
