@@ -1,106 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2020 19:03:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups-filters: add dejavu
- mandatory dependency
-In-Reply-To: <20200713124642.741955-1-fontaine.fabrice@gmail.com>
-References: <20200713124642.741955-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200713170357.GD18825@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 19:06:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-backcall: bump to version
+ 0.2.0
+Message-ID: <20200713170625.1564386-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+- Update indentation in hash file (two spaces)
+- Add license file and its hash
 
-On 2020-07-13 14:46 +0200, Fabrice Fontaine spake thusly:
-> Since version 1.27.3, cups-filters needs dejavu (even if it is only used
-> for test programs):
-> https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-backcall/python-backcall.hash | 6 ++++--
+ package/python-backcall/python-backcall.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-This is a bit sad... :-(
-
-What we usually try to do in such a case, is to add an option to disable
-or enable tests, and submit that upstream.
-
-Furthermore, see below...
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/cups-filters/Config.in       | 1 +
->  package/cups-filters/cups-filters.mk | 3 ++-
->  2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-> index 9e4e37ca6b..d62a791ed6 100644
-> --- a/package/cups-filters/Config.in
-> +++ b/package/cups-filters/Config.in
-> @@ -8,6 +8,7 @@ config BR2_PACKAGE_CUPS_FILTERS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->  	depends on BR2_PACKAGE_CUPS
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +	select BR2_PACKAGE_DEJAVU
->  	select BR2_PACKAGE_JPEG
->  	select BR2_PACKAGE_FONTCONFIG
->  	select BR2_PACKAGE_FREETYPE
-> diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-> index dc4e89b52e..dd78f4b7f7 100644
-> --- a/package/cups-filters/cups-filters.mk
-> +++ b/package/cups-filters/cups-filters.mk
-> @@ -9,7 +9,7 @@ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
->  CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
->  CUPS_FILTERS_LICENSE_FILES = COPYING
->  
-> -CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
-> +CUPS_FILTERS_DEPENDENCIES = cups dejavu libglib2 lcms2 qpdf fontconfig freetype jpeg
->  
->  CUPS_FILTERS_CONF_OPTS = \
->  	--disable-mutool \
-> @@ -20,6 +20,7 @@ CUPS_FILTERS_CONF_OPTS = \
->  	--with-sysroot=$(STAGING_DIR) \
->  	--with-pdftops=pdftops \
->  	--with-jpeg \
-> +	--with-test-font-path=$(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf \
-
-This is not nice at all, because the tests programs are compiled for the
-target, so they can't run natively. But still you are passing a path
-that is only valid at build time, so they would not even run on the
-target.
-
-So, this tests of cups-filter os borked for cross-compilation, and thus
-the best option would be to idneed add a configutre option to
-enable/disable tests, and disable them when doing cross-compilation.
-
-An alternate solution: since we do not care what about those test
-programs to begin with, and since the font file only has to exist at
-build time, we can simply point to whatever we see fit. /dev/null would
-be the obvious candidate, I believe...
-
-Thus, we do not need to have the dejavu fonts on the target.
-
-Care to check ansd respin, please?
-
-Regards,
-Yann E. MORIN.
-
->  	--without-rcdir
->  
->  ifeq ($(BR2_PACKAGE_LIBPNG),y)
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-backcall/python-backcall.hash b/package/python-backcall/python-backcall.hash
+index 2eccbdef5d..063b4bed27 100644
+--- a/package/python-backcall/python-backcall.hash
++++ b/package/python-backcall/python-backcall.hash
+@@ -1,3 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/backcall/json
+-md5	87ce0c7839808e6a3427d57df6a792e7  backcall-0.1.0.tar.gz
+-sha256	38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4  backcall-0.1.0.tar.gz
++md5  1f4c9a370c78743406296f48e56e8821  backcall-0.2.0.tar.gz
++sha256  5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e  backcall-0.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  d422f8ce77312733c07f5fec8ccbe61d58d539774f7a66f37e4bc54740d86020  LICENSE
+diff --git a/package/python-backcall/python-backcall.mk b/package/python-backcall/python-backcall.mk
+index 3f95ea3d24..2ead3421a8 100644
+--- a/package/python-backcall/python-backcall.mk
++++ b/package/python-backcall/python-backcall.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BACKCALL_VERSION = 0.1.0
++PYTHON_BACKCALL_VERSION = 0.2.0
+ PYTHON_BACKCALL_SOURCE = backcall-$(PYTHON_BACKCALL_VERSION).tar.gz
+-PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/84/71/c8ca4f5bb1e08401b916c68003acf0a0655df935d74d93bf3f3364b310e0
++PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/a2/40/764a663805d84deee23043e1426a9175567db89c8b3287b5c2ad9f71aa93
+ PYTHON_BACKCALL_SETUP_TYPE = distutils
+-# From https://github.com/takluyver/backcall/blob/master/LICENSE
+ PYTHON_BACKCALL_LICENSE = BSD-3-Clause
++PYTHON_BACKCALL_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
