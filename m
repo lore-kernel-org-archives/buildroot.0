@@ -1,152 +1,67 @@
-From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Date: Mon, 13 Jul 2020 11:36:03 +0200
-Subject: [Buildroot] [ANNOUNCE] mtd-utils-2.1.2 is released
-Message-ID: <d0dd301f-d03d-a406-eea1-e39be99369d0@sigma-star.at>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 12:12:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to version
+ 2.16.7
+Message-ID: <20200713101242.250717-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+- Fix a side channel vulnerability in modular exponentiation that could
+  reveal an RSA private key used in a secure enclave.
+- Fix side channel in mbedtls_ecp_check_pub_priv() and
+  mbedtls_pk_parse_key() / mbedtls_pk_parse_keyfile() (when loading a
+  private key that didn't include the uncompressed public key), as well
+  as mbedtls_ecp_mul() / mbedtls_ecp_mul_restartable() when called with
+  a NULL f_rng argument. An attacker with access to precise enough
+  timing and memory access information (typically an untrusted operating
+  system attacking a secure enclave) could fully recover the ECC private
+  key.
+- Fix issue in Lucky 13 counter-measure that could make it ineffective
+  when hardware accelerators were used (using one of the
+  MBEDTLS_SHAxxx_ALT macros). This would cause the original Lucky 13
+  attack to be possible in those configurations, allowing an active
+  network attacker to recover plaintext after repeated timing
+  measurements under some conditions.
 
-mtd-utils-2.1.2 is released.
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-07
 
-Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.2.tar.bz2
-Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.2.tar.bz2.asc
-Signed git tag:        git://git.infradead.org/mtd-utils.git v2.1.2
+Switch to github to get latest release
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mbedtls/mbedtls.hash | 4 +---
+ package/mbedtls/mbedtls.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-Alternatively also mirrored here:
-
-Tarball:               https://infraroot.at/pub/mtd/mtd-utils-2.1.2.tar.bz2
-Tarball gpg signature: https://infraroot.at/pub/mtd/mtd-utils-2.1.2.tar.bz2.asc
-Signed git tag:        https://git.infraroot.at/mtd-utils.git v2.1.2
-
-
-After a while of inactivity, I decided to release the current backlog of
-fixes as mtd-utils version 2.1.2.
-
-As already said, the changes since 2.1.1 are primarily bug fixes, addressing
-compiler warnings and issues reported by diagnostic tools, but also build
-failures for some configurations.
-
-Besides the bug fixes, this version also finally pulls in the ubihealthd and
-mkfs.ubifs authentication patches.
-
-
-Changes from 2.1.1 to 2.1.2:
-
-Features:
-      flashcp: Add option -A/--erase-all
-      mtd-utils: add optional offset parameter to flash_otp_dump
-      ubi-utils: Implement a ubihealthd
-      mkfs.ubifs: Add authentication support
-
-Fixes:
-      ubifs-media: Update to Linux-5.3-rc3
-      mtd-utils: Fix return value of ubiformat
-      ubiupdatevol: Prevent null pointer dereference
-      libubigen: remove unnecessary include
-      libubi: remove private kernel header from includes
-      mkfs.ubifs: fscrypt: bail from encrypt_block if gen_essiv_salt fails
-      mkfs.ubifs: abort add_directory if readdir fails
-      mkfs.ubifs: close file descriptor in add_file error path
-      mkfs.ubifs: don't leak copied command line arguments
-      mkfs.ubifs: free derived fscrypt context in add_directory error paths
-      mkfs.ubifs: don't leak hastable iterators
-      mkfs.ubifs: don't leak temporary buffers
-      mkfs.ubifs: propperly cleanup in ALL interpret_table_entry error paths
-      mkfs.jffs2: don't leak temporary buffer if readlink fails
-      libmtd: don't leak temporary buffers
-      ftl_check: don't leak temporary buffers
-      ftl_format: don't leak temporary buffers
-      ubiformat: don't leak file descriptors
-      nanddump: don't leak copied command line arguments
-      mtd_debug: cleanup error handling in flash_to_file
-      jittertest: fix error check for open system call
-      fs-tests: don't leak temporary buffers
-      mtd-utils: Fix printf format specifiers with the wrong type
-      mtd-utils: Fix potential negative arguments passed to close(2)
-      mtd-utils: Fix various TOCTOU issues
-      mtd-utils: Fix some simple cases of uninitialized value reads
-      mtd-utils: Fix wrong argument to sizeof in nanddump
-      mtd-utils: Fix "are we really at EOF" test logic in libubi read_data
-      mtd-utils: Fix potentially unterminated strings
-      mtd-utils: Add checks to code that copies strings into fixed sized buffers
-      mkfs.ubifs: fix broken build if fscrtyp is disabled
-
-
-
-Raw short log since the 2.1.1 release:
-
-Alexander Dahl (2):
-      ubihealthd: Add missing sentinel in options array
-      ubihealthd: Add option -h/--help
-
-Andrij Abyzov (1):
-      flashcp: Add option -A/--erase-all
-
-Barry Grussling (1):
-      mtd-utils: Fix return value of ubiformat
-
-Bastian Germann (3):
-      ubiupdatevol: Prevent null pointer dereference
-      libubigen: remove unnecessary include
-      libubi: remove private kernel header from includes
-
-David Oberhollenzer (28):
-      Add the mkfs.ubifs sign.h header to the list of sources
-      Add ubihealthd to gitignore file
-      mkfs.ubifs: fscrypt: bail from encrypt_block if gen_essiv_salt fails
-      mkfs.ubifs: abort add_directory if readdir fails
-      mkfs.ubifs: close file descriptor in add_file error path
-      mkfs.ubifs: don't leak copied command line arguments
-      mkfs.ubifs: free derived fscrypt context in add_directory error paths
-      mkfs.ubifs: don't leak hastable iterators
-      mkfs.ubifs: don't leak temporary buffers
-      mkfs.ubifs: propperly cleanup in ALL interpret_table_entry error paths
-      mkfs.jffs2: don't leak temporary buffer if readlink fails
-      libmtd: don't leak temporary buffers
-      ftl_check: don't leak temporary buffers
-      ftl_format: don't leak temporary buffers
-      ubiformat: don't leak file descriptors
-      nanddump: don't leak copied command line arguments
-      mtd_debug: cleanup error handling in flash_to_file
-      jittertest: fix error check for open system call
-      fs-tests: don't leak temporary buffers
-      mtd-utils: Fix printf format specifiers with the wrong type
-      mtd-utils: Fix potential negative arguments passed to close(2)
-      mtd-utils: Fix various TOCTOU issues
-      mtd-utils: Fix some simple cases of uninitialized value reads
-      mtd-utils: Fix wrong argument to sizeof in nanddump
-      mtd-utils: Fix "are we really at EOF" test logic in libubi read_data
-      mtd-utils: Fix potentially unterminated strings
-      mtd-utils: Add checks to code that copies strings into fixed sized buffers
-      mkfs.ubifs: fix broken build if fscrtyp is disabled
-
-Marek Vasut (1):
-      ubihealthd: Build only if sys/random.h is present
-
-Michael Walle (1):
-      mtd-utils: add optional offset parameter to flash_otp_dump
-
-Richard Weinberger (1):
-      ubi-utils: Implement a ubihealthd
-
-Sascha Hauer (2):
-      ubifs-media: Update to Linux-5.3-rc3
-      mkfs.ubifs: Add authentication support
-
-
-Regards,
-
-David
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200713/ae8ab444/attachment.asc>
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 17ac18bb25..b75a8fa80c 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,3 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
+-sha1  3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
+-sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770  mbedtls-2.16.6-apache.tgz
+ # Locally calculated
++sha256  4786b7d1676f5e4d248f3a7f2d28446876d64962634f060ff21b92c690cfbe86  mbedtls-2.16.7.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 50121fa6c7..4ae8291c11 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.16.6
+-MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
++MBEDTLS_VERSION = 2.16.7
++MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,mbedtls-$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ 	-DENABLE_TESTING=OFF
+-- 
+2.27.0
