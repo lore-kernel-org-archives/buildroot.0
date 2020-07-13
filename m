@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jul 2020 08:37:19 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/iwd: needs dbus
+Date: Mon, 13 Jul 2020 08:36:53 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/iwd: needs dbus
  (runtime)
-Message-ID: <20200713063558.ED3EB817CB@busybox.osuosl.org>
+Message-ID: <20200713063604.75099817CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0f1d375ad3f0f77183397986b522e168601bae7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fafecb80712d0a27d8403c621aba7d6fc2f8244a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fixes (on startup):
 
