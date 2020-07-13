@@ -1,58 +1,54 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 13 Jul 2020 20:49:41 +0200
-Subject: [Buildroot] [PATCH] package/cdrkit: fix build with GCC 10
-In-Reply-To: <20200625005836.2232591-1-urjaman@gmail.com>
-References: <20200625005836.2232591-1-urjaman@gmail.com>
-Message-ID: <CAEyMn7bESKCEz=4hE8qJJLC9mK9Kk=c07feimKaduSnruvVp_g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Jul 2020 21:32:25 +0200
+Subject: [Buildroot] [PATCH RESEND 0/2] Use bzip2 for X11 PFC font
+ compression
+In-Reply-To: <20200713184751.23534-1-asierra@xes-inc.com>
+References: <20200713184751.23534-1-asierra@xes-inc.com>
+Message-ID: <20200713213225.7e9d3343@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Urja,
+Hello Aaron,
 
-Am Do., 25. Juni 2020 um 02:58 Uhr schrieb Urja Rannikko <urjaman@gmail.com>:
->
-> This patch adds a missing extern on the outfile
-> variable in genisoimage.h.
->
-> Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+Thanks for this work!
 
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+On Mon, 13 Jul 2020 13:47:49 -0500
+Aaron Sierra <asierra@xes-inc.com> wrote:
 
-> ---
-> Note: I would like to see this applied to the LTS 2020.02
-> branch too, since it fixes building host-cdrkit for ISO9660
-> generation with a host GCC 10.
->
->  .../cdrkit/0003-genisoimage-outfile-extern.patch    | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 package/cdrkit/0003-genisoimage-outfile-extern.patch
->
-> diff --git a/package/cdrkit/0003-genisoimage-outfile-extern.patch b/package/cdrkit/0003-genisoimage-outfile-extern.patch
-> new file mode 100644
-> index 0000000000..5a9f0363c9
-> --- /dev/null
-> +++ b/package/cdrkit/0003-genisoimage-outfile-extern.patch
-> @@ -0,0 +1,13 @@
-> +diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
-> +index bbedfb0..82c859b 100644
-> +--- a/genisoimage/genisoimage.h
-> ++++ b/genisoimage/genisoimage.h
-> +@@ -376,7 +376,7 @@ extern int use_fileversion;
-> + extern int    split_SL_component;
-> + extern int    split_SL_field;
-> + extern char   *trans_tbl;
-> +-char          *outfile;
-> ++extern char   *outfile;
-> +
-> + #define       JMAX            64      /* maximum Joliet file name length (spec) */
-> + #define       JLONGMAX        103     /* out of spec Joliet file name length */
-> --
-> 2.26.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Gzip has been used as the default compressor for PCF fonts, but this
+> series changes the default compressor to bzip2 for a few reasons:
+> 
+> 1. Even with the latest gzip, these seemingly synonymous pipelines
+>    produce different output, but this issue does not exist with bzip2:
+> 
+>   $ cat /path/to/file | gzip > /path/to/file.gz
+>   $ gzip < /path/to/file > /path/to/file.gz
+> 
+> 2. Prior to gzip 1.10, the compression pipeline used with PCF fonts was
+>    not reproducible due to the implicit -N/--name injecting a timestamp:
+> 
+>   * cat /path/to/file | gzip > /path/to/file.gz
+> 
+> 3. The BR2_USE_WCHAR dependency of the gzip package tarnishes the appeal
+>    of using host-gzip to provide reproducible output.
+
+This argument seems pretty weird. The fact that gzip needs
+BR2_USE_WCHAR on the target doesn't at all prevent from building
+host-gzip. We have plenty of host packages that need wchar packages,
+and we simply assume the host system as wide char support available.
+
+So this third argument is a bit "moot", especially since
+host-xapp-mkfontscale already has a dependency on host-gzip, which
+builds a gzip 1.10, so it shouldn't be affected by the problem you
+describe.
+
+So that leaves us with just argument (1), correct ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
