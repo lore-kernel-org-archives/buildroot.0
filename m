@@ -1,72 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jul 2020 19:10:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fuse-overlayfs: needs headers
- >= 3.15
-In-Reply-To: <20200713144159.897606-1-fontaine.fabrice@gmail.com>
-References: <20200713144159.897606-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200713171004.GF18825@scaer>
+Date: Mon, 13 Jul 2020 19:10:20 +0200
+Subject: [Buildroot] [git commit] package/lcms2: bump to version 2.11
+Message-ID: <20200713170711.3C1368229D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2cf994944cbc8644473947c6ea5c1c4d56d21727
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-13 16:41 +0200, Fabrice Fontaine spake thusly:
-> fuse-overlayfs unconditionally uses SYS_renameat2 since version 0.2 and
-> https://github.com/containers/fuse-overlayfs/commit/616119093a5d37bf201a7b7970eeb5f7ba32de22
-> which is not available until kernel 3.15 and
-> https://github.com/torvalds/linux/commit/5fb6b953bb7aa86a9c8ea760934982cedc45c52b
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3c97e25c69ab949e51f04b5d0134bc4b4059982d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lcms2/lcms2.hash | 6 +++---
+ package/lcms2/lcms2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/fuse-overlayfs/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/fuse-overlayfs/Config.in b/package/fuse-overlayfs/Config.in
-> index a13cdd9e93..30a3372cbd 100644
-> --- a/package/fuse-overlayfs/Config.in
-> +++ b/package/fuse-overlayfs/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_FUSE_OVERLAYFS
->  	depends on BR2_USE_MMU # libfuse3
->  	depends on !BR2_STATIC_LIBS # libfuse3
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
->  	select BR2_PACKAGE_LIBFUSE3
->  	help
->  	  FUSE-overlayfs is an implementation of overlay+shiftfs in
-> @@ -10,6 +11,7 @@ config BR2_PACKAGE_FUSE_OVERLAYFS
->  
->  	  http://github.com/containers/fuse-overlayfs
->  
-> -comment "fuse-overlayfs needs a toolchain w/ threads, dynamic library"
-> +comment "fuse-overlayfs needs a toolchain w/ threads, dynamic library, headers >= 3.15"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
+index 1d83fcb2ba..c0916820f7 100644
+--- a/package/lcms2/lcms2.hash
++++ b/package/lcms2/lcms2.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/lcms/files/lcms/2.10
+-sha1  59bcebaf15c1c4b21815708cb68498b9b5d40db3  lcms2-2.10.tar.gz
++# From https://sourceforge.net/projects/lcms/files/lcms/2.11
++sha1  7413047c74de29e20caa5c9afc1b12bf07bbf7a7  lcms2-2.11.tar.gz
+ # Locally computed:
+-sha256  e11bc4e538587ec1530f9fef25f77261b94d5886c5ea81d8bb171a802df970ad  lcms2-2.10.tar.gz
++sha256  dc49b9c8e4d7cdff376040571a722902b682a795bf92985a85b48854c270772e  lcms2-2.11.tar.gz
+ sha256  53ad5ca11b8f4079e9c9bfa61575927a33f53526d6d414287149ec3ab61e8e4d  COPYING
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 6929825f69..d42c8c9a1f 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LCMS2_VERSION = 2.10
++LCMS2_VERSION = 2.11
+ LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+ LCMS2_LICENSE = MIT
+ LCMS2_LICENSE_FILES = COPYING
