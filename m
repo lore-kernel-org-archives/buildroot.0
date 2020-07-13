@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jul 2020 08:29:01 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mesa3d: disable
+Date: Mon, 13 Jul 2020 08:26:48 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/mesa3d: disable
  --as-needed linker flag for Codesourcery ARM 2014.05 toolchain
-Message-ID: <20200713062631.CF6B7869AA@busybox.osuosl.org>
+Message-ID: <20200713062650.1D5C0869AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cac0ed915d7b92f70d08b0c8fcf4fb1156a3c4a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1e9741e597fca0a9a87d4035ac50b31d42b16355
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Meson build system enable by default -Wl,--as-needed [1][2] in the linker command line
 and due to this the libmesa_dri_drivers.so build fail with the Codesourcery ARM and
@@ -83,12 +83,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 000ec1c1ef..330c7b4610 100644
+index d1933dabfd..346f35ba43 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -28,6 +28,12 @@ MESA3D_CONF_OPTS = \
- 	-Dpower8=false \
- 	-Dvalgrind=false
+@@ -27,6 +27,12 @@ MESA3D_CONF_OPTS = \
+ 	-Dgallium-omx=disabled \
+ 	-Dpower8=false
  
 +# Codesourcery ARM 2014.05 fail to link libmesa_dri_drivers.so with --as-needed linker
 +# flag due to a linker bug between binutils 2.24 and 2.25 (2.24.51.20140217).
