@@ -1,50 +1,49 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 13 Jul 2020 18:18:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyparted: needs python3
-In-Reply-To: <20200713091003.155280-1-fontaine.fabrice@gmail.com>
-References: <20200713091003.155280-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAGm1_ksJhxiBt_bwFscdsJALUHOYbk8V7BcZH2C+AO21TLA9Yw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 18:20:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.0
+Message-ID: <20200713162024.1352570-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 13, 2020 at 11:10 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> python3 is a mandatory dependency since version 3.11.5 and
-> https://github.com/dcantrell/pyparted/commit/c4949263538784036a5917195f956f8fcda9cf20
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/7d93b4e5c3afebef8c4c19d1c6a0c26e71423191
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This is the new LTS branch (EOL in 2025-Q2)
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+https://www.mail-archive.com/haproxy at formilux.org/msg37852.html
 
-> ---
->  package/python-pyparted/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/package/python-pyparted/Config.in b/package/python-pyparted/Config.in
-> index 6e3bde2030..0e27ce1d2e 100644
-> --- a/package/python-pyparted/Config.in
-> +++ b/package/python-pyparted/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_PYPARTED
->         bool "python-pyparted"
-> +       depends on BR2_PACKAGE_PYTHON3
->         depends on BR2_ENABLE_LOCALE # parted
->         depends on BR2_USE_WCHAR
->         depends on !BR2_TOOLCHAIN_USES_UCLIBC # parted
-> @@ -10,5 +11,6 @@ config BR2_PACKAGE_PYTHON_PYPARTED
->           https://github.com/rhinstaller/pyparted
->
->  comment "pyparted needs a glibc or musl toolchain w/ locale, wchar"
-> +       depends on BR2_PACKAGE_PYTHON3
->         depends on BR2_TOOLCHAIN_USES_UCLIBC || \
->                 !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR
-> --
-> 2.27.0
->
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index b89bda834b..4d880ef653 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.4.tar.gz.sha256
+-sha256  51030ff696d7067162b4d24d354044293aecfbb36d7acc2f840c8d928bfe91cd  haproxy-2.1.4.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.0.tar.gz.sha256
++sha256  3c1a87160eea40e067f1e2813bfe692280a10c455beb17a8ee7fae11e4223274  haproxy-2.2.0.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index e59896b485..6f97840f6d 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HAPROXY_VERSION_MAJOR = 2.1
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
++HAPROXY_VERSION_MAJOR = 2.2
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).0
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-- 
+2.27.0
