@@ -1,71 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 Jul 2020 23:17:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rp-pppoe: bump to version 3.14
-Message-ID: <20200713211710.2036960-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 13 Jul 2020 23:21:54 +0200
+Subject: [Buildroot] [PATCH 3/4] configs/qemu_aarch64_virt_defconfig:
+ boot with grub bootloader with efi
+In-Reply-To: <20200712212826.4025d0d5@windsurf.home>
+References: <20200712163422.1162187-1-romain.naour@gmail.com>
+ <20200712163422.1162187-3-romain.naour@gmail.com>
+ <20200712212826.4025d0d5@windsurf.home>
+Message-ID: <daaa32d9-5da6-84c6-3546-6abb04542530@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update patch and renumber it
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../{0002-krn-plugin.patch => 0001-krn-plugin.patch}        | 6 ++++--
- package/rp-pppoe/rp-pppoe.hash                              | 2 +-
- package/rp-pppoe/rp-pppoe.mk                                | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
- rename package/rp-pppoe/{0002-krn-plugin.patch => 0001-krn-plugin.patch} (79%)
+Le 12/07/2020 ? 21:28, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sun, 12 Jul 2020 18:34:21 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> The current qemu_aarch64_virt_defconfig boot with just the kernel, so ACPI
+>> tables are missing and the plug and play support is disabled.
+>>
+>> dmesg:
+>> ACPI: Interpreter disabled.
+>> [...]
+>> pnp: PnP ACPI: disabled
+>>
+>> The ACPI support is already available in the kernel defconfig, the
+>> memory hotplug support will be added by the next patch.
+>>
+>> Borrow the post image script, genimage and bootloader configuration from
+>> aarch64_efi_defconfig to build the disk image used to boot the system
+>> in efi mode.
+>>
+>> As a side effect, the bootloader grub2 is now runtime tested in the
+>> Buildroot gitlab-ci while testing this defconfig.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> 
+> But isn't this making qemu_aarch64_virt_defconfig too similar to
+> aarch64_efi_defconfig ?
 
-diff --git a/package/rp-pppoe/0002-krn-plugin.patch b/package/rp-pppoe/0001-krn-plugin.patch
-similarity index 79%
-rename from package/rp-pppoe/0002-krn-plugin.patch
-rename to package/rp-pppoe/0001-krn-plugin.patch
-index d364e8684c..c386e85f29 100644
---- a/package/rp-pppoe/0002-krn-plugin.patch
-+++ b/package/rp-pppoe/0001-krn-plugin.patch
-@@ -1,3 +1,5 @@
-+[Fabrice: update patch for 3.14]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- diff -Nura rp-pppoe-3.11.orig/src/configure rp-pppoe-3.11/src/configure
- --- rp-pppoe-3.11.orig/src/configure	2012-08-21 10:01:10.536440032 -0300
- +++ rp-pppoe-3.11/src/configure	2012-08-21 10:01:45.353442397 -0300
-@@ -5,8 +7,8 @@ diff -Nura rp-pppoe-3.11.orig/src/configure rp-pppoe-3.11/src/configure
-  modprobe pppoe > /dev/null 2>&1
-  fi
-  if test "$cross_compiling" = yes; then :
---  ac_cv_linux_kernel_pppoe=no; $ECHO "cross-compiling, default: "
--+  ac_cv_linux_kernel_pppoe=yes; $ECHO "cross-compiling, default: "
-+-  ac_cv_linux_kernel_pppoe=no; echo "cross-compiling, default: "
-++  ac_cv_linux_kernel_pppoe=yes; echo "cross-compiling, default: "
-  else
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-  /* end confdefs.h.  */
-diff --git a/package/rp-pppoe/rp-pppoe.hash b/package/rp-pppoe/rp-pppoe.hash
-index 3f7af60558..806bab1b0f 100644
---- a/package/rp-pppoe/rp-pppoe.hash
-+++ b/package/rp-pppoe/rp-pppoe.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  00794e04031546b0e9b8cf286f2a6d1ccfc4a621b2a3abb2d7ef2a7ab7cc86c2  rp-pppoe-3.12.tar.gz
-+sha256  7825232f64ab4d618ef074d62d145ae43d6edc91b9a718c6130a4742bac40e2a  rp-pppoe-3.14.tar.gz
- # Locally computed
- sha256  464006ba771074f4022db14f58a29a0b447b6fdde9529cf0331be396b6279162  doc/LICENSE
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 4214df929f..2f0073b6c0 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--RP_PPPOE_VERSION = 3.12
--RP_PPPOE_SITE = http://www.roaringpenguin.com/files/download
-+RP_PPPOE_VERSION = 3.14
-+RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
- RP_PPPOE_LICENSE = GPL-2.0
- RP_PPPOE_LICENSE_FILES = doc/LICENSE
- RP_PPPOE_DEPENDENCIES = pppd
--- 
-2.27.0
+Well, that why I suggested to merge the two defconfig. But I'm fine having two
+defconfig for different purpose.
+
+> 
+> Shouldn't we keep qemu_aarch64_virt_defconfig as-is, and simply add
+> runtime testing for aarch64_efi_defconfig ?
+
+I would like to continue enabling features in the qemu_aarch64_virt_defconfig
+and some of them require ACPI support. That is why I borrowed the post-image
+script, grub defconfig from aarch64_efi_defconfig and packaged the edk2-bin.
+
+If we start enabling qemu runtime testing for other defconfig that the one named
+qemu_* we could continue (for example) test the nitrogen6x_defconfig with
+qemu-system-arm -M sabrelite. This can be interesting :)
+
+For now, I would like to focus on qemu_* defconfigs.
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
