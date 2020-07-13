@@ -1,83 +1,84 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 13 Jul 2020 14:33:59 +0930
-Subject: [Buildroot] [PATCH] pdbg: Bump version to v3.0
-Message-ID: <20200713050359.3830866-1-joel@jms.id.au>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jul 2020 08:30:05 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: disable --as-needed linker
+ flag for Codesourcery ARM 2014.05 toolchain
+In-Reply-To: <20200613104708.2415431-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 13 Jun 2020 12:47:08 +0200")
+References: <20200613104708.2415431-1-romain.naour@gmail.com>
+Message-ID: <87imeskjv6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes a patch to fix building with uclibc, where pdbg was
-missing a header for ssize_t.
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- .../pdbg/0001-Fix-building-with-uclibc.patch  | 32 +++++++++++++++++++
- package/pdbg/pdbg.hash                        |  2 +-
- package/pdbg/pdbg.mk                          |  2 +-
- 3 files changed, 34 insertions(+), 2 deletions(-)
- create mode 100644 package/pdbg/0001-Fix-building-with-uclibc.patch
+ > Meson build system enable by default -Wl,--as-needed [1][2] in the linker command line
+ > and due to this the libmesa_dri_drivers.so build fail with the Codesourcery ARM and
+ > Aarch64 2014.05 toolchain:
 
-diff --git a/package/pdbg/0001-Fix-building-with-uclibc.patch b/package/pdbg/0001-Fix-building-with-uclibc.patch
-new file mode 100644
-index 000000000000..90fe67b51f47
---- /dev/null
-+++ b/package/pdbg/0001-Fix-building-with-uclibc.patch
-@@ -0,0 +1,32 @@
-+From 7ad1193f705563dc984b738b9af3c7461caeef37 Mon Sep 17 00:00:00 2001
-+From: Joel Stanley <joel@jms.id.au>
-+Date: Mon, 13 Jul 2020 14:57:31 +1000
-+Subject: [PATCH] Fix building with uclibc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+libpdbg/target.h:66:2: error: unknown type name ?ssize_t?
-+   66 |  ssize_t len;
-+      |  ^~~~~~~
-+
-+Signed-off-by: Joel Stanley <joel@jms.id.au>
-+---
-+ libpdbg/target.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libpdbg/target.h b/libpdbg/target.h
-+index 522a4dc..a12cce8 100644
-+--- a/libpdbg/target.h
-++++ b/libpdbg/target.h
-+@@ -17,6 +17,7 @@
-+ #define __TARGET_H
-+ 
-+ #include <stdint.h>
-++#include <unistd.h>
-+ #include <ccan/list/list.h>
-+ #include <ccan/str/str.h>
-+ #include <ccan/container_of/container_of.h>
-+-- 
-+2.17.1
-+
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-index 486dff240d52..f2aa145cb1fe 100644
---- a/package/pdbg/pdbg.hash
-+++ b/package/pdbg/pdbg.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 10f701c4bb8557a35de166c4322d77fa64ddbdd1146141a88a3d530144545820 pdbg-2.4.tar.gz
-+sha256 1a2736a010d21a2e5b735212a35cd214d6ab90aab0cad5c0260b975398f19dc8 pdbg-3.0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-index 9977a126fb62..17d65be7fd53 100644
---- a/package/pdbg/pdbg.mk
-+++ b/package/pdbg/pdbg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PDBG_VERSION = 2.4
-+PDBG_VERSION = 3.0
- PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
- PDBG_LICENSE = Apache-2.0
- PDBG_LICENSE_FILES = COPYING
+ > /home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++
+ >   -o src/mesa/drivers/dri/libmesa_dri_drivers.so
+ >   -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group
+ >   -Wl,-soname,libmesa_dri_drivers.so -Wl,--whole-archive
+ >   src/mesa/drivers/dri/radeon/libr100.a src/mesa/drivers/dri/nouveau/libnouveau_vieux.a
+ >   -Wl,--no-whole-archive
+ >   src/mesa/drivers/dri/common/libmegadriver_stub.a
+ >   src/mesa/drivers/dri/common/libdricommon.a
+ >   src/mapi/shared-glapi/libglapi.so.0.0.0
+ >   src/mesa/libmesa_classic.a src/mesa/libmesa_common.a
+ >   src/compiler/glsl/libglsl.a src/compiler/glsl/glcpp/libglcpp.a
+ >   src/util/libmesa_util.a src/util/format/libmesa_format.a
+ >   src/compiler/nir/libnir.a src/compiler/libcompiler.a
+ >   src/util/libxmlconfig.a
+ >   [...]
+
+ > src/mesa/drivers/dri/common/libmegadriver_stub.a(megadriver_stub.c.o): In function `megadriver_stub_init':
+ > megadriver_stub.c:(.text.startup+0x20): undefined reference to `dladdr'
+ > megadriver_stub.c:(.text.startup+0xbc): undefined reference to `dlsym'
+ > collect2: error: ld returned 1 exit status
+
+ > This problem seems to be specific to this toolchain release (ARM and aarch64)
+ > CodeSourcery 2014.05: gcc 4.8.3-prerelease; binutils 2.24.51.20140217; glibc 2.18
+
+ > The following prebuilt toolchain has been tested and doesn't trigger this issue:
+ > Linaro 4.9-4.9-2014.11: gcc 4.9.3; binutils 2.24.0; glibc 2.19
+ > CodeSourcery 2014.11: gcc 4.9.1; binutils 2.24.51.20140217; glibc 2.20
+
+ > Older toolchains doesn't have a recent enough glibc or linux-headers version
+ > to breaking the build with mesa3d 20.1.0 or libdrm 2.4.102.
+
+ > In order to build mesa3d with the CodeSourcery 2014.05 using --as-needed would be
+ > reorder the static librairies:
+
+ >  diff --git a/src/mesa/drivers/dri/meson.build b/src/mesa/drivers/dri/meson.build
+ >  index b09ca16e38a..9ac6731c522 100644
+ >  --- a/src/mesa/drivers/dri/meson.build
+ >  +++ b/src/mesa/drivers/dri/meson.build
+ >  @@ -59,7 +59,7 @@ if _dri_drivers != []
+ >       [],
+ >       link_whole : _dri_drivers,
+ >       link_with : [
+ >  -      libmegadriver_stub, libdricommon, libglapi,
+ >  +      libdricommon, libmegadriver_stub, libglapi,
+ >         libmesa_classic,
+ >       ],
+
+ > Instead, we can disable --as-needed from the meson build system using
+ > "-Db_asneeded=false" only for this toolchain.
+
+ > [1] https://mesonbuild.com/Builtin-options.html
+ > [2] https://wiki.gentoo.org/wiki/Project:Quality_Assurance/As-needed
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/eec39a4fbfbfaa58980fab36f2fd902a16eecf0f/build-end.log
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
 -- 
-2.27.0
+Bye, Peter Korsgaard
