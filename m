@@ -1,64 +1,104 @@
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Mon, 13 Jul 2020 12:17:11 +0530
-Subject: [Buildroot] [PATCH v3 2/2] configs/rock_pi_4: new defconfig
-In-Reply-To: <20200712222959.54d8d12c@windsurf.home>
-References: <1593893805-8430-1-git-send-email-sunil@amarulasolutions.com>
- <1593893805-8430-3-git-send-email-sunil@amarulasolutions.com>
- <20200712222959.54d8d12c@windsurf.home>
-Message-ID: <CAM+7aWv165kA2XxZpU0UZN+GAGB3u3QHx5GTGe8SQb60mczp6Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jul 2020 08:50:40 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/meson: fix shared
+ build issue due to --static flag always passed to pkg-config
+Message-ID: <20200713064700.800BC86CA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=82f0530cf0be51fba834d9177c42ddd738875bec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-On Mon, Jul 13, 2020 at 2:00 AM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+Since cf75d7da98596580eee5a9b5e1a3e156ad832099 we have a build failures when
+building libgbm.so when valgrind package is selected because --static is always
+passed to pkg-config even for shared build.
 
-> On Sun,  5 Jul 2020 01:46:45 +0530
-> Suniel Mahesh <sunil@amarulasolutions.com> wrote:
->
-> > Add initial support for RK3399 based rockpi-4 targets (model A, B, C)
-> > with below features:
-> >
-> >       - Custom U-Boot 2020.07-rc4
-> >         https://github.com/amarula/u-boot-amarula.git
-> >         branch rock-pi
-> >       - Linux 5.4.46
-> >       - GPT partition layout is being used
-> >       - Default packages from buildroot
-> >
-> > Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> > ---
-> > Changes for v3:
-> > - no changes
->
-> Applied to master with similar changes than the n10 defconfig.
->
-> Regarding the use of u-boot-rockchip.bin, I think I very much prefer
-> that there is one partition for each bootloader stage. Having this huge
-> image u-boot-rockchip.bin, with a huge gap in the middle feels odd, so
-> I tend to prefer the solution implemented by your patch as it is.
->
-> Of course, please send some updates when the ATF support and U-Boot
-> support is fully merged, so that we can use mainline and tagged releases.
->
+Even if -Dvalgrind=false on meson command line to build mesa, the valgrind
+libraries come from pkg-config libdrm...
 
-I will update the target to use mainline u-boot and others once the support
-is fully
-merged and send patches accordingly. Thanks for the review.
+output/host/bin/pkg-config libdrm --libs --static
+-L[...]/sysroot/usr/lib -ldrm -lm -L[...]/sysroot/usr/lib/valgrind
+-lcoregrind-arm64-linux -lvex-arm64-linux -lgcc
 
+... and break the build.
 
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200713/49e2a9ee/attachment.html>
+See initial discussions:
+http://lists.busybox.net/pipermail/buildroot/2020-June/284543.html
+
+This is due to a wrong condition test added by the patch
+0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch.
+
+Indeed, pkg_config_static is a string, not a boolean; it is set to
+either 'true' or 'aflse' by our meson package infra. Since the returned
+object is a string, do not pass a boolean, but pas None (we only want to
+test against the 'true' string, so we don't care what we get back when
+it is not set, which never happens in Buildroot).
+
+Before this patch, the issue can be reproduced using the following defconfig:
+    BR2_aarch64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_VALGRIND=y
+    BR2_PACKAGE_MESA3D=y
+    BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+
+Fixes:
+http://autobuild.buildroot.net/results/1b5/1b58d73ecbbe1af2c3e140563d696cf32d1c4a5a/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: slightly reword the commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6ae1932e717094c858036d652f7bf054b70d4bb2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...uild-dependencies-base.py-add-pkg_config_stati.patch | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+index 7bb00f3fba..4196545a96 100644
+--- a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
++++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
+@@ -1,4 +1,4 @@
+-From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
++From 71295eec724f89ef5f5822c17cf44480335225cd Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sat, 15 Feb 2020 15:13:59 +0100
+ Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
+@@ -16,23 +16,26 @@ Fixes:
+  - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Romain: Fix if condition, pkg_config_static is a string not a boolean]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+- mesonbuild/dependencies/base.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ mesonbuild/dependencies/base.py | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
+-index a83e3d6c..913bff6b 100644
++index 5636602e..de4e87bc 100644
+ --- a/mesonbuild/dependencies/base.py
+ +++ b/mesonbuild/dependencies/base.py
+-@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
++@@ -858,7 +858,8 @@ class PkgConfigDependency(ExternalDependency):
+      def _set_libs(self):
+          env = None
+          libcmd = [self.name, '--libs']
+ -        if self.static:
+-+        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
+++        if self.static or \
+++           (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
+              libcmd.append('--static')
+          # Force pkg-config to output -L fields even if they are system
+          # paths so we can do manual searching with cc.find_library() later.
+ -- 
+-2.24.1
++2.25.4
+ 
