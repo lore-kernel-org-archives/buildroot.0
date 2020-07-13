@@ -1,59 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:56:41 +0200
-Subject: [Buildroot] [PATCH RESEND 0/2] Use bzip2 for X11 PFC font
- compression
-In-Reply-To: <987740769.442321.1594670110258.JavaMail.zimbra@xes-inc.com>
-References: <20200713184751.23534-1-asierra@xes-inc.com>
- <20200713213225.7e9d3343@windsurf.home>
- <987740769.442321.1594670110258.JavaMail.zimbra@xes-inc.com>
-Message-ID: <20200713215641.51c15c4b@windsurf.home>
+Date: Mon, 13 Jul 2020 21:57:03 +0200
+Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
+ 2.16.7
+Message-ID: <20200713195825.E569186D86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 14:55:10 -0500 (CDT)
-Aaron Sierra <asierra@xes-inc.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7f79bb5cfdf371ef0d959f2e7fdc43dc1e6afffc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >> 1. Even with the latest gzip, these seemingly synonymous pipelines
-> >>    produce different output, but this issue does not exist with bzip2:
-> >> 
-> >>   $ cat /path/to/file | gzip > /path/to/file.gz
-> >>   $ gzip < /path/to/file > /path/to/file.gz
-> >> 
-> >> 2. Prior to gzip 1.10, the compression pipeline used with PCF fonts was
-> >>    not reproducible due to the implicit -N/--name injecting a timestamp:
-> >> 
-> >>   * cat /path/to/file | gzip > /path/to/file.gz
-> >> 
-> >> 3. The BR2_USE_WCHAR dependency of the gzip package tarnishes the appeal
-> >>    of using host-gzip to provide reproducible output.  
-> > 
-> > This argument seems pretty weird. The fact that gzip needs
-> > BR2_USE_WCHAR on the target doesn't at all prevent from building
-> > host-gzip. We have plenty of host packages that need wchar packages,
-> > and we simply assume the host system as wide char support available.
-> > 
-> > So this third argument is a bit "moot", especially since
-> > host-xapp-mkfontscale already has a dependency on host-gzip, which
-> > builds a gzip 1.10, so it shouldn't be affected by the problem you
-> > describe.  
-> 
-> OK, then maybe adding a host-gzip dependency would be the better solution.
-> I've found some evidence that this patchset isn't complete with respect to
-> X itself using bzip-compressed fonts :(
-> 
-> > So that leaves us with just argument (1), correct ?  
-> 
-> Well, I think that (2) or (3) would be needed as the real justification for
-> switching compression mechanisms. Let me investigate the host-gzip path now
-> that I know that isn't a compatibility problem.
+- Fix a side channel vulnerability in modular exponentiation that could
+  reveal an RSA private key used in a secure enclave.
+- Fix side channel in mbedtls_ecp_check_pub_priv() and
+  mbedtls_pk_parse_key() / mbedtls_pk_parse_keyfile() (when loading a
+  private key that didn't include the uncompressed public key), as well
+  as mbedtls_ecp_mul() / mbedtls_ecp_mul_restartable() when called with
+  a NULL f_rng argument. An attacker with access to precise enough
+  timing and memory access information (typically an untrusted operating
+  system attacking a secure enclave) could fully recover the ECC private
+  key.
+- Fix issue in Lucky 13 counter-measure that could make it ineffective
+  when hardware accelerators were used (using one of the
+  MBEDTLS_SHAxxx_ALT macros). This would cause the original Lucky 13
+  attack to be possible in those configurations, allowing an active
+  network attacker to recover plaintext after repeated timing
+  measurements under some conditions.
 
-OK, thanks!
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-07
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Switch to github to get latest release
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mbedtls/mbedtls.hash | 4 +---
+ package/mbedtls/mbedtls.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 17ac18bb25..b75a8fa80c 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,3 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
+-sha1  3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
+-sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770  mbedtls-2.16.6-apache.tgz
+ # Locally calculated
++sha256  4786b7d1676f5e4d248f3a7f2d28446876d64962634f060ff21b92c690cfbe86  mbedtls-2.16.7.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 50121fa6c7..4ae8291c11 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.16.6
+-MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
++MBEDTLS_VERSION = 2.16.7
++MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,mbedtls-$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ 	-DENABLE_TESTING=OFF
