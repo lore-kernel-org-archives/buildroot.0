@@ -1,46 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 23:12:25 +0200
-Subject: [Buildroot] [git commit] package/parprouted: bump version to 0.7
-Message-ID: <20200713210928.6DA6E81763@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 23:17:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rp-pppoe: bump to version 3.14
+Message-ID: <20200713211710.2036960-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a4b1801e7c5fd0a178c43bf0ec0e339d15ef2dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Update patch and renumber it
 
-This was supposed to be part of
-fce71d09fb139ed2b29ad1f3158da50731c7ca48, which introduced the
-parprouted package, but due to a missed "git commit --amend", it
-wasn't included in this commit, so let's add it now.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/parprouted/parprouted.hash | 2 +-
- package/parprouted/parprouted.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../{0002-krn-plugin.patch => 0001-krn-plugin.patch}        | 6 ++++--
+ package/rp-pppoe/rp-pppoe.hash                              | 2 +-
+ package/rp-pppoe/rp-pppoe.mk                                | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
+ rename package/rp-pppoe/{0002-krn-plugin.patch => 0001-krn-plugin.patch} (79%)
 
-diff --git a/package/parprouted/parprouted.hash b/package/parprouted/parprouted.hash
-index ec73f92168..d35691b62a 100644
---- a/package/parprouted/parprouted.hash
-+++ b/package/parprouted/parprouted.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/rp-pppoe/0002-krn-plugin.patch b/package/rp-pppoe/0001-krn-plugin.patch
+similarity index 79%
+rename from package/rp-pppoe/0002-krn-plugin.patch
+rename to package/rp-pppoe/0001-krn-plugin.patch
+index d364e8684c..c386e85f29 100644
+--- a/package/rp-pppoe/0002-krn-plugin.patch
++++ b/package/rp-pppoe/0001-krn-plugin.patch
+@@ -1,3 +1,5 @@
++[Fabrice: update patch for 3.14]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ diff -Nura rp-pppoe-3.11.orig/src/configure rp-pppoe-3.11/src/configure
+ --- rp-pppoe-3.11.orig/src/configure	2012-08-21 10:01:10.536440032 -0300
+ +++ rp-pppoe-3.11/src/configure	2012-08-21 10:01:45.353442397 -0300
+@@ -5,8 +7,8 @@ diff -Nura rp-pppoe-3.11.orig/src/configure rp-pppoe-3.11/src/configure
+  modprobe pppoe > /dev/null 2>&1
+  fi
+  if test "$cross_compiling" = yes; then :
+--  ac_cv_linux_kernel_pppoe=no; $ECHO "cross-compiling, default: "
+-+  ac_cv_linux_kernel_pppoe=yes; $ECHO "cross-compiling, default: "
++-  ac_cv_linux_kernel_pppoe=no; echo "cross-compiling, default: "
+++  ac_cv_linux_kernel_pppoe=yes; echo "cross-compiling, default: "
+  else
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  /* end confdefs.h.  */
+diff --git a/package/rp-pppoe/rp-pppoe.hash b/package/rp-pppoe/rp-pppoe.hash
+index 3f7af60558..806bab1b0f 100644
+--- a/package/rp-pppoe/rp-pppoe.hash
++++ b/package/rp-pppoe/rp-pppoe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  00794e04031546b0e9b8cf286f2a6d1ccfc4a621b2a3abb2d7ef2a7ab7cc86c2  rp-pppoe-3.12.tar.gz
++sha256  7825232f64ab4d618ef074d62d145ae43d6edc91b9a718c6130a4742bac40e2a  rp-pppoe-3.14.tar.gz
  # Locally computed
--sha256  4b8cb2c801047f26b63aefaa8d69adc8552fb7c8a8f5d851798a48f841948d36  parprouted-0.65.tar.gz
-+sha256  d63643c95d4149a3d71112da5892f459433456bf0279bfa304625f109178defc  parprouted-0.7.tar.gz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/parprouted/parprouted.mk b/package/parprouted/parprouted.mk
-index 09565787c2..a0425d92cd 100644
---- a/package/parprouted/parprouted.mk
-+++ b/package/parprouted/parprouted.mk
-@@ -4,7 +4,7 @@
+ sha256  464006ba771074f4022db14f58a29a0b447b6fdde9529cf0331be396b6279162  doc/LICENSE
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index 4214df929f..2f0073b6c0 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PARPROUTED_VERSION = 0.65
-+PARPROUTED_VERSION = 0.7
- PARPROUTED_SITE = https://www.hazard.maks.net/parprouted
- PARPROUTED_LICENSE = GPL-2.0
- PARPROUTED_LICENSE_FILES = COPYING
+-RP_PPPOE_VERSION = 3.12
+-RP_PPPOE_SITE = http://www.roaringpenguin.com/files/download
++RP_PPPOE_VERSION = 3.14
++RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
+ RP_PPPOE_LICENSE = GPL-2.0
+ RP_PPPOE_LICENSE_FILES = doc/LICENSE
+ RP_PPPOE_DEPENDENCIES = pppd
+-- 
+2.27.0
