@@ -1,69 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:57:03 +0200
-Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
- 2.16.7
-Message-ID: <20200713195825.E569186D86@busybox.osuosl.org>
+Date: Mon, 13 Jul 2020 22:05:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cups-filters: add dejavu
+ mandatory dependency
+In-Reply-To: <20200713124642.741955-1-fontaine.fabrice@gmail.com>
+References: <20200713124642.741955-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200713220546.4514bc2a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f79bb5cfdf371ef0d959f2e7fdc43dc1e6afffc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 13 Jul 2020 14:46:42 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-- Fix a side channel vulnerability in modular exponentiation that could
-  reveal an RSA private key used in a secure enclave.
-- Fix side channel in mbedtls_ecp_check_pub_priv() and
-  mbedtls_pk_parse_key() / mbedtls_pk_parse_keyfile() (when loading a
-  private key that didn't include the uncompressed public key), as well
-  as mbedtls_ecp_mul() / mbedtls_ecp_mul_restartable() when called with
-  a NULL f_rng argument. An attacker with access to precise enough
-  timing and memory access information (typically an untrusted operating
-  system attacking a secure enclave) could fully recover the ECC private
-  key.
-- Fix issue in Lucky 13 counter-measure that could make it ineffective
-  when hardware accelerators were used (using one of the
-  MBEDTLS_SHAxxx_ALT macros). This would cause the original Lucky 13
-  attack to be possible in those configurations, allowing an active
-  network attacker to recover plaintext after repeated timing
-  measurements under some conditions.
+> Since version 1.27.3, cups-filters needs dejavu (even if it is only used
+> for test programs):
+> https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-07
+I already pointed out this issue in a former patch that bumped cups-filters:
 
-Switch to github to get latest release
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200619145719.2352019-3-angelo at amarulasolutions.com/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mbedtls/mbedtls.hash | 4 +---
- package/mbedtls/mbedtls.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 6 deletions(-)
+But Angelo did not reply to my question, and then resubmitted the
+version bump without taking care of the font issue:
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 17ac18bb25..b75a8fa80c 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,3 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
--sha1  3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
--sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770  mbedtls-2.16.6-apache.tgz
- # Locally calculated
-+sha256  4786b7d1676f5e4d248f3a7f2d28446876d64962634f060ff21b92c690cfbe86  mbedtls-2.16.7.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 50121fa6c7..4ae8291c11 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.16.6
--MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
-+MBEDTLS_VERSION = 2.16.7
-+MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,mbedtls-$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
- 	-DENABLE_TESTING=OFF
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200624204347.797088-3-angelo at amarulasolutions.com/
+
+So I thought it was resolved, but apparently not.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
