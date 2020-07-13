@@ -1,28 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:34:11 +0200
-Subject: [Buildroot] [PATCH RESEND 0/2] Use bzip2 for X11 PFC font
- compression
-In-Reply-To: <20200713213225.7e9d3343@windsurf.home>
-References: <20200713184751.23534-1-asierra@xes-inc.com>
- <20200713213225.7e9d3343@windsurf.home>
-Message-ID: <20200713213411.272d1f41@windsurf.home>
+Date: Mon, 13 Jul 2020 21:28:22 +0200
+Subject: [Buildroot] [git commit] package/libmpdclient: bump to version 2.19
+Message-ID: <20200713193042.B330E86D78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 21:32:25 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc2152758ea3dae237998270c50f756b208ea2f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> So this third argument is a bit "moot", especially since
-> host-xapp-mkfontscale already has a dependency on host-gzip, which
+* fix off-by-one bug in MPD_HOST parser
+* add function mpd_lookup_replay_gain_mode()
+* identify messages with length over the buffer limit
+* support MPD protocol 0.16
+ - replay gain
+* support MPD protocol 0.19
+ - idle events "neighbor" and "mount"
+* support MPD protocol 0.20
+ - rangeid
+* support MPD protocol 0.21
+  - command "tagtypes all"
 
-Sorry, host-xapp-mkfontscale has a dependency on host-zlib, but adding
-a dependency on host-gzip should not cause any problem.
+https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/v2.19/NEWS
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmpdclient/libmpdclient.hash | 4 ++--
+ package/libmpdclient/libmpdclient.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+index e4456f125c..882a588a88 100644
+--- a/package/libmpdclient/libmpdclient.hash
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -1,3 +1,3 @@
+-# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.18.tar.xz.sig, sha256 locally computed
+-sha256  4cb01e1f567e0169aca94875fb6e1200e7f5ce35b63a4df768ec1591fb1081fa  libmpdclient-2.18.tar.xz
++# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.19.tar.xz.sig, sha256 locally computed
++sha256  158aad4c2278ab08e76a3f2b0166c99b39fae00ee17231bd225c5a36e977a189  libmpdclient-2.19.tar.xz
+ sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 6e7c5a45a9..a880980a3c 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBMPDCLIENT_VERSION_MAJOR = 2
+-LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).18
++LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).19
+ LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
+ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
+ LIBMPDCLIENT_INSTALL_STAGING = YES
