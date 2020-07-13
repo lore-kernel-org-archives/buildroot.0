@@ -1,51 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:32:25 +0200
-Subject: [Buildroot] [PATCH RESEND 0/2] Use bzip2 for X11 PFC font
- compression
-In-Reply-To: <20200713184751.23534-1-asierra@xes-inc.com>
+Date: Mon, 13 Jul 2020 21:33:24 +0200
+Subject: [Buildroot] [PATCH RESEND 1/2] package/x11r7/xapp_mkfontscale:
+ support bzip2
+In-Reply-To: <20200713184751.23534-2-asierra@xes-inc.com>
 References: <20200713184751.23534-1-asierra@xes-inc.com>
-Message-ID: <20200713213225.7e9d3343@windsurf.home>
+ <20200713184751.23534-2-asierra@xes-inc.com>
+Message-ID: <20200713213324.74e5f488@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Aaron,
-
-Thanks for this work!
-
-On Mon, 13 Jul 2020 13:47:49 -0500
+On Mon, 13 Jul 2020 13:47:50 -0500
 Aaron Sierra <asierra@xes-inc.com> wrote:
 
-> Gzip has been used as the default compressor for PCF fonts, but this
-> series changes the default compressor to bzip2 for a few reasons:
-> 
-> 1. Even with the latest gzip, these seemingly synonymous pipelines
->    produce different output, but this issue does not exist with bzip2:
-> 
->   $ cat /path/to/file | gzip > /path/to/file.gz
->   $ gzip < /path/to/file > /path/to/file.gz
-> 
-> 2. Prior to gzip 1.10, the compression pipeline used with PCF fonts was
->    not reproducible due to the implicit -N/--name injecting a timestamp:
-> 
->   * cat /path/to/file | gzip > /path/to/file.gz
-> 
-> 3. The BR2_USE_WCHAR dependency of the gzip package tarnishes the appeal
->    of using host-gzip to provide reproducible output.
+> diff --git a/package/x11r7/xapp_mkfontscale/Config.in b/package/x11r7/xapp_mkfontscale/Config.in
+> index d0a9d89658..02eff4f9f1 100644
+> --- a/package/x11r7/xapp_mkfontscale/Config.in
+> +++ b/package/x11r7/xapp_mkfontscale/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_XAPP_MKFONTSCALE
+>  	bool "mkfontscale"
+> +	select BR2_PACKAGE_BZIP2
+>  	select BR2_PACKAGE_FREETYPE
+>  	select BR2_PACKAGE_XLIB_LIBX11
+>  	select BR2_PACKAGE_XLIB_LIBFONTENC
+> diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+> index 11d9cc952f..96cde6b942 100644
+> --- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+> +++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+> @@ -9,9 +9,11 @@ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+>  XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+>  XAPP_MKFONTSCALE_LICENSE = MIT
+>  XAPP_MKFONTSCALE_LICENSE_FILES = COPYING
+> -XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xorgproto
+> +XAPP_MKFONTSCALE_CONF_OPTS = --with-bzip2
+> +XAPP_MKFONTSCALE_DEPENDENCIES = bzip2 zlib freetype xlib_libfontenc xorgproto
+> +HOST_XAPP_MKFONTSCALE_CONF_OPTS = --with-bzip2
+>  HOST_XAPP_MKFONTSCALE_DEPENDENCIES = \
+> -	host-zlib host-freetype host-xlib_libfontenc host-xorgproto
+> +	host-bzip2 host-zlib host-freetype host-xlib_libfontenc host-xorgproto
 
-This argument seems pretty weird. The fact that gzip needs
-BR2_USE_WCHAR on the target doesn't at all prevent from building
-host-gzip. We have plenty of host packages that need wchar packages,
-and we simply assume the host system as wide char support available.
+Can we drop the zlib/host-zlib dependencies then, after PATCH 2/2 ?
 
-So this third argument is a bit "moot", especially since
-host-xapp-mkfontscale already has a dependency on host-gzip, which
-builds a gzip 1.10, so it shouldn't be affected by the problem you
-describe.
-
-So that leaves us with just argument (1), correct ?
+Best regards,
 
 Thomas
 -- 
