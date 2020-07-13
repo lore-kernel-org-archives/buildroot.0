@@ -1,50 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 21:28:10 +0200
-Subject: [Buildroot] [git commit] package/libnetfilter_queue: bump to
- version 1.0.5
-Message-ID: <20200713193042.A459286D77@busybox.osuosl.org>
+Date: Mon, 13 Jul 2020 21:28:37 +0200
+Subject: [Buildroot] [git commit] package/python-backcall: bump to version
+ 0.2.0
+Message-ID: <20200713193042.BC91986D77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65da2ce77ae8daf46e9871a3e114392301c8271b
+commit: https://git.buildroot.net/buildroot/commit/?id=5be5ade453443c756e1d4e961fa8a8dc3aca07b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+- Update indentation in hash file (two spaces)
+- Add license file and its hash
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnetfilter_queue/libnetfilter_queue.hash | 7 +++----
- package/libnetfilter_queue/libnetfilter_queue.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-backcall/python-backcall.hash | 6 ++++--
+ package/python-backcall/python-backcall.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/libnetfilter_queue/libnetfilter_queue.hash b/package/libnetfilter_queue/libnetfilter_queue.hash
-index 1425d41b31..098205c9de 100644
---- a/package/libnetfilter_queue/libnetfilter_queue.hash
-+++ b/package/libnetfilter_queue/libnetfilter_queue.hash
-@@ -1,6 +1,5 @@
--# From ftp://ftp.netfilter.org/pub/libnetfilter_queue/libnetfilter_queue-1.0.3.tar.bz2.{md5sum,sha1sum}
--md5	700ce0ae4784257ab5abe6fd1802f366	libnetfilter_queue-1.0.3.tar.bz2
--sha1	3d182e3211b633d0a0f8a2b12ef80dc2621f53cb	libnetfilter_queue-1.0.2.tar.bz2
-+# From http://netfilter.org/pub/libnetfilter_queue/libnetfilter_queue-1.0.5.tar.bz2.sha256sum
-+sha256  f9ff3c11305d6e03d81405957bdc11aea18e0d315c3e3f48da53a24ba251b9f5  libnetfilter_queue-1.0.5.tar.bz2
- 
- # Hash for license file:
--sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/libnetfilter_queue/libnetfilter_queue.mk b/package/libnetfilter_queue/libnetfilter_queue.mk
-index 302f9a2575..2bb4dd376d 100644
---- a/package/libnetfilter_queue/libnetfilter_queue.mk
-+++ b/package/libnetfilter_queue/libnetfilter_queue.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-backcall/python-backcall.hash b/package/python-backcall/python-backcall.hash
+index 2eccbdef5d..063b4bed27 100644
+--- a/package/python-backcall/python-backcall.hash
++++ b/package/python-backcall/python-backcall.hash
+@@ -1,3 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/backcall/json
+-md5	87ce0c7839808e6a3427d57df6a792e7  backcall-0.1.0.tar.gz
+-sha256	38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4  backcall-0.1.0.tar.gz
++md5  1f4c9a370c78743406296f48e56e8821  backcall-0.2.0.tar.gz
++sha256  5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e  backcall-0.2.0.tar.gz
++# Locally computed sha256 checksums
++sha256  d422f8ce77312733c07f5fec8ccbe61d58d539774f7a66f37e4bc54740d86020  LICENSE
+diff --git a/package/python-backcall/python-backcall.mk b/package/python-backcall/python-backcall.mk
+index 3f95ea3d24..2ead3421a8 100644
+--- a/package/python-backcall/python-backcall.mk
++++ b/package/python-backcall/python-backcall.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LIBNETFILTER_QUEUE_VERSION = 1.0.3
-+LIBNETFILTER_QUEUE_VERSION = 1.0.5
- LIBNETFILTER_QUEUE_SOURCE = libnetfilter_queue-$(LIBNETFILTER_QUEUE_VERSION).tar.bz2
- LIBNETFILTER_QUEUE_SITE = http://www.netfilter.org/projects/libnetfilter_queue/files
- LIBNETFILTER_QUEUE_INSTALL_STAGING = YES
+-PYTHON_BACKCALL_VERSION = 0.1.0
++PYTHON_BACKCALL_VERSION = 0.2.0
+ PYTHON_BACKCALL_SOURCE = backcall-$(PYTHON_BACKCALL_VERSION).tar.gz
+-PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/84/71/c8ca4f5bb1e08401b916c68003acf0a0655df935d74d93bf3f3364b310e0
++PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/a2/40/764a663805d84deee23043e1426a9175567db89c8b3287b5c2ad9f71aa93
+ PYTHON_BACKCALL_SETUP_TYPE = distutils
+-# From https://github.com/takluyver/backcall/blob/master/LICENSE
+ PYTHON_BACKCALL_LICENSE = BSD-3-Clause
++PYTHON_BACKCALL_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
