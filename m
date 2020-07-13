@@ -1,61 +1,35 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 14 Jul 2020 00:06:11 +0200
-Subject: [Buildroot] [PATCH v2 3/3] support/config-fragments: use
- external riscv64 musl toolchain
-In-Reply-To: <20200510154347.5711-3-mark@dibsco.co.uk>
-References: <20200510154347.5711-1-mark@dibsco.co.uk>
- <20200510154347.5711-3-mark@dibsco.co.uk>
-Message-ID: <2f4b6be3-fafb-df6e-2270-86048d9940c4@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 00:28:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tinydtls: needs host-pkgconf
+Message-ID: <20200713222801.2461778-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mark,
+Add host-pkgconf dependency, it is only used to find cunit for tests
+which are disabled by default but otherwise autoreconf will fail
 
-Le 10/05/2020 ? 17:43, Mark Corbin a ?crit?:
-> Move to an external RISC-V 64 bit musl toolchain to ease the load
-> on the autobuilders.
+Fixes:
+ - http://autobuild.buildroot.org/results/721c9feb96f93c60505a12f546a64a86b7eb36aa
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[toolchain downloaded and busybox built with this toolchain]
-Tested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/tinydtls/tinydtls.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  .../autobuild/br-riscv64-internal-musl.config            | 3 ---
->  .../config-fragments/autobuild/br-riscv64-musl.config    | 9 +++++++++
->  2 files changed, 9 insertions(+), 3 deletions(-)
->  delete mode 100644 support/config-fragments/autobuild/br-riscv64-internal-musl.config
->  create mode 100644 support/config-fragments/autobuild/br-riscv64-musl.config
-> 
-> diff --git a/support/config-fragments/autobuild/br-riscv64-internal-musl.config b/support/config-fragments/autobuild/br-riscv64-internal-musl.config
-> deleted file mode 100644
-> index 89e7afb276..0000000000
-> --- a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -BR2_riscv=y
-> -BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-> -BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> diff --git a/support/config-fragments/autobuild/br-riscv64-musl.config b/support/config-fragments/autobuild/br-riscv64-musl.config
-> new file mode 100644
-> index 0000000000..fd6ef822aa
-> --- /dev/null
-> +++ b/support/config-fragments/autobuild/br-riscv64-musl.config
-> @@ -0,0 +1,9 @@
-> +BR2_riscv=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-musl-2020.02.tar.bz2"
-> +BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-> +BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> 
+diff --git a/package/tinydtls/tinydtls.mk b/package/tinydtls/tinydtls.mk
+index e683dea1a0..b4fd06ff70 100644
+--- a/package/tinydtls/tinydtls.mk
++++ b/package/tinydtls/tinydtls.mk
+@@ -9,6 +9,7 @@ TINYDTLS_SITE = $(call github,eclipse,tinydtls,v$(TINYDTLS_VERSION))
+ TINYDTLS_LICENSE = EPL-1.0 or EDL-1.0
+ TINYDTLS_LICENSE_FILES = LICENSE
+ TINYDTLS_INSTALL_STAGING = YES
++TINYDTLS_DEPENDENCIES = host-pkgconf
+ # From git
+ TINYDTLS_AUTORECONF = YES
+ # use inttypes.h data types instead of u_intXX_t for musl compatibility
+-- 
+2.27.0
