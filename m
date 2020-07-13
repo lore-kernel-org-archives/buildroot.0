@@ -1,32 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Jul 2020 13:38:35 +0200
-Subject: [Buildroot] [git commit] package/python-pybind: new package
-In-Reply-To: <87sgdvkewr.fsf@dell.be.48ers.dk>
-References: <20200610205210.71B2481F5F@busybox.osuosl.org>
- <874kqcmnti.fsf@dell.be.48ers.dk>
- <20200712234050.14cb61d9@windsurf.home>
- <87sgdvkewr.fsf@dell.be.48ers.dk>
-Message-ID: <20200713133835.374c8280@windsurf.home>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 13 Jul 2020 13:58:55 +0200
+Subject: [Buildroot] [PATCH] package/python-matplotlib: add QT5 support
+Message-ID: <20200713115855.2921059-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 10:17:08 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
->  > It's a header-only library, so by itself, it doesn't need C++ to build,
->  > at least that was my understanding.  
-> 
-> True, but you cannot actually do anything with it unless you have C++
-> support in the toolchain - So I don't think it makes any sense to show
-> it then.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/python-matplotlib/Config.in            | 13 +++++++++++++
+ package/python-matplotlib/python-matplotlib.mk |  4 ++++
+ 2 files changed, 17 insertions(+)
 
-Yes, I agree, we need to change that.
-
-Thomas
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index e6ed8cda2f..e3eb465947 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -28,3 +28,16 @@ comment "python-matplotlib needs a toolchain w/ C++"
+ 
+ comment "python-matplotlib needs glibc or musl"
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++
++if BR2_PACKAGE_PYTHON_MATPLOTLIB
++
++config BR2_PACKAGE_PYTHON_MATPLOTLIB_QT
++	bool "qt display"
++	depends on BR2_PACKAGE_QT5 # python-pyqt5
++	select BR2_PACKAGE_PYTHON_PYQT5
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_FONTCONFIG # runtime
++	select BR2_PACKAGE_QT5BASE_GUI # runtime
++	select BR2_PACKAGE_QT5BASE_WIDGETS # runtime
++
++endif
+diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
+index 7082637d09..19c68e7e27 100644
+--- a/package/python-matplotlib/python-matplotlib.mk
++++ b/package/python-matplotlib/python-matplotlib.mk
+@@ -13,4 +13,8 @@ PYTHON_MATPLOTLIB_DEPENDENCIES = host-pkgconf freetype host-python-numpy \
+ 	libpng python-cycler
+ PYTHON_MATPLOTLIB_SETUP_TYPE = setuptools
+ 
++ifeq ($(BR2_PACKAGE_PYTHON_MATPLOTLIB_QT),y)
++PYTHON_MATPLOTLIB_DEPENDENCIES += qt5base python-pyqt5
++endif
++
+ $(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
