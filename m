@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jul 2020 08:50:40 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/meson: fix shared
+Date: Mon, 13 Jul 2020 08:50:28 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/meson: fix shared
  build issue due to --static flag always passed to pkg-config
-Message-ID: <20200713064700.800BC86CA4@busybox.osuosl.org>
+Message-ID: <20200713064705.87FF682203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82f0530cf0be51fba834d9177c42ddd738875bec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e25aa12b5a371c6451ef7a9e8140b2fd389c3a1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Since cf75d7da98596580eee5a9b5e1a3e156ad832099 we have a build failures when
 building libgbm.so when valgrind package is selected because --static is always
