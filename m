@@ -1,195 +1,63 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 13 Jul 2020 16:51:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{avro-c,
- python-avro}: bump to version 1.10.0
-Message-ID: <20200713145110.29214-1-titouan.christophe@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 13 Jul 2020 17:51:34 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/live555: fix static build with openssl
+Message-ID: <20200713155135.1214109-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patches that have been released upstream.
+Use pkg-config to retrieve openssl static dependencies such as -lz or
+-latomic.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Moreover, don't pass the openssl libraries to LIBS_FOR_LIVEMEDIA_LIB
+when linking statically with ar or the build will break on:
+
+/home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar cr libliveMedia.a  \
+	Media.o MediaSource.o FramedSource.o FramedFileSource.o FramedFilter.o ByteStreamFileSource.o ByteStreamMultiFileSource.o ByteStreamMemoryBufferSource.o BasicUDPSource.o DeviceSource.o AudioInputDevice.o WAVAudioFileSource.o MPEG1or2Demux.o MPEG1or2DemuxedElementaryStream.o MPEGVideoStreamFramer.o MPEG1or2VideoStreamFramer.o MPEG1or2VideoStreamDiscreteFramer.o MPEG4VideoStreamFramer.o MPEG4VideoStreamDiscreteFramer.o H264or5VideoStreamFramer.o H264or5VideoStreamDiscreteFramer.o H264VideoStreamFramer.o H264VideoStreamDiscreteFramer.o H265VideoStreamFramer.o H265VideoStreamDiscreteFramer.o MPEGVideoStreamParser.o MPEG1or2AudioStreamFramer.o MPEG1or2AudioRTPSource.o MPEG4LATMAudioRTPSource.o MPEG4ESVideoRTPSource.o MPEG4GenericRTPSource.o MP3FileSource.o MP3Transcoder.o MP3ADU.o MP3ADUdescriptor.o MP3ADUinterleaving.o MP3ADUTranscoder.o MP3StreamState.o MP3Internals.o MP3InternalsHuffman.o MP3InternalsHuffmanTable.o MP3ADURTPSource.o MPEG1or2VideoRTPSource.o MPEG2TransportStreamMultiplexor.o MPEG2TransportStreamFromPESSource.o MPEG2TransportStreamFromESSource.o MPEG2TransportStreamFramer.o MPEG2TransportStreamAccumulator.o ADTSAudioFileSource.o ADTSAudioStreamDiscreteFramer.o JPEGVideoSource.o JPEGVideoRTPSource.o JPEG2000VideoRTPSource.o H263plusVideoRTPSource.o H263plusVideoStreamFramer.o H263plusVideoStreamParser.o AC3AudioStreamFramer.o AC3AudioRTPSource.o DVVideoStreamFramer.o DVVideoRTPSource.o AMRAudioSource.o AMRAudioFileSource.o InputFile.o StreamReplicator.o MediaSink.o FileSink.o BasicUDPSink.o AMRAudioFileSink.o H264or5VideoFileSink.o H264VideoFileSink.o H265VideoFileSink.o OggFileSink.o MPEG1or2AudioRTPSink.o MP3ADURTPSink.o MPEG1or2VideoRTPSink.o MPEG4LATMAudioRTPSink.o MPEG4GenericRTPSink.o MPEG4ESVideoRTPSink.o JPEGVideoRTPSink.o JPEG2000VideoRTPSink.o H263plusVideoRTPSink.o H264or5VideoRTPSink.o H264VideoRTPSink.o H265VideoRTPSink.o DVVideoRTPSink.o AC3AudioRTPSink.o VorbisAudioRTPSink.o TheoraVideoRTPSink.o VP8VideoRTPSink.o VP9VideoRTPSink.o GSMAudioRTPSink.o SimpleRTPSink.o AMRAudioRTPSink.o T140TextRTPSink.o OutputFile.o RawVideoRTPSink.o uLawAudioFilter.o RTPSource.o MultiFramedRTPSource.o SimpleRTPSource.o H261VideoRTPSource.o H264VideoRTPSource.o H265VideoRTPSource.o QCELPAudioRTPSource.o AMRAudioRTPSource.o VorbisAudioRTPSource.o TheoraVideoRTPSource.o VP8VideoRTPSource.o VP9VideoRTPSource.o RawVideoRTPSource.o RTPSink.o MultiFramedRTPSink.o AudioRTPSink.o VideoRTPSink.o TextRTPSink.o RTPInterface.o RTCP.o rtcp_from_spec.o GenericMediaServer.o RTSPServer.o RTSPServerRegister.o RTSPClient.o RTSPCommon.o RTSPRegisterSender.o SIPClient.o MediaSession.o ServerMediaSession.o PassiveServerMediaSubsession.o OnDemandServerMediaSubsession.o FileServerMediaSubsession.o MPEG4VideoFileServerMediaSubsession.o H264VideoFileServerMediaSubsession.o H265VideoFileServerMediaSubsession.o H263plusVideoFileServerMediaSubsession.o WAVAudioFileServerMediaSubsession.o AMRAudioFileServerMediaSubsession.o MP3AudioFileServerMediaSubsession.o MPEG1or2VideoFileServerMediaSubsession.o MPEG1or2FileServerDemux.o MPEG1or2DemuxedServerMediaSubsession.o MPEG2TransportFileServerMediaSubsession.o ADTSAudioFileServerMediaSubsession.o DVVideoFileServerMediaSubsession.o AC3AudioFileServerMediaSubsession.o MPEG2TransportUDPServerMediaSubsession.o ProxyServerMediaSession.o QuickTimeFileSink.o QuickTimeGenericRTPSource.o AVIFileSink.o MPEG2IndexFromTransportStream.o MPEG2TransportStreamIndexFile.o MPEG2TransportStreamTrickModeFilter.o MatroskaFile.o MatroskaFileParser.o EBMLNumber.o MatroskaDemuxedTrack.o MatroskaFileServerDemux.o MatroskaFileServerMediaSubsession.o MP3AudioMatroskaFileServerMediaSubsession.o OggFile.o OggFileParser.o OggDemuxedTrack.o OggFileServerDemux.o OggFileServerMediaSubsession.o MPEG2TransportStreamDemux.o MPEG2TransportStreamDemuxedTrack.o MPEG2TransportStreamParser.o MPEG2TransportStreamParser_PAT.o MPEG2TransportStreamParser_PMT.o MPEG2TransportStreamParser_STREAM.o HLSSegmenter.o TLSState.o MIKEY.o SRTPCryptographicContext.o HMAC_SHA1.o BitVector.o StreamParser.o DigestAuthentication.o ourMD5.o Base64.o Locale.o -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssl -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -latomic -lpthread -lcrypto -lz -latomic -lpthread
+/home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar: invalid option -- 'L'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1299a05cfaabccc45e2878e969b443a973ec4c9e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...2-CMakeLists.txt-fix-build-without-C.patch | 92 -------------------
- package/avro-c/avro-c.hash                    |  4 +-
- package/avro-c/avro-c.mk                      |  2 +-
- .../0001-fix-pycodestyle-regression.patch     | 28 ------
- package/python-avro/python-avro.hash          |  4 +-
- 5 files changed, 5 insertions(+), 125 deletions(-)
- delete mode 100644 package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
- delete mode 100644 package/python-avro/0001-fix-pycodestyle-regression.patch
+Changes v1 -> v2:
+ - Enhance patch to avoid a build failure when building dynamically
 
-diff --git a/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch b/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
-deleted file mode 100644
-index 89a500c588..0000000000
---- a/package/avro-c/0002-CMakeLists.txt-fix-build-without-C.patch
-+++ /dev/null
-@@ -1,92 +0,0 @@
--From cdab7db8ad81884cfb21cc1cf94c981c59d17ef4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 30 Dec 2019 12:32:20 +0100
--Subject: [PATCH] CMakeLists.txt: fix build without C++
--
--Specify that AvroC is a C project and remove tests_cpp.cpp to avoid the
--following build failure if a C++ compiler is not found:
--
--CMake Error at CMakeLists.txt:20 (project):
--  The CMAKE_CXX_COMPILER:
--
--    /home/naourr/work/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++
--
--  is not a full path to an existing compiler tool.
--
--  Tell CMake where to find the compiler by setting either the environment
--  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
--  to the compiler, or to the compiler name if it is in the PATH.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/135e246aa70f28c6b9aea5fd6b0eb9c7b45ebfe7
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/apache/avro/pull/754]
-----
-- CMakeLists.txt       |  2 +-
-- tests/CMakeLists.txt |  1 -
-- tests/test_cpp.cpp   | 27 ---------------------------
-- 3 files changed, 1 insertion(+), 29 deletions(-)
-- delete mode 100644 lang/c/tests/test_cpp.cpp
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 11cbf018..b75418c3 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -17,7 +17,7 @@
-- # under the License.
-- #
-- cmake_minimum_required(VERSION 2.4)
---project(AvroC)
--+project(AvroC C)
-- enable_testing()
-- 
-- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
--diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
--index b9e8fe1d..2e84a06a 100644
----- a/tests/CMakeLists.txt
--+++ b/tests/CMakeLists.txt
--@@ -81,7 +81,6 @@ add_avro_test_checkmem(test_avro_1405)
-- add_avro_test_checkmem(test_avro_1572)
-- add_avro_test(test_avro_data) # Skip memory check for datum. Deprecated and has a lot of memory issues
-- add_avro_test_checkmem(test_refcount)
---add_avro_test_checkmem(test_cpp test_cpp.cpp)
-- add_avro_test_checkmem(test_avro_1379)
-- add_avro_test_checkmem(test_avro_1691)
-- add_avro_test_checkmem(test_avro_1906)
--diff --git a/lang/c/tests/test_cpp.cpp b/lang/c/tests/test_cpp.cpp
--deleted file mode 100644
--index 13f98a9b..00000000
----- a/tests/test_cpp.cpp
--+++ /dev/null
--@@ -1,27 +0,0 @@
---/*
--- * Licensed to the Apache Software Foundation (ASF) under one or more
--- * contributor license agreements.  See the NOTICE file distributed with
--- * this work for additional information regarding copyright ownership.
--- * The ASF licenses this file to you under the Apache License, Version 2.0
--- * (the "License"); you may not use this file except in compliance with
--- * the License.  You may obtain a copy of the License at
--- *
--- * https://www.apache.org/licenses/LICENSE-2.0
--- *
--- * Unless required by applicable law or agreed to in writing, software
--- * distributed under the License is distributed on an "AS IS" BASIS,
--- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
--- * implied.  See the License for the specific language governing
--- * permissions and limitations under the License.
--- */
---
---#include "avro.h"
---
---int main(int argc, char **argv)
---{
---    (void)argc;
---    (void)argv;
---
---	return 0;
---}
---
---- 
--2.24.0
--
-diff --git a/package/avro-c/avro-c.hash b/package/avro-c/avro-c.hash
-index fdddf0bd80..c4fd7d3f57 100644
---- a/package/avro-c/avro-c.hash
-+++ b/package/avro-c/avro-c.hash
-@@ -1,5 +1,5 @@
--# From https://www-eu.apache.org/dist/avro/avro-1.9.2/c/avro-c-1.9.2.tar.gz.sha512
--sha512  1bc4bb22c88b70235e8e0280dbb7aeee7aa3f6cb7ff78a1aa5a7a6a1aca5522e8cfc89064096eace1c07a50e98f2397abd3620de1a29f9e5103b6f4c84316927  avro-c-1.9.2.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.10.0/c/avro-c-1.10.0.tar.gz.sha512
-+sha512  2e64926b214fd996abf0553572ec6f46b312cf84df17149d1a7e89f4033b63cc34fabef62b98d727799a8a5d452ac9254e275bdea4bf894e9e1e4588bc5dfc9b  avro-c-1.10.0.tar.gz
+ package/live555/live555.mk | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index b2313886b1..0453b19751 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -23,8 +23,11 @@ LIVE555_CFLAGS += -fPIC
+ endif
  
- # License files
- sha256  d62488d6ba17132e92c23c03c80bfedc848267f96ab36489fec860f76cf6819a  LICENSE
-diff --git a/package/avro-c/avro-c.mk b/package/avro-c/avro-c.mk
-index 5cdbe362d8..ee6e864161 100644
---- a/package/avro-c/avro-c.mk
-+++ b/package/avro-c/avro-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIVE555_DEPENDENCIES += openssl
+-LIVE555_LIBS = -lssl -lcrypto
++LIVE555_DEPENDENCIES += host-pkgconf openssl
++LIVE555_CONSOLE_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
++ifneq ($(BR2_STATIC_LIBS),y)
++LIVE555_LIVEMEDIA_LIBS = $(LIVE555_CONSOLE_LIBS)
++endif
+ else
+ LIVE555_CFLAGS += -DNO_OPENSSL
+ endif
+@@ -44,8 +47,8 @@ define LIVE555_CONFIGURE_CMDS
+ 	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
+ 	# fails
+ 	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+-	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+-	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_CONSOLE_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
++	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIVEMEDIA_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
+ 	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
+ endef
  
--AVRO_C_VERSION = 1.9.2
-+AVRO_C_VERSION = 1.10.0
- AVRO_C_SITE = https://www-eu.apache.org/dist/avro/avro-$(AVRO_C_VERSION)/c
- AVRO_C_LICENSE = Apache-2.0
- AVRO_C_LICENSE_FILES = LICENSE
-diff --git a/package/python-avro/0001-fix-pycodestyle-regression.patch b/package/python-avro/0001-fix-pycodestyle-regression.patch
-deleted file mode 100644
-index 63cb5da294..0000000000
---- a/package/python-avro/0001-fix-pycodestyle-regression.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From a66459dd654489bf2c17e2828d5c314a4048be70 Mon Sep 17 00:00:00 2001
--From: Ryan Skraba <ryan@skraba.com>
--Date: Thu, 13 Feb 2020 09:57:02 +0100
--Subject: [PATCH] AVRO-2737: Fix pycodestyle regression.
--
--An erroneous import was added in the Avro 1.9.2 Python3 package.
--The issue has been fixed and released on pypi as version 1.9.2.1, but has
--not been published on the Apache download website, hence this patch.
--
--[Titouan: add detailed commit message]
--Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-----
-- setup.py | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/setup.py b/setup.py
--index 20dd4e240..f6297bb1b 100755
----- a/setup.py
--+++ b/setup.py
--@@ -38,8 +38,6 @@
-- 
-- import setuptools
-- 
---import pycodestyle
---
-- _HERE = os.path.dirname(os.path.abspath(__file__))
-- _AVRO_DIR = os.path.join(_HERE, 'avro')
-- _VERSION_FILE_NAME = 'VERSION.txt'
-diff --git a/package/python-avro/python-avro.hash b/package/python-avro/python-avro.hash
-index fbc466a94f..2428be96e5 100644
---- a/package/python-avro/python-avro.hash
-+++ b/package/python-avro/python-avro.hash
-@@ -1,5 +1,5 @@
--# From https://www-eu.apache.org/dist/avro/avro-1.9.2/py3/avro-python3-1.9.2.tar.gz.sha512
--sha512  f981fd72bc64eb71e6c132c551700e89a8ebdd6cd9d7e6fa7559831cee69749fc255a49ee0859afd106e0d913c36327b27ca4c7b36efbf740515881b92076cb6  avro-python3-1.9.2.tar.gz
-+# From https://downloads.apache.org/avro/avro-1.10.0/py3/avro-python3-1.10.0.tar.gz.sha512
-+sha512  fb41f9227d2410c29cde10d7573aebbc142c2bf3f5945a1aaffdeac8b4b5ec690b0befdfc813a8762289dbbb7fc4e1be1564ba0c69d03092b84d8e938d6156f6  avro-python3-1.10.0.tar.gz
- 
- # License files
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  avro/LICENSE
 -- 
-2.25.3
+2.27.0
