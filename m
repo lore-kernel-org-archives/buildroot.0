@@ -1,73 +1,44 @@
-From: Aaron Sierra <asierra@xes-inc.com>
-Date: Mon, 13 Jul 2020 14:55:10 -0500 (CDT)
-Subject: [Buildroot] [PATCH RESEND 0/2] Use bzip2 for X11 PFC font
- compression
-In-Reply-To: <20200713213225.7e9d3343@windsurf.home>
-References: <20200713184751.23534-1-asierra@xes-inc.com>
- <20200713213225.7e9d3343@windsurf.home>
-Message-ID: <987740769.442321.1594670110258.JavaMail.zimbra@xes-inc.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Jul 2020 21:55:13 +0200
+Subject: [Buildroot] [PATCH v2] package/exiv2: bump version to 0.27.3
+In-Reply-To: <20200713102512.462644-1-nicolas.serafini@sensefly.com>
+References: <20200713102512.462644-1-nicolas.serafini@sensefly.com>
+Message-ID: <20200713215513.1c85a1e2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------ Original Message -----
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> Sent: Monday, July 13, 2020 2:32:25 PM
+On Mon, 13 Jul 2020 12:25:13 +0200
+Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
 
-Hi Thomas,
-
-Thanks for your review.
-
-> Hello Aaron,
+> Bump version 0.27.3 and remove 0001[1] and 0002[2] local patches that
+> has been upstreamed.
 > 
-> Thanks for this work!
+> Release notes:
+> https://github.com/Exiv2/exiv2/blob/v0.27.3/releasenotes/releasenotes.txt
 > 
-> On Mon, 13 Jul 2020 13:47:49 -0500
-> Aaron Sierra <asierra@xes-inc.com> wrote:
+> [1]: https://github.com/Exiv2/exiv2/commit/b7890776c62398ca1005e8edc32786859d60fcf7
+> [2]: https://github.com/Exiv2/exiv2/commit/1b917c3f7dd86336a9f6fda4456422c419dfe88c
 > 
->> Gzip has been used as the default compressor for PCF fonts, but this
->> series changes the default compressor to bzip2 for a few reasons:
->> 
->> 1. Even with the latest gzip, these seemingly synonymous pipelines
->>    produce different output, but this issue does not exist with bzip2:
->> 
->>   $ cat /path/to/file | gzip > /path/to/file.gz
->>   $ gzip < /path/to/file > /path/to/file.gz
->> 
->> 2. Prior to gzip 1.10, the compression pipeline used with PCF fonts was
->>    not reproducible due to the implicit -N/--name injecting a timestamp:
->> 
->>   * cat /path/to/file | gzip > /path/to/file.gz
->> 
->> 3. The BR2_USE_WCHAR dependency of the gzip package tarnishes the appeal
->>    of using host-gzip to provide reproducible output.
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 > 
-> This argument seems pretty weird. The fact that gzip needs
-> BR2_USE_WCHAR on the target doesn't at all prevent from building
-> host-gzip. We have plenty of host packages that need wchar packages,
-> and we simply assume the host system as wide char support available.
-> 
-> So this third argument is a bit "moot", especially since
-> host-xapp-mkfontscale already has a dependency on host-gzip, which
-> builds a gzip 1.10, so it shouldn't be affected by the problem you
-> describe.
+> ---
+> v2: Remove BSD-3-Clause license attached to removed COPYING-CMAKE-SCRIPTS file
+> ---
+>  ...k-offset-and-size-against-total-size.patch | 32 -------
+>  .../0002-fix_1011_jp2_readmetadata_loop.patch | 86 -------------------
+>  package/exiv2/exiv2.hash                      |  3 +-
+>  package/exiv2/exiv2.mk                        | 17 +---
+>  4 files changed, 4 insertions(+), 134 deletions(-)
+>  delete mode 100644 package/exiv2/0001-crwimage-Check-offset-and-size-against-total-size.patch
+>  delete mode 100644 package/exiv2/0002-fix_1011_jp2_readmetadata_loop.patch
 
-OK, then maybe adding a host-gzip dependency would be the better solution.
-I've found some evidence that this patchset isn't complete with respect to
-X itself using bzip-compressed fonts :(
+Applied to master, thanks.
 
-> So that leaves us with just argument (1), correct ?
-
-Well, I think that (2) or (3) would be needed as the real justification for
-switching compression mechanisms. Let me investigate the host-gzip path now
-that I know that isn't a compatibility problem.
-
--Aaron
- 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
