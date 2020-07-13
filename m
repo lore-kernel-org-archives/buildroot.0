@@ -1,7 +1,7 @@
 From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Mon, 13 Jul 2020 12:00:59 +0200
-Subject: [Buildroot] [PATCH] package/exiv2: bump version to 0.27.3
-Message-ID: <20200713100058.456954-1-nicolas.serafini@sensefly.com>
+Date: Mon, 13 Jul 2020 12:25:13 +0200
+Subject: [Buildroot] [PATCH v2] package/exiv2: bump version to 0.27.3
+Message-ID: <20200713102512.462644-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,12 +18,15 @@ https://github.com/Exiv2/exiv2/blob/v0.27.3/releasenotes/releasenotes.txt
 [2]: https://github.com/Exiv2/exiv2/commit/1b917c3f7dd86336a9f6fda4456422c419dfe88c
 
 Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+
+---
+v2: Remove BSD-3-Clause license attached to removed COPYING-CMAKE-SCRIPTS file
 ---
  ...k-offset-and-size-against-total-size.patch | 32 -------
  .../0002-fix_1011_jp2_readmetadata_loop.patch | 86 -------------------
  package/exiv2/exiv2.hash                      |  3 +-
- package/exiv2/exiv2.mk                        | 15 +---
- 4 files changed, 3 insertions(+), 133 deletions(-)
+ package/exiv2/exiv2.mk                        | 17 +---
+ 4 files changed, 4 insertions(+), 134 deletions(-)
  delete mode 100644 package/exiv2/0001-crwimage-Check-offset-and-size-against-total-size.patch
  delete mode 100644 package/exiv2/0002-fix_1011_jp2_readmetadata_loop.patch
 
@@ -168,7 +171,7 @@ index 7937d3f572..94ab4ac638 100644
  sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
 -sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b COPYING-CMAKE-SCRIPTS
 diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 5ca16c4747..f423a381b1 100644
+index 5ca16c4747..7f38473609 100644
 --- a/package/exiv2/exiv2.mk
 +++ b/package/exiv2/exiv2.mk
 @@ -4,22 +4,11 @@
@@ -179,7 +182,7 @@ index 5ca16c4747..f423a381b1 100644
 +EXIV2_VERSION = 0.27.3
  EXIV2_SITE = $(call github,Exiv2,exiv2,v$(EXIV2_VERSION))
  EXIV2_INSTALL_STAGING = YES
- EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
+-EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
 -EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
 -
 -# CVE-2019-13504 is misclassified (by our CVE tracker) as affecting version
@@ -192,6 +195,7 @@ index 5ca16c4747..f423a381b1 100644
 -
 -# 0002-fix_1011_jp2_readmetadata_loop.patch
 -EXIV2_IGNORE_CVES += CVE-2019-20421
++EXIV2_LICENSE = GPL-2.0+
 +EXIV2_LICENSE_FILES = COPYING
  
  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
