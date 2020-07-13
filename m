@@ -1,65 +1,83 @@
-From: William Tambe <tambewilliam@gmail.com>
-Date: Sun, 12 Jul 2020 21:35:04 -0400
-Subject: [Buildroot] start-stop-daemon failing due to option -q
-In-Reply-To: <20200712213126.59c57981@windsurf.home>
-References: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
- <20200712213126.59c57981@windsurf.home>
-Message-ID: <CAF8i9mMZ1Je-SUDHkDX97ijv8FT68D0Mz9-6D6-tw51U3ZkPnw@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 13 Jul 2020 14:33:59 +0930
+Subject: [Buildroot] [PATCH] pdbg: Bump version to v3.0
+Message-ID: <20200713050359.3830866-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 12, 2020 at 3:31 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sun, 12 Jul 2020 09:16:00 -0400
-> William Tambe <tambewilliam@gmail.com> wrote:
->
-> > I am seeing the following failure when start-stop-daemon is used
-> > during services starting; the failure goes away when I remove from
-> > start-stop-daemon the use of the option -q in the service scripts
-> > under /etc/init.d/ .
-> > Is this a known issue ?
-> >
-> > Starting syslogd: start-stop-daemon: option requires an argument -- 'x'
->
-> This has something to do with -q. -q is always supported in
-> start-stop-daemon, it's even listed in the help text of
-> start-stop-daemon you provide:
->
-> >         -q              Quiet
->
-> The S01syslogd script looks like this:
->
->         start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
->                 -- -n $SYSLOGD_ARGS
->
-> So I don't see how the -x argument can be empty.
->
-> Did you customize the SYSLOGD_ARGS in /etc/default/syslogd perhaps ?
+This includes a patch to fix building with uclibc, where pdbg was
+missing a header for ssize_t.
 
-No, I did not customize SYSLOD_ARGS in in /etc/default/syslogd.
-to find that -q was causing problem, I manually ran start-stop-daemon
-at the shell as follow:
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ .../pdbg/0001-Fix-building-with-uclibc.patch  | 32 +++++++++++++++++++
+ package/pdbg/pdbg.hash                        |  2 +-
+ package/pdbg/pdbg.mk                          |  2 +-
+ 3 files changed, 34 insertions(+), 2 deletions(-)
+ create mode 100644 package/pdbg/0001-Fix-building-with-uclibc.patch
 
-DAEMON="syslogd"
-PIDFILE="/var/run/$DAEMON.pid"
-SYSLOGD_ARGS=""
-
-# This fails:
-start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" -- -n
-$SYSLOGD_ARGS
-
-# While this without -q is successful:
-start-stop-daemon -b -m -S -p "$PIDFILE" -x "/sbin/$DAEMON" -- -n $SYSLOGD_ARGS
-
-Are you able to run start-stop-daemon with the -q option ?
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/pdbg/0001-Fix-building-with-uclibc.patch b/package/pdbg/0001-Fix-building-with-uclibc.patch
+new file mode 100644
+index 000000000000..90fe67b51f47
+--- /dev/null
++++ b/package/pdbg/0001-Fix-building-with-uclibc.patch
+@@ -0,0 +1,32 @@
++From 7ad1193f705563dc984b738b9af3c7461caeef37 Mon Sep 17 00:00:00 2001
++From: Joel Stanley <joel@jms.id.au>
++Date: Mon, 13 Jul 2020 14:57:31 +1000
++Subject: [PATCH] Fix building with uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++libpdbg/target.h:66:2: error: unknown type name ?ssize_t?
++   66 |  ssize_t len;
++      |  ^~~~~~~
++
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ libpdbg/target.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libpdbg/target.h b/libpdbg/target.h
++index 522a4dc..a12cce8 100644
++--- a/libpdbg/target.h
+++++ b/libpdbg/target.h
++@@ -17,6 +17,7 @@
++ #define __TARGET_H
++ 
++ #include <stdint.h>
+++#include <unistd.h>
++ #include <ccan/list/list.h>
++ #include <ccan/str/str.h>
++ #include <ccan/container_of/container_of.h>
++-- 
++2.17.1
++
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index 486dff240d52..f2aa145cb1fe 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 10f701c4bb8557a35de166c4322d77fa64ddbdd1146141a88a3d530144545820 pdbg-2.4.tar.gz
++sha256 1a2736a010d21a2e5b735212a35cd214d6ab90aab0cad5c0260b975398f19dc8 pdbg-3.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 9977a126fb62..17d65be7fd53 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 2.4
++PDBG_VERSION = 3.0
+ PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
+-- 
+2.27.0
