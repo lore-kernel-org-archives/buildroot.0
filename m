@@ -1,146 +1,92 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 14 Jul 2020 10:52:09 +0200
-Subject: [Buildroot] [PATCH] package/agentpp: fix build when
- BR2_PACKAGE_SNMPPP_SNMPV3 disabled
-Message-ID: <20200714085209.14252-1-luca@lucaceresoli.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 13:23:07 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/cups-filters: fix build without dejavu font
+Message-ID: <20200714112308.3264764-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Agent++ 4.3.1 does not build if SNMPv3 is disabled due to incorrect #ifdef
-clauses, esulting in errors such as:
+Since version 1.27.3, cups-filters needs dejavu (even if it is only used
+for test programs):
+https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
 
-  ../include/agent_pp/notification_originator.h:232:39: error: 'snmpCommunityEntry' has not been declared
-           void set_snmp_community_entry(snmpCommunityEntry* communityEntryRef) {
-                                         ^
-  ../include/agent_pp/notification_originator.h:296:32: error: 'nlmLogEntry' has not been declared
-           void set_nlm_log_entry(nlmLogEntry* nlmLogEntryRef) {
-                                  ^
-  ../include/agent_pp/notification_originator.h:321:9: error: 'nlmLogEntry' does not name a type
-           nlmLogEntry*            _nlmLogEntry;
-           ^
+Add a patch to avoid this build failure when cross-compiling
 
 Fixes:
-  http://autobuild.buildroot.net/results/d7a5fa5ba4ab6c9da23fcc93bf766be9ca630af3/
-  http://autobuild.buildroot.net/results/40ce9bc4bed267dc762a0282a8da0ad1514ad7a8/
-  ...
+ - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
 
-Fixes: 88355e967fef ("package/agentpp: bump version to 4.3.1")
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...01-Fix-build-when-SNMPv3-is-disabled.patch | 102 ++++++++++++++++++
- 1 file changed, 102 insertions(+)
- create mode 100644 package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Add a patch instead of adding dejavu dependency
 
-diff --git a/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch b/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
+ ...fix-cross-compilation-without-dejavu.patch | 41 +++++++++++++++++++
+ package/cups-filters/cups-filters.mk          |  2 +
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+
+diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
 new file mode 100644
-index 000000000000..f16c2b4b7721
+index 0000000000..650b90a89b
 --- /dev/null
-+++ b/package/agentpp/0001-Fix-build-when-SNMPv3-is-disabled.patch
-@@ -0,0 +1,102 @@
-+From 2a0fe384eec254643ca2176ccfcbbd036a5aad06 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Tue, 14 Jul 2020 10:30:10 +0200
-+Subject: [PATCH] Fix build when SNMPv3 is disabled
++++ b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+@@ -0,0 +1,41 @@
++From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 13 Jul 2020 23:02:50 +0200
++Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
 +
-+agentpp has ifdefs to disable v3 code when SNMPv3 is disabled. However it
-+is missing one and it has a few ones in excess. Fix them.
++Cross-compilation is broken since commit 1d66106. Indeed, when
++cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
++path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
++provided through --with-test-font-path which will fix the build failure
++but will result in broken test programs.
 +
-+Upstream is aware, says "will fix in later version", but thinks to make v3
-+mandatory. See discussion at
-+https://forum.snmp.app/t/agent-compile-fails-if-snmp-has-disable-snmpv3/326
++So when cross-compiling don't try to check if the test-font-path is
++valid or not and just use the one provided by the user or the default
++one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
 +
-+Upstream status: none, upstream is not welcoming contributions.
++Fix #262
 +
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
 +---
-+ include/agent_pp/notification_log_mib.h    | 4 ++--
-+ include/agent_pp/notification_originator.h | 2 ++
-+ include/agent_pp/snmp_community_mib.h      | 4 ++--
-+ src/notification_originator.cpp            | 2 ++
-+ 4 files changed, 8 insertions(+), 4 deletions(-)
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/include/agent_pp/notification_log_mib.h b/include/agent_pp/notification_log_mib.h
-+index ddac05e515d9..8fd8cfec32ca 100644
-+--- a/include/agent_pp/notification_log_mib.h
-++++ b/include/agent_pp/notification_log_mib.h
-+@@ -22,7 +22,7 @@
++diff --git a/configure.ac b/configure.ac
++index aa905cf5d..4cc4fd6e5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
++ 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
++ )
 + 
-+ //--AgentGen BEGIN=_BEGIN
-+ #include <agent_pp/agent++.h>
-+-#ifdef _SNMPv3
-++// #ifdef _SNMPv3 // This file deos not look SNMPv3-specific
-+ #include <agent_pp/mib_complex_entry.h>
-+ //--AgentGen END
++-AS_IF([test -f "$with_test_font_path"],
++-	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+++AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
++ 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
++ )
+++AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
 + 
-+@@ -688,6 +688,6 @@ protected:
-+  */
-+ 
-+ 
-+-#endif
-++// #endif // _SNMPv3
-+ 
-+ 
-+diff --git a/include/agent_pp/notification_originator.h b/include/agent_pp/notification_originator.h
-+index 95e8b4e1836d..6f50cd52625b 100644
-+--- a/include/agent_pp/notification_originator.h
-++++ b/include/agent_pp/notification_originator.h
-+@@ -307,7 +307,9 @@ class AGENTPP_DECL NotificationOriginator: public NotificationSender {
-+          */
-+         virtual nlmLogEntry* get_nlm_log_entry();
-+                 
-++#ifdef _SNMPv3
-+         virtual v3MP* get_v3mp();
-++#endif
-+ 
-+  protected:
-+      
-+diff --git a/include/agent_pp/snmp_community_mib.h b/include/agent_pp/snmp_community_mib.h
-+index 7d5c4558f36d..d9eb2b4a87ec 100644
-+--- a/include/agent_pp/snmp_community_mib.h
-++++ b/include/agent_pp/snmp_community_mib.h
-+@@ -49,7 +49,7 @@ namespace Agentpp {
-+ #define oidSnmpTrapAddress               "1.3.6.1.6.3.18.1.3.0"
-+ #define oidSnmpTrapCommunity             "1.3.6.1.6.3.18.1.4.0"
-+ 
-+-#ifdef _SNMPv3
-++// #ifdef _SNMPv3 // This file deos not look SNMPv3-specific
-+ 
-+ /**
-+  *  snmpCommunityName
-+@@ -346,7 +346,7 @@ class AGENTPP_DECL snmp_community_mib: public MibGroup
-+ 	static void	       	add_public();
-+ 	static void	       	add_public(Mib* mib);
-+ };
-+-#endif
-++// #endif // _SNMPv3
-+ 
-+ #ifdef AGENTPP_NAMESPACE
-+ }
-+diff --git a/src/notification_originator.cpp b/src/notification_originator.cpp
-+index d7d566869998..39ddbe08cdeb 100644
-+--- a/src/notification_originator.cpp
-++++ b/src/notification_originator.cpp
-+@@ -237,6 +237,7 @@ nlmLogEntry* NotificationOriginator::get_nlm_log_entry() {
-+     return nlmLogEntry::instance;
-+ }
-+ 
-++#ifdef _SNMPv3
-+ v3MP* NotificationOriginator::get_v3mp() {
-+     if (mib) {
-+         return mib->get_request_list()->get_v3mp();
-+@@ -244,6 +245,7 @@ v3MP* NotificationOriginator::get_v3mp() {
-+         return v3MP::I;
-+     }
-+ }
-++#endif
-+ 
-+ 
-+ bool NotificationOriginator::check_access(ListCursor<MibTableRow>& cur,
-+-- 
-+2.27.0
-+
++ # ================
++ # Check for cflags
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index dc4e89b52e..517e809cad 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -8,6 +8,8 @@ CUPS_FILTERS_VERSION = 1.27.5
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
++# We're patching configure.ac
++CUPS_FILTERS_AUTORECONF = YES
+ 
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
 -- 
 2.27.0
