@@ -1,40 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 15:10:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-ugly:
- fix static build with libdvdcss
-In-Reply-To: <20200630065228.1594953-1-fontaine.fabrice@gmail.com>
-References: <20200630065228.1594953-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200714151014.0185b159@windsurf.home>
+Date: Tue, 14 Jul 2020 15:14:59 +0200
+Subject: [Buildroot] [PATCH] system/skeleton: make /var/run a symlink to
+ /run
+In-Reply-To: <20200629104749.46938-1-nolange79@gmail.com>
+References: <20200629104749.46938-1-nolange79@gmail.com>
+Message-ID: <20200714151459.6ee4ca7a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 30 Jun 2020 08:52:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Norbert,
 
-> The double quotes from GST1_PLUGINS_UGLY_LDFLAGS += "-ldvdcss"
-> raise the following build failure:
-> 
-> sed -e 's%@TARGET_CROSS@%/home/buildroot/autobuild/run/instance-2/output-1/host/bin/arm-linux-%g' -e 's%@TARGET_ARCH@%arm%g' -e 's%@TARGET_CPU@%arm926ej-s%g' -e 's%@TARGET_ENDIAN@%little%g' -e 's%@TARGET_CFLAGS@%"-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE", "-D_FILE_OFFSET_BITS=64", "-Os", "-g2", "-static"%g' -e 's%@TARGET_LDFLAGS@%"-static", ""-ldvdcss""%g' -e 's%@TARGET_CXXFLAGS@%"-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE", "-D_FILE_OFFSET_BITS=64", "-Os", "-g2", "-static", "-static"%g' -e 's%@HOST_DIR@%/home/buildroot/autobuild/run/instance-2/output-1/host%g' -e 's%@STAGING_DIR@%/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot%g' -e 's%@STATIC@%true%g' -e "/^\[binaries\]$/s:$::" -e "/^\[properties\]$/s:$::" package/meson/cross-compilation.conf.in > /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build/cross-compilation.conf
-> PATH="/home/buildroot/autobuild/run/instance-2/output-1/host/bin:/home/buildroot/autobuild/run/instance-2/output-1/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  PYTHONNOUSERSITE=y /home/buildroot/autobuild/run/instance-2/output-1/host/bin/meson --prefix=/usr --libdir=lib --default-library=static --buildtype=debug --cross-file=/home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build/cross-compilation.conf -Dbuild.pkg_config_path=/home/buildroot/autobuild/run/instance-2/output-1/host/lib/pkgconfig -Dexamples=disabled -Dtests=disabled -Da52dec=disabled -Damrnb=disabled -Damrwbdec=disabled -Dcdio=disabled -Dsidplay=disabled -Dorc=disabled -Dasfdemux=enabled -Ddvdlpcmdec=disabled -Ddvdsub=disabled -Dxingmux=disabled -Drealmedia=disabled -Ddvdread=enabled -Dmpeg2dec=disabled -Dx264=disabled /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2/ /home/buildroot/autobuild/run/instance-2/output-1/build/gs
->  t1-plugins-ugly-1.16.2//build
-> 
-> ERROR: Malformed value in cross file variable c_link_args.
-> 
-> However since the switch to messon, this workaround is not needed so
-> drop it
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/56a830625cf6e6b0d63b6e7e2761496abc146152
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 4 ----
->  1 file changed, 4 deletions(-)
+On Mon, 29 Jun 2020 12:47:49 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-Applied to master, thanks.
+> both systemd and FHS3 denote /var/run as a compatibility directory,
+> new systems should use /run.
+> 
+> There seems to be little reason to not switch to the new FHS layout
+> with buildroot, and adding the compatibility symlink.
+> 
+> [1] - https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s13.html
+
+The commit log is a bit confusing here, especially when looking at the
+patch. Indeed, we see you are *removing* code that creates /var/run as
+a symlink to /run, but you're saying that you're making /var/run a
+symlink to /run.
+
+However, what really happens is that /var/run was already a symlink to
+/run when the selected init system is systemd, but not with other init
+systems. What your patch does is that it moves all init system to this
+convention.
+
+So perhaps a better commit title would be:
+
+===
+
+system/skeleton: always make /var/run a symlink to /run
+
+While Buildroot was already making /var/run a symlink to /run when
+systemd was selected as the init system, it was not the case with other
+init systems.
+
+However, FHS3 denotes /var/run as a compatibility directory, and new
+systems should use /run. So let's switch to this convention regardless
+of the init system being used.
+
+===
+
+Also, was there any specific motivation/issue for this change, or just
+make things "nicer" ?
 
 Thomas
 -- 
