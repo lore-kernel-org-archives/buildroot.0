@@ -1,211 +1,204 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 15:33:17 +0200
-Subject: [Buildroot] [git commit] boot/optee-os: bump to version 3.9.0
-Message-ID: <20200714133101.C4E5286FB1@busybox.osuosl.org>
+Date: Tue, 14 Jul 2020 15:34:28 +0200
+Subject: [Buildroot] [git commit] package/optee-test: bump to version 3.9.0
+Message-ID: <20200714133101.DE13586D40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ea88220051a0b08324c0a51c4051d5db00a5c6f
+commit: https://git.buildroot.net/buildroot/commit/?id=b7cb6020e569f5cdd0fe8ce35ab134ec83046c5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE OS package version to OP-TEE release 3.9.0.
+Bump OP-TEE Test package version to OP-TEE release 3.9.0.
 
-Update patch on pydrypto/pycryptodome to match 3.9.0.
-Add patch on CFG_OPTEE_REVISION_MINOR that was not updated in release
-3.9.0 and fixed only few commits above.
+Drop patch on scripts/file_to_c.py that is merged in 3.9.0.
+Add patch from [1] for related issue found in 3.9.0 xtest tool.
+Add patch to default disable xtest regression test 1027 and 1028 that
+mandate changes in Linux kernel OP-TEE driver that are not available
+in mainline, at least as of Linux kernel v5.7.
+
+[1] https://github.com/OP-TEE/optee_test/commit/e1af176af2bb274745e9b0d43456763f8946f107
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-Tested-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ..._to_pub.py-use-Cryptodome-module-instead-.patch | 34 ++++++++++++
- ...pem_to_pub_c.py-sign.py-use-pycryptodomex.patch | 64 ----------------------
- ...02-config.mk-fix-CFG_OPTEE_REVISION_MINOR.patch | 32 +++++++++++
- boot/optee-os/Config.in                            |  4 +-
- boot/optee-os/optee-os.hash                        |  4 +-
- 5 files changed, 70 insertions(+), 68 deletions(-)
+ .../0001-use-python3-instead-of-python.patch       | 50 ----------------------
+ .../0001-xtest-fix-generic-argument-handling.patch | 32 ++++++++++++++
+ ...ssion-1027-1028-skip-tests-when-test-leve.patch | 47 ++++++++++++++++++++
+ package/optee-test/optee-test.hash                 |  4 +-
+ package/optee-test/optee-test.mk                   |  2 +-
+ 5 files changed, 82 insertions(+), 53 deletions(-)
 
-diff --git a/boot/optee-os/0001-scripts-pem_to_pub.py-use-Cryptodome-module-instead-.patch b/boot/optee-os/0001-scripts-pem_to_pub.py-use-Cryptodome-module-instead-.patch
-new file mode 100644
-index 0000000000..822ef4b39e
---- /dev/null
-+++ b/boot/optee-os/0001-scripts-pem_to_pub.py-use-Cryptodome-module-instead-.patch
-@@ -0,0 +1,34 @@
-+From 04a8def18caccad27292ba97dc8ea8b3eb3a6afd Mon Sep 17 00:00:00 2001
-+From: Etienne Carriere <etienne.carriere@linaro.org>
-+Date: Tue, 26 May 2020 11:10:45 +0200
-+Subject: [PATCH] scripts/pem_to_pub.py: use Cryptodome module instead of
-+ Crypto
-+
-+Upgrade scripts/pem_to_pub.py to use module Cryptodome instead of
-+module Crypto for consistency with the other helper Python scripts
-+of OP-TEE OS package.
-+
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Acked-by: Jens Wiklander <jens.wiklander@linaro.org>
-+---
-+ scripts/pem_to_pub_c.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/scripts/pem_to_pub_c.py b/scripts/pem_to_pub_c.py
-+index 3a896a393..d3f0e5006 100755
-+--- a/scripts/pem_to_pub_c.py
-++++ b/scripts/pem_to_pub_c.py
-+@@ -21,8 +21,8 @@ def get_args():
-+ 
-+ def main():
-+     import array
-+-    from Crypto.PublicKey import RSA
-+-    from Crypto.Util.number import long_to_bytes
-++    from Cryptodome.PublicKey import RSA
-++    from Cryptodome.Util.number import long_to_bytes
-+ 
-+     args = get_args()
-+ 
-+-- 
-+2.17.1
-+
-diff --git a/boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch b/boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch
+diff --git a/package/optee-test/0001-use-python3-instead-of-python.patch b/package/optee-test/0001-use-python3-instead-of-python.patch
 deleted file mode 100644
-index 1ce960e0e3..0000000000
---- a/boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch
+index 2765a980db..0000000000
+--- a/package/optee-test/0001-use-python3-instead-of-python.patch
 +++ /dev/null
-@@ -1,64 +0,0 @@
--From 06e71feaeb08349abe56b50c3dfb08a8341cf55f Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 26 Apr 2020 21:55:55 +0200
--Subject: [PATCH] scripts/pem_to_pub_c.py/sign.py: use pycryptodomex
+@@ -1,50 +0,0 @@
+-From cc3cb798375c5f47ea5c7579f32060933435e231 Mon Sep 17 00:00:00 2001
+-From: Scott Branden <scott.branden@broadcom.com>
+-Date: Fri, 27 Dec 2019 12:54:28 -0800
+-Subject: [PATCH] use python3 instead of python
 -
--These scripts still use pycrypto.
+-use python3 instead of python as python2 is EOL January 2020.
 -
--From [1]:
--"PyCryptodome is a fork of PyCrypto, which is not maintained any more
--(the last release dates back to 2013 [2]). It exposes almost the same
--API, but there are a few incompatibilities [3]."
+-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+-Reviewed-by: Jerome Forissier <jerome@forissier.org>
+-Tested-by: Jerome Forissier <jerome@forissier.org> (QEMU, CFG_GCM_NIST_VECTORS=y)
 -
--Don't use upstream commit since it also switches from the algorithm
--TEE_ALG_RSASSA_PKCS1_V1_5_SHA256 to TEE_ALG_RSASSA_PKCS1_PSS_MGF1_SHA256
--when replacing pycrypto to pycryptodomex [4].
--
--[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
--[2] https://pypi.org/project/pycrypto/#history
--[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
--[4] https://github.com/OP-TEE/optee_os/commit/ababd72d2fd76cb2ded8e202b49db28d6545f6eb
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-(cherry picked from commit 6271160639002a2580d80b75b5397a96d56329f2)
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ----
-- scripts/pem_to_pub_c.py | 4 ++--
-- scripts/sign.py         | 8 ++++----
-- 2 files changed, 6 insertions(+), 6 deletions(-)
+- scripts/file_to_c.py       | 4 ++--
+- scripts/rsp_to_gcm_test.py | 2 +-
+- 2 files changed, 3 insertions(+), 3 deletions(-)
 -
--diff --git a/scripts/pem_to_pub_c.py b/scripts/pem_to_pub_c.py
--index 3a896a39..d3f0e500 100755
----- a/scripts/pem_to_pub_c.py
--+++ b/scripts/pem_to_pub_c.py
--@@ -21,8 +21,8 @@ def get_args():
+-diff --git a/scripts/file_to_c.py b/scripts/file_to_c.py
+-index ae16f52..b4ce2a2 100755
+---- a/scripts/file_to_c.py
+-+++ b/scripts/file_to_c.py
+-@@ -1,4 +1,4 @@
+--#!/usr/bin/env python
+-+#!/usr/bin/env python3
+- # SPDX-License-Identifier: BSD-2-Clause
+- #
+- # Copyright (c) 2018, Linaro Limited
+-@@ -29,7 +29,7 @@ def main():
 - 
-- def main():
--     import array
---    from Crypto.PublicKey import RSA
---    from Crypto.Util.number import long_to_bytes
--+    from Cryptodome.PublicKey import RSA
--+    from Cryptodome.Util.number import long_to_bytes
+-     f.write("const uint8_t " + args.name + "[] = {\n")
+-     i = 0
+--    for x in array.array("B", inf.read()):
+-+    for x in array.array("B", map(ord, (inf.read()))):
+-         f.write("0x" + '{0:02x}'.format(x) + ",")
+-         i = i + 1
+-         if i % 8 == 0:
+-diff --git a/scripts/rsp_to_gcm_test.py b/scripts/rsp_to_gcm_test.py
+-index 0543541..e4418be 100755
+---- a/scripts/rsp_to_gcm_test.py
+-+++ b/scripts/rsp_to_gcm_test.py
+-@@ -1,4 +1,4 @@
+--#!/usr/bin/env python
+-+#!/usr/bin/env python3
 - 
--     args = get_args()
+- modes = {'encrypt': 0, 'decrypt': 1}
 - 
--diff --git a/scripts/sign.py b/scripts/sign.py
--index 2939c591..80ce2e9f 100755
----- a/scripts/sign.py
--+++ b/scripts/sign.py
--@@ -121,10 +121,10 @@ def get_args(logger):
-- 
-- 
-- def main():
---    from Crypto.Signature import PKCS1_v1_5
---    from Crypto.Hash import SHA256
---    from Crypto.PublicKey import RSA
---    from Crypto.Util.number import ceil_div
--+    from Cryptodome.Signature import PKCS1_v1_5
--+    from Cryptodome.Hash import SHA256
--+    from Cryptodome.PublicKey import RSA
--+    from Cryptodome.Util.number import ceil_div
--     import base64
--     import logging
--     import os
 --- 
--2.25.3
+-2.24.1
 -
-diff --git a/boot/optee-os/0002-config.mk-fix-CFG_OPTEE_REVISION_MINOR.patch b/boot/optee-os/0002-config.mk-fix-CFG_OPTEE_REVISION_MINOR.patch
+diff --git a/package/optee-test/0001-xtest-fix-generic-argument-handling.patch b/package/optee-test/0001-xtest-fix-generic-argument-handling.patch
 new file mode 100644
-index 0000000000..867836ef0c
+index 0000000000..c61dc49c5c
 --- /dev/null
-+++ b/boot/optee-os/0002-config.mk-fix-CFG_OPTEE_REVISION_MINOR.patch
++++ b/package/optee-test/0001-xtest-fix-generic-argument-handling.patch
 @@ -0,0 +1,32 @@
-+From c5f5e6bf6644a536a0d53bfb9f5c5419150035dd Mon Sep 17 00:00:00 2001
-+From: Jens Wiklander <jens.wiklander@linaro.org>
-+Date: Mon, 25 May 2020 12:20:08 +0200
-+Subject: [PATCH] config.mk: fix CFG_OPTEE_REVISION_MINOR
++From e1af176af2bb274745e9b0d43456763f8946f107 Mon Sep 17 00:00:00 2001
++From: Etienne Carriere <etienne.carriere@linaro.org>
++Date: Mon, 25 May 2020 13:09:59 +0200
++Subject: [PATCH] xtest: fix generic argument handling
 +
-+The current release is 3.9.0, change the revision to match.
++Fix position of last generic argument badly handled that makes -d, -l or
++-t argument being treated also as if it was the first test ID to consider
++in the filtered test IDs list.
 +
-+Fixes: af141c61fe7a ("Update CHANGELOG for 3.9.0")
-+Reviewed-by: Joakim Bech <joakim.bech@linaro.org>
-+Reported-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
++Fixes: 66542a1bb4e0 ("xtest: exclude tests with -x")
 +Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
++Acked-by: Jerome Forissier <jerome@forissier.org>
 +---
-+ mk/config.mk | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ host/xtest/xtest_main.c | 2 --
++ 1 file changed, 2 deletions(-)
 +
-+diff --git a/mk/config.mk b/mk/config.mk
-+index c00a14618..bc49f83d8 100644
-+--- a/mk/config.mk
-++++ b/mk/config.mk
-+@@ -116,7 +116,7 @@ endif
-+ # with limited depth not including any tag, so there is really no guarantee
-+ # that TEE_IMPL_VERSION contains the major and minor revision numbers.
-+ CFG_OPTEE_REVISION_MAJOR ?= 3
-+-CFG_OPTEE_REVISION_MINOR ?= 8
-++CFG_OPTEE_REVISION_MINOR ?= 9
++diff --git a/host/xtest/xtest_main.c b/host/xtest/xtest_main.c
++index 3dff2fe..1e566fa 100644
++--- a/host/xtest/xtest_main.c
+++++ b/host/xtest/xtest_main.c
++@@ -188,8 +188,6 @@ int main(int argc, char *argv[])
++ 		}
++ 	}
++ next:
++-	if (last_gen_option > 1)
++-		last_gen_option--;
 + 
-+ # Trusted OS implementation manufacturer name
-+ CFG_TEE_MANUFACTURER ?= LINARO
++ 	for (index = last_gen_option; index < argc; index++) {
++ 		if (!strcmp(argv[index], "-x")) {
 +-- 
 +2.17.1
 +
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 669bbda924..5a786833ef 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
- 
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.7.0"
-+	bool "3.9.0"
- 	help
- 	  Use the latest release tag from the OP-TEE OS official Git
- 	  repository.
-@@ -50,7 +50,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.7.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.9.0"		if BR2_TARGET_OPTEE_OS_LATEST
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index dc0fbecce7..f38ebc569f 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
+diff --git a/package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch b/package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch
+new file mode 100644
+index 0000000000..d45644426e
+--- /dev/null
++++ b/package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch
+@@ -0,0 +1,47 @@
++From 899099be7f522d59baa51d26077c0f5804161cfe Mon Sep 17 00:00:00 2001
++From: Etienne Carriere <etienne.carriere@linaro.org>
++Date: Fri, 29 May 2020 15:27:06 +0200
++Subject: [PATCH] xtest: regression 1027/1028: skip tests when test level is 0
++
++Skip regression tests 1027 and 1028 when xtest runs with test level 0
++since these tests expect changes in Linux kernel that are not available
++in mainline kernel source trees, at least up to v5.7.
++
++Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
++---
++ host/xtest/regression_1000.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/host/xtest/regression_1000.c b/host/xtest/regression_1000.c
++index a70a722..2b0140c 100644
++--- a/host/xtest/regression_1000.c
+++++ b/host/xtest/regression_1000.c
++@@ -2096,6 +2096,12 @@ static void xtest_tee_test_1027(ADBG_Case_t *c)
++ 	TEEC_UUID uuid_ns = { };
++ 	char uuid_name[TEE_UUID_NS_NAME_SIZE] = { };
++ 
+++	/* Skip test at level 0 since its dependency on patched Linux kernel */
+++	if (level == 0) {
+++		Do_ADBG_Log("Test level 0: skip regression 1027");
+++		return;
+++	}
+++
++ 	result = xtest_uuid_from_str(&uuid_ns, client_uuid_linux_ns);
++ 
++ 	if (!ADBG_EXPECT_TEEC_SUCCESS(c, result))
++@@ -2159,6 +2165,12 @@ static void xtest_tee_test_1028(ADBG_Case_t *c)
++ 	char uuid_name[TEE_UUID_NS_NAME_SIZE] = { };
++ 	uint32_t group = 0;
++ 
+++	/* Skip test at level 0 since its dependency on patched Linux kernel */
+++	if (level == 0) {
+++		Do_ADBG_Log("Test level 0: skip regression 1027");
+++		return;
+++	}
+++
++ 	group = getegid();
++ 
++ 	result = xtest_uuid_from_str(&uuid_ns, client_uuid_linux_ns);
++-- 
++2.17.1
++
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index 17f73e26d7..3a769ac4c2 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.7.0.tar.gz
--sha256 ff378f22b8e7dacf933a2d34eb5c1bdcafe74bdda692e4dbc2969301f6a81d43  optee-os-3.7.0.tar.gz
-+# From https://github.com/OP-TEE/optee_os/archive/3.9.0.tar.gz
-+sha256 ac6f145ebde715d4d7a1d5277f4e08a06b660e1c0237c926a274d86cd90ef4c5  optee-os-3.9.0.tar.gz
+-# From https://github.com/OP-TEE/optee_test/archive/3.7.0.tar.gz
+-sha256 6486ba7eba8ea8b43278032c9d6ea1d6b35340a7f76ef4c6f34efbca3d80265d  optee-test-3.7.0.tar.gz
++# From https://github.com/OP-TEE/optee_test/archive/3.9.0.tar.gz
++sha256 59be1c97cdef7a886bdf4c50f7bf86354be68a68f6ffd43cd5ce4bb96156f402  optee-test-3.9.0.tar.gz
  # Locally computed
- sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+ sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index 4cf2f95305..fb6c9fcc50 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_TEST_VERSION = 3.7.0
++OPTEE_TEST_VERSION = 3.9.0
+ OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
+ OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
+ OPTEE_TEST_LICENSE_FILES = LICENSE.md
