@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 15:08:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rp-pppoe: bump to version 3.14
-In-Reply-To: <20200713211710.2036960-1-fontaine.fabrice@gmail.com>
-References: <20200713211710.2036960-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200714150801.0036bbcf@windsurf.home>
+Date: Tue, 14 Jul 2020 15:08:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/exiv2: really disable samples
+In-Reply-To: <20200713214023.2094574-1-fontaine.fabrice@gmail.com>
+References: <20200713214023.2094574-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200714150815.6140419f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 23:17:10 +0200
+On Mon, 13 Jul 2020 23:40:22 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Update patch and renumber it
+> EXIV2_ENABLE_BUILD_SAMPLES has been renamed into EXIV2_BUILD_SAMPLES
+> since version 0.27 and
+> https://github.com/Exiv2/exiv2/commit/60d436c96960fa314e2d12d017440253ce280d51
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../{0002-krn-plugin.patch => 0001-krn-plugin.patch}        | 6 ++++--
->  package/rp-pppoe/rp-pppoe.hash                              | 2 +-
->  package/rp-pppoe/rp-pppoe.mk                                | 4 ++--
->  3 files changed, 7 insertions(+), 5 deletions(-)
->  rename package/rp-pppoe/{0002-krn-plugin.patch => 0001-krn-plugin.patch} (79%)
+>  package/exiv2/exiv2.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
