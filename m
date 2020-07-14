@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 15:37:10 +0200
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump to version 3.9.0
-In-Reply-To: <20200529142742.9381-1-etienne.carriere@linaro.org>
-References: <20200529142742.9381-1-etienne.carriere@linaro.org>
-Message-ID: <20200714153710.513e7c16@windsurf.home>
+From: Sam Voss <sam.voss@rockwellcollins.com>
+Date: Tue, 14 Jul 2020 08:47:52 -0500
+Subject: [Buildroot] [PATCH] package/sqlite: bump version 3.32.3
+In-Reply-To: <20200711152448.26f4dff7@windsurf.home>
+References: <20200709215759.53406-1-sam.voss@rockwellcollins.com>
+ <20200711152448.26f4dff7@windsurf.home>
+Message-ID: <CAH=K+6=9iFHt8GuaiL=ioMirXjfHN_=UpqTRXOmGHghYneA5KQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 29 May 2020 16:27:38 +0200
-Etienne Carriere <etienne.carriere@linaro.org> wrote:
+Hey Thomas,
 
-> Bump OP-TEE OS package version to OP-TEE release 3.9.0.
-> 
-> Update patch on pydrypto/pycryptodome to match 3.9.0.
-> Add patch on CFG_OPTEE_REVISION_MINOR that was not updated in release
-> 3.9.0 and fixed only few commits above.
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->  ...ub.py-use-Cryptodome-module-instead-.patch | 34 ++++++++++
->  ...o_pub_c.py-sign.py-use-pycryptodomex.patch | 64 -------------------
->  ...nfig.mk-fix-CFG_OPTEE_REVISION_MINOR.patch | 32 ++++++++++
->  boot/optee-os/Config.in                       |  4 +-
->  boot/optee-os/optee-os.hash                   |  4 +-
->  5 files changed, 70 insertions(+), 68 deletions(-)
->  create mode 100644 boot/optee-os/0001-scripts-pem_to_pub.py-use-Cryptodome-module-instead-.patch
->  delete mode 100644 boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch
->  create mode 100644 boot/optee-os/0002-config.mk-fix-CFG_OPTEE_REVISION_MINOR.patch
+On Sat, Jul 11, 2020 at 8:25 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Sam,
+>
+> On Thu,  9 Jul 2020 16:57:59 -0500
+> Sam Voss <sam.voss@rockwellcollins.com> wrote:
+>
+> > Fixes the following CVEs:
+>
+> [...]
+>
+> Thanks, I've applied. However, you should send patches based on master,
+> not based on 2020.02.x, unless of course they are only applicable to
+> 2020.02.x.
+>
+> In addition, for version bumps that we know have security fixes, we
+> like to have the commit title that says "security bump to version
+> X.Y.Z" or something along those lines.
 
-Thanks, series applied!
+Sounds good, I'll make sure to do this in the future.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Sam Voss | Sr. Software Engineer | Commercial Avionics
+COLLINS AEROSPACE
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+Tel: +1 319 263 4039
+sam.voss at collins.com | collinsaerospace.com
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
