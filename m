@@ -1,104 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 16:34:02 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/cups-filters: fix build without dejavu font
-Message-ID: <20200714143402.4164670-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 14 Jul 2020 17:31:17 +0200
+Subject: [Buildroot] [PATCHv2 1/2] board/qemu/post-image.sh: start from
+ a shell
+In-Reply-To: <20200522215142.2907439-1-romain.naour@gmail.com>
+References: <20200522215142.2907439-1-romain.naour@gmail.com>
+Message-ID: <3818b56d-84a0-3212-80b0-00521d5a09b5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.27.3, cups-filters needs dejavu (even if it is only used
-for test programs):
-https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
+Hi Etienne, All,
 
-Add a patch to avoid this build failure when cross-compiling and set
-test font path to /dev/null to avoid setting TESTFONT to an incorrect
-host path
+Le 22/05/2020 ? 23:51, Romain Naour a ?crit?:
+> Usually the qemu command line start directly with "qemu-system-<arch> ...".
+> But the command line for qemu_arm_vexpress_tz_defconfig start by doing
+> "cd output/images && ../host/bin/qemu-system-arm". This is necessary
+> since boot binaries, except BL1, are primarily loaded via semi-hosting
+> so all binaries has to reside in the same directory as QEMU is started
+> from [1].
+> 
+> The start-qemu.sh script fail to start qemu since it use exec on the
+> "cd" command. To work around this issue, use "exec sh -c":
+> exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
+> 
+> [1] https://github.com/ARM-software/arm-trusted-firmware/blob/4ebbea9592ab37fc62217d0ac62fa13a3e063527/docs/plat/qemu.rst
 
-Fixes:
- - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
+What do you think we can switch to boot via flash based firmwares method ? [1]
+It would avoid the constraint of running qemu from the directory where all
+binaries reside. This is mainly to allow testing this defconfig in gitlab-ci.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Set test font path to /dev/null
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Add a patch instead of adding dejavu dependency
+It would require to update the uboot boot command, the post-image script and the
+qemu command line etc...
 
- ...fix-cross-compilation-without-dejavu.patch | 41 +++++++++++++++++++
- package/cups-filters/cups-filters.mk          |  3 ++
- 2 files changed, 44 insertions(+)
- create mode 100644 package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+[1]
+https://trustedfirmware-a.readthedocs.io/en/latest/plat/qemu.html#booting-via-flash-based-firmwares
 
-diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-new file mode 100644
-index 0000000000..650b90a89b
---- /dev/null
-+++ b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-@@ -0,0 +1,41 @@
-+From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 13 Jul 2020 23:02:50 +0200
-+Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
-+
-+Cross-compilation is broken since commit 1d66106. Indeed, when
-+cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
-+path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
-+provided through --with-test-font-path which will fix the build failure
-+but will result in broken test programs.
-+
-+So when cross-compiling don't try to check if the test-font-path is
-+valid or not and just use the one provided by the user or the default
-+one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
-+
-+Fix #262
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index aa905cf5d..4cc4fd6e5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
-+ 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
-+ )
-+ 
-+-AS_IF([test -f "$with_test_font_path"],
-+-	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
-++AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
-+ 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
-+ )
-++AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
-+ 
-+ # ================
-+ # Check for cflags
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index dc4e89b52e..237d8afe62 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -8,6 +8,8 @@ CUPS_FILTERS_VERSION = 1.27.5
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
-+# We're patching configure.ac
-+CUPS_FILTERS_AUTORECONF = YES
- 
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
- 
-@@ -20,6 +22,7 @@ CUPS_FILTERS_CONF_OPTS = \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--with-pdftops=pdftops \
- 	--with-jpeg \
-+	--with-test-font-path=/dev/null \
- 	--without-rcdir
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
--- 
-2.27.0
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+> v2: escape double quote for -append
+> ---
+>  board/qemu/post-image.sh | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+> index 9a4d216274..07ce9c0d09 100755
+> --- a/board/qemu/post-image.sh
+> +++ b/board/qemu/post-image.sh
+> @@ -27,6 +27,9 @@ QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${IMAGE_DIR\}}"
+>  DEFAULT_ARGS="$(sed -r -e '/-serial stdio/!d; s/.*(-serial stdio).*/\1/' <<<"${QEMU_CMD_LINE}")"
+>  QEMU_CMD_LINE="${QEMU_CMD_LINE//-serial stdio/}"
+>  
+> +# Escape -append double quotes
+> +QEMU_CMD_LINE=$(echo ${QEMU_CMD_LINE} | sed "s%\"%\\\\\"%g")
+> +
+>  # Disable graphical output and redirect serial I/Os to console
+>  case ${DEFCONFIG_NAME} in
+>    (qemu_sh4eb_r2d_defconfig|qemu_sh4_r2d_defconfig)
+> @@ -49,7 +52,7 @@ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+>  	fi
+>  
+>  	export PATH="${HOST_DIR}/bin:\${PATH}"
+> -	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
+> +	exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
+>  _EOF_
+>  
+>  chmod +x "${START_QEMU_SCRIPT}"
+> 
