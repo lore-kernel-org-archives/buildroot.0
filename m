@@ -1,52 +1,104 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 14 Jul 2020 16:22:25 +0200
-Subject: [Buildroot] [PATCH] system/skeleton: make /var/run a symlink to
- /run
-In-Reply-To: <20200714155207.08d6ffb1@windsurf.home>
-References: <20200629104749.46938-1-nolange79@gmail.com>
- <20200714151459.6ee4ca7a@windsurf.home>
- <CADYdroPBcpgMkNme2OP8jz3SX-+3J7eDqp0r8UbWXh_swvNkVQ@mail.gmail.com>
- <20200714155207.08d6ffb1@windsurf.home>
-Message-ID: <CADYdroM9wPyVGM2_oAcKcMYBHjYdfEPrd7YKL5QozGP3kDXPHA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 16:34:02 +0200
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/cups-filters: fix build without dejavu font
+Message-ID: <20200714143402.4164670-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Di., 14. Juli 2020 um 15:52 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Tue, 14 Jul 2020 15:35:22 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > > Also, was there any specific motivation/issue for this change, or just
-> > > make things "nicer" ?
-> >
-> > Removal of stuff like this:
-> > ifeq ($(BR2_INIT_SYSTEMD),y)
-> > LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
-> > endif
->
-> I'm confused, this snippet of code is for systemd configurations only,
-> and your patch doesn't change anything for systemd-based systems, where
-> /var/run was already a symlink to /run.
->
-> Could you clarify ?
+Since version 1.27.3, cups-filters needs dejavu (even if it is only used
+for test programs):
+https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
 
-chronological:
+Add a patch to avoid this build failure when cross-compiling and set
+test font path to /dev/null to avoid setting TESTFONT to an incorrect
+host path
 
--   Buildroot uses /var/run as RUNTIME directory for SysV, and /run for systemd.
--   I add the lttng patch above to use either /var/run/lttng or /run/lttng
--   I consider doing the same for dbus as I get warnings otherwise
-(actually have a post_install script replacing /var/run with /run)
--   I consider it would be alot easier to just use /run everywhere and
-add this patch to see if that's accepted, before doing more
-if-butt-ing like with lttng
+Fixes:
+ - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
 
-So the end result should be that /var/run is treated as legacy
-unconditionally, and packages would always use /run,
-and don't depend on a symlink (potentially on a network drive). the
-symlink schoul just be a safety net.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v2 -> v3 (after review of Thomas Petazzoni):
+ - Set test font path to /dev/null
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Add a patch instead of adding dejavu dependency
 
-Norbert
+ ...fix-cross-compilation-without-dejavu.patch | 41 +++++++++++++++++++
+ package/cups-filters/cups-filters.mk          |  3 ++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+
+diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+new file mode 100644
+index 0000000000..650b90a89b
+--- /dev/null
++++ b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+@@ -0,0 +1,41 @@
++From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 13 Jul 2020 23:02:50 +0200
++Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
++
++Cross-compilation is broken since commit 1d66106. Indeed, when
++cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
++path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
++provided through --with-test-font-path which will fix the build failure
++but will result in broken test programs.
++
++So when cross-compiling don't try to check if the test-font-path is
++valid or not and just use the one provided by the user or the default
++one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
++
++Fix #262
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index aa905cf5d..4cc4fd6e5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
++ 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
++ )
++ 
++-AS_IF([test -f "$with_test_font_path"],
++-	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+++AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
++ 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
++ )
+++AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
++ 
++ # ================
++ # Check for cflags
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index dc4e89b52e..237d8afe62 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -8,6 +8,8 @@ CUPS_FILTERS_VERSION = 1.27.5
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
++# We're patching configure.ac
++CUPS_FILTERS_AUTORECONF = YES
+ 
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
+@@ -20,6 +22,7 @@ CUPS_FILTERS_CONF_OPTS = \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--with-pdftops=pdftops \
+ 	--with-jpeg \
++	--with-test-font-path=/dev/null \
+ 	--without-rcdir
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+-- 
+2.27.0
