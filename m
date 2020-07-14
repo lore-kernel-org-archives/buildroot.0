@@ -1,128 +1,502 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 14:04:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 2.10.0
-Message-ID: <20200714120401.3519027-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Jul 2020 14:07:23 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xfont_font-*: make outputs
+ reproducible
+Message-ID: <20200714120432.3BCA884706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version)
-- Add zstd optional dependency, available since version 2.10.0 and
-  https://github.com/nmoinvaz/minizip/commit/1f4758bd7f979a56b33667fbbcdb0305e8b4173f
-- Use the new MZ_LIBBSD option available since version 2.10.0 and
-  https://github.com/nmoinvaz/minizip/commit/29fcb4768050fbbf02d572a24a4e2ad29d51b60d
+commit: https://git.buildroot.net/buildroot/commit/?id=10082b2e439c95cf285ab462fe0961d4c67d9c91
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Prior to gzip 1.10, the compression pipeline used with PCF fonts was
+not reproducible due to the implicit -N/--name injecting a timestamp:
+
+  $ cat /path/to/file | gzip > /path/to/file.gz
+
+This updates Portable Compiled Format font packages to have a host-gzip
+dependency, so gzip version 1.10 or newer will reliably be used.
+
+This change does not affect encodings, which use a seemingly
+synonymous compression pipeline, but that happens to be reproducible
+with gzip versions at least as old as version 1.3.13:
+
+  $ gzip < /path/to/file > /path/to/file.gz
+
+Reported-by: Jordan Speicher <jspeicher@xes-inc.com>
+Signed-off-by: Aaron Sierra <asierra@xes-inc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...s.txt-use-pkg-config-to-find-openssl.patch | 44 -------------------
- package/minizip/minizip.hash                  |  2 +-
- package/minizip/minizip.mk                    | 17 ++++++-
- 3 files changed, 16 insertions(+), 47 deletions(-)
- delete mode 100644 package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
+ package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk   | 7 ++++++-
+ package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk     | 7 ++++++-
+ .../xfont_font-adobe-utopia-100dpi.mk                              | 7 ++++++-
+ .../xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk | 7 ++++++-
+ package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk     | 7 ++++++-
+ package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk         | 7 ++++++-
+ package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk           | 7 ++++++-
+ .../xfont_font-bh-lucidatypewriter-100dpi.mk                       | 7 ++++++-
+ .../xfont_font-bh-lucidatypewriter-75dpi.mk                        | 7 ++++++-
+ .../xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk     | 7 ++++++-
+ .../x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk | 7 ++++++-
+ .../x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk | 7 ++++++-
+ package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk     | 7 ++++++-
+ package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk     | 7 ++++++-
+ package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk           | 7 ++++++-
+ package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk         | 7 ++++++-
+ package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk           | 7 ++++++-
+ package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk       | 7 ++++++-
+ package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk | 7 ++++++-
+ package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk         | 7 ++++++-
+ package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk         | 7 ++++++-
+ .../x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk | 7 ++++++-
+ .../x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk | 7 ++++++-
+ package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk         | 7 ++++++-
+ package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk           | 7 ++++++-
+ .../xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk   | 7 ++++++-
+ 26 files changed, 156 insertions(+), 26 deletions(-)
 
-diff --git a/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch b/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
-deleted file mode 100644
-index 8b44a17712..0000000000
---- a/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 1fdf5da78369305164313610dbb1ec868233ba08 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jun 2020 14:04:03 +0200
--Subject: [PATCH] CMakeLists.txt: use pkg-config to find openssl
--
--Use pkg-config to find openssl libraries otherwise minizip will fail to
--retrieve openssl static dependencies such as -latomic and build of
--test_cmd will fail on:
--
--[100%] Linking C executable test_cmd
--/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/test/autobuild/run/instance-3/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(bio_lib.o): in function `BIO_free':
--bio_lib.c:(.text+0x510): undefined reference to `__atomic_fetch_sub_4'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/b54b625751a45d3b449fffcdfaa06fb9209b4652
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/nmoinvaz/minizip/pull/499]
-----
-- CMakeLists.txt | 8 +++++++-
-- 1 file changed, 7 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index b789f62..7a81e32 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -140,7 +140,13 @@ endif()
-- 
-- # Check to see if openssl installation is present
-- if(MZ_OPENSSL)
---    find_package(OpenSSL)
--+    find_package(PkgConfig)
--+    if(PKGCONFIG_FOUND)
--+        pkg_check_modules(OPENSSL openssl)
--+    endif()
--+    if(NOT OPENSSL_FOUND)
--+        find_package(OpenSSL)
--+    endif()
--     if (OPENSSL_FOUND)
--         message(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
-- 
---- 
--2.26.2
--
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index 0fed09735a..74799b9d58 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8425399277d9d5e39454e655cfd3eb004607960c8358a3e732f5e741a6b5df0a  minizip-2.9.2.tar.gz
-+sha256  4c7f236268fef57ce5dcbd9645235a22890d62480a592e1b0515ecff93f9989b  minizip-2.10.0.tar.gz
- sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 32a46d61dc..f4fb19f867 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
+index bc05a2165c..2418769808 100644
+--- a/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
++++ b/package/x11r7/xfont_font-adobe-100dpi/xfont_font-adobe-100dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_ADOBE_100DPI_LICENSE_FILES = COPYING
  
--MINIZIP_VERSION = 2.9.2
-+MINIZIP_VERSION = 2.10.0
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = \
- 	host-pkgconf \
--	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- MINIZIP_INSTALL_STAGING = YES
- MINIZIP_CONF_OPTS = \
-@@ -24,6 +23,13 @@ else
- MINIZIP_CONF_OPTS += -DMZ_BZIP2=OFF
- endif
+ XFONT_FONT_ADOBE_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_ADOBE_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_ADOBE_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_ADOBE_100DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
  
-+ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+MINIZIP_DEPENDENCIES += libbsd
-+MINIZIP_CONF_OPTS += -DMZ_LIBBSD=ON
-+else
-+MINIZIP_CONF_OPTS += -DMZ_LIBBSD=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MINIZIP_DEPENDENCIES += openssl
- MINIZIP_CONF_OPTS += -DMZ_OPENSSL=ON
-@@ -38,4 +44,11 @@ else
- MINIZIP_CONF_OPTS += -DMZ_ZLIB=OFF
- endif
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk b/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk
+index f77c1706cd..90e94d27cb 100644
+--- a/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk
++++ b/package/x11r7/xfont_font-adobe-75dpi/xfont_font-adobe-75dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_ADOBE_75DPI_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+MINIZIP_DEPENDENCIES += zstd
-+MINIZIP_CONF_OPTS += -DMZ_ZSTD=ON
-+else
-+MINIZIP_CONF_OPTS += -DMZ_ZSTD=OFF
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.27.0
+ XFONT_FONT_ADOBE_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_ADOBE_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_ADOBE_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_ADOBE_75DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk b/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk
+index 1c157dd4cf..83157f5c67 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk
++++ b/package/x11r7/xfont_font-adobe-utopia-100dpi/xfont_font-adobe-utopia-100dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_ADOBE_UTOPIA_100DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_ADOBE_UTOPIA_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_ADOBE_UTOPIA_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_ADOBE_UTOPIA_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_ADOBE_UTOPIA_100DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
+index cd60b34fce..ac3bf2e230 100644
+--- a/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
++++ b/package/x11r7/xfont_font-adobe-utopia-75dpi/xfont_font-adobe-utopia-75dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_ADOBE_UTOPIA_75DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_ADOBE_UTOPIA_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_ADOBE_UTOPIA_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_ADOBE_UTOPIA_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_ADOBE_UTOPIA_75DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk b/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk
+index e8f6f3d2e6..c867a60233 100644
+--- a/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk
++++ b/package/x11r7/xfont_font-arabic-misc/xfont_font-arabic-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_ARABIC_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_ARABIC_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_ARABIC_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_ARABIC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_ARABIC_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk b/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
+index d1176d54e5..cc15738692 100644
+--- a/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
++++ b/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_BH_100DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_BH_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_BH_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_BH_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_BH_100DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk b/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk
+index 5b05f5f797..788a76a2b9 100644
+--- a/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk
++++ b/package/x11r7/xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_BH_75DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_BH_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_BH_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_BH_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_BH_75DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
+index 4afec6ce69..2f055ddab9 100644
+--- a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
++++ b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
+index 7a36c11053..4166b2d741 100644
+--- a/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
++++ b/package/x11r7/xfont_font-bh-lucidatypewriter-75dpi/xfont_font-bh-lucidatypewriter-75dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_BH_LUCIDATYPEWRITER_75DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk b/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk
+index 9812ddc1b7..90d9e5bbb4 100644
+--- a/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk
++++ b/package/x11r7/xfont_font-bitstream-100dpi/xfont_font-bitstream-100dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_BITSTREAM_100DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_BITSTREAM_100DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_BITSTREAM_100DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_BITSTREAM_100DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_BITSTREAM_100DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk b/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk
+index 91dfeb2ac8..deb99aa596 100644
+--- a/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk
++++ b/package/x11r7/xfont_font-bitstream-75dpi/xfont_font-bitstream-75dpi.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_BITSTREAM_75DPI_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_BITSTREAM_75DPI_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_BITSTREAM_75DPI_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_BITSTREAM_75DPI_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_BITSTREAM_75DPI_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk b/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk
+index 28329a36bb..caca639c25 100644
+--- a/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk
++++ b/package/x11r7/xfont_font-cronyx-cyrillic/xfont_font-cronyx-cyrillic.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_CRONYX_CYRILLIC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_CRONYX_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_CRONYX_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_CRONYX_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_CRONYX_CYRILLIC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk b/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk
+index 9e8852aeee..e752803086 100644
+--- a/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk
++++ b/package/x11r7/xfont_font-cursor-misc/xfont_font-cursor-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_CURSOR_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_CURSOR_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_CURSOR_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_CURSOR_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_CURSOR_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
+index f591b8b80b..f5bd941383 100644
+--- a/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
++++ b/package/x11r7/xfont_font-daewoo-misc/xfont_font-daewoo-misc.mk
+@@ -11,6 +11,11 @@ XFONT_FONT_DAEWOO_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_DAEWOO_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_DAEWOO_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_DAEWOO_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_DAEWOO_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk b/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk
+index 10d24c6c57..1642b41352 100644
+--- a/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk
++++ b/package/x11r7/xfont_font-dec-misc/xfont_font-dec-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_DEC_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_DEC_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_DEC_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_DEC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_DEC_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk b/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk
+index 721f93d80f..1393d67eae 100644
+--- a/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk
++++ b/package/x11r7/xfont_font-isas-misc/xfont_font-isas-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_ISAS_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_ISAS_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_ISAS_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_ISAS_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_ISAS_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk b/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk
+index 1736aed179..78a5bbbf8e 100644
+--- a/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk
++++ b/package/x11r7/xfont_font-jis-misc/xfont_font-jis-misc.mk
+@@ -11,6 +11,11 @@ XFONT_FONT_JIS_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_JIS_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_JIS_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_JIS_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_JIS_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk b/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk
+index 60105427df..b5da83f398 100644
+--- a/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk
++++ b/package/x11r7/xfont_font-micro-misc/xfont_font-micro-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_MICRO_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_MICRO_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_MICRO_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_MICRO_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_MICRO_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk b/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk
+index 2263972084..8fa30ea314 100644
+--- a/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk
++++ b/package/x11r7/xfont_font-misc-cyrillic/xfont_font-misc-cyrillic.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_MISC_CYRILLIC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_MISC_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_MISC_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_MISC_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_MISC_CYRILLIC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk b/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
+index dd62f05026..e03da6f1b5 100644
+--- a/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
++++ b/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_MISC_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_MISC_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_MISC_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_MISC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_MISC_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk b/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk
+index 475fc68b2a..6fcaa5dadc 100644
+--- a/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk
++++ b/package/x11r7/xfont_font-mutt-misc/xfont_font-mutt-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_MUTT_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_MUTT_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_MUTT_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_MUTT_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_MUTT_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk b/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
+index b50ed57688..e07569d4b4 100644
+--- a/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
++++ b/package/x11r7/xfont_font-schumacher-misc/xfont_font-schumacher-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_SCHUMACHER_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_SCHUMACHER_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_SCHUMACHER_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_SCHUMACHER_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_SCHUMACHER_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk b/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
+index dd444594ed..a254d4a756 100644
+--- a/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
++++ b/package/x11r7/xfont_font-screen-cyrillic/xfont_font-screen-cyrillic.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_SCREEN_CYRILLIC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_SCREEN_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_SCREEN_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_SCREEN_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_SCREEN_CYRILLIC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk b/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
+index ae4444e597..6e580fd922 100644
+--- a/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
++++ b/package/x11r7/xfont_font-sony-misc/xfont_font-sony-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_SONY_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_SONY_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_SONY_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_SONY_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_SONY_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
+index c1e2dac72e..737cfb5c9b 100644
+--- a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
++++ b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_SUN_MISC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_SUN_MISC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_SUN_MISC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_SUN_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_SUN_MISC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
+index 8e83d44665..e43cd1150f 100644
+--- a/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
++++ b/package/x11r7/xfont_font-winitzki-cyrillic/xfont_font-winitzki-cyrillic.mk
+@@ -12,6 +12,11 @@ XFONT_FONT_WINITZKI_CYRILLIC_LICENSE_FILES = COPYING
+ 
+ XFONT_FONT_WINITZKI_CYRILLIC_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install
+ XFONT_FONT_WINITZKI_CYRILLIC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/bin/mkfontdir install-data
+-XFONT_FONT_WINITZKI_CYRILLIC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_bdftopcf
++XFONT_FONT_WINITZKI_CYRILLIC_DEPENDENCIES = \
++	xfont_font-util \
++	host-xfont_font-util \
++	host-xapp_mkfontscale \
++	host-xapp_bdftopcf \
++	host-gzip
+ 
+ $(eval $(autotools-package))
