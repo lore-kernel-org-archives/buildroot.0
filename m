@@ -1,31 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 10:12:38 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: add /etc/bash_completion.d to
- non-bash purge
-In-Reply-To: <20200714022459.1926-1-danomimanchego123@gmail.com>
-References: <20200714022459.1926-1-danomimanchego123@gmail.com>
-Message-ID: <20200714101238.36f600e4@windsurf.home>
+Date: Tue, 14 Jul 2020 10:13:40 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: delete debug libs when debug
+ is not enabled
+In-Reply-To: <20200714022554.2045-1-danomimanchego123@gmail.com>
+References: <20200714022554.2045-1-danomimanchego123@gmail.com>
+Message-ID: <20200714101340.186cbf90@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 22:24:59 -0400
+On Mon, 13 Jul 2020 22:25:54 -0400
 Danomi Manchego <danomimanchego123@gmail.com> wrote:
 
-> Currently, we delete /usr/share/bash-completion when bash is not enabled.
-> We need to delete /etc/bash_completion.d too. For example, the jo package
-> installs files there:
-> 
-> /etc/bash_completion.d/jo.bash
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+> +ifneq ($(BR2_ENABLE_DEBUG),y)
+> +	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
+> +endif
 
-Applied to master, thanks.
+The thing is that BR2_ENABLE_DEBUG=y doesn't mean you want debugging
+symbols on the target, it means you want debugging symbols in staging.
+
+So, I adjusted this to:
+
++ifneq ($(BR2_ENABLE_DEBUG):$(BR2_STRIP_strip),y:)
++       rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
++endif
+
+As BR2_ENABLE_DEBUG=y + BR2_STRIP_strip disabled is the best indication
+we have (I believe) to say "I want debugging symbols on the target".
+
+Applied with that change. Thanks!
 
 Thomas
 -- 
