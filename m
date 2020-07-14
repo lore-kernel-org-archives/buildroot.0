@@ -1,73 +1,53 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 14 Jul 2020 15:35:22 +0200
-Subject: [Buildroot] [PATCH] system/skeleton: make /var/run a symlink to
- /run
-In-Reply-To: <20200714151459.6ee4ca7a@windsurf.home>
-References: <20200629104749.46938-1-nolange79@gmail.com>
- <20200714151459.6ee4ca7a@windsurf.home>
-Message-ID: <CADYdroPBcpgMkNme2OP8jz3SX-+3J7eDqp0r8UbWXh_swvNkVQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Jul 2020 15:36:57 +0200
+Subject: [Buildroot] [PATCH v2] package/openal: bump to version 1.20.1
+In-Reply-To: <20200412134900.14298-1-nerv@dawncrow.de>
+References: <20200412134900.14298-1-nerv@dawncrow.de>
+Message-ID: <20200714153657.76d86234@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Di., 14. Juli 2020 um 15:15 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Norbert,
->
-> On Mon, 29 Jun 2020 12:47:49 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > both systemd and FHS3 denote /var/run as a compatibility directory,
-> > new systems should use /run.
-> >
-> > There seems to be little reason to not switch to the new FHS layout
-> > with buildroot, and adding the compatibility symlink.
-> >
-> > [1] - https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s13.html
->
-> The commit log is a bit confusing here, especially when looking at the
-> patch. Indeed, we see you are *removing* code that creates /var/run as
-> a symlink to /run, but you're saying that you're making /var/run a
-> symlink to /run.
->
-> However, what really happens is that /var/run was already a symlink to
-> /run when the selected init system is systemd, but not with other init
-> systems. What your patch does is that it moves all init system to this
-> convention.
->
-> So perhaps a better commit title would be:
->
-> ===
->
-> system/skeleton: always make /var/run a symlink to /run
->
-> While Buildroot was already making /var/run a symlink to /run when
-> systemd was selected as the init system, it was not the case with other
-> init systems.
->
-> However, FHS3 denotes /var/run as a compatibility directory, and new
-> systems should use /run. So let's switch to this convention regardless
-> of the init system being used.
->
-> ===
+On Sun, 12 Apr 2020 15:49:00 +0200
+Andr? Hentschel <nerv@dawncrow.de> wrote:
 
-Fine with that, can you change that pls?
+> -OPENAL_VERSION = 1.19.1
+> +OPENAL_VERSION = 1.20.1
+>  OPENAL_SITE = $(call github,kcat,openal-soft,openal-soft-$(OPENAL_VERSION))
+>  OPENAL_LICENSE = LGPL-2.0+
+>  OPENAL_LICENSE_FILES = COPYING
+> diff --git a/package/solarus/Config.in b/package/solarus/Config.in
+> index 6bed38a6f5..851e54920c 100644
+> --- a/package/solarus/Config.in
+> +++ b/package/solarus/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_SOLARUS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
 
->
-> Also, was there any specific motivation/issue for this change, or just
-> make things "nicer" ?
+A question is why is this being changed? When I read
+https://openal-soft.org/, it says:
 
-Removal of stuff like this:
-ifeq ($(BR2_INIT_SYSTEMD),y)
-LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
-endif
+""
+The changes from 1.19.1 include:
 
-You get warnings everytime you start systemd with units using a
-var/run directory
-(eg. dbus). So cleaning that up would be the next step once this
-change is accepted.
+    Converted the library codebase to C++11.
+""
 
-Norbert
+so they just moved to C++11, not C++14, at least according to this
+change log.
+
+Could you explain what prompted you to update the gcc requirement to
+5.x, so that at least the commit log can be extended a bit ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
