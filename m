@@ -1,60 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 22:43:34 +0200
-Subject: [Buildroot] [git commit] package/zstd: bump to version 1.4.5
-Message-ID: <20200714203947.10BC186D31@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 14 Jul 2020 14:42:16 -0500
+Subject: [Buildroot] [2020.02.x] package/pcre: security bump to 8.44
+In-Reply-To: <20200714194008.63423-1-matthew.weber@rockwellcollins.com>
+References: <20200714194008.63423-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpbN4eVZYS0Nxjr9eXd+ES+467binOnF6SR-T_OLaWe1Yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=510b339818c628b794a38d736e2ba3414139cbf2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All,
 
-- Get official tarball and its hash
-- Update indentation in hash file (two spaces)
+Ignore this patch. It looks like master already
+has a92e06c352a838a4ee72069aeee7ba5ffea6c32b which can be picked over to
+2020.02.x.
 
-This is a fairly important release which includes performance
-improvements and new major CLI features. It also fixes a few corner
-cases, making it a recommended upgrade.
+On Tue, Jul 14, 2020 at 2:40 PM Matt Weber <
+matthew.weber@rockwellcollins.com> wrote:
 
-https://github.com/facebook/zstd/releases/tag/v1.4.5
-https://github.com/facebook/zstd/releases/tag/v1.4.4
+>  * 0001-Kill-compatibility-bits.patch had a bugfix for the lcc
+>    compiler (
+> https://vcs.pcre.org/pcre/code/trunk/pcrecpp.cc?r1=1735&r2=1752&pathrev=1763
+> )
+>  * License file updated copyright date
+>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  package/pcre/0001-Kill-compatibility-bits.patch | 5 +++--
+>  package/pcre/pcre.hash                          | 6 +++---
+>  package/pcre/pcre.mk                            | 2 +-
+>  3 files changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/pcre/0001-Kill-compatibility-bits.patch
+> b/package/pcre/0001-Kill-compatibility-bits.patch
+> index 3563e4b714..00eff692c4 100644
+> --- a/package/pcre/0001-Kill-compatibility-bits.patch
+> +++ b/package/pcre/0001-Kill-compatibility-bits.patch
+> @@ -15,7 +15,7 @@ diff --git a/pcrecpp.cc b/pcrecpp.cc
+>  index d09c9ab..6910db0 100644
+>  --- a/pcrecpp.cc
+>  +++ b/pcrecpp.cc
+> -@@ -58,22 +58,6 @@ static const int kVecSize = (1 + kMaxArgs) * 3;  //
+> results + PCRE workspace
+> +@@ -58,23 +58,6 @@ static const int kVecSize = (1 + kMaxArgs) * 3;  //
+> results + PCRE workspace
+>   // Special object that stands-in for no argument
+>   Arg RE::no_arg((void*)NULL);
+>
+> @@ -27,7 +27,8 @@ index d09c9ab..6910db0 100644
+>  -// inclusive test if we ever needed it.  (Note that not only the
+>  -// __attribute__ syntax, but also __USER_LABEL_PREFIX__, are
+>  -// gnu-specific.)
+> --#if defined(__GNUC__) && __GNUC__ >= 3 && defined(__ELF__) &&
+> !defined(__INTEL_COMPILER)
+> +-#if defined(__GNUC__) && __GNUC__ >= 3 && defined(__ELF__) \
+> +-       && !defined(__INTEL_COMPILER) && !defined(__LCC__)
+>  -# define ULP_AS_STRING(x)            ULP_AS_STRING_INTERNAL(x)
+>  -# define ULP_AS_STRING_INTERNAL(x)   #x
+>  -# define USER_LABEL_PREFIX_STR       ULP_AS_STRING(__USER_LABEL_PREFIX__)
+> diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+> index 7513d5f198..6dea2a0987 100644
+> --- a/package/pcre/pcre.hash
+> +++ b/package/pcre/pcre.hash
+> @@ -1,4 +1,4 @@
+> -# Locally calculated after checking pgp signature
+> -sha256 91e762520003013834ac1adb4a938d53b22a216341c061b0cf05603b290faf6b
+> pcre-8.43.tar.bz2
+>  # License files, locally calculated
+> -sha256 a5fce68baf797e0918463a4437ef75984c41118f43850ddeabda1b5a90154309
+> LICENCE
+> +sha256  0dd9c13864dbb9ee4d77a1557e96be29b2d719fb6584192ee36611aae264c4a3
+> LICENCE
+> +# Locally calculated
+> +sha256  19108658b23b3ec5058edc9f66ac545ea19f9537234be1ec62b714c84399366d
+> pcre-8.44.tar.bz2
+> diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+> index 595cda8a53..3c280e593f 100644
+> --- a/package/pcre/pcre.mk
+> +++ b/package/pcre/pcre.mk
+> @@ -4,7 +4,7 @@
+>  #
+>
+>  ################################################################################
+>
+> -PCRE_VERSION = 8.43
+> +PCRE_VERSION = 8.44
+>  PCRE_SITE = https://ftp.pcre.org/pub/pcre
+>  PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+>  PCRE_LICENSE = BSD-3-Clause
+> --
+> 2.17.1
+>
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zstd/zstd.hash | 8 ++++----
- package/zstd/zstd.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+-- 
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 8a69261314..b764917c8f 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,6 +1,6 @@
--# Locally computed
--sha256 5eda3502ecc285c3c92ee0cc8cd002234dee39d539b3f692997a0e80de1d33de zstd-1.4.3.tar.gz
-+# From https://github.com/facebook/zstd/releases/download/v1.4.5/zstd-1.4.5.tar.gz.sha256
-+sha256  98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e  zstd-1.4.5.tar.gz
- 
- # License files (locally computed as well)
--sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
--sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505 COPYING
-+sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
-+sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 765fa6dd56..e2ba12b058 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--ZSTD_VERSION = 1.4.3
--ZSTD_SITE = $(call github,facebook,zstd,v$(ZSTD_VERSION))
-+ZSTD_VERSION = 1.4.5
-+ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
- ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
+*Matthew Weber | Associate Director Software Engineer | Commercial Avionics*
+
+*COLLINS AEROSPACE*
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+*Tel:* +1 319 295 7349 | *FAX:* +1 319 263 6099
+
+*matthew.weber at collins.com <matthew.weber@collins.com>* | *collinsaerospace.com
+<http://collinsaerospace.com>*
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated companies.
+If you are not the intended recipient, please 1) Do not disclose, copy,
+distribute or use this message or its contents. 2) Advise the sender by
+return email. 3) Delete all copies (including all attachments) from your
+computer. Your cooperation is greatly appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
+
+
+ALPHA BRAVO COLLINS | Aerospace Redefined
+
+         __ l __
+
+ \- - - -o-(_)-o- - - -/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200714/8efa40d6/attachment.html>
