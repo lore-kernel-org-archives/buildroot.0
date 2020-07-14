@@ -1,60 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Jul 2020 22:17:50 +0200
-Subject: [Buildroot] [PATCH v1] board/raspberrypi: fix rpi4/rpi4-64 genimage
- config files
-Message-ID: <20200714201750.22289-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Jul 2020 22:19:04 +0200
+Subject: [Buildroot] [git commit] package/qemu: add optional usb-redir
+ support
+Message-ID: <20200714201523.BD9CA7FFF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 'package/rpi-firmware: fix startup file names' ([1]) the
-start and fixup file names are normalized to start.elf/fixup.dat,
-adjust the rpi4 genimage config files accordingly.
+commit: https://git.buildroot.net/buildroot/commit/?id=3eab44d9a3bf776204bfe9f871f3b0828b566c07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-  ERROR: file(rpi-firmware/fixup4.dat): stat(.../images/rpi-firmware/fixup4.dat) failed: No such file or directory
-  ERROR: vfat(boot.vfat): could not setup rpi-firmware/fixup4.dat
-
-[1] https://git.buildroot.net/buildroot/commit/?id=1bdc0334ff6273761b2e7fda730cdcc7e1f46862
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/raspberrypi/genimage-raspberrypi4-64.cfg | 4 ++--
- board/raspberrypi/genimage-raspberrypi4.cfg    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qemu/qemu.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi4-64.cfg b/board/raspberrypi/genimage-raspberrypi4-64.cfg
-index 3c480e98f0..854e0c7e31 100644
---- a/board/raspberrypi/genimage-raspberrypi4-64.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi4-64.cfg
-@@ -4,8 +4,8 @@ image boot.vfat {
-       "bcm2711-rpi-4-b.dtb",
-       "rpi-firmware/cmdline.txt",
-       "rpi-firmware/config.txt",
--      "rpi-firmware/fixup4.dat",
--      "rpi-firmware/start4.elf",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-       "rpi-firmware/overlays",
-       "Image"
-     }
-diff --git a/board/raspberrypi/genimage-raspberrypi4.cfg b/board/raspberrypi/genimage-raspberrypi4.cfg
-index 4e4742f3ef..60e1f23bcc 100644
---- a/board/raspberrypi/genimage-raspberrypi4.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi4.cfg
-@@ -4,8 +4,8 @@ image boot.vfat {
-       "bcm2711-rpi-4-b.dtb",
-       "rpi-firmware/cmdline.txt",
-       "rpi-firmware/config.txt",
--      "rpi-firmware/fixup4.dat",
--      "rpi-firmware/start4.elf",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-       "rpi-firmware/overlays",
-       "zImage"
-     }
--- 
-2.27.0
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index a68f37542c..c2872a2748 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -140,6 +140,13 @@ else
+ QEMU_OPTS += --disable-spice
+ endif
+ 
++ifeq ($(BR2_PACKAGE_USBREDIR),y)
++QEMU_OPTS += --enable-usb-redir
++QEMU_DEPENDENCIES += usbredir
++else
++QEMU_OPTS += --disable-usb-redir
++endif
++
+ # Override CPP, as it expects to be able to call it like it'd
+ # call the compiler.
+ define QEMU_CONFIGURE_CMDS
+@@ -172,7 +179,6 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-docs \
+ 			--disable-rbd \
+ 			--disable-libiscsi \
+-			--disable-usb-redir \
+ 			--disable-strip \
+ 			--disable-sparse \
+ 			--disable-mpath \
