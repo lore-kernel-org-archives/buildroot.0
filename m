@@ -1,101 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 Jul 2020 22:24:07 +0200
-Subject: [Buildroot] [PATCH v1 3/3] package/uredir: new package
-In-Reply-To: <20200714202407.23575-1-ps.report@gmx.net>
-References: <20200714202407.23575-1-ps.report@gmx.net>
-Message-ID: <20200714202407.23575-3-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 22:28:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zstd: bump to version 1.4.5
+Message-ID: <20200714202850.1441606-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The provided download hash ([1]) differes from actual one, so use
-the locally calculated one.
+- Get official tarball and its hash
+- Update indentation in hash file (two spaces)
 
-[1] https://github.com/troglobit/uredir/releases/download/v3.3/uredir-3.3.tar.gz.md5
+This is a fairly important release which includes performance
+improvements and new major CLI features. It also fixes a few corner
+cases, making it a recommended upgrade.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+https://github.com/facebook/zstd/releases/tag/v1.4.5
+https://github.com/facebook/zstd/releases/tag/v1.4.4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/uredir/Config.in   |  9 +++++++++
- package/uredir/uredir.hash |  4 ++++
- package/uredir/uredir.mk   | 15 +++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/uredir/Config.in
- create mode 100644 package/uredir/uredir.hash
- create mode 100644 package/uredir/uredir.mk
+ package/zstd/zstd.hash | 8 ++++----
+ package/zstd/zstd.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b07bb040c2..c0006d046a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2047,6 +2047,7 @@ F:	package/qt5/
- F:	package/quotatool/
- F:	package/racehound/
- F:	package/redir/
-+F:	package/uredir/
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 8a69261314..b764917c8f 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,6 +1,6 @@
+-# Locally computed
+-sha256 5eda3502ecc285c3c92ee0cc8cd002234dee39d539b3f692997a0e80de1d33de zstd-1.4.3.tar.gz
++# From https://github.com/facebook/zstd/releases/download/v1.4.5/zstd-1.4.5.tar.gz.sha256
++sha256  98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e  zstd-1.4.5.tar.gz
  
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
- F:	package/sdl2_gfx/
-diff --git a/package/Config.in b/package/Config.in
-index c9601a01fe..86ed5fe696 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2231,6 +2231,7 @@ endif
- 	source "package/unbound/Config.in"
- 	source "package/ushare/Config.in"
- 	source "package/ussp-push/Config.in"
-+	source "package/uredir/Config.in"
- 	source "package/vde2/Config.in"
- 	source "package/vdr/Config.in"
- 	source "package/vdr-plugin-vnsiserver/Config.in"
-diff --git a/package/uredir/Config.in b/package/uredir/Config.in
-new file mode 100644
-index 0000000000..99206cfe47
---- /dev/null
-+++ b/package/uredir/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_UREDIR
-+	bool "uredir"
-+	select BR2_PACKAGE_LIBUEV
-+	help
-+	  A small Linux daemon to redirect UDP connections. It can be
-+	  used to forward connections on small and embedded systems that
-+	  do not have (or want to use) iptables.
-+
-+	  https://github.com/troglobit/uredir
-diff --git a/package/uredir/uredir.hash b/package/uredir/uredir.hash
-new file mode 100644
-index 0000000000..d3dddbcaa2
---- /dev/null
-+++ b/package/uredir/uredir.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+md5  154c90eca41909b80cc8c00e567a00e7  uredir-3.3.tar.gz
-+# License files
-+sha256  e4b8fd3375ce44e5e03be199724a8785510ea5fa58ed92a7a34fd0ccbd35db10  LICENSE
-diff --git a/package/uredir/uredir.mk b/package/uredir/uredir.mk
-new file mode 100644
-index 0000000000..8d74a0fb3d
---- /dev/null
-+++ b/package/uredir/uredir.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# uredir
-+#
-+################################################################################
-+
-+UREDIR_VERSION = 3.3
-+UREDIR_SITE = $(call github,troglobit,uredir,v$(UREDIR_VERSION))
-+UREDIR_LICENSE = ISC
-+UREDIR_LICENSE_FILES = LICENSE
-+# no configure provided by tarball download
-+UREDIR_AUTORECONF = YES
-+UREDIR_DEPENDENCIES = host-pkgconf libuev
-+
-+$(eval $(autotools-package))
+ # License files (locally computed as well)
+-sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+-sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505 COPYING
++sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
++sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 765fa6dd56..e2ba12b058 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ZSTD_VERSION = 1.4.3
+-ZSTD_SITE = $(call github,facebook,zstd,v$(ZSTD_VERSION))
++ZSTD_VERSION = 1.4.5
++ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+ ZSTD_LICENSE_FILES = LICENSE COPYING
 -- 
 2.27.0
