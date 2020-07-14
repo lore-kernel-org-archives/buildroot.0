@@ -1,33 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 16:03:24 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/cups-filters: fix build without dejavu font
-In-Reply-To: <CAPi7W80Xhbo9DWmTbY+5ykMF068HFCiXOQMEfmZzVHj+Y_nwuQ@mail.gmail.com>
-References: <20200714112308.3264764-1-fontaine.fabrice@gmail.com>
- <20200714144735.56a11bb9@windsurf.home>
- <CAPi7W81nhSFN09_=mR2g8A5kHL1vHzYCzCjarZWWtrAMEDvLCA@mail.gmail.com>
- <20200714154922.0bad332b@windsurf.home>
- <CAPi7W80Xhbo9DWmTbY+5ykMF068HFCiXOQMEfmZzVHj+Y_nwuQ@mail.gmail.com>
-Message-ID: <20200714160324.41f608f2@windsurf.home>
+Date: Tue, 14 Jul 2020 16:11:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gvfs: bump to version 1.44.1
+In-Reply-To: <20200412125747.1073025-1-fontaine.fabrice@gmail.com>
+References: <20200412125747.1073025-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200714161113.6f48c925@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Jul 2020 15:55:18 +0200
+On Sun, 12 Apr 2020 14:57:47 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> > I think it would be better to not hardcode any path at all, so perhaps
-> > Yann's suggestion of using /dev/null is a good option here.  
-> Then I'll send a new pull request upstream that replaces "test -f" by
-> "test -e" because /dev/null is not a regular file.
+> - Remove all patches (already in version)
+> - Move to meson-package
+> - Add new gsettings-desktop-schemas mandatory dependency
+> - gdu option doesn't exist anymore:
+>   https://gitlab.gnome.org/GNOME/gvfs/-/commit/1db029df72bcd50dd877d388c2e0934d8ed3d321
+> - Use new gcrypt otion
+> - systemd-login option has been replaced by logind option
+> - avahi option has been replaced by dnsd option
+> - gtk3 optional dependency has been removed since
+>   https://gitlab.gnome.org/GNOME/gvfs/-/commit/dff13283c943c8b10265bd3925d86f17cdc4be6f
+> - Disable new sftp backend:
+>   https://gitlab.gnome.org/GNOME/gvfs/-/commit/44d45dca5d1ab2369fa7e5c2789b31c51e44f985
+> - Disable fuse (depends on fuse3 which is not available on buildroot)
+> - Remove gvfs-less workaround (not installed anymore)
+> - Update indentation of hash file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Well, the patch that you have accepted anyway disables the check when
-cross_compiling=yes, so we should be good, no?
+Thanks, I've applied, with just one change, see below.
+
+> +GVFS_CONF_ENV = LIBS="$(TARGET_NLS_LIBS)"
+
+I didn't actually test if this works or not, but none of our meson
+packages add TARGET_NLS_LIBS this way. See:
+
+$ git grep TARGET_NLS_LIBS $(git grep -l meson-package)
+
+so I've changed to:
+
+GVFS_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+
+to match what we do in other packages.
+
+Thanks!
 
 Thomas
--- 
+--  
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
