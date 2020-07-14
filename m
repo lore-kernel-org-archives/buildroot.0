@@ -1,71 +1,99 @@
-From: Robert Hancock <hancock@sedsystems.ca>
-Date: Tue, 14 Jul 2020 10:23:43 -0600
-Subject: [Buildroot] [PATCH] package/scons: explicitly specify host
- Python 3
-In-Reply-To: <20200714101510.378d1909@windsurf.home>
-References: <20200714033927.1516172-1-hancock@sedsystems.ca>
- <20200714101510.378d1909@windsurf.home>
-Message-ID: <fcb7c8aa-4265-c6dc-813f-94712df112e2@sedsystems.ca>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 18:31:52 +0200
+Subject: [Buildroot] [PATCH 2/2] package/oracle-mysql: don't use bundled zlib
+In-Reply-To: <20200714163152.994504-1-fontaine.fabrice@gmail.com>
+References: <20200714163152.994504-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200714163152.994504-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-07-14 2:15 a.m., Thomas Petazzoni wrote:
-> On Mon, 13 Jul 2020 21:39:27 -0600
-> Robert Hancock <hancock@sedsystems.ca> wrote:
-> 
->> All packages using scons are now using Python 3 to run it, so
->> explicitly set scons as using host-python3. This avoids a
->> spurious host Python 2 dependency if BR2_PACKAGE_PYTHON3 is not
->> set (for example, if no Python is packaged for the target).
->>
->> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
->> ---
->>   package/scons/scons.mk | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
->> index da2ccceb08..a95fa7fd69 100644
->> --- a/package/scons/scons.mk
->> +++ b/package/scons/scons.mk
->> @@ -10,6 +10,8 @@ SCONS_LICENSE = MIT
->>   SCONS_LICENSE_FILES = LICENSE.txt
->>   SCONS_SETUP_TYPE = distutils
->>   
->> +HOST_SCONS_NEEDS_HOST_PYTHON = python3
-> 
-> I am just wondering if we should do our usual dance that consists in
-> relying on python2 if enabled, i.e something like this:
-> 
-> HOST_SCONS_NEEDS_HOST_PYTHON = $(if ($(BR2_PACKAGE_PYTHON),python,python3)
-> 
-> or if we simply stop doing this and say that we switch to just python3.
+As spotted by Thomas Petazzoni during review of
+https://patchwork.ozlabs.org/project/buildroot/patch/20200713215943.2240412-1-fontaine.fabrice at gmail.com,
+oracle-mysql uses its bundled version of zlib if it is not found on the
+system
 
-What you describe is basically the existing default behavior in 
-package/pkg-python.mk when *_NEEDS_HOST_PYTHON is not set, except that 
-the default is reversed, it defaults to python unless 
-BR2_PACKAGE_PYTHON3 is set. The problem with that is it conflates what 
-is selected for the target with what is needed on the host. In our 
-configuration, no Python is selected for the target, so a dependency on 
-host-python gets added, even though all of the packages using SCons 
-explicitly depend on host-python3 and run SCons using python3, so the 
-host-python dependency is pointless.
+So explictly disable zlib if needed and add a patch fixing build
+failures without it
 
-I went with this simple change in the SCons case, as because it doesn't 
-seem widely used (only 3 packages in Buildroot now), the chance that 
-another package will end up being added that both uses SCons and can't 
-use Python 3 to run it, seems quite unlikely.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0010-fix-build-without-zlib.patch         | 50 +++++++++++++++++++
+ package/oracle-mysql/oracle-mysql.mk          |  3 ++
+ 2 files changed, 53 insertions(+)
+ create mode 100644 package/oracle-mysql/0010-fix-build-without-zlib.patch
 
-> 
-> Titouan, what do you think ?
-> 
-> Thomas
-> 
-
+diff --git a/package/oracle-mysql/0010-fix-build-without-zlib.patch b/package/oracle-mysql/0010-fix-build-without-zlib.patch
+new file mode 100644
+index 0000000000..515369718f
+--- /dev/null
++++ b/package/oracle-mysql/0010-fix-build-without-zlib.patch
+@@ -0,0 +1,50 @@
++fix build without zlib
++
++Don't include unconditionally zlib.h
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++diff -durN mysql-5.1.73.orig/mysys/checksum.c mysql-5.1.73/mysys/checksum.c
++--- mysql-5.1.73.orig/mysys/checksum.c	2020-07-14 17:34:38.212304432 +0200
+++++ mysql-5.1.73/mysys/checksum.c	2020-07-14 18:06:45.076342493 +0200
++@@ -16,7 +16,9 @@
++ 
++ #include <my_global.h>
++ #include <my_sys.h>
+++#ifdef HAVE_COMPRESS
++ #include <zlib.h>
+++#endif
++ 
++ /*
++   Calculate a long checksum for a memoryblock.
++diff -durN mysql-5.1.73.orig/sql/item_strfunc.cc mysql-5.1.73/sql/item_strfunc.cc
++--- mysql-5.1.73.orig/sql/item_strfunc.cc	2020-07-14 17:34:38.160304431 +0200
+++++ mysql-5.1.73/sql/item_strfunc.cc	2020-07-14 18:04:36.956339962 +0200
++@@ -35,7 +35,9 @@
++ #include "my_md5.h"
++ #include "sha1.h"
++ #include "my_aes.h"
+++#ifdef HAVE_COMPRESS
++ #include <zlib.h>
+++#endif
++ C_MODE_START
++ #include "../mysys/my_static.h"			// For soundex_map
++ C_MODE_END
++diff -durN mysql-5.1.73.orig/sql/sql_table.cc mysql-5.1.73/sql/sql_table.cc
++--- mysql-5.1.73.orig/sql/sql_table.cc	2020-07-14 17:34:38.156304431 +0200
+++++ mysql-5.1.73/sql/sql_table.cc	2020-07-14 18:14:48.628352044 +0200
++@@ -1681,6 +1681,7 @@
++       goto end;
++     }
++   }
+++#ifdef HAVE_COMPRESS
++   if (flags & WFRM_PACK_FRM)
++   {
++     /*
++@@ -1702,6 +1703,7 @@
++     }
++     error= my_delete(shadow_frm_name, MYF(MY_WME));
++   }
+++#endif
++   if (flags & WFRM_INSTALL_SHADOW)
++   {
++ #ifdef WITH_PARTITION_STORAGE_ENGINE
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index 8a8613a3d1..1449c58e41 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -68,6 +68,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ ORACLE_MYSQL_DEPENDENCIES += zlib
++ORACLE_MYSQL_CONF_OPTS += --with-zlib-dir=$(STAGING_DIR)/usr
++else
++ORACLE_MYSQL_CONF_OPTS += --without-zlib-dir
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ORACLE_MYSQL_SERVER),y)
 -- 
-Robert Hancock
-Senior Hardware Designer
-SED Systems, a division of Calian Ltd.
-Email: hancock at sedsystems.ca
+2.27.0
