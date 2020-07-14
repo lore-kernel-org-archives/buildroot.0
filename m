@@ -1,44 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 22:16:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/open2300: link with -lz only if
- needed
-Message-ID: <20200714201630.1407071-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 14 Jul 2020 22:17:50 +0200
+Subject: [Buildroot] [PATCH v1] board/raspberrypi: fix rpi4/rpi4-64 genimage
+ config files
+Message-ID: <20200714201750.22289-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-oracle-mysql won't built its own bundled zlib since commit
-6fed83a03047535d4a9c849352f8c21b30177fcd so don't unconditionally link
-with zlib
-
-It should be noted that oracle-mysql has a pkg-config file since version
-5.7.22 and
-https://github.com/mysql/mysql-server/commit/f701787602583464fce4f44d44f67471a06c9b70
-but we're stuck in version 5.1.x and can't easily import this commit
-because upstream switched to cmake
+Since commit 'package/rpi-firmware: fix startup file names' ([1]) the
+start and fixup file names are normalized to start.elf/fixup.dat,
+adjust the rpi4 genimage config files accordingly.
 
 Fixes:
- - No autobuilder failures yet
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  ERROR: file(rpi-firmware/fixup4.dat): stat(.../images/rpi-firmware/fixup4.dat) failed: No such file or directory
+  ERROR: vfat(boot.vfat): could not setup rpi-firmware/fixup4.dat
+
+[1] https://git.buildroot.net/buildroot/commit/?id=1bdc0334ff6273761b2e7fda730cdcc7e1f46862
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/open2300/open2300.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/raspberrypi/genimage-raspberrypi4-64.cfg | 4 ++--
+ board/raspberrypi/genimage-raspberrypi4.cfg    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index 589d344b97..a9087279eb 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -21,7 +21,7 @@ OPEN2300_DEPENDENCIES += mysql
- OPEN2300_BINS += mysql2300 mysqlhistlog2300
- OPEN2300_CFLAGS += -I$(STAGING_DIR)/usr/include/mysql
- OPEN2300_LDFLAGS += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
--ifeq ($(BR2_STATIC_LIBS),y)
-+ifeq ($(BR2_PACKAGE_ZLIB)$(BR2_STATIC_LIBS),yy)
- # mysql needs -lz, so we need to specify it for static builds
- OPEN2300_LDFLAGS += -lz
- endif
+diff --git a/board/raspberrypi/genimage-raspberrypi4-64.cfg b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+index 3c480e98f0..854e0c7e31 100644
+--- a/board/raspberrypi/genimage-raspberrypi4-64.cfg
++++ b/board/raspberrypi/genimage-raspberrypi4-64.cfg
+@@ -4,8 +4,8 @@ image boot.vfat {
+       "bcm2711-rpi-4-b.dtb",
+       "rpi-firmware/cmdline.txt",
+       "rpi-firmware/config.txt",
+-      "rpi-firmware/fixup4.dat",
+-      "rpi-firmware/start4.elf",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
+       "rpi-firmware/overlays",
+       "Image"
+     }
+diff --git a/board/raspberrypi/genimage-raspberrypi4.cfg b/board/raspberrypi/genimage-raspberrypi4.cfg
+index 4e4742f3ef..60e1f23bcc 100644
+--- a/board/raspberrypi/genimage-raspberrypi4.cfg
++++ b/board/raspberrypi/genimage-raspberrypi4.cfg
+@@ -4,8 +4,8 @@ image boot.vfat {
+       "bcm2711-rpi-4-b.dtb",
+       "rpi-firmware/cmdline.txt",
+       "rpi-firmware/config.txt",
+-      "rpi-firmware/fixup4.dat",
+-      "rpi-firmware/start4.elf",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
+       "rpi-firmware/overlays",
+       "zImage"
+     }
 -- 
 2.27.0
