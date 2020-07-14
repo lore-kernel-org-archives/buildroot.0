@@ -1,47 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 10:15:10 +0200
-Subject: [Buildroot] [PATCH] package/scons: explicitly specify host
- Python 3
-In-Reply-To: <20200714033927.1516172-1-hancock@sedsystems.ca>
-References: <20200714033927.1516172-1-hancock@sedsystems.ca>
-Message-ID: <20200714101510.378d1909@windsurf.home>
+Date: Tue, 14 Jul 2020 10:20:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libodb-mysql: fix static build
+In-Reply-To: <20200713215943.2240412-1-fontaine.fabrice@gmail.com>
+References: <20200713215943.2240412-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200714102035.0536d2bd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 21:39:27 -0600
-Robert Hancock <hancock@sedsystems.ca> wrote:
+On Mon, 13 Jul 2020 23:59:43 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> All packages using scons are now using Python 3 to run it, so
-> explicitly set scons as using host-python3. This avoids a
-> spurious host Python 2 dependency if BR2_PACKAGE_PYTHON3 is not
-> set (for example, if no Python is packaged for the target).
+> mysql needs -lz for static build
 > 
-> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a5447c5105f15606ed562b39ca84c06e7e6b78c0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/scons/scons.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/libodb-mysql/libodb-mysql.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-> index da2ccceb08..a95fa7fd69 100644
-> --- a/package/scons/scons.mk
-> +++ b/package/scons/scons.mk
-> @@ -10,6 +10,8 @@ SCONS_LICENSE = MIT
->  SCONS_LICENSE_FILES = LICENSE.txt
->  SCONS_SETUP_TYPE = distutils
+> diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
+> index 97cbcddf93..1a12220222 100644
+> --- a/package/libodb-mysql/libodb-mysql.mk
+> +++ b/package/libodb-mysql/libodb-mysql.mk
+> @@ -13,4 +13,9 @@ LIBODB_MYSQL_LICENSE = GPL-2.0
+>  LIBODB_MYSQL_LICENSE_FILES = LICENSE
+>  LIBODB_MYSQL_DEPENDENCIES = libodb mysql
 >  
-> +HOST_SCONS_NEEDS_HOST_PYTHON = python3
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +# mysql needs -lz, so we need to specify it for static builds
+> +LIBODB_MYSQL_CONF_ENV += LIBS=-lz
+> +endif
 
-I am just wondering if we should do our usual dance that consists in
-relying on python2 if enabled, i.e something like this:
+zlib is only an optional dependency of mysql. When I build just
+oracle-mysql, the libmysqlclient libraries are not linked with zlib:
 
-HOST_SCONS_NEEDS_HOST_PYTHON = $(if ($(BR2_PACKAGE_PYTHON),python,python3)
+ 0x00000001 (NEEDED)                     Shared library: [libcrypt.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libnsl.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000e (SONAME)                     Library soname: [libmysqlclient.so.16]
 
-or if we simply stop doing this and say that we switch to just python3.
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libcrypt.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libnsl.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.6]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.6]
+ 0x0000000e (SONAME)                     Library soname: [libmysqlclient_r.so.16]
 
-Titouan, what do you think ?
+So you cannot forcefully link with zlib, as it may not be present.
+According to
+https://dev.mysql.com/doc/refman/5.7/en/c-api-building-clients-pkg-config.html,
+MySQL provides a pkg-config file, but I don't have it installed.
+Perhaps it is due to the fact that we use an ancient MySQL version
+(5.1.x) ?
 
 Thomas
 -- 
