@@ -1,47 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 23:49:15 +0200
-Subject: [Buildroot] [git commit] package/open2300: use mysql_config to
- retrieve cflags and libs
-Message-ID: <20200714214641.482DC86D0D@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 15 Jul 2020 00:23:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/optee-client: fix static build
+Message-ID: <20200714222312.2462708-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efffb3ea45fccf5926be52ffa12c0acb0c234d6b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-oracle-mysql won't built its own bundled zlib since commit
-6fed83a03047535d4a9c849352f8c21b30177fcd so don't unconditionally link
-with zlib instead use mysql_config to retrieve cflags and libs as
-suggested by Thomas Petazzoni in review of first iteration
+Add a patch that fix a build failure on version 3.9.0
 
 Fixes:
- - No autobuilder failures yet
+ - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/open2300/open2300.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ ...teec-CMakeLists.txt-fix-static-build.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
 
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index 589d344b97..0ffb8b5046 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -19,12 +19,8 @@ OPEN2300_LDFLAGS = $(TARGET_LDFLAGS)
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- OPEN2300_DEPENDENCIES += mysql
- OPEN2300_BINS += mysql2300 mysqlhistlog2300
--OPEN2300_CFLAGS += -I$(STAGING_DIR)/usr/include/mysql
--OPEN2300_LDFLAGS += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
--ifeq ($(BR2_STATIC_LIBS),y)
--# mysql needs -lz, so we need to specify it for static builds
--OPEN2300_LDFLAGS += -lz
--endif
-+OPEN2300_CFLAGS += $(shell $(STAGING_DIR)/usr/bin/mysql_config --cflags)
-+OPEN2300_LDFLAGS += $(shell $(STAGING_DIR)/usr/bin/mysql_config --libs)
- endif
- 
- define OPEN2300_BUILD_CMDS
+diff --git a/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+new file mode 100644
+index 0000000000..5307c7032c
+--- /dev/null
++++ b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+@@ -0,0 +1,55 @@
++From dedd04034fd246c5726ad875e8207c821e9471b7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Jul 2020 00:09:21 +0200
++Subject: [PATCH] libckteec/CMakeLists.txt: fix static build
++
++Remove SHARED from add_library call to avoid the following build failure
++when the toolchain does not support shared library:
++
++[ 78%] Linking C shared library libckteec.so
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open64.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux[ 84%] Building C object tee-supplicant/CMakeFiles/tee-supplicant.dir/src/teec_ta_load.c.o
++-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(__syscall_fcntl.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: further warnings about FDE encoding preventing .eh_frame_hdr generation dropped
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.33.1 assertion fail elf32-microblaze.c:1542
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/crtbeginT.o: probably compiled without -fPIC?
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
++collect2: error: ld returned 1 exit status
++libckteec/CMakeFiles/ckteec.dir/build.make:144: recipe for target 'libckteec/libckteec.so.0.1.0' failed
++
++This build failure is raised on version 3.9.0 since
++https://github.com/ffontaine/optee_client/commit/fa679fc6f1f0c6240513ec69c63f0f89c2c4dd99
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OP-TEE/optee_client/pull/215]
++---
++ libckteec/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libckteec/CMakeLists.txt b/libckteec/CMakeLists.txt
++index f0e14d1..615c9fe 100644
++--- a/libckteec/CMakeLists.txt
+++++ b/libckteec/CMakeLists.txt
++@@ -33,7 +33,7 @@ set (SRC
++ ################################################################################
++ # Built library
++ ################################################################################
++-add_library (ckteec SHARED ${SRC})
+++add_library (ckteec ${SRC})
++ 
++ set_target_properties (ckteec PROPERTIES
++ 	VERSION ${PROJECT_VERSION}
++-- 
++2.27.0
++
+-- 
+2.27.0
