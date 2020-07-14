@@ -1,37 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 23:18:04 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/libodb-mysql: fix static build
-Message-ID: <20200714211804.2434281-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Jul 2020 23:40:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version
+ 86bd30a
+In-Reply-To: <1592996759-31938-1-git-send-email-pjtexier@koncepto.io>
+References: <1592996759-31938-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20200714234036.13eaffca@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use mysql_config to help libodb-mysql to retrieve mysql dependencies
-such as -lz
+On Wed, 24 Jun 2020 13:05:59 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/a5447c5105f15606ed562b39ca84c06e7e6b78c0
+> This includes the following changes:
+> 
+> 86bd30a Restore ability to feed script file via stdin, using `-s -`.
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+>  package/libubootenv/libubootenv.hash | 2 +-
+>  package/libubootenv/libubootenv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Use mysql_config to avoid hardcoding -lz
+Applied to master, thanks.
 
- package/libodb-mysql/libodb-mysql.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
-index 97cbcddf93..835e5bc6bf 100644
---- a/package/libodb-mysql/libodb-mysql.mk
-+++ b/package/libodb-mysql/libodb-mysql.mk
-@@ -12,5 +12,6 @@ LIBODB_MYSQL_INSTALL_STAGING = YES
- LIBODB_MYSQL_LICENSE = GPL-2.0
- LIBODB_MYSQL_LICENSE_FILES = LICENSE
- LIBODB_MYSQL_DEPENDENCIES = libodb mysql
-+LIBODB_MYSQL_CONF_ENV = LIBS="$(shell $(STAGING_DIR)/usr/bin/mysql_config --libs)"
- 
- $(eval $(autotools-package))
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
