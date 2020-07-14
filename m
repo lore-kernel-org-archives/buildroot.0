@@ -1,50 +1,50 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Tue, 14 Jul 2020 11:57:50 -0500
-Subject: [Buildroot] [PATCH v2 2/2] package/qemu: add usb-redir support
-In-Reply-To: <20200714165750.33726-1-jared.bents@rockwellcollins.com>
-References: <20200714165750.33726-1-jared.bents@rockwellcollins.com>
-Message-ID: <20200714165750.33726-2-jared.bents@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 18:58:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: don't use --{en,
+ dis}able-iptables
+Message-ID: <20200714165800.995534-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-update to add usb-redir support to qemu if usbredir is enabled
+Commit 5fcee496df262fcc304ad22738441df35a960a67 wrongly replaced
+--{en,dis}able-libiptc by --{en,dis}able-iptables.
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
---
-v1->v2: N/A. Update in v2 was to handle suboptions for vnc support.
-        No change for usb-redir support.
+Indeed, this will raise the following build failure if
+--disable-iptables and --disable-ipset are both set:
+
+configure: error: disable-libipset requires vrrp and iptables
+
+The issue is that when iptables flag is set, it will first check for
+libiptc and then for ipset so setting --disable-iptables will disable
+libiptc and ipset (which is not what we wants)
+
+As iptables flag is enabled by default, just drop
+--{en,dis}able-iptables to keep it simple
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a1712b2cc3ad878e6876325ec7d4c434d0d9d11b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qemu/qemu.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/keepalived/keepalived.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index ff234622f4..d08dcdc057 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -141,6 +141,13 @@ else
- QEMU_OPTS += --disable-spice
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index df1ab6d306..64224e66b4 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -41,9 +41,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_IPTABLES),y)
+ KEEPALIVED_DEPENDENCIES += iptables
+-KEEPALIVED_CONF_OPTS += --enable-iptables
+-else
+-KEEPALIVED_CONF_OPTS += --disable-iptables
  endif
  
-+ifeq ($(BR2_PACKAGE_USBREDIR),y)
-+QEMU_OPTS += --enable-usb-redir
-+QEMU_DEPENDENCIES += usbredir
-+else
-+QEMU_OPTS += --disable-usb-redir
-+endif
-+
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define QEMU_CONFIGURE_CMDS
-@@ -173,7 +180,6 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-docs \
- 			--disable-rbd \
- 			--disable-libiscsi \
--			--disable-usb-redir \
- 			--disable-strip \
- 			--disable-sparse \
- 			--disable-mpath \
+ ifeq ($(BR2_PACKAGE_LIBNFTNL),y)
 -- 
-2.17.1
+2.27.0
