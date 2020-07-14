@@ -1,47 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 15:34:45 +0200
-Subject: [Buildroot] [git commit] package/optee-examples: bump to version
- 3.9.0
-Message-ID: <20200714133102.0136C82295@busybox.osuosl.org>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Tue, 14 Jul 2020 15:35:22 +0200
+Subject: [Buildroot] [PATCH] system/skeleton: make /var/run a symlink to
+ /run
+In-Reply-To: <20200714151459.6ee4ca7a@windsurf.home>
+References: <20200629104749.46938-1-nolange79@gmail.com>
+ <20200714151459.6ee4ca7a@windsurf.home>
+Message-ID: <CADYdroPBcpgMkNme2OP8jz3SX-+3J7eDqp0r8UbWXh_swvNkVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a97e503932187b3ef22113ac37675bb0c5837cc7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Di., 14. Juli 2020 um 15:15 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> Hello Norbert,
+>
+> On Mon, 29 Jun 2020 12:47:49 +0200
+> Norbert Lange <nolange79@gmail.com> wrote:
+>
+> > both systemd and FHS3 denote /var/run as a compatibility directory,
+> > new systems should use /run.
+> >
+> > There seems to be little reason to not switch to the new FHS layout
+> > with buildroot, and adding the compatibility symlink.
+> >
+> > [1] - https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s13.html
+>
+> The commit log is a bit confusing here, especially when looking at the
+> patch. Indeed, we see you are *removing* code that creates /var/run as
+> a symlink to /run, but you're saying that you're making /var/run a
+> symlink to /run.
+>
+> However, what really happens is that /var/run was already a symlink to
+> /run when the selected init system is systemd, but not with other init
+> systems. What your patch does is that it moves all init system to this
+> convention.
+>
+> So perhaps a better commit title would be:
+>
+> ===
+>
+> system/skeleton: always make /var/run a symlink to /run
+>
+> While Buildroot was already making /var/run a symlink to /run when
+> systemd was selected as the init system, it was not the case with other
+> init systems.
+>
+> However, FHS3 denotes /var/run as a compatibility directory, and new
+> systems should use /run. So let's switch to this convention regardless
+> of the init system being used.
+>
+> ===
 
-Bump OP-TEE Examples package version to OP-TEE release 3.9.0.
+Fine with that, can you change that pls?
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/optee-examples/optee-examples.hash | 4 ++--
- package/optee-examples/optee-examples.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> Also, was there any specific motivation/issue for this change, or just
+> make things "nicer" ?
 
-diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
-index 8b14e43ad4..ff7a49a6cb 100644
---- a/package/optee-examples/optee-examples.hash
-+++ b/package/optee-examples/optee-examples.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_examples/archive/3.7.0.tar.gz
--sha256 6c5600871edc64dbdca08dfe40b3161bfb55a11e6004699957c6da8f67b2a475  optee-examples-3.7.0.tar.gz
-+# From https://github.com/linaro-swg/optee_examples/archive/3.9.0.tar.gz
-+sha256 deb5161ac9b9c1bf12963d28992e3941452a78bcbd518169b53c0798393eb386  optee-examples-3.9.0.tar.gz
- # Locally computed
- sha256 6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
-index 093b8600c1..d48707216b 100644
---- a/package/optee-examples/optee-examples.mk
-+++ b/package/optee-examples/optee-examples.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPTEE_EXAMPLES_VERSION = 3.7.0
-+OPTEE_EXAMPLES_VERSION = 3.9.0
- OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
- OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
- OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
+Removal of stuff like this:
+ifeq ($(BR2_INIT_SYSTEMD),y)
+LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
+endif
+
+You get warnings everytime you start systemd with units using a
+var/run directory
+(eg. dbus). So cleaning that up would be the next step once this
+change is accepted.
+
+Norbert
