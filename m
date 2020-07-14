@@ -1,24 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 22:06:17 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lxc: disable examples
-In-Reply-To: <20200714174851.1399083-1-fontaine.fabrice@gmail.com>
-References: <20200714174851.1399083-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200714220617.38a47676@windsurf.home>
+Date: Tue, 14 Jul 2020 22:08:51 +0200
+Subject: [Buildroot] [2020.02.x] package/pcre: security bump to 8.44
+In-Reply-To: <20200714194008.63423-1-matthew.weber@rockwellcollins.com>
+References: <20200714194008.63423-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200714220851.3d616930@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Jul 2020 19:48:50 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 14 Jul 2020 14:40:08 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lxc/lxc.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  * 0001-Kill-compatibility-bits.patch had a bugfix for the lcc
+>    compiler (https://vcs.pcre.org/pcre/code/trunk/pcrecpp.cc?r1=1735&r2=1752&pathrev=1763)
+>  * License file updated copyright date
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Both applied. Thanks!
+There is already a bump to 8.44 in master. Why do you send a separate
+patch doing the same thing, but for 2020.02.x ?
+
+I think in this kind of case, we should instead reply to the commit
+e-mail, and ask Peter to backport it to 2020.02.x.
+
+However, you label it as a security bump, without saying which
+vulnerability is being fixed. The original version bump commit did not
+label it as a security bump.
 
 Thomas
 -- 
