@@ -1,40 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 19:25:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: set USE_DL if needed
-Message-ID: <20200714172529.1048144-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 19:48:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lxc: disable examples
+Message-ID: <20200714174851.1399083-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-haproxy uses dladdr since version 2.2.0 and
-http://git.haproxy.org/?p=haproxy.git;a=commit;h=eb8b1ca3eb4c8d4688e1a4a1d9c1b91f68324e09
-
-So set USE_DL to enable linking with -ldl
-
-Fixes:
- - http://autobuild.buildroot.org/results/7bb76153b7dd8f392b247569c53d0f4cbf408371
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lxc/lxc.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 6f97840f6d..fba9a7c137 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -15,6 +15,10 @@ HAPROXY_MAKE_OPTS = \
- 	PREFIX=/usr \
- 	TARGET=custom
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 53e3c85c6d..7994dffcf5 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -13,7 +13,10 @@ LXC_INSTALL_STAGING = YES
+ # We're patching configure.ac
+ LXC_AUTORECONF = YES
  
-+ifneq ($(BR2_STATIC_LIBS),y)
-+HAPROXY_MAKE_OPTS += USE_DL=1
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- HAPROXY_LIBS += -latomic
- endif
+-LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
++LXC_CONF_OPTS = \
++	--disable-apparmor \
++	--disable-examples \
++	--with-distro=buildroot \
+ 	--disable-werror \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+ 
 -- 
 2.27.0
