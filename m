@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 10:13:40 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: delete debug libs when debug
- is not enabled
-In-Reply-To: <20200714022554.2045-1-danomimanchego123@gmail.com>
-References: <20200714022554.2045-1-danomimanchego123@gmail.com>
-Message-ID: <20200714101340.186cbf90@windsurf.home>
+Date: Tue, 14 Jul 2020 10:13:47 +0200
+Subject: [Buildroot] [PATCH] package/gpsd: bump version to 3.20
+In-Reply-To: <20200714033848.1516000-1-hancock@sedsystems.ca>
+References: <20200714033848.1516000-1-hancock@sedsystems.ca>
+Message-ID: <20200714101347.16e52a6c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 22:25:54 -0400
-Danomi Manchego <danomimanchego123@gmail.com> wrote:
+On Mon, 13 Jul 2020 21:38:48 -0600
+Robert Hancock <hancock@sedsystems.ca> wrote:
 
-> +ifneq ($(BR2_ENABLE_DEBUG),y)
-> +	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
-> +endif
+> Removes BR2_PACKAGE_GPSD_PPS config option, since PPS functionality is
+> no longer optional and always enabled in gpsd's SCons configuration.
+> 
+> Removed passing ntpshm=y to SCons since that feature is also no longer
+> optional.
+> 
+> Added a patch adapted from changes merged upstream post-3.20 to fix a
+> build failure during cross-compilation when checking sizeof(time_t)
+> and where shared libraries were being linked with ld rather than g++.
+> 
+> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> ---
+>  ...s-during-gpsd-3.20-cross-compilation.patch | 148 ++++++++++++++++++
+>  package/gpsd/Config.in                        |   3 -
+>  package/gpsd/gpsd.hash                        |   2 +-
+>  package/gpsd/gpsd.mk                          |   6 +-
+>  4 files changed, 150 insertions(+), 9 deletions(-)
+>  create mode 100644 package/gpsd/0001-Fix-errors-during-gpsd-3.20-cross-compilation.patch
 
-The thing is that BR2_ENABLE_DEBUG=y doesn't mean you want debugging
-symbols on the target, it means you want debugging symbols in staging.
-
-So, I adjusted this to:
-
-+ifneq ($(BR2_ENABLE_DEBUG):$(BR2_STRIP_strip),y:)
-+       rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
-+endif
-
-As BR2_ENABLE_DEBUG=y + BR2_STRIP_strip disabled is the best indication
-we have (I believe) to say "I want debugging symbols on the target".
-
-Applied with that change. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
