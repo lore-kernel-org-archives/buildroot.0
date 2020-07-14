@@ -1,41 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 22:11:30 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/cups-filters: fix build without dejavu font
-In-Reply-To: <20200714143402.4164670-1-fontaine.fabrice@gmail.com>
-References: <20200714143402.4164670-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200714221130.6e519e6b@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 14 Jul 2020 15:15:00 -0500
+Subject: [Buildroot] [2020.02.x] package/pcre: security bump to 8.44
+In-Reply-To: <20200714220851.3d616930@windsurf.home>
+References: <20200714194008.63423-1-matthew.weber@rockwellcollins.com>
+ <20200714220851.3d616930@windsurf.home>
+Message-ID: <CANQCQpZg+huuOz8hB7OohN=Z2E4bz7xajeebY7JoLP=6GbBHpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Jul 2020 16:34:02 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Thomas,
 
-> Since version 1.27.3, cups-filters needs dejavu (even if it is only used
-> for test programs):
-> https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
-> 
-> Add a patch to avoid this build failure when cross-compiling and set
-> test font path to /dev/null to avoid setting TESTFONT to an incorrect
-> host path
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3 (after review of Thomas Petazzoni):
->  - Set test font path to /dev/null
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Add a patch instead of adding dejavu dependency
 
-Applied to master, thanks.
+On Tue, Jul 14, 2020 at 3:09 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Tue, 14 Jul 2020 14:40:08 -0500
+> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> >  * 0001-Kill-compatibility-bits.patch had a bugfix for the lcc
+> >    compiler (https://vcs.pcre.org/pcre/code/trunk/pcrecpp.cc?r1=1735&r2=1752&pathrev=1763)
+> >  * License file updated copyright date
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> There is already a bump to 8.44 in master. Why do you send a separate
+> patch doing the same thing, but for 2020.02.x ?
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Agree, not needed.  I realized this afterwards.
+
+> I think in this kind of case, we should instead reply to the commit
+> e-mail, and ask Peter to backport it to 2020.02.x.
+
+I just checked and it was old enough that I don't have the original
+commit email.
+
+>
+> However, you label it as a security bump, without saying which
+> vulnerability is being fixed. The original version bump commit did not
+> label it as a security bump.
+
+Agree, should have included:
+
+CVE-2020-14155
+libpcre in PCRE before 8.44 allows an integer overflow via a large
+number after a (?C substring.
+
+Regards,
+Matt
