@@ -1,71 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 22:41:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/open2300: link with -lz only if
- needed
-In-Reply-To: <20200714223740.45585ef3@windsurf.home>
-References: <20200714201630.1407071-1-fontaine.fabrice@gmail.com>
- <20200714223740.45585ef3@windsurf.home>
-Message-ID: <CAPi7W81HwJVcM2VnVxjDZJHgdeAQY1T2+On98THu2YEqHM=F2Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Jul 2020 22:43:34 +0200
+Subject: [Buildroot] [git commit] package/zstd: bump to version 1.4.5
+Message-ID: <20200714203947.10BC186D31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mar. 14 juil. 2020 ? 22:37, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Tue, 14 Jul 2020 22:16:30 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > oracle-mysql won't built its own bundled zlib since commit
-> > 6fed83a03047535d4a9c849352f8c21b30177fcd so don't unconditionally link
-> > with zlib
-> >
-> > It should be noted that oracle-mysql has a pkg-config file since version
-> > 5.7.22 and
-> > https://github.com/mysql/mysql-server/commit/f701787602583464fce4f44d44f67471a06c9b70
-> > but we're stuck in version 5.1.x and can't easily import this commit
-> > because upstream switched to cmake
-> >
-> > Fixes:
-> >  - No autobuilder failures yet
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/open2300/open2300.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-> > index 589d344b97..a9087279eb 100644
-> > --- a/package/open2300/open2300.mk
-> > +++ b/package/open2300/open2300.mk
-> > @@ -21,7 +21,7 @@ OPEN2300_DEPENDENCIES += mysql
-> >  OPEN2300_BINS += mysql2300 mysqlhistlog2300
-> >  OPEN2300_CFLAGS += -I$(STAGING_DIR)/usr/include/mysql
-> >  OPEN2300_LDFLAGS += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
-> > -ifeq ($(BR2_STATIC_LIBS),y)
-> > +ifeq ($(BR2_PACKAGE_ZLIB)$(BR2_STATIC_LIBS),yy)
->
-> In fact, now that I think of it, why don't we use the mysql_config
-> script here ?
->
-> I.E:
->
-> OPEN2300_CFLAGS += $(shell $(STAGING_DIR)/usr/bin/mysql_config --cflags)
-> OPEN2300_LDFLAGS += $(shell $(STAGING_DIR)/usr/bin/mysql_config --libs)
->
-> this way the static linking mess can be hidden inside the mysql_config
-> script, and hopefully factored out from all the packages using mysql.
->
-> What do you think ?
-Indeed, this seems a good idea, I'll try it.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+commit: https://git.buildroot.net/buildroot/commit/?id=510b339818c628b794a38d736e2ba3414139cbf2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fabrice
+- Get official tarball and its hash
+- Update indentation in hash file (two spaces)
+
+This is a fairly important release which includes performance
+improvements and new major CLI features. It also fixes a few corner
+cases, making it a recommended upgrade.
+
+https://github.com/facebook/zstd/releases/tag/v1.4.5
+https://github.com/facebook/zstd/releases/tag/v1.4.4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zstd/zstd.hash | 8 ++++----
+ package/zstd/zstd.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index 8a69261314..b764917c8f 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,6 +1,6 @@
+-# Locally computed
+-sha256 5eda3502ecc285c3c92ee0cc8cd002234dee39d539b3f692997a0e80de1d33de zstd-1.4.3.tar.gz
++# From https://github.com/facebook/zstd/releases/download/v1.4.5/zstd-1.4.5.tar.gz.sha256
++sha256  98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e  zstd-1.4.5.tar.gz
+ 
+ # License files (locally computed as well)
+-sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+-sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505 COPYING
++sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
++sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 765fa6dd56..e2ba12b058 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ZSTD_VERSION = 1.4.3
+-ZSTD_SITE = $(call github,facebook,zstd,v$(ZSTD_VERSION))
++ZSTD_VERSION = 1.4.5
++ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+ ZSTD_LICENSE_FILES = LICENSE COPYING
