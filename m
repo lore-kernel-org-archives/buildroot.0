@@ -1,36 +1,35 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 13 Jul 2020 22:25:54 -0400
-Subject: [Buildroot] [PATCH 1/1] Makefile: delete debug libs when debug is
- not enabled
-Message-ID: <20200714022554.2045-1-danomimanchego123@gmail.com>
+From: Robert Hancock <hancock@sedsystems.ca>
+Date: Mon, 13 Jul 2020 21:39:27 -0600
+Subject: [Buildroot] [PATCH] package/scons: explicitly specify host Python 3
+Message-ID: <20200714033927.1516172-1-hancock@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchains, like the Linaro gcc7 toolchains, now install libstdc++ debug
-library symbols to /lib/debug, which can be as large as the library itself.
-This commit removes the extra debug content if debugging is not enabled.
+All packages using scons are now using Python 3 to run it, so
+explicitly set scons as using host-python3. This avoids a
+spurious host Python 2 dependency if BR2_PACKAGE_PYTHON3 is not
+set (for example, if no Python is packaged for the target).
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
 ---
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ package/scons/scons.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 04c29b1..3a81385 100644
---- a/Makefile
-+++ b/Makefile
-@@ -765,6 +765,9 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
-+ifneq ($(BR2_ENABLE_DEBUG),y)
-+	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
-+endif
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
- 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index da2ccceb08..a95fa7fd69 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -10,6 +10,8 @@ SCONS_LICENSE = MIT
+ SCONS_LICENSE_FILES = LICENSE.txt
+ SCONS_SETUP_TYPE = distutils
+ 
++HOST_SCONS_NEEDS_HOST_PYTHON = python3
++
+ HOST_SCONS_INSTALL_OPTS = \
+ 	--install-lib=$(HOST_DIR)/lib/scons-$(SCONS_VERSION)
  
 -- 
-2.7.4
+2.18.4
