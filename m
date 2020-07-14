@@ -1,64 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 22:48:59 +0200
-Subject: [Buildroot] [git commit] package/ngircd: security bump to version 26
-Message-ID: <20200714204615.DDCEB8708E@busybox.osuosl.org>
+Date: Tue, 14 Jul 2020 22:44:22 +0200
+Subject: [Buildroot] [git commit] package/bind: security bump to version
+ 9.11.20
+Message-ID: <20200714204615.D2EE786DA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53f92e65edf10831a65d8ad4f6403552b564c06d
+commit: https://git.buildroot.net/buildroot/commit/?id=cc7740825afec413d78db697477c8246ad5da9da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2020-14148: The Server-Server protocol implementation in
-  ngIRCd before 26~rc2 allows an out-of-bounds access, as demonstrated
-  by the IRC_NJOIN() function.
-- Fix a static build failure with openssl thanks to
-  https://github.com/ngircd/ngircd/commit/ad86a41eeed9f85d74bb50a25fa0bf4515aaf3af
-- Update indentation in hash file (two spaces)
+Fixes the following security issue:
+ * CVE-2020-8619: It was possible to trigger an INSIST failure when a
+   zone with an interior wildcard label was queried in a certain
+   pattern.
 
-Fixes:
- - http://autobuild.buildroot.org/results/078a7afc432786316a1d2ea03f96444ff741b942
+Release notes:
+https://ftp.isc.org/isc/bind9/cur/9.11/RELEASE-NOTES-bind-9.11.20.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ngircd/ngircd.hash | 4 ++--
- package/ngircd/ngircd.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ngircd/ngircd.hash b/package/ngircd/ngircd.hash
-index 3772bd6c16..72874c8d49 100644
---- a/package/ngircd/ngircd.hash
-+++ b/package/ngircd/ngircd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 c4997cae3e3dd6ff6a605ca274268f2b8c9ba0b1a96792c7402e5594222eee4e  ngircd-25.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  56dcc6483058699fcdd8e54f5010eecee09824b93bad7ed5f18818e550d855c6  ngircd-26.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
-index 5fa86afdd5..4859a29c2f 100644
---- a/package/ngircd/ngircd.mk
-+++ b/package/ngircd/ngircd.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 4eb3aff3b1..282b2aeba3 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.19/bind-9.11.19.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
+ # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
+-sha256  0dee554a4caa368948b32da9a0c97b516c19103bc13ff5b3762c5d8552f52329  bind-9.11.19.tar.gz
++sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
+ sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 362a26dce6..80f8defca8 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGIRCD_VERSION = 25
-+NGIRCD_VERSION = 26
- NGIRCD_SOURCE = ngircd-$(NGIRCD_VERSION).tar.xz
- NGIRCD_SITE = https://arthur.barton.de/pub/ngircd
- NGIRCD_LICENSE = GPL-2.0+
-@@ -18,8 +18,8 @@ NGIRCD_CONF_OPTS += --without-pam
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--NGIRCD_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
--NGIRCD_DEPENDENCIES += openssl
-+NGIRCD_CONF_OPTS += --with-openssl
-+NGIRCD_DEPENDENCIES += host-pkgconf openssl
- else
- NGIRCD_CONF_OPTS += --without-openssl
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-BIND_VERSION = 9.11.19
++BIND_VERSION = 9.11.20
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
