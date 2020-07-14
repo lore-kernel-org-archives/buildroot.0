@@ -1,92 +1,128 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Jul 2020 13:23:07 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/cups-filters: fix build without dejavu font
-Message-ID: <20200714112308.3264764-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 Jul 2020 14:04:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 2.10.0
+Message-ID: <20200714120401.3519027-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.27.3, cups-filters needs dejavu (even if it is only used
-for test programs):
-https://github.com/OpenPrinting/cups-filters/commit/1d66106e5ae45407b01459cb112ee09752166dba
-
-Add a patch to avoid this build failure when cross-compiling
-
-Fixes:
- - http://autobuild.buildroot.org/results/0e141abc57e4185c74adce75cac4215dd8a3108b
+- Drop patch (already in version)
+- Add zstd optional dependency, available since version 2.10.0 and
+  https://github.com/nmoinvaz/minizip/commit/1f4758bd7f979a56b33667fbbcdb0305e8b4173f
+- Use the new MZ_LIBBSD option available since version 2.10.0 and
+  https://github.com/nmoinvaz/minizip/commit/29fcb4768050fbbf02d572a24a4e2ad29d51b60d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Add a patch instead of adding dejavu dependency
+ ...s.txt-use-pkg-config-to-find-openssl.patch | 44 -------------------
+ package/minizip/minizip.hash                  |  2 +-
+ package/minizip/minizip.mk                    | 17 ++++++-
+ 3 files changed, 16 insertions(+), 47 deletions(-)
+ delete mode 100644 package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
 
- ...fix-cross-compilation-without-dejavu.patch | 41 +++++++++++++++++++
- package/cups-filters/cups-filters.mk          |  2 +
- 2 files changed, 43 insertions(+)
- create mode 100644 package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-
-diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-new file mode 100644
-index 0000000000..650b90a89b
---- /dev/null
-+++ b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-@@ -0,0 +1,41 @@
-+From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 13 Jul 2020 23:02:50 +0200
-+Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
-+
-+Cross-compilation is broken since commit 1d66106. Indeed, when
-+cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
-+path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
-+provided through --with-test-font-path which will fix the build failure
-+but will result in broken test programs.
-+
-+So when cross-compiling don't try to check if the test-font-path is
-+valid or not and just use the one provided by the user or the default
-+one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
-+
-+Fix #262
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index aa905cf5d..4cc4fd6e5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
-+ 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
-+ )
-+ 
-+-AS_IF([test -f "$with_test_font_path"],
-+-	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
-++AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
-+ 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
-+ )
-++AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
-+ 
-+ # ================
-+ # Check for cflags
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index dc4e89b52e..517e809cad 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -8,6 +8,8 @@ CUPS_FILTERS_VERSION = 1.27.5
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
-+# We're patching configure.ac
-+CUPS_FILTERS_AUTORECONF = YES
+diff --git a/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch b/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
+deleted file mode 100644
+index 8b44a17712..0000000000
+--- a/package/minizip/0001-CMakeLists.txt-use-pkg-config-to-find-openssl.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 1fdf5da78369305164313610dbb1ec868233ba08 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 14 Jun 2020 14:04:03 +0200
+-Subject: [PATCH] CMakeLists.txt: use pkg-config to find openssl
+-
+-Use pkg-config to find openssl libraries otherwise minizip will fail to
+-retrieve openssl static dependencies such as -latomic and build of
+-test_cmd will fail on:
+-
+-[100%] Linking C executable test_cmd
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/test/autobuild/run/instance-3/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a(bio_lib.o): in function `BIO_free':
+-bio_lib.c:(.text+0x510): undefined reference to `__atomic_fetch_sub_4'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/b54b625751a45d3b449fffcdfaa06fb9209b4652
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/nmoinvaz/minizip/pull/499]
+----
+- CMakeLists.txt | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index b789f62..7a81e32 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -140,7 +140,13 @@ endif()
+- 
+- # Check to see if openssl installation is present
+- if(MZ_OPENSSL)
+--    find_package(OpenSSL)
+-+    find_package(PkgConfig)
+-+    if(PKGCONFIG_FOUND)
+-+        pkg_check_modules(OPENSSL openssl)
+-+    endif()
+-+    if(NOT OPENSSL_FOUND)
+-+        find_package(OpenSSL)
+-+    endif()
+-     if (OPENSSL_FOUND)
+-         message(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
+- 
+--- 
+-2.26.2
+-
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index 0fed09735a..74799b9d58 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8425399277d9d5e39454e655cfd3eb004607960c8358a3e732f5e741a6b5df0a  minizip-2.9.2.tar.gz
++sha256  4c7f236268fef57ce5dcbd9645235a22890d62480a592e1b0515ecff93f9989b  minizip-2.10.0.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 32a46d61dc..f4fb19f867 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+-MINIZIP_VERSION = 2.9.2
++MINIZIP_VERSION = 2.10.0
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = \
+ 	host-pkgconf \
+-	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ MINIZIP_INSTALL_STAGING = YES
+ MINIZIP_CONF_OPTS = \
+@@ -24,6 +23,13 @@ else
+ MINIZIP_CONF_OPTS += -DMZ_BZIP2=OFF
+ endif
  
++ifeq ($(BR2_PACKAGE_LIBBSD),y)
++MINIZIP_DEPENDENCIES += libbsd
++MINIZIP_CONF_OPTS += -DMZ_LIBBSD=ON
++else
++MINIZIP_CONF_OPTS += -DMZ_LIBBSD=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MINIZIP_DEPENDENCIES += openssl
+ MINIZIP_CONF_OPTS += -DMZ_OPENSSL=ON
+@@ -38,4 +44,11 @@ else
+ MINIZIP_CONF_OPTS += -DMZ_ZLIB=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++MINIZIP_DEPENDENCIES += zstd
++MINIZIP_CONF_OPTS += -DMZ_ZSTD=ON
++else
++MINIZIP_CONF_OPTS += -DMZ_ZSTD=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.27.0
