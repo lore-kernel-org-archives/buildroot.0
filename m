@@ -1,36 +1,36 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 13 Jul 2020 22:24:59 -0400
-Subject: [Buildroot] [PATCH 1/1] Makefile: add /etc/bash_completion.d to
- non-bash purge
-Message-ID: <20200714022459.1926-1-danomimanchego123@gmail.com>
+Date: Mon, 13 Jul 2020 22:25:54 -0400
+Subject: [Buildroot] [PATCH 1/1] Makefile: delete debug libs when debug is
+ not enabled
+Message-ID: <20200714022554.2045-1-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we delete /usr/share/bash-completion when bash is not enabled.
-We need to delete /etc/bash_completion.d too. For example, the jo package
-installs files there:
-
-/etc/bash_completion.d/jo.bash
+Some toolchains, like the Linaro gcc7 toolchains, now install libstdc++ debug
+library symbols to /lib/debug, which can be as large as the library itself.
+This commit removes the extra debug content if debugging is not enabled.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 04c29b1..d6540ac 100644
+index 04c29b1..3a81385 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -756,6 +756,7 @@ ifneq ($(BR2_PACKAGE_GDB),y)
- endif
- ifneq ($(BR2_PACKAGE_BASH),y)
- 	rm -rf $(TARGET_DIR)/usr/share/bash-completion
-+	rm -rf $(TARGET_DIR)/etc/bash_completion.d
- endif
- ifneq ($(BR2_PACKAGE_ZSH),y)
- 	rm -rf $(TARGET_DIR)/usr/share/zsh
+@@ -765,6 +765,9 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
++ifneq ($(BR2_ENABLE_DEBUG),y)
++	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
++endif
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+ 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
+ 
 -- 
 2.7.4
