@@ -1,66 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 14 Jul 2020 15:40:27 +0000
-Subject: [Buildroot] [Bug 13071] New: toolchain not found error when
- building netsurf
-Message-ID: <bug-13071-163@https.bugs.busybox.net/>
+From: Robert Hancock <hancock@sedsystems.ca>
+Date: Tue, 14 Jul 2020 10:23:43 -0600
+Subject: [Buildroot] [PATCH] package/scons: explicitly specify host
+ Python 3
+In-Reply-To: <20200714101510.378d1909@windsurf.home>
+References: <20200714033927.1516172-1-hancock@sedsystems.ca>
+ <20200714101510.378d1909@windsurf.home>
+Message-ID: <fcb7c8aa-4265-c6dc-813f-94712df112e2@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13071
+On 2020-07-14 2:15 a.m., Thomas Petazzoni wrote:
+> On Mon, 13 Jul 2020 21:39:27 -0600
+> Robert Hancock <hancock@sedsystems.ca> wrote:
+> 
+>> All packages using scons are now using Python 3 to run it, so
+>> explicitly set scons as using host-python3. This avoids a
+>> spurious host Python 2 dependency if BR2_PACKAGE_PYTHON3 is not
+>> set (for example, if no Python is packaged for the target).
+>>
+>> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+>> ---
+>>   package/scons/scons.mk | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+>> index da2ccceb08..a95fa7fd69 100644
+>> --- a/package/scons/scons.mk
+>> +++ b/package/scons/scons.mk
+>> @@ -10,6 +10,8 @@ SCONS_LICENSE = MIT
+>>   SCONS_LICENSE_FILES = LICENSE.txt
+>>   SCONS_SETUP_TYPE = distutils
+>>   
+>> +HOST_SCONS_NEEDS_HOST_PYTHON = python3
+> 
+> I am just wondering if we should do our usual dance that consists in
+> relying on python2 if enabled, i.e something like this:
+> 
+> HOST_SCONS_NEEDS_HOST_PYTHON = $(if ($(BR2_PACKAGE_PYTHON),python,python3)
+> 
+> or if we simply stop doing this and say that we switch to just python3.
 
-            Bug ID: 13071
-           Summary: toolchain not found error when building netsurf
-           Product: buildroot
-           Version: 2020.05
-          Hardware: Macintosh
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: dr.ryanthach at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+What you describe is basically the existing default behavior in 
+package/pkg-python.mk when *_NEEDS_HOST_PYTHON is not set, except that 
+the default is reversed, it defaults to python unless 
+BR2_PACKAGE_PYTHON3 is set. The problem with that is it conflates what 
+is selected for the target with what is needed on the host. In our 
+configuration, no Python is selected for the target, so a dependency on 
+host-python gets added, even though all of the packages using SCons 
+explicitly depend on host-python3 and run SCons using python3, so the 
+host-python dependency is pointless.
 
-Created attachment 8526
-  --> https://bugs.busybox.net/attachment.cgi?id=8526&action=edit
-This is a screenshot of the Ubuntu VM's terminal
+I went with this simple change in the SCons case, as because it doesn't 
+seem widely used (only 3 packages in Buildroot now), the chance that 
+another package will end up being added that both uses SCons and can't 
+use Python 3 to run it, seems quite unlikely.
 
-General summary: The bug occurred after the makefile.tools for netsurf goes to
-auto-detect a toolchain.
-
-Description of the bug:
-  Overview:
-    The bug happens when Netsurf's Makefile.tools goes to auto-detect a 
-    toolchain.
-    (Defined beginning at line 353 of the Makefile.tools file) For unknown 
-    reasons the process failed, even though two valid toolchains were present
-    (gcc and clang). 
-
-  Steps to reproduce (This is not perfect):
-
-     1. Make buildroot configure to output a Linux distro made for x86_64 PCs
-for EFI and in the build options enable gcc and glibc
-
-     2. Configure a distro that does not include libgtk3 in anyway
-
-     3. Enable netsurf
-
-     4. Compile
-
-  Expected Results:
-    Netsurf will compile successfully and the compilation will move on as usual
-
-  Actual Results:
-    Netsurf completely fails to detect a toolchain and fails 
-
-  Build Date and Hardware: July 14, 2020 10:45 AM EST on a Macbook Pro mid-2017
-running MacOS 10.14.6 running a Ubuntu VM
+> 
+> Titouan, what do you think ?
+> 
+> Thomas
+> 
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Robert Hancock
+Senior Hardware Designer
+SED Systems, a division of Calian Ltd.
+Email: hancock at sedsystems.ca
