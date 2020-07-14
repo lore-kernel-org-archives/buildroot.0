@@ -1,50 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 14:46:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libodb-mysql: fix static build
-In-Reply-To: <CAPi7W82G3K_FEJbdSjUJZs8FfKkFjrDoY8jHqKft0hk4ENOLHw@mail.gmail.com>
-References: <20200713215943.2240412-1-fontaine.fabrice@gmail.com>
- <20200714102035.0536d2bd@windsurf.home>
- <CAPi7W82G3K_FEJbdSjUJZs8FfKkFjrDoY8jHqKft0hk4ENOLHw@mail.gmail.com>
-Message-ID: <20200714144628.223b7fe5@windsurf.home>
+Date: Tue, 14 Jul 2020 14:47:35 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/cups-filters: fix build without dejavu font
+In-Reply-To: <20200714112308.3264764-1-fontaine.fabrice@gmail.com>
+References: <20200714112308.3264764-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200714144735.56a11bb9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Jul 2020 10:33:37 +0200
+On Tue, 14 Jul 2020 13:23:07 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> I basically copy/pasted the solution that was applied to the open2300
-> package 4 years ago:
-> https://git.buildroot.net/buildroot/commit/package/open2300?id=382fa60f9c7445e962b290c74779a0e0fd7e310f
+> +-AS_IF([test -f "$with_test_font_path"],
+> +-	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+> ++AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
+> + 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
+> + )
+> ++AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
 
-Wow, I looked into this, and what I found is not pretty. It turns out
-that when there's no zlib available, MySQL builds its own copy, and
-installs it in $(STAGING_DIR). We can see during the MySQL configure:
+While I understand this is "fixing" the build issue, I don't understand
+how it makes sense. The ttfread program, built from fontembed/main.c,
+will use the TESTFONT macro.
 
-checking for zlib compression library... system-wide zlib not found, using one bundled with MySQL
+So it means that your program on the target will point to a font on the
+target that may not exists as its path was detected on the build
+machine.
 
-So to me, it seems like we should fix this, using the following option:
-
-  --with-zlib-dir=no|bundled|DIR
-                          Provide MySQL with a custom location of compression
-                          library. Given DIR, zlib binary is assumed to be in
-                          $DIR/lib and header files in $DIR/include.
-
-I.e probably:
-
-ifeq ($(BR2_PACKAGE_ZLIB),y)
-ORACLE_MYSQL_CONF_OPTS += --with-zlib-dir=$(STAGING_DIR)/usr
-ORACLE_MYSQL_DEPENDENCIES += zlib
-else
-ORACLE_MYSQL_CONF_OPTS += --without-zlib-dir
-endif
-
-and of course check in the latter case that it really builds without
-zlib.
-
-Could you have a look into this ?
+This doesn't seem right. Am I missing something here ?
 
 Thomas
 -- 
