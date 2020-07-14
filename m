@@ -1,84 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 15 Jul 2020 00:23:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: fix static build
-Message-ID: <20200714222312.2462708-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 14 Jul 2020 20:15:32 -0300
+Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2020.07
+Message-ID: <20200714231532.5024-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that fix a build failure on version 3.9.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- ...teec-CMakeLists.txt-fix-static-build.patch | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
-new file mode 100644
-index 0000000000..5307c7032c
---- /dev/null
-+++ b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
-@@ -0,0 +1,55 @@
-+From dedd04034fd246c5726ad875e8207c821e9471b7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 15 Jul 2020 00:09:21 +0200
-+Subject: [PATCH] libckteec/CMakeLists.txt: fix static build
-+
-+Remove SHARED from add_library call to avoid the following build failure
-+when the toolchain does not support shared library:
-+
-+[ 78%] Linking C shared library libckteec.so
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open64.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux[ 84%] Building C object tee-supplicant/CMakeFiles/tee-supplicant.dir/src/teec_ta_load.c.o
-+-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(__syscall_fcntl.os)(.eh_frame) prevents .eh_frame_hdr table being created
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: further warnings about FDE encoding preventing .eh_frame_hdr generation dropped
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.33.1 assertion fail elf32-microblaze.c:1542
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/crtbeginT.o: probably compiled without -fPIC?
-+/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
-+collect2: error: ld returned 1 exit status
-+libckteec/CMakeFiles/ckteec.dir/build.make:144: recipe for target 'libckteec/libckteec.so.0.1.0' failed
-+
-+This build failure is raised on version 3.9.0 since
-+https://github.com/ffontaine/optee_client/commit/fa679fc6f1f0c6240513ec69c63f0f89c2c4dd99
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OP-TEE/optee_client/pull/215]
-+---
-+ libckteec/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libckteec/CMakeLists.txt b/libckteec/CMakeLists.txt
-+index f0e14d1..615c9fe 100644
-+--- a/libckteec/CMakeLists.txt
-++++ b/libckteec/CMakeLists.txt
-+@@ -33,7 +33,7 @@ set (SRC
-+ ################################################################################
-+ # Built library
-+ ################################################################################
-+-add_library (ckteec SHARED ${SRC})
-++add_library (ckteec ${SRC})
-+ 
-+ set_target_properties (ckteec PROPERTIES
-+ 	VERSION ${PROJECT_VERSION}
-+-- 
-+2.27.0
-+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 7303160100..a87a642581 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -41,7 +41,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2020.04"
++	bool "2020.07"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -85,7 +85,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2020.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2020.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 8274246cf6..4b660dd6d8 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372  u-boot-2020.04.tar.bz2
++sha256  c1f5bf9ee6bb6e648edbf19ce2ca9452f614b08a9f886f1a566aa42e8cf05f6a  u-boot-2020.07.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
 -- 
-2.27.0
+2.17.1
