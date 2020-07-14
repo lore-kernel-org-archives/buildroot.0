@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Jul 2020 10:11:18 +0200
-Subject: [Buildroot] [git commit] Makefile: add /etc/bash_completion.d to
+Date: Tue, 14 Jul 2020 10:12:38 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: add /etc/bash_completion.d to
  non-bash purge
-Message-ID: <20200714080737.0C11D86CB9@busybox.osuosl.org>
+In-Reply-To: <20200714022459.1926-1-danomimanchego123@gmail.com>
+References: <20200714022459.1926-1-danomimanchego123@gmail.com>
+Message-ID: <20200714101238.36f600e4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18072ecc24b8f288cf131e0d3dcceb0bb6c955c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 13 Jul 2020 22:24:59 -0400
+Danomi Manchego <danomimanchego123@gmail.com> wrote:
 
-Currently, we delete /usr/share/bash-completion when bash is not enabled.
-We need to delete /etc/bash_completion.d too. For example, the jo package
-installs files there:
+> Currently, we delete /usr/share/bash-completion when bash is not enabled.
+> We need to delete /etc/bash_completion.d too. For example, the jo package
+> installs files there:
+> 
+> /etc/bash_completion.d/jo.bash
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 
-/etc/bash_completion.d/jo.bash
+Applied to master, thanks.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Makefile b/Makefile
-index 8355de5ffa..7bd8ada488 100644
---- a/Makefile
-+++ b/Makefile
-@@ -756,6 +756,7 @@ ifneq ($(BR2_PACKAGE_GDB),y)
- endif
- ifneq ($(BR2_PACKAGE_BASH),y)
- 	rm -rf $(TARGET_DIR)/usr/share/bash-completion
-+	rm -rf $(TARGET_DIR)/etc/bash_completion.d
- endif
- ifneq ($(BR2_PACKAGE_ZSH),y)
- 	rm -rf $(TARGET_DIR)/usr/share/zsh
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
