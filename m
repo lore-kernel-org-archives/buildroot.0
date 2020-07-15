@@ -1,150 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:42:53 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tinydtls: fix
- build on big endian
-Message-ID: <20200715195254.6BAE986D40@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:50:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] support/download: fix git
+ wrapper with submodules on older git versions
+Message-ID: <20200715195254.7FAEB87400@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a25ca507346b3345a06481907480e40f3c9c227
+commit: https://git.buildroot.net/buildroot/commit/?id=845d560371ca4f608ec76f5226cf8e10381fb822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/e8704e02fdede7b63e22da552292977b23380b32
+Older versions of git store the absolute path of the submodules'
+repository as stored in the super-project, e.g.:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4852bb14c978d53fb91fb9d82c8c7a4d06f3a012)
+    $ cat some-submodule/.git
+    gitdir: /path/to/super-project/.git/modules/some-submodule
+
+Obviously, this is not very reproducible.
+
+More recent versions of git, however, store relative paths, which
+de-facto makes it reproducible.
+
+Fix older versions by replacing the absolute paths with relative ones.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8fe9894f655fd79207c41673e1966cc4d4d101d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-sha2-sha2.c-fix-build-on-big-endian.patch | 119 +++++++++++++++++++++
- 1 file changed, 119 insertions(+)
+ support/download/git | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch b/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
-new file mode 100644
-index 0000000000..09d74d8ac6
---- /dev/null
-+++ b/package/tinydtls/0001-sha2-sha2.c-fix-build-on-big-endian.patch
-@@ -0,0 +1,119 @@
-+From 608738ccad9ac3743ccd535bde1e84f401e6176f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Jun 2020 12:50:40 +0200
-+Subject: [PATCH] sha2/sha2.c: fix build on big endian
+diff --git a/support/download/git b/support/download/git
+index 075f665bbf..15d8c66e05 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -176,6 +176,19 @@ date="$( _git log -1 --pretty=format:%cD )"
+ # There might be submodules, so fetch them.
+ if [ ${recurse} -eq 1 ]; then
+     _git submodule update --init --recursive
 +
-+Build is broken since 865ec9ba1d44e629c1107c299aebd20e901a19ff because
-+tmp is undefined in put32be and put64be:
-+
-+sha2.c: In function 'put32be':
-+sha2.c:177:34: error: 'tmp' undeclared (first use in this function)
-+  MEMCPY_BCOPY(data, &val, sizeof(tmp));
-+                                  ^~~
-+
-+Fix this error by replacing tmp by val
-+
-+Moreover, move MEMCPY_BCOPY before its usage or linking step will fail
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e8704e02fdede7b63e22da552292977b23380b32
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream: https://github.com/eclipse/tinydtls/commit/78a2d32f47165eda10cbf8f5cf79f86fa1c4872b]
-+---
-+ sha2/sha2.c | 58 ++++++++++++++++++++++++++---------------------------
-+ 1 file changed, 29 insertions(+), 29 deletions(-)
-+
-+diff --git a/sha2/sha2.c b/sha2/sha2.c
-+index cb6d90f..5c794c6 100644
-+--- a/sha2/sha2.c
-++++ b/sha2/sha2.c
-+@@ -114,6 +114,33 @@
-+ #error Define BYTE_ORDER to be equal to either LITTLE_ENDIAN or BIG_ENDIAN
-+ #endif
-+ 
-++/*
-++ * Macros for copying blocks of memory and for zeroing out ranges
-++ * of memory.  Using these macros makes it easy to switch from
-++ * using memset()/memcpy() and using bzero()/bcopy().
-++ *
-++ * Please define either SHA2_USE_MEMSET_MEMCPY or define
-++ * SHA2_USE_BZERO_BCOPY depending on which function set you
-++ * choose to use:
-++ */
-++#if !defined(SHA2_USE_MEMSET_MEMCPY) && !defined(SHA2_USE_BZERO_BCOPY)
-++/* Default to memset()/memcpy() if no option is specified */
-++#define	SHA2_USE_MEMSET_MEMCPY	1
-++#endif
-++#if defined(SHA2_USE_MEMSET_MEMCPY) && defined(SHA2_USE_BZERO_BCOPY)
-++/* Abort with an error if BOTH options are defined */
-++#error Define either SHA2_USE_MEMSET_MEMCPY or SHA2_USE_BZERO_BCOPY, not both!
-++#endif
-++
-++#ifdef SHA2_USE_MEMSET_MEMCPY
-++#define MEMSET_BZERO(p,l)	memset((p), 0, (l))
-++#define MEMCPY_BCOPY(d,s,l)	memcpy((d), (s), (l))
-++#endif
-++#ifdef SHA2_USE_BZERO_BCOPY
-++#define MEMSET_BZERO(p,l)	bzero((p), (l))
-++#define MEMCPY_BCOPY(d,s,l)	bcopy((s), (d), (l))
-++#endif
-++
-+ /*
-+  * Define the followingsha2_* types to types of the correct length on
-+  * the native archtecture.   Most BSD systems and Linux define u_intXX_t
-+@@ -174,7 +201,7 @@ static inline void put32be(sha2_byte* data, sha2_word32 val)
-+ 	data[1] = val; val >>= 8;
-+ 	data[0] = val;
-+ #else /* BYTE_ORDER != LITTLE_ENDIAN */
-+-	MEMCPY_BCOPY(data, &val, sizeof(tmp));
-++	MEMCPY_BCOPY(data, &val, sizeof(val));
-+ #endif /* BYTE_ORDER != LITTLE_ENDIAN */
-+ }
-+ 
-+@@ -209,7 +236,7 @@ static inline void put64be(sha2_byte* data, sha2_word64 val)
-+ 	data[1] = val; val >>= 8;
-+ 	data[0] = val;
-+ #else /* BYTE_ORDER != LITTLE_ENDIAN */
-+-	MEMCPY_BCOPY(data, &val, sizeof(tmp));
-++	MEMCPY_BCOPY(data, &val, sizeof(val));
-+ #endif /* BYTE_ORDER != LITTLE_ENDIAN */
-+ }
-+ 
-+@@ -225,33 +252,6 @@ static inline void put64be(sha2_byte* data, sha2_word64 val)
-+ 	} \
-+ }
-+ 
-+-/*
-+- * Macros for copying blocks of memory and for zeroing out ranges
-+- * of memory.  Using these macros makes it easy to switch from
-+- * using memset()/memcpy() and using bzero()/bcopy().
-+- *
-+- * Please define either SHA2_USE_MEMSET_MEMCPY or define
-+- * SHA2_USE_BZERO_BCOPY depending on which function set you
-+- * choose to use:
-+- */
-+-#if !defined(SHA2_USE_MEMSET_MEMCPY) && !defined(SHA2_USE_BZERO_BCOPY)
-+-/* Default to memset()/memcpy() if no option is specified */
-+-#define	SHA2_USE_MEMSET_MEMCPY	1
-+-#endif
-+-#if defined(SHA2_USE_MEMSET_MEMCPY) && defined(SHA2_USE_BZERO_BCOPY)
-+-/* Abort with an error if BOTH options are defined */
-+-#error Define either SHA2_USE_MEMSET_MEMCPY or SHA2_USE_BZERO_BCOPY, not both!
-+-#endif
-+-
-+-#ifdef SHA2_USE_MEMSET_MEMCPY
-+-#define MEMSET_BZERO(p,l)	memset((p), 0, (l))
-+-#define MEMCPY_BCOPY(d,s,l)	memcpy((d), (s), (l))
-+-#endif
-+-#ifdef SHA2_USE_BZERO_BCOPY
-+-#define MEMSET_BZERO(p,l)	bzero((p), (l))
-+-#define MEMCPY_BCOPY(d,s,l)	bcopy((s), (d), (l))
-+-#endif
-+-
-+ 
-+ /*** THE SIX LOGICAL FUNCTIONS ****************************************/
-+ /*
-+-- 
-+2.26.2
-+
++    # Older versions of git will store the absolute path of the git tree
++    # in the .git of submodules, while newer versions just use relative
++    # paths. Detect and fix the older variants to use relative paths, so
++    # that the archives are reproducible across a wider range of git
++    # versions. However, we can't do that if git is too old and uses
++    # full repositories for submodules.
++    cmd='printf "%s\n" "${path}/"'
++    for module_dir in $( _git submodule --quiet foreach "'${cmd}'" ); do
++        [ -f "${module_dir}/.git" ] || continue
++        relative_dir="$( sed -r -e 's,/+,/,g; s,[^/]+/,../,g' <<<"${module_dir}" )"
++        sed -r -i -e "s:^gitdir\: $(pwd)/:gitdir\: "${relative_dir}":" "${module_dir}/.git"
++    done
+ fi
+ 
+ # Generate the archive, sort with the C locale so that it is reproducible.
