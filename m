@@ -1,36 +1,51 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 15 Jul 2020 11:19:44 -0500
-Subject: [Buildroot] [2020.02.x] package/python-twisted: Fix several
- request smuggling attacks
-In-Reply-To: <20200715153056.26874-1-matthew.weber@rockwellcollins.com>
-References: <20200715153056.26874-1-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpaRVk7h6sEY-Ucs10kwvT6HWHEgdOdVvTwxVhgf7xkjfA@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 15 Jul 2020 14:27:03 -0300
+Subject: [Buildroot] [PATCH] configs/mx53loco: Bump U-Boot and kernel
+ versions
+Message-ID: <20200715172703.27412-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 15, 2020 at 10:30 AM Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> CVE-2020-10108
-> In Twisted Web through 19.10.0, there was an HTTP request splitting
-> vulnerability. When presented with two content-length headers, it
-> ignored the first header. When the second content-length value was
-> set to zero, the request body was interpreted as a pipelined request.
->
-> CVE-2020-10109
-> In Twisted Web through 19.10.0, there was an HTTP request splitting
-> vulnerability. When presented with a content-length and a chunked
-> encoding header, the content-length took precedence and the remainder
-> of the request body was interpreted as a pipelined request.
+Bump to U-Boot 2020.07 and kernel 5.7.8 versions.
 
-Up to and including 19.10.0 requires this patch (2020.02.x) and 20.3.0
-on master already has the fix  [1].
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-
-Regards,
-Matt
-
-[1] https://github.com/twisted/twisted/commit/4a7d22e490bb8ff836892cc99a1f54b85ccb0281
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 06f434e5de..69a94e071b 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.7 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.8"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
+-- 
+2.17.1
