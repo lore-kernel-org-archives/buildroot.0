@@ -1,58 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:39:16 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/vlc: security
- bump version to 3.0.11
-Message-ID: <20200715195249.7A8DD81F67@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:44:33 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libnss: fix build
+ with old PPC ABI
+Message-ID: <20200715195249.A8E3181F67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0173155a59bab6d5d87410100b62acb9242fd0f6
+commit: https://git.buildroot.net/buildroot/commit/?id=7955f169da24d318251395a1831884857f19711e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes CVE-2020-13428: https://www.videolan.org/security/sb-vlc3011.html
+Fixes:
+http://autobuild.buildroot.net/results/bdbd33c7a764931b2066dd8b527dde2f5dc298b4
+http://autobuild.buildroot.net/results/61bf50f73bb79e85c22e663f5fc22f4b9ccc0d3b
+http://autobuild.buildroot.net/results/4437942a528ab8f782d3b97595e76bb690d3a409
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2d9200f9927407921153769a7b674f731d7d534d)
+(cherry picked from commit f30fc8944763c17ac8140c01b0775f458c6ade54)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vlc/vlc.hash | 12 ++++++------
- package/vlc/vlc.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/libnss/0001-fix-old-abi-ppc.patch | 40 +++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 8b2910af49..7775e449f4 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha256
--sha256  a966abfc7f3b2ff3adaa130306ecaf5d6ad3b6dc73385fc9ab0c1204029d4c31  vlc-3.0.10.tar.xz
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha1
--sha1  4b3c75d1861bf463db53ba9059e8cc165f5c30a7  vlc-3.0.10.tar.xz
--# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.md5
--md5  28417dd27462ccb014b7dc7e50e9e9d6  vlc-3.0.10.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha256
-+sha256  3e94a1acf33445e9da15d528aa48657aa26b912eaa2656b403d43860a8834919  vlc-3.0.11.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha1
-+sha1  66d377a2f24b6b865d5c56530e10d84b8262b46c  vlc-3.0.11.tar.xz
-+# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.md5
-+md5  7e68f9e2d307eb7cc16e7345cda9e978  vlc-3.0.11.tar.xz
- # Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 039f106181..38d9751690 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VLC_VERSION = 3.0.10
-+VLC_VERSION = 3.0.11
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+diff --git a/package/libnss/0001-fix-old-abi-ppc.patch b/package/libnss/0001-fix-old-abi-ppc.patch
+new file mode 100644
+index 0000000000..202b4ad271
+--- /dev/null
++++ b/package/libnss/0001-fix-old-abi-ppc.patch
+@@ -0,0 +1,40 @@
++From a7a862bab5e4aae4615ddae3cbe230345f92ed0d Mon Sep 17 00:00:00 2001
++From: Lauri Kasanen <cand@gmx.com>
++Date: Mon, 1 Jun 2020 12:11:45 +0300
++Subject: [PATCH v3] Bug 1642174 /usr/bin/ld: OBJS/Linux_SINGLE_SHLIB/sha512-p8.o:
++ ABI version 2 is not compatible with ABI version 1 output
++
++Don't try to build the SHA-2 accelerated asm on old-ABI ppc.
++
++Currently make only, I don't have enough gyp-fu to do that side.
++However, the reporters of 1642174 and 1635625 both used make, not gyp.
++
++Signed-off-by: Lauri Kasanen <cand@gmx.com>
++[Fetch-from: https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
++ Manually modified paths to apply to nss subdirectory in release tarball.]
++Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
++---
++ lib/freebl/Makefile | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
++index 5f7384429..e0461c7d3 100644
++--- a/nss/lib/freebl/Makefile
+++++ b/nss/lib/freebl/Makefile
++@@ -267,9 +267,12 @@ ifeq ($(CPU_ARCH),arm)
++ endif
++ ifeq ($(CPU_ARCH),ppc)
++     EXTRA_SRCS += gcm-ppc.c
++-    ASFILES += sha512-p8.s
++ ifdef USE_64
++     DEFINES += -DNSS_NO_INIT_SUPPORT
+++    PPC_ABI := $(shell $(CC) -dM -E - < /dev/null | awk '$$2 == "_CALL_ELF" {print $$3}')
+++    ifeq ($(PPC_ABI),2)
+++        ASFILES += sha512-p8.s
+++    endif
++ endif # USE_64
++ endif # ppc
++ endif # Linux
++--
++2.19.1
++
