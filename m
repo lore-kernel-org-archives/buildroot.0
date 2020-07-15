@@ -1,34 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:30:32 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/readline: update
- homepage link
-Message-ID: <20200715192709.C74D786FB1@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:36:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python: use a shell
+ expansion for sysconfigdata_name
+In-Reply-To: <20200605205920.465052-1-aduskett@gmail.com> (aduskett's message
+ of "Fri, 5 Jun 2020 13:59:20 -0700")
+References: <20200605205920.465052-1-aduskett@gmail.com>
+Message-ID: <87y2nkzi2f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6a4f75180a540333c7699fbe8074de1ce9667ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
-The old link is dead since 2017.
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Currently, GNU Make expands the Python SYSCONFIGDATA_NAME variable; however,
+ > when building with per-package directories, this variable is not set because
+ > the evaluation of this variable occurs before buildroot creates the
+ > per-package directories of a given package.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 60b1cb9d473e3d3202a967e1b9d51011b8fb42ac)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/readline/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > There are two solutions to fix this problem:
+ > - Add a step between "patch" and "configure," which would evaluate all of the
+ >   variables after creating the per-package directories.
 
-diff --git a/package/readline/Config.in b/package/readline/Config.in
-index 1cb0672cf1..7021472623 100644
---- a/package/readline/Config.in
-+++ b/package/readline/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_READLINE
- 	  by applications that allow users to edit command lines
- 	  as they are typed in.
- 
--	  https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
-+	  https://tiswww.case.edu/php/chet/readline/rltop.html
+ > - Evaluate SYSCONFIGDATA_NAME via a shell expansion instead of GNU Make.
+
+ > As the second option is more expedient, the second option is what this commit
+ > impliments.
+
+ > Remove the current PKG_PYTHON_SYSCONFIGDATA_NAME definition and replace it
+ > with the following:
+
+ > PKG_PYTHON_SYSCONFIGDATA_PATH:
+ >   - This variable is used to make the next line easier to read.
+
+ > PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] &&
+ > basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
+
+ >   - The "-e" check ensures the path exists, as the basename command only
+ >     evaluates strings.
+
+ >   - The "|| true" is added to ensure the old behavior of returning an empty
+ >     string if the file does not exist still works.
+
+ > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12941
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
