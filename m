@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 23:23:28 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libopenssl: fix
+Date: Wed, 15 Jul 2020 23:23:16 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libopenssl: fix
  target architecture for MIPS64n32
-Message-ID: <20200715212017.1B0EB86BA0@busybox.osuosl.org>
+Message-ID: <20200715212022.0764386BA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2957f994fe4273c2adceadfff655e3dd3cfd9cf0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b86a753bb025fbf4131494808a66c86c925c39bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Commit 1ebb35ee5fb7bd5e6278a84ac2c18aa0a38056fb changed the libopenssl
 target architecture to 'linux-generic64' for 64-bit archs based on
