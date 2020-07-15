@@ -1,76 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 17:25:16 +0200
-Subject: [Buildroot] [git commit] package/mongodb: security bump to version
- 4.2.8
-Message-ID: <20200715152129.A34418716C@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 17:25:22 +0200
+Subject: [Buildroot] [git commit] package/optee-client: fix static build
+Message-ID: <20200715152129.B09648716C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af455335232069a160a1862e1f66b8bbe58a49ae
+commit: https://git.buildroot.net/buildroot/commit/?id=71214bdca3f34c670e0efd1696225ee0a0acbf49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following security issues:
-- SERVER-45514 [FLE] Reject document validators with encryption-related
-  keywords if the validationAction is ???warn???
-- SERVER-48039 Unrecognized option: net.ssl.clusterCertificateSelector
-  in MongoDB v4.2
-- SERVER-45803 mongodecrypt needs a ServiceContext
-- SERVER-46834 Use monotonic time in UserCacheInvalidator
-- SERVER-47113 LDAP connection pool acquisition state should own host
-  list
+Add a patch that fix a build failure on version 3.9.0
 
-https://docs.mongodb.com/manual/release-notes/4.2
-
-Also:
-- Update indentation in hash file (two spaces)
-- Tweak version to be "compliant" with https://release-monitoring.org
-- Use official tarball
+Fixes:
+ - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mongodb/mongodb.hash | 6 +++---
- package/mongodb/mongodb.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ ...libckteec-CMakeLists.txt-fix-static-build.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-index 01793e02e9..943ffda997 100644
---- a/package/mongodb/mongodb.hash
-+++ b/package/mongodb/mongodb.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 033839fe43adb13351f9e0ef361d4731d7e917b2d7ad12f09df73e6e9c8bf6db  mongodb-r4.2.4.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
--sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-+sha256  e8880277e3910afd82c71ed61861d518f2040cbc062e00a26d53a3224284db8f  mongodb-src-r4.2.8.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
-+sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index f7f8b4bd05..fa111bef7b 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--MONGODB_VERSION_BASE = 4.2.4
--MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
--MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
-+MONGODB_VERSION = 4.2.8
-+MONGODB_SITE = https://fastdl.mongodb.org/src
-+MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
- 
- MONGODB_LICENSE = Apache-2.0 (drivers), SSPL (database)
- MONGODB_LICENSE_FILES = APACHE-2.0.txt LICENSE-Community.txt
-@@ -41,7 +41,7 @@ MONGODB_SCONS_OPTS = \
- 	--use-system-zlib
- 
- # need to pass mongo version when not building from git repo
--MONGODB_SCONS_OPTS += MONGO_VERSION=$(MONGODB_VERSION_BASE)-
-+MONGODB_SCONS_OPTS += MONGO_VERSION=$(MONGODB_VERSION)-
- 
- # WiredTiger database storage engine only supported on 64 bits
- ifeq ($(BR2_ARCH_IS_64),y)
+diff --git a/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+new file mode 100644
+index 0000000000..5307c7032c
+--- /dev/null
++++ b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+@@ -0,0 +1,55 @@
++From dedd04034fd246c5726ad875e8207c821e9471b7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Jul 2020 00:09:21 +0200
++Subject: [PATCH] libckteec/CMakeLists.txt: fix static build
++
++Remove SHARED from add_library call to avoid the following build failure
++when the toolchain does not support shared library:
++
++[ 78%] Linking C shared library libckteec.so
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open64.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux[ 84%] Building C object tee-supplicant/CMakeFiles/tee-supplicant.dir/src/teec_ta_load.c.o
++-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(__syscall_fcntl.os)(.eh_frame) prevents .eh_frame_hdr table being created
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: further warnings about FDE encoding preventing .eh_frame_hdr generation dropped
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.33.1 assertion fail elf32-microblaze.c:1542
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/crtbeginT.o: probably compiled without -fPIC?
++/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
++collect2: error: ld returned 1 exit status
++libckteec/CMakeFiles/ckteec.dir/build.make:144: recipe for target 'libckteec/libckteec.so.0.1.0' failed
++
++This build failure is raised on version 3.9.0 since
++https://github.com/ffontaine/optee_client/commit/fa679fc6f1f0c6240513ec69c63f0f89c2c4dd99
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OP-TEE/optee_client/pull/215]
++---
++ libckteec/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libckteec/CMakeLists.txt b/libckteec/CMakeLists.txt
++index f0e14d1..615c9fe 100644
++--- a/libckteec/CMakeLists.txt
+++++ b/libckteec/CMakeLists.txt
++@@ -33,7 +33,7 @@ set (SRC
++ ################################################################################
++ # Built library
++ ################################################################################
++-add_library (ckteec SHARED ${SRC})
+++add_library (ckteec ${SRC})
++ 
++ set_target_properties (ckteec PROPERTIES
++ 	VERSION ${PROJECT_VERSION}
++-- 
++2.27.0
++
