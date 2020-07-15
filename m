@@ -1,85 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 15 Jul 2020 22:25:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-networkx: needs python3
-Message-ID: <20200715202515.819362-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Jul 2020 22:26:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix license
+In-Reply-To: <CAPi7W83p-63jxoYFpda1szKQWTr3XFgXecS9QGLZ92MxnMb5_w@mail.gmail.com>
+References: <20200715190438.16497-1-fontaine.fabrice@gmail.com>
+ <20200715213055.407fac8d@windsurf.home>
+ <CAPi7W83p-63jxoYFpda1szKQWTr3XFgXecS9QGLZ92MxnMb5_w@mail.gmail.com>
+Message-ID: <20200715222620.74f91859@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python3 is mandatory since version 2.3 and
-https://github.com/networkx/networkx/commit/8f4845e94709dd62a4ebf3775fe02ca777ec49f2
+On Wed, 15 Jul 2020 21:38:48 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/c34d9c92cadbfb0e333eba91c9fae3baac53d0a2
+> > Has this been reported upstream ?  
+> I created an issue here: https://github.com/lxc/lxc/issues/3484.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-networkx/Config.in |  1 +
- package/setools/Config.in         |  6 ++++--
- package/setools/setools.mk        | 10 +---------
- 3 files changed, 6 insertions(+), 11 deletions(-)
+Thanks!
 
-diff --git a/package/python-networkx/Config.in b/package/python-networkx/Config.in
-index 0f3e86f497..2ae3841dfa 100644
---- a/package/python-networkx/Config.in
-+++ b/package/python-networkx/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_NETWORKX
- 	bool "python-networkx"
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_DECORATOR # runtime
- 	help
- 	  A Python package for the creation, manipulation,
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index 56a85b01c8..668a4efecc 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -4,8 +4,7 @@ config BR2_PACKAGE_SETOOLS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_ENUM34 if !BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_NETWORKX # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	select BR2_PACKAGE_LIBSELINUX
-@@ -24,3 +23,6 @@ comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
- 		!BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+
-+comment "setools needs python3"
-+	depends on !BR2_PACKAGE_PYTHON3
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index fc49fc218e..24da3613c4 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -13,14 +13,6 @@ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
- SETOOLS_SETUP_TYPE = setuptools
- HOST_SETOOLS_DEPENDENCIES = host-python-cython host-libselinux host-libsepol host-python-networkx
- 
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
--SETOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
--else
--SETOOLS_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
--SETOOLS_DEPENDENCIES += python-enum34
--HOST_SETOOLS_DEPENDENCIES += host-python-enum34
--endif
--
- define SETOOLS_FIX_SETUP
- 	# By default, setup.py will look for libsepol.a in the host machines
- 	# /usr/lib directory. This needs to be changed to the staging directory.
-@@ -43,7 +35,7 @@ HOST_SETOOLS_POST_PATCH_HOOKS += HOST_SETOOLS_FIX_SETUP
- ifeq ($(BR2_PACKAGE_PYTHON_PYQT5),)
- define SETOOLS_REMOVE_QT_SCRIPTS
- 	$(RM) $(TARGET_DIR)/usr/bin/apol
--	$(RM) -r $(TARGET_DIR)/lib/$(SETOOLS_PYLIBVER)/site-packages/setoolsgui/
-+	$(RM) -r $(TARGET_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/setoolsgui/
- endef
- SETOOLS_POST_INSTALL_TARGET_HOOKS += SETOOLS_REMOVE_QT_SCRIPTS
- endif
+> > Do we have some details about what is under GPL, what is under LGPL ?  
+> Yes, each file has a SPDX header since
+> https://github.com/lxc/lxc/commit/cc73685dd09315b292968ee91a08a8f295376b35.
+> Most of them are LGPL but some source files under tools directory are
+> GPL-2.0-only.
+
+Then it would be good to annotate in the LXC_LICENSE variable under
+what license is which part.
+
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
