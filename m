@@ -1,30 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 22:48:36 +0200
-Subject: [Buildroot] [PATCH 2/2] package/open-plc-utils: install
- packages to /usr/bin
-In-Reply-To: <20200617222159.176141-2-aduskett@gmail.com> (aduskett's message
- of "Wed, 17 Jun 2020 15:21:59 -0700")
-References: <20200617222159.176141-1-aduskett@gmail.com>
- <20200617222159.176141-2-aduskett@gmail.com>
-Message-ID: <87imeoy063.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jul 2020 22:47:57 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/open-plc-utils:
+ install packages to /usr/bin
+Message-ID: <20200715204518.3897F873B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9d9bcbc55deb213691876b5f8f8d0bc93b719c11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > From: Adam Duskett <Aduskett@gmail.com>
- > By default, open-plc-utils installs all of the compiled binaries to
- > /usr/local/bin which is not in the default path provided by Buildroot.
+By default, open-plc-utils installs all of the compiled binaries to
+/usr/local/bin which is not in the default path provided by Buildroot.
 
- > Passing BIN="$(TARGET_DIR)/usr/bin" to make install forces open-plc-utils to
- > install the compiled binaries to /usr/bin.
+Passing BIN="$(TARGET_DIR)/usr/bin" to make install forces open-plc-utils to
+install the compiled binaries to /usr/bin.
 
- > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 35bbcde75c2cb0b0d4a823b67f7fb82f305762ca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/open-plc-utils/open-plc-utils.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
+index e1e66bf7e0..3030301f7d 100644
+--- a/package/open-plc-utils/open-plc-utils.mk
++++ b/package/open-plc-utils/open-plc-utils.mk
+@@ -26,7 +26,8 @@ define OPEN_PLC_UTILS_BUILD_CMDS
+ endef
+ 
+ define OPEN_PLC_UTILS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) ROOTFS=$(TARGET_DIR) -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) ROOTFS=$(TARGET_DIR) \
++		BIN="$(TARGET_DIR)/usr/bin" -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
