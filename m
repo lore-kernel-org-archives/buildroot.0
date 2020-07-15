@@ -1,350 +1,655 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 17:13:05 +0200
-Subject: [Buildroot] [git commit] package/setools: bump to 4.3.0
-Message-ID: <20200715151043.920D385B4F@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 17:12:27 +0200
+Subject: [Buildroot] [git commit] package/libsepol: bump to 20200710
+Message-ID: <20200715151043.381D985B4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7115551c47e980e82eabeb31880282a35c77fec
+commit: https://git.buildroot.net/buildroot/commit/?id=558909b1395d4c564f010b38851e4d8e73e0f8bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-setools is no longer hosted on https://github.com/TresysTechnology/setools/.
-Update the source location to its new home,
-https://github.com/SELinuxProject/setools/.
-
-Refresh patches 0001-remove-werror-flag-from-setup.patch and
-0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch for
-4.3.0 and remove patch 0003-setup.py-drop-path-prefix-from-man-install.patch
-that is now upstream.
-
-Add a new dependency on host-python-cython, as setup.py now depends on
-it.
+Patches 0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
+and 0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch are
+now upstream.
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-remove-werror-flag-from-setup.patch       | 16 +++--
- ...rt-use-setools.InfoFlowAnalysis-and-setoo.patch | 74 +++++++++++-----------
- ...etup.py-drop-path-prefix-from-man-install.patch | 42 ------------
- package/setools/setools.hash                       |  4 +-
- package/setools/setools.mk                         | 12 ++--
- 5 files changed, 54 insertions(+), 94 deletions(-)
+ ...fix-CIL_KEY_-build-errors-with-fno-common.patch | 528 ---------------------
+ ...remove-leftovers-of-cil_mem_error_handler.patch |  63 ---
+ package/libsepol/libsepol.hash                     |   2 +-
+ package/libsepol/libsepol.mk                       |   4 +-
+ 4 files changed, 3 insertions(+), 594 deletions(-)
 
-diff --git a/package/setools/0001-remove-werror-flag-from-setup.patch b/package/setools/0001-remove-werror-flag-from-setup.patch
-index 4f6d2efb96..0ab4006661 100644
---- a/package/setools/0001-remove-werror-flag-from-setup.patch
-+++ b/package/setools/0001-remove-werror-flag-from-setup.patch
-@@ -1,4 +1,4 @@
--From b2fe84bfd00117d4897f1f2e8f83d3410eb188b8 Mon Sep 17 00:00:00 2001
-+From 8ab5a49247d870d92a8287db6134877ebf7a4379 Mon Sep 17 00:00:00 2001
- From: Adam Duskett <aduskett@gmail.com>
- Date: Thu, 12 Oct 2017 22:04:58 -0400
- Subject: [PATCH] remove werror flag from setup
-@@ -6,24 +6,26 @@ Subject: [PATCH] remove werror flag from setup
- Compilers older than gcc6 will generate uninitialized variable warnings which
- will cause compiling to fail.
- 
-+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-+[Refreshed for 4.3.0]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- ---
-  setup.py | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/setup.py b/setup.py
--index 2ca44c9..9319bf6 100644
-+index 457c83049ca5..4dcb30196abf 100644
- --- a/setup.py
- +++ b/setup.py
--@@ -146,7 +146,7 @@ ext_py_mods = [Extension('setools.policyrep._qpol',
--                           'libqpol/policy_scan.c',
--                           'libqpol/xen_query.c'],
--                          include_dirs=include_dirs,
-+@@ -106,7 +106,7 @@ ext_py_mods = [Extension('setools.policyrep', ['setools/policyrep.pyx'],
-+                          libraries=['selinux', 'sepol'],
-+                          library_dirs=lib_dirs,
-+                          define_macros=macros,
- -                         extra_compile_args=['-Werror', '-Wextra',
- +                         extra_compile_args=['-Wextra',
-                                               '-Waggregate-return',
-                                               '-Wfloat-equal',
-                                               '-Wformat', '-Wformat=2',
- -- 
--2.13.6
-+2.26.2
- 
-diff --git a/package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch b/package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-index 508087ff2c..f9519a0790 100644
---- a/package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-+++ b/package/setools/0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
-@@ -1,4 +1,4 @@
--From 2512c3ba608077db3a5e0286b976fadc8a04a5c4 Mon Sep 17 00:00:00 2001
-+From ae84e5ef59bb24d5b8fd17e6756952f42c2d5c36 Mon Sep 17 00:00:00 2001
- From: rpm-build <rpm-build>
- Date: Thu, 23 Feb 2017 08:17:07 +0100
- Subject: [PATCH] Do not export/use setools.InfoFlowAnalysis and
-@@ -12,30 +12,32 @@ Therefore it's better to use setools.infoflow.InfoFlowAnalysis and
- setools.dta.DomainTransitionAnalysis and let the package containing
- sedta and seinfoflow to require python3-networkx
- 
-+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-+[Refreshed for 4.3.0]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- ---
-  sedta                       | 3 ++-
-- seinfoflow                  | 3 ++-
-+ seinfoflow                  | 5 +++--
-  setools/__init__.py         | 4 ++--
-  setoolsgui/apol/dta.py      | 2 +-
-  setoolsgui/apol/infoflow.py | 2 +-
-- tests/dta.py                | 3 ++-
-- tests/infoflow.py           | 3 ++-
-- 7 files changed, 12 insertions(+), 8 deletions(-)
-+ tests/dta.py                | 2 +-
-+ tests/infoflow.py           | 2 +-
-+ 7 files changed, 11 insertions(+), 9 deletions(-)
- 
- diff --git a/sedta b/sedta
--index 1c76ebb..255ad49 100755
-+index 60861ca630a5..0056172a55e5 100755
- --- a/sedta
- +++ b/sedta
--@@ -23,6 +23,7 @@ import argparse
-- import logging
-+@@ -23,6 +23,7 @@ import logging
-+ import signal
-  
-  import setools
- +import setools.dta
-  
-  
-  def print_transition(trans):
--@@ -111,7 +112,7 @@ else:
-+@@ -114,7 +115,7 @@ else:
-  
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-@@ -45,31 +47,33 @@ index 1c76ebb..255ad49 100755
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/seinfoflow b/seinfoflow
--index b287921..d53bdef 100755
-+index f10c39de4d8e..fe733bbd0787 100755
- --- a/seinfoflow
- +++ b/seinfoflow
--@@ -19,6 +19,7 @@
-+@@ -18,6 +18,7 @@
-+ #
-  
-- from __future__ import print_function
-  import setools
- +import setools.infoflow
-  import argparse
-  import sys
-  import logging
--@@ -79,7 +80,7 @@ else:
-+@@ -101,8 +102,8 @@ elif args.booleans is not None:
-  try:
-      p = setools.SELinuxPolicy(args.policy)
-      m = setools.PermissionMap(args.map)
---    g = setools.InfoFlowAnalysis(p, m, min_weight=args.min_weight, exclude=args.exclude)
--+    g = setools.infoflow.InfoFlowAnalysis(p, m, min_weight=args.min_weight, exclude=args.exclude)
-+-    g = setools.InfoFlowAnalysis(p, m, min_weight=args.min_weight, exclude=args.exclude,
-+-                                 booleans=booleans)
-++    g = setools.infoflow.InfoFlowAnalysis(p, m, min_weight=args.min_weight, exclude=args.exclude,
-++                                          booleans=booleans)
-  
-      if args.shortest_path or args.all_paths:
-          if args.shortest_path:
- diff --git a/setools/__init__.py b/setools/__init__.py
--index a84c846..a53c5a7 100644
-+index 26fa5aa34a19..9e9058a6bf90 100644
- --- a/setools/__init__.py
- +++ b/setools/__init__.py
--@@ -74,11 +74,11 @@ from .pcideviceconquery import PcideviceconQuery
-+@@ -75,11 +75,11 @@ from .pcideviceconquery import PcideviceconQuery
-  from .devicetreeconquery import DevicetreeconQuery
-  
-  # Information Flow Analysis
-@@ -84,59 +88,57 @@ index a84c846..a53c5a7 100644
-  # Policy difference
-  from .diff import PolicyDifference
- diff --git a/setoolsgui/apol/dta.py b/setoolsgui/apol/dta.py
--index 0aaf13f..5b1ea20 100644
-+index 4608b9dbf34e..2cde44c142e9 100644
- --- a/setoolsgui/apol/dta.py
- +++ b/setoolsgui/apol/dta.py
- @@ -23,7 +23,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
--                             QTreeWidgetItem
-+     QTreeWidgetItem
- -from setools import DomainTransitionAnalysis
- +from setools.dta import DomainTransitionAnalysis
-  
-  from ..logtosignal import LogHandlerToSignal
-  from .analysistab import AnalysisTab
- diff --git a/setoolsgui/apol/infoflow.py b/setoolsgui/apol/infoflow.py
--index 1ae16de..fdf8f7b 100644
-+index 7bca299d23fc..7fee2778f35f 100644
- --- a/setoolsgui/apol/infoflow.py
- +++ b/setoolsgui/apol/infoflow.py
--@@ -25,7 +25,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-+@@ -26,7 +26,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QStringListModel, QThread
-  from PyQt5.QtGui import QPalette, QTextCursor
-  from PyQt5.QtWidgets import QCompleter, QHeaderView, QMessageBox, QProgressDialog, \
--                             QTreeWidgetItem
-+     QTreeWidgetItem
- -from setools import InfoFlowAnalysis
- +from setools.infoflow import InfoFlowAnalysis
-  from setools.exception import UnmappedClass, UnmappedPermission
-  
-  from ..logtosignal import LogHandlerToSignal
- diff --git a/tests/dta.py b/tests/dta.py
--index 32b9271..2bdd052 100644
-+index a0cc9381469c..177e6fb0b961 100644
- --- a/tests/dta.py
- +++ b/tests/dta.py
--@@ -17,7 +17,8 @@
-- #
-+@@ -18,7 +18,7 @@
-+ import os
-  import unittest
-  
---from setools import SELinuxPolicy, DomainTransitionAnalysis
--+from setools import SELinuxPolicy
-+-from setools import DomainTransitionAnalysis
- +from setools.dta import DomainTransitionAnalysis
-  from setools import TERuletype as TERT
-- from setools.policyrep.exception import InvalidType
-- from setools.policyrep.typeattr import Type
-+ from setools.exception import InvalidType
-+ from setools.policyrep import Type
- diff --git a/tests/infoflow.py b/tests/infoflow.py
--index 7751dda..a21c683 100644
-+index aa0e44a7e4f8..fca2848aeca5 100644
- --- a/tests/infoflow.py
- +++ b/tests/infoflow.py
--@@ -17,7 +17,8 @@
-- #
-+@@ -18,7 +18,7 @@
-+ import os
-  import unittest
-  
---from setools import SELinuxPolicy, InfoFlowAnalysis
--+from setools import SELinuxPolicy
-+-from setools import InfoFlowAnalysis
- +from setools.infoflow import InfoFlowAnalysis
-  from setools import TERuletype as TERT
-+ from setools.exception import InvalidType
-  from setools.permmap import PermissionMap
-- from setools.policyrep.exception import InvalidType
- -- 
--2.9.3
-+2.26.2
- 
-diff --git a/package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch b/package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch
+diff --git a/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch b/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
 deleted file mode 100644
-index 63344506b2..0000000000
---- a/package/setools/0003-setup.py-drop-path-prefix-from-man-install.patch
+index 6876751ee0..0000000000
+--- a/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
 +++ /dev/null
-@@ -1,42 +0,0 @@
--From bc36cba1393120e65bfe4d0f642fd8d38010c0f7 Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Wed, 28 Nov 2018 20:49:00 -0600
--Subject: [PATCH] setup.py: drop path prefix from man install
+@@ -1,528 +0,0 @@
+-From a96e8c59ecac84096d870b42701a504791a8cc8c Mon Sep 17 00:00:00 2001
+-From: Ondrej Mosnacek <omosnace@redhat.com>
+-Date: Thu, 23 Jan 2020 13:57:13 +0100
+-Subject: [PATCH] libsepol: fix CIL_KEY_* build errors with -fno-common
 -
--If the directory is a relative path, it is interpreted relative to the
--installation prefix (Python's sys.prefix for pure-Python packages,
--sys.exec_prefix for packages that contain extension modules).
--So the sys.prefix should not be joined because the correct one will be
--added regardless. The reason why a relative path is going to work is
--because the installation path is built internally joining python root
--with python prefix, thus forming the correct path $(TARGET_DIR)/usr.
--(https://docs.python.org/3/distutils/setupscript.html#installing-additional-files)
+-GCC 10 comes with -fno-common enabled by default - fix the CIL_KEY_*
+-global variables to be defined only once in cil.c and declared in the
+-header file correctly with the 'extern' keyword, so that other units
+-including the file don't generate duplicate definitions.
 -
--For this man file install scenario, joining the sys.prefix makes the
--path absolute (this was previously working by accident).
+-Upstream: https://github.com/SELinuxProject/selinux/commit/a96e8c59ecac84096d870b42701a504791a8cc8c
 -
--Upstream: https://github.com/SELinuxProject/setools/pull/13/commits/bc36cba1393120e65bfe4d0f642fd8d38010c0f7
--
--Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
--Cc: Arnout Vandecappelle <arnout@mind.be>
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ----
-- setup.py | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- cil/src/cil.c          | 162 ++++++++++++++++
+- cil/src/cil_internal.h | 322 ++++++++++++++++----------------
+- 2 files changed, 323 insertions(+), 161 deletions(-)
 -
--diff --git a/setup.py b/setup.py
--index 3767fbc..80e0400 100644
----- a/setup.py
--+++ b/setup.py
--@@ -136,7 +136,7 @@ setup(name='setools',
--       cmdclass={'build_qhc': QtHelpCommand, 'clean': CleanCommand},
--       packages=['setools', 'setools.diff', 'setoolsgui', 'setoolsgui.apol'],
--       scripts=['apol', 'sediff', 'seinfo', 'seinfoflow', 'sesearch', 'sedta'],
---      data_files=[(join(sys.prefix, 'share/man/man1'), glob.glob("man/*.1"))],
--+      data_files=[('share/man/man1', glob.glob("man/*.1"))],
--       package_data={'': ['*.ui', '*.qhc', '*.qch'], 'setools': ['perm_map']},
--       ext_modules=cythonize(ext_py_mods, include_path=['setools/policyrep'],
--                             annotate=cython_annotate,
+-diff --git a/cil/src/cil.c b/cil/src/cil.c
+-index de729cf8..d222ad3a 100644
+---- a/cil/src/cil.c
+-+++ b/cil/src/cil.c
+-@@ -77,6 +77,168 @@ int cil_sym_sizes[CIL_SYM_ARRAY_NUM][CIL_SYM_NUM] = {
+- 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+- };
+- 
+-+char *CIL_KEY_CONS_T1;
+-+char *CIL_KEY_CONS_T2;
+-+char *CIL_KEY_CONS_T3;
+-+char *CIL_KEY_CONS_R1;
+-+char *CIL_KEY_CONS_R2;
+-+char *CIL_KEY_CONS_R3;
+-+char *CIL_KEY_CONS_U1;
+-+char *CIL_KEY_CONS_U2;
+-+char *CIL_KEY_CONS_U3;
+-+char *CIL_KEY_CONS_L1;
+-+char *CIL_KEY_CONS_L2;
+-+char *CIL_KEY_CONS_H1;
+-+char *CIL_KEY_CONS_H2;
+-+char *CIL_KEY_AND;
+-+char *CIL_KEY_OR;
+-+char *CIL_KEY_NOT;
+-+char *CIL_KEY_EQ;
+-+char *CIL_KEY_NEQ;
+-+char *CIL_KEY_CONS_DOM;
+-+char *CIL_KEY_CONS_DOMBY;
+-+char *CIL_KEY_CONS_INCOMP;
+-+char *CIL_KEY_CONDTRUE;
+-+char *CIL_KEY_CONDFALSE;
+-+char *CIL_KEY_SELF;
+-+char *CIL_KEY_OBJECT_R;
+-+char *CIL_KEY_STAR;
+-+char *CIL_KEY_TCP;
+-+char *CIL_KEY_UDP;
+-+char *CIL_KEY_DCCP;
+-+char *CIL_KEY_SCTP;
+-+char *CIL_KEY_AUDITALLOW;
+-+char *CIL_KEY_TUNABLEIF;
+-+char *CIL_KEY_ALLOW;
+-+char *CIL_KEY_DONTAUDIT;
+-+char *CIL_KEY_TYPETRANSITION;
+-+char *CIL_KEY_TYPECHANGE;
+-+char *CIL_KEY_CALL;
+-+char *CIL_KEY_TUNABLE;
+-+char *CIL_KEY_XOR;
+-+char *CIL_KEY_ALL;
+-+char *CIL_KEY_RANGE;
+-+char *CIL_KEY_GLOB;
+-+char *CIL_KEY_FILE;
+-+char *CIL_KEY_DIR;
+-+char *CIL_KEY_CHAR;
+-+char *CIL_KEY_BLOCK;
+-+char *CIL_KEY_SOCKET;
+-+char *CIL_KEY_PIPE;
+-+char *CIL_KEY_SYMLINK;
+-+char *CIL_KEY_ANY;
+-+char *CIL_KEY_XATTR;
+-+char *CIL_KEY_TASK;
+-+char *CIL_KEY_TRANS;
+-+char *CIL_KEY_TYPE;
+-+char *CIL_KEY_ROLE;
+-+char *CIL_KEY_USER;
+-+char *CIL_KEY_USERATTRIBUTE;
+-+char *CIL_KEY_USERATTRIBUTESET;
+-+char *CIL_KEY_SENSITIVITY;
+-+char *CIL_KEY_CATEGORY;
+-+char *CIL_KEY_CATSET;
+-+char *CIL_KEY_LEVEL;
+-+char *CIL_KEY_LEVELRANGE;
+-+char *CIL_KEY_CLASS;
+-+char *CIL_KEY_IPADDR;
+-+char *CIL_KEY_MAP_CLASS;
+-+char *CIL_KEY_CLASSPERMISSION;
+-+char *CIL_KEY_BOOL;
+-+char *CIL_KEY_STRING;
+-+char *CIL_KEY_NAME;
+-+char *CIL_KEY_SOURCE;
+-+char *CIL_KEY_TARGET;
+-+char *CIL_KEY_LOW;
+-+char *CIL_KEY_HIGH;
+-+char *CIL_KEY_LOW_HIGH;
+-+char *CIL_KEY_GLBLUB;
+-+char *CIL_KEY_HANDLEUNKNOWN;
+-+char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
+-+char *CIL_KEY_HANDLEUNKNOWN_DENY;
+-+char *CIL_KEY_HANDLEUNKNOWN_REJECT;
+-+char *CIL_KEY_MACRO;
+-+char *CIL_KEY_IN;
+-+char *CIL_KEY_MLS;
+-+char *CIL_KEY_DEFAULTRANGE;
+-+char *CIL_KEY_BLOCKINHERIT;
+-+char *CIL_KEY_BLOCKABSTRACT;
+-+char *CIL_KEY_CLASSORDER;
+-+char *CIL_KEY_CLASSMAPPING;
+-+char *CIL_KEY_CLASSPERMISSIONSET;
+-+char *CIL_KEY_COMMON;
+-+char *CIL_KEY_CLASSCOMMON;
+-+char *CIL_KEY_SID;
+-+char *CIL_KEY_SIDCONTEXT;
+-+char *CIL_KEY_SIDORDER;
+-+char *CIL_KEY_USERLEVEL;
+-+char *CIL_KEY_USERRANGE;
+-+char *CIL_KEY_USERBOUNDS;
+-+char *CIL_KEY_USERPREFIX;
+-+char *CIL_KEY_SELINUXUSER;
+-+char *CIL_KEY_SELINUXUSERDEFAULT;
+-+char *CIL_KEY_TYPEATTRIBUTE;
+-+char *CIL_KEY_TYPEATTRIBUTESET;
+-+char *CIL_KEY_EXPANDTYPEATTRIBUTE;
+-+char *CIL_KEY_TYPEALIAS;
+-+char *CIL_KEY_TYPEALIASACTUAL;
+-+char *CIL_KEY_TYPEBOUNDS;
+-+char *CIL_KEY_TYPEPERMISSIVE;
+-+char *CIL_KEY_RANGETRANSITION;
+-+char *CIL_KEY_USERROLE;
+-+char *CIL_KEY_ROLETYPE;
+-+char *CIL_KEY_ROLETRANSITION;
+-+char *CIL_KEY_ROLEALLOW;
+-+char *CIL_KEY_ROLEATTRIBUTE;
+-+char *CIL_KEY_ROLEATTRIBUTESET;
+-+char *CIL_KEY_ROLEBOUNDS;
+-+char *CIL_KEY_BOOLEANIF;
+-+char *CIL_KEY_NEVERALLOW;
+-+char *CIL_KEY_TYPEMEMBER;
+-+char *CIL_KEY_SENSALIAS;
+-+char *CIL_KEY_SENSALIASACTUAL;
+-+char *CIL_KEY_CATALIAS;
+-+char *CIL_KEY_CATALIASACTUAL;
+-+char *CIL_KEY_CATORDER;
+-+char *CIL_KEY_SENSITIVITYORDER;
+-+char *CIL_KEY_SENSCAT;
+-+char *CIL_KEY_CONSTRAIN;
+-+char *CIL_KEY_MLSCONSTRAIN;
+-+char *CIL_KEY_VALIDATETRANS;
+-+char *CIL_KEY_MLSVALIDATETRANS;
+-+char *CIL_KEY_CONTEXT;
+-+char *CIL_KEY_FILECON;
+-+char *CIL_KEY_IBPKEYCON;
+-+char *CIL_KEY_IBENDPORTCON;
+-+char *CIL_KEY_PORTCON;
+-+char *CIL_KEY_NODECON;
+-+char *CIL_KEY_GENFSCON;
+-+char *CIL_KEY_NETIFCON;
+-+char *CIL_KEY_PIRQCON;
+-+char *CIL_KEY_IOMEMCON;
+-+char *CIL_KEY_IOPORTCON;
+-+char *CIL_KEY_PCIDEVICECON;
+-+char *CIL_KEY_DEVICETREECON;
+-+char *CIL_KEY_FSUSE;
+-+char *CIL_KEY_POLICYCAP;
+-+char *CIL_KEY_OPTIONAL;
+-+char *CIL_KEY_DEFAULTUSER;
+-+char *CIL_KEY_DEFAULTROLE;
+-+char *CIL_KEY_DEFAULTTYPE;
+-+char *CIL_KEY_ROOT;
+-+char *CIL_KEY_NODE;
+-+char *CIL_KEY_PERM;
+-+char *CIL_KEY_ALLOWX;
+-+char *CIL_KEY_AUDITALLOWX;
+-+char *CIL_KEY_DONTAUDITX;
+-+char *CIL_KEY_NEVERALLOWX;
+-+char *CIL_KEY_PERMISSIONX;
+-+char *CIL_KEY_IOCTL;
+-+char *CIL_KEY_UNORDERED;
+-+char *CIL_KEY_SRC_INFO;
+-+char *CIL_KEY_SRC_CIL;
+-+char *CIL_KEY_SRC_HLL;
+-+
+- static void cil_init_keys(void)
+- {
+- 	/* Initialize CIL Keys into strpool */
+-diff --git a/cil/src/cil_internal.h b/cil/src/cil_internal.h
+-index 30fab649..9bdcbdd0 100644
+---- a/cil/src/cil_internal.h
+-+++ b/cil/src/cil_internal.h
+-@@ -74,167 +74,167 @@ enum cil_pass {
+- /*
+- 	Keywords
+- */
+--char *CIL_KEY_CONS_T1;
+--char *CIL_KEY_CONS_T2;
+--char *CIL_KEY_CONS_T3;
+--char *CIL_KEY_CONS_R1;
+--char *CIL_KEY_CONS_R2;
+--char *CIL_KEY_CONS_R3;
+--char *CIL_KEY_CONS_U1;
+--char *CIL_KEY_CONS_U2;
+--char *CIL_KEY_CONS_U3;
+--char *CIL_KEY_CONS_L1;
+--char *CIL_KEY_CONS_L2;
+--char *CIL_KEY_CONS_H1;
+--char *CIL_KEY_CONS_H2;
+--char *CIL_KEY_AND;
+--char *CIL_KEY_OR;
+--char *CIL_KEY_NOT;
+--char *CIL_KEY_EQ;
+--char *CIL_KEY_NEQ;
+--char *CIL_KEY_CONS_DOM;
+--char *CIL_KEY_CONS_DOMBY;
+--char *CIL_KEY_CONS_INCOMP;
+--char *CIL_KEY_CONDTRUE;
+--char *CIL_KEY_CONDFALSE;
+--char *CIL_KEY_SELF;
+--char *CIL_KEY_OBJECT_R;
+--char *CIL_KEY_STAR;
+--char *CIL_KEY_TCP;
+--char *CIL_KEY_UDP;
+--char *CIL_KEY_DCCP;
+--char *CIL_KEY_SCTP;
+--char *CIL_KEY_AUDITALLOW;
+--char *CIL_KEY_TUNABLEIF;
+--char *CIL_KEY_ALLOW;
+--char *CIL_KEY_DONTAUDIT;
+--char *CIL_KEY_TYPETRANSITION;
+--char *CIL_KEY_TYPECHANGE;
+--char *CIL_KEY_CALL;
+--char *CIL_KEY_TUNABLE;
+--char *CIL_KEY_XOR;
+--char *CIL_KEY_ALL;
+--char *CIL_KEY_RANGE;
+--char *CIL_KEY_GLOB;
+--char *CIL_KEY_FILE;
+--char *CIL_KEY_DIR;
+--char *CIL_KEY_CHAR;
+--char *CIL_KEY_BLOCK;
+--char *CIL_KEY_SOCKET;
+--char *CIL_KEY_PIPE;
+--char *CIL_KEY_SYMLINK;
+--char *CIL_KEY_ANY;
+--char *CIL_KEY_XATTR;
+--char *CIL_KEY_TASK;
+--char *CIL_KEY_TRANS;
+--char *CIL_KEY_TYPE;
+--char *CIL_KEY_ROLE;
+--char *CIL_KEY_USER;
+--char *CIL_KEY_USERATTRIBUTE;
+--char *CIL_KEY_USERATTRIBUTESET;
+--char *CIL_KEY_SENSITIVITY;
+--char *CIL_KEY_CATEGORY;
+--char *CIL_KEY_CATSET;
+--char *CIL_KEY_LEVEL;
+--char *CIL_KEY_LEVELRANGE;
+--char *CIL_KEY_CLASS;
+--char *CIL_KEY_IPADDR;
+--char *CIL_KEY_MAP_CLASS;
+--char *CIL_KEY_CLASSPERMISSION;
+--char *CIL_KEY_BOOL;
+--char *CIL_KEY_STRING;
+--char *CIL_KEY_NAME;
+--char *CIL_KEY_SOURCE;
+--char *CIL_KEY_TARGET;
+--char *CIL_KEY_LOW;
+--char *CIL_KEY_HIGH;
+--char *CIL_KEY_LOW_HIGH;
+--char *CIL_KEY_GLBLUB;
+--char *CIL_KEY_HANDLEUNKNOWN;
+--char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
+--char *CIL_KEY_HANDLEUNKNOWN_DENY;
+--char *CIL_KEY_HANDLEUNKNOWN_REJECT;
+--char *CIL_KEY_MACRO;
+--char *CIL_KEY_IN;
+--char *CIL_KEY_MLS;
+--char *CIL_KEY_DEFAULTRANGE;
+--char *CIL_KEY_BLOCKINHERIT;
+--char *CIL_KEY_BLOCKABSTRACT;
+--char *CIL_KEY_CLASSORDER;
+--char *CIL_KEY_CLASSMAPPING;
+--char *CIL_KEY_CLASSPERMISSIONSET;
+--char *CIL_KEY_COMMON;
+--char *CIL_KEY_CLASSCOMMON;
+--char *CIL_KEY_SID;
+--char *CIL_KEY_SIDCONTEXT;
+--char *CIL_KEY_SIDORDER;
+--char *CIL_KEY_USERLEVEL;
+--char *CIL_KEY_USERRANGE;
+--char *CIL_KEY_USERBOUNDS;
+--char *CIL_KEY_USERPREFIX;
+--char *CIL_KEY_SELINUXUSER;
+--char *CIL_KEY_SELINUXUSERDEFAULT;
+--char *CIL_KEY_TYPEATTRIBUTE;
+--char *CIL_KEY_TYPEATTRIBUTESET;
+--char *CIL_KEY_EXPANDTYPEATTRIBUTE;
+--char *CIL_KEY_TYPEALIAS;
+--char *CIL_KEY_TYPEALIASACTUAL;
+--char *CIL_KEY_TYPEBOUNDS;
+--char *CIL_KEY_TYPEPERMISSIVE;
+--char *CIL_KEY_RANGETRANSITION;
+--char *CIL_KEY_USERROLE;
+--char *CIL_KEY_ROLETYPE;
+--char *CIL_KEY_ROLETRANSITION;
+--char *CIL_KEY_ROLEALLOW;
+--char *CIL_KEY_ROLEATTRIBUTE;
+--char *CIL_KEY_ROLEATTRIBUTESET;
+--char *CIL_KEY_ROLEBOUNDS;
+--char *CIL_KEY_BOOLEANIF;
+--char *CIL_KEY_NEVERALLOW;
+--char *CIL_KEY_TYPEMEMBER;
+--char *CIL_KEY_SENSALIAS;
+--char *CIL_KEY_SENSALIASACTUAL;
+--char *CIL_KEY_CATALIAS;
+--char *CIL_KEY_CATALIASACTUAL;
+--char *CIL_KEY_CATORDER;
+--char *CIL_KEY_SENSITIVITYORDER;
+--char *CIL_KEY_SENSCAT;
+--char *CIL_KEY_CONSTRAIN;
+--char *CIL_KEY_MLSCONSTRAIN;
+--char *CIL_KEY_VALIDATETRANS;
+--char *CIL_KEY_MLSVALIDATETRANS;
+--char *CIL_KEY_CONTEXT;
+--char *CIL_KEY_FILECON;
+--char *CIL_KEY_IBPKEYCON;
+--char *CIL_KEY_IBENDPORTCON;
+--char *CIL_KEY_PORTCON;
+--char *CIL_KEY_NODECON;
+--char *CIL_KEY_GENFSCON;
+--char *CIL_KEY_NETIFCON;
+--char *CIL_KEY_PIRQCON;
+--char *CIL_KEY_IOMEMCON;
+--char *CIL_KEY_IOPORTCON;
+--char *CIL_KEY_PCIDEVICECON;
+--char *CIL_KEY_DEVICETREECON;
+--char *CIL_KEY_FSUSE;
+--char *CIL_KEY_POLICYCAP;
+--char *CIL_KEY_OPTIONAL;
+--char *CIL_KEY_DEFAULTUSER;
+--char *CIL_KEY_DEFAULTROLE;
+--char *CIL_KEY_DEFAULTTYPE;
+--char *CIL_KEY_ROOT;
+--char *CIL_KEY_NODE;
+--char *CIL_KEY_PERM;
+--char *CIL_KEY_ALLOWX;
+--char *CIL_KEY_AUDITALLOWX;
+--char *CIL_KEY_DONTAUDITX;
+--char *CIL_KEY_NEVERALLOWX;
+--char *CIL_KEY_PERMISSIONX;
+--char *CIL_KEY_IOCTL;
+--char *CIL_KEY_UNORDERED;
+--char *CIL_KEY_SRC_INFO;
+--char *CIL_KEY_SRC_CIL;
+--char *CIL_KEY_SRC_HLL;
+-+extern char *CIL_KEY_CONS_T1;
+-+extern char *CIL_KEY_CONS_T2;
+-+extern char *CIL_KEY_CONS_T3;
+-+extern char *CIL_KEY_CONS_R1;
+-+extern char *CIL_KEY_CONS_R2;
+-+extern char *CIL_KEY_CONS_R3;
+-+extern char *CIL_KEY_CONS_U1;
+-+extern char *CIL_KEY_CONS_U2;
+-+extern char *CIL_KEY_CONS_U3;
+-+extern char *CIL_KEY_CONS_L1;
+-+extern char *CIL_KEY_CONS_L2;
+-+extern char *CIL_KEY_CONS_H1;
+-+extern char *CIL_KEY_CONS_H2;
+-+extern char *CIL_KEY_AND;
+-+extern char *CIL_KEY_OR;
+-+extern char *CIL_KEY_NOT;
+-+extern char *CIL_KEY_EQ;
+-+extern char *CIL_KEY_NEQ;
+-+extern char *CIL_KEY_CONS_DOM;
+-+extern char *CIL_KEY_CONS_DOMBY;
+-+extern char *CIL_KEY_CONS_INCOMP;
+-+extern char *CIL_KEY_CONDTRUE;
+-+extern char *CIL_KEY_CONDFALSE;
+-+extern char *CIL_KEY_SELF;
+-+extern char *CIL_KEY_OBJECT_R;
+-+extern char *CIL_KEY_STAR;
+-+extern char *CIL_KEY_TCP;
+-+extern char *CIL_KEY_UDP;
+-+extern char *CIL_KEY_DCCP;
+-+extern char *CIL_KEY_SCTP;
+-+extern char *CIL_KEY_AUDITALLOW;
+-+extern char *CIL_KEY_TUNABLEIF;
+-+extern char *CIL_KEY_ALLOW;
+-+extern char *CIL_KEY_DONTAUDIT;
+-+extern char *CIL_KEY_TYPETRANSITION;
+-+extern char *CIL_KEY_TYPECHANGE;
+-+extern char *CIL_KEY_CALL;
+-+extern char *CIL_KEY_TUNABLE;
+-+extern char *CIL_KEY_XOR;
+-+extern char *CIL_KEY_ALL;
+-+extern char *CIL_KEY_RANGE;
+-+extern char *CIL_KEY_GLOB;
+-+extern char *CIL_KEY_FILE;
+-+extern char *CIL_KEY_DIR;
+-+extern char *CIL_KEY_CHAR;
+-+extern char *CIL_KEY_BLOCK;
+-+extern char *CIL_KEY_SOCKET;
+-+extern char *CIL_KEY_PIPE;
+-+extern char *CIL_KEY_SYMLINK;
+-+extern char *CIL_KEY_ANY;
+-+extern char *CIL_KEY_XATTR;
+-+extern char *CIL_KEY_TASK;
+-+extern char *CIL_KEY_TRANS;
+-+extern char *CIL_KEY_TYPE;
+-+extern char *CIL_KEY_ROLE;
+-+extern char *CIL_KEY_USER;
+-+extern char *CIL_KEY_USERATTRIBUTE;
+-+extern char *CIL_KEY_USERATTRIBUTESET;
+-+extern char *CIL_KEY_SENSITIVITY;
+-+extern char *CIL_KEY_CATEGORY;
+-+extern char *CIL_KEY_CATSET;
+-+extern char *CIL_KEY_LEVEL;
+-+extern char *CIL_KEY_LEVELRANGE;
+-+extern char *CIL_KEY_CLASS;
+-+extern char *CIL_KEY_IPADDR;
+-+extern char *CIL_KEY_MAP_CLASS;
+-+extern char *CIL_KEY_CLASSPERMISSION;
+-+extern char *CIL_KEY_BOOL;
+-+extern char *CIL_KEY_STRING;
+-+extern char *CIL_KEY_NAME;
+-+extern char *CIL_KEY_SOURCE;
+-+extern char *CIL_KEY_TARGET;
+-+extern char *CIL_KEY_LOW;
+-+extern char *CIL_KEY_HIGH;
+-+extern char *CIL_KEY_LOW_HIGH;
+-+extern char *CIL_KEY_GLBLUB;
+-+extern char *CIL_KEY_HANDLEUNKNOWN;
+-+extern char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
+-+extern char *CIL_KEY_HANDLEUNKNOWN_DENY;
+-+extern char *CIL_KEY_HANDLEUNKNOWN_REJECT;
+-+extern char *CIL_KEY_MACRO;
+-+extern char *CIL_KEY_IN;
+-+extern char *CIL_KEY_MLS;
+-+extern char *CIL_KEY_DEFAULTRANGE;
+-+extern char *CIL_KEY_BLOCKINHERIT;
+-+extern char *CIL_KEY_BLOCKABSTRACT;
+-+extern char *CIL_KEY_CLASSORDER;
+-+extern char *CIL_KEY_CLASSMAPPING;
+-+extern char *CIL_KEY_CLASSPERMISSIONSET;
+-+extern char *CIL_KEY_COMMON;
+-+extern char *CIL_KEY_CLASSCOMMON;
+-+extern char *CIL_KEY_SID;
+-+extern char *CIL_KEY_SIDCONTEXT;
+-+extern char *CIL_KEY_SIDORDER;
+-+extern char *CIL_KEY_USERLEVEL;
+-+extern char *CIL_KEY_USERRANGE;
+-+extern char *CIL_KEY_USERBOUNDS;
+-+extern char *CIL_KEY_USERPREFIX;
+-+extern char *CIL_KEY_SELINUXUSER;
+-+extern char *CIL_KEY_SELINUXUSERDEFAULT;
+-+extern char *CIL_KEY_TYPEATTRIBUTE;
+-+extern char *CIL_KEY_TYPEATTRIBUTESET;
+-+extern char *CIL_KEY_EXPANDTYPEATTRIBUTE;
+-+extern char *CIL_KEY_TYPEALIAS;
+-+extern char *CIL_KEY_TYPEALIASACTUAL;
+-+extern char *CIL_KEY_TYPEBOUNDS;
+-+extern char *CIL_KEY_TYPEPERMISSIVE;
+-+extern char *CIL_KEY_RANGETRANSITION;
+-+extern char *CIL_KEY_USERROLE;
+-+extern char *CIL_KEY_ROLETYPE;
+-+extern char *CIL_KEY_ROLETRANSITION;
+-+extern char *CIL_KEY_ROLEALLOW;
+-+extern char *CIL_KEY_ROLEATTRIBUTE;
+-+extern char *CIL_KEY_ROLEATTRIBUTESET;
+-+extern char *CIL_KEY_ROLEBOUNDS;
+-+extern char *CIL_KEY_BOOLEANIF;
+-+extern char *CIL_KEY_NEVERALLOW;
+-+extern char *CIL_KEY_TYPEMEMBER;
+-+extern char *CIL_KEY_SENSALIAS;
+-+extern char *CIL_KEY_SENSALIASACTUAL;
+-+extern char *CIL_KEY_CATALIAS;
+-+extern char *CIL_KEY_CATALIASACTUAL;
+-+extern char *CIL_KEY_CATORDER;
+-+extern char *CIL_KEY_SENSITIVITYORDER;
+-+extern char *CIL_KEY_SENSCAT;
+-+extern char *CIL_KEY_CONSTRAIN;
+-+extern char *CIL_KEY_MLSCONSTRAIN;
+-+extern char *CIL_KEY_VALIDATETRANS;
+-+extern char *CIL_KEY_MLSVALIDATETRANS;
+-+extern char *CIL_KEY_CONTEXT;
+-+extern char *CIL_KEY_FILECON;
+-+extern char *CIL_KEY_IBPKEYCON;
+-+extern char *CIL_KEY_IBENDPORTCON;
+-+extern char *CIL_KEY_PORTCON;
+-+extern char *CIL_KEY_NODECON;
+-+extern char *CIL_KEY_GENFSCON;
+-+extern char *CIL_KEY_NETIFCON;
+-+extern char *CIL_KEY_PIRQCON;
+-+extern char *CIL_KEY_IOMEMCON;
+-+extern char *CIL_KEY_IOPORTCON;
+-+extern char *CIL_KEY_PCIDEVICECON;
+-+extern char *CIL_KEY_DEVICETREECON;
+-+extern char *CIL_KEY_FSUSE;
+-+extern char *CIL_KEY_POLICYCAP;
+-+extern char *CIL_KEY_OPTIONAL;
+-+extern char *CIL_KEY_DEFAULTUSER;
+-+extern char *CIL_KEY_DEFAULTROLE;
+-+extern char *CIL_KEY_DEFAULTTYPE;
+-+extern char *CIL_KEY_ROOT;
+-+extern char *CIL_KEY_NODE;
+-+extern char *CIL_KEY_PERM;
+-+extern char *CIL_KEY_ALLOWX;
+-+extern char *CIL_KEY_AUDITALLOWX;
+-+extern char *CIL_KEY_DONTAUDITX;
+-+extern char *CIL_KEY_NEVERALLOWX;
+-+extern char *CIL_KEY_PERMISSIONX;
+-+extern char *CIL_KEY_IOCTL;
+-+extern char *CIL_KEY_UNORDERED;
+-+extern char *CIL_KEY_SRC_INFO;
+-+extern char *CIL_KEY_SRC_CIL;
+-+extern char *CIL_KEY_SRC_HLL;
+- 
+- /*
+- 	Symbol Table Array Indices
 --- 
--1.9.1
+-2.17.1
 -
-diff --git a/package/setools/setools.hash b/package/setools/setools.hash
-index 8729297064..689b20a357 100644
---- a/package/setools/setools.hash
-+++ b/package/setools/setools.hash
-@@ -1,7 +1,5 @@
--# From https://github.com/TresysTechnology/setools3/wiki/Download
--md5	d68d0d4e4da0f01da0f208782ff04b91	setools-4.1.1.tar.bz2
- # Locally computed
--sha256	46a927ea2b163cbe1d35cc35da43e45853e13720c7e02d4cf75a498783c19610 setools-4.1.1.tar.gz
-+sha256	da2c1d23edd24c4aa17d01d78e86c9e5fb5bf3aa38c71d5d63f41c750f6ef26c setools-4.3.0.tar.gz
- sha256  2f7547e10f76a382c24c053595f38a5cc6dda9347f508f254ca490e0046a9624 COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING.GPL
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LGPL
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 63ca3651e8..fc49fc218e 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -4,14 +4,14 @@
+diff --git a/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch b/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
+deleted file mode 100644
+index a1b016121f..0000000000
+--- a/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 3d32fc24d6aff360a538c63dad08ca5c957551b0 Mon Sep 17 00:00:00 2001
+-From: Ondrej Mosnacek <omosnace@redhat.com>
+-Date: Thu, 23 Jan 2020 13:57:14 +0100
+-Subject: [PATCH] libsepol: remove leftovers of cil_mem_error_handler
+-
+-Commit 4459d635b8f1 ("libsepol: Remove cil_mem_error_handler() function
+-pointer") replaced cil_mem_error_handler usage with inline contents of
+-the default handler. However, it left over the header declaration and
+-two callers. Convert these as well and remove the header declaration.
+-
+-This also fixes a build failure with -fno-common.
+-
+-Upstream: https://github.com/SELinuxProject/selinux/commit/3d32fc24d6aff360a538c63dad08ca5c957551b0
+-
+-Fixes: 4459d635b8f1 ("libsepol: Remove cil_mem_error_handler() function pointer")
+-Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+----
+- cil/src/cil_mem.h     | 1 -
+- cil/src/cil_strpool.c | 8 ++++----
+- 2 files changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/cil/src/cil_mem.h b/cil/src/cil_mem.h
+-index 902ce131..794f02a3 100644
+---- a/cil/src/cil_mem.h
+-+++ b/cil/src/cil_mem.h
+-@@ -36,7 +36,6 @@ void *cil_calloc(size_t num_elements, size_t element_size);
+- void *cil_realloc(void *ptr, size_t size);
+- char *cil_strdup(const char *str);
+- int cil_asprintf(char **strp, const char *fmt, ...);
+--void (*cil_mem_error_handler)(void);
+- 
+- #endif /* CIL_MEM_H_ */
+- 
+-diff --git a/cil/src/cil_strpool.c b/cil/src/cil_strpool.c
+-index 97d4c4b9..2598bbf3 100644
+---- a/cil/src/cil_strpool.c
+-+++ b/cil/src/cil_strpool.c
+-@@ -80,8 +80,8 @@ char *cil_strpool_add(const char *str)
+- 		int rc = hashtab_insert(cil_strpool_tab, (hashtab_key_t)strpool_ref->str, strpool_ref);
+- 		if (rc != SEPOL_OK) {
+- 			pthread_mutex_unlock(&cil_strpool_mutex);
+--			(*cil_mem_error_handler)();
+--			pthread_mutex_lock(&cil_strpool_mutex);
+-+			cil_log(CIL_ERR, "Failed to allocate memory\n");
+-+			exit(1);
+- 		}
+- 	}
+- 
+-@@ -104,8 +104,8 @@ void cil_strpool_init(void)
+- 		cil_strpool_tab = hashtab_create(cil_strpool_hash, cil_strpool_compare, CIL_STRPOOL_TABLE_SIZE);
+- 		if (cil_strpool_tab == NULL) {
+- 			pthread_mutex_unlock(&cil_strpool_mutex);
+--			(*cil_mem_error_handler)();
+--			return;
+-+			cil_log(CIL_ERR, "Failed to allocate memory\n");
+-+			exit(1);
+- 		}
+- 	}
+- 	cil_strpool_readers++;
+--- 
+-2.17.1
+-
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index a43d387a4f..1759d3ba04 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 5b7ae1881909f1048b06f7a0c364c5c8a86ec12e0ec76e740fe9595a6033eb79  libsepol-3.0.tar.gz
++sha256 ae6778d01443fdd38cd30eeee846494e19f4d407b09872580372f4aa4bf8a3cc  libsepol-3.1.tar.gz
+ 
+ # Hash for license file
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 2d64c53bc3..7d8b7b2063 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SETOOLS_VERSION = 4.1.1
--SETOOLS_SITE = $(call github,TresysTechnology,setools,$(SETOOLS_VERSION))
--SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-swig
-+SETOOLS_VERSION = 4.3.0
-+SETOOLS_SITE = $(call github,SELinuxProject,setools,$(SETOOLS_VERSION))
-+SETOOLS_DEPENDENCIES = libselinux libsepol python-setuptools host-bison host-flex host-python-cython host-swig
- SETOOLS_INSTALL_STAGING = YES
- SETOOLS_LICENSE = GPL-2.0+, LGPL-2.1+
- SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
- SETOOLS_SETUP_TYPE = setuptools
--HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-python-networkx
-+HOST_SETOOLS_DEPENDENCIES = host-python-cython host-libselinux host-libsepol host-python-networkx
+-LIBSEPOL_VERSION = 3.0
+-LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
++LIBSEPOL_VERSION = 3.1
++LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20200710
+ LIBSEPOL_LICENSE = LGPL-2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- SETOOLS_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
-@@ -24,7 +24,7 @@ endif
- define SETOOLS_FIX_SETUP
- 	# By default, setup.py will look for libsepol.a in the host machines
- 	# /usr/lib directory. This needs to be changed to the staging directory.
--	$(SED) "s at base_lib_dirs =.*@base_lib_dirs = ['$(STAGING_DIR)/usr/lib']@g" \
-+	$(SED) "s at lib_dirs =.*@lib_dirs = ['$(STAGING_DIR)/usr/lib']@g" \
- 		$(@D)/setup.py
- endef
- SETOOLS_POST_PATCH_HOOKS += SETOOLS_FIX_SETUP
-@@ -32,7 +32,7 @@ SETOOLS_POST_PATCH_HOOKS += SETOOLS_FIX_SETUP
- define HOST_SETOOLS_FIX_SETUP
- 	# By default, setup.py will look for libsepol.a in the host machines
- 	# /usr/lib directory. This needs to be changed to the host directory.
--	$(SED) "s at base_lib_dirs =.*@base_lib_dirs = ['$(HOST_DIR)/lib']@g" \
-+	$(SED) "s at lib_dirs =.*@lib_dirs = ['$(HOST_DIR)/lib']@g" \
- 		$(@D)/setup.py
- endef
- HOST_SETOOLS_POST_PATCH_HOOKS += HOST_SETOOLS_FIX_SETUP
