@@ -1,62 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 23:33:41 +0200
-Subject: [Buildroot] [git commit] package/gvfs: needs dynamic library
-Message-ID: <20200715213024.80428873CC@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 23:35:35 +0200
+Subject: [Buildroot] [git commit] package/zstd: fix build without st_mtime
+Message-ID: <20200715213143.2859C86D40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4266c9f54f635e8a9d0a7fdedfb1c84c1de10785
+commit: https://git.buildroot.net/buildroot/commit/?id=267ce1718edccacdf02bc68b651ba5f8ffe72fa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit 35e240105f1db3e91fb769616efd8bdb90fb1b24, gvfs needs
-dynamic library as it uses shared_module to build libgvfs_dbus and
-libgioremote_volume_monitor
-
 Fixes:
- - http://autobuild.buildroot.org/results/89a02fda05e75bfc9bd4fa17fea3bec23fd5da3d
+ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-engine/Config.in | 1 +
- package/gvfs/Config.in          | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ...rograms-util.c-fix-build-without-st_mtime.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 1fd229fcbb..fcbccbd5c0 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- 	depends on BR2_USE_WCHAR # gvfs
- 	depends on BR2_USE_MMU # gvfs
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	depends on !BR2_STATIC_LIBS # gvfs
- 	select BR2_PACKAGE_GVFS
- 	help
- 	  Build the vfs filesystem driver for Docker.
-diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
-index 78280f80e0..5a6b3e73ec 100644
---- a/package/gvfs/Config.in
-+++ b/package/gvfs/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GVFS
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_USE_MMU # dbus, glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_GSETTINGS_DESKTOP_SCHEMAS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_DBUS
-@@ -16,6 +17,7 @@ config BR2_PACKAGE_GVFS
- 
- 	  https://wiki.gnome.org/action/show/Projects/gvfs
- 
--comment "gvfs needs a toolchain w/ wchar, threads"
-+comment "gvfs needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_STATIC_LIBS
+diff --git a/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
+new file mode 100644
+index 0000000000..0f735b8843
+--- /dev/null
++++ b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
+@@ -0,0 +1,40 @@
++From 26d01bdb26f1c7487ad4ba0151221dfe28cd878d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Jul 2020 21:19:14 +0200
++Subject: [PATCH] programs/util.c: fix build without st_mtime
++
++Since version 1.4.5 and commit
++5af8cb7aea8d890b4801e50e5274371510f2cf33, if st_mtime is not defined,
++programs/util.c uses utime without including utime.h which will raise
++the following build failure on some of the buildroot autobuilders:
++
++util.c: In function 'UTIL_setFileStat':
++util.c:161:24: error: storage size of 'timebuf' isn't known
++         struct utimbuf timebuf;
++                        ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/facebook/zstd/pull/2246]
++---
++ programs/util.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/programs/util.c b/programs/util.c
++index a0d45745..2493a4ad 100644
++--- a/programs/util.c
+++++ b/programs/util.c
++@@ -28,7 +28,7 @@ extern "C" {
++ #  include <io.h>         /* _chmod */
++ #else
++ #  include <unistd.h>     /* chown, stat */
++-#  if PLATFORM_POSIX_VERSION < 200809L
+++#  if PLATFORM_POSIX_VERSION < 200809L || !defined(st_mtime)
++ #    include <utime.h>    /* utime */
++ #  else
++ #    include <fcntl.h>    /* AT_FDCWD */
++-- 
++2.27.0
++
