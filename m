@@ -1,63 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 17:21:19 +0200
-Subject: [Buildroot] [PATCH 9/9] package/setools: bump to 4.3.0
-In-Reply-To: <20200715130740.775804-10-antoine.tenart@bootlin.com>
-References: <20200715130740.775804-1-antoine.tenart@bootlin.com>
- <20200715130740.775804-10-antoine.tenart@bootlin.com>
-Message-ID: <20200715172119.0e9a9d44@windsurf.home>
+Date: Wed, 15 Jul 2020 17:24:51 +0200
+Subject: [Buildroot] [git commit] boot/uboot: bump to version 2020.07
+Message-ID: <20200715152129.909008716C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=500bf2c37b80899505be2dfe7bb26203326f34f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Adam who worked on setools
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, 15 Jul 2020 15:07:40 +0200
-Antoine Tenart <antoine.tenart@bootlin.com> wrote:
-
-> setools is no longer hosted on https://github.com/TresysTechnology/setools/.
-> Update the source location to its new home,
-> https://github.com/SELinuxProject/setools/.
-> 
-> Refresh patches 0001-remove-werror-flag-from-setup.patch and
-> 0002-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch for
-> 4.3.0 and remove patch 0003-setup.py-drop-path-prefix-from-man-install.patch
-> that is now upstream.
-> 
-> Add a new dependency on host-python-cython, as setup.py now depends on
-> it.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-
-Independently from your version bump, I think this package would
-probably warrant a further review as a few things look suspicious, or
-at least would be good to check if they are still needed after all the
-version bumps.
-
-List of things that makes me a bit "meh":
-
- - It would be good if we could get rid of the SETOOLS_FIX_SETUP /
-   HOST_SETOOLS_FIX_SETUP macros by having an upstreamable solution to
-   specify the path to the libraries via some setup.py argument.
-
- - It is quite weird that the dependencies of the target and host
-   variant are so different, even if we build them in exactly the same
-   way. The target variant needs host-flex, host-bison and host-swig,
-   but not the host variant ? The host variant needs
-   host-python-networkx, but the target does not need python-networkx ?
-   The target needs python-setuptools ? Why ?
-
- - It would be nice to also find an upstream solution for the "apol"
-   installation issue, where it gets installed even if python-pyqt5 is
-   not available.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 7303160100..a87a642581 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -41,7 +41,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
+ 
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2020.04"
++	bool "2020.07"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -85,7 +85,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2020.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2020.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 8274246cf6..4b660dd6d8 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372  u-boot-2020.04.tar.bz2
++sha256  c1f5bf9ee6bb6e648edbf19ce2ca9452f614b08a9f886f1a566aa42e8cf05f6a  u-boot-2020.07.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
