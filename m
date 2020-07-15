@@ -1,68 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 23:35:35 +0200
-Subject: [Buildroot] [git commit] package/zstd: fix build without st_mtime
-Message-ID: <20200715213143.2859C86D40@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 23:35:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gvfs: needs dynamic library
+In-Reply-To: <20200715195244.253915-1-fontaine.fabrice@gmail.com>
+References: <20200715195244.253915-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200715233552.237246f3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=267ce1718edccacdf02bc68b651ba5f8ffe72fa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 15 Jul 2020 21:52:44 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
+> Since commit 35e240105f1db3e91fb769616efd8bdb90fb1b24, gvfs needs
+> dynamic library as it uses shared_module to build libgvfs_dbus and
+> libgioremote_volume_monitor
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/89a02fda05e75bfc9bd4fa17fea3bec23fd5da3d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/docker-engine/Config.in | 1 +
+>  package/gvfs/Config.in          | 6 ++++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...rograms-util.c-fix-build-without-st_mtime.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
-new file mode 100644
-index 0000000000..0f735b8843
---- /dev/null
-+++ b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
-@@ -0,0 +1,40 @@
-+From 26d01bdb26f1c7487ad4ba0151221dfe28cd878d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 15 Jul 2020 21:19:14 +0200
-+Subject: [PATCH] programs/util.c: fix build without st_mtime
-+
-+Since version 1.4.5 and commit
-+5af8cb7aea8d890b4801e50e5274371510f2cf33, if st_mtime is not defined,
-+programs/util.c uses utime without including utime.h which will raise
-+the following build failure on some of the buildroot autobuilders:
-+
-+util.c: In function 'UTIL_setFileStat':
-+util.c:161:24: error: storage size of 'timebuf' isn't known
-+         struct utimbuf timebuf;
-+                        ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/facebook/zstd/pull/2246]
-+---
-+ programs/util.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/programs/util.c b/programs/util.c
-+index a0d45745..2493a4ad 100644
-+--- a/programs/util.c
-++++ b/programs/util.c
-+@@ -28,7 +28,7 @@ extern "C" {
-+ #  include <io.h>         /* _chmod */
-+ #else
-+ #  include <unistd.h>     /* chown, stat */
-+-#  if PLATFORM_POSIX_VERSION < 200809L
-++#  if PLATFORM_POSIX_VERSION < 200809L || !defined(st_mtime)
-+ #    include <utime.h>    /* utime */
-+ #  else
-+ #    include <fcntl.h>    /* AT_FDCWD */
-+-- 
-+2.27.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
