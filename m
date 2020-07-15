@@ -1,25 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 23:19:14 +0200
-Subject: [Buildroot] [PATCH] package/fastd: bump to v19
-In-Reply-To: <20200611192504.4058-1-post@lespocky.de> (Alexander Dahl's
- message of "Thu, 11 Jun 2020 21:25:04 +0200")
-References: <20200611192504.4058-1-post@lespocky.de>
-Message-ID: <871rlcxyr1.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jul 2020 23:21:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mutt: fix CVE-2020-14093
+In-Reply-To: <20200619221150.284997-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 20 Jun 2020 00:11:49 +0200")
+References: <20200619221150.284997-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wo34wk20.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Maintenance release, most important is OpenSSL 1.1+ support. See full
- > release notes for details:
+ > Mutt before 1.14.3 allows an IMAP fcc/postpone man-in-the-middle attack
+ > via a PREAUTH response.
 
- > https://fastd.readthedocs.io/en/stable/releases/v19.html
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Does this mean that fastd 18 is broken with openssl 1.1?, E.G. does this
-need to be backported to 2020.02.x?
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
