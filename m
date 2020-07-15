@@ -1,27 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:56:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version
- 1.3.4
-In-Reply-To: <20200615160952.101687-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Mon, 15 Jun 2020 18:09:52 +0200")
-References: <20200615160952.101687-1-titouan.christophe@railnova.eu>
-Message-ID: <87mu40y2kn.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jul 2020 21:33:38 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/pkg-python.mk:
+ fixup typo, PYTHON#_PATH --> PHYON3_PATH
+Message-ID: <20200715195249.689E487400@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2d770d62763258478d56bf167c5390e19df844e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > This is a crucial bugfix release that fixes a backward incompatible ABI
- > change introduced in 1.3.2.
+Signed-off-by: Brock.Zheng <goodmenzy@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 54b57cf27107a80a626b28ab79fd4138aebfcee9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-python.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Also drop patches that are now applied upstream.
-
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index 31b53e281b..59a48e5a87 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -23,7 +23,7 @@
+ # basename does not evaluate if a file exists, so we must check to ensure
+ # the _sysconfigdata__linux_*.py file exists. The "|| true" is added to return
+ # an empty string if the file does not exist.
+-PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON#_PATH)/_sysconfigdata__linux_*.py
++PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON3_PATH)/_sysconfigdata__linux_*.py
+ PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
+ 
+ # Target distutils-based packages
