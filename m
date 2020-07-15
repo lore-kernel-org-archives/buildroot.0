@@ -1,12 +1,15 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Wed, 15 Jul 2020 17:38:45 +0200
-Subject: [Buildroot] [PATCH] package/python-networkx: bump to 2.4
-Message-ID: <20200715153845.1915659-1-antoine.tenart@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Jul 2020 17:43:48 +0200
+Subject: [Buildroot] [git commit] package/python-networkx: bump to 2.4
+Message-ID: <20200715153959.09AC186D47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7e451843b76d3a2c619644128ad6e080158f73b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 python-networkx wasn't upgraded for a while due to incompatibilities
 with setools not supporting versions above 1.11. With the recent version
@@ -17,13 +20,14 @@ The license checksum had to be updated while bumping the package, but
 only the year of the copyright has changed.
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/python-networkx/python-networkx.hash | 8 ++++----
  package/python-networkx/python-networkx.mk   | 5 ++---
  2 files changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
-index 92383e75c4fd..6c4b793e0dc0 100644
+index 92383e75c4..6c4b793e0d 100644
 --- a/package/python-networkx/python-networkx.hash
 +++ b/package/python-networkx/python-networkx.hash
 @@ -1,4 +1,4 @@
@@ -36,7 +40,7 @@ index 92383e75c4fd..6c4b793e0dc0 100644
 +# Locally computed
 +sha256 f421f7c5d30022aa268174976e43e488b856ad953f32cdd13f0675630996d8c0 LICENSE.txt
 diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
-index 4dfdbd5a1c03..bcb3f22f8e5e 100644
+index 4dfdbd5a1c..bcb3f22f8e 100644
 --- a/package/python-networkx/python-networkx.mk
 +++ b/package/python-networkx/python-networkx.mk
 @@ -4,10 +4,9 @@
@@ -52,5 +56,3 @@ index 4dfdbd5a1c03..bcb3f22f8e5e 100644
  PYTHON_NETWORKX_LICENSE = BSD-3-Clause
  PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
  PYTHON_NETWORKX_SETUP_TYPE = setuptools
--- 
-2.26.2
