@@ -1,54 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:40:42 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tcpreplay:
- security bump to version 4.3.3
-Message-ID: <20200715195254.57E4C87400@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:39:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/vlc: security
+ bump version to 3.0.11
+Message-ID: <20200715195254.4E46F802E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f032777e0af7173a8852a181aef5b90fa7f5380
+commit: https://git.buildroot.net/buildroot/commit/?id=11d191a3267cd286d1ddba34a2754d7f718b77c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- Fix CVE-2020-12740: tcprewrite in Tcpreplay through 4.3.2 has a
-  heap-based buffer over-read during a get_c operation. The issue is
-  being triggered in the function get_ipv6_next() at common/get.c.
-- Update indentation in hash file (two spaces)
+Fixes CVE-2020-13428: https://www.videolan.org/security/sb-vlc3011.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 25168d220a29915a92bd213c062a8505bc0ec623)
+(cherry picked from commit 2d9200f9927407921153769a7b674f731d7d534d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpreplay/tcpreplay.hash | 6 +++---
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/vlc/vlc.hash | 12 ++++++------
+ package/vlc/vlc.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index cc00bc09b1..e83efd78b1 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.3.2/tcpreplay-4.3.2.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.3.3/tcpreplay-4.3.3.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256 955aed6a40f49a5b8c1234fd0a928edc5c665d94b7755ab5769c30938e33f380  tcpreplay-4.3.2.tar.xz
--sha256 5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
-+sha256  5e960e2a4432f583adbd11fa0855d17b73d9e0f2d6453b749f27aacaee53bab5  tcpreplay-4.3.3.tar.xz
-+sha256  5971b0c544622f4b210a9cc56436a970685d3b0666e373c09e3cf9304db15d05  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 39d0f44343..8b395b4962 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 8b2910af49..7775e449f4 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,9 +1,9 @@
+-# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha256
+-sha256  a966abfc7f3b2ff3adaa130306ecaf5d6ad3b6dc73385fc9ab0c1204029d4c31  vlc-3.0.10.tar.xz
+-# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.sha1
+-sha1  4b3c75d1861bf463db53ba9059e8cc165f5c30a7  vlc-3.0.10.tar.xz
+-# From https://get.videolan.org/vlc/3.0.10/vlc-3.0.10.tar.xz.md5
+-md5  28417dd27462ccb014b7dc7e50e9e9d6  vlc-3.0.10.tar.xz
++# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha256
++sha256  3e94a1acf33445e9da15d528aa48657aa26b912eaa2656b403d43860a8834919  vlc-3.0.11.tar.xz
++# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.sha1
++sha1  66d377a2f24b6b865d5c56530e10d84b8262b46c  vlc-3.0.11.tar.xz
++# From https://get.videolan.org/vlc/3.0.11/vlc-3.0.11.tar.xz.md5
++md5  7e68f9e2d307eb7cc16e7345cda9e978  vlc-3.0.11.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 039f106181..38d9751690 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TCPREPLAY_VERSION = 4.3.2
-+TCPREPLAY_VERSION = 4.3.3
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
+-VLC_VERSION = 3.0.10
++VLC_VERSION = 3.0.11
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
