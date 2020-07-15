@@ -1,7 +1,7 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 15 Jul 2020 19:41:02 -0300
-Subject: [Buildroot] [PATCH] package/zlog: bump version to 1.2.15
-Message-ID: <20200715224102.17594-1-sergio.prado@e-labworks.com>
+Date: Wed, 15 Jul 2020 19:57:39 -0300
+Subject: [Buildroot] [PATCH] package/xz: bump version to 5.2.5
+Message-ID: <20200715225739.30967-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,40 @@ Also separate the fields in the hash file by two spaces.
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/zlog/zlog.hash | 4 ++--
- package/zlog/zlog.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xz/xz.hash | 10 +++++-----
+ package/xz/xz.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/zlog/zlog.hash b/package/zlog/zlog.hash
-index b9f254056bfd..c39505b2c699 100644
---- a/package/zlog/zlog.hash
-+++ b/package/zlog/zlog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 05a6533e32f313eeaf134a761481a5cbc586c5dc85ba9ee6771c7458daaeb031 zlog-1.2.14.tar.gz
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-+sha256  00037ab8d52772a95d645f1dcfd2c292b7cea326b54e63e219a5b7fdcb7e6508  zlog-1.2.15.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index d9aeae7c7fca..e2410d3665f1 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 69d1db2f4dc0..3dd0cbe45944 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,8 +1,8 @@
+ # Locally calculated after checking pgp signature
+-sha256 3313fd2a95f43d88e44264e6b015e7d03053e681860b0d5d3f9baca79c57b7bf  xz-5.2.4.tar.bz2
++sha256  5117f930900b341493827d63aa910ff5e011e0b994197c3b71c08a20228a42df  xz-5.2.5.tar.bz2
+ 
+ # Hash for license files
+-sha256 bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPLv3
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
++sha256  bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPLv3
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index dbf874e9b9e3..487dac461b71 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZLOG_VERSION = 1.2.14
-+ZLOG_VERSION = 1.2.15
- ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
- ZLOG_LICENSE = LGPL-2.1
- ZLOG_LICENSE_FILES = COPYING
+-XZ_VERSION = 5.2.4
++XZ_VERSION = 5.2.5
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = https://tukaani.org/xz
+ XZ_INSTALL_STAGING = YES
 -- 
 2.17.1
