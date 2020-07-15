@@ -1,26 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:45:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnss: fix build with old PPC
- ABI
-In-Reply-To: <20200617200251.31283-1-joseph.kogut@gmail.com> (Joseph Kogut's
- message of "Wed, 17 Jun 2020 13:02:51 -0700")
-References: <20200617200251.31283-1-joseph.kogut@gmail.com>
-Message-ID: <874kq8zho5.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jul 2020 21:49:12 +0200
+Subject: [Buildroot] [PATCH v3] package/systemd: fixup RPATH for more
+ systemd host binaries
+In-Reply-To: <20200615222856.147762-1-nolange79@gmail.com> (Norbert Lange's
+ message of "Tue, 16 Jun 2020 00:28:55 +0200")
+References: <20200615222856.147762-1-nolange79@gmail.com>
+Message-ID: <87zh80y2x3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
+>>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/bdbd33c7a764931b2066dd8b527dde2f5dc298b4
- > http://autobuild.buildroot.net/results/61bf50f73bb79e85c22e663f5fc22f4b9ccc0d3b
- > http://autobuild.buildroot.net/results/4437942a528ab8f782d3b97595e76bb690d3a409
- > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+ > All systemd binaries depend on libsystemd-shared and need their
+ > RPATH fixed. Use a glob to catch them all
 
-Committed to 2020.05.x, thanks.
+ > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+ > ---
+ v1-> v2:
+ > -   dont ignore failure from patchelf
+ v2-> v3:
+ > -   change back to shell loop, the wildcard gets expanded before
+ >     the install step and is empty the first time
+ > -   add busctl
+
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
