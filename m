@@ -1,54 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:29:01 +0200
-Subject: [Buildroot] [PATCH 1/2] core.br2-external: fix reporting errors
-In-Reply-To: <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 22 May 2020 23:40:50 +0200")
-References: <cover.1590183628.git.yann.morin.1998@free.fr>
- <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
-Message-ID: <87eepc1ssi.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 15 Jul 2020 21:29:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zstd: fix build without st_mtime
+Message-ID: <20200715192905.34773-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Fixes:
+ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
 
- > When a br2-external tree has an issue, e.g. a missing file, or does not
- > have a name, or the name uses invalid cahrs, we report that condition by
- > setting the variable BR2_EXTERNAL_ERROR.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ms-util.c-fix-build-without-st_mtime.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
 
- > That variable is defined in the script support/scripts/br2-external,
- > which outputs it on stdout, and checked by the Makefile.
-
- > Before d027cd75d09, stdout was explicitly redirected to the generated
- > .mk file, with   exec >"${ofile}"   as the Makefile and Kconfig
- > fragments were generated each with their own call to the script, and o
- > the validation phase would emit the BR2_EXTERNAL_ERROR variable in the
- > Makefile fragment.
-
- > But with d027cd75d09, both the Makefile and Kconfig fragmetns were now
- > generated with a single call to the script, and as such the semantics of
- > the scripts changed, and only each of the actual generators, do_mk and
- > do_kconfig, ahd their out put redirected. Which left do_validate with
- > the default stdout. Which would emit BR2_EXTERNAL_ERROR on stdout.
-
- > In turn, the stdout of the script would be interpreted by as part of the
- > Makefile. But this does not end up very well when a br2-external tree
- > indeed has an error:
-
- >     Makefile:184: *** multiple target patterns.  Stop.
-
- > So we must redirect the output of the validation step to the
- > Makefile fragment.
-
- > Note that we don't need to append in do_mk, and we can do an overwrite
- > redirection: if we go so far as to call do_mk, it means there was no
- > error, and thus the fragment is empty.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
+diff --git a/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
+new file mode 100644
+index 0000000000..0f735b8843
+--- /dev/null
++++ b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
+@@ -0,0 +1,40 @@
++From 26d01bdb26f1c7487ad4ba0151221dfe28cd878d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Jul 2020 21:19:14 +0200
++Subject: [PATCH] programs/util.c: fix build without st_mtime
++
++Since version 1.4.5 and commit
++5af8cb7aea8d890b4801e50e5274371510f2cf33, if st_mtime is not defined,
++programs/util.c uses utime without including utime.h which will raise
++the following build failure on some of the buildroot autobuilders:
++
++util.c: In function 'UTIL_setFileStat':
++util.c:161:24: error: storage size of 'timebuf' isn't known
++         struct utimbuf timebuf;
++                        ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/facebook/zstd/pull/2246]
++---
++ programs/util.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/programs/util.c b/programs/util.c
++index a0d45745..2493a4ad 100644
++--- a/programs/util.c
+++++ b/programs/util.c
++@@ -28,7 +28,7 @@ extern "C" {
++ #  include <io.h>         /* _chmod */
++ #else
++ #  include <unistd.h>     /* chown, stat */
++-#  if PLATFORM_POSIX_VERSION < 200809L
+++#  if PLATFORM_POSIX_VERSION < 200809L || !defined(st_mtime)
++ #    include <utime.h>    /* utime */
++ #  else
++ #    include <fcntl.h>    /* AT_FDCWD */
++-- 
++2.27.0
++
 -- 
-Bye, Peter Korsgaard
+2.27.0
