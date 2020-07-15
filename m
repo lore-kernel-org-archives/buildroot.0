@@ -1,45 +1,36 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 15 Jul 2020 20:09:32 -0300
-Subject: [Buildroot] [PATCH] package/xxhash: bump version to 0.7.4
-Message-ID: <20200715230933.10814-1-sergio.prado@e-labworks.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 15 Jul 2020 16:19:16 -0700
+Subject: [Buildroot] [PATCH 1/1] package/mender/mender.mk: add missing
+ backslash
+Message-ID: <20200715231916.1617588-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change the hash of the license:
-- Copyright message changed from 'present' to 2020
-- Link to BSD 2-Clause License changed from http to https
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Without this backslash, any attempt to run make will result in the error:
+package/mender/mender.mk:44: *** recipe commences before first target.  Stop
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/xxhash/xxhash.hash | 4 ++--
- package/xxhash/xxhash.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mender/mender.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
-index 097694364b7a..5598b64955f8 100644
---- a/package/xxhash/xxhash.hash
-+++ b/package/xxhash/xxhash.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  7e93d28e81c3e95ff07674a400001d0cdf23b7842d49b211e5582d00d8e3ac3e  xxhash-0.7.2.tar.gz
--sha256  94df5da58df6c83bcc2fc0c84aaad71a0b0fe94625060d6cac000121dda37730  LICENSE
-+sha256  4d9706c9da4fbdf901598f5e3b71db0eddd4ac962e827a73ebf75d66dfd820fe  xxhash-0.7.4.tar.gz
-+sha256  9da63520e9293d82c4b1613be5c84058cadb82b02f5972179bad13731d589910  LICENSE
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index bd51c9bd1b67..6fbda50fbb20 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 13f0225037..325141787e 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -40,7 +40,7 @@ MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
+ MENDER_UPDATE_MODULES_FILES = \
+ 	directory \
+ 	script \
+-	single-file
++	single-file \
+ 	$(if $(BR2_PACKAGE_DOCKER_CLI),docker) \
+ 	$(if $(BR2_PACKAGE_RPM),rpm)
  
--XXHASH_VERSION = 0.7.2
-+XXHASH_VERSION = 0.7.4
- XXHASH_SITE = $(call github,Cyan4973,xxHash,v$(XXHASH_VERSION))
- XXHASH_LICENSE = BSD-2-Clause (library), GPL-2.0+ (xxhsum)
- XXHASH_LICENSE_FILES = LICENSE
 -- 
-2.17.1
+2.26.2
