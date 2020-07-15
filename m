@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 22:47:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/open-plc-utils:
+Date: Wed, 15 Jul 2020 22:47:45 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/open-plc-utils:
  install packages to /usr/bin
-Message-ID: <20200715204518.3897F873B9@busybox.osuosl.org>
+Message-ID: <20200715204523.5E564873B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d9bcbc55deb213691876b5f8f8d0bc93b719c11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=37b4bffac5f4b74275c424b4b466007e610eabe3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 By default, open-plc-utils installs all of the compiled binaries to
 /usr/local/bin which is not in the default path provided by Buildroot.
