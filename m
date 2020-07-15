@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:26:54 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] core/br2-external: fix
+Date: Wed, 15 Jul 2020 21:27:04 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] core/br2-external: fix
  reporting errors
-Message-ID: <20200715192515.3D452873BE@busybox.osuosl.org>
+Message-ID: <20200715192519.CF6BB873BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87f9527b55b202c1078f2130342077175407cdbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=88e7c731338698262f0e7bfef36f1ef0021061d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 When a br2-external tree has an issue, e.g. a missing file, or does not
 have a name, or the name uses invalid chars, we report that condition by
