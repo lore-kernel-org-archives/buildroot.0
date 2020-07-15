@@ -1,36 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 17:44:27 +0200
-Subject: [Buildroot] [PATCH] package/python-networkx: bump to 2.4
-In-Reply-To: <20200715153845.1915659-1-antoine.tenart@bootlin.com>
-References: <20200715153845.1915659-1-antoine.tenart@bootlin.com>
-Message-ID: <20200715174427.33fcfb00@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 15 Jul 2020 11:19:44 -0500
+Subject: [Buildroot] [2020.02.x] package/python-twisted: Fix several
+ request smuggling attacks
+In-Reply-To: <20200715153056.26874-1-matthew.weber@rockwellcollins.com>
+References: <20200715153056.26874-1-matthew.weber@rockwellcollins.com>
+Message-ID: <CANQCQpaRVk7h6sEY-Ucs10kwvT6HWHEgdOdVvTwxVhgf7xkjfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Jul 2020 17:38:45 +0200
-Antoine Tenart <antoine.tenart@bootlin.com> wrote:
+On Wed, Jul 15, 2020 at 10:30 AM Matt Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> CVE-2020-10108
+> In Twisted Web through 19.10.0, there was an HTTP request splitting
+> vulnerability. When presented with two content-length headers, it
+> ignored the first header. When the second content-length value was
+> set to zero, the request body was interpreted as a pipelined request.
+>
+> CVE-2020-10109
+> In Twisted Web through 19.10.0, there was an HTTP request splitting
+> vulnerability. When presented with a content-length and a chunked
+> encoding header, the content-length took precedence and the remainder
+> of the request body was interpreted as a pipelined request.
 
-> python-networkx wasn't upgraded for a while due to incompatibilities
-> with setools not supporting versions above 1.11. With the recent version
-> bump of setools this is no longer true and we can bump python-networkx
-> to 2.4.
-> 
-> The license checksum had to be updated while bumping the package, but
-> only the year of the copyright has changed.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-> ---
->  package/python-networkx/python-networkx.hash | 8 ++++----
->  package/python-networkx/python-networkx.mk   | 5 ++---
->  2 files changed, 6 insertions(+), 7 deletions(-)
+Up to and including 19.10.0 requires this patch (2020.02.x) and 20.3.0
+on master already has the fix  [1].
 
-Applied to master, thanks.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Matt
+
+[1] https://github.com/twisted/twisted/commit/4a7d22e490bb8ff836892cc99a1f54b85ccb0281
