@@ -1,51 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 17:24:51 +0200
-Subject: [Buildroot] [git commit] boot/uboot: bump to version 2020.07
-Message-ID: <20200715152129.909008716C@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 17:25:16 +0200
+Subject: [Buildroot] [git commit] package/mongodb: security bump to version
+ 4.2.8
+Message-ID: <20200715152129.A34418716C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=500bf2c37b80899505be2dfe7bb26203326f34f1
+commit: https://git.buildroot.net/buildroot/commit/?id=af455335232069a160a1862e1f66b8bbe58a49ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Fix the following security issues:
+- SERVER-45514 [FLE] Reject document validators with encryption-related
+  keywords if the validationAction is ???warn???
+- SERVER-48039 Unrecognized option: net.ssl.clusterCertificateSelector
+  in MongoDB v4.2
+- SERVER-45803 mongodecrypt needs a ServiceContext
+- SERVER-46834 Use monotonic time in UserCacheInvalidator
+- SERVER-47113 LDAP connection pool acquisition state should own host
+  list
+
+https://docs.mongodb.com/manual/release-notes/4.2
+
+Also:
+- Update indentation in hash file (two spaces)
+- Tweak version to be "compliant" with https://release-monitoring.org
+- Use official tarball
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mongodb/mongodb.hash | 6 +++---
+ package/mongodb/mongodb.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 7303160100..a87a642581 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2020.04"
-+	bool "2020.07"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2020.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2020.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 8274246cf6..4b660dd6d8 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index 01793e02e9..943ffda997 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
  # Locally computed:
--sha256  fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372  u-boot-2020.04.tar.bz2
-+sha256  c1f5bf9ee6bb6e648edbf19ce2ca9452f614b08a9f886f1a566aa42e8cf05f6a  u-boot-2020.07.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+-sha256 033839fe43adb13351f9e0ef361d4731d7e917b2d7ad12f09df73e6e9c8bf6db  mongodb-r4.2.4.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+-sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
++sha256  e8880277e3910afd82c71ed61861d518f2040cbc062e00a26d53a3224284db8f  mongodb-src-r4.2.8.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
++sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index f7f8b4bd05..fa111bef7b 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION_BASE = 4.2.4
+-MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+-MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
++MONGODB_VERSION = 4.2.8
++MONGODB_SITE = https://fastdl.mongodb.org/src
++MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+ 
+ MONGODB_LICENSE = Apache-2.0 (drivers), SSPL (database)
+ MONGODB_LICENSE_FILES = APACHE-2.0.txt LICENSE-Community.txt
+@@ -41,7 +41,7 @@ MONGODB_SCONS_OPTS = \
+ 	--use-system-zlib
+ 
+ # need to pass mongo version when not building from git repo
+-MONGODB_SCONS_OPTS += MONGO_VERSION=$(MONGODB_VERSION_BASE)-
++MONGODB_SCONS_OPTS += MONGO_VERSION=$(MONGODB_VERSION)-
+ 
+ # WiredTiger database storage engine only supported on 64 bits
+ ifeq ($(BR2_ARCH_IS_64),y)
