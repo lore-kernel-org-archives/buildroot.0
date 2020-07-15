@@ -1,10 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 15 Jul 2020 10:51:29 -0700
-Subject: [Buildroot] [PATCH v5 3/4] package/firewalld: bear the kernel
- options munging
+Date: Wed, 15 Jul 2020 10:51:30 -0700
+Subject: [Buildroot] [PATCH v5 4/4] support/testing: add firewalld test cases
 In-Reply-To: <20200715175130.591273-1-aduskett@gmail.com>
 References: <20200715175130.591273-1-aduskett@gmail.com>
-Message-ID: <20200715175130.591273-3-aduskett@gmail.com>
+Message-ID: <20200715175130.591273-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,288 +12,152 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-To run, Firewalld requires enabling almost every single nftables option in the
-kernel menuconfig. Indeed for a regular user, this task is quite a
-time-consuming operation, and missing even one required nftables option results
-in firewalld failing to start.
+This test case runs firewalld using both system and sysvinit.
 
-Through a mix of trial and error and talking to the upstream developers,
-attached is the minimum amount of kernel options required for runtime.
-Understandably this list is daunting. However, these options have passed
-run-time tests with kernel 4.18 (the minimum kernel version required) and
-kernel 5.7.8 (the latest kernel version as of this commit log.)
-
-As such, it is safe to say these options will work for anybody wanting to
-use firewalld with a supported kernel version of 4.18 or higher.
+The tests perform the following tasks:
+  - Start and login
+  - run `firewalld-cmd --state` with the expected output of "running" and a
+    return code of 0.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v4:
   - Add this patch to the series
 
- package/firewalld/firewalld.mk | 252 +++++++++++++++++++++++++++++++++
- 1 file changed, 252 insertions(+)
+ .gitlab-ci.yml                                |  2 +
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/test_firewalld.py   | 98 +++++++++++++++++++
+ 3 files changed, 101 insertions(+)
+ create mode 100644 support/testing/tests/package/test_firewalld.py
 
-diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-index 9f5f21d1ad..1b2ff5af2d 100644
---- a/package/firewalld/firewalld.mk
-+++ b/package/firewalld/firewalld.mk
-@@ -78,4 +78,256 @@ define FIREWALLD_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S41firewalld
- endef
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index d60a50f5c5..d7e2dc5802 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -407,6 +407,8 @@ tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
+ tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
+ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+ tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
++tests.package.test_firewalld.TestFirewalldSystemd: { extends: .runtime_test }
++tests.package.test_firewalld.TestFirewalldSysVInit: { extends: .runtime_test }
+ tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
+ tests.package.test_gst1_python.TestGst1Python: { extends: .runtime_test }
+ tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d96c016997..5b020573af 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -93,6 +93,7 @@ F:	package/setools/
+ F:	package/sngrep/
+ F:	package/spidermonkey/
+ F:	package/systemd/
++F:	support/testing/tests/package/test_firewalld.py
+ F:	support/testing/tests/package/test_gst1_python.py
+ F:	support/testing/tests/package/test_python_gobject.py
  
-+# Firewalld requires almost every single nftables rule enabled in the kernel to
-+# properly start. As such, if a user selects the firewalld package, it is much
-+# easier to select these options for them, much like we do for systemd or
-+# iptables.
-+define FIREWALLD_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_COMMON)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_CONNCOUNT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_ZONES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PROCFS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_EVENTS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMEOUT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMESTAMP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_LABELS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_DCCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_GRE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_SCTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_UDPLITE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_AMANDA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_FTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_H323)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_IRC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_BROADCAST)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_NETBIOS_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SNMP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PPTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SANE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TFTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_TIMEOUT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_HELPER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_GLUE_CT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_NEEDED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_DCCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_UDPLITE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_SCTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_AMANDA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_FTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IRC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_TFTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_REDIRECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NUMGEN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FLOW_OFFLOAD)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COUNTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CONNLIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LOG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TUNNEL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OBJREF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUOTA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_BRIDGE_META)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COMPAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_HASH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OSF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FWD_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_NETDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_CONNMARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_CHECKSUM)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_CLASSIFY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_CONNMARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_CT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_DSCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_HMARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_IDLETIMER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_LED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_LOG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_MARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_NFLOG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_NFQUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_NOTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_RATEEST)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_TEE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_TPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_TRACE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_TCPMSS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CGROUP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CLUSTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_COMMENT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNBYTES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNLABEL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNLIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNMARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CPU)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_DCCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_DEVGROUP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_DSCP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ESP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_HASHLIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_HELPER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_IPCOMP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_IPRANGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_L2TP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_LENGTH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_LIMIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_MAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_MARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_MULTIPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_NFACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_OSF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_OWNER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_POLICY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_PHYSDEV)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_PKTTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_QUOTA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_RATEEST)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_REALM)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_RECENT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_SCTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_SOCKET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_STATE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_STATISTIC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_STRING)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_TCPMSS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_TIME)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_U32)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IPMAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_PORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTNET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_MAC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORTNET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETNET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETIFACE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_LIST_SET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_ARP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_ACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_QUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_LOG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_ARP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV4)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SNMP_BASIC)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_GRE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PPTP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_H323)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_AH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_ECN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_RPFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_TTL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MANGLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_CLUSTERIP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_ECN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_TTL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_RAW)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARP_MANGLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_AH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_EUI64)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_FRAG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_OPTS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_HL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_IPV6HEADER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_MH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RPFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_SRH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_HL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_SYNPROXY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MANGLE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_RAW)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_NPT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV6)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_BRIDGE_REJECT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_BRIDGE)
-+endef
+diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
+new file mode 100644
+index 0000000000..4fbccfacfa
+--- /dev/null
++++ b/support/testing/tests/package/test_firewalld.py
+@@ -0,0 +1,98 @@
++"""Test firewalld for both systemd and sysvinit."""
++import os
++from tests.package.test_python import TestPythonPackageBase
 +
- $(eval $(autotools-package))
++
++class TestFirewalldSystemd(TestPythonPackageBase):
++    """Build the kernel as firewalld requires all of the nftable options."""
++
++    __test__ = True
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.39"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_INIT_SYSTEMD=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_FIREWALLD=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def wait_boot(self):
++        """Boot time is longer than the default multiplier."""
++        self.emulator.timeout_multiplier *= 10
++        self.emulator.login()
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kernel_file = os.path.join(self.builddir, "images", "zImage")
++        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7",
++                           kernel=kernel_file,
++                           kernel_cmdline=["console=ttyAMA0,115200"],
++                           options=[
++                               "-initrd", cpio_file,
++                               "-dtb", dtb_file,
++                               "-M", "vexpress-a9"
++                           ])
++        self.wait_boot()
++        cmd = "firewall-cmd --state"
++        output, exit_code = self.emulator.run(cmd, timeout=10)
++        self.assertIn("running", output[0])
++        self.assertEqual(exit_code, 0)
++
++
++class TestFirewalldSysVInit(TestPythonPackageBase):
++    """Build the kernel as firewalld requires all of the nftable options."""
++
++    __test__ = True
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.39"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_FIREWALLD=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def wait_boot(self):
++        """Boot time is longer than the default multiplier."""
++        self.emulator.timeout_multiplier *= 10
++        self.emulator.login()
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kernel_file = os.path.join(self.builddir, "images", "zImage")
++        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7",
++                           kernel=kernel_file,
++                           kernel_cmdline=["console=ttyAMA0,115200"],
++                           options=[
++                               "-initrd", cpio_file,
++                               "-dtb", dtb_file,
++                               "-M", "vexpress-a9"
++                           ])
++        self.wait_boot()
++        cmd = "firewall-cmd --state"
++        output, exit_code = self.emulator.run(cmd, timeout=10)
++        self.assertIn("running", output[0])
++        self.assertEqual(exit_code, 0)
 -- 
 2.26.2
