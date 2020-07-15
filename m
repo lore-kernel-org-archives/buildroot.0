@@ -1,53 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 15 Jul 2020 21:04:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lxc: fix license
-Message-ID: <20200715190438.16497-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jul 2020 21:25:00 +0200
+Subject: [Buildroot] Virtual/online Buildroot Developers meeting ?
+In-Reply-To: <20200713133634.350b9d23@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 13 Jul 2020 13:36:34 +0200")
+References: <20200711165315.0c2b5079@windsurf.home>
+ <20200711165601.GA15448@scaer>
+ <197f53b1-9c94-2697-0aff-4b80fdbc3a9c@mind.be>
+ <20200713133634.350b9d23@windsurf.home>
+Message-ID: <87imeo1sz7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 5a393677314dfdaa6a4bd6a847b642ae54517538 forgot to update
-license which has been changed from COPYING to LICENSE.GPL2 and
-LICENSE.LGPL2.1 since version 4.0.0 and
-https://github.com/lxc/lxc/commit/cc73685dd09315b292968ee91a08a8f295376b35
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-It should be noted that COPYING describes GPLv3 for an unknown reason
+ > On Mon, 13 Jul 2020 09:45:43 +0200
+ > Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/2da182d0b84e2597e135506f8166a54660c4b2f5
+ >> [Yes, I'm still alive :-) ]
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lxc/lxc.hash | 3 ++-
- package/lxc/lxc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ > Awesome, some of us were wondering ! :-)
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index faaa17dde0..411947f165 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
- sha256  d56d91d772449c57e9a67b770dab8967e412051d8d6246ce56c63264671672e5  lxc-4.0.3.tar.gz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 0d88cd6c8c..ac8c432f24 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -6,8 +6,8 @@
- 
- LXC_VERSION = 4.0.3
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
--LXC_LICENSE = LGPL-2.1+
--LXC_LICENSE_FILES = COPYING
-+LXC_LICENSE = GPL-2.0, LGPL-2.1+
-+LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
- LXC_DEPENDENCIES = host-pkgconf
- LXC_INSTALL_STAGING = YES
- 
+So am I, sorry about the slow response.
+
+
+ >> >>  - What format should it take ? One full day once in a while ? Just a
+ >> >>    few hours here and there ? Multiple days in a row ?  
+ >> > 
+ >> > My preference would be to block two or more days in a row. Sun-Mon ro
+ >> > Sun-Tue would be ideal for me, but I can adapt.  
+ >> 
+ >> I also think it's easier to organise at least one and maybe several days in a
+ >> row. For that, you clear your calendar, while if it's just for a couple of hours
+ >> you tend not to do the effort.
+
+ > On my side, I agree that doing full days is going to be easier than
+ > just a few hours here and there. It also allows to focus on something a
+ > bit more complex than what can be done in just 2-3 hours.
+
+Indeed.
+
+ > However, the question is whether we want a few full days spread over
+ > time, or grouped together. Or perhaps just have 2 meetings of 2 days
+ > each, a few weeks apart ?
+
+I think 1, max 2 days is easiest to plan in. I have some free time late
+next week / early the week after, and will be away on holiday from 30/7
+to 14/8.
+
+ >> Here are the candidates that I've used and think are suitable (in no particular
+ >> order):
+ >> 
+ >> - jitsi
+ >> - zoom
+ >> - Google meet
+ >> - discord
+ >> - whereby
+
+ > If that's needed, Bootlin has its own Jitsi installation, which we can
+ > use. We've used it successfully to deliver 4 hours training courses,
+ > over several days, and it works fine.
+
+I don't really have any preferences.
+
 -- 
-2.27.0
+Bye, Peter Korsgaard
