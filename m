@@ -1,42 +1,53 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 15 Jul 2020 21:02:38 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/warp7: bump Kernel and U-Boot
- version
-Message-ID: <1594839758-3574-1-git-send-email-pjtexier@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 15 Jul 2020 21:04:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix license
+Message-ID: <20200715190438.16497-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2020.07 and kernel to version 5.7.8
+Commit 5a393677314dfdaa6a4bd6a847b642ae54517538 forgot to update
+license which has been changed from COPYING to LICENSE.GPL2 and
+LICENSE.LGPL2.1 since version 4.0.0 and
+https://github.com/lxc/lxc/commit/cc73685dd09315b292968ee91a08a8f295376b35
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+It should be noted that COPYING describes GPLv3 for an unknown reason
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2da182d0b84e2597e135506f8166a54660c4b2f5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/warp7_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lxc/lxc.hash | 3 ++-
+ package/lxc/lxc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index 41511c1..76d2801 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.8"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
-@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index faaa17dde0..411947f165 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  d56d91d772449c57e9a67b770dab8967e412051d8d6246ce56c63264671672e5  lxc-4.0.3.tar.gz
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 0d88cd6c8c..ac8c432f24 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -6,8 +6,8 @@
  
- # wifi firmware for brcm43430
+ LXC_VERSION = 4.0.3
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+-LXC_LICENSE = LGPL-2.1+
+-LXC_LICENSE_FILES = COPYING
++LXC_LICENSE = GPL-2.0, LGPL-2.1+
++LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
+ 
 -- 
-2.7.4
+2.27.0
