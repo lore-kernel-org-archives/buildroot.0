@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 22:47:45 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/open-plc-utils:
- install packages to /usr/bin
-Message-ID: <20200715204523.5E564873B9@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 22:51:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/granite: bump to version 5.4.0
+In-Reply-To: <20200614163524.281536-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 14 Jun 2020 18:35:24 +0200")
+References: <20200614163524.281536-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eepcy013.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37b4bffac5f4b74275c424b4b466007e610eabe3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-By default, open-plc-utils installs all of the compiled binaries to
-/usr/local/bin which is not in the default path provided by Buildroot.
+ > granite fails to build since bump to vala 0.46.6 in commit
+ > 2723ff3333f4f31a06628692bb644552681f8226:
 
-Passing BIN="$(TARGET_DIR)/usr/bin" to make install forces open-plc-utils to
-install the compiled binaries to /usr/bin.
+ > make[3]: Leaving directory '/tmp/instance-0/output-1/build/granite-0.4.1'
+ > [  1%] Generating style-classes.c;Application.c;Drawing/Color.c;Drawing/BufferSurface.c;Drawing/Utilities.c;GtkPatch/AboutDialog.c;Services/Settings.c;Services/Logger.c;Services/Paths.c;Services/System.c;Services/Contractor.c;Services/ContractorProxy.c;Services/IconFactory.c;Services/SimpleCommand.c;Widgets/AlertView.c;Widgets/Avatar.c;Widgets/Utils.c;Widgets/WrapLabel.c;Widgets/AboutDialog.c;Widgets/ModeButton.c;Widgets/DatePicker.c;Widgets/Entries.c;Widgets/TimePicker.c;Widgets/CollapsiblePaned.c;Widgets/StaticNotebook.c;Widgets/DynamicNotebook.c;Widgets/CompositedWindow.c;Widgets/AppMenu.c;Widgets/Welcome.c;Widgets/WelcomeButton.c;Widgets/Toast.c;Widgets/ToolButtonWithMenu.c;Widgets/PopOver.c;Widgets/ContractorView.c;Widgets/ContractorMenu.c;Widgets/DecoratedWindow.c;Widgets/LightWindow.c;Widgets/StatusBar.c;Widgets/SidebarPaned.c;Widgets/StorageBar.c;Widgets/SourceList.c;Widgets/CellRendererExpander.c;Widgets/CellRendererBadge.c;Widgets/ThinPaned.c;Widgets/OverlayBar.c
+ ;gr
+ >  anite.vapi;granite.h
+ > make[3]: Entering directory '/tmp/instance-0/output-1/build/granite-0.4.1'
+ > /tmp/instance-0/output-1/build/granite-0.4.1/lib/Application.vala:145.9-145.26: error: Creation method of abstract class cannot be public.
+ >         public Application () {
+ >         ^^^^^^^^^^^^^^^^^^
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 35bbcde75c2cb0b0d4a823b67f7fb82f305762ca)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/open-plc-utils/open-plc-utils.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > So bump granite to latest version to include the following commit (that
+ > does not apply cleanly on current version):
+ > https://github.com/elementary/granite/commit/fd26013c84afdeb6300ae2f4a574856753fc2b58
 
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index e1e66bf7e0..3030301f7d 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
-@@ -26,7 +26,8 @@ define OPEN_PLC_UTILS_BUILD_CMDS
- endef
- 
- define OPEN_PLC_UTILS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) ROOTFS=$(TARGET_DIR) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) ROOTFS=$(TARGET_DIR) \
-+		BIN="$(TARGET_DIR)/usr/bin" -C $(@D) install
- endef
- 
- $(eval $(generic-package))
+ > Moreover:
+ > - Switch site to github to get latest release
+ > - Switch to meson-package
+ > - Add gobject-introspection optional dependency
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3e2cc89b9bd42824731d0c7b39dd5b5c98e527ee
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
