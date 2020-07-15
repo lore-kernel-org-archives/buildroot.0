@@ -1,102 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:33:13 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/pkg-python: use a
- shell expansion for sysconfigdata_name
-Message-ID: <20200715195249.5F43987400@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:47:45 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/systemd: fixup
+ RPATH for more systemd host binaries
+Message-ID: <20200715195249.B6D2281F67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d10659b93698d53003fccabea1b100fb1d29b02c
+commit: https://git.buildroot.net/buildroot/commit/?id=4a552b6447c328309a6dd66cfc321bc6ae7c3887
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Currently, GNU Make expands the Python SYSCONFIGDATA_NAME variable;
-however, when building with per-package directories, this variable is
-not set because the evaluation of this variable occurs before buildroot
-creates the per-package directories of a given package.
+All systemd binaries depend on libsystemd-shared and need their RPATH
+fixed. Use a glob to catch them all.
 
-This can be easily demonstrated with that trivial Makefile:
+We can't use $(wildcard ...) because this is expanded before any file
+may exist (it's in the same rule that install those file, and the
+expansion in Makefile is done once at the beginning of the recipe).
 
-    $ cat Makefile
-    BLA = $(wildcard bla)
-    all:
-        @echo 'BLA=$(BLA)'
-        @touch bla
-        @echo 'BLA=$(BLA)'
+We need to test each file:
+ 1. to ignore files that were not build (e.g. because the host is
+    missing some dependencies (in which case we don't care; we're only
+    interested in systemctl, and that one is already built)
+ 2. to ensure the glob was expanded (in case no file would match
+    systemd-*)
 
-    $ make
-    BLA=
-    BLA=
-
-    $ make
-    BLA=bla
-    BLA=bla
-
-I.e. the variables are evaluated at the beginning of a recipe, not for
-each line of the recipe.
-
-There are two solutions to fix this problem:
-
-  - add a step between "patch" and "configure," which would evaluate all
-    of the variables after creating the per-package directories;
-
-  - evaluate SYSCONFIGDATA_NAME via a shell expansion instead of
-    Makefile, to postpone the effective ex[ansion to until after the
-    file has been created.
-
-Even though the first option is semantically the best solution, this is
-also very intrusive, especially since python3 is so far the only case
-where we would need it. The second option however is more expedient, adn
-so this is what we're doing here.
-
-We introduce PKG_PYTHON_SYSCONFIGDATA_PATH to avoid duplication and to
-make the following line easier to read.
-
-Then PKG_PYTHON_SYSCONFIGDATA_NAME is actually defined as a back-tick
-shell expansion (although back-ticks have their drawbacks, using $(...)
-in Makefile is not trivial either):
-
-  - we test that the file does exist, to cover the python2 and python3
-    cases: with python2, the file does not exist, so we want to expand
-    to an empty string; 'basename' only works on the filename, and does
-    not check the file actually exists;
-
-  - if the file exist, we get its basename without the .py extension,
-    and this makes our expansion;
-
-  - the "|| true" is added to ensure the old behavior of returning an
-    empty string if the file does not exist still works, when the
-    expansion is attempted in a shell where 'set -e' is in effect (the
-    test would fail with python2, but this is not an error).
-
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12941
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[yann.morin.1998 at free.fr: slight rewording in commit log]
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+[yann.morin.1998 at free.fr:
+  - don't use 'set -e', use the more traditional '|| exit 1'
+  - don't cd into HOST_DIR/bin, but use $(addprefix ...)
+  - use positive logic in the test
+  - expand commit log
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2158c87206a901be7fcd0beb5b499f086638dc58)
+(cherry picked from commit 9f1a9ee9328797f46a65cd7ad55b0df92252b566)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-python.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/systemd/systemd.mk | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index e5cd52003e..31b53e281b 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -20,9 +20,11 @@
- #
- ################################################################################
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 92de540725..2490a988a2 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -643,6 +643,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ 	host-libcap \
+ 	host-gperf
  
--define PKG_PYTHON_SYSCONFIGDATA_NAME
--$(basename $(notdir $(wildcard $(PYTHON3_PATH)/_sysconfigdata__linux_*.py)))
--endef
-+# basename does not evaluate if a file exists, so we must check to ensure
-+# the _sysconfigdata__linux_*.py file exists. The "|| true" is added to return
-+# an empty string if the file does not exist.
-+PKG_PYTHON_SYSCONFIGDATA_PATH = $(PYTHON#_PATH)/_sysconfigdata__linux_*.py
-+PKG_PYTHON_SYSCONFIGDATA_NAME = `{ [ -e $(PKG_PYTHON_SYSCONFIGDATA_PATH) ] && basename $(PKG_PYTHON_SYSCONFIGDATA_PATH) .py; } || true`
++HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
++
+ # Fix RPATH After installation
+ # * systemd provides a install_rpath instruction to meson because the binaries
+ #   need to link with libsystemd which is not in a standard path
+@@ -651,20 +653,14 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ # * the original path had been tweaked by buildroot via LDFLAGS to add
+ #   $(HOST_DIR)/lib
+ # * thus re-tweak rpath after the installation for all binaries that need it
+-HOST_SYSTEMD_HOST_TOOLS = \
+-	systemd-analyze \
+-	systemd-machine-id-setup \
+-	systemd-mount \
+-	systemd-nspawn \
+-	systemctl \
+-	udevadm
+-
+-HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
++HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
  
- # Target distutils-based packages
- PKG_PYTHON_DISTUTILS_ENV = \
+ define HOST_SYSTEMD_FIX_RPATH
+-	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+-		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+-	)
++	for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
++		[ -e $$f ] || continue; \
++		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
++		|| exit 1; \
++	done
+ endef
+ HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
+ 
