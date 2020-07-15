@@ -1,82 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:47:45 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/systemd: fixup
- RPATH for more systemd host binaries
-Message-ID: <20200715195249.B6D2281F67@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:50:24 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] support/download: fix git
+ wrapper with submodules on older git versions
+Message-ID: <20200715195249.C3B8F80170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a552b6447c328309a6dd66cfc321bc6ae7c3887
+commit: https://git.buildroot.net/buildroot/commit/?id=131fdd39bbfc2f5e2306e13930966168ca734bc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-All systemd binaries depend on libsystemd-shared and need their RPATH
-fixed. Use a glob to catch them all.
+Older versions of git store the absolute path of the submodules'
+repository as stored in the super-project, e.g.:
 
-We can't use $(wildcard ...) because this is expanded before any file
-may exist (it's in the same rule that install those file, and the
-expansion in Makefile is done once at the beginning of the recipe).
+    $ cat some-submodule/.git
+    gitdir: /path/to/super-project/.git/modules/some-submodule
 
-We need to test each file:
- 1. to ignore files that were not build (e.g. because the host is
-    missing some dependencies (in which case we don't care; we're only
-    interested in systemctl, and that one is already built)
- 2. to ensure the glob was expanded (in case no file would match
-    systemd-*)
+Obviously, this is not very reproducible.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-[yann.morin.1998 at free.fr:
-  - don't use 'set -e', use the more traditional '|| exit 1'
-  - don't cd into HOST_DIR/bin, but use $(addprefix ...)
-  - use positive logic in the test
-  - expand commit log
-]
+More recent versions of git, however, store relative paths, which
+de-facto makes it reproducible.
+
+Fix older versions by replacing the absolute paths with relative ones.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9f1a9ee9328797f46a65cd7ad55b0df92252b566)
+(cherry picked from commit 8fe9894f655fd79207c41673e1966cc4d4d101d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.mk | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+ support/download/git | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 92de540725..2490a988a2 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -643,6 +643,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
- 	host-libcap \
- 	host-gperf
- 
-+HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+diff --git a/support/download/git b/support/download/git
+index 075f665bbf..15d8c66e05 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -176,6 +176,19 @@ date="$( _git log -1 --pretty=format:%cD )"
+ # There might be submodules, so fetch them.
+ if [ ${recurse} -eq 1 ]; then
+     _git submodule update --init --recursive
 +
- # Fix RPATH After installation
- # * systemd provides a install_rpath instruction to meson because the binaries
- #   need to link with libsystemd which is not in a standard path
-@@ -651,20 +653,14 @@ HOST_SYSTEMD_DEPENDENCIES = \
- # * the original path had been tweaked by buildroot via LDFLAGS to add
- #   $(HOST_DIR)/lib
- # * thus re-tweak rpath after the installation for all binaries that need it
--HOST_SYSTEMD_HOST_TOOLS = \
--	systemd-analyze \
--	systemd-machine-id-setup \
--	systemd-mount \
--	systemd-nspawn \
--	systemctl \
--	udevadm
--
--HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
-+HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
++    # Older versions of git will store the absolute path of the git tree
++    # in the .git of submodules, while newer versions just use relative
++    # paths. Detect and fix the older variants to use relative paths, so
++    # that the archives are reproducible across a wider range of git
++    # versions. However, we can't do that if git is too old and uses
++    # full repositories for submodules.
++    cmd='printf "%s\n" "${path}/"'
++    for module_dir in $( _git submodule --quiet foreach "'${cmd}'" ); do
++        [ -f "${module_dir}/.git" ] || continue
++        relative_dir="$( sed -r -e 's,/+,/,g; s,[^/]+/,../,g' <<<"${module_dir}" )"
++        sed -r -i -e "s:^gitdir\: $(pwd)/:gitdir\: "${relative_dir}":" "${module_dir}/.git"
++    done
+ fi
  
- define HOST_SYSTEMD_FIX_RPATH
--	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
--		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
--	)
-+	for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
-+		[ -e $$f ] || continue; \
-+		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
-+		|| exit 1; \
-+	done
- endef
- HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
- 
+ # Generate the archive, sort with the C locale so that it is reproducible.
