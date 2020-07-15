@@ -1,298 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:42:42 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tinydtls:
- security bump to version 0.9-rc1
-Message-ID: <20200715195254.62EE686D40@busybox.osuosl.org>
+Date: Wed, 15 Jul 2020 21:48:24 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: fixup
+ RPATH for more systemd host binaries
+Message-ID: <20200715195254.745F786D40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=130760e1021c4ad1900940e84d1345e9bd7255b4
+commit: https://git.buildroot.net/buildroot/commit/?id=cd5edc9650755d2347a0d41a17e7719786977b30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- Switch site to github
-- License is now EPL-1.0 or EDL-1.0 as specified in the new LICENSE file
-- Update indentation of hash file (two spaces)
-- Drop first patch (already in version) and second patch (not needed since
-  https://github.com/eclipse/tinydtls/commit/f1ff324a4d1cc14dc6e1c3a88ea16f0242e106de)
-- Fix CVE-2017-7243 as specified in
-  https://github.com/eclipse/tinydtls/issues/12 as well as other
-  security issues:
-  https://github.com/eclipse/tinydtls/commit/68a1cdaff9e329e13ea59529f1eb61b05632c297
-  https://github.com/eclipse/tinydtls/commit/494a40dfbb174930ca616e560532d52549736b42
-  https://github.com/eclipse/tinydtls/commit/2d9f0a82377277af1be8d559d18e30477d63e8ec
+All systemd binaries depend on libsystemd-shared and need their RPATH
+fixed. Use a glob to catch them all.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1d14a3349dd50c245fed4b5a9d2c77b9964571e6)
+We can't use $(wildcard ...) because this is expanded before any file
+may exist (it's in the same rule that install those file, and the
+expansion in Makefile is done once at the beginning of the recipe).
+
+We need to test each file:
+ 1. to ignore files that were not build (e.g. because the host is
+    missing some dependencies (in which case we don't care; we're only
+    interested in systemctl, and that one is already built)
+ 2. to ensure the glob was expanded (in case no file would match
+    systemd-*)
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+[yann.morin.1998 at free.fr:
+  - don't use 'set -e', use the more traditional '|| exit 1'
+  - don't cd into HOST_DIR/bin, but use $(addprefix ...)
+  - use positive logic in the test
+  - expand commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9f1a9ee9328797f46a65cd7ad55b0df92252b566)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...te-Makefile.in-to-allow-cross-compilation.patch | 170 ---------------------
- .../0002-Fix-compilation-of-tests-directory.patch  |  31 ----
- package/tinydtls/Config.in                         |   2 +-
- package/tinydtls/tinydtls.hash                     |   4 +-
- package/tinydtls/tinydtls.mk                       |  12 +-
- 5 files changed, 9 insertions(+), 210 deletions(-)
+ package/systemd/systemd.mk | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch b/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
-deleted file mode 100644
-index 5e91f2ee5d..0000000000
---- a/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
-+++ /dev/null
-@@ -1,170 +0,0 @@
--From a6f312dfb4497d5e72664c4772a8b122e25b81d8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Tue, 26 Jul 2016 09:09:53 +0200
--Subject: [PATCH] Update Makefile.in to allow cross-compilation
--
--Use CC, CPP and DESTDIR environment variables passed to configure in Makefile.in files
--Fix definition of LIBS and LDFLAGS (LDFLAGS was set to @LIBS@)
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-----
-- Makefile.in       | 13 ++++++++-----
-- aes/Makefile.in   |  7 +++++--
-- doc/Makefile.in   |  4 ++--
-- ecc/Makefile.in   |  7 +++++--
-- sha2/Makefile.in  |  7 +++++--
-- tests/Makefile.in |  4 +++-
-- 6 files changed, 28 insertions(+), 14 deletions(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 38cc665..7dcd424 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -40,7 +40,9 @@ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES)) $(SUB_OBJECTS)
-- HEADERS:=dtls.h hmac.h dtls_debug.h dtls_config.h uthash.h numeric.h crypto.h global.h ccm.h \
--  netq.h alert.h utlist.h prng.h peer.h state.h dtls_time.h session.h \
--  tinydtls.h
--+CC:=@CC@
-- CFLAGS:=-Wall -pedantic -std=c99 @CFLAGS@
--+CPP:=@CPP@
-- CPPFLAGS:=@CPPFLAGS@ -DDTLS_CHECK_CONTENTTYPE
-- SUBDIRS:=tests doc platform-specific sha2 aes ecc
-- DISTSUBDIRS:=$(SUBDIRS)
--@@ -48,7 +50,8 @@ DISTDIR=$(top_builddir)/$(package)
-- FILES:=Makefile.in configure configure.in dtls_config.h.in tinydtls.h.in \
--   Makefile.tinydtls $(SOURCES) $(HEADERS)
-- LIB:=libtinydtls.a
---LDFLAGS:=@LIBS@
--+LDFLAGS:=@LDFLAGS@
--+LIBS:=@LIBS@
-- ARFLAGS:=cru
-- doc:=doc
-- 
--@@ -100,10 +103,10 @@ dist:	$(FILES) $(DISTSUBDIRS)
-- 	tar czf $(package).tar.gz $(DISTDIR)
-- 
-- install:	$(LIB) $(HEADERS) $(SUBDIRS)
---	test -d $(libdir) || mkdir -p $(libdir)
---	test -d $(includedir) || mkdir -p $(includedir)
---	$(install) $(LIB) $(libdir)/
---	$(install) $(HEADERS) $(includedir)/
--+	test -d $(DESTDIR)$(libdir) || mkdir -p $(DESTDIR)$(libdir)
--+	test -d $(DESTDIR)$(includedir) || mkdir -p $(DESTDIR)$(includedir)
--+	$(install) $(LIB) $(DESTDIR)$(libdir)/
--+	$(install) $(HEADERS) $(DESTDIR)$(includedir)/
-- 	for dir in $(SUBDIRS); do \
-- 		$(MAKE) -C $$dir install="$(install)" includedir=$(includedir) install; \
-- 	done
--diff --git a/aes/Makefile.in b/aes/Makefile.in
--index 7c9f6ef..9ff7799 100644
----- a/aes/Makefile.in
--+++ b/aes/Makefile.in
--@@ -28,8 +28,11 @@ top_srcdir:= @top_srcdir@
-- SOURCES:= rijndael.c
-- HEADERS:= rijndael.h
-- OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
--+CPP=@CPP@
-- CPPFLAGS=@CPPFLAGS@
--+CC=@CC@
-- CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@
--+LDFLAGS=@LDFLAGS@
-- LDLIBS=@LIBS@
-- FILES:=Makefile.in $(SOURCES) $(HEADERS) 
-- DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
--@@ -60,8 +63,8 @@ dist:	$(FILES)
-- 	cp -p $(FILES) $(DISTDIR)/aes
-- 
-- install:	$(HEADERS)
---	test -d $(includedir)/aes || mkdir -p $(includedir)/aes
---	$(install) $(HEADERS) $(includedir)/aes
--+	test -d $(DESTDIR)$(includedir)/aes || mkdir -p $(DESTDIR)$(includedir)/aes
--+	$(install) $(HEADERS) $(DESTDIR)$(includedir)/aes
-- 
-- .gitignore:
-- 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
--diff --git a/doc/Makefile.in b/doc/Makefile.in
--index a07101e..5ab0a35 100644
----- a/doc/Makefile.in
--+++ b/doc/Makefile.in
--@@ -32,5 +32,5 @@ dist:	doc
-- 	cp -r $(FILES) $(DISTDIR)/doc
-- 
-- install:	$(doc) html
---	test -d $(htmldir) || mkdir -p $(htmldir)
---	cp -r html/* $(htmldir)
--+	test -d $(DESTDIR)$(htmldir) || mkdir -p $(DESTDIR)$(htmldir)
--+	cp -r html/* $(DESTDIR)$(htmldir)
--diff --git a/ecc/Makefile.in b/ecc/Makefile.in
--index 2ba17a1..2086d4f 100644
----- a/ecc/Makefile.in
--+++ b/ecc/Makefile.in
--@@ -36,8 +36,11 @@ include Makefile.contiki
-- else
-- ECC_OBJECTS:= $(patsubst %.c, %.o, $(ECC_SOURCES)) ecc_test.o
-- PROGRAMS:= testecc testfield
--+CPP=@CPP@
-- CPPFLAGS=@CPPFLAGS@
--+CC=@CC@
-- CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@ -DTEST_INCLUDE
--+LDFLAGS=@LDFLAGS@
-- LDLIBS=@LIBS@
-- 
-- .PHONY: all dirs clean install distclean .gitignore doc
--@@ -74,8 +77,8 @@ dist:	$(FILES)
-- 	cp -p $(FILES) $(DISTDIR)/ecc
-- 
-- install:	$(HEADERS)
---	test -d $(includedir)/ecc || mkdir -p $(includedir)/ecc
---	$(install) $(HEADERS) $(includedir)/ecc
--+	test -d $(DESTDIR)$(includedir)/ecc || mkdir -p $(DESTDIR)$(includedir)/ecc
--+	$(install) $(ECC_HEADERS) $(DESTDIR)$(includedir)/ecc
-- 
-- .gitignore:
-- 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
--diff --git a/sha2/Makefile.in b/sha2/Makefile.in
--index 9f19314..69f8793 100644
----- a/sha2/Makefile.in
--+++ b/sha2/Makefile.in
--@@ -28,8 +28,11 @@ top_srcdir:= @top_srcdir@
-- SOURCES:= sha2.c
-- HEADERS:=sha2.h
-- OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
--+CPP=@CPP@
-- CPPFLAGS=@CPPFLAGS@ -I$(top_srcdir)
--+CC=@CC@
-- CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@
--+LDFLAGS=@LDFLAGS@
-- LDLIBS=@LIBS@
-- FILES:=Makefile.in $(SOURCES) $(HEADERS) README sha2prog.c sha2speed.c sha2test.pl 
-- DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
--@@ -62,8 +65,8 @@ dist:	$(FILES)
-- 	cp -pr testvectors $(DISTDIR)/sha2/testvectors
-- 
-- install:	$(HEADERS)
---	test -d $(includedir)/sha2 || mkdir -p $(includedir)/sha2
---	$(install) $(HEADERS) $(includedir)/sha2
--+	test -d $(DESTDIR)$(includedir)/sha2 || mkdir -p $(DESTDIR)$(includedir)/sha2
--+	$(install) $(HEADERS) $(DESTDIR)$(includedir)/sha2
-- 
-- .gitignore:
-- 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
--diff --git a/tests/Makefile.in b/tests/Makefile.in
--index a8a2ed0..b45f440 100644
----- a/tests/Makefile.in
--+++ b/tests/Makefile.in
--@@ -32,9 +32,11 @@ SOURCES:= dtls-server.c ccm-test.c prf-test.c \
-- OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
-- PROGRAMS:= $(patsubst %.c, %, $(SOURCES))
-- HEADERS:=
--+CC:=@CC@
-- CFLAGS:=-Wall @CFLAGS@ 
--+CPP:=@CPP@
-- CPPFLAGS:=-I$(top_srcdir) @CPPFLAGS@
---LDFLAGS:=-L$(top_builddir) 
--+LDFLAGS:=-L$(top_builddir) @LDFLAGS@ 
-- LDLIBS:=-ltinydtls @LIBS@
-- DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
-- FILES:=Makefile.in $(SOURCES) ccm-testdata.c #cbc_aes128-testdata.c
---- 
--2.7.4
--
-diff --git a/package/tinydtls/0002-Fix-compilation-of-tests-directory.patch b/package/tinydtls/0002-Fix-compilation-of-tests-directory.patch
-deleted file mode 100644
-index 0ab579c45e..0000000000
---- a/package/tinydtls/0002-Fix-compilation-of-tests-directory.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From c629a108f5d03cd365c0ba71143ad507f6cd97f0 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Thu, 28 Jul 2016 08:36:06 +0200
--Subject: [PATCH] Fix compilation of tests directory
--
--binaries in tests subdirectory depends on libtinydtls so add $(LIB) dependency
--for dirs target in Makefile.in
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-----
-- Makefile.in | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 7dcd424..c493705 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -68,8 +68,8 @@ check:
-- 	echo top_builddir: $(top_builddir)
-- 	$(MAKE) -C tests check
-- 
---dirs:	$(SUBDIRS)
---	for dir in $^; do \
--+dirs:	$(LIB) $(SUBDIRS)
--+	for dir in $(SUBDIRS); do \
-- 		$(MAKE) -C $$dir ; \
-- 	done
-- 
---- 
--2.7.4
--
-diff --git a/package/tinydtls/Config.in b/package/tinydtls/Config.in
-index 2f90eb2436..98cbbb5875 100644
---- a/package/tinydtls/Config.in
-+++ b/package/tinydtls/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_TINYDTLS
- 	  machine.  It is implemented in C and provides support for
- 	  the mandatory cipher suites specified in CoAP.
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 16ef131ba6..d9ebd5db7f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -568,6 +568,8 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ 	host-libcap \
+ 	host-gperf
  
--	  https://sourceforge.net/projects/tinydtls
-+	  https://projects.eclipse.org/projects/iot.tinydtls
++HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
++
+ # Fix RPATH After installation
+ # * systemd provides a install_rpath instruction to meson because the binaries
+ #   need to link with libsystemd which is not in a standard path
+@@ -576,20 +578,14 @@ HOST_SYSTEMD_DEPENDENCIES = \
+ # * the original path had been tweaked by buildroot via LDFLAGS to add
+ #   $(HOST_DIR)/lib
+ # * thus re-tweak rpath after the installation for all binaries that need it
+-HOST_SYSTEMD_HOST_TOOLS = \
+-	systemd-analyze \
+-	systemd-machine-id-setup \
+-	systemd-mount \
+-	systemd-nspawn \
+-	systemctl \
+-	udevadm
+-
+-HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
++HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
  
- comment "tinydtls needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tinydtls/tinydtls.hash b/package/tinydtls/tinydtls.hash
-index 66644df7a1..be6bf182e7 100644
---- a/package/tinydtls/tinydtls.hash
-+++ b/package/tinydtls/tinydtls.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	ccf6d8fbae03fb2e0ba32878ed8e57d8b4f73538b1064df90a3e764da5fac010	tinydtls-0.8.2.tar.gz
--sha256	65fbf31c3551633e7dcc051fac80f2c1a73b0b077af9ed564d726155dfc40513	tinydtls.h
-+sha256  af73742835b5a66dc0b4a9c126ca8243b5db2986b4969d76e2b4531aa7e13f67  tinydtls-0.9-rc1.tar.gz
-+sha256  7e906fb56da52bb6bba38e77eec00e7d37fe65b0b7b28c4bf68ff036573d0de5  LICENSE
-diff --git a/package/tinydtls/tinydtls.mk b/package/tinydtls/tinydtls.mk
-index fe250014ca..e683dea1a0 100644
---- a/package/tinydtls/tinydtls.mk
-+++ b/package/tinydtls/tinydtls.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--TINYDTLS_REL = r5
--TINYDTLS_VERSION = 0.8.2
--TINYDTLS_SITE = http://downloads.sourceforge.net/project/tinydtls/$(TINYDTLS_REL)
--TINYDTLS_LICENSE = MIT
--TINYDTLS_LICENSE_FILES = tinydtls.h
-+TINYDTLS_VERSION = 0.9-rc1
-+TINYDTLS_SITE = $(call github,eclipse,tinydtls,v$(TINYDTLS_VERSION))
-+TINYDTLS_LICENSE = EPL-1.0 or EDL-1.0
-+TINYDTLS_LICENSE_FILES = LICENSE
- TINYDTLS_INSTALL_STAGING = YES
--TINYDTLS_STRIP_COMPONENTS = 2
-+# From git
-+TINYDTLS_AUTORECONF = YES
- # use inttypes.h data types instead of u_intXX_t for musl compatibility
- TINYDTLS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DSHA2_USE_INTTYPES_H"
+ define HOST_SYSTEMD_FIX_RPATH
+-	$(foreach f,$(HOST_SYSTEMD_HOST_TOOLS), \
+-		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $(HOST_DIR)/bin/$(f)
+-	)
++	for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
++		[ -e $$f ] || continue; \
++		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
++		|| exit 1; \
++	done
+ endef
+ HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
  
