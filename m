@@ -1,69 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jul 2020 21:25:00 +0200
-Subject: [Buildroot] Virtual/online Buildroot Developers meeting ?
-In-Reply-To: <20200713133634.350b9d23@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 13 Jul 2020 13:36:34 +0200")
-References: <20200711165315.0c2b5079@windsurf.home>
- <20200711165601.GA15448@scaer>
- <197f53b1-9c94-2697-0aff-4b80fdbc3a9c@mind.be>
- <20200713133634.350b9d23@windsurf.home>
-Message-ID: <87imeo1sz7.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jul 2020 21:29:01 +0200
+Subject: [Buildroot] [PATCH 1/2] core.br2-external: fix reporting errors
+In-Reply-To: <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 22 May 2020 23:40:50 +0200")
+References: <cover.1590183628.git.yann.morin.1998@free.fr>
+ <22d695ca68ad664cbe5af125683b61c80f828d35.1590183628.git.yann.morin.1998@free.fr>
+Message-ID: <87eepc1ssi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > On Mon, 13 Jul 2020 09:45:43 +0200
- > Arnout Vandecappelle <arnout@mind.be> wrote:
+ > When a br2-external tree has an issue, e.g. a missing file, or does not
+ > have a name, or the name uses invalid cahrs, we report that condition by
+ > setting the variable BR2_EXTERNAL_ERROR.
 
- >> [Yes, I'm still alive :-) ]
+ > That variable is defined in the script support/scripts/br2-external,
+ > which outputs it on stdout, and checked by the Makefile.
 
- > Awesome, some of us were wondering ! :-)
+ > Before d027cd75d09, stdout was explicitly redirected to the generated
+ > .mk file, with   exec >"${ofile}"   as the Makefile and Kconfig
+ > fragments were generated each with their own call to the script, and o
+ > the validation phase would emit the BR2_EXTERNAL_ERROR variable in the
+ > Makefile fragment.
 
-So am I, sorry about the slow response.
+ > But with d027cd75d09, both the Makefile and Kconfig fragmetns were now
+ > generated with a single call to the script, and as such the semantics of
+ > the scripts changed, and only each of the actual generators, do_mk and
+ > do_kconfig, ahd their out put redirected. Which left do_validate with
+ > the default stdout. Which would emit BR2_EXTERNAL_ERROR on stdout.
 
+ > In turn, the stdout of the script would be interpreted by as part of the
+ > Makefile. But this does not end up very well when a br2-external tree
+ > indeed has an error:
 
- >> >>  - What format should it take ? One full day once in a while ? Just a
- >> >>    few hours here and there ? Multiple days in a row ?  
- >> > 
- >> > My preference would be to block two or more days in a row. Sun-Mon ro
- >> > Sun-Tue would be ideal for me, but I can adapt.  
- >> 
- >> I also think it's easier to organise at least one and maybe several days in a
- >> row. For that, you clear your calendar, while if it's just for a couple of hours
- >> you tend not to do the effort.
+ >     Makefile:184: *** multiple target patterns.  Stop.
 
- > On my side, I agree that doing full days is going to be easier than
- > just a few hours here and there. It also allows to focus on something a
- > bit more complex than what can be done in just 2-3 hours.
+ > So we must redirect the output of the validation step to the
+ > Makefile fragment.
 
-Indeed.
+ > Note that we don't need to append in do_mk, and we can do an overwrite
+ > redirection: if we go so far as to call do_mk, it means there was no
+ > error, and thus the fragment is empty.
 
- > However, the question is whether we want a few full days spread over
- > time, or grouped together. Or perhaps just have 2 meetings of 2 days
- > each, a few weeks apart ?
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-I think 1, max 2 days is easiest to plan in. I have some free time late
-next week / early the week after, and will be away on holiday from 30/7
-to 14/8.
-
- >> Here are the candidates that I've used and think are suitable (in no particular
- >> order):
- >> 
- >> - jitsi
- >> - zoom
- >> - Google meet
- >> - discord
- >> - whereby
-
- > If that's needed, Bootlin has its own Jitsi installation, which we can
- > use. We've used it successfully to deliver 4 hours training courses,
- > over several days, and it works fine.
-
-I don't really have any preferences.
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
