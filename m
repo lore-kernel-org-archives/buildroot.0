@@ -1,9 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 15 Jul 2020 10:51:30 -0700
-Subject: [Buildroot] [PATCH v5 4/4] support/testing: add firewalld test cases
-In-Reply-To: <20200715175130.591273-1-aduskett@gmail.com>
-References: <20200715175130.591273-1-aduskett@gmail.com>
-Message-ID: <20200715175130.591273-4-aduskett@gmail.com>
+Date: Wed, 15 Jul 2020 10:53:49 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.64.4
+Message-ID: <20200715175349.592381-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,152 +10,49 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-This test case runs firewalld using both system and sysvinit.
-
-The tests perform the following tasks:
-  - Start and login
-  - run `firewalld-cmd --state` with the expected output of "running" and a
-    return code of 0.
-
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v4:
-  - Add this patch to the series
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
- .gitlab-ci.yml                                |  2 +
- DEVELOPERS                                    |  1 +
- .../testing/tests/package/test_firewalld.py   | 98 +++++++++++++++++++
- 3 files changed, 101 insertions(+)
- create mode 100644 support/testing/tests/package/test_firewalld.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d60a50f5c5..d7e2dc5802 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -407,6 +407,8 @@ tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
- tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
- tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
- tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
-+tests.package.test_firewalld.TestFirewalldSystemd: { extends: .runtime_test }
-+tests.package.test_firewalld.TestFirewalldSysVInit: { extends: .runtime_test }
- tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
- tests.package.test_gst1_python.TestGst1Python: { extends: .runtime_test }
- tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d96c016997..5b020573af 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -93,6 +93,7 @@ F:	package/setools/
- F:	package/sngrep/
- F:	package/spidermonkey/
- F:	package/systemd/
-+F:	support/testing/tests/package/test_firewalld.py
- F:	support/testing/tests/package/test_gst1_python.py
- F:	support/testing/tests/package/test_python_gobject.py
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 4f06ad588d..7e447a9efc 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.64.3',
++   version : '2.64.4',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 4e9b25165e..55f0bb1678 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.64/glib-2.64.3.sha256sum
+-sha256  fe9cbc97925d14c804935f067a3ad77ef55c0bbe9befe68962318f5a767ceb22  glib-2.64.3.tar.xz
++# https://download.gnome.org/sources/glib/2.64/glib-2.64.4.sha256sum
++sha256  f7e0b325b272281f0462e0f7fff25a833820cac19911ff677251daf6d87bce50  glib-2.64.4.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d1c75d8a43..fda04334f5 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
-new file mode 100644
-index 0000000000..4fbccfacfa
---- /dev/null
-+++ b/support/testing/tests/package/test_firewalld.py
-@@ -0,0 +1,98 @@
-+"""Test firewalld for both systemd and sysvinit."""
-+import os
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestFirewalldSystemd(TestPythonPackageBase):
-+    """Build the kernel as firewalld requires all of the nftable options."""
-+
-+    __test__ = True
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.39"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_INIT_SYSTEMD=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_FIREWALLD=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def wait_boot(self):
-+        """Boot time is longer than the default multiplier."""
-+        self.emulator.timeout_multiplier *= 10
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        kernel_file = os.path.join(self.builddir, "images", "zImage")
-+        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7",
-+                           kernel=kernel_file,
-+                           kernel_cmdline=["console=ttyAMA0,115200"],
-+                           options=[
-+                               "-initrd", cpio_file,
-+                               "-dtb", dtb_file,
-+                               "-M", "vexpress-a9"
-+                           ])
-+        self.wait_boot()
-+        cmd = "firewall-cmd --state"
-+        output, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertIn("running", output[0])
-+        self.assertEqual(exit_code, 0)
-+
-+
-+class TestFirewalldSysVInit(TestPythonPackageBase):
-+    """Build the kernel as firewalld requires all of the nftable options."""
-+
-+    __test__ = True
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.39"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_FIREWALLD=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def wait_boot(self):
-+        """Boot time is longer than the default multiplier."""
-+        self.emulator.timeout_multiplier *= 10
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        kernel_file = os.path.join(self.builddir, "images", "zImage")
-+        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
-+        self.emulator.boot(arch="armv7",
-+                           kernel=kernel_file,
-+                           kernel_cmdline=["console=ttyAMA0,115200"],
-+                           options=[
-+                               "-initrd", cpio_file,
-+                               "-dtb", dtb_file,
-+                               "-M", "vexpress-a9"
-+                           ])
-+        self.wait_boot()
-+        cmd = "firewall-cmd --state"
-+        output, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertIn("running", output[0])
-+        self.assertEqual(exit_code, 0)
+ LIBGLIB2_VERSION_MAJOR = 2.64
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 -- 
 2.26.2
