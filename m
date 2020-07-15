@@ -1,68 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Jul 2020 15:49:39 +0200
-Subject: [Buildroot] Rename aarch64_efi_defconfig to
- qemu_aarch64_virt_efi_defconfig
-In-Reply-To: <CAK4VdL3Jn_zNH3XuLfCTbzTVG=JDjDNk1=r1CivOgNQ64=3aAw@mail.gmail.com>
-References: <9693c61b-610e-9371-8ecf-a45a9f1f22e4@gmail.com>
- <20200711125919.6e484aef@windsurf.home>
- <39be97c6-9569-e206-ebe5-a49ca65015af@gmail.com>
- <20200711151214.44b2b74a@windsurf.home>
- <8869dfef-7cd1-999a-5b34-bc319dce218b@gmail.com>
- <CAK4VdL3Jn_zNH3XuLfCTbzTVG=JDjDNk1=r1CivOgNQ64=3aAw@mail.gmail.com>
-Message-ID: <20200715154939.4f3ffc2c@windsurf.home>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 15 Jul 2020 15:53:12 +0200
+Subject: [Buildroot] [PATCH] system/skeleton: make /var/run a symlink to
+ /run
+In-Reply-To: <20200715154338.1e52ffe5@windsurf.home>
+References: <20200629104749.46938-1-nolange79@gmail.com>
+ <20200714151459.6ee4ca7a@windsurf.home>
+ <CADYdroPBcpgMkNme2OP8jz3SX-+3J7eDqp0r8UbWXh_swvNkVQ@mail.gmail.com>
+ <20200714155207.08d6ffb1@windsurf.home>
+ <CADYdroM9wPyVGM2_oAcKcMYBHjYdfEPrd7YKL5QozGP3kDXPHA@mail.gmail.com>
+ <20200715154338.1e52ffe5@windsurf.home>
+Message-ID: <CADYdroN0JsN4BS6QWX-wruwSrnBQSZmWBy1FTzPYej6tygdxNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Jul 2020 15:18:28 +0200
-Erico Nunes <nunes.erico@gmail.com> wrote:
-
-> as you already mentioned, the original intent of aarch64_efi_defconfig
-> is to be used with standards compliant aarch64 systems running
-> ACPI/UEFI. It is analogous to the pc_* defconfigs for x86_64.
-> There is a short documentation on it at
-> https://git.buildroot.net/buildroot/tree/board/aarch64-efi/readme.txt
-> where the need for OVMF is mentioned.
-> That was a manual example though as it requires users to pull OVMF
-> from the distribution. If there are plans to turn it into an automated
-> test, then indeed it would be better to have a Buildroot provided one
-> and this readme can also be updated.
-
-Romain has already submitted a patch series that adds a package for
-edk2, in a precompiled form. I don't know if you have been Cc'ed on
-that.
-
-> > >> Instead of renaming aarch64_efi_defconfig, we can enable UEFI and grub in the
-> > >> qemu_aarch64_virt_defconfig itself.  
-> 
-> Probably needs ACPI support in the kernel config as well, and be
-> booted with acpi=on as device tree is probably the default in upstream
-> kernels in case both are available.
-> 
-> > >
-> > > Seems like a good idea.  
+Am Mi., 15. Juli 2020 um 15:43 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Tue, 14 Jul 2020 16:22:25 +0200
+> Norbert Lange <nolange79@gmail.com> wrote:
+>
+> > chronological:
 > >
-> > Ok  
-> 
-> Just to double check, wouldn't it be the case to have 2 qemu configs,
-> one to test the ACPI/UEFI+grub2 profile and another one for the qemu
-> direct kernel boot?
-> If qemu_aarch64_virt_defconfig gets converted to that (which is a
-> little more complex and I believe less used with Buildroot), then only
-> that would get the automated testing coverage.
+> > -   Buildroot uses /var/run as RUNTIME directory for SysV, and /run for systemd.
+> > -   I add the lttng patch above to use either /var/run/lttng or /run/lttng
+> > -   I consider doing the same for dbus as I get warnings otherwise
+> > (actually have a post_install script replacing /var/run with /run)
+> > -   I consider it would be alot easier to just use /run everywhere and
+> > add this patch to see if that's accepted, before doing more
+> > if-butt-ing like with lttng
+>
+> But then, you have to anyway tweak lttng to pass:
+>
+> LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
+>
+> but unconditionally, and no longer depending on whether systemd is used
+> or not. Correct ?
 
-But we already have 2 defconfigs:
+That's the idea, yes.
 
- - qemu_aarch64_virt_defconfig, which IMO should stay pretty much as it
-   is: directly kernel boot
+> But... /run is already a tmpfs in sysv-based systems, so what prevents
+> today from using /run/lttng even for sysv based systems ?
 
- - aarch64_efi_defconfig, which should be usable by EFI/ACPI compliant
-   platform, and Qemu should be one of them.
+Ok, I missed that bit, thought it would have unrelated /run and
+/var/run directories.
+So this patch is just a cleanup then, and buildroot already *always*
+uses a tmpfs /run (with compatibilty symlink /var/run),
+and I can use /run with lttng and dbus whether this cleanup is merged or not?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I'd redo the patch with those removed, if you agree:
+
+package/skeleton-init-openrc/skeleton/var/run
+package/skeleton-init-sysv/skeleton/var/run
+
+Or do nothing if you dont ;)
+My new argument would be that this would prevent false assumptions (like mine).
+
+Norbert
