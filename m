@@ -1,185 +1,125 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jul 2020 22:24:16 +0200
-Subject: [Buildroot] [git commit] configs/nitrogen*: bump kernel version to
- 5.4.x_2.1.0
-Message-ID: <20200716203405.46A698711C@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 22:30:15 +0200
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: refine
+ vpu and sdma copies
+Message-ID: <20200716203405.84A9987840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38fa2e89e62f8366f327836880af5208205399c7
+commit: https://git.buildroot.net/buildroot/commit/?id=9e236a0576c756fe131e538f3e472caf1a3e2ffe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- based on NXP imx_5.4.24_2.1.0 release
-- includes latest stable releases, hence 5.4.x naming
-- includes support for all Boundary Devices platforms + accessories
+In latest patch the SDMA installation was limited to platforms whose
+name was mentioned in the binary but this approach wasn't flexible to
+manage cases like imx8m using imx7 sdma binary, so this patch does:
+- change VPU/SDMA FW options to string to allow specifying the name
+  (suggested by Thomas)
+- remove imx27 sdma case as non-existent
+- add imx8m family support (using imx7d binary)
+- get rid of FIRMWARE_IMX_PLATFORM_LOWER macro
 
+Fixes: fad2df39b9 ("package/freescale-imx/firmware-imx: clarify installation of firmware files")
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/nitrogen6sx_defconfig | 8 ++++----
- configs/nitrogen6x_defconfig  | 8 ++++----
- configs/nitrogen7_defconfig   | 8 ++++----
- configs/nitrogen8m_defconfig  | 8 ++++----
- configs/nitrogen8mm_defconfig | 8 ++++----
- configs/nitrogen8mn_defconfig | 8 ++++----
- 6 files changed, 24 insertions(+), 24 deletions(-)
+ package/freescale-imx/firmware-imx/Config.in       | 34 ++++++++++++----------
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 19 ++++--------
+ 2 files changed, 24 insertions(+), 29 deletions(-)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index dc65ccf9f6..fff8774469 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index aae552177f..5becf8b6a9 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -12,23 +12,25 @@ config BR2_PACKAGE_FIRMWARE_IMX
  
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ if BR2_PACKAGE_FIRMWARE_IMX
  
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -34,8 +34,8 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+# Last version of branch boundary-imx_5.4.x_2.1.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/62335a04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 6ecac6e8b0..17e09eb285 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+-config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW
+-	bool
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
++	string
++	default "imx25" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
++	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
++	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
  
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+-config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_VPU_FW
+-	bool
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++config BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME
++	string
++	default "imx27" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default "imx6"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
++	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
  
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -34,8 +34,8 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+# Last version of branch boundary-imx_5.4.x_2.1.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/62335a04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index c1d4f5a9a0..06d9e45740 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -16,8 +16,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
+ 	bool
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index cd299aad5e..5cfff2da05 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -14,8 +14,6 @@ FIRMWARE_IMX_REDISTRIBUTE = NO
  
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ FIRMWARE_IMX_INSTALL_IMAGES = YES
  
- # bootloader
- BR2_TARGET_UBOOT=y
-@@ -33,8 +33,8 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+# Last version of branch boundary-imx_5.4.x_2.1.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/62335a04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index e0b1850f02..8d2bb121d7 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+-FIRMWARE_IMX_PLATFORM_LOWER = $(shell echo $(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) | tr A-Z a-z | head -c 5)
+-
+ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
+@@ -106,10 +104,11 @@ endif
+ # SDMA firmware
+ #
  
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+-ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW),y)
++FIRMWARE_IMX_SDMA_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME))
++ifneq ($(FIRMWARE_IMX_SDMA_FW_NAME),)
+ define FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/imx/sdma
+-	cp -r $(@D)/firmware/sdma/sdma-$(FIRMWARE_IMX_PLATFORM_LOWER)*.bin \
++	cp -r $(@D)/firmware/sdma/sdma-$(FIRMWARE_IMX_SDMA_FW_NAME)*.bin \
+ 	       $(TARGET_DIR)/lib/firmware/imx/sdma/
+ endef
+ endif
+@@ -118,17 +117,11 @@ endif
+ # VPU firmware
+ #
  
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -48,8 +48,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+# Latest revision  of branch boundary-imx_5.4.x_2.1.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/62335a04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index 082f9e355a..b1a5a8ad0c 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -48,8 +48,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+# Latest revision  of branch boundary-imx_5.4.x_2.1.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/62335a04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index e7a0151e8c..3be31d5db9 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -17,8 +17,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # DDR training binaries
- BR2_PACKAGE_FREESCALE_IMX=y
-@@ -48,8 +48,8 @@ BR2_TARGET_UBOOT_SPL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+# Latest revision  of branch boundary-imx_5.4.x_2.1.0
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/62335a04.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_VPU_FW),y)
+-# special case for i.MX8X, which uses the same firmware as i.MX8
+-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+-FIRMWARE_IMX_VPU_PLATFORM = imx8
+-else
+-FIRMWARE_IMX_VPU_PLATFORM = $(FIRMWARE_IMX_PLATFORM_LOWER)
+-endif
+-
++FIRMWARE_IMX_VPU_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME))
++ifneq ($(FIRMWARE_IMX_VPU_FW_NAME),)
+ define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/imx/vpu
+-	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_PLATFORM)*.bin \
++	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin \
+ 		$(TARGET_DIR)/lib/firmware/imx/vpu/
+ endef
+ endif
