@@ -1,36 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:20:22 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/sdl2: remove
- sdl2-config.cmake
-In-Reply-To: <20200505184303.609201-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 5 May 2020 20:43:02 +0200")
-References: <20200505184303.609201-1-romain.naour@gmail.com>
-Message-ID: <875zantos9.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jul 2020 18:06:56 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/sdl2: enable SSE
+ only if it's supported by the target
+Message-ID: <20200716161637.CE59C84AB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2f822c2d0c23a41a1eff330eb12d21cf1c9cfea9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > We are using autotools build system for sdl2, so the sdl2-config.cmake
- > include path are not resolved like for sdl2-config script [1].
- > Remove sdl2-config.cmake file and avoid unsafe include path if this
- > file is used by a cmake based package.
+Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a14a9629837a4de32a7a06a2f7b0e88958948ce5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sdl2/sdl2.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- > This trigger an issue with ogre 1.12.6 package that replaced
- > FindSDL2.cmake by sdl2-config.cmake [2].
-
- > Thanks to Pavel Rojtberg for the help [3].
-
- > [1] https://bugzilla.libsdl.org/show_bug.cgi?id=4597
- > [2] https://github.com/OGRECave/ogre/commit/6de6f9b4081a07c911932441700c54b72ec1ee1f
- > [3] https://github.com/OGRECave/ogre/issues/1568
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 501bb4699d..4a287b66a3 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -30,6 +30,12 @@ else
+ SDL2_CONF_OPTS += --disable-libudev
+ endif
+ 
++ifeq ($(BR2_X86_CPU_HAS_SSE),y)
++SDL2_CONF_OPTS += --enable-sse
++else
++SDL2_CONF_OPTS += --disable-sse
++endif
++
+ ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
+ SDL2_DEPENDENCIES += directfb
+ SDL2_CONF_OPTS += --enable-video-directfb
