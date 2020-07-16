@@ -1,54 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:25:26 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libconfuse: bump
- version to 3.3
-Message-ID: <20200716163651.6C5A084C53@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:39:56 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/poco: add
+ BR2_PACKAGE_POCO_ARCH_SUPPORTS
+Message-ID: <20200716163651.9186C7F8DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=315436e83e8d7df33e7b3d1b284a752b5baefd48
+commit: https://git.buildroot.net/buildroot/commit/?id=ab59bd24beddd43f8ac41d1c0bc4e8779844acaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This fixes a possible loop-forever bug.
+Commit 0737f48c5f (package/poco: disable build for riscv) did not
+propagate the new dependency on BR2_riscv to the comment.
 
-Release notes:
-https://github.com/martinh/libconfuse/releases/tag/v3.3
+Introduce BR2_PACKAGE_POCO_ARCH_SUPPORTS to solve this issue.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Julien Olivain <juju@cotds.org>
+[yann.morin.1998 at free.fr:
+  - reword the commit log
+  - use separate 'depend on !arch'
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2747d967144a641bccd143bd2e6ccd878dec321c)
+(cherry picked from commit 4f733a4de7da15f207cb1b20815d5abaf67f7b5e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libconfuse/libconfuse.hash | 6 +++---
- package/libconfuse/libconfuse.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/poco/Config.in | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
-index adc93f99a3..bb968f7a52 100644
---- a/package/libconfuse/libconfuse.hash
-+++ b/package/libconfuse/libconfuse.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/martinh/libconfuse/releases/download/v3.2.2/confuse-3.2.2.tar.xz.md5
--md5  978996e421e5005e6a9f6f84948fac44  confuse-3.2.2.tar.xz
-+# From https://github.com/martinh/libconfuse/releases/download/v3.3/confuse-3.3.tar.xz.md5
-+md5  a183cef2cecdd3783436ff8de500d274  confuse-3.3.tar.xz
- # Locally computed
--sha256  a9240b653d02e8cfc52db48e8c4224426e528e1faa09b65e8ca08a197fad210b  confuse-3.2.2.tar.xz
-+sha256  1dd50a0320e135a55025b23fcdbb3f0a81913b6d0b0a9df8cc2fdf3b3dc67010  confuse-3.3.tar.xz
- sha256  dc3ff4b62f851dd2e94a151061ffeb7d28ddfc880a442068dc5283dbaa927306  LICENSE
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index b16bc9b7a7..516c0056d1 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCONFUSE_VERSION = 3.2.2
-+LIBCONFUSE_VERSION = 3.3
- LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
- LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
- LIBCONFUSE_INSTALL_STAGING = YES
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index f8f921de04..05e56eb6b8 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -1,3 +1,13 @@
++config BR2_PACKAGE_POCO_ARCH_SUPPORTS
++	bool
++	default y
++	depends on !BR2_arc
++	depends on !BR2_microblaze
++	depends on !BR2_mipsel
++	depends on !BR2_or1k
++	depends on !BR2_riscv
++	depends on !BR2_xtensa
++
+ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -5,8 +15,7 @@ config BR2_PACKAGE_POCO
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+-	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+-		|| BR2_or1k || BR2_riscv || BR2_xtensa)
++	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -85,5 +94,4 @@ endif # BR2_PACKAGE_POCO
+ comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+-	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+-		|| BR2_or1k || BR2_xtensa)
++	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
