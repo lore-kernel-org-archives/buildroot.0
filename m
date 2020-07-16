@@ -1,62 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:18:26 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] arch/x86: adds
- BR2_X86_CPU_HAS_3DNOW flag
-Message-ID: <20200716161642.F2FB186303@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:22:17 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] packages/pkg-download.mk:
+ fix file locking over NFS
+Message-ID: <20200716161859.96D558716A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce313033079d1ba3545778ad11ca52fcc2221f19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b3554820a58e03bb8dad009d87798ce8155fa5e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f6cd56b9ce3587c3e56eaa5a8e5f44d777c41e60)
+BSD style locks such as implemented by flock are translated to POSIX
+advisory file locks (implemented by the fcntl system call on Linux).  It
+is not possible to lock a directory using POSIX advisory file locks.
+Hence, the lock strategy used by Buildroot doesn't work when used over
+NFS.
+
+Using flock on a simple file works correctly though, so use a '.lock'
+file inside the download directory instead. If the lockfile does not
+exist, flock will create it (in a race-free fashion).
+
+Tested using NFS v4.2 and Linux 5.4.43.
+
+Signed-off-by: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
+[yann.morin.1998 at free.fr:
+  - slightly expand commit log about creation of the lockfile
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2e9d6565fcc10268b7db6d44d74f9b48d2c2354c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.x86 | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index eb655adbca..7aae3cafb7 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -1,6 +1,8 @@
- # i386/x86_64 cpu features
- config BR2_X86_CPU_HAS_MMX
- 	bool
-+config BR2_X86_CPU_HAS_3DNOW
-+	bool
- config BR2_X86_CPU_HAS_SSE
- 	bool
- config BR2_X86_CPU_HAS_SSE2
-@@ -155,15 +157,18 @@ config BR2_x86_k6_2
- 	bool "k6-2"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_athlon
- 	bool "athlon"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_athlon_4
- 	bool "athlon-4"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_opteron
- 	bool "opteron"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -209,6 +214,7 @@ config BR2_x86_c3
- 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_c32
- 	bool "Via C3-2 (Nehemiah cores)"
- 	depends on !BR2_x86_64
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index de619ba90a..951d2fb554 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -99,7 +99,7 @@ endif
+ 
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(2)_DL_DIR)
+-	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/ $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+ 		-c '$($(2)_DL_VERSION)' \
+ 		-d '$($(2)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
