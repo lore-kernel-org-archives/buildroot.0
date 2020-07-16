@@ -1,46 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:36:15 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libresslL: bump
- version to 3.1.2
-Message-ID: <20200716163657.2DF1C87702@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:39:46 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/poco: add
+ BR2_PACKAGE_POCO_ARCH_SUPPORTS
+Message-ID: <20200716163657.40B54815C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1df1b90150679a61af4350d6c2ad12a8893f9932
+commit: https://git.buildroot.net/buildroot/commit/?id=36fb7b34755d64647b3175b1c08ffcbf2fa2605a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Commit 0737f48c5f (package/poco: disable build for riscv) did not
+propagate the new dependency on BR2_riscv to the comment.
+
+Introduce BR2_PACKAGE_POCO_ARCH_SUPPORTS to solve this issue.
+
+Signed-off-by: Julien Olivain <juju@cotds.org>
+[yann.morin.1998 at free.fr:
+  - reword the commit log
+  - use separate 'depend on !arch'
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e9769585638f78a43d1fe8a2a6c2fe03524b8a9e)
+(cherry picked from commit 4f733a4de7da15f207cb1b20815d5abaf67f7b5e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/poco/Config.in | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index fcecc2b434..6b53d54e45 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  libressl-3.0.2.tar.gz
-+sha256  f88a2f7ea617149a34e40c022d9912963f00eaa6109af421317525e6c978d892  libressl-3.1.2.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index c2491bb3a9..c703076268 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 3.0.2
-+LIBRESSL_VERSION = 3.1.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index f8f921de04..05e56eb6b8 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -1,3 +1,13 @@
++config BR2_PACKAGE_POCO_ARCH_SUPPORTS
++	bool
++	default y
++	depends on !BR2_arc
++	depends on !BR2_microblaze
++	depends on !BR2_mipsel
++	depends on !BR2_or1k
++	depends on !BR2_riscv
++	depends on !BR2_xtensa
++
+ config BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+@@ -5,8 +15,7 @@ config BR2_PACKAGE_POCO
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+-	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+-		|| BR2_or1k || BR2_riscv || BR2_xtensa)
++	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	help
+@@ -85,5 +94,4 @@ endif # BR2_PACKAGE_POCO
+ comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+-	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
+-		|| BR2_or1k || BR2_xtensa)
++	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
