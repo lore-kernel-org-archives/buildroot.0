@@ -1,43 +1,33 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 16 Jul 2020 11:56:15 -0700
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.13.13
-Message-ID: <20200716185615.1439944-1-christian@paral.in>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 16 Jul 2020 21:36:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvncserver: disable gtk example
+Message-ID: <20200716193610.1924967-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go1.13.13 (released 2020/07/14) includes security fixes to the
-crypto/x509 and net/http packages.
+gtkvncviewer has been added since version 0.9.13 and
+https://github.com/LibVNC/libvncserver/commit/2650cfc17bb7718e42bfff8510c15f011eda1b1f,
+disable it as it is only an example
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libvncserver/libvncserver.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index a874345762..ab36962775 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	17ba2c4de4d78793a21cc659d9907f4356cd9c8de8b7d0899cdedcef712eba34  go1.13.12.src.tar.gz
-+sha256	ab7e44461e734ce1fd5f4f82c74c6d236e947194d868514d48a2b1ea73d25137  go1.13.13.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index c26b9f1c83..3a4560a5ea 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 96dd51299c..23ab40b7eb 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -16,6 +16,7 @@ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
++	-DWITH_GTK=OFF \
+ 	-DWITH_SDL=OFF
  
--GO_VERSION = 1.13.12
-+GO_VERSION = 1.13.13
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
 2.27.0
