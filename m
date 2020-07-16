@@ -1,52 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:33:21 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] fs/cpio: generate
- reproducible archives
-Message-ID: <20200716163657.245E187083@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:32:17 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ toolchain/toolchain-wrapper: let recent GCC handle SOURCE_DATE_EPOCH
+Message-ID: <20200716163657.16BC687083@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5027f8371b1a187bdf52e753d69cc3fb33b673c
+commit: https://git.buildroot.net/buildroot/commit/?id=9c0a81a21b4f7c94fcf54664bb0a360d5f7897e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-The output of 'find' depends on the directory entries, and is not
-ordered. As a consequence, the cpio archive is not reproducible.
+When using precompiled headers, changing any macros defined on the
+command line will invalidate the precompiled header.  With
+toolchain-wrapper adding __DATE__ and __TIME__, any commits to Buildroot
+will invalidate incremental builds regardless of whether the precompiled
+header actually uses those values (affecting _OVERRIDE_SRCDIR).
 
-Fix that by sorting the output of find. Use the 'C' locale to enforce
-reproducibility that does not depend on the locale.
+GCC-7 and later support SOURCE_DATE_EPOCH and use it to define __DATE__
+and __TIME__ internally, avoiding any impact on precompiled headers.
 
-The command line is now pretty long, so we wrap it.
+Disable the custom handling in toolchain-wrapper if GCC is version 7 or
+newer.
 
-Signed-off-by: Yurii Monakov <monakov.y@gmail.com>
-[yann.morin.1998 at free.fr:
-  - use LC_ALL=C when sorting
-  - wrap long line
-  - reword commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4728fdd4c06be07883e59eeb148c86cb74e10d73)
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 408bc354a9c14b3940938cfb7a3e3eefa81641a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/cpio/cpio.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ toolchain/toolchain-wrapper.c  | 10 ++++++++++
+ toolchain/toolchain-wrapper.mk |  3 +++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index 28a435dd5e..81f8c393d1 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -37,7 +37,11 @@ ROOTFS_CPIO_OPTS += --reproducible
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 8cfc963ccd..aa6d560fe6 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -177,6 +177,7 @@ static void check_unsafe_path(const char *arg,
+ 	}
+ }
+ 
++#ifdef BR_NEED_SOURCE_DATE_EPOCH
+ /* Returns false if SOURCE_DATE_EPOCH was not defined in the environment.
+  *
+  * Returns true if SOURCE_DATE_EPOCH is in the environment and represent
+@@ -230,6 +231,15 @@ bool parse_source_date_epoch_from_env(void)
+ 	}
+ 	return true;
+ }
++#else
++bool parse_source_date_epoch_from_env(void)
++{
++	/* The compiler is recent enough to handle SOURCE_DATE_EPOCH itself
++	 * so we do not need to do anything here.
++	 */
++	return false;
++}
++#endif
+ 
+ int main(int argc, char **argv)
+ {
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 09dda17890..f1312c5c7f 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -28,6 +28,9 @@ TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
+ else
+ TOOLCHAIN_WRAPPER_OPTS += -D__FILE__=\"\" -D__BASE_FILE__=\"\" -Wno-builtin-macro-redefined
+ endif
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_7),)
++TOOLCHAIN_WRAPPER_OPTS += -DBR_NEED_SOURCE_DATE_EPOCH
++endif
  endif
  
- define ROOTFS_CPIO_CMD
--	cd $(TARGET_DIR) && find . | cpio $(ROOTFS_CPIO_OPTS) --quiet -o -H newc > $@
-+	cd $(TARGET_DIR) && \
-+	find . \
-+	| LC_ALL=C sort \
-+	| cpio $(ROOTFS_CPIO_OPTS) --quiet -o -H newc \
-+	> $@
- endef
- 
- ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
