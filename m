@@ -1,40 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 16:59:17 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/python-validators: fix license
-Message-ID: <20200716150405.E802F814ED@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 17:02:37 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libxmlrpc: add
+ openssl optional dependency
+Message-ID: <20200716150406.17BA28765D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a7c7e14a67915334492d73763c9bce853365d46
+commit: https://git.buildroot.net/buildroot/commit/?id=3c71a7f201847feaba27bd1db565ff011fa33eff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The LICENSE file is MIT, not BSD.  The confusion comes from the license info
-in setup.py, which stated BSD until (post-0.14.2):
+Without this patch, openssl_abyss is enabled if openssl is built before
+libxmlrpc
 
-https://github.com/kvesteri/validators/commit/669129a3d3eb106e1b2d82bd9911faebb3287db6
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d682a3aeb9e3cc684e2dc6c2221a820bd4c08179)
+(cherry picked from commit 32844dfd99e021e9c24b4dbc726d39ffae291b50)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-validators/python-validators.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libxmlrpc/libxmlrpc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
-index e24ce35fdd..594c1d26e5 100644
---- a/package/python-validators/python-validators.mk
-+++ b/package/python-validators/python-validators.mk
-@@ -8,7 +8,7 @@ PYTHON_VALIDATORS_VERSION = 0.14.2
- PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
- PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/4d/56/9b48c918ef118ea12b90f227c4498ed4703b418bdd8fb49479dfcbeae4ef
- PYTHON_VALIDATORS_SETUP_TYPE = setuptools
--PYTHON_VALIDATORS_LICENSE = BSD
-+PYTHON_VALIDATORS_LICENSE = MIT
- PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index 54db9f1f89..f9925b74ca 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -39,6 +39,13 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBXMLRPC_STATIC_OPTS = SHARED_LIB_TYPE=NONE MUST_BUILD_SHLIB=N
+ endif
  
- $(eval $(python-package))
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBXMLRPC_DEPENDENCIES = host-pkgconf openssl
++LIBXMLRPC_CONF_OPTS = --enable-abyss-openssl
++else
++LIBXMLRPC_CONF_OPTS = --disable-abyss-openssl
++endif
++
+ LIBXMLRPC_MAKE_OPTS += $(LIBXMLRPC_STATIC_OPTS)
+ LIBXMLRPC_INSTALL_STAGING_OPTS = $(LIBXMLRPC_STATIC_OPTS) \
+ 	DESTDIR=$(STAGING_DIR) install
