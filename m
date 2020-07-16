@@ -1,56 +1,63 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Thu, 16 Jul 2020 14:26:37 +0200
-Subject: [Buildroot] audit2allow BR support
-In-Reply-To: <20200716110524.5214d23a@windsurf.home>
-References: <5696376.2474933.1594878993118.ref@mail.yahoo.com>
- <5696376.2474933.1594878993118@mail.yahoo.com>
- <20200716094540.27274cf4@windsurf.home>
- <159488904315.3198.6229972988341724924@kwain>
- <20200716110524.5214d23a@windsurf.home>
-Message-ID: <159490239727.3198.17598205481021389208@kwain>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 16 Jul 2020 15:03:17 +0200
+Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: fix sdma
+ support for imx8m family
+Message-ID: <20200716130317.135841-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+In latest patch the SDMA installation was limited to platforms whose
+name was mentioned in the binary. That would unfortunately be too simple
+to manage, instead the i.MX 8M family uses the same binary as the i.MX 7
+processors [1].
 
-Quoting Thomas Petazzoni (2020-07-16 11:05:24)
-> On Thu, 16 Jul 2020 10:44:03 +0200
-> Antoine Tenart <antoine.tenart@bootlin.com> wrote:
-> > > > 2- /var/lib/selinux directory missing
-> > > > $ semodule -llibsemanage.semanage_create_store: Could not create module store at /var/lib/selinux/targeted. (No such file or directory).libsemanage.semanage_direct_connect: could not establish direct connection (No such file or directory).semodule: Could not connect to policy handler
-> > > > ls /var/lib/selinuxls: /var/lib/selinux: No such file or directory  
-> > > > ==> looks like the directory can just be added    
-> > > 
-> > > On this one, I'm not sure, would need testing. I don't immediately see
-> > > anything creating /var/lib/selinux in Buildroot, so if it's not done by
-> > > the build system of one the SELinux packages, indeed /var/lib/selinux
-> > > will be missing.
-> > > 
-> > > Antoine: you are working on building systems with SELinux supports, did
-> > > you face the /var/lib/selinux missing problem ? Or perhaps because
-> > > you're testing with systemd, the situation is different ?  
-> > 
-> > Using a modular policy at runtime isn't supported by the current
-> > refpolicy support in BR. When playing with it, I had similar issues with
-> > directories missing. Also, I don't think adding those directories alone
-> > will make it working, there's probably more work to do.
-> 
-> How could have Tomas encountered this with the current Buildroot, where
-> we don't even have the logic to build a modular policy ?
+Fixes: fad2df39b9 ("package/freescale-imx/firmware-imx: clarify
+installation of firmware files")
 
-The refpolicy has no upstream support (in BR) to compile and install a
-policy with modules; but the semodule tool can still be installed
-(coming from policycoreutils). It's two different things.
+[1]
+https://source.codeaurora.org/external/imx/linux-imx/tree/arch/arm64/boot/dts/freescale/imx8mq.dtsi?h=imx_5.4.24_2.1.0#n519
 
-If we want to improve things, we could have semodule only installed
-conditionally when policycoreutils is selected.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/freescale-imx/firmware-imx/Config.in       | 3 +++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 6 +++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-Antoine
-
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index aae552177f..3859cc1d14 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -20,6 +20,9 @@ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+ 
+ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_VPU_FW
+ 	bool
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index cd299aad5e..90d9a79860 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -107,9 +107,13 @@ endif
+ #
+ 
+ ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW),y)
++FIRMWARE_IMX_SDMA_NAME = $(FIRMWARE_IMX_PLATFORM_LOWER)
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
++FIRMWARE_IMX_SDMA_NAME = imx7d
++endif
+ define FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/imx/sdma
+-	cp -r $(@D)/firmware/sdma/sdma-$(FIRMWARE_IMX_PLATFORM_LOWER)*.bin \
++	cp -r $(@D)/firmware/sdma/sdma-$(FIRMWARE_IMX_SDMA_NAME)*.bin \
+ 	       $(TARGET_DIR)/lib/firmware/imx/sdma/
+ endef
+ endif
 -- 
-Antoine T?nart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
