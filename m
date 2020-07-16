@@ -1,70 +1,58 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 16 Jul 2020 20:45:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gpm: fix build failure with gcc 10
-Message-ID: <20200716184528.25630-1-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 16 Jul 2020 20:53:45 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/lxc: fix license
+Message-ID: <20200716185345.1016519-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch from upstream [1] to fix -fno-common build failure
+Commit 5a393677314dfdaa6a4bd6a847b642ae54517538 forgot to update
+license which has been changed from COPYING to LICENSE.GPL2 and
+LICENSE.LGPL2.1 since version 4.0.0 and
+https://github.com/lxc/lxc/commit/cc73685dd09315b292968ee91a08a8f295376b35
 
-[1] https://github.com/telmich/gpm/commit/f04f24dd5ca5c1c13608b144ab66e2ccd47f106a
+It should be noted that COPYING describes GPLv3, see upstream answer
+here: https://github.com/lxc/lxc/issues/3484
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/2da182d0b84e2597e135506f8166a54660c4b2f5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...on.h-avoid-redefinition-of-last_sele.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Specify that GPL-2.0 is for some tools (6 source files)
+ - Add link on upstream answer for COPYING
 
-diff --git a/package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch b/package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch
-new file mode 100644
-index 0000000000..d976834a0d
---- /dev/null
-+++ b/package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch
-@@ -0,0 +1,42 @@
-+From f04f24dd5ca5c1c13608b144ab66e2ccd47f106a Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Sun, 19 Jan 2020 19:53:41 +0000
-+Subject: [PATCH] src/headers/daemon.h: avoid redefinition of
-+ 'last_selection_time'
-+
-+Noticed build failure on gcc-10 as:
-+
-+```
-+gcc  -L/home/slyfox/dev/git/gpm/src  -o gpm mice.o ... report.o tools.o   -lm
-+ld: twiddler.o:gpm/src/headers/daemon.h:183:
-+  multiple definition of `last_selection_time'; mice.o:gpm/src/headers/daemon.h:183: first defined here
-+ld: synaptics.o:git/gpm/src/headers/daemon.h:183:
-+  multiple definition of `last_selection_time'; mice.o:git/gpm/src/headers/daemon.h:183: first defined here
-+```
-+
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
-+
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+---
-+ src/headers/daemon.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/headers/daemon.h b/src/headers/daemon.h
-+index a8936ad..24a1a97 100644
-+--- a/src/headers/daemon.h
-++++ b/src/headers/daemon.h
-+@@ -180,7 +180,7 @@ extern struct mouse_features  mouse_table[3],
-+ extern Gpm_Type         mice[];
-+ extern Gpm_Type         *repeated_type;
-+ 
-+-time_t                  last_selection_time;
-++extern time_t           last_selection_time;
-+ 
-+ 
-+ 
-+-- 
-+2.20.1
-+
+ package/lxc/lxc.hash | 3 ++-
+ package/lxc/lxc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index faaa17dde0..411947f165 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  d56d91d772449c57e9a67b770dab8967e412051d8d6246ce56c63264671672e5  lxc-4.0.3.tar.gz
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 0d88cd6c8c..ad26580980 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -6,8 +6,8 @@
+ 
+ LXC_VERSION = 4.0.3
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+-LXC_LICENSE = LGPL-2.1+
+-LXC_LICENSE_FILES = COPYING
++LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
++LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+ LXC_DEPENDENCIES = host-pkgconf
+ LXC_INSTALL_STAGING = YES
+ 
 -- 
-2.20.1
+2.27.0
