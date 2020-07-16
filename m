@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:14:32 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/irrlicht: add
+Date: Thu, 16 Jul 2020 17:14:08 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/irrlicht: add
  patch to fix libraries linking
-Message-ID: <20200716151140.4F060875E5@busybox.osuosl.org>
+Message-ID: <20200716151151.789C4875E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d5e2957109e9781a08802a2be8e4d2497c7bbe7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a8dd8f03d1cc9c35543153292d5991eaa7f6e79d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 This patch fix the irrlicht makefile which contains the paths
 that point to the host system libraries that are not used and
