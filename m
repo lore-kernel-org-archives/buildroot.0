@@ -1,121 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:29:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/rpi-firmware: fix
- startup file names
-Message-ID: <20200716163651.75B527F8DF@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:25:33 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libconfuse: bump
+ version to 3.3
+Message-ID: <20200716163656.F33CF87083@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d92af490a51a27578aee441b8cad9169d2695b4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7e2b980d29b2364f0750595f85e294764cf75903
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-When booting, a Raspberry Pi will load the appropriate start files,
-depending on the provided configuration. For example, if the config.txt
-file contains ???gpu_mem=16??? the board will automatically load the
-cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
+This fixes a possible loop-forever bug.
 
-Unfortunately, even when the appropriate version is selected in the
-configuration menu, if the rpi-firmware makefile takes the good files,
-it renames them to non-qualified, i.e. start.elf and fixup.dat. But as
-these are not the files searched by the Raspberry Pi, the board will not
-start.
+Release notes:
+https://github.com/martinh/libconfuse/releases/tag/v3.3
 
-This patch will set the names of the files to load as constant in the
-config.txt file. This guarantees that the rpi firmware blobs do not take
-any other corner-case decision based on any other as-yet unknown
-conditions.
-
-This eases the maintenance, as only the names of the source files
-matter; the destination filenames are constants, and so are the
-filenames in config.txt.
-
-Fixes: #13026
-
-Signed-off-by: St??phane Veyret <sveyret@gmail.com>
-[yann.morin.1998 at free.fr:
-  - very minor fix in commit title
-  - drop the non-conditional macro and move its content into
-    RPI_FIRMWARE_INSTALL_IMAGES_CMDS
-]
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1bdc0334ff6273761b2e7fda730cdcc7e1f46862)
+(cherry picked from commit 2747d967144a641bccd143bd2e6ccd878dec321c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-firmware/Config.in       |  7 ++++---
- package/rpi-firmware/config.txt      |  5 +++++
- package/rpi-firmware/rpi-firmware.mk | 15 +++++----------
- 3 files changed, 14 insertions(+), 13 deletions(-)
+ package/libconfuse/libconfuse.hash | 6 +++---
+ package/libconfuse/libconfuse.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index cced53f017..f5a25c5680 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -62,11 +62,12 @@ endchoice
+diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
+index adc93f99a3..bb968f7a52 100644
+--- a/package/libconfuse/libconfuse.hash
++++ b/package/libconfuse/libconfuse.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/martinh/libconfuse/releases/download/v3.2.2/confuse-3.2.2.tar.xz.md5
+-md5  978996e421e5005e6a9f6f84948fac44  confuse-3.2.2.tar.xz
++# From https://github.com/martinh/libconfuse/releases/download/v3.3/confuse-3.3.tar.xz.md5
++md5  a183cef2cecdd3783436ff8de500d274  confuse-3.3.tar.xz
+ # Locally computed
+-sha256  a9240b653d02e8cfc52db48e8c4224426e528e1faa09b65e8ca08a197fad210b  confuse-3.2.2.tar.xz
++sha256  1dd50a0320e135a55025b23fcdbb3f0a81913b6d0b0a9df8cc2fdf3b3dc67010  confuse-3.3.tar.xz
+ sha256  dc3ff4b62f851dd2e94a151061ffeb7d28ddfc880a442068dc5283dbaa927306  LICENSE
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index b16bc9b7a7..516c0056d1 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_RPI_FIRMWARE_BOOT
- 	string
--	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
-+	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
-+	default "4"     if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
- 	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
--	default "x"     if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
-+	default "4x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
- 	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
--	default "cd"    if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
-+	default "4cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
- 
- config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
- 	bool "Install Device Tree Blobs (DTBs)"
-diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
-index 58cc966a87..4a92a4dd95 100644
---- a/package/rpi-firmware/config.txt
-+++ b/package/rpi-firmware/config.txt
-@@ -4,6 +4,11 @@
- # See http://buildroot.org/manual.html#rootfs-custom
- # and http://elinux.org/RPiconfig for a description of config.txt syntax
- 
-+# We always use the same names, the real used variant is selected by
-+# BR2_PACKAGE_RPI_FIRMWARE_{DEFAULT,X,CD} choice
-+start_file=start.elf
-+fixup_file=fixup.dat
-+
- kernel=zImage
- 
- # To use an external initramfs file
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 6fee60b08c..4da687caec 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -41,24 +41,19 @@ define RPI_FIRMWARE_INSTALL_TARGET_CMDS
- endef
- endif # INSTALL_VCDBG
- 
--ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
-+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
- # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
--define RPI_FIRMWARE_INSTALL_BOOT
--	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
--	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
--endef
--else
--define RPI_FIRMWARE_INSTALL_BOOT
-+define RPI_FIRMWARE_INSTALL_BOOTCODE_BIN
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
--	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
--	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
- endef
- endif
- 
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
- 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
--	$(RPI_FIRMWARE_INSTALL_BOOT)
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-+	$(RPI_FIRMWARE_INSTALL_BOOTCODE_BIN)
- 	$(RPI_FIRMWARE_INSTALL_DTB)
- 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
- endef
+-LIBCONFUSE_VERSION = 3.2.2
++LIBCONFUSE_VERSION = 3.3
+ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
+ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
+ LIBCONFUSE_INSTALL_STAGING = YES
