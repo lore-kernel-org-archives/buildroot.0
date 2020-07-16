@@ -1,77 +1,121 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:32:12 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- toolchain/toolchain-wrapper: let recent GCC handle SOURCE_DATE_EPOCH
-Message-ID: <20200716163651.7D9597F8DF@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:29:57 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/rpi-firmware: fix
+ startup file names
+Message-ID: <20200716163651.75B527F8DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bebf3d9d444f56fb156d859b7992d80fa654869e
+commit: https://git.buildroot.net/buildroot/commit/?id=d92af490a51a27578aee441b8cad9169d2695b4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-When using precompiled headers, changing any macros defined on the
-command line will invalidate the precompiled header.  With
-toolchain-wrapper adding __DATE__ and __TIME__, any commits to Buildroot
-will invalidate incremental builds regardless of whether the precompiled
-header actually uses those values (affecting _OVERRIDE_SRCDIR).
+When booting, a Raspberry Pi will load the appropriate start files,
+depending on the provided configuration. For example, if the config.txt
+file contains ???gpu_mem=16??? the board will automatically load the
+cut-down startup files (start_cd.elf and fixup_cd.dat on non-Rpi4).
 
-GCC-7 and later support SOURCE_DATE_EPOCH and use it to define __DATE__
-and __TIME__ internally, avoiding any impact on precompiled headers.
+Unfortunately, even when the appropriate version is selected in the
+configuration menu, if the rpi-firmware makefile takes the good files,
+it renames them to non-qualified, i.e. start.elf and fixup.dat. But as
+these are not the files searched by the Raspberry Pi, the board will not
+start.
 
-Disable the custom handling in toolchain-wrapper if GCC is version 7 or
-newer.
+This patch will set the names of the files to load as constant in the
+config.txt file. This guarantees that the rpi firmware blobs do not take
+any other corner-case decision based on any other as-yet unknown
+conditions.
 
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 408bc354a9c14b3940938cfb7a3e3eefa81641a5)
+This eases the maintenance, as only the names of the source files
+matter; the destination filenames are constants, and so are the
+filenames in config.txt.
+
+Fixes: #13026
+
+Signed-off-by: St??phane Veyret <sveyret@gmail.com>
+[yann.morin.1998 at free.fr:
+  - very minor fix in commit title
+  - drop the non-conditional macro and move its content into
+    RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 1bdc0334ff6273761b2e7fda730cdcc7e1f46862)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-wrapper.c  | 10 ++++++++++
- toolchain/toolchain-wrapper.mk |  3 +++
- 2 files changed, 13 insertions(+)
+ package/rpi-firmware/Config.in       |  7 ++++---
+ package/rpi-firmware/config.txt      |  5 +++++
+ package/rpi-firmware/rpi-firmware.mk | 15 +++++----------
+ 3 files changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 8cfc963ccd..aa6d560fe6 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -177,6 +177,7 @@ static void check_unsafe_path(const char *arg,
- 	}
- }
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index cced53f017..f5a25c5680 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -62,11 +62,12 @@ endchoice
  
-+#ifdef BR_NEED_SOURCE_DATE_EPOCH
- /* Returns false if SOURCE_DATE_EPOCH was not defined in the environment.
-  *
-  * Returns true if SOURCE_DATE_EPOCH is in the environment and represent
-@@ -230,6 +231,15 @@ bool parse_source_date_epoch_from_env(void)
- 	}
- 	return true;
- }
-+#else
-+bool parse_source_date_epoch_from_env(void)
-+{
-+	/* The compiler is recent enough to handle SOURCE_DATE_EPOCH itself
-+	 * so we do not need to do anything here.
-+	 */
-+	return false;
-+}
-+#endif
+ config BR2_PACKAGE_RPI_FIRMWARE_BOOT
+ 	string
+-	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
++	default "4"     if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "x"     if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
++	default "4x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "cd"    if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
++	default "4cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
  
- int main(int argc, char **argv)
- {
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 09dda17890..f1312c5c7f 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -28,6 +28,9 @@ TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
- else
- TOOLCHAIN_WRAPPER_OPTS += -D__FILE__=\"\" -D__BASE_FILE__=\"\" -Wno-builtin-macro-redefined
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+ 	bool "Install Device Tree Blobs (DTBs)"
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index 58cc966a87..4a92a4dd95 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -4,6 +4,11 @@
+ # See http://buildroot.org/manual.html#rootfs-custom
+ # and http://elinux.org/RPiconfig for a description of config.txt syntax
+ 
++# We always use the same names, the real used variant is selected by
++# BR2_PACKAGE_RPI_FIRMWARE_{DEFAULT,X,CD} choice
++start_file=start.elf
++fixup_file=fixup.dat
++
+ kernel=zImage
+ 
+ # To use an external initramfs file
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 6fee60b08c..4da687caec 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -41,24 +41,19 @@ define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+ endef
+ endif # INSTALL_VCDBG
+ 
+-ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
+ # bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
+-define RPI_FIRMWARE_INSTALL_BOOT
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
+-endef
+-else
+-define RPI_FIRMWARE_INSTALL_BOOT
++define RPI_FIRMWARE_INSTALL_BOOTCODE_BIN
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ endef
  endif
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_7),)
-+TOOLCHAIN_WRAPPER_OPTS += -DBR_NEED_SOURCE_DATE_EPOCH
-+endif
- endif
  
- # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+-	$(RPI_FIRMWARE_INSTALL_BOOT)
++	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
++	$(RPI_FIRMWARE_INSTALL_BOOTCODE_BIN)
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
+ 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+ endef
