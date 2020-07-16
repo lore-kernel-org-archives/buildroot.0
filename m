@@ -1,51 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jul 2020 09:39:20 +0200
-Subject: [Buildroot] Specifying march extensions for the toolchain
-In-Reply-To: <CA+h8R2qy+s9z_DzYuNMyhfbxKvKQ8cJ5XBRA9w48HDn4eC7T4g@mail.gmail.com>
-References: <CA+h8R2qy+s9z_DzYuNMyhfbxKvKQ8cJ5XBRA9w48HDn4eC7T4g@mail.gmail.com>
-Message-ID: <20200716093920.3765363a@windsurf.home>
+Date: Thu, 16 Jul 2020 09:45:40 +0200
+Subject: [Buildroot] audit2allow BR support
+In-Reply-To: <5696376.2474933.1594878993118@mail.yahoo.com>
+References: <5696376.2474933.1594878993118.ref@mail.yahoo.com>
+ <5696376.2474933.1594878993118@mail.yahoo.com>
+Message-ID: <20200716094540.27274cf4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Jul 2020 21:20:16 -0700
-Christian Stewart <christian@paral.in> wrote:
+Hello,
 
-> When using the Buildroot toolchain, the toolchain-wrapper is used,
-> which specifies march=GCC_TARGET_ARCH.
-> 
-> When using armv8, GCC_TARGET_ARCH is as expected, "armv8a."
-> 
-> However, there are optional extensions to the instruction set - for
-> example, one can specify "armv8a+crypto+crc" would enable the crypto,
-> crc extensions.
-> 
-> Would the best way to specify extensions be:
-> 
-> BR2_TARGET_OPTIMIZATION="-march=armv8a+crypto+crc"
-> 
-> Or is there a better way to specify the march override, which inherits
-> the BR2_ARCH value?
+I am adding a few folks with SELinux/Buildroot knowledge in Cc. See
+below some comments as well.
 
-I think we would probably want to add some explicit Config.in options
-in arch/Config.in.arm so that the user can declare what features are
-supported by its particular AArch64 core. It is worth mentioning that
-some features are already implicitly enabled depending on the CPU core
-you select:
+On Thu, 16 Jul 2020 05:56:33 +0000 (UTC)
+"Tomas V. Arredondo" <surf_fanatico@yahoo.com> wrote:
 
-     ARCH value     Architecture   Includes by default
-     --------------------------------------------------------------------------
-     'armv8-a'      Armv8-A        '+fp', '+simd'
-     'armv8.1-a'    Armv8.1-A      'armv8-a', '+crc', '+lse', '+rdma'
-     'armv8.2-a'    Armv8.2-A      'armv8.1-a'
-     'armv8.3-a'    Armv8.3-A      'armv8.2-a'
-     'armv8.4-a'    Armv8.4-A      'armv8.3-a', '+fp16fml', '+dotprod'
-     'armv8.5-a'    Armv8.5-A      'armv8.4-a', '+sb', '+ssbs', '+predres'
-     'armv8.6-a'    Armv8.6-A      'armv8.5-a', '+bf16', '+i8mm'
+> +BR2_PACKAGE_REFPOLICY=y+BR2_PACKAGE_SETOOLS=y+BR2_PACKAGE_POLICYCOREUTILS=y+BR2_PACKAGE_SELINUX_PYTHON=y+BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW=y?
+> The build completes with the kernel, rootfs and dtb.? SELinux support is seen in that the Z option works with ps, ls and labels etc are seen.But some errors are observed:
+> 
+> 1- selinux module not found in audit2allow
+> $ audit2allow -aTraceback (most recent call last):File "/usr/bin/audit2allow", line 25, in <module>import sepolgen.audit as auditFile "usr/lib/python3.7/sepolgen/audit.py", line 23, in <module>File "usr/lib/python3.7/sepolgen/refpolicy.py", line 21, in <module>ModuleNotFoundError: No module named 'selinux'
+> buildroot/package/selinux-python$ cat selinux-python.hash# https://github.com/SELinuxProject/selinux/wiki/Releasessha256 3650b5393b0d1790cac66db00e34f059aa91c23cfe3c2559676594e295d75fde selinux-python-2.9.tar.gz
+> # ls__init__.pyc? ? ? interfaces.pyc? ? output.pyc? ? ? ? util.pycaccess.pyc? ? ? ? lex.pyc? ? ? ? ? ?policygen.pyc? ? ?yacc.pycaudit.pyc? ? ? ? ?matching.pyc? ? ? refparser.pycclassperms.pyc? ? module.pyc? ? ? ? refpolicy.pycdefaults.pyc? ? ? objectmodel.pyc? ?sepolgeni18n.pyc# pwd/usr/lib/python3.7/sepolgen
+> ==> I do see selinux.py in the build directory but not in the target rootfs as a pyc or otherwise:  
+> buildroot/output/build/host-libselinux-2.9/src/selinux.pybuildroot/output/build/libselinux-2.9/src/selinux.py
 
-Best regards,
+This file is from host-libselinux, which is not relevant here.
+
+Which Python version have you chosen ? Python 3.x or Python 2.x, i.e
+BR2_PACKAGE_PYTHON=y or BR2_PACKAGE_PYTHON3=y ?
+
+> 2- /var/lib/selinux directory missing
+> $ semodule -llibsemanage.semanage_create_store: Could not create module store at /var/lib/selinux/targeted. (No such file or directory).libsemanage.semanage_direct_connect: could not establish direct connection (No such file or directory).semodule: Could not connect to policy handler
+> ls /var/lib/selinuxls: /var/lib/selinux: No such file or directory
+> ==> looks like the directory can just be added  
+
+On this one, I'm not sure, would need testing. I don't immediately see
+anything creating /var/lib/selinux in Buildroot, so if it's not done by
+the build system of one the SELinux packages, indeed /var/lib/selinux
+will be missing.
+
+Antoine: you are working on building systems with SELinux supports, did
+you face the /var/lib/selinux missing problem ? Or perhaps because
+you're testing with systemd, the situation is different ?
+
+Thanks,
 
 Thomas
 -- 
