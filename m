@@ -1,28 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:01:47 +0200
-Subject: [Buildroot] [PATCH] package/gnutls: Fix build with uClibc
-In-Reply-To: <20200623101533.1459806-1-stefan.sorensen@spectralink.com>
- (stefan's message of "Tue, 23 Jun 2020 12:15:33 +0200")
-References: <20200623101533.1459806-1-stefan.sorensen@spectralink.com>
-Message-ID: <87tuy7v6zo.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jul 2020 17:03:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libxmlrpc: add openssl optional
+ dependency
+In-Reply-To: <20200622054708.1885805-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Jun 2020 07:47:08 +0200")
+References: <20200622054708.1885805-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pn8vv6wn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "stefan" == stefan  <stefan@astylos.dk> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: Stefan S?rensen <stefan.sorensen@spectralink.com>
- > Since v3.6.14 gnutls wants to use the 'e' flag with fopen to set the
- > O_CLOEXEC flags. Since this is a glibc extension, it will trigger a
- > gnulib override of fopen on non-glibc systems, but that override
- > breaks the uClibc stdio.h header.
+ > Without this patch, openssl_abyss is enabled if openssl is built before
+ > libxmlrpc
 
- > Fixes:
- > http://autobuild.buildroot.org/results/02f/02f2b524add307c8f7cc1af1ed0783bb1baf029a
-
- > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
