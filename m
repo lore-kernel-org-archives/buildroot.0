@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jul 2020 23:06:49 +0200
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.13.13
-In-Reply-To: <20200716185615.1439944-1-christian@paral.in>
-References: <20200716185615.1439944-1-christian@paral.in>
-Message-ID: <20200716230649.62cd4e49@windsurf.home>
+Date: Thu, 16 Jul 2020 23:06:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvncserver: disable gtk
+ example
+In-Reply-To: <20200716193610.1924967-1-fontaine.fabrice@gmail.com>
+References: <20200716193610.1924967-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200716230653.42c8ed86@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Jul 2020 11:56:15 -0700
-Christian Stewart <christian@paral.in> wrote:
+On Thu, 16 Jul 2020 21:36:10 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> go1.13.13 (released 2020/07/14) includes security fixes to the
-> crypto/x509 and net/http packages.
+> gtkvncviewer has been added since version 0.9.13 and
+> https://github.com/LibVNC/libvncserver/commit/2650cfc17bb7718e42bfff8510c15f011eda1b1f,
+> disable it as it is only an example
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/go/go.hash | 2 +-
->  package/go/go.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libvncserver/libvncserver.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
