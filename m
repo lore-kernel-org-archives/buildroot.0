@@ -1,49 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:49:26 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libcurl: security
- bump to version 7.71.0
-Message-ID: <20200716155443.E861784BCF@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 17:51:51 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/wpebackend-fdo:
+ bump to version 1.6.1
+Message-ID: <20200716155444.1037684BCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49f08cfbc2d952d1770a3708b139e869e40d1273
+commit: https://git.buildroot.net/buildroot/commit/?id=1987e221853ef736b75e8f03bae6527949869d07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-CVE-2020-8177: curl overwrite local file with -J.
+This update brings in a few build fixes only. In particular the
+one for EGL implementations which use oddball definitions of the
+EGLNativeDisplayType type might be needed for some configurations.
 
-CVE-2020-8169: Partial password leak over DNS on HTTP redirect.
+Full release notes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8370769d4a5e62e7054872053eafdd99419fef36)
+  https://wpewebkit.org/release/wpebackend-fdo-1.6.1.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bbada0c2ecb2ce04d3054cdbfb9efb79c11ee6ed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 2157f3d2d2..104d603f3e 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
--sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
-+sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index cc2ca0aa65..11748924ff 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 1380934af3..0b821f3443 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.0.tar.xz.sums
+-md5  456afeed22f6749f7b2a97c11660835d  wpebackend-fdo-1.6.0.tar.xz
+-sha1  d128e2c7ff273d9b9f31217f6ac25be3b266d805  wpebackend-fdo-1.6.0.tar.xz
+-sha256  7f5bd7b9d8f97b1655f4dcd39fad92719d0fb3985b251da5802df13aaa09f567  wpebackend-fdo-1.6.0.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.1.tar.xz.sums
++md5  ea6c2a13e6c2423f2c2b0b31fcf9567b  wpebackend-fdo-1.6.1.tar.xz
++sha1  53e38189324d9c0c87f40164d8349a827663aabd  wpebackend-fdo-1.6.1.tar.xz
++sha256  740eee3327acfb462b8460519a219e30dc0a870326e88e2ddc4fe2c8de20b1c9  wpebackend-fdo-1.6.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 99e10c5a01..5bc2d3ed37 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.70.0
-+LIBCURL_VERSION = 7.71.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-WPEBACKEND_FDO_VERSION = 1.6.0
++WPEBACKEND_FDO_VERSION = 1.6.1
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
