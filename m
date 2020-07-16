@@ -1,47 +1,45 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 15 Jul 2020 20:35:24 -0300
-Subject: [Buildroot] [PATCH] package/xterm: bump version to 358
-Message-ID: <20200715233525.11935-1-sergio.prado@e-labworks.com>
+Date: Wed, 15 Jul 2020 21:04:18 -0300
+Subject: [Buildroot] [PATCH] package/xtables-addons: bump version to 3.9
+Message-ID: <20200716000418.30107-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Separate the fields in the hash file by two spaces.
-
-Change the hash of the license:
-- Copyright message changed from 2018,2019 to 2019,2020
+Separate the fields in the hash file by two spaces and remove hash of
+old version.
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/xterm/xterm.hash | 4 ++--
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xtables-addons/xtables-addons.hash | 5 ++---
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 57d5a72b9a1b..7f2ff2c301ed 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 39a6a3d3724f9a0a068f8cc353ab0c82831f0a43abb24470d933af299658475f xterm-349.tgz
-+sha256  7cdb106962910a99700b3c45fa1a1493e46e97a5aa3785093a786e07196fbf7b  xterm-358.tgz
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index fea496d99754..33cc139b3646 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,4 +1,3 @@
  # Locally calculated
--sha256 b0d302c6d67f63122bbe8d622dd8a66cfadccc32853f606b7558103609201993 COPYING
-+sha256  c655a5fa3dec936543e02f863b8c1343d08522a2821cb484df6c5f62afa7354d  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 8cbfa070e2ec..5e3e64fff4de 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+-sha256 189ff57a0b8960969bd99141a6c79c345efa67e4461f450e2f162c9bd3d17da6 xtables-addons-3.5.tar.xz
+-sha256 045ee3fcfe5d6edb95483cf49e2446ff8cab4bb79411018b18354138b70c5eb5 xtables-addons-3.7.tar.xz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 LICENSE
++sha256  064dd68937d98e6cfcbdf51ef459310d9810c17ab31b21285bc7a76cdcef7c49  xtables-addons-3.9.tar.xz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index dab57d980e14..c9e5bfdde090 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 349
-+XTERM_VERSION = 358
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-XTABLES_ADDONS_VERSION = 3.7
++XTABLES_ADDONS_VERSION = 3.9
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
 -- 
 2.17.1
