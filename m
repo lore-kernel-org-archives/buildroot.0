@@ -1,58 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:49:31 +0200
+Date: Thu, 16 Jul 2020 17:49:18 +0200
 Subject: [Buildroot] [git commit branch/2020.05.x] package/libcurl: bump to
- version 7.71.1
-Message-ID: <20200716155443.F149684BCF@busybox.osuosl.org>
+ 7.70.0
+Message-ID: <20200716155443.DE2F084BCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a51bde68ee8667d536db7b17610558c71e3de13
+commit: https://git.buildroot.net/buildroot/commit/?id=7af9c08d36796a64ef14510f69ef04bf1975d4db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This release fixes build with BR2_PACKAGE_LIBCURL_PROXY_SUPPORT disabled
-and mbedtls enabled.
-
-Add reference to upstream tarball signature.
-
-Fixes:
-http://autobuild.buildroot.net/results/f32b6ab927560839cacaa1b9e6b64ced92b9ffe3/
-http://autobuild.buildroot.net/results/566f0db496f6d1feefd9d3e6b6955a2539670735/
-http://autobuild.buildroot.net/results/19de1111318aea863118c9b0b44dc282f011918f/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8360886fb2d983fb3324a352531b19289fe4e8f3)
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 88aebf5fcbcad32e006c04322be499a8e5b29ef6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 ++++--
+ package/libcurl/libcurl.hash | 4 ++--
  package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 104d603f3e..46f72c1eaf 100644
+index 69cf7b5398..2157f3d2d2 100644
 --- a/package/libcurl/libcurl.hash
 +++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
-+# Locally calculated after checking pgp signature
-+# https://curl.haxx.se/download/curl-7.71.1.tar.xz.asc
-+# signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-+sha256  40f83eda27cdbeb25cd4da48cefb639af1b9395d6026d2da1825bf059239658c  curl-7.71.1.tar.xz
- sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
--sha256  cdf18794393d8bead915312708a9e5d819c6e9919de14b20d5c8e7987abd9772  curl-7.71.0.tar.xz
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
+-sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
++sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
++sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
 diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 11748924ff..6f053f00a8 100644
+index 7a29634c68..cc2ca0aa65 100644
 --- a/package/libcurl/libcurl.mk
 +++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.71.0
-+LIBCURL_VERSION = 7.71.1
+-LIBCURL_VERSION = 7.69.1
++LIBCURL_VERSION = 7.70.0
  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
  LIBCURL_SITE = https://curl.haxx.se/download
  LIBCURL_DEPENDENCIES = host-pkgconf \
