@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:18:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Thu, 16 Jul 2020 17:17:09 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
  package/wireguard-linux-compat: bump version to 1.0.20200506
-Message-ID: <20200716151506.7C52C86D37@busybox.osuosl.org>
+Message-ID: <20200716151510.EF71286D37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f18425d768af5f40536a813a06e7121f43678f54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b0240dce90d0eb79cce4fc7c0421a904717034b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Synchronizes with upstream 5.7-rc5.  For details, see the announcement:
 https://lists.zx2c4.com/pipermail/wireguard/2020-May/005408.html
@@ -35,7 +35,7 @@ index d308f47a13..54af5af956 100644
  # Locally calculated
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 27f5981ae3..134c4040f2 100644
+index 6d90245bd2..f1b117d258 100644
 --- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
 +++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
 @@ -4,7 +4,7 @@
