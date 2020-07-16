@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:17:09 +0200
-Subject: [Buildroot] [PATCH 1/3] package/sdl2: enable SSE only if it's
- supported by the target
-In-Reply-To: <20200515175357.45954-1-nrosfs@gmail.com> (Nicolas Robin's
- message of "Fri, 15 May 2020 19:53:55 +0200")
+Date: Thu, 16 Jul 2020 18:18:35 +0200
+Subject: [Buildroot] [PATCH 2/3] arch/x86: adds BR2_X86_CPU_HAS_3DNOW
+ flag
+In-Reply-To: <20200515175357.45954-2-nrosfs@gmail.com> (Nicolas Robin's
+ message of "Fri, 15 May 2020 19:53:56 +0200")
 References: <20200515175357.45954-1-nrosfs@gmail.com>
-Message-ID: <87imentoxm.fsf@dell.be.48ers.dk>
+ <20200515175357.45954-2-nrosfs@gmail.com>
+Message-ID: <87eepbtov8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
