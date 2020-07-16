@@ -1,125 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jul 2020 22:30:15 +0200
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: refine
- vpu and sdma copies
-Message-ID: <20200716203405.84A9987840@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 22:25:07 +0200
+Subject: [Buildroot] [git commit]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.0.p2.4
+Message-ID: <20200716203405.7A4598711C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e236a0576c756fe131e538f3e472caf1a3e2ffe
+commit: https://git.buildroot.net/buildroot/commit/?id=303eb0e389623e2a854ccbe4df4bdaa559a5d839
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In latest patch the SDMA installation was limited to platforms whose
-name was mentioned in the binary but this approach wasn't flexible to
-manage cases like imx8m using imx7 sdma binary, so this patch does:
-- change VPU/SDMA FW options to string to allow specifying the name
-  (suggested by Thomas)
-- remove imx27 sdma case as non-existent
-- add imx8m family support (using imx7d binary)
-- get rid of FIRMWARE_IMX_PLATFORM_LOWER macro
+- Same version as NXP release 5.4.24-2.1.0
+- No changelog provided by NXP
+- Tested on Nitrogen8M device with Weston (DRM backend) as follows:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
-Fixes: fad2df39b9 ("package/freescale-imx/firmware-imx: clarify installation of firmware files")
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/firmware-imx/Config.in       | 34 ++++++++++++----------
- package/freescale-imx/firmware-imx/firmware-imx.mk | 19 ++++--------
- 2 files changed, 24 insertions(+), 29 deletions(-)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index aae552177f..5becf8b6a9 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -12,23 +12,25 @@ config BR2_PACKAGE_FIRMWARE_IMX
- 
- if BR2_PACKAGE_FIRMWARE_IMX
- 
--config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW
--	bool
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
-+config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
-+	string
-+	default "imx25" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
-+	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
-+	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
-+	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-+	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
-+	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
-+	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-+	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
- 
--config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_VPU_FW
--	bool
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
--	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+config BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME
-+	string
-+	default "imx27" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
-+	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
-+	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
-+	default "imx6"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-+	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
-+	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 
- config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
- 	bool
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index cd299aad5e..5cfff2da05 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -14,8 +14,6 @@ FIRMWARE_IMX_REDISTRIBUTE = NO
- 
- FIRMWARE_IMX_INSTALL_IMAGES = YES
- 
--FIRMWARE_IMX_PLATFORM_LOWER = $(shell echo $(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) | tr A-Z a-z | head -c 5)
--
- define FIRMWARE_IMX_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
- endef
-@@ -106,10 +104,11 @@ endif
- # SDMA firmware
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index fe40692a6b..b9b93aeb5b 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  d747c39f900315f2f46b8397f55d199c7ece7328ae91ce21a2f5eb0895603865  kernel-module-imx-gpu-viv-4cc1368dc05073b368cfdbadfdf5de3a3d3b15f4.tar.gz
++sha256  52b7425453fa32300e4779220d5deebd4a43a7525991ce3e5ce27eba909780f3  kernel-module-imx-gpu-viv-f2e8483fbda59bf2482f77efb0804c014848f749.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index a037858cfc..89b47f9147 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
  #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW),y)
-+FIRMWARE_IMX_SDMA_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME))
-+ifneq ($(FIRMWARE_IMX_SDMA_FW_NAME),)
- define FIRMWARE_IMX_INSTALL_TARGET_SDMA_FW
- 	mkdir -p $(TARGET_DIR)/lib/firmware/imx/sdma
--	cp -r $(@D)/firmware/sdma/sdma-$(FIRMWARE_IMX_PLATFORM_LOWER)*.bin \
-+	cp -r $(@D)/firmware/sdma/sdma-$(FIRMWARE_IMX_SDMA_FW_NAME)*.bin \
- 	       $(TARGET_DIR)/lib/firmware/imx/sdma/
- endef
- endif
-@@ -118,17 +117,11 @@ endif
- # VPU firmware
- #
- 
--ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_VPU_FW),y)
--# special case for i.MX8X, which uses the same firmware as i.MX8
--ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
--FIRMWARE_IMX_VPU_PLATFORM = imx8
--else
--FIRMWARE_IMX_VPU_PLATFORM = $(FIRMWARE_IMX_PLATFORM_LOWER)
--endif
--
-+FIRMWARE_IMX_VPU_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME))
-+ifneq ($(FIRMWARE_IMX_VPU_FW_NAME),)
- define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
- 	mkdir -p $(TARGET_DIR)/lib/firmware/imx/vpu
--	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_PLATFORM)*.bin \
-+	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin \
- 		$(TARGET_DIR)/lib/firmware/imx/vpu/
- endef
- endif
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 4cc1368dc05073b368cfdbadfdf5de3a3d3b15f4
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = f2e8483fbda59bf2482f77efb0804c014848f749
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
