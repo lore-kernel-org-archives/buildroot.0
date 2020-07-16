@@ -1,50 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:22:12 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] packages/pkg-download.mk:
- fix file locking over NFS
-Message-ID: <20200716161904.064EC8716A@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:25:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libconfuse: bump version to 3.3
+In-Reply-To: <20200625133636.1394588-1-fhunleth@troodon-software.com> (Frank
+ Hunleth's message of "Thu, 25 Jun 2020 09:36:36 -0400")
+References: <20200625133636.1394588-1-fhunleth@troodon-software.com>
+Message-ID: <87wo33s9yk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed383f99c83b45c0b52616adb36745da36b9f281
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-BSD style locks such as implemented by flock are translated to POSIX
-advisory file locks (implemented by the fcntl system call on Linux).  It
-is not possible to lock a directory using POSIX advisory file locks.
-Hence, the lock strategy used by Buildroot doesn't work when used over
-NFS.
+ > This fixes a possible loop-forever bug.
 
-Using flock on a simple file works correctly though, so use a '.lock'
-file inside the download directory instead. If the lockfile does not
-exist, flock will create it (in a race-free fashion).
+Sounds bad :/
 
-Tested using NFS v4.2 and Linux 5.4.43.
+ > Release notes:
+ > https://github.com/martinh/libconfuse/releases/tag/v3.3
 
-Signed-off-by: Maxim Cournoyer <maxim.cournoyer@savoirfairelinux.com>
-[yann.morin.1998 at free.fr:
-  - slightly expand commit log about creation of the lockfile
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2e9d6565fcc10268b7db6d44d74f9b48d2c2354c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2020.02.x and 2020.05.x, thanks.
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index de619ba90a..951d2fb554 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -99,7 +99,7 @@ endif
- 
- define DOWNLOAD
- 	$(Q)mkdir -p $($(2)_DL_DIR)
--	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/ $(DL_WRAPPER) \
-+	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
- 		-c '$($(2)_DL_VERSION)' \
- 		-d '$($(2)_DL_DIR)' \
- 		-D '$(DL_DIR)' \
+-- 
+Bye, Peter Korsgaard
