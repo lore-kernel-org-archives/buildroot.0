@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:50:24 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: bump to version 7.71.1
-In-Reply-To: <4387744d39413cd4a6c9e4470fdb1e63b7a90ed5.1593749554.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 3 Jul 2020 07:12:34 +0300")
-References: <4387744d39413cd4a6c9e4470fdb1e63b7a90ed5.1593749554.git.baruch@tkos.co.il>
-Message-ID: <87zh7ztq67.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jul 2020 17:50:42 +0200
+Subject: [Buildroot] [PATCH] package/libcurl: fix no-proxy build with
+ bearssl and nss
+In-Reply-To: <c4509d9911d8202601895685017a1295768a1871.1594274810.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 9 Jul 2020 09:06:50 +0300")
+References: <c4509d9911d8202601895685017a1295768a1871.1594274810.git.baruch@tkos.co.il>
+Message-ID: <87v9intq5p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This release fixes build with BR2_PACKAGE_LIBCURL_PROXY_SUPPORT disabled
- > and mbedtls enabled.
-
- > Add reference to upstream tarball signature.
+ > Add two patches fixing build against BearSSL and NSS TLS implementations
+ > when BR2_PACKAGE_LIBCURL_PROXY_SUPPORT is disabled.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/f32b6ab927560839cacaa1b9e6b64ced92b9ffe3/
- > http://autobuild.buildroot.net/results/566f0db496f6d1feefd9d3e6b6955a2539670735/
- > http://autobuild.buildroot.net/results/19de1111318aea863118c9b0b44dc282f011918f/
+ > http://autobuild.buildroot.net/results/4d37d9163bfece536974f15f16b2ebfc5fabc539/
+ > http://autobuild.buildroot.net/results/387e8baa13d0f07ed4dfd5b6ee3b933d4843c0e8/
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
