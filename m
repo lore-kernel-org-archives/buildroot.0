@@ -1,39 +1,54 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 16 Jul 2020 18:04:32 -0300
-Subject: [Buildroot] [PATCH 1/3] board/freescale/imx: Add helper to
- generate fw binary
-In-Reply-To: <20200427211638.6047-1-xroumegue@gmail.com>
-References: <20200427211638.6047-1-xroumegue@gmail.com>
-Message-ID: <CAOMZO5AK3-1iVNvW3RKZyhVgbYNptm81xsy0z7auMeCoxmbn3Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 16 Jul 2020 23:06:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/refpolicy: needs python3
+In-Reply-To: <20200716205939.1965929-1-fontaine.fabrice@gmail.com>
+References: <20200716205939.1965929-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200716230625.54fd0280@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xavier,
+On Thu, 16 Jul 2020 22:59:39 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Mon, Apr 27, 2020 at 6:16 PM Xavier Roumegue <xroumegue@gmail.com> wrote:
->
-> This script aims to create an imx compatible boot image embedding
-> mainline components, using only upstream uboot mkimage tool, avoiding
-> dependencies on proprietary imx mkimage.
->
-> Mainline u-boot can generate a bootable image, but SPL soc proprietary
-> firmware dependencies have to be copied on uboot root dir.
->
-> This script prevents additional buildroot uboot recipe hacking to handle
-> custom SoC uboot build process.
->
-> The script actions summary is:
-> - Append DDR4 firmware to uboot spl binary
-> - Generate imx mkimage configuration file, extracting entry points from
->   relevant elf files on the fly.
-> - Generate imx boot image using uboot upstream mkimage tool
->
-> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+> Commit 09b94b1e8f94d1f49f7a2349b4c8cbfecefa73da forgot to propagate
+> python3 dependency from host-setools to refpolicy
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/fdeaa54355aa0741eccc7864b034a7b07ef0c4bc
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/refpolicy/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+> index b50b2f09ff..e374ab1901 100644
+> --- a/package/refpolicy/Config.in
+> +++ b/package/refpolicy/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_REFPOLICY
+>  	bool "refpolicy"
+> +	depends on BR2_PACKAGE_PYTHON3 # host-setools
 
-Do you plan to resubmit this patch?
+It is not possible for host-setools (a host package) to have a
+dependency on python3, which is a target package.
 
-I am looking forward to being able to use a Buildroot generated image
-with U-Boot and kernel mainline on i.MX8 boards :-)
+However, what is possible is that when BR2_PACKAGE_PYTHON=y, the
+default host Python version is Python 2.x, and therefore host-setools
+gets installed for Python 2.x, but the refpolicy build uses
+host-python3, so it does not find host-setools.
+
+I think the correct fix is instead to set
+HOST_SETOOLS_NEEDS_HOST_PYTHON = python3 since anyway it only works
+with Python 3.x.
+
+Antoine: any thoughts on this ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
