@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jul 2020 09:23:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{openjdk,
- openjdk-bin}: bump to version 11.0.8+10
-In-Reply-To: <20200715232948.1843405-1-aduskett@gmail.com>
-References: <20200715232948.1843405-1-aduskett@gmail.com>
-Message-ID: <20200716092306.6e25ab1d@windsurf.home>
+Date: Thu, 16 Jul 2020 09:23:09 +0200
+Subject: [Buildroot] [PATCH] package/xterm: bump version to 358
+In-Reply-To: <20200715233525.11935-1-sergio.prado@e-labworks.com>
+References: <20200715233525.11935-1-sergio.prado@e-labworks.com>
+Message-ID: <20200716092309.20b1452b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Jul 2020 16:29:48 -0700
-aduskett at gmail.com wrote:
+On Wed, 15 Jul 2020 20:35:24 -0300
+Sergio Prado <sergio.prado@e-labworks.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> Separate the fields in the hash file by two spaces.
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Change the hash of the license:
+> - Copyright message changed from 2018,2019 to 2019,2020
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 > ---
->  package/openjdk-bin/openjdk-bin.hash                            | 2 +-
->  package/openjdk-bin/openjdk-bin.mk                              | 2 +-
->  .../{11.0.7+10 => 11.0.8+10}/0001-fix-gcc-10-support.patch      | 0
->  package/openjdk/openjdk.hash                                    | 2 +-
->  package/openjdk/openjdk.mk                                      | 2 +-
->  5 files changed, 4 insertions(+), 4 deletions(-)
->  rename package/openjdk/{11.0.7+10 => 11.0.8+10}/0001-fix-gcc-10-support.patch (100%)
+>  package/xterm/xterm.hash | 4 ++--
+>  package/xterm/xterm.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
