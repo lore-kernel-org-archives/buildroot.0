@@ -1,47 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:36:21 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libressl: bump
- version to 3.1.3
-Message-ID: <20200716163657.36F8E87083@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 16 Jul 2020 20:45:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gpm: fix build failure with gcc 10
+Message-ID: <20200716184528.25630-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dc1e6da500184a6f228e77fcdfcd7e24c9c421a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+Add a patch from upstream [1] to fix -fno-common build failure
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7c8910e095707b0da70a46b0be22f7e077a60851)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] https://github.com/telmich/gpm/commit/f04f24dd5ca5c1c13608b144ab66e2ccd47f106a
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/libressl/libressl.hash | 4 ++--
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...on.h-avoid-redefinition-of-last_sele.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 6b53d54e45..957af1e32c 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  f88a2f7ea617149a34e40c022d9912963f00eaa6109af421317525e6c978d892  libressl-3.1.2.tar.gz
-+sha256  c76b0316acf612ecb62f5cb014a20d972a663bd9e40abf952a86f3b998b69fa0  libressl-3.1.3.tar.gz
- # Locally computed
--sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-+sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index c703076268..dad119a041 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 3.1.2
-+LIBRESSL_VERSION = 3.1.3
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+diff --git a/package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch b/package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch
+new file mode 100644
+index 0000000000..d976834a0d
+--- /dev/null
++++ b/package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch
+@@ -0,0 +1,42 @@
++From f04f24dd5ca5c1c13608b144ab66e2ccd47f106a Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Sun, 19 Jan 2020 19:53:41 +0000
++Subject: [PATCH] src/headers/daemon.h: avoid redefinition of
++ 'last_selection_time'
++
++Noticed build failure on gcc-10 as:
++
++```
++gcc  -L/home/slyfox/dev/git/gpm/src  -o gpm mice.o ... report.o tools.o   -lm
++ld: twiddler.o:gpm/src/headers/daemon.h:183:
++  multiple definition of `last_selection_time'; mice.o:gpm/src/headers/daemon.h:183: first defined here
++ld: synaptics.o:git/gpm/src/headers/daemon.h:183:
++  multiple definition of `last_selection_time'; mice.o:git/gpm/src/headers/daemon.h:183: first defined here
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++---
++ src/headers/daemon.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/headers/daemon.h b/src/headers/daemon.h
++index a8936ad..24a1a97 100644
++--- a/src/headers/daemon.h
+++++ b/src/headers/daemon.h
++@@ -180,7 +180,7 @@ extern struct mouse_features  mouse_table[3],
++ extern Gpm_Type         mice[];
++ extern Gpm_Type         *repeated_type;
++ 
++-time_t                  last_selection_time;
+++extern time_t           last_selection_time;
++ 
++ 
++ 
++-- 
++2.20.1
++
+-- 
+2.20.1
