@@ -1,49 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Jul 2020 09:16:36 +0200
-Subject: [Buildroot] [git commit] package/xterm: bump version to 358
-Message-ID: <20200716071707.7576681363@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 09:14:57 +0200
+Subject: [Buildroot] [git commit] package/{openjdk,
+ openjdk-bin}: bump to version 11.0.8+10
+Message-ID: <20200716071707.6423681363@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=650f0aa3e27e4c950fa9216d806fc39cdf11eada
+commit: https://git.buildroot.net/buildroot/commit/?id=20d8d2aab0444134e3120e4e62ddc3495e8e4c7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Separate the fields in the hash file by two spaces.
-
-Change the hash of the license:
-- Copyright message changed from 2018,2019 to 2019,2020
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xterm/xterm.hash | 4 ++--
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openjdk-bin/openjdk-bin.hash                                   | 2 +-
+ package/openjdk-bin/openjdk-bin.mk                                     | 2 +-
+ package/openjdk/{11.0.7+10 => 11.0.8+10}/0001-fix-gcc-10-support.patch | 0
+ package/openjdk/openjdk.hash                                           | 2 +-
+ package/openjdk/openjdk.mk                                             | 2 +-
+ 5 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 57d5a72b9a..7f2ff2c301 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 39a6a3d3724f9a0a068f8cc353ab0c82831f0a43abb24470d933af299658475f xterm-349.tgz
-+sha256  7cdb106962910a99700b3c45fa1a1493e46e97a5aa3785093a786e07196fbf7b  xterm-358.tgz
- # Locally calculated
--sha256 b0d302c6d67f63122bbe8d622dd8a66cfadccc32853f606b7558103609201993 COPYING
-+sha256  c655a5fa3dec936543e02f863b8c1343d08522a2821cb484df6c5f62afa7354d  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 8cbfa070e2..5e3e64fff4 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 065eda0603..ab12323599 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -2,7 +2,7 @@
+ sha256  9ddf9b35996fbd784a53fff3e0d59920a7d5acf1a82d4c8d70906957ac146cd1  OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
  
--XTERM_VERSION = 349
-+XTERM_VERSION = 358
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+ # From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
+-sha256  ee60304d782c9d5654bf1a6b3f38c683921c1711045e1db94525a51b7024a2ca  OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
++sha256  6e4cead158037cb7747ca47416474d4f408c9126be5b96f9befd532e0a762b47  OpenJDK11U-jdk_x64_linux_hotspot_11.0.8_10.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index b8110ab968..1c20137d2f 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -11,7 +11,7 @@ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ else
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.7
++HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.8
+ HOST_OPENJDK_BIN_VERSION_MINOR = 10
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+diff --git a/package/openjdk/11.0.7+10/0001-fix-gcc-10-support.patch b/package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch
+similarity index 100%
+rename from package/openjdk/11.0.7+10/0001-fix-gcc-10-support.patch
+rename to package/openjdk/11.0.8+10/0001-fix-gcc-10-support.patch
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 2279c8b971..9e3f189a1f 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+ sha256  301203cbda9c40a5fc496b3299806995ac4833b39c6d2e8470fd85a35461afd4  jdk-14.0.1+7.tar.gz
+-sha256  d105471d06568e4659c21518d1bf42b8ebab5c70539e9777d570549a98ed2a8a  jdk-11.0.7+10.tar.gz
++sha256  7fc124b5e20428cd5df42d78b001abc663558b0881e66a5def0892b98265b6e9  jdk-11.0.8+10.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 8ce740ebb7..85a433d8d9 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -11,7 +11,7 @@ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+ OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
+ else
+-OPENJDK_VERSION_MAJOR = 11.0.7
++OPENJDK_VERSION_MAJOR = 11.0.8
+ OPENJDK_VERSION_MINOR = 10
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
