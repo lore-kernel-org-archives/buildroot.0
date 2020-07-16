@@ -1,30 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:52:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
- 1.6.1
-In-Reply-To: <20200608090442.2265237-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Mon, 8 Jun 2020 12:04:42 +0300")
-References: <20200608090442.2265237-1-aperez@igalia.com>
-Message-ID: <87mu3ztq2o.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jul 2020 17:47:10 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libcurl: bump
+ version to 7.69.1
+Message-ID: <20200716155439.721DD876A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=36b4384b469ef056d96ab11be1b362ab1bbbaf1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > This update brings in a few build fixes only. In particular the
- > one for EGL implementations which use oddball definitions of the
- > EGLNativeDisplayType type might be needed for some configurations.
+Changelog: https://curl.haxx.se/changes.html
 
- > Full release notes:
+Removed polarssl configure options, upstream removed polarssl support:
+https://curl.haxx.se/bug/?i=4825
 
- >   https://wpewebkit.org/release/wpebackend-fdo-1.6.1.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit de3de7e158e163b59472a3c5a5a51c140ac9d30d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index e60194254e..69cf7b5398 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b724240722276a27f6e770b952121a3afd097129d8c9fe18e6272dc34192035a  curl-7.68.0.tar.xz
++sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
+ sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 16b11ca944..11b5f4a976 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.68.0
++LIBCURL_VERSION = 7.69.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -22,7 +22,7 @@ LIBCURL_INSTALL_STAGING = YES
+ # generate C code) isn't very useful
+ LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+ 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
+-	--without-polarssl --disable-libcurl-option
++	--disable-libcurl-option
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
+@@ -177,7 +177,6 @@ HOST_LIBCURL_CONF_OPTS = \
+ 	--with-ssl \
+ 	--without-gnutls \
+ 	--without-mbedtls \
+-	--without-polarssl \
+ 	--without-nss
+ 
+ HOST_LIBCURL_POST_PATCH_HOOKS += LIBCURL_FIX_DOT_PC
