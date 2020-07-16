@@ -1,90 +1,44 @@
-From: Francois Gervais <fgervais@distech-controls.com>
-Date: Thu, 16 Jul 2020 09:57:37 -0400
-Subject: [Buildroot] [PATCH 1/2] package/nxp: new package directory
-In-Reply-To: <20200716135738.19050-1-fgervais@distech-controls.com>
-References: <20200716135738.19050-1-fgervais@distech-controls.com>
-Message-ID: <20200716135738.19050-2-fgervais@distech-controls.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 16 Jul 2020 16:48:34 +0200
+Subject: [Buildroot] [PATCH 0/3] imx: bump graphics version to 6.4.0.p2.4
+Message-ID: <20200716144837.701680-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Changming Huang <jerry.huang@nxp.com>
+Hi,
 
-The "nxp" directory is intended to contain all NXP
-QorIQ (including PowerPC and LayerScape serial) related packages,
-together with their download site and version info.
+This series bumps the i.MX graphics component to their 6.4.0.p2.4
+version which is coming from NXP release 5.4.24-2.1.0 [1][2].
 
-Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
----
- package/Config.in     |  1 +
- package/nxp/Config.in |  4 ++++
- package/nxp/helper.mk | 32 ++++++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/nxp/Config.in
- create mode 100644 package/nxp/helper.mk
+This was tested on Nitrogen8M (i.MX8MQ) on top of the Weston pending
+series [3].
 
-diff --git a/package/Config.in b/package/Config.in
-index aafaa312a1..c93c7452ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -502,6 +502,7 @@ endmenu
- 	source "package/nvidia-driver/Config.in"
- 	source "package/nvidia-tegra23/Config.in"
- 	source "package/nvme/Config.in"
-+	source "package/nxp/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-diff --git a/package/nxp/Config.in b/package/nxp/Config.in
-new file mode 100644
-index 0000000000..575542c7ab
---- /dev/null
-+++ b/package/nxp/Config.in
-@@ -0,0 +1,4 @@
-+menu "NXP QorIQ libraries"
-+	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
-+
-+endmenu
-diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk
-new file mode 100644
-index 0000000000..79e4236249
---- /dev/null
-+++ b/package/nxp/helper.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# helper
-+#
-+################################################################################
-+
-+# Helper for self-extracting binaries distributed by NXP.
-+#
-+# The --force option makes sure it doesn't fail if the source
-+# directory already exists. The --auto-accept skips the license check,
-+# as it is not needed in Buildroot because we have legal-info. Since
-+# there's a EULA in the binary file, we extract it in this macro, and
-+# it should therefore be added to the LICENSE_FILES variable of
-+# packages using this macro. Also, remember to set REDISTRIBUTE to
-+# "NO". Indeed, this is a legal minefield: the EULA specifies that the
-+# Board Support Package includes software and hardware (sic!) for
-+# which a separate license is needed...
-+#
-+# $(1): full path to the archive file
-+#
-+define NXP_EXTRACT_HELPER
-+	awk 'BEGIN      { start = 0; } \
-+	     /^EOEULA/  { start = 0; } \
-+	                { if (start) print; } \
-+	     /<<EOEULA/ { start = 1; }' \
-+	    $(1) > $(@D)/EULA
-+	cd $(@D) && sh $(1) --force --auto-accept
-+	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
-+	rmdir $(@D)/$(basename $(notdir $(1)))
-+endef
-+
-+include $(sort $(wildcard package/nxp/*/*.mk))
+Let me know if you have any questions.
+
+Regards,
+Gary
+
+
+[1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-graphics/imx-gpu-viv?h=zeus-5.4.24-2.1.0
+[2] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-graphics/imx-gpu-g2d?h=zeus-5.4.24-2.1.0
+[3] http://patchwork.ozlabs.org/project/buildroot/list/?series=184556
+
+Gary Bisson (3):
+  package/freescale-imx/imx-gpu-g2d: bump to version 6.4.0.p2.4
+  package/freescale-imx/imx-gpu-viv: bump to version 6.4.0.p2.4
+  package/freescale-imx/kernel-module-imx-gpu-viv: bump to version
+    6.4.0.p2.4
+
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash        | 8 ++++----
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk          | 4 ++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash        | 8 ++++----
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk          | 4 ++--
+ .../kernel-module-imx-gpu-viv.hash                        | 2 +-
+ .../kernel-module-imx-gpu-viv.mk                          | 2 +-
+ 6 files changed, 14 insertions(+), 14 deletions(-)
+
 -- 
-2.17.1
+2.27.0
