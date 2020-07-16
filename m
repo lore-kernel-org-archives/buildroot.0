@@ -1,66 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 18:39:46 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/poco: add
- BR2_PACKAGE_POCO_ARCH_SUPPORTS
-Message-ID: <20200716163657.40B54815C0@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 18:36:21 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libressl: bump
+ version to 3.1.3
+Message-ID: <20200716163657.36F8E87083@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36fb7b34755d64647b3175b1c08ffcbf2fa2605a
+commit: https://git.buildroot.net/buildroot/commit/?id=7dc1e6da500184a6f228e77fcdfcd7e24c9c421a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Commit 0737f48c5f (package/poco: disable build for riscv) did not
-propagate the new dependency on BR2_riscv to the comment.
-
-Introduce BR2_PACKAGE_POCO_ARCH_SUPPORTS to solve this issue.
-
-Signed-off-by: Julien Olivain <juju@cotds.org>
-[yann.morin.1998 at free.fr:
-  - reword the commit log
-  - use separate 'depend on !arch'
-]
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4f733a4de7da15f207cb1b20815d5abaf67f7b5e)
+(cherry picked from commit 7c8910e095707b0da70a46b0be22f7e077a60851)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poco/Config.in | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ package/libressl/libressl.hash | 4 ++--
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index f8f921de04..05e56eb6b8 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -1,3 +1,13 @@
-+config BR2_PACKAGE_POCO_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on !BR2_arc
-+	depends on !BR2_microblaze
-+	depends on !BR2_mipsel
-+	depends on !BR2_or1k
-+	depends on !BR2_riscv
-+	depends on !BR2_xtensa
-+
- config BR2_PACKAGE_POCO
- 	bool "poco"
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -5,8 +15,7 @@ config BR2_PACKAGE_POCO
- 	# pthread_condattr_setclock
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS # dlopen()
--	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
--		|| BR2_or1k || BR2_riscv || BR2_xtensa)
-+	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
- 	help
-@@ -85,5 +94,4 @@ endif # BR2_PACKAGE_POCO
- comment "poco needs a toolchain w/ wchar, NPTL, C++, dynamic library"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
--	depends on !(BR2_arc || BR2_microblaze || BR2_mipsel \
--		|| BR2_or1k || BR2_xtensa)
-+	depends on BR2_PACKAGE_POCO_ARCH_SUPPORTS
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 6b53d54e45..957af1e32c 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  f88a2f7ea617149a34e40c022d9912963f00eaa6109af421317525e6c978d892  libressl-3.1.2.tar.gz
++sha256  c76b0316acf612ecb62f5cb014a20d972a663bd9e40abf952a86f3b998b69fa0  libressl-3.1.3.tar.gz
+ # Locally computed
+-sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
++sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index c703076268..dad119a041 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.1.2
++LIBRESSL_VERSION = 3.1.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
