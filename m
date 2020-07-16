@@ -1,64 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jul 2020 17:00:54 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gnutls: security
- bump to 3.6.14
-Message-ID: <20200716150406.016C881F67@busybox.osuosl.org>
+Date: Thu, 16 Jul 2020 17:00:57 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gnutls: fix build
+ with uClibc
+Message-ID: <20200716150406.0C6C68765D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bc2cd002a23e6de3d7d373142b4eac16b53368b
+commit: https://git.buildroot.net/buildroot/commit/?id=735f1cde0346b753b1df56e94427a4cc5ba01538
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issue:
+Since v3.6.14 gnutls wants to use the 'e' flag with fopen to set the
+O_CLOEXEC flags. Since this is a glibc extension, it will trigger a
+gnulib override of fopen on non-glibc systems, but that override
+breaks the uClibc stdio.h header.
 
- * CVE-2020-13777: It was found that GnuTLS 3.6.4 introduced a
-   regression in the TLS protocol implementation. This caused the TLS
-   server to not securely construct a session ticket encryption key
-   considering the application supplied secret, allowing a MitM
-   attacker to bypass authentication in TLS 1.3 and recover previous
-   conversations in TLS 1.2
-
-Release announcement:
- https://lists.gnupg.org/pipermail/gnutls-help/2020-June/004648.html
+Fixes:
+http://autobuild.buildroot.org/results/02f/02f2b524add307c8f7cc1af1ed0783bb1baf029a
 
 Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-[yann.morin.1998 at free.fr: two spaces in hash file]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 16ea3ee784c5203b33c086f84474b1dba6a3e54a)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 838f67c27f0cf1f3c363e2156d5c4813b9cac9eb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 8 ++++----
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...0001-Fix-gnulib-stdio.h-include-on-uclibc.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 99279bfb6b..6a4203f3a2 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.13.tar.xz.sig
--sha256	32041df447d9f4644570cf573c9f60358e865637d69b7e59d1159b7240b52f38	gnutls-3.6.13.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.14.tar.xz.sig
-+sha256  5630751adec7025b8ef955af4d141d00d252a985769f51b4059e5affa3d39d63  gnutls-3.6.14.tar.xz
- # Locally calculated
--sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
--sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-+sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
-+sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index a1dfce62a2..34878e97b4 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+diff --git a/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
+new file mode 100644
+index 0000000000..758e7cca73
+--- /dev/null
++++ b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
+@@ -0,0 +1,49 @@
++From 60fa934ffba3c230040328fdbbbf51f417f12871 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
++Date: Mon, 22 Jun 2020 14:11:05 +0200
++Subject: [PATCH] Fix gnulib stdio.h include on uclibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The __need_FILE define used by gnulib interferes with the uClibc stdio.h
++header, so move the inclusion the stdio.h to after __need_FILE has been
++undefined again.
++
++Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
++---
++ gl/fopen.c     | 2 +-
++ src/gl/fopen.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gl/fopen.c b/gl/fopen.c
++index 8d6625a..248692c 100644
++--- a/gl/fopen.c
+++++ b/gl/fopen.c
++@@ -23,8 +23,8 @@
++ #include <config.h>
++ 
++ /* Get the original definition of fopen.  It might be defined as a macro.  */
++-#include <stdio.h>
++ #undef __need_FILE
+++#include <stdio.h>
++ 
++ static FILE *
++ orig_fopen (const char *filename, const char *mode)
++diff --git a/src/gl/fopen.c b/src/gl/fopen.c
++index 47d7f19..1f22f4f 100644
++--- a/src/gl/fopen.c
+++++ b/src/gl/fopen.c
++@@ -23,8 +23,8 @@
++ #include <config.h>
++ 
++ /* Get the original definition of fopen.  It might be defined as a macro.  */
++-#include <stdio.h>
++ #undef __need_FILE
+++#include <stdio.h>
++ 
++ static FILE *
++ orig_fopen (const char *filename, const char *mode)
++-- 
++2.25.4
++
