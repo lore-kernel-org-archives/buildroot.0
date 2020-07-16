@@ -1,102 +1,34 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 16 Jul 2020 17:00:56 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nxp: new package directory
-In-Reply-To: <20200716135738.19050-2-fgervais@distech-controls.com>
-References: <20200716135738.19050-1-fgervais@distech-controls.com>
- <20200716135738.19050-2-fgervais@distech-controls.com>
-Message-ID: <20200716150056.GA702345@p1g2>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jul 2020 17:01:38 +0200
+Subject: [Buildroot] [PATCH] package/gnutls: security bump to 3.6.14
+In-Reply-To: <20200611053151.709390-1-stefan.sorensen@spectralink.com>
+ (stefan's message of "Thu, 11 Jun 2020 07:31:51 +0200")
+References: <20200611053151.709390-1-stefan.sorensen@spectralink.com>
+Message-ID: <87y2njv6zx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "stefan" == stefan  <stefan@astylos.dk> writes:
 
-On Thu, Jul 16, 2020 at 09:57:37AM -0400, Francois Gervais wrote:
-> From: Changming Huang <jerry.huang@nxp.com>
-> 
-> The "nxp" directory is intended to contain all NXP
-> QorIQ (including PowerPC and LayerScape serial) related packages,
-> together with their download site and version info.
-> 
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-> Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
-> ---
->  package/Config.in     |  1 +
->  package/nxp/Config.in |  4 ++++
->  package/nxp/helper.mk | 32 ++++++++++++++++++++++++++++++++
->  3 files changed, 37 insertions(+)
->  create mode 100644 package/nxp/Config.in
->  create mode 100644 package/nxp/helper.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index aafaa312a1..c93c7452ec 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -502,6 +502,7 @@ endmenu
->  	source "package/nvidia-driver/Config.in"
->  	source "package/nvidia-tegra23/Config.in"
->  	source "package/nvme/Config.in"
-> +	source "package/nxp/Config.in"
->  	source "package/ofono/Config.in"
->  	source "package/on2-8170-modules/Config.in"
->  	source "package/open2300/Config.in"
-> diff --git a/package/nxp/Config.in b/package/nxp/Config.in
-> new file mode 100644
-> index 0000000000..575542c7ab
-> --- /dev/null
-> +++ b/package/nxp/Config.in
-> @@ -0,0 +1,4 @@
-> +menu "NXP QorIQ libraries"
-> +	depends on BR2_aarch64 || BR2_arm || BR2_powerpc64 || BR2_powerpc
-> +
-> +endmenu
-> diff --git a/package/nxp/helper.mk b/package/nxp/helper.mk
-> new file mode 100644
-> index 0000000000..79e4236249
-> --- /dev/null
-> +++ b/package/nxp/helper.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# helper
-> +#
-> +################################################################################
-> +
-> +# Helper for self-extracting binaries distributed by NXP.
-> +#
-> +# The --force option makes sure it doesn't fail if the source
-> +# directory already exists. The --auto-accept skips the license check,
-> +# as it is not needed in Buildroot because we have legal-info. Since
-> +# there's a EULA in the binary file, we extract it in this macro, and
-> +# it should therefore be added to the LICENSE_FILES variable of
-> +# packages using this macro. Also, remember to set REDISTRIBUTE to
-> +# "NO". Indeed, this is a legal minefield: the EULA specifies that the
-> +# Board Support Package includes software and hardware (sic!) for
-> +# which a separate license is needed...
-> +#
-> +# $(1): full path to the archive file
-> +#
-> +define NXP_EXTRACT_HELPER
-> +	awk 'BEGIN      { start = 0; } \
-> +	     /^EOEULA/  { start = 0; } \
-> +	                { if (start) print; } \
-> +	     /<<EOEULA/ { start = 1; }' \
-> +	    $(1) > $(@D)/EULA
-> +	cd $(@D) && sh $(1) --force --auto-accept
-> +	find $(@D)/$(basename $(notdir $(1))) -mindepth 1 -maxdepth 1 -exec mv {} $(@D) \;
-> +	rmdir $(@D)/$(basename $(notdir $(1)))
-> +endef
-> +
-> +include $(sort $(wildcard package/nxp/*/*.mk))
+ > From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+ > Fixes the following security issue:
 
-This looks like a copy/paste of package/freescale-imx/freescale-imx.mk,
-maybe it is time to move the latter to a common "nxp" folder so that
-new QorIQ/i.MX packages share the same macros.
-Any thoughts?
+ >  * CVE-2020-13777: It was found that GnuTLS 3.6.4 introduced a
+ >    regression in the TLS protocol implementation. This caused the TLS
+ >    server to not securely construct a session ticket encryption key
+ >    considering the application supplied secret, allowing a MitM
+ >    attacker to bypass authentication in TLS 1.3 and recover previous
+ >    conversations in TLS 1.2
 
-Note that latest NXP release (LF) are for both i.MX and QorIQ.
+ > Release announcement:
+ >  https://lists.gnupg.org/pipermail/gnutls-help/2020-June/004648.html
 
-Regards,
-Gary
+ > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
