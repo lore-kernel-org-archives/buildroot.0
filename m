@@ -1,33 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 16 Jul 2020 23:02:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/setools: add comment
-Message-ID: <20200716210225.1966566-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 16 Jul 2020 18:04:32 -0300
+Subject: [Buildroot] [PATCH 1/3] board/freescale/imx: Add helper to
+ generate fw binary
+In-Reply-To: <20200427211638.6047-1-xroumegue@gmail.com>
+References: <20200427211638.6047-1-xroumegue@gmail.com>
+Message-ID: <CAOMZO5AK3-1iVNvW3RKZyhVgbYNptm81xsy0z7auMeCoxmbn3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 09b94b1e8f94d1f49f7a2349b4c8cbfecefa73da forgot to add the usual
-comment that python3 dependency is due to python-networkx
+Hi Xavier,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/setools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Apr 27, 2020 at 6:16 PM Xavier Roumegue <xroumegue@gmail.com> wrote:
+>
+> This script aims to create an imx compatible boot image embedding
+> mainline components, using only upstream uboot mkimage tool, avoiding
+> dependencies on proprietary imx mkimage.
+>
+> Mainline u-boot can generate a bootable image, but SPL soc proprietary
+> firmware dependencies have to be copied on uboot root dir.
+>
+> This script prevents additional buildroot uboot recipe hacking to handle
+> custom SoC uboot build process.
+>
+> The script actions summary is:
+> - Append DDR4 firmware to uboot spl binary
+> - Generate imx mkimage configuration file, extracting entry points from
+>   relevant elf files on the fly.
+> - Generate imx boot image using uboot upstream mkimage tool
+>
+> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
 
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index 9475bbef65..882c8764f3 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_SETOOLS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON3 # python-networkx
- 	select BR2_PACKAGE_PYTHON_NETWORKX # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	select BR2_PACKAGE_LIBSELINUX
--- 
-2.27.0
+Do you plan to resubmit this patch?
+
+I am looking forward to being able to use a Buildroot generated image
+with U-Boot and kernel mainline on i.MX8 boards :-)
