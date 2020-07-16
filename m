@@ -1,39 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 16 Jul 2020 18:19:11 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/sdl2: enable
- 3DNOW only if it's supported by the target
-Message-ID: <20200716161637.E57BE876AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2020.05.x] package/sdl2: remove
+ sdl2-config.cmake
+Message-ID: <20200716161637.EF00184AB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fd337ec22c40534814772d8290fb468fd6ee8e5
+commit: https://git.buildroot.net/buildroot/commit/?id=a842d033ac5badbb551d794f9c8d6ef8ff285bcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Signed-off-by: Nicolas Robin <nrosfs@gmail.com>
+We are using autotools build system for sdl2, so the sdl2-config.cmake
+include path are not resolved like for sdl2-config script [1].
+Remove sdl2-config.cmake file and avoid unsafe include path if this
+file is used by a cmake based package.
+
+This trigger an issue with ogre 1.12.6 package that replaced
+FindSDL2.cmake by sdl2-config.cmake [2].
+
+Thanks to Pavel Rojtberg for the help [3].
+
+[1] https://bugzilla.libsdl.org/show_bug.cgi?id=4597
+[2] https://github.com/OGRECave/ogre/commit/6de6f9b4081a07c911932441700c54b72ec1ee1f
+[3] https://github.com/OGRECave/ogre/issues/1568
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fe29913fa96d2265ecf91e259f334dbdd67f92fb)
+(cherry picked from commit d59261836a2ae2d024645b1e286540dd4269b6c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2/sdl2.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/sdl2/sdl2.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 4a287b66a3..830873c9e4 100644
+index 830873c9e4..6ef530fb43 100644
 --- a/package/sdl2/sdl2.mk
 +++ b/package/sdl2/sdl2.mk
-@@ -36,6 +36,12 @@ else
- SDL2_CONF_OPTS += --disable-sse
- endif
+@@ -20,6 +20,16 @@ SDL2_CONF_OPTS += \
+ 	--disable-pulseaudio \
+ 	--disable-video-wayland
  
-+ifeq ($(BR2_X86_CPU_HAS_3DNOW),y)
-+SDL2_CONF_OPTS += --enable-3dnow
-+else
-+SDL2_CONF_OPTS += --disable-3dnow
-+endif
++# We are using autotools build system for sdl2, so the sdl2-config.cmake
++# include path are not resolved like for sdl2-config script.
++# Remove sdl2-config.cmake file and avoid unsafe include path if this
++# file is used by a cmake based package.
++# https://bugzilla.libsdl.org/show_bug.cgi?id=4597
++define SDL2_REMOVE_SDL2_CONFIG_CMAKE
++	rm -rf $(STAGING_DIR)/usr/lib/cmake/SDL2
++endef
++SDL2_POST_INSTALL_STAGING_HOOKS += SDL2_REMOVE_SDL2_CONFIG_CMAKE
 +
- ifeq ($(BR2_PACKAGE_SDL2_DIRECTFB),y)
- SDL2_DEPENDENCIES += directfb
- SDL2_CONF_OPTS += --enable-video-directfb
+ # We must enable static build to get compilation successful.
+ SDL2_CONF_OPTS += --enable-static
+ 
