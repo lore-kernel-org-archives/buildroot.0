@@ -1,94 +1,74 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 17 Jul 2020 23:52:07 +0200
-Subject: [Buildroot] [PATCH v2 1/1] treewide: replace nogroup with nobody
-Message-ID: <20200717215208.8736-1-nolange79@gmail.com>
+Date: Fri, 17 Jul 2020 23:55:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dbus: use /run for runtime data
+Message-ID: <20200717215521.8868-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the recommended groupname for user nobody. One practical
-issue is that systemd-sysusers will otherwise create a
-nobody group with gid 999.
+All init systems supported by busybox support the /run
+directory and have a symlink for /var/run.
 
-Quote: "If the username exists on a system,then they should
-be in the suggested corresponding group".
-
-https://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/usernames.html
+Use the /run directory directly.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
-v2:
--   Undo whitespace changes in boa.conf
----
- package/boa/boa.conf                 | 2 +-
- package/mosquitto/mosquitto.mk       | 2 +-
- package/oracle-mysql/oracle-mysql.mk | 2 +-
- package/systemd/systemd.mk           | 1 -
- system/skeleton/etc/group            | 2 +-
- 5 files changed, 4 insertions(+), 5 deletions(-)
+ package/dbus/S30dbus | 6 +++---
+ package/dbus/dbus.mk | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/boa/boa.conf b/package/boa/boa.conf
-index e94029665f..f51c237316 100644
---- a/package/boa/boa.conf
-+++ b/package/boa/boa.conf
-@@ -46,7 +46,7 @@ Port 80
- # Group: The group name or GID the server should run as.
+diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+index 52646cea2f..26772755d7 100644
+--- a/package/dbus/S30dbus
++++ b/package/dbus/S30dbus
+@@ -7,11 +7,11 @@
+ #               and other messages. See http://www.freedesktop.org/software/dbus/
+ #
+ # processname: dbus-daemon
+-# pidfile: /var/run/messagebus.pid
++# pidfile: /run/messagebus.pid
+ #
  
- User nobody
--Group nogroup
-+Group nobody
+ # Create needed directories.
+-[ -d /var/run/dbus ] || mkdir -p /var/run/dbus
++[ -d /run/dbus ] || mkdir -p /run/dbus
+ [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+ [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
  
- # ServerAdmin: The email address where server problems should be sent.
- # Note: this is not currently used, except as an environment variable
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 2a9b504eb8..cdd515e1a4 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -114,7 +114,7 @@ define MOSQUITTO_INSTALL_INIT_SYSTEMD
+@@ -38,7 +38,7 @@ stop() {
+     echo "done"
+     if [ $RETVAL -eq 0 ]; then
+         rm -f /var/lock/subsys/dbus-daemon
+-        rm -f /var/run/messagebus.pid
++        rm -f /run/messagebus.pid
+     fi
+ }
+ 
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 5c2a5fb2cc..312c6ba1d8 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -15,7 +15,7 @@ define DBUS_PERMISSIONS
  endef
  
- define MOSQUITTO_USERS
--	mosquitto -1 nogroup -1 * - - - Mosquitto user
-+	mosquitto -1 nobody -1 * - - - Mosquitto user
- endef
- endif
- 
-diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
-index 1449c58e41..ccfa40cfb1 100644
---- a/package/oracle-mysql/oracle-mysql.mk
-+++ b/package/oracle-mysql/oracle-mysql.mk
-@@ -102,7 +102,7 @@ ORACLE_MYSQL_CONF_OPTS += --without-debug
- endif
- 
- define ORACLE_MYSQL_USERS
--	mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
-+	mysql -1 nobody -1 * /var/mysql - - MySQL daemon
+ define DBUS_USERS
+-	dbus -1 dbus -1 * /var/run/dbus - dbus DBus messagebus user
++	dbus -1 dbus -1 * /run/dbus - dbus DBus messagebus user
  endef
  
- define ORACLE_MYSQL_ADD_FOLDER
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8e01a0db5b..e88b559dbb 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -38,7 +38,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsulogin-path=/usr/sbin/sulogin \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount \
--	-Dnobody-group=nogroup \
- 	-Didn=true \
- 	-Dnss-systemd=true
+ DBUS_DEPENDENCIES = host-pkgconf expat
+@@ -27,8 +27,8 @@ DBUS_CONF_OPTS = \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
+ 	--with-xml=expat \
+-	--with-system-socket=/var/run/dbus/system_bus_socket \
+-	--with-system-pid-file=/var/run/messagebus.pid
++	--with-system-socket=/run/dbus/system_bus_socket \
++	--with-system-pid-file=/run/messagebus.pid
  
-diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
-index 76346b35f2..6822a277bf 100644
---- a/system/skeleton/etc/group
-+++ b/system/skeleton/etc/group
-@@ -23,4 +23,4 @@ staff:x:50:
- lock:x:54:
- netdev:x:82:
- users:x:100:
--nogroup:x:65534:
-+nobody:x:65534:
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DBUS_CONF_OPTS += LIBS='-pthread'
 -- 
 2.27.0
