@@ -1,113 +1,105 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 17 Jul 2020 10:46:00 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-07-12
-In-Reply-To: <CANQCQpYvLur42NJ6BtBiMdgQynm644FQeB3h9pwG_o6WZmejTQ@mail.gmail.com>
-References: <5f0c105a.1c69fb81.17d79.8de3SMTPIN_ADDED_MISSING@mx.google.com>
- <CAJe0E3fag3pVOjp+4ZHTq8mpVB7Ni18k0jrM_Bz_huxKa3QP3w@mail.gmail.com>
- <20200717173748.2485d781@windsurf.home>
- <CANQCQpYvLur42NJ6BtBiMdgQynm644FQeB3h9pwG_o6WZmejTQ@mail.gmail.com>
-Message-ID: <CANQCQpba3fB=xDQ2zTz22RKtGroVc7RGy6BtQZShpZK3KMRLtg@mail.gmail.com>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Fri, 17 Jul 2020 15:51:43 +0000
+Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx:
+ refactor DDR firmware preparation
+In-Reply-To: <20200711214239.1179211-1-thomas.petazzoni@bootlin.com>
+References: <20200711214239.1179211-1-thomas.petazzoni@bootlin.com>
+Message-ID: <DB8PR04MB5755F1143B24E33670082629A77C0@DB8PR04MB5755.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+Daniel Riechers
-
-On Fri, Jul 17, 2020 at 10:45 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
+>The logic doing the padding and concatenation of DDR firmware was
+>duplicated between the DDR4 and LPDDR4 cases. This commit refactors
+>this logic into a single function FIRMWARE_IMX_PREPARE_DDR_FW.
 >
-> Thomas,  Daniel,
+>Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
+(Tested on i.MX8MQ EVK)
+(Tested on i.MX8MM EVK)
+(Tested on i.MX8MN DDR4 EVK)
+
+>---
+> .../firmware-imx/firmware-imx.mk              | 44 ++++++++-----------
+> 1 file changed, 19 insertions(+), 25 deletions(-)
 >
-> On Fri, Jul 17, 2020 at 10:39 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > +Matt in Cc. Matt, we detected an incorrect thing in the NVD database,
-> > see below.
-> >
-> > On Fri, 17 Jul 2020 15:01:26 +0200
-> > Guillaume Bres <guillaume.bressaix@gmail.com> wrote:
-> >
-> > > Indeed I am using this lib to be able to (cross)compile 'dsniff' library,
-> > > but I did not want to introduce 'dsniff' to buildroot.
-> > > Do you consider this a problem, knowing that only one package requires this
-> > > lib & it is currently not integrated to Buildroot and, in my opinion,
-> > > should remain as is,
-> >
-> > There is a one line patch that Debian applied back in the days to fix
-> > this vulnerability:
-> >
-> >   https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=576281;filename=CVE-2010-1144.patch;msg=5
-> >
-> > However, this issue is fixed upstream in 1.24, as the code contains:
-> >
-> > static void
-> > ip_evictor(void)
-> > {
-> >   // fprintf(stderr, "ip_evict:numpack=%i\n", numpack);
-> >   while (this_host && this_host->ip_frag_mem > IPFRAG_LOW_THRESH) {
-> >
-> > This is consistent with the fact that Debian, which is packaging
-> > version 1.24, no longer has the CVE patch.
-> >
-> > This is even listed in the CHANGES file of the project:
-> >
-> > v1.24 Mar 14 2010
-> > - fixed another remotely triggerable NULL dereference in ip_fragment.c
-> >
-> > The issue is that the NVD database entry for this CVE is wrong: it says
-> > that version 1.24 is affected, while in fact it got fixed in 1.24. This
-> > needs to be fixed in the NVD database. This libnids project
-> > unfortunately doesn't have a publicly available version control system
-> > with all the history, so it's not easy to say which versions are
-> > affected, but at least versions prior to 1.24 are affected.
-> >
-> > Matt: do you think we can get this to be fixed from the NVD database ?
-> >
+>diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+>index ed8a81bcc5..351fe3f63a 100644
+>--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+>+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+>@@ -24,26 +24,29 @@ endef
+> # DDR firmware
+> #
 >
-> We should be able to.  Daniel, what is the current process for sending
-> a requested CVE version mapping update?
+>-ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+>-FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+>-define FIRMWARE_IMX_PREPARE_LPDDR4_FW
+>+define FIRMWARE_IMX_PREPARE_DDR_FW
+>         $(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem.bin \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem_pad.bin
+>+               $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
+>+               $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
+>         $(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem.bin \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem_pad.bin
+>-       cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem_pad.bin \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem_pad.bin > \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_fw.bin
+>+               $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
+>+               $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
+>+       cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
+>+               $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin > \
+>+               $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+> endef
 >
-> Guillaum, thanks for looking at this.
+>+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+>+FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+>+
+> define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+>         # Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
+>         # lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
+>         # which is done in post-image script.
+>-       $(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,1d)
+>-       $(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,2d)
+>+       $(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+>+               lpddr4_pmu_train_1d_imem,lpddr4_pmu_train_1d_dmem,lpddr4_pmu_train_1d_fw)
+>+       $(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+>+               lpddr4_pmu_train_2d_imem,lpddr4_pmu_train_2d_dmem,lpddr4_pmu_train_2d_fw)
+>         cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
+>                 $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+>                 $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+>@@ -53,24 +56,15 @@ endif
 >
-> Regards,
-> Matt
-
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
-
-
-ALPHA BRAVO COLLINS | Aerospace Redefined
-
-         __ l __
-
- \- - - -o-(_)-o- - - -/
+> ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR4),y)
+> FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+>-define FIRMWARE_IMX_PREPARE_DDR4_FW
+>-       $(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810.bin \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin
+>-       $(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810.bin \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin
+>-       cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin > \
+>-               $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_$(1)_201810_fw.bin
+>-endef
+>
+> define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+>         # Create padded versions of ddr4_* and generate ddr4_fw.bin.
+>         # ddr4_fw.bin is needed when generating imx8-boot-sd.bin
+>         # which is done in post-image script.
+>-       $(call FIRMWARE_IMX_PREPARE_DDR4_FW,1d)
+>-       $(call FIRMWARE_IMX_PREPARE_DDR4_FW,2d)
+>+       $(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+>+               ddr4_imem_1d_201810,ddr4_dmem_1d_201810,ddr4_1d_201810_fw)
+>+       $(call FIRMWARE_IMX_PREPARE_DDR_FW, \
+>+               ddr4_imem_2d_201810,ddr4_dmem_2d_201810,ddr4_2d_201810_fw)
+>         cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
+>                 $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+>                 $(BINARIES_DIR)/ddr4_201810_fw.bin
+>--
+>2.26.2
