@@ -1,105 +1,94 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Fri, 17 Jul 2020 22:53:15 +0200
-Subject: [Buildroot] [PATCH 1/1] treewide: replace nogroup with nobody
-In-Reply-To: <20200717202043.GI18825@scaer>
-References: <20200717102048.346554-1-nolange79@gmail.com>
- <20200717202043.GI18825@scaer>
-Message-ID: <CADYdroMgOyM+LzL5YB1Jff19Vgn3HYV1Ur8uciLCOTRhjLb7PQ@mail.gmail.com>
+Date: Fri, 17 Jul 2020 23:52:07 +0200
+Subject: [Buildroot] [PATCH v2 1/1] treewide: replace nogroup with nobody
+Message-ID: <20200717215208.8736-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fr., 17. Juli 2020 um 22:20 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
->
-> Norbert, All,
->
-> On 2020-07-17 12:20 +0200, Norbert Lange spake thusly:
-> > Use the recommended groupname for user nobody. One practical
-> > issue is that systemd-sysusers will otherwise create a
-> > nobody group with gid 999.
-> >
-> > Quote: "If the username exists on a system,then they should
-> > be in the suggested corresponding group".
-> >
-> > https://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/usernames.html
->
-> Note the phrasing, which states 'should' and 'suggested', in that they
-> are not mandatory. And indeed, I'm looking at Ubuntu 19.10 here. which
-> has a 'nogroup' group, and no 'nobody' group.
+Use the recommended groupname for user nobody. One practical
+issue is that systemd-sysusers will otherwise create a
+nobody group with gid 999.
 
-Debian (and in effect its siblings) don't follow the LSB at all,
-so you are correct, but using Ubuntu as example doesnt count.
+Quote: "If the username exists on a system,then they should
+be in the suggested corresponding group".
 
->
-> It is however to be noted that, initially, only the 'nobody' group did
-> exist (commit 339f2f492e, 2001-12-22), and subsequently removed soon
-> afterwards (commit 08782ae7d8, 2002-04-26). to be then reintroduced
-> again a while later (commit 3ed6fb0af3, 2005-08-07).
->
-> And them oh-so-shortly afterwards, the 'nogroup' group makes its grand
-> appearance (commit 3c31be684d, 2005-08-09), on the excuse to make LTP
-> happy.
->
-> However, nowadays, LTP does check preferentially for 'nobody', and falls
-> back on 'nogroup', with this comment (in IDcheck.sh):
->
->     # nobody is a standard group on all distros, apart from debian based ones;
->     # let's account for the fact that they use the nogroup group instead.
->
-> So, indeed, switching to using 'nobody' makes sense, and would not make
-> LTP less happy.
+https://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/usernames.html
 
-If necessary, a 'nogroup' could be added aswell (with a different gid),
-let's hope that's not necessary.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+v2:
+-   Undo whitespace changes in boa.conf
+---
+ package/boa/boa.conf                 | 2 +-
+ package/mosquitto/mosquitto.mk       | 2 +-
+ package/oracle-mysql/oracle-mysql.mk | 2 +-
+ package/systemd/systemd.mk           | 1 -
+ system/skeleton/etc/group            | 2 +-
+ 5 files changed, 4 insertions(+), 5 deletions(-)
 
->
-> As for the numbering, I seemd to recall some specificities of 65534, and
-> indeed I found commit 9c67af2c52, 2019-08-25, that switched 'nogroup'
-> from 99 to 65534, so we're clean there too.
-
-65534 seems to get special treatment in the kernel ("overflow uid").
-
->
-> And for the records, I was the one to drop the 'nobody' group 7 years
-> ago now, in commit 908198e756, stating "Anyway, the user 'nobody'
-> belongs to the group 'nogroup' in any sane distribution." Damn. ;-]
-
-I'll be cautious to add such a statement in the commit logs,
-thanks for the warning ;)
-
->
-> Nits, below...
->
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >  package/boa/boa.conf                 | 18 +++++++++---------
-> >  package/mosquitto/mosquitto.mk       |  2 +-
-> >  package/oracle-mysql/oracle-mysql.mk |  2 +-
-> >  package/systemd/systemd.mk           |  1 -
-> >  system/skeleton/etc/group            |  2 +-
-> >  5 files changed, 12 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/package/boa/boa.conf b/package/boa/boa.conf
-> > index e94029665f..03630c0f9a 100644
-> > --- a/package/boa/boa.conf
-> > +++ b/package/boa/boa.conf
-> > @@ -7,7 +7,7 @@
-> >  # generated parser.  If it reports an error, the line number will be
-> >  # provided; it should be easy to spot.  The syntax of each of these
-> >  # rules is very simple, and they can occur in any order.  Where possible
-> > -# these directives mimic those of NCSA httpd 1.3; I saw no reason to
-> > +# these directives mimic those of NCSA httpd 1.3; I saw no reason to
->
-> Lots of spurious changes (removal of trailing spaces), should not be in
-> that patch.
->
-> Regards,
-> Yann E. MORIN.
-
-Dont want my name showing up everywhere with a 'git blame',
-gonna do a V2 shortly.
-
-Norbert
+diff --git a/package/boa/boa.conf b/package/boa/boa.conf
+index e94029665f..f51c237316 100644
+--- a/package/boa/boa.conf
++++ b/package/boa/boa.conf
+@@ -46,7 +46,7 @@ Port 80
+ # Group: The group name or GID the server should run as.
+ 
+ User nobody
+-Group nogroup
++Group nobody
+ 
+ # ServerAdmin: The email address where server problems should be sent.
+ # Note: this is not currently used, except as an environment variable
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 2a9b504eb8..cdd515e1a4 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -114,7 +114,7 @@ define MOSQUITTO_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ define MOSQUITTO_USERS
+-	mosquitto -1 nogroup -1 * - - - Mosquitto user
++	mosquitto -1 nobody -1 * - - - Mosquitto user
+ endef
+ endif
+ 
+diff --git a/package/oracle-mysql/oracle-mysql.mk b/package/oracle-mysql/oracle-mysql.mk
+index 1449c58e41..ccfa40cfb1 100644
+--- a/package/oracle-mysql/oracle-mysql.mk
++++ b/package/oracle-mysql/oracle-mysql.mk
+@@ -102,7 +102,7 @@ ORACLE_MYSQL_CONF_OPTS += --without-debug
+ endif
+ 
+ define ORACLE_MYSQL_USERS
+-	mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
++	mysql -1 nobody -1 * /var/mysql - - MySQL daemon
+ endef
+ 
+ define ORACLE_MYSQL_ADD_FOLDER
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8e01a0db5b..e88b559dbb 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -38,7 +38,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dsulogin-path=/usr/sbin/sulogin \
+ 	-Dmount-path=/usr/bin/mount \
+ 	-Dumount-path=/usr/bin/umount \
+-	-Dnobody-group=nogroup \
+ 	-Didn=true \
+ 	-Dnss-systemd=true
+ 
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index 76346b35f2..6822a277bf 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -23,4 +23,4 @@ staff:x:50:
+ lock:x:54:
+ netdev:x:82:
+ users:x:100:
+-nogroup:x:65534:
++nobody:x:65534:
+-- 
+2.27.0
