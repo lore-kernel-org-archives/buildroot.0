@@ -1,41 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 17 Jul 2020 19:23:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version to
- 5.10.19-Leia
-Message-ID: <20200717172328.72563-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 17 Jul 2020 21:34:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix install path with
+ FTDIPP
+Message-ID: <20200717193419.669052-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This will fix a build failure with libsigrok and libftdi1 in version
+1.5.0
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index f85b5f0a4b..1896592cf5 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cabf3771424fd1eb61b66ce0594bec38756ad72967903ab65c25a7ea3f22eeb3  kodi-pvr-mythtv-5.10.18-Leia.tar.gz
-+sha256  b2048db252966d5f78828cacd41e85d00a522c03fe7f24a0f000f720fe7aff0a  kodi-pvr-mythtv-5.10.19-Leia.tar.gz
- sha256  0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 7bb133de4e..a15db14f1c 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_MYTHTV_VERSION = 5.10.18-Leia
-+KODI_PVR_MYTHTV_VERSION = 5.10.19-Leia
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
+Fixes:
+ - http://autobuild.buildroot.org/results/1427f44e36752c337791597fab47a1889552a2fe
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...sts.txt-fix-paths-when-FTDIPP-is-set.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
+
+diff --git a/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch b/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
+new file mode 100644
+index 0000000000..14c248bb99
+--- /dev/null
++++ b/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
+@@ -0,0 +1,46 @@
++From 3e68fd7da98a755403cf5719c3d7a3c2f4dcbb58 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 17 Jul 2020 21:04:45 +0200
++Subject: [PATCH] CMakeLists.txt: fix paths when FTDIPP is set
++
++Use the same project name (i.e. libftdi1 and not libftdipp1) when FTDIPP
++is enabled as suggested by Aurelien Jarno in
++http://developer.intra2net.com/mailarchive/html/libftdi/2020/msg00044.html
++
++Without this change, the libftdi1.pc config file defines the include
++path as /usr/local/include/libftdipp1 while the ftdi.h file is actually
++installed in /usr/local/include/libftdi1
++
++This is an issue for example for libsigrok which will fail on:
++
++In file included from src/hardware/asix-sigma/protocol.c:27:
++src/hardware/asix-sigma/protocol.h:28:10: fatal error: ftdi.h: No such file or directory
++   28 | #include <ftdi.h>
++      |          ^~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1427f44e36752c337791597fab47a1889552a2fe
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++http://developer.intra2net.com/mailarchive/html/libftdi/2020/msg00045.html]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 5aecafc..3b0b87c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -136,7 +136,7 @@ endif ()
++ 
++ add_subdirectory(src)
++ if ( FTDIPP )
++-  project(libftdipp1 C CXX)
+++  project(libftdi1 C CXX)
++   add_subdirectory(ftdipp)
++ endif ()
++ if ( PYTHON_BINDINGS )
++-- 
++2.27.0
++
 -- 
 2.27.0
