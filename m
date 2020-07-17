@@ -1,106 +1,108 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 17 Jul 2020 17:28:55 -0600
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.55.0
-In-Reply-To: <20200718010941.7340e100@gmx.net>
-References: <20200716110140.825664-1-james.hilliard1@gmail.com>
- <20200716232023.727b5303@gmx.net>
- <CADvTj4ozE24H7tRvGy2+9YOxL9Ur5aB_LuQmOPeHqFESzrvaBg@mail.gmail.com>
- <20200716235722.61bd13bf@gmx.net>
- <CADvTj4pLKMnE7G4B3SzV0A=95b=fVgBNdoW7wZvRX50HPGO9GQ@mail.gmail.com>
- <20200718000531.3366ed60@gmx.net> <20200718002344.5da14318@gmx.net>
- <CADvTj4oXO55YM4AkwJi2eqzd6+h6ymKyjc_GrNLLja=h9YLCCA@mail.gmail.com>
- <20200718010941.7340e100@gmx.net>
-Message-ID: <CADvTj4oB62iACyVPY49jsbdgueY5CxHTMtwwUAuNPskwvuULog@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sat, 18 Jul 2020 01:42:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: pre-create directories for
+ services
+Message-ID: <20200717234235.17829-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 17, 2020 at 5:09 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello James,
->
-> On Fri, 17 Jul 2020 16:24:41 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> [...]
->
-> > > > > > > > > diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-> > > > > > > > > index 79e99adf4a..e098c25bbe 100644
-> > > > > > > > > --- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-> > > > > > > > > +++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-> > > > > > > > > @@ -1,4 +1,4 @@
-> > > > > > > > > -From 4db4fd79d9bb2b98cea1117f22b6c97942ab2ecd Mon Sep 17 00:00:00 2001
-> > > > > > > > > +From bb155880bd08d7c0c9ddf0264d73016a426d8579 Mon Sep 17 00:00:00 2001
-> > > > > > > > >  From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > > > > > > > >  Date: Sat, 14 Jul 2018 11:18:45 +0200
-> > > > > > > > >  Subject: [PATCH] Only fix RPATH if install_rpath is not empty
-> > > > > > > > > @@ -11,20 +11,20 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > > > > > > > >   1 file changed, 8 insertions(+), 2 deletions(-)
-> > > > > > > > >
-> > > > > > > > >  diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
-> > > > > > > > > -index 8ac6aab1..7ef04116 100644
-> > > > > > > > > +index 0be01fe75..d991cf4e7 100644
-> > > > > > > > >  --- a/mesonbuild/minstall.py
-> > > > > > > > >  +++ b/mesonbuild/minstall.py
-> > > > > > > > > -@@ -489,8 +489,14 @@ class Installer:
-> > > > > > > > > -                         printed_symlink_error = True
-> > > > > > > > > -             if os.path.isfile(outname):
-> > > > > > > > > +@@ -512,8 +512,14 @@ class Installer:
-> > > > > > > > > +             if file_copied:
-> > > > > > > > > +                 self.did_install_something = True
-> > > > > > > > >                   try:
-> > > > > > > > > --                    depfixer.fix_rpath(outname, install_rpath, final_path,
-> > > > > > > > > +-                    depfixer.fix_rpath(outname, t.rpath_dirs_to_remove, install_rpath, final_path,
-> > > > > > > >
-> > > > > > > > Out of interest, do you know with which commit the t.rpath_dirs_to_remove comes in (or what is
-> > > > > > > > the functionality of it)?
-> > > > > > >
-> > > > > > > https://github.com/mesonbuild/meson/commit/d7235c5905fa98207d90f3ad34bf590493498d5b
-> > > > > > > https://github.com/mesonbuild/meson/pull/7103
-> > > > > > >
-> > > > > >
-> > > > > > Thanks for the links, did only a very quick look at the discussion (mentioning
-> > > > > > buildroot), any chance the upstream commit makes this patch unnecessary?
-> > > > > Yeah, looks like it does, sent a v3 with that removed:
-> > > > > https://patchwork.ozlabs.org/project/buildroot/patch/20200717080356.3094739-1-james.hilliard1 at gmail.com/
-> > >
-> > > Did you test it or did your decide by patch description/patch review (recall the failure
-> > > condition was a bit tricky)?
-> > I did a build test and everything seemed to still compile ok.
->
-> Same simple check failed back once (see [3], [4], [5] for the history), at least
-> a test with one (or more) host packages build by meson needed ;-)
-Looks good, I've verified all of those packages compile without errors.
->
->         $ git grep host-meson-package | cat
->         docs/manual/adding-packages-meson.txt:packages is also available, with the +host-meson-package+ macro.
->         package/gobject-introspection/gobject-introspection.mk:$(eval $(host-meson-package))
->         package/libglib2/libglib2.mk:$(eval $(host-meson-package))
->         package/orc/orc.mk:$(eval $(host-meson-package))
->         package/pango/pango.mk:$(eval $(host-meson-package))
->         package/pkg-meson.mk:host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
->         package/systemd/systemd.mk:$(eval $(host-meson-package))
->         package/wayland/wayland.mk:$(eval $(host-meson-package))
->
->
-> Regards,
-> Peter
->
-> [3] http://lists.busybox.net/pipermail/buildroot/2018-July/226154.html
-> [4] http://lists.busybox.net/pipermail/buildroot/2018-July/226314.html
-> [5] http://lists.busybox.net/pipermail/buildroot/2018-October/232956.html
->
-> > >
-> > > The meson pull request 7103 mentions the meson issue 2567 ([1]), mentioned in the
-> > > original version of the buildroot meson rpath patch ([2])...
-> > >
-> > > Regards,
-> > > Peter
-> > >
-> > > [1] https://github.com/mesonbuild/meson/issues/2567
-> > > [2] https://git.buildroot.net/buildroot/commit/?id=7a23af4773665d2ee40e2d4e525746ebe38456dd
-> > >
-> > >
->
->
+this adds a new hook and a corresponding variable to add
+addirectories and files after installation.
+
+various services need directories in /var when they are started,
+and create them if necessary. Creating those before, allows
+those services to start even if /var is read-only.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/systemd/systemd.mk | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index c202f5be02..b57365872e 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -317,6 +317,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
+ SYSTEMD_CONF_OPTS += -Dlogind=true
++SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/linger/
+ else
+ SYSTEMD_CONF_OPTS += -Dlogind=false
+ endif
+@@ -336,6 +337,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_HOMED),y)
+ SYSTEMD_CONF_OPTS += -Dhomed=true
+ SYSTEMD_DEPENDENCIES += cryptsetup openssl
++SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/home/
+ else
+ SYSTEMD_CONF_OPTS += -Dhomed=false
+ endif
+@@ -380,12 +382,14 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
+ SYSTEMD_CONF_OPTS += -Dcoredump=true
+ SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * - - - systemd core dump processing
++SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/coredump/
+ else
+ SYSTEMD_CONF_OPTS += -Dcoredump=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_PSTORE),y)
+ SYSTEMD_CONF_OPTS += -Dpstore=true
++SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/pstore/
+ else
+ SYSTEMD_CONF_OPTS += -Dpstore=false
+ endif
+@@ -436,6 +440,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=true
+ SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - systemd Time Synchronization
++SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/timesync/
+ else
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=false
+ endif
+@@ -485,18 +490,23 @@ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+ endif
+ 
++define SYSTEMD_INSTALL_ENTRY_HOOK
++	mkdir -p -m700 $(TARGET_DIR)/var/lib/private $(TARGET_DIR)/var/log/private \
++		$(TARGET_DIR)/var/cache/private
++	mkdir -p -m1777 $(TARGET_DIR)/var/tmp
++	$(if $(BR2_PACKAGE_SYSTEMD_MACHINED),mkdir -p -m700 $(TARGET_DIR)/var/lib/machines)
++	mkdir -p $(addprefix $(TARGET_DIR)/,var/lib $(filter %/,$(SYSTEMD_POST_INSTALL_ENTRIES)))
++	touch $(addprefix $(TARGET_DIR)/,etc/machine-id $(filter-out %/,$(SYSTEMD_POST_INSTALL_ENTRIES)))
++endef
++
+ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs multi-user.target \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
+ endef
+ 
+-define SYSTEMD_INSTALL_MACHINEID_HOOK
+-	touch $(TARGET_DIR)/etc/machine-id
+-endef
+-
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
++	SYSTEMD_INSTALL_ENTRY_HOOK \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+-	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
+ define SYSTEMD_INSTALL_IMAGES_CMDS
+@@ -532,6 +542,10 @@ endef
+ 
+ SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
+ 
++define SYSTEMD_PERMISSIONS
++	$(if $(SYSTEMD_TIMESYNCD_USER),/var/lib/systemd/timesync d 755 systemd-timesync systemd-timesync - - - - -)
++endef
++
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd provides multiple units to autospawn getty as neede
+ # * getty at .service to start a getty on normal TTY
+-- 
+2.27.0
