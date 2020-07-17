@@ -1,108 +1,121 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Sat, 18 Jul 2020 01:42:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: pre-create directories for
- services
-Message-ID: <20200717234235.17829-1-nolange79@gmail.com>
+Date: Sat, 18 Jul 2020 01:42:45 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: add support for
+ creating journal catalog DB
+Message-ID: <20200717234245.17889-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this adds a new hook and a corresponding variable to add
-addirectories and files after installation.
+journald supports catalog files, or rather a binary database of
+those.
+Functionality added includes:
 
-various services need directories in /var when they are started,
-and create them if necessary. Creating those before, allows
-those services to start even if /var is read-only.
+-   A config option allows enabling this database.
+
+-   If BR2_ENABLE_LOCALE_PURGE is enabled, the catalogs not in the
+    language whitelist are deleted.
+
+-   if the option is enabled, the database is built and moved to
+    /usr/share/factory. A symlink is created in /var pointing to
+    that file.
+
+-   the service normally used for creating the DB during boot,
+    and the source files used as input are deleted.
+
+The move to /usr/share/factory is helpful for having /usr as whole
+system distribution.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/systemd/systemd.mk | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+v1>v2:
+-   Moved all logic into systemd.mk
+-   solved the LOCALE_PURGE order that way
+-   use the factory to store the file
+-   option to enable the DB (similar to udev HWDB)
+-   cant be anabled with !ROOTFS_RW, tons of issues with that one
 
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/systemd/Config.in  | 14 ++++++++++++++
+ package/systemd/systemd.mk | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 52 insertions(+)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index f754b9d0cf..bbb77b280d 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -246,6 +246,20 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/machinectl.html#Image%20Transfer%20Commands
+ 
++config BR2_PACKAGE_SYSTEMD_CATALOGDB
++	bool "enable journal catalog database installation"
++	depends on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW # conflicting tmpfiles magic
++	help
++	  Build and install the journal catalog database.
++
++	  catalog files are used to provide extended and potentially localized
++	  messages for the journal.
++
++	  The original catalog files will be built into a DB at
++	  /usr/share/factory/var/lib/systemd/catalog/database.
++
++	  https://www.freedesktop.org/wiki/Software/systemd/catalog/
++
+ config BR2_PACKAGE_SYSTEMD_LOCALED
+ 	bool "enable locale daemon"
+ 	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index c202f5be02..b57365872e 100644
+index 1b94ffc67a..60d97ae176 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -317,6 +317,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
- SYSTEMD_CONF_OPTS += -Dlogind=true
-+SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/linger/
- else
- SYSTEMD_CONF_OPTS += -Dlogind=false
- endif
-@@ -336,6 +337,7 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_HOMED),y)
- SYSTEMD_CONF_OPTS += -Dhomed=true
- SYSTEMD_DEPENDENCIES += cryptsetup openssl
-+SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/home/
- else
- SYSTEMD_CONF_OPTS += -Dhomed=false
- endif
-@@ -380,12 +382,14 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
- SYSTEMD_CONF_OPTS += -Dcoredump=true
- SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * - - - systemd core dump processing
-+SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/coredump/
- else
- SYSTEMD_CONF_OPTS += -Dcoredump=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_PSTORE),y)
- SYSTEMD_CONF_OPTS += -Dpstore=true
-+SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/pstore/
- else
- SYSTEMD_CONF_OPTS += -Dpstore=false
- endif
-@@ -436,6 +440,7 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
- SYSTEMD_CONF_OPTS += -Dtimesyncd=true
- SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - systemd Time Synchronization
-+SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/timesync/
- else
- SYSTEMD_CONF_OPTS += -Dtimesyncd=false
- endif
-@@ -485,18 +490,23 @@ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
- SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
- endif
- 
-+define SYSTEMD_INSTALL_ENTRY_HOOK
-+	mkdir -p -m700 $(TARGET_DIR)/var/lib/private $(TARGET_DIR)/var/log/private \
-+		$(TARGET_DIR)/var/cache/private
-+	mkdir -p -m1777 $(TARGET_DIR)/var/tmp
-+	$(if $(BR2_PACKAGE_SYSTEMD_MACHINED),mkdir -p -m700 $(TARGET_DIR)/var/lib/machines)
-+	mkdir -p $(addprefix $(TARGET_DIR)/,var/lib $(filter %/,$(SYSTEMD_POST_INSTALL_ENTRIES)))
-+	touch $(addprefix $(TARGET_DIR)/,etc/machine-id $(filter-out %/,$(SYSTEMD_POST_INSTALL_ENTRIES)))
-+endef
-+
- define SYSTEMD_INSTALL_INIT_HOOK
- 	ln -fs multi-user.target \
- 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
+@@ -593,6 +593,44 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
+ 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
  endef
  
--define SYSTEMD_INSTALL_MACHINEID_HOOK
--	touch $(TARGET_DIR)/etc/machine-id
--endef
--
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
-+	SYSTEMD_INSTALL_ENTRY_HOOK \
- 	SYSTEMD_INSTALL_INIT_HOOK \
--	SYSTEMD_INSTALL_MACHINEID_HOOK \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
- 
- define SYSTEMD_INSTALL_IMAGES_CMDS
-@@ -532,6 +542,10 @@ endef
- 
- SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
- 
-+define SYSTEMD_PERMISSIONS
-+	$(if $(SYSTEMD_TIMESYNCD_USER),/var/lib/systemd/timesync d 755 systemd-timesync systemd-timesync - - - - -)
++ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
++define SYSTEMD_LOCALE_PURGE_CATALOGS
++	for cfile in $$(find $(TARGET_DIR)/usr/lib/systemd/catalog -name '*.*.catalog'); \
++	do \
++		basename=$${cfile##*/}; \
++		basename=$${basename%.catalog}; \
++		langext=$${basename#*.}; \
++		[ "$$langext" != "$${basename}" ] || continue; \
++		expr >/dev/null $(BR2_ENABLE_LOCALE_WHITELIST) : ".*\b$${langext}\b" || rm -f "$$cfile"; \
++	done
 +endef
 +
- ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # systemd provides multiple units to autospawn getty as neede
- # * getty at .service to start a getty on normal TTY
++SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_LOCALE_PURGE_CATALOGS
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD_CATALOGDB),y)
++define SYSTEMD_UPDATE_CATALOGS
++	$(HOST_DIR)/bin/journalctl --root=$(TARGET_DIR) --update-catalog
++	install -D $(TARGET_DIR)/var/lib/systemd/catalog/database \
++		$(TARGET_DIR)/usr/share/factory/var/lib/systemd/catalog/database
++	rm $(TARGET_DIR)/var/lib/systemd/catalog/database
++	ln -sf /usr/share/factory/var/lib/systemd/catalog/database \
++		$(TARGET_DIR)/var/lib/systemd/catalog/database
++	grep -q '^L /var/lib/systemd/catalog/database' $(TARGET_DIR)/usr/lib/tmpfiles.d/var.conf || \
++		printf "\nL /var/lib/systemd/catalog/database\n" >> $(TARGET_DIR)/usr/lib/tmpfiles.d/var.conf
++endef
++
++SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_UPDATE_CATALOGS
++endif
++
++define SYSTEMD_RM_CATALOG_UPDATE_SERVICE
++	rm -rf $(TARGET_DIR)/usr/lib/systemd/catalog \
++		$(TARGET_DIR)/usr/lib/systemd/system/systemd-journal-catalog-update.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/*/systemd-journal-catalog-update.service
++endef
++
++SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_RM_CATALOG_UPDATE_SERVICE
++
+ define SYSTEMD_PRESET_ALL
+ 	$(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
+ endef
 -- 
 2.27.0
