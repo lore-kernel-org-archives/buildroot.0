@@ -1,59 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Jul 2020 14:51:39 +0200
-Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
- to 3.4.0
-In-Reply-To: <20200715173707.584226-1-aduskett@gmail.com>
-References: <20200715173707.584226-1-aduskett@gmail.com>
-Message-ID: <20200717145139.50b3254a@windsurf.home>
+From: Guillaume Bres <guillaume.bressaix@gmail.com>
+Date: Fri, 17 Jul 2020 15:01:26 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-07-12
+In-Reply-To: <5f0c105a.1c69fb81.17d79.8de3SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5f0c105a.1c69fb81.17d79.8de3SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAJe0E3fag3pVOjp+4ZHTq8mpVB7Ni18k0jrM_Bz_huxKa3QP3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Jul 2020 10:37:04 -0700
-aduskett at gmail.com wrote:
+Thomas, all,
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Update the following license file hashes due to copyright year changes:
->   - vendor/github.com/mendersoftware/mendertesting/LICENSE
->   - vendor/github.com/davecgh/go-spew/LICENSE
->   - vendor/github.com/stretchr/testify/LICENSE
-> 
-> Add hashes for the the following new files:
->   - vendor/github.com/minio/sha256-simd/LICENSE
->   - vendor/gopkg.in/yaml.v2/LICENSE
->   - vendor/github.com/klauspost/compress/LICENSE
->   - vendor/github.com/russross/blackfriday/v2/LICENSE.txt
->   - vendor/github.com/klauspost/pgzip/LICENSE
->   - vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
->   - vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Packages with CVEs
+> ==================
+>
+> This is the list of packages for which a known CVE is affecting them,
+> which means a security vulnerability exists for those packages.
+>
+>              name              |       CVE        |
+>      link
+>
+> -------------------------------+------------------+--------------------------------------------------------------
+>                        libnids | CVE-2010-0751    |
+> https://security-tracker.debian.org/tracker/CVE-2010-0751
+>
 
-I don't know if this is exactly related to this version bump, but after
-this, I'm seeing my autobuilder fails to remove the output directory,
-with lots of:
+What are your views about this problem?
 
-rm: cannot remove '/home/test/autobuild/run/instance-2/output-1/build/host-mender-artifact-3.4.0/_gopath/pkg/mod/github.com/klauspost/compress at v1.10.5/zip/testdata/utf8-osx.zip': Permission denied
+Indeed I am using this lib to be able to (cross)compile 'dsniff' library,
+but I did not want to introduce 'dsniff' to buildroot.
+Do you consider this a problem, knowing that only one package requires this
+lib & it is currently not integrated to Buildroot and, in my opinion,
+should remain as is,
 
-This is due to the fact that the folders created in
-/home/test/autobuild/run/instance-2/output-1/build/host-mender-artifact-3.4.0/_gopath/pkg/mod/github.com/klauspost/
-don't have write permission:
+thanks
 
-test at build:~/autobuild/run/instance-2/output-1/build/host-mender-artifact-3.4.0/_gopath/pkg/mod/github.com/klauspost$ ls -l
-total 8
-dr-x------ 12 test test 4096 Jul 17 05:15 compress at v1.10.5
-dr-x------  3 test test 4096 Jul 17 05:15 pgzip at v1.2.3
+Guillaume W. Bres
+Software engineer
+<guillaume.bressaix@gmail.com>
 
-is this expected ? Is there anything we can do to have proper
-permissions on this ?
 
-Thanks,
+Le lun. 13 juil. 2020 ? 09:42, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hello,
+>
+> Packages with CVEs
+> ==================
+>
+> This is the list of packages for which a known CVE is affecting them,
+> which means a security vulnerability exists for those packages.
+>
+>              name              |       CVE        |
+>      link
+>
+> -------------------------------+------------------+--------------------------------------------------------------
+>                        libnids | CVE-2010-0751    |
+> https://security-tracker.debian.org/tracker/CVE-2010-0751
+>
+> --
+> http://autobuild.buildroot.net
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200717/1de16067/attachment.html>
