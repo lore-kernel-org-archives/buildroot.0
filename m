@@ -1,60 +1,62 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 17 Jul 2020 09:11:59 +0200
-Subject: [Buildroot] [PATCH v2] package/freescale-imx/firmware-imx:
- refine vpu and sdma copies
-In-Reply-To: <20200716230844.0008f950@windsurf.home>
-References: <20200716161413.719361-1-gary.bisson@boundarydevices.com>
- <20200716230844.0008f950@windsurf.home>
-Message-ID: <20200717071159.GA6428@p1g2>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Fri, 17 Jul 2020 09:20:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/refpolicy: needs python3
+In-Reply-To: <20200716230625.54fd0280@windsurf.home>
+References: <20200716205939.1965929-1-fontaine.fabrice@gmail.com>
+ <20200716230625.54fd0280@windsurf.home>
+Message-ID: <159497042415.3166.13410392594054553615@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Thu, Jul 16, 2020 at 11:08:44PM +0200, Thomas Petazzoni wrote:
-> On Thu, 16 Jul 2020 18:14:13 +0200
-> Gary Bisson <gary.bisson@boundarydevices.com> wrote:
+Quoting Thomas Petazzoni (2020-07-16 23:06:25)
+> On Thu, 16 Jul 2020 22:59:39 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 > 
-> > In latest patch the SDMA installation was limited to platforms whose
-> > name was mentioned in the binary but this approach wasn't flexible to
-> > manage cases like imx8m using imx7 sdma binary, so this patch does:
-> > - change VPU/SDMA FW options to string to allow specifying the name
-> >   (suggested by Thomas)
-> > - remove imx27 sdma case as non-existent
-> > - add imx8m family support (using imx7d binary)
-> > - get rid of FIRMWARE_IMX_PLATFORM_LOWER macro
+> > Commit 09b94b1e8f94d1f49f7a2349b4c8cbfecefa73da forgot to propagate
+> > python3 dependency from host-setools to refpolicy
 > > 
-> > Fixes: fad2df39b9 ("package/freescale-imx/firmware-imx: clarify
-> > installation of firmware files")
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/fdeaa54355aa0741eccc7864b034a7b07ef0c4bc
 > > 
-> > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/refpolicy/Config.in | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+> > index b50b2f09ff..e374ab1901 100644
+> > --- a/package/refpolicy/Config.in
+> > +++ b/package/refpolicy/Config.in
+> > @@ -1,5 +1,6 @@
+> >  config BR2_PACKAGE_REFPOLICY
+> >       bool "refpolicy"
+> > +     depends on BR2_PACKAGE_PYTHON3 # host-setools
 > 
-> I've applied, but there were some issues. See below.
+> It is not possible for host-setools (a host package) to have a
+> dependency on python3, which is a target package.
 > 
-> > -ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW),y)
-> > +ifneq ($(BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME),)
+> However, what is possible is that when BR2_PACKAGE_PYTHON=y, the
+> default host Python version is Python 2.x, and therefore host-setools
+> gets installed for Python 2.x, but the refpolicy build uses
+> host-python3, so it does not find host-setools.
 > 
-> This condition would always be true, because
-> $(BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME) will at least always contain
-> "" as it is a string option.
+> I think the correct fix is instead to set
+> HOST_SETOOLS_NEEDS_HOST_PYTHON = python3 since anyway it only works
+> with Python 3.x.
+> 
+> Antoine: any thoughts on this ?
 
-Oh I see, thanks for catching this, I obviously tried that patch with
-imx8m and saw the copy was ok, but I didn't try the case of a platform
-without sdma, sorry.
+Your proposal seems reasonable.
 
-> So, instead, I've done this:
-> 
-> FIRMWARE_IMX_SDMA_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME))
-> 
-> and then used $(FIRMWARE_IMX_SDMA_FW_NAME). Ditto for the VPU case, of
-> course.
-> 
-> Applied with this fixed. I did a quick test with i.MX6Q, and both the
-> SDMA and VPU firmware got installed, as expected.
+Thanks!
+Antoine
 
-Looks good, thanks!
-
-Gary
+-- 
+Antoine T?nart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
