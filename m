@@ -1,34 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:34:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version
- to 0.102.4
-In-Reply-To: <20200717171831.69049-1-bernd.kuhls@t-online.de>
-References: <20200717171831.69049-1-bernd.kuhls@t-online.de>
-Message-ID: <20200718153454.63c9a2b0@windsurf.home>
+Date: Sat, 18 Jul 2020 15:19:35 +0200
+Subject: [Buildroot] [git commit] package/armadillo: bump version to 9.900.2
+Message-ID: <20200718134051.B45A484BCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Jul 2020 19:18:31 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fefd28ea3d7d7dbabb5172f415eb1accd31eea18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://blog.clamav.net/2020/07/clamav-01024-security-patch-released.html
-> 
-> Fixes CVE-2020-3481, CVE-2020-3327 & CVE-2020-3350.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/clamav/clamav.hash | 2 +-
->  package/clamav/clamav.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Also remove upstream hashes not available anymore.
 
-Applied to master, thanks.
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/armadillo/armadillo.hash | 5 +----
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index aa21570803..cc91fb456a 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,7 +1,4 @@
+-# From http://sourceforge.net/projects/arma/files/?source=navbar
+-md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
+-sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
+ # Locally computed:
+-sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
++sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index f693d8c946..624b842ef6 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION = 9.850.1
++ARMADILLO_VERSION = 9.900.2
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
