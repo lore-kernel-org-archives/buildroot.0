@@ -1,54 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:44:41 +0200
-Subject: [Buildroot] [git commit] package/e2fsprogs: explicitly do not
- install udev and systemd files for host variant
-Message-ID: <20200718134052.0E41E84BCF@busybox.osuosl.org>
+Date: Sat, 18 Jul 2020 15:26:16 +0200
+Subject: [Buildroot] [git commit] package/libftdi1: fix install path with
+ FTDIPP
+Message-ID: <20200718134051.E0AB086D68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea6ddd367140f38bb512cf35de9f84d0ac853cff
+commit: https://git.buildroot.net/buildroot/commit/?id=e5e55b1eb4ed72a1b178af6973e179c1e367edec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Explicitly do not install udev rules and systemd units when installing
-the host version of e2fsprogs, as we do not need those files when
-calling host tools provided by e2fsprogs from Buildroot.
+This will fix a build failure with libsigrok and libftdi1 in version
+1.5.0
 
-This fixes a weird issue I encountered: host-e2fsprogs was built and
-installed without any issue when building an image from scratch. But
-any attempt to rebuild host-e2fsprogs alone was failing during the
-installation steps as it tried to install files to the host system.
+Fixes:
+ - http://autobuild.buildroot.org/results/1427f44e36752c337791597fab47a1889552a2fe
 
-This is because e2fsprogs' build system (autotools) is using the
-prefix given at configuration time when installing its binaries,
-configuration files, man pages, etc... but not when installing its
-systemd units and udev rules.
-
-The issue did not arise when building it from scratch, as
-host-e2fsprogs do not have a dependency on host-udev/systemd, so its
-configure script did not automatically enable udev/systemd
-installation steps at first.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ ...akeLists.txt-fix-paths-when-FTDIPP-is-set.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 41986eec58..f6642d8de1 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -29,7 +29,9 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-testio-debug \
- 	--enable-symlink-install \
- 	--enable-elf-shlibs \
--	--with-crond-dir=no
-+	--with-crond-dir=no \
-+	--with-udev-rules-dir=no \
-+	--with-systemd-unit-dir=no
- 
- # Set the binary directories to "/bin" and "/sbin", as busybox does,
- # so that we do not end up with two versions of e2fs tools.
+diff --git a/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch b/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
+new file mode 100644
+index 0000000000..14c248bb99
+--- /dev/null
++++ b/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
+@@ -0,0 +1,46 @@
++From 3e68fd7da98a755403cf5719c3d7a3c2f4dcbb58 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 17 Jul 2020 21:04:45 +0200
++Subject: [PATCH] CMakeLists.txt: fix paths when FTDIPP is set
++
++Use the same project name (i.e. libftdi1 and not libftdipp1) when FTDIPP
++is enabled as suggested by Aurelien Jarno in
++http://developer.intra2net.com/mailarchive/html/libftdi/2020/msg00044.html
++
++Without this change, the libftdi1.pc config file defines the include
++path as /usr/local/include/libftdipp1 while the ftdi.h file is actually
++installed in /usr/local/include/libftdi1
++
++This is an issue for example for libsigrok which will fail on:
++
++In file included from src/hardware/asix-sigma/protocol.c:27:
++src/hardware/asix-sigma/protocol.h:28:10: fatal error: ftdi.h: No such file or directory
++   28 | #include <ftdi.h>
++      |          ^~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1427f44e36752c337791597fab47a1889552a2fe
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++http://developer.intra2net.com/mailarchive/html/libftdi/2020/msg00045.html]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 5aecafc..3b0b87c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -136,7 +136,7 @@ endif ()
++ 
++ add_subdirectory(src)
++ if ( FTDIPP )
++-  project(libftdipp1 C CXX)
+++  project(libftdi1 C CXX)
++   add_subdirectory(ftdipp)
++ endif ()
++ if ( PYTHON_BINDINGS )
++-- 
++2.27.0
++
