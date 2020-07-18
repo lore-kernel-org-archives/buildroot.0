@@ -1,30 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:34:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libftdi1: fix install path with
- FTDIPP
-In-Reply-To: <20200717193419.669052-1-fontaine.fabrice@gmail.com>
-References: <20200717193419.669052-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200718153446.0b382160@windsurf.home>
+Date: Sat, 18 Jul 2020 15:34:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-mythtv: bump version
+ to 5.10.19-Leia
+In-Reply-To: <20200717172328.72563-1-bernd.kuhls@t-online.de>
+References: <20200717172328.72563-1-bernd.kuhls@t-online.de>
+Message-ID: <20200718153450.0dad5416@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Jul 2020 21:34:19 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Fri, 17 Jul 2020 19:23:28 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> This will fix a build failure with libsigrok and libftdi1 in version
-> 1.5.0
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1427f44e36752c337791597fab47a1889552a2fe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...sts.txt-fix-paths-when-FTDIPP-is-set.patch | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
+>  package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+>  package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
