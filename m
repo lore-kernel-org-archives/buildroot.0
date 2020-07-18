@@ -1,45 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jul 2020 22:14:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 4.9.3
-Message-ID: <20200718201445.29813-1-bernd.kuhls@t-online.de>
+Date: Sat, 18 Jul 2020 22:16:25 +0200
+Subject: [Buildroot] [PATCH 2/2] package/fmt: bump version to 7.0.1
+In-Reply-To: <20200718201625.29899-1-bernd.kuhls@t-online.de>
+References: <20200718201625.29899-1-bernd.kuhls@t-online.de>
+Message-ID: <20200718201625.29899-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.nano-editor.org/news.php
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fmt/fmt.hash | 2 +-
+ package/fmt/fmt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 9193a8af32..54c8ab591d 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v4/nano-4.9.2.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.9.3.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  d8a25eea942ecee2d57b8e037eb4b28f030f818b78773b8fcb994ed5835d2ef6  nano-4.9.2.tar.xz
-+sha256  6e3438f033a0ed07d3d74c30d0803cbda3d2366ba1601b7bbf9b16ac371f51b4  nano-4.9.3.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 3b7ccf1129..f3dd9fc895 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index da58d45c33..19a8c8d9fe 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5edf8b0f32135ad5fafb3064de26d063571e95e8ae46829c2f4f4b52696bbff0  fmt-6.2.1.tar.gz
++sha256  ac335a4ca6beaebec4ddb2bc35b9ae960b576f3b64a410ff2c379780f0cd4948  fmt-7.0.1.tar.gz
+ sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 62c165fbea..cfd4512a89 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 4
--NANO_VERSION = $(NANO_VERSION_MAJOR).9.2
-+NANO_VERSION = $(NANO_VERSION_MAJOR).9.3
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-FMT_VERSION = 6.2.1
++FMT_VERSION = 7.0.1
+ FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
+ FMT_LICENSE = MIT with exception
+ FMT_LICENSE_FILES = LICENSE.rst
 -- 
 2.27.0
