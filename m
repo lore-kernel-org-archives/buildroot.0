@@ -1,58 +1,64 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Jul 2020 21:10:03 +0000
-Subject: [Buildroot] [Bug 13086] New: SYSTEMD build failed on host-systemd
- 244.3 Building
-Message-ID: <bug-13086-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 18 Jul 2020 23:11:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jq: needs threads
+Message-ID: <20200718211134.1288605-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13086
+threads is a strong requirement since
+https://github.com/stedolan/jq/commit/cf4b48c7ba30cb30e116b523cff036ea481459f6
 
-            Bug ID: 13086
-           Summary: SYSTEMD build failed on host-systemd 244.3 Building
-           Product: buildroot
-           Version: 2020.02.3
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ymarkman at marvell.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Fixes:
+ - http://autobuild.buildroot.org/results/b871cc175655c2d6aa5f184d891b994a0ebd9902
 
-Buildroot 2020.02.3 in INIT-SYSTEMD configuration failed
-(BusyBox and SYSV are ok) 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jq/Config.in     | 4 ++++
+ package/sysdig/Config.in | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Found ninja-1.10.0 at ./output/host/bin/ninja
->>> host-systemd 244.3 Building
-./output/host/bin/ninja  -j25  -C ./output/build/host-systemd-244.3/build
-ninja: Entering directory `./output/build/host-systemd-244.3//build'
-[302/639] Linking target libsystemd.so.0.27.1.
-FAILED: libsystemd.so.0.27.1
-
-/usr/bin/gcc  -o libsystemd.so.0.27.1
-'systemd at sha/src_libsystemd_disable-mempool.c.o' -I./output/host/include
--L./output/host/lib \
- -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group
--Wl,-soname,libsystemd.so.0 -Wl,--whole-archive       \
- src/libsystemd/libsystemd_static.a src/journal/libjournal-client.a
--Wl,--no-whole-archive -Wl,-z,relro -Wl,-z,now -fstack-protector \
- -Wl,--gc-sections -O2 -Wl,-rpath,./output/host/lib src/basic/libbasic.a
-src/basic/libbasic-gcrypt.a -shared         \
-
--Wl,--version-script=./output/build/host-systemd-244.3/src/libsystemd/libsystemd.sym
--pthread -lrt /lib64/libcap.so \
- -lm -Wl,--end-group '-Wl,-rpath,$ORIGIN/src/basic:/lib64'
--Wl,-rpath-link,./build/host-systemd-244.3/build/src/basic
--Wl,-rpath-link,/lib64
-/lib64/libcap.so: error adding symbols: File in wrong format
-
+diff --git a/package/jq/Config.in b/package/jq/Config.in
+index 321cbe8b51..5edb5d0989 100644
+--- a/package/jq/Config.in
++++ b/package/jq/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_JQ
+ 	bool "jq"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  jq is like sed for JSON data - you can use it to slice and
+ 	  filter and map and transform structured data with the same
+ 	  ease that sed, awk, grep and friends let you play with text.
+ 
+ 	  http://stedolan.github.io/jq/
++
++comment "jq needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 0a1b3f8935..ee53b4fa20 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_THREADS # jq
+ 	depends on !BR2_STATIC_LIBS # luajit, elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+@@ -25,8 +26,9 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  https://github.com/draios/sysdig/wiki
+ 
+-comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
++comment "sysdig needs a glibc or uclibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library and a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.27.0
