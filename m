@@ -1,36 +1,52 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 17 Jul 2020 23:31:38 -0700
-Subject: [Buildroot] [RFC] Buildroot running on the NVIDIA Tegra TX2 devkit
-Message-ID: <CA+h8R2qEcwbkWAT_deTkAKHdqPpvraskuOr3bnTvsYFu9YZY6A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jul 2020 08:47:34 +0200
+Subject: [Buildroot] [git commit] Makefile: use order-only dependency so
+ symlinks are made only once
+Message-ID: <20200718064732.51E3882A8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d38e58d4c6d62868b3973204c827b62bde4aa84
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I spent some time and managed to get Buildroot to run on the NVIDIA
-Tegra TX2 via my SkiffOS project, which simply combines together
-different configuration fragments.
+The rule to create the staging symlink has it depend on BASE_DIR, and
+the symlink is created in BASE_DIR, which means that when the symlink
+is created, BASE_DIR is updated, and thus made more recent than the
+symlink itself.
 
-There is a buildroot package added as an extension which downloads
-Linux4Tegra and marks the licenses correctly (I hope).
+As a consequence, every time one runs 'make', the symlink will be older
+than BASE_DIR, and so will be re-created.
 
-The system can be flashed by booting it into recovery mode (holding
-the REC button while starting) and running the "flash_usb.sh" script,
-which calls into T4L's flash.sh script, pointed to the Buildroot
-images output directory.
+Ditto for the host symlink when the user has elected to have an
+out-of-tree host dir.
 
-The kernel, u-boot, and rootfs (as ext4) are flashed, and the
-opportunity for custom kernel arguments or boot-up behavior is there
-as well.
+Fix that by changing to using an order-only dependency.
 
-RFC, if there's interest I can format into a Buildroot mainline defconfig.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Stable commit link:
-
-https://github.com/paralin/SkiffOS/commit/6dc2b3f249e5d76018271ae00cff5029ff15b7da
-
-Best regards,
-Christian Stewart
+diff --git a/Makefile b/Makefile
+index 7bd8ada488..12812526c7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -457,12 +457,12 @@ endif
+ 
+ ifneq ($(HOST_DIR),$(BASE_DIR)/host)
+ HOST_DIR_SYMLINK = $(BASE_DIR)/host
+-$(HOST_DIR_SYMLINK): $(BASE_DIR)
++$(HOST_DIR_SYMLINK): | $(BASE_DIR)
+ 	ln -snf $(HOST_DIR) $(HOST_DIR_SYMLINK)
+ endif
+ 
+ STAGING_DIR_SYMLINK = $(BASE_DIR)/staging
+-$(STAGING_DIR_SYMLINK): $(BASE_DIR)
++$(STAGING_DIR_SYMLINK): | $(BASE_DIR)
+ 	ln -snf $(STAGING_DIR) $(STAGING_DIR_SYMLINK)
+ 
+ # Quotes are needed for spaces and all in the original PATH content.
