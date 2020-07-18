@@ -1,27 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Jul 2020 02:49:18 +0000
-Subject: [Buildroot] [Bug 13081] host-e2fsprogs attempts to create udev
- rules.d on build host if not exists
-In-Reply-To: <bug-13081-163@https.bugs.busybox.net/>
-References: <bug-13081-163@https.bugs.busybox.net/>
-Message-ID: <bug-13081-163-VgwjFVY0f0@https.bugs.busybox.net/>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Sat, 18 Jul 2020 10:52:19 +0800
+Subject: [Buildroot] [PATCH 1/1] package/rtty: bump version to 7.1.4
+Message-ID: <20200718025219.11656-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13081
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/rtty/rtty.hash | 2 +-
+ package/rtty/rtty.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---- Comment #1 from Christian Stewart <christian@paral.in> ---
-Seems like the /usr/lib/systemd/system path also leaks:
-
-making install in scrub
-        MKDIR_P /usr/lib/udev/rules.d
-       iMKDIR_P /usr/lib/systemd/system
-/bin/mkdir: cannot create directory '/usr/lib/systemd/system': Permission
-denied
-
+diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
+index feaac4762d..b49004ca1f 100644
+--- a/package/rtty/rtty.hash
++++ b/package/rtty/rtty.hash
+@@ -1,2 +1,2 @@
+-sha256  e10ee2048a29e18e6b21c77cb9cf7772eb95646e69567f8b40e85b816d93a3fa  rtty-7.1.3.tar.gz
++sha256  f0b8cf4c4d3d4b34d10097fe430d32ab1576edbf41131d27b6b964e078be1716  rtty-7.1.4.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
+index 0b787a6353..b0efda0470 100644
+--- a/package/rtty/rtty.mk
++++ b/package/rtty/rtty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTTY_VERSION = 7.1.3
++RTTY_VERSION = 7.1.4
+ RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
+ RTTY_LICENSE = MIT
+ RTTY_LICENSE_FILES = LICENSE
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
