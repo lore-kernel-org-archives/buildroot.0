@@ -1,37 +1,44 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Sat, 18 Jul 2020 10:11:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnids: ignore CVE-2010-0751
-Message-ID: <20200718081154.15819-1-guillaume.bressaix@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 18 Jul 2020 11:03:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtd: disable crypto for host
+Message-ID: <20200718090346.1230829-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Commit f1d1347bde41d35630d65898d27d87b99a519cb8 added the optional
+openssl dependency for mtd however nothing was done for host-mtd
 
-This CVE is falsely reported because it was fixed
-in package version 1.24 (which we are using).
-Ignore this CVE until the database is updated.
+As a result, crypto support on host-mtd depends on the availability of
+host-openssl which is not listed in HOST_MTD_DEPENDENCIES
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Moreover, crypto support needs host linux-headers as it includes
+<linux/hash_info.h> since version 2.1.2 and
+https://github.com/sigma-star/mtd-utils/commit/a739b59efe7996e3bdcbe8b17743dc05ac7c110a
+
+So just disable crypto support for host-mtd
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e581bd04e1902476afcdc9d9e34f5fb00fcd31be
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnids/libnids.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/mtd/mtd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libnids/libnids.mk b/package/libnids/libnids.mk
-index 4a67215242..a7e8f5514a 100644
---- a/package/libnids/libnids.mk
-+++ b/package/libnids/libnids.mk
-@@ -39,4 +39,9 @@ endif
- LIBNIDS_INSTALL_STAGING_OPTS = install_prefix=$(STAGING_DIR) install
- LIBNIDS_INSTALL_TARGET_OPTS = install_prefix=$(TARGET_DIR) install
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 74b19c7e4a..8220a5ace8 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -56,6 +56,7 @@ HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
+ HOST_MTD_CONF_OPTS = \
+ 	--with-jffs \
+ 	--with-ubifs \
++	--without-crypto \
+ 	--disable-tests
  
-+# CVE-2010-0751 was fixed in libnids v1.24
-+# but the NVD database is not aware of the fix,
-+# ignore it until this is updated
-+LIBNIDS_IGNORE_CVES += CVE-2010-0751
-+
- $(eval $(autotools-package))
+ MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
 -- 
-2.20.1
+2.27.0
