@@ -1,46 +1,42 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 18 Jul 2020 06:40:37 -0300
-Subject: [Buildroot] [PATCH] package/armadillo: bump version to 9.900.2
-Message-ID: <20200718094037.14072-1-sergio.prado@e-labworks.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jul 2020 13:43:23 +0200
+Subject: [Buildroot] [git commit] package/systemd: cosmetic rearrange list
+ of users
+Message-ID: <20200718113954.3A2A782B56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove upstream hashes not available anymore.
+commit: https://git.buildroot.net/buildroot/commit/?id=3346d78384c9732affb4149f941c74c369b7c1d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Group the udev users first, to make clear which software
+requires them.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/armadillo/armadillo.hash | 5 +----
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/systemd/systemd.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index aa2157080398..cc91fb456aa0 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,7 +1,4 @@
--# From http://sourceforge.net/projects/arma/files/?source=navbar
--md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
--sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
- # Locally computed:
--sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
-+sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index f693d8c9465b..624b842ef6f3 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1a8eb86e53..0890ac3ac0 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -483,10 +483,12 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
+ endef
  
--ARMADILLO_VERSION = 9.850.1
-+ARMADILLO_VERSION = 9.900.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
--- 
-2.17.1
+ define SYSTEMD_USERS
++	# udev user groups
+ 	- - input -1 * - - - Input device group
+-	- - systemd-journal -1 * - - - Journal
+ 	- - render -1 * - - - DRI rendering nodes
+ 	- - kvm -1 * - - - kvm nodes
++	# systemd user groups
++	- - systemd-journal -1 * - - - Journal
+ 	$(SYSTEMD_REMOTE_USER)
+ 	$(SYSTEMD_COREDUMP_USER)
+ 	$(SYSTEMD_NETWORKD_USER)
