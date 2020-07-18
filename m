@@ -1,44 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 18 Jul 2020 11:03:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtd: disable crypto for host
-Message-ID: <20200718090346.1230829-1-fontaine.fabrice@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 18 Jul 2020 06:40:37 -0300
+Subject: [Buildroot] [PATCH] package/armadillo: bump version to 9.900.2
+Message-ID: <20200718094037.14072-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit f1d1347bde41d35630d65898d27d87b99a519cb8 added the optional
-openssl dependency for mtd however nothing was done for host-mtd
+Also remove upstream hashes not available anymore.
 
-As a result, crypto support on host-mtd depends on the availability of
-host-openssl which is not listed in HOST_MTD_DEPENDENCIES
-
-Moreover, crypto support needs host linux-headers as it includes
-<linux/hash_info.h> since version 2.1.2 and
-https://github.com/sigma-star/mtd-utils/commit/a739b59efe7996e3bdcbe8b17743dc05ac7c110a
-
-So just disable crypto support for host-mtd
-
-Fixes:
- - http://autobuild.buildroot.org/results/e581bd04e1902476afcdc9d9e34f5fb00fcd31be
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/mtd/mtd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/armadillo/armadillo.hash | 5 +----
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 74b19c7e4a..8220a5ace8 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -56,6 +56,7 @@ HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
- HOST_MTD_CONF_OPTS = \
- 	--with-jffs \
- 	--with-ubifs \
-+	--without-crypto \
- 	--disable-tests
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index aa2157080398..cc91fb456aa0 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,7 +1,4 @@
+-# From http://sourceforge.net/projects/arma/files/?source=navbar
+-md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
+-sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
+ # Locally computed:
+-sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
++sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index f693d8c9465b..624b842ef6f3 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- MKFS_JFFS2 = $(HOST_DIR)/sbin/mkfs.jffs2
+-ARMADILLO_VERSION = 9.850.1
++ARMADILLO_VERSION = 9.900.2
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
 -- 
-2.27.0
+2.17.1
