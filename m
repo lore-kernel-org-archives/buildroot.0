@@ -1,42 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jul 2020 22:16:25 +0200
-Subject: [Buildroot] [PATCH 2/2] package/fmt: bump version to 7.0.1
-In-Reply-To: <20200718201625.29899-1-bernd.kuhls@t-online.de>
-References: <20200718201625.29899-1-bernd.kuhls@t-online.de>
-Message-ID: <20200718201625.29899-2-bernd.kuhls@t-online.de>
+Date: Sat, 18 Jul 2020 22:16:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/spdlog: bump version to 1.7.0
+Message-ID: <20200718201625.29899-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Reformatted hashes.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This bump adds compatibility to fmt version >= 7.x and needs to be
+applied before the fmt bump.
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index da58d45c33..19a8c8d9fe 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
+ package/spdlog/spdlog.hash | 4 ++--
+ package/spdlog/spdlog.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+index d4799f92f3..db6c811753 100644
+--- a/package/spdlog/spdlog.hash
++++ b/package/spdlog/spdlog.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  5edf8b0f32135ad5fafb3064de26d063571e95e8ae46829c2f4f4b52696bbff0  fmt-6.2.1.tar.gz
-+sha256  ac335a4ca6beaebec4ddb2bc35b9ae960b576f3b64a410ff2c379780f0cd4948  fmt-7.0.1.tar.gz
- sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 62c165fbea..cfd4512a89 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
+-sha256 378a040d91f787aec96d269b0c39189f58a6b852e4cbf9150ccfacbe85ebbbfc  spdlog-1.6.1.tar.gz
+-sha256 a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
++sha256  f0114a4d3c88be9e696762f37a7c379619443ce9d668546c61b21d41affe5b62  spdlog-1.7.0.tar.gz
++sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index 49b4bd3acd..41a4442e80 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FMT_VERSION = 6.2.1
-+FMT_VERSION = 7.0.1
- FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
- FMT_LICENSE = MIT with exception
- FMT_LICENSE_FILES = LICENSE.rst
+-SPDLOG_VERSION = 1.6.1
++SPDLOG_VERSION = 1.7.0
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
 -- 
 2.27.0
