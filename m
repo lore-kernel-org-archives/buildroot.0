@@ -1,39 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:56:24 +0200
-Subject: [Buildroot] [PATCH] package/host-e2fsprogs: explicitly do not
- install udev and systemd files
-In-Reply-To: <20200717120654.548833-1-antoine.tenart@bootlin.com>
-References: <20200717120654.548833-1-antoine.tenart@bootlin.com>
-Message-ID: <20200718155624.00f44c7e@windsurf.home>
+Date: Sat, 18 Jul 2020 15:56:29 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/meson: bump to version 0.55.0
+In-Reply-To: <20200717080356.3094739-1-james.hilliard1@gmail.com>
+References: <20200717080356.3094739-1-james.hilliard1@gmail.com>
+Message-ID: <20200718155629.34b85f3a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Jul 2020 14:06:54 +0200
-Antoine Tenart <antoine.tenart@bootlin.com> wrote:
+On Fri, 17 Jul 2020 02:03:56 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Explicitly do not install udev rules and systemd units when installing
-> the host version of e2fsprogs, as we do not need those files when
-> calling host tools provided by e2fsprogs from Buildroot.
+> Drop fix rpath patch which is no longer needed.
 > 
-> This fixes a weird issue I encountered: host-e2fsprogs was built and
-> installed without any issue when building an image from scratch. But any
-> attempt to rebuild host-e2fsprogs alone was failing during the
-> installation steps as it tried to install files to the host system.
+> Drop g-ir-scanner/g-ir-compiler override patch which is now upstream.
 > 
-> This is because e2fsprogs' build system (autotools) is using the prefix
-> given at configuration time when installing its binaries, configuration
-> files, man pages, etc... but not when installing its systemd units and
-> udev rules.
+> Rebase remaining patches.
 > 
-> The issue did not arise when building it from scratch, as host-e2fsprogs
-> do not have a dependency on host-udev/systemd, so its configure script
-> did not automatically enable udev/systemd installation steps at first.
+> Meson now requires single quotes for cross-compilation.conf, replace
+> double quotes with single quotes.
 > 
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
+> Changes v1 -> v2:
+>   - cleanup make-sq-comma-list syntax
+> Changes v2 -> v3:
+>   - remove rpath patch
+> ---
+>  ...-RPATH-if-install_rpath-is-not-empty.patch | 36 ---------
+>  ...ic-libs-when-default-library-static.patch} |  8 +-
+>  ...encies-base.py-add-pkg_config_stati.patch} |  8 +-
+>  ...-g-ir-scanner-and-g-ir-compiler-bina.patch | 74 -------------------
+>  package/meson/meson.hash                      |  4 +-
+>  package/meson/meson.mk                        |  2 +-
+>  package/pkg-meson.mk                          | 12 +--
+>  support/misc/utils.mk                         |  4 +
+>  8 files changed, 21 insertions(+), 127 deletions(-)
+>  delete mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+>  rename package/meson/{0002-Prefer-ext-static-libs-when-default-library-static.patch => 0001-Prefer-ext-static-libs-when-default-library-static.patch} (91%)
+>  rename package/meson/{0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch => 0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch} (95%)
+>  delete mode 100644 package/meson/0003-Allow-overriding-g-ir-scanner-and-g-ir-compiler-bina.patch
 
 Applied to master, thanks.
 
