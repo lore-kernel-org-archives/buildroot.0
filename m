@@ -1,54 +1,135 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 22:18:36 +0200
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: properly
- delete output dir even with write-protected folders
-Message-ID: <20200718201836.2408554-1-thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jul 2020 22:24:57 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: make a couple
+ dependencies optional
+In-Reply-To: <20200717234256.17942-1-nolange79@gmail.com>
+References: <20200717234256.17942-1-nolange79@gmail.com>
+Message-ID: <20200718202457.GO18825@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We're already deleting the output directory before a new build with
-"rm -rf" so that write protected files are removed as well, which
-shutil.rmtree() doesn't do.
+Norbert, All,
 
-However "rm -rf" fails on write protected folders.
+On 2020-07-18 01:42 +0200, Norbert Lange spake thusly:
+> Remove BR2_PACKAGE_UTIL_LINUX_BINARIES, as none
+> of the tools is necessary.
+> 
+> Remove BR2_PACKAGE_UTIL_LINUX_LIBBLKID, as this is optional.
+> Aslong as MOUNT or FSCK are enabled, it will end up enabled
+> anyway, but this seems more clear and correct.
+> 
+> Remove BR2_PACKAGE_UTIL_LINUX_NOLOGIN, if this option is not
+> enabled then fall back to using /bin/false instead.
+> 
+> For importd, remove BR2_PACKAGE_BZIP2 and BR2_PACKAGE_LZ4,
+> those arent dependencies.
 
-So instead, we do a recursive chmod +w, and then use shutil.rmtree()
-since we are now sure that all folders and files will have write
-permissions.
+This patch does too many things. It should be at least split into four
+patches:
 
-This solves an autobuild-run failure that occurs when the output
-directory cannot be deleted due to write-protected directories. This
-is happening with mender-artefact Go modules for example.
+  - drop bzip2 and lz4 for importd
+  - drop util-linux' binaries
+  - make util-linux' nologin optional
+  - make util-linux' libblkid optional
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- scripts/autobuild-run | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Also, I would extra love that we add a runtime test for this
+stripped-down systemd settings, to check that a minimalist systemd still
+works as expected.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index e475ea8..212e751 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -384,13 +384,14 @@ class Builder:
- 
-         # Create an empty output directory. We remove it first, in case a previous build was aborted.
-         if os.path.exists(self.outputdir):
--            # shutil.rmtree doesn't remove write-protected files
--            subprocess.call(["rm", "-rf", self.outputdir])
-+            subprocess.call(["chmod", "-R", "+w", self.outputdir])
-+            shutil.rmtree(self.outputdir)
-         os.mkdir(self.outputdir)
- 
-         # If it exists, remove the other output directory used for reproducibility testing
-         if os.path.exists(self.outputdir_2):
--            subprocess.call(["rm", "-rf", self.outputdir_2])
-+            subprocess.call(["chmod", "-R", "+w", self.outputdir_2])
-+            shutil.rmtree(self.outputdir_2)
-         with open(os.path.join(self.outputdir, "branch"), "w") as branchf:
-             branchf.write(branch)
- 
+Not only will a runtime test help get confidence in this kind of
+patches, but will help notice any breakage when we later update systemd
+to a newer version.
+
+If at least because of the first point, I've marked this patch as
+"changes requested" in patchwork.
+
+Please, could you also mark any patch that is superseded in your
+original series, now:
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=183318
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+> v1->v2:
+> -   undo a copy-paste mistake in the repart section
+> -   Drop some dependencies for importd aswell
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/systemd/Config.in  |  5 -----
+>  package/systemd/systemd.mk | 13 ++++++++++++-
+>  2 files changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index dd3b8c534d..f754b9d0cf 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -28,12 +28,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_DBUS # runtime dependency only
+>  	select BR2_PACKAGE_LIBCAP
+>  	select BR2_PACKAGE_UTIL_LINUX
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> -	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+>  	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+>  	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+> -	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+>  	select BR2_PACKAGE_UTIL_LINUX_FSCK
+>  	select BR2_PACKAGE_KMOD
+>  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+> @@ -240,8 +237,6 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
+>  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+>  	select BR2_PACKAGE_LIBCURL
+>  	select BR2_PACKAGE_LIBGCRYPT
+> -	select BR2_PACKAGE_BZIP2
+> -	select BR2_PACKAGE_LZ4
+>  	select BR2_PACKAGE_XZ
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index c09ada091a..1b94ffc67a 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -25,7 +25,6 @@ SYSTEMD_CONF_OPTS += \
+>  	-Dsysvinit-path= \
+>  	-Dsysvrcnd-path= \
+>  	-Dutmp=false \
+> -	-Dblkid=true \
+>  	-Dman=false \
+>  	-Dima=false \
+>  	-Dldconfig=false \
+> @@ -205,6 +204,18 @@ else
+>  SYSTEMD_CONF_OPTS += -Dpcre2=false
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
+> +SYSTEMD_CONF_OPTS += -Dblkid=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Dblkid=false
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),y)
+> +SYSTEMD_CONF_OPTS += -Dnologin-path=/usr/sbin/nologin
+> +else
+> +SYSTEMD_CONF_OPTS += -Dnologin-path=/bin/false
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
+>  SYSTEMD_DEPENDENCIES += libmicrohttpd
+>  SYSTEMD_CONF_OPTS += -Dmicrohttpd=true
+> -- 
+> 2.27.0
+> 
+
 -- 
-2.26.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
