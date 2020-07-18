@@ -1,46 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Jul 2020 22:16:24 +0200
-Subject: [Buildroot] [PATCH 1/2] package/spdlog: bump version to 1.7.0
-Message-ID: <20200718201625.29899-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Jul 2020 22:18:36 +0200
+Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run: properly
+ delete output dir even with write-protected folders
+Message-ID: <20200718201836.2408554-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+We're already deleting the output directory before a new build with
+"rm -rf" so that write protected files are removed as well, which
+shutil.rmtree() doesn't do.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+However "rm -rf" fails on write protected folders.
+
+So instead, we do a recursive chmod +w, and then use shutil.rmtree()
+since we are now sure that all folders and files will have write
+permissions.
+
+This solves an autobuild-run failure that occurs when the output
+directory cannot be deleted due to write-protected directories. This
+is happening with mender-artefact Go modules for example.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-This bump adds compatibility to fmt version >= 7.x and needs to be
-applied before the fmt bump.
+ scripts/autobuild-run | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- package/spdlog/spdlog.hash | 4 ++--
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index d4799f92f3..db6c811753 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 378a040d91f787aec96d269b0c39189f58a6b852e4cbf9150ccfacbe85ebbbfc  spdlog-1.6.1.tar.gz
--sha256 a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-+sha256  f0114a4d3c88be9e696762f37a7c379619443ce9d668546c61b21d41affe5b62  spdlog-1.7.0.tar.gz
-+sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index 49b4bd3acd..41a4442e80 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index e475ea8..212e751 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -384,13 +384,14 @@ class Builder:
  
--SPDLOG_VERSION = 1.6.1
-+SPDLOG_VERSION = 1.7.0
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+         # Create an empty output directory. We remove it first, in case a previous build was aborted.
+         if os.path.exists(self.outputdir):
+-            # shutil.rmtree doesn't remove write-protected files
+-            subprocess.call(["rm", "-rf", self.outputdir])
++            subprocess.call(["chmod", "-R", "+w", self.outputdir])
++            shutil.rmtree(self.outputdir)
+         os.mkdir(self.outputdir)
+ 
+         # If it exists, remove the other output directory used for reproducibility testing
+         if os.path.exists(self.outputdir_2):
+-            subprocess.call(["rm", "-rf", self.outputdir_2])
++            subprocess.call(["chmod", "-R", "+w", self.outputdir_2])
++            shutil.rmtree(self.outputdir_2)
+         with open(os.path.join(self.outputdir, "branch"), "w") as branchf:
+             branchf.write(branch)
+ 
 -- 
-2.27.0
+2.26.2
