@@ -1,23 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Jul 2020 06:21:25 +0000
-Subject: [Buildroot] [Bug 13081] host-e2fsprogs attempts to create udev
- rules.d on build host if not exists
-In-Reply-To: <bug-13081-163@https.bugs.busybox.net/>
-References: <bug-13081-163@https.bugs.busybox.net/>
-Message-ID: <bug-13081-163-Oe4tA303IZ@https.bugs.busybox.net/>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 17 Jul 2020 23:31:38 -0700
+Subject: [Buildroot] [RFC] Buildroot running on the NVIDIA Tegra TX2 devkit
+Message-ID: <CA+h8R2qEcwbkWAT_deTkAKHdqPpvraskuOr3bnTvsYFu9YZY6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13081
+Hi all,
 
---- Comment #3 from Christian Stewart <christian@paral.in> ---
-The attached patch disables e2fsprogs scrub utilities by removing them from the
-Makefile.in. This fixes the build on systems where the paths it tries to mkdir
--p do not already exist. But, a better patch is probably needed for upstream.
+I spent some time and managed to get Buildroot to run on the NVIDIA
+Tegra TX2 via my SkiffOS project, which simply combines together
+different configuration fragments.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+There is a buildroot package added as an extension which downloads
+Linux4Tegra and marks the licenses correctly (I hope).
+
+The system can be flashed by booting it into recovery mode (holding
+the REC button while starting) and running the "flash_usb.sh" script,
+which calls into T4L's flash.sh script, pointed to the Buildroot
+images output directory.
+
+The kernel, u-boot, and rootfs (as ext4) are flashed, and the
+opportunity for custom kernel arguments or boot-up behavior is there
+as well.
+
+RFC, if there's interest I can format into a Buildroot mainline defconfig.
+
+Stable commit link:
+
+https://github.com/paralin/SkiffOS/commit/6dc2b3f249e5d76018271ae00cff5029ff15b7da
+
+Best regards,
+Christian Stewart
