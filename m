@@ -1,64 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jul 2020 13:46:08 +0200
-Subject: [Buildroot] [PATCH v2 04/14] package/systemd: cosmetic
- rearrange list of users
-In-Reply-To: <20200615072055.2083-5-nolange79@gmail.com>
-References: <20200615072055.2083-1-nolange79@gmail.com>
- <20200615072055.2083-5-nolange79@gmail.com>
-Message-ID: <20200718114608.GL18825@scaer>
+Date: Sat, 18 Jul 2020 13:48:23 +0200
+Subject: [Buildroot] [PATCH 0/4 v5] dus-borker: new package (branch
+ yem/dbus-broker)
+Message-ID: <cover.1595072897.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Hello All!
 
-On 2020-06-15 09:20 +0200, Norbert Lange spake thusly:
-> Group the udev users first, to make clear which software
-> requires them.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> Reviewed-by: J?r?my Rosen <jeremy.rosen@smile.fr>
+This series is a rework of the original submission by Norbert, to add
+dbus-broker and make use of it as a message us daemon for use with
+systemd.
 
-I don;t care much about the separation: indeed, this is the systemd
-package, and thus all users defined herein arwe needed by any one of
-the systemd component. That they be sorted I don;t care much, as long as
-the conditional ones come after the non-conditional ones.
+I (Yann) have reorganised the package, and fixed various issues, and
+finally introduced run-time tests.
 
-If I had been slightly more pedant, I'd have re-ordered them
-alphabetically. But oh well... ;-)
+All the gory details necessary to make dbus-broker work are explained in
+the first patch' commit log.
 
-Applied to mster, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/systemd/systemd.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index ead4e70f95..6629c933cd 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -499,10 +499,12 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
->  endef
->  
->  define SYSTEMD_USERS
-> +	# udev user groups
->  	- - input -1 * - - - Input device group
-> -	- - systemd-journal -1 * - - - Journal
->  	- - render -1 * - - - DRI rendering nodes
->  	- - kvm -1 * - - - kvm nodes
-> +	# systemd user groups
-> +	- - systemd-journal -1 * - - - Journal
->  	$(SYSTEMD_REMOTE_USER)
->  	$(SYSTEMD_COREDUMP_USER)
->  	$(SYSTEMD_NETWORKD_USER)
-> -- 
-> 2.27.0
-> 
+
+The following changes since commit 3346d78384c9732affb4149f941c74c369b7c1d7
+
+  package/systemd: cosmetic rearrange list of users (2020-07-18 13:43:23 +0200)
+
+
+are available in the git repository at:
+
+  https://git.busybox.net/~ymorin/git/buildroot
+
+for you to fetch changes up to a63f1dc4a5c32382d5861934aa426cfbe58a490e
+
+  support/run-test: add test for systemd using dbus-broker (2020-07-18 13:46:20 +0200)
+
+
+----------------------------------------------------------------
+Norbert Lange (1):
+      package/dbus-broker: new package
+
+Yann E. MORIN (3):
+      package/systemd: do not force dbus if dbus-broker is available
+      support/testsuite: de-duplicate the systemd runtime tests
+      support/run-test: add test for systemd using dbus-broker
+
+ .gitlab-ci.yml                             |   4 +
+ DEVELOPERS                                 |   2 +
+ package/Config.in                          |   1 +
+ package/dbus-broker/Config.in              |  22 ++++++
+ package/dbus-broker/dbus-broker.hash       |   3 +
+ package/dbus-broker/dbus-broker.mk         |  77 ++++++++++++++++++
+ package/dbus-broker/dbus.socket            |   5 ++
+ package/dbus-broker/session.conf           |  65 +++++++++++++++
+ package/dbus-broker/system.conf            | 123 +++++++++++++++++++++++++++++
+ package/systemd/Config.in                  |   2 +-
+ support/testing/tests/init/test_systemd.py |  69 +++++++++++-----
+ 11 files changed, 352 insertions(+), 21 deletions(-)
+ create mode 100644 package/dbus-broker/Config.in
+ create mode 100644 package/dbus-broker/dbus-broker.hash
+ create mode 100644 package/dbus-broker/dbus-broker.mk
+ create mode 100644 package/dbus-broker/dbus.socket
+ create mode 100644 package/dbus-broker/session.conf
+ create mode 100644 package/dbus-broker/system.conf
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
