@@ -1,42 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 16:03:44 +0200
-Subject: [Buildroot] [git commit] package/libnftnl: bump to version 1.1.7
-Message-ID: <20200718140150.8019980FE2@busybox.osuosl.org>
+Date: Sat, 18 Jul 2020 16:03:38 +0200
+Subject: [Buildroot] [git commit] package/nftables: bump to version 0.9.6
+Message-ID: <20200718140150.7065E86E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ca689a68fd31ad49f465b2f5032e44dd32b48e6
+commit: https://git.buildroot.net/buildroot/commit/?id=4af058948eab167d2b4a03afcaeabdc145e2b87a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Drop patch (already in version)
+- Drop host-bison and host-flex, not needed since version 0.9.5 and
+  https://git.netfilter.org/nftables/commit/?id=2885cf2e65042b3dbc44fc232fd35840df255935
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnftnl/libnftnl.hash | 2 +-
- package/libnftnl/libnftnl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-src-main.c-fix-build-with-gcc-4.8.patch   | 46 ----------------------
+ package/nftables/nftables.hash                     |  2 +-
+ package/nftables/nftables.mk                       |  5 +--
+ 3 files changed, 3 insertions(+), 50 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index 0114619089..f22b02af09 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
+diff --git a/package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch b/package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 11b63b452a..0000000000
+--- a/package/nftables/0001-src-main.c-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From e871a7ad19f6b38d9c0a1c6cf554692b5cdea9bc Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 7 Jun 2020 23:25:55 +0200
+-Subject: [PATCH] src/main.c: fix build with gcc <= 4.8
+-
+-Since commit 719e44277f8e89323a87219b4d4bc7abac05b051, build with
+-gcc <= 4.8 fails on:
+-
+-main.c:186:2: error: 'for' loop initial declarations are only allowed in C99 mode
+-  for (size_t i = IDX_INTERACTIVE + 1; i < NR_NFT_OPTIONS; ++i)
+-  ^
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/cf2359b8311fe91f9335c91f2bb4a730c9f4c9dc
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://marc.info/?l=netfilter-devel&m=159156583001993]
+----
+- src/main.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/main.c b/src/main.c
+-index d830c7a2..e248a347 100644
+---- a/src/main.c
+-+++ b/src/main.c
+-@@ -169,6 +169,7 @@ static void print_option(const struct nft_opt *opt)
+- 
+- static void show_help(const char *name)
+- {
+-+	size_t i;
+- 	printf("Usage: %s [ options ] [ cmds... ]\n"
+- 	       "\n"
+- 	       "Options:\n", name);
+-@@ -185,7 +186,7 @@ static void show_help(const char *name)
+- 
+- 	fputs("\n", stdout);
+- 
+--	for (size_t i = IDX_INTERACTIVE + 1; i < NR_NFT_OPTIONS; ++i)
+-+	for (i = IDX_INTERACTIVE + 1; i < NR_NFT_OPTIONS; ++i)
+- 		print_option(&nft_options[i]);
+- 
+- 	fputs("\n", stdout);
+--- 
+-2.26.2
+-
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index afe16ddfaf..1112b7a8ad 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
 @@ -1,3 +1,3 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
--sha256  c1eb5a696fc1d4b3b412770586017bc01af93da3ddd25233d34a62979dee1eca  libnftnl-1.1.6.tar.bz2
-+sha256  20dbc13f11004aea2c9e479cfb90359cb11fe3446c3140811c18e4ec1648ed8f  libnftnl-1.1.7.tar.bz2
- sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index f624474196..f4487bdebe 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
-@@ -4,7 +4,7 @@
+ # From https://netfilter.org/projects/nftables/downloads.html
+-sha256  08b8683a9db5fba980bc092b75288af98d218bbe8ab446daf2338570d0730f9a  nftables-0.9.4.tar.bz2
++sha256  68d6fdfe8ab02303e6b1f13968a4022da5b0120110eaee3233d806857937b66e  nftables-0.9.6.tar.bz2
+ sha256  c17bc4fa5b2434c6f283ffcb2312e5bf3c7cdf5787b79505f094d8de734ac53e  COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index c5503e2039..8a003a5e34 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--LIBNFTNL_VERSION = 1.1.6
-+LIBNFTNL_VERSION = 1.1.7
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPL-2.0+
+-NFTABLES_VERSION = 0.9.4
++NFTABLES_VERSION = 0.9.6
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+-NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
+-	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
++NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NFTABLES_LICENSE = GPL-2.0
+ NFTABLES_LICENSE_FILES = COPYING
+ NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
