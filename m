@@ -1,28 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:30:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnids: ignore CVE-2010-0751
-In-Reply-To: <20200718081154.15819-1-guillaume.bressaix@gmail.com>
-References: <20200718081154.15819-1-guillaume.bressaix@gmail.com>
-Message-ID: <20200718153017.214d52d7@windsurf.home>
+Date: Sat, 18 Jul 2020 15:30:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtd: disable crypto for host
+In-Reply-To: <20200718090346.1230829-1-fontaine.fabrice@gmail.com>
+References: <20200718090346.1230829-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200718153022.2bb56520@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 18 Jul 2020 10:11:54 +0200
-guillaume.bressaix at gmail.com wrote:
+On Sat, 18 Jul 2020 11:03:46 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+> Commit f1d1347bde41d35630d65898d27d87b99a519cb8 added the optional
+> openssl dependency for mtd however nothing was done for host-mtd
 > 
-> This CVE is falsely reported because it was fixed
-> in package version 1.24 (which we are using).
-> Ignore this CVE until the database is updated.
+> As a result, crypto support on host-mtd depends on the availability of
+> host-openssl which is not listed in HOST_MTD_DEPENDENCIES
 > 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> Moreover, crypto support needs host linux-headers as it includes
+> <linux/hash_info.h> since version 2.1.2 and
+> https://github.com/sigma-star/mtd-utils/commit/a739b59efe7996e3bdcbe8b17743dc05ac7c110a
+> 
+> So just disable crypto support for host-mtd
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/e581bd04e1902476afcdc9d9e34f5fb00fcd31be
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libnids/libnids.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/mtd/mtd.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
