@@ -1,29 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Jul 2020 13:51:29 +0000
-Subject: [Buildroot] [Bug 13081] host-e2fsprogs attempts to create udev
- rules.d on build host if not exists
-In-Reply-To: <bug-13081-163@https.bugs.busybox.net/>
-References: <bug-13081-163@https.bugs.busybox.net/>
-Message-ID: <bug-13081-163-HWqinzKTMs@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Jul 2020 15:56:24 +0200
+Subject: [Buildroot] [PATCH] package/host-e2fsprogs: explicitly do not
+ install udev and systemd files
+In-Reply-To: <20200717120654.548833-1-antoine.tenart@bootlin.com>
+References: <20200717120654.548833-1-antoine.tenart@bootlin.com>
+Message-ID: <20200718155624.00f44c7e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13081
+On Fri, 17 Jul 2020 14:06:54 +0200
+Antoine Tenart <antoine.tenart@bootlin.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+> Explicitly do not install udev rules and systemd units when installing
+> the host version of e2fsprogs, as we do not need those files when
+> calling host tools provided by e2fsprogs from Buildroot.
+> 
+> This fixes a weird issue I encountered: host-e2fsprogs was built and
+> installed without any issue when building an image from scratch. But any
+> attempt to rebuild host-e2fsprogs alone was failing during the
+> installation steps as it tried to install files to the host system.
+> 
+> This is because e2fsprogs' build system (autotools) is using the prefix
+> given at configuration time when installing its binaries, configuration
+> files, man pages, etc... but not when installing its systemd units and
+> udev rules.
+> 
+> The issue did not arise when building it from scratch, as host-e2fsprogs
+> do not have a dependency on host-udev/systemd, so its configure script
+> did not automatically enable udev/systemd installation steps at first.
+> 
+> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> ---
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Applied to master, thanks.
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-This is fixed by
-https://git.buildroot.org/buildroot/commit/?id=ea6ddd367140f38bb512cf35de9f84d0ac853cff
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
