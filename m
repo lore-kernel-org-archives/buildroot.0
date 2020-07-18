@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:20:14 +0200
-Subject: [Buildroot] [git commit] package/rtty: bump version to 7.1.4
-Message-ID: <20200718134051.C953586D68@busybox.osuosl.org>
+Date: Sat, 18 Jul 2020 15:29:46 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
+ 5.10.19-Leia
+Message-ID: <20200718134051.EBC0B847AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c80245ddbe78c8e443f98b9bbccac56331cdb26
+commit: https://git.buildroot.net/buildroot/commit/?id=920d0bf5c0fc7add417b5d70e2a1cd9ca5a53943
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rtty/rtty.hash | 2 +-
- package/rtty/rtty.mk   | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-index feaac4762d..b49004ca1f 100644
---- a/package/rtty/rtty.hash
-+++ b/package/rtty/rtty.hash
-@@ -1,2 +1,2 @@
--sha256  e10ee2048a29e18e6b21c77cb9cf7772eb95646e69567f8b40e85b816d93a3fa  rtty-7.1.3.tar.gz
-+sha256  f0b8cf4c4d3d4b34d10097fe430d32ab1576edbf41131d27b6b964e078be1716  rtty-7.1.4.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 0b787a6353..b0efda0470 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index f85b5f0a4b..1896592cf5 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cabf3771424fd1eb61b66ce0594bec38756ad72967903ab65c25a7ea3f22eeb3  kodi-pvr-mythtv-5.10.18-Leia.tar.gz
++sha256  b2048db252966d5f78828cacd41e85d00a522c03fe7f24a0f000f720fe7aff0a  kodi-pvr-mythtv-5.10.19-Leia.tar.gz
+ sha256  0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index e2878cf910..e902bab148 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTTY_VERSION = 7.1.3
-+RTTY_VERSION = 7.1.4
- RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
- RTTY_LICENSE = MIT
- RTTY_LICENSE_FILES = LICENSE
+-KODI_PVR_MYTHTV_VERSION = 5.10.18-Leia
++KODI_PVR_MYTHTV_VERSION = 5.10.19-Leia
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
