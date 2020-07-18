@@ -1,48 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 15:19:35 +0200
-Subject: [Buildroot] [git commit] package/armadillo: bump version to 9.900.2
-Message-ID: <20200718134051.B45A484BCF@busybox.osuosl.org>
+Date: Sat, 18 Jul 2020 15:44:41 +0200
+Subject: [Buildroot] [git commit] package/e2fsprogs: explicitly do not
+ install udev and systemd files for host variant
+Message-ID: <20200718134052.0E41E84BCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fefd28ea3d7d7dbabb5172f415eb1accd31eea18
+commit: https://git.buildroot.net/buildroot/commit/?id=ea6ddd367140f38bb512cf35de9f84d0ac853cff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove upstream hashes not available anymore.
+Explicitly do not install udev rules and systemd units when installing
+the host version of e2fsprogs, as we do not need those files when
+calling host tools provided by e2fsprogs from Buildroot.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+This fixes a weird issue I encountered: host-e2fsprogs was built and
+installed without any issue when building an image from scratch. But
+any attempt to rebuild host-e2fsprogs alone was failing during the
+installation steps as it tried to install files to the host system.
+
+This is because e2fsprogs' build system (autotools) is using the
+prefix given at configuration time when installing its binaries,
+configuration files, man pages, etc... but not when installing its
+systemd units and udev rules.
+
+The issue did not arise when building it from scratch, as
+host-e2fsprogs do not have a dependency on host-udev/systemd, so its
+configure script did not automatically enable udev/systemd
+installation steps at first.
+
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/armadillo/armadillo.hash | 5 +----
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index aa21570803..cc91fb456a 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,7 +1,4 @@
--# From http://sourceforge.net/projects/arma/files/?source=navbar
--md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
--sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
- # Locally computed:
--sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
-+sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index f693d8c946..624b842ef6 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 41986eec58..f6642d8de1 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -29,7 +29,9 @@ HOST_E2FSPROGS_CONF_OPTS = \
+ 	--disable-testio-debug \
+ 	--enable-symlink-install \
+ 	--enable-elf-shlibs \
+-	--with-crond-dir=no
++	--with-crond-dir=no \
++	--with-udev-rules-dir=no \
++	--with-systemd-unit-dir=no
  
--ARMADILLO_VERSION = 9.850.1
-+ARMADILLO_VERSION = 9.900.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
+ # Set the binary directories to "/bin" and "/sbin", as busybox does,
+ # so that we do not end up with two versions of e2fs tools.
