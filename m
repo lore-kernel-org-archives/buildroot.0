@@ -1,64 +1,132 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 18 Jul 2020 23:11:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jq: needs threads
-Message-ID: <20200718211134.1288605-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Jul 2020 23:16:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: pre-create directories
+ for services
+In-Reply-To: <20200717234235.17829-1-nolange79@gmail.com>
+References: <20200717234235.17829-1-nolange79@gmail.com>
+Message-ID: <20200718211625.GR18825@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-threads is a strong requirement since
-https://github.com/stedolan/jq/commit/cf4b48c7ba30cb30e116b523cff036ea481459f6
+Norbert, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/b871cc175655c2d6aa5f184d891b994a0ebd9902
+On 2020-07-18 01:42 +0200, Norbert Lange spake thusly:
+> this adds a new hook and a corresponding variable to add
+> addirectories and files after installation.
+> 
+> various services need directories in /var when they are started,
+> and create them if necessary. Creating those before, allows
+> those services to start even if /var is read-only.
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/systemd/systemd.mk | 24 +++++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index c202f5be02..b57365872e 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -317,6 +317,7 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
+>  SYSTEMD_CONF_OPTS += -Dlogind=true
+> +SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/linger/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jq/Config.in     | 4 ++++
- package/sysdig/Config.in | 4 +++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+The naming is not nice. Also, paths should be absolute:
 
-diff --git a/package/jq/Config.in b/package/jq/Config.in
-index 321cbe8b51..5edb5d0989 100644
---- a/package/jq/Config.in
-+++ b/package/jq/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_JQ
- 	bool "jq"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  jq is like sed for JSON data - you can use it to slice and
- 	  filter and map and transform structured data with the same
- 	  ease that sed, awk, grep and friends let you play with text.
- 
- 	  http://stedolan.github.io/jq/
-+
-+comment "jq needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 0a1b3f8935..ee53b4fa20 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # jq
- 	depends on !BR2_STATIC_LIBS # luajit, elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-@@ -25,8 +26,9 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  https://github.com/draios/sysdig/wiki
- 
--comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
-+comment "sysdig needs a glibc or uclibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library and a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
- 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+    SYSTEMD_CREATE_DIRS += /var/lib/systemd/linger/
+
+However, I am not fond of mixing the directories creation with two
+infras: post-isntall hooks and _PERMISSIONS tables.
+
+So, in fact:
+
+    SYSTEMD_LOGIND_PERMISIONS = /var/lib/systemd/linger d 755 0 0 - - - - -
+
+Ditto for the others conditional directories. And of course, we should
+also treat the non-conditional ones similarly.
+
+[--SNIP--]
+> @@ -436,6 +440,7 @@ endif
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+>  SYSTEMD_CONF_OPTS += -Dtimesyncd=true
+>  SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - systemd Time Synchronization
+> +SYSTEMD_POST_INSTALL_ENTRIES += var/lib/systemd/timesync/
+
+    SYSTEMD_TIMESYNCD_PERMISIONS = /var/lib/systemd/timesync d 755 systemd-timesync systemd-timesync - - - - -
+
+[--SNIP--]
+> @@ -485,18 +490,23 @@ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+>  SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+>  endif
+>  
+> +define SYSTEMD_INSTALL_ENTRY_HOOK
+> +	mkdir -p -m700 $(TARGET_DIR)/var/lib/private $(TARGET_DIR)/var/log/private \
+> +		$(TARGET_DIR)/var/cache/private
+> +	mkdir -p -m1777 $(TARGET_DIR)/var/tmp
+> +	$(if $(BR2_PACKAGE_SYSTEMD_MACHINED),mkdir -p -m700 $(TARGET_DIR)/var/lib/machines)
+> +	mkdir -p $(addprefix $(TARGET_DIR)/,var/lib $(filter %/,$(SYSTEMD_POST_INSTALL_ENTRIES)))
+> +	touch $(addprefix $(TARGET_DIR)/,etc/machine-id $(filter-out %/,$(SYSTEMD_POST_INSTALL_ENTRIES)))
+> +endef
+
+This would thus no longer be needed.
+
+>  define SYSTEMD_INSTALL_INIT_HOOK
+>  	ln -fs multi-user.target \
+>  		$(TARGET_DIR)/usr/lib/systemd/system/default.target
+>  endef
+>  
+> -define SYSTEMD_INSTALL_MACHINEID_HOOK
+> -	touch $(TARGET_DIR)/etc/machine-id
+> -endef
+
+This could also probably be replaced with a non-conditional entry in the
+permissions table, see below...
+
+>  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+> +	SYSTEMD_INSTALL_ENTRY_HOOK \
+>  	SYSTEMD_INSTALL_INIT_HOOK \
+> -	SYSTEMD_INSTALL_MACHINEID_HOOK \
+>  	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+>  
+>  define SYSTEMD_INSTALL_IMAGES_CMDS
+> @@ -532,6 +542,10 @@ endef
+>  
+>  SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_INSTALL_NSSCONFIG_HOOK
+>  
+> +define SYSTEMD_PERMISSIONS
+> +	$(if $(SYSTEMD_TIMESYNCD_USER),/var/lib/systemd/timesync d 755 systemd-timesync systemd-timesync - - - - -)
+> +endef
+
+We usually do not use conditional in the permissions tables, but define
+conditional variables that we then re-use (see above):
+
+    define SYSTEMD_PERMISSIONS
+        /etc/machine-id f 644 0 0 - - - - -
+        $(SYSTEMD_LOGIND_PERMISIONS)
+        $(SYSTEMD_TIMESYNCD_PERMISIONS)
+        ...
+    endef
+
+Regards,
+Yann E. MORIN.
+
+> +
+>  ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+>  # systemd provides multiple units to autospawn getty as neede
+>  # * getty at .service to start a getty on normal TTY
+> -- 
+> 2.27.0
+> 
+
 -- 
-2.27.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
