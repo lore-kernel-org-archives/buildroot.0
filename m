@@ -1,65 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jul 2020 18:55:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: fix CC and LNCC
- initialization
-In-Reply-To: <20200719102946.1646674-1-alejandro.gonzalez.correo@gmail.com>
-References: <20200719102946.1646674-1-alejandro.gonzalez.correo@gmail.com>
-Message-ID: <20200719165513.GX18825@scaer>
+From: Urja Rannikko <urjaman@gmail.com>
+Date: Sun, 19 Jul 2020 20:42:36 +0300
+Subject: [Buildroot] [PATCH v2] package/cdrkit: fix build with GCC 10
+In-Reply-To: <20200625005836.2232591-1-urjaman@gmail.com>
+References: <20200625005836.2232591-1-urjaman@gmail.com>
+Message-ID: <20200719174236.534982-1-urjaman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alejandro, All,
+This patch adds a missing extern on the outfile
+variable in genisoimage.h.
 
-On 2020-07-19 12:29 +0200, Alejandro Gonz?lez spake thusly:
-> When using ccache to build the exim package, the
-> HOSTCC value contains characters that are incorrectly
-> interpreted by exim's Makefile, presumably spaces. This
-> breaks the build with "unrecognized option" ccache errors.
-> 
-> Fix that by wrapping the HOSTCC variable in double quotes,
-> as it is done for other variables that follow.
-> 
-> Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+---
+Note: I would like to see this applied to the LTS 2020.02
+branch too, since it fixes building host-cdrkit for ISO9660
+generation with a host GCC 10.
 
-Applied to master, after tweaking the commit log slightly. Thanks!
+v2: Make the patch a fully fledged commit with a sign-off and
+way more description than is necessary for a single "extern".
 
-Regards,
-Yann E. MORIN.
+ ...ar-outfile-declaration-to-fix-build-.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch
 
-> ---
->  package/exim/exim.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index 6643abbf65..19a62f497d 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -123,8 +123,8 @@ endif
->  define EXIM_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) makefile
->  	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build-br macro_predef \
-> -		CC=$(HOSTCC) \
-> -		LNCC=$(HOSTCC) \
-> +		CC="$(HOSTCC)" \
-> +		LNCC="$(HOSTCC)" \
->  		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
->  		LFLAGS="-fPIC $(HOST_LDFLAGS)"
->  	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch b/package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch
+new file mode 100644
+index 0000000000..30f4c8d01d
+--- /dev/null
++++ b/package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch
+@@ -0,0 +1,30 @@
++From eabcc8a6e39dc3c28faee3e04aa56cc65a38d65a Mon Sep 17 00:00:00 2001
++From: Urja Rannikko <urjaman@gmail.com>
++Date: Sun, 19 Jul 2020 20:28:27 +0300
++Subject: [PATCH] Add extern to char* outfile declaration to fix build with gcc
++ 10
++
++Without this linking fails with a rather long spew of
++"multiple definition of `outfile'".
++
++Signed-off-by: Urja Rannikko <urjaman@gmail.com>
++---
++ genisoimage/genisoimage.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
++index bbedfb0..82c859b 100644
++--- a/genisoimage/genisoimage.h
+++++ b/genisoimage/genisoimage.h
++@@ -376,7 +376,7 @@ extern int	use_fileversion;
++ extern int	split_SL_component;
++ extern int	split_SL_field;
++ extern char	*trans_tbl;
++-char		*outfile;
+++extern char	*outfile;
++ 
++ #define	JMAX		64	/* maximum Joliet file name length (spec) */
++ #define	JLONGMAX	103	/* out of spec Joliet file name length */
++-- 
++2.27.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
