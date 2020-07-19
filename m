@@ -1,109 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Jul 2020 23:27:32 +0200
-Subject: [Buildroot] [git commit] package/unclutter-xfixes: new package
-Message-ID: <20200719075129.8D1D586CB9@busybox.osuosl.org>
+Date: Sun, 19 Jul 2020 09:55:48 +0200
+Subject: [Buildroot] [git commit] package/meson: fix LDFLAGS rpath match
+ pattern
+Message-ID: <20200719075148.BF0A486CB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97424d147f0a3af8f176dfa32a94685afeea9546
+commit: https://git.buildroot.net/buildroot/commit/?id=ae26a5b539242ca5952a1e4f45a43d2ff64856bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-[Thomas:
- - Fix incorrect "select"
- - Simplify the build command, to allow the package Makefile to use
-   pkg-config, so added host-pkgconf
- - Use a full destination path for the installation step
- - Use the Github macro]
+The upstream change in d7235c5905fa98207d90f3ad34bf590493498d5b is not
+sufficient to prevent rpaths from being stripped in some cases due to
+a bug in how it matches rpaths in LDFLAGS.
+
+Add a patch fixing the LDFLAGS rpath match pattern.
+
+Fixes:
+http://autobuild.buildroot.net/results/f2f/f2f912416ab11d454479ef3d22ed6b757207f84f/
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/unclutter-xfixes/Config.in             | 13 +++++++++++++
- package/unclutter-xfixes/unclutter-xfixes.hash |  3 +++
- package/unclutter-xfixes/unclutter-xfixes.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 40 insertions(+)
+ .../0003-backends-fix-rpath-match-pattern.patch    | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f91314a13a..5bed3e7439 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1377,6 +1377,7 @@ F:	package/python-schedule/
- F:	package/python-sentry-sdk/
- F:	package/python-websockets/
- F:	package/python-xlib/
-+F:	package/unclutter-xfixes/
- 
- N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
-diff --git a/package/Config.in b/package/Config.in
-index aafaa312a1..22531d4fb5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1464,6 +1464,7 @@ menu "Graphics"
- 	source "package/poppler/Config.in"
- 	source "package/powervr/Config.in"
- 	source "package/tiff/Config.in"
-+	source "package/unclutter-xfixes/Config.in"
- 	source "package/waffle/Config.in"
- 	source "package/wayland/Config.in"
- 	source "package/wayland-protocols/Config.in"
-diff --git a/package/unclutter-xfixes/Config.in b/package/unclutter-xfixes/Config.in
+diff --git a/package/meson/0003-backends-fix-rpath-match-pattern.patch b/package/meson/0003-backends-fix-rpath-match-pattern.patch
 new file mode 100644
-index 0000000000..852a8cfda9
+index 0000000000..5fd5b73ade
 --- /dev/null
-+++ b/package/unclutter-xfixes/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_UNCLUTTER_XFIXES
-+	bool "unclutter-xfixes"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBEV
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	help
-+	  Remove idle cursor image from screen.
++++ b/package/meson/0003-backends-fix-rpath-match-pattern.patch
+@@ -0,0 +1,74 @@
++From af4ac0284714842535106f3d5f8a973c20e95105 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sat, 18 Jul 2020 17:01:33 -0600
++Subject: [PATCH] backends: fix rpath match pattern
 +
-+	  A rewrite of unclutter using the x11-xfixes extension.
++Since -Wl,-rpath= is not the only valid rpath ldflags syntax we
++need to try and match all valid rpath ldflags.
 +
-+	  https://github.com/Airblader/unclutter-xfixes
-diff --git a/package/unclutter-xfixes/unclutter-xfixes.hash b/package/unclutter-xfixes/unclutter-xfixes.hash
-new file mode 100644
-index 0000000000..785825da7a
---- /dev/null
-+++ b/package/unclutter-xfixes/unclutter-xfixes.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 35c75ad24be989dd6708db1d9ce9b2a2f814b80638c0633cdb075c6df090ed11  unclutter-xfixes-1.5.tar.gz
-+sha256 33e94693849b57fdb34987c95fd0076b4aa4b70fcd9a3152313d00b86a3f7bf7  LICENSE
-diff --git a/package/unclutter-xfixes/unclutter-xfixes.mk b/package/unclutter-xfixes/unclutter-xfixes.mk
-new file mode 100644
-index 0000000000..713a84bca6
---- /dev/null
-+++ b/package/unclutter-xfixes/unclutter-xfixes.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# unclutter-xfixes
-+#
-+################################################################################
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Upstream status:
++https://github.com/mesonbuild/meson/pull/7472]
++---
++ mesonbuild/backend/backends.py |  6 ++++--
++ run_unittests.py               | 26 +++++++++++++++-----------
++ 2 files changed, 19 insertions(+), 13 deletions(-)
 +
-+UNCLUTTER_XFIXES_VERSION = 1.5
-+UNCLUTTER_XFIXES_SITE = $(call github,Airblader,unclutter-xfixes,v$(UNCLUTTER_XFIXES_VERSION))
-+UNCLUTTER_XFIXES_LICENSE = MIT
-+UNCLUTTER_XFIXES_LICENSE_FILES = LICENSE
-+UNCLUTTER_XFIXES_DEPENDENCIES = libev xlib_libX11 xlib_libXfixes xlib_libXi host-pkgconf
++diff --git a/mesonbuild/backend/backends.py b/mesonbuild/backend/backends.py
++index cfd3a397f..6f44abc13 100644
++--- a/mesonbuild/backend/backends.py
+++++ b/mesonbuild/backend/backends.py
++@@ -455,9 +455,11 @@ class Backend:
++                 args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
++             except Exception:
++                 pass
+++        rpath_regex = re.compile(r'-Wl,-rpath(?:-link)?[=,]([^,@\-][^,]+)')
++         for arg in args:
++-            if arg.startswith('-Wl,-rpath='):
++-                for dir in arg.replace('-Wl,-rpath=','').split(':'):
+++            rpath_match = rpath_regex.match(arg)
+++            if rpath_match:
+++                for dir in rpath_match.group(1).split(':'):
++                     dirs.add(dir)
++         return dirs
++ 
++diff --git a/run_unittests.py b/run_unittests.py
++index 820b705b5..2c3ffc2e9 100755
++--- a/run_unittests.py
+++++ b/run_unittests.py
++@@ -6421,17 +6421,21 @@ class LinuxlikeTests(BasePlatformTests):
++         self.install(use_destdir=False)
++         self.new_builddir()
++ 
++-        # Build an app that uses that installed library.
++-        # Supply the rpath to the installed library via LDFLAGS
++-        # (as systems like buildroot and guix are wont to do)
++-        # and verify install preserves that rpath.
++-        env = {'LDFLAGS': '-Wl,-rpath=' + yonder_libdir,
++-               'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
++-        self.init(testdir, override_envvars=env)
++-        self.build()
++-        self.install(use_destdir=False)
++-        got_rpath = get_rpath(os.path.join(yonder_prefix, 'bin/rpathified'))
++-        self.assertEqual(got_rpath, yonder_libdir)
+++        # Since rpath has multiple valid formats we need to
+++        # test that they are all properly used.
+++        rpath_formats = ['-Wl,-rpath=', '-Wl,-rpath,', '-Wl,-rpath-link=', '-Wl,-rpath-link,']
+++        for rpath_format in rpath_formats:
+++            # Build an app that uses that installed library.
+++            # Supply the rpath to the installed library via LDFLAGS
+++            # (as systems like buildroot and guix are wont to do)
+++            # and verify install preserves that rpath.
+++            env = {'LDFLAGS': rpath_format + yonder_libdir,
+++                   'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
+++            self.init(testdir, override_envvars=env)
+++            self.build()
+++            self.install(use_destdir=False)
+++            got_rpath = get_rpath(os.path.join(yonder_prefix, 'bin/rpathified'))
+++            self.assertEqual(got_rpath, yonder_libdir, rpath_format)
++ 
++     @skip_if_not_base_option('b_sanitize')
++     def test_pch_with_address_sanitizer(self):
++-- 
++2.25.1
 +
-+define UNCLUTTER_XFIXES_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-+		$(MAKE) -C $(@D) unclutter CC="$(TARGET_CC)"
-+endef
-+
-+define UNCLUTTER_XFIXES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/unclutter $(TARGET_DIR)/usr/bin/unclutter
-+endef
-+
-+$(eval $(generic-package))
