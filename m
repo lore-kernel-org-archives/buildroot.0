@@ -1,40 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Jul 2020 10:05:14 +0200
-Subject: [Buildroot] [PATCH] initscripts: Make installation of
- S20urandom optional.
-In-Reply-To: <20200718224444.2748609-1-christoph.muellner@theobroma-systems.com>
-References: <20200718224444.2748609-1-christoph.muellner@theobroma-systems.com>
-Message-ID: <20200719100514.618894ca@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Jul 2020 10:27:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avro-c: fix build without C++
+Message-ID: <20200719082744.1708332-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christoph,
+Fixes:
+ - http://autobuild.buildroot.org/results/cfa91db53cf5502cbb6f902d1e7ad6397c8d70fd
 
-On Sun, 19 Jul 2020 00:44:44 +0200
-christoph.muellner at theobroma-systems.com wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...d-failure-without-a-C-compiler-again.patch | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch
 
-> From: Christoph M?llner <christoph.muellner@theobroma-systems.com>
-> 
-> S20urandom is a nice script. However, there are systems, which
-> cannot make use of that script for some reasons (e.g. systems that
-> only have read-only partitions).
-> 
-> So let's install S20urandom only if configured to do so
-> (with default y to keep backwards-compatibility).
-> 
-> Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
-
-Hm, indeed it saves to /var/lib/random-seed, which we do not seem to
-symlink to a tmpfs place when the rootfs is read-only. I'm not entirely
-sure we want to add yet another option for this, or if we want to fix
-it so that it "works" even in read-only rootfs scenarios. I don't have
-a very clear opinion on how to handle that.
-
-Thomas
+diff --git a/package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch b/package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch
+new file mode 100644
+index 0000000000..8f7e59cf62
+--- /dev/null
++++ b/package/avro-c/0001-cmake-Build-failure-without-a-C-compiler-again.patch
+@@ -0,0 +1,34 @@
++From 8f5633a29b083a84876c00b88fba6d3e8dbbf1a8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 19 Jul 2020 09:35:09 +0200
++Subject: [PATCH] cmake: Build failure without a C++ compiler (again)
++
++avro-c fails to build (again) without a C++ compiler because commit
++664c2fc7fba19709c1f974055f9cf4c8a799e108 reverted the change made by
++commit 414a51fdc1856083bb16851f09a4c61a48796132
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cfa91db53cf5502cbb6f902d1e7ad6397c8d70fd
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://issues.apache.org/jira/browse/AVRO-2898]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 6c8d7aaf..aa923e18 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -17,7 +17,7 @@
++ # under the License.
++ #
++ cmake_minimum_required(VERSION 3.1)
++-project(AvroC)
+++project(AvroC C)
++ enable_testing()
++ 
++ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
++-- 
++2.27.0
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
