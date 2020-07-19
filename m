@@ -1,66 +1,84 @@
-From: Urja Rannikko <urjaman@gmail.com>
-Date: Sun, 19 Jul 2020 20:42:36 +0300
-Subject: [Buildroot] [PATCH v2] package/cdrkit: fix build with GCC 10
-In-Reply-To: <20200625005836.2232591-1-urjaman@gmail.com>
-References: <20200625005836.2232591-1-urjaman@gmail.com>
-Message-ID: <20200719174236.534982-1-urjaman@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 19 Jul 2020 21:11:28 +0300
+Subject: [Buildroot] [PATCH v3 1/1] package/python-bsdiff4: new package
+Message-ID: <20200719181128.78893-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a missing extern on the outfile
-variable in genisoimage.h.
+Binary diff and patch using the BSDIFF4-format.
 
-Signed-off-by: Urja Rannikko <urjaman@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-Note: I would like to see this applied to the LTS 2020.02
-branch too, since it fixes building host-cdrkit for ISO9660
-generation with a host GCC 10.
+v2->v3: use a higher version, license is now shipped with the version
+---
+ package/Config.in                          |  1 +
+ package/python-bsdiff4/Config.in           |  8 ++++++++
+ package/python-bsdiff4/python-bsdiff4.hash |  5 +++++
+ package/python-bsdiff4/python-bsdiff4.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-bsdiff4/Config.in
+ create mode 100644 package/python-bsdiff4/python-bsdiff4.hash
+ create mode 100644 package/python-bsdiff4/python-bsdiff4.mk
 
-v2: Make the patch a fully fledged commit with a sign-off and
-way more description than is necessary for a single "extern".
-
- ...ar-outfile-declaration-to-fix-build-.patch | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch
-
-diff --git a/package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch b/package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch
+diff --git a/package/Config.in b/package/Config.in
+index 22531d4fb5..cdb4c0d4bb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -895,6 +895,7 @@ menu "External python modules"
+ 	source "package/python-bluezero/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-brotli/Config.in"
++	source "package/python-bsdiff4/Config.in"
+ 	source "package/python-bunch/Config.in"
+ 	source "package/python-cached-property/Config.in"
+ 	source "package/python-can/Config.in"
+diff --git a/package/python-bsdiff4/Config.in b/package/python-bsdiff4/Config.in
 new file mode 100644
-index 0000000000..30f4c8d01d
+index 0000000000..a383cda0f5
 --- /dev/null
-+++ b/package/cdrkit/0003-Add-extern-to-char-outfile-declaration-to-fix-build-.patch
-@@ -0,0 +1,30 @@
-+From eabcc8a6e39dc3c28faee3e04aa56cc65a38d65a Mon Sep 17 00:00:00 2001
-+From: Urja Rannikko <urjaman@gmail.com>
-+Date: Sun, 19 Jul 2020 20:28:27 +0300
-+Subject: [PATCH] Add extern to char* outfile declaration to fix build with gcc
-+ 10
++++ b/package/python-bsdiff4/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_BSDIFF4
++	bool "python-bsdiff4"
++	select BR2_PACKAGE_PYTHON_BZIP2 if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_BZIP2 if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  binary diff and patch using the BSDIFF4-format.
 +
-+Without this linking fails with a rather long spew of
-+"multiple definition of `outfile'".
++	  https://github.com/ilanschnell/bsdiff4
+diff --git a/package/python-bsdiff4/python-bsdiff4.hash b/package/python-bsdiff4/python-bsdiff4.hash
+new file mode 100644
+index 0000000000..e64e817f9c
+--- /dev/null
++++ b/package/python-bsdiff4/python-bsdiff4.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/bsdiff4/json
++md5	a0d047e91429ce67a3b0231facf41169  bsdiff4-1.2.0.tar.gz
++sha256	3c2f7f5504f41a54d238b54b00b4544d0eb4276179edabf02b9d00415a03cc9d  bsdiff4-1.2.0.tar.gz
++# Locally computed sha256
++sha256	c6c921c90383f1c43beb53c49a652d28309a410a7c394c729fd8870271451cf0  LICENSE
+diff --git a/package/python-bsdiff4/python-bsdiff4.mk b/package/python-bsdiff4/python-bsdiff4.mk
+new file mode 100644
+index 0000000000..7bc607b2d6
+--- /dev/null
++++ b/package/python-bsdiff4/python-bsdiff4.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-bsdiff4
++#
++################################################################################
 +
-+Signed-off-by: Urja Rannikko <urjaman@gmail.com>
-+---
-+ genisoimage/genisoimage.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++PYTHON_BSDIFF4_VERSION = 1.2.0
++PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
++PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/9b/ca/06cd939630ca78125c36489f92b52918980cbcfee2dcc0969411eb5ae8a8
++PYTHON_BSDIFF4_LICENSE = BSD-2-Clause, BSD-Protection (core.c)
++PYTHON_BSDIFF4_LICENSE_FILES = LICENSE
++PYTHON_BSDIFF4_SETUP_TYPE = distutils
 +
-+diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
-+index bbedfb0..82c859b 100644
-+--- a/genisoimage/genisoimage.h
-++++ b/genisoimage/genisoimage.h
-+@@ -376,7 +376,7 @@ extern int	use_fileversion;
-+ extern int	split_SL_component;
-+ extern int	split_SL_field;
-+ extern char	*trans_tbl;
-+-char		*outfile;
-++extern char	*outfile;
-+ 
-+ #define	JMAX		64	/* maximum Joliet file name length (spec) */
-+ #define	JLONGMAX	103	/* out of spec Joliet file name length */
-+-- 
-+2.27.0
-+
++$(eval $(python-package))
 -- 
-2.27.0
+2.26.2
