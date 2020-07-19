@@ -1,50 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jul 2020 14:15:24 +0200
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
- properly delete output dir even with write-protected folders
-In-Reply-To: <20200718205511.GQ18825@scaer>
-References: <20200718201836.2408554-1-thomas.petazzoni@bootlin.com>
- <20200718205511.GQ18825@scaer>
-Message-ID: <20200719121524.GU18825@scaer>
+Date: Sun, 19 Jul 2020 14:24:57 +0200
+Subject: [Buildroot] [PATCH] initscripts: Make installation of
+ S20urandom optional.
+In-Reply-To: <20200719140921.5bc74639@gmx.net>
+References: <20200718224444.2748609-1-christoph.muellner@theobroma-systems.com>
+ <20200719100514.618894ca@windsurf.home>
+ <20200719114950.GT18825@scaer> <20200719140921.5bc74639@gmx.net>
+Message-ID: <20200719122457.GV18825@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Peter, All,
 
-On 2020-07-18 22:55 +0200, Yann E. MORIN spake thusly:
-> On 2020-07-18 22:18 +0200, Thomas Petazzoni spake thusly:
-> > We're already deleting the output directory before a new build with
-> > "rm -rf" so that write protected files are removed as well, which
-> > shutil.rmtree() doesn't do.
-> > 
-> > However "rm -rf" fails on write protected folders.
+On 2020-07-19 14:09 +0200, Peter Seiderer spake thusly:
+> On Sun, 19 Jul 2020 13:49:50 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 [--SNIP--]
-> >          if os.path.exists(self.outputdir):
-> > -            # shutil.rmtree doesn't remove write-protected files
-> > -            subprocess.call(["rm", "-rf", self.outputdir])
-> > +            subprocess.call(["chmod", "-R", "+w", self.outputdir])
-> > +            shutil.rmtree(self.outputdir)
+> > I would however believe this script is not interesting at all. In fact,
+> > an ambedded device seldom reboots nicely; instead, it is most often a
+> > hard-reboot (with a power cycle). In that case, the script would have no
+> > chance whatsoever to save the current seed before shutdown, thus on next
+> > boot we would restore a seed that would have already been used, thus
+> > defeating randomness to begin with; worse, it would give people a sense
+> > of security where there would in fact be a hole.
 > 
-> Why can't we do as suggested in the docs:
->     https://docs.python.org/3/library/shutil.html#rmtree-example
-> 
->     def rm_ro(f, p, _):
->         os.chmod(p, stat.S_IWRITE)
->         f(p)
-> 
->     shutil.rmtree(self.outputdir, onerror=rm_ro)
+> This is a very limited view of the buildroot use-cases, I believe there
+> are although some, call it 'mid-range' embedded systems, with a proper
+> power-down button shutting down the system before killing the power
+> (or at least the use-case of two of my customer projects)...
 
-We might need to be a little bit more careful, though:
+Yeah, but still, is saving-n-restoring the seed the sanest thing to do?
+If your devices are that well engineered (yeah!), you probably have a
+good source of randmoness (proably HW, or with rng-tools et al), so
+don't need to save-n-restore the seed...
 
-    def rm_ro(f, p, _):
-        os.chmod(os.path.dirname(p), stat.S_IWRITE)
-        os.chmod(p, stat.S_IWRITE)
-        f(p)
+Even for well-designed devices, that can be sanely powered-off-then-on,
+there is always the possibility that the power completely goes out, and
+thus the seed would be re-used.
 
-    shutil.rmtree(self.outputdir, onerror=rm_ro)
+Re-using a seed is one of the worst thing one may do about randomness:
+it is very, very bad, because it gives people a false sense of security
+"Hey! I'm saving and restoring the seed, so no two boots will have the
+same random sequence! Woohoo!" Boom, wrong...
+
+So I still stand on my position that we should get rid of S20random.
 
 Regards,
 Yann E. MORIN.
