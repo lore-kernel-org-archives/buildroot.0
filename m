@@ -1,111 +1,139 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 18 Jul 2020 19:21:40 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/meson: fix LDFLAGS rpath match
- pattern
-Message-ID: <20200719012140.3135984-1-james.hilliard1@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Jul 2020 07:33:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvorbis: bump version to 1.3.7
+Message-ID: <20200719053328.8698-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The upstream change in d7235c5905fa98207d90f3ad34bf590493498d5b is not
-sufficient to prevent rpaths from being stripped in some cases due to
-a bug in how it matches rpaths in LDFLAGS.
+Removed patches which were applied upstream.
 
-Add a patch fixing the LDFLAGS rpath match pattern.
+Reformatted hashes,
 
-Fixes:
-http://autobuild.buildroot.net/results/f2f/f2f912416ab11d454479ef3d22ed6b757207f84f/
+Updated license hash after copyright year update:
+https://gitlab.xiph.org/xiph/vorbis/-/commit/eb40ca5fbd0c60d8bd1fd33be07f02defc21e5d7
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Switched _SITE to https.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - Fix root cause of rpath bug in meson instead of using workaround patch.
----
- ...003-backends-fix-rpath-match-pattern.patch | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/meson/0003-backends-fix-rpath-match-pattern.patch
+ ...ounds-check-on-very-low-sample-rates.patch | 31 -------------------
+ ...ty-check-number-of-channels-in-setup.patch | 28 -----------------
+ package/libvorbis/libvorbis.hash              |  4 +--
+ package/libvorbis/libvorbis.mk                | 10 ++----
+ 4 files changed, 4 insertions(+), 69 deletions(-)
+ delete mode 100644 package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+ delete mode 100644 package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
 
-diff --git a/package/meson/0003-backends-fix-rpath-match-pattern.patch b/package/meson/0003-backends-fix-rpath-match-pattern.patch
-new file mode 100644
-index 0000000000..5fd5b73ade
---- /dev/null
-+++ b/package/meson/0003-backends-fix-rpath-match-pattern.patch
-@@ -0,0 +1,74 @@
-+From af4ac0284714842535106f3d5f8a973c20e95105 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Sat, 18 Jul 2020 17:01:33 -0600
-+Subject: [PATCH] backends: fix rpath match pattern
-+
-+Since -Wl,-rpath= is not the only valid rpath ldflags syntax we
-+need to try and match all valid rpath ldflags.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[Upstream status:
-+https://github.com/mesonbuild/meson/pull/7472]
-+---
-+ mesonbuild/backend/backends.py |  6 ++++--
-+ run_unittests.py               | 26 +++++++++++++++-----------
-+ 2 files changed, 19 insertions(+), 13 deletions(-)
-+
-+diff --git a/mesonbuild/backend/backends.py b/mesonbuild/backend/backends.py
-+index cfd3a397f..6f44abc13 100644
-+--- a/mesonbuild/backend/backends.py
-++++ b/mesonbuild/backend/backends.py
-+@@ -455,9 +455,11 @@ class Backend:
-+                 args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
-+             except Exception:
-+                 pass
-++        rpath_regex = re.compile(r'-Wl,-rpath(?:-link)?[=,]([^,@\-][^,]+)')
-+         for arg in args:
-+-            if arg.startswith('-Wl,-rpath='):
-+-                for dir in arg.replace('-Wl,-rpath=','').split(':'):
-++            rpath_match = rpath_regex.match(arg)
-++            if rpath_match:
-++                for dir in rpath_match.group(1).split(':'):
-+                     dirs.add(dir)
-+         return dirs
-+ 
-+diff --git a/run_unittests.py b/run_unittests.py
-+index 820b705b5..2c3ffc2e9 100755
-+--- a/run_unittests.py
-++++ b/run_unittests.py
-+@@ -6421,17 +6421,21 @@ class LinuxlikeTests(BasePlatformTests):
-+         self.install(use_destdir=False)
-+         self.new_builddir()
-+ 
-+-        # Build an app that uses that installed library.
-+-        # Supply the rpath to the installed library via LDFLAGS
-+-        # (as systems like buildroot and guix are wont to do)
-+-        # and verify install preserves that rpath.
-+-        env = {'LDFLAGS': '-Wl,-rpath=' + yonder_libdir,
-+-               'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
-+-        self.init(testdir, override_envvars=env)
-+-        self.build()
-+-        self.install(use_destdir=False)
-+-        got_rpath = get_rpath(os.path.join(yonder_prefix, 'bin/rpathified'))
-+-        self.assertEqual(got_rpath, yonder_libdir)
-++        # Since rpath has multiple valid formats we need to
-++        # test that they are all properly used.
-++        rpath_formats = ['-Wl,-rpath=', '-Wl,-rpath,', '-Wl,-rpath-link=', '-Wl,-rpath-link,']
-++        for rpath_format in rpath_formats:
-++            # Build an app that uses that installed library.
-++            # Supply the rpath to the installed library via LDFLAGS
-++            # (as systems like buildroot and guix are wont to do)
-++            # and verify install preserves that rpath.
-++            env = {'LDFLAGS': rpath_format + yonder_libdir,
-++                   'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
-++            self.init(testdir, override_envvars=env)
-++            self.build()
-++            self.install(use_destdir=False)
-++            got_rpath = get_rpath(os.path.join(yonder_prefix, 'bin/rpathified'))
-++            self.assertEqual(got_rpath, yonder_libdir, rpath_format)
-+ 
-+     @skip_if_not_base_option('b_sanitize')
-+     def test_pch_with_address_sanitizer(self):
-+-- 
-+2.25.1
-+
+diff --git a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+deleted file mode 100644
+index 94dc4c614b..0000000000
+--- a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From: Thomas Daede <daede003@umn.edu>
+-Date: Wed, 9 May 2018 21:56:59 +0000 (-0700)
+-Subject: CVE-2017-14160: fix bounds check on very low sample rates.
+-X-Git-Url: https://git.xiph.org/?p=vorbis.git;a=commitdiff_plain;h=018ca26dece618457dd13585cad52941193c4a25
+-
+-CVE-2017-14160: fix bounds check on very low sample rates.
+-CVE-2018-10393: Out-of-bounds Read
+-
+-Downloaded from upstream commit
+-https://git.xiph.org/?p=vorbis.git;a=commitdiff;h=018ca26dece618457dd13585cad52941193c4a25
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[yann.morin.1998 at free.fr: also fixes CVE-2018-10393]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+-
+-diff --git a/lib/psy.c b/lib/psy.c
+-index 422c6f1..1310123 100644
+---- a/lib/psy.c
+-+++ b/lib/psy.c
+-@@ -602,8 +602,9 @@ static void bark_noise_hybridmp(int n,const long *b,
+-   for (i = 0, x = 0.f;; i++, x += 1.f) {
+- 
+-     lo = b[i] >> 16;
+--    if( lo>=0 ) break;
+-     hi = b[i] & 0xffff;
+-+    if( lo>=0 ) break;
+-+    if( hi>=n ) break;
+- 
+-     tN = N[hi] + N[-lo];
+-     tX = X[hi] - X[-lo];
+diff --git a/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch b/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
+deleted file mode 100644
+index 1208839a20..0000000000
+--- a/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 112d3bd0aaacad51305e1464d4b381dabad0e88b Mon Sep 17 00:00:00 2001
+-From: Thomas Daede <daede003@umn.edu>
+-Date: Thu, 17 May 2018 16:19:19 -0700
+-Subject: [PATCH] Sanity check number of channels in setup.
+-
+-Fixes #2335.
+-[Retrieved from:
+-https://gitlab.xiph.org/xiph/vorbis/commit/112d3bd0aaacad51305e1464d4b381dabad0e88b]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/vorbisenc.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/lib/vorbisenc.c b/lib/vorbisenc.c
+-index 4fc7b62..64a51b5 100644
+---- a/lib/vorbisenc.c
+-+++ b/lib/vorbisenc.c
+-@@ -684,6 +684,7 @@ int vorbis_encode_setup_init(vorbis_info *vi){
+-   highlevel_encode_setup *hi=&ci->hi;
+- 
+-   if(ci==NULL)return(OV_EINVAL);
+-+  if(vi->channels<1||vi->channels>255)return(OV_EINVAL);
+-   if(!hi->impulse_block_p)i0=1;
+- 
+-   /* too low/high an ATH floater is nonsensical, but doesn't break anything */
+--- 
+-2.24.1
+-
+diff --git a/package/libvorbis/libvorbis.hash b/package/libvorbis/libvorbis.hash
+index 15bd01f22a..2e44ba33af 100644
+--- a/package/libvorbis/libvorbis.hash
++++ b/package/libvorbis/libvorbis.hash
+@@ -1,4 +1,4 @@
+ # From http://www.xiph.org/downloads/
+-sha256 af00bb5a784e7c9e69f56823de4637c350643deedaf333d0fa86ecdba6fcb415 libvorbis-1.3.6.tar.xz
++sha256  b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b  libvorbis-1.3.7.tar.xz
+ # License files, locally calculated
+-sha256 29e9914e6173b7061b7d48c25e6159fc1438326738bc047cc7248abc01b271f6  COPYING
++sha256  ec1815db59fcd302846df949d7424876cb2e2dc5ed1606c5fb0b36787b1cf43a  COPYING
+diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
+index 708f3364ec..95c43d959e 100644
+--- a/package/libvorbis/libvorbis.mk
++++ b/package/libvorbis/libvorbis.mk
+@@ -4,19 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBVORBIS_VERSION = 1.3.6
++LIBVORBIS_VERSION = 1.3.7
+ LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.xz
+-LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis
++LIBVORBIS_SITE = https://downloads.xiph.org/releases/vorbis
+ LIBVORBIS_INSTALL_STAGING = YES
+ LIBVORBIS_CONF_OPTS = --disable-oggtest
+ LIBVORBIS_DEPENDENCIES = host-pkgconf libogg
+ LIBVORBIS_LICENSE = BSD-3-Clause
+ LIBVORBIS_LICENSE_FILES = COPYING
+ 
+-# 0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+-LIBVORBIS_IGNORE_CVES += CVE-2018-10393
+-
+-# 0002-Sanity-check-number-of-channels-in-setup.patch
+-LIBVORBIS_IGNORE_CVES += CVE-2018-10392
+-
+ $(eval $(autotools-package))
 -- 
-2.25.1
+2.27.0
