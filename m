@@ -1,59 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jul 2020 14:24:57 +0200
-Subject: [Buildroot] [PATCH] initscripts: Make installation of
- S20urandom optional.
-In-Reply-To: <20200719140921.5bc74639@gmx.net>
-References: <20200718224444.2748609-1-christoph.muellner@theobroma-systems.com>
- <20200719100514.618894ca@windsurf.home>
- <20200719114950.GT18825@scaer> <20200719140921.5bc74639@gmx.net>
-Message-ID: <20200719122457.GV18825@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 19 Jul 2020 16:34:04 +0200
+Subject: [Buildroot] [PATCH] package/exiv2: fix compiler flags detection
+Message-ID: <20200719143404.2542434-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Add a patch, which has been submitted upstream, to properly detect the
+availability of compiler flags before using them.
 
-On 2020-07-19 14:09 +0200, Peter Seiderer spake thusly:
-> On Sun, 19 Jul 2020 13:49:50 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > I would however believe this script is not interesting at all. In fact,
-> > an ambedded device seldom reboots nicely; instead, it is most often a
-> > hard-reboot (with a power cycle). In that case, the script would have no
-> > chance whatsoever to save the current seed before shutdown, thus on next
-> > boot we would restore a seed that would have already been used, thus
-> > defeating randomness to begin with; worse, it would give people a sense
-> > of security where there would in fact be a hole.
-> 
-> This is a very limited view of the buildroot use-cases, I believe there
-> are although some, call it 'mid-range' embedded systems, with a proper
-> power-down button shutting down the system before killing the power
-> (or at least the use-case of two of my customer projects)...
+This will fix the build of exiv2 on CPU architectures for which gcc
+doesn't implement -fcf-protection.
 
-Yeah, but still, is saving-n-restoring the seed the sanest thing to do?
-If your devices are that well engineered (yeah!), you probably have a
-good source of randmoness (proably HW, or with rng-tools et al), so
-don't need to save-n-restore the seed...
+Fixes:
 
-Even for well-designed devices, that can be sanely powered-off-then-on,
-there is always the possibility that the power completely goes out, and
-thus the seed would be re-used.
+  http://autobuild.buildroot.net/results/ef6a6fa2309e66a7a36fface626ae0da1a7ec633/
+  (and many similar build failures on other architectures)
 
-Re-using a seed is one of the worst thing one may do about randomness:
-it is very, very bad, because it gives people a false sense of security
-"Hey! I'm saving and restoring the seed, so no two boots will have the
-same random sequence! Woohoo!" Boom, wrong...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ags.cmake-properly-detect-availabili.patch | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch
 
-So I still stand on my position that we should get rid of S20random.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch b/package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch
+new file mode 100644
+index 0000000000..6302d4cfcf
+--- /dev/null
++++ b/package/exiv2/0001-cmake-compilerFlags.cmake-properly-detect-availabili.patch
+@@ -0,0 +1,58 @@
++From 2f6d2e5795382f0d6e22f5aea52e8104110d24ad Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 19 Jul 2020 16:29:15 +0200
++Subject: [PATCH] cmake/compilerFlags.cmake: properly detect availability of
++ flags
++
++Instead of relying on fragile and complex logic to decide if a
++compiler flag is available or not, use the check_c_compiler_flag()
++macro provided by the CMake standard library.
++
++This for example avoids using -fcf-protection on architectures that
++don't support this option.
++
++[Upstream: https://github.com/Exiv2/exiv2/pull/1252. The submitted
++patch is slightly different than this one, due to other changes
++between 0.27.3 and master.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ cmake/compilerFlags.cmake | 18 +++++++++++-------
++ 1 file changed, 11 insertions(+), 7 deletions(-)
++
++diff --git a/cmake/compilerFlags.cmake b/cmake/compilerFlags.cmake
++index 0418aa61..be430977 100644
++--- a/cmake/compilerFlags.cmake
+++++ b/cmake/compilerFlags.cmake
++@@ -1,4 +1,5 @@
++ # These flags applies to exiv2lib, the applications, and to the xmp code
+++include(CheckCCompilerFlag)
++ 
++ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
++     if (${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
++@@ -25,13 +26,16 @@ if ( MINGW OR UNIX OR MSYS ) # MINGW, Linux, APPLE, CYGWIN
++ 
++         # This fails under Fedora, MinGW GCC 8.3.0 and CYGWIN/MSYS 9.3.0
++         if (NOT (MINGW OR CMAKE_HOST_SOLARIS OR CYGWIN OR MSYS) )
++-            if (COMPILER_IS_GCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 8.0)
++-                add_compile_options(-fstack-clash-protection -fcf-protection)
++-            endif()
++-
++-            if( (COMPILER_IS_GCC   AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 5.0) # Not in GCC 4.8
++-            OR  (COMPILER_IS_CLANG AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 3.7) # Not in Clang 3.4.2
++-            )
+++	    check_c_compiler_flag(-fstack-clash-protection HAS_FSTACK_CLASH_PROTECTION)
+++	    check_c_compiler_flag(-fcf-protection HAS_FCF_PROTECTION)
+++	    check_c_compiler_flag(-fstack-protector-strong HAS_FSTACK_PROTECTOR_STRONG)
+++	    if(HAS_FSTACK_CLASH_PROTECTION)
+++                add_compile_options(-fstack-clash-protection)
+++	    endif()
+++	    if(GCC_HAS_FCF_PROTECTION)
+++		add_compile_options(-fcf-protection)
+++	    endif()
+++	    if(GCC_HAS_FSTACK_PROTECTOR_STRONG)
++                 add_compile_options(-fstack-protector-strong)
++             endif()
++         endif()
++-- 
++2.26.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
