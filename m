@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 08:45:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with
+Date: Mon, 20 Jul 2020 08:45:55 +0200
+Subject: [Buildroot] [PATCH 4/5] package/upmpdcli: fix build with
  libmicrohttpd 0.9.71
-In-Reply-To: <20200705111513.1298364-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 5 Jul 2020 13:15:13 +0200")
-References: <20200705111513.1298364-1-bernd.kuhls@t-online.de>
-Message-ID: <87d04qr8fn.fsf@dell.be.48ers.dk>
+In-Reply-To: <20200705101217.630684-4-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 5 Jul 2020 12:12:16 +0200")
+References: <20200705101217.630684-1-bernd.kuhls@t-online.de>
+ <20200705101217.630684-4-bernd.kuhls@t-online.de>
+Message-ID: <878sfer8f0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
