@@ -1,197 +1,159 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
-Date: Mon, 20 Jul 2020 15:49:44 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/systemd: make a couple
- dependencies optional
-In-Reply-To: <CADYdroO=GZy+TghL+XS6EqPNJT+yEUUxQ5O6+JdL=WCCp+Oa4A@mail.gmail.com>
-References: <20200717234256.17942-1-nolange79@gmail.com>
- <20200718202457.GO18825@scaer>
- <CADYdroO=GZy+TghL+XS6EqPNJT+yEUUxQ5O6+JdL=WCCp+Oa4A@mail.gmail.com>
-Message-ID: <CAFvCimV-EkT-2sC3NphGuiPHXrBR1yd1b53mBL3F5=dubi9HjA@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 20 Jul 2020 09:32:45 -0500
+Subject: [Buildroot] [PATCH v2] package/resiprocate: new package
+Message-ID: <20200720143245.48783-1-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain had a serie enabling systemd's self-test, but I'm not sure what
-happened to it...
+reSIProcate is a framework that aims to fully implement the SIP
+protocol in first class C++. It is intended for use in other
+applications, such as the repro SIP proxy.
 
-Le lun. 20 juil. 2020 ? 01:15, Norbert Lange <nolange79@gmail.com> a ?crit :
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+v1 -> v2:
+ - Add install to staging since this is a library
+---
+ package/Config.in                    |  1 +
+ package/resiprocate/Config.in        | 48 ++++++++++++++++++++++++++++
+ package/resiprocate/resiprocate.hash |  4 +++
+ package/resiprocate/resiprocate.mk   | 47 +++++++++++++++++++++++++++
+ 4 files changed, 100 insertions(+)
+ create mode 100644 package/resiprocate/Config.in
+ create mode 100644 package/resiprocate/resiprocate.hash
+ create mode 100644 package/resiprocate/resiprocate.mk
 
-> Am Sa., 18. Juli 2020 um 22:25 Uhr schrieb Yann E. MORIN
-> <yann.morin.1998@free.fr>:
-> >
-> > Norbert, All,
-> >
-> > On 2020-07-18 01:42 +0200, Norbert Lange spake thusly:
-> > > Remove BR2_PACKAGE_UTIL_LINUX_BINARIES, as none
-> > > of the tools is necessary.
-> > >
-> > > Remove BR2_PACKAGE_UTIL_LINUX_LIBBLKID, as this is optional.
-> > > Aslong as MOUNT or FSCK are enabled, it will end up enabled
-> > > anyway, but this seems more clear and correct.
-> > >
-> > > Remove BR2_PACKAGE_UTIL_LINUX_NOLOGIN, if this option is not
-> > > enabled then fall back to using /bin/false instead.
-> > >
-> > > For importd, remove BR2_PACKAGE_BZIP2 and BR2_PACKAGE_LZ4,
-> > > those arent dependencies.
-> >
-> > This patch does too many things. It should be at least split into four
-> > patches:
-> >
-> >   - drop bzip2 and lz4 for importd
-> >   - drop util-linux' binaries
-> >   - make util-linux' nologin optional
-> >   - make util-linux' libblkid optional
->
-> Thats primary a matter of handling a set of patches and their rebases over
-> quite some time.
->
-> >
-> > Also, I would extra love that we add a runtime test for this
-> > stripped-down systemd settings, to check that a minimalist systemd still
-> > works as expected
->
-> Issue of time (lack thereof).
-> I can guarantee you that I run a pretty minimal configuration (removed
-> dbus/dbus-broker aswell),
-> but I suspect that's not really tested upstream.
->
-> Some better definition of what to expect of a functional systemd would
-> be nice tho.
->
-> > Not only will a runtime test help get confidence in this kind of
-> > patches, but will help notice any breakage when we later update systemd
-> > to a newer version.
-> >
-> > If at least because of the first point, I've marked this patch as
-> > "changes requested" in patchwork.
->
-> TBH I don't look at that, tried to wake up maintainers a few times by
-> changing state did not seem to work either ;)
->
-> >
-> > Please, could you also mark any patch that is superseded in your
-> > original series, now:
-> >     https://patchwork.ozlabs.org/project/buildroot/list/?series=183318
->
-> Done.
->
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > > ---
-> > > v1->v2:
-> > > -   undo a copy-paste mistake in the repart section
-> > > -   Drop some dependencies for importd aswell
-> > >
-> > > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > > ---
-> > >  package/systemd/Config.in  |  5 -----
-> > >  package/systemd/systemd.mk | 13 ++++++++++++-
-> > >  2 files changed, 12 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> > > index dd3b8c534d..f754b9d0cf 100644
-> > > --- a/package/systemd/Config.in
-> > > +++ b/package/systemd/Config.in
-> > > @@ -28,12 +28,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
-> > >       select BR2_PACKAGE_DBUS # runtime dependency only
-> > >       select BR2_PACKAGE_LIBCAP
-> > >       select BR2_PACKAGE_UTIL_LINUX
-> > > -     select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> > >       select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-> > > -     select BR2_PACKAGE_UTIL_LINUX_BINARIES
-> > >       select BR2_PACKAGE_UTIL_LINUX_AGETTY
-> > >       select BR2_PACKAGE_UTIL_LINUX_MOUNT
-> > > -     select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
-> > >       select BR2_PACKAGE_UTIL_LINUX_FSCK
-> > >       select BR2_PACKAGE_KMOD
-> > >       select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
-> > > @@ -240,8 +237,6 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
-> > >       depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
-> > >       select BR2_PACKAGE_LIBCURL
-> > >       select BR2_PACKAGE_LIBGCRYPT
-> > > -     select BR2_PACKAGE_BZIP2
-> > > -     select BR2_PACKAGE_LZ4
-> > >       select BR2_PACKAGE_XZ
-> > >       select BR2_PACKAGE_ZLIB
-> > >       help
-> > > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> > > index c09ada091a..1b94ffc67a 100644
-> > > --- a/package/systemd/systemd.mk
-> > > +++ b/package/systemd/systemd.mk
-> > > @@ -25,7 +25,6 @@ SYSTEMD_CONF_OPTS += \
-> > >       -Dsysvinit-path= \
-> > >       -Dsysvrcnd-path= \
-> > >       -Dutmp=false \
-> > > -     -Dblkid=true \
-> > >       -Dman=false \
-> > >       -Dima=false \
-> > >       -Dldconfig=false \
-> > > @@ -205,6 +204,18 @@ else
-> > >  SYSTEMD_CONF_OPTS += -Dpcre2=false
-> > >  endif
-> > >
-> > > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
-> > > +SYSTEMD_CONF_OPTS += -Dblkid=true
-> > > +else
-> > > +SYSTEMD_CONF_OPTS += -Dblkid=false
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),y)
-> > > +SYSTEMD_CONF_OPTS += -Dnologin-path=/usr/sbin/nologin
-> > > +else
-> > > +SYSTEMD_CONF_OPTS += -Dnologin-path=/bin/false
-> > > +endif
-> > > +
-> > >  ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
-> > >  SYSTEMD_DEPENDENCIES += libmicrohttpd
-> > >  SYSTEMD_CONF_OPTS += -Dmicrohttpd=true
-> > > --
-> > > 2.27.0
-> > >
-> >
-> > --
-> >
-> .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->        |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> >
-> '------------------------------^-------^------------------^--------------------'
->
-> Norbert
->
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 22531d4fb5..7ab1112644 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1768,6 +1768,7 @@ menu "Networking"
+ 	source "package/qdecoder/Config.in"
+ 	source "package/qpid-proton/Config.in"
+ 	source "package/rabbitmq-c/Config.in"
++	source "package/resiprocate/Config.in"
+ 	source "package/restclient-cpp/Config.in"
+ 	source "package/rtmpdump/Config.in"
+ 	source "package/slirp/Config.in"
+diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
+new file mode 100644
+index 0000000000..fc44a6a30f
+--- /dev/null
++++ b/package/resiprocate/Config.in
+@@ -0,0 +1,48 @@
++config BR2_PACKAGE_RESIPROCATE
++	bool "resiprocate"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_C_ARES
++	help
++	  reSIProcate is a framework that aims to fully implement the
++	  SIP protocol in first class C++. It is intended for use in
++	  other applications, such as the repro SIP proxy.
++
++	  By default this package provides the core libraries: librutil
++	  (utilities), libresip (SIP stack/RFC compliant message
++	  parsing) and libdum (SIP Dialog Usage Manager, a state
++	  machine for SIP dialogs).
++
++	  https://www.resiprocate.org/
++
++comment "resiprocate needs a toolchain w/ C++, threads, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++
++if BR2_PACKAGE_RESIPROCATE
++
++config BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT
++	bool "Enable DTLS support"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enable DTLS support (requires OpenSSL)
++
++config BR2_PACKAGE_RESIPROCATE_REND
++	bool "resiprocate-rend"
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_POPT
++	help
++	  Rend is tool that is was created specifically to load test
++	  gtSIP based presence servers.
++
++config BR2_PACKAGE_RESIPROCATE_APPS
++	bool "resiprocate-apps"
++	select BR2_PACKAGE_PCRE
++	help
++	  Build apps clicktocall and sipdial
++
++endif # BR2_PACKAGE_RESIPROCATE
+diff --git a/package/resiprocate/resiprocate.hash b/package/resiprocate/resiprocate.hash
+new file mode 100644
+index 0000000000..03336c64a2
+--- /dev/null
++++ b/package/resiprocate/resiprocate.hash
+@@ -0,0 +1,4 @@
++# http://list.resiprocate.org/pipermail/resiprocate-announce/2020-May/000000.html
++sha256  046826503d3c8682ae0e42101b28f903c5f988235f1ff4a98dbfb9066d0d3d49  resiprocate-1.12.0.tar.gz
++# Locally Computed
++sha256  16b0fd1938a10fcd145904cc2dad74500fef9d27fc15b44cf8e8f92011f94d35  COPYING
+diff --git a/package/resiprocate/resiprocate.mk b/package/resiprocate/resiprocate.mk
+new file mode 100644
+index 0000000000..3a17c888e3
+--- /dev/null
++++ b/package/resiprocate/resiprocate.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# resiprocate
++#
++################################################################################
++
++RESIPROCATE_VERSION = 1.12.0
++RESIPROCATE_SITE =  $(call github,resiprocate,resiprocate,resiprocate-$(RESIPROCATE_VERSION))
++# For complete details see https://www.resiprocate.org/License
++RESIPROCATE_LICENSE = VSL-1.0, BSD-3-Clause
++RESIPROCATE_LICENSE_FILES = COPYING
++RESIPROCATE_INSTALL_STAGING = YES
++
++# Utilize c-ares from buildroot instead built in ARES library
++# NOTE: resiprocate doesn't support --without-<feature> syntax as it will try
++#       to build with package if specified
++RESIPROCATE_DEPENDENCIES = c-ares
++RESIPROCATE_CONF_OPTS = -with-c-ares \
++	--with-sysroot="$(STAGING_DIR)"
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++RESIPROCATE_DEPENDENCIES += openssl host-pkgconf
++RESIPROCATE_CONF_OPTS += --with-ssl
++# Configure.ac does not include '-lz' when statically linking against openssl
++RESIPROCATE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
++endif
++
++ifeq ($(BR2_PACKAGE_POPT),y)
++RESIPROCATE_CONF_OPTS += --with-popt
++RESIPROCATE_DEPENDENCIES += popt
++endif
++
++ifeq ($(BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT),y)
++RESIPROCATE_CONF_OPTS += --with-dtls
++endif
++
++ifeq ($(BR2_PACKAGE_RESIPROCATE_REND),y)
++RESIPROCATE_CONF_OPTS += --with-rend
++RESIPROCATE_DEPENDENCIES += boost
++endif
++
++ifeq ($(BR2_PACKAGE_RESIPROCATE_APPS),y)
++RESIPROCATE_CONF_OPTS += --with-apps
++RESIPROCATE_DEPENDENCIES += pcre
++endif
++
++$(eval $(autotools-package))
 -- 
-[image: SMILE]  <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-*J?r?my ROSEN*
-Architecte technique
-
-[image: email] jeremy.rosen at smile.fr
-[image: phone]  +33 6 88 25 87 42
-[image: url] http://www.smile.eu
-
-[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
-<https://www.facebook.com/smileopensource> [image: LinkedIn]
-<https://www.linkedin.com/company/smile> [image: Github]
-<https://github.com/Smile-SA>
-
-[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
-<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200720/82e98134/attachment.html>
+2.17.1
