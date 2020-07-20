@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 18:10:53 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libgcrypt: bump version to 1.8.6
-In-Reply-To: <20200719060939.48742-1-bernd.kuhls@t-online.de>
-References: <20200719060939.48742-1-bernd.kuhls@t-online.de>
-Message-ID: <20200720181053.7f76fe8e@windsurf.home>
+Date: Mon, 20 Jul 2020 18:10:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libzip: bump version to 1.7.3
+In-Reply-To: <20200719061418.52817-1-bernd.kuhls@t-online.de>
+References: <20200719061418.52817-1-bernd.kuhls@t-online.de>
+Message-ID: <20200720181057.3cb117da@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Jul 2020 08:09:38 +0200
+On Sun, 19 Jul 2020 08:14:18 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Release notes:
-> https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000445.html
+> Release notes: https://libzip.org/news/
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/nih-at/libzip/commit/40098f0445599d53eb85254777734ccef6ce6915
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libgcrypt/libgcrypt.hash | 8 ++++----
->  package/libgcrypt/libgcrypt.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/libzip/libzip.hash | 4 ++--
+>  package/libzip/libzip.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
