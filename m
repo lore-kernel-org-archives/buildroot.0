@@ -1,88 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Jul 2020 22:56:14 +0200
-Subject: [Buildroot] [git commit] package/urandom-scripts: new package
-Message-ID: <20200720205949.90E2D8614F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Jul 2020 23:10:48 +0200
+Subject: [Buildroot] [PATCH 0/8] Introduce EDK2 firmware builds
+In-Reply-To: <20200719180727.28202-1-hi@senzilla.io>
+References: <20200719180727.28202-1-hi@senzilla.io>
+Message-ID: <20200720231048.35f0aa60@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb5886fd739f47d811ea0d3f595d50250de5646
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Dick,
 
-The init script S20urandom is used to preserve the kernel's RNG
-seed between reboots. This functionality is not required for the
-package "initscripts". Further there are use-cases where this script
-should not be installed at all (e.g. systems that only have read-only
-partitions), but that's currently not possible as the script is
-a mandatory part of the package "initscripts".
+On Sun, 19 Jul 2020 18:08:13 +0000
+Dick Olsson <hi@senzilla.io> wrote:
 
-Let's move the script into its own package "urandom-scripts" and select it,
-if the default skeleton is enabled. This maintains backward-compatibility
-and allows to deselect it.
+> One of the main reasons one would use EDK2 and UEFI on a AArch64 is for
+> different standards compliance scenarios. The most prevalent standards in this
+> space are:
+> 
+> * Server Base System Architecture (SBSA) for hardware platforms
+> * Server Base Boot Requirement (SBBR) for bootloader firmware
+> 
+> This series introduces a new generic SBSA board called aarch64-sbsa which can
+> be used by any configuration providing SBBR firmware.
+> 
+> Three of the four configurations in this series implement SBBR firmware:
+> 
+> 1. aarch_efi_defconfig: EDK2 as stand-alone flash device for QEMU Virt
+> 2. qemu_aarch64_virt_sbbr_defconfig: EDK2 as ATF BL33 for QEMU Virt
+> 3. qemu_aarch64_sbsa_sbbr_defconfig: EDK2 as ATF BL33 for QEMU SBSA
+> 4. arm_foundationv8_sbbr_defconfig: EDK2 as ATF BL33 for ARM FVP
 
-Signed-off-by: Christoph M??llner <christoph.muellner@theobroma-systems.com>
-[yann.morin.1998 at free.fr:
-  - extend help text
-  - default y if initscripts (instead of skeleton default)
-  - allow use with openRC, but not systemd
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/Config.in                                          |  1 +
- package/urandom-scripts/Config.in                          | 10 ++++++++++
- package/{initscripts/init.d => urandom-scripts}/S20urandom |  0
- package/urandom-scripts/urandom-scripts.mk                 | 12 ++++++++++++
- 4 files changed, 23 insertions(+)
+I must say my knowledge of SBBR/SBBA is very limited, but I'm confused
+by the addition of all those configurations.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7ab1112644..e6500123f6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2291,6 +2291,7 @@ menu "Security"
- 	source "package/selinux-python/Config.in"
- 	source "package/semodule-utils/Config.in"
- 	source "package/setools/Config.in"
-+	source "package/urandom-scripts/Config.in"
- endmenu
- 
- menu "Shell and utilities"
-diff --git a/package/urandom-scripts/Config.in b/package/urandom-scripts/Config.in
-new file mode 100644
-index 0000000000..987e442e22
---- /dev/null
-+++ b/package/urandom-scripts/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_URANDOM_SCRIPTS
-+	bool "urandom-initscripts"
-+	default y if BR2_PACKAGE_INITSCRIPTS
-+	depends on !BR2_PACKAGE_SYSTEMD
-+	help
-+	  Initscript to preserve the random seed between reboots.
-+
-+	  WARNING: this is a poor fit to try and get high-quality
-+	  entropy at boot. There are better ways, like haveged, or
-+	  rng-tools.
-diff --git a/package/initscripts/init.d/S20urandom b/package/urandom-scripts/S20urandom
-similarity index 100%
-rename from package/initscripts/init.d/S20urandom
-rename to package/urandom-scripts/S20urandom
-diff --git a/package/urandom-scripts/urandom-scripts.mk b/package/urandom-scripts/urandom-scripts.mk
-new file mode 100644
-index 0000000000..2c09728c46
---- /dev/null
-+++ b/package/urandom-scripts/urandom-scripts.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# urandom-scripts
-+#
-+################################################################################
-+
-+define URANDOM_SCRIPTS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(URANDOM_SCRIPTS_PKGDIR)/S20urandom \
-+		$(TARGET_DIR)/etc/init.d/S20urandom
-+endef
-+
-+$(eval $(generic-package))
+First of all, Buildroot doesn't really have a concept of a "board"
+separated from a defconfig. It seems like you believe you have created
+the support for a board by creating board/aarch64-sbsa/, but really the
+support for a board in Buildroot is mainly a defconfig. So here, you
+have adjusted one board configuration and created 3 new ones.
+
+What is the Qemu SBSA platform compared to the QEMU Virt one ? Why
+would we want qemu_aarch64_virt_sbbr_defconfig and
+qemu_aarch64_sbsa_sbbr_defconfig ?
+
+What makes these platform Qemu specific ? The fact that we do build
+EDK2, which is the firmware, and therefore is obviously
+board/platform-specific ? If that's the case how is EDK2 useful on the
+aarch64_efi case, which is a cross-platform defconfig that should work
+on any EFI-capable AArch64 system ?
+
+I know, lots of questions there. Just trying to figure out how things
+work, and what is the most relevant for Buildroot to handle this.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
