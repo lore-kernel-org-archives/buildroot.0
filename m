@@ -1,195 +1,306 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 22:51:14 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/sqlite: security
- bump to version 3.32.3
-Message-ID: <20200720204752.468CF87D27@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Jul 2020 22:56:19 +0200
+Subject: [Buildroot] [PATCH 2/8] boot/edk2: new package
+In-Reply-To: <20200719180727.28202-3-hi@senzilla.io>
+References: <20200719180727.28202-1-hi@senzilla.io>
+ <20200719180727.28202-3-hi@senzilla.io>
+Message-ID: <20200720225619.72658053@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50e8194e4a9e59f225d0f2e77abf6b279079025e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+Hello Dick,
 
-Fixes the following CVEs:
+Against, thanks for your contribution, glad to see EDK2 being packaged
+in Buildroot.
 
-- CVE-2019-19923 (Fixed in 3.31.0)
+On Sun, 19 Jul 2020 18:09:25 +0000
+Dick Olsson <hi@senzilla.io> wrote:
 
-SQLite is vulnerable to denial-of-service condition because of a NULL
-pointer dereferencing while handling `SELECT DISTINCT`statements.
+> diff --git a/boot/Config.in b/boot/Config.in
+> index b3adbfc8bc..1999d1ef7a 100644
+> --- a/boot/Config.in
+> +++ b/boot/Config.in
+> @@ -5,6 +5,7 @@ source "boot/at91bootstrap/Config.in"
+>  source "boot/at91bootstrap3/Config.in"
+>  source "boot/at91dataflashboot/Config.in"
+>  source "boot/arm-trusted-firmware/Config.in"
+> +source "boot/edk2/Config.in"
+>  source "boot/barebox/Config.in"
+>  source "boot/binaries-marvell/Config.in"
+>  source "boot/boot-wrapper-aarch64/Config.in"
 
-- CVE-2019-19924 (Fixed in 3.31.0)
+Alphabetic ordering is not correct here.
 
-The SQLite mishandles certain SQL commands due to improper error
-handling by ` sqlite3WindowRewrite() ` function.
+> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+> index b1ca5d7ea1..fdb469bb5e 100644
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE
+>  	bool "ARM Trusted Firmware (ATF)"
+>  	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
+> -		   BR2_TARGET_UBOOT
+> +           BR2_TARGET_UBOOT
 
-- CVE-2020-13435 (Fixed in 3.32.1)
+This is a spurious change, should not be part of this patch.
 
-SQLite is vulnerable to denial-of-service (DoS) due to improper handling
-of query rewriting. An attacker could exploit this vulnerability by
-supplying a system with maliciously crafted input.
+>  	help
+>  	  Enable this option if you want to build the ATF for your ARM
+>  	  based embedded device.
+> diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+> new file mode 100644
+> index 0000000000..76b47f2fc5
+> --- /dev/null
+> +++ b/boot/edk2/Config.in
+> @@ -0,0 +1,59 @@
+> +config BR2_TARGET_EDK2
+> +	bool "EDK2"
 
-- CVE-2020-13632 (Fixed in 3.32.0)
+	bool "edk2"
 
-SQLite is vulnerable to denial-of-service (DoS) due to improper pointer
-management in the FTS3 virtual table module. An attacker could exploit
-this vulnerability by supplying a system with maliciously crafted input.
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
 
-- CVE-2020-13434 (Fixed in 3.32.1)
 
-SQLite is vulnerable to denial-of-service (DoS) due to improper handling
-of floating-point operations. An attacker could exploit this
-vulnerability by supplying a system with maliciously crafted input.
+Should there be some architecture dependency here ?
 
-- CVE-2020-13871 (Fixed in 3.32.3)
+> +	help
+> +	  EDK II is a modern, feature-rich, cross-platform firmware
+> +	  development environment for the UEFI and PI specifications.
+> +
+> +	  https://github.com/tianocore/tianocore.github.io/wiki/EDK-II
+> +
+> +if BR2_TARGET_EDK2
+> +
+> +config BR2_TARGET_EDK2_DEBUG
+> +    bool "Debug build"
+> +    help
+> +      Use the debug build type.
+> +
+> +choice
+> +    prompt "Platform"
+> +    default BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU
 
-SQLite 3.32.2 has a use-after-free in resetAccumulator in select.c
-because the parse tree rewrite for window functions is too late.
+Do we really need an explicit list of platforms here? How many
+platforms can there be? For example in U-Boot or ATF, we have a
+free-form string to indicate the platform to build for.
 
-- CVE-2020-13630 (Fixed in 3.32.0)
+Of course, if the number of platforms is always going to be strictly
+limited to a finite set, having an explicit "choice" is fine, but if
+not, we want this to be a free-form string.
 
-SQLite is vulnerable to denial-of-service (DoS) due to a use after free
-issue in the FTS3 virtual table module. An attacker could exploit this
-vulnerability by supplying a system with maliciously crafted input.
+> diff --git a/boot/edk2/edk2.hash b/boot/edk2/edk2.hash
+> new file mode 100644
+> index 0000000000..e9c7ac06f1
+> --- /dev/null
+> +++ b/boot/edk2/edk2.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 251520730b53ec7d686fb07aabf0bdec0d8721ac3ca59fd3e6df5dde64f1d715  edk2-edk2-stable202005.tar.gz
 
-- CVE-2020-15358 (Fixed in 3.32.3)
+We want the hash of the license file as well.
 
-SQLite is vulnerable to a heap-based buffer overflow flaw in part of an
-optimization feature. An attacker able to issue specially crafted
-queries could cause the application to crash, resulting in a
-denial-of-service (DoS).
+> diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+> new file mode 100644
+> index 0000000000..050b5703ad
+> --- /dev/null
+> +++ b/boot/edk2/edk2.mk
+> @@ -0,0 +1,111 @@
+> +EDK2_VERSION = edk2-stable202005
+> +EDK2_SITE = https://github.com/tianocore/edk2
+> +EDK2_SITE_METHOD = git
 
-- CVE-2020-9327 (Fixed in 3.32.0)
+Could you make this:
 
-SQLite is vulnerable to a Null pointer dereference flaw. A remote
-attacker able to issue specially crafted SQL statements may be able to
-cause a segmentation fault and application crash, resulting in a
-denial-of-service (DoS).
+EDK2_VERSION = 202005
+EDK2_SITE = $(call github,tianocore,edk2,edk2-stable$(EDK2_VERSION))
 
-- CVE-2019-19645 (Fixed in 3.31.0)
+Two changes:
 
-It was discovered that SQLite contains an denial-of-service (DoS)
-vulnerability. An attacker could exploit this to trigger an infinite
-recursion resulting in excessive resource consumption leading to a DoS
-condition.
+ - Use our "github" macro instead of fetching from Git
 
-- CVE-2019-19926 (Fixed in 3.31.0)
+ - Have a <pkg>_VERSION variable that really only contains the version.
+   Indeed, even if release-monitoring.org doesn't yet track edk2, if it
+   does in the future, it will track its version to be just YYYYMM.
 
-The SQLite allows denial-of-service attack due to improper input
-validation of user-supplied input.
+> +EDK2_LICENSE = BSD-2-Clause
+> +EDK2_LICENSE_FILE = License.txt
+> +EDK2_DEPENDENCIES = host-python3 host-acpica
+> +
+> +# The EDK2 build system is rather special, so we're resorting to using its
+> +# own Git submodules in order to include certain build dependencies.
+> +EDK2_GIT_SUBMODULES = YES
 
-- CVE-2020-11655 (Fixed in 3.32.0)
+Gaaah, so you can't use the "github" macro above in fact :-/ Just
+curious, what are those submodules ?
 
-SQLite contains a memory corruption vulnerability. Successfully
-exploiting this issue may allow attackers to cause a denial-of-service
-(DoS). This allows an attacker to cause SQLite to crash by issuing a
-crafted SQL query to the database.
+> +
+> +EDK2_INSTALL_IMAGES = YES
+> +
+> +ifeq ($(BR2_aarch64),y)
+> +EDK2_ARCH = AARCH64
+> +endif
 
-- CVE-2019-19925 (Fixed in 3.31.0)
+So it's only supported on AArch64 ?
 
-The INSERT statement fails when the zip file path is `NULL`.
+> +ifeq ($(BR2_TARGET_EDK2_DEBUG),y)
+> +EDK2_BUILD_TYPE = DEBUG
+> +else
+> +EDK2_BUILD_TYPE = RELEASE
+> +endif
+> +
+> +# EDk2 can be built with CLANG or GCC >= 5. But since Buildroot currently
+> +# only support GCC toolchains this option is assumed for now.
+> +EDK2_TOOLCHAIN_TYPE = GCC5
 
-- CVE-2019-19242 (Fixed in 3.31.0)
+So it can be hardcoded in the build command line, no need for a
+separate variable.
 
-SQLite is vulnerable to a denial-of-service (DoS). An attacker could
-exploit this vulnerability by supplying a maliciously crafted query to
-cause an application crash.
+> +
+> +# Packages path.
+> +#
+> +# The EDK2 build system will, for some platforms, depend on binary outputs
+> +# from other bootloader packages. Those dependencies need to be in the path
+> +# for the EDK2 build system, so we define this special directory here.
+> +EDK2_OUTPUT_BASE = $(BINARIES_DIR)/edk2
+> +
+> +ifeq ($(BR2_PACKAGE_HOST_EDK2_PLATFORMS),y)
+> +EDK2_PACKAGES_PATH = $(@D):$(EDK2_OUTPUT_BASE):$(BUILD_DIR)/host-edk2-platforms-$(EDK2_PLATFORMS_VERSION)
 
-- CVE-2019-19244 (Fixed in 3.31.0)
+We don't really like having one package use the BUILD_DIR of another
+package. Can you make host-edk2-platforms install its platform
+definitions in $(HOST_DIR)/usr/share/edk2-platforms/ instead, and use
+it from there ?
 
-SQLite is vulnerable to a denial-of-service. An attacker could exploit
-this vulnerability by providing a crafted SELECT statement to the SQL
-server, resulting in an application crash.
+> +else
+> +EDK2_PACKAGES_PATH = $(@D):$(EDK2_OUTPUT_BASE)
+> +endif
+> +
+> +# Platform name configuration.
+> +#
+> +# Defining EDK2_FD_NAME is important. This variable may be used by other
+> +# bootloaders (e.g. ATF) as they build firmware packages based on this file.
 
-- CVE-2020-13631 (Fixed in 3.32.0)
+Be careful, using variables defined by one package in another package
+is sometimes problematic.
 
-SQLite is vulnerable to data manipulation due to improper management of
-virtual tables. An attacker could exploit this vulnerability by
-supplying a system with maliciously crafted input.
+> +#
+> +# However, the case of the QEMU SBSA platform is a bit unique as there are
+> +# different implicit assumptions on how this firmware should be packaged
+> +# and executed with ATF and the SBSA reference machine for QEMU.
+> +
+> +ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU),y)
+> +EDK2_PACKAGE_NAME = ArmVirtPkg
+> +EDK2_PLATFORM_NAME = ArmVirtQemu
+> +EDK2_FD_NAME = QEMU_EFI
+> +
+> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL),y)
+> +EDK2_PACKAGE_NAME = ArmVirtPkg
+> +EDK2_PLATFORM_NAME = ArmVirtQemuKernel
+> +EDK2_FD_NAME = QEMU_EFI
+> +
+> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64),y)
+> +EDK2_DEPENDENCIES += host-edk2-platforms
+> +EDK2_PACKAGE_NAME = Platform/ARM/VExpressPkg
+> +EDK2_PLATFORM_NAME = ArmVExpress-FVP-AArch64
+> +EDK2_FD_NAME = FVP_AARCH64_EFI
+> +
+> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA),y)
+> +EDK2_DEPENDENCIES += host-edk2-platforms arm-trusted-firmware
+> +EDK2_PACKAGE_NAME = Platform/Qemu/SbsaQemu
+> +EDK2_PLATFORM_NAME = SbsaQemu
+> +EDK2_PRE_CONFIGURE_HOOKS += EDK2_OUTPUT_QEMU_SBSA
+> +endif
+> +
+> +# This will create the package path structure that EDK2 expect when building
+> +# flash devices for QEMU SBSA.
+> +define EDK2_OUTPUT_QEMU_SBSA
+> +	mkdir -p $(EDK2_OUTPUT_BASE)/Platform/Qemu/Sbsa && \
 
-- CVE-2020-11656 (Fixed in 3.32.0)
+No need for the &&, just two separate commands will do fine.
 
-SQLite contains a Use-After-Free vulnerability. Successfully exploiting
-this issue may allow attackers to cause a denial-of-service (DoS). This
-allows an attacker to cause SQLite to crash by issuing a crafted SQL
-query to the database.
+> +	ln -srf $(BINARIES_DIR)/{bl1.bin,fip.bin} $(EDK2_OUTPUT_BASE)/Platform/Qemu/Sbsa/
+> +endef
+> +
+> +# Make build variables.
+> +EDK2_MAKE_OPTS += -C $(@D)/BaseTools
+> +EDK2_MAKE_TARGETS += \
+> +$(EDK2_TOOLCHAIN_TYPE)_$(EDK2_ARCH)_PREFIX="$(TARGET_CROSS)" \
+> +build -a $(EDK2_ARCH) -t $(EDK2_TOOLCHAIN_TYPE) -b $(EDK2_BUILD_TYPE) \
+> +-p $(EDK2_PACKAGE_NAME)/$(EDK2_PLATFORM_NAME).dsc $(EDK2_BUILD_OPTS) all
 
-- CVE-2019-19880 (Fixed in 3.31.0)
+This is difficult to read and is not a list of make targets.
 
-SQLite is vulnerable to denial-of-service (DoS) due to the mismanagement
-of memory resources. A remote attacker could cause a victim's instance
-of the application to crash by submitting crafted request that will lead
-to the application parsing problematic integer values.
+> +
+> +define EDK2_BUILD_CMDS
+> +	export WORKSPACE=$(@D) && \
+> +	export PACKAGES_PATH=$(EDK2_PACKAGES_PATH) && \
+> +	export PYTHON_COMMAND=$(HOST_DIR)/bin/python3 && \
+> +	export IASL_PREFIX=$(BUILD_DIR)/host-acpica-$(ACPICA_VERSION)/generate/unix/bin/ && \
 
-- CVE-2019-20218 (Fixed in 3.31.0)
+Are you sure you need to export all those variables ?
 
-SQLite is vulnerable to denial-of-service (DoS) due to improper
-exception handling which could lead to unwinding of the `WITH` stack
-following parsing errors. An attacker could exploit this vulnerability
-by supplying a system with maliciously crafted input.
+Again, we don't like to point to the build directory of other packages:
+acpica should have been installed to $(HOST_DIR).
 
-- CVE-2019-19603 (Fixed in 3.31.0)
+> +	mkdir -p $(EDK2_OUTPUT_BASE) && \
+> +	source $(@D)/edksetup.sh && \
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(EDK2_MAKE_OPTS) && $(EDK2_MAKE_TARGETS)
+> +endef
 
-It was discovered that SQLite contains a denial-of-service (DoS)
-vulnerability. An authenticated attacker could exploit this
-vulnerability by creating tables with the same name as shadow table
-names.
+Perhaps:
 
-- CVE-2019-19959 (Fixed in 3.31.0)
+define EDK2_BUILD_CMDS
+	mkdir -p $(EDK2_OUTPUT_BASE)
+	WORKSPACE=$(@D) \
+	PACKAGE_PATH=$(EDK2_PACKAGES_PATH) \
+	PYTHON_COMMAND=$(HOST_DIR)/bin/python3 \
+	IASL_PREFIX=$(HOST_DIR)/bin \
+	source $(@D)/edksetup.sh && \
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/BaseTools \
+		GCC5_$(EDK2_ARCH)_PREFIX="$(TARGET_CROSS)" \
+		build \
+		-a $(EDK2_ARCH) \
+		-t GCC5 \
+		-b $(EDK2_BUILD_TYPE) \
+		-p $(EDK2_PACKAGE_NAME)/$(EDK2_PLATFORM_NAME).dsc \
+		all
+endef
 
-SQLite is vulnerable to denial-of-service (DoS) due to the mismanagement
-of system memory resources. A remote attacker could cause a victim's
-instance of the application to crash by causing it to process a SQL
-statement that references a maliciously crafted file name.
+> +# Location of the compiled flash device files is not consistent between
+> +# platform descriptions. So this install command have to test for the two
+> +# different locations.
+> +EDK2_FV1 = $(@D)/Build/$(EDK2_PLATFORM_NAME)/$(EDK2_BUILD_TYPE)_$(EDK2_TOOLCHAIN_TYPE)/FV
+> +EDK2_FV2 = $(@D)/Build/$(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)/$(EDK2_BUILD_TYPE)_$(EDK2_TOOLCHAIN_TYPE)/FV
+> +
+> +define EDK2_INSTALL_IMAGES_CMDS
+> +	if test -d $(EDK2_FV1); then \
+> +		cp $(EDK2_FV1)/*.fd $(BINARIES_DIR)/; \
+> +	elif test -d $(EDK2_FV2); then \
+> +		cp $(EDK2_FV2)/*.fd $(BINARIES_DIR)/; \
+> +	fi
+> +endef
 
-- CVE-2019-19646 (Fixed in 3.31.0)
+Perhaps:
 
-SQLite is vulnerable to a denial-of-service (DoS). An attacker could
-exploit this vulnerability by supplying malicious SQL in order to crash
-the application.
+EDK2_INSTALL_PATHS = \
+	$(@D)/Build/$(EDK2_PLATFORM_NAME)/$(EDK2_BUILD_TYPE)_$(EDK2_TOOLCHAIN_TYPE)/FV \
+	$(@D)/Build/$(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)/$(EDK2_BUILD_TYPE)_$(EDK2_TOOLCHAIN_TYPE)/FV
 
-- CVE-2019-19317 (Fixed in 3.31.0)
+define EDK2_INSTALL_IMAGES_CMDS
+	$(foreach dir,$(wildcard $(EDK2_INSTALL_PATHS),\
+		cp $(dir)/* $(BINARIES_DIR)
+	)
+endef
 
-SQLite contains a denial-of-service (DoS) vulnerability due to incorrect
-logic in name lookups. An attacker could exploit this to cause a
-application crash.
+or something along those lines (I haven't tested the above code).
 
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-CC: Peter Korsgard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a231f01e4b44c5615b5947054b25abbca9c983f2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.hash | 6 ++++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Thanks!
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index e8e6a67051..162b52d607 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,8 @@
- # From https://www.sqlite.org/download.html
--sha1  0c30f5b22152a8166aa3bebb0f4bc1f3e9cc508b  sqlite-autoconf-3310100.tar.gz
-+sha1  ea14ef2dc4cc7fcbc5ebbb018d3a03faa3a41cb4  sqlite-autoconf-3320300.tar.gz
-+
- # Calculated based on the hash above
--sha256  62284efebc05a76f909c580ffa5c008a7d22a1287285d68b7825a2b6b51949ae  sqlite-autoconf-3310100.tar.gz
-+sha256  a31507123c1c2e3a210afec19525fd7b5bb1e19a6a34ae5b998fbd7302568b66  sqlite-autoconf-3320300.tar.gz
-+
- # Locally calculated
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 3283d40cb1..c8b9ba3150 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3310100
-+SQLITE_VERSION = 3320300
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2020
- SQLITE_LICENSE = Public domain
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
