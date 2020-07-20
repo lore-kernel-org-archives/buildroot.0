@@ -1,34 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Jul 2020 22:48:40 +0200
-Subject: [Buildroot] [PATCH v1 3/3] package/uredir: new package
-In-Reply-To: <20200714223620.4837f180@windsurf.home>
-References: <20200714202407.23575-1-ps.report@gmx.net>
- <20200714202407.23575-3-ps.report@gmx.net>
- <20200714223620.4837f180@windsurf.home>
-Message-ID: <20200720224840.1259502e@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Jul 2020 22:50:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to version
+ 2.2.0
+Message-ID: <20200720205019.2100604-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fix CVE-2020-15103 - Integer overflow due to missing input sanitation in
+rdpegfx channel
 
-On Tue, 14 Jul 2020 22:36:20 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.2.0
 
-> On Tue, 14 Jul 2020 22:24:07 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > The provided download hash ([1]) differes from actual one, so use
-> > the locally calculated one.
->
-> This is quite worrying. Did you report this upstream ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Re-checked, it was my fault, did take the wrong download url/method, using
-the right one fixes the match with the provided md5 sum, will re-send...
-
-Regards,
-Peter
-
->
-> Thomas
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 6c52d38a4f..8217a2106c 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.1.2.tar.gz.sha256
+-sha256  f33bc6aef83b8ad3cbf2cdbc82dcfa980ec2b051efb72650f6f2365d55b79b8d  freerdp-2.1.2.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.2.0.tar.gz.sha256
++sha256  19b30759e324ce7a9767af880116a4c571761e9ad9c5d6c98c5b302ff8c24c6c  freerdp-2.2.0.tar.gz
+ 
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 33b83922cc..4c804c136f 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.1.2
++FREERDP_VERSION = 2.2.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
+-- 
+2.27.0
