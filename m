@@ -1,119 +1,81 @@
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Mon, 20 Jul 2020 14:38:36 +0200
-Subject: [Buildroot] [PATCH] package/dbus-cpp: new patch to fix dbus c++
- threading issue
-In-Reply-To: <20200712111247.118e8aae@windsurf.home>
-References: <20200706153355.429941-1-kamel.bouhara@bootlin.com>
- <20200712111247.118e8aae@windsurf.home>
-Message-ID: <20200720123836.GB3477@kb-xps>
+From: Marco Oliverio <marco.oliverio@tanaza.com>
+Date: Mon, 20 Jul 2020 15:25:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hostapd: add support for
+ hostapd_cli
+In-Reply-To: <CANQCQpaFFBLeNcKz95AQjGkadMM9k6_iS0JuZ1eBD7hpb0yD6g@mail.gmail.com>
+References: <20200720102247.9780-1-marco.oliverio@tanaza.com>
+ <CANQCQpaFFBLeNcKz95AQjGkadMM9k6_iS0JuZ1eBD7hpb0yD6g@mail.gmail.com>
+Message-ID: <CACUc26x=jyd_vyTnECNtc=PdjhAogy4cvsJrDM8rzKWaCM9gjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 12, 2020 at 11:12:47AM +0200, Thomas Petazzoni wrote:
-> Hello Kamel,
->
+Yes you're right.
+That's my fault.
+I was working on a custom version and I didn't check upstream/master
+properly.
 
-Hello Thomas,
+Never mind the patch.
+Marco
 
-> On Mon,  6 Jul 2020 17:33:55 +0200
-> Kamel Bouhara <kamel.bouhara@bootlin.com> wrote:
+On Mon, Jul 20, 2020 at 1:47 PM Matthew Weber <matthew.weber@collins.com>
+wrote:
+
+> Marco,
 >
-> > From: https://sourceforge.net/p/dbus-cplusplus/patches/18/
+>
+> On Mon, Jul 20, 2020 at 5:24 AM Marco Oliverio
+> <marco.oliverio@tanaza.com> wrote:
 > >
-> > dispatcher.h has invalid template code. When DBUS_HAS_RECURSIVE_MUTEX is
-> > MutexFreeFn and MutexLockFn become of type void and the code is valid.
-> > See lines 232-235.
-> > However, when a user #includes dispatcher.h directly or indirectly the
-> > macro DBUS_HAS_RECURSIVE_MUTEX is undefined. This makes the above
-> > function pointers defined of type bool and but then _init_threading
-> > function call in line 259 becomes invalid, as it passes function
-> > pointers to mutex_free and mutex_lock which or of type void.
-> >
-> > Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+> > Signed-off-by: Marco Oliverio <marco.oliverio@tanaza.com>
 > > ---
-> >  .../dbus-cpp/0004-dbus-c++-threading.patch    | 45 +++++++++++++++++++
-> >  1 file changed, 45 insertions(+)
-> >  create mode 100644 package/dbus-cpp/0004-dbus-c++-threading.patch
+> >  package/hostapd/Config.in  | 6 ++++++
+> >  package/hostapd/hostapd.mk | 8 ++++++++
+> >  2 files changed, 14 insertions(+)
 > >
-> > diff --git a/package/dbus-cpp/0004-dbus-c++-threading.patch b/package/dbus-cpp/0004-dbus-c++-threading.patch
-> > new file mode 100644
-> > index 0000000000..502320ad09
-> > --- /dev/null
-> > +++ b/package/dbus-cpp/0004-dbus-c++-threading.patch
-> > @@ -0,0 +1,45 @@
+> > diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+> > index 54d2086c09..185fa04626 100644
+> > --- a/package/hostapd/Config.in
+> > +++ b/package/hostapd/Config.in
+> > @@ -111,4 +111,10 @@ comment "netlink-based VLAN support needs a
+> toolchain w/ threads"
+> >
+> >  endif # BR2_PACKAGE_HOSTAPD_VLAN
+> >
+> > +config BR2_PACKAGE_HOSTAPD_HOSTAPD_CLI
+> > +       bool "Install hostapd_cli"
+> > +       default n
+> > +       help
+> > +         Install hostapd command-line interface
+> > +
+> >  endif
+> > diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+> > index b94a0e4578..d65e4b03fd 100644
+> > --- a/package/hostapd/hostapd.mk
+> > +++ b/package/hostapd/hostapd.mk
+> > @@ -144,4 +144,12 @@ define HOSTAPD_INSTALL_TARGET_CMDS
+> >                 $(TARGET_DIR)/etc/hostapd.conf
+> >  endef
+> >
+> > +ifeq ($(BR2_PACKAGE_HOSTAPD_HOSTAPD_CLI),y)
+> > +define HOSTAPD_INSTALL_TARGET_CMDS +=
 >
-> Thanks for your patch, but the patch itself needs a proper commit
-> title, commit description and Signed-off-by. See
-> https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+> Future note, instead of the += you'd need to define a new variable and
+> then call it in the HOSTAPD_INSTALL_TARGET_CMDS.
 >
-
-Ok.
-
-> Also, under what conditions does this build failure occurs ? We don't
-> have any build failures for the dbus-cpp package in our autobuilders.
+> > +
+> > +       $(INSTALL) -m 0755 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd_cli \
+> > +               $(TARGET_DIR)/usr/sbin/hostapd_cli
 >
-
-Actually, I have an application that depends on dbus-c++ and fails with
-the following errors:
-
-...
-In file included from .../buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/dbus-c++-1/dbus-c++/server.h:34,
-                 from .../buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/dbus-c++-1/dbus-c++/dbus.h:33,
-                 from src/DbusComm/DBusGlobal.h:3,
-                 from src/DbusComm/DBusGlobal.cpp:1:
- .../buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/dbus-c++-1/dbus-c++/dispatcher.h: In static member function ?static void DBus::Threading<Mx, Cv>::init()?:
- .../buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/dbus-c++-1/dbus-c++/dispatcher.h:262:5: error: no matching function for call to ?_init_threading(DBus::Mutex* (&)(), void (&)(DBus::Mutex*), void (&)(DBus::Mutex*), void (&)(DBus::Mutex*), DBus::CondVar* (&)(), void (&)(DBus::CondVar*), void (&)(DBus::CondVar*, DBus::Mutex*), bool (&)(DBus::CondVar*, DBus::Mutex*, int), void (&)(DBus::CondVar*), void (&)(DBus::CondVar*))?
-     );
-     ^
- .../buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/dbus-c++-1/dbus-c++/dispatcher.h:247:13: note: candidate: ?void DBus::_init_threading()?
- void DXXAPI _init_threading();
-             ^~~~~~~~~~~~~~~
-...
-
-Which after some googling points me to the following thread:
-
-https://sourceforge.net/p/dbus-cplusplus/patches/18/
-
-The proposed patch applies to libdbus-c++ which is part of the dbus-cpp
-package here. Applying this patch also fixed my application build issue.
-
-> Finally, it looks like Ubuntu or Debian have a 5.0.x version of
-> dbus-cpp, and we're at 0.9.0. It's really unclear what site really is
-> the official upstream for this project.
+> It looks like the  HOSTAPD_INSTALL_TARGET_CMDS stage already is
+> installing the cli tool with the main service and default conf file.
+> Do you have an example where that wasn't working?
 >
-> The SourceForge project points to a Gitorious Git repository, but
-> Gitorious has been shut down a few years ago. Then there is
-> https://github.com/lib-cpp/dbus-cpp, but is that the same project ?
+> Regards,
+> Matt
 >
-
-Im completely agree but the sf project seems the more relevant.
-
-> Hm according to
-> https://www.freedesktop.org/wiki/Software/DBusBindings/, dbus-c++
-> (which we call dbus-cpp in Buildroot) is different from dbus-cpp. They
-> also say that dbus-c++ has been inactive since 2011, and shouldn't be
-> used.
->
-> Perhaps we should instead remove this package entirely ? Do you have
-> the possibility of moving to a properly maintained D-Bus C++ binding ?
->
-
-I have several modules of my application dependending on it yet.
-
-Thanks.
-
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200720/cfa097bd/attachment.html>
