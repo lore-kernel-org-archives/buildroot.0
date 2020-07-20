@@ -1,64 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 08:16:14 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- package/gstreamer1/gst1-plugins-good: Enable GUDEV for V4L2 if available
-Message-ID: <20200720064220.9B5D6811AD@busybox.osuosl.org>
+Date: Mon, 20 Jul 2020 08:11:15 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] core/pkg-infra: Add
+ per-package support in qmake infra
+Message-ID: <20200720064220.8DC4286D78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a5b9dc6f11bf6b61bfc86f07a2d871dc29d50f4
+commit: https://git.buildroot.net/buildroot/commit/?id=a2c9c59d5dcd396361e008f25ded8421d37a382a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Video4Linux2 plugins can udev for device probing and monitor.
-This greatly improves load time and monitoring performance.
+Qmake configured packages will, by default, use the absolute HostPrefix/Sysroot
+pathes set during configuration/building of qt5base for their install
+destinations.
+For the per-package host/staging infrastructure, this causes non-qt5base
+packages to litter the qt5base folders. In addition, buildroots target-install
+step subsequently fails because the respective files are missing from the
+per-package sysroot of the package itself.
 
-It also enables hotplug monitoring for cameras.
+Fortunately, qmake's built-in pathes can be overridden by placing a custom
+qt.conf next to the qmake binary. This is already used to facilitate SDK
+relocation. So for per-package path manipulation we can reuse that method, but
+need to change the host/sysroot values according to each per-package
+path.
 
-gstreamer is libglib2-based; libgudev is libnglib2-based. So they both
-have the same basic dependencies as liblib2 has, and thus propagating
-the dependencies of libgudev is not necessary (but might be confusing in
-the future, even though such a change is highly unlikely...)
-
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: drop useless 'rm -f' of generated file]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f50086e59fe997cdeb3da381cfdefc1bd41d305c)
+(cherry picked from commit 60e3a09693703f0c923322d39ce1210baf154983)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in            | 1 +
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 7 +++++++
- 2 files changed, 8 insertions(+)
+ package/pkg-qmake.mk           |  1 +
+ package/qt5/qt5.mk             | 14 ++++++++++++++
+ package/qt5/qt5base/qt5base.mk |  9 +--------
+ 3 files changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 20aebc473e..be77f5a82e 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -295,6 +295,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 	bool "v4l2"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-+	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_HAS_UDEV
- 	help
- 	  elements for Video 4 Linux
+diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+index 46d2b22d04..27727119d7 100644
+--- a/package/pkg-qmake.mk
++++ b/package/pkg-qmake.mk
+@@ -50,6 +50,7 @@ endif
+ #
+ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
++	$$(QT5_QT_CONF_FIXUP)
+ 	cd $$($(2)_BUILDDIR) && \
+ 	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
+ endef
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index f98a0a56e6..d6b995071b 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -11,5 +11,19 @@ QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)
  
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 6709f14cca..eed4bfe117 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -354,6 +354,13 @@ endif
+ include $(sort $(wildcard package/qt5/*/*.mk))
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2=enabled
-+# Enable use of gudev if available, for device probing and monitoring.
-+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libgudev
-+GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=enabled
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-gudev=disabled
++# The file "qt.conf" can be used to override the hard-coded paths that are
++# compiled into the Qt library. We need it to make "qmake" relocatable and
++# tweak the per-package install pathes
++define QT5_INSTALL_QT_CONF
++	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
++		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
++endef
++
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++define QT5_QT_CONF_FIXUP
++        $(QT5_INSTALL_QT_CONF)
++endef
 +endif
- else
- GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2=disabled
- endif
++
+ # Variable for other Qt applications to use
+ QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 42d77306cc..ec56287ed0 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -308,13 +308,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 	)
+ endef
+ 
+-# The file "qt.conf" can be used to override the hard-coded paths that are
+-# compiled into the Qt library. We need it to make "qmake" relocatable.
+-define QT5BASE_INSTALL_QT_CONF
+-	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
+-		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
+-endef
+-
+-QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_INSTALL_QT_CONF
++QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
+ 
+ $(eval $(qmake-package))
