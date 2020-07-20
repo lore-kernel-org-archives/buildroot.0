@@ -1,359 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 18:04:10 +0200
-Subject: [Buildroot] [git commit] package/ltris: bump to version 1.2
-Message-ID: <20200720160000.AF5BD873B9@busybox.osuosl.org>
+Date: Mon, 20 Jul 2020 18:03:28 +0200
+Subject: [Buildroot] [git commit] package/libzip: bump version to 1.7.3
+Message-ID: <20200720160000.A0E5A821BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f73c3097e91b6cb1653959b917285e6b8e825679
+commit: https://git.buildroot.net/buildroot/commit/?id=8a61f45137f461eb9c6a47d1220e1b7a3240fca1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
+Release notes: https://libzip.org/news/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Updated license hash due to copyright year bump:
+https://github.com/nih-at/libzip/commit/40098f0445599d53eb85254777734ccef6ce6915
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ltris/0001-fix-gcc5-build.patch | 308 --------------------------------
- package/ltris/ltris.hash                |   2 +-
- package/ltris/ltris.mk                  |   2 +-
- 3 files changed, 2 insertions(+), 310 deletions(-)
+ package/libzip/libzip.hash | 4 ++--
+ package/libzip/libzip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ltris/0001-fix-gcc5-build.patch b/package/ltris/0001-fix-gcc5-build.patch
-deleted file mode 100644
-index 66d0fa3df7..0000000000
---- a/package/ltris/0001-fix-gcc5-build.patch
-+++ /dev/null
-@@ -1,308 +0,0 @@
--Upstream patch to fix build with GCC 5
--
--Obtained from the LGames Subversion repository with the following command:
--svn diff -c164 svn://svn.code.sf.net/p/lgames/code/trunk/ltris
--
--Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
--
--Revision log message:
--------------------------------------------------------------------------
--r164 | kulkanie | 2015-05-16 05:48:02 -0300 (Sat, 16 May 2015) | 1 line
--
--removed all inline keywords
--------------------------------------------------------------------------
--
--Line added to LTris ChangeLog concerning the change:
--- removed all inline keywords to work with GCC 5 (2015/05/16 MS)
--
--Author: Michael Speck
--
--Index: src/sdl.c
--===================================================================
----- a/src/sdl.c	(revision 163)
--+++ b/src/sdl.c	(revision 164)
--@@ -244,7 +244,7 @@
-- #endif
-- 
-- /* return full path of bitmap */
---inline void get_full_bmp_path( char *full_path, char *file_name )
--+void get_full_bmp_path( char *full_path, char *file_name )
-- {
--     sprintf(full_path,  "%s/gfx/%s", SRC_DIR, file_name );
-- }
--@@ -330,7 +330,7 @@
-- /*
--     lock surface
-- */
---inline void lock_surf(SDL_Surface *sur)
--+void lock_surf(SDL_Surface *sur)
-- {
--     if (SDL_MUSTLOCK(sur))
--         SDL_LockSurface(sur);
--@@ -339,7 +339,7 @@
-- /*
--     unlock surface
-- */
---inline void unlock_surf(SDL_Surface *sur)
--+void unlock_surf(SDL_Surface *sur)
-- {
--     if (SDL_MUSTLOCK(sur))
--         SDL_UnlockSurface(sur);
--@@ -666,7 +666,7 @@
-- /*
--     lock font surface
-- */
---inline void lock_font(Font *fnt)
--+void lock_font(Font *fnt)
-- {
--     if (SDL_MUSTLOCK(fnt->pic))
--         SDL_LockSurface(fnt->pic);
--@@ -675,7 +675,7 @@
-- /*
--     unlock font surface
-- */
---inline void unlock_font(Font *fnt)
--+void unlock_font(Font *fnt)
-- {
--     if (SDL_MUSTLOCK(fnt->pic))
--         SDL_UnlockSurface(fnt->pic);
--@@ -905,7 +905,7 @@
-- /*
--     update rectangle (0,0,0,0)->fullscreen
-- */
---inline void refresh_screen(int x, int y, int w, int h)
--+void refresh_screen(int x, int y, int w, int h)
-- {
--     SDL_UpdateRect(sdl.screen, x, y, w, h);
-- }
--@@ -1055,7 +1055,7 @@
-- /*
--     lock surface
-- */
---inline void lock_screen()
--+void lock_screen()
-- {
--     if (SDL_MUSTLOCK(sdl.screen))
--         SDL_LockSurface(sdl.screen);
--@@ -1064,7 +1064,7 @@
-- /*
--     unlock surface
-- */
---inline void unlock_screen()
--+void unlock_screen()
-- {
--     if (SDL_MUSTLOCK(sdl.screen))
--         SDL_UnlockSurface(sdl.screen);
--@@ -1073,7 +1073,7 @@
-- /*
--     flip hardware screens (double buffer)
-- */
---inline void flip_screen()
--+void flip_screen()
-- {
--     SDL_Flip(sdl.screen);
-- }
--@@ -1132,7 +1132,7 @@
-- /*
--     get milliseconds since last call
-- */
---inline int get_time()
--+int get_time()
-- {
--     int ms;
--     cur_time = SDL_GetTicks();
--@@ -1148,7 +1148,7 @@
-- /*
--     reset timer
-- */
---inline void reset_timer()
--+void reset_timer()
-- {
--     last_time = SDL_GetTicks();
-- }
--Index: src/sdl.h
--===================================================================
----- a/src/sdl.h	(revision 163)
--+++ b/src/sdl.h	(revision 164)
--@@ -41,8 +41,8 @@
-- SDL_Surface* load_surf(char *fname, int f);
-- SDL_Surface* create_surf(int w, int h, int f);
-- void free_surf( SDL_Surface **surf );
---inline void lock_surf(SDL_Surface *sur);
---inline void unlock_surf(SDL_Surface *sur);
--+void lock_surf(SDL_Surface *sur);
--+void unlock_surf(SDL_Surface *sur);
-- void blit_surf(void);
-- void alpha_blit_surf(int alpha);
-- void fill_surf(int c);
--@@ -86,8 +86,8 @@
-- Font* load_fixed_font(char *fname, int off, int len, int w);
-- void free_font(Font **sfnt);
-- int  write_text(Font *sfnt, SDL_Surface *dest, int x, int y, char *str, int alpha);
---inline void lock_font(Font *sfnt);
---inline void unlock_font(Font *sfnt);
--+void lock_font(Font *sfnt);
--+void unlock_font(Font *sfnt);
-- SDL_Rect last_write_rect(Font *fnt);
-- int  text_width(Font *fnt, char *str);
-- 
--@@ -132,14 +132,14 @@
-- char** get_mode_names( int *count );
-- int  set_video_mode( Video_Mode mode );
-- void hardware_cap();
---inline void refresh_screen( int x, int y, int w, int h );
--+void refresh_screen( int x, int y, int w, int h );
-- void refresh_rects();
-- void add_refresh_rect(int x, int y, int w, int h);
-- int  wait_for_key();
-- void wait_for_click();
---inline void lock_screen();
---inline void unlock_screen();
---inline void flip_screen();
--+void lock_screen();
--+void unlock_screen();
--+void flip_screen();
-- void fade_screen( int type, int ms );
-- void take_screenshot( int i );
-- 
--@@ -148,8 +148,8 @@
-- SDL_Cursor* create_cursor( int width, int height, int hot_x, int hot_y, char *source );
-- 
-- /* timer */
---inline int get_time();
---inline void reset_timer();
--+int get_time();
--+void reset_timer();
-- 
-- #ifdef __cplusplus
-- };
--Index: src/tools.c
--===================================================================
----- a/src/tools.c	(revision 163)
--+++ b/src/tools.c	(revision 164)
--@@ -23,7 +23,7 @@
-- #include "ltris.h"
-- 
-- /* compares to strings and returns true if their first strlen(str1) chars are equal */
---inline int strequal( char *str1, char *str2 )
--+int strequal( char *str1, char *str2 )
-- {
--     if ( strlen( str1 ) != strlen( str2 ) ) return 0;
--     return ( !strncmp( str1, str2, strlen( str1 ) ) );
--@@ -30,7 +30,7 @@
-- }
-- 
-- /* set delay to ms milliseconds */
---inline void delay_set( Delay *delay, int ms )
--+void delay_set( Delay *delay, int ms )
-- {
--     delay->limit = ms;
--     delay->cur = 0;
--@@ -37,13 +37,13 @@
-- }
-- 
-- /* reset delay ( cur = 0 )*/
---inline void delay_reset( Delay *delay )
--+void delay_reset( Delay *delay )
-- {
--     delay->cur = 0;
-- }
-- 
-- /* check if times out and reset */
---inline int delay_timed_out( Delay *delay, int ms )
--+int delay_timed_out( Delay *delay, int ms )
-- {
--     delay->cur += ms;
--     if ( delay->cur >= delay->limit ) {
--@@ -56,12 +56,12 @@
-- }
-- 
-- /* set timer so that we have a time out next call of delay_timed_out() */
---inline void delay_force_time_out( Delay *delay )
--+void delay_force_time_out( Delay *delay )
-- {
--     delay->cur = delay->limit;
-- }
-- 
---inline void goto_tile( int *x, int *y, int d )
--+void goto_tile( int *x, int *y, int d )
-- {
--     /*  0 -up, clockwise, 5 - left up */
--     switch ( d ) {
--@@ -326,24 +326,24 @@
-- the target value until reached when counter_update() is called.
-- ====================================================================
-- */
---inline void counter_set( Counter *counter, double value )
--+void counter_set( Counter *counter, double value )
-- {
--     counter->value = value;
--     counter->approach = value;
-- }
---inline void counter_add( Counter *counter, double add )
--+void counter_add( Counter *counter, double add )
-- {
--     counter->value += add;
-- }
---inline double counter_get_approach( Counter counter )
--+double counter_get_approach( Counter counter )
-- {
--     return counter.approach;
-- }
---inline double counter_get( Counter counter )
--+double counter_get( Counter counter )
-- {
--     return counter.value;
-- }
---inline void counter_update( Counter *counter, int ms )
--+void counter_update( Counter *counter, int ms )
-- {
--     double change;
--     if ( counter->approach == counter->value ) return;
--Index: src/bowl.c
--===================================================================
----- a/src/bowl.c	(revision 163)
--+++ b/src/bowl.c	(revision 164)
--@@ -333,7 +333,7 @@
-- Set a tile contents and pixel contents.
-- ====================================================================
-- */
---inline void bowl_set_tile( Bowl *bowl, int x, int y, int tile_id )
--+void bowl_set_tile( Bowl *bowl, int x, int y, int tile_id )
-- {
--     int i, j = y * bowl->block_size;
--     bowl->contents[x][y] = tile_id;
--Index: src/tools.h
--===================================================================
----- a/src/tools.h	(revision 163)
--+++ b/src/tools.h	(revision 164)
--@@ -33,7 +33,7 @@
-- #define VEC_DIST( vec1, vec2 ) ( sqrt( ( vec1.x - vec2.x ) * ( vec1.x - vec2.x ) + ( vec1.y - vec2.y ) * ( vec1.y - vec2.y ) ) )
-- 
-- /* compares to strings and returns true if their first strlen(str1) chars are equal */
---inline int strequal( char *str1, char *str2 );
--+int strequal( char *str1, char *str2 );
-- 
-- /* delete lines */
-- void delete_lines( char **lines, int line_number );
--@@ -45,16 +45,16 @@
-- } Delay;
-- 
-- /* set delay to ms milliseconds */
---inline void delay_set( Delay *delay, int ms );
--+void delay_set( Delay *delay, int ms );
-- 
-- /* reset delay ( cur = 0 )*/
---inline void delay_reset( Delay *delay );
--+void delay_reset( Delay *delay );
-- 
-- /* check if time's out ( add ms milliseconds )and reset */
---inline int delay_timed_out( Delay *delay, int ms );
--+int delay_timed_out( Delay *delay, int ms );
-- 
-- /* set timer so that we have a time out next call of delay_timed_out() */
---inline void delay_force_time_out( Delay *delay );
--+void delay_force_time_out( Delay *delay );
-- 
-- /* return distance betwteen to map positions */
-- int get_dist( int x1, int y1, int x2, int y2 );
-diff --git a/package/ltris/ltris.hash b/package/ltris/ltris.hash
-index 25fc04c6cb..f696e3af17 100644
---- a/package/ltris/ltris.hash
-+++ b/package/ltris/ltris.hash
+diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
+index 1ca4828f09..a298b9aba9 100644
+--- a/package/libzip/libzip.hash
++++ b/package/libzip/libzip.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8f6a9e7719d22004aee153db29ffd9ca41c7a6cd87fc791591994eecc2e625a1  ltris-1.0.19.tar.gz
-+sha256  a7bc6c5fc6539b88505077a1b4580edc9b179ce0a6b829c58fbd9416cf456195  ltris-1.2.tar.gz
- sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
-diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
-index fb0d4c34d2..9b59613417 100644
---- a/package/ltris/ltris.mk
-+++ b/package/ltris/ltris.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256  a020dc1b17a79faa748e43a05f8605d65e403813e8e97ad3a300a90ddba097ac  libzip-1.7.1.tar.xz
+-sha256  af6d9141427cf40b7d1fa6d7f5473b06a7faa9f9b0a2ea588eb6ba7b2e1c8a9e  LICENSE
++sha256  a60473ffdb7b4260c08bfa19c2ccea0438edac11193c3afbbb1f17fbcf6c6132  libzip-1.7.3.tar.xz
++sha256  deae392de70503672793ee784d603bfa8069dcd5974a325dfbf91160f3a147d6  LICENSE
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
+index c30ad037c3..379eb2c5df 100644
+--- a/package/libzip/libzip.mk
++++ b/package/libzip/libzip.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LTRIS_SITE = http://downloads.sourceforge.net/lgames/ltris
--LTRIS_VERSION = 1.0.19
-+LTRIS_VERSION = 1.2
- LTRIS_LICENSE = GPL-2.0+
- LTRIS_LICENSE_FILES = COPYING
- 
+-LIBZIP_VERSION = 1.7.1
++LIBZIP_VERSION = 1.7.3
+ LIBZIP_SITE = https://libzip.org/download
+ LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
+ LIBZIP_LICENSE = BSD-3-Clause
