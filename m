@@ -1,44 +1,37 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 19 Jul 2020 20:48:48 -0300
-Subject: [Buildroot] [PATCH] package/bison: bump version to 3.6.4
-Message-ID: <20200719234848.18585-1-sergio.prado@e-labworks.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Jul 2020 08:14:44 +0200
+Subject: [Buildroot] [PATCH v6 19/28] core/pkg-infra: Add per-package
+ support in qmake infra
+In-Reply-To: <20200217212350.29750-20-anaumann@ultratronik.de> (Andreas
+ Naumann's message of "Mon, 17 Feb 2020 22:23:41 +0100")
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-20-anaumann@ultratronik.de>
+Message-ID: <87pn8qr9uz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also separate the fields in the hash file by two spaces.
+>>>>> "Andreas" == Andreas Naumann <anaumann@ultratronik.de> writes:
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/bison/bison.hash | 4 ++--
- package/bison/bison.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Qmake configured packages will, by default, use the absolute HostPrefix/Sysroot
+ > pathes set during configuration/building of qt5base for their install
+ > destinations.
+ > For the per-package host/staging infrastructure, this causes non-qt5base
+ > packages to litter the qt5base folders. In addition, buildroots target-install
+ > step subsequently fails because the respective files are missing from the
+ > per-package sysroot of the package itself.
 
-diff --git a/package/bison/bison.hash b/package/bison/bison.hash
-index 01ee17d76eee..9c3f32b4b4b6 100644
---- a/package/bison/bison.hash
-+++ b/package/bison/bison.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	27d05534699735dc69e86add5b808d6cb35900ad3fd63fa82e3eb644336abfa0	bison-3.4.2.tar.xz
-+sha256  8b13473b31ca7fcf65e5e8a74224368ffd5df19275602a9c9567ba393f18577d  bison-3.6.4.tar.xz
- # License files, locally calculated
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index 4cc635c445a9..b73e9163ad80 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BISON_VERSION = 3.4.2
-+BISON_VERSION = 3.6.4
- BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPL-3.0+
+ > Fortunately, qmake's built-in pathes can be overridden by placing a custom
+ > qt.conf next to the qmake binary. This is already used to facilitate SDK
+ > relocation. So for per-package path manipulation we can reuse that method, but
+ > need to change the host/sysroot values according to each per-package
+ > path.
+
+ > Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+
+Committed to 2020.05.x, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
