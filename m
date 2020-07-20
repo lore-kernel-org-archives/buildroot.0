@@ -1,9 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 Jul 2020 22:48:24 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/libuev: new package
+Date: Mon, 20 Jul 2020 22:48:25 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/uredir: new package
 In-Reply-To: <20200720204825.15826-1-ps.report@gmx.net>
 References: <20200720204825.15826-1-ps.report@gmx.net>
-Message-ID: <20200720204825.15826-2-ps.report@gmx.net>
+Message-ID: <20200720204825.15826-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +13,85 @@ To: buildroot@busybox.net
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
-  - no changes
+  - change download url to fix match with provided md5 sum
 ---
  DEVELOPERS                 |  1 +
  package/Config.in          |  1 +
- package/libuev/Config.in   |  6 ++++++
- package/libuev/libuev.hash |  4 ++++
- package/libuev/libuev.mk   | 15 +++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/libuev/Config.in
- create mode 100644 package/libuev/libuev.hash
- create mode 100644 package/libuev/libuev.mk
+ package/uredir/Config.in   |  9 +++++++++
+ package/uredir/uredir.hash |  4 ++++
+ package/uredir/uredir.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/uredir/Config.in
+ create mode 100644 package/uredir/uredir.hash
+ create mode 100644 package/uredir/uredir.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 422c665f27..a27cbd6927 100644
+index a27cbd6927..c83f273929 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2041,6 +2041,7 @@ F:	package/gstreamer1/gst1-validate/
- F:	package/gstreamer1/gstreamer1-editing-services/
- F:	package/iwd/
- F:	package/libevdev/
-+F:	package/libuev/
- F:	package/log4cplus/
- F:	package/postgresql/
- F:	package/python-colorzero/
+@@ -2050,6 +2050,7 @@ F:	package/qt5/
+ F:	package/quotatool/
+ F:	package/racehound/
+ F:	package/redir/
++F:	package/uredir/
+ 
+ N:	Peter Thompson <peter.macleod.thompson@gmail.com>
+ F:	package/sdl2_gfx/
 diff --git a/package/Config.in b/package/Config.in
-index bf29e603ec..458afc4b9f 100644
+index 458afc4b9f..4a5b5f50c7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1736,6 +1736,7 @@ menu "Networking"
- 	source "package/libtirpc/Config.in"
- 	source "package/libtorrent/Config.in"
- 	source "package/libtorrent-rasterbar/Config.in"
-+	source "package/libuev/Config.in"
- 	source "package/libuhttpd/Config.in"
- 	source "package/libupnp/Config.in"
- 	source "package/libupnp18/Config.in"
-diff --git a/package/libuev/Config.in b/package/libuev/Config.in
+@@ -2232,6 +2232,7 @@ endif
+ 	source "package/unbound/Config.in"
+ 	source "package/ushare/Config.in"
+ 	source "package/ussp-push/Config.in"
++	source "package/uredir/Config.in"
+ 	source "package/vde2/Config.in"
+ 	source "package/vdr/Config.in"
+ 	source "package/vdr-plugin-vnsiserver/Config.in"
+diff --git a/package/uredir/Config.in b/package/uredir/Config.in
 new file mode 100644
-index 0000000000..bb50099cee
+index 0000000000..99206cfe47
 --- /dev/null
-+++ b/package/libuev/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBUEV
-+	bool "libuev"
++++ b/package/uredir/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_UREDIR
++	bool "uredir"
++	select BR2_PACKAGE_LIBUEV
 +	help
-+	  Simple event loop for Linux.
++	  A small Linux daemon to redirect UDP connections. It can be
++	  used to forward connections on small and embedded systems that
++	  do not have (or want to use) iptables.
 +
-+	  https://github.com/troglobit/libuev
-diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
++	  https://github.com/troglobit/uredir
+diff --git a/package/uredir/uredir.hash b/package/uredir/uredir.hash
 new file mode 100644
-index 0000000000..fece0e9b65
+index 0000000000..00c816c2dd
 --- /dev/null
-+++ b/package/libuev/libuev.hash
++++ b/package/uredir/uredir.hash
 @@ -0,0 +1,4 @@
-+# From https://github.com/troglobit/libuev/releases/download/v2.3.1/libuev-2.3.1.tar.xz.md5
-+md5  ec601f69f69477858fa023a75da23793  libuev-2.3.1.tar.xz
++# From https://github.com/troglobit/uredir/releases/download/v3.3/uredir-3.3.tar.gz.md5
++md5  a42ee27e84de2e08e35ee733508bb6ea  uredir-3.3.tar.gz
 +# License files
-+sha256  3c2bf3fdd85687242ba6f2b02b6ce5176aba15b5e1a2ccb8b608439197ec4641  LICENSE
-diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
++sha256  e4b8fd3375ce44e5e03be199724a8785510ea5fa58ed92a7a34fd0ccbd35db10  LICENSE
+diff --git a/package/uredir/uredir.mk b/package/uredir/uredir.mk
 new file mode 100644
-index 0000000000..c7b73b4221
+index 0000000000..6ca394730e
 --- /dev/null
-+++ b/package/libuev/libuev.mk
-@@ -0,0 +1,15 @@
++++ b/package/uredir/uredir.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libuev
++# uredir
 +#
 +################################################################################
 +
-+LIBUEV_VERSION = 2.3.1
-+LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
-+LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
-+LIBUEV_LICENSE = MIT
-+LIBUEV_LICENSE_FILES = LICENSE
-+LIBUEV_INSTALL_STAGING = YES
-+LIBUEV_CONF_OPTS = --disable-examples
++UREDIR_VERSION = 3.3
++UREDIR_SOURCE = uredir-$(UREDIR_VERSION).tar.gz
++UREDIR_SITE = https://github.com/troglobit/uredir/releases/download/v$(UREDIR_VERSION)
++UREDIR_LICENSE = ISC
++UREDIR_LICENSE_FILES = LICENSE
++UREDIR_DEPENDENCIES = host-pkgconf libuev
 +
 +$(eval $(autotools-package))
 -- 
