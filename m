@@ -1,57 +1,64 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 20 Jul 2020 13:32:12 +0200
-Subject: [Buildroot] Handling read-only mounts in buildroot
-Message-ID: <CADYdroPb7G4hP+PnTfCMNvA8M0gmWEmuDQgZ8Oxc6Cnp=6zB=Q@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 20 Jul 2020 06:46:20 -0500
+Subject: [Buildroot] [PATCH 1/1] package/hostapd: add support for
+ hostapd_cli
+In-Reply-To: <20200720102247.9780-1-marco.oliverio@tanaza.com>
+References: <20200720102247.9780-1-marco.oliverio@tanaza.com>
+Message-ID: <CANQCQpaFFBLeNcKz95AQjGkadMM9k6_iS0JuZ1eBD7hpb0yD6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Marco,
 
-I ran my head against the hidden logic in buildroot, which will be inadvertently
-triggered if one dares to pick the REMOUNT_ROOTFS_RW option.
 
-I brought up some deficiencies in [1], it boils down to this,
-that there is a copy operation in the image creation phase,
-and a replacement started on the running system.
-Both operations care little about the previous state, or issues
-related to the order in the phase they are executed.
+On Mon, Jul 20, 2020 at 5:24 AM Marco Oliverio
+<marco.oliverio@tanaza.com> wrote:
+>
+> Signed-off-by: Marco Oliverio <marco.oliverio@tanaza.com>
+> ---
+>  package/hostapd/Config.in  | 6 ++++++
+>  package/hostapd/hostapd.mk | 8 ++++++++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+> index 54d2086c09..185fa04626 100644
+> --- a/package/hostapd/Config.in
+> +++ b/package/hostapd/Config.in
+> @@ -111,4 +111,10 @@ comment "netlink-based VLAN support needs a toolchain w/ threads"
+>
+>  endif # BR2_PACKAGE_HOSTAPD_VLAN
+>
+> +config BR2_PACKAGE_HOSTAPD_HOSTAPD_CLI
+> +       bool "Install hostapd_cli"
+> +       default n
+> +       help
+> +         Install hostapd command-line interface
+> +
+>  endif
+> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+> index b94a0e4578..d65e4b03fd 100644
+> --- a/package/hostapd/hostapd.mk
+> +++ b/package/hostapd/hostapd.mk
+> @@ -144,4 +144,12 @@ define HOSTAPD_INSTALL_TARGET_CMDS
+>                 $(TARGET_DIR)/etc/hostapd.conf
+>  endef
+>
+> +ifeq ($(BR2_PACKAGE_HOSTAPD_HOSTAPD_CLI),y)
+> +define HOSTAPD_INSTALL_TARGET_CMDS +=
 
-It might be possible to improve the logic (handling symlinks, picking
-file names that are lexicographically late/early) but I consider this
-a very narrow and fragile concept.
+Future note, instead of the += you'd need to define a new variable and
+then call it in the HOSTAPD_INSTALL_TARGET_CMDS.
 
--   REMOUNT_ROOTFS_RW should only add/change an entry to /etc/fstab
--   There are multiple ways to create a ro base installation (and many
-more outside of the scope of buildroot, like handling this in the
-initrd), so make any logic an explicit option or a own package.
--   Find one solution that works the same or similar with all init systems.
+> +
+> +       $(INSTALL) -m 0755 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd_cli \
+> +               $(TARGET_DIR)/usr/sbin/hostapd_cli
 
-I attached one possible solution, currently only for systemd. Did not
-package as BR package,
-but it's basically "production-ready". Just unpack it into
-/usr/lib/systemd/system.
+It looks like the  HOSTAPD_INSTALL_TARGET_CMDS stage already is
+installing the cli tool with the main service and default conf file.
+Do you have an example where that wasn't working?
 
-The benefits would be that it's design:
-
--   unties all packages from side-effects.
--   filesystem is otherwise untouched
--   no dependency and sideffects on/with tmpfilesd, create image hooks
--   same solution could be used for openrc/sysv/busybox
--   could be distributed/maintained as separate package
-    (and thus easily replaced by another read-only package)
-
-Norbert
-
-[1] - http://lists.busybox.net/pipermail/buildroot/2020-July/287016.html
-[2] - http://lists.busybox.net/pipermail/buildroot/2020-July/287200.html
-[3] - http://lists.busybox.net/pipermail/buildroot/2020-July/287359.html
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: bmountvar.tar
-Type: application/x-tar
-Size: 10240 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200720/d167ecb3/attachment.tar>
+Regards,
+Matt
