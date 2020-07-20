@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 22:51:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sqlite: security
+Date: Mon, 20 Jul 2020 22:51:14 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/sqlite: security
  bump to version 3.32.3
-Message-ID: <20200720204747.1D3A287D7B@busybox.osuosl.org>
+Message-ID: <20200720204752.468CF87D27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74ee3b920e57d3ce37c206300805c860b3681be3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=50e8194e4a9e59f225d0f2e77abf6b279079025e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fixes the following CVEs:
 
