@@ -1,24 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 08:19:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5: fix check-package warnings
-In-Reply-To: <1593778322-13727-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Fri, 3 Jul 2020 14:12:02 +0200")
-References: <1593778322-13727-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87h7u2r9my.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jul 2020 08:45:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix build with
+ libmicrohttpd 0.9.71
+In-Reply-To: <20200705111513.1298364-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 5 Jul 2020 13:15:13 +0200")
+References: <20200705111513.1298364-1-bernd.kuhls@t-online.de>
+Message-ID: <87d04qr8fn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/622129163
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
-Committed to 2020.05.x, thanks.
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
