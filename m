@@ -1,64 +1,141 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 20 Jul 2020 06:46:20 -0500
-Subject: [Buildroot] [PATCH 1/1] package/hostapd: add support for
- hostapd_cli
-In-Reply-To: <20200720102247.9780-1-marco.oliverio@tanaza.com>
-References: <20200720102247.9780-1-marco.oliverio@tanaza.com>
-Message-ID: <CANQCQpaFFBLeNcKz95AQjGkadMM9k6_iS0JuZ1eBD7hpb0yD6g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Jul 2020 13:59:57 +0200
+Subject: [Buildroot] [PATCH] Makefile: properly account for custom tags in
+ BR2_VERSION_FULL
+Message-ID: <20200720115958.2564971-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marco,
+BR2_VERSION_FULL is currently defined as follows:
 
+  BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
 
-On Mon, Jul 20, 2020 at 5:24 AM Marco Oliverio
-<marco.oliverio@tanaza.com> wrote:
->
-> Signed-off-by: Marco Oliverio <marco.oliverio@tanaza.com>
-> ---
->  package/hostapd/Config.in  | 6 ++++++
->  package/hostapd/hostapd.mk | 8 ++++++++
->  2 files changed, 14 insertions(+)
->
-> diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-> index 54d2086c09..185fa04626 100644
-> --- a/package/hostapd/Config.in
-> +++ b/package/hostapd/Config.in
-> @@ -111,4 +111,10 @@ comment "netlink-based VLAN support needs a toolchain w/ threads"
->
->  endif # BR2_PACKAGE_HOSTAPD_VLAN
->
-> +config BR2_PACKAGE_HOSTAPD_HOSTAPD_CLI
-> +       bool "Install hostapd_cli"
-> +       default n
-> +       help
-> +         Install hostapd command-line interface
-> +
->  endif
-> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-> index b94a0e4578..d65e4b03fd 100644
-> --- a/package/hostapd/hostapd.mk
-> +++ b/package/hostapd/hostapd.mk
-> @@ -144,4 +144,12 @@ define HOSTAPD_INSTALL_TARGET_CMDS
->                 $(TARGET_DIR)/etc/hostapd.conf
->  endef
->
-> +ifeq ($(BR2_PACKAGE_HOSTAPD_HOSTAPD_CLI),y)
-> +define HOSTAPD_INSTALL_TARGET_CMDS +=
+This BR2_VERSION_FULL value then gets used as the "VERSION" variable
+in the /etc/os-release file.
 
-Future note, instead of the += you'd need to define a new variable and
-then call it in the HOSTAPD_INSTALL_TARGET_CMDS.
+The logic of "setlocalversion" is that if it is exactly on a tag, it
+returns nothing.
 
-> +
-> +       $(INSTALL) -m 0755 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd_cli \
-> +               $(TARGET_DIR)/usr/sbin/hostapd_cli
+If it is on a tag + a number of commits, then it returns only
+-XYZ-gABC where XYZ is the number of commits since the last tag, and
+ABC the git commit hash (these are extracted from git describe).
 
-It looks like the  HOSTAPD_INSTALL_TARGET_CMDS stage already is
-installing the cli tool with the main service and default conf file.
-Do you have an example where that wasn't working?
+This output then gets concatenated to BR2_VERSION which gives
+something like 2020.05 or 2020.05-00123-g5bc6a.
 
-Regards,
-Matt
+The issue is that when you're on a tag specific to your project, which
+is not a Buildroot YYYY.MM tag, then the output of setlocalversion is
+empty, and all you get as VERSION in os-release is $(BR2_VERSION)
+which is not really nice. Worse, if you have another non-official
+Buildroot tag between the last official Buildroot tag/version and
+where you are, you will get $(BR2_VERSION)-XYZ-gABC, but XYZ will not
+correspond to the number of commits since BR2_VERSION, but since the
+last tag that "git describe" as found, which is clearly incorrect.
+
+Here is an example: you're on master, "make print-version" (which
+displays BR2_VERSION_FULL) will show:
+
+$ make print-version
+2020.08-git-00758-gc351877a6e
+
+So far so good. Now, you create a tag say 5 commits "before" master,
+and show BR2_VERSION_FULL again:
+
+$ git tag -a -m "dummy tag" dummy-tag HEAD~5
+$ make print-version
+2020.08-git-00005-gc351877a6e
+
+This makes you believe you are 5 commits above 2020.08, which is
+absolutely wrong.
+
+So this commit simplifies the logic of setlocalversion to simply
+return what "git describe" provides, and not prepend $(BR2_VERSION) in
+the main Makefile. Since official Buildroot tags match official
+Buildroot version names, you get the same output when you're on an
+official Buildroot tag, or some commits above a Buildroot tag. An in
+other cases, you get a sensible output. The logic is also adjusted for
+the Mercurial case.
+
+In the above situation, with this commit applied, we get:
+
+$ make print-version
+dummy-tag-6-g6258cdddeb
+
+(6 commits instead of 5 as we have this very commit applied, but at
+least it's 6 commits on top of the dummy-tag)
+
+Finally, if you're not using a version control system, setlocalversion
+was already returning nothing, so in this case, the Makefile simply
+sets BR2_VERSION_FULL to BR2_VERSION to preserve this behavior.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile                        |  8 +++++++-
+ support/scripts/setlocalversion | 23 ++++++++++-------------
+ 2 files changed, 17 insertions(+), 14 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 12812526c7..036d4aa5c4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -113,7 +113,13 @@ DATE := $(shell date +%Y%m%d)
+ 
+ # Compute the full local version string so packages can use it as-is
+ # Need to export it, so it can be got from environment in children (eg. mconf)
+-export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
++
++BR2_LOCALVERSION := $(shell $(TOPDIR)/support/scripts/setlocalversion)
++ifeq ($(BR2_LOCALVERSION),)
++export BR2_VERSION_FULL := $(BR2_VERSION)
++else
++export BR2_VERSION_FULL := $(BR2_LOCALVERSION)
++endif
+ 
+ # List of targets and target patterns for which .config doesn't need to be read in
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
+index b39b751f03..e04c955d9e 100755
+--- a/support/scripts/setlocalversion
++++ b/support/scripts/setlocalversion
+@@ -19,19 +19,14 @@ cd "${1:-.}" || usage
+ # Check for git and a git repo.
+ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
+ 
+-	# If we are at a tagged commit (like "v2.6.30-rc6"), we ignore it,
+-	# because this version is defined in the top level Makefile.
+-	if [ -z "`git describe --exact-match 2>/dev/null`" ]; then
+-
+-		# If we are past a tagged commit (like "v2.6.30-rc5-302-g72357d5"),
+-		# we pretty print it.
+-		if atag="`git describe 2>/dev/null`"; then
+-			echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
+-
+-		# If we don't have a tag at all we print -g{commitish}.
+-		else
+-			printf '%s%s' -g $head
+-		fi
++	atag="`git describe 2>/dev/null`"
++
++	# Show -g<commit> if we have no tag, or just the tag
++	# otherwise.
++	if [ -z "${atag}" ] ; then
++		printf "%s%s" -g ${head}
++	else
++		printf ${atag}
+ 	fi
+ 
+ 	# Is this git on svn?
+@@ -60,6 +55,8 @@ if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
+ 	if [ -z "$tag" -o "$tag" = tip ]; then
+ 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
+ 		printf '%s%s' -hg "$id"
++	else
++		printf ${tag}
+ 	fi
+ 
+ 	# Are there uncommitted changes?
+-- 
+2.26.2
