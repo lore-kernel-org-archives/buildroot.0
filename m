@@ -1,41 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 22:38:11 +0200
-Subject: [Buildroot] [PATCH] support/testing/tests/boot/test_atf: update
- U-Boot/ATF use in TestATFVexpress
-Message-ID: <20200720203812.2792903-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Jul 2020 22:29:17 +0200
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: bump to version
+ 2.2
+Message-ID: <20200720203408.7C74687D27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This simply updates to more modern versions of ATF and U-Boot.
+commit: https://git.buildroot.net/buildroot/commit/?id=a757d173f1794354d40d73539d822536dd034496
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Release notes:
+https://trustedfirmware-a.readthedocs.io/en/latest/change-log.html#version-2-2
+
+Take this opportunity to fix the hash file spacing.
+
+Signed-off-by: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/boot/test_atf.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ boot/arm-trusted-firmware/Config.in                 | 4 ++--
+ boot/arm-trusted-firmware/arm-trusted-firmware.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/boot/test_atf.py b/support/testing/tests/boot/test_atf.py
-index 21c3ec314e..678c13de5b 100644
---- a/support/testing/tests/boot/test_atf.py
-+++ b/support/testing/tests/boot/test_atf.py
-@@ -10,14 +10,14 @@ class TestATFVexpress(infra.basetest.BRTest):
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
--        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
-+        BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.2"
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-         BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-         BR2_TARGET_UBOOT=y
-         BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-         BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+        BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-         BR2_TARGET_VEXPRESS_FIRMWARE=y
-         """
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index b1ca5d7ea1..e505dee9d0 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -15,7 +15,7 @@ choice
+ 	  Select the specific ATF version you want to use
  
--- 
-2.26.2
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+-	bool "v1.4"
++	bool "v2.2"
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -43,7 +43,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
+ 	string
+-	default "v1.4"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
++	default "v2.2"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
+ 	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
+ 	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+index 394071865e..3cd83d78f2 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
+-sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
++sha256  07e3c058ae2d95c7d516a46fc93565b797e912c3271ddbf29df523b1ab1ee911  arm-trusted-firmware-v2.2.tar.gz
++sha256  487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
