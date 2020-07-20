@@ -1,141 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 13:59:57 +0200
-Subject: [Buildroot] [PATCH] Makefile: properly account for custom tags in
- BR2_VERSION_FULL
-Message-ID: <20200720115958.2564971-1-thomas.petazzoni@bootlin.com>
+From: =?UTF-8?Q?Christoph_M=c3=bcllner?= <christoph.muellner@theobroma-systems.com>
+Date: Mon, 20 Jul 2020 14:26:59 +0200
+Subject: [Buildroot] [PATCH] initscripts: Make installation of
+ S20urandom optional.
+In-Reply-To: <20200719122457.GV18825@scaer>
+References: <20200718224444.2748609-1-christoph.muellner@theobroma-systems.com>
+ <20200719100514.618894ca@windsurf.home> <20200719114950.GT18825@scaer>
+ <20200719140921.5bc74639@gmx.net> <20200719122457.GV18825@scaer>
+Message-ID: <b4563955-d358-cfd3-8ae6-6e358e551595@theobroma-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_VERSION_FULL is currently defined as follows:
+Hi all,
 
-  BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+On 7/19/20 2:24 PM, Yann E. MORIN wrote:
+> Peter, All,
+> 
+> On 2020-07-19 14:09 +0200, Peter Seiderer spake thusly:
+>> On Sun, 19 Jul 2020 13:49:50 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+>>> I would however believe this script is not interesting at all. In fact,
+>>> an ambedded device seldom reboots nicely; instead, it is most often a
+>>> hard-reboot (with a power cycle). In that case, the script would have no
+>>> chance whatsoever to save the current seed before shutdown, thus on next
 
-This BR2_VERSION_FULL value then gets used as the "VERSION" variable
-in the /etc/os-release file.
+That's not fully correct.
+save_random_seed() is also called during start.
 
-The logic of "setlocalversion" is that if it is exactly on a tag, it
-returns nothing.
+>>> boot we would restore a seed that would have already been used, thus
+>>> defeating randomness to begin with; worse, it would give people a sense
+>>> of security where there would in fact be a hole.
+>>
+>> This is a very limited view of the buildroot use-cases, I believe there
+>> are although some, call it 'mid-range' embedded systems, with a proper
+>> power-down button shutting down the system before killing the power
+>> (or at least the use-case of two of my customer projects)...
+> 
+> Yeah, but still, is saving-n-restoring the seed the sanest thing to do?
+> If your devices are that well engineered (yeah!), you probably have a
+> good source of randmoness (proably HW, or with rng-tools et al), so
+> don't need to save-n-restore the seed...
+> 
+> Even for well-designed devices, that can be sanely powered-off-then-on,
+> there is always the possibility that the power completely goes out, and
+> thus the seed would be re-used.
+> 
+> Re-using a seed is one of the worst thing one may do about randomness:
+> it is very, very bad, because it gives people a false sense of security
+> "Hey! I'm saving and restoring the seed, soMatt Weber <matthew.weber@rockwellcollins.com> no two boots will have the
+> same random sequence! Woohoo!" Boom, wrong...
+> 
+> So I still stand on my position that we should get rid of S20random.
 
-If it is on a tag + a number of commits, then it returns only
--XYZ-gABC where XYZ is the number of commits since the last tag, and
-ABC the git commit hash (these are extracted from git describe).
+I agree mostly to your argumentation.
 
-This output then gets concatenated to BR2_VERSION which gives
-something like 2020.05 or 2020.05-00123-g5bc6a.
+However, I know that a S20urandom-like mechanism is exactly
+what I need in systems where I need to start an SSH server
+in an development image for a system without proper entropy source.
+I.e. where poor quality of random number does not matter, but
+a bootup delay of a minute until the kernel RNG is seeded hurts.
 
-The issue is that when you're on a tag specific to your project, which
-is not a Buildroot YYYY.MM tag, then the output of setlocalversion is
-empty, and all you get as VERSION in os-release is $(BR2_VERSION)
-which is not really nice. Worse, if you have another non-official
-Buildroot tag between the last official Buildroot tag/version and
-where you are, you will get $(BR2_VERSION)-XYZ-gABC, but XYZ will not
-correspond to the number of commits since BR2_VERSION, but since the
-last tag that "git describe" as found, which is clearly incorrect.
+So I am in favor of being able to remove S20urandom (thus my patch),
+but I see that users need that and would like to continue to support
+people that need it out-of-the-box.
 
-Here is an example: you're on master, "make print-version" (which
-displays BR2_VERSION_FULL) will show:
+What about moving S20urandom into a package urandom-scripts
+(similar to ifupdown-scripts)?
 
-$ make print-version
-2020.08-git-00758-gc351877a6e
+If you still insist on dropping the script, then just let me know and
+I will prepare a patch to do so.
 
-So far so good. Now, you create a tag say 5 commits "before" master,
-and show BR2_VERSION_FULL again:
-
-$ git tag -a -m "dummy tag" dummy-tag HEAD~5
-$ make print-version
-2020.08-git-00005-gc351877a6e
-
-This makes you believe you are 5 commits above 2020.08, which is
-absolutely wrong.
-
-So this commit simplifies the logic of setlocalversion to simply
-return what "git describe" provides, and not prepend $(BR2_VERSION) in
-the main Makefile. Since official Buildroot tags match official
-Buildroot version names, you get the same output when you're on an
-official Buildroot tag, or some commits above a Buildroot tag. An in
-other cases, you get a sensible output. The logic is also adjusted for
-the Mercurial case.
-
-In the above situation, with this commit applied, we get:
-
-$ make print-version
-dummy-tag-6-g6258cdddeb
-
-(6 commits instead of 5 as we have this very commit applied, but at
-least it's 6 commits on top of the dummy-tag)
-
-Finally, if you're not using a version control system, setlocalversion
-was already returning nothing, so in this case, the Makefile simply
-sets BR2_VERSION_FULL to BR2_VERSION to preserve this behavior.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile                        |  8 +++++++-
- support/scripts/setlocalversion | 23 ++++++++++-------------
- 2 files changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 12812526c7..036d4aa5c4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -113,7 +113,13 @@ DATE := $(shell date +%Y%m%d)
- 
- # Compute the full local version string so packages can use it as-is
- # Need to export it, so it can be got from environment in children (eg. mconf)
--export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
-+
-+BR2_LOCALVERSION := $(shell $(TOPDIR)/support/scripts/setlocalversion)
-+ifeq ($(BR2_LOCALVERSION),)
-+export BR2_VERSION_FULL := $(BR2_VERSION)
-+else
-+export BR2_VERSION_FULL := $(BR2_LOCALVERSION)
-+endif
- 
- # List of targets and target patterns for which .config doesn't need to be read in
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index b39b751f03..e04c955d9e 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -19,19 +19,14 @@ cd "${1:-.}" || usage
- # Check for git and a git repo.
- if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- 
--	# If we are at a tagged commit (like "v2.6.30-rc6"), we ignore it,
--	# because this version is defined in the top level Makefile.
--	if [ -z "`git describe --exact-match 2>/dev/null`" ]; then
--
--		# If we are past a tagged commit (like "v2.6.30-rc5-302-g72357d5"),
--		# we pretty print it.
--		if atag="`git describe 2>/dev/null`"; then
--			echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
--
--		# If we don't have a tag at all we print -g{commitish}.
--		else
--			printf '%s%s' -g $head
--		fi
-+	atag="`git describe 2>/dev/null`"
-+
-+	# Show -g<commit> if we have no tag, or just the tag
-+	# otherwise.
-+	if [ -z "${atag}" ] ; then
-+		printf "%s%s" -g ${head}
-+	else
-+		printf ${atag}
- 	fi
- 
- 	# Is this git on svn?
-@@ -60,6 +55,8 @@ if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	if [ -z "$tag" -o "$tag" = tip ]; then
- 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
- 		printf '%s%s' -hg "$id"
-+	else
-+		printf ${tag}
- 	fi
- 
- 	# Are there uncommitted changes?
--- 
-2.26.2
+Thanks,
+Christoph
