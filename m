@@ -1,25 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 21:57:35 +0200
-Subject: [Buildroot] [git commit] package/dvb-apps: add hash file
-In-Reply-To: <20200709195652.E97F18666D@busybox.osuosl.org> (Yann E. MORIN's
- message of "Thu, 9 Jul 2020 21:59:10 +0200")
-References: <20200709195652.E97F18666D@busybox.osuosl.org>
-Message-ID: <875zaiot74.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jul 2020 18:45:16 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libcamera: fix
+ install staging typo
+Message-ID: <20200720195318.019E68636F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=28a48f969398767cbafc0e008786cd6e4220e48f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=aaf689903c1e7e874664063b7c828c1c13a79b6b
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This won't enable install to staging unless capitalized.
 
- > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b6141b2aa127cebb29bfff7a0beb392251972092)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcamera/libcamera.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index d209a38df3..2be344899e 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -9,7 +9,7 @@ LIBCAMERA_VERSION = 448393f77ec9e37cb807e8e8d35c1a4877d253d4
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = udev
+ LIBCAMERA_CONF_OPTS = -Dtest=false -Ddocumentation=false
+-LIBCAMERA_INSTALL_STAGING = yes
++LIBCAMERA_INSTALL_STAGING = YES
+ LIBCAMERA_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (utils)
+ LIBCAMERA_LICENSE_FILES = \
+ 	licenses/gnu-gpl-2.0.txt \
