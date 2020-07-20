@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 08:14:44 +0200
-Subject: [Buildroot] [PATCH v6 19/28] core/pkg-infra: Add per-package
- support in qmake infra
-In-Reply-To: <20200217212350.29750-20-anaumann@ultratronik.de> (Andreas
- Naumann's message of "Mon, 17 Feb 2020 22:23:41 +0100")
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-20-anaumann@ultratronik.de>
-Message-ID: <87pn8qr9uz.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jul 2020 08:17:56 +0200
+Subject: [Buildroot] [PATCH v3] package/gstreamer1/gst1-plugins-good:
+ Enable GUDEV for V4L2 if available
+In-Reply-To: <20200608000026.4237-1-ezequiel@vanguardiasur.com.ar> (Ezequiel
+ Garcia's message of "Sun, 7 Jun 2020 21:00:26 -0300")
+References: <20200608000026.4237-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <87lfjer9pn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andreas" == Andreas Naumann <anaumann@ultratronik.de> writes:
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
- > Qmake configured packages will, by default, use the absolute HostPrefix/Sysroot
- > pathes set during configuration/building of qt5base for their install
- > destinations.
- > For the per-package host/staging infrastructure, this causes non-qt5base
- > packages to litter the qt5base folders. In addition, buildroots target-install
- > step subsequently fails because the respective files are missing from the
- > per-package sysroot of the package itself.
+ > From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+ > Video4Linux2 plugins can udev for device probing and monitor.
+ > This greatly improves load time and monitoring performance.
 
- > Fortunately, qmake's built-in pathes can be overridden by placing a custom
- > qt.conf next to the qmake binary. This is already used to facilitate SDK
- > relocation. So for per-package path manipulation we can reuse that method, but
- > need to change the host/sysroot values according to each per-package
- > path.
+ > It also enables hotplug monitoring for cameras.
 
- > Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+ > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+ > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+ > ---
+ > v3:
+ > * Apply the dependency only if V4L2 plugins are enabled
+ > v2:
+ > * Enable/disable v4l2-gudev explicitly
 
-Committed to 2020.05.x, thanks.
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
