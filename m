@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 22:59:41 +0200
-Subject: [Buildroot] [PATCH 4/8] boot/arm-trusted-firmware: add EDK2 as
- BL33 option
-In-Reply-To: <20200719180727.28202-5-hi@senzilla.io>
+Date: Mon, 20 Jul 2020 23:02:04 +0200
+Subject: [Buildroot] [PATCH 5/8] configs/aarch64_efi_defconfig: build
+ the EDK2 firmware from source
+In-Reply-To: <20200719180727.28202-6-hi@senzilla.io>
 References: <20200719180727.28202-1-hi@senzilla.io>
- <20200719180727.28202-5-hi@senzilla.io>
-Message-ID: <20200720225941.796ff11c@windsurf.home>
+ <20200719180727.28202-6-hi@senzilla.io>
+Message-ID: <20200720230204.2d45c284@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,68 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-+Yann Morin, on variable reference between packages.
++Erico in Cc.
 
-On Sun, 19 Jul 2020 18:10:03 +0000
+On Sun, 19 Jul 2020 18:10:21 +0000
 Dick Olsson <hi@senzilla.io> wrote:
 
-> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-> index 7d0f6aa4e0..f24813f8e6 100644
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE
->  	bool "ARM Trusted Firmware (ATF)"
->  	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
-> -           BR2_TARGET_UBOOT
-> +           (BR2_TARGET_UBOOT || BR2_TARGET_EDK2)
+> Prior to this patch, you had to manually download a pre-built EDK2 flash device
+> image (QEMU_EFI.fd) in order to boot this configuration with QEMU. With this
+> patch, the configuration is now building EDK2 from source as a stand-alone
+> flash device file.
+> 
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
 
-Ah, this is why your previous patch has a spurious change in this file :-)
+Erico: since you are the maintainer for the aarch64_efi defconfig, it
+would be nice to have your review/feedback on this patch.
 
-> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
-> +	bool "Use EDK2 as BL33"
-> +	depends on BR2_TARGET_EDK2
-> +	help
-> +	  This option allows to embed EDK2 as the BL33 part of
-> +	  the ARM Trusted Firmware. It ensures that the EDK2 package
-> +	  gets built before ATF, and that the appropriate BL33
-> +	  variable pointing to the EDK2 is passed when building ATF.
-> +
-> +	  Do not choose this option if you intend to build ATF and EDK2
-> +	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
-> +	  build system, the dependency between ATF and EDK is reversed.
+> +# EDK2 firmware
+> +BR2_TARGET_EDK2=y
 
-So there are cases where ATF depends on EDK2, and other cases where
-EDK2 depends on ATF (BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA situation).
-Correct ?
-
-Note: this is OK, we already have this situation between U-Boot and
-ATF. On some platforms, ATF embeds U-Boot, on others, U-Boot embeds ATF.
-
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
->  	bool "Use U-Boot as BL33"
->  	depends on BR2_TARGET_UBOOT
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index a3553e36cf..58b48df5d8 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -79,6 +79,13 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
->  endif
->  endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
->  
-> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
-> +# Since the flash device names vary between platforms, we use the variable
-> +# provided by the EDK2 package this.
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(EDK2_FD_NAME).fd
-
-So there is this reference to a variable of another package, which I'm
-never sure if it works correctly. Yann, what is the rule again ? :-)
-
-For the U-Boot case, we have an explicit
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE. If we drop the
-"platform choice" in EDK2, we would anyway have to specify somewhere a
-free form string that contains the final image name.
+Which platform is selected then ? The default,
+BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU ?
 
 Thomas
 -- 
