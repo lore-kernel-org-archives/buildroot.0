@@ -1,49 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Jul 2020 22:50:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to version
- 2.2.0
-Message-ID: <20200720205019.2100604-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Jul 2020 22:50:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcec: downgrade to version
+ 4.0.5
+In-Reply-To: <20200710062102.531210-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 10 Jul 2020 08:21:02 +0200")
+References: <20200710062102.531210-1-bernd.kuhls@t-online.de>
+Message-ID: <871rl5q5as.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-15103 - Integer overflow due to missing input sanitation in
-rdpegfx channel
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-https://github.com/FreeRDP/FreeRDP/releases/tag/2.2.0
+ > According to
+ > https://github.com/Pulse-Eight/libcec/releases/tag/libcec-5.0.0
+ > version 5.0.0 is "not compatible with Kodi 18.x. Please use libCEC
+ > 4.0.5 instead."
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/freerdp/freerdp.hash | 4 ++--
- package/freerdp/freerdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 6c52d38a4f..8217a2106c 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,5 +1,5 @@
--# From https://pub.freerdp.com/releases/freerdp-2.1.2.tar.gz.sha256
--sha256  f33bc6aef83b8ad3cbf2cdbc82dcfa980ec2b051efb72650f6f2365d55b79b8d  freerdp-2.1.2.tar.gz
-+# From https://pub.freerdp.com/releases/freerdp-2.2.0.tar.gz.sha256
-+sha256  19b30759e324ce7a9767af880116a4c571761e9ad9c5d6c98c5b302ff8c24c6c  freerdp-2.2.0.tar.gz
- 
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 33b83922cc..4c804c136f 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREERDP_VERSION = 2.1.2
-+FREERDP_VERSION = 2.2.0
- FREERDP_SITE = https://pub.freerdp.com/releases
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
+Committed to 2020.05.x, thanks.
+
 -- 
-2.27.0
+Bye, Peter Korsgaard
