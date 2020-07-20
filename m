@@ -1,34 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 21:56:41 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/dvb-apps: add
- hash file
-Message-ID: <20200720195328.A2CE486D68@busybox.osuosl.org>
+From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
+Date: Mon, 20 Jul 2020 22:10:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cryptodev-linux: bump to version
+ f2927e3
+Message-ID: <20200720201052.212572-1-alejandro.gonzalez.correo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f2da3feca24de23e0e1bd651a15f962d9e78a3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+This version mainly fixes build issues with more
+recent kernels.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit aaf689903c1e7e874664063b7c828c1c13a79b6b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+98b163a cryptlib.c: fix build on kernel v5.5+
+7e72f67 enabled the support for TLS1.1 - AES128-SHA1 - AES256-SHA1
+9e76506 Fix build for Linux 5.8-rc1
+
+Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
 ---
- package/dvb-apps/dvb-apps.hash | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dvb-apps/dvb-apps.hash b/package/dvb-apps/dvb-apps.hash
-new file mode 100644
-index 0000000000..d394ced131
---- /dev/null
-+++ b/package/dvb-apps/dvb-apps.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  926208b7e711b4bab1a909ff9bf4e6ae54acdd30a46f5d5bd700ecb088fe1f57  dvb-apps-3d43b280298c39a67d1d889e01e173f52c12da35.tar.gz
-+
-+# Hash for license files:
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index 4319fd313a..f7cbe6e803 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 50cf34ecedc897edb11d1a24076f0d4cfcb704dcd294273bc03e2f6c3632fe2c cryptodev-linux-a1e738aef6249ee3bddf997e91e59b1210553209.tar.gz
++sha256 f2927e313b6a74408d17d152abb21aa59d113b46 cryptodev-linux-f2927e313b6a74408d17d152abb21aa59d113b46.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index a02add6310..3d5d640b8a 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTODEV_LINUX_VERSION = a1e738aef6249ee3bddf997e91e59b1210553209
++CRYPTODEV_LINUX_VERSION = f2927e313b6a74408d17d152abb21aa59d113b46
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
+-- 
+2.27.0
