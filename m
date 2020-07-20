@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 18:11:44 +0200
-Subject: [Buildroot] [PATCH] package/bison: bump version to 3.6.4
-In-Reply-To: <20200719234848.18585-1-sergio.prado@e-labworks.com>
-References: <20200719234848.18585-1-sergio.prado@e-labworks.com>
-Message-ID: <20200720181144.3bf5c6cc@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Jul 2020 18:39:39 +0200
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
+ version
+In-Reply-To: <20200707160857.645197-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Tue, 7 Jul 2020 18:08:57 +0200")
+References: <20200707160857.645197-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87r1t6p2d0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Jul 2020 20:48:48 -0300
-Sergio Prado <sergio.prado@e-labworks.com> wrote:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-> Also separate the fields in the hash file by two spaces.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  package/bison/bison.hash | 4 ++--
->  package/bison/bison.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+ > For 5.6 and 5.7 support.
+ > git shortlog --invert-grep --grep=Travis --no-merges ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2..
+ > Jonathan Liu (2):
+ >       mali: Fix build for 5.6
+ >       mali: Fix build for 5.7
 
-Applied to master, thanks.
+ > Maxime Ripard (3):
+ >       Create travis.yml
+ >       actions: Add feedparser to the host
+ >       travis: Try to fix the push code
 
-Thomas
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Committed to 2020.05.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
