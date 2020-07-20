@@ -1,57 +1,168 @@
-From: Alejandro <alejandro.gonzalez.correo@gmail.com>
-Date: Mon, 20 Jul 2020 22:17:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev-linux: bump to
- version f2927e3
-In-Reply-To: <20200720201052.212572-1-alejandro.gonzalez.correo@gmail.com>
-References: <20200720201052.212572-1-alejandro.gonzalez.correo@gmail.com>
-Message-ID: <CA+wirGqBaF1t=c2dbnUE2vb6aO+SAf-eq20xqYQSmtPiQsHz9A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Jul 2020 22:25:16 +0200
+Subject: [Buildroot] [git commit] package/resiprocate: new package
+Message-ID: <20200720202108.9D71C87B6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El lun., 20 jul. 2020 a las 22:11, Alejandro Gonz?lez
-(<alejandro.gonzalez.correo@gmail.com>) escribi?:
->
-> This version mainly fixes build issues with more
-> recent kernels.
->
-> 98b163a cryptlib.c: fix build on kernel v5.5+
-> 7e72f67 enabled the support for TLS1.1 - AES128-SHA1 - AES256-SHA1
-> 9e76506 Fix build for Linux 5.8-rc1
->
-> Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
-> ---
->  package/cryptodev-linux/cryptodev-linux.hash | 2 +-
->  package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-> index 4319fd313a..f7cbe6e803 100644
-> --- a/package/cryptodev-linux/cryptodev-linux.hash
-> +++ b/package/cryptodev-linux/cryptodev-linux.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 50cf34ecedc897edb11d1a24076f0d4cfcb704dcd294273bc03e2f6c3632fe2c cryptodev-linux-a1e738aef6249ee3bddf997e91e59b1210553209.tar.gz
-> +sha256 f2927e313b6a74408d17d152abb21aa59d113b46 cryptodev-linux-f2927e313b6a74408d17d152abb21aa59d113b46.tar.gz
->  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-> diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-> index a02add6310..3d5d640b8a 100644
-> --- a/package/cryptodev-linux/cryptodev-linux.mk
-> +++ b/package/cryptodev-linux/cryptodev-linux.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -CRYPTODEV_LINUX_VERSION = a1e738aef6249ee3bddf997e91e59b1210553209
-> +CRYPTODEV_LINUX_VERSION = f2927e313b6a74408d17d152abb21aa59d113b46
->  CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
->  CRYPTODEV_LINUX_INSTALL_STAGING = YES
->  CRYPTODEV_LINUX_LICENSE = GPL-2.0+
-> --
-> 2.27.0
->
+commit: https://git.buildroot.net/buildroot/commit/?id=a3883964a3468a226fffe01f69a361621a3819a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please do not merge this. I made a mistake with the locally calculated
-hash. I will submit a corrected version of this change soon :)
+reSIProcate is a framework that aims to fully implement the SIP
+protocol in first class C++. It is intended for use in other
+applications, such as the repro SIP proxy.
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/resiprocate/Config.in        | 48 ++++++++++++++++++++++++++++++++++++
+ package/resiprocate/resiprocate.hash |  4 +++
+ package/resiprocate/resiprocate.mk   | 47 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 101 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5bed3e7439..043e8ce3f4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2245,6 +2245,7 @@ F:	package/miraclecast/
+ F:	package/python-pysnmp/
+ F:	package/python-pysnmp-mibs/
+ F:	package/python-tornado/
++F:	package/resiprocate/
+ F:	package/websocketpp/
+ 
+ N:	Ryan Coe <bluemrp9@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index 22531d4fb5..7ab1112644 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1768,6 +1768,7 @@ menu "Networking"
+ 	source "package/qdecoder/Config.in"
+ 	source "package/qpid-proton/Config.in"
+ 	source "package/rabbitmq-c/Config.in"
++	source "package/resiprocate/Config.in"
+ 	source "package/restclient-cpp/Config.in"
+ 	source "package/rtmpdump/Config.in"
+ 	source "package/slirp/Config.in"
+diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
+new file mode 100644
+index 0000000000..ed57e09c1b
+--- /dev/null
++++ b/package/resiprocate/Config.in
+@@ -0,0 +1,48 @@
++comment "resiprocate needs a toolchain w/ C++, threads, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++
++config BR2_PACKAGE_RESIPROCATE
++	bool "resiprocate"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_C_ARES
++	help
++	  reSIProcate is a framework that aims to fully implement the
++	  SIP protocol in first class C++. It is intended for use in
++	  other applications, such as the repro SIP proxy.
++
++	  By default this package provides the core libraries: librutil
++	  (utilities), libresip (SIP stack/RFC compliant message
++	  parsing) and libdum (SIP Dialog Usage Manager, a state
++	  machine for SIP dialogs).
++
++	  https://www.resiprocate.org/
++
++if BR2_PACKAGE_RESIPROCATE
++
++config BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT
++	bool "DTLS support"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enable DTLS support (requires OpenSSL)
++
++config BR2_PACKAGE_RESIPROCATE_REND
++	bool "resiprocate-rend"
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_POPT
++	help
++	  Rend is tool that is was created specifically to load test
++	  gtSIP based presence servers.
++
++config BR2_PACKAGE_RESIPROCATE_APPS
++	bool "resiprocate-apps"
++	select BR2_PACKAGE_PCRE
++	help
++	  Build apps clicktocall and sipdial
++
++endif # BR2_PACKAGE_RESIPROCATE
+diff --git a/package/resiprocate/resiprocate.hash b/package/resiprocate/resiprocate.hash
+new file mode 100644
+index 0000000000..03336c64a2
+--- /dev/null
++++ b/package/resiprocate/resiprocate.hash
+@@ -0,0 +1,4 @@
++# http://list.resiprocate.org/pipermail/resiprocate-announce/2020-May/000000.html
++sha256  046826503d3c8682ae0e42101b28f903c5f988235f1ff4a98dbfb9066d0d3d49  resiprocate-1.12.0.tar.gz
++# Locally Computed
++sha256  16b0fd1938a10fcd145904cc2dad74500fef9d27fc15b44cf8e8f92011f94d35  COPYING
+diff --git a/package/resiprocate/resiprocate.mk b/package/resiprocate/resiprocate.mk
+new file mode 100644
+index 0000000000..e4915eec59
+--- /dev/null
++++ b/package/resiprocate/resiprocate.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# resiprocate
++#
++################################################################################
++
++RESIPROCATE_VERSION = 1.12.0
++RESIPROCATE_SITE =  https://www.resiprocate.org/files/pub/reSIProcate/releases
++# For complete details see https://www.resiprocate.org/License
++RESIPROCATE_LICENSE = VSL-1.0, BSD-3-Clause
++RESIPROCATE_LICENSE_FILES = COPYING
++RESIPROCATE_INSTALL_STAGING = YES
++
++# Utilize c-ares from buildroot instead built in ARES library
++# NOTE: resiprocate doesn't support --without-<feature> syntax as it will try
++#       to build with package if specified
++RESIPROCATE_DEPENDENCIES = c-ares
++RESIPROCATE_CONF_OPTS = -with-c-ares \
++	--with-sysroot="$(STAGING_DIR)"
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++RESIPROCATE_DEPENDENCIES += openssl host-pkgconf
++RESIPROCATE_CONF_OPTS += --with-ssl
++# Configure.ac does not include '-lz' when statically linking against openssl
++RESIPROCATE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
++endif
++
++ifeq ($(BR2_PACKAGE_POPT),y)
++RESIPROCATE_CONF_OPTS += --with-popt
++RESIPROCATE_DEPENDENCIES += popt
++endif
++
++ifeq ($(BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT),y)
++RESIPROCATE_CONF_OPTS += --with-dtls
++endif
++
++ifeq ($(BR2_PACKAGE_RESIPROCATE_REND),y)
++RESIPROCATE_CONF_OPTS += --with-rend
++RESIPROCATE_DEPENDENCIES += boost
++endif
++
++ifeq ($(BR2_PACKAGE_RESIPROCATE_APPS),y)
++RESIPROCATE_CONF_OPTS += --with-apps
++RESIPROCATE_DEPENDENCIES += pcre
++endif
++
++$(eval $(autotools-package))
