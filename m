@@ -1,50 +1,169 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 22:50:30 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libcec: downgrade
- to version 4.0.5
-Message-ID: <20200720204634.16E5587D7B@busybox.osuosl.org>
+Date: Mon, 20 Jul 2020 22:52:04 +0200
+Subject: [Buildroot] [PATCH] package/sqlite: bump version 3.32.3
+In-Reply-To: <20200709215759.53406-1-sam.voss@rockwellcollins.com> (Sam Voss's
+ message of "Thu, 9 Jul 2020 16:57:59 -0500")
+References: <20200709215759.53406-1-sam.voss@rockwellcollins.com>
+Message-ID: <87wo2xoqob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25652106cf887da42f1ea26311b40c58e21779ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+>>>>> "Sam" == Sam Voss <sam.voss@rockwellcollins.com> writes:
 
-According to
-https://github.com/Pulse-Eight/libcec/releases/tag/libcec-5.0.0
-version 5.0.0 is "not compatible with Kodi 18.x. Please use libCEC
-4.0.5 instead."
+ > Fixes the following CVEs:
+ > - CVE-2019-19923 (Fixed in 3.31.0)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7b77a0687eae412150719ab45bf7c608d52124d2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > SQLite is vulnerable to denial-of-service condition because of a NULL
+ > pointer dereferencing while handling `SELECT DISTINCT`statements.
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index 000a4f7b40..aa09b36bd8 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7c6ef02f39918ac88a3dac8ea35021f6c4b4b695df9204b3ac9faca673c706cc  libcec-5.0.0.tar.gz
-+sha256  e4d749430ebcf3a35ec3a3f6675afcc5755afc1e5801c12121e54d80eb187743  libcec-4.0.5.tar.gz
- sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 8c0981e488..d5f1caf7c5 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = 5.0.0
-+LIBCEC_VERSION = 4.0.5
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
+ > - CVE-2019-19924 (Fixed in 3.31.0)
+
+ > The SQLite mishandles certain SQL commands due to improper error
+ > handling by ` sqlite3WindowRewrite() ` function.
+
+ > - CVE-2020-13435 (Fixed in 3.32.1)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to improper handling
+ > of query rewriting. An attacker could exploit this vulnerability by
+ > supplying a system with maliciously crafted input.
+
+ > - CVE-2020-13632 (Fixed in 3.32.0)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to improper pointer
+ > management in the FTS3 virtual table module. An attacker could exploit
+ > this vulnerability by supplying a system with maliciously crafted input.
+
+ > - CVE-2020-13434 (Fixed in 3.32.1)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to improper handling
+ > of floating-point operations. An attacker could exploit this
+ > vulnerability by supplying a system with maliciously crafted input.
+
+ > - CVE-2020-13871 (Fixed in 3.32.3)
+
+ > SQLite 3.32.2 has a use-after-free in resetAccumulator in select.c
+ > because the parse tree rewrite for window functions is too late.
+
+ > - CVE-2020-13630 (Fixed in 3.32.0)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to a use after free
+ > issue in the FTS3 virtual table module. An attacker could exploit this
+ > vulnerability by supplying a system with maliciously crafted input.
+
+ > - CVE-2020-15358 (Fixed in 3.32.3)
+
+ > SQLite is vulnerable to a heap-based buffer overflow flaw in part of an
+ > optimization feature. An attacker able to issue specially crafted
+ > queries could cause the application to crash, resulting in a
+ > denial-of-service (DoS).
+
+ > - CVE-2020-9327 (Fixed in 3.32.0)
+
+ > SQLite is vulnerable to a Null pointer dereference flaw. A remote
+ > attacker able to issue specially crafted SQL statements may be able to
+ > cause a segmentation fault and application crash, resulting in a
+ > denial-of-service (DoS).
+
+ > - CVE-2019-19645 (Fixed in 3.31.0)
+
+ > It was discovered that SQLite contains an denial-of-service (DoS)
+ > vulnerability. An attacker could exploit this to trigger an infinite
+ > recursion resulting in excessive resource consumption leading to a DoS
+ > condition.
+
+ > - CVE-2019-19926 (Fixed in 3.31.0)
+
+ > The SQLite allows denial-of-service attack due to improper input
+ > validation of user-supplied input.
+
+ > - CVE-2020-11655 (Fixed in 3.32.0)
+
+ > SQLite contains a memory corruption vulnerability. Successfully
+ > exploiting this issue may allow attackers to cause a denial-of-service
+ > (DoS). This allows an attacker to cause SQLite to crash by issuing a
+ > crafted SQL query to the database.
+
+ > - CVE-2019-19925 (Fixed in 3.31.0)
+
+ > The INSERT statement fails when the zip file path is `NULL`.
+
+ > - CVE-2019-19242 (Fixed in 3.31.0)
+
+ > SQLite is vulnerable to a denial-of-service (DoS). An attacker could
+ > exploit this vulnerability by supplying a maliciously crafted query to
+ > cause an application crash.
+
+ > - CVE-2019-19244 (Fixed in 3.31.0)
+
+ > SQLite is vulnerable to a denial-of-service. An attacker could exploit
+ > this vulnerability by providing a crafted SELECT statement to the SQL
+ > server, resulting in an application crash.
+
+ > - CVE-2020-13631 (Fixed in 3.32.0)
+
+ > SQLite is vulnerable to data manipulation due to improper management of
+ > virtual tables. An attacker could exploit this vulnerability by
+ > supplying a system with maliciously crafted input.
+
+ > - CVE-2020-11656 (Fixed in 3.32.0)
+
+ > SQLite contains a Use-After-Free vulnerability. Successfully exploiting
+ > this issue may allow attackers to cause a denial-of-service (DoS). This
+ > allows an attacker to cause SQLite to crash by issuing a crafted SQL
+ > query to the database.
+
+ > - CVE-2019-19880 (Fixed in 3.31.0)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to the mismanagement
+ > of memory resources. A remote attacker could cause a victim's instance
+ > of the application to crash by submitting crafted request that will lead
+ > to the application parsing problematic integer values.
+
+ > - CVE-2019-20218 (Fixed in 3.31.0)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to improper
+ > exception handling which could lead to unwinding of the `WITH` stack
+ > following parsing errors. An attacker could exploit this vulnerability
+ > by supplying a system with maliciously crafted input.
+
+ > - CVE-2019-19603 (Fixed in 3.31.0)
+
+ > It was discovered that SQLite contains a denial-of-service (DoS)
+ > vulnerability. An authenticated attacker could exploit this
+ > vulnerability by creating tables with the same name as shadow table
+ > names.
+
+ > - CVE-2019-19959 (Fixed in 3.31.0)
+
+ > SQLite is vulnerable to denial-of-service (DoS) due to the mismanagement
+ > of system memory resources. A remote attacker could cause a victim's
+ > instance of the application to crash by causing it to process a SQL
+ > statement that references a maliciously crafted file name.
+
+ > - CVE-2019-19646 (Fixed in 3.31.0)
+
+ > SQLite is vulnerable to a denial-of-service (DoS). An attacker could
+ > exploit this vulnerability by supplying malicious SQL in order to crash
+ > the application.
+
+ > - CVE-2019-19317 (Fixed in 3.31.0)
+
+ > SQLite contains a denial-of-service (DoS) vulnerability due to incorrect
+ > logic in name lookups. An attacker could exploit this to cause a
+ > application crash.
+
+ > Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+ > CC: Peter Korsgard <peter@korsgaard.com>
+
+ > ---
+
+ > Peter: Can this be put onto the 2020.02 LTS as it carries a lot of
+ > security fixes?
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
