@@ -1,99 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 08:28:08 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: fix
+Date: Mon, 20 Jul 2020 08:40:33 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/upmpdcli: fix
  build with libmicrohttpd 0.9.71
-Message-ID: <20200720064201.45F6F813FE@busybox.osuosl.org>
+Message-ID: <20200720064201.62EF786D78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8bd41660f0ecebb4c6ad676870ced796f02ee26
+commit: https://git.buildroot.net/buildroot/commit/?id=7cd9390f966720738ce71dd716a77bae1df78309
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c3a50eeae2ed661415e99ca0d0f26ee8dc6d40bd)
+(cherry picked from commit 17b80efd6bfd3abe5637d1b7962b89a894efa9ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ ...001-Adapt-streamproxy-to-newer-microhttpd.patch | 106 +++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
 
-diff --git a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
+diff --git a/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
 new file mode 100644
-index 0000000000..7c1cfe939b
+index 0000000000..55c691b86a
 --- /dev/null
-+++ b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
-@@ -0,0 +1,71 @@
-+From d17eabb1052e7c8c432331a7a782845e36164f01 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
-+Date: Tue, 30 Jun 2020 09:56:10 +0200
-+Subject: [PATCH] =?UTF-8?q?Fix=20build=20with=20=C2=B5httpd=200.9.71?=
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The return type of callbacks was changed from int to an enum.
++++ b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
+@@ -0,0 +1,106 @@
++From 4fd8a07b560dcd4ad5706684d512d33707de3da0 Mon Sep 17 00:00:00 2001
++From: Jean-Francois Dockes <jf@dockes.org>
++Date: Fri, 3 Jul 2020 19:26:37 +0200
++Subject: [PATCH] Adapt streamproxy to newer microhttpd where results are now
++ an enum
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +[downloaded from upstream commit
-+ https://github.com/systemd/systemd/commit/d17eabb1052e7c8c432331a7a782845e36164f01]
++ https://framagit.org/medoc92/upmpdcli/-/commit/4fd8a07b560dcd4ad5706684d512d33707de3da0]
 +---
-+ src/journal-remote/journal-gatewayd.c    | 4 ++--
-+ src/journal-remote/journal-remote-main.c | 2 +-
-+ src/journal-remote/microhttpd-util.h     | 6 ++++++
-+ 3 files changed, 9 insertions(+), 3 deletions(-)
++ src/mediaserver/cdplugins/streamproxy.cpp | 23 ++++++++++++++---------
++ 1 file changed, 14 insertions(+), 9 deletions(-)
 +
-+diff --git a/src/journal-remote/journal-gatewayd.c b/src/journal-remote/journal-gatewayd.c
-+index 5177e0d1577..3ab7c98b0b5 100644
-+--- a/src/journal-remote/journal-gatewayd.c
-++++ b/src/journal-remote/journal-gatewayd.c
-+@@ -349,7 +349,7 @@ static int request_parse_range(
-+         return 0;
-+ }
++diff --git a/src/mediaserver/cdplugins/streamproxy.cpp b/src/mediaserver/cdplugins/streamproxy.cpp
++index abc57915..8d283834 100644
++--- a/src/mediaserver/cdplugins/streamproxy.cpp
+++++ b/src/mediaserver/cdplugins/streamproxy.cpp
++@@ -28,6 +28,11 @@
++ #include <fcntl.h>
++ #include <microhttpd.h>
 + 
-+-static int request_parse_arguments_iterator(
-++static mhd_result request_parse_arguments_iterator(
-+                 void *cls,
-+                 enum MHD_ValueKind kind,
-+                 const char *key,
-+@@ -796,7 +796,7 @@ static int request_handler_machine(
-+         return MHD_queue_response(connection, MHD_HTTP_OK, response);
-+ }
-+ 
-+-static int request_handler(
-++static mhd_result request_handler(
-+                 void *cls,
-+                 struct MHD_Connection *connection,
-+                 const char *url,
-+diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
-+index 69a111afead..f82d188a8c6 100644
-+--- a/src/journal-remote/journal-remote-main.c
-++++ b/src/journal-remote/journal-remote-main.c
-+@@ -253,7 +253,7 @@ static int process_http_upload(
-+         return mhd_respond(connection, MHD_HTTP_ACCEPTED, "OK.");
-+ };
-+ 
-+-static int request_handler(
-++static mhd_result request_handler(
-+                 void *cls,
-+                 struct MHD_Connection *connection,
-+                 const char *url,
-+diff --git a/src/journal-remote/microhttpd-util.h b/src/journal-remote/microhttpd-util.h
-+index d90c6bbd4f1..4ca9a5c4f16 100644
-+--- a/src/journal-remote/microhttpd-util.h
-++++ b/src/journal-remote/microhttpd-util.h
-+@@ -47,6 +47,12 @@
-+ #  define MHD_create_response_from_fd_at_offset64 MHD_create_response_from_fd_at_offset
-+ #endif
-+ 
-++#if MHD_VERSION >= 0x00097002
-++#  define mhd_result enum MHD_Result
-++#else
-++#  define mhd_result int
+++
+++#if MHD_VERSION < 0x00097002
+++typedef int MHD_Result;
 ++#endif
 ++
-+ void microhttpd_logger(void *arg, const char *fmt, va_list ap) _printf_(2, 0);
++ #include <mutex>
++ #include <condition_variable>
++ #include <unordered_map>
++@@ -155,7 +160,7 @@ public:
++     ~Internal();
++     bool startMHD();
 + 
-+ /* respond_oom() must be usable with return, hence this form. */
++-    int answerConn(
+++    MHD_Result answerConn(
++         struct MHD_Connection *connection, const char *url, 
++         const char *method, const char *version, 
++         const char *upload_data, size_t *upload_data_size,
++@@ -202,7 +207,7 @@ StreamProxy::Internal::Internal(int _listenport, UrlTransFunc _urltrans)
++ }
++ 
++ 
++-static int answer_to_connection(
+++static MHD_Result answer_to_connection(
++     void *cls, struct MHD_Connection *conn, 
++     const char *url, const char *method, const char *version, 
++     const char *upload_data, size_t *upload_data_size,
++@@ -214,7 +219,7 @@ static int answer_to_connection(
++         return internal->answerConn(
++             conn, url, method, version, upload_data, upload_data_size, con_cls);
++     } else {
++-        return -1;
+++        return MHD_NO;
++     }
++ }
++ 
++@@ -238,8 +243,8 @@ static int print_out_key (void *cls, enum MHD_ValueKind kind,
++ }
++ #endif /* PRINT_KEYS */
++ 
++-static int mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
++-                        const char *key, const char *value)
+++static MHD_Result mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
+++                               const char *key, const char *value)
++ {
++     unordered_map<string,string> *mp = (unordered_map<string,string> *)cls;
++     if (mp) {
++@@ -307,7 +312,7 @@ static bool processRange(struct MHD_Connection *mhdconn, uint64_t& offset)
++     return true;
++ }
++ 
++-int StreamProxy::Internal::answerConn(
+++MHD_Result StreamProxy::Internal::answerConn(
++     struct MHD_Connection *mhdconn, const char *_url,
++     const char *method, const char *version, 
++     const char *upload_data, size_t *upload_data_size,
++@@ -352,7 +357,7 @@ int StreamProxy::Internal::answerConn(
++                 return MHD_NO;
++             }
++             MHD_add_response_header (response, "Location", url.c_str());
++-            int ret = MHD_queue_response(mhdconn, 302, response);
+++            MHD_Result ret = MHD_queue_response(mhdconn, 302, response);
++             MHD_destroy_response(response);
++             return ret;
++         }
++@@ -393,7 +398,7 @@ int StreamProxy::Internal::answerConn(
++         int code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
++         struct MHD_Response *response =
++             MHD_create_response_from_buffer(0, 0, MHD_RESPMEM_PERSISTENT);
++-        int ret = MHD_queue_response(mhdconn, code, response);
+++        MHD_Result ret = MHD_queue_response(mhdconn, code, response);
++         MHD_destroy_response(response);
++         LOGINF("StreamProxy::answerConn (1): return with http code: " <<
++                code << endl);
++@@ -434,7 +439,7 @@ int StreamProxy::Internal::answerConn(
++     if (reader->fetcher->fetchDone(&fetchcode, &httpcode)) {
++         code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
++     }
++-    int ret = MHD_queue_response(mhdconn, code, response);
+++    MHD_Result ret = MHD_queue_response(mhdconn, code, response);
++     MHD_destroy_response(response);
++     return ret;
++ }
++-- 
++GitLab
++
