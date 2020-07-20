@@ -1,139 +1,160 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Jul 2020 18:03:06 +0200
-Subject: [Buildroot] [git commit] package/libvorbis: bump version to 1.3.7
-Message-ID: <20200720160000.6CA8E821BB@busybox.osuosl.org>
+Date: Mon, 20 Jul 2020 18:02:48 +0200
+Subject: [Buildroot] [git commit] package/libevdev: bump version to 1.9.1
+Message-ID: <20200720160000.61165873B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe383b5f216e0bf1a4ab9fa6df514b4d277d431e
+commit: https://git.buildroot.net/buildroot/commit/?id=6641c8a9279e5fa1761bc8610c53292cee8593dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patches which were applied upstream.
+For details see [1].
 
-Reformatted hashes,
+- drop 0001-meson.build-use-local-include-path-for-tools.patch
+  (upstream [2])
+- drop 0003-meson.build-enable-static-library-build.patch
+  (upstream [3])
 
-Updated license hash after copyright year update:
-https://gitlab.xiph.org/xiph/vorbis/-/commit/eb40ca5fbd0c60d8bd1fd33be07f02defc21e5d7
+[1] https://lists.freedesktop.org/archives/input-tools/2020-July/001541.html
+[2] https://gitlab.freedesktop.org/libevdev/libevdev/-/commit/fe8238a71ae3ad8a776ee35a88fc292f1f006ec7
+[3] https://gitlab.freedesktop.org/libevdev/libevdev/-/commit/a9d324f82bd5e822ea57224000fea43cb64aa214
 
-Switched _SITE to https.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...fix-bounds-check-on-very-low-sample-rates.patch | 31 ----------------------
- ...-Sanity-check-number-of-channels-in-setup.patch | 28 -------------------
- package/libvorbis/libvorbis.hash                   |  4 +--
- package/libvorbis/libvorbis.mk                     | 10 ++-----
- 4 files changed, 4 insertions(+), 69 deletions(-)
+ ...on.build-use-local-include-path-for-tools.patch | 54 ----------------------
+ ...3-meson.build-enable-static-library-build.patch | 30 ------------
+ package/libevdev/libevdev.hash                     | 10 ++--
+ package/libevdev/libevdev.mk                       |  2 +-
+ 4 files changed, 6 insertions(+), 90 deletions(-)
 
-diff --git a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+diff --git a/package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch b/package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch
 deleted file mode 100644
-index 94dc4c614b..0000000000
---- a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+index aa0af75055..0000000000
+--- a/package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From: Thomas Daede <daede003@umn.edu>
--Date: Wed, 9 May 2018 21:56:59 +0000 (-0700)
--Subject: CVE-2017-14160: fix bounds check on very low sample rates.
--X-Git-Url: https://git.xiph.org/?p=vorbis.git;a=commitdiff_plain;h=018ca26dece618457dd13585cad52941193c4a25
+@@ -1,54 +0,0 @@
+-From 83eb5bbac775d46b74e7f99fbd243d53f0118b37 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 2 Mar 2020 15:43:14 +0100
+-Subject: [PATCH] meson.build: use local include path for tools
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--CVE-2017-14160: fix bounds check on very low sample rates.
--CVE-2018-10393: Out-of-bounds Read
+-Fixes the following compile failure with old toolchains and meson
+-build (autotools build not affected):
 -
--Downloaded from upstream commit
--https://git.xiph.org/?p=vorbis.git;a=commitdiff;h=018ca26dece618457dd13585cad52941193c4a25
+-  ../tools/mouse-dpi-tool.c: In function ???handle_event???:
+-  ../tools/mouse-dpi-tool.c:115:13: error: ???const struct input_event??? has no member named ???input_event_sec???
+-     m->us = ev->input_event_sec * 1000000 + ev->input_event_usec;
+-               ^
+-  ../tools/mouse-dpi-tool.c:115:45: error: ???const struct input_event??? has no member named ???input_event_usec???
+-     m->us = ev->input_event_sec * 1000000 + ev->input_event_usec;
+-                                               ^
 -
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[yann.morin.1998 at free.fr: also fixes CVE-2018-10393]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ----
+- meson.build | 4 ++++
+- 1 file changed, 4 insertions(+)
 -
--diff --git a/lib/psy.c b/lib/psy.c
--index 422c6f1..1310123 100644
----- a/lib/psy.c
--+++ b/lib/psy.c
--@@ -602,8 +602,9 @@ static void bark_noise_hybridmp(int n,const long *b,
--   for (i = 0, x = 0.f;; i++, x += 1.f) {
+-diff --git a/meson.build b/meson.build
+-index 4831f8e..5500a83 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -102,18 +102,22 @@ install_man(manpage)
+- # tools
+- executable('libevdev-events',
+- 	   sources: ['tools/libevdev-events.c'],
+-+	   include_directories: [includes_include],
+- 	   dependencies: dep_libevdev,
+- 	   install: false)
+- executable('touchpad-edge-detector',
+- 	   sources: ['tools/touchpad-edge-detector.c'],
+-+	   include_directories: [includes_include],
+- 	   dependencies: [dep_libevdev, dep_lm],
+-            install: true)
+- executable('mouse-dpi-tool',
+- 	   sources: ['tools/mouse-dpi-tool.c'],
+-+	   include_directories: [includes_include],
+- 	   dependencies: dep_libevdev,
+-            install: true)
+- executable('libevdev-tweak-device',
+- 	   sources: ['tools/libevdev-tweak-device.c'],
+-+	   include_directories: [includes_include],
+- 	   dependencies: dep_libevdev,
+- 	   install: true)
 - 
--     lo = b[i] >> 16;
---    if( lo>=0 ) break;
--     hi = b[i] & 0xffff;
--+    if( lo>=0 ) break;
--+    if( hi>=n ) break;
-- 
--     tN = N[hi] + N[-lo];
--     tX = X[hi] - X[-lo];
-diff --git a/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch b/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
-deleted file mode 100644
-index 1208839a20..0000000000
---- a/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 112d3bd0aaacad51305e1464d4b381dabad0e88b Mon Sep 17 00:00:00 2001
--From: Thomas Daede <daede003@umn.edu>
--Date: Thu, 17 May 2018 16:19:19 -0700
--Subject: [PATCH] Sanity check number of channels in setup.
--
--Fixes #2335.
--[Retrieved from:
--https://gitlab.xiph.org/xiph/vorbis/commit/112d3bd0aaacad51305e1464d4b381dabad0e88b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- lib/vorbisenc.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/lib/vorbisenc.c b/lib/vorbisenc.c
--index 4fc7b62..64a51b5 100644
----- a/lib/vorbisenc.c
--+++ b/lib/vorbisenc.c
--@@ -684,6 +684,7 @@ int vorbis_encode_setup_init(vorbis_info *vi){
--   highlevel_encode_setup *hi=&ci->hi;
-- 
--   if(ci==NULL)return(OV_EINVAL);
--+  if(vi->channels<1||vi->channels>255)return(OV_EINVAL);
--   if(!hi->impulse_block_p)i0=1;
-- 
--   /* too low/high an ATH floater is nonsensical, but doesn't break anything */
 --- 
--2.24.1
+-2.25.1
 -
-diff --git a/package/libvorbis/libvorbis.hash b/package/libvorbis/libvorbis.hash
-index 15bd01f22a..2e44ba33af 100644
---- a/package/libvorbis/libvorbis.hash
-+++ b/package/libvorbis/libvorbis.hash
-@@ -1,4 +1,4 @@
- # From http://www.xiph.org/downloads/
--sha256 af00bb5a784e7c9e69f56823de4637c350643deedaf333d0fa86ecdba6fcb415 libvorbis-1.3.6.tar.xz
-+sha256  b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b  libvorbis-1.3.7.tar.xz
- # License files, locally calculated
--sha256 29e9914e6173b7061b7d48c25e6159fc1438326738bc047cc7248abc01b271f6  COPYING
-+sha256  ec1815db59fcd302846df949d7424876cb2e2dc5ed1606c5fb0b36787b1cf43a  COPYING
-diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
-index 708f3364ec..95c43d959e 100644
---- a/package/libvorbis/libvorbis.mk
-+++ b/package/libvorbis/libvorbis.mk
-@@ -4,19 +4,13 @@
+diff --git a/package/libevdev/0003-meson.build-enable-static-library-build.patch b/package/libevdev/0003-meson.build-enable-static-library-build.patch
+deleted file mode 100644
+index d9a336ef8c..0000000000
+--- a/package/libevdev/0003-meson.build-enable-static-library-build.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 0d39ee4958869e9dd7657d6d0528bc4e2461e912 Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Tue, 10 Mar 2020 09:35:52 +0100
+-Subject: [PATCH] meson.build: enable static library build
+-
+-Use meson library() instead of shared_library() to enable
+-static build.
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-Upstream: https://gitlab.freedesktop.org/libevdev/libevdev/-/commit/a9d324f82bd5e822ea57224000fea43cb64aa214
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index a623a90..94224cb 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -70,7 +70,7 @@ src_libevdev = [
+- 
+- mapfile = join_paths(dir_src, 'libevdev.sym')
+- version_flag = '-Wl,--version-script, at 0@'.format(mapfile)
+--lib_libevdev = shared_library('evdev',
+-+lib_libevdev = library('evdev',
+- 	src_libevdev,
+- 	include_directories: [includes_include],
+- 	dependencies: [],
+--- 
+-2.25.1
+-
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 5a28275319..c4ce252ef1 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2020-March/001530.html
+-md5  13c3f0911f9326d4b9fa103365f84421  libevdev-1.9.0.tar.xz
+-sha1  ab5040ee88dd4cb49a75da72e8fded91b282c108  libevdev-1.9.0.tar.xz
+-sha256  e7e18a64264f2dea19b6c50a481f8c062529d42919ccda0bc861495bce28eb9e  libevdev-1.9.0.tar.xz
+-sha512  6e7589b5776437ac23fbf65b3194fb1dd3a68a294696145060cdd97bcdeb9b04f355f2be028dc1a5efe98ef2cafca15e4f61115edf5d62591e3a8944dc95942a  libevdev-1.9.0.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2020-July/001541.html
++md5  58286a834ae14536caf9cab8633419cf  libevdev-1.9.1.tar.xz
++sha1  b61c6a09446d717edc4971f7bc3ce9ffa2f05306  libevdev-1.9.1.tar.xz
++sha256  f5603c48c5afd76b14df7a5124e0a94a102f8da0d45826192325069d1bbc7acb  libevdev-1.9.1.tar.xz
++sha512  7d845ce2279d2e2ef12437f6218550265ea0c85e5b6c0d116aff09787b73626b338fe3084baff060085d393688b5ae3d33772689e0581684eff257af01c4c645  libevdev-1.9.1.tar.xz
+ 
+ # Hash for license files:
+ sha256  f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137  COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 78e3146b9a..8505346b33 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVORBIS_VERSION = 1.3.6
-+LIBVORBIS_VERSION = 1.3.7
- LIBVORBIS_SOURCE = libvorbis-$(LIBVORBIS_VERSION).tar.xz
--LIBVORBIS_SITE = http://downloads.xiph.org/releases/vorbis
-+LIBVORBIS_SITE = https://downloads.xiph.org/releases/vorbis
- LIBVORBIS_INSTALL_STAGING = YES
- LIBVORBIS_CONF_OPTS = --disable-oggtest
- LIBVORBIS_DEPENDENCIES = host-pkgconf libogg
- LIBVORBIS_LICENSE = BSD-3-Clause
- LIBVORBIS_LICENSE_FILES = COPYING
- 
--# 0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
--LIBVORBIS_IGNORE_CVES += CVE-2018-10393
--
--# 0002-Sanity-check-number-of-channels-in-setup.patch
--LIBVORBIS_IGNORE_CVES += CVE-2018-10392
--
- $(eval $(autotools-package))
+-LIBEVDEV_VERSION = 1.9.0
++LIBEVDEV_VERSION = 1.9.1
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
