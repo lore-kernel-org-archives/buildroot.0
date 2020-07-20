@@ -1,43 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jul 2020 18:41:21 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python-greenlet:
- really enable for i386
-Message-ID: <20200720163849.3AAF884054@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 20 Jul 2020 18:47:20 +0200
+Subject: [Buildroot] [PATCH 1/4] package/glibc: move version string to
+ Kconfig
+Message-ID: <20200720164723.359198-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d58f4a202bc02bb085a6b655389df7dcc6f78f70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Commit 30f1decec2c (package/python-greenlet: enable only on supported
-architectures) mis-typed the architecture name fox 286-32: BR2_x86
-doesn't exist in buildroot; it is BR2_i386.
+Currently, the libc version is shared by glibc and localedef. Syncing is
+usually not strictly mandatory, but we had breakage in the past, when
+glibc 2.27 changed locale handling, so that a localedef from 2.26 or
+earlier would generate locale definitions unsuitable for glibc 2.27. So,
+the safe bet is to keep both in sync.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998 at free.fr:
-  - just do the s/x86/i386/ fix for easy backport
-  - x86_64 split off to its own patch
-]
+Keeping them in sync is currently done manually, with hints as comments
+in glibc.mk and localedef.mk, and this is error-prone.
+
+By moving the version string to Kconfig, we can ensure the version is
+always defined before we scan the packages, and thus it will be easier
+to share between glibc and localedef, at which point we'll no longer
+need the manual sync.
+
+However, the matter is made a little bit more complex by the fact that
+some architectures require a forked version of glibc. For those, in
+theory, we should also be using a localedef that is in sync with them.
+However, that would require that we also carry a patch so we can build
+only localedef for those versions as well.
+
+In practice, those versions are close-enough to upstream that the
+localedef from upstream is compatible with those versions. Besides, the
+current behaviour is that we are using upstream localedef for those
+versions already, so we keep doing that.
+
+So we do not move the site to Kconfig.
+
+So, we will always need to know the upstream version string, even when
+usign one of the forked trees. We use a Kconfig trick: a default for a
+symbol can be another symbol. We define the upstream version in its own
+symbol, which we use as fallback default for the generic version symbol,
+when not specific fork is needed.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b29eadf903be27caee24c12755efbc3bd10bd31a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/python-greenlet/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/glibc/Config.in | 17 +++++++++++++++++
+ package/glibc/glibc.mk  |  8 +-------
+ 2 files changed, 18 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-greenlet/Config.in b/package/python-greenlet/Config.in
-index 44ab96b488..15765f1e45 100644
---- a/package/python-greenlet/Config.in
-+++ b/package/python-greenlet/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_PYTHON_GREENLET_ARCH_SUPPORTS
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_riscv
- 	default y if BR2_sparc || BR2_sparc64
--	default y if BR2_x86
-+	default y if BR2_i386
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 5ecd058145..1c5b33a0dd 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -17,3 +17,20 @@ config BR2_PACKAGE_GLIBC_UTILS
+ 	  ldconfig, ldd and locale glibc utilities for the target.
  
- config BR2_PACKAGE_PYTHON_GREENLET
- 	bool "python-greenlet"
+ endif # BR2_TOOLCHAIN_BUILDROOT_GLIBC
++
++# Keep version string outside of the conditional and keep the upstream
++# version last and unconditional.
++
++# Generate upstream version string using:
++#   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
++# When updating the version, please also update localedef
++config BR2_GLIBC_VERSION_UPSTREAM
++	string
++	default "2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427"
++
++config BR2_GLIBC_VERSION
++	string
++	default "arc-2020.03-release"                               if BR2_arc
++	default "7630ed2fa60caea98f500e4a7a51b88f9bf1e176"          if BR2_csky
++	default "06983fe52cfe8e4779035c27e8cc5d2caab31531"          if BR2_RISCV_32
++	default BR2_GLIBC_VERSION_UPSTREAM
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 1881cf0cdc..1801ac7744 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -4,20 +4,14 @@
+ #
+ ################################################################################
+ 
++GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION))
+ ifeq ($(BR2_arc),y)
+-GLIBC_VERSION =  arc-2020.03-release
+ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+ else ifeq ($(BR2_RISCV_32),y)
+-GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+ GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+ else ifeq ($(BR2_csky),y)
+-GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
+ GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+ else
+-# Generate version string using:
+-#   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-# When updating the version, please also update localedef
+-GLIBC_VERSION = 2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+-- 
+2.25.4
