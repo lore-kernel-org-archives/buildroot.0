@@ -1,66 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 07:59:20 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/wpewebkit:
- security bump to version 2.28.3
-Message-ID: <20200721064041.784657FBE4@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 08:04:46 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/jq: bump version
+ to a17dd32
+Message-ID: <20200721064041.9344F7FBE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa3fa779b227834c2b15bff423db788fb44e155d
+commit: https://git.buildroot.net/buildroot/commit/?id=6302d13742ce177981f916c014faec29cbfa4c3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This is a minor release which provides fixes for CVE-2020-9800,
-CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
-CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
+Bump jq package to latest to fix seg fault errors reported at
+https://github.com/stedolan/jq/issues/2003
 
-Updating from 2.28.2 also brings in the usual batch of fixes, including
-important improvements to threading in the media player. Full release
-notes can be found at:
-
-  https://wpewebkit.org/release/wpewebkit-2.28.3.html
-
-A detailed security advisory can be found at:
-
-  https://wpewebkit.org/security/WSA-2020-0006.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Lyle Franklin <lylejfranklin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit aa2c6cfd31ea3fb426b3404ec8e0390f9176442b)
+(cherry picked from commit c94794175fab58823fde539eac83ec0234768f36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/jq/jq.hash | 2 +-
+ package/jq/jq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 8c660d3003..fcc35c5024 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.28.2.tar.xz.sums
--md5  c1f17d4b031e9462692443e3c089789c  wpewebkit-2.28.2.tar.xz
--sha1  b109cfec921eb466227ab3b8d21c5f5717311c8e  wpewebkit-2.28.2.tar.xz
--sha256  6929d28744702ead3574484ca02645c457a6fdcd6b43ccc9766d98dc3664e8dc  wpewebkit-2.28.2.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.28.3.tar.xz.sums
-+md5  0b3655598f340a5c83cc26423fefcf36  wpewebkit-2.28.3.tar.xz
-+sha1  ea03d365584ef5e86ca28cec6ca072a4674e9312  wpewebkit-2.28.3.tar.xz
-+sha256  2539263a4d73c00abfe0205f54770dc1f6d2b635edbe41e748b507254f21e98b  wpewebkit-2.28.3.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index a6124d3529..22c3d96460 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index 2cddda32c6..e9f15afa78 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3002cf80d871728562989b4a47d90a7301fe049a4e1d69836b99108f198dac06  jq-a97638713ad30653d424f136018098c4b0e5c71b.tar.gz
++sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
+ sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index 3d22306537..297a608b12 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.28.2
-+WPEWEBKIT_VERSION = 2.28.3
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-JQ_VERSION = a97638713ad30653d424f136018098c4b0e5c71b
++JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
+ JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
+ JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
