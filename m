@@ -1,55 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 07:57:28 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/php: bump version
- to 7.4.8
-Message-ID: <20200721064051.AA5BD87167@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 08:04:58 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jq: bump version
+ to a17dd32
+Message-ID: <20200721064051.D003C87167@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01299680bd8d548e9e4eb71e10693e9b50633046
+commit: https://git.buildroot.net/buildroot/commit/?id=3b482ea1ae9a67b8d88f90f5b02822e04e1c51e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Quoting https://www.php.net/
-"For windows users running an official build, this release contains a
- patched version of libcurl addressing CVE-2020-8159.
+Bump jq package to latest to fix seg fault errors reported at
+https://github.com/stedolan/jq/issues/2003
 
-For all other consumers of PHP, this is a bug fix release."
-
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.8
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Lyle Franklin <lylejfranklin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a6a500bb990fe6b9302e762adbd5e440329e99d9)
+(cherry picked from commit c94794175fab58823fde539eac83ec0234768f36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/jq/jq.hash | 2 +-
+ package/jq/jq.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 9789a99988..47879eecca 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf  php-7.4.7.tar.xz
-+sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
- 
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ed71404c7b..48af0f6fdc 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index 2cddda32c6..e9f15afa78 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3002cf80d871728562989b4a47d90a7301fe049a4e1d69836b99108f198dac06  jq-a97638713ad30653d424f136018098c4b0e5c71b.tar.gz
++sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
+ sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index 3d22306537..297a608b12 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.7
-+PHP_VERSION = 7.4.8
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-JQ_VERSION = a97638713ad30653d424f136018098c4b0e5c71b
++JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
+ JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
+ JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
