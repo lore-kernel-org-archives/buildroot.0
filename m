@@ -1,85 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Jul 2020 09:25:26 +0200
-Subject: [Buildroot] [PATCH v2] package/resiprocate: new package
-In-Reply-To: <CAMQcK5Kh4eeiN1Fm0=14JFsOzgtdoHHR+mFxHjpPMWQVBazXDg@mail.gmail.com>
-References: <20200720143245.48783-1-ryan.barnett@rockwellcollins.com>
- <20200720222812.0d6432bc@windsurf.home>
- <CAMQcK5Kh4eeiN1Fm0=14JFsOzgtdoHHR+mFxHjpPMWQVBazXDg@mail.gmail.com>
-Message-ID: <20200721092526.1abec404@windsurf.home>
+Date: Tue, 21 Jul 2020 09:26:51 +0200
+Subject: [Buildroot] [PATCH 4/8] boot/arm-trusted-firmware: add EDK2 as
+ BL33 option
+In-Reply-To: <20200720212119.GE2296@scaer>
+References: <20200719180727.28202-1-hi@senzilla.io>
+ <20200719180727.28202-5-hi@senzilla.io>
+ <20200720225941.796ff11c@windsurf.home>
+ <20200720212119.GE2296@scaer>
+Message-ID: <20200721092651.314d1501@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, 20 Jul 2020 23:21:19 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On Mon, 20 Jul 2020 20:57:25 -0500
-Ryan Barnett <ryan.barnett@collins.com> wrote:
+> > > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(EDK2_FD_NAME).fd  
+> > 
+> > So there is this reference to a variable of another package, which I'm
+> > never sure if it works correctly. Yann, what is the rule again ? :-)  
+> 
+> If a variable is expanded at the time of '$(eval $(foo-package))', then
+> you can't share variables bewtween packages.
+> 
+> That is the case for _VERSION for example, as that serves to create a
+> make-dependency in the form;
+> 
+>     build-dir/foo-$(FOO_VERSION): some-dependencies
+> 
+> If however, avariable is expanded in the configure, build, install,
+> etc... rules, then this is OK.
+> 
+> For example, cross-using a variable in a _CMDS or _HOOKS is OK.
 
-> > > +if BR2_PACKAGE_RESIPROCATE
-> > > +
-> > > +config BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT
-> > > +     bool "Enable DTLS support"
-> > > +     select BR2_PACKAGE_OPENSSL
-> > > +     help
-> > > +       Enable DTLS support (requires OpenSSL)  
-> >
-> > I haven't changed this, but I'm wondering if it makes sense to have a
-> > separate option for this. You already have an optional dependency on
-> > OpenSSL. How much more size does --with-dtls takes ?  
-> 
-> The reason that I created this option was so that when selected, it
-> will also select/enable OpenSSL features for the package. As far as
-> size improvements, there are none:
-> 
-> Build with only enabling BR2_PACKAGE_RESIPROCATE (size in bytes):
-> 
->     3168800 Jul 20 20:06 output/target/usr/lib/libresip-1.12.so*
-> 
-> Build with BR2_PACKAGE_RESIPROCATE_DTLS_SUPPORT (size in bytes):
-> 
->     3168800 Jul 20 20:29 output/target/usr/lib/libresip-1.12.so*
-> 
-> Do you just prefer this option is removed?
+OK, so the case of the EDK2_FD_NAME used by Dick in this patch series
+is OK I guess.
 
-So what is this option doing? Is the DTLS support only in the apps? I
-tried to track down where the USE_DTLS macro is used, but since I'm not
-familiar with the code base, I couldn't quickly figure that out.
-
-Is the size increase is modest, then I would just enable DTLS support
-when OpenSSL is available, i.e together with --with-ssl.
-
-> > This didn't work, as it doesn't give the same hash as the official
-> > release tarball, so I switched to using the official release tarball.  
+> Finally, if you can *ensure* the ordering, by defining the variable
+> before the fiels that uses it are included, then that is also OK.
 > 
-> I apologize for this - since this was developed behind a firewall, I
-> had to use a web browser to download the tar file and place it on my
-> build server. Initially there was an issue when trying to download the
-> tar.gz file using Chrome as it would download the file already
-> extracted. This is because the HTTP request reply header contains
-> 'content-encoding: gzip' which chrome automatically decompresses the
-> file. I had temporarily switch to Github to try the issue until I
-> track the issue down to this by using Firefox:
-> 
-> https://superuser.com/questions/940605/chromium-prevent-unpacking-tar-gz
+> This is the case for exampe for the qt5 packages, or for barebox, where
+> the include order *has been written* to ensure that.
 
-OK, no worries.
-
-> > Is this something that could be reported upstream, and fixed ?  
-> 
-> Issue has been reported upstream in the following GitHub issue:
-> 
-> https://github.com/resiprocate/resiprocate/issues/155
-
-Thanks! I added a comment to it.
-
-> > Upstream configure.ac is already using PKG_CHECK_MODULES(), so it could
-> > be improved to use that as well for OpenSSL.  
-> 
-> I can look at creating a patch for this in the future.
-
-Great, thanks!
+Yeah, that is the point I remember, it's the other one that is less
+clear to me, i.e when ordering is not guaranteed, what you can/cannot
+do.
 
 Thomas
 -- 
