@@ -1,40 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 22:50:13 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Makefile: delete debug
- libs when debug is not enabled
-Message-ID: <20200721204713.0DB3B87E9B@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 23:05:41 +0200
+Subject: [Buildroot] [PATCH v2] package/x11r7/xfont_font-*: make outputs
+ reproducible
+In-Reply-To: <20200714012459.21451-1-asierra@xes-inc.com> (Aaron Sierra's
+ message of "Mon, 13 Jul 2020 20:24:59 -0500")
+References: <20200713184751.23534-1-asierra@xes-inc.com>
+ <20200714012459.21451-1-asierra@xes-inc.com>
+Message-ID: <87v9iglgt6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ade40aa1e7a863edb2223f6fafcf2e03e94deab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Aaron" == Aaron Sierra <asierra@xes-inc.com> writes:
 
-Some toolchains, like the Linaro gcc7 toolchains, now install libstdc++ debug
-library symbols to /lib/debug, which can be as large as the library itself.
-This commit removes the extra debug content if debugging is not enabled.
+ > Prior to gzip 1.10, the compression pipeline used with PCF fonts was
+ > not reproducible due to the implicit -N/--name injecting a timestamp:
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 04e9a1ec8c0dee17728f7a213855bef2f8300b64)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ >   $ cat /path/to/file | gzip > /path/to/file.gz
 
-diff --git a/Makefile b/Makefile
-index 2ed4551653..7461632c43 100644
---- a/Makefile
-+++ b/Makefile
-@@ -765,6 +765,9 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
-+ifneq ($(BR2_ENABLE_DEBUG):$(BR2_STRIP_strip),y:)
-+	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
-+endif
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
- 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
- 
+ > This updates Portable Compiled Format font packages to have a host-gzip
+ > dependency, so gzip version 1.10 or newer will reliably be used.
+
+ > This change does not affect encodings, which use a seemingly synonymous
+ > compression pipeline that happens to be reproducible with gzip versions
+ > at least as old as version 1.3.13:
+
+ >   $ gzip < /path/to/file > /path/to/file.gz
+
+ > Reported-by: Jordan Speicher <jspeicher@xes-inc.com>
+ > Signed-off-by: Aaron Sierra <asierra@xes-inc.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - Use host-gzip instead of converting to bzip2 for reproducibility
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
