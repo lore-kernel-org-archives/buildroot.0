@@ -1,66 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 07:59:05 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wpewebkit:
- security bump to version 2.28.3
-Message-ID: <20200721064051.B880887167@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 07:57:28 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: bump version
+ to 7.4.8
+Message-ID: <20200721064051.AA5BD87167@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93e045d16677d148c41414e40bdc42c6cb5de3fd
+commit: https://git.buildroot.net/buildroot/commit/?id=01299680bd8d548e9e4eb71e10693e9b50633046
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This is a minor release which provides fixes for CVE-2020-9800,
-CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
-CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
+Quoting https://www.php.net/
+"For windows users running an official build, this release contains a
+ patched version of libcurl addressing CVE-2020-8159.
 
-Updating from 2.28.2 also brings in the usual batch of fixes, including
-important improvements to threading in the media player. Full release
-notes can be found at:
+For all other consumers of PHP, this is a bug fix release."
 
-  https://wpewebkit.org/release/wpewebkit-2.28.3.html
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.8
 
-A detailed security advisory can be found at:
-
-  https://wpewebkit.org/security/WSA-2020-0006.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit aa2c6cfd31ea3fb426b3404ec8e0390f9176442b)
+(cherry picked from commit a6a500bb990fe6b9302e762adbd5e440329e99d9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 8c660d3003..fcc35c5024 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.28.2.tar.xz.sums
--md5  c1f17d4b031e9462692443e3c089789c  wpewebkit-2.28.2.tar.xz
--sha1  b109cfec921eb466227ab3b8d21c5f5717311c8e  wpewebkit-2.28.2.tar.xz
--sha256  6929d28744702ead3574484ca02645c457a6fdcd6b43ccc9766d98dc3664e8dc  wpewebkit-2.28.2.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.28.3.tar.xz.sums
-+md5  0b3655598f340a5c83cc26423fefcf36  wpewebkit-2.28.3.tar.xz
-+sha1  ea03d365584ef5e86ca28cec6ca072a4674e9312  wpewebkit-2.28.3.tar.xz
-+sha256  2539263a4d73c00abfe0205f54770dc1f6d2b635edbe41e748b507254f21e98b  wpewebkit-2.28.3.tar.xz
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 9789a99988..47879eecca 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf  php-7.4.7.tar.xz
++sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index a6124d3529..22c3d96460 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ed71404c7b..48af0f6fdc 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.28.2
-+WPEWEBKIT_VERSION = 2.28.3
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-PHP_VERSION = 7.4.7
++PHP_VERSION = 7.4.8
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
