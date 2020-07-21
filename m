@@ -1,33 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 23:13:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/putty: security bump version to
- 0.74
-In-Reply-To: <20200630054929.439626-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 30 Jun 2020 07:49:29 +0200")
-References: <20200630054929.439626-1-bernd.kuhls@t-online.de>
-Message-ID: <87imeglgfn.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Jul 2020 23:11:37 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/exiv2: really
+ disable samples
+Message-ID: <20200721210931.CD3377F917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2db7209867d8e04fdffb72fa7813377d8d21336b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > Reformatted hashes, added md5 hash provided by upstream.
- > Release notes:
- > https://lists.tartarus.org/pipermail/putty-announce/2020/000030.html
+EXIV2_ENABLE_BUILD_SAMPLES has been renamed into EXIV2_BUILD_SAMPLES
+since version 0.27 and
+https://github.com/Exiv2/exiv2/commit/60d436c96960fa314e2d12d017440253ce280d51
 
- > Fixes CVE-2020-14002:
- > https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-14002
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 918842133127e1f95a7ba5e8832d81f439c0cff3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/exiv2/exiv2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Updated license hash due to upstream commits adding copyright holders
- > and bumping the copyright year:
- > https://git.tartarus.org/?p=simon/putty.git;a=history;f=LICENCE;h=3e1d146289644749b3578f610c74715fa1c6bf0d;hb=HEAD
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 5ca16c4747..2b2e534c38 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -21,7 +21,7 @@ EXIV2_IGNORE_CVES += CVE-2019-17402
+ # 0002-fix_1011_jp2_readmetadata_loop.patch
+ EXIV2_IGNORE_CVES += CVE-2019-20421
+ 
+-EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
++EXIV2_CONF_OPTS += -DEXIV2_BUILD_SAMPLES=OFF
+ 
+ # The following CMake variable disables a TRY_RUN call in the -pthread
+ # test which is not allowed when cross-compiling.
