@@ -1,48 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 08:04:58 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/jq: bump version
- to a17dd32
-Message-ID: <20200721064051.D003C87167@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 07:59:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/webkitgtk:
+ security bump to version 2.28.3
+Message-ID: <20200721064051.C6DF287167@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b482ea1ae9a67b8d88f90f5b02822e04e1c51e0
+commit: https://git.buildroot.net/buildroot/commit/?id=622fa01b3f15a4fb3e2c766792f6548074d997ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Bump jq package to latest to fix seg fault errors reported at
-https://github.com/stedolan/jq/issues/2003
+This is a minor release which provides fixes for CVE-2020-9800,
+CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
+CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
 
-Signed-off-by: Lyle Franklin <lylejfranklin@gmail.com>
+Updating from 2.28.2 also brings in the usual batch of fixes, including
+important improvements to threading in the media player. Full release
+notes can be found at:
+
+  https://webkitgtk.org/2020/07/09/webkitgtk2.28.3-released.html
+
+A detailed security advisory can be found at:
+
+  https://webkitgtk.org/security/WSA-2020-0006.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c94794175fab58823fde539eac83ec0234768f36)
+(cherry picked from commit fa1185412e215c1eea6743e5c1d64ef7f239c967)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jq/jq.hash | 2 +-
- package/jq/jq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-index 2cddda32c6..e9f15afa78 100644
---- a/package/jq/jq.hash
-+++ b/package/jq/jq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3002cf80d871728562989b4a47d90a7301fe049a4e1d69836b99108f198dac06  jq-a97638713ad30653d424f136018098c4b0e5c71b.tar.gz
-+sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
- sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index 3d22306537..297a608b12 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index a76cc925a1..44263745e4 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.28.2.tar.xz.sums
+-md5  ec0ef870ca37e3a5ebbead2f268a28ec  webkitgtk-2.28.2.tar.xz
+-sha1  0aba97beba7b2677ed2d28aac51e429cb26c3fe6  webkitgtk-2.28.2.tar.xz
+-sha256  b9d23525cfd8d22c37b5d964a9fe9a8ce7583042a2f8d3922e71e6bbc68c30bd  webkitgtk-2.28.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.28.3.tar.xz.sums
++md5  a03a4dcd2819baca14fdec5af68b4356  webkitgtk-2.28.3.tar.xz
++sha1  af1d845d373e67fd666105e798a44e2cadaef83c  webkitgtk-2.28.3.tar.xz
++sha256  f0898ac072c220e13a4aee819408421a6cb56a6eb89170ceafe52468b0903522  webkitgtk-2.28.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 2abb083fc6..f38ea5d20a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JQ_VERSION = a97638713ad30653d424f136018098c4b0e5c71b
-+JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
- JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
- JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
+-WEBKITGTK_VERSION = 2.28.2
++WEBKITGTK_VERSION = 2.28.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
