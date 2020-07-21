@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 23:11:45 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/exiv2: really
- disable samples
-Message-ID: <20200721210859.F14987FC7D@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 23:12:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/exiv2: drop
+ unrecognized variable
+Message-ID: <20200721210900.09057880A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5aeafd86d228f5a0b6d7ffa4a6b369548eb6403
+commit: https://git.buildroot.net/buildroot/commit/?id=cde60c457380f66a9a9e4396e74cd455c7def24d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-EXIV2_ENABLE_BUILD_SAMPLES has been renamed into EXIV2_BUILD_SAMPLES
-since version 0.27 and
-https://github.com/Exiv2/exiv2/commit/60d436c96960fa314e2d12d017440253ce280d51
+EXIV2_ENABLE_LIBXMP has been dropped since version 0.27 and
+https://github.com/Exiv2/exiv2/commit/2784b1f7f7ddcc66211e6cf492de1588aa6093d9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 918842133127e1f95a7ba5e8832d81f439c0cff3)
+(cherry picked from commit e5310ad13e4d789030c169f6ed9d6ce1a0dd134d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exiv2/exiv2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/exiv2/exiv2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 5ca16c4747..2b2e534c38 100644
+index 2b2e534c38..a2590ecdf6 100644
 --- a/package/exiv2/exiv2.mk
 +++ b/package/exiv2/exiv2.mk
-@@ -21,7 +21,7 @@ EXIV2_IGNORE_CVES += CVE-2019-17402
- # 0002-fix_1011_jp2_readmetadata_loop.patch
- EXIV2_IGNORE_CVES += CVE-2019-20421
+@@ -41,10 +41,10 @@ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_PNG=OFF
+ endif
  
--EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
-+EXIV2_CONF_OPTS += -DEXIV2_BUILD_SAMPLES=OFF
+ ifeq ($(BR2_PACKAGE_EXIV2_XMP),y)
+-EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=ON -DEXIV2_ENABLE_LIBXMP=ON
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=ON
+ EXIV2_DEPENDENCIES += expat
+ else
+-EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=OFF -DEXIV2_ENABLE_LIBXMP=OFF
++EXIV2_CONF_OPTS += -DEXIV2_ENABLE_XMP=OFF
+ endif
  
- # The following CMake variable disables a TRY_RUN call in the -pthread
- # test which is not allowed when cross-compiling.
+ EXIV2_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
