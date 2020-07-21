@@ -1,52 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 22:07:49 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gupnp: security
- bump to version 1.0.5
-Message-ID: <20200721200730.DF2DA8792B@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 22:13:06 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/freerdp: security
+ bump to version 2.1.2
+Message-ID: <20200721200843.1A61F81596@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=651af5f09c6c77dfd6d5c0897b5d527a50127f77
+commit: https://git.buildroot.net/buildroot/commit/?id=d5f015ca68d6fe44d0334197eb1611dc9a696bb7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issue:
+- Fix CVE-2020-4030: In FreeRDP before version 2.1.2, there is an out of
+  bounds read in TrioParse. Logging might bypass string length checks
+  due to an integer overflow.
+- Fix CVE-2020-4031: In FreeRDP before version 2.1.2, there is a
+  use-after-free in gdi_SelectObject. All FreeRDP clients using
+  compatibility mode with /relax-order-checks are affected.
+- Fix CVE-2020-4032: In FreeRDP before version 2.1.2, there is an
+  integer casting vulnerability in update_recv_secondary_order. All
+  clients with +glyph-cache /relax-order-checks are affected.
+- Fix CVE-2020-4033: In FreeRDP before version 2.1.2, there is an out of
+  bounds read in RLEDECOMPRESS. All FreeRDP based clients with sessions
+  with color depth < 32 are affected.
+- Fix CVE-2020-11095: In FreeRDP before version 2.1.2, an out of bound
+  reads occurs resulting in accessing a memory location that is outside
+  of the boundaries of the static array
+  PRIMARY_DRAWING_ORDER_FIELD_BYTES.
+- Fix CVE-2020-11096: In FreeRDP before version 2.1.2, there is a global
+  OOB read in update_read_cache_bitmap_v3_order. As a workaround, one
+  can disable bitmap cache with -bitmap-cache (default).
+- Fix CVE-2020-11097: In FreeRDP before version 2.1.2, an out of bounds
+  read occurs resulting in accessing a memory location that is outside
+  of the boundaries of the static array
+  PRIMARY_DRAWING_ORDER_FIELD_BYTES.
+- Fix CVE-2020-11098: In FreeRDP before version 2.1.2, there is an
+  out-of-bound read in glyph_cache_put. This affects all FreeRDP clients
+  with `+glyph-cache` option enabled.
+- Fix CVE-2020-11099: In FreeRDP before version 2.1.2, there is an out
+  of bounds read in license_read_new_or_upgrade_license_packet. A
+  manipulated license packet can lead to out of bound reads to an
+  internal buffer.
 
-- CVE-2020-12695: The Open Connectivity Foundation UPnP specification before
-  2020-04-17 does not forbid the acceptance of a subscription request with a
-  delivery URL on a different network segment than the fully qualified
-  event-subscription URL, aka the CallStranger issue
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7f54bfc16963845d0294784c3c5d22e615f59a66)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 2 +-
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index c530eb7ef5..6997c8de55 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index a6100271fd..6c52d38a4f 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
 @@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.4.sha256sum:
--sha256	8b0992650c6ef8566d2d0c9198c8a669106dc2c73aa908fcc4a4d043a8c0b544	gupnp-1.0.4.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.5.sha256sum:
-+sha256 e9359fa8ed70c3c2b2b987869262ebb5c5ed1365726b7a9e8e59b3471e5c37f5  gupnp-1.0.5.tar.xz
+-# From https://pub.freerdp.com/releases/freerdp-2.1.1.tar.gz.sha256
+-sha256  6c6bf72fba1058ca6524c040d0825e4cdaa88682884a6c1c360e1cd5b8e21723  freerdp-2.1.1.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.1.2.tar.gz.sha256
++sha256  f33bc6aef83b8ad3cbf2cdbc82dcfa980ec2b051efb72650f6f2365d55b79b8d  freerdp-2.1.2.tar.gz
  
- # Hash for license file:
- sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index 29305f0b4b..e47506ed8f 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index f3bc26ac52..33b83922cc 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GUPNP_VERSION_MAJOR = 1.0
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).5
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.0+
+-FREERDP_VERSION = 2.1.1
++FREERDP_VERSION = 2.1.2
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
