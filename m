@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 22:23:34 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark:
+Date: Tue, 21 Jul 2020 22:23:28 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/wireshark:
  security bump to version 3.2.5
-Message-ID: <20200721201917.4AFF988027@busybox.osuosl.org>
+Message-ID: <20200721201921.E07648777E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a581dba5c9a78ef9e25cd5184038cb01fb33772
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a08b2944436436c23941c1c1654b5b488daf299a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fix CVE-2020-15466: It may be possible to make Wireshark consume
 excessive CPU resources by injecting a malformed packet onto the wire or
