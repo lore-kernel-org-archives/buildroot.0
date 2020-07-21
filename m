@@ -1,38 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 08:38:07 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- support/scripts/pkg-stats: fix flake8 warning
-Message-ID: <20200721064041.B44C07FBE4@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 08:04:51 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/jq: fix license
+Message-ID: <20200721064041.9DE2B87E9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ef5d51a2bc8a252a1f72306404b201627c57559
+commit: https://git.buildroot.net/buildroot/commit/?id=7dc0e94b0c8d17b90064cb4cd4a7bcce128f25e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This fixes the following flake8 warning:
+Commit c94794175fab58823fde539eac83ec0234768f36 forgot to update hash of
+COPYING
 
-support/scripts/pkg-stats:1005:9: E117 over-indented
+ICU license has been added for decNumber library since
+https://github.com/stedolan/jq/commit/b6be13d5de6dd7d8aad5fd871eb6b0b30fc7d7f6
 
+Fixes:
+ - http://autobuild.buildroot.org/results/569aa7ba86a022d3c32a65fb8b58f558aba7ae4c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 204d03ae43bcf9578e2d356a9a243c78eddf3453)
+(cherry picked from commit 16d0f5bff84a8e0384679d013eae511ef693776b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/jq/jq.hash | 2 +-
+ package/jq/jq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 170f99e7fc..ec4d538758 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -1002,7 +1002,7 @@ def dump_json(packages, defconfigs, stats, date, commit, output):
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index e9f15afa78..125781385c 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  20249104d4df2247253df6df4a980b8be1f5232f03fef7cd41bacb7e6eab04fd  jq-a17dd3248a666d01be75f6b16be37e80e20b0954.tar.gz
+-sha256  111136aebcbfa68b6b0084e582b30e981da76adcff84eab6f9be32a1f38c5bf1  COPYING
++sha256  c8437d414ca5b394718784c3bf5bdff7f01fee417625fabf1fb722ca263037da  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index 297a608b12..f3a0493b89 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -6,7 +6,7 @@
  
+ JQ_VERSION = a17dd3248a666d01be75f6b16be37e80e20b0954
+ JQ_SITE = $(call github,stedolan,jq,$(JQ_VERSION))
+-JQ_LICENSE = MIT (code), CC-BY-3.0 (documentation)
++JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
+ JQ_INSTALL_STAGING = YES
  
- def resolvepath(path):
--        return os.path.abspath(os.path.expanduser(path))
-+    return os.path.abspath(os.path.expanduser(path))
- 
- 
- def parse_args():
