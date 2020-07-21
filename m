@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 22:48:17 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls: security
+Date: Tue, 21 Jul 2020 22:48:08 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/mbedtls: security
  bump to version 2.16.7
-Message-ID: <20200721204355.617AC87DAC@busybox.osuosl.org>
+Message-ID: <20200721204400.1533C87DAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ff98fb23918e56c9c66152d41266c49009e7ffd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ce81e38540ae066206e415f7440cee6593c65ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 - Fix a side channel vulnerability in modular exponentiation that could
   reveal an RSA private key used in a secure enclave.
