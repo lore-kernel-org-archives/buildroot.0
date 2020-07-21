@@ -1,37 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Jul 2020 21:34:46 +0200
-Subject: [Buildroot] start-stop-daemon failing due to option -q
-In-Reply-To: <CAF8i9mMxkOdD0bcjcrSHbOVxs5fJsz9X__dKC5EzDUG9O_L21Q@mail.gmail.com>
-References: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
- <20200712213126.59c57981@windsurf.home>
- <CAF8i9mMZ1Je-SUDHkDX97ijv8FT68D0Mz9-6D6-tw51U3ZkPnw@mail.gmail.com>
- <CAF8i9mMxkOdD0bcjcrSHbOVxs5fJsz9X__dKC5EzDUG9O_L21Q@mail.gmail.com>
-Message-ID: <20200721213446.6f8e631b@windsurf.home>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Tue, 21 Jul 2020 15:08:48 -0500
+Subject: [Buildroot] [PATCH 1/1] package/libnids: NVD database has been
+ updated
+In-Reply-To: <20200721204324.58fa9cc2@windsurf.home>
+References: <20200721180555.31453-1-guillaume.bressaix@gmail.com>
+ <20200721204324.58fa9cc2@windsurf.home>
+Message-ID: <CANQCQpb3NtawUS-fGVDXn+jfvjS2mh1T--r815m8jsnSj0wYHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Jul 2020 15:18:19 -0400
-William Tambe <tambewilliam@gmail.com> wrote:
+Ugh, looks like they only updated the description and didn't adjust the
+rest of the version references
 
-> > Are you able to run start-stop-daemon with the -q option ?  
-> 
-> Is anyone else seeing the issue of start-stop-daemon failing when the
-> option -q is used ?
+https://nvd.nist.gov/vuln/detail/CVE-2010-0751#match-5471142
 
-I still don't see how it is possible to not have support for the -q
-option in start-stop-daemon, I don't see any conditional in the Busybox
-source code.
+On Tue, Jul 21, 2020 at 1:46 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Could you provide the Buildroot configuration and Busybox configuration
-that exhibits the issue ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> On Tue, 21 Jul 2020 20:05:55 +0200
+> guillaume.bressaix at gmail.com wrote:
+>
+> > From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+> >
+> > Thanks to Matthew W. & Thomas, the NVD database has been updated
+> > and CVE-2010-0751 is now declared fixed, see
+> > https://security-tracker.debian.org/tracker/CVE-2010-0751
+> >
+> > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+>
+> Are you sure it has already been fixed ?
+>
+> https://nvd.nist.gov/vuln/detail/CVE-2010-0751 still marks 1.24 as
+> affected as far as I can see.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200721/6efdf37f/attachment.html>
