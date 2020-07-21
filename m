@@ -1,50 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 08:47:34 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: bump
- version to 4.11.10
-Message-ID: <20200721072318.C7B7086D0E@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 08:51:42 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ntp: security
+ bump to version 4.2.8p15
+Message-ID: <20200721072318.D3ADC86D0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bec65bd9d5964b0e8d651fc4368005e670ef7313
+commit: https://git.buildroot.net/buildroot/commit/?id=5640bc72e1350f0fedfda4414066d9d8530f3a28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changelog:
-https://www.samba.org/samba/history/samba-4.11.10.html
+Fixes the following security issue:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- MEDIUM: Sec 3661: Memory leak with CMAC keys
+
+  Systems that use a CMAC algorithm in ntp.keys will not release a bit of
+  memory on each packet that uses a CMAC key, eventually causing ntpd to run
+  out of memory and fail.  The CMAC cleanup from https://bugs.ntp.org/3447,
+  part of ntp-4.2.8p11 and ntp-4.3.97, introduced a bug whereby the CMAC
+  data structure was no longer completely removed.
+
+https://support.ntp.org/bin/view/Main/SecurityNotice#June_2020_ntp_4_2_8p15_NTP_Relea
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4e813db5335fe256b44e51b5873f7f417310dce8)
+(cherry picked from commit d6d4557b7ac17339f705cfe0b37e2d7b0fce3e6d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ntp/ntp.hash | 6 +++---
+ package/ntp/ntp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index ad34489317..34ae6f84bc 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
--sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
-+sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4124032264..b6fe1a827c 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index fdb5bacade..3c2f6a95a7 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,5 +1,5 @@
+-# From https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p14.tar.gz.md5
+-md5  783edaf1d68ddf651bde64eda54a579d  ntp-4.2.8p14.tar.gz
++# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p15.tar.gz.md5
++md5  e1e6b23d2fc75cced41801dbcd6c2561  ntp-4.2.8p15.tar.gz
+ # Calculated based on the hash above
+-sha256  1960e4f081f6aafd108d721bc3ab15f9e8dfd08dc08339aa95bca9d2545e4eb7  ntp-4.2.8p14.tar.gz
++sha256  f65840deab68614d5d7ceb2d0bb9304ff70dcdedd09abb79754a87536b849c19  ntp-4.2.8p15.tar.gz
+ sha256  957e6a13445cc61ab1ca3dc80d8c269cf9b0a6d9eaec20f9f39639b0b3e66ee8  COPYRIGHT
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 3af3e01a52..f82eeae9b4 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SAMBA4_VERSION = 4.11.9
-+SAMBA4_VERSION = 4.11.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p14
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p15
+ NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent
+ NTP_LICENSE = NTP
