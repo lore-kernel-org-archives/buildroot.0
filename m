@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 22:13:06 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/freerdp: security
+Date: Tue, 21 Jul 2020 22:12:28 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/freerdp: security
  bump to version 2.1.2
-Message-ID: <20200721200843.1A61F81596@busybox.osuosl.org>
+Message-ID: <20200721200847.DF09E841C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5f015ca68d6fe44d0334197eb1611dc9a696bb7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bd627e861f5d26bcda2fd373e419e1157c5d66fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 - Fix CVE-2020-4030: In FreeRDP before version 2.1.2, there is an out of
   bounds read in TrioParse. Logging might bypass string length checks
