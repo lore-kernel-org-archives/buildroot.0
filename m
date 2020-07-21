@@ -1,55 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Jul 2020 09:26:51 +0200
-Subject: [Buildroot] [PATCH 4/8] boot/arm-trusted-firmware: add EDK2 as
- BL33 option
-In-Reply-To: <20200720212119.GE2296@scaer>
-References: <20200719180727.28202-1-hi@senzilla.io>
- <20200719180727.28202-5-hi@senzilla.io>
- <20200720225941.796ff11c@windsurf.home>
- <20200720212119.GE2296@scaer>
-Message-ID: <20200721092651.314d1501@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 Jul 2020 08:47:31 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: bump
+ version to 4.11.9
+Message-ID: <20200721072318.BAD2B87EA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Jul 2020 23:21:19 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2eb92ded47911a3278b6bc388902cbc5eb3f3df4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-> > > +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(EDK2_FD_NAME).fd  
-> > 
-> > So there is this reference to a variable of another package, which I'm
-> > never sure if it works correctly. Yann, what is the rule again ? :-)  
-> 
-> If a variable is expanded at the time of '$(eval $(foo-package))', then
-> you can't share variables bewtween packages.
-> 
-> That is the case for _VERSION for example, as that serves to create a
-> make-dependency in the form;
-> 
->     build-dir/foo-$(FOO_VERSION): some-dependencies
-> 
-> If however, avariable is expanded in the configure, build, install,
-> etc... rules, then this is OK.
-> 
-> For example, cross-using a variable in a _CMDS or _HOOKS is OK.
+Release notes: https://www.samba.org/samba/history/samba-4.11.9.html
 
-OK, so the case of the EDK2_FD_NAME used by Dick in this patch series
-is OK I guess.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ab86c3fa11cae4574c08b6257f19d51fb2ee5bc2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Finally, if you can *ensure* the ordering, by defining the variable
-> before the fiels that uses it are included, then that is also OK.
-> 
-> This is the case for exampe for the qt5 packages, or for barebox, where
-> the include order *has been written* to ensure that.
-
-Yeah, that is the point I remember, it's the other one that is less
-clear to me, i.e when ordering is not guaranteed, what you can/cannot
-do.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index f2ae8b5b58..ad34489317 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.8.tar.asc
+-sha256  bb140caa37d2bbbb1f15f849aa86b1d5f787729443099139936f0ea06a5100ca  samba-4.11.8.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
++sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9ec4c1eabe..4124032264 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.11.8
++SAMBA4_VERSION = 4.11.9
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
