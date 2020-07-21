@@ -1,55 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 07:57:22 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/php: bump version
- to 7.4.8
-Message-ID: <20200721064041.69DA787E9C@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 08:38:07 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ support/scripts/pkg-stats: fix flake8 warning
+Message-ID: <20200721064041.B44C07FBE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3ff844f34cd31069af311271defa0d0736d3ed8
+commit: https://git.buildroot.net/buildroot/commit/?id=5ef5d51a2bc8a252a1f72306404b201627c57559
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Quoting https://www.php.net/
-"For windows users running an official build, this release contains a
- patched version of libcurl addressing CVE-2020-8159.
+This fixes the following flake8 warning:
 
-For all other consumers of PHP, this is a bug fix release."
+support/scripts/pkg-stats:1005:9: E117 over-indented
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.8
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a6a500bb990fe6b9302e762adbd5e440329e99d9)
+(cherry picked from commit 204d03ae43bcf9578e2d356a9a243c78eddf3453)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 9789a99988..47879eecca 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  53558f8f24cd8ab6fa0ea252ca8198e2650160649681ce5230c1df1dc2b52faf  php-7.4.7.tar.xz
-+sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 170f99e7fc..ec4d538758 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -1002,7 +1002,7 @@ def dump_json(packages, defconfigs, stats, date, commit, output):
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ed71404c7b..48af0f6fdc 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
  
--PHP_VERSION = 7.4.7
-+PHP_VERSION = 7.4.8
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ def resolvepath(path):
+-        return os.path.abspath(os.path.expanduser(path))
++    return os.path.abspath(os.path.expanduser(path))
+ 
+ 
+ def parse_args():
