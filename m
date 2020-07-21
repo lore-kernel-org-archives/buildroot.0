@@ -1,34 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 08:00:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
- version 2.28.3
-In-Reply-To: <20200710115248.806492-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Fri, 10 Jul 2020 14:52:48 +0300")
-References: <20200710115248.806492-1-aperez@igalia.com>
-Message-ID: <87k0yxo1b2.fsf@dell.be.48ers.dk>
+Date: Tue, 21 Jul 2020 08:05:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jq: fix license
+In-Reply-To: <20200712220657.67801-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Jul 2020 00:06:57 +0200")
+References: <20200712220657.67801-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ft9lo11r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This is a minor release which provides fixes for CVE-2020-9800,
- > CVE-2020-9802, CVE-2020-9803, CVE-2020-9805, CVE-2020-9806,
- > CVE-2020-9807, CVE-2020-9843, CVE-2020-9850, and CVE-2020-13753.
+ > Commit c94794175fab58823fde539eac83ec0234768f36 forgot to update hash of
+ > COPYING
 
- > Updating from 2.28.2 also brings in the usual batch of fixes, including
- > important improvements to threading in the media player. Full release
- > notes can be found at:
+ > ICU license has been added for decNumber library since
+ > https://github.com/stedolan/jq/commit/b6be13d5de6dd7d8aad5fd871eb6b0b30fc7d7f6
 
- >   https://webkitgtk.org/2020/07/09/webkitgtk2.28.3-released.html
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/569aa7ba86a022d3c32a65fb8b58f558aba7ae4c
 
- > A detailed security advisory can be found at:
-
- >   https://webkitgtk.org/security/WSA-2020-0006.html
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
