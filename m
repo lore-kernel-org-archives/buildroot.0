@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Jul 2020 09:31:52 +0200
-Subject: [Buildroot] [git commit] package/libzip: use ENABLE_BZIP2
-Message-ID: <20200721072745.CAE7687EA0@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 09:32:26 +0200
+Subject: [Buildroot] [git commit] package/freerdp: security bump to version
+ 2.2.0
+Message-ID: <20200721072853.D9AD184758@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=016916e6e208a9f92a96af61892ccd891a9a8bb3
+commit: https://git.buildroot.net/buildroot/commit/?id=6f0305a95d222b8710bbe69710e58ff7244fe916
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use ENABLE_BZIP2 option which is available since version 1.5.2 and
-https://github.com/nih-at/libzip/commit/028c492c9d45ca29e2fbec79a203ba492016f15e
+Fix CVE-2020-15103 - Integer overflow due to missing input sanitation in
+rdpegfx channel
+
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.2.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libzip/libzip.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-index 379eb2c5df..6023dbec1b 100644
---- a/package/libzip/libzip.mk
-+++ b/package/libzip/libzip.mk
-@@ -15,8 +15,9 @@ HOST_LIBZIP_DEPENDENCIES = host-zlib
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 6c52d38a4f..8217a2106c 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.1.2.tar.gz.sha256
+-sha256  f33bc6aef83b8ad3cbf2cdbc82dcfa980ec2b051efb72650f6f2365d55b79b8d  freerdp-2.1.2.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.2.0.tar.gz.sha256
++sha256  19b30759e324ce7a9767af880116a4c571761e9ad9c5d6c98c5b302ff8c24c6c  freerdp-2.2.0.tar.gz
  
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- LIBZIP_DEPENDENCIES += bzip2
-+LIBZIP_CONF_OPTS += -DENABLE_BZIP2=ON
- else
--LIBZIP_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_BZIP2=TRUE
-+LIBZIP_CONF_OPTS += -DENABLE_BZIP2=OFF
- endif
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 33b83922cc..4c804c136f 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-FREERDP_VERSION = 2.1.2
++FREERDP_VERSION = 2.2.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
