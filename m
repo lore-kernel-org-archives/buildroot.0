@@ -1,216 +1,72 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 21 Jul 2020 21:05:49 +0200
-Subject: [Buildroot] [PATCH v1 3/3] configs/raspberrypi*: bump kernel
- version to 1c64f4b (5.4.51)
-In-Reply-To: <20200721190549.29166-1-ps.report@gmx.net>
-References: <20200721190549.29166-1-ps.report@gmx.net>
-Message-ID: <20200721190549.29166-4-ps.report@gmx.net>
+From: William Tambe <tambewilliam@gmail.com>
+Date: Tue, 21 Jul 2020 15:18:19 -0400
+Subject: [Buildroot] start-stop-daemon failing due to option -q
+In-Reply-To: <CAF8i9mMZ1Je-SUDHkDX97ijv8FT68D0Mz9-6D6-tw51U3ZkPnw@mail.gmail.com>
+References: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
+ <20200712213126.59c57981@windsurf.home>
+ <CAF8i9mMZ1Je-SUDHkDX97ijv8FT68D0Mz9-6D6-tw51U3ZkPnw@mail.gmail.com>
+Message-ID: <CAF8i9mMxkOdD0bcjcrSHbOVxs5fJsz9X__dKC5EzDUG9O_L21Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now based on 5.4.51 (from 4.19.113)
+On Sun, Jul 12, 2020 at 9:35 PM William Tambe <tambewilliam@gmail.com> wrote:
+>
+> On Sun, Jul 12, 2020 at 3:31 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Sun, 12 Jul 2020 09:16:00 -0400
+> > William Tambe <tambewilliam@gmail.com> wrote:
+> >
+> > > I am seeing the following failure when start-stop-daemon is used
+> > > during services starting; the failure goes away when I remove from
+> > > start-stop-daemon the use of the option -q in the service scripts
+> > > under /etc/init.d/ .
+> > > Is this a known issue ?
+> > >
+> > > Starting syslogd: start-stop-daemon: option requires an argument -- 'x'
+> >
+> > This has something to do with -q. -q is always supported in
+> > start-stop-daemon, it's even listed in the help text of
+> > start-stop-daemon you provide:
+> >
+> > >         -q              Quiet
+> >
+> > The S01syslogd script looks like this:
+> >
+> >         start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
+> >                 -- -n $SYSLOGD_ARGS
+> >
+> > So I don't see how the -x argument can be empty.
+> >
+> > Did you customize the SYSLOGD_ARGS in /etc/default/syslogd perhaps ?
+>
+> No, I did not customize SYSLOD_ARGS in in /etc/default/syslogd.
+> to find that -q was causing problem, I manually ran start-stop-daemon
+> at the shell as follow:
+>
+> DAEMON="syslogd"
+> PIDFILE="/var/run/$DAEMON.pid"
+> SYSLOGD_ARGS=""
+>
+> # This fails:
+> start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" -- -n
+> $SYSLOGD_ARGS
+>
+> # While this without -q is successful:
+> start-stop-daemon -b -m -S -p "$PIDFILE" -x "/sbin/$DAEMON" -- -n $SYSLOGD_ARGS
+>
+> Are you able to run start-stop-daemon with the -q option ?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- configs/raspberrypi0_defconfig       | 6 +++---
- configs/raspberrypi0w_defconfig      | 6 +++---
- configs/raspberrypi2_defconfig       | 6 +++---
- configs/raspberrypi3_64_defconfig    | 6 +++---
- configs/raspberrypi3_defconfig       | 6 +++---
- configs/raspberrypi3_qt5we_defconfig | 6 +++---
- configs/raspberrypi4_64_defconfig    | 6 +++---
- configs/raspberrypi4_defconfig       | 6 +++---
- configs/raspberrypi_defconfig        | 6 +++---
- 9 files changed, 27 insertions(+), 27 deletions(-)
+Is anyone else seeing the issue of start-stop-daemon failing when the
+option -q is used ?
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 6ad0efc284..e4a704f2f6 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -2,14 +2,14 @@ BR2_arm=y
- BR2_arm1176jzf_s=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 2023ee4fa5..d5670b19bd 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -2,14 +2,14 @@ BR2_arm=y
- BR2_arm1176jzf_s=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 7990a2dcf0..375cb86763 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -7,12 +7,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 3be79a0f63..9f9a145908 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index a22589aa2e..1a1e7b3dd8 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 3b2e5cd29a..cbcbf64460 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -7,12 +7,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-index d3de09668f..f2b08f96a8 100644
---- a/configs/raspberrypi4_64_defconfig
-+++ b/configs/raspberrypi4_64_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index 943f955ce6..879ed0c1cc 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index a0c83a5686..558c04ca6d 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -4,14 +4,14 @@ BR2_ARM_EABIHF=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
--- 
-2.27.0
+>
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
