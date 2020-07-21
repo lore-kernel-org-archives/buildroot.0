@@ -1,53 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 08:56:08 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/gupnp: security
- bump to version 1.2.3
-Message-ID: <20200721200719.774488258C@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 08:47:13 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/samba4: bump
+ version to 4.11.10
+Message-ID: <20200721200719.5F9AC8188C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b57d10b5eae6e344bb2641cbd00460e661dd7df
+commit: https://git.buildroot.net/buildroot/commit/?id=da943f07ecd988c51617a3a56f455ac05c483bbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-It includes the following commits:
-https://github.com/GNOME/gupnp/commit/66a73e96f5a733a149803a985686a4e4e196f90b
-https://github.com/GNOME/gupnp/commit/f943904e2d7f21601337b90058faf74b49c02796
-which mitigate CVE-2020-12695
+Changelog:
+https://www.samba.org/samba/history/samba-4.11.10.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4420af7c3b70ca2c7a04d8f2bb9c819f53554762)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4e813db5335fe256b44e51b5873f7f417310dce8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 2 +-
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index 24a0d36631..6baf105318 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.2.sha256sum:
--sha256  9a80bd953e5c8772ad26b72f8da01cbe7241a113edd6084903f413ce751c9989  gupnp-1.2.2.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.3.sha256sum:
-+sha256  d447e54d88e4a8fab84ad1766070e9208e21166fc7e2ce95df6e33e49e8d29b1  gupnp-1.2.3.tar.xz
- 
- # Hash for license file:
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index dfe25e16c5..953beb2559 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index ad34489317..34ae6f84bc 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
+-sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
++sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4124032264..b6fe1a827c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GUPNP_VERSION_MAJOR = 1.2
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.0+
+-SAMBA4_VERSION = 4.11.9
++SAMBA4_VERSION = 4.11.10
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
