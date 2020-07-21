@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 23:12:02 +0200
-Subject: [Buildroot] [PATCH 1/2] package/exiv2: really disable samples
-In-Reply-To: <20200713214023.2094574-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 13 Jul 2020 23:40:22 +0200")
+Date: Tue, 21 Jul 2020 23:12:44 +0200
+Subject: [Buildroot] [PATCH 2/2] package/exiv2: drop unrecognized
+ variable
+In-Reply-To: <20200713214023.2094574-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Jul 2020 23:40:23 +0200")
 References: <20200713214023.2094574-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1t4lgil.fsf@dell.be.48ers.dk>
+ <20200713214023.2094574-2-fontaine.fabrice@gmail.com>
+Message-ID: <87mu3slghf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +15,8 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > EXIV2_ENABLE_BUILD_SAMPLES has been renamed into EXIV2_BUILD_SAMPLES
- > since version 0.27 and
- > https://github.com/Exiv2/exiv2/commit/60d436c96960fa314e2d12d017440253ce280d51
+ > EXIV2_ENABLE_LIBXMP has been dropped since version 0.27 and
+ > https://github.com/Exiv2/exiv2/commit/2784b1f7f7ddcc66211e6cf492de1588aa6093d9
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
