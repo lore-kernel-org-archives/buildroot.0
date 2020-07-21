@@ -1,105 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jul 2020 08:56:17 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/gupnp: disable
- documentation
-Message-ID: <20200721200719.8538988015@busybox.osuosl.org>
+Date: Tue, 21 Jul 2020 22:07:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gssdp: bump
+ version to 1.0.4
+Message-ID: <20200721200730.D19728792B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe1232e5332d14092efe1516a3f47539ec868cdf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce6351f61af28fab5e67ebce9eb39f76a68de5c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-gupnp always builds man page since version 1.2.3 and
-https://gitlab.gnome.org/GNOME/gupnp/-/commit/23f54c2a1e8718e836224d68dafded091604a677
+Required by gupnp-1.0.5.
 
-This will raise the following build failure on some of our autobuilders:
-
-FAILED: doc/gupnp-binding-tool-1.2.1
-/usr/bin/xsltproc --nonet --xinclude --path /home/naourr/work/instance-0/output-1/build/gupnp-1.2.3/doc:/home/naourr/work/instance-0/output-1/build/gupnp-1.2.3/build/doc --stringparam man.output.quietly 1 --stringparam funcsynopsis.style ansi --stringparam man.th.extra1.suppress 1 --stringparam man.authors.section.enabled 1 --stringparam man.copyright.section.enabled 1 -o doc/gupnp-binding-tool-1.2.1 http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl ../doc/gupnp-binding-tool.xml
-I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
-warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"
-cannot parse http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl
-
-This issue has been reported upstream, until we got more feedback, just
-revert the commit
-
-Fixes:
- - http://autobuild.buildroot.org/results/7bf388e81dff3875e396a228b2d48d345377b0da
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ba9139334dea630db7c76a7424b1037873226206)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...d-Always-build-gupnp-binding-tool-manpage.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ package/gssdp/gssdp.hash | 4 ++--
+ package/gssdp/gssdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch b/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
-new file mode 100644
-index 0000000000..05b07b49c5
---- /dev/null
-+++ b/package/gupnp/0001-Revert-build-Always-build-gupnp-binding-tool-manpage.patch
-@@ -0,0 +1,60 @@
-+From 9225b076d107538209fbd5b8bbc21a68d1b2c016 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 15 Jul 2020 22:42:44 +0200
-+Subject: [PATCH] Revert "build: Always build gupnp-binding-tool manpage"
-+
-+This reverts commit 23f54c2a1e8718e836224d68dafded091604a677 until
-+upstream decides what to do between adding a new option or renaming
-+gtk_doc into documentation:
-+https://gitlab.gnome.org/GNOME/gupnp/-/issues/17
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ doc/meson.build | 2 --
-+ meson.build     | 5 ++++-
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/doc/meson.build b/doc/meson.build
-+index b71b657..478650b 100644
-+--- a/doc/meson.build
-++++ b/doc/meson.build
-+@@ -4,7 +4,6 @@ version_xml = configure_file(input: 'version.xml.in',
-+                output: 'version.xml', configuration:
-+                entities)
-+ 
-+-if get_option('gtk_doc')
-+ gnome.gtkdoc('gupnp',
-+              main_xml : 'gupnp-docs.xml',
-+              src_dir : [join_paths(meson.source_root(), 'libgupnp'),
-+@@ -27,7 +26,6 @@ gnome.gtkdoc('gupnp',
-+                  'gupnp-types-private.h'
-+              ],
-+              install : true)
-+-endif
-+ 
-+ xsltproc = find_program('xsltproc', required: false)
-+ if xsltproc.found()
-+diff --git a/meson.build b/meson.build
-+index 28c40b2..dea0a49 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -31,12 +31,15 @@ dependencies = [
-+ subdir('libgupnp')
-+ subdir('tests')
-+ subdir('tools')
-+-subdir('doc')
-+ 
-+ if get_option('vapi') and get_option('introspection')
-+     subdir('vala')
-+ endif
-+ 
-++if get_option('gtk_doc')
-++    subdir('doc')
-++endif
-++
-+ if get_option('examples')
-+     subdir('examples')
-+ endif
-+-- 
-+2.27.0
-+
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index b389d0205c..ad1483667e 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.3.sha256sum:
+-sha256 211387a62bc1d99821dd0333d873a781320287f5436f91e58b2ca145b378be41  gssdp-1.0.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.4.sha256sum:
++sha256 ab29f6eaed476cd4bd1004034620cc25d45102c08656bdf2301a667c95bc0d46  gssdp-1.0.4.tar.xz
+ 
+ # Hash for license file:
+ sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 071ad00109..8b44320bac 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GSSDP_VERSION_MAJOR = 1.0
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).4
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+ GSSDP_LICENSE = LGPL-2.0+
