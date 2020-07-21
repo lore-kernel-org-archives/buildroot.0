@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 21 Jul 2020 14:45:21 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/libabseil-cpp new package
-Message-ID: <20200721214522.3719304-1-aduskett@gmail.com>
+Date: Tue, 21 Jul 2020 14:45:22 -0700
+Subject: [Buildroot] [PATCH v2 2/2] package/grpc: bump version to 1.30.2
+In-Reply-To: <20200721214522.3719304-1-aduskett@gmail.com>
+References: <20200721214522.3719304-1-aduskett@gmail.com>
+Message-ID: <20200721214522.3719304-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +12,13 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-This package is a new dependency on grpc versions > 1.25.0
+Other changes:
+  - Add a dependency on libabseil-cpp
+  - Update the patches to apply properly.
+  - Add a dependency for BR2_TOOLCHAIN_USES_GLIBC.
+    libabseil-cpp uses execinfo.h for stacktracing, which uclibc and musl do
+    not provide by default. As such, a dependency on BR2_TOOLCHAIN_USES_GLIBC
+    as been added to the grpc package and to the grpc option for collectd.
 
 Tested with the following distributions:
   - Debian 9
@@ -21,151 +29,207 @@ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v2:
   - Add a dependency on BR2_TOOLCHAIN_USES_GLIBC
-  - Replace the patch that force -fPIC in favor of
-    set_property(TARGET ${_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-    (Thomas)
 
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...0001-force-position-independent-code.patch | 38 +++++++++++++++++++
- package/libabseil-cpp/Config.in               | 17 +++++++++
- package/libabseil-cpp/libabseil-cpp.hash      |  3 ++
- package/libabseil-cpp/libabseil-cpp.mk        | 24 ++++++++++++
- 6 files changed, 84 insertions(+)
- create mode 100644 package/libabseil-cpp/0001-force-position-independent-code.patch
- create mode 100644 package/libabseil-cpp/Config.in
- create mode 100644 package/libabseil-cpp/libabseil-cpp.hash
- create mode 100644 package/libabseil-cpp/libabseil-cpp.mk
+ package/collectd/Config.in                       |  6 ++++--
+ .../0001-target-build-using-host-plugin.patch    | 16 ++++++++--------
+ ...ct-the-availability-of-pthread_setname_.patch | 16 ++++++++--------
+ package/grpc/Config.in                           |  7 +++++--
+ package/grpc/grpc.hash                           |  4 ++--
+ package/grpc/grpc.mk                             | 11 +++++++----
+ 6 files changed, 34 insertions(+), 26 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 043e8ce3f4..f30645aaa4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-vaapi/
- F:	package/imx-usb-loader/
- F:	package/janus-gateway/
- F:	package/json-for-modern-cpp/
-+F:	package/libabseil-cpp/
- F:	package/libcpprestsdk/
- F:	package/libcutl/
- F:	package/libodb/
-diff --git a/package/Config.in b/package/Config.in
-index e6500123f6..03be2b0587 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1824,6 +1824,7 @@ menu "Other"
- 	source "package/gtest/Config.in"
- 	source "package/jemalloc/Config.in"
- 	source "package/lapack/Config.in"
-+	source "package/libabseil-cpp/Config.in"
- 	source "package/libargtable2/Config.in"
- 	source "package/libatomic_ops/Config.in"
- 	source "package/libavl/Config.in"
-diff --git a/package/libabseil-cpp/0001-force-position-independent-code.patch b/package/libabseil-cpp/0001-force-position-independent-code.patch
-new file mode 100644
-index 0000000000..997d75597e
---- /dev/null
-+++ b/package/libabseil-cpp/0001-force-position-independent-code.patch
-@@ -0,0 +1,38 @@
-+From d170b19e500d85381369e379771be8d7816bcc92 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Tue, 21 Jul 2020 13:08:50 -0700
-+Subject: [PATCH] force position independent code
-+
-+Without this option, programs building for arm64 or x86-64 will fail when
-+attempting to link to the built libraries with the following (abbreviated)
-+error:
-+
-+"relocation against `.rodata' can not be used when making a shared object;
-+recompile with -fPIC."
-+
-+Because libabseil-cpp builds static libraries, it is better to set the
-+POSITION_INDEPENDENT_CODE to ON instead of forcing fPIC, as forcing fPIC may
-+cause relocation errors when shared libraries link against the built static
-+libraries.
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ CMake/AbseilHelpers.cmake | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/CMake/AbseilHelpers.cmake b/CMake/AbseilHelpers.cmake
-+index 86ff9eb..bdb7a89 100644
-+--- a/CMake/AbseilHelpers.cmake
-++++ b/CMake/AbseilHelpers.cmake
-+@@ -207,6 +207,8 @@ function(absl_cc_library)
-+     set_property(TARGET ${_NAME} PROPERTY CXX_STANDARD ${ABSL_CXX_STANDARD})
-+     set_property(TARGET ${_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
-+ 
-++    # Without this setting, other programs such as GRPC will fail when linking.
-++    set_property(TARGET ${_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-+     # When being installed, we lose the absl_ prefix.  We want to put it back
-+     # to have properly named lib files.  This is a no-op when we are not being
-+     # installed.
-+-- 
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 188be3c0fb..bff0694684 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -566,6 +566,7 @@ config BR2_PACKAGE_COLLECTD_GRAPHITE
+ config BR2_PACKAGE_COLLECTD_GRPC
+ 	bool "grpc"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
++	depends on BR2_TOOLCHAIN_USES_GLIBC # libabseil-cpp -> execinfo.h
+ 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # grpc -> protobuf
+@@ -573,8 +574,9 @@ config BR2_PACKAGE_COLLECTD_GRPC
+ 	help
+ 	  Send/receive values using the gRPC protocol.
+ 
+-comment "grpc needs a toolchain w/ C++, gcc >= 4.8"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
++comment "grpc needs a glibc toolchain w/ C++, gcc >= 4.8"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC || \
++		!BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+diff --git a/package/grpc/0001-target-build-using-host-plugin.patch b/package/grpc/0001-target-build-using-host-plugin.patch
+index 2da657762f..ac2bf8cc38 100644
+--- a/package/grpc/0001-target-build-using-host-plugin.patch
++++ b/package/grpc/0001-target-build-using-host-plugin.patch
+@@ -17,12 +17,12 @@ Signed-off-by: Robert Rose <robertroyrose@gmail.com>
+  1 file changed, 13 insertions(+)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index fc76cf5..7a22b08 100644
++index be695c2..45c2fcb 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -13420,6 +13420,18 @@ target_link_libraries(grpc_cli
+- endif (gRPC_BUILD_TESTS)
+- if (gRPC_BUILD_CODEGEN)
++@@ -10844,6 +10844,18 @@ target_link_libraries(grpc_cli
++ endif()
++ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
+  
+ +if (gRPC_NATIVE_CPP_PLUGIN)
+ +
+@@ -39,14 +39,14 @@ index fc76cf5..7a22b08 100644
+  add_executable(grpc_cpp_plugin
+    src/compiler/cpp_plugin.cc
+  )
+-@@ -13457,6 +13469,7 @@ if (gRPC_INSTALL)
++@@ -10877,6 +10889,7 @@ if(gRPC_INSTALL)
+      ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+    )
+  endif()
+ +endif()
+  
+- endif (gRPC_BUILD_CODEGEN)
+- if (gRPC_BUILD_CODEGEN)
++ endif()
++ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CSHARP_PLUGIN)
+ -- 
+-2.20.0.rc0.387.gc7a69e6b6c-goog
 +2.26.2
-+
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-new file mode 100644
-index 0000000000..c37506dde1
---- /dev/null
-+++ b/package/libabseil-cpp/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBABSEIL_CPP
-+	bool "libabseil-cpp"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Abseil is an open-source collection of C++ library code
-+	  designed to augment the C++ standard library. The Abseil
-+	  library code is collected from Google's own C++ code base, has
-+	  been extensively tested and used in production, and is the
-+	  same code we depend on in our daily coding lives.
-+
-+	  https://github.com/abseil/abseil-cpp
-+
-+comment "grpc needs a glibc toolchain w/ C++, threads"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-new file mode 100644
-index 0000000000..7f0b5fc394
---- /dev/null
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353  libabseil-cpp-20200225.tar.gz
-+sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-new file mode 100644
-index 0000000000..92cbb0051d
---- /dev/null
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libabseil-cpp
-+#
-+################################################################################
-+
-+LIBABSEIL_CPP_VERSION = 20200225
-+LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
-+LIBABSEIL_CPP_LICENSE = Apache-2.0
-+LIBABSEIL_CPP_LICENSE_FILES = LICENSE
-+LIBABSEIL_CPP_INSTALL_STAGING = YES
-+
-+LIBABSEIL_CPP_CONF_OPTS = \
-+	-DABSL_ENABLE_INSTALL=ON \
-+	-DABSL_USE_GOOGLETEST_HEAD=OFF \
-+	-DABSL_RUN_TESTS=OFF
-+
-+HOST_LIBABSEIL_CPP_CONF_OPTS = \
-+	-DABSL_ENABLE_INSTALL=ON \
-+	-DABSL_USE_GOOGLETEST_HEAD=OFF \
-+	-DABSL_RUN_TESTS=OFF
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+ 
+diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+index 86586d850b..4b7253f7aa 100644
+--- a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
++++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -17,12 +17,12 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  2 files changed, 8 insertions(+)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 89e834b..c7bd2ad 100644
++index 45c2fcb..0b2be4f 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -97,6 +97,12 @@ endif()
+- 
+- set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
++@@ -177,6 +177,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
++ endif()
++ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+  
+ +include(CheckSymbolExists)
+ +check_symbol_exists(pthread_setname_np pthread.h HAVE_PTHREAD_SETNAME_NP)
+@@ -30,14 +30,14 @@ index 89e834b..c7bd2ad 100644
+ +  add_definitions(-DHAVE_PTHREAD_SETNAME_NP)
+ +endif ()
+ +
+- if (MSVC)
++ if(MSVC)
+    include(cmake/msvc_static_runtime.cmake)
+    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
+ diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
+-index 031c0c3..a29a9dc 100644
++index 4f213ff..55ecd9d 100644
+ --- a/include/grpc/impl/codegen/port_platform.h
+ +++ b/include/grpc/impl/codegen/port_platform.h
+-@@ -181,7 +181,9 @@
++@@ -195,7 +195,9 @@
+  #endif /* _LP64 */
+  #ifdef __GLIBC__
+  #define GPR_POSIX_CRASH_HANDLER 1
+@@ -48,5 +48,5 @@ index 031c0c3..a29a9dc 100644
+  #else /* musl libc */
+  #define GPR_MUSL_LIBC_COMPAT 1
+ -- 
+-2.14.4
++2.26.2
+ 
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index 43f446d8dc..5d24d6745f 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -2,11 +2,13 @@ config BR2_PACKAGE_GRPC
+ 	bool "grpc"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
++	depends on BR2_TOOLCHAIN_USES_GLIBC # libabseil-cpp -> execinfo.h
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_C_ARES
++	select BR2_PACKAGE_LIBABSEIL_CPP
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_ZLIB
+@@ -16,8 +18,9 @@ config BR2_PACKAGE_GRPC
+ 
+ 	  http://github.com/grpc/grpc
+ 
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
++comment "grpc needs a glibc toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC || \
++		!BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 5201f72106..f0586e4b18 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ffbe61269160ea745e487f79b0fd06b6edd3d50c6d9123f053b5634737cf2f69 grpc-1.25.0.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
++sha256  ba74b97a2f1b4e22ec5fb69d639d849d2069fb58ea7d6579a31f800af6fe3b6c  grpc-1.30.2.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 39f6123792..087deac0c6 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.25.0
++GRPC_VERSION = 1.30.2
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
+@@ -12,8 +12,9 @@ GRPC_LICENSE_FILES = LICENSE
+ GRPC_INSTALL_STAGING = YES
+ 
+ # Need to use host grpc_cpp_plugin during cross compilation.
+-GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf zlib
+-HOST_GRPC_DEPENDENCIES = host-c-ares host-openssl host-protobuf host-zlib
++GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf zlib libabseil-cpp
++HOST_GRPC_DEPENDENCIES = host-c-ares host-openssl host-protobuf host-zlib \
++	host-libabseil-cpp
+ 
+ # gRPC_CARES_PROVIDER=package won't work because it requires c-ares to have
+ # installed a cmake config file, but buildroot uses c-ares' autotools build,
+@@ -25,6 +26,7 @@ GRPC_CONF_OPTS = \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+ 	-DgRPC_ZLIB_PROVIDER=package \
++	-DgRPC_ABSL_PROVIDER=package \
+ 	-DgRPC_NATIVE_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin
+ 
+ # grpc can use __atomic builtins, so we need to link with
+@@ -65,7 +67,8 @@ HOST_GRPC_CONF_OPTS = \
+ 	-DgRPC_CARES_PROVIDER=none \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+-	-DgRPC_ZLIB_PROVIDER=package
++	-DgRPC_ZLIB_PROVIDER=package \
++	-DgRPC_ABSL_PROVIDER=package
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.26.2
