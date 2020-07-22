@@ -1,76 +1,62 @@
-From: William Tambe <tambewilliam@gmail.com>
-Date: Tue, 21 Jul 2020 21:05:45 -0500
-Subject: [Buildroot] start-stop-daemon failing due to option -q
-In-Reply-To: <20200721213446.6f8e631b@windsurf.home>
-References: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
- <20200712213126.59c57981@windsurf.home>
- <CAF8i9mMZ1Je-SUDHkDX97ijv8FT68D0Mz9-6D6-tw51U3ZkPnw@mail.gmail.com>
- <CAF8i9mMxkOdD0bcjcrSHbOVxs5fJsz9X__dKC5EzDUG9O_L21Q@mail.gmail.com>
- <20200721213446.6f8e631b@windsurf.home>
-Message-ID: <CAF8i9mMEJH8znZvbbct6ucD-mg=eEJ4u86DPbPjiS5aOd+p08w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 Jul 2020 08:57:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-ugly:
+ fix static build with libdvdcss
+In-Reply-To: <20200630065228.1594953-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 30 Jun 2020 08:52:28 +0200")
+References: <20200630065228.1594953-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eep4kpej.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 21, 2020 at 2:35 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Tue, 21 Jul 2020 15:18:19 -0400
-> William Tambe <tambewilliam@gmail.com> wrote:
->
-> > > Are you able to run start-stop-daemon with the -q option ?
-> >
-> > Is anyone else seeing the issue of start-stop-daemon failing when the
-> > option -q is used ?
->
-> I still don't see how it is possible to not have support for the -q
-> option in start-stop-daemon, I don't see any conditional in the Busybox
-> source code.
->
-> Could you provide the Buildroot configuration and Busybox configuration
-> that exhibits the issue ?
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Certainly; I am currently only using a buildroot configuration with no
-busybox configuration; so I think buildroot uses a default busybox
-configuration:
+ > The double quotes from GST1_PLUGINS_UGLY_LDFLAGS += "-ldvdcss"
+ > raise the following build failure:
 
-BR2_iron=y
-BR2_ENABLE_DEBUG=y
-BR2_DEBUG_3=y
-# BR2_STRIP_strip is not set
-BR2_OPTIMIZE_G=y
-BR2_STATIC_LIBS=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/iron-toolchain/"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-elf"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_5=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
-# BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_ROOTFS_MERGED_USR=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="root"
-BR2_TARGET_GENERIC_GETTY_OPTIONS="-n -l /bin/bash"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_BASH=y
-BR2_PACKAGE_HTOP=y
-BR2_PACKAGE_NANO=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
-# BR2_TARGET_ROOTFS_TAR is not set
+ > sed -e
+ > 's%@TARGET_CROSS@%/home/buildroot/autobuild/run/instance-2/output-1/host/bin/arm-linux-%g'
+ > -e 's%@TARGET_ARCH@%arm%g' -e 's%@TARGET_CPU@%arm926ej-s%g' -e
+ > 's%@TARGET_ENDIAN@%little%g' -e
+ > 's%@TARGET_CFLAGS@%"-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE",
+ > "-D_FILE_OFFSET_BITS=64", "-Os", "-g2", "-static"%g' -e
+ > 's%@TARGET_LDFLAGS@%"-static", ""-ldvdcss""%g' -e
+ > 's%@TARGET_CXXFLAGS@%"-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE",
+ > "-D_FILE_OFFSET_BITS=64", "-Os", "-g2", "-static", "-static"%g' -e
+ > 's%@HOST_DIR@%/home/buildroot/autobuild/run/instance-2/output-1/host%g'
+ > -e
+ > 's%@STAGING_DIR@%/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot%g'
+ > -e 's%@STATIC@%true%g' -e "/^\[binaries\]$/s:$::" -e
+ > "/^\[properties\]$/s:$::" package/meson/cross-compilation.conf.in >
+ > /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build/cross-compilation.conf
+ > PATH="/home/buildroot/autobuild/run/instance-2/output-1/host/bin:/home/buildroot/autobuild/run/instance-2/output-1/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+ > PYTHONNOUSERSITE=y
+ > /home/buildroot/autobuild/run/instance-2/output-1/host/bin/meson
+ > --prefix=/usr --libdir=lib --default-library=static --buildtype=debug
+ > --cross-file=/home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2//build/cross-compilation.conf
+ > -Dbuild.pkg_config_path=/home/buildroot/autobuild/run/instance-2/output-1/host/lib/pkgconfig
+ > -Dexamples=disabled -Dtests=disabled -Da52dec=disabled
+ > -Damrnb=disabled -Damrwbdec=disabled -Dcdio=disabled
+ > -Dsidplay=disabled -Dorc=disabled -Dasfdemux=enabled
+ > -Ddvdlpcmdec=disabled -Ddvdsub=disabled -Dxingmux=disabled
+ > -Drealmedia=disabled -Ddvdread=enabled -Dmpeg2dec=disabled
+ > -Dx264=disabled
+ > /home/buildroot/autobuild/run/instance-2/output-1/build/gst1-plugins-ugly-1.16.2/
+ > /home/buildroot/autobuild/run/instance-2/output-1/build/gs
+ >  t1-plugins-ugly-1.16.2//build
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > ERROR: Malformed value in cross file variable c_link_args.
+
+ > However since the switch to messon, this workaround is not needed so
+ > drop it
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/56a830625cf6e6b0d63b6e7e2761496abc146152
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
