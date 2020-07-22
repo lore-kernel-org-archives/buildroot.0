@@ -1,115 +1,209 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 23 Jul 2020 00:05:32 +0200
-Subject: [Buildroot] [PATCH 2/4] package/localedef: use upstream glibc
- version
-In-Reply-To: <20200721212729.41a9374e@windsurf.home>
-References: <20200720164723.359198-1-romain.naour@gmail.com>
- <20200720164723.359198-2-romain.naour@gmail.com>
- <20200721212729.41a9374e@windsurf.home>
-Message-ID: <f89c4907-6d65-44a7-d6d1-b412b06d87a0@gmail.com>
+From: Stephen Beckwith <embeddedsteve@gmail.com>
+Date: Wed, 22 Jul 2020 18:05:39 -0400
+Subject: [Buildroot] Re-building a Linux Net-bootable image after all other
+ components are built
+Message-ID: <CAN34fowMoYAPF1iJKBPQFfVBfcNR_Sv52Cvtzus5WA2UOScDSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Please pardon the verbosity of this - I am a believer that the more you
+know (i.e. context) the better.  I am grateful for your expertise and
+assistance.
+Regards,
+Stephen Beckwith
 
-Le 21/07/2020 ? 21:27, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Mon, 20 Jul 2020 18:47:21 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>
->> Since the upstream version and site are always defined in Kconfig now,
->> they are always available, so we can use them to define the localedef
->> version and site. We also change the localedef hash file to be a
->> symlink to the glibc one.
->>
->> Now, there is no manual action to do to keep localedef and glibc in
->> sync for the internal toolchain.
->>
->> External toolchains will use the upstream glibc version (as is currently
->> the case already); with some luck, it is good enough if the external
->> toolchain is not too old (2.26 or older may have issues, but there's
->> nothing we can do as we can't know what version is used).
->>
->> Additionally, for some architectures, the internall toolchain uses a
->> forked glibc tree. In theory, we would also want to use the localedef
->> from those trees, but that would mean we would have to carry a patch for
->> each, to be able to build only localedef. This is highly inpractical.
->>
->> However, those architectures are close enought to upstream that upstream
->> localedef is compatible. Besides, the current behaviour is already to
->> use an upstream localedef for those architectures anyway, so we keep
->> doing that.
->>
->> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> 
-> Unfortunately, this breaks building host-localedef for external
-> toolchains. Indeed, package/glibc/Config.in is only included in the
-> Config.in machinery when the internal toolchain backend is used. I'm
-> not sure what is the best way to solve this.
+*In original setup:*
 
-Indeed...
+BR 2015.08.1  With GCC 4.4.7 (BR Build)
 
-> Another concern is that this change doesn't make it as "transparent" as
-> it seems to update the glibc version: the idea was that changing
-> BR2_GLIBC_VERSION_UPSTREAM would be sufficient, and localedef would
-> automatically use that new version. Unfortunately, this doesn't work
-> due to the hash file of localedef:
-> 
-> package/localedef/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/localedef.hash -> ../../glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
-> 
-> This symlink anyway needs to be updated in localedef whenever
-> BR2_GLIBC_VERSION_UPSTREAM is changed.
-> 
-> With PATCH 3/4 in this series, it becomes worse as another symlink is
-> needed for the other glibc version that we would support.
-> 
-> Another concern with localedef, though not related to this series, is
-> that with external toolchains, you don't know which glibc version is
-> used in the toolchain. We may need a post-2.27 localedef, or a pre-2.27
-> localedef. I'm not sure how to solve that though. Random thought: for
-> the internal toolchains, have a host-glibc package that builds
-> localedef for the host, so that its version is naturally in sync with
-> the target glibc. For external toolchains, have the host-localedef
-> package with a version choice between different upstream glibc
-> versions, and it's up to the user to select the right thing ?
+Kernel = linux-3.14.17-pilot4  {with patches}
 
-I'm not sure how we can check if the localedef version is compatible with the
-external toolchain glibc version (add a check in toolchain/helpers.mk?). We only
-have BR2_TOOLCHAIN_USES_GLIBC to know it's a glibc toolchain.
+U-Boot = u-boot-2013.07-pilot4  {with patches}
 
-I'm not sure we want to introduce BR2_TOOLCHAIN_GLIBC_AT_LEAST_x_xx just to
-build the right localedef version.
+ - in this setup, everything works fine.  We complete our build steps, then
+we go back and do a ?rebuild? of the Linux kernel as shown below.  The
+output uImage (renamed to uImage_netboot) will be approximately the same
+size as the output image we create for flashing:  ~ 26MB.
 
-> 
-> Overall, this is quite complicated, and it's annoying to keep glibc
-> 2.31 unsupported because of this. To me, it feels like glibc 2.31 has
-> been around for quite a while now. Why not just make the jump, keep a
-> single glibc version that we bump to 2.31 ?
+ - This will be a linux kernel (~ 2.8MB) + an INITRAMFS attached - to make
+the total size.
 
-This was the initial question:
-http://lists.busybox.net/pipermail/buildroot/2020-April/279015.html
 
-Initially I didn't take into acount the host-localedef problem, In previous
-series version host-localedef was at the same version as the latest upstream glibc.
+*New Setup:*
 
-My concern is about having only one glibc version choice (the latest) to build
-the internal toolchain. It's pity to block on host-localedef problem not related
-to the glibc version choice.
+BR 2020.02.1  With GCC 9.2.0 (and updated glibc as well)
 
-Note, glibc 2.32 will be released next week (2020-08-01). Maybe we should merge
-the glibc version bump without introducing the version choice now and wait for
-glibc 2.32 version bump series.
+Kernel and U-boot are the same, with some additional patches to allow for
+successful compile.
 
-Best regards,
-Romain
+ - here, the final output is ~ the same as the previous build.
 
-> 
-> Thomas
-> 
+ - However, when we go to remake the Netboot image, we only get the Kernel
+output size of ~ 2.8MB, without the attached ROOT FILE SYSTEM.
+
+
+Investigation seems to show that the updated Buildroot internals are doing
+somethings differently vs. how we had implemented this in the current setup.
+The linux .config (in the output/build/linux-custom directory) seems to be
+getting overwritten by Buildroot AFTER we have manually modified it (shown
+below).  When I searched the .config file in the linux build directory, the
+parameters set below are NOT present, which leads me to believe that
+Buildroot is overwriting this during the reconfigure step (which it didn?t
+use to in the current setup).
+
+
+I?m looking for suggestions on how to do this post-processing build with
+the new Buildroot setup to generate this image.  We have the rootfs.cpio
+file to be attached to the kernel, just need to figure out how to do this
+?correctly?.
+
+
+*BR Configuration:*
+
+BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL_SP_DEV_PATH)/scripts/post_image_build.sh"
+
+
+The post_image_build.sh script calls: buildrootfs_binary_files script
+
+This script will Generate the ext4 RFS images required (verified they are
+correct)
+
+The post_image_build.sh then creates the package we flash on our devices,
+packing up the kernel and RFS with a ?header? for our update process.
+
+The very last step done in the entire process is to call:
+build_netbooting_image.sh
+
+
+This build_netbooting_image.sh script will:
+
+Save off the uImage in the build directory, saves the original config file
+as well
+
+It then ?tweaks? the output/build/linux-custom directory?s .config file
+
+CONFIG_INITRAMFS_SOURCE=${BR_BINARIES_DIR}/rootfs.cpio
+
+CONFIG_INITRAMFS_ROOT_UID = 0
+
+CONFIG_INITRAMFS_ROOT_GID =0
+
+CONFIG_INITRAMFS_COMPRESSION_NONE = y
+
+cd into the output directory and from here does a ?make linux-reconfigure?
+
+Does clean up and re-copy of images: so we get a ?uImage_netboot? of ~ 26MB
+
+
+This is the exact same process that we do with current buildroot setup -
+the only real difference is the Buildroot infrastructure and the compiler.
+
+
+*Current Build:*
+
+  LD      vmlinux
+
+  SORTEX  vmlinux
+
+  SYSMAP  System.map
+
+  OBJCOPY arch/arm/boot/Image
+
+  Kernel: arch/arm/boot/Image is ready
+
+  GZIP    arch/arm/boot/compressed/piggy.gzip
+
+  AS      arch/arm/boot/compressed/piggy.gzip.o
+
+arm-buildroot-linux-gnueabi-gcc: warning:
+/u/sbeckwit/p4/spNext/mendo_dev/src/include: linker input file unused
+because linking not done
+
+  LD      arch/arm/boot/compressed/vmlinux
+
+  OBJCOPY arch/arm/boot/zImage
+
+  Kernel: arch/arm/boot/zImage is ready
+
+  UIMAGE  arch/arm/boot/uImage
+
+Image Name:   Linux-3.14.17-ami
+
+Created:      Thu Jun 11 15:17:52 2020
+
+Image Type:   ARM Linux Kernel Image (uncompressed)
+
+*Data Size:    26622048 Bytes = 25998.09 kB = 25.39 MB*
+
+Load Address: 81008000
+
+Entry Point:  81008000
+
+  Image arch/arm/boot/uImage is ready
+
+  CHK     include/config/kernel.release
+
+  CHK     include/generated/uapi/linux/version.h
+
+  CHK     include/generated/utsrelease.h
+
+make[6]: `include/generated/mach-types.h' is up to date.
+
+  CALL    scripts/checksyscalls.sh
+
+arm-buildroot-linux-gnueabi-gcc: warning:
+/u/sbeckwit/p4/spNext/mendo_dev/src/include: linker input file unused
+because linking not done
+
+  Building modules, stage 2.
+
+  MODPOST 8 modules
+
+
+*New Build:*
+
+  CHK     include/config/kernel.release
+
+  CHK     include/generated/uapi/linux/version.h
+
+  CHK     include/generated/utsrelease.h
+
+make[6]: 'include/generated/mach-types.h' is up to date.
+
+  CALL    scripts/checksyscalls.sh
+
+arm-buildroot-linux-gnueabi-gcc.br_real: warning:
+/home/sbeckwit/sp_dev/bowie_dev/src/include: linker input file unused
+because linking not done
+
+  CHK     include/generated/compile.h
+
+  CHK     kernel/config_data.h
+
+  Kernel: arch/arm/boot/Image is ready
+
+  Kernel: arch/arm/boot/zImage is ready
+
+  UIMAGE  arch/arm/boot/uImage
+
+Image Name:   Linux-3.14.17-ami
+
+Created:      Thu Jun 11 15:04:23 2020
+
+Image Type:   ARM Linux Kernel Image (uncompressed)
+
+*Data Size:    2824656 Bytes = 2758.45 KiB = 2.69 MiB*
+
+Load Address: 81008000
+
+Entry Point:  81008000
+
+  Image arch/arm/boot/uImage is ready
+
+ - More detailed listings can be provided.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200722/ec68d563/attachment.html>
