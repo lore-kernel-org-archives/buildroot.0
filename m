@@ -1,70 +1,89 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 22 Jul 2020 21:35:30 +0200
-Subject: [Buildroot] [PATCH 1/3] package/ima-evm-utils: bump version to 1.3
-Message-ID: <20200722193532.32150-1-petr.vorel@gmail.com>
+Date: Wed, 22 Jul 2020 21:35:31 +0200
+Subject: [Buildroot] [PATCH 2/3] package/ima-evm-utils: fix build for old
+ compilers
+In-Reply-To: <20200722193532.32150-1-petr.vorel@gmail.com>
+References: <20200722193532.32150-1-petr.vorel@gmail.com>
+Message-ID: <20200722193532.32150-2-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-added tpm2-tss as dependency (needed for ima_boot_aggregate cmd for
-reading PCR; better to use libtss2-esys and libtss2-rc than require
-tsspcrread binary in runtime)
-
-added also sha1 hash from sourceforge
+Fixes:
+                     sourcery-arm-armv4t [38/44]: FAILED
+                            sourcery-arm [39/44]: FAILED
+                     sourcery-arm-thumb2 [40/44]: FAILED
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/ima-evm-utils/Config.in          | 3 ++-
- package/ima-evm-utils/ima-evm-utils.hash | 5 +++--
- package/ima-evm-utils/ima-evm-utils.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+Acked by upstream, but not yet merged.
+https://lore.kernel.org/linux-integrity/1595416105.5311.33.camel at linux.ibm.com/T/#mc663d7aa4e39752db4034de49a9fda2442185009
 
-diff --git a/package/ima-evm-utils/Config.in b/package/ima-evm-utils/Config.in
-index 851e2456bc..6c29c9de28 100644
---- a/package/ima-evm-utils/Config.in
-+++ b/package/ima-evm-utils/Config.in
-@@ -1,9 +1,10 @@
- config BR2_PACKAGE_IMA_EVM_UTILS
- 	bool "ima-evm-utils"
- 	depends on BR2_USE_MMU # keyutils
--	depends on !BR2_STATIC_LIBS # keyutils
-+	depends on !BR2_STATIC_LIBS # keyutils, tpm2-tss
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_KEYUTILS
-+	select BR2_PACKAGE_TPM2_TSS
- 	help
- 	  Linux Integrity Measurement Architecture (IMA)
- 	  Extended Verification Module (EVM) tools.
-diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
-index 24be627d20..4fe1591f74 100644
---- a/package/ima-evm-utils/ima-evm-utils.hash
-+++ b/package/ima-evm-utils/ima-evm-utils.hash
-@@ -1,3 +1,4 @@
--# Locally computed
--sha256 ad8471b58c4df29abd51c80d74b1501cfe3289b60d32d1b318618a8fd26c0c0a  ima-evm-utils-1.2.1.tar.gz
-+# sha1 from sourceforge, sha256 locally computed
-+sha1  8b81f83ddc0e7c863268e76049fa50ad89a04b11  ima-evm-utils-1.3.tar.gz
-+sha256 62e90e8dc6b131a4f34a356114cdcb5bef844f110abbdd5d8b53c449aecc609f  ima-evm-utils-1.3.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-index b944eda13c..70295643a4 100644
---- a/package/ima-evm-utils/ima-evm-utils.mk
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--IMA_EVM_UTILS_VERSION = 1.2.1
-+IMA_EVM_UTILS_VERSION = 1.3
- IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
- IMA_EVM_UTILS_LICENSE = GPL-2.0
- IMA_EVM_UTILS_LICENSE_FILES = COPYING
--IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl
-+IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
- 
- # Tarball doesn't contain configure
- IMA_EVM_UTILS_AUTORECONF = YES
+Kind regards,
+Petr
+
+ ...ss-Fix-compilation-for-old-compilers.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch
+
+diff --git a/package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch b/package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch
+new file mode 100644
+index 0000000000..258a74fe8c
+--- /dev/null
++++ b/package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch
+@@ -0,0 +1,51 @@
++From 8e98b5bbf2127131f968a5d864f86e8443505639 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Wed, 22 Jul 2020 12:06:28 +0200
++Subject: [PATCH] pcr_tss: Fix compilation for old compilers
++
++pcr_tss.c: In function 'pcr_selections_match':
++pcr_tss.c:73:2: error: 'for' loop initial declarations are only allowed in C99 mode
++  for (int i = 0; i < a->count; i++) {
++  ^
++pcr_tss.c:73:2: note: use option -std=c99 or -std=gnu99 to compile your code
++pcr_tss.c:78:3: error: 'for' loop initial declarations are only allowed in C99 mode
++   for (int j = 0; j < a->pcrSelections[i].sizeofSelect; j++) {
++   ^
++
++Fixes: 03f99ea ("ima-evm-utils: Add support for Intel TSS2 for PCR
++reading")
++
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++[ upstream status: https://lore.kernel.org/linux-integrity/1595416105.5311.33.camel at linux.ibm.com/T/#t ]
++---
++ src/pcr_tss.c | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/src/pcr_tss.c b/src/pcr_tss.c
++index 11b247b..feb1ff7 100644
++--- a/src/pcr_tss.c
+++++ b/src/pcr_tss.c
++@@ -68,14 +68,17 @@ int tpm2_pcr_supported(void)
++ 
++ static int pcr_selections_match(TPML_PCR_SELECTION *a, TPML_PCR_SELECTION *b)
++ {
+++	int i, j;
+++
++ 	if (a->count != b->count)
++ 		return 0;
++-	for (int i = 0; i < a->count; i++) {
+++
+++	for (i = 0; i < a->count; i++) {
++ 		if (a->pcrSelections[i].hash != b->pcrSelections[i].hash)
++ 			return 0;
++ 		if (a->pcrSelections[i].sizeofSelect != b->pcrSelections[i].sizeofSelect)
++ 			return 0;
++-		for (int j = 0; j < a->pcrSelections[i].sizeofSelect; j++) {
+++		for (j = 0; j < a->pcrSelections[i].sizeofSelect; j++) {
++ 			if (a->pcrSelections[i].pcrSelect[j] != b->pcrSelections[i].pcrSelect[j])
++ 				return 0;
++ 		}
++-- 
++2.27.0
++
 -- 
 2.27.0
