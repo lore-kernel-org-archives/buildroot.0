@@ -1,64 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:06:20 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] board/raspberrypi: fix
- rpi4/rpi4-64 genimage config files
-Message-ID: <20200722085626.182AB880B0@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 09:15:44 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libvncserver:
+ disable gtk example
+Message-ID: <20200722085626.5275B8810A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47da3f925b1e7526dee2e6c5c67c2d3bc75460a9
+commit: https://git.buildroot.net/buildroot/commit/?id=22fe2e6847e919f7b594884804748d29f2b6fe8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Since commit 'package/rpi-firmware: fix startup file names' ([1]) the
-start and fixup file names are normalized to start.elf/fixup.dat,
-adjust the rpi4 genimage config files accordingly.
+gtkvncviewer has been added since version 0.9.13 and
+https://github.com/LibVNC/libvncserver/commit/2650cfc17bb7718e42bfff8510c15f011eda1b1f,
+disable it as it is only an example
 
-Fixes:
-
-  ERROR: file(rpi-firmware/fixup4.dat): stat(.../images/rpi-firmware/fixup4.dat) failed: No such file or directory
-  ERROR: vfat(boot.vfat): could not setup rpi-firmware/fixup4.dat
-
-[1] https://git.buildroot.net/buildroot/commit/?id=1bdc0334ff6273761b2e7fda730cdcc7e1f46862
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 59c3426c5197fc2df1c8307543ed54edbb22f595)
+(cherry picked from commit c89f62cec69a29b9f7441893b39d24e141fbe988)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage-raspberrypi4-64.cfg | 4 ++--
- board/raspberrypi/genimage-raspberrypi4.cfg    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libvncserver/libvncserver.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi4-64.cfg b/board/raspberrypi/genimage-raspberrypi4-64.cfg
-index 3c480e98f0..854e0c7e31 100644
---- a/board/raspberrypi/genimage-raspberrypi4-64.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi4-64.cfg
-@@ -4,8 +4,8 @@ image boot.vfat {
-       "bcm2711-rpi-4-b.dtb",
-       "rpi-firmware/cmdline.txt",
-       "rpi-firmware/config.txt",
--      "rpi-firmware/fixup4.dat",
--      "rpi-firmware/start4.elf",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-       "rpi-firmware/overlays",
-       "Image"
-     }
-diff --git a/board/raspberrypi/genimage-raspberrypi4.cfg b/board/raspberrypi/genimage-raspberrypi4.cfg
-index 4e4742f3ef..60e1f23bcc 100644
---- a/board/raspberrypi/genimage-raspberrypi4.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi4.cfg
-@@ -4,8 +4,8 @@ image boot.vfat {
-       "bcm2711-rpi-4-b.dtb",
-       "rpi-firmware/cmdline.txt",
-       "rpi-firmware/config.txt",
--      "rpi-firmware/fixup4.dat",
--      "rpi-firmware/start4.elf",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-       "rpi-firmware/overlays",
-       "zImage"
-     }
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 96dd51299c..23ab40b7eb 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -16,6 +16,7 @@ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
++	-DWITH_GTK=OFF \
+ 	-DWITH_SDL=OFF
+ 
+ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
