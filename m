@@ -1,43 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Jul 2020 09:27:00 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/libabseil-cpp new package
-In-Reply-To: <20200721214522.3719304-1-aduskett@gmail.com>
-References: <20200721214522.3719304-1-aduskett@gmail.com>
-Message-ID: <20200722092700.76f8decd@windsurf.home>
+From: Guillaume Bres <guillaume.bressaix@gmail.com>
+Date: Wed, 22 Jul 2020 09:32:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnids: NVD database has been
+ updated
+In-Reply-To: <CANQCQpb3NtawUS-fGVDXn+jfvjS2mh1T--r815m8jsnSj0wYHw@mail.gmail.com>
+References: <20200721180555.31453-1-guillaume.bressaix@gmail.com>
+ <20200721204324.58fa9cc2@windsurf.home>
+ <CANQCQpb3NtawUS-fGVDXn+jfvjS2mh1T--r815m8jsnSj0wYHw@mail.gmail.com>
+Message-ID: <CAJe0E3cP6oppGocO9LuE+-ctjicSq1oRh8p2qD=gZdwi7N+_aQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+>
+> Ugh, looks like they only updated the description and didn't adjust the
+> rest of the version references
 
-Thanks for the new iteration.
 
-On Tue, 21 Jul 2020 14:45:21 -0700
-aduskett at gmail.com wrote:
+yes that's what happened ? we may need to wait a little longer
 
-> +Because libabseil-cpp builds static libraries, it is better to set the
-> +POSITION_INDEPENDENT_CODE to ON instead of forcing fPIC, as forcing fPIC may
-> +cause relocation errors when shared libraries link against the built static
-> +libraries.
+Guillaume W. Bres
+Software engineer
+<guillaume.bressaix@gmail.com>
 
-Duh? This doesn't make much sense to me. Did you perhaps misunderstand
-what I said in my previous e-mail ?
 
-When building static libraries, -fPIC is normally not needed.
+Le mar. 21 juil. 2020 ? 22:09, Matthew Weber <matthew.weber@collins.com> a
+?crit :
 
-Except when such static libraries end up being linked into a shared
-library, in which case all the code of the shared library (which
-includes the static library) must have been compiled with -fPIC.
-
-The reason is pretty simple: the load address of shared libraries is
-decided at runtime, and it may be different for every program using a
-given shared library. Hence the shared library code must be Position
-Independent, so that it can run from any memory address.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Ugh, looks like they only updated the description and didn't adjust the
+> rest of the version references
+>
+> https://nvd.nist.gov/vuln/detail/CVE-2010-0751#match-5471142
+>
+> On Tue, Jul 21, 2020 at 1:46 PM Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> wrote:
+>
+>> On Tue, 21 Jul 2020 20:05:55 +0200
+>> guillaume.bressaix at gmail.com wrote:
+>>
+>> > From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+>> >
+>> > Thanks to Matthew W. & Thomas, the NVD database has been updated
+>> > and CVE-2010-0751 is now declared fixed, see
+>> > https://security-tracker.debian.org/tracker/CVE-2010-0751
+>> >
+>> > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+>>
+>> Are you sure it has already been fixed ?
+>>
+>> https://nvd.nist.gov/vuln/detail/CVE-2010-0751 still marks 1.24 as
+>> affected as far as I can see.
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200722/1a71638e/attachment.html>
