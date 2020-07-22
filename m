@@ -1,309 +1,115 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 23:11:12 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-twisted:
- Fix several request smuggling attacks
-Message-ID: <20200722211134.418EF81057@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 23 Jul 2020 00:05:32 +0200
+Subject: [Buildroot] [PATCH 2/4] package/localedef: use upstream glibc
+ version
+In-Reply-To: <20200721212729.41a9374e@windsurf.home>
+References: <20200720164723.359198-1-romain.naour@gmail.com>
+ <20200720164723.359198-2-romain.naour@gmail.com>
+ <20200721212729.41a9374e@windsurf.home>
+Message-ID: <f89c4907-6d65-44a7-d6d1-b412b06d87a0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25bda2ef0a646cc498e564db97d07b0deec00d4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hello,
 
-CVE-2020-10108
-In Twisted Web through 19.10.0, there was an HTTP request splitting
-vulnerability. When presented with two content-length headers, it
-ignored the first header. When the second content-length value was
-set to zero, the request body was interpreted as a pipelined request.
+Le 21/07/2020 ? 21:27, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Mon, 20 Jul 2020 18:47:21 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>
+>> Since the upstream version and site are always defined in Kconfig now,
+>> they are always available, so we can use them to define the localedef
+>> version and site. We also change the localedef hash file to be a
+>> symlink to the glibc one.
+>>
+>> Now, there is no manual action to do to keep localedef and glibc in
+>> sync for the internal toolchain.
+>>
+>> External toolchains will use the upstream glibc version (as is currently
+>> the case already); with some luck, it is good enough if the external
+>> toolchain is not too old (2.26 or older may have issues, but there's
+>> nothing we can do as we can't know what version is used).
+>>
+>> Additionally, for some architectures, the internall toolchain uses a
+>> forked glibc tree. In theory, we would also want to use the localedef
+>> from those trees, but that would mean we would have to carry a patch for
+>> each, to be able to build only localedef. This is highly inpractical.
+>>
+>> However, those architectures are close enought to upstream that upstream
+>> localedef is compatible. Besides, the current behaviour is already to
+>> use an upstream localedef for those architectures anyway, so we keep
+>> doing that.
+>>
+>> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> 
+> Unfortunately, this breaks building host-localedef for external
+> toolchains. Indeed, package/glibc/Config.in is only included in the
+> Config.in machinery when the internal toolchain backend is used. I'm
+> not sure what is the best way to solve this.
 
-CVE-2020-10109
-In Twisted Web through 19.10.0, there was an HTTP request splitting
-vulnerability. When presented with a content-length and a chunked
-encoding header, the content-length took precedence and the remainder
-of the request body was interpreted as a pipelined request.
+Indeed...
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...001-fix-several-request-smuggling-attacks.patch | 271 +++++++++++++++++++++
- 1 file changed, 271 insertions(+)
+> Another concern is that this change doesn't make it as "transparent" as
+> it seems to update the glibc version: the idea was that changing
+> BR2_GLIBC_VERSION_UPSTREAM would be sufficient, and localedef would
+> automatically use that new version. Unfortunately, this doesn't work
+> due to the hash file of localedef:
+> 
+> package/localedef/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/localedef.hash -> ../../glibc/2.30-67-g4748829f86a458b76642f3e98b1d80f7b868e427/glibc.hash
+> 
+> This symlink anyway needs to be updated in localedef whenever
+> BR2_GLIBC_VERSION_UPSTREAM is changed.
+> 
+> With PATCH 3/4 in this series, it becomes worse as another symlink is
+> needed for the other glibc version that we would support.
+> 
+> Another concern with localedef, though not related to this series, is
+> that with external toolchains, you don't know which glibc version is
+> used in the toolchain. We may need a post-2.27 localedef, or a pre-2.27
+> localedef. I'm not sure how to solve that though. Random thought: for
+> the internal toolchains, have a host-glibc package that builds
+> localedef for the host, so that its version is naturally in sync with
+> the target glibc. For external toolchains, have the host-localedef
+> package with a version choice between different upstream glibc
+> versions, and it's up to the user to select the right thing ?
 
-diff --git a/package/python-twisted/0001-fix-several-request-smuggling-attacks.patch b/package/python-twisted/0001-fix-several-request-smuggling-attacks.patch
-new file mode 100644
-index 0000000000..9fe15ad7b8
---- /dev/null
-+++ b/package/python-twisted/0001-fix-several-request-smuggling-attacks.patch
-@@ -0,0 +1,271 @@
-+From 4a7d22e490bb8ff836892cc99a1f54b85ccb0281 Mon Sep 17 00:00:00 2001
-+From: Mark Williams <mrw@enotuniq.org>
-+Date: Sun, 16 Feb 2020 19:00:10 -0800
-+Subject: [PATCH] Fix several request smuggling attacks.
-+
-+1. Requests with multiple Content-Length headers were allowed (thanks
-+to Jake Miller from Bishop Fox and ZeddYu Lu) and now fail with a 400;
-+
-+2. Requests with a Content-Length header and a Transfer-Encoding
-+header honored the first header (thanks to Jake Miller from Bishop
-+Fox) and now fail with a 400;
-+
-+3. Requests whose Transfer-Encoding header had a value other than
-+"chunked" and "identity" (thanks to ZeddYu Lu) were allowed and now fail
-+with a 400.
-+
-+Fixes CVE-2020-10108 & CVE-2020-10109 - HTTP request splitting
-+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-10108
-+https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-10109
-+
-+Upstream:
-+https://github.com/twisted/twisted/commit/4a7d22e490bb8ff836892cc99a1f54b85ccb0281
-+
-+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+
-+
-+---
-+ src/twisted/web/http.py                   |  64 +++++++---
-+ src/twisted/web/newsfragments/9770.bugfix |   1 +
-+ src/twisted/web/test/test_http.py         | 137 ++++++++++++++++++++++
-+ 3 files changed, 187 insertions(+), 15 deletions(-)
-+ create mode 100644 src/twisted/web/newsfragments/9770.bugfix
-+
-+diff --git a/src/twisted/web/http.py b/src/twisted/web/http.py
-+index f0fb05b4d69..06d830fe30f 100644
-+--- a/src/twisted/web/http.py
-++++ b/src/twisted/web/http.py
-+@@ -2171,6 +2171,51 @@ def _finishRequestBody(self, data):
-+         self.allContentReceived()
-+         self._dataBuffer.append(data)
-+ 
-++    def _maybeChooseTransferDecoder(self, header, data):
-++        """
-++        If the provided header is C{content-length} or
-++        C{transfer-encoding}, choose the appropriate decoder if any.
-++
-++        Returns L{True} if the request can proceed and L{False} if not.
-++        """
-++
-++        def fail():
-++            self._respondToBadRequestAndDisconnect()
-++            self.length = None
-++
-++        # Can this header determine the length?
-++        if header == b'content-length':
-++            try:
-++                length = int(data)
-++            except ValueError:
-++                fail()
-++                return False
-++            newTransferDecoder = _IdentityTransferDecoder(
-++                length, self.requests[-1].handleContentChunk, self._finishRequestBody)
-++        elif header == b'transfer-encoding':
-++            # XXX Rather poorly tested code block, apparently only exercised by
-++            # test_chunkedEncoding
-++            if data.lower() == b'chunked':
-++                length = None
-++                newTransferDecoder = _ChunkedTransferDecoder(
-++                    self.requests[-1].handleContentChunk, self._finishRequestBody)
-++            elif data.lower() == b'identity':
-++                return True
-++            else:
-++                fail()
-++                return False
-++        else:
-++            # It's not a length related header, so exit
-++            return True
-++
-++        if self._transferDecoder is not None:
-++            fail()
-++            return False
-++        else:
-++            self.length = length
-++            self._transferDecoder = newTransferDecoder
-++            return True
-++
-+ 
-+     def headerReceived(self, line):
-+         """
-+@@ -2196,21 +2241,10 @@ def headerReceived(self, line):
-+ 
-+         header = header.lower()
-+         data = data.strip()
-+-        if header == b'content-length':
-+-            try:
-+-                self.length = int(data)
-+-            except ValueError:
-+-                self._respondToBadRequestAndDisconnect()
-+-                self.length = None
-+-                return False
-+-            self._transferDecoder = _IdentityTransferDecoder(
-+-                self.length, self.requests[-1].handleContentChunk, self._finishRequestBody)
-+-        elif header == b'transfer-encoding' and data.lower() == b'chunked':
-+-            # XXX Rather poorly tested code block, apparently only exercised by
-+-            # test_chunkedEncoding
-+-            self.length = None
-+-            self._transferDecoder = _ChunkedTransferDecoder(
-+-                self.requests[-1].handleContentChunk, self._finishRequestBody)
-++
-++        if not self._maybeChooseTransferDecoder(header, data):
-++            return False
-++
-+         reqHeaders = self.requests[-1].requestHeaders
-+         values = reqHeaders.getRawHeaders(header)
-+         if values is not None:
-+diff --git a/src/twisted/web/newsfragments/9770.bugfix b/src/twisted/web/newsfragments/9770.bugfix
-+new file mode 100644
-+index 00000000000..4f1be97de8a
-+--- /dev/null
-++++ b/src/twisted/web/newsfragments/9770.bugfix
-+@@ -0,0 +1 @@
-++Fix several request smuggling attacks: requests with multiple Content-Length headers were allowed (thanks to Jake Miller from Bishop Fox and ZeddYu Lu) and now fail with a 400; requests with a Content-Length header and a Transfer-Encoding header honored the first header (thanks to Jake Miller from Bishop Fox) and now fail with a 400; requests whose Transfer-Encoding header had a value other than "chunked" and "identity" (thanks to ZeddYu Lu) were allowed and now fail a 400.
-+\ No newline at end of file
-+diff --git a/src/twisted/web/test/test_http.py b/src/twisted/web/test/test_http.py
-+index 0a0db09b750..578cb500cda 100644
-+--- a/src/twisted/web/test/test_http.py
-++++ b/src/twisted/web/test/test_http.py
-+@@ -2252,6 +2252,143 @@ def process(self):
-+         self.flushLoggedErrors(AttributeError)
-+ 
-+ 
-++    def assertDisconnectingBadRequest(self, request):
-++        """
-++        Assert that the given request bytes fail with a 400 bad
-++        request without calling L{Request.process}.
-++
-++        @param request: A raw HTTP request
-++        @type request: L{bytes}
-++        """
-++        class FailedRequest(http.Request):
-++            processed = False
-++            def process(self):
-++                FailedRequest.processed = True
-++
-++        channel = self.runRequest(request, FailedRequest, success=False)
-++        self.assertFalse(FailedRequest.processed, "Request.process called")
-++        self.assertEqual(
-++            channel.transport.value(),
-++            b"HTTP/1.1 400 Bad Request\r\n\r\n")
-++        self.assertTrue(channel.transport.disconnecting)
-++
-++
-++    def test_duplicateContentLengths(self):
-++        """
-++        A request which includes multiple C{content-length} headers
-++        fails with a 400 response without calling L{Request.process}.
-++        """
-++        self.assertRequestRejected([
-++            b'GET /a HTTP/1.1',
-++            b'Content-Length: 56',
-++            b'Content-Length: 0',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++        ])
-++
-++
-++    def test_duplicateContentLengthsWithPipelinedRequests(self):
-++        """
-++        Two pipelined requests, the first of which includes multiple
-++        C{content-length} headers, trigger a 400 response without
-++        calling L{Request.process}.
-++        """
-++        self.assertRequestRejected([
-++            b'GET /a HTTP/1.1',
-++            b'Content-Length: 56',
-++            b'Content-Length: 0',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++            b'GET /a HTTP/1.1',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++        ])
-++
-++
-++    def test_contentLengthAndTransferEncoding(self):
-++        """
-++        A request that includes both C{content-length} and
-++        C{transfer-encoding} headers fails with a 400 response without
-++        calling L{Request.process}.
-++        """
-++        self.assertRequestRejected([
-++            b'GET /a HTTP/1.1',
-++            b'Transfer-Encoding: chunked',
-++            b'Content-Length: 0',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++        ])
-++
-++
-++    def test_contentLengthAndTransferEncodingWithPipelinedRequests(self):
-++        """
-++        Two pipelined requests, the first of which includes both
-++        C{content-length} and C{transfer-encoding} headers, triggers a
-++        400 response without calling L{Request.process}.
-++        """
-++        self.assertRequestRejected([
-++            b'GET /a HTTP/1.1',
-++            b'Transfer-Encoding: chunked',
-++            b'Content-Length: 0',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++            b'GET /a HTTP/1.1',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++        ])
-++
-++
-++    def test_unknownTransferEncoding(self):
-++        """
-++        A request whose C{transfer-encoding} header includes a value
-++        other than C{chunked} or C{identity} fails with a 400 response
-++        without calling L{Request.process}.
-++        """
-++        self.assertRequestRejected([
-++            b'GET /a HTTP/1.1',
-++            b'Transfer-Encoding: unknown',
-++            b'Host: host.invalid',
-++            b'',
-++            b'',
-++        ])
-++
-++
-++    def test_transferEncodingIdentity(self):
-++        """
-++        A request with a valid C{content-length} and a
-++        C{transfer-encoding} whose value is C{identity} succeeds.
-++        """
-++        body = []
-++
-++        class SuccessfulRequest(http.Request):
-++            processed = False
-++            def process(self):
-++                body.append(self.content.read())
-++                self.setHeader(b'content-length', b'0')
-++                self.finish()
-++
-++        request = b'''\
-++GET / HTTP/1.1
-++Host: host.invalid
-++Content-Length: 2
-++Transfer-Encoding: identity
-++
-++ok
-++'''
-++        channel = self.runRequest(request, SuccessfulRequest, False)
-++        self.assertEqual(body, [b'ok'])
-++        self.assertEqual(
-++            channel.transport.value(),
-++            b'HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n',
-++        )
-++
-++
-+ 
-+ class QueryArgumentsTests(unittest.TestCase):
-+     def testParseqs(self):
+I'm not sure how we can check if the localedef version is compatible with the
+external toolchain glibc version (add a check in toolchain/helpers.mk?). We only
+have BR2_TOOLCHAIN_USES_GLIBC to know it's a glibc toolchain.
+
+I'm not sure we want to introduce BR2_TOOLCHAIN_GLIBC_AT_LEAST_x_xx just to
+build the right localedef version.
+
+> 
+> Overall, this is quite complicated, and it's annoying to keep glibc
+> 2.31 unsupported because of this. To me, it feels like glibc 2.31 has
+> been around for quite a while now. Why not just make the jump, keep a
+> single glibc version that we bump to 2.31 ?
+
+This was the initial question:
+http://lists.busybox.net/pipermail/buildroot/2020-April/279015.html
+
+Initially I didn't take into acount the host-localedef problem, In previous
+series version host-localedef was at the same version as the latest upstream glibc.
+
+My concern is about having only one glibc version choice (the latest) to build
+the internal toolchain. It's pity to block on host-localedef problem not related
+to the glibc version choice.
+
+Note, glibc 2.32 will be released next week (2020-08-01). Maybe we should merge
+the glibc version bump without introducing the version choice now and wait for
+glibc 2.32 version bump series.
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
