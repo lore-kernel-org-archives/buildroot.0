@@ -1,46 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 13:37:14 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/a10disp: add
- license file
-Message-ID: <20200722114333.0EB847FEBD@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 13:44:19 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jq: needs threads
+Message-ID: <20200722114333.31720880C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=293d90b555fa792e4559303bcf43c1a89b38c6a4
+commit: https://git.buildroot.net/buildroot/commit/?id=5c988635f93af14592e0531ecc79b2621c2ebdc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Also separate the fields in the hash file by two spaces.
+threads is a strong requirement since
+https://github.com/stedolan/jq/commit/cf4b48c7ba30cb30e116b523cff036ea481459f6
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ebfb17eaf65eef316916379d6a6e00f8a8cf4fd)
+Fixes:
+ - http://autobuild.buildroot.org/results/b871cc175655c2d6aa5f184d891b994a0ebd9902
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 826587fa4834ed8da03682df605d1ba51d4b7675)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/a10disp/a10disp.hash | 3 ++-
- package/a10disp/a10disp.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/jq/Config.in     | 4 ++++
+ package/sysdig/Config.in | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/a10disp/a10disp.hash b/package/a10disp/a10disp.hash
-index f1bddec5df..acaafc3530 100644
---- a/package/a10disp/a10disp.hash
-+++ b/package/a10disp/a10disp.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 5077405030e8f97a1edd4b86d469466abbc4d32b4a4609e58459347fcd1ba35b a10disp-0.6.1.tar.gz
-+sha256  5077405030e8f97a1edd4b86d469466abbc4d32b4a4609e58459347fcd1ba35b  a10disp-0.6.1.tar.gz
-+sha256  ddf849966f57fee8f9675f5a3c7791353d1cba71695cd58016212fc236bbdbee  a10disp.c
-diff --git a/package/a10disp/a10disp.mk b/package/a10disp/a10disp.mk
-index 4c2ee14e29..c919202329 100644
---- a/package/a10disp/a10disp.mk
-+++ b/package/a10disp/a10disp.mk
-@@ -7,6 +7,7 @@
- A10DISP_VERSION = 0.6.1
- A10DISP_SITE = $(call github,hglm,a10disp,v$(A10DISP_VERSION))
- A10DISP_LICENSE = MIT
-+A10DISP_LICENSE_FILES = a10disp.c
+diff --git a/package/jq/Config.in b/package/jq/Config.in
+index 321cbe8b51..5edb5d0989 100644
+--- a/package/jq/Config.in
++++ b/package/jq/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_JQ
+ 	bool "jq"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  jq is like sed for JSON data - you can use it to slice and
+ 	  filter and map and transform structured data with the same
+ 	  ease that sed, awk, grep and friends let you play with text.
  
- A10DISP_DEPENDENCIES = linux
+ 	  http://stedolan.github.io/jq/
++
++comment "jq needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 0a1b3f8935..ee53b4fa20 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_THREADS # jq
+ 	depends on !BR2_STATIC_LIBS # luajit, elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+@@ -25,8 +26,9 @@ config BR2_PACKAGE_SYSDIG
  
+ 	  https://github.com/draios/sysdig/wiki
+ 
+-comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
++comment "sysdig needs a glibc or uclibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library and a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
