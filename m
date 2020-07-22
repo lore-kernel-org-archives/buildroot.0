@@ -1,39 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 22 Jul 2020 09:18:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zstd: bump to version 1.4.5
-In-Reply-To: <87lfjcja5s.fsf@dell.be.48ers.dk>
-References: <20200714202850.1441606-1-fontaine.fabrice@gmail.com>
- <87lfjcja5s.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W819ZdkSdBjPmiKkKOmVuresGfrTF229ipCqnLEJH4z+xw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 Jul 2020 09:23:32 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/open2300: use mysql_config to retrieve cflags and libs
+In-Reply-To: <20200714211017.2421936-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 14 Jul 2020 23:10:17 +0200")
+References: <20200714211017.2421936-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wo2whv2j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Le mer. 22 juil. 2020 ? 09:12, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > - Get official tarball and its hash
->  > - Update indentation in hash file (two spaces)
->
->  > This is a fairly important release which includes performance
->  > improvements and new major CLI features. It also fixes a few corner
->  > cases, making it a recommended upgrade.
->
->  > https://github.com/facebook/zstd/releases/tag/v1.4.5
->  > https://github.com/facebook/zstd/releases/tag/v1.4.4
->
-> Does this mean that it should be applied to 2020.02.x / 2020.05.x as
-> well?
-Yes, I think it should also be applied to 2020.02.x / 2020.05.x with
-commit 267ce1718edccacdf02bc68b651ba5f8ffe72fa9.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+ > oracle-mysql won't built its own bundled zlib since commit
+ > 6fed83a03047535d4a9c849352f8c21b30177fcd so don't unconditionally link
+ > with zlib instead use mysql_config to retrieve cflags and libs as
+ > suggested by Thomas Petazzoni in review of first iteration
 
-Fabrice
+ > Fixes:
+ >  - No autobuilder failures yet
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Use mysql_config instead of current workarounds
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
