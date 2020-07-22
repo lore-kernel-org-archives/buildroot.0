@@ -1,38 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:15:44 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libvncserver:
- disable gtk example
-Message-ID: <20200722085626.5275B8810A@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 09:13:12 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/bind: security
+ bump to version 9.11.20
+Message-ID: <20200722085626.2B671880B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22fe2e6847e919f7b594884804748d29f2b6fe8c
+commit: https://git.buildroot.net/buildroot/commit/?id=b129195c51b69b9753c826cabea2f8f680452472
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-gtkvncviewer has been added since version 0.9.13 and
-https://github.com/LibVNC/libvncserver/commit/2650cfc17bb7718e42bfff8510c15f011eda1b1f,
-disable it as it is only an example
+Fixes the following security issue:
+ * CVE-2020-8619: It was possible to trigger an INSIST failure when a
+   zone with an interior wildcard label was queried in a certain
+   pattern.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+https://ftp.isc.org/isc/bind9/cur/9.11/RELEASE-NOTES-bind-9.11.20.txt
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c89f62cec69a29b9f7441893b39d24e141fbe988)
+(cherry picked from commit cc7740825afec413d78db697477c8246ad5da9da)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvncserver/libvncserver.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 96dd51299c..23ab40b7eb 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -16,6 +16,7 @@ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
- 	-DWITH_FFMPEG=OFF \
-+	-DWITH_GTK=OFF \
- 	-DWITH_SDL=OFF
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 4eb3aff3b1..282b2aeba3 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.19/bind-9.11.19.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
+ # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
+-sha256  0dee554a4caa368948b32da9a0c97b516c19103bc13ff5b3762c5d8552f52329  bind-9.11.19.tar.gz
++sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
+ sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 362a26dce6..80f8defca8 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-BIND_VERSION = 9.11.19
++BIND_VERSION = 9.11.20
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
