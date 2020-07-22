@@ -1,26 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:16:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: disable gtk
- example
-In-Reply-To: <20200716193610.1924967-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 16 Jul 2020 21:36:10 +0200")
-References: <20200716193610.1924967-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kq0j9yc.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Jul 2020 09:18:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zstd: bump to version 1.4.5
+In-Reply-To: <87lfjcja5s.fsf@dell.be.48ers.dk>
+References: <20200714202850.1441606-1-fontaine.fabrice@gmail.com>
+ <87lfjcja5s.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W819ZdkSdBjPmiKkKOmVuresGfrTF229ipCqnLEJH4z+xw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi Peter,
 
- > gtkvncviewer has been added since version 0.9.13 and
- > https://github.com/LibVNC/libvncserver/commit/2650cfc17bb7718e42bfff8510c15f011eda1b1f,
- > disable it as it is only an example
+Le mer. 22 juil. 2020 ? 09:12, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > - Get official tarball and its hash
+>  > - Update indentation in hash file (two spaces)
+>
+>  > This is a fairly important release which includes performance
+>  > improvements and new major CLI features. It also fixes a few corner
+>  > cases, making it a recommended upgrade.
+>
+>  > https://github.com/facebook/zstd/releases/tag/v1.4.5
+>  > https://github.com/facebook/zstd/releases/tag/v1.4.4
+>
+> Does this mean that it should be applied to 2020.02.x / 2020.05.x as
+> well?
+Yes, I think it should also be applied to 2020.02.x / 2020.05.x with
+commit 267ce1718edccacdf02bc68b651ba5f8ffe72fa9.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Fabrice
