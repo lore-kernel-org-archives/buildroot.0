@@ -1,68 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 13:44:19 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/jq: needs threads
-Message-ID: <20200722114333.31720880C2@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 13:47:00 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/exim: fix build
+ with ccache
+Message-ID: <20200722114333.3FD8B821B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c988635f93af14592e0531ecc79b2621c2ebdc4
+commit: https://git.buildroot.net/buildroot/commit/?id=a28d658ecb7c5686130bb02e2f1c921b2bf93b09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-threads is a strong requirement since
-https://github.com/stedolan/jq/commit/cf4b48c7ba30cb30e116b523cff036ea481459f6
+When using ccache to build the exim package, the HOSTCC value contains
+spaces, that are incorrectly interpreted by exim's Makefilei, which uses
+the first word of ${CC} to test compiler options. This breaks the build
+with "unrecognized option" ccache errors.
 
-Fixes:
- - http://autobuild.buildroot.org/results/b871cc175655c2d6aa5f184d891b994a0ebd9902
+Fix that by wrapping the HOSTCC variable in double quotes, as it is done
+for other variables that follow.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+[yann.morin.1998 at free.fr: slight rewording of commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 826587fa4834ed8da03682df605d1ba51d4b7675)
+(cherry picked from commit a9486e337ac7b32a58c31618a070c1b9f9ca9506)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jq/Config.in     | 4 ++++
- package/sysdig/Config.in | 4 +++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/exim/exim.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jq/Config.in b/package/jq/Config.in
-index 321cbe8b51..5edb5d0989 100644
---- a/package/jq/Config.in
-+++ b/package/jq/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_JQ
- 	bool "jq"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  jq is like sed for JSON data - you can use it to slice and
- 	  filter and map and transform structured data with the same
- 	  ease that sed, awk, grep and friends let you play with text.
- 
- 	  http://stedolan.github.io/jq/
-+
-+comment "jq needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 0a1b3f8935..ee53b4fa20 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # jq
- 	depends on !BR2_STATIC_LIBS # luajit, elfutils
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
-@@ -25,8 +26,9 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  https://github.com/draios/sysdig/wiki
- 
--comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
-+comment "sysdig needs a glibc or uclibc toolchain w/ C++, threads, gcc >= 4.8, dynamic library and a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
- 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index dc445c6d93..90ec364168 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -123,8 +123,8 @@ endif
+ define EXIM_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) makefile
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build-br macro_predef \
+-		CC=$(HOSTCC) \
+-		LNCC=$(HOSTCC) \
++		CC="$(HOSTCC)" \
++		LNCC="$(HOSTCC)" \
+ 		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+ 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+ 	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
