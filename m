@@ -1,22 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 11:08:51 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump version to 1.13.14
-In-Reply-To: <20200717193718.621965-1-christian@paral.in> (Christian Stewart's
- message of "Fri, 17 Jul 2020 12:37:18 -0700")
-References: <20200717193718.621965-1-christian@paral.in>
-Message-ID: <877duvj4rg.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jul 2020 11:10:29 +0200
+Subject: [Buildroot] [PATCH 1/1] Makefile: use order-only dependency so
+ symlinks are made only once
+In-Reply-To: <20200713011321.6905-1-danomimanchego123@gmail.com> (Danomi
+ Manchego's message of "Sun, 12 Jul 2020 21:13:21 -0400")
+References: <20200713011321.6905-1-danomimanchego123@gmail.com>
+Message-ID: <87365jj4oq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- > go1.13.14 (released 2020/07/16) includes fixes to the compiler, vet, and
- > the database/sql, net/http, and reflect packages.
+ > The staging symlink is being created on every invocation of "make" as it
+ > depends on its destination directory, which is modified when the symlink
+ > is created.  This is prevented by changing the destination directory
+ > dependency to be order-only.
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
