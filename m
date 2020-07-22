@@ -1,33 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:23:32 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/open2300: use mysql_config to retrieve cflags and libs
-In-Reply-To: <20200714211017.2421936-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 14 Jul 2020 23:10:17 +0200")
-References: <20200714211017.2421936-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wo2whv2j.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 22 Jul 2020 09:27:00 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/libabseil-cpp new package
+In-Reply-To: <20200721214522.3719304-1-aduskett@gmail.com>
+References: <20200721214522.3719304-1-aduskett@gmail.com>
+Message-ID: <20200722092700.76f8decd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello Adam,
 
- > oracle-mysql won't built its own bundled zlib since commit
- > 6fed83a03047535d4a9c849352f8c21b30177fcd so don't unconditionally link
- > with zlib instead use mysql_config to retrieve cflags and libs as
- > suggested by Thomas Petazzoni in review of first iteration
+Thanks for the new iteration.
 
- > Fixes:
- >  - No autobuilder failures yet
+On Tue, 21 Jul 2020 14:45:21 -0700
+aduskett at gmail.com wrote:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Use mysql_config instead of current workarounds
+> +Because libabseil-cpp builds static libraries, it is better to set the
+> +POSITION_INDEPENDENT_CODE to ON instead of forcing fPIC, as forcing fPIC may
+> +cause relocation errors when shared libraries link against the built static
+> +libraries.
 
-Committed to 2020.02.x and 2020.05.x, thanks.
+Duh? This doesn't make much sense to me. Did you perhaps misunderstand
+what I said in my previous e-mail ?
 
+When building static libraries, -fPIC is normally not needed.
+
+Except when such static libraries end up being linked into a shared
+library, in which case all the code of the shared library (which
+includes the static library) must have been compiled with -fPIC.
+
+The reason is pretty simple: the load address of shared libraries is
+decided at runtime, and it may be different for every program using a
+given shared library. Hence the shared library code must be Position
+Independent, so that it can run from any memory address.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
