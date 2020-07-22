@@ -1,45 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 11:06:13 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/network-manager:
- disable introspection
-Message-ID: <20200722090926.E9DE8817AE@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 11:07:44 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/go: bump version
+ to 1.13.13
+Message-ID: <20200722090927.029DB817AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=101f058ace9b2e3d7549c253a0367881118088d6
+commit: https://git.buildroot.net/buildroot/commit/?id=52fd86bd2475e3e384f297fdcdad44c22112abc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Build will fail if gobject-introspection is built before network-manager
-but python-gobject is not:
+go1.13.13 (released 2020/07/14) includes security fixes to the
+crypto/x509 and net/http packages.
 
-configure: error: "--enable-introspection aims to build the settings documentation. This requires GObject introspection for python (pygobject)
-
-To avoid this build failure and because we don't need documentation,
-just disable introspection
-
-Fixes:
- - http://autobuild.buildroot.org/results/d3b1bc2fa7559e66465033c455176761d6e184d1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit adfb36c07d2cd8da690b0c64612021bc00099361)
+(cherry picked from commit e31919878de33daaf0e5699e6aaf9e52abd19c8a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/network-manager.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index c5749c857c..3dc3188f32 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -23,6 +23,7 @@ NETWORK_MANAGER_CONF_ENV = \
- 	ac_cv_file__etc_SuSE_release=no
+diff --git a/package/go/go.hash b/package/go/go.hash
+index a874345762..ab36962775 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	17ba2c4de4d78793a21cc659d9907f4356cd9c8de8b7d0899cdedcef712eba34  go1.13.12.src.tar.gz
++sha256	ab7e44461e734ce1fd5f4f82c74c6d236e947194d868514d48a2b1ea73d25137  go1.13.13.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index dd15ed5168..0d6630f7e3 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- NETWORK_MANAGER_CONF_OPTS = \
-+	--disable-introspection \
- 	--disable-tests \
- 	--disable-qt \
- 	--disable-more-warnings \
+-GO_VERSION = 1.13.12
++GO_VERSION = 1.13.13
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
