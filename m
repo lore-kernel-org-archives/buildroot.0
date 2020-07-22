@@ -1,63 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 11:01:46 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/zstd: bump to
- version 1.4.5
-Message-ID: <20200722085741.692A683C05@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 11:01:40 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/zstd: fix build
+ without st_mtime
+Message-ID: <20200722085746.8C7C58812A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0c2e034e688df1a8c560cfe0bf7123345afa573
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ef91a41f60e23fd62cbba95682bb94a4361a9dce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-- Get official tarball and its hash
-- Update indentation in hash file (two spaces)
-
-This is a fairly important release which includes performance
-improvements and new major CLI features. It also fixes a few corner
-cases, making it a recommended upgrade.
-
-https://github.com/facebook/zstd/releases/tag/v1.4.5
-https://github.com/facebook/zstd/releases/tag/v1.4.4
+Fixes:
+ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 510b339818c628b794a38d736e2ba3414139cbf2)
+(cherry picked from commit 267ce1718edccacdf02bc68b651ba5f8ffe72fa9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zstd/zstd.hash | 8 ++++----
- package/zstd/zstd.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...rograms-util.c-fix-build-without-st_mtime.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 8a69261314..b764917c8f 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,6 +1,6 @@
--# Locally computed
--sha256 5eda3502ecc285c3c92ee0cc8cd002234dee39d539b3f692997a0e80de1d33de zstd-1.4.3.tar.gz
-+# From https://github.com/facebook/zstd/releases/download/v1.4.5/zstd-1.4.5.tar.gz.sha256
-+sha256  98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e  zstd-1.4.5.tar.gz
- 
- # License files (locally computed as well)
--sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
--sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505 COPYING
-+sha256  2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b  LICENSE
-+sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 765fa6dd56..e2ba12b058 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--ZSTD_VERSION = 1.4.3
--ZSTD_SITE = $(call github,facebook,zstd,v$(ZSTD_VERSION))
-+ZSTD_VERSION = 1.4.5
-+ZSTD_SITE = https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)
- ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
- ZSTD_LICENSE_FILES = LICENSE COPYING
+diff --git a/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
+new file mode 100644
+index 0000000000..0f735b8843
+--- /dev/null
++++ b/package/zstd/0001-programs-util.c-fix-build-without-st_mtime.patch
+@@ -0,0 +1,40 @@
++From 26d01bdb26f1c7487ad4ba0151221dfe28cd878d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 Jul 2020 21:19:14 +0200
++Subject: [PATCH] programs/util.c: fix build without st_mtime
++
++Since version 1.4.5 and commit
++5af8cb7aea8d890b4801e50e5274371510f2cf33, if st_mtime is not defined,
++programs/util.c uses utime without including utime.h which will raise
++the following build failure on some of the buildroot autobuilders:
++
++util.c: In function 'UTIL_setFileStat':
++util.c:161:24: error: storage size of 'timebuf' isn't known
++         struct utimbuf timebuf;
++                        ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/be902c5d110f37bce622a2215191f155b7d3e7e0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/facebook/zstd/pull/2246]
++---
++ programs/util.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/programs/util.c b/programs/util.c
++index a0d45745..2493a4ad 100644
++--- a/programs/util.c
+++++ b/programs/util.c
++@@ -28,7 +28,7 @@ extern "C" {
++ #  include <io.h>         /* _chmod */
++ #else
++ #  include <unistd.h>     /* chown, stat */
++-#  if PLATFORM_POSIX_VERSION < 200809L
+++#  if PLATFORM_POSIX_VERSION < 200809L || !defined(st_mtime)
++ #    include <utime.h>    /* utime */
++ #  else
++ #    include <fcntl.h>    /* AT_FDCWD */
++-- 
++2.27.0
++
