@@ -1,26 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 13:39:12 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: update BR2_OPTIMIZE_FAST
- label
-In-Reply-To: <20200716214451.2074700-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 16 Jul 2020 23:44:51 +0200")
-References: <20200716214451.2074700-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfjbhj8f.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jul 2020 13:40:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nano: bump version to 4.9.3
+In-Reply-To: <20200718201445.29813-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 18 Jul 2020 22:14:45 +0200")
+References: <20200718201445.29813-1-bernd.kuhls@t-online.de>
+Message-ID: <87h7tzhj5k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Update label as suggested by St?phane Veyret
- > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=13046
+ > Release notes: https://www.nano-editor.org/news.php
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
+Committed to 2020.05.x given that it fixes as crash, thanks.
 
 -- 
 Bye, Peter Korsgaard
