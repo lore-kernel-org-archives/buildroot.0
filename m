@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 08:55:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Wed, 22 Jul 2020 08:55:32 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
  package/gstreamer1/gst1-plugins-ugly: fix static build with libdvdcss
-Message-ID: <20200722065317.9E0A3880BB@busybox.osuosl.org>
+Message-ID: <20200722065327.CC6D286D3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f457d1637ac265895d5b2238ca6e4e552577573
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f1490232fee061a93f83757646195f183198d0bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 The double quotes from GST1_PLUGINS_UGLY_LDFLAGS += "-ldvdcss"
 raise the following build failure:
