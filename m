@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 14:25:58 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/freerdp: security
+Date: Wed, 22 Jul 2020 14:26:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/freerdp: security
  bump to version 2.2.0
-Message-ID: <20200722122350.77A937F8A6@busybox.osuosl.org>
+Message-ID: <20200722122356.2956788086@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c148039bfddb457d41084745710b72d1dace05d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e579a718ef972d214e19a8015083a1f7d9b05034
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fix CVE-2020-15103 - Integer overflow due to missing input sanitation in
 rdpegfx channel
