@@ -1,54 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 14:23:36 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python3: security
- bump version to 3.8.5
-Message-ID: <20200722122350.688AF7FBFF@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 14:26:29 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/cryptodev-linux:
+ bump to version f2927e3
+Message-ID: <20200722122350.835787F8A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eab5685b125c2ba09af9bfac4402403d582c4278
+commit: https://git.buildroot.net/buildroot/commit/?id=a0fe9a594e411027850736bb5a3867969d71a54d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes CVE-2020-15801 & CVE-2019-20907.
+This version mainly fixes build issues with more
+recent kernels.
 
-Changelog:
-https://docs.python.org/release/3.8.5/whatsnew/changelog.html
+98b163a cryptlib.c: fix build on kernel v5.5+
+7e72f67 enabled the support for TLS1.1 - AES128-SHA1 - AES256-SHA1
+9e76506 Fix build for Linux 5.8-rc1
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3c81f492aa55d7abb4a99c459ee2aeb5124398e3)
+(cherry picked from commit 74217ada85fd82da37c54623fac8a734ca704a16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 2ca3f5a335..0a08d04b3f 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-384/
--md5  e16df33cd7b58702e57e137f8f5d13e7  Python-3.8.4.tar.xz
-+# From https://www.python.org/downloads/release/python-385/
-+md5  35b5a3d0254c1c59be9736373d429db7  Python-3.8.5.tar.xz
- # Locally computed
--sha256  5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37  Python-3.8.4.tar.xz
-+sha256  e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0  Python-3.8.5.tar.xz
- sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b79d320cbf..31e7ca3d3a 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index 4319fd313a..53f64e6830 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 50cf34ecedc897edb11d1a24076f0d4cfcb704dcd294273bc03e2f6c3632fe2c cryptodev-linux-a1e738aef6249ee3bddf997e91e59b1210553209.tar.gz
++sha256 d67a4a306a0d449298af2448f8f324bf79ec9d41411eef0c92ed764b6d505eee cryptodev-linux-f2927e313b6a74408d17d152abb21aa59d113b46.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index a02add6310..3d5d640b8a 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.8
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-CRYPTODEV_LINUX_VERSION = a1e738aef6249ee3bddf997e91e59b1210553209
++CRYPTODEV_LINUX_VERSION = f2927e313b6a74408d17d152abb21aa59d113b46
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
