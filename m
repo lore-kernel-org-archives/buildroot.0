@@ -1,98 +1,76 @@
-From: Kris Bahnsen <kris@embeddedARM.com>
-Date: Tue, 21 Jul 2020 14:45:34 -0700
-Subject: [Buildroot] [PATCH 1/3 v2] package/kmod: explicitly disable
- compression when not enabled
-In-Reply-To: <CANQCQpYwWseH-9LFoOceLqyAgVYF_Mm7EHs379q0VAB+Rdfisw@mail.gmail.com>
-References: <cover.1588511382.git.yann.morin.1998@free.fr>
- <7067f36377f52c1a5022a9988be2ee7e70ce48ac.1588511382.git.yann.morin.1998@free.fr>
- <CANQCQpYwWseH-9LFoOceLqyAgVYF_Mm7EHs379q0VAB+Rdfisw@mail.gmail.com>
-Message-ID: <e9725d8a-e123-3c31-470d-e95f24ed9ee1@embeddedarm.com>
+From: William Tambe <tambewilliam@gmail.com>
+Date: Tue, 21 Jul 2020 21:05:45 -0500
+Subject: [Buildroot] start-stop-daemon failing due to option -q
+In-Reply-To: <20200721213446.6f8e631b@windsurf.home>
+References: <CAF8i9mOOn0pU=1u79T_=hgNmxBbi_en_QZ=puossyLFgzrExSw@mail.gmail.com>
+ <20200712213126.59c57981@windsurf.home>
+ <CAF8i9mMZ1Je-SUDHkDX97ijv8FT68D0Mz9-6D6-tw51U3ZkPnw@mail.gmail.com>
+ <CAF8i9mMxkOdD0bcjcrSHbOVxs5fJsz9X__dKC5EzDUG9O_L21Q@mail.gmail.com>
+ <20200721213446.6f8e631b@windsurf.home>
+Message-ID: <CAF8i9mMEJH8znZvbbct6ucD-mg=eEJ4u86DPbPjiS5aOd+p08w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+On Tue, Jul 21, 2020 at 2:35 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Tue, 21 Jul 2020 15:18:19 -0400
+> William Tambe <tambewilliam@gmail.com> wrote:
+>
+> > > Are you able to run start-stop-daemon with the -q option ?
+> >
+> > Is anyone else seeing the issue of start-stop-daemon failing when the
+> > option -q is used ?
+>
+> I still don't see how it is possible to not have support for the -q
+> option in start-stop-daemon, I don't see any conditional in the Busybox
+> source code.
+>
+> Could you provide the Buildroot configuration and Busybox configuration
+> that exhibits the issue ?
 
+Certainly; I am currently only using a buildroot configuration with no
+busybox configuration; so I think buildroot uses a default busybox
+configuration:
 
-> On Sun, May 3, 2020 at 8:12 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-
-
-Tested support for compressed kernel modules. Did not test signed modules.
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_NEON=y
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_FPU_VFPV3=y
-BR2_CCACHE=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_KERNEL_HEADERS_4_14=y
-BR2_GCC_VERSION_8_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_GCC_ENABLE_LTO=y
-BR2_GCC_ENABLE_OPENMP=y
-BR2_TARGET_GENERIC_HOSTNAME="tsa38x"
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-BR2_TARGET_TZ_INFO=y
-BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_TECHNOLOGIC_PATH)/board/tsa38x/rootfs_overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_TECHNOLOGIC_PATH)/board/tsa38x/post-build.sh"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call 
-github,embeddedarm,linux-a38x,9007c40f288d3eb01689c66ac0fad166d63c1958)/linux-9007c40f288d3eb01689c66ac0fad166d63c1958.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="tsa38x"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-385-ts7840"
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
-BR2_PACKAGE_LINUX_TOOLS_GPIO=y
-BR2_PACKAGE_LINUX_TOOLS_IIO=y
+BR2_iron=y
+BR2_ENABLE_DEBUG=y
+BR2_DEBUG_3=y
+# BR2_STRIP_strip is not set
+BR2_OPTIMIZE_G=y
+BR2_STATIC_LIBS=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/iron-toolchain/"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-elf"
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_5=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
+# BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_ROOTFS_MERGED_USR=y
+BR2_TARGET_GENERIC_ROOT_PASSWD="root"
+BR2_TARGET_GENERIC_GETTY_OPTIONS="-n -l /bin/bash"
 BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_BUSYBOX_WATCHDOG=y
-BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD="30"
-BR2_PACKAGE_BZIP2=y
-BR2_PACKAGE_XZ=y
-BR2_PACKAGE_LINUX_FIRMWARE=y
-BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA=y
-BR2_PACKAGE_LIBZIP=y
-BR2_PACKAGE_OPENSSL=y
-BR2_PACKAGE_LIBOPENSSL_BIN=y
-BR2_PACKAGE_EXPAT=y
-BR2_PACKAGE_LIBEVENT=y
-BR2_PACKAGE_LIBGLIB2=y
-# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-BR2_PACKAGE_KMOD=y
-BR2_PACKAGE_KMOD_TOOLS=y
-BR2_TARGET_ROOTFS_TAR_XZ=y
-BR2_PACKAGE_HOST_KMOD_XZ=y
-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-BR2_PACKAGE_HOST_UTIL_LINUX=y
+BR2_PACKAGE_BASH=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_NANO=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+# BR2_TARGET_ROOTFS_TAR is not set
 
-
-Relevant Linux Kernel options
-
-CONFIG_MODULES_USE_ELF_REL=y
-CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
-CONFIG_STRICT_KERNEL_RWX=y
-CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
-CONFIG_STRICT_MODULE_RWX=y
-CONFIG_MODULES=y
-CONFIG_MODULE_FORCE_LOAD=y
-CONFIG_MODULE_UNLOAD=y
-CONFIG_MODULE_FORCE_UNLOAD=y
-CONFIG_MODVERSIONS=y
-# CONFIG_MODULE_SIG is not set
-CONFIG_MODULE_COMPRESS=y
-CONFIG_MODULE_COMPRESS_XZ=y
-
-Tested-by: Kris Bahnsen <kris@embeddedarm.com>
-
--- 
-Best Regards,
-________________________________________________________________
-Kris Bahnsen, Technologic Systems     | voice: (480) 837-5200
-16525 East Laser Drive                | fax: (480) 837-5300
-Fountain Hills, AZ 85268              | web: www.embeddedARM.com
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
