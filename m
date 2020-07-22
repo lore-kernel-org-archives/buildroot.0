@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 11:10:29 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: use order-only dependency so
- symlinks are made only once
-In-Reply-To: <20200713011321.6905-1-danomimanchego123@gmail.com> (Danomi
- Manchego's message of "Sun, 12 Jul 2020 21:13:21 -0400")
-References: <20200713011321.6905-1-danomimanchego123@gmail.com>
-Message-ID: <87365jj4oq.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jul 2020 11:12:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version
+ to 0.102.4
+In-Reply-To: <20200717171831.69049-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 17 Jul 2020 19:18:31 +0200")
+References: <20200717171831.69049-1-bernd.kuhls@t-online.de>
+Message-ID: <87y2nbhq11.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > The staging symlink is being created on every invocation of "make" as it
- > depends on its destination directory, which is modified when the symlink
- > is created.  This is prevented by changing the destination directory
- > dependency to be order-only.
+ > Release notes:
+ > https://blog.clamav.net/2020/07/clamav-01024-security-patch-released.html
 
- > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ > Fixes CVE-2020-3481, CVE-2020-3327 & CVE-2020-3350.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
