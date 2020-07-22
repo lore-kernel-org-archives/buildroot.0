@@ -1,52 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 14:26:29 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/cryptodev-linux:
- bump to version f2927e3
-Message-ID: <20200722122350.835787F8A6@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 14:25:58 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/freerdp: security
+ bump to version 2.2.0
+Message-ID: <20200722122350.77A937F8A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0fe9a594e411027850736bb5a3867969d71a54d
+commit: https://git.buildroot.net/buildroot/commit/?id=2c148039bfddb457d41084745710b72d1dace05d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This version mainly fixes build issues with more
-recent kernels.
+Fix CVE-2020-15103 - Integer overflow due to missing input sanitation in
+rdpegfx channel
 
-98b163a cryptlib.c: fix build on kernel v5.5+
-7e72f67 enabled the support for TLS1.1 - AES128-SHA1 - AES256-SHA1
-9e76506 Fix build for Linux 5.8-rc1
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.2.0
 
-Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 74217ada85fd82da37c54623fac8a734ca704a16)
+(cherry picked from commit 6f0305a95d222b8710bbe69710e58ff7244fe916)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptodev-linux/cryptodev-linux.hash | 2 +-
- package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index 4319fd313a..53f64e6830 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 6c52d38a4f..8217a2106c 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.1.2.tar.gz.sha256
+-sha256  f33bc6aef83b8ad3cbf2cdbc82dcfa980ec2b051efb72650f6f2365d55b79b8d  freerdp-2.1.2.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.2.0.tar.gz.sha256
++sha256  19b30759e324ce7a9767af880116a4c571761e9ad9c5d6c98c5b302ff8c24c6c  freerdp-2.2.0.tar.gz
+ 
  # Locally calculated
--sha256 50cf34ecedc897edb11d1a24076f0d4cfcb704dcd294273bc03e2f6c3632fe2c cryptodev-linux-a1e738aef6249ee3bddf997e91e59b1210553209.tar.gz
-+sha256 d67a4a306a0d449298af2448f8f324bf79ec9d41411eef0c92ed764b6d505eee cryptodev-linux-f2927e313b6a74408d17d152abb21aa59d113b46.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index a02add6310..3d5d640b8a 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 33b83922cc..4c804c136f 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CRYPTODEV_LINUX_VERSION = a1e738aef6249ee3bddf997e91e59b1210553209
-+CRYPTODEV_LINUX_VERSION = f2927e313b6a74408d17d152abb21aa59d113b46
- CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPL-2.0+
+-FREERDP_VERSION = 2.1.2
++FREERDP_VERSION = 2.2.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
