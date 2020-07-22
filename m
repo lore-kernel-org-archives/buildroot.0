@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:03:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-urllib3:
+Date: Wed, 22 Jul 2020 09:03:18 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python-urllib3:
  security bump to 1.25.9
-Message-ID: <20200722070120.7D0C3880C3@busybox.osuosl.org>
+Message-ID: <20200722070126.3B6A786D74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f97af53ee0462a8c1864494d5521ec3dd279813
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a6af42abe24fd2aa90a18cb9864677822c03a210
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fixes CVE-2020-7212 (1.25.2 - 1.25.7)
 The _encode_invalid_chars function does not remove duplicate percent
