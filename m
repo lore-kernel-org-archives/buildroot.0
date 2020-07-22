@@ -1,34 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 14:27:58 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/cryptodev-linux: bump to
- version f2927e3
-In-Reply-To: <20200720211114.689018-1-alejandro.gonzalez.correo@gmail.com>
- ("Alejandro =?utf-8?Q?Gonz=C3=A1lez=22's?= message of "Mon, 20 Jul 2020
- 23:11:14 +0200")
-References: <20200720211114.689018-1-alejandro.gonzalez.correo@gmail.com>
-Message-ID: <87mu3rg2ep.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jul 2020 14:23:36 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python3: security
+ bump version to 3.8.5
+Message-ID: <20200722122350.688AF7FBFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alejandro" == Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eab5685b125c2ba09af9bfac4402403d582c4278
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > This version mainly fixes build issues with more
- > recent kernels.
+Fixes CVE-2020-15801 & CVE-2019-20907.
 
- > 98b163a cryptlib.c: fix build on kernel v5.5+
- > 7e72f67 enabled the support for TLS1.1 - AES128-SHA1 - AES256-SHA1
- > 9e76506 Fix build for Linux 5.8-rc1
+Changelog:
+https://docs.python.org/release/3.8.5/whatsnew/changelog.html
 
- > Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3c81f492aa55d7abb4a99c459ee2aeb5124398e3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > ---
- > Changes v1 -> v2:
- > 	- Fix download tarball hash
-
-Committed to 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 2ca3f5a335..0a08d04b3f 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-384/
+-md5  e16df33cd7b58702e57e137f8f5d13e7  Python-3.8.4.tar.xz
++# From https://www.python.org/downloads/release/python-385/
++md5  35b5a3d0254c1c59be9736373d429db7  Python-3.8.5.tar.xz
+ # Locally computed
+-sha256  5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37  Python-3.8.4.tar.xz
++sha256  e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0  Python-3.8.5.tar.xz
+ sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index b79d320cbf..31e7ca3d3a 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.8
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
