@@ -1,55 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:13:01 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/bind: security
- bump to version 9.11.20
-Message-ID: <20200722085616.CCD7780F83@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 10:11:39 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mongodb: security
+ bump to version 4.0.19
+Message-ID: <20200722085617.173B58810A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd201a1f599e7b35c2969967f59be71bb3c2712b
+commit: https://git.buildroot.net/buildroot/commit/?id=5c6cdcf4a56ec122b6fb5f3f49e8fe31ed26f189
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issue:
- * CVE-2020-8619: It was possible to trigger an INSIST failure when a
-   zone with an interior wildcard label was queried in a certain
-   pattern.
+Fixes the following security vulnerabilities:
 
-Release notes:
-https://ftp.isc.org/isc/bind9/cur/9.11/RELEASE-NOTES-bind-9.11.20.txt
+- CVE-2020-7921: (4.0.15) Improper serialization of internal state in the
+  authorization subsystem in MongoDB Server's authorization subsystem
+  permits a user with valid credentials to bypass IP whitelisting protection
+  mechanisms following administrative action.
 
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc7740825afec413d78db697477c8246ad5da9da)
+Plus a number of other bugfixes. For details, see the release notes:
+https://docs.mongodb.com/manual/release-notes/4.0/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 4eb3aff3b1..282b2aeba3 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index f08ffffe3b..ba2181a1f7 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
 @@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.19/bind-9.11.19.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
- # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
--sha256  0dee554a4caa368948b32da9a0c97b516c19103bc13ff5b3762c5d8552f52329  bind-9.11.19.tar.gz
-+sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
- sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 362a26dce6..80f8defca8 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+ # Locally computed:
+-sha256 b39c5b7bb77a547804ab6f43f9b5f09add47574356b31512fd1cc641a08b4ea5  mongodb-r4.0.12.tar.gz
++sha256 fadfb81400a1b5d86d01943690064404856aaf1b050f4b56eb74811cadffdcef  mongodb-r4.0.19.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 22ca920e12..31ea972b8c 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.19
-+BIND_VERSION = 9.11.20
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-MONGODB_VERSION_BASE = 4.0.12
++MONGODB_VERSION_BASE = 4.0.19
+ MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+ MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
+ 
