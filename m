@@ -1,50 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 13:38:51 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Config.in: update
- BR2_OPTIMIZE_FAST prompt and help text
-Message-ID: <20200722114333.20EC087B52@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 13:37:14 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/a10disp: add
+ license file
+Message-ID: <20200722114333.0EB847FEBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b947b730902e5c476fd2849f60c38b0796d6d9ad
+commit: https://git.buildroot.net/buildroot/commit/?id=293d90b555fa792e4559303bcf43c1a89b38c6a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Update label as suggested by St??phane Veyret, as -Ofast is potentially
-dangerous, and may break packages.
+Also separate the fields in the hash file by two spaces.
 
-Fixes:
-
- - https://bugs.buildroot.org/show_bug.cgi?id=13046
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3e186cee008f94f6a33adeac329b13087ab11ddb)
+(cherry picked from commit 7ebfb17eaf65eef316916379d6a6e00f8a8cf4fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/a10disp/a10disp.hash | 3 ++-
+ package/a10disp/a10disp.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 48fd36ff98..e2c1d26148 100644
---- a/Config.in
-+++ b/Config.in
-@@ -516,13 +516,14 @@ config BR2_OPTIMIZE_S
- 	  This is the default.
+diff --git a/package/a10disp/a10disp.hash b/package/a10disp/a10disp.hash
+index f1bddec5df..acaafc3530 100644
+--- a/package/a10disp/a10disp.hash
++++ b/package/a10disp/a10disp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 5077405030e8f97a1edd4b86d469466abbc4d32b4a4609e58459347fcd1ba35b a10disp-0.6.1.tar.gz
++sha256  5077405030e8f97a1edd4b86d469466abbc4d32b4a4609e58459347fcd1ba35b  a10disp-0.6.1.tar.gz
++sha256  ddf849966f57fee8f9675f5a3c7791353d1cba71695cd58016212fc236bbdbee  a10disp.c
+diff --git a/package/a10disp/a10disp.mk b/package/a10disp/a10disp.mk
+index 4c2ee14e29..c919202329 100644
+--- a/package/a10disp/a10disp.mk
++++ b/package/a10disp/a10disp.mk
+@@ -7,6 +7,7 @@
+ A10DISP_VERSION = 0.6.1
+ A10DISP_SITE = $(call github,hglm,a10disp,v$(A10DISP_VERSION))
+ A10DISP_LICENSE = MIT
++A10DISP_LICENSE_FILES = a10disp.c
  
- config BR2_OPTIMIZE_FAST
--	bool "optimize for fast"
-+	bool "optimize for fast (may break packages!)"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 	help
- 	  Optimize for fast. Disregard strict standards
- 	  compliance. -Ofast enables all -O3 optimizations. It also
- 	  enables optimizations that are not valid for all
--	  standard-compliant programs. It turns on -ffast-math and the
-+	  standard-compliant programs, so be careful, as it may break
-+	  some packages. It turns on -ffast-math and the
- 	  Fortran-specific -fstack-arrays, unless -fmax-stack-var-size
- 	  is specified, and -fno-protect-parens.
+ A10DISP_DEPENDENCIES = linux
  
