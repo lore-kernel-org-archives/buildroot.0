@@ -1,42 +1,55 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Wed, 22 Jul 2020 09:44:29 +0200
-Subject: [Buildroot] [PATCH 1/2] package/setools: remove C++ dependency on
- comment
-Message-ID: <20200722074430.2150934-1-antoine.tenart@bootlin.com>
+From: DO <hi@senzilla.io>
+Date: Wed, 22 Jul 2020 08:03:12 +0000
+Subject: [Buildroot] [PATCH 1/1] boot/optee-os: Depend on host-python3
+In-Reply-To: <20200720094645.5bb9c7ee@windsurf.home>
+References: <20200719190244.30172-1-hi@senzilla.io>
+ <20200720094645.5bb9c7ee@windsurf.home>
+Message-ID: <qb4o-mMj9icXzr_K2o6uLvzXHjVYazjK_rfBs3A3RhnCWhP2yqU1bdBbViqJD_IWDRRfnRoq1fID0PucW2kDlF6DHMGfu9wJnXvVqg_Lh-I=@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to 4.1.1 (commit 96d3d017963b) removed setools' dependency on
-BR2_INSTALL_LIBSTDCPP, but the corresponding inverse dependency on one
-of its Kconfig comment was not removed. This led to have the package
-being available while a Kconfig comment on non-matched dependencies is
-shown. Fix this by removing the dependency on !BR2_INSTALL_LIBSTDCPP on
-the Kconfig comment.
+Hi Thomas,
 
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
----
- package/setools/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> If the scripts in OP-TEE do need python3, why don't they use it
+> explicitly ?
 
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index 9475bbef65f3..46b3d4525bc5 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -19,10 +19,10 @@ config BR2_PACKAGE_SETOOLS
- 
- 	  https://github.com/TresysTechnology/setools
- 
--comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
-+comment "setools needs a toolchain w/ threads, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+		!BR2_USE_WCHAR
- 
- comment "setools needs python3"
- 	depends on BR2_USE_MMU
--- 
-2.26.2
+Good question! The hashbangs in all their Python scripts
+use "/usr/bin/env python3" but that's about as much build-time
+enforcement there is on Python 3. The maintainers seem happy about
+the upstream patch which enable more explicit control of the specific
+interpreter used.
+
+> > depends on BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A
+> >
+> > -   select BR2_PACKAGE_PYTHON3
+>
+> This is clearly annoying as it brings the python3 interpreter on the
+> target, which clearly isn't a dependency of OP-TEE, so we definitely
+> don't want that.
+
+Addressed this in the new v2 series.
+
+
+> Unless the OP-TEE scripts are changed to use python3, you will have to
+> use CFG_PYTHON="$(HOST_DIR)/bin/python3" here.
+>
+> However, when you'll drop "select BR2_PACKAGE_PYTHON3", it means that
+> python3 will no longer be the default host Python interpreter. And
+> therefore, if you want to have host-python-pycryptodomex and
+> host-python-pyelftools guaranteed to be installed for Python3, you have
+> to use host-python3-pyelftools (which exists) and
+> host-python3-pycryptodomex (which doesn't exist, you'll have to create
+> it).
+
+Addressed this in the new v2 series.
+
+I marked this patch as superseded in Patchwork.
+
+
+
+Cheers
+
+Dick Olsson
