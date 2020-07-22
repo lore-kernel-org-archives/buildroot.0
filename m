@@ -1,49 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 18:52:22 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/gssdp: bump to
- version 1.2.3
-Message-ID: <20200722164934.E166B87D1B@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 22 Jul 2020 21:23:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/debianutils: bump version to 4.11
+Message-ID: <20200722192340.12515-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d546b005d36e4a498142e1871da4a60f498fc69e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
++ updated copyright hash
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7a2f73e9930d3e46f1530aa865675439adc0e162)
-[Peter: needed by gupnp-1.2.3]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/gssdp/gssdp.hash | 4 ++--
- package/gssdp/gssdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index 8e00e7e56b..f31f21942a 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.2/gssdp-1.2.2.sha256sum:
--sha256  cabb9e3b456b8354a55e23eb0207545d974643cda6d623523470ebbc4188b0a4  gssdp-1.2.2.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.2/gssdp-1.2.3.sha256sum:
-+sha256  a263dcb6730e3b3dc4bbbff80cf3fab4cd364021981d419db6dd5a8e148aa7e8  gssdp-1.2.3.tar.xz
- 
- # Hash for license file:
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 14eec0b5fd..02b10d961a 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -5,7 +5,7 @@
+tested:
+                             andes-nds32 [ 1/44]: OK
+                             arm-aarch64 [ 2/44]: OK
+                        br-aarch64-glibc [ 3/44]: OK
+                           br-arcle-hs38 [ 4/44]: OK
+                            br-arm-basic [ 5/44]: OK
+                  br-arm-cortex-a9-glibc [ 6/44]: OK
+                   br-arm-cortex-a9-musl [ 7/44]: OK
+                   br-arm-cortex-m4-full [ 8/44]: SKIPPED
+                             br-arm-full [ 9/44]: OK
+                    br-arm-full-nothread [10/44]: OK
+                      br-arm-full-static [11/44]: OK
+                br-i386-pentium-mmx-musl [12/44]: OK
+                   br-i386-pentium4-full [13/44]: OK
+                    br-microblazeel-full [14/44]: OK
+                      br-mipsel-o32-full [15/44]: OK
+                 br-mips32r6-el-hf-glibc [16/44]: OK
+                      br-mips64-n64-full [17/44]: OK
+                 br-mips64r6-el-hf-glibc [18/44]: OK
+                       br-m68k-5208-full [19/44]: SKIPPED
+                      br-m68k-68040-full [20/44]: OK
+                          br-nios2-glibc [21/44]: OK
+                      br-openrisc-uclibc [22/44]: OK
+                  br-powerpc-e500mc-full [23/44]: OK
+               br-powerpc-603e-basic-cpp [24/44]: OK
+             br-powerpc64le-power8-glibc [25/44]: OK
+               br-powerpc64-power7-glibc [26/44]: OK
+                              br-riscv32 [27/44]: OK
+                              br-riscv64 [28/44]: OK
+                             br-sh4-full [29/44]: OK
+                         br-sparc-uclibc [30/44]: OK
+                        br-sparc64-glibc [31/44]: OK
+                          br-xtensa-full [32/44]: OK
+                    br-x86-64-core2-full [33/44]: OK
+                          br-x86-64-musl [34/44]: OK
+                       linaro-aarch64-be [35/44]: OK
+                          linaro-aarch64 [36/44]: OK
+                              linaro-arm [37/44]: OK
+                     sourcery-arm-armv4t [38/44]: OK
+                            sourcery-arm [39/44]: OK
+                     sourcery-arm-thumb2 [40/44]: OK
+                           sourcery-mips [41/44]: OK
+                         sourcery-mips64 [42/44]: OK
+                          sourcery-nios2 [43/44]: OK
+                         sourcery-x86-64 [44/44]: OK
+
+Kind regards,
+Petr
+
+ package/debianutils/debianutils.hash | 6 +++---
+ package/debianutils/debianutils.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+index e07f405ee9..16a45d4ea1 100644
+--- a/package/debianutils/debianutils.hash
++++ b/package/debianutils/debianutils.hash
+@@ -1,4 +1,4 @@
+-# From http://snapshot.debian.org/archive/debian/20190828T161440Z/pool/main/d/debianutils/debianutils_4.8.6.3.dsc
+-sha256 2cc7de3afc6df1cf6d00af9938efac7ee8f739228e548e512ddc186b6a7be221 debianutils_4.8.6.3.tar.xz
++# From http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils/debianutils_4.11.dsc
++sha256 bb5ce6290696b0d623377521ed217f484aa98f7346c5f7c48f9ae3e1acfb7151 debianutils_4.11.tar.xz
+ # Locally calculated
+-sha256 a8698f078cd21fc501e66d070e12cf2f23ec1eaf5841bbc87629de76858ef7a7 debian/copyright
++sha256 3c8b5112cb8f74ba959233291908d73f527afa6f1d96f93649aeb912b5884567 debian/copyright
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+index a91383c17a..d2c41130fb 100644
+--- a/package/debianutils/debianutils.mk
++++ b/package/debianutils/debianutils.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- GSSDP_VERSION_MAJOR = 1.2
--GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).2
-+GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
- GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPL-2.0+
+-DEBIANUTILS_VERSION = 4.8.6.3
++DEBIANUTILS_VERSION = 4.11
+ DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+-DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20190828T161440Z/pool/main/d/debianutils
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20200525T145753Z/pool/main/d/debianutils
+ DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+ DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
+ DEBIANUTILS_LICENSE_FILES = debian/copyright
+-- 
+2.27.0
