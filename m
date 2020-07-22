@@ -1,54 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 14:23:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python3: security
- bump version to 3.8.5
-Message-ID: <20200722122356.1B23988086@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 22 Jul 2020 16:53:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gettext-tiny.hash: remove hash
+ value for gettext-gnu
+Message-ID: <20200722145417.2195-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ba3b5a884cd20d93e6999a38f1a3bcc9c2c5619
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+The gettext-tiny hash file holds a value that belongs to the gettext-gnu.
 
-Fixes CVE-2020-15801 & CVE-2019-20907.
-
-Changelog:
-https://docs.python.org/release/3.8.5/whatsnew/changelog.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3c81f492aa55d7abb4a99c459ee2aeb5124398e3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gettext-tiny/gettext-tiny.hash | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 2ca3f5a335..0a08d04b3f 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-384/
--md5  e16df33cd7b58702e57e137f8f5d13e7  Python-3.8.4.tar.xz
-+# From https://www.python.org/downloads/release/python-385/
-+md5  35b5a3d0254c1c59be9736373d429db7  Python-3.8.5.tar.xz
- # Locally computed
--sha256  5f41968a95afe9bc12192d7e6861aab31e80a46c46fa59d3d837def6a4cd4d37  Python-3.8.4.tar.xz
-+sha256  e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0  Python-3.8.5.tar.xz
- sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b79d320cbf..31e7ca3d3a 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.8
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 201b05c6ff..585a2bdcc3 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -2,5 +2,3 @@
+ sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
+ sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+ sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  extra/COPYING
+-# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
+-sha1 62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90 gettext-0.20.1.tar.xz
+-- 
+2.20.1
