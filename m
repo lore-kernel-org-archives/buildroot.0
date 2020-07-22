@@ -1,38 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 09:01:18 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/lxc: disable
- examples
-Message-ID: <20200722065804.B15AA87E9D@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 08:59:55 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/oracle-mysql:
+ renumber patch
+Message-ID: <20200722065809.7E43F87E9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2d88df8ef3ad34849a72475f5e1d360866c4e2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a59dc66a4a78ab6e047ad3170c141ddc0bff18cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+
+Renumber patch added by commit 94bad4fbf5759302a9f8f33267989d543f3a1167
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 27f1995d9374faf66e2b965a16523b775589bcf5)
+(cherry picked from commit 1e23e2ab45872c111dbd069e71f7721af6043a10)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lxc/lxc.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/oracle-mysql/{0008-gcc7.patch => 0009-gcc7.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 53e3c85c6d..7994dffcf5 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -13,7 +13,10 @@ LXC_INSTALL_STAGING = YES
- # We're patching configure.ac
- LXC_AUTORECONF = YES
- 
--LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
-+LXC_CONF_OPTS = \
-+	--disable-apparmor \
-+	--disable-examples \
-+	--with-distro=buildroot \
- 	--disable-werror \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
+diff --git a/package/oracle-mysql/0008-gcc7.patch b/package/oracle-mysql/0009-gcc7.patch
+similarity index 100%
+rename from package/oracle-mysql/0008-gcc7.patch
+rename to package/oracle-mysql/0009-gcc7.patch
