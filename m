@@ -1,92 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jul 2020 23:12:51 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5xmlpatterns:
- enable qml module
-Message-ID: <20200722211134.4D5E781057@busybox.osuosl.org>
+Date: Wed, 22 Jul 2020 23:02:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pcre: security
+ bump to version 8.44
+Message-ID: <20200722211134.3608A81057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5fdf37e134fa30afcf9ba6a8a3b9897b14355f7
+commit: https://git.buildroot.net/buildroot/commit/?id=2218a5b771401c2488fa65b695f16579bcac3b6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-qt5declarative:
- - remove unneded dependency on qt5mlpatterns
+Fixes the following security issues:
 
-qt5xmlpatterns:
- - add optional dependency on qt5declarative
- - add target install step of the optional qml files
+- CVE-2020-14155: libpcre in PCRE before 8.44 allows an integer overflow via
+  a large number after a (?C substring.
 
-Reported-by: Nimai Mahajan <nimaim@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Nimai Mahajan <nimaim@gmail.com>
+Additionally:
+- Update first patch
+- Update hash of license file (update in year)
+- Update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a92e06c352a838a4ee72069aeee7ba5ffea6c32b)
+[Peter: mention security fix]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5declarative/Config.in         |  1 -
- package/qt5/qt5declarative/qt5declarative.mk |  2 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 11 +++++++++++
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ package/pcre/0001-Kill-compatibility-bits.patch | 7 +++++--
+ package/pcre/pcre.hash                          | 4 ++--
+ package/pcre/pcre.mk                            | 2 +-
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 3a353a8326..d85f4c7136 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_QT5DECLARATIVE
- 	bool "qt5declarative"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	select BR2_PACKAGE_QT5XMLPATTERNS
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	help
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index 6210611961..200a5578f8 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -7,7 +7,7 @@
- QT5DECLARATIVE_VERSION = $(QT5_VERSION)
- QT5DECLARATIVE_SITE = $(QT5_SITE)
- QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5DECLARATIVE_VERSION).tar.xz
--QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns
-+QT5DECLARATIVE_DEPENDENCIES = qt5base
- QT5DECLARATIVE_INSTALL_STAGING = YES
+diff --git a/package/pcre/0001-Kill-compatibility-bits.patch b/package/pcre/0001-Kill-compatibility-bits.patch
+index 3563e4b714..d2cf76bf8d 100644
+--- a/package/pcre/0001-Kill-compatibility-bits.patch
++++ b/package/pcre/0001-Kill-compatibility-bits.patch
+@@ -7,6 +7,8 @@ Kill ABI compatibility bits, we don't need them.
+ Fixes build failures on non-ELF targets.
  
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index 6ed247fd59..5ce4064cb6 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -21,6 +21,10 @@ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
- endif
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++[Fabrice: update for 8.44]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  pcrecpp.cc | 16 ----------------
+  1 file changed, 16 deletions(-)
+@@ -15,7 +17,7 @@ diff --git a/pcrecpp.cc b/pcrecpp.cc
+ index d09c9ab..6910db0 100644
+ --- a/pcrecpp.cc
+ +++ b/pcrecpp.cc
+-@@ -58,22 +58,6 @@ static const int kVecSize = (1 + kMaxArgs) * 3;  // results + PCRE workspace
++@@ -58,23 +58,6 @@ static const int kVecSize = (1 + kMaxArgs) * 3;  // results + PCRE workspace
+  // Special object that stands-in for no argument
+  Arg RE::no_arg((void*)NULL);
+  
+@@ -27,7 +29,8 @@ index d09c9ab..6910db0 100644
+ -// inclusive test if we ever needed it.  (Note that not only the
+ -// __attribute__ syntax, but also __USER_LABEL_PREFIX__, are
+ -// gnu-specific.)
+--#if defined(__GNUC__) && __GNUC__ >= 3 && defined(__ELF__) && !defined(__INTEL_COMPILER)
++-#if defined(__GNUC__) && __GNUC__ >= 3 && defined(__ELF__) \
++-       && !defined(__INTEL_COMPILER) && !defined(__LCC__)
+ -# define ULP_AS_STRING(x)            ULP_AS_STRING_INTERNAL(x)
+ -# define ULP_AS_STRING_INTERNAL(x)   #x
+ -# define USER_LABEL_PREFIX_STR       ULP_AS_STRING(__USER_LABEL_PREFIX__)
+diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+index 7513d5f198..628d617353 100644
+--- a/package/pcre/pcre.hash
++++ b/package/pcre/pcre.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 91e762520003013834ac1adb4a938d53b22a216341c061b0cf05603b290faf6b  pcre-8.43.tar.bz2
++sha256  19108658b23b3ec5058edc9f66ac545ea19f9537234be1ec62b714c84399366d  pcre-8.44.tar.bz2
+ # License files, locally calculated
+-sha256 a5fce68baf797e0918463a4437ef75984c41118f43850ddeabda1b5a90154309  LICENCE
++sha256  0dd9c13864dbb9ee4d77a1557e96be29b2d719fb6584192ee36611aae264c4a3  LICENCE
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 595cda8a53..3c280e593f 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5XMLPATTERNS_DEPENDENCIES += qt5declarative
-+endif
-+
- define QT5XMLPATTERNS_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
- endef
-@@ -39,6 +43,12 @@ define QT5XMLPATTERNS_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5XMLPATTERNS_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/XmlListModel $(TARGET_DIR)/usr/qml/QtQuick
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/xmlpatterns $(TARGET_DIR)/usr/lib/qt/examples/
-@@ -47,6 +57,7 @@ endif
- 
- define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
- 	$(QT5XMLPATTERNS_INSTALL_TARGET_LIBS)
-+	$(QT5XMLPATTERNS_INSTALL_TARGET_QMLS)
- 	$(QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES)
- endef
- 
+-PCRE_VERSION = 8.43
++PCRE_VERSION = 8.44
+ PCRE_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+ PCRE_LICENSE = BSD-3-Clause
