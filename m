@@ -1,106 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 23 Jul 2020 22:31:21 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic.mk: introduce final
- 'install' step
-Message-ID: <20200723202658.5E930814D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-generic.mk: create directories
+ upfront in the configure step
+Message-ID: <20200723202658.69BDE814D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2a12a8e9fa292ab61d99f963683a97f1283b7a3
+commit: https://git.buildroot.net/buildroot/commit/?id=2dbb0660fb4d89f8eac86fcff08e9b3d0a705917
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We currently have four different install steps: target installation,
-staging installation, images installation and host installation. These
-steps are directly triggered from the $(1)-install make target, so
-there is no place where we can run some logic once all installation
-steps have completed.
+We currently create HOST_DIR, TARGET_DIR, STAGING_DIR and BINARIES_DIR
+in their respective installation steps. However, as we are about to
+change how the logic to capture files installed by packages is
+implemented, we will need these directories to exist at the configure
+step to keep things simple.
 
-However, as part of improving the reliability of the logic done in
-step_pkg_size_before and step_pkg_size_after to detect the files
-installed by packages, we would in fact need to run some logic after
-all installation steps have completed. This will allow us to make sure
-that all files are detected, even if a host package installs something
-in the target directory, or if a target package installs something in
-the host directory.
-
-To achieve this, this commit implements a new stamp file,
-.stamp_installed, which is a step that depends on all four install
-steps. Currently, this step does nothing except creating the stamp
-file.
+Note that when BR2_PER_PACKAGE_DIRECTORIES=y, the HOST_DIR, TARGET_DIR
+and STAGING_DIR are anyway already created at the configure step, when
+populating the per-package HOST_DIR and TARGET_DIR. This also means
+that we can drop the "mkdir" from per-package-rsync.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr: remove stampfile on foo-reinstall]
+[yann.morin.1998 at free.fr:
+  - create directories after MESSAGE
+  - use $(Q) not @
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 5 +----
+ package/pkg-utils.mk   | 1 -
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bcf5d9815c..c9c0d74858 100644
+index c9c0d74858..6b3a3f73d9 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -374,6 +374,11 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_end,install-target)
- 	$(Q)touch $@
+@@ -251,6 +251,7 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call step_start,configure)
+ 	@$(call MESSAGE,"Configuring")
++	$(Q)mkdir -p $(HOST_DIR) $(TARGET_DIR) $(STAGING_DIR) $(BINARIES_DIR)
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+ 	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+@@ -271,7 +272,6 @@ $(BUILD_DIR)/%/.stamp_built::
  
-+# Final installation step, completed when all installation steps
-+# (host, images, staging, target) have completed
-+$(BUILD_DIR)/%/.stamp_installed:
-+	$(Q)touch $@
-+
- # Remove package sources
- $(BUILD_DIR)/%/.stamp_dircleaned:
- 	$(if $(BR2_PER_PACKAGE_DIRECTORIES),rm -Rf $(PER_PACKAGE_DIR)/$(NAME))
-@@ -705,6 +710,7 @@ $(2)_FINAL_RECURSIVE_RDEPENDENCIES = $$(sort \
- 	$$($(2)_FINAL_RECURSIVE_RDEPENDENCIES__X))
+ # Install to host dir
+ $(BUILD_DIR)/%/.stamp_host_installed:
+-	@mkdir -p $(HOST_DIR)
+ 	@$(call step_start,install-host)
+ 	@$(call MESSAGE,"Installing to host directory")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+@@ -301,7 +301,6 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ # empty when we use an internal toolchain.
+ #
+ $(BUILD_DIR)/%/.stamp_staging_installed:
+-	@mkdir -p $(STAGING_DIR)
+ 	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+@@ -344,7 +343,6 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
  
- # define sub-target stamps
-+$(2)_TARGET_INSTALL =           $$($(2)_DIR)/.stamp_installed
- $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
- $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
- $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
-@@ -760,14 +766,23 @@ endif
+ # Install to images dir
+ $(BUILD_DIR)/%/.stamp_images_installed:
+-	@mkdir -p $(BINARIES_DIR)
+ 	@$(call step_start,install-image)
+ 	@$(call MESSAGE,"Installing to images directory")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+@@ -355,7 +353,6 @@ $(BUILD_DIR)/%/.stamp_images_installed:
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-+$(1)-install:		$$($(2)_TARGET_INSTALL)
- 
- ifeq ($$($(2)_TYPE),host)
--$(1)-install:	        $(1)-install-host
-+$$($(2)_TARGET_INSTALL): $$($(2)_TARGET_INSTALL_HOST)
- else
- $(2)_INSTALL_STAGING	?= NO
- $(2)_INSTALL_IMAGES	?= NO
- $(2)_INSTALL_TARGET	?= YES
--$(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
-+ifeq ($$($(2)_INSTALL_TARGET),YES)
-+$$($(2)_TARGET_INSTALL): $$($(2)_TARGET_INSTALL_TARGET)
-+endif
-+ifeq ($$($(2)_INSTALL_STAGING),YES)
-+$$($(2)_TARGET_INSTALL): $$($(2)_TARGET_INSTALL_STAGING)
-+endif
-+ifeq ($$($(2)_INSTALL_IMAGES),YES)
-+$$($(2)_TARGET_INSTALL): $$($(2)_TARGET_INSTALL_IMAGES)
-+endif
- endif
- 
- ifeq ($$($(2)_INSTALL_TARGET),YES)
-@@ -917,6 +932,7 @@ $(1)-clean-for-reinstall:
- ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 			rm -f $$($(2)_TARGET_RSYNC)
- endif
-+			rm -f $$($(2)_TARGET_INSTALL)
- 			rm -f $$($(2)_TARGET_INSTALL_STAGING)
- 			rm -f $$($(2)_TARGET_INSTALL_TARGET)
- 			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
-@@ -936,6 +952,7 @@ $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
- 
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
-+$$($(2)_TARGET_INSTALL):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
- $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ # Install to target dir
+ $(BUILD_DIR)/%/.stamp_target_installed:
+-	@mkdir -p $(TARGET_DIR)
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index d88a14ab0f..b17b5465af 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -163,7 +163,6 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ # $2: 'host' or 'target'
+ # $3: destination directory
+ define per-package-rsync
+-	mkdir -p $(3)
+ 	$(foreach pkg,$(1),\
+ 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 		$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
