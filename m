@@ -1,62 +1,110 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Jul 2020 22:37:06 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic.mk: exclude the
- staging sub-directory
-Message-ID: <20200723204112.4652E880BA@busybox.osuosl.org>
+Date: Thu, 23 Jul 2020 22:48:51 +0200
+Subject: [Buildroot] [git commit] package/pkg-generic.mk: move
+ pkg_size_{before, after} and check_bin_arch functions
+Message-ID: <20200723204430.29AC087B07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e59f748fec7b509261adb0a42e57f837e9df370f
+commit: https://git.buildroot.net/buildroot/commit/?id=7f97fd4f15eb9c4268823980c4193ed9a2963a3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we are checking the host directory changes throughout all
-installation steps and not just during the "host installation step",
-it means that changes done within the staging directory (which is a
-subdir of the host directory) are also visible in the
-.files-list-host.txt file.
+These functions are no longer using the GLOBAL_INSTRUMENTATION_HOOKS
+mechanism, so it doesn't make much sense for them to be in the section
+of pkg-generic.mk related to those hooks.
 
-Note that this problem already potentially occurs if a host package is
-installing files in the staging directory: they would be listed in
-.files-list-host.txt even without the changes in this series.
-
-To fix this up, we simply exclude files that are beneath the
-$(STAGING_SUBDIR). Note that we do that in all cases, so when
-searching $(HOST_DIR), $(HOST_DIR)/$(STAGING_SUBDIR) is excluded, but
-when searching $(TARGET_DIR), $(TARGET_DIR)/$(STAGING_SUBDIR) is
-excluded, and when search $(STAGING_DIR),
-$(STAGING_DIR)/$(STAGING_SUBDIR) is excluded. This is not a problem in
-practice since $(TARGET_DIR)/$(STAGING_SUBDIR) and
-$(STAGING_DIR)/$(STAGING_SUBDIR) don't exist, but it's not very
-nice. However, it allows to keep the code simple.
+Move them to the "Helper functions" section.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 66 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 33 insertions(+), 33 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 22e7e1b04f..659b8e5661 100644
+index 659b8e5661..c63807047b 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -61,7 +61,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- # $(2): suffix of file (optional)
- define pkg_size_before
- 	cd $(1); \
--	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-+	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
- 		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
+@@ -55,39 +55,6 @@ define step_time
  endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
  
-@@ -69,7 +69,7 @@ endef
- # $(2): suffix of file (optional)
- define pkg_size_after
- 	cd $(1); \
--	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+-# Hooks to collect statistics about installed files
+-
+-# $(1): base directory to search in
+-# $(2): suffix of file (optional)
+-define pkg_size_before
+-	cd $(1); \
+-	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+-		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
+-endef
+-
+-# $(1): base directory to search in
+-# $(2): suffix of file (optional)
+-define pkg_size_after
+-	cd $(1); \
+-	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+-		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
+-	LC_ALL=C comm -13 \
+-		$($(PKG)_DIR)/.files-list$(2).before \
+-		$($(PKG)_DIR)/.files-list$(2).after \
+-		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
+-		> $($(PKG)_DIR)/.files-list$(2).txt
+-	rm -f $($(PKG)_DIR)/.files-list$(2).before
+-	rm -f $($(PKG)_DIR)/.files-list$(2).after
+-endef
+-
+-define check_bin_arch
+-	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
+-		-l $($(PKG)_DIR)/.files-list.txt \
+-		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
+-		-r $(TARGET_READELF) \
+-		-a $(BR2_READELF_ARCH_NAME)
+-endef
+-
+ # This hook checks that host packages that need libraries that we build
+ # have a proper DT_RPATH or DT_RUNPATH tag
+ define check_host_rpath
+@@ -135,6 +102,39 @@ define fixup-libtool-files
+ endef
+ endif
+ 
++# Functions to collect statistics about installed files
++
++# $(1): base directory to search in
++# $(2): suffix of file (optional)
++define pkg_size_before
++	cd $(1); \
 +	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
- 		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
- 	LC_ALL=C comm -13 \
- 		$($(PKG)_DIR)/.files-list$(2).before \
++		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
++endef
++
++# $(1): base directory to search in
++# $(2): suffix of file (optional)
++define pkg_size_after
++	cd $(1); \
++	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
++		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
++	LC_ALL=C comm -13 \
++		$($(PKG)_DIR)/.files-list$(2).before \
++		$($(PKG)_DIR)/.files-list$(2).after \
++		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
++		> $($(PKG)_DIR)/.files-list$(2).txt
++	rm -f $($(PKG)_DIR)/.files-list$(2).before
++	rm -f $($(PKG)_DIR)/.files-list$(2).after
++endef
++
++define check_bin_arch
++	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
++		-l $($(PKG)_DIR)/.files-list.txt \
++		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
++		-r $(TARGET_READELF) \
++		-a $(BR2_READELF_ARCH_NAME)
++endef
++
+ ################################################################################
+ # Implicit targets -- produce a stamp file for each step of a package build
+ ################################################################################
