@@ -1,91 +1,40 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Thu, 23 Jul 2020 12:29:51 +0200
-Subject: [Buildroot] [PATCH v6 20/28] qt5: Fix pkgconfig search path for
- per-package infrastructure
-In-Reply-To: <20200722202651.GF2296@scaer>
-References: <20200701215442.GY20645@scaer>
- <5FC5B08F-2FD5-4243-934E-A11C97636D79@getmailspring.com>
- <20200722202651.GF2296@scaer>
-Message-ID: <1d374f6d-16c2-a624-de2f-bfc8a6392694@andin.de>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Thu, 23 Jul 2020 10:45:18 +0000
+Subject: [Buildroot] [PATCH 1/1] package/gloox: bump version to 1.0.24
+Message-ID: <J0GvNUdjc-5cLSp-aHyxHP7sDCnJ98tivfd1FJr998HImbhNZGztic9lG7QXgB8WutzQ3LcR4BwThHYxROjNGgWs9TI_Ug121beg75BXwbs=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Louis-Paul, all
+Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+---
+ package/gloox/gloox.hash | 2 +-
+ package/gloox/gloox.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-first of all sorry for not responding for such a long time. There are 
-just too many things on my table and yes, I also have a life outside the 
-computer (kids, bees, wife should probably come first ...).
+diff --git a/package/gloox/gloox.hash b/package/gloox/gloox.hash
+index ee42c079b2..6419db90f8 100644
+--- a/package/gloox/gloox.hash
++++ b/package/gloox/gloox.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  97cb6a0c07e320ffa4a7c66e8ab06b2361086271dc87ed2398befef4e8435f8a  gloox-1.0.23.tar.bz2
++sha256  ae1462be2a2eb8fe5cd054825143617c53c2c9c7195606cb5a5ba68c0f68f9c9  gloox-1.0.24.tar.bz2
+ sha256  40a20c41c8dabb8ba61bea983fa8f2f6989e67fac56bb62c2249053807fd26af  LICENSE
+diff --git a/package/gloox/gloox.mk b/package/gloox/gloox.mk
+index f643118198..b741d5ebc1 100644
+--- a/package/gloox/gloox.mk
++++ b/package/gloox/gloox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-However, I'm still interested in the set and veeery happy that #19 was 
-finally merged. Thanks everyone for reviewing and testing!
-
-So Louis Paul, would it be possible you send your fix as a separate 
-patch and once this is in, I resend what's left from the series?
-
-If IRC is needed for further coordination i can join, but I'm a bit 
-hesitant because I can hardly handle the four different messengers that 
-I'm using already.
-
-
-regards,
-Andreas
-
-
-
-On 22.07.20 22:26, Yann E. MORIN wrote:
-> Louis-Paul, All,
-> 
-> On 2020-07-22 21:48 +0200, LP C spake thusly:
->> I'm very glad that this serie has finally ended.
-> 
-> Oh, no, no! The series is not applied to master at all!
-> 
-> I've just provided some feedback while trying your patches. The original
-> patches from 20 onward have not been applied...
-> 
-> [--SNIP--]
->>>> As for the .pc files, I think the fix should be generalised out of the
->>>> Qt world, maybe... Fopr example, we already fix the /la files in
->>>> package/pkg-generic at 324
->>>> So, as far as I can see (which can be quite short, in some cases), we
->>>> should introduce a similar generic .pc fixup.
->> I totally agree with this. I can add this on my todo list if you wish.
-> 
-> I'd like to, please.
-> 
-> [--SNIP--]
->>>>> I'm now able to use full parallel build with per-package with Qt5.
->>>>
->>>> This is really sounding good! :-)
->>>>
->>>> Andreas, Louis-Paul, I know I may be asking a lot, but I'd love to see
->>>> an updated and consolidated series reposted to the list, that aggregates
->>>> both your developments.
->>>>
->>>> Would you be willing to do that, please?
->>
->> I'm really crowded under the snow those days (you know, when you come
->> back from holidays ;) ). I'm ok to do it but in a teamwork (IRC or
->> Discord).
-> 
-> Thomas P. and I are always logged in on IRC. I look from ~07:30+0200 to
-> ~22:00+0200, and Thomas has similar presence. Not sure about Andreas and
-> Peter, though...
-> 
->> I spent way too much of my personal time to fix Qt5 parallel build.
-> 
-> I know this can be a lot of work, and that people have a life outside of
-> Buildroot (and even outside of computers, amazing! ;-] ), but having
-> people, like you, who understand what is going on, and are interested in
-> fixing the issue, is the only way to make progress on such topics.
-> 
-> By the way, we're having a virtual developper day next Monday,
-> 2020-07-27, the whole day. If you are willing to join:
->      https://elinux.org/Buildroot:VirtualDeveloperDaysSummer2020
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+-GLOOX_VERSION = 1.0.23
++GLOOX_VERSION = 1.0.24
+ GLOOX_SOURCE = gloox-$(GLOOX_VERSION).tar.bz2
+ GLOOX_SITE = https://camaya.net/download
+ GLOOX_LICENSE = GPL-3.0 with OpenSSL exception
+--
+2.20.1
