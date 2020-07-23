@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 22:05:16 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/rpi-firmware: bump version
- to 542aceb
-In-Reply-To: <20200721190549.29166-2-ps.report@gmx.net>
-References: <20200721190549.29166-1-ps.report@gmx.net>
- <20200721190549.29166-2-ps.report@gmx.net>
-Message-ID: <20200723220516.40649bbd@windsurf.home>
+Date: Thu, 23 Jul 2020 22:05:33 +0200
+Subject: [Buildroot] [git commit] package/pistache: bump version to
+ f2f5a50fbf
+Message-ID: <20200723200224.EC42C8401B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Jul 2020 21:05:47 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ae9903f94780e383c4c2a3e34ece7737f7a42c23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Upstream improved testing and fixed minor issues.
 
-Series applied. Thanks!
+Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pistache/pistache.hash | 2 +-
+ package/pistache/pistache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
+index 63597b4149..5079387eb7 100644
+--- a/package/pistache/pistache.hash
++++ b/package/pistache/pistache.hash
+@@ -1,3 +1,3 @@
+ #locally computed
+-sha256  bcc7640eb4ae4b178e504f18ebf29dd0a6f8189710cdc0fa4703fa27728145e4  pistache-73f248acd6db4c53e6604577b7e13fd5e756f96f.tar.gz
++sha256  70aeef5f5a4603cb2ceb20a284e3239f5da520e68f39dcb572c9f21473ac0b6d  pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d.tar.gz
+ sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
+diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
+index c182754cee..4d6bd283ea 100644
+--- a/package/pistache/pistache.mk
++++ b/package/pistache/pistache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PISTACHE_VERSION = 73f248acd6db4c53e6604577b7e13fd5e756f96f
++PISTACHE_VERSION = f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d
+ PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
+ PISTACHE_LICENSE = Apache-2.0
+ PISTACHE_LICENSE_FILES = LICENSE
