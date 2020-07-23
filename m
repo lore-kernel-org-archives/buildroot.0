@@ -1,46 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 09:54:21 +0200
-Subject: [Buildroot] [PATCH 02/12] package/libbytesize: new package
-In-Reply-To: <20200723010810.3237608-3-aduskett@gmail.com>
+Date: Thu, 23 Jul 2020 10:57:21 +0200
+Subject: [Buildroot] [PATCH 04/12] package/libblockdev: new package
+In-Reply-To: <20200723010810.3237608-5-aduskett@gmail.com>
 References: <20200723010810.3237608-1-aduskett@gmail.com>
- <20200723010810.3237608-3-aduskett@gmail.com>
-Message-ID: <20200723095421.7fca4153@windsurf.home>
+ <20200723010810.3237608-5-aduskett@gmail.com>
+Message-ID: <20200723105721.4d4cee59@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Hello,
 
-In Cc, I'm adding Vadim as there are some gettext-tiny questions below.
-
-On Wed, 22 Jul 2020 18:08:00 -0700
+On Wed, 22 Jul 2020 18:08:02 -0700
 aduskett at gmail.com wrote:
 
-> Libbytesize is a tiny library providing a C "class" for working with
-> arbitrary big sizes in bytes.
-
-"tiny library", which needs gmp, mpfr and pcre2 :-)
-
-> +LIBBYTESIZE_VERSION = 2.3
-> +LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
-> +LIBBYTESIZE_LICENSE = LGPL-2.1+
-> +LIBBYTESIZE_LICENSE_FILES = LICENSE
-> +LIBBYTESIZE_INSTALL_STAGING = YES
+> +LIBBLOCKDEV_VERSION = 2.24
+> +LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
+> +LIBBLOCKDEV_LICENSE = LGPL-2.1+
+> +LIBBLOCKDEV_LICENSE_FILES = LICENSE
+> +LIBBLOCKDEV_INSTALL_STAGING = YES
 > +
-> +# gettext-gnu is needed for msgcat which gettext-tiny does not provide,
+> +LIBBLOCKDEV_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	kmod \
+> +	libbytesize \
+> +	libglib2 \
+> +	libyaml \
+> +	lvm2 \
+> +	parted \
+> +	udev
 
-Meh, this is not great :-/
+Are you sure all those dependencies are needed ?
 
-I had a quick look, and there is interestingly an issue on the
-gettext-tiny tracker:
+For example, libyaml seems to only be needed when:
 
-  https://github.com/sabotage-linux/gettext-tiny/issues/34
+AS_IF([test "x$with_vdo" != "xno"],
+      [LIBBLOCKDEV_PKG_CHECK_MODULES([YAML], [yaml-0.1])]
+      [])
 
-and it precisely says that msgcat and msgfilter are missing to build
-libbytesize. It says msgcat is in fact not used/needed by libbytesize,
-and the msgfilter tool is only used for the Serbian translation.
+and you're passing --without-vdo.
+
+Instead of passing --with-lvm, perhaps you could use --without-lvm,
+this would avoid the need for the lvm2 dependency I believe.
+
+Also, why --with-part and --with-swap ?
+
+The part plugin is what brings the parted dependency:
+
+AS_IF([test "x$with_part" != "xno" -o "x$with_fs" != "xno"],
+      [LIBBLOCKDEV_PKG_CHECK_MODULES([PARTED], [libparted >= 3.1])]
+      [])
+
+libbytesize is also not always needed:
+
+AS_IF([test "x$with_btrfs" != "xno" -o "x$with_mdraid" != "xno" -o "x$with_kbd" != "xno" -o "x$with_vdo" != "xno" -o "x$with_tools" != "xno"],
+      [LIBBLOCKDEV_PKG_CHECK_MODULES([BYTESIZE], [bytesize >= 0.1])],
+      [])
+
+Could you revisit the set of dependencies, and make them optional as
+they should be ?
+
+> +
+> +LIBBLOCKDEV_CONF_OPTS = \
+> +	--enable-introspection=no \
+
+	--disable-introspection
+
+is preferred.
+
+> +	--without-bcache \
+> +	--without-btrfs \
+> +	--without-crypto \
+> +	--without-escrow \
+> +	--without-fs \
+> +	--without-dm \
+> +	--without-dmraid \
+> +	--without-nvdimm \
+> +	--without-tools \
+> +	--without-python2 \
+> +	--without-vdo \
+> +	--with-lvm \
+> +	--with-part \
+> +	--with-swap
+
+As said above, these last 3 should probably not be unconditionally
+enabled.
 
 Thomas
 -- 
