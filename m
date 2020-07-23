@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 22 Jul 2020 18:08:06 -0700
-Subject: [Buildroot] [PATCH 08/12] package/polkit: add host variant
+Date: Wed, 22 Jul 2020 18:08:07 -0700
+Subject: [Buildroot] [PATCH 09/12] package/udisks/Config.in: alphabatize
+ package selection
 In-Reply-To: <20200723010810.3237608-1-aduskett@gmail.com>
 References: <20200723010810.3237608-1-aduskett@gmail.com>
-Message-ID: <20200723010810.3237608-9-aduskett@gmail.com>
+Message-ID: <20200723010810.3237608-10-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +13,34 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Building a host variant of polkit ensures that building the new version of the
-udisks package succeeds on distributions that do not provide a new enough
-version of Polkit.
+This patch makes the upcoming udisk2 version bump patch easier to read,
+and also fixes the Config.in, so it follows Buildroot's package guidelines.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/polkit/polkit.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/udisks/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index 3ae42b2312..5f9914482a 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -14,6 +14,9 @@ POLKIT_INSTALL_STAGING = YES
- POLKIT_DEPENDENCIES = \
- 	libglib2 host-intltool expat spidermonkey $(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index 04a632dd8d..2c0d0dab52 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -13,12 +13,12 @@ config BR2_PACKAGE_UDISKS
+ 	depends on !BR2_STATIC_LIBS # lvm2, spidermonkey
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+-	select BR2_PACKAGE_SG3_UTILS
+-	select BR2_PACKAGE_POLKIT
+-	select BR2_PACKAGE_PARTED
+-	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_LIBATASMART
+ 	select BR2_PACKAGE_LIBGUDEV
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_PARTED
++	select BR2_PACKAGE_POLKIT
++	select BR2_PACKAGE_SG3_UTILS
+ 	help
+ 	  The udisks project provides
  
-+HOST_POLKIT_DEPENDENCIES = \
-+	host-libglib2 host-intltool host-expat host-spidermonkey
-+
- # spidermonkey needs C++11
- POLKIT_CONF_ENV = \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
-@@ -26,6 +29,17 @@ POLKIT_CONF_OPTS = \
- 	--disable-libelogind \
- 	--disable-libsystemd-login
- 
-+# The only reason for building the host polkit is to build udisks.
-+# As such, only the bare minimum is enabled.
-+HOST_POLKIT_CONF_OPTS = \
-+	--with-os-type=unknown \
-+	--disable-man-pages \
-+	--disable-examples \
-+	--disable-libelogind \
-+	--disable-libsystemd-login \
-+	--disable-introspection \
-+	--with-authfw=shadow
-+
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- POLKIT_CONF_OPTS += --enable-introspection
- POLKIT_DEPENDENCIES += gobject-introspection
-@@ -57,3 +71,4 @@ define POLKIT_INSTALL_INIT_SYSTEMD
- endef
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
 -- 
 2.26.2
