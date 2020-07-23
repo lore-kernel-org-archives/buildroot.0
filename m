@@ -1,10 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 22 Jul 2020 18:08:03 -0700
-Subject: [Buildroot] [PATCH 05/12] package/libblockdev: add cryptography
- support
+Date: Wed, 22 Jul 2020 18:08:04 -0700
+Subject: [Buildroot] [PATCH 06/12] package/libblockdev: add fs plugin support
 In-Reply-To: <20200723010810.3237608-1-aduskett@gmail.com>
 References: <20200723010810.3237608-1-aduskett@gmail.com>
-Message-ID: <20200723010810.3237608-6-aduskett@gmail.com>
+Message-ID: <20200723010810.3237608-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +12,50 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-The cryptography plugin requires the volume-key package. Because of the large
-number of required dependencies needed to build volume-key, adding a separate
-config option to libblockdev's Config.in is preferable than checking if a user
-selected the volume-key package independently.
-
-This option is needed for newer versions of udisks.
+This plugin enables the fs plugin for the libblockdev library, which is
+required for newer versions of the udisks package.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libblockdev/Config.in      | 13 +++++++++++++
- package/libblockdev/libblockdev.mk | 12 ++++++++++--
- 2 files changed, 23 insertions(+), 2 deletions(-)
+ package/libblockdev/Config.in      | 4 ++++
+ package/libblockdev/libblockdev.mk | 7 ++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 19a6ed0974..6740b7ac6c 100644
+index 6740b7ac6c..db67afd648 100644
 --- a/package/libblockdev/Config.in
 +++ b/package/libblockdev/Config.in
-@@ -22,6 +22,19 @@ config BR2_PACKAGE_LIBBLOCKDEV
+@@ -33,6 +33,10 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
+ 	select BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_VOLUME_KEY
  
- 	  https://github.com/storaged-project/libblockdev/
++config BR2_PACKAGE_LIBBLOCKDEV_FS
++	bool "Filesystem plugin"
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++
+ endif
  
-+if BR2_PACKAGE_LIBBLOCKDEV
-+
-+config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
-+	bool "Crypto plugin"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # gpg2, libgpgme, libassuan
-+	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # volume-key -> libnss -> libnspr
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # volume-key -> cryptsetup -> json-c
-+	select BR2_PACKAGE_CRYPTSETUP
-+	select BR2_PACKAGE_LIBNSS
-+	select BR2_PACKAGE_VOLUME_KEY
-+
-+endif
-+
  comment "libblockdev needs udev /dev management and a glibc or musl toolchain w/ locale, wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV
 diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index f48adbcdee..72163d8a94 100644
+index 72163d8a94..2fd24e6103 100644
 --- a/package/libblockdev/libblockdev.mk
 +++ b/package/libblockdev/libblockdev.mk
-@@ -24,8 +24,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+@@ -24,7 +24,6 @@ LIBBLOCKDEV_CONF_OPTS = \
  	--enable-introspection=no \
  	--without-bcache \
  	--without-btrfs \
--	--without-crypto \
--	--without-escrow \
- 	--without-fs \
+-	--without-fs \
  	--without-dm \
  	--without-dmraid \
-@@ -37,4 +35,14 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--with-part \
- 	--with-swap
+ 	--without-nvdimm \
+@@ -45,4 +44,10 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-crypto --without-escrow
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
-+LIBBLOCKDEV_CONF_OPTS += --with-crypto --with-escrow
-+LIBBLOCKDEV_DEPENDENCIES += \
-+	cryptsetup \
-+	libnss \
-+	volume-key
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_FS),y)
++LIBBLOCKDEV_CONF_OPTS += --with-fs
 +else
-+LIBBLOCKDEV_CONF_OPTS += --without-crypto --without-escrow
++LIBBLOCKDEV_CONF_OPTS += --without-fs
 +endif
 +
  $(eval $(autotools-package))
