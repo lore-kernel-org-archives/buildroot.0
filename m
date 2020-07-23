@@ -1,41 +1,49 @@
-From: Thomas Ruschival <thomas@ruschival.de>
-Date: Thu, 23 Jul 2020 19:02:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pistache: bump version to f2f5a50fbf
-Message-ID: <20200723170249.177064-1-thomas@ruschival.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 23 Jul 2020 21:46:00 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-networkx: install for
+ host-python3
+In-Reply-To: <20200723194600.3491282-1-thomas.petazzoni@bootlin.com>
+References: <20200723194600.3491282-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200723194600.3491282-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream improved testing and fixed minor issues.
-Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
----
- package/pistache/pistache.hash | 2 +-
- package/pistache/pistache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This Python module only works for Python 3: the target variant has a
+"depends on BR2_PACKAGE_PYTHON3".
 
-diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
-index 63597b4149..5079387eb7 100644
---- a/package/pistache/pistache.hash
-+++ b/package/pistache/pistache.hash
-@@ -1,3 +1,3 @@
- #locally computed
--sha256  bcc7640eb4ae4b178e504f18ebf29dd0a6f8189710cdc0fa4703fa27728145e4  pistache-73f248acd6db4c53e6604577b7e13fd5e756f96f.tar.gz
-+sha256  70aeef5f5a4603cb2ceb20a284e3239f5da520e68f39dcb572c9f21473ac0b6d  pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d.tar.gz
- sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
-diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
-index c182754cee..4d6bd283ea 100644
---- a/package/pistache/pistache.mk
-+++ b/package/pistache/pistache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+However today in Buildroot, when no target python is selected, or when
+BR2_PACKAGE_PYTHON=y, all host python modules are installed for
+host-python, i.e Python 2. But this module won't install in Python 2,
+so let's force its host variant to be installed with Python 3 on the
+host. Of course, for that to work, its dependency must also be built
+for host-python3, so we change it to the newly introduced
+host-python3-decorator package.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/46a89bd6cd0d0b896b28010db287068309e7a43c/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-networkx/python-networkx.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
+index bcb3f22f8e..2efc53d628 100644
+--- a/package/python-networkx/python-networkx.mk
++++ b/package/python-networkx/python-networkx.mk
+@@ -10,7 +10,8 @@ PYTHON_NETWORKX_SITE = https://pypi.python.org/packages/bf/63/7b579dd3b1c49ce6b7
+ PYTHON_NETWORKX_LICENSE = BSD-3-Clause
+ PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
+ PYTHON_NETWORKX_SETUP_TYPE = setuptools
+-HOST_PYTHON_NETWORKX_DEPENDENCIES = host-python-decorator
++HOST_PYTHON_NETWORKX_DEPENDENCIES = host-python3-decorator
++HOST_PYTHON_NETWORKX_NEEDS_HOST_PYTHON = python3
  
--PISTACHE_VERSION = 73f248acd6db4c53e6604577b7e13fd5e756f96f
-+PISTACHE_VERSION = f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d
- PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
- PISTACHE_LICENSE = Apache-2.0
- PISTACHE_LICENSE_FILES = LICENSE
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
-2.27.0
+2.26.2
