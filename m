@@ -1,53 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 22:40:44 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/ima-evm-utils: fix build on
- musl
-In-Reply-To: <20200723200457.3996-1-petr.vorel@gmail.com>
-References: <20200723200457.3996-1-petr.vorel@gmail.com>
-Message-ID: <20200723224044.3dc2fefe@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Jul 2020 22:37:06 +0200
+Subject: [Buildroot] [git commit] package/pkg-generic.mk: exclude the
+ staging sub-directory
+Message-ID: <20200723204112.4652E880BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Jul 2020 22:04:55 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e59f748fec7b509261adb0a42e57f837e9df370f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->                    br-arm-cortex-a9-musl [ 7/44]: FAILED
->                 br-i386-pentium-mmx-musl [12/44]: FAILED
->                           br-x86-64-musl [34/44]: FAILED
->                           linaro-aarch64 [36/44]: FAILED
-> 
-> Fix will be released in future release (after 1.3), but was needed since
-> initial release.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Now that we are checking the host directory changes throughout all
+installation steps and not just during the "host installation step",
+it means that changes done within the staging directory (which is a
+subdir of the host directory) are also visible in the
+.files-list-host.txt file.
 
-Why don't we have autobuilder failures ?
+Note that this problem already potentially occurs if a host package is
+installing files in the staging directory: they would be listed in
+.files-list-host.txt even without the changes in this series.
 
-If you look at:
+To fix this up, we simply exclude files that are beneath the
+$(STAGING_SUBDIR). Note that we do that in all cases, so when
+searching $(HOST_DIR), $(HOST_DIR)/$(STAGING_SUBDIR) is excluded, but
+when searching $(TARGET_DIR), $(TARGET_DIR)/$(STAGING_SUBDIR) is
+excluded, and when search $(STAGING_DIR),
+$(STAGING_DIR)/$(STAGING_SUBDIR) is excluded. This is not a problem in
+practice since $(TARGET_DIR)/$(STAGING_SUBDIR) and
+$(STAGING_DIR)/$(STAGING_SUBDIR) don't exist, but it's not very
+nice. However, it allows to keep the code simple.
 
-  http://autobuild.buildroot.net/index.php?libc=musl&symbols%5BBR2_PACKAGE_IMA_EVM_UTILS%5D=y
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-generic.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-you will see that we have plenty of builds that succeed, with
-BR2_PACKAGE_IMA_EVM_UTILS=y, with musl toolchains.
-
-Notes:
-
- - There are failures above, but none of them are due to ima-evm-utils.
-   You can also look at
-   http://autobuild.buildroot.net/?reason=ima-evm-utils% which shows we
-   never had a single build failure caused by this package (it seems).
-
- - The above URL is slow to load, please give it some time, the SQL
-   query is slow!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 22e7e1b04f..659b8e5661 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -61,7 +61,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(2): suffix of file (optional)
+ define pkg_size_before
+ 	cd $(1); \
+-	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
++	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+ 		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
+ endef
+ 
+@@ -69,7 +69,7 @@ endef
+ # $(2): suffix of file (optional)
+ define pkg_size_after
+ 	cd $(1); \
+-	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
++	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+ 		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
+ 	LC_ALL=C comm -13 \
+ 		$($(PKG)_DIR)/.files-list$(2).before \
