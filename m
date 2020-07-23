@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 16:31:32 +0200
-Subject: [Buildroot] [PATCH 00/12] package/udisks: bump version to 2.9.0
-In-Reply-To: <20200723010810.3237608-1-aduskett@gmail.com>
-References: <20200723010810.3237608-1-aduskett@gmail.com>
-Message-ID: <20200723163132.0c0c1688@windsurf.home>
+Date: Thu, 23 Jul 2020 16:35:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/setools: remove C++ dependency
+ on comment
+In-Reply-To: <20200722074430.2150934-1-antoine.tenart@bootlin.com>
+References: <20200722074430.2150934-1-antoine.tenart@bootlin.com>
+Message-ID: <20200723163507.16f1550d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Jul 2020 18:07:58 -0700
-aduskett at gmail.com wrote:
+On Wed, 22 Jul 2020 09:44:29 +0200
+Antoine Tenart <antoine.tenart@bootlin.com> wrote:
 
-> After successfully compiling in Fedora 32, I loaded up CentOS7 with confidence.
-> Of course, my confidence was my undoing, and udisks immediately choked on
-> trying to build due to CentOS7 having an ancient pre-spidermonkey polkit.
-> After a few hours of fiddling around, I finally figured out what the issue
-> was, added host variants of spidermonkey and polkit, and then added
-> host-polkit as a dependency to udisks and everything compiled cleanly.
+> Bump to 4.1.1 (commit 96d3d017963b) removed setools' dependency on
+> BR2_INSTALL_LIBSTDCPP, but the corresponding inverse dependency on one
+> of its Kconfig comment was not removed. This led to have the package
+> being available while a Kconfig comment on non-matched dependencies is
+> shown. Fix this by removing the dependency on !BR2_INSTALL_LIBSTDCPP on
+> the Kconfig comment.
+> 
+> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> ---
+>  package/setools/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Do you have more details about what it does with host-polkit? Indeed,
-having to build host-spidermonkey and host-polkit is quite a big hammer :-/
+Both applied. Thanks!
 
 Thomas
 -- 
