@@ -1,209 +1,132 @@
-From: Stephen Beckwith <embeddedsteve@gmail.com>
-Date: Wed, 22 Jul 2020 18:05:39 -0400
-Subject: [Buildroot] Re-building a Linux Net-bootable image after all other
- components are built
-Message-ID: <CAN34fowMoYAPF1iJKBPQFfVBfcNR_Sv52Cvtzus5WA2UOScDSA@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 22 Jul 2020 18:07:58 -0700
+Subject: [Buildroot] [PATCH 00/12] package/udisks: bump version to 2.9.0
+Message-ID: <20200723010810.3237608-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please pardon the verbosity of this - I am a believer that the more you
-know (i.e. context) the better.  I am grateful for your expertise and
-assistance.
-Regards,
-Stephen Beckwith
-
-*In original setup:*
-
-BR 2015.08.1  With GCC 4.4.7 (BR Build)
-
-Kernel = linux-3.14.17-pilot4  {with patches}
-
-U-Boot = u-boot-2013.07-pilot4  {with patches}
-
- - in this setup, everything works fine.  We complete our build steps, then
-we go back and do a ?rebuild? of the Linux kernel as shown below.  The
-output uImage (renamed to uImage_netboot) will be approximately the same
-size as the output image we create for flashing:  ~ 26MB.
-
- - This will be a linux kernel (~ 2.8MB) + an INITRAMFS attached - to make
-the total size.
-
-
-*New Setup:*
-
-BR 2020.02.1  With GCC 9.2.0 (and updated glibc as well)
-
-Kernel and U-boot are the same, with some additional patches to allow for
-successful compile.
-
- - here, the final output is ~ the same as the previous build.
-
- - However, when we go to remake the Netboot image, we only get the Kernel
-output size of ~ 2.8MB, without the attached ROOT FILE SYSTEM.
-
-
-Investigation seems to show that the updated Buildroot internals are doing
-somethings differently vs. how we had implemented this in the current setup.
-The linux .config (in the output/build/linux-custom directory) seems to be
-getting overwritten by Buildroot AFTER we have manually modified it (shown
-below).  When I searched the .config file in the linux build directory, the
-parameters set below are NOT present, which leads me to believe that
-Buildroot is overwriting this during the reconfigure step (which it didn?t
-use to in the current setup).
-
-
-I?m looking for suggestions on how to do this post-processing build with
-the new Buildroot setup to generate this image.  We have the rootfs.cpio
-file to be attached to the kernel, just need to figure out how to do this
-?correctly?.
-
-
-*BR Configuration:*
-
-BR2_ROOTFS_POST_IMAGE_SCRIPT="$(BR2_EXTERNAL_SP_DEV_PATH)/scripts/post_image_build.sh"
-
-
-The post_image_build.sh script calls: buildrootfs_binary_files script
-
-This script will Generate the ext4 RFS images required (verified they are
-correct)
-
-The post_image_build.sh then creates the package we flash on our devices,
-packing up the kernel and RFS with a ?header? for our update process.
-
-The very last step done in the entire process is to call:
-build_netbooting_image.sh
-
-
-This build_netbooting_image.sh script will:
-
-Save off the uImage in the build directory, saves the original config file
-as well
-
-It then ?tweaks? the output/build/linux-custom directory?s .config file
-
-CONFIG_INITRAMFS_SOURCE=${BR_BINARIES_DIR}/rootfs.cpio
-
-CONFIG_INITRAMFS_ROOT_UID = 0
-
-CONFIG_INITRAMFS_ROOT_GID =0
-
-CONFIG_INITRAMFS_COMPRESSION_NONE = y
-
-cd into the output directory and from here does a ?make linux-reconfigure?
-
-Does clean up and re-copy of images: so we get a ?uImage_netboot? of ~ 26MB
-
-
-This is the exact same process that we do with current buildroot setup -
-the only real difference is the Buildroot infrastructure and the compiler.
-
-
-*Current Build:*
-
-  LD      vmlinux
-
-  SORTEX  vmlinux
-
-  SYSMAP  System.map
-
-  OBJCOPY arch/arm/boot/Image
-
-  Kernel: arch/arm/boot/Image is ready
-
-  GZIP    arch/arm/boot/compressed/piggy.gzip
-
-  AS      arch/arm/boot/compressed/piggy.gzip.o
-
-arm-buildroot-linux-gnueabi-gcc: warning:
-/u/sbeckwit/p4/spNext/mendo_dev/src/include: linker input file unused
-because linking not done
-
-  LD      arch/arm/boot/compressed/vmlinux
-
-  OBJCOPY arch/arm/boot/zImage
-
-  Kernel: arch/arm/boot/zImage is ready
-
-  UIMAGE  arch/arm/boot/uImage
-
-Image Name:   Linux-3.14.17-ami
-
-Created:      Thu Jun 11 15:17:52 2020
-
-Image Type:   ARM Linux Kernel Image (uncompressed)
-
-*Data Size:    26622048 Bytes = 25998.09 kB = 25.39 MB*
-
-Load Address: 81008000
-
-Entry Point:  81008000
-
-  Image arch/arm/boot/uImage is ready
-
-  CHK     include/config/kernel.release
-
-  CHK     include/generated/uapi/linux/version.h
-
-  CHK     include/generated/utsrelease.h
-
-make[6]: `include/generated/mach-types.h' is up to date.
-
-  CALL    scripts/checksyscalls.sh
-
-arm-buildroot-linux-gnueabi-gcc: warning:
-/u/sbeckwit/p4/spNext/mendo_dev/src/include: linker input file unused
-because linking not done
-
-  Building modules, stage 2.
-
-  MODPOST 8 modules
-
-
-*New Build:*
-
-  CHK     include/config/kernel.release
-
-  CHK     include/generated/uapi/linux/version.h
-
-  CHK     include/generated/utsrelease.h
-
-make[6]: 'include/generated/mach-types.h' is up to date.
-
-  CALL    scripts/checksyscalls.sh
-
-arm-buildroot-linux-gnueabi-gcc.br_real: warning:
-/home/sbeckwit/sp_dev/bowie_dev/src/include: linker input file unused
-because linking not done
-
-  CHK     include/generated/compile.h
-
-  CHK     kernel/config_data.h
-
-  Kernel: arch/arm/boot/Image is ready
-
-  Kernel: arch/arm/boot/zImage is ready
-
-  UIMAGE  arch/arm/boot/uImage
-
-Image Name:   Linux-3.14.17-ami
-
-Created:      Thu Jun 11 15:04:23 2020
-
-Image Type:   ARM Linux Kernel Image (uncompressed)
-
-*Data Size:    2824656 Bytes = 2758.45 KiB = 2.69 MiB*
-
-Load Address: 81008000
-
-Entry Point:  81008000
-
-  Image arch/arm/boot/uImage is ready
-
- - More detailed listings can be provided.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200722/ec68d563/attachment.html>
+From: Adam Duskett <Aduskett@gmail.com>
+
+Hello!
+
+I was bored and needed a small challenge. I remembered that I was finally
+finishing up the GOI series around the same time that Giulio was helping me by
+testing against a newer version of udisks.
+
+As Giulio is currently not working on software development, I asked him via
+Facebook messenger if he was OK with me taking over this patch series. He was
+more than happy to give me this gigantic mess!
+
+We thought that newer versions of udisks required GOI, but it
+turns out this is not true! Hooray!
+
+Still, this is a pretty hefty patch series, weighing in at 10 in total for the
+basics, plus two additional patches at the end to enable GOI support.
+
+Here is a quick summary of my trials and tribulations for anybody who has
+made it this far into my ramblings:
+
+Three new packages are necessary:
+  - libbytesize
+  - libblockdev
+  - volume-key
+
+libbytesize is pretty straight forward and doesn't require any significant
+system dependencies?just a few small target packages.
+
+libblockdev is an extensive helper library with a ton of plugins. I did test
+all of the plugins that it * could * do, but for this patch series, I have
+only included the bare minimum needed to get the udisks package version up to
+modern standards.
+
+Volume-key: This is a nasty requirement and includes a bunch of encryption
+handling. libblockdev doesn't require this package, but udisks does. Because
+of the numerous dependencies that volume-key requires, I decided to skip the
+traditional "enable this package feature if a user happens to select the
+dependent package" in favor of a simple menu config option.
+
+After successfully compiling in Fedora 32, I loaded up CentOS7 with confidence.
+Of course, my confidence was my undoing, and udisks immediately choked on
+trying to build due to CentOS7 having an ancient pre-spidermonkey polkit.
+After a few hours of fiddling around, I finally figured out what the issue
+was, added host variants of spidermonkey and polkit, and then added
+host-polkit as a dependency to udisks and everything compiled cleanly.
+
+I have tested this patch series with a test-pkg -a in CentOS7, and I recieved
+no errors (Other than me running out of hard drive space and having to restart
+the test series!)
+
+The size difference between the old and new versions of udisks, even with the
+additional dependencies is:
+
+Old: 56M
+New: 69M
+
+That's not too bad considering the 6 years of updates that udisks has gone
+through!
+
+I am sure there will be some additional changes requested, as this is a hefty
+patch series, but * hopefully, * it is broken down enough that Thomas won't
+complain too much! :)
+
+Thanks for reading!
+Adam
+
+PS.
+I added GOI support to libblockdev and udisks because I can. :)
+
+Adam Duskett (12):
+  package/gcr: fix gpg path
+  package/libbytesize: add new package
+  package/volume-key: new package
+  package/libblockdev: new package
+  package/libblockdev: add cryptography support
+  package/libblockdev: add fs plugin support
+  package/spidermonkey: add host variant
+  package/polkit: add host variant
+  package/udisks/Config.in: alphabatize the package selection
+  package/udisks: bump version to 2.9.0
+  package/libblockdev: add gobject-introspection support
+  package/udisks: add gobject-introspection support
+
+ DEVELOPERS                                    |  3 +
+ package/Config.in                             |  3 +
+ package/gcr/gcr.mk                            |  2 +-
+ package/libblockdev/Config.in                 | 46 +++++++++++
+ package/libblockdev/libblockdev.hash          |  3 +
+ package/libblockdev/libblockdev.mk            | 62 ++++++++++++++
+ package/libbytesize/Config.in                 | 10 +++
+ package/libbytesize/libbytesize.hash          |  3 +
+ package/libbytesize/libbytesize.mk            | 21 +++++
+ package/polkit/polkit.mk                      | 13 +++
+ package/spidermonkey/spidermonkey.mk          | 15 ++++
+ ...-fix-build-with-newer-glibc-versions.patch | 29 -------
+ .../0002-Fix-systemd-service-file.patch       | 33 --------
+ ...issue-with-missing-sys-sysmacros.h-i.patch | 81 -------------------
+ package/udisks/Config.in                      | 29 ++++---
+ package/udisks/udisks.hash                    |  4 +-
+ package/udisks/udisks.mk                      | 30 +++++--
+ ...ove-po-Makefile.in-entry-from-AC_CON.patch | 28 +++++++
+ package/volume-key/Config.in                  | 38 +++++++++
+ package/volume-key/volume-key.hash            |  3 +
+ package/volume-key/volume-key.mk              | 31 +++++++
+ 21 files changed, 324 insertions(+), 163 deletions(-)
+ create mode 100644 package/libblockdev/Config.in
+ create mode 100644 package/libblockdev/libblockdev.hash
+ create mode 100644 package/libblockdev/libblockdev.mk
+ create mode 100644 package/libbytesize/Config.in
+ create mode 100644 package/libbytesize/libbytesize.hash
+ create mode 100644 package/libbytesize/libbytesize.mk
+ delete mode 100644 package/udisks/0001-fix-build-with-newer-glibc-versions.patch
+ delete mode 100644 package/udisks/0002-Fix-systemd-service-file.patch
+ delete mode 100644 package/udisks/0003-Fix-compilation-issue-with-missing-sys-sysmacros.h-i.patch
+ create mode 100644 package/volume-key/0001-configure.ac-remove-po-Makefile.in-entry-from-AC_CON.patch
+ create mode 100644 package/volume-key/Config.in
+ create mode 100644 package/volume-key/volume-key.hash
+ create mode 100644 package/volume-key/volume-key.mk
+
+-- 
+2.26.2
