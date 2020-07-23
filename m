@@ -1,138 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 16:28:45 +0200
-Subject: [Buildroot] [git commit] package/x11vnc: fix build with 64 bits
- time_t
-Message-ID: <20200723142432.19BBA86D4A@busybox.osuosl.org>
+Date: Thu, 23 Jul 2020 16:31:32 +0200
+Subject: [Buildroot] [PATCH 00/12] package/udisks: bump version to 2.9.0
+In-Reply-To: <20200723010810.3237608-1-aduskett@gmail.com>
+References: <20200723010810.3237608-1-aduskett@gmail.com>
+Message-ID: <20200723163132.0c0c1688@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ec0b8f86ad52403418dcbc66053175ab79fc21e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 22 Jul 2020 18:07:58 -0700
+aduskett at gmail.com wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/75e45b566c85d19c5ed00529d036b4808413b1ca
+> After successfully compiling in Fedora 32, I loaded up CentOS7 with confidence.
+> Of course, my confidence was my undoing, and udisks immediately choked on
+> trying to build due to CentOS7 having an ancient pre-spidermonkey polkit.
+> After a few hours of fiddling around, I finally figured out what the issue
+> was, added host variants of spidermonkey and polkit, and then added
+> host-polkit as a dependency to udisks and everything compiled cleanly.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...x-build-on-32bit-arches-with-64bit-time_t.patch | 109 +++++++++++++++++++++
- 1 file changed, 109 insertions(+)
+Do you have more details about what it does with host-polkit? Indeed,
+having to build host-spidermonkey and host-polkit is quite a big hammer :-/
 
-diff --git a/package/x11vnc/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch b/package/x11vnc/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch
-new file mode 100644
-index 0000000000..87dc3c994f
---- /dev/null
-+++ b/package/x11vnc/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch
-@@ -0,0 +1,109 @@
-+From daecf59cc8b294265666482a4766aaa3148c308b Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 30 Nov 2019 11:43:32 -0800
-+Subject: [PATCH] Fix build on 32bit arches with 64bit time_t
-+
-+time element is deprecated on new input_event structure in kernel's
-+input.h [1]
-+
-+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
-+
-+[Retrieved from:
-+https://github.com/LibVNC/x11vnc/commit/daecf59cc8b294265666482a4766aaa3148c308b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/uinput.c | 25 +++++++++++++++++++++----
-+ 1 file changed, 21 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/uinput.c b/src/uinput.c
-+index 28fbad3..d71bcde 100644
-+--- a/src/uinput.c
-++++ b/src/uinput.c
-+@@ -54,6 +54,11 @@ so, delete this exception statement from your version.
-+ #include <linux/input.h>
-+ #include <linux/uinput.h>
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ #if !defined(EV_SYN) || !defined(SYN_REPORT)
-+ #undef UINPUT_OK
-+ #endif
-+@@ -710,6 +715,7 @@ void parse_uinput_str(char *in) {
-+ static void ptr_move(int dx, int dy) {
-+ #ifdef UINPUT_OK
-+ 	struct input_event ev;
-++	struct timeval tval;
-+ 	int d = direct_rel_fd < 0 ? fd : direct_rel_fd;
-+ 
-+ 	if (injectable && strchr(injectable, 'M') == NULL) {
-+@@ -720,7 +726,9 @@ static void ptr_move(int dx, int dy) {
-+ 
-+ 	if (db) fprintf(stderr, "ptr_move(%d, %d) fd=%d\n", dx, dy, d);
-+ 
-+-	gettimeofday(&ev.time, NULL);
-++	gettimeofday(&tval, NULL);
-++	ev.input_event_sec = tval.tv_sec;
-++	ev.input_event_usec = tval.tv_usec;
-+ 	ev.type = EV_REL;
-+ 	ev.code = REL_Y;
-+ 	ev.value = dy;
-+@@ -755,6 +763,7 @@ static void apply_tslib(int *x, int *y) {
-+ static void ptr_abs(int x, int y, int p) {
-+ #ifdef UINPUT_OK
-+ 	struct input_event ev;
-++	struct timeval tval;
-+ 	int x0, y0;
-+ 	int d = direct_abs_fd < 0 ? fd : direct_abs_fd;
-+ 
-+@@ -773,7 +782,9 @@ static void ptr_abs(int x, int y, int p) {
-+ 
-+ 	if (db) fprintf(stderr, "ptr_abs(%d, %d => %d %d, p=%d) fd=%d\n", x0, y0, x, y, p, d);
-+ 
-+-	gettimeofday(&ev.time, NULL);
-++	gettimeofday(&tval, NULL);
-++	ev.input_event_sec = tval.tv_sec;
-++	ev.input_event_usec = tval.tv_usec;
-+ 	ev.type = EV_ABS;
-+ 	ev.code = ABS_Y;
-+ 	ev.value = y;
-+@@ -950,6 +961,7 @@ if (0) {usleep(100*1000) ;}
-+ static void button_click(int down, int btn) {
-+ #ifdef UINPUT_OK
-+ 	struct input_event ev;
-++	struct timeval tval;
-+ 	int d = direct_btn_fd < 0 ? fd : direct_btn_fd;
-+ 
-+ 	if (injectable && strchr(injectable, 'B') == NULL) {
-+@@ -959,7 +971,9 @@ static void button_click(int down, int btn) {
-+ 	if (db) fprintf(stderr, "button_click: btn %d %s fd=%d\n", btn, down ? "down" : "up", d);
-+ 
-+ 	memset(&ev, 0, sizeof(ev));
-+-	gettimeofday(&ev.time, NULL);
-++	gettimeofday(&tval, NULL);
-++	ev.input_event_sec = tval.tv_sec;
-++	ev.input_event_usec = tval.tv_usec;
-+ 	ev.type = EV_KEY;
-+ 	ev.value = down;
-+ 
-+@@ -1230,6 +1244,7 @@ void uinput_pointer_command(int mask, int x, int y, rfbClientPtr client) {
-+ void uinput_key_command(int down, int keysym, rfbClientPtr client) {
-+ #ifdef UINPUT_OK
-+ 	struct input_event ev;
-++	struct timeval tval;
-+ 	int scancode;
-+ 	allowed_input_t input;
-+ 	int d = direct_key_fd < 0 ? fd : direct_key_fd;
-+@@ -1253,7 +1268,9 @@ void uinput_key_command(int down, int keysym, rfbClientPtr client) {
-+ 	if (db) fprintf(stderr, "uinput_key_command: %d -> %d %s fd=%d\n", keysym, scancode, down ? "down" : "up", d);
-+ 
-+ 	memset(&ev, 0, sizeof(ev));
-+-	gettimeofday(&ev.time, NULL);
-++	gettimeofday(&tval, NULL);
-++	ev.input_event_sec = tval.tv_sec;
-++	ev.input_event_usec = tval.tv_usec;
-+ 	ev.type = EV_KEY;
-+ 	ev.code = (unsigned char) scancode;
-+ 	ev.value = down;
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
