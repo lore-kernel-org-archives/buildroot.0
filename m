@@ -1,7 +1,10 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 23 Jul 2020 22:04:55 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/ima-evm-utils: fix build on musl
-Message-ID: <20200723200457.3996-1-petr.vorel@gmail.com>
+Date: Thu, 23 Jul 2020 22:04:57 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/ima-evm-utils: fix build for old
+ compilers
+In-Reply-To: <20200723200457.3996-1-petr.vorel@gmail.com>
+References: <20200723200457.3996-1-petr.vorel@gmail.com>
+Message-ID: <20200723200457.3996-3-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,52 +12,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-                   br-arm-cortex-a9-musl [ 7/44]: FAILED
-                br-i386-pentium-mmx-musl [12/44]: FAILED
-                          br-x86-64-musl [34/44]: FAILED
-                          linaro-aarch64 [36/44]: FAILED
-
-Fix will be released in future release (after 1.3), but was needed since
-initial release.
+                     sourcery-arm-armv4t [38/44]: FAILED
+                            sourcery-arm [39/44]: FAILED
+                     sourcery-arm-thumb2 [40/44]: FAILED
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...Fix-missing-u-g-id_t-typedef-on-musl.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/ima-evm-utils/0002-Fix-missing-u-g-id_t-typedef-on-musl.patch
+1.3 specific fix.
 
-diff --git a/package/ima-evm-utils/0002-Fix-missing-u-g-id_t-typedef-on-musl.patch b/package/ima-evm-utils/0002-Fix-missing-u-g-id_t-typedef-on-musl.patch
+ ...ss-Fix-compilation-for-old-compilers.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch
+
+diff --git a/package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch b/package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch
 new file mode 100644
-index 0000000000..0596f68170
+index 0000000000..079c4e0d22
 --- /dev/null
-+++ b/package/ima-evm-utils/0002-Fix-missing-u-g-id_t-typedef-on-musl.patch
-@@ -0,0 +1,29 @@
-+From e74b1c8620ba81682dc6b62bd2783311b99f5bd0 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Wed, 22 Jul 2020 13:10:20 +0200
-+Subject: [PATCH] Fix missing {u,g}id_t typedef on musl
++++ b/package/ima-evm-utils/0001-pcr_tss-Fix-compilation-for-old-compilers.patch
+@@ -0,0 +1,51 @@
++From 8e98b5bbf2127131f968a5d864f86e8443505639 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <pvorel@suse.cz>
++Date: Wed, 22 Jul 2020 12:06:28 +0200
++Subject: [PATCH] pcr_tss: Fix compilation for old compilers
 +
-+Fixes: 273701a ("evmctl - IMA/EVM control tool")
++pcr_tss.c: In function 'pcr_selections_match':
++pcr_tss.c:73:2: error: 'for' loop initial declarations are only allowed in C99 mode
++  for (int i = 0; i < a->count; i++) {
++  ^
++pcr_tss.c:73:2: note: use option -std=c99 or -std=gnu99 to compile your code
++pcr_tss.c:78:3: error: 'for' loop initial declarations are only allowed in C99 mode
++   for (int j = 0; j < a->pcrSelections[i].sizeofSelect; j++) {
++   ^
 +
++Fixes: 03f99ea ("ima-evm-utils: Add support for Intel TSS2 for PCR
++reading")
++
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
 +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[ upstream status: 7f9a59c ("Fix missing {u,g}id_t typedef on musl") ]
++[ upstream status: 1f4e423 ("pcr_tss: Fix compilation for old compilers") ]
 +---
-+ src/imaevm.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/pcr_tss.c | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/imaevm.h b/src/imaevm.h
-+index b881d92..923e2e6 100644
-+--- a/src/imaevm.h
-++++ b/src/imaevm.h
-+@@ -46,7 +46,7 @@
-+ #include <syslog.h>
-+ #include <stdbool.h>
-+ #include <errno.h>
-+-
-++#include <sys/types.h>
-+ #include <openssl/rsa.h>
++diff --git a/src/pcr_tss.c b/src/pcr_tss.c
++index 11b247b..feb1ff7 100644
++--- a/src/pcr_tss.c
+++++ b/src/pcr_tss.c
++@@ -68,14 +68,17 @@ int tpm2_pcr_supported(void)
 + 
-+ #ifdef USE_FPRINTF
++ static int pcr_selections_match(TPML_PCR_SELECTION *a, TPML_PCR_SELECTION *b)
++ {
+++	int i, j;
+++
++ 	if (a->count != b->count)
++ 		return 0;
++-	for (int i = 0; i < a->count; i++) {
+++
+++	for (i = 0; i < a->count; i++) {
++ 		if (a->pcrSelections[i].hash != b->pcrSelections[i].hash)
++ 			return 0;
++ 		if (a->pcrSelections[i].sizeofSelect != b->pcrSelections[i].sizeofSelect)
++ 			return 0;
++-		for (int j = 0; j < a->pcrSelections[i].sizeofSelect; j++) {
+++		for (j = 0; j < a->pcrSelections[i].sizeofSelect; j++) {
++ 			if (a->pcrSelections[i].pcrSelect[j] != b->pcrSelections[i].pcrSelect[j])
++ 				return 0;
++ 		}
 +-- 
 +2.27.0
 +
