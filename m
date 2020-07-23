@@ -1,48 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 09:44:22 +0200
-Subject: [Buildroot] [PATCH 01/12] package/gcr: fix gpg path
-In-Reply-To: <20200723010810.3237608-2-aduskett@gmail.com>
+Date: Thu, 23 Jul 2020 09:47:38 +0200
+Subject: [Buildroot] [PATCH 00/12] package/udisks: bump version to 2.9.0
+In-Reply-To: <20200723010810.3237608-1-aduskett@gmail.com>
 References: <20200723010810.3237608-1-aduskett@gmail.com>
- <20200723010810.3237608-2-aduskett@gmail.com>
-Message-ID: <20200723094422.2a35adb7@windsurf.home>
+Message-ID: <20200723094738.5ad33b9b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Hello,
 
-Thanks for picking up the work on udisks!
-
-On Wed, 22 Jul 2020 18:07:59 -0700
+On Wed, 22 Jul 2020 18:07:58 -0700
 aduskett at gmail.com wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> The size difference between the old and new versions of udisks, even with the
+> additional dependencies is:
 > 
-> gnugpg2 does not create /usr/bin/gpg2, instead, /usr/bin/gpg2 is typically
-> a symlink to /usr/bin/gpg.
-> 
-> Buildroot does not create this symlink, so this path is not valid.
-> Change the path to /usr/bin/gpg to fix this issue.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Old: 56M
+> New: 69M
 
-Back when gcr was introduced in commit
-ec069dcf54cc69c19701a69106acaffdd07023bf, it already had:
+Wow, that's still huge. Do you have a breakdown of that size
+per-package, i.e a "make graph-size" output for both the old and new
+situations ?
 
-+GCR_CONF_ENV = ac_cv_path_GNUPG=/usr/bin/gpg2
+I guess the fact that polkit uses spidermonkey is contributing quite a
+lot to overall size.
 
-so presumably this was working then.
+> I am sure there will be some additional changes requested, as this is a hefty
+> patch series, but * hopefully, * it is broken down enough that Thomas won't
+> complain too much! :)
 
-So I think it is probably 86dfb429ae1770550beb49299ef08ef05605c190 that
-broke that, as it changed the name of the binaries installed by the
-gnupg2 package.
-
-This is the kind of research I would like to see when doing such
-changes: don't just fix the current situation, try to find out how we
-ended up here, so that we understand since when the problem has been
-occurring, whether we need to backport to LTS/stable, etc.
+Hehe :-)
 
 Thomas
 -- 
