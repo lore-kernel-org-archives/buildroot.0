@@ -1,110 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Jul 2020 22:48:51 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic.mk: move
- pkg_size_{before, after} and check_bin_arch functions
-Message-ID: <20200723204430.29AC087B07@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 23 Jul 2020 22:51:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minizip: use pkg-config to find zstd
+Message-ID: <20200723205135.55024-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f97fd4f15eb9c4268823980c4193ed9a2963a3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix build with zstd in version 2.10.0
 
-These functions are no longer using the GLOBAL_INSTRUMENTATION_HOOKS
-mechanism, so it doesn't make much sense for them to be in the section
-of pkg-generic.mk related to those hooks.
+Fixes:
+ - http://autobuild.buildroot.org/results/0fe0ca0a7d39f863614f2aecd9eefc20cd64daf4
 
-Move them to the "Helper functions" section.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-generic.mk | 66 +++++++++++++++++++++++++-------------------------
- 1 file changed, 33 insertions(+), 33 deletions(-)
+ .../0001-Use-pkg-config-to-find-ZSTD.patch    | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 659b8e5661..c63807047b 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -55,39 +55,6 @@ define step_time
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_time
- 
--# Hooks to collect statistics about installed files
--
--# $(1): base directory to search in
--# $(2): suffix of file (optional)
--define pkg_size_before
--	cd $(1); \
--	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
--endef
--
--# $(1): base directory to search in
--# $(2): suffix of file (optional)
--define pkg_size_after
--	cd $(1); \
--	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
--	LC_ALL=C comm -13 \
--		$($(PKG)_DIR)/.files-list$(2).before \
--		$($(PKG)_DIR)/.files-list$(2).after \
--		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
--		> $($(PKG)_DIR)/.files-list$(2).txt
--	rm -f $($(PKG)_DIR)/.files-list$(2).before
--	rm -f $($(PKG)_DIR)/.files-list$(2).after
--endef
--
--define check_bin_arch
--	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
--		-l $($(PKG)_DIR)/.files-list.txt \
--		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
--		-r $(TARGET_READELF) \
--		-a $(BR2_READELF_ARCH_NAME)
--endef
--
- # This hook checks that host packages that need libraries that we build
- # have a proper DT_RPATH or DT_RUNPATH tag
- define check_host_rpath
-@@ -135,6 +102,39 @@ define fixup-libtool-files
- endef
- endif
- 
-+# Functions to collect statistics about installed files
+diff --git a/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch b/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
+new file mode 100644
+index 0000000000..5866099634
+--- /dev/null
++++ b/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
+@@ -0,0 +1,30 @@
++From 69afd09aee3727f2804e1b063ef50800b22c6bb9 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Patrik=20Novotn=C3=BD?= <panovotn@redhat.com>
++Date: Wed, 1 Jul 2020 11:18:08 +0200
++Subject: [PATCH] Use pkg-config to find ZSTD
 +
-+# $(1): base directory to search in
-+# $(2): suffix of file (optional)
-+define pkg_size_before
-+	cd $(1); \
-+	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-+		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
-+endef
++[Retrieved from: https://github.com/nmoinvaz/minizip/pull/509]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
 +
-+# $(1): base directory to search in
-+# $(2): suffix of file (optional)
-+define pkg_size_after
-+	cd $(1); \
-+	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-+		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
-+	LC_ALL=C comm -13 \
-+		$($(PKG)_DIR)/.files-list$(2).before \
-+		$($(PKG)_DIR)/.files-list$(2).after \
-+		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
-+		> $($(PKG)_DIR)/.files-list$(2).txt
-+	rm -f $($(PKG)_DIR)/.files-list$(2).before
-+	rm -f $($(PKG)_DIR)/.files-list$(2).after
-+endef
-+
-+define check_bin_arch
-+	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
-+		-l $($(PKG)_DIR)/.files-list.txt \
-+		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
-+		-r $(TARGET_READELF) \
-+		-a $(BR2_READELF_ARCH_NAME)
-+endef
-+
- ################################################################################
- # Implicit targets -- produce a stamp file for each step of a package build
- ################################################################################
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a6deb4ce..987e7947 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -115,7 +115,13 @@ endif()
++ # Check if zstd installation is present
++ if(MZ_ZSTD)
++     if(NOT ZSTD_FORCE_FETCH)
++-        find_package(ZSTD QUIET)
+++        find_package(PkgConfig)
+++        if(PKGCONFIG_FOUND)
+++            pkg_check_modules(ZSTD libzstd)
+++        endif()
+++        if(NOT ZSTD_FOUND)
+++            find_package(ZSTD QUIET)
+++        endif()
++     endif()
++     if(ZSTD_FOUND AND NOT ZSTD_FORCE_FETCH)
++         message(STATUS "Using ZSTD")
+-- 
+2.27.0
