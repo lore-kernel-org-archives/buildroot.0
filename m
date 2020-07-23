@@ -1,35 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 16:35:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{openjdk,
- openjdk-bin}: bump to version 14.0.2+12
-In-Reply-To: <20200721204958.3089846-1-aduskett@gmail.com>
-References: <20200721204958.3089846-1-aduskett@gmail.com>
-Message-ID: <20200723163555.44fd3d32@windsurf.home>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 23 Jul 2020 16:44:06 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gettext-tiny.hash: remove hash
+ value for gettext-gnu
+In-Reply-To: <20200723162557.637cb778@windsurf.home>
+References: <20200722145417.2195-1-heiko.thiery@gmail.com>
+ <20200723162142.2aca3ea9@windsurf.home>
+ <20200723162557.637cb778@windsurf.home>
+Message-ID: <CAEyMn7ZQ7eBp-aTkV7MWPm9z5_k9p01TLCM5okkykObG=Pg_GA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Jul 2020 13:49:58 -0700
-aduskett at gmail.com wrote:
+Hi Thomas,
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/openjdk-bin/openjdk-bin.hash                          | 2 +-
->  package/openjdk-bin/openjdk-bin.mk                            | 4 ++--
->  .../{14.0.1+7 => 14.0.2+12}/0001-fix-gcc-10-support.patch     | 0
->  package/openjdk/openjdk.hash                                  | 2 +-
->  package/openjdk/openjdk.mk                                    | 4 ++--
->  5 files changed, 6 insertions(+), 6 deletions(-)
->  rename package/openjdk/{14.0.1+7 => 14.0.2+12}/0001-fix-gcc-10-support.patch (100%)
+Am Do., 23. Juli 2020 um 16:25 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Thu, 23 Jul 2020 16:21:42 +0200
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > I don't think gettext-tiny can build after you apply this change, it
+> > should complain that one file that it downloads does not have a hash.
+> > Are you sure you tested this ? If you did, then we have a bug in
+> > Buildroot :-)
 
-Applied to master, thanks.
+Sorry for that .. indeed I did not check that it builds. I faced this
+after doing the bump and the check ;-/
 
-Thomas
+>
+> There's no bug in Buildroot, it really fails:
+>
+> ERROR: No hash found for gettext-0.20.1.tar.xz
+> make: *** [package/pkg-generic.mk:171: /home/thomas/projets/buildroot/output/build/host-gettext-tiny-0.3.2/.stamp_downloaded] Error 1
+>
+> Thomas
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Heko
