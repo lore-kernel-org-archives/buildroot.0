@@ -1,51 +1,43 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 23 Jul 2020 22:03:25 +0200
-Subject: [Buildroot] [PATCH 3/3] package/ima-evm-utils: fix build on musl
-In-Reply-To: <20200723141140.0af45237@windsurf.home>
-References: <20200722193532.32150-1-petr.vorel@gmail.com>
- <20200722193532.32150-3-petr.vorel@gmail.com>
- <20200723141140.0af45237@windsurf.home>
-Message-ID: <20200723200325.GA3734@dell5510>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 23 Jul 2020 22:04:13 +0200
+Subject: [Buildroot] [git commit] package/rpi-userland: bump version to
+ 188d3bf
+Message-ID: <20200723195951.80CC886D3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=060599fc233b94dfec67630ecb62388de96c8b4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On Wed, 22 Jul 2020 21:35:32 +0200
-> Petr Vorel <petr.vorel@gmail.com> wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rpi-userland/rpi-userland.hash | 2 +-
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > Fixes:
-> >                    br-arm-cortex-a9-musl [ 7/44]: FAILED
-> >                 br-i386-pentium-mmx-musl [12/44]: FAILED
-> >                           br-x86-64-musl [34/44]: FAILED
-> >                           linaro-aarch64 [36/44]: FAILED
-
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-
-> Same question as for PATCH 2/3: is this needed after the 1.3 version
-> bump, or is this needed independently of the version bump.
-
-> There are two possibilities:
-
->  - The fixes of PATCH 2/3 and PATCH 3/3 are needed independently of the
->    version bump. In this case, they should be in the patch series
->    *before* the 1.3 version bump, so that we know those fixes can for
->    example be backported to our LTS/stable branch.
-
->  - The fixes of PATCH 2/3 and PATCH 3/3 are needed due to
->    issues/regressions introduced by the 1.3 version bump. In this case,
->    they should be part of the version bump patch itself, to not break
->    bisectability.
-
-Sorry for not taking care for older release.
-Musl fix is there from the beginning. I'm sending v2, where I reflect that.
-
-> Thanks!
-
-> Thomas
-
-Kind regards,
-Petr
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+index 4a10536e74..0db5b7c83f 100644
+--- a/package/rpi-userland/rpi-userland.hash
++++ b/package/rpi-userland/rpi-userland.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f81fe28c636178645fb406cc87f543efa828ca896df856536f7b1b4ab54dfe0e  rpi-userland-6fb59736b1ae80fc62cddfe3309c800f72e1c07e.tar.gz
++sha256  7c58d6b4cdf65acef0ce1f441606df87e25745f78d74e11930383d03100aff4b  rpi-userland-188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e.tar.gz
+ sha256  bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5  LICENCE
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index efb02f719f..9edc92344e 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 6fb59736b1ae80fc62cddfe3309c800f72e1c07e
++RPI_USERLAND_VERSION = 188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3-Clause
+ RPI_USERLAND_LICENSE_FILES = LICENCE
