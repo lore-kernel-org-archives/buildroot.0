@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Jul 2020 09:47:38 +0200
-Subject: [Buildroot] [PATCH 00/12] package/udisks: bump version to 2.9.0
-In-Reply-To: <20200723010810.3237608-1-aduskett@gmail.com>
+Date: Thu, 23 Jul 2020 09:54:21 +0200
+Subject: [Buildroot] [PATCH 02/12] package/libbytesize: new package
+In-Reply-To: <20200723010810.3237608-3-aduskett@gmail.com>
 References: <20200723010810.3237608-1-aduskett@gmail.com>
-Message-ID: <20200723094738.5ad33b9b@windsurf.home>
+ <20200723010810.3237608-3-aduskett@gmail.com>
+Message-ID: <20200723095421.7fca4153@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Adam,
 
-On Wed, 22 Jul 2020 18:07:58 -0700
+In Cc, I'm adding Vadim as there are some gettext-tiny questions below.
+
+On Wed, 22 Jul 2020 18:08:00 -0700
 aduskett at gmail.com wrote:
 
-> The size difference between the old and new versions of udisks, even with the
-> additional dependencies is:
-> 
-> Old: 56M
-> New: 69M
+> Libbytesize is a tiny library providing a C "class" for working with
+> arbitrary big sizes in bytes.
 
-Wow, that's still huge. Do you have a breakdown of that size
-per-package, i.e a "make graph-size" output for both the old and new
-situations ?
+"tiny library", which needs gmp, mpfr and pcre2 :-)
 
-I guess the fact that polkit uses spidermonkey is contributing quite a
-lot to overall size.
+> +LIBBYTESIZE_VERSION = 2.3
+> +LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
+> +LIBBYTESIZE_LICENSE = LGPL-2.1+
+> +LIBBYTESIZE_LICENSE_FILES = LICENSE
+> +LIBBYTESIZE_INSTALL_STAGING = YES
+> +
+> +# gettext-gnu is needed for msgcat which gettext-tiny does not provide,
 
-> I am sure there will be some additional changes requested, as this is a hefty
-> patch series, but * hopefully, * it is broken down enough that Thomas won't
-> complain too much! :)
+Meh, this is not great :-/
 
-Hehe :-)
+I had a quick look, and there is interestingly an issue on the
+gettext-tiny tracker:
+
+  https://github.com/sabotage-linux/gettext-tiny/issues/34
+
+and it precisely says that msgcat and msgfilter are missing to build
+libbytesize. It says msgcat is in fact not used/needed by libbytesize,
+and the msgfilter tool is only used for the Serbian translation.
 
 Thomas
 -- 
