@@ -1,392 +1,320 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Jul 2020 23:07:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zbar: bump to version 0.23.1
-Message-ID: <20200724210738.1077246-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Jul 2020 23:27:00 +0200
+Subject: [Buildroot] [git commit] package/netopeer2: add package
+Message-ID: <20200724212239.99D528832E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add new NLS dependency as well as a patch to fix a build failure
-  without it: https://github.com/mchehab/zbar/issues/90
-- Update indentation in hash file (two spaces)
+commit: https://git.buildroot.net/buildroot/commit/?id=6335ff08570daa6ec905650a8e46b449b0ad1bb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Netopeer2 is a set of tools implementing network configuration
+tools based on the NETCONF Protocol.
+
+Netopeer2 needs libnetconf2 to have SSL/TSL and SSH support, so
+we enable both openssl and libssh+server from netopeer2, so that
+libnetconf2 has appropriate support. But netopeer2 does not use
+either, so does not build-depend on them.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+[yann.morin.1998 at free.fr:
+  - fix dependencies and their comments
+  - explain openssl and libssh+server dependencies
+  - fix codestyle in Config,in, noticed by Adam
+  - fix codestyle in .mk
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...01-zbar-add-some-translation-support.patch | 329 ++++++++++++++++++
- package/zbar/zbar.hash                        |   4 +-
- package/zbar/zbar.mk                          |   5 +-
- 3 files changed, 334 insertions(+), 4 deletions(-)
- create mode 100644 package/zbar/0001-zbar-add-some-translation-support.patch
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...uild-BUGFIX-take-DESTDIR-into-account-649.patch | 33 +++++++++
+ ...pts-CHANGE-use-su-only-for-effective-root.patch | 79 ++++++++++++++++++++++
+ package/netopeer2/Config.in                        | 34 ++++++++++
+ package/netopeer2/S52netopeer2                     | 50 ++++++++++++++
+ package/netopeer2/netopeer2.hash                   |  3 +
+ package/netopeer2/netopeer2.mk                     | 21 ++++++
+ 8 files changed, 222 insertions(+)
 
-diff --git a/package/zbar/0001-zbar-add-some-translation-support.patch b/package/zbar/0001-zbar-add-some-translation-support.patch
-new file mode 100644
-index 0000000000..a505887e15
---- /dev/null
-+++ b/package/zbar/0001-zbar-add-some-translation-support.patch
-@@ -0,0 +1,329 @@
-+From d05911f8d5fb8c1e064bd93ed9ec9f038c5da096 Mon Sep 17 00:00:00 2001
-+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-+Date: Sun, 12 Apr 2020 14:45:40 +0200
-+Subject: [PATCH] zbar: add some translation support
-+
-+A full zBar translation would take a while, but let's take the
-+first step and translate the help messages from the two
-+command line utils.
-+
-+This sets a baseline code to be used by other translations.
-+
-+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-+[Retrieved (and updated to keep only gettext.h) from:
-+https://github.com/mchehab/zbar/commit/d05911f8d5fb8c1e064bd93ed9ec9f038c5da096]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile.am         |  20 ++-
-+ config/config.rpath |   2 +-
-+ configure.ac        |   5 +-
-+ po/Makevars         |  72 +++++++++++
-+ po/POTFILES.in      |   5 +
-+ zbar/gettext.h      | 294 ++++++++++++++++++++++++++++++++++++++++++++
-+ zbarcam/zbarcam.c   |  33 ++++-
-+ zbarimg/zbarimg.c   | 106 ++++++++++------
-+ 8 files changed, 486 insertions(+), 51 deletions(-)
-+ create mode 100644 po/Makevars
-+ create mode 100644 po/POTFILES.in
-+ create mode 100644 zbar/gettext.h
-+
-+diff --git a/zbar/gettext.h b/zbar/gettext.h
-+new file mode 100644
-+index 0000000..bd8e87d
-+--- /dev/null
-++++ b/zbar/gettext.h
-+@@ -0,0 +1,294 @@
-++/* Convenience header for conditional use of GNU <libintl.h>.
-++   Copyright (C) 1995-1998, 2000-2002, 2004-2006, 2009-2018 Free Software
-++   Foundation, Inc.
-++
-++   This program is free software: you can redistribute it and/or modify
-++   it under the terms of the GNU General Public License as published by
-++   the Free Software Foundation; either version 3 of the License, or
-++   (at your option) any later version.
-++
-++   This program is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++   GNU General Public License for more details.
-++
-++   You should have received a copy of the GNU General Public License
-++   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
-++
-++#ifndef _LIBGETTEXT_H
-++#define _LIBGETTEXT_H 1
-++
-++/* NLS can be disabled through the configure --disable-nls option
-++   or through "#define ENABLE NLS 0" before including this file.  */
-++#if defined ENABLE_NLS && ENABLE_NLS
-++
-++/* Get declarations of GNU message catalog functions.  */
-++# include <libintl.h>
-++
-++/* You can set the DEFAULT_TEXT_DOMAIN macro to specify the domain used by
-++   the gettext() and ngettext() macros.  This is an alternative to calling
-++   textdomain(), and is useful for libraries.  */
-++# ifdef DEFAULT_TEXT_DOMAIN
-++#  undef gettext
-++#  define gettext(Msgid) \
-++     dgettext (DEFAULT_TEXT_DOMAIN, Msgid)
-++#  undef ngettext
-++#  define ngettext(Msgid1, Msgid2, N) \
-++     dngettext (DEFAULT_TEXT_DOMAIN, Msgid1, Msgid2, N)
-++# endif
-++
-++#else
-++
-++/* Solaris /usr/include/locale.h includes /usr/include/libintl.h, which
-++   chokes if dcgettext is defined as a macro.  So include it now, to make
-++   later inclusions of <locale.h> a NOP.  We don't include <libintl.h>
-++   as well because people using "gettext.h" will not include <libintl.h>,
-++   and also including <libintl.h> would fail on SunOS 4, whereas <locale.h>
-++   is OK.  */
-++#if defined(__sun)
-++# include <locale.h>
-++#endif
-++
-++/* Many header files from the libstdc++ coming with g++ 3.3 or newer include
-++   <libintl.h>, which chokes if dcgettext is defined as a macro.  So include
-++   it now, to make later inclusions of <libintl.h> a NOP.  */
-++#if defined(__cplusplus) && defined(__GNUG__) && (__GNUC__ >= 3)
-++# include <cstdlib>
-++# if (__GLIBC__ >= 2 && !defined __UCLIBC__) || _GLIBCXX_HAVE_LIBINTL_H
-++#  include <libintl.h>
-++# endif
-++#endif
-++
-++/* Disabled NLS.
-++   The casts to 'const char *' serve the purpose of producing warnings
-++   for invalid uses of the value returned from these functions.
-++   On pre-ANSI systems without 'const', the config.h file is supposed to
-++   contain "#define const".  */
-++# undef gettext
-++# define gettext(Msgid) ((const char *) (Msgid))
-++# undef dgettext
-++# define dgettext(Domainname, Msgid) ((void) (Domainname), gettext (Msgid))
-++# undef dcgettext
-++# define dcgettext(Domainname, Msgid, Category) \
-++    ((void) (Category), dgettext (Domainname, Msgid))
-++# undef ngettext
-++# define ngettext(Msgid1, Msgid2, N) \
-++    ((N) == 1 \
-++     ? ((void) (Msgid2), (const char *) (Msgid1)) \
-++     : ((void) (Msgid1), (const char *) (Msgid2)))
-++# undef dngettext
-++# define dngettext(Domainname, Msgid1, Msgid2, N) \
-++    ((void) (Domainname), ngettext (Msgid1, Msgid2, N))
-++# undef dcngettext
-++# define dcngettext(Domainname, Msgid1, Msgid2, N, Category) \
-++    ((void) (Category), dngettext (Domainname, Msgid1, Msgid2, N))
-++# undef textdomain
-++# define textdomain(Domainname) ((const char *) (Domainname))
-++# undef bindtextdomain
-++# define bindtextdomain(Domainname, Dirname) \
-++    ((void) (Domainname), (const char *) (Dirname))
-++# undef bind_textdomain_codeset
-++# define bind_textdomain_codeset(Domainname, Codeset) \
-++    ((void) (Domainname), (const char *) (Codeset))
-++
-++#endif
-++
-++/* Prefer gnulib's setlocale override over libintl's setlocale override.  */
-++#ifdef GNULIB_defined_setlocale
-++# undef setlocale
-++# define setlocale rpl_setlocale
-++#endif
-++
-++/* A pseudo function call that serves as a marker for the automated
-++   extraction of messages, but does not call gettext().  The run-time
-++   translation is done at a different place in the code.
-++   The argument, String, should be a literal string.  Concatenated strings
-++   and other string expressions won't work.
-++   The macro's expansion is not parenthesized, so that it is suitable as
-++   initializer for static 'char[]' or 'const char[]' variables.  */
-++#define gettext_noop(String) String
-++
-++/* The separator between msgctxt and msgid in a .mo file.  */
-++#define GETTEXT_CONTEXT_GLUE "\004"
-++
-++/* Pseudo function calls, taking a MSGCTXT and a MSGID instead of just a
-++   MSGID.  MSGCTXT and MSGID must be string literals.  MSGCTXT should be
-++   short and rarely need to change.
-++   The letter 'p' stands for 'particular' or 'special'.  */
-++#ifdef DEFAULT_TEXT_DOMAIN
-++# define pgettext(Msgctxt, Msgid) \
-++   pgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
-++#else
-++# define pgettext(Msgctxt, Msgid) \
-++   pgettext_aux (NULL, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
-++#endif
-++#define dpgettext(Domainname, Msgctxt, Msgid) \
-++  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, LC_MESSAGES)
-++#define dcpgettext(Domainname, Msgctxt, Msgid, Category) \
-++  pgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, Category)
-++#ifdef DEFAULT_TEXT_DOMAIN
-++# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
-++   npgettext_aux (DEFAULT_TEXT_DOMAIN, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
-++#else
-++# define npgettext(Msgctxt, Msgid, MsgidPlural, N) \
-++   npgettext_aux (NULL, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
-++#endif
-++#define dnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
-++  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, LC_MESSAGES)
-++#define dcnpgettext(Domainname, Msgctxt, Msgid, MsgidPlural, N, Category) \
-++  npgettext_aux (Domainname, Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid, MsgidPlural, N, Category)
-++
-++#ifdef __GNUC__
-++__inline
-++#else
-++#ifdef __cplusplus
-++inline
-++#endif
-++#endif
-++static const char *
-++pgettext_aux (const char *domain,
-++              const char *msg_ctxt_id, const char *msgid,
-++              int category)
-++{
-++  const char *translation = dcgettext (domain, msg_ctxt_id, category);
-++  if (translation == msg_ctxt_id)
-++    return msgid;
-++  else
-++    return translation;
-++}
-++
-++#ifdef __GNUC__
-++__inline
-++#else
-++#ifdef __cplusplus
-++inline
-++#endif
-++#endif
-++static const char *
-++npgettext_aux (const char *domain,
-++               const char *msg_ctxt_id, const char *msgid,
-++               const char *msgid_plural, unsigned long int n,
-++               int category)
-++{
-++  const char *translation =
-++    dcngettext (domain, msg_ctxt_id, msgid_plural, n, category);
-++  if (translation == msg_ctxt_id || translation == msgid_plural)
-++    return (n == 1 ? msgid : msgid_plural);
-++  else
-++    return translation;
-++}
-++
-++/* The same thing extended for non-constant arguments.  Here MSGCTXT and MSGID
-++   can be arbitrary expressions.  But for string literals these macros are
-++   less efficient than those above.  */
-++
-++#include <string.h>
-++
-++#if (((__GNUC__ >= 3 || __GNUG__ >= 2) && !defined __STRICT_ANSI__) \
-++     /* || (__STDC_VERSION__ == 199901L && !defined __HP_cc)
-++        || (__STDC_VERSION__ >= 201112L && !defined __STDC_NO_VLA__) */ )
-++# define _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS 1
-++#else
-++# define _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS 0
-++#endif
-++
-++#if !_LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS
-++#include <stdlib.h>
-++#endif
-++
-++#define pgettext_expr(Msgctxt, Msgid) \
-++  dcpgettext_expr (NULL, Msgctxt, Msgid, LC_MESSAGES)
-++#define dpgettext_expr(Domainname, Msgctxt, Msgid) \
-++  dcpgettext_expr (Domainname, Msgctxt, Msgid, LC_MESSAGES)
-++
-++#ifdef __GNUC__
-++__inline
-++#else
-++#ifdef __cplusplus
-++inline
-++#endif
-++#endif
-++static const char *
-++dcpgettext_expr (const char *domain,
-++                 const char *msgctxt, const char *msgid,
-++                 int category)
-++{
-++  size_t msgctxt_len = strlen (msgctxt) + 1;
-++  size_t msgid_len = strlen (msgid) + 1;
-++  const char *translation;
-++#if _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS
-++  char msg_ctxt_id[msgctxt_len + msgid_len];
-++#else
-++  char buf[1024];
-++  char *msg_ctxt_id =
-++    (msgctxt_len + msgid_len <= sizeof (buf)
-++     ? buf
-++     : (char *) malloc (msgctxt_len + msgid_len));
-++  if (msg_ctxt_id != NULL)
-++#endif
-++    {
-++      int found_translation;
-++      memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
-++      msg_ctxt_id[msgctxt_len - 1] = '\004';
-++      memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
-++      translation = dcgettext (domain, msg_ctxt_id, category);
-++      found_translation = (translation != msg_ctxt_id);
-++#if !_LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS
-++      if (msg_ctxt_id != buf)
-++        free (msg_ctxt_id);
-++#endif
-++      if (found_translation)
-++        return translation;
-++    }
-++  return msgid;
-++}
-++
-++#define npgettext_expr(Msgctxt, Msgid, MsgidPlural, N) \
-++  dcnpgettext_expr (NULL, Msgctxt, Msgid, MsgidPlural, N, LC_MESSAGES)
-++#define dnpgettext_expr(Domainname, Msgctxt, Msgid, MsgidPlural, N) \
-++  dcnpgettext_expr (Domainname, Msgctxt, Msgid, MsgidPlural, N, LC_MESSAGES)
-++
-++#ifdef __GNUC__
-++__inline
-++#else
-++#ifdef __cplusplus
-++inline
-++#endif
-++#endif
-++static const char *
-++dcnpgettext_expr (const char *domain,
-++                  const char *msgctxt, const char *msgid,
-++                  const char *msgid_plural, unsigned long int n,
-++                  int category)
-++{
-++  size_t msgctxt_len = strlen (msgctxt) + 1;
-++  size_t msgid_len = strlen (msgid) + 1;
-++  const char *translation;
-++#if _LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS
-++  char msg_ctxt_id[msgctxt_len + msgid_len];
-++#else
-++  char buf[1024];
-++  char *msg_ctxt_id =
-++    (msgctxt_len + msgid_len <= sizeof (buf)
-++     ? buf
-++     : (char *) malloc (msgctxt_len + msgid_len));
-++  if (msg_ctxt_id != NULL)
-++#endif
-++    {
-++      int found_translation;
-++      memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
-++      msg_ctxt_id[msgctxt_len - 1] = '\004';
-++      memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
-++      translation = dcngettext (domain, msg_ctxt_id, msgid_plural, n, category);
-++      found_translation = !(translation == msg_ctxt_id || translation == msgid_plural);
-++#if !_LIBGETTEXT_HAVE_VARIABLE_SIZE_ARRAYS
-++      if (msg_ctxt_id != buf)
-++        free (msg_ctxt_id);
-++#endif
-++      if (found_translation)
-++        return translation;
-++    }
-++  return (n == 1 ? msgid : msgid_plural);
-++}
-++
-++#endif /* _LIBGETTEXT_H */
-diff --git a/package/zbar/zbar.hash b/package/zbar/zbar.hash
-index eae5b7ebf5..4277091892 100644
---- a/package/zbar/zbar.hash
-+++ b/package/zbar/zbar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 e99fb8f3be85a76fe24784ad67fecb2da3a02b1e432696b05eefe212d448ad2e zbar-0.23.tar.bz2
--sha256 44260f9252c7fe38ba8dfb645330504f4a375e3a5e9dd7d5d6b9f04adb4952f1 LICENSE.md
-+sha256  dad260b47ef887a639e840a89e5e6e132217b6bba2a8473565d1f459bcb97c1f  zbar-0.23.1.tar.bz2
-+sha256  44260f9252c7fe38ba8dfb645330504f4a375e3a5e9dd7d5d6b9f04adb4952f1  LICENSE.md
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index 0550f3e23f..019df58ebe 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 043e8ce3f4..ad927c6bbe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1090,6 +1090,7 @@ F:	package/python-sip/
+ N:	Heiko Thiery <heiko.thiery@gmail.com>
+ F:	package/libnetconf2/
+ F:	package/libyang/
++F:	package/netopeer2/
+ F:	package/sysrepo/
  
--ZBAR_VERSION = 0.23
-+ZBAR_VERSION = 0.23.1
- ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
- ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
- ZBAR_LICENSE = LGPL-2.1+
-@@ -12,7 +12,8 @@ ZBAR_LICENSE_FILES = LICENSE.md
- ZBAR_INSTALL_STAGING = YES
- ZBAR_DEPENDENCIES = libv4l jpeg
- # add host-gettext for AM_ICONV macro
--ZBAR_DEPENDENCIES += host-gettext
-+ZBAR_DEPENDENCIES += host-gettext $(TARGET_NLS_DEPENDENCIES)
-+ZBAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- # uses C99 features
- ZBAR_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- ZBAR_CONF_OPTS = \
--- 
-2.27.0
+ N:	Henrique Camargo <henrique@henriquecamargo.com>
+diff --git a/package/Config.in b/package/Config.in
+index e6500123f6..3b0b57bc5b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1751,6 +1751,7 @@ menu "Networking"
+ 	source "package/mongoose/Config.in"
+ 	source "package/nanomsg/Config.in"
+ 	source "package/neon/Config.in"
++	source "package/netopeer2/Config.in"
+ 	source "package/nghttp2/Config.in"
+ 	source "package/norm/Config.in"
+ 	source "package/nss-mdns/Config.in"
+diff --git a/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
+new file mode 100644
+index 0000000000..bff4337fe7
+--- /dev/null
++++ b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
+@@ -0,0 +1,33 @@
++From c6afffafd1e27054ff59b82ffed3a99795814631 Mon Sep 17 00:00:00 2001
++From: Heiko Thiery <heiko.thiery@gmail.com>
++Date: Mon, 8 Jun 2020 09:47:58 +0200
++Subject: [PATCH] build BUGFIX take DESTDIR into account (#649)
++
++When installing yang modules add DESTDIR prefix to the NP2_MODULE_DIR.
++
++Fixes #648
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++[patch taken from upstream:
++https://github.com/CESNET/netopeer2/commit/726b1384a3f93090ede1143da86c99d5d24d06c5]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ scripts/setup.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/scripts/setup.sh b/scripts/setup.sh
++index 7175bc4..81abf63 100755
++--- a/scripts/setup.sh
+++++ b/scripts/setup.sh
++@@ -8,7 +8,7 @@ fi
++ 
++ # avoid problems with sudo path
++ SYSREPOCTL=`su -c "which sysrepoctl" $USER`
++-MODDIR=${NP2_MODULE_DIR}
+++MODDIR=${DESTDIR}${NP2_MODULE_DIR}
++ PERMS=${NP2_MODULE_PERMS}
++ OWNER=${NP2_MODULE_OWNER}
++ GROUP=${NP2_MODULE_GROUP}
++-- 
++2.20.1
++
+diff --git a/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
+new file mode 100644
+index 0000000000..b960a87beb
+--- /dev/null
++++ b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
+@@ -0,0 +1,79 @@
++From 71cc996faa5500b3bfd499ad0c436c8b96629ea7 Mon Sep 17 00:00:00 2001
++From: Michal Vasko <mvasko@cesnet.cz>
++Date: Wed, 10 Jun 2020 15:20:23 +0200
++Subject: [PATCH] scripts CHANGE use su only for effective root
++
++Fixes #645
++
++[patch taken from upstream:
++https://github.com/CESNET/netopeer2/commit/2161b333009c21ffc8501e5127b82e6f0570ca8e]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ scripts/merge_config.sh  |  8 ++++++--
++ scripts/merge_hostkey.sh | 11 ++++++++---
++ scripts/setup.sh         |  8 ++++++--
++ 3 files changed, 20 insertions(+), 7 deletions(-)
++
++diff --git a/scripts/merge_config.sh b/scripts/merge_config.sh
++index dde0c75..4ad151c 100755
++--- a/scripts/merge_config.sh
+++++ b/scripts/merge_config.sh
++@@ -2,8 +2,12 @@
++ 
++ set -e
++ 
++-# avoid problems with sudo path
++-SYSREPOCFG=`su -c "which sysrepocfg" $USER`
+++# avoid problems with sudo PATH
+++if [ `id -u` -eq 0 ]; then
+++    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
+++else
+++    SYSREPOCFG=`which sysrepocfg`
+++fi
++ KS_KEY_NAME=genkey
++ 
++ # check that there is no listen/Call Home configuration yet
++diff --git a/scripts/merge_hostkey.sh b/scripts/merge_hostkey.sh
++index 87947fa..a0677ee 100755
++--- a/scripts/merge_hostkey.sh
+++++ b/scripts/merge_hostkey.sh
++@@ -2,9 +2,14 @@
++ 
++ set -e
++ 
++-# avoid problems with sudo path
++-SYSREPOCFG=`su -c "which sysrepocfg" $USER`
++-OPENSSL=`su -c "which openssl" $USER`
+++# avoid problems with sudo PATH
+++if [ `id -u` -eq 0 ]; then
+++    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
+++    OPENSSL=`su -c 'which openssl' -l $USER`
+++else
+++    SYSREPOCFG=`which sysrepocfg`
+++    OPENSSL=`which openssl`
+++fi
++ 
++ # check that there is no SSH key with this name yet
++ KEYSTORE_KEY=`$SYSREPOCFG -X -x "/ietf-keystore:keystore/asymmetric-keys/asymmetric-key[name='genkey']/name"`
++diff --git a/scripts/setup.sh b/scripts/setup.sh
++index 81abf63..8bf6825 100755
++--- a/scripts/setup.sh
+++++ b/scripts/setup.sh
++@@ -6,8 +6,12 @@ if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" -o -z "$NP2_MODULE_OWNER" -o
++     exit 1
++ fi
++ 
++-# avoid problems with sudo path
++-SYSREPOCTL=`su -c "which sysrepoctl" $USER`
+++# avoid problems with sudo PATH
+++if [ `id -u` -eq 0 ]; then
+++    SYSREPOCTL=`su -c 'which sysrepoctl' -l $USER`
+++else
+++    SYSREPOCTL=`which sysrepoctl`
+++fi
++ MODDIR=${DESTDIR}${NP2_MODULE_DIR}
++ PERMS=${NP2_MODULE_PERMS}
++ OWNER=${NP2_MODULE_OWNER}
++-- 
++2.20.1
++
+diff --git a/package/netopeer2/Config.in b/package/netopeer2/Config.in
+new file mode 100644
+index 0000000000..763b1f234b
+--- /dev/null
++++ b/package/netopeer2/Config.in
+@@ -0,0 +1,34 @@
++comment "netopeer2 needs a toolchain w/ gcc >= 4.8, C++, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++config BR2_PACKAGE_NETOPEER2
++	bool "netopeer2"
++	depends on BR2_USE_MMU # libnetconf2, libssh, sysrepo
++	depends on !BR2_STATIC_LIBS # libnetconf2, libssh, libyang, sysrepo
++	depends on BR2_INSTALL_LIBSTDCPP # sysrepo
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sysrepo
++	select BR2_PACKAGE_LIBNETCONF2
++	select BR2_PACKAGE_LIBSSH
++	select BR2_PACKAGE_LIBSSH_SERVER # For libnetconf2 to have SSH
++	select BR2_PACKAGE_LIBYANG
++	select BR2_PACKAGE_OPENSSL # For libnetconf2 to have TLS
++	select BR2_PACKAGE_SYSREPO
++	help
++	  Netopeer2 is a set of tools implementing network configuration
++	  tools based on the NETCONF Protocol.
++
++	  This is the server part.
++
++	  https://github.com/CESNET/Netopeer2
++
++if BR2_PACKAGE_NETOPEER2
++
++config BR2_PACKAGE_NETOPEER2_CLI
++	bool "cli"
++	help
++	  Enable netopeer2 CLI.
++
++endif
+diff --git a/package/netopeer2/S52netopeer2 b/package/netopeer2/S52netopeer2
+new file mode 100644
+index 0000000000..cf53a8f109
+--- /dev/null
++++ b/package/netopeer2/S52netopeer2
+@@ -0,0 +1,50 @@
++#!/bin/sh
++
++DAEMON="netopeer2-server"
++PIDFILE="/var/run/$DAEMON.pid"
++
++NETOPEER2_SERVER_ARGS=""
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++
++	start-stop-daemon -S -b -q -p $PIDFILE -x "/usr/bin/$DAEMON" \
++		-- $NETOPEER2_SERVER_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p $PIDFILE
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++reload() {
++	# we do not support real reload .. just restart
++	restart
++}
++
++case "$1" in
++	start|stop|restart|reload)
++		"$1";;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++esac
+diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
+new file mode 100644
+index 0000000000..93a094d563
+--- /dev/null
++++ b/package/netopeer2/netopeer2.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  66f3ad68cc6e41f3231b090ef27016ccbfe007cda7d08ec19f409f7429f46ff9  netopeer2-1.1.34.tar.gz
++sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+new file mode 100644
+index 0000000000..641666e8d3
+--- /dev/null
++++ b/package/netopeer2/netopeer2.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# netopeer2
++#
++################################################################################
++
++NETOPEER2_VERSION = 1.1.34
++NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
++NETOPEER2_DL_SUBDIR = netopeer2
++NETOPEER2_LICENSE = BSD-3-Clause
++NETOPEER2_LICENSE_FILES = LICENSE
++NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
++
++NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
++
++define NETOPEER2_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
++		$(TARGET_DIR)/etc/init.d/S52netopeer2
++endef
++
++$(eval $(cmake-package))
