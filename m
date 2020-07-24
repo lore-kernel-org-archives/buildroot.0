@@ -1,54 +1,43 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jul 2020 18:21:28 +0200
-Subject: [Buildroot] [PATCH 10/10] package/perl-mail-dkim: bump to version
- 1.20200708
-In-Reply-To: <20200724162128.2752535-1-francois.perrad@gadz.org>
-References: <20200724162128.2752535-1-francois.perrad@gadz.org>
-Message-ID: <20200724162128.2752535-10-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 24 Jul 2020 20:43:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qlibc: bump to version 2.4.5
+Message-ID: <20200724184319.987594-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- new scheme for version
-- LICENSE file added
+Update indentation in hash file (two spaces)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 7 +++++--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 4 +++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/qlibc/qlibc.hash | 4 ++--
+ package/qlibc/qlibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index 86a638479..99ba275d7 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
-@@ -1,3 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9b03bcd334cbf22a93fd94af9935e11b Mail-DKIM-0.58.tar.gz
--sha256 0a43a42b528a435f9e393171bf8ca1dc0cb54092f1d120d6299e615c0c55f331 Mail-DKIM-0.58.tar.gz
-+md5  f911799d8b9418ea1299323587ad7319  Mail-DKIM-1.20200708.tar.gz
-+sha256  d9d21f4f9960a174d45f9660ab5d52db667b9af57182ff4e4d7fc33316a51e54  Mail-DKIM-1.20200708.tar.gz
-+
-+# computed by scancpan
-+sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index d331fe9d6..5d45f0335 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
+index 616194f8d9..6abb16b274 100644
+--- a/package/qlibc/qlibc.hash
++++ b/package/qlibc/qlibc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 93512e2203aaadda7aa62039b29500d9236b878e16f070328c58dc9d23da94d7  qlibc-2.4.4.tar.gz
+-sha256 7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
++sha256  e195c97453c260acea4421146ba992d9a4d89732eac345b3765c43cc3326d2ad  qlibc-2.4.5.tar.gz
++sha256  7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
+diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
+index 1b234f7e47..6cce8201bd 100644
+--- a/package/qlibc/qlibc.mk
++++ b/package/qlibc/qlibc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 0.58
-+PERL_MAIL_DKIM_VERSION = 1.20200708
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
-+PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
-+PERL_MAIL_DKIM_LICENSE_FILES = LICENSE
- PERL_MAIL_DKIM_DISTNAME = Mail-DKIM
- 
- $(eval $(perl-package))
+-QLIBC_VERSION = 2.4.4
++QLIBC_VERSION = 2.4.5
+ QLIBC_SITE = $(call github,wolkykim,qlibc,v$(QLIBC_VERSION))
+ QLIBC_LICENSE = BSD-2-Clause
+ QLIBC_LICENSE_FILES = LICENSE
 -- 
-2.25.1
+2.27.0
