@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Jul 2020 21:53:31 +0200
-Subject: [Buildroot] [PATCH 08/11] package/pkg-generic.mk: detect files
- overwritten in TARGET_DIR and HOST_DIR
-In-Reply-To: <20200501212318.GD15673@scaer>
+Date: Fri, 24 Jul 2020 22:11:44 +0200
+Subject: [Buildroot] [PATCH 09/11] support/testing/infra: add
+ log_file_path() function
+In-Reply-To: <20200430095249.782597-10-thomas.petazzoni@bootlin.com>
 References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
- <20200430095249.782597-9-thomas.petazzoni@bootlin.com>
- <20200501212318.GD15673@scaer>
-Message-ID: <20200724195331.GI2296@scaer>
+ <20200430095249.782597-10-thomas.petazzoni@bootlin.com>
+Message-ID: <20200724201144.GJ2296@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +14,73 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2020-05-01 23:23 +0200, Yann E. MORIN spake thusly:
-> On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> > +# $(1): base directory to search in
-> > +# $(2): suffix of file (optional)
-> > +define pkg_detect_overwrite_before
-> > +	cd $(1); \
-> > +	LC_ALL=C find . -type f -exec md5sum {} \; > $($(PKG)_DIR)/.files$(2).md5
+Some pythonery below...
 
-Note that this is very slow: it spawns a new md5sum process for each
-file it encounters.
+On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
+> Some tests will need to grep through the build log to verify that some
+> features are working are expected. In order to allow them to open the
+> build log, we provide a new function called log_file_path(), which
+> returns the path to the log file if available.
+> 
+> We also use this function in open_log_file().
+> 
+> Note that open_log_file() cannot be used directly to grep through the
+> log file at the end of a build: because it opens in "a+" mode, it
+> greps starting from the end of the file.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/testing/infra/__init__.py | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+> index 6392aa679b..aaee055ee6 100644
+> --- a/support/testing/infra/__init__.py
+> +++ b/support/testing/infra/__init__.py
+> @@ -10,14 +10,23 @@ ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
+>  BASE_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../.."))
+>  
+>  
+> +def log_file_path(builddir, stage, logtofile=True):
+> +    """Return path to log file"""
+> +    if logtofile:
+> +        return "{}-{}.log".format(builddir, stage)
+> +    else:
+> +        return None
 
-There is a better solution, though:
+    def log_file_path(builddir, stage, logtofile=True):
+        """
+        blabla
+        """
+        return "{}-{}.log".format(builddir, stage) if logtofile else None
 
-    find $(1) -type f -print0 |xargs -0 md5sum > $($(PKG)_DIR)/.files$(2).md5
+>  def open_log_file(builddir, stage, logtofile=True):
+>      """
+>      Open a file for logging and return its handler.
+>      If logtofile is True, returns sys.stdout. Otherwise opens a file
+>      with a suitable name in the build directory.
+>      """
+> -    if logtofile:
+> -        fhandle = open("{}-{}.log".format(builddir, stage), 'a+')
+> +    logf = log_file_path(builddir, stage, logtofile)
+> +    if logf:
+> +        fhandle = open(logf, 'a+')
+>      else:
+>          fhandle = sys.stdout
+>      return fhandle
 
-Your original code took 11s (the second time, with a hot VFS cache),
-while my proposal got it down to 2s (again, hot VFS cache).
-
-We could also try to parallelise the job:
-
-    find $(1) -type f -print0 |xargs -P $(PARALLEL_JOBS) -0 md5sum > $($(PKG)_DIR)/.files$(2).md5
+    def open_log_file(builddir, stage, logtofile=True):
+        """
+        blabla
+        """
+        return open(log_file_path(builddir, stage, logtofile), 'a+') if logtofile else sys.stdout
 
 Regards,
 Yann E. MORIN.
+
+> -- 
+> 2.25.4
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
