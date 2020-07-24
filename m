@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 24 Jul 2020 16:25:50 -0700
-Subject: [Buildroot] [PATCH v2 02/13] package/libblockdev: new package
+Date: Fri, 24 Jul 2020 16:25:52 -0700
+Subject: [Buildroot] [PATCH v2 04/13] package/libblockdev: add support for
+ crypto plugin
 In-Reply-To: <20200724232601.2441272-1-aduskett@gmail.com>
 References: <20200724232601.2441272-1-aduskett@gmail.com>
-Message-ID: <20200724232601.2441272-3-aduskett@gmail.com>
+Message-ID: <20200724232601.2441272-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,137 +13,62 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-libblockdev is a C library supporting GObject introspection for manipulation
-of block devices. It has a plugin-based architecture where each technology
-(like LVM, Btrfs, MD RAID, Swap,...) is implemented in a separate plugin,
-possibly with multiple implementations.
-
-Gobject-introspection is not a strict dependency and may be disabled via a
-configure flag.
-
-This is the base package with everything disabled, the subsequent patches in
-this series will add more options necessary to bump udisk to the latest
-
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes V1 -> v2:
-  - Rework dependencies. (Thomas)
+Changes v1 -> v2:
+  - Only depend on and select the cryptsetup package.
+    The volume-key and libnss packages are only necessary if --with-escrow is
+    passed as a conf opt.
 
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/libblockdev/Config.in        | 22 ++++++++++++++++
- package/libblockdev/libblockdev.hash |  3 +++
- package/libblockdev/libblockdev.mk   | 39 ++++++++++++++++++++++++++++
- 5 files changed, 66 insertions(+)
- create mode 100644 package/libblockdev/Config.in
- create mode 100644 package/libblockdev/libblockdev.hash
- create mode 100644 package/libblockdev/libblockdev.mk
+ package/libblockdev/Config.in      | 11 +++++++++++
+ package/libblockdev/libblockdev.mk |  8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 043e8ce3f4..cd489754ed 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-vaapi/
- F:	package/imx-usb-loader/
- F:	package/janus-gateway/
- F:	package/json-for-modern-cpp/
-+F:	package/libblockdev/
- F:	package/libcpprestsdk/
- F:	package/libcutl/
- F:	package/libodb/
-diff --git a/package/Config.in b/package/Config.in
-index e6500123f6..faf3768a96 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1493,6 +1493,7 @@ menu "Hardware handling"
- 	source "package/let-me-create/Config.in"
- 	source "package/libaio/Config.in"
- 	source "package/libatasmart/Config.in"
-+	source "package/libblockdev/Config.in"
- 	source "package/libcec/Config.in"
- 	source "package/libfreefare/Config.in"
- 	source "package/libftdi/Config.in"
 diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-new file mode 100644
-index 0000000000..4fd80f1f5c
---- /dev/null
+index 4fd80f1f5c..50c84c0c4d 100644
+--- a/package/libblockdev/Config.in
 +++ b/package/libblockdev/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LIBBLOCKDEV
-+	bool "libblockdev"
-+	depends on !BR2_STATIC_LIBS # kmod
-+	depends on BR2_USE_WCHAR # libglib2 -> gettext
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # fork() # libglib2
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_KMOD
-+	help
-+	  libblockdev is a C library supporting GObject introspection
-+	  for manipulation of block devices. It has a plugin-based
-+	  architecture where each technology (like LVM, Btrfs, MD RAID,
-+	  Swap,...) is implemented in a separate plugin, possibly with
-+	  multiple implementations.
+@@ -16,6 +16,17 @@ config BR2_PACKAGE_LIBBLOCKDEV
+ 
+ 	  https://github.com/storaged-project/libblockdev/
+ 
++if BR2_PACKAGE_LIBBLOCKDEV
 +
-+	  https://github.com/storaged-project/libblockdev/
++comment "plugins"
 +
-+comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-new file mode 100644
-index 0000000000..1c4b1ec7bf
---- /dev/null
-+++ b/package/libblockdev/libblockdev.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  dc207c70dbef52c818a8abbcb6b8e298a6b63c0b78a5e1f2773b5f7b89300773  libblockdev-2.24.tar.gz
-+sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
++config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
++	bool "crypto"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
++	select BR2_PACKAGE_CRYPTSETUP
++
++endif
++
+ comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV
 diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-new file mode 100644
-index 0000000000..3040a2a690
---- /dev/null
+index 3040a2a690..bb6fbcdda1 100644
+--- a/package/libblockdev/libblockdev.mk
 +++ b/package/libblockdev/libblockdev.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# libblockdev
-+#
-+################################################################################
+@@ -16,7 +16,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--with-loop \
+ 	--without-bcache \
+ 	--without-btrfs \
+-	--without-crypto \
+ 	--without-dm \
+ 	--without-dmraid \
+ 	--without-escrow \
+@@ -36,4 +35,11 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--without-tools \
+ 	--without-vdo
+ 
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
++LIBBLOCKDEV_DEPENDENCIES += cryptsetup
++LIBBLOCKDEV_CONF_OPTS += --with-crypto
++else
++LIBBLOCKDEV_CONF_OPTS += --without-crypto
++endif
 +
-+LIBBLOCKDEV_VERSION = 2.24
-+LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
-+LIBBLOCKDEV_LICENSE = LGPL-2.1
-+LIBBLOCKDEV_LICENSE_FILES = LICENSE
-+LIBBLOCKDEV_INSTALL_STAGING = YES
-+LIBBLOCKDEV_DEPENDENCIES = host-pkgconf libglib2 kmod udev
-+
-+LIBBLOCKDEV_CONF_OPTS = \
-+	--disable-introspection \
-+	--with-loop \
-+	--without-bcache \
-+	--without-btrfs \
-+	--without-crypto \
-+	--without-dm \
-+	--without-dmraid \
-+	--without-escrow \
-+	--without-fs \
-+	--without-kbd \
-+	--without-loop \
-+	--without-lvm \
-+	--without-lvm_dbus \
-+	--without-mdraid \
-+	--without-mpath \
-+	--without-nvdimm \
-+	--without-parted \
-+	--without-python2 \
-+	--without-python3 \
-+	--without-s390 \
-+	--without-swap \
-+	--without-tools \
-+	--without-vdo
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
 -- 
 2.26.2
