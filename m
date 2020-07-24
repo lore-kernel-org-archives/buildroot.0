@@ -1,353 +1,142 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Jul 2020 23:29:26 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/netopeer2: add package
-In-Reply-To: <20200616121644.7039-1-heiko.thiery@gmail.com>
-References: <20200616121644.7039-1-heiko.thiery@gmail.com>
-Message-ID: <20200724212926.GK2296@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 25 Jul 2020 01:13:41 +0200
+Subject: [Buildroot] [PATCH] package/gcc: bump to gcc 10.2
+Message-ID: <20200724231341.666961-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+Remove upstream patch backported to gcc 10.2:
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e86ae54172bb982e3c9d5aa62d20be5b72fe0f24
 
-On 2020-06-16 14:16 +0200, Heiko Thiery spake thusly:
-> Netopeer2 is a set of tools implementing network configuration
-> tools based on the NETCONF Protocol. This is the second
-> generation of the toolset, originally available as the Netopeer
-> project. Netopeer2 is based on the new generation of the NETCONF
-> and YANG libraries - libyang and libnetconf2. The Netopeer
-> server uses sysrepo as a NETCONF datastore implementation.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+"GCC 10.2 is a bug-fix release from the GCC 10 branch
+containing important fixes for regressions and serious bugs in
+GCC 10.1 with more than 94 bugs fixed since the previous release."
 
-Applied to master, after doing a bunch of changes:
+https://gcc.gnu.org/pipermail/gcc-announce/2020/000164.html
 
-  - fix dependencies and their comments
-  - explain openssl and libssh+server dependencies
-  - fix codestyle in Config,in, noticed by Adam
-  - fix codestyle in .mk
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...move-SELFTEST_DEPS-before-including-.patch | 79 -------------------
+ package/gcc/Config.in.host                    |  2 +-
+ package/gcc/gcc.hash                          |  4 +-
+ 3 files changed, 3 insertions(+), 82 deletions(-)
+ delete mode 100644 package/gcc/10.1.0/0001-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
 
-Please review the commit I pushed for more details.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  ...BUGFIX-take-DESTDIR-into-account-649.patch | 33 ++++++++
->  ...HANGE-use-su-only-for-effective-root.patch | 79 +++++++++++++++++++
->  package/netopeer2/Config.in                   | 36 +++++++++
->  package/netopeer2/S52netopeer2                | 50 ++++++++++++
->  package/netopeer2/netopeer2.hash              |  3 +
->  package/netopeer2/netopeer2.mk                | 22 ++++++
->  8 files changed, 225 insertions(+)
->  create mode 100644 package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
->  create mode 100644 package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
->  create mode 100644 package/netopeer2/Config.in
->  create mode 100644 package/netopeer2/S52netopeer2
->  create mode 100644 package/netopeer2/netopeer2.hash
->  create mode 100644 package/netopeer2/netopeer2.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 76a153d695..57628fbead 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1080,6 +1080,7 @@ F:	package/python-sip/
->  N:	Heiko Thiery <heiko.thiery@gmail.com>
->  F:	package/libnetconf2/
->  F:	package/libyang/
-> +F:	package/netopeer2/
->  F:	package/sysrepo/
->  
->  N:	Henrique Camargo <henrique@henriquecamargo.com>
-> diff --git a/package/Config.in b/package/Config.in
-> index d32eadab88..bd89fed041 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1739,6 +1739,7 @@ menu "Networking"
->  	source "package/mongoose/Config.in"
->  	source "package/nanomsg/Config.in"
->  	source "package/neon/Config.in"
-> +	source "package/netopeer2/Config.in"
->  	source "package/nghttp2/Config.in"
->  	source "package/norm/Config.in"
->  	source "package/nss-mdns/Config.in"
-> diff --git a/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
-> new file mode 100644
-> index 0000000000..bff4337fe7
-> --- /dev/null
-> +++ b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
-> @@ -0,0 +1,33 @@
-> +From c6afffafd1e27054ff59b82ffed3a99795814631 Mon Sep 17 00:00:00 2001
-> +From: Heiko Thiery <heiko.thiery@gmail.com>
-> +Date: Mon, 8 Jun 2020 09:47:58 +0200
-> +Subject: [PATCH] build BUGFIX take DESTDIR into account (#649)
-> +
-> +When installing yang modules add DESTDIR prefix to the NP2_MODULE_DIR.
-> +
-> +Fixes #648
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[patch taken from upstream:
-> +https://github.com/CESNET/netopeer2/commit/726b1384a3f93090ede1143da86c99d5d24d06c5]
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + scripts/setup.sh | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/scripts/setup.sh b/scripts/setup.sh
-> +index 7175bc4..81abf63 100755
-> +--- a/scripts/setup.sh
-> ++++ b/scripts/setup.sh
-> +@@ -8,7 +8,7 @@ fi
-> + 
-> + # avoid problems with sudo path
-> + SYSREPOCTL=`su -c "which sysrepoctl" $USER`
-> +-MODDIR=${NP2_MODULE_DIR}
-> ++MODDIR=${DESTDIR}${NP2_MODULE_DIR}
-> + PERMS=${NP2_MODULE_PERMS}
-> + OWNER=${NP2_MODULE_OWNER}
-> + GROUP=${NP2_MODULE_GROUP}
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
-> new file mode 100644
-> index 0000000000..b960a87beb
-> --- /dev/null
-> +++ b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
-> @@ -0,0 +1,79 @@
-> +From 71cc996faa5500b3bfd499ad0c436c8b96629ea7 Mon Sep 17 00:00:00 2001
-> +From: Michal Vasko <mvasko@cesnet.cz>
-> +Date: Wed, 10 Jun 2020 15:20:23 +0200
-> +Subject: [PATCH] scripts CHANGE use su only for effective root
-> +
-> +Fixes #645
-> +
-> +[patch taken from upstream:
-> +https://github.com/CESNET/netopeer2/commit/2161b333009c21ffc8501e5127b82e6f0570ca8e]
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + scripts/merge_config.sh  |  8 ++++++--
-> + scripts/merge_hostkey.sh | 11 ++++++++---
-> + scripts/setup.sh         |  8 ++++++--
-> + 3 files changed, 20 insertions(+), 7 deletions(-)
-> +
-> +diff --git a/scripts/merge_config.sh b/scripts/merge_config.sh
-> +index dde0c75..4ad151c 100755
-> +--- a/scripts/merge_config.sh
-> ++++ b/scripts/merge_config.sh
-> +@@ -2,8 +2,12 @@
-> + 
-> + set -e
-> + 
-> +-# avoid problems with sudo path
-> +-SYSREPOCFG=`su -c "which sysrepocfg" $USER`
-> ++# avoid problems with sudo PATH
-> ++if [ `id -u` -eq 0 ]; then
-> ++    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
-> ++else
-> ++    SYSREPOCFG=`which sysrepocfg`
-> ++fi
-> + KS_KEY_NAME=genkey
-> + 
-> + # check that there is no listen/Call Home configuration yet
-> +diff --git a/scripts/merge_hostkey.sh b/scripts/merge_hostkey.sh
-> +index 87947fa..a0677ee 100755
-> +--- a/scripts/merge_hostkey.sh
-> ++++ b/scripts/merge_hostkey.sh
-> +@@ -2,9 +2,14 @@
-> + 
-> + set -e
-> + 
-> +-# avoid problems with sudo path
-> +-SYSREPOCFG=`su -c "which sysrepocfg" $USER`
-> +-OPENSSL=`su -c "which openssl" $USER`
-> ++# avoid problems with sudo PATH
-> ++if [ `id -u` -eq 0 ]; then
-> ++    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
-> ++    OPENSSL=`su -c 'which openssl' -l $USER`
-> ++else
-> ++    SYSREPOCFG=`which sysrepocfg`
-> ++    OPENSSL=`which openssl`
-> ++fi
-> + 
-> + # check that there is no SSH key with this name yet
-> + KEYSTORE_KEY=`$SYSREPOCFG -X -x "/ietf-keystore:keystore/asymmetric-keys/asymmetric-key[name='genkey']/name"`
-> +diff --git a/scripts/setup.sh b/scripts/setup.sh
-> +index 81abf63..8bf6825 100755
-> +--- a/scripts/setup.sh
-> ++++ b/scripts/setup.sh
-> +@@ -6,8 +6,12 @@ if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" -o -z "$NP2_MODULE_OWNER" -o
-> +     exit 1
-> + fi
-> + 
-> +-# avoid problems with sudo path
-> +-SYSREPOCTL=`su -c "which sysrepoctl" $USER`
-> ++# avoid problems with sudo PATH
-> ++if [ `id -u` -eq 0 ]; then
-> ++    SYSREPOCTL=`su -c 'which sysrepoctl' -l $USER`
-> ++else
-> ++    SYSREPOCTL=`which sysrepoctl`
-> ++fi
-> + MODDIR=${DESTDIR}${NP2_MODULE_DIR}
-> + PERMS=${NP2_MODULE_PERMS}
-> + OWNER=${NP2_MODULE_OWNER}
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/netopeer2/Config.in b/package/netopeer2/Config.in
-> new file mode 100644
-> index 0000000000..fcf3aaf57d
-> --- /dev/null
-> +++ b/package/netopeer2/Config.in
-> @@ -0,0 +1,36 @@
-> +comment "netopeer2 needs a toolchain w/ C++, threads, dynamic library, host gcc >= 4.8"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-> +		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_HOST_GCC_AT_LEAST_4_8
-> +
-> +config BR2_PACKAGE_NETOPEER2
-> +	bool "netopeer2"
-> +	depends on BR2_USE_MMU # sysrepo
-> +	depends on !BR2_STATIC_LIBS # sysrepo
-> +	depends on BR2_INSTALL_LIBSTDCPP # sysrepo
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	select BR2_PACKAGE_LIBYANG
-> +	select BR2_PACKAGE_LIBNETCONF2
-> +	select BR2_PACKAGE_PCRE # sysrepo
-> +	select BR2_PACKAGE_PCRE_UCP # syrepo
-> +	select BR2_PACKAGE_SYSREPO
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBSSH
-> +	select BR2_PACKAGE_LIBSSH_SERVER
-> +
-> +	help
-> +	  Netopeer2 is a set of tools implementing network
-> +	  configuration tools based on the NETCONF Protocol.
-> +
-> +	  This is the server part.
-> +
-> +	  https://github.com/CESNET/Netopeer2
-> +
-> +if BR2_PACKAGE_NETOPEER2
-> +
-> +config BR2_PACKAGE_NETOPEER2_CLI
-> +       bool "cli"
-> +       help
-> +         Enable netopeer2 CLI.
-> +
-> +endif
-> diff --git a/package/netopeer2/S52netopeer2 b/package/netopeer2/S52netopeer2
-> new file mode 100644
-> index 0000000000..cf53a8f109
-> --- /dev/null
-> +++ b/package/netopeer2/S52netopeer2
-> @@ -0,0 +1,50 @@
-> +#!/bin/sh
-> +
-> +DAEMON="netopeer2-server"
-> +PIDFILE="/var/run/$DAEMON.pid"
-> +
-> +NETOPEER2_SERVER_ARGS=""
-> +
-> +start() {
-> +	printf 'Starting %s: ' "$DAEMON"
-> +
-> +	start-stop-daemon -S -b -q -p $PIDFILE -x "/usr/bin/$DAEMON" \
-> +		-- $NETOPEER2_SERVER_ARGS
-> +	status=$?
-> +	if [ "$status" -eq 0 ]; then
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "$status"
-> +}
-> +
-> +stop() {
-> +	printf 'Stopping %s: ' "$DAEMON"
-> +	start-stop-daemon -K -q -p $PIDFILE
-> +	status=$?
-> +	if [ "$status" -eq 0 ]; then
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "$status"
-> +}
-> +
-> +restart() {
-> +	stop
-> +	sleep 1
-> +	start
-> +}
-> +
-> +reload() {
-> +	# we do not support real reload .. just restart
-> +	restart
-> +}
-> +
-> +case "$1" in
-> +	start|stop|restart|reload)
-> +		"$1";;
-> +	*)
-> +		echo "Usage: $0 {start|stop|restart|reload}"
-> +esac
-> diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
-> new file mode 100644
-> index 0000000000..93a094d563
-> --- /dev/null
-> +++ b/package/netopeer2/netopeer2.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  66f3ad68cc6e41f3231b090ef27016ccbfe007cda7d08ec19f409f7429f46ff9  netopeer2-1.1.34.tar.gz
-> +sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
-> diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-> new file mode 100644
-> index 0000000000..2553501f1d
-> --- /dev/null
-> +++ b/package/netopeer2/netopeer2.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# netopeer2
-> +#
-> +################################################################################
-> +
-> +NETOPEER2_VERSION = 1.1.34
-> +NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
-> +NETOPEER2_DL_SUBDIR = netopeer2
-> +NETOPEER2_LICENSE = BSD-3-Clause
-> +NETOPEER2_LICENSE_FILES = LICENSE
-> +NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
-> +
-> +NETOPEER2_CONF_OPTS += \
-> +	-DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
-> +
-> +define NETOPEER2_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
-> +		$(TARGET_DIR)/etc/init.d/S52netopeer2
-> +endef
-> +
-> +$(eval $(cmake-package))
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gcc/10.1.0/0001-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch b/package/gcc/10.1.0/0001-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
+deleted file mode 100644
+index 281bb53690..0000000000
+--- a/package/gcc/10.1.0/0001-gcc-Makefile.in-move-SELFTEST_DEPS-before-including-.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From f05b73275515c4a1a70e28e06229bf682ac74385 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Thu, 21 May 2020 15:58:02 +0200
+-Subject: [PATCH] gcc/Makefile.in: move SELFTEST_DEPS before including language
+- makefile fragments
+-
+-As reported by several Buildroot users [1][2][3], the gcc build
+-may fail while running selftests makefile target.
+-
+-The problem only occurs when ccache is used with gcc 9 and 10,
+-probably due to a race condition.
+-
+-While debuging with "make -p" we can notice that s-selftest-c target
+-contain only "cc1" as dependency instead of cc1 and SELFTEST_DEPS [4].
+-
+-  s-selftest-c: cc1
+-
+-While the build is failing, the s-selftest-c dependencies recipe is
+-still running and reported as a bug by make.
+-
+-  "Dependencies recipe running (THIS IS A BUG)."
+-
+-A change [5] in gcc 9 seems to introduce the problem since we can't
+-reproduce this problem with gcc 8.
+-
+-As suggested by Yann E. MORIN [6], move SELFTEST_DEPS before
+-including language makefile fragments.
+-
+-With the fix applied, the s-seltest-c dependency contains
+-SELFTEST_DEPS value.
+-
+-  s-selftest-c: cc1 xgcc specs stmp-int-hdrs ../../gcc/testsuite/selftests
+-
+-[1] http://lists.busybox.net/pipermail/buildroot/2020-May/282171.html
+-[2] http://lists.busybox.net/pipermail/buildroot/2020-May/282766.html
+-[3] https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
+-[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/c/Make-lang.in;h=bfae6fd2549c4f728816cd355fa9739dcc08fcde;hb=033eb5671769a4c681a44aad08a454e667e08502#l120
+-[5] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=033eb5671769a4c681a44aad08a454e667e08502
+-[6] http://lists.busybox.net/pipermail/buildroot/2020-May/283213.html
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-Cc: Ben Dakin-Norris <ben.dakin-norris@navtechradar.com>
+-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+-Cc: David Malcolm <dmalcolm@gcc.gnu.org>
+----
+-This patch should be backported to gcc 10 and gcc 9.
+----
+- gcc/Makefile.in | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/gcc/Makefile.in b/gcc/Makefile.in
+-index 543b477ff18..c8611e35c70 100644
+---- a/gcc/Makefile.in
+-+++ b/gcc/Makefile.in
+-@@ -1725,6 +1725,10 @@ $(FULL_DRIVER_NAME): ./xgcc
+- 	rm -f $@
+- 	$(LN_S) $< $@
+- 
+-+# SELFTEST_DEPS need to be set before including language makefile fragments.
+-+# Otherwise $(SELFTEST_DEPS) is empty when used from various <LANG>/Make-lang.in.
+-+SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
+-+
+- #
+- # Language makefile fragments.
+- 
+-@@ -2001,8 +2005,6 @@ DEVNULL=$(if $(findstring mingw,$(build)),nul,/dev/null)
+- SELFTEST_FLAGS = -nostdinc $(DEVNULL) -S -o $(DEVNULL) \
+- 	-fself-test=$(srcdir)/testsuite/selftests
+- 
+--SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
+--
+- # Run the selftests during the build once we have a driver and the frontend,
+- # so that self-test failures are caught as early as possible.
+- # Use "s-selftest-FE" to ensure that we only run the selftests if the
+--- 
+-2.25.4
+-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 5bbb5b3ad4..dffd052665 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -85,7 +85,7 @@ config BR2_GCC_VERSION
+ 	default "7.5.0"     if BR2_GCC_VERSION_7_X
+ 	default "8.4.0"     if BR2_GCC_VERSION_8_X
+ 	default "9.3.0"     if BR2_GCC_VERSION_9_X
+-	default "10.1.0"    if BR2_GCC_VERSION_10_X
++	default "10.2.0"    if BR2_GCC_VERSION_10_X
+ 	default "arc-2020.03-release" if BR2_GCC_VERSION_ARC
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 91bb86f0aa..5f38572beb 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  fe716cc19f2e3255d3a8b1b8290777bf769c6d98e6e0b07b81a3d6ad43f8af74cb170dfa
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+ #  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.3.0/sha512.sum
+ sha512  4b9e3639eef6e623747a22c37a904b4750c93b6da77cf3958d5047e9b5ebddb7eebe091cc16ca0a227c0ecbd2bf3b984b221130f269a97ee4cc18f9cf6c444de  gcc-9.3.0.tar.xz
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.1.0/sha512.sum
+-sha512  0cb2a74c793face751f42bc580960b00e2bfea785872a0a2155f1f1dbfaa248f9591b67f4322db0f096f8844aca9243bc02732bda106c3b6e43b02bb67eb3096  gcc-10.1.0.tar.xz
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-10.2.0/sha512.sum
++sha512  42ae38928bd2e8183af445da34220964eb690b675b1892bbeb7cd5bb62be499011ec9a93397dba5e2fb681afadfc6f2767d03b9035b44ba9be807187ae6dc65e  gcc-10.2.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  09ad77fce757d77f2db49cd049b78861abfa5c1c6c3be76228815ec2b15810c1985525c48b0300e83e88f3fa33dee0062f34790cc8b6bc2fa6b0301595acf42b  gcc-arc-2020.03-release.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.4
