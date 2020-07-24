@@ -1,57 +1,79 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 24 Jul 2020 17:43:56 +0200
-Subject: [Buildroot] [PATCH v3 8/8] package/pkg-utils/cve.py: Manage case
- when package version doesn't exist
+Date: Fri, 24 Jul 2020 17:43:55 +0200
+Subject: [Buildroot] [PATCH v3 7/8] support/script/cve-checker: Manage the
+ CVEs that need to be check
 In-Reply-To: <20200724154356.2607639-1-gregory.clement@bootlin.com>
 References: <20200724154356.2607639-1-gregory.clement@bootlin.com>
-Message-ID: <20200724154356.2607639-9-gregory.clement@bootlin.com>
+Message-ID: <20200724154356.2607639-8-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, when a package didn't report a version, then the CVE
-comparison was just skipped. It leads most of the time to declare the
-package not affected by the CVE.
+When looking for if a package is affected, the version comparison can
+fail. This means that we don't know if the version of the package used
+is affected or not and we need to check manually the version.
 
-Instead of it, report the CVE_UNKNOWN status in order to be aware that
-the CVE related to this package has to be checked.
+This patch exposes this new information in json and html format.
 
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
- support/scripts/cve.py | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ support/scripts/cve-checker | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 4e83ac8961..83daf6b089 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -193,6 +193,7 @@ class CVE:
-         if (self.identifier in cve_ignore_list):
-             return self.CVE_DOESNT_AFFECT
+diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
+index 19fd104b56..712ec1ded0 100755
+--- a/support/scripts/cve-checker
++++ b/support/scripts/cve-checker
+@@ -32,6 +32,7 @@ class Package:
+         self.name = name
+         self.version = version
+         self.cves = list()
++        self.cves_to_check = list()
+         self.ignored_cves = ignored_cves
  
-+        unknown_pkg_version = False
-         for cpe in self.each_cpe():
-             affected = True
-             if cpe['product'] != name:
-@@ -205,6 +206,7 @@ class CVE:
-             pkg_version = distutils.version.LooseVersion(version)
-             if not hasattr(pkg_version, "version"):
-                 print("Cannot parse package '%s' version '%s'" % (name, version))
-+                unknown_pkg_version = True
-                 continue
+ def check_package_cves(nvd_path, packages):
+@@ -41,8 +42,12 @@ def check_package_cves(nvd_path, packages):
+     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+         for pkg_name in cve.pkg_names:
+             pkg = packages.get(pkg_name, '')
+-            if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves):
+-                pkg.cves.append(cve.identifier)
++            if pkg:
++                affected = cve.affects(pkg.name, pkg.version, pkg.ignored_cves)
++                if (affected == cve.CVE_UNKNOWN):
++                    pkg.cves_to_check.append(cve.identifier)
++                elif affected == cve.CVE_AFFECTS:
++                    pkg.cves.append(cve.identifier)
  
-             if cpe['v_start']:
-@@ -224,4 +226,8 @@ class CVE:
-                         return self.CVE_UNKNOWN
-             if (affected):
-                 return self.CVE_AFFECTS
--        return self.CVE_DOESNT_AFFECT
+ html_header = """
+ <head>
+@@ -161,6 +166,17 @@ def dump_html_pkg(f, pkg):
+         f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
+     f.write("  </td>\n")
+ 
++    # CVEs to check
++    td_class = ["centered"]
++    if len(pkg.cves_to_check) == 0:
++        td_class.append("correct")
++    else:
++        td_class.append("wrong")
++    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
++    for cve in pkg.cves_to_check:
++        f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
++    f.write("  </td>\n")
 +
-+        if unknown_pkg_version:
-+            return self.CVE_UNKNOWN
-+        else:
-+            return self.CVE_DOESNT_AFFECT
+     f.write(" </tr>\n")
+ 
+ 
+@@ -171,6 +187,7 @@ def dump_html_all_pkgs(f, packages):
+ <td>Package</td>
+ <td class=\"centered\">Version</td>
+ <td class=\"centered\">CVEs</td>
++<td class=\"centered\">CVEs to check</td>
+ </tr>
+ """)
+     for pkg in packages:
 -- 
 2.27.0
