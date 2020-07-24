@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 24 Jul 2020 16:25:53 -0700
-Subject: [Buildroot] [PATCH v2 05/13] package/libblockdev: add support for
- fs plugin
+Date: Fri, 24 Jul 2020 16:25:54 -0700
+Subject: [Buildroot] [PATCH v2 06/13] package/libblockdev: add support for
+ loop plugin
 In-Reply-To: <20200724232601.2441272-1-aduskett@gmail.com>
 References: <20200724232601.2441272-1-aduskett@gmail.com>
-Message-ID: <20200724232601.2441272-6-aduskett@gmail.com>
+Message-ID: <20200724232601.2441272-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +15,44 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - Change BR2_PACKAGE_UTIL_LINUX_LIBMOUNT to BR2_PACKAGE_PARTED which is the
-    proper dependency on this plugin.
-
- package/libblockdev/Config.in      | 8 ++++++++
- package/libblockdev/libblockdev.mk | 8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/libblockdev/Config.in      | 3 +++
+ package/libblockdev/libblockdev.mk | 7 ++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 50c84c0c4d..a514f01875 100644
+index a514f01875..6f0b3435fe 100644
 --- a/package/libblockdev/Config.in
 +++ b/package/libblockdev/Config.in
-@@ -25,6 +25,14 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
- 	select BR2_PACKAGE_CRYPTSETUP
+@@ -33,6 +33,9 @@ config BR2_PACKAGE_LIBBLOCKDEV_FS
+ comment "filesystem plugin needs a toolchain w/ locale"
+ 	depends on !BR2_ENABLE_LOCALE
  
-+config BR2_PACKAGE_LIBBLOCKDEV_FS
-+	bool "filesystem"
-+	depends on BR2_ENABLE_LOCALE # parted
-+	select BR2_PACKAGE_PARTED
-+
-+comment "filesystem plugin needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
++config BR2_PACKAGE_LIBBLOCKDEV_LOOP
++	bool "loop"
 +
  endif
  
  comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
 diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index bb6fbcdda1..7cb5ceb9bb 100644
+index 7cb5ceb9bb..fddf7e2e87 100644
 --- a/package/libblockdev/libblockdev.mk
 +++ b/package/libblockdev/libblockdev.mk
-@@ -19,7 +19,6 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--without-dm \
+@@ -20,7 +20,6 @@ LIBBLOCKDEV_CONF_OPTS = \
  	--without-dmraid \
  	--without-escrow \
--	--without-fs \
  	--without-kbd \
- 	--without-loop \
+-	--without-loop \
  	--without-lvm \
-@@ -42,4 +41,11 @@ else
- LIBBLOCKDEV_CONF_OPTS += --without-crypto
+ 	--without-lvm_dbus \
+ 	--without-mdraid \
+@@ -48,4 +47,10 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-fs
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_FS),y)
-+LIBBLOCKDEV_DEPENDENCIES += parted
-+LIBBLOCKDEV_CONF_OPTS += --with-fs
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LOOP),y)
++LIBBLOCKDEV_CONF_OPTS += --with-loop
 +else
-+LIBBLOCKDEV_CONF_OPTS += --without-fs
++LIBBLOCKDEV_CONF_OPTS += --without-loop
 +endif
 +
  $(eval $(autotools-package))
