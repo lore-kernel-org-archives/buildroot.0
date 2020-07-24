@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Jul 2020 13:40:33 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/cdrkit: fix build
+Date: Fri, 24 Jul 2020 13:40:25 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/cdrkit: fix build
  with GCC 10
-Message-ID: <20200724113557.E1EBC8845B@busybox.osuosl.org>
+Message-ID: <20200724113603.6723B8845B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d684818226cd4c7eb4a4cdfe4d17ada8124850f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5f21717f07222baaf07c7492e2c7a75fd94726ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 This patch adds a missing extern on the outfile
 variable in genisoimage.h.
