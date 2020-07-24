@@ -1,43 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Jul 2020 20:43:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qlibc: bump to version 2.4.5
-Message-ID: <20200724184319.987594-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 24 Jul 2020 21:14:45 +0200
+Subject: [Buildroot] buildroot compilation error
+In-Reply-To: <CAKBF_5rzmSryuzdhs7oSHobxTVNYL_H7Lj04uxjZY+6UaNK=nA@mail.gmail.com>
+References: <CAKBF_5rzmSryuzdhs7oSHobxTVNYL_H7Lj04uxjZY+6UaNK=nA@mail.gmail.com>
+Message-ID: <20200724211445.536ef09b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+Hello Billa,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/qlibc/qlibc.hash | 4 ++--
- package/qlibc/qlibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, 24 Jul 2020 12:16:16 +0530, Billa Surendra <billa.iitmadras@gmail.com> wrote:
 
-diff --git a/package/qlibc/qlibc.hash b/package/qlibc/qlibc.hash
-index 616194f8d9..6abb16b274 100644
---- a/package/qlibc/qlibc.hash
-+++ b/package/qlibc/qlibc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 93512e2203aaadda7aa62039b29500d9236b878e16f070328c58dc9d23da94d7  qlibc-2.4.4.tar.gz
--sha256 7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
-+sha256  e195c97453c260acea4421146ba992d9a4d89732eac345b3765c43cc3326d2ad  qlibc-2.4.5.tar.gz
-+sha256  7c9d03656af4c0acf0a35e29459086498dd64080eac6d2945bc1c064aaf18132  LICENSE
-diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
-index 1b234f7e47..6cce8201bd 100644
---- a/package/qlibc/qlibc.mk
-+++ b/package/qlibc/qlibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QLIBC_VERSION = 2.4.4
-+QLIBC_VERSION = 2.4.5
- QLIBC_SITE = $(call github,wolkykim,qlibc,v$(QLIBC_VERSION))
- QLIBC_LICENSE = BSD-2-Clause
- QLIBC_LICENSE_FILES = LICENSE
--- 
-2.27.0
+> Dear all,
+>
+> I am getting errors while compiling buildroot for riscv architecture. Can
+> anyone please help me regarding this?.
+>
+> Error:
+>
+> fseeko.c: In function 'rpl_fseeko':
+> fseeko.c:109:4: error: #error "Please port gnulib fseeko.c to your
+> platform! Loo         k at the code in fseeko.c, then report this to
+> bug-gnulib."
+>   109 |   #error "Please port gnulib fseeko.c to your platform! Look at the
+> code          in fseeko.c, then report this to bug-gnulib."
+>       |    ^~~~~
+> make[5]: *** [Makefile:1842: fseeko.o] Error 1
+> make[5]: *** Waiting for unfinished jobs....
+> freadahead.c: In function 'freadahead':
+> freadahead.c:91:3: error: #error "Please port gnulib freadahead.c to your
+> platfo         rm! Look at the definition of fflush, fread, ungetc on your
+> system, then report          this to bug-gnulib."
+>    91 |  #error "Please port gnulib freadahead.c to your platform! Look at
+> the d         efinition of fflush, fread, ungetc on your system, then
+> report this to bug-gnuli         b."
+
+Mind to provide a .config (or defconfig) file? Which buildroot version?
+
+Regards,
+Peter
+
+>
+> Thanks and regards
+> Billa Surendra
