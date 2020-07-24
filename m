@@ -1,48 +1,51 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 24 Jul 2020 21:14:45 +0200
-Subject: [Buildroot] buildroot compilation error
-In-Reply-To: <CAKBF_5rzmSryuzdhs7oSHobxTVNYL_H7Lj04uxjZY+6UaNK=nA@mail.gmail.com>
-References: <CAKBF_5rzmSryuzdhs7oSHobxTVNYL_H7Lj04uxjZY+6UaNK=nA@mail.gmail.com>
-Message-ID: <20200724211445.536ef09b@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Jul 2020 21:53:31 +0200
+Subject: [Buildroot] [PATCH 08/11] package/pkg-generic.mk: detect files
+ overwritten in TARGET_DIR and HOST_DIR
+In-Reply-To: <20200501212318.GD15673@scaer>
+References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
+ <20200430095249.782597-9-thomas.petazzoni@bootlin.com>
+ <20200501212318.GD15673@scaer>
+Message-ID: <20200724195331.GI2296@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Billa,
+Thomas, All,
 
-On Fri, 24 Jul 2020 12:16:16 +0530, Billa Surendra <billa.iitmadras@gmail.com> wrote:
+On 2020-05-01 23:23 +0200, Yann E. MORIN spake thusly:
+> On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
+[--SNIP--]
+> > +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> > +# $(1): base directory to search in
+> > +# $(2): suffix of file (optional)
+> > +define pkg_detect_overwrite_before
+> > +	cd $(1); \
+> > +	LC_ALL=C find . -type f -exec md5sum {} \; > $($(PKG)_DIR)/.files$(2).md5
 
-> Dear all,
->
-> I am getting errors while compiling buildroot for riscv architecture. Can
-> anyone please help me regarding this?.
->
-> Error:
->
-> fseeko.c: In function 'rpl_fseeko':
-> fseeko.c:109:4: error: #error "Please port gnulib fseeko.c to your
-> platform! Loo         k at the code in fseeko.c, then report this to
-> bug-gnulib."
->   109 |   #error "Please port gnulib fseeko.c to your platform! Look at the
-> code          in fseeko.c, then report this to bug-gnulib."
->       |    ^~~~~
-> make[5]: *** [Makefile:1842: fseeko.o] Error 1
-> make[5]: *** Waiting for unfinished jobs....
-> freadahead.c: In function 'freadahead':
-> freadahead.c:91:3: error: #error "Please port gnulib freadahead.c to your
-> platfo         rm! Look at the definition of fflush, fread, ungetc on your
-> system, then report          this to bug-gnulib."
->    91 |  #error "Please port gnulib freadahead.c to your platform! Look at
-> the d         efinition of fflush, fread, ungetc on your system, then
-> report this to bug-gnuli         b."
+Note that this is very slow: it spawns a new md5sum process for each
+file it encounters.
 
-Mind to provide a .config (or defconfig) file? Which buildroot version?
+There is a better solution, though:
+
+    find $(1) -type f -print0 |xargs -0 md5sum > $($(PKG)_DIR)/.files$(2).md5
+
+Your original code took 11s (the second time, with a hot VFS cache),
+while my proposal got it down to 2s (again, hot VFS cache).
+
+We could also try to parallelise the job:
+
+    find $(1) -type f -print0 |xargs -P $(PARALLEL_JOBS) -0 md5sum > $($(PKG)_DIR)/.files$(2).md5
 
 Regards,
-Peter
+Yann E. MORIN.
 
->
-> Thanks and regards
-> Billa Surendra
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
