@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 24 Jul 2020 16:25:49 -0700
-Subject: [Buildroot] [PATCH v2 01/13] package/gettext-gnu: add msgfmt wrapper
+Date: Fri, 24 Jul 2020 16:25:50 -0700
+Subject: [Buildroot] [PATCH v2 02/13] package/libblockdev: new package
 In-Reply-To: <20200724232601.2441272-1-aduskett@gmail.com>
 References: <20200724232601.2441272-1-aduskett@gmail.com>
-Message-ID: <20200724232601.2441272-2-aduskett@gmail.com>
+Message-ID: <20200724232601.2441272-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,137 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-The msgfmt provided by gettext-gnu uses a default GETTEXTDATADIR path of
-/usr/share/gettext, causing problems with msgfmt, particularly if the host
-does not have gettext development packages installed, or if the host has a
-different version of gettext. Install a wrapper that sets the GETTEXTDATADIR
-to ${TARGET_DIR}/usr/share/gettext/ to ensure that any package using the
-msgfmt utility uses the proper GETTEXTDATADIR path.
+libblockdev is a C library supporting GObject introspection for manipulation
+of block devices. It has a plugin-based architecture where each technology
+(like LVM, Btrfs, MD RAID, Swap,...) is implemented in a separate plugin,
+possibly with multiple implementations.
 
-This wrapper is not needed for gettext-tiny, as their implimentation of msgfmt
-is written completely from scratch and does not use the GETTEXTDATADIR
-variable.
+Gobject-introspection is not a strict dependency and may be disabled via a
+configure flag.
+
+This is the base package with everything disabled, the subsequent patches in
+this series will add more options necessary to bump udisk to the latest
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/gettext-gnu/gettext-gnu.mk | 13 +++++++++++++
- package/gettext-gnu/msgfmt         |  3 +++
- 2 files changed, 16 insertions(+)
- create mode 100644 package/gettext-gnu/msgfmt
+Changes V1 -> v2:
+  - Rework dependencies. (Thomas)
 
-diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
-index ee7e97baf7..0b25203b5c 100644
---- a/package/gettext-gnu/gettext-gnu.mk
-+++ b/package/gettext-gnu/gettext-gnu.mk
-@@ -87,6 +87,19 @@ define HOST_GETTEXT_GNU_GETTEXTIZE_CONFIRMATION
- endef
- HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += HOST_GETTEXT_GNU_GETTEXTIZE_CONFIRMATION
- 
-+# The msgfmt provided by gettext-gnu uses a default GETTEXTDATADIR path of
-+# /usr/share/gettext, causing problems with msgfmt, particularly if the host
-+# does not have gettext development packages installed, or if the host has a
-+# different version of gettext. Install a wrapper that sets the GETTEXTDATADIR
-+# to ${TARGET_DIR}/usr/share/gettext/ to ensure that any package using the
-+# msgfmt utility uses the proper GETTEXTDATADIR path.
-+define GETTEXT_GNU_INSTALL_MSGFMT_WRAPPER
-+	mv $(HOST_DIR)/bin/msgfmt $(HOST_DIR)/bin/msgfmt.real
-+	$(INSTALL) -D -m 755 \
-+			$(GETTEXT_GNU_PKGDIR)/msgfmt $(HOST_DIR)/bin/msgfmt
-+endef
-+HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += GETTEXT_GNU_INSTALL_MSGFMT_WRAPPER
-+
- # autoreconf expects gettextize to install ABOUT-NLS, but it only gets
- # installed by gettext-runtime which we don't build/install for the
- # host, so do it manually
-diff --git a/package/gettext-gnu/msgfmt b/package/gettext-gnu/msgfmt
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/libblockdev/Config.in        | 22 ++++++++++++++++
+ package/libblockdev/libblockdev.hash |  3 +++
+ package/libblockdev/libblockdev.mk   | 39 ++++++++++++++++++++++++++++
+ 5 files changed, 66 insertions(+)
+ create mode 100644 package/libblockdev/Config.in
+ create mode 100644 package/libblockdev/libblockdev.hash
+ create mode 100644 package/libblockdev/libblockdev.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 043e8ce3f4..cd489754ed 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-vaapi/
+ F:	package/imx-usb-loader/
+ F:	package/janus-gateway/
+ F:	package/json-for-modern-cpp/
++F:	package/libblockdev/
+ F:	package/libcpprestsdk/
+ F:	package/libcutl/
+ F:	package/libodb/
+diff --git a/package/Config.in b/package/Config.in
+index e6500123f6..faf3768a96 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1493,6 +1493,7 @@ menu "Hardware handling"
+ 	source "package/let-me-create/Config.in"
+ 	source "package/libaio/Config.in"
+ 	source "package/libatasmart/Config.in"
++	source "package/libblockdev/Config.in"
+ 	source "package/libcec/Config.in"
+ 	source "package/libfreefare/Config.in"
+ 	source "package/libftdi/Config.in"
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
 new file mode 100644
-index 0000000000..06f1a523da
+index 0000000000..4fd80f1f5c
 --- /dev/null
-+++ b/package/gettext-gnu/msgfmt
-@@ -0,0 +1,3 @@
-+#!/usr/bin/env bash
++++ b/package/libblockdev/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_LIBBLOCKDEV
++	bool "libblockdev"
++	depends on !BR2_STATIC_LIBS # kmod
++	depends on BR2_USE_WCHAR # libglib2 -> gettext
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # fork() # libglib2
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_KMOD
++	help
++	  libblockdev is a C library supporting GObject introspection
++	  for manipulation of block devices. It has a plugin-based
++	  architecture where each technology (like LVM, Btrfs, MD RAID,
++	  Swap,...) is implemented in a separate plugin, possibly with
++	  multiple implementations.
 +
-+GETTEXTDATADIR="${TARGET_DIR}/usr/share/gettext/" ${HOST_DIR}/bin/msgfmt.real "${@}"
++	  https://github.com/storaged-project/libblockdev/
++
++comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_HAS_UDEV
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+new file mode 100644
+index 0000000000..1c4b1ec7bf
+--- /dev/null
++++ b/package/libblockdev/libblockdev.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  dc207c70dbef52c818a8abbcb6b8e298a6b63c0b78a5e1f2773b5f7b89300773  libblockdev-2.24.tar.gz
++sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+new file mode 100644
+index 0000000000..3040a2a690
+--- /dev/null
++++ b/package/libblockdev/libblockdev.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# libblockdev
++#
++################################################################################
++
++LIBBLOCKDEV_VERSION = 2.24
++LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
++LIBBLOCKDEV_LICENSE = LGPL-2.1
++LIBBLOCKDEV_LICENSE_FILES = LICENSE
++LIBBLOCKDEV_INSTALL_STAGING = YES
++LIBBLOCKDEV_DEPENDENCIES = host-pkgconf libglib2 kmod udev
++
++LIBBLOCKDEV_CONF_OPTS = \
++	--disable-introspection \
++	--with-loop \
++	--without-bcache \
++	--without-btrfs \
++	--without-crypto \
++	--without-dm \
++	--without-dmraid \
++	--without-escrow \
++	--without-fs \
++	--without-kbd \
++	--without-loop \
++	--without-lvm \
++	--without-lvm_dbus \
++	--without-mdraid \
++	--without-mpath \
++	--without-nvdimm \
++	--without-parted \
++	--without-python2 \
++	--without-python3 \
++	--without-s390 \
++	--without-swap \
++	--without-tools \
++	--without-vdo
++
++$(eval $(autotools-package))
 -- 
 2.26.2
