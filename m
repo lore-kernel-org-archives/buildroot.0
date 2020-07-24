@@ -1,74 +1,317 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Fri, 24 Jul 2020 09:17:37 +0200
-Subject: [Buildroot] [PATCH v6 20/28] qt5: Fix pkgconfig search path for
- per-package infrastructure
-In-Reply-To: <20200723201733.GG2296@scaer>
-References: <20200701215442.GY20645@scaer>
- <5FC5B08F-2FD5-4243-934E-A11C97636D79@getmailspring.com>
- <20200722202651.GF2296@scaer> <1d374f6d-16c2-a624-de2f-bfc8a6392694@andin.de>
- <20200723201733.GG2296@scaer>
-Message-ID: <58b4935f-9ce0-e591-6c46-179c81a53294@andin.de>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 24 Jul 2020 12:17:48 +0200
+Subject: [Buildroot] [PATCH v2 3/4] boot/optee-os: Depend on host-python3
+In-Reply-To: <20200722071030.16128-4-hi@senzilla.io>
+References: <20200722071030.16128-4-hi@senzilla.io>
+Message-ID: <CAN5uoS-MzqE_eCJvasZiO0oo4Sd5V39i-RMZ71W=1pE1-nR0Dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Dick,
 
-On 23.07.20 22:17, Yann E. MORIN wrote:
-> Andreas, All,
-> 
-> On 2020-07-23 12:29 +0200, Andreas Naumann spake thusly:
->> first of all sorry for not responding for such a long time. There are just
->> too many things on my table and yes, I also have a life outside the computer
->> (kids, bees, wife should probably come first ...).
-> 
-> Yes, this is perfectly understandable. :-)
-> (my comment was just a joke; a bad one, I agree.)
-> 
->> However, I'm still interested in the set and veeery happy that #19 was
->> finally merged. Thanks everyone for reviewing and testing!
->>
->> So Louis Paul, would it be possible you send your fix as a separate patch
->> and once this is in, I resend what's left from the series?
-> 
-> Yes, we can address it in smaller, independent pieces, as long as they
-> make sense on their own.
-> 
-> I think there were two major thinks in the orioginal series:
-> 
->    - making the qmake infra parallel-safe
-> 
->    - fixing individual packages that are not using the qmake infra
-> 
-> Maybe we can first concentrate on fixing the infra, and then handle
-> packages.
+Many thanks for addressing optee-os dependency on host-python3, and
+for the change you got merged in optee-os mainline. This v2 looks all
+fine to me.
 
-I guess #20 is the last generic one, the rework from Louis Paul being 
-even more generic.
+Best regards,
+Etienne
 
-The individual ones #24-#28 are probably still applicable. If somebody 
-wants to have a look at it...
-
-For some of the other ones I owe a response or have already agreed on a 
-rework.
-
-> 
->> If IRC is needed for further coordination i can join, but I'm a bit hesitant
->> because I can hardly handle the four different messengers that I'm using
->> already.
-> 
-> Well, IRC is mostly for quick back-n-forth discussions to clarify
-> things, and to organise the work. It's not mandatory to join.
-
-Yes of course. I see how it goes.
-
-regards,
-Andreas
-
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+On Wed, 22 Jul 2020 at 09:11, Dick Olsson <hi@senzilla.io> wrote:
+>
+> Recent versions of OP-TEE depend on Python 3. Currently, OP-TEE is building
+> with the Python interpreter provided by the user. This patch includes an
+> upstream patch that makes the interpreter configurable, and makes use of
+> this configuration with host-python3.
+>
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
+> ---
+>  ...e-ta-Configurable-Python-interpreter.patch | 249 ++++++++++++++++++
+>  boot/optee-os/optee-os.mk                     |   5 +-
+>  2 files changed, 252 insertions(+), 2 deletions(-)
+>  create mode 100644 boot/optee-os/0003-mk-core-ta-Configurable-Python-interpreter.patch
+>
+> diff --git a/boot/optee-os/0003-mk-core-ta-Configurable-Python-interpreter.patch b/boot/optee-os/0003-mk-core-ta-Configurable-Python-interpreter.patch
+> new file mode 100644
+> index 0000000000..e093c4f91c
+> --- /dev/null
+> +++ b/boot/optee-os/0003-mk-core-ta-Configurable-Python-interpreter.patch
+> @@ -0,0 +1,249 @@
+> +From 49c7d2557d92993a1e09e50c961b9d4f7ab1091b Mon Sep 17 00:00:00 2001
+> +From: Dick Olsson <hi@senzilla.io>
+> +Date: Wed, 22 Jul 2020 08:49:12 +0200
+> +Subject: [PATCH 3/3] mk: core: ta: Configurable Python interpreter
+> +
+> +Build systems that manage multiple different python interpreters need
+> +explicit control over which version of the interpreter to use.
+> +This patch enables one to override the default interpreter with the path
+> +to a specific one.
+> +
+> +Signed-off-by: Dick Olsson <hi@senzilla.io>
+> +Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+> +Reviewed-by: Jerome Forissier <jerome@forissier.org>
+> +---
+> + core/arch/arm/arm.mk         |  2 ++
+> + core/arch/arm/kernel/link.mk | 22 +++++++++++-----------
+> + core/sub.mk                  | 10 +++++-----
+> + mk/config.mk                 |  6 ++++++
+> + mk/lib.mk                    |  2 +-
+> + ta/arch/arm/link.mk          |  2 +-
+> + ta/arch/arm/link_shlib.mk    |  2 +-
+> + ta/ta.mk                     |  2 +-
+> + 8 files changed, 28 insertions(+), 20 deletions(-)
+> +
+> +diff --git a/core/arch/arm/arm.mk b/core/arch/arm/arm.mk
+> +index 5c9f16ef..878035c5 100644
+> +--- a/core/arch/arm/arm.mk
+> ++++ b/core/arch/arm/arm.mk
+> +@@ -245,6 +245,7 @@ ta-mk-file-export-add-ta_arm32 += CROSS_COMPILE32 ?= $$(CROSS_COMPILE)_nl_
+> + ta-mk-file-export-add-ta_arm32 += CROSS_COMPILE_ta_arm32 ?= $$(CROSS_COMPILE32)_nl_
+> + ta-mk-file-export-add-ta_arm32 += COMPILER ?= gcc_nl_
+> + ta-mk-file-export-add-ta_arm32 += COMPILER_ta_arm32 ?= $$(COMPILER)_nl_
+> ++ta-mk-file-export-add-ta_arm32 += PYTHON3 ?= python3_nl_
+> + endif
+> +
+> + ifneq ($(filter ta_arm64,$(ta-targets)),)
+> +@@ -275,6 +276,7 @@ ta-mk-file-export-add-ta_arm64 += CROSS_COMPILE64 ?= $$(CROSS_COMPILE)_nl_
+> + ta-mk-file-export-add-ta_arm64 += CROSS_COMPILE_ta_arm64 ?= $$(CROSS_COMPILE64)_nl_
+> + ta-mk-file-export-add-ta_arm64 += COMPILER ?= gcc_nl_
+> + ta-mk-file-export-add-ta_arm64 += COMPILER_ta_arm64 ?= $$(COMPILER)_nl_
+> ++ta-mk-file-export-add-ta_arm64 += PYTHON3 ?= python3_nl_
+> + endif
+> +
+> + # Set cross compiler prefix for each TA target
+> +diff --git a/core/arch/arm/kernel/link.mk b/core/arch/arm/kernel/link.mk
+> +index 1b89b895..69375ad6 100644
+> +--- a/core/arch/arm/kernel/link.mk
+> ++++ b/core/arch/arm/kernel/link.mk
+> +@@ -62,13 +62,13 @@ cleanfiles += $(link-out-dir)/text_unpaged.ld.S
+> + $(link-out-dir)/text_unpaged.ld.S: $(link-out-dir)/unpaged.o
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +       $(q)$(READELFcore) -S -W $< | \
+> +-              ./scripts/gen_ld_sects.py .text. > $@
+> ++              $(PYTHON3) ./scripts/gen_ld_sects.py .text. > $@
+> +
+> + cleanfiles += $(link-out-dir)/rodata_unpaged.ld.S
+> + $(link-out-dir)/rodata_unpaged.ld.S: $(link-out-dir)/unpaged.o
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +       $(q)$(READELFcore) -S -W $< | \
+> +-              ./scripts/gen_ld_sects.py .rodata. > $@
+> ++              $(PYTHON3) ./scripts/gen_ld_sects.py .rodata. > $@
+> +
+> +
+> + cleanfiles += $(link-out-dir)/init_entries.txt
+> +@@ -92,12 +92,12 @@ cleanfiles += $(link-out-dir)/text_init.ld.S
+> + $(link-out-dir)/text_init.ld.S: $(link-out-dir)/init.o
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +       $(q)$(READELFcore) -S -W $< | \
+> +-              ./scripts/gen_ld_sects.py .text. > $@
+> ++              $(PYTHON3) ./scripts/gen_ld_sects.py .text. > $@
+> +
+> + cleanfiles += $(link-out-dir)/rodata_init.ld.S
+> + $(link-out-dir)/rodata_init.ld.S: $(link-out-dir)/init.o
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)$(READELFcore) -S -W $< | ./scripts/gen_ld_sects.py .rodata. > $@
+> ++      $(q)$(READELFcore) -S -W $< | $(PYTHON3) ./scripts/gen_ld_sects.py .rodata. > $@
+> +
+> + -include $(link-script-dep)
+> +
+> +@@ -176,39 +176,39 @@ cleanfiles += $(link-out-dir)/tee-pager.bin
+> + $(link-out-dir)/tee-pager.bin: $(link-out-dir)/tee.elf scripts/gen_tee_bin.py
+> +       @echo Warning: $@ is deprecated
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)scripts/gen_tee_bin.py --input $< --out_tee_pager_bin $@
+> ++      $(q)$(PYTHON3) scripts/gen_tee_bin.py --input $< --out_tee_pager_bin $@
+> +
+> + cleanfiles += $(link-out-dir)/tee-pageable.bin
+> + $(link-out-dir)/tee-pageable.bin: $(link-out-dir)/tee.elf scripts/gen_tee_bin.py
+> +       @echo Warning: $@ is deprecated
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)scripts/gen_tee_bin.py --input $< --out_tee_pageable_bin $@
+> ++      $(q)$(PYTHON3) scripts/gen_tee_bin.py --input $< --out_tee_pageable_bin $@
+> +
+> + all: $(link-out-dir)/tee.bin
+> + cleanfiles += $(link-out-dir)/tee.bin
+> + $(link-out-dir)/tee.bin: $(link-out-dir)/tee.elf scripts/gen_tee_bin.py
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)scripts/gen_tee_bin.py --input $< --out_tee_bin $@
+> ++      $(q)$(PYTHON3) scripts/gen_tee_bin.py --input $< --out_tee_bin $@
+> +
+> + all: $(link-out-dir)/tee-header_v2.bin
+> + cleanfiles += $(link-out-dir)/tee-header_v2.bin
+> + $(link-out-dir)/tee-header_v2.bin: $(link-out-dir)/tee.elf \
+> +                                  scripts/gen_tee_bin.py
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)scripts/gen_tee_bin.py --input $< --out_header_v2 $@
+> ++      $(q)$(PYTHON3) scripts/gen_tee_bin.py --input $< --out_header_v2 $@
+> +
+> + all: $(link-out-dir)/tee-pager_v2.bin
+> + cleanfiles += $(link-out-dir)/tee-pager_v2.bin
+> + $(link-out-dir)/tee-pager_v2.bin: $(link-out-dir)/tee.elf scripts/gen_tee_bin.py
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)scripts/gen_tee_bin.py --input $< --out_pager_v2 $@
+> ++      $(q)$(PYTHON3) scripts/gen_tee_bin.py --input $< --out_pager_v2 $@
+> +
+> + all: $(link-out-dir)/tee-pageable_v2.bin
+> + cleanfiles += $(link-out-dir)/tee-pageable_v2.bin
+> + $(link-out-dir)/tee-pageable_v2.bin: $(link-out-dir)/tee.elf \
+> +                                    scripts/gen_tee_bin.py
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)scripts/gen_tee_bin.py --input $< --out_pageable_v2 $@
+> ++      $(q)$(PYTHON3) scripts/gen_tee_bin.py --input $< --out_pageable_v2 $@
+> +
+> + all: $(link-out-dir)/tee.symb_sizes
+> + cleanfiles += $(link-out-dir)/tee.symb_sizes
+> +@@ -222,5 +222,5 @@ mem_usage: $(link-out-dir)/tee.mem_usage
+> +
+> + $(link-out-dir)/tee.mem_usage: $(link-out-dir)/tee.elf
+> +       @$(cmd-echo-silent) '  GEN     $@'
+> +-      $(q)./scripts/mem_usage.py $< > $@
+> ++      $(q)$(PYTHON3) ./scripts/mem_usage.py $< > $@
+> + endif
+> +diff --git a/core/sub.mk b/core/sub.mk
+> +index 03cc6bc7..0959c9a9 100644
+> +--- a/core/sub.mk
+> ++++ b/core/sub.mk
+> +@@ -9,13 +9,13 @@ ifeq ($(CFG_WITH_USER_TA),y)
+> + gensrcs-y += ta_pub_key
+> + produce-ta_pub_key = ta_pub_key.c
+> + depends-ta_pub_key = $(TA_SIGN_KEY) scripts/pem_to_pub_c.py
+> +-recipe-ta_pub_key = scripts/pem_to_pub_c.py --prefix ta_pub_key \
+> ++recipe-ta_pub_key = $(PYTHON3) scripts/pem_to_pub_c.py --prefix ta_pub_key \
+> +               --key $(TA_SIGN_KEY) --out $(sub-dir-out)/ta_pub_key.c
+> +
+> + gensrcs-y += ldelf
+> + produce-ldelf = ldelf_hex.c
+> + depends-ldelf = scripts/gen_ldelf_hex.py $(out-dir)/ldelf/ldelf.elf
+> +-recipe-ldelf = scripts/gen_ldelf_hex.py --input $(out-dir)/ldelf/ldelf.elf \
+> ++recipe-ldelf = $(PYTHON3) scripts/gen_ldelf_hex.py --input $(out-dir)/ldelf/ldelf.elf \
+> +                       --output $(sub-dir-out)/ldelf_hex.c
+> + endif
+> +
+> +@@ -25,7 +25,7 @@ early-ta-$1-uuid := $(firstword $(subst ., ,$(notdir $1)))
+> + gensrcs-y += early-ta-$1
+> + produce-early-ta-$1 = early_ta_$$(early-ta-$1-uuid).c
+> + depends-early-ta-$1 = $1 scripts/ta_bin_to_c.py
+> +-recipe-early-ta-$1 = scripts/ta_bin_to_c.py --compress --ta $1 \
+> ++recipe-early-ta-$1 = $(PYTHON3) scripts/ta_bin_to_c.py --compress --ta $1 \
+> +               --out $(sub-dir-out)/early_ta_$$(early-ta-$1-uuid).c
+> + endef
+> + $(foreach f, $(EARLY_TA_PATHS), $(eval $(call process_early_ta,$(f))))
+> +@@ -40,7 +40,7 @@ core-embed-fdt-c = $(out-dir)/$(arch-dir)/dts/$(CFG_EMBED_DTB_SOURCE_FILE:.dts=.
+> + gensrcs-y += embedded_secure_dtb
+> + produce-embedded_secure_dtb = arch/$(ARCH)/dts/$(CFG_EMBED_DTB_SOURCE_FILE:.dts=.c)
+> + depends-embedded_secure_dtb = $(core-embed-fdt-dtb) scripts/bin_to_c.py
+> +-recipe-embedded_secure_dtb = scripts/bin_to_c.py \
+> ++recipe-embedded_secure_dtb = $(PYTHON3) scripts/bin_to_c.py \
+> +                               --bin $(core-embed-fdt-dtb) \
+> +                               --vname embedded_secure_dtb \
+> +                               --out $(core-embed-fdt-c)
+> +@@ -58,7 +58,7 @@ $(conf-mk-xz-base64): $(conf-mk-file)
+> + gensrcs-y += conf_str
+> + produce-conf_str = conf.mk.xz.base64.c
+> + depends-conf_str = $(conf-mk-xz-base64)
+> +-recipe-conf_str = scripts/bin_to_c.py --text --bin $(conf-mk-xz-base64) \
+> ++recipe-conf_str = $(PYTHON3) scripts/bin_to_c.py --text --bin $(conf-mk-xz-base64) \
+> +                       --out $(sub-dir-out)/conf.mk.xz.base64.c \
+> +                       --vname conf_str
+> + endif
+> +diff --git a/mk/config.mk b/mk/config.mk
+> +index 70732c4d..1fe65576 100644
+> +--- a/mk/config.mk
+> ++++ b/mk/config.mk
+> +@@ -32,6 +32,12 @@ endif
+> + # Supported values: undefined, 1, 2 and 3. 3 gives more warnings.
+> + WARNS ?= 3
+> +
+> ++# Path to the Python interpreter used by the build system.
+> ++# This variable is set to the default python3 interpreter in the user's
+> ++# path. But build environments that require more explicit control can
+> ++# set the path to a specific interpreter through this variable.
+> ++PYTHON3 ?= python3
+> ++
+> + # Define DEBUG=1 to compile without optimization (forces -O0)
+> + # DEBUG=1
+> +
+> +diff --git a/mk/lib.mk b/mk/lib.mk
+> +index 6e890893..3bd422d6 100644
+> +--- a/mk/lib.mk
+> ++++ b/mk/lib.mk
+> +@@ -72,7 +72,7 @@ $(lib-shlibstrippedfile): $(lib-shlibfile)
+> +
+> + $(lib-shlibtafile): $(lib-shlibstrippedfile) $(TA_SIGN_KEY)
+> +       @$(cmd-echo-silent) '  SIGN    $$@'
+> +-      $$(q)$$(SIGN) --key $(TA_SIGN_KEY) --uuid $(libuuid) --in $$< --out $$@
+> ++      $$(q)$$(PYTHON3) $$(SIGN) --key $(TA_SIGN_KEY) --uuid $(libuuid) --in $$< --out $$@
+> +
+> + $(lib-libuuidln): $(lib-shlibfile)
+> +       @$(cmd-echo-silent) '  LN      $$@'
+> +diff --git a/ta/arch/arm/link.mk b/ta/arch/arm/link.mk
+> +index db7d0b9a..b95c0cba 100644
+> +--- a/ta/arch/arm/link.mk
+> ++++ b/ta/arch/arm/link.mk
+> +@@ -2,7 +2,7 @@ link-script$(sm) = $(ta-dev-kit-dir$(sm))/src/ta.ld.S
+> + link-script-pp$(sm) = $(link-out-dir$(sm))/ta.lds
+> + link-script-dep$(sm) = $(link-out-dir$(sm))/.ta.ld.d
+> +
+> +-SIGN_ENC ?= $(ta-dev-kit-dir$(sm))/scripts/sign_encrypt.py
+> ++SIGN_ENC ?= $(PYTHON3) $(ta-dev-kit-dir$(sm))/scripts/sign_encrypt.py
+> + TA_SIGN_KEY ?= $(ta-dev-kit-dir$(sm))/keys/default_ta.pem
+> +
+> + ifeq ($(CFG_ENCRYPT_TA),y)
+> +diff --git a/ta/arch/arm/link_shlib.mk b/ta/arch/arm/link_shlib.mk
+> +index ed81e59a..cc177ef0 100644
+> +--- a/ta/arch/arm/link_shlib.mk
+> ++++ b/ta/arch/arm/link_shlib.mk
+> +@@ -47,5 +47,5 @@ $(link-out-dir)/$(shlibuuid).elf: $(link-out-dir)/$(shlibname).so
+> + $(link-out-dir)/$(shlibuuid).ta: $(link-out-dir)/$(shlibname).stripped.so \
+> +                               $(TA_SIGN_KEY)
+> +       @$(cmd-echo-silent) '  SIGN    $@'
+> +-      $(q)$(SIGN) --key $(TA_SIGN_KEY) --uuid $(shlibuuid) \
+> ++      $(q)$(PYTHON3) $(SIGN) --key $(TA_SIGN_KEY) --uuid $(shlibuuid) \
+> +               --in $< --out $@
+> +diff --git a/ta/ta.mk b/ta/ta.mk
+> +index 918880f4..59ed87f7 100644
+> +--- a/ta/ta.mk
+> ++++ b/ta/ta.mk
+> +@@ -67,7 +67,7 @@ $$(arm32-user-sysregs-out)/$$(arm32-user-sysregs-$(1)-h): \
+> +               $(1) scripts/arm32_sysreg.py
+> +       @$(cmd-echo-silent) '  GEN     $$@'
+> +       $(q)mkdir -p $$(dir $$@)
+> +-      $(q)scripts/arm32_sysreg.py --guard __$$(arm32-user-sysregs-$(1)-h) \
+> ++      $(q)$(PYTHON3) scripts/arm32_sysreg.py --guard __$$(arm32-user-sysregs-$(1)-h) \
+> +               < $$< > $$@
+> +
+> + endef #process-arm32-user-sysreg
+> +--
+> +2.20.1
+> +
+> diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+> index c6d1bbd48a..03ce08ffb2 100644
+> --- a/boot/optee-os/optee-os.mk
+> +++ b/boot/optee-os/optee-os.mk
+> @@ -21,7 +21,7 @@ else
+>  OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
+>  endif
+>
+> -OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycryptodomex host-python-pyelftools
+> +OPTEE_OS_DEPENDENCIES = host-openssl host-python3 host-python3-pycryptodomex host-python3-pyelftools
+>
+>  # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
+>  # can be built in 64bit mode and support 32bit and 64bit
+> @@ -32,7 +32,8 @@ OPTEE_OS_MAKE_OPTS = \
+>         CROSS_COMPILE="$(TARGET_CROSS)" \
+>         CROSS_COMPILE_core="$(TARGET_CROSS)" \
+>         CROSS_COMPILE_ta_arm64="$(TARGET_CROSS)" \
+> -       CROSS_COMPILE_ta_arm32="$(TARGET_CROSS)"
+> +       CROSS_COMPILE_ta_arm32="$(TARGET_CROSS)" \
+> +       PYTHON3="$(HOST_DIR)/bin/python3"
+>
+>  ifeq ($(BR2_aarch64),y)
+>  OPTEE_OS_MAKE_OPTS += \
+> --
+> 2.20.1
+>
+>
