@@ -1,22 +1,19 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2020 22:08:25 +0200
-Subject: [Buildroot] [PATCH] package/python-pydal: bump to version
- 20200714.1
-In-Reply-To: <20200725200007.201535-1-angelo@amarulasolutions.com>
-References: <20200725200007.201535-1-angelo@amarulasolutions.com>
-Message-ID: <20200725200825.GC19818@scaer>
+Date: Sat, 25 Jul 2020 22:08:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cramfs: bump to version 2.1
+In-Reply-To: <20200725173836.822088-1-fontaine.fabrice@gmail.com>
+References: <20200725173836.822088-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200725200845.GD19818@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+Fabrice, All,
 
-On 2020-07-25 22:00 +0200, Angelo Compagnucci spake thusly:
-> this patch bumps python-pydal to version 20200714.1
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+On 2020-07-25 19:38 +0200, Fabrice Fontaine spake thusly:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Applied to master, thanks.
 
@@ -24,34 +21,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-pydal/python-pydal.hash | 2 +-
->  package/python-pydal/python-pydal.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/cramfs/cramfs.hash | 2 +-
+>  package/cramfs/cramfs.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-> index 1823050713..4eaeccbf46 100644
-> --- a/package/python-pydal/python-pydal.hash
-> +++ b/package/python-pydal/python-pydal.hash
+> diff --git a/package/cramfs/cramfs.hash b/package/cramfs/cramfs.hash
+> index af7d2e1db3..672266b468 100644
+> --- a/package/cramfs/cramfs.hash
+> +++ b/package/cramfs/cramfs.hash
 > @@ -1,3 +1,3 @@
->  # sha256 from https://pypi.org/project/pyDAL/#files
-> -sha256 ae0de85bbecfef886db8f8888c9b6de794ba2615867a75d5daa463701152baa4  python-pydal-20200531.1.tar.gz
-> +sha256 65bc77933eb9ac84874702629fcb167c18dc242a00cf7cc191899796761349e4  python-pydal-20200714.1.tar.gz
->  sha256 1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-> diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-> index 0836b1d00a..2ea3790a3d 100644
-> --- a/package/python-pydal/python-pydal.mk
-> +++ b/package/python-pydal/python-pydal.mk
-> @@ -4,7 +4,7 @@
+>  # Locally computed:
+> -sha256  99d87aa5874f4a34c219275e0297b0f4c710895f9c87295267aeabe6a752add1  cramfs-1a1e65f2a049.tar.gz
+> +sha256  cdb7a4ecad034f063b6456b37cdf653ae31758a224c32161e54712a9d7f01cc3  cramfs-2.1.tar.gz
+>  sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+> diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
+> index 18bef80bd2..85706d1a8e 100644
+> --- a/package/cramfs/cramfs.mk
+> +++ b/package/cramfs/cramfs.mk
+> @@ -4,8 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_PYDAL_VERSION = 20200531.1
-> +PYTHON_PYDAL_VERSION = 20200714.1
->  PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
->  PYTHON_PYDAL_LICENSE = BSD-3-Clause
->  PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
+> -CRAMFS_VERSION = 1a1e65f2a049
+> -CRAMFS_SITE = $(call github,npitre,cramfs-tools,$(CRAMFS_VERSION))
+> +CRAMFS_VERSION = 2.1
+> +CRAMFS_SITE = $(call github,npitre,cramfs-tools,v$(CRAMFS_VERSION))
+>  CRAMFS_LICENSE = GPL-2.0+
+>  CRAMFS_LICENSE_FILES = COPYING
+>  
 > -- 
-> 2.25.1
+> 2.27.0
 > 
 > _______________________________________________
 > buildroot mailing list
