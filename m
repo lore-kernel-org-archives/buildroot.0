@@ -1,17 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 25 Jul 2020 22:37:35 +0200
-Subject: [Buildroot] [git commit] package/libabseil-cpp new package
-Message-ID: <20200725203718.4C519814BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grpc: bump version to 1.30.2
+Message-ID: <20200725203718.66BB7885DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93568440eda120b12bcbfe267af8f0182484c3b6
+commit: https://git.buildroot.net/buildroot/commit/?id=d0fb8135393d472950ff1eac7be7e3813aa5552e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is a new dependency on grpc versions > 1.25.0
+Other changes:
+  - Add a dependency on libabseil-cpp
+  - Update the patches to apply properly.
 
 Tested with the following distributions:
   - Debian 9
@@ -21,209 +23,161 @@ Tested with the following distributions:
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../0001-force-position-independent-code.patch     | 38 +++++++++++++
- ...ugging-use-execinfo.h-only-when-available.patch | 63 ++++++++++++++++++++++
- package/libabseil-cpp/Config.in                    | 15 ++++++
- package/libabseil-cpp/libabseil-cpp.hash           |  3 ++
- package/libabseil-cpp/libabseil-cpp.mk             | 24 +++++++++
- 7 files changed, 145 insertions(+)
+ package/grpc/0001-target-build-using-host-plugin.patch   | 16 ++++++++--------
+ ...rly-detect-the-availability-of-pthread_setname_.patch | 16 ++++++++--------
+ package/grpc/Config.in                                   |  1 +
+ package/grpc/grpc.hash                                   |  4 ++--
+ package/grpc/grpc.mk                                     | 11 +++++++----
+ 5 files changed, 26 insertions(+), 22 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ad927c6bbe..bdbfa4728a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-vaapi/
- F:	package/imx-usb-loader/
- F:	package/janus-gateway/
- F:	package/json-for-modern-cpp/
-+F:	package/libabseil-cpp/
- F:	package/libcpprestsdk/
- F:	package/libcutl/
- F:	package/libodb/
-diff --git a/package/Config.in b/package/Config.in
-index 3b0b57bc5b..178b4da98a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1825,6 +1825,7 @@ menu "Other"
- 	source "package/gtest/Config.in"
- 	source "package/jemalloc/Config.in"
- 	source "package/lapack/Config.in"
-+	source "package/libabseil-cpp/Config.in"
- 	source "package/libargtable2/Config.in"
- 	source "package/libatomic_ops/Config.in"
- 	source "package/libavl/Config.in"
-diff --git a/package/libabseil-cpp/0001-force-position-independent-code.patch b/package/libabseil-cpp/0001-force-position-independent-code.patch
-new file mode 100644
-index 0000000000..997d75597e
---- /dev/null
-+++ b/package/libabseil-cpp/0001-force-position-independent-code.patch
-@@ -0,0 +1,38 @@
-+From d170b19e500d85381369e379771be8d7816bcc92 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Tue, 21 Jul 2020 13:08:50 -0700
-+Subject: [PATCH] force position independent code
-+
-+Without this option, programs building for arm64 or x86-64 will fail when
-+attempting to link to the built libraries with the following (abbreviated)
-+error:
-+
-+"relocation against `.rodata' can not be used when making a shared object;
-+recompile with -fPIC."
-+
-+Because libabseil-cpp builds static libraries, it is better to set the
-+POSITION_INDEPENDENT_CODE to ON instead of forcing fPIC, as forcing fPIC may
-+cause relocation errors when shared libraries link against the built static
-+libraries.
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ CMake/AbseilHelpers.cmake | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/CMake/AbseilHelpers.cmake b/CMake/AbseilHelpers.cmake
-+index 86ff9eb..bdb7a89 100644
-+--- a/CMake/AbseilHelpers.cmake
-++++ b/CMake/AbseilHelpers.cmake
-+@@ -207,6 +207,8 @@ function(absl_cc_library)
-+     set_property(TARGET ${_NAME} PROPERTY CXX_STANDARD ${ABSL_CXX_STANDARD})
-+     set_property(TARGET ${_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
-+ 
-++    # Without this setting, other programs such as GRPC will fail when linking.
-++    set_property(TARGET ${_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-+     # When being installed, we lose the absl_ prefix.  We want to put it back
-+     # to have properly named lib files.  This is a no-op when we are not being
-+     # installed.
-+-- 
+diff --git a/package/grpc/0001-target-build-using-host-plugin.patch b/package/grpc/0001-target-build-using-host-plugin.patch
+index 2da657762f..ac2bf8cc38 100644
+--- a/package/grpc/0001-target-build-using-host-plugin.patch
++++ b/package/grpc/0001-target-build-using-host-plugin.patch
+@@ -17,12 +17,12 @@ Signed-off-by: Robert Rose <robertroyrose@gmail.com>
+  1 file changed, 13 insertions(+)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index fc76cf5..7a22b08 100644
++index be695c2..45c2fcb 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -13420,6 +13420,18 @@ target_link_libraries(grpc_cli
+- endif (gRPC_BUILD_TESTS)
+- if (gRPC_BUILD_CODEGEN)
++@@ -10844,6 +10844,18 @@ target_link_libraries(grpc_cli
++ endif()
++ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
+  
+ +if (gRPC_NATIVE_CPP_PLUGIN)
+ +
+@@ -39,14 +39,14 @@ index fc76cf5..7a22b08 100644
+  add_executable(grpc_cpp_plugin
+    src/compiler/cpp_plugin.cc
+  )
+-@@ -13457,6 +13469,7 @@ if (gRPC_INSTALL)
++@@ -10877,6 +10889,7 @@ if(gRPC_INSTALL)
+      ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+    )
+  endif()
+ +endif()
+  
+- endif (gRPC_BUILD_CODEGEN)
+- if (gRPC_BUILD_CODEGEN)
++ endif()
++ if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CSHARP_PLUGIN)
+ -- 
+-2.20.0.rc0.387.gc7a69e6b6c-goog
 +2.26.2
-+
-diff --git a/package/libabseil-cpp/0002-absl-debugging-use-execinfo.h-only-when-available.patch b/package/libabseil-cpp/0002-absl-debugging-use-execinfo.h-only-when-available.patch
-new file mode 100644
-index 0000000000..dd40d4138f
---- /dev/null
-+++ b/package/libabseil-cpp/0002-absl-debugging-use-execinfo.h-only-when-available.patch
-@@ -0,0 +1,63 @@
-+From 445907a8a98e5d14f9c0042aa6849bdad4b0af5b Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 23 Jul 2020 22:28:55 +0200
-+Subject: [PATCH] absl/debugging: use <execinfo.h> only when available
-+
-+Instead of relying on __GLIBC__ or other unreliable detection
-+mechanism, simply detect if <execinfo.h> is available before using the
-+stacktrace_generic-inl.inc implementation.
-+
-+Upstream: https://github.com/abseil/abseil-cpp/pull/746
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ absl/debugging/CMakeLists.txt               | 7 +++++++
-+ absl/debugging/internal/stacktrace_config.h | 6 +++---
-+ 2 files changed, 10 insertions(+), 3 deletions(-)
-+
-+diff --git a/absl/debugging/CMakeLists.txt b/absl/debugging/CMakeLists.txt
-+index 7733615..285c5a8 100644
-+--- a/absl/debugging/CMakeLists.txt
-++++ b/absl/debugging/CMakeLists.txt
-+@@ -14,6 +14,13 @@
-+ # limitations under the License.
-+ #
-+ 
-++include(CheckIncludeFileCXX)
-++
-++check_include_file_cxx(execinfo.h HAVE_EXECINFO_H)
-++if(HAVE_EXECINFO_H)
-++    add_definitions(-DHAVE_EXECINFO_H)
-++endif()
-++
-+ absl_cc_library(
-+   NAME
-+     stacktrace
-+diff --git a/absl/debugging/internal/stacktrace_config.h b/absl/debugging/internal/stacktrace_config.h
-+index d4e8480..2e17ca3 100644
-+--- a/absl/debugging/internal/stacktrace_config.h
-++++ b/absl/debugging/internal/stacktrace_config.h
-+@@ -40,7 +40,7 @@
-+ # elif defined(__aarch64__)
-+ #define ABSL_STACKTRACE_INL_HEADER \
-+     "absl/debugging/internal/stacktrace_aarch64-inl.inc"
-+-# elif defined(__arm__)
-++# elif defined(__arm__) && defined(HAVE_EXECINFO_H)
-+ // Note: When using glibc this may require -funwind-tables to function properly.
-+ #define ABSL_STACKTRACE_INL_HEADER \
-+   "absl/debugging/internal/stacktrace_generic-inl.inc"
-+@@ -49,10 +49,10 @@
-+    "absl/debugging/internal/stacktrace_unimplemented-inl.inc"
-+ # endif
-+ #else  // defined(NO_FRAME_POINTER)
-+-# if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
-++# if (defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)) && defined(HAVE_EXECINFO_H)
-+ #define ABSL_STACKTRACE_INL_HEADER \
-+     "absl/debugging/internal/stacktrace_generic-inl.inc"
-+-# elif defined(__ppc__) || defined(__PPC__)
-++# elif (defined(__ppc__) || defined(__PPC__)) && defined(HAVE_EXECINFO_H)
-+ #define ABSL_STACKTRACE_INL_HEADER \
-+     "absl/debugging/internal/stacktrace_generic-inl.inc"
-+ # else
-+-- 
+ 
+diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+index 86586d850b..4b7253f7aa 100644
+--- a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
++++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -17,12 +17,12 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  2 files changed, 8 insertions(+)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 89e834b..c7bd2ad 100644
++index 45c2fcb..0b2be4f 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -97,6 +97,12 @@ endif()
+- 
+- set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
++@@ -177,6 +177,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
++ endif()
++ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+  
+ +include(CheckSymbolExists)
+ +check_symbol_exists(pthread_setname_np pthread.h HAVE_PTHREAD_SETNAME_NP)
+@@ -30,14 +30,14 @@ index 89e834b..c7bd2ad 100644
+ +  add_definitions(-DHAVE_PTHREAD_SETNAME_NP)
+ +endif ()
+ +
+- if (MSVC)
++ if(MSVC)
+    include(cmake/msvc_static_runtime.cmake)
+    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
+ diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
+-index 031c0c3..a29a9dc 100644
++index 4f213ff..55ecd9d 100644
+ --- a/include/grpc/impl/codegen/port_platform.h
+ +++ b/include/grpc/impl/codegen/port_platform.h
+-@@ -181,7 +181,9 @@
++@@ -195,7 +195,9 @@
+  #endif /* _LP64 */
+  #ifdef __GLIBC__
+  #define GPR_POSIX_CRASH_HANDLER 1
+@@ -48,5 +48,5 @@ index 031c0c3..a29a9dc 100644
+  #else /* musl libc */
+  #define GPR_MUSL_LIBC_COMPAT 1
+ -- 
+-2.14.4
 +2.26.2
-+
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-new file mode 100644
-index 0000000000..38cb66d49f
---- /dev/null
-+++ b/package/libabseil-cpp/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBABSEIL_CPP
-+	bool "libabseil-cpp"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Abseil is an open-source collection of C++ library code
-+	  designed to augment the C++ standard library. The Abseil
-+	  library code is collected from Google's own C++ code base,
-+	  has been extensively tested and used in production, and is
-+	  the same code we depend on in our daily coding lives.
-+
-+	  https://github.com/abseil/abseil-cpp
-+
-+comment "libabseil-cpp needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-new file mode 100644
-index 0000000000..7f0b5fc394
---- /dev/null
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353  libabseil-cpp-20200225.tar.gz
-+sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-new file mode 100644
-index 0000000000..92cbb0051d
---- /dev/null
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libabseil-cpp
-+#
-+################################################################################
-+
-+LIBABSEIL_CPP_VERSION = 20200225
-+LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
-+LIBABSEIL_CPP_LICENSE = Apache-2.0
-+LIBABSEIL_CPP_LICENSE_FILES = LICENSE
-+LIBABSEIL_CPP_INSTALL_STAGING = YES
-+
-+LIBABSEIL_CPP_CONF_OPTS = \
-+	-DABSL_ENABLE_INSTALL=ON \
-+	-DABSL_USE_GOOGLETEST_HEAD=OFF \
-+	-DABSL_RUN_TESTS=OFF
-+
-+HOST_LIBABSEIL_CPP_CONF_OPTS = \
-+	-DABSL_ENABLE_INSTALL=ON \
-+	-DABSL_USE_GOOGLETEST_HEAD=OFF \
-+	-DABSL_RUN_TESTS=OFF
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+ 
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index 43f446d8dc..45299888ea 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_GRPC
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_C_ARES
++	select BR2_PACKAGE_LIBABSEIL_CPP
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 5201f72106..f0586e4b18 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ffbe61269160ea745e487f79b0fd06b6edd3d50c6d9123f053b5634737cf2f69 grpc-1.25.0.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
++sha256  ba74b97a2f1b4e22ec5fb69d639d849d2069fb58ea7d6579a31f800af6fe3b6c  grpc-1.30.2.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 39f6123792..087deac0c6 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRPC_VERSION = 1.25.0
++GRPC_VERSION = 1.30.2
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
+@@ -12,8 +12,9 @@ GRPC_LICENSE_FILES = LICENSE
+ GRPC_INSTALL_STAGING = YES
+ 
+ # Need to use host grpc_cpp_plugin during cross compilation.
+-GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf zlib
+-HOST_GRPC_DEPENDENCIES = host-c-ares host-openssl host-protobuf host-zlib
++GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf zlib libabseil-cpp
++HOST_GRPC_DEPENDENCIES = host-c-ares host-openssl host-protobuf host-zlib \
++	host-libabseil-cpp
+ 
+ # gRPC_CARES_PROVIDER=package won't work because it requires c-ares to have
+ # installed a cmake config file, but buildroot uses c-ares' autotools build,
+@@ -25,6 +26,7 @@ GRPC_CONF_OPTS = \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+ 	-DgRPC_ZLIB_PROVIDER=package \
++	-DgRPC_ABSL_PROVIDER=package \
+ 	-DgRPC_NATIVE_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin
+ 
+ # grpc can use __atomic builtins, so we need to link with
+@@ -65,7 +67,8 @@ HOST_GRPC_CONF_OPTS = \
+ 	-DgRPC_CARES_PROVIDER=none \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+-	-DgRPC_ZLIB_PROVIDER=package
++	-DgRPC_ZLIB_PROVIDER=package \
++	-DgRPC_ABSL_PROVIDER=package
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
