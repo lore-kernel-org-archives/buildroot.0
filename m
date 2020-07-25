@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Jul 2020 08:04:19 +0200
-Subject: [Buildroot] [PATCH 1/2] package/squid: add optional systemd
- dependency
-In-Reply-To: <20200723215623.890307-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 23 Jul 2020 23:56:22 +0200")
+Date: Sat, 25 Jul 2020 08:04:26 +0200
+Subject: [Buildroot] [PATCH 2/2] package/squid: security bump to version
+ 4.12
+In-Reply-To: <20200723215623.890307-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 23 Jul 2020 23:56:23 +0200")
 References: <20200723215623.890307-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ft9g1670.fsf@dell.be.48ers.dk>
+ <20200723215623.890307-2-fontaine.fabrice@gmail.com>
+Message-ID: <87blk4166t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +15,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > systemd is an optional dependency (enabled by default) since version
- > 4.11 and
- > https://github.com/squid-cache/squid/commit/6fa8c66435d55a2e713db0222cdca3a9dccf5bbe
+ > - Fix CVE-2020-15049: Cache Poisoning Issue in HTTP Request processing
+ > - Fix CVE-2020-14058: Denial of Service issue in TLS handshake
+ > - Fix CVE-2020-14059: Denial of Service when using SMP cache
+
+ > This version also fix a build failure with systemd
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/4f586c497577d6c96289e821430fa2c2f61eda2a
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
