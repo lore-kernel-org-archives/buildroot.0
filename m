@@ -1,87 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 25 Jul 2020 23:45:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minizip: fix build with gcc 4.8
-Message-ID: <20200725214545.866978-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Jul 2020 23:47:41 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/zbar: bump to version 0.23.1
+In-Reply-To: <20200725210843.865861-1-fontaine.fabrice@gmail.com>
+References: <20200725210843.865861-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200725234741.208555b8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/b8baff4b86923d29163ce5cc9e391904d81fc90c
+On Sat, 25 Jul 2020 23:08:43 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0002-mz.h-fix-build-with-gcc-4.8.patch    | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
+> -ZBAR_VERSION = 0.23
+> +ZBAR_VERSION = 0.23.1
+>  ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
+>  ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
+>  ZBAR_LICENSE = LGPL-2.1+
+> @@ -12,9 +12,11 @@ ZBAR_LICENSE_FILES = LICENSE.md
+>  ZBAR_INSTALL_STAGING = YES
+>  ZBAR_DEPENDENCIES = libv4l jpeg
+>  # add host-gettext for AM_ICONV macro
+> -ZBAR_DEPENDENCIES += host-gettext
+> +ZBAR_DEPENDENCIES += host-gettext $(TARGET_NLS_DEPENDENCIES)
 
-diff --git a/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..f9d28a3c75
---- /dev/null
-+++ b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,60 @@
-+From d38254c2cfdfa2baceef9e4fa553b74ed2e0247e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 25 Jul 2020 14:36:11 +0200
-+Subject: [PATCH] mz.h: fix build with gcc 4.8
-+
-+gcc 4.8 does not support __has_include directive as a result the build
-+will fail on:
-+
-+/home/naourr/work/instance-1/output-1/build/minizip-2.10.0/mz.h:162:44: error: missing binary operator before token "("
-+    (defined(__has_include) && __has_include(<stdint.h>))
-+                                            ^
-+
-+Fix it by appling:
-+https://gcc.gnu.org/onlinedocs/gcc-10.1.0/cpp/_005f_005fhas_005finclude.html
-+
-+Fix #510
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nmoinvaz/minizip/pull/515]
-+---
-+ mz.h | 14 ++++++++++----
-+ 1 file changed, 10 insertions(+), 4 deletions(-)
-+
-+diff --git a/mz.h b/mz.h
-+index 4d3732b..83662e0 100644
-+--- a/mz.h
-++++ b/mz.h
-+@@ -158,9 +158,12 @@
-+ #include <string.h> /* memset, strncpy, strlen */
-+ #include <limits.h>
-+ 
-+-#if defined(HAVE_STDINT_H) || \
-+-   (defined(__has_include) && __has_include(<stdint.h>))
-++#if defined(HAVE_STDINT_H)
-+ #  include <stdint.h>
-++#elif defined(__has_include)
-++#  if __has_include(<stdint.h>)
-++#    include <stdint.h>
-++#  endif
-+ #endif
-+ 
-+ #ifndef __INT8_TYPE__
-+@@ -188,9 +191,12 @@ typedef unsigned int       uint32_t;
-+ typedef unsigned long long uint64_t;
-+ #endif
-+ 
-+-#if defined(HAVE_INTTYPES_H) || \
-+-   (defined(__has_include) && __has_include(<inttypes.h>))
-++#if defined(HAVE_INTTYPES_H)
-+ #  include <inttypes.h>
-++#elif defined(__has_include)
-++#  if __has_include(<inttypes.h>)
-++#    include <inttypes.h>
-++#  endif
-+ #endif
-+ 
-+ #ifndef PRId8
-+-- 
-+2.27.0
-+
+Could you check if this host-gettext dependency for the AM_ICONV macro
+is still needed? I think it might not. Indeed, it was needed because we
+used to AUTORECONF the package. But we no longer autoreconf it since
+8729c4ef881b02ff85b7645b0ad309d6ae44fccf. So perhaps this host-gettext
+dependency is no longer needed ?
+
+Thanks!
+
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
