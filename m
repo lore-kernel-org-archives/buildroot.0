@@ -1,109 +1,93 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 25 Jul 2020 18:54:41 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gvfs: fix linking with libmetadata
-Message-ID: <20200725165441.399163-1-fontaine.fabrice@gmail.com>
+Date: Sat, 25 Jul 2020 19:12:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: define
+ fuse_session_loop_mt as a macro on uclibc
+Message-ID: <20200725171241.470533-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This will fix a build failure with fuse-overlayfs
+
 Fixes:
- - http://autobuild.buildroot.org/results/fa892c41b6b9285839a0164b000e37fb04dcc194
+ - http://autobuild.buildroot.org/results/7186515526ee60488dac3bf9c4580ffd13a0ceac
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Fix typo: Fiwes -> Fixes
+ ...op_mt-as-a-macro-on-uclibc-and-MacOS.patch | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
 
- ...n.build-fix-linking-with-libmetadata.patch | 78 +++++++++++++++++++
- 1 file changed, 78 insertions(+)
- create mode 100644 package/gvfs/0001-meson.build-fix-linking-with-libmetadata.patch
-
-diff --git a/package/gvfs/0001-meson.build-fix-linking-with-libmetadata.patch b/package/gvfs/0001-meson.build-fix-linking-with-libmetadata.patch
+diff --git a/package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch b/package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
 new file mode 100644
-index 0000000000..3ee4a28e94
+index 0000000000..53f31bc071
 --- /dev/null
-+++ b/package/gvfs/0001-meson.build-fix-linking-with-libmetadata.patch
-@@ -0,0 +1,78 @@
-+From 731256d7517f0d9cf0b999bb22f864080d5e8690 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 18 Jul 2020 10:00:50 +0200
-+Subject: [PATCH] meson.build: fix linking with libmetadata
++++ b/package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
+@@ -0,0 +1,63 @@
++From c27a9172af352ab36aeeb425fb1ab86888368961 Mon Sep 17 00:00:00 2001
++From: Asaf Kahlon <asafka7@gmail.com>
++Date: Sat, 11 Jul 2020 12:51:17 +0300
++Subject: [PATCH] Define fuse_session_loop_mt as a macro on uclibc and MacOS
 +
-+libmetadata is built as a static library and depends on libgvfscommon so
-+change the dependencies order to put libgvfscommon_dep after
-+libmetadata_dep or gvfsd-metadata will fail to link on:
++On uclibc and MacOS we don't use versioned symbols. Hence,
++there's no definition for fuse_session_loop_mt on those cases
++and the linker won't be able to resolve calls to fuse_session_loop_mt()
 +
-+FAILED: metadata/gvfsd-metadata
-+/home/naourr/work/instance-3/output-1/host/bin/arm-none-linux-gnueabi-gcc  -o metadata/gvfsd-metadata 'metadata/45447b7@@gvfsd-metadata at exe/meta-daemon.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group common/libgvfscommon.so metadata/libmetadata.a /home/naourr/work/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libgio-2.0.so /home/naourr/work/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libgobject-2.0.so /home/naourr/work/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libglib-2.0.so -Wl,--end-group '-Wl,-rpath,$ORIGIN/../common:$ORIGIN/' -Wl,-rpath-link,/home/naourr/work/instance-3/output-1/build/gvfs-1.44.1/build/common -Wl,-rpath-link,/home/naourr/work/instance-3/output-1/build/gvfs-1.44.1/build/metadata
-+metadata/libmetadata.a(metatree.c.o): In function `safe_open':
-+metatree.c:(.text+0x9c8): undefined reference to `gvfs_randomize_string'
-+collect2: error: ld returned 1 exit status
-+
-+Apply this change in the whole source code and not only for
-+gvfsd-metadata to avoid any other build failures.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results//fa892c41b6b9285839a0164b000e37fb04dcc194
-+
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
++[Retrieved from: https://github.com/libfuse/libfuse/pull/532]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/gvfs/-/merge_requests/92]
 +---
-+ client/meson.build   | 2 +-
-+ metadata/meson.build | 5 +++--
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
++ include/fuse_lowlevel.h | 9 +++++++--
++ lib/fuse_versionscript  | 1 +
++ 2 files changed, 8 insertions(+), 2 deletions(-)
 +
-+diff --git a/client/meson.build b/client/meson.build
-+index 8f57d0d3..1d251481 100644
-+--- a/client/meson.build
-++++ b/client/meson.build
-+@@ -33,8 +33,8 @@ sources = uri_parser_sources + uri_utils + files(
++diff --git a/include/fuse_lowlevel.h b/include/fuse_lowlevel.h
++index e2b4617b..57995547 100644
++--- a/include/fuse_lowlevel.h
+++++ b/include/fuse_lowlevel.h
++@@ -471,7 +471,7 @@ struct fuse_lowlevel_ops {
++ 	 *  - When writeback caching is disabled, the filesystem is
++ 	 *    expected to properly handle the O_APPEND flag and ensure
++ 	 *    that each write is appending to the end of the file.
++-	 * 
+++	 *
++          *  - When writeback caching is enabled, the kernel will
++ 	 *    handle O_APPEND. However, unless all changes to the file
++ 	 *    come through the kernel this will not work reliably. The
++@@ -1975,14 +1975,19 @@ int fuse_session_loop(struct fuse_session *se);
++  * fuse_session_loop().
++  *
++  * @param se the session
++- * @param config session loop configuration 
+++ * @param config session loop configuration
++  * @return see fuse_session_loop()
++  */
++ #if FUSE_USE_VERSION < 32
++ int fuse_session_loop_mt_31(struct fuse_session *se, int clone_fd);
++ #define fuse_session_loop_mt(se, clone_fd) fuse_session_loop_mt_31(se, clone_fd)
++ #else
+++#if (!defined(__UCLIBC__) && !defined(__APPLE__))
++ int fuse_session_loop_mt(struct fuse_session *se, struct fuse_loop_config *config);
+++#else
+++int fuse_session_loop_mt_32(struct fuse_session *se, struct fuse_loop_config *config);
+++#define fuse_session_loop_mt(se, config) fuse_session_loop_mt_32(se, config)
+++#endif
++ #endif
 + 
-+ deps = [
-+   gio_unix_dep,
-+-  libgvfscommon_dep,
-+   libmetadata_dep,
-++  libgvfscommon_dep,
-+ ]
-+ 
-+ cflags = [
-+diff --git a/metadata/meson.build b/metadata/meson.build
-+index 4e120d18..5699e6f2 100644
-+--- a/metadata/meson.build
-++++ b/metadata/meson.build
-+@@ -72,8 +72,8 @@ libmetadata_dep = declare_dependency(
-+ )
-+ 
-+ deps = [
-+-  libgvfscommon_dep,
-+   libmetadata_dep,
-++  libgvfscommon_dep,
-+ ]
-+ 
-+ if enable_gudev
-+@@ -105,8 +105,8 @@ if enable_devel_utils
-+       app + '.c',
-+       include_directories: top_inc,
-+       dependencies: [
-+-        libgvfscommon_dep,
-+         libmetadata_dep,
-++        libgvfscommon_dep,
-+       ],
-+       c_args: cflags,
-+     )
-+@@ -119,6 +119,7 @@ if enable_devel_utils
-+       include_directories: top_inc,
-+       dependencies: [
-+         libmetadata_dep,
-++        libgvfscommon_dep,
-+         libxml_dep,
-+       ],
-+       c_args: cflags,
-+-- 
-+2.27.0
-+
++ /**
++diff --git a/lib/fuse_versionscript b/lib/fuse_versionscript
++index 235abf41..95ea149c 100644
++--- a/lib/fuse_versionscript
+++++ b/lib/fuse_versionscript
++@@ -146,6 +146,7 @@ FUSE_3.2 {
++ 	global:
++ 		fuse_session_loop_mt;
++ 		fuse_session_loop_mt_31;
+++                fuse_session_loop_mt_32;
++ 		fuse_loop_mt;
++ 		fuse_loop_mt_31;
++ } FUSE_3.1;
 -- 
 2.27.0
