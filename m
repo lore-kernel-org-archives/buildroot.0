@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Jul 2020 23:30:55 +0200
-Subject: [Buildroot] [git commit] package/perl-file-slurp: bump to version
- 9999.32
-Message-ID: <20200725213108.B44888144E@busybox.osuosl.org>
+Date: Sat, 25 Jul 2020 23:31:21 +0200
+Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
+ 6.25
+Message-ID: <20200725213108.E1DA68144E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7472f7790c50ef904a9e826159cce84b3d21179f
+commit: https://git.buildroot.net/buildroot/commit/?id=f97e7a73081428f0589db69a7ed55ef40a2f2f67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-file-slurp/perl-file-slurp.hash | 6 +++---
- package/perl-file-slurp/perl-file-slurp.mk   | 2 +-
+ package/perl-http-message/perl-http-message.hash | 4 ++--
+ package/perl-http-message/perl-http-message.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
-index 5bf2713dc7..f3cc579f8a 100644
---- a/package/perl-file-slurp/perl-file-slurp.hash
-+++ b/package/perl-file-slurp/perl-file-slurp.hash
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index 99464e3ba1..c220d5f824 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    a806ca5c769d811b0f32c6a773295408 File-Slurp-9999.30.tar.gz
--sha256 2a37163db0b9454e48eb308dac1fc27571be086e0864c9083bed88d9c4e93747 File-Slurp-9999.30.tar.gz
-+md5  a10ddfcbe153fc8d0076936ee83b98ed  File-Slurp-9999.32.tar.gz
-+sha256  4c3c21992a9d42be3a79dd74a3c83d27d38057269d65509a2f555ea0fb2bc5b0  File-Slurp-9999.32.tar.gz
+-md5  d1d1dc1f83ece90bd0503b4495274955  HTTP-Message-6.24.tar.gz
+-sha256  554a1acf2daa401091f7012f5cb82d04d281db43fbd8f39a1fcbb7ed56dde16d  HTTP-Message-6.24.tar.gz
++md5  8847fe62ec103a242d39194c9e3c647e  HTTP-Message-6.25.tar.gz
++sha256  21f46502e87d57f43b7a38f81916464b079f5d50fe529458391c0ad529e0075a  HTTP-Message-6.25.tar.gz
  
  # computed by scancpan
--sha256 2281c2e5a690ac7f227fd9934b3d0b9abc419fd514f001d421f2f854203d92b4 README.md
-+sha256  d1be945657536c93caf481b9f3c73fd1952ef66388c664e29021ab91d4fe47e8  README.md
-diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
-index 4174df4a2e..0d4ab94034 100644
---- a/package/perl-file-slurp/perl-file-slurp.mk
-+++ b/package/perl-file-slurp/perl-file-slurp.mk
-@@ -4,7 +4,7 @@
+ sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index d802c258df..cb8a1d94b5 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_FILE_SLURP_VERSION = 9999.30
-+PERL_FILE_SLURP_VERSION = 9999.32
- PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
- PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
- PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_MESSAGE_VERSION = 6.24
++PERL_HTTP_MESSAGE_VERSION = 6.25
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+-PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
++PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+ PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
+ PERL_HTTP_MESSAGE_DISTNAME = HTTP-Message
