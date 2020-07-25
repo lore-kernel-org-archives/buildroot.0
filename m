@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Jul 2020 08:04:26 +0200
-Subject: [Buildroot] [PATCH 2/2] package/squid: security bump to version
- 4.12
-In-Reply-To: <20200723215623.890307-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 23 Jul 2020 23:56:23 +0200")
-References: <20200723215623.890307-1-fontaine.fabrice@gmail.com>
- <20200723215623.890307-2-fontaine.fabrice@gmail.com>
-Message-ID: <87blk4166t.fsf@dell.be.48ers.dk>
+Date: Sat, 25 Jul 2020 08:23:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mraa: fix architecture
+In-Reply-To: <20200724203103.990071-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 24 Jul 2020 22:31:03 +0200")
+References: <20200724203103.990071-1-fontaine.fabrice@gmail.com>
+Message-ID: <877dus15a9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +13,18 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Fix CVE-2020-15049: Cache Poisoning Issue in HTTP Request processing
- > - Fix CVE-2020-14058: Denial of Service issue in TLS handshake
- > - Fix CVE-2020-14059: Denial of Service when using SMP cache
+ > mraa supports aarch64 since version 0.9.0 and
+ > https://github.com/eclipse/mraa/commit/47ec54c3330de176ed0b8e3254e81d9451fb866a
 
- > This version also fix a build failure with systemd
+ > mips is supported since version 1.9.0 and
+ > https://github.com/eclipse/mraa/commit/6770be911ba18b25ff284eeac80390e4111f602f
+
+ > Moreover, BUILD_ARCH must be passed otherwise build will fail on i686
+ > and arm
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/4f586c497577d6c96289e821430fa2c2f61eda2a
+ >  - http://autobuild.buildroot.org/results/8e99eb282668f6f83f43c5be45112d82936e3408
+ >  - http://autobuild.buildroot.org/results/75ba0840da6eb4907847ef05adeec2df109c9937
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
