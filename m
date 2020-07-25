@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2020 13:03:16 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libgsasl: bump to version 1.8.1
-In-Reply-To: <20200725101829.1192501-1-fontaine.fabrice@gmail.com>
-References: <20200725101829.1192501-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200725110316.GN2296@scaer>
+Date: Sat, 25 Jul 2020 13:03:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libzip: fix build with cmake <
+ 3.16
+In-Reply-To: <20200725102322.1197842-1-fontaine.fabrice@gmail.com>
+References: <20200725102322.1197842-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200725110337.GO2296@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +13,131 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-07-25 12:18 +0200, Fabrice Fontaine spake thusly:
-> - Update hash of README
-> - Update indentation in hash file (two spaces)
-> 
-> https://lists.gnu.org/archive/html/info-gnu/2020-01/msg00000.html
+On 2020-07-25 12:23 +0200, Fabrice Fontaine spake thusly:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7e996aebafa4c690ff130b7d18e5b09c7b255829
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/libgsasl/libgsasl.hash | 8 ++++----
->  package/libgsasl/libgsasl.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  ...001-Add-FindGnuTLS-cmake-from-3-17-3.patch | 103 ++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+>  create mode 100644 package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch
 > 
-> diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
-> index 82bfe339c6..57fd98fc95 100644
-> --- a/package/libgsasl/libgsasl.hash
-> +++ b/package/libgsasl/libgsasl.hash
-> @@ -1,7 +1,7 @@
->  # Locally calculated after checking pgp signature
-> -sha256	3adfb49f9c92a719dea855fd1840d698cde55d4648d332a69032ba8bea207720	libgsasl-1.8.0.tar.gz
-> +sha256  19e2f90525c531010918c50bb1febef0d7115d620150cc66153b9ce73ff814e6  libgsasl-1.8.1.tar.gz
->  
->  # Hash for license files:
-> -sha256	4eb54155afd4684d7e9423f6037e5cc887ae4d8818e83d3af93350ebd4a8e6eb	README
-> -sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING.LIB
-> -sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-> +sha256  185b5b29a3febbfe1ab0b1ec6b1a26df630be97a17a99b5d305fdfff3344c117  README
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-> index 9a625433ee..0cec9c73bd 100644
-> --- a/package/libgsasl/libgsasl.mk
-> +++ b/package/libgsasl/libgsasl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBGSASL_VERSION = 1.8.0
-> +LIBGSASL_VERSION = 1.8.1
->  LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
->  LIBGSASL_LICENSE = LGPL-2.1+ (library), GPL-3.0+ (programs)
->  LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
+> diff --git a/package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch b/package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch
+> new file mode 100644
+> index 0000000000..30bc201048
+> --- /dev/null
+> +++ b/package/libzip/0001-Add-FindGnuTLS-cmake-from-3-17-3.patch
+> @@ -0,0 +1,103 @@
+> +From 73f6f8ebff678a0847e6b197b574082cc285b528 Mon Sep 17 00:00:00 2001
+> +From: Thomas Klausner <tk@giga.or.at>
+> +Date: Sat, 25 Jul 2020 12:03:29 +0200
+> +Subject: [PATCH] Add FindGnuTLS.cmake from 3.17.3.
+> +
+> +Addresses #199
+> +
+> +[Retrieved from:
+> +https://github.com/nih-at/libzip/commit/73f6f8ebff678a0847e6b197b574082cc285b528]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + cmake-compat/FindGnuTLS.cmake | 82 +++++++++++++++++++++++++++++++++++
+> + 1 file changed, 82 insertions(+)
+> + create mode 100644 cmake-compat/FindGnuTLS.cmake
+> +
+> +diff --git a/cmake-compat/FindGnuTLS.cmake b/cmake-compat/FindGnuTLS.cmake
+> +new file mode 100644
+> +index 00000000..819f0001
+> +--- /dev/null
+> ++++ b/cmake-compat/FindGnuTLS.cmake
+> +@@ -0,0 +1,82 @@
+> ++# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+> ++# file Copyright.txt or https://cmake.org/licensing for details.
+> ++
+> ++#[=======================================================================[.rst:
+> ++FindGnuTLS
+> ++----------
+> ++
+> ++Find the GNU Transport Layer Security library (gnutls)
+> ++
+> ++IMPORTED Targets
+> ++^^^^^^^^^^^^^^^^
+> ++
+> ++This module defines :prop_tgt:`IMPORTED` target ``GnuTLS::GnuTLS``, if
+> ++gnutls has been found.
+> ++
+> ++Result Variables
+> ++^^^^^^^^^^^^^^^^
+> ++
+> ++``GNUTLS_FOUND``
+> ++  System has gnutls
+> ++``GNUTLS_INCLUDE_DIR``
+> ++  The gnutls include directory
+> ++``GNUTLS_LIBRARIES``
+> ++  The libraries needed to use gnutls
+> ++``GNUTLS_DEFINITIONS``
+> ++  Compiler switches required for using gnutls
+> ++``GNUTLS_VERSION``
+> ++  version of gnutls.
+> ++#]=======================================================================]
+> ++
+> ++# Note that this doesn't try to find the gnutls-extra package.
+> ++
+> ++
+> ++if (GNUTLS_INCLUDE_DIR AND GNUTLS_LIBRARY)
+> ++  # in cache already
+> ++  set(gnutls_FIND_QUIETLY TRUE)
+> ++endif ()
+> ++
+> ++if (NOT WIN32)
+> ++  # try using pkg-config to get the directories and then use these values
+> ++  # in the find_path() and find_library() calls
+> ++  # also fills in GNUTLS_DEFINITIONS, although that isn't normally useful
+> ++  find_package(PkgConfig QUIET)
+> ++  PKG_CHECK_MODULES(PC_GNUTLS QUIET gnutls)
+> ++  set(GNUTLS_DEFINITIONS ${PC_GNUTLS_CFLAGS_OTHER})
+> ++  set(GNUTLS_VERSION ${PC_GNUTLS_VERSION})
+> ++  # keep for backward compatibility
+> ++  set(GNUTLS_VERSION_STRING ${PC_GNUTLS_VERSION})
+> ++endif ()
+> ++
+> ++find_path(GNUTLS_INCLUDE_DIR gnutls/gnutls.h
+> ++  HINTS
+> ++    ${PC_GNUTLS_INCLUDEDIR}
+> ++    ${PC_GNUTLS_INCLUDE_DIRS}
+> ++  )
+> ++
+> ++find_library(GNUTLS_LIBRARY NAMES gnutls libgnutls
+> ++  HINTS
+> ++    ${PC_GNUTLS_LIBDIR}
+> ++    ${PC_GNUTLS_LIBRARY_DIRS}
+> ++  )
+> ++
+> ++mark_as_advanced(GNUTLS_INCLUDE_DIR GNUTLS_LIBRARY)
+> ++
+> ++include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+> ++FIND_PACKAGE_HANDLE_STANDARD_ARGS(GnuTLS
+> ++                                  REQUIRED_VARS GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR
+> ++                                  VERSION_VAR GNUTLS_VERSION_STRING)
+> ++
+> ++if(GNUTLS_FOUND)
+> ++  set(GNUTLS_LIBRARIES    ${GNUTLS_LIBRARY})
+> ++  set(GNUTLS_INCLUDE_DIRS ${GNUTLS_INCLUDE_DIR})
+> ++
+> ++  if(NOT TARGET GnuTLS::GnuTLS)
+> ++    add_library(GnuTLS::GnuTLS UNKNOWN IMPORTED)
+> ++    set_target_properties(GnuTLS::GnuTLS PROPERTIES
+> ++      INTERFACE_INCLUDE_DIRECTORIES "${GNUTLS_INCLUDE_DIRS}"
+> ++      INTERFACE_COMPILE_DEFINITIONS "${GNUTLS_DEFINITIONS}"
+> ++      IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+> ++      IMPORTED_LOCATION "${GNUTLS_LIBRARIES}")
+> ++  endif()
+> ++endif()
 > -- 
 > 2.27.0
 > 
