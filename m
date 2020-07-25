@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 25 Jul 2020 16:06:05 -0700
-Subject: [Buildroot] [PATCH v3 00/13] package/udisks: bump version to 2.9.0
-Message-ID: <20200725230618.3640682-1-aduskett@gmail.com>
+Date: Sat, 25 Jul 2020 16:06:06 -0700
+Subject: [Buildroot] [PATCH v3 01/13] package/gettext-gnu: add msgfmt wrapper
+In-Reply-To: <20200725230618.3640682-1-aduskett@gmail.com>
+References: <20200725230618.3640682-1-aduskett@gmail.com>
+Message-ID: <20200725230618.3640682-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +12,56 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Not many changes, just the two that Thomas mentioned. Also, because of the
-addition of libabseil-cpp, V2 didn't apply cleanly anymore because of the
-added entry in the DEVELOPERS file. This is fixed with this series.
+The msgfmt provided by gettext-gnu uses a default GETTEXTDATADIR path of
+/usr/share/gettext, causing problems with msgfmt, particularly if the host
+does not have gettext development packages installed, or if the host has a
+different version of gettext. Install a wrapper that sets the GETTEXTDATADIR
+to ${TARGET_DIR}/usr/share/gettext/ to ensure that any package using the
+msgfmt utility uses the proper GETTEXTDATADIR path.
 
-Adam Duskett (13):
-  package/gettext-gnu: add msgfmt wrapper
-  package/libblockdev: new package
-  package/libbytesize: new package
-  package/libblockdev: add support for crypto plugin
-  package/libblockdev: add support for fs plugin
-  package/libblockdev: add support for loop plugin
-  package/libblockdev: add support for lvm plugin
-  package/libblockdev: add support for mdraid plugin
-  package/libblockdev: add support for part plugin
-  package/libblockdev: add support for swap plugin
-  package/udisks/Config.in: alphabatize package selection
-  package/udisks/udisks.mk: alphabatize dependencies
-  package/udisks: bump version to 2.9.0
+This wrapper is not needed for gettext-tiny, as their implimentation of msgfmt
+is written completely from scratch and does not use the GETTEXTDATADIR
+variable.
 
- DEVELOPERS                                    |  2 +
- package/Config.in                             |  1 +
- package/gettext-gnu/gettext-gnu.mk            | 13 +++
- package/gettext-gnu/msgfmt                    |  3 +
- package/libblockdev/Config.in                 | 70 ++++++++++++++++
- package/libblockdev/libblockdev.hash          |  3 +
- package/libblockdev/libblockdev.mk            | 80 ++++++++++++++++++
- .../0001-remove-msgcat-dependency.patch       | 36 +++++++++
- package/libbytesize/Config.in                 | 10 +++
- package/libbytesize/libbytesize.hash          |  3 +
- package/libbytesize/libbytesize.mk            | 27 +++++++
- ...-fix-build-with-newer-glibc-versions.patch | 29 -------
- .../0002-Fix-systemd-service-file.patch       | 33 --------
- ...issue-with-missing-sys-sysmacros.h-i.patch | 81 -------------------
- package/udisks/Config.in                      | 20 ++++-
- package/udisks/udisks.hash                    |  4 +-
- package/udisks/udisks.mk                      | 36 ++++++---
- 17 files changed, 291 insertions(+), 160 deletions(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/gettext-gnu/gettext-gnu.mk | 13 +++++++++++++
+ package/gettext-gnu/msgfmt         |  3 +++
+ 2 files changed, 16 insertions(+)
  create mode 100644 package/gettext-gnu/msgfmt
- create mode 100644 package/libblockdev/Config.in
- create mode 100644 package/libblockdev/libblockdev.hash
- create mode 100644 package/libblockdev/libblockdev.mk
- create mode 100644 package/libbytesize/0001-remove-msgcat-dependency.patch
- create mode 100644 package/libbytesize/Config.in
- create mode 100644 package/libbytesize/libbytesize.hash
- create mode 100644 package/libbytesize/libbytesize.mk
- delete mode 100644 package/udisks/0001-fix-build-with-newer-glibc-versions.patch
- delete mode 100644 package/udisks/0002-Fix-systemd-service-file.patch
- delete mode 100644 package/udisks/0003-Fix-compilation-issue-with-missing-sys-sysmacros.h-i.patch
 
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index ee7e97baf7..0b25203b5c 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -87,6 +87,19 @@ define HOST_GETTEXT_GNU_GETTEXTIZE_CONFIRMATION
+ endef
+ HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += HOST_GETTEXT_GNU_GETTEXTIZE_CONFIRMATION
+ 
++# The msgfmt provided by gettext-gnu uses a default GETTEXTDATADIR path of
++# /usr/share/gettext, causing problems with msgfmt, particularly if the host
++# does not have gettext development packages installed, or if the host has a
++# different version of gettext. Install a wrapper that sets the GETTEXTDATADIR
++# to ${TARGET_DIR}/usr/share/gettext/ to ensure that any package using the
++# msgfmt utility uses the proper GETTEXTDATADIR path.
++define GETTEXT_GNU_INSTALL_MSGFMT_WRAPPER
++	mv $(HOST_DIR)/bin/msgfmt $(HOST_DIR)/bin/msgfmt.real
++	$(INSTALL) -D -m 755 \
++			$(GETTEXT_GNU_PKGDIR)/msgfmt $(HOST_DIR)/bin/msgfmt
++endef
++HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += GETTEXT_GNU_INSTALL_MSGFMT_WRAPPER
++
+ # autoreconf expects gettextize to install ABOUT-NLS, but it only gets
+ # installed by gettext-runtime which we don't build/install for the
+ # host, so do it manually
+diff --git a/package/gettext-gnu/msgfmt b/package/gettext-gnu/msgfmt
+new file mode 100644
+index 0000000000..06f1a523da
+--- /dev/null
++++ b/package/gettext-gnu/msgfmt
+@@ -0,0 +1,3 @@
++#!/usr/bin/env bash
++
++GETTEXTDATADIR="${TARGET_DIR}/usr/share/gettext/" ${HOST_DIR}/bin/msgfmt.real "${@}"
 -- 
 2.26.2
