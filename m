@@ -1,44 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 26 Jul 2020 00:12:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/chocolate-doom: bump to version
- 3.0.1
-Message-ID: <20200725221201.1064330-1-fontaine.fabrice@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 25 Jul 2020 16:06:05 -0700
+Subject: [Buildroot] [PATCH v3 00/13] package/udisks: bump version to 2.9.0
+Message-ID: <20200725230618.3640682-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/chocolate-doom/chocolate-doom.hash | 4 ++--
- package/chocolate-doom/chocolate-doom.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Not many changes, just the two that Thomas mentioned. Also, because of the
+addition of libabseil-cpp, V2 didn't apply cleanly anymore because of the
+added entry in the DEVELOPERS file. This is fixed with this series.
 
-diff --git a/package/chocolate-doom/chocolate-doom.hash b/package/chocolate-doom/chocolate-doom.hash
-index 7f7fa27ab7..79eb1c6a3f 100644
---- a/package/chocolate-doom/chocolate-doom.hash
-+++ b/package/chocolate-doom/chocolate-doom.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	73aea623930c7d18a7a778eea391e1ddfbe90ad1ac40a91b380afca4b0e1dab8	chocolate-doom-3.0.0.tar.gz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  d435d6177423491d60be706da9f07d3ab4fabf3e077ec2a3fc216e394fcfc8c7  chocolate-doom-3.0.1.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
-index 4e0a8fee18..8318c123bd 100644
---- a/package/chocolate-doom/chocolate-doom.mk
-+++ b/package/chocolate-doom/chocolate-doom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHOCOLATE_DOOM_VERSION = 3.0.0
-+CHOCOLATE_DOOM_VERSION = 3.0.1
- CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
- CHOCOLATE_DOOM_LICENSE = GPL-2.0+
- CHOCOLATE_DOOM_LICENSE_FILES = COPYING
+Adam Duskett (13):
+  package/gettext-gnu: add msgfmt wrapper
+  package/libblockdev: new package
+  package/libbytesize: new package
+  package/libblockdev: add support for crypto plugin
+  package/libblockdev: add support for fs plugin
+  package/libblockdev: add support for loop plugin
+  package/libblockdev: add support for lvm plugin
+  package/libblockdev: add support for mdraid plugin
+  package/libblockdev: add support for part plugin
+  package/libblockdev: add support for swap plugin
+  package/udisks/Config.in: alphabatize package selection
+  package/udisks/udisks.mk: alphabatize dependencies
+  package/udisks: bump version to 2.9.0
+
+ DEVELOPERS                                    |  2 +
+ package/Config.in                             |  1 +
+ package/gettext-gnu/gettext-gnu.mk            | 13 +++
+ package/gettext-gnu/msgfmt                    |  3 +
+ package/libblockdev/Config.in                 | 70 ++++++++++++++++
+ package/libblockdev/libblockdev.hash          |  3 +
+ package/libblockdev/libblockdev.mk            | 80 ++++++++++++++++++
+ .../0001-remove-msgcat-dependency.patch       | 36 +++++++++
+ package/libbytesize/Config.in                 | 10 +++
+ package/libbytesize/libbytesize.hash          |  3 +
+ package/libbytesize/libbytesize.mk            | 27 +++++++
+ ...-fix-build-with-newer-glibc-versions.patch | 29 -------
+ .../0002-Fix-systemd-service-file.patch       | 33 --------
+ ...issue-with-missing-sys-sysmacros.h-i.patch | 81 -------------------
+ package/udisks/Config.in                      | 20 ++++-
+ package/udisks/udisks.hash                    |  4 +-
+ package/udisks/udisks.mk                      | 36 ++++++---
+ 17 files changed, 291 insertions(+), 160 deletions(-)
+ create mode 100644 package/gettext-gnu/msgfmt
+ create mode 100644 package/libblockdev/Config.in
+ create mode 100644 package/libblockdev/libblockdev.hash
+ create mode 100644 package/libblockdev/libblockdev.mk
+ create mode 100644 package/libbytesize/0001-remove-msgcat-dependency.patch
+ create mode 100644 package/libbytesize/Config.in
+ create mode 100644 package/libbytesize/libbytesize.hash
+ create mode 100644 package/libbytesize/libbytesize.mk
+ delete mode 100644 package/udisks/0001-fix-build-with-newer-glibc-versions.patch
+ delete mode 100644 package/udisks/0002-Fix-systemd-service-file.patch
+ delete mode 100644 package/udisks/0003-Fix-compilation-issue-with-missing-sys-sysmacros.h-i.patch
+
 -- 
-2.27.0
+2.26.2
