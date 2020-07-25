@@ -1,61 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Jul 2020 23:30:49 +0200
-Subject: [Buildroot] [git commit] package/minizip: use pkg-config to find
- zstd
-Message-ID: <20200725213108.AAC148871C@busybox.osuosl.org>
+Date: Sat, 25 Jul 2020 23:30:59 +0200
+Subject: [Buildroot] [git commit] package/perl-file-util: bump to version
+ 4.201720
+Message-ID: <20200725213108.BEC3D8144E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ebc22aef0f0ac5e6f7e864ae25559bc44fe252f
+commit: https://git.buildroot.net/buildroot/commit/?id=eedb4a55c5a16a89fa19ef43d12ce0e919f97816
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build with zstd in version 2.10.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/0fe0ca0a7d39f863614f2aecd9eefc20cd64daf4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../minizip/0001-Use-pkg-config-to-find-ZSTD.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/perl-file-util/perl-file-util.hash | 8 ++++----
+ package/perl-file-util/perl-file-util.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch b/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
-new file mode 100644
-index 0000000000..5866099634
---- /dev/null
-+++ b/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
-@@ -0,0 +1,30 @@
-+From 69afd09aee3727f2804e1b063ef50800b22c6bb9 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Patrik=20Novotn=C3=BD?= <panovotn@redhat.com>
-+Date: Wed, 1 Jul 2020 11:18:08 +0200
-+Subject: [PATCH] Use pkg-config to find ZSTD
-+
-+[Retrieved from: https://github.com/nmoinvaz/minizip/pull/509]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index a6deb4ce..987e7947 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -115,7 +115,13 @@ endif()
-+ # Check if zstd installation is present
-+ if(MZ_ZSTD)
-+     if(NOT ZSTD_FORCE_FETCH)
-+-        find_package(ZSTD QUIET)
-++        find_package(PkgConfig)
-++        if(PKGCONFIG_FOUND)
-++            pkg_check_modules(ZSTD libzstd)
-++        endif()
-++        if(NOT ZSTD_FOUND)
-++            find_package(ZSTD QUIET)
-++        endif()
-+     endif()
-+     if(ZSTD_FOUND AND NOT ZSTD_FORCE_FETCH)
-+         message(STATUS "Using ZSTD")
+diff --git a/package/perl-file-util/perl-file-util.hash b/package/perl-file-util/perl-file-util.hash
+index 0915494f76..7e529e03ed 100644
+--- a/package/perl-file-util/perl-file-util.hash
++++ b/package/perl-file-util/perl-file-util.hash
+@@ -1,7 +1,7 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    5706487ecf0daae885f709914915e832 File-Util-4.161950.tar.gz
+-sha256 88507b19da580d595b5c25fe6ba75bbd6096b4359e389ead067a216f766c20ee File-Util-4.161950.tar.gz
++md5  093fe77c4658f98375c7f6cc68694948  File-Util-4.201720.tar.gz
++sha256  d4491021850d5c5cbd702c7e4744858079841d2fa93f1c2d09ddc9a7863608df  File-Util-4.201720.tar.gz
+ 
+ # computed by scancpan
+-sha256 5f3732812570654ba911e45ec4e5f7353f4b63747ebfc506c543e8fb1ccf797f COPYING
+-sha256 48428fd07c402ea82d3556753ca936c7030f0d7a6a93c3ef09423c36820ffb91 LICENSE
++sha256  5f3732812570654ba911e45ec4e5f7353f4b63747ebfc506c543e8fb1ccf797f  COPYING
++sha256  996b77ca668f16a443ed14758fce492bddd9f55fe831ee8353274c89191b8544  LICENSE
+diff --git a/package/perl-file-util/perl-file-util.mk b/package/perl-file-util/perl-file-util.mk
+index 5437bc11cf..4348b0e956 100644
+--- a/package/perl-file-util/perl-file-util.mk
++++ b/package/perl-file-util/perl-file-util.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_FILE_UTIL_VERSION = 4.161950
++PERL_FILE_UTIL_VERSION = 4.201720
+ PERL_FILE_UTIL_SOURCE = File-Util-$(PERL_FILE_UTIL_VERSION).tar.gz
+ PERL_FILE_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOMMY
+ PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
