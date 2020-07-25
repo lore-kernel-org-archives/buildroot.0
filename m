@@ -1,128 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Jul 2020 10:39:24 +0200
-Subject: [Buildroot] Buildroot 2020.05.1 released
-Message-ID: <87imecyon7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Jul 2020 10:40:53 +0200
+Subject: [Buildroot] [PATCH v2 07/13] package/libblockdev: add support
+ for lvm plugin
+In-Reply-To: <20200724232601.2441272-8-aduskett@gmail.com>
+References: <20200724232601.2441272-1-aduskett@gmail.com>
+ <20200724232601.2441272-8-aduskett@gmail.com>
+Message-ID: <20200725104053.715fefa5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 24 Jul 2020 16:25:55 -0700
+aduskett at gmail.com wrote:
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libblockdev/Config.in      | 9 +++++++++
+>  package/libblockdev/libblockdev.mk | 8 +++++++-
+>  2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+> index 6f0b3435fe..9da9685bd9 100644
+> --- a/package/libblockdev/Config.in
+> +++ b/package/libblockdev/Config.in
+> @@ -36,6 +36,15 @@ comment "filesystem plugin needs a toolchain w/ locale"
+>  config BR2_PACKAGE_LIBBLOCKDEV_LOOP
+>  	bool "loop"
+>  
+> +config BR2_PACKAGE_LIBBLOCKDEV_LVM2
+> +	bool "lvm2"
+> +	depends on BR2_ENABLE_LOCALE # parted
+> +	select BR2_PACKAGE_PARTED
 
-Buildroot 2020.05.1 is released - Go download it at:
+You're selecting parted here.
 
-http://buildroot.org/downloads/buildroot-2020.05.1.tar.gz
+> +ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LVM2),y)
+> +LIBBLOCKDEV_DEPENDENCIES += lvm2
 
-or
+but don't make it a build-time dependency here.
 
-http://buildroot.org/downloads/buildroot-2020.05.1.tar.bz2
+Could you clarify ?
 
-Or get it from Git:
+Thanks!
 
-git://git.buildroot.org/buildroot
-
-Buildroot 2020.05.1 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2020.05 release.
-
-- Toolchain:
-  - Make external toolchain version check also work for toolchains
-    configured with --with-gcc-major-version-only
-  - Do not handle SOURCE_DATE_EPOCH in toolchain wrapper if the compiler
-    supports it, fixing an issue with precompiled headers
-  - Ensure debug libs from external toolchains are not installed into
-    target if debugging is disabled
-
-- Download:
-  - Correct reproducibility issue in handling of git submodules for
-    older git versions.
-  - Fix file locking over NFS
-
-- Per-package:
-  - Fix an issue with python3 sysconfig data not getting correctly
-    expanded
-  - Fix per-package building for packages using the qmake infrastructure
-
-- Br2-external: Fix error reporting for invalid br2-external trees
-
-- Security fixes for asterisk, bind, clamav, dbus, docker-cli,
-  docker-engine, freerdp, gnutls, go, gupnp, intel-microcode, libcurl,
-  libmicrohttpd, libvncserver, mbedtls, mongodb, mutt, nghttp2, ngircd,
-  nodejs, ntp, php, putty, python-urllib3, python3, sqlite, squid,
-  tcpreplay, tinydtls, upx, vlc, webkitgtk, wireshark, wpewebkit, znc
-
-- Fixes for download/compilation/runtime/license issues in brltty,
-  cdrkit, cryptodev-linux, dbus, e2fsprogs, exim, exiv2, gdb,
-  gdk-pixbuf, gerbera, go, granite, grub2, gst1-plugins-good,
-  gst1-plugins-ugly, iproute2, irrlicht, iwd, jq, libcamera, libcec,
-  libconfuse, libevdev, libhttpserver, libnss, libopenssl, libressl,
-  libxmlrpc, lxc, mesa3d, meson, minizip, mtools, nano, network-manager,
-  nodejs, open-plc-utils, openjdk-bin, openssh, oracle-mysql,
-  paho-mqtt-c, pango, php, prosody, python-greenlet, python-validators,
-  redis, rpi-firmware, samba4, sdl2, squid, strace,
-  sunxi-mali-mainline-driver, syslog-ng, systemd,
-  wireguard-linux-compat, wpebackend-fdo, x11vnc, zstd
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.1
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2020.05..
-
-    44  Fabrice Fontaine
-    16  Bernd Kuhls
-     7  Adam Duskett
-     7  Peter Korsgaard
-     6  Norbert Lange
-     5  Baruch Siach
-     5  Christian Stewart
-     5  Romain Naour
-     4  Danomi Manchego
-     4  James Hilliard
-     4  Peter Seiderer
-     4  Yann E. MORIN
-     3  Adrian Perez de Castro
-     3  Nicolas Robin
-     3  Stefan S?rensen
-     2  Alejandro Gonz?lez
-     2  Martin Bark
-     2  Matt Weber
-     2  Sergio Prado
-     2  Yegor Yefremov
-     1  Aaron Sierra
-     1  Andreas Naumann
-     1  Antoine Tenart
-     1  Asaf Kahlon
-     1  Bartosz Bilas
-     1  Felix Vollmer
-     1  Frank Hunleth
-     1  Giulio Benetti
-     1  Gregory CLEMENT
-     1  Heiko Thiery
-     1  John Keeping
-     1  Joris Offouga
-     1  Joseph Kogut
-     1  Julien Olivain
-     1  Lyle Franklin
-     1  Maxim Cournoyer
-     1  Myl?ne Josserand
-     1  Nicolas Dufresne
-     1  Pierre-Jean Texier
-     1  Sam Voss
-     1  St?phane Veyret
-     1  Thomas De Schampheleire
-     1  Thomas Petazzoni
-     1  Titouan Christophe
-     1  Urja Rannikko
-     1  Yi Zheng
-     1  Yurii Monakov
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
