@@ -1,8 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 26 Jul 2020 00:06:39 +0200
-Subject: [Buildroot] [PATCH v2 1/3] qemu_mips32r6: Do not include hi and lo
+Date: Sun, 26 Jul 2020 00:06:40 +0200
+Subject: [Buildroot] [PATCH v2 2/3] qemu_mips64r6: Do not include hi and lo
  in clobber list for R6
-Message-ID: <20200725220641.1370957-1-romain.naour@gmail.com>
+In-Reply-To: <20200725220641.1370957-1-romain.naour@gmail.com>
+References: <20200725220641.1370957-1-romain.naour@gmail.com>
+Message-ID: <20200725220641.1370957-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,8 +31,8 @@ for mips r6 cpus with gcc 10 for the same reason as glibc.
 [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
 
 Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/655618359
-https://gitlab.com/kubu93/buildroot/-/jobs/655618360
+https://gitlab.com/kubu93/buildroot/-/jobs/655618363
+https://gitlab.com/kubu93/buildroot/-/jobs/655618364
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
@@ -38,19 +40,19 @@ v2: use MIPS_ISA_REV instead of __mips_isa_rev
 ---
  ...ude-hi-and-lo-in-clobber-list-for-R6.patch | 149 ++++++++++++++++++
  ...ude-hi-and-lo-in-clobber-list-for-R6.patch | 149 ++++++++++++++++++
- configs/qemu_mips32r6_malta_defconfig         |   1 +
- configs/qemu_mips32r6el_malta_defconfig       |   1 +
+ configs/qemu_mips64r6_malta_defconfig         |   1 +
+ configs/qemu_mips64r6el_malta_defconfig       |   1 +
  4 files changed, 300 insertions(+)
- create mode 100644 board/qemu/mips32r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
- create mode 100644 board/qemu/mips32r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+ create mode 100644 board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+ create mode 100644 board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
 
-diff --git a/board/qemu/mips32r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch b/board/qemu/mips32r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+diff --git a/board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch b/board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
 new file mode 100644
-index 0000000000..801efb5d08
+index 0000000000..ad2647e627
 --- /dev/null
-+++ b/board/qemu/mips32r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
++++ b/board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
 @@ -0,0 +1,149 @@
-+From bb04c220d82598066eeadf49defaec1157d4d206 Mon Sep 17 00:00:00 2001
++From cfb381d8f4b64f3752c95b4bdd787be63ef84fb2 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@gmail.com>
 +Date: Sat, 25 Jul 2020 11:46:01 +0200
 +Subject: [PATCH] mips: Do not include hi and lo in clobber list for R6
@@ -199,13 +201,13 @@ index 0000000000..801efb5d08
 +-- 
 +2.25.4
 +
-diff --git a/board/qemu/mips32r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch b/board/qemu/mips32r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+diff --git a/board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch b/board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
 new file mode 100644
-index 0000000000..801efb5d08
+index 0000000000..ad2647e627
 --- /dev/null
-+++ b/board/qemu/mips32r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
++++ b/board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
 @@ -0,0 +1,149 @@
-+From bb04c220d82598066eeadf49defaec1157d4d206 Mon Sep 17 00:00:00 2001
++From cfb381d8f4b64f3752c95b4bdd787be63ef84fb2 Mon Sep 17 00:00:00 2001
 +From: Romain Naour <romain.naour@gmail.com>
 +Date: Sat, 25 Jul 2020 11:46:01 +0200
 +Subject: [PATCH] mips: Do not include hi and lo in clobber list for R6
@@ -354,27 +356,27 @@ index 0000000000..801efb5d08
 +-- 
 +2.25.4
 +
-diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
-index 9fb0e0b04d..d0147b4ed9 100644
---- a/configs/qemu_mips32r6_malta_defconfig
-+++ b/configs/qemu_mips32r6_malta_defconfig
-@@ -23,6 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
+index 16bc692996..d53e8e114d 100644
+--- a/configs/qemu_mips64r6_malta_defconfig
++++ b/configs/qemu_mips64r6_malta_defconfig
+@@ -24,6 +24,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
  BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_GLOBAL_PATCH_DIR="board/qemu/mips32r6-malta/patches"
++BR2_GLOBAL_PATCH_DIR="board/qemu/mips64r6-malta/patches"
  
  # Serial port config
  BR2_TARGET_GENERIC_GETTY=y
-diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
-index efadd712b7..f240f869be 100644
---- a/configs/qemu_mips32r6el_malta_defconfig
-+++ b/configs/qemu_mips32r6el_malta_defconfig
-@@ -23,6 +23,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
+index 33b91f3ac1..9f4573a4a9 100644
+--- a/configs/qemu_mips64r6el_malta_defconfig
++++ b/configs/qemu_mips64r6el_malta_defconfig
+@@ -24,6 +24,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
  BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_GLOBAL_PATCH_DIR="board/qemu/mips32r6el-malta/patches"
++BR2_GLOBAL_PATCH_DIR="board/qemu/mips64r6el-malta/patches"
  
  # Serial port config
  BR2_TARGET_GENERIC_GETTY=y
