@@ -1,18 +1,22 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 25 Jul 2020 18:47:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gvfs: fix linking with libmetadata
-Message-ID: <20200725164732.398665-1-fontaine.fabrice@gmail.com>
+Date: Sat, 25 Jul 2020 18:54:41 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/gvfs: fix linking with libmetadata
+Message-ID: <20200725165441.399163-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fiwes:
+Fixes:
  - http://autobuild.buildroot.org/results/fa892c41b6b9285839a0164b000e37fb04dcc194
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix typo: Fiwes -> Fixes
+
  ...n.build-fix-linking-with-libmetadata.patch | 78 +++++++++++++++++++
  1 file changed, 78 insertions(+)
  create mode 100644 package/gvfs/0001-meson.build-fix-linking-with-libmetadata.patch
