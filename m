@@ -1,46 +1,679 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Jul 2020 23:34:33 +0200
-Subject: [Buildroot] [git commit] package/perl-net-dns: bump to version 1.25
-Message-ID: <20200725213109.207E08144E@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 25 Jul 2020 23:35:58 +0200
+Subject: [Buildroot] [PATCH v2] gitlab: generate the gitlab-ci configuration
+ before each build
+Message-ID: <20200725213558.1368219-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cbbfccbf7fed62258027d05b81c8e25bf0a3e97
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since Gitlab 12.9, Gitlab allow to trigger child pipeline with generated configuration file.
+See: https://gitlab.com/gitlab-org/gitlab/-/issues/35632
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This allow us to stop updating the .gitlab-ci.yml file when a
+new defconfig is added to Buildroot.
+
+Remove check-gitlab-ci.yml job since it is now uneeded.
+Remove .gitlab-ci.yml make target.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Back in 2017 (during a Buildroot summer camp) Arnout suggested an
+improvement to generate gitlab-ci yaml file:
+https://gitlab.com/gitlab-org/gitlab-foss/-/issues/34595
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index 14662a235d..d3f909dec1 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  1bf07817bb272d412a737ecc2347d70b  Net-DNS-1.24.tar.gz
--sha256  11a6c2ba6cb1c6640f01c9bbf2036bcbe3974232e9b939ab94985230c92cde63  Net-DNS-1.24.tar.gz
-+md5  5c0d1a6de317993e146ce6d37c897be5  Net-DNS-1.25.tar.gz
-+sha256  10931927d32d771817f9cd7d5502794f245a86cb403310db33656e493f67ff25  Net-DNS-1.25.tar.gz
+It's finally available in Gitlab 12.9.
+
+See:
+https://gitlab.com/kubu93/buildroot/-/pipelines/170612668
+
+v2: move the gitlab-ci template to support/misc/gitlab-ci.yml.in
+    Add "strategy: depend" to fail the parent-pipeline if the child-pipeline fail
+    https://docs.gitlab.com/ee/ci/parent_child_pipelines.html
+---
+ .gitlab-ci.yml                                | 565 +-----------------
+ Makefile                                      |   4 -
+ docs/manual/contribute.txt                    |   3 +-
+ .../misc/gitlab-ci.yml.in                     |  10 -
+ 4 files changed, 19 insertions(+), 563 deletions(-)
+ rename .gitlab-ci.yml.in => support/misc/gitlab-ci.yml.in (92%)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 6cb4d34625..5c6ca69c81 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,552 +1,23 @@
+ # Configuration for Gitlab-CI.
+ # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+-# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
+-# It needs to be regenerated every time a defconfig is added, using
+-# "make .gitlab-ci.yml".
  
- # computed by scancpan
- sha256  afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583  README
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index a6e0f9a280..bd387bb081 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ image: buildroot/base:20191027.2027
  
--PERL_NET_DNS_VERSION = 1.24
-+PERL_NET_DNS_VERSION = 1.25
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-.check_base:
+-    rules:
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
+-          when: never
+-        - when: always
+-
+-check-DEVELOPERS:
+-    extends: .check_base
+-    # get-developers should print just "No action specified"; if it prints
+-    # anything else, it's a parse error.
+-    # The initial ! is removed by YAML so we need to quote it.
+-    script:
+-        - "! utils/get-developers | grep -v 'No action specified'"
+-
+-check-flake8:
+-    extends: .check_base
+-    before_script:
+-        # Help flake8 to find the Python files without .py extension.
+-        - find * -type f -name '*.py' > files.txt
+-        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
+-        - sort -u files.txt | tee files.processed
+-    script:
+-        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
+-    after_script:
+-        - wc -l files.processed
+-
+-check-gitlab-ci.yml:
+-    extends: .check_base
+-    script:
+-        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
+-        - make .gitlab-ci.yml
+-        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+-
+-check-package:
+-    extends: .check_base
+-    script:
+-        - make check-package
+-
+-.defconfig_base:
+-    script:
+-        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+-        - make ${DEFCONFIG_NAME}
+-        - echo 'Build buildroot'
+-        - |
+-            make > >(tee build.log |grep '>>>') 2>&1 || {
+-                echo 'Failed build last output'
+-                tail -200 build.log
+-                exit 1
+-            }
+-        - |
+-            ./support/scripts/boot-qemu-image.py "${DEFCONFIG_NAME}" > >(tee runtime-test.log) 2>&1 || {
+-                echo 'Failed runtime test last output'
+-                tail -200 runtime-test.log
+-                exit 1
+-            }
+-    artifacts:
+-        when: always
+-        expire_in: 2 weeks
+-        paths:
+-            - .config
+-            - build.log
+-            - output/images/
+-            - output/build/build-time.log
+-            - output/build/packages-file-list.txt
+-            - output/build/*/.config
+-            - runtime-test.log
+-
+-.defconfig:
+-    extends: .defconfig_base
+-    # Running the defconfigs for every push is too much, so limit to
+-    # explicit triggers through the API.
+-    rules:
+-        # For tags, create a pipeline.
+-        - if: '$CI_COMMIT_TAG'
+-        # For pipeline created by using a trigger token.
+-        - if: '$CI_PIPELINE_TRIGGERED'
+-        # For the branch or tag name named *-defconfigs, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
+-    before_script:
+-        - DEFCONFIG_NAME=${CI_JOB_NAME}
+-
+-one-defconfig:
+-    extends: .defconfig_base
+-    rules:
+-        # For the branch or tag name named *-*_defconfigs, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/'
+-    before_script:
+-        - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
+-
+-.runtime_test_base:
+-    # Keep build directories so the rootfs can be an artifact of the job. The
+-    # runner will clean up those files for us.
+-    # Multiply every emulator timeout by 10 to avoid sporadic failures in
+-    # elastic runners.
+-    script:
+-        - echo "Starting runtime test ${TEST_CASE_NAME}"
+-        - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
+-    artifacts:
+-        when: always
+-        expire_in: 2 weeks
+-        paths:
+-            - test-output/*.log
+-            - test-output/*/.config
+-            - test-output/*/images/*
+-
+-.runtime_test:
+-    extends: .runtime_test_base
+-    # Running the runtime tests for every push is too much, so limit to
+-    # explicit triggers through the API.
+-    rules:
+-        # For tags, create a pipeline.
+-        - if: '$CI_COMMIT_TAG'
+-        # For pipeline created by using a trigger token.
+-        - if: '$CI_PIPELINE_TRIGGERED'
+-        # For the branch or tag name named *-runtime-tests, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-runtime-tests$/'
+-    before_script:
+-        - TEST_CASE_NAME=${CI_JOB_NAME}
+-
+-one-runtime_test:
+-    extends: .runtime_test_base
+-    rules:
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
+-    before_script:
+-        - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
+-aarch64_efi_defconfig: { extends: .defconfig }
+-acmesystems_aria_g25_128mb_defconfig: { extends: .defconfig }
+-acmesystems_aria_g25_256mb_defconfig: { extends: .defconfig }
+-acmesystems_arietta_g25_128mb_defconfig: { extends: .defconfig }
+-acmesystems_arietta_g25_256mb_defconfig: { extends: .defconfig }
+-amarula_a64_relic_defconfig: { extends: .defconfig }
+-amarula_vyasa_rk3288_defconfig: { extends: .defconfig }
+-andes_ae3xx_defconfig: { extends: .defconfig }
+-arcturus_ucls1012a_defconfig: { extends: .defconfig }
+-arcturus_ucp1020_defconfig: { extends: .defconfig }
+-arm_foundationv8_defconfig: { extends: .defconfig }
+-arm_juno_defconfig: { extends: .defconfig }
+-armadeus_apf27_defconfig: { extends: .defconfig }
+-armadeus_apf28_defconfig: { extends: .defconfig }
+-armadeus_apf51_defconfig: { extends: .defconfig }
+-asus_tinker_rk3288_defconfig: { extends: .defconfig }
+-at91sam9260eknf_defconfig: { extends: .defconfig }
+-at91sam9g20dfc_defconfig: { extends: .defconfig }
+-at91sam9g45m10ek_defconfig: { extends: .defconfig }
+-at91sam9rlek_defconfig: { extends: .defconfig }
+-at91sam9x5ek_defconfig: { extends: .defconfig }
+-at91sam9x5ek_dev_defconfig: { extends: .defconfig }
+-at91sam9x5ek_mmc_defconfig: { extends: .defconfig }
+-at91sam9x5ek_mmc_dev_defconfig: { extends: .defconfig }
+-atmel_sama5d27_som1_ek_mmc_dev_defconfig: { extends: .defconfig }
+-atmel_sama5d2_xplained_mmc_defconfig: { extends: .defconfig }
+-atmel_sama5d2_xplained_mmc_dev_defconfig: { extends: .defconfig }
+-atmel_sama5d3_xplained_defconfig: { extends: .defconfig }
+-atmel_sama5d3_xplained_dev_defconfig: { extends: .defconfig }
+-atmel_sama5d3_xplained_mmc_defconfig: { extends: .defconfig }
+-atmel_sama5d3_xplained_mmc_dev_defconfig: { extends: .defconfig }
+-atmel_sama5d3xek_defconfig: { extends: .defconfig }
+-atmel_sama5d4_xplained_defconfig: { extends: .defconfig }
+-atmel_sama5d4_xplained_dev_defconfig: { extends: .defconfig }
+-atmel_sama5d4_xplained_mmc_defconfig: { extends: .defconfig }
+-atmel_sama5d4_xplained_mmc_dev_defconfig: { extends: .defconfig }
+-bananapi_m1_defconfig: { extends: .defconfig }
+-bananapi_m2_plus_defconfig: { extends: .defconfig }
+-bananapi_m2_ultra_defconfig: { extends: .defconfig }
+-bananapi_m2_zero_defconfig: { extends: .defconfig }
+-bananapi_m64_defconfig: { extends: .defconfig }
+-bananapro_defconfig: { extends: .defconfig }
+-beagleboardx15_defconfig: { extends: .defconfig }
+-beaglebone_defconfig: { extends: .defconfig }
+-beaglebone_qt5_defconfig: { extends: .defconfig }
+-beagleboneai_defconfig: { extends: .defconfig }
+-beelink_gs1_defconfig: { extends: .defconfig }
+-chromebook_snow_defconfig: { extends: .defconfig }
+-ci20_defconfig: { extends: .defconfig }
+-csky_gx6605s_defconfig: { extends: .defconfig }
+-cubieboard2_defconfig: { extends: .defconfig }
+-engicam_imx6qdl_icore_defconfig: { extends: .defconfig }
+-engicam_imx6qdl_icore_qt5_defconfig: { extends: .defconfig }
+-engicam_imx6qdl_icore_rqs_defconfig: { extends: .defconfig }
+-engicam_imx6ul_geam_defconfig: { extends: .defconfig }
+-engicam_imx6ul_isiot_defconfig: { extends: .defconfig }
+-freescale_imx28evk_defconfig: { extends: .defconfig }
+-freescale_imx6dlsabreauto_defconfig: { extends: .defconfig }
+-freescale_imx6dlsabresd_defconfig: { extends: .defconfig }
+-freescale_imx6qsabreauto_defconfig: { extends: .defconfig }
+-freescale_imx6qsabresd_defconfig: { extends: .defconfig }
+-freescale_imx6sxsabresd_defconfig: { extends: .defconfig }
+-freescale_imx6ullevk_defconfig: { extends: .defconfig }
+-freescale_imx7dsabresd_defconfig: { extends: .defconfig }
+-freescale_imx8mmevk_defconfig: { extends: .defconfig }
+-freescale_imx8mnevk_defconfig: { extends: .defconfig }
+-freescale_imx8mqevk_defconfig: { extends: .defconfig }
+-freescale_imx8qmmek_defconfig: { extends: .defconfig }
+-freescale_imx8qxpmek_defconfig: { extends: .defconfig }
+-freescale_p1025twr_defconfig: { extends: .defconfig }
+-freescale_t1040d4rdb_defconfig: { extends: .defconfig }
+-freescale_t2080_qds_rdb_defconfig: { extends: .defconfig }
+-friendlyarm_nanopi_a64_defconfig: { extends: .defconfig }
+-friendlyarm_nanopi_neo2_defconfig: { extends: .defconfig }
+-friendlyarm_nanopi_neo_plus2_defconfig: { extends: .defconfig }
+-galileo_defconfig: { extends: .defconfig }
+-globalscale_espressobin_defconfig: { extends: .defconfig }
+-grinn_chiliboard_defconfig: { extends: .defconfig }
+-grinn_liteboard_defconfig: { extends: .defconfig }
+-hifive_unleashed_defconfig: { extends: .defconfig }
+-imx23evk_defconfig: { extends: .defconfig }
+-imx6-sabreauto_defconfig: { extends: .defconfig }
+-imx6-sabresd_defconfig: { extends: .defconfig }
+-imx6-sabresd_qt5_defconfig: { extends: .defconfig }
+-imx6slevk_defconfig: { extends: .defconfig }
+-imx6sx-sdb_defconfig: { extends: .defconfig }
+-imx6ulevk_defconfig: { extends: .defconfig }
+-imx6ullevk_defconfig: { extends: .defconfig }
+-imx6ulpico_defconfig: { extends: .defconfig }
+-imx7d-sdb_defconfig: { extends: .defconfig }
+-imx7dpico_defconfig: { extends: .defconfig }
+-imx8mmpico_defconfig: { extends: .defconfig }
+-imx8mpico_defconfig: { extends: .defconfig }
+-lafrite_defconfig: { extends: .defconfig }
+-lego_ev3_defconfig: { extends: .defconfig }
+-licheepi_zero_defconfig: { extends: .defconfig }
+-linksprite_pcduino_defconfig: { extends: .defconfig }
+-microchip_sama5d27_wlsom1_ek_mmc_defconfig: { extends: .defconfig }
+-microchip_sama5d27_wlsom1_ek_mmc_dev_defconfig: { extends: .defconfig }
+-minnowboard_max-graphical_defconfig: { extends: .defconfig }
+-minnowboard_max_defconfig: { extends: .defconfig }
+-mx25pdk_defconfig: { extends: .defconfig }
+-mx51evk_defconfig: { extends: .defconfig }
+-mx53loco_defconfig: { extends: .defconfig }
+-mx6cubox_defconfig: { extends: .defconfig }
+-mx6sx_udoo_neo_defconfig: { extends: .defconfig }
+-mx6udoo_defconfig: { extends: .defconfig }
+-nanopi_m1_defconfig: { extends: .defconfig }
+-nanopi_m1_plus_defconfig: { extends: .defconfig }
+-nanopi_neo4_defconfig: { extends: .defconfig }
+-nanopi_neo_defconfig: { extends: .defconfig }
+-nanopi_r1_defconfig: { extends: .defconfig }
+-nexbox_a95x_defconfig: { extends: .defconfig }
+-nitrogen6sx_defconfig: { extends: .defconfig }
+-nitrogen6x_defconfig: { extends: .defconfig }
+-nitrogen7_defconfig: { extends: .defconfig }
+-nitrogen8m_defconfig: { extends: .defconfig }
+-nitrogen8mm_defconfig: { extends: .defconfig }
+-nitrogen8mn_defconfig: { extends: .defconfig }
+-odroidxu4_defconfig: { extends: .defconfig }
+-olimex_a10_olinuxino_lime_defconfig: { extends: .defconfig }
+-olimex_a13_olinuxino_defconfig: { extends: .defconfig }
+-olimex_a20_olinuxino_lime2_defconfig: { extends: .defconfig }
+-olimex_a20_olinuxino_lime_defconfig: { extends: .defconfig }
+-olimex_a20_olinuxino_micro_defconfig: { extends: .defconfig }
+-olimex_a33_olinuxino_defconfig: { extends: .defconfig }
+-olimex_a64_olinuxino_defconfig: { extends: .defconfig }
+-olimex_imx233_olinuxino_defconfig: { extends: .defconfig }
+-olpc_xo175_defconfig: { extends: .defconfig }
+-olpc_xo1_defconfig: { extends: .defconfig }
+-openblocks_a6_defconfig: { extends: .defconfig }
+-orangepi_lite2_defconfig: { extends: .defconfig }
+-orangepi_lite_defconfig: { extends: .defconfig }
+-orangepi_one_defconfig: { extends: .defconfig }
+-orangepi_one_plus_defconfig: { extends: .defconfig }
+-orangepi_pc2_defconfig: { extends: .defconfig }
+-orangepi_pc_defconfig: { extends: .defconfig }
+-orangepi_pc_plus_defconfig: { extends: .defconfig }
+-orangepi_plus_defconfig: { extends: .defconfig }
+-orangepi_prime_defconfig: { extends: .defconfig }
+-orangepi_r1_defconfig: { extends: .defconfig }
+-orangepi_win_defconfig: { extends: .defconfig }
+-orangepi_zero_defconfig: { extends: .defconfig }
+-orangepi_zero_plus2_defconfig: { extends: .defconfig }
+-pandaboard_defconfig: { extends: .defconfig }
+-pc_x86_64_bios_defconfig: { extends: .defconfig }
+-pc_x86_64_efi_defconfig: { extends: .defconfig }
+-pine64_defconfig: { extends: .defconfig }
+-pine64_sopine_defconfig: { extends: .defconfig }
+-qemu_aarch64_virt_defconfig: { extends: .defconfig }
+-qemu_arm_versatile_defconfig: { extends: .defconfig }
+-qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
+-qemu_arm_vexpress_defconfig: { extends: .defconfig }
+-qemu_arm_vexpress_tz_defconfig: { extends: .defconfig }
+-qemu_csky610_virt_defconfig: { extends: .defconfig }
+-qemu_csky807_virt_defconfig: { extends: .defconfig }
+-qemu_csky810_virt_defconfig: { extends: .defconfig }
+-qemu_csky860_virt_defconfig: { extends: .defconfig }
+-qemu_m68k_mcf5208_defconfig: { extends: .defconfig }
+-qemu_m68k_q800_defconfig: { extends: .defconfig }
+-qemu_microblazebe_mmu_defconfig: { extends: .defconfig }
+-qemu_microblazeel_mmu_defconfig: { extends: .defconfig }
+-qemu_mips32r2_malta_defconfig: { extends: .defconfig }
+-qemu_mips32r2el_malta_defconfig: { extends: .defconfig }
+-qemu_mips32r6_malta_defconfig: { extends: .defconfig }
+-qemu_mips32r6el_malta_defconfig: { extends: .defconfig }
+-qemu_mips64_malta_defconfig: { extends: .defconfig }
+-qemu_mips64el_malta_defconfig: { extends: .defconfig }
+-qemu_mips64r6_malta_defconfig: { extends: .defconfig }
+-qemu_mips64r6el_malta_defconfig: { extends: .defconfig }
+-qemu_nios2_10m50_defconfig: { extends: .defconfig }
+-qemu_or1k_defconfig: { extends: .defconfig }
+-qemu_ppc64_e5500_defconfig: { extends: .defconfig }
+-qemu_ppc64_pseries_defconfig: { extends: .defconfig }
+-qemu_ppc64le_pseries_defconfig: { extends: .defconfig }
+-qemu_ppc_g3beige_defconfig: { extends: .defconfig }
+-qemu_ppc_mac99_defconfig: { extends: .defconfig }
+-qemu_ppc_mpc8544ds_defconfig: { extends: .defconfig }
+-qemu_ppc_virtex_ml507_defconfig: { extends: .defconfig }
+-qemu_riscv32_virt_defconfig: { extends: .defconfig }
+-qemu_riscv64_virt_defconfig: { extends: .defconfig }
+-qemu_sh4_r2d_defconfig: { extends: .defconfig }
+-qemu_sh4eb_r2d_defconfig: { extends: .defconfig }
+-qemu_sparc64_sun4u_defconfig: { extends: .defconfig }
+-qemu_sparc_ss10_defconfig: { extends: .defconfig }
+-qemu_x86_64_defconfig: { extends: .defconfig }
+-qemu_x86_defconfig: { extends: .defconfig }
+-qemu_xtensa_lx60_defconfig: { extends: .defconfig }
+-qemu_xtensa_lx60_nommu_defconfig: { extends: .defconfig }
+-raspberrypi0_defconfig: { extends: .defconfig }
+-raspberrypi0w_defconfig: { extends: .defconfig }
+-raspberrypi2_defconfig: { extends: .defconfig }
+-raspberrypi3_64_defconfig: { extends: .defconfig }
+-raspberrypi3_defconfig: { extends: .defconfig }
+-raspberrypi3_qt5we_defconfig: { extends: .defconfig }
+-raspberrypi4_64_defconfig: { extends: .defconfig }
+-raspberrypi4_defconfig: { extends: .defconfig }
+-raspberrypi_defconfig: { extends: .defconfig }
+-riotboard_defconfig: { extends: .defconfig }
+-roc_pc_rk3399_defconfig: { extends: .defconfig }
+-rock64_defconfig: { extends: .defconfig }
+-rock_pi_4_defconfig: { extends: .defconfig }
+-rock_pi_n10_defconfig: { extends: .defconfig }
+-roseapplepi_defconfig: { extends: .defconfig }
+-s6lx9_microboard_defconfig: { extends: .defconfig }
+-sheevaplug_defconfig: { extends: .defconfig }
+-snps_aarch64_vdk_defconfig: { extends: .defconfig }
+-snps_arc700_axs101_defconfig: { extends: .defconfig }
+-snps_archs38_axs103_defconfig: { extends: .defconfig }
+-snps_archs38_haps_defconfig: { extends: .defconfig }
+-snps_archs38_hsdk_defconfig: { extends: .defconfig }
+-snps_archs38_vdk_defconfig: { extends: .defconfig }
+-socrates_cyclone5_defconfig: { extends: .defconfig }
+-solidrun_clearfog_defconfig: { extends: .defconfig }
+-solidrun_clearfog_gt_8k_defconfig: { extends: .defconfig }
+-solidrun_macchiatobin_defconfig: { extends: .defconfig }
+-stm32f429_disco_defconfig: { extends: .defconfig }
+-stm32f469_disco_defconfig: { extends: .defconfig }
+-stm32mp157a_dk1_defconfig: { extends: .defconfig }
+-stm32mp157c_dk2_defconfig: { extends: .defconfig }
+-toradex_apalis_imx6_defconfig: { extends: .defconfig }
+-ts4900_defconfig: { extends: .defconfig }
+-ts5500_defconfig: { extends: .defconfig }
+-ts7680_defconfig: { extends: .defconfig }
+-wandboard_defconfig: { extends: .defconfig }
+-warp7_defconfig: { extends: .defconfig }
+-warpboard_defconfig: { extends: .defconfig }
+-zynq_microzed_defconfig: { extends: .defconfig }
+-zynq_qmtech_defconfig: { extends: .defconfig }
+-zynq_zc706_defconfig: { extends: .defconfig }
+-zynq_zed_defconfig: { extends: .defconfig }
+-zynqmp_zcu106_defconfig: { extends: .defconfig }
+-tests.boot.test_atf.TestATFAllwinner: { extends: .runtime_test }
+-tests.boot.test_atf.TestATFMarvell: { extends: .runtime_test }
+-tests.boot.test_atf.TestATFVexpress: { extends: .runtime_test }
+-tests.boot.test_syslinux.TestSysLinuxX86EFI: { extends: .runtime_test }
+-tests.boot.test_syslinux.TestSysLinuxX86LegacyBios: { extends: .runtime_test }
+-tests.boot.test_syslinux.TestSysLinuxX86_64EFI: { extends: .runtime_test }
+-tests.boot.test_syslinux.TestSysLinuxX86_64LegacyBios: { extends: .runtime_test }
+-tests.core.test_file_capabilities.TestFileCapabilities: { extends: .runtime_test }
+-tests.core.test_hardening.TestFortifyConserv: { extends: .runtime_test }
+-tests.core.test_hardening.TestFortifyNone: { extends: .runtime_test }
+-tests.core.test_hardening.TestRelro: { extends: .runtime_test }
+-tests.core.test_hardening.TestRelroPartial: { extends: .runtime_test }
+-tests.core.test_hardening.TestSspNone: { extends: .runtime_test }
+-tests.core.test_hardening.TestSspStrong: { extends: .runtime_test }
+-tests.core.test_post_scripts.TestPostScripts: { extends: .runtime_test }
+-tests.core.test_root_password.TestRootPassword: { extends: .runtime_test }
+-tests.core.test_rootfs_overlay.TestRootfsOverlay: { extends: .runtime_test }
+-tests.core.test_timezone.TestGlibcAllTimezone: { extends: .runtime_test }
+-tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone: { extends: .runtime_test }
+-tests.core.test_timezone.TestNoTimezone: { extends: .runtime_test }
+-tests.download.test_git.TestGitHash: { extends: .runtime_test }
+-tests.download.test_git.TestGitRefs: { extends: .runtime_test }
+-tests.fs.test_ext.TestExt2: { extends: .runtime_test }
+-tests.fs.test_ext.TestExt2r1: { extends: .runtime_test }
+-tests.fs.test_ext.TestExt3: { extends: .runtime_test }
+-tests.fs.test_ext.TestExt4: { extends: .runtime_test }
+-tests.fs.test_f2fs.TestF2FS: { extends: .runtime_test }
+-tests.fs.test_iso9660.TestIso9660Grub2External: { extends: .runtime_test }
+-tests.fs.test_iso9660.TestIso9660Grub2ExternalCompress: { extends: .runtime_test }
+-tests.fs.test_iso9660.TestIso9660Grub2Internal: { extends: .runtime_test }
+-tests.fs.test_iso9660.TestIso9660SyslinuxExternal: { extends: .runtime_test }
+-tests.fs.test_iso9660.TestIso9660SyslinuxExternalCompress: { extends: .runtime_test }
+-tests.fs.test_iso9660.TestIso9660SyslinuxInternal: { extends: .runtime_test }
+-tests.fs.test_jffs2.TestJffs2: { extends: .runtime_test }
+-tests.fs.test_squashfs.TestSquashfs: { extends: .runtime_test }
+-tests.fs.test_ubi.TestUbi: { extends: .runtime_test }
+-tests.fs.test_yaffs2.TestYaffs2: { extends: .runtime_test }
+-tests.init.test_busybox.TestInitSystemBusyboxRo: { extends: .runtime_test }
+-tests.init.test_busybox.TestInitSystemBusyboxRoNet: { extends: .runtime_test }
+-tests.init.test_busybox.TestInitSystemBusyboxRw: { extends: .runtime_test }
+-tests.init.test_busybox.TestInitSystemBusyboxRwNet: { extends: .runtime_test }
+-tests.init.test_none.TestInitSystemNone: { extends: .runtime_test }
+-tests.init.test_openrc.TestInitSystemOpenrcRoFull: { extends: .runtime_test }
+-tests.init.test_openrc.TestInitSystemOpenrcRwFull: { extends: .runtime_test }
+-tests.init.test_systemd.TestInitSystemSystemdRoFull: { extends: .runtime_test }
+-tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: { extends: .runtime_test }
+-tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: { extends: .runtime_test }
+-tests.init.test_systemd.TestInitSystemSystemdRwFull: { extends: .runtime_test }
+-tests.init.test_systemd.TestInitSystemSystemdRwIfupdown: { extends: .runtime_test }
+-tests.init.test_systemd.TestInitSystemSystemdRwNetworkd: { extends: .runtime_test }
+-tests.package.test_atop.TestAtop: { extends: .runtime_test }
+-tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
+-tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
+-tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+-tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
+-tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
+-tests.package.test_gst1_python.TestGst1Python: { extends: .runtime_test }
+-tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
+-tests.package.test_libftdi1.TestPythonPy2Libftdi1: { extends: .runtime_test }
+-tests.package.test_libftdi1.TestPythonPy3Libftdi1: { extends: .runtime_test }
+-tests.package.test_lpeg.TestLuaLPeg: { extends: .runtime_test }
+-tests.package.test_lpeg.TestLuajitLPeg: { extends: .runtime_test }
+-tests.package.test_lsqlite3.TestLuaLsqlite3: { extends: .runtime_test }
+-tests.package.test_lsqlite3.TestLuajitLsqlite3: { extends: .runtime_test }
+-tests.package.test_lua.TestLua: { extends: .runtime_test }
+-tests.package.test_lua.TestLuajit: { extends: .runtime_test }
+-tests.package.test_lua_cqueues.TestLuaLuaCqueues: { extends: .runtime_test }
+-tests.package.test_lua_cqueues.TestLuajitLuaCqueues: { extends: .runtime_test }
+-tests.package.test_lua_curl.TestLuaLuacURL: { extends: .runtime_test }
+-tests.package.test_lua_curl.TestLuajitLuacURL: { extends: .runtime_test }
+-tests.package.test_lua_gd.TestLuaLuaGD: { extends: .runtime_test }
+-tests.package.test_lua_gd.TestLuajitLuaGD: { extends: .runtime_test }
+-tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
+-tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
+-tests.package.test_lua_lyaml.TestLuaLuaLyaml: { extends: .runtime_test }
+-tests.package.test_lua_lyaml.TestLuajitLuaLyaml: { extends: .runtime_test }
+-tests.package.test_lua_sdl2.TestLuaLuaSDL2: { extends: .runtime_test }
+-tests.package.test_lua_sdl2.TestLuajitLuaSDL2: { extends: .runtime_test }
+-tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
+-tests.package.test_lua_utf8.TestLuajitUtf8: { extends: .runtime_test }
+-tests.package.test_luaexpat.TestLuaLuaExpat: { extends: .runtime_test }
+-tests.package.test_luaexpat.TestLuajitLuaExpat: { extends: .runtime_test }
+-tests.package.test_luafilesystem.TestLuaLuaFileSystem: { extends: .runtime_test }
+-tests.package.test_luafilesystem.TestLuajitLuaFileSystem: { extends: .runtime_test }
+-tests.package.test_luaossl.TestLuaLuaossl: { extends: .runtime_test }
+-tests.package.test_luaossl.TestLuajitLuaossl: { extends: .runtime_test }
+-tests.package.test_luaposix.TestLuaLuaPosix: { extends: .runtime_test }
+-tests.package.test_luaposix.TestLuajitLuaPosix: { extends: .runtime_test }
+-tests.package.test_luasec.TestLuaLuaSec: { extends: .runtime_test }
+-tests.package.test_luasec.TestLuajitLuaSec: { extends: .runtime_test }
+-tests.package.test_luasocket.TestLuaLuaSocket: { extends: .runtime_test }
+-tests.package.test_luasocket.TestLuajitLuaSocket: { extends: .runtime_test }
+-tests.package.test_luasyslog.TestLuaLuasyslog: { extends: .runtime_test }
+-tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
+-tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
+-tests.package.test_lxc.TestLxc: { extends: .runtime_test }
+-tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
+-tests.package.test_netdata.TestNetdata: { extends: .runtime_test }
+-tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
+-tests.package.test_opkg.TestOpkg: { extends: .runtime_test }
+-tests.package.test_perl.TestPerl: { extends: .runtime_test }
+-tests.package.test_perl_class_load.TestPerlClassLoad: { extends: .runtime_test }
+-tests.package.test_perl_dbd_mysql.TestPerlDBDmysql: { extends: .runtime_test }
+-tests.package.test_perl_encode_detect.TestPerlEncodeDetect: { extends: .runtime_test }
+-tests.package.test_perl_gdgraph.TestPerlGDGraph: { extends: .runtime_test }
+-tests.package.test_perl_html_parser.TestPerlHTMLParser: { extends: .runtime_test }
+-tests.package.test_perl_io_socket_multicast.TestPerlIOSocketMulticast: { extends: .runtime_test }
+-tests.package.test_perl_io_socket_ssl.TestPerlIOSocketSSL: { extends: .runtime_test }
+-tests.package.test_perl_libwww_perl.TestPerllibwwwperl: { extends: .runtime_test }
+-tests.package.test_perl_lwp_protocol_https.TestPerlLWPProtocolhttps: { extends: .runtime_test }
+-tests.package.test_perl_mail_dkim.TestPerlMailDKIM: { extends: .runtime_test }
+-tests.package.test_perl_x10.TestPerlX10: { extends: .runtime_test }
+-tests.package.test_perl_xml_libxml.TestPerlXMLLibXML: { extends: .runtime_test }
+-tests.package.test_prosody.TestProsodyLua51: { extends: .runtime_test }
+-tests.package.test_prosody.TestProsodyLuajit: { extends: .runtime_test }
+-tests.package.test_python.TestPython2: { extends: .runtime_test }
+-tests.package.test_python.TestPython3: { extends: .runtime_test }
+-tests.package.test_python_argh.TestPythonPy2Argh: { extends: .runtime_test }
+-tests.package.test_python_argh.TestPythonPy3Argh: { extends: .runtime_test }
+-tests.package.test_python_attrs.TestPythonPy2Attrs: { extends: .runtime_test }
+-tests.package.test_python_attrs.TestPythonPy3Attrs: { extends: .runtime_test }
+-tests.package.test_python_autobahn.TestPythonPy3Autobahn: { extends: .runtime_test }
+-tests.package.test_python_automat.TestPythonPy2Automat: { extends: .runtime_test }
+-tests.package.test_python_automat.TestPythonPy3Automat: { extends: .runtime_test }
+-tests.package.test_python_avro.TestPythonAvro: { extends: .runtime_test }
+-tests.package.test_python_bitstring.TestPythonPy2Bitstring: { extends: .runtime_test }
+-tests.package.test_python_bitstring.TestPythonPy3Bitstring: { extends: .runtime_test }
+-tests.package.test_python_can.TestPythonPy2Can: { extends: .runtime_test }
+-tests.package.test_python_can.TestPythonPy3Can: { extends: .runtime_test }
+-tests.package.test_python_cbor.TestPythonPy2Cbor: { extends: .runtime_test }
+-tests.package.test_python_cbor.TestPythonPy3Cbor: { extends: .runtime_test }
+-tests.package.test_python_click.TestPythonPy2Click: { extends: .runtime_test }
+-tests.package.test_python_click.TestPythonPy3Click: { extends: .runtime_test }
+-tests.package.test_python_colorzero.TestPythonPy2Colorzero: { extends: .runtime_test }
+-tests.package.test_python_colorzero.TestPythonPy3Colorzero: { extends: .runtime_test }
+-tests.package.test_python_constantly.TestPythonPy2Constantly: { extends: .runtime_test }
+-tests.package.test_python_constantly.TestPythonPy3Constantly: { extends: .runtime_test }
+-tests.package.test_python_crossbar.TestPythonPy3Crossbar: { extends: .runtime_test }
+-tests.package.test_python_cryptography.TestPythonPy2Cryptography: { extends: .runtime_test }
+-tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .runtime_test }
+-tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
+-tests.package.test_python_gitdb2.TestPythonPy2Gitdb2: { extends: .runtime_test }
+-tests.package.test_python_gitdb2.TestPythonPy3Gitdb2: { extends: .runtime_test }
+-tests.package.test_python_gobject.TestPythonPy3Gobject: { extends: .runtime_test }
+-tests.package.test_python_gpiozero.TestPythonPy2Gpiozero: { extends: .runtime_test }
+-tests.package.test_python_gpiozero.TestPythonPy3Gpiozero: { extends: .runtime_test }
+-tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
+-tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
+-tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
+-tests.package.test_python_passlib.TestPythonPy3Passlib: { extends: .runtime_test }
+-tests.package.test_python_pexpect.TestPythonPy2Pexpect: { extends: .runtime_test }
+-tests.package.test_python_pexpect.TestPythonPy3Pexpect: { extends: .runtime_test }
+-tests.package.test_python_pynacl.TestPythonPy2Pynacl: { extends: .runtime_test }
+-tests.package.test_python_pynacl.TestPythonPy3Pynacl: { extends: .runtime_test }
+-tests.package.test_python_pyyaml.TestPythonPy2Pyyaml: { extends: .runtime_test }
+-tests.package.test_python_pyyaml.TestPythonPy3Pyyaml: { extends: .runtime_test }
+-tests.package.test_python_service_identity.TestPythonPy2ServiceIdentity: { extends: .runtime_test }
+-tests.package.test_python_service_identity.TestPythonPy3ServiceIdentity: { extends: .runtime_test }
+-tests.package.test_python_smmap2.TestPythonPy2Smmap2: { extends: .runtime_test }
+-tests.package.test_python_smmap2.TestPythonPy3Smmap2: { extends: .runtime_test }
+-tests.package.test_python_subprocess32.TestPythonPy2Subprocess32: { extends: .runtime_test }
+-tests.package.test_python_treq.TestPythonPy2Treq: { extends: .runtime_test }
+-tests.package.test_python_treq.TestPythonPy3Treq: { extends: .runtime_test }
+-tests.package.test_python_twisted.TestPythonPy2Twisted: { extends: .runtime_test }
+-tests.package.test_python_twisted.TestPythonPy3Twisted: { extends: .runtime_test }
+-tests.package.test_python_txaio.TestPythonPy3Txaio: { extends: .runtime_test }
+-tests.package.test_python_txtorcon.TestPythonPy2Txtorcon: { extends: .runtime_test }
+-tests.package.test_python_txtorcon.TestPythonPy3Txtorcon: { extends: .runtime_test }
+-tests.package.test_python_ubjson.TestPythonPy2Ubjson: { extends: .runtime_test }
+-tests.package.test_python_ubjson.TestPythonPy3Ubjson: { extends: .runtime_test }
+-tests.package.test_redis.TestRedis: { extends: .runtime_test }
+-tests.package.test_rings.TestLuaRings: { extends: .runtime_test }
+-tests.package.test_rings.TestLuajitRings: { extends: .runtime_test }
+-tests.package.test_rust.TestRust: { extends: .runtime_test }
+-tests.package.test_rust.TestRustBin: { extends: .runtime_test }
+-tests.package.test_syslog_ng.TestSyslogNg: { extends: .runtime_test }
+-tests.package.test_tmux.TestTmux: { extends: .runtime_test }
+-tests.package.test_turbolua.TestLuajitTurbolua: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainCCache: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainCtngMusl: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainLinaroArm: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainSourceryArmv4: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainSourceryArmv5: { extends: .runtime_test }
+-tests.toolchain.test_external.TestExternalToolchainSourceryArmv7: { extends: .runtime_test }
+-tests.utils.test_check_package.TestCheckPackage: { extends: .runtime_test }
++stages:
++  - generate-gitlab-ci
++  - build
++
++generate-gitlab-ci-yml:
++  stage: generate-gitlab-ci
++  script: ./support/scripts/generate-gitlab-ci-yml support/misc/gitlab-ci.yml.in > generated-gitlab-ci.yml
++  artifacts:
++    paths:
++      - generated-gitlab-ci.yml
++
++buildroot-pipeline:
++  stage: build
++  trigger:
++    include:
++      - artifact: generated-gitlab-ci.yml
++        job: generate-gitlab-ci-yml
++    strategy: depend
+diff --git a/Makefile b/Makefile
+index 12812526c7..f8388dae5d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1206,10 +1206,6 @@ check-package:
+ 	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
+ 		-exec ./utils/check-package {} +
+ 
+-.PHONY: .gitlab-ci.yml
+-.gitlab-ci.yml: .gitlab-ci.yml.in
+-	./support/scripts/generate-gitlab-ci-yml $< > $@
+-
+ include docs/manual/manual.mk
+ -include $(foreach dir,$(BR2_EXTERNAL_DIRS),$(sort $(wildcard $(dir)/docs/*/*.mk)))
+ 
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index bde7543c25..ef3edb500d 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -574,8 +574,7 @@ emulator and provide test case conditions.
+ Beyond creating the test script, there are a couple of additional steps that
+ should be taken once you have your initial test case script. The first is
+ to add yourself to the +DEVELOPERS+ file to be the maintainer of that test
+-case. The second is to update the Gitlab CI yml by executing
+-+make .gitlab-ci.yml+.
++case. The second is to update the Gitlab CI yml.
+ 
+ ==== Debugging a test case
+ 
+diff --git a/.gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+similarity index 92%
+rename from .gitlab-ci.yml.in
+rename to support/misc/gitlab-ci.yml.in
+index 1facd2a66f..cf9bf5f9cf 100644
+--- a/.gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -1,8 +1,5 @@
+ # Configuration for Gitlab-CI.
+ # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+-# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
+-# It needs to be regenerated every time a defconfig is added, using
+-# "make .gitlab-ci.yml".
+ 
+ image: buildroot/base:20191027.2027
+ 
+@@ -32,13 +29,6 @@ check-flake8:
+     after_script:
+         - wc -l files.processed
+ 
+-check-gitlab-ci.yml:
+-    extends: .check_base
+-    script:
+-        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
+-        - make .gitlab-ci.yml
+-        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+-
+ check-package:
+     extends: .check_base
+     script:
+-- 
+2.25.4
