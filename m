@@ -1,50 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Jul 2020 23:31:21 +0200
-Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
- 6.25
-Message-ID: <20200725213108.E1DA68144E@busybox.osuosl.org>
+Date: Sat, 25 Jul 2020 23:34:30 +0200
+Subject: [Buildroot] [git commit] package/perl-mojolicious: bump to version
+ 8.57
+Message-ID: <20200725213109.11C6E8144E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f97e7a73081428f0589db69a7ed55ef40a2f2f67
+commit: https://git.buildroot.net/buildroot/commit/?id=b144705fe47210f13d7837fcd5e9cc956e8bd4d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-message/perl-http-message.hash | 4 ++--
- package/perl-http-message/perl-http-message.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index 99464e3ba1..c220d5f824 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index 1f837cbd56..8802ba261f 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  d1d1dc1f83ece90bd0503b4495274955  HTTP-Message-6.24.tar.gz
--sha256  554a1acf2daa401091f7012f5cb82d04d281db43fbd8f39a1fcbb7ed56dde16d  HTTP-Message-6.24.tar.gz
-+md5  8847fe62ec103a242d39194c9e3c647e  HTTP-Message-6.25.tar.gz
-+sha256  21f46502e87d57f43b7a38f81916464b079f5d50fe529458391c0ad529e0075a  HTTP-Message-6.25.tar.gz
+-md5  9502ffca0dac9cb85caac9a1913108d5  Mojolicious-8.40.tar.gz
+-sha256  185ec9ccd3012c391db863635b7c1dd06927e7b4f2d436a45b64154fd56578c3  Mojolicious-8.40.tar.gz
++md5  c5110e47f83a7fb0d6369ea12458652f  Mojolicious-8.57.tar.gz
++sha256  baa310e3859fe83df421acb467cc07694dcc58d06d936d06584b4679a8d5bada  Mojolicious-8.57.tar.gz
  
  # computed by scancpan
- sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index d802c258df..cb8a1d94b5 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
-@@ -4,9 +4,9 @@
+ sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index 140c089ab3..edcbaf3d5f 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.24
-+PERL_HTTP_MESSAGE_VERSION = 6.25
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
--PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
-+PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
- PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
- PERL_HTTP_MESSAGE_DISTNAME = HTTP-Message
+-PERL_MOJOLICIOUS_VERSION = 8.40
++PERL_MOJOLICIOUS_VERSION = 8.57
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
