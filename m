@@ -1,29 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 25 Jul 2020 07:27:20 +0000
-Subject: [Buildroot] [Bug 13026] rpi-firmware: must not rename start files
-In-Reply-To: <bug-13026-163@https.bugs.busybox.net/>
-References: <bug-13026-163@https.bugs.busybox.net/>
-Message-ID: <bug-13026-163-CYIMja9FOp@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 25 Jul 2020 09:29:08 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/squid: add
+ optional systemd dependency
+Message-ID: <20200725072436.2B7CA87B20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13026
+commit: https://git.buildroot.net/buildroot/commit/?id=a5f37fce0132faefb26dfd1c7e556f765dfd92e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+systemd is an optional dependency (enabled by default) since version
+4.11 and
+https://github.com/squid-cache/squid/commit/6fa8c66435d55a2e713db0222cdca3a9dccf5bbe
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a70bcb531ce5e22e8a6126a6ed774dd538e18623)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=72bf704f0313b314bc52dbebfd2b2e62d4fed5b3,
-thanks
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index d281eee3ed..ef2f84085c 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -62,6 +62,13 @@ else
+ SQUID_CONF_OPTS += --without-gnutls
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++SQUID_CONF_OPTS += --with-systemd
++SQUID_DEPENDENCIES += systemd
++else
++SQUID_CONF_OPTS += --without-systemd
++endif
++
+ define SQUID_CLEANUP_TARGET
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, \
+ 		RunCache RunAccel)
