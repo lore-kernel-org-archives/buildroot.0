@@ -1,58 +1,117 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Jul 2020 08:03:30 +0200
-Subject: [Buildroot] [git commit] package/squid: security bump to version
- 4.12
-Message-ID: <20200725062158.257058100B@busybox.osuosl.org>
+Date: Sat, 25 Jul 2020 08:04:47 +0200
+Subject: [Buildroot] [git commit] package/haproxy: fix static only build
+Message-ID: <20200725062158.2DFA38616A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5eef337aead10d6105ddabf6230ec14b1b8e9fa
+commit: https://git.buildroot.net/buildroot/commit/?id=63360d1493f4b9f751a74dd2894dc0a57f2e327f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2020-15049: Cache Poisoning Issue in HTTP Request processing
-- Fix CVE-2020-14058: Denial of Service issue in TLS handshake
-- Fix CVE-2020-14059: Denial of Service when using SMP cache
-
-This version also fix a build failure with systemd
+Add a patch to avoid dlfcn.h use when the toolchain is static only.
 
 Fixes:
- - http://autobuild.buildroot.org/results/4f586c497577d6c96289e821430fa2c2f61eda2a
+http://autobuild.buildroot.net/results/98caf66e8a7f72ee24e4d39f3aab541f82310369/
+http://autobuild.buildroot.net/results/3024eb48a026b1a91e39f7d996be3d7f50314762/
+http://autobuild.buildroot.net/results/e6bbf1469926bde9057f270940d1455e0f758e0e/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...tools-fix-build-with-static-only-toolchai.patch | 84 ++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 3c8ab64d35..a3ef655185 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.11.tar.xz.asc
--md5  10f34e852153a9996aa4614670e2bda1  squid-4.11.tar.xz
--sha1  053277bf5497163ffc9261b9807abda5959bb6fc  squid-4.11.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
-+md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
-+sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
- # Locally calculated
--sha256  4ed947612410263f57ad0e39bfd087e60fb714f028d7d3b0e469943efd34287d  squid-4.11.tar.xz
-+sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index ef2f84085c..6bce74b7d6 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 4.11
-+SQUID_VERSION = 4.12
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+diff --git a/package/haproxy/0001-BUG-MEDIUM-tools-fix-build-with-static-only-toolchai.patch b/package/haproxy/0001-BUG-MEDIUM-tools-fix-build-with-static-only-toolchai.patch
+new file mode 100644
+index 0000000000..7ae7a6cbfd
+--- /dev/null
++++ b/package/haproxy/0001-BUG-MEDIUM-tools-fix-build-with-static-only-toolchai.patch
+@@ -0,0 +1,84 @@
++From 311df83437c4d578e35e5faca30c10da28c30323 Mon Sep 17 00:00:00 2001
++Message-Id: <311df83437c4d578e35e5faca30c10da28c30323.1595566447.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 24 Jul 2020 07:44:59 +0300
++Subject: [PATCH] BUG/MEDIUM: tools: fix build with static only toolchains
++
++uClibc toolchains built with no dynamic library support don't provide
++the dlfcn.h header. That leads to build failure:
++
++  CC      src/tools.o
++src/tools.c:15:10: fatal error: dlfcn.h: No such file or directory
++ #include <dlfcn.h>
++          ^~~~~~~~~
++Enable dladdr only when USE_DL is defined.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status:
++https://www.mail-archive.com/haproxy at formilux.org/msg37986.html
++
++ src/tools.c | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/tools.c b/src/tools.c
++index 1c664852ad73..0bd80f846d05 100644
++--- a/src/tools.c
+++++ b/src/tools.c
++@@ -10,7 +10,7 @@
++  *
++  */
++ 
++-#ifdef __ELF__
+++#if defined(__ELF__) && defined(USE_DL)
++ #define _GNU_SOURCE
++ #include <dlfcn.h>
++ #include <link.h>
++@@ -4410,7 +4410,7 @@ const char *get_exec_path()
++ 	return ret;
++ }
++ 
++-#ifdef __ELF__
+++#if defined(__ELF__) && defined(USE_DL)
++ /* calls dladdr() or dladdr1() on <addr> and <dli>. If dladdr1 is available,
++  * also returns the symbol size in <size>, otherwise returns 0 there.
++  */
++@@ -4444,7 +4444,7 @@ static int dladdr_and_size(const void *addr, Dl_info *dli, size_t *size)
++  * The file name (lib or executable) is limited to what lies between the last
++  * '/' and the first following '.'. An optional prefix <pfx> is prepended before
++  * the output if not null. The file is not dumped when it's the same as the one
++- * that contains the "main" symbol, or when __ELF__ is not set.
+++ * that contains the "main" symbol, or when __ELF__ && USE_DL are not set.
++  *
++  * The symbol's base address is returned, or NULL when unresolved, in order to
++  * allow the caller to match it against known ones.
++@@ -4472,7 +4472,7 @@ const void *resolve_sym_name(struct buffer *buf, const char *pfx, void *addr)
++ #endif
++ 	};
++ 
++-#ifdef __ELF__
+++#if defined(__ELF__) && defined(USE_DL)
++ 	Dl_info dli, dli_main;
++ 	size_t size;
++ 	const char *fname, *p;
++@@ -4489,7 +4489,7 @@ const void *resolve_sym_name(struct buffer *buf, const char *pfx, void *addr)
++ 		}
++ 	}
++ 
++-#ifdef __ELF__
+++#if defined(__ELF__) && defined(USE_DL)
++ 	/* Now let's try to be smarter */
++ 	if (!dladdr_and_size(addr, &dli, &size))
++ 		goto unknown;
++@@ -4529,7 +4529,7 @@ const void *resolve_sym_name(struct buffer *buf, const char *pfx, void *addr)
++ 		chunk_appendf(buf, "+%#lx", (long)(addr - dli.dli_fbase));
++ 		return NULL;
++ 	}
++-#endif /* __ELF__ */
+++#endif /* __ELF__ && USE_DL */
++  unknown:
++ 	/* unresolved symbol from the main file, report relative offset to main */
++ 	if ((void*)addr < (void*)main)
++-- 
++2.27.0
++
