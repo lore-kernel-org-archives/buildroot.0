@@ -1,44 +1,66 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Jul 2020 08:16:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch-mod-bcg729: bump version
- to 1.0.5
-Message-ID: <20200726061601.365706-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Jul 2020 23:48:00 +0200
+Subject: [Buildroot] [git commit] package/enchant: bump to version 2.2.8
+Message-ID: <20200726070409.08BEF7FF08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+commit: https://git.buildroot.net/buildroot/commit/?id=e90729b5b1391d2bde5b0813d8402cda4f0cd24a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- Update site to get latest version
+- Update hash of COPYING.LIB (update in FSF address with
+  https://github.com/AbiWord/enchant/commit/adcb08292d4650a1c258f9b02c53cf1e26b47185)
+- Update indentation in hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash | 4 ++--
- package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/enchant/Config.in    | 2 +-
+ package/enchant/enchant.hash | 5 ++---
+ package/enchant/enchant.mk   | 5 +++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
-index a863dbfcf7..d7fb58fb6d 100644
---- a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
-+++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 0dec5b78f655e175936806396b89b4997c8e543a1c84683a19ea2b6f36e01d7e  freeswitch-mod-bcg729-1.0.4.tar.gz
--sha256 bb4680b13c3190429464a8308a07d7d891e6454349fb7be856e02405b25b1195  LICENSE
-+sha256  ada0640094b5b3b4a767ec360213bfed624e698c9932b2f9ceb76eb1c0f5a246  freeswitch-mod-bcg729-1.0.5.tar.gz
-+sha256  bb4680b13c3190429464a8308a07d7d891e6454349fb7be856e02405b25b1195  LICENSE
-diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
-index f92a490051..d820756c0f 100644
---- a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
-+++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/enchant/Config.in b/package/enchant/Config.in
+index 86b2fade8f..4a39d03f86 100644
+--- a/package/enchant/Config.in
++++ b/package/enchant/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_ENCHANT
+ 	  Enchant is a spell-checking library that provides a consistent
+ 	  API across a number of spell-checking system backends.
+ 
+-	  http://www.abisource.com/projects/enchant/
++	  https://abiword.github.io/enchant/
+ 
+ comment "enchant needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_USE_MMU
+diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
+index f5709f08ee..5485444519 100644
+--- a/package/enchant/enchant.hash
++++ b/package/enchant/enchant.hash
+@@ -1,4 +1,3 @@
+-# From http://www.abisource.com/downloads/enchant/1.6.0/MD5SUM
+-md5	de11011aff801dc61042828041fb59c7	enchant-1.6.0.tar.gz
+ # locally computed
+-sha256  d0db934167997c8b8c863af297b3653aa98500bca0a7c05e9c6ec0dabf4f67d4  COPYING.LIB
++sha256  c7b5e2853f0dd0b1aafea2f9e071941affeec3a76df8e3f6d67a718c89293555  enchant-2.2.8.tar.gz
++sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING.LIB
+diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
+index 69402c1af7..4465b38885 100644
+--- a/package/enchant/enchant.mk
++++ b/package/enchant/enchant.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--FREESWITCH_MOD_BCG729_VERSION = 1.0.4
-+FREESWITCH_MOD_BCG729_VERSION = 1.0.5
- FREESWITCH_MOD_BCG729_SITE = $(call github,xadhoom,mod_bcg729,v$(FREESWITCH_MOD_BCG729_VERSION))
- FREESWITCH_MOD_BCG729_LICENSE = MPL-1.1
- FREESWITCH_MOD_BCG729_LICENSE_FILES = LICENSE
--- 
-2.27.0
+-ENCHANT_VERSION = 1.6.0
+-ENCHANT_SITE = http://www.abisource.com/downloads/enchant/$(ENCHANT_VERSION)
++ENCHANT_VERSION = 2.2.8
++ENCHANT_SITE = \
++	https://github.com/AbiWord/enchant/releases/download/v$(ENCHANT_VERSION)
+ ENCHANT_INSTALL_STAGING = YES
+ ENCHANT_DEPENDENCIES = libglib2 host-pkgconf
+ ENCHANT_LICENSE = LGPL-2.1+
