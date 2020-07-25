@@ -1,101 +1,382 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2020 14:05:23 +0200
-Subject: [Buildroot] [PATCH 11/11] support/testing/tests: add test for
- file overwrite detection
-In-Reply-To: <20200430095249.782597-12-thomas.petazzoni@bootlin.com>
-References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
- <20200430095249.782597-12-thomas.petazzoni@bootlin.com>
-Message-ID: <20200725120523.GB19818@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 25 Jul 2020 15:06:11 +0200
+Subject: [Buildroot] [PATCH 2/3] qemu_mips64r6: Do not include hi and lo in
+ clobber list for R6
+In-Reply-To: <20200725130612.1325544-1-romain.naour@gmail.com>
+References: <20200725130612.1325544-1-romain.naour@gmail.com>
+Message-ID: <20200725130612.1325544-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From [1]
+"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
+available to be present in the clobber list anymore, resulting in build failure
+for mips*r6 targets in form of:
+...
+.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
+  146 |  __asm__ volatile (	 \
+      |  ^~~~~~~
 
-On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-[--SNIP--]
-> diff --git a/support/testing/tests/core/test_file_overwrite.py b/support/testing/tests/core/test_file_overwrite.py
-> new file mode 100644
-> index 0000000000..526ed55e43
-> --- /dev/null
-> +++ b/support/testing/tests/core/test_file_overwrite.py
-> @@ -0,0 +1,47 @@
-> +import infra
-> +import infra.basetest
-> +import subprocess
-> +
-> +
-> +class DetectTargetFileOverwriteTest(infra.basetest.BRConfigTest):
-> +    config = \
-> +        infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_PER_PACKAGE_DIRECTORIES=y
-> +        BR2_PACKAGE_DETECT_OVERWRITE=y
-> +        """
-> +    br2_external = [infra.filepath("tests/core/br2-external/detect-overwrite")]
-> +
-> +    def test_run(self):
-> +        with self.assertRaises(SystemError):
-> +            self.b.build()
-> +        logf_path = infra.log_file_path(self.b.builddir, "build",
-> +                                        infra.basetest.BRConfigTest.logtofile)
-> +        if logf_path:
-> +            s = './etc/passwd: FAILED'
-> +            logf = open(logf_path, "r")
-> +            ret = subprocess.call(["grep", "-q", s], stdin=logf)
-> +            self.assertEqual(ret, 0)
+This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
+This patch provides the alternative clobber list for r6 targets that won't include
+those registers."
 
-This does not need a subprocess, and can be done efficiently in python,
-like suggested in my review of patch 10.
+Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to build
+for mips r6 cpus with gcc 10 for the same reason as glibc.
 
-Note thatif the search pattern does not occur at the beginning of the
-line, we can do:
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
 
-    s = 'blabla'
-    for open(log_path, "r") as f:
-        lines = [l for l in f.readlines() if s in l]
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/655618363
+https://gitlab.com/kubu93/buildroot/-/jobs/655618364
 
-Ditto for the other test, of course. ;-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...ude-hi-and-lo-in-clobber-list-for-R6.patch | 149 ++++++++++++++++++
+ ...ude-hi-and-lo-in-clobber-list-for-R6.patch | 149 ++++++++++++++++++
+ configs/qemu_mips64r6_malta_defconfig         |   1 +
+ configs/qemu_mips64r6el_malta_defconfig       |   1 +
+ 4 files changed, 300 insertions(+)
+ create mode 100644 board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+ create mode 100644 board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
 
-Regards,
-Yann E. MORIN.
-
-> +
-> +class DetectHostFileOverwriteTest(infra.basetest.BRConfigTest):
-> +    config = \
-> +        infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        infra.basetest.MINIMAL_CONFIG + \
-> +        """
-> +        BR2_PER_PACKAGE_DIRECTORIES=y
-> +        BR2_PACKAGE_HOST_DETECT_OVERWRITE=y
-> +        """
-> +    br2_external = [infra.filepath("tests/core/br2-external/detect-overwrite")]
-> +
-> +    def test_run(self):
-> +        with self.assertRaises(SystemError):
-> +            self.b.build()
-> +        logf_path = infra.log_file_path(self.b.builddir, "build",
-> +                                        infra.basetest.BRConfigTest.logtofile)
-> +        if logf_path:
-> +            s = './lib/pkgconfig/libpkgconf.pc: FAILED'
-> +            logf = open(logf_path, "r")
-> +            ret = subprocess.call(["grep", "-q", s], stdin=logf)
-> +            self.assertEqual(ret, 0)
-
-
-> -- 
-> 2.25.4
-> 
-
+diff --git a/board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch b/board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+new file mode 100644
+index 0000000000..a2ac528877
+--- /dev/null
++++ b/board/qemu/mips64r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+@@ -0,0 +1,149 @@
++From cfb381d8f4b64f3752c95b4bdd787be63ef84fb2 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 25 Jul 2020 11:46:01 +0200
++Subject: [PATCH] mips: Do not include hi and lo in clobber list for R6
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++From [1]
++"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
++available to be present in the clobber list anymore, resulting in build failure
++for mips*r6 targets in form of:
++...
++.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
++  146 |  __asm__ volatile (      \
++      |  ^~~~~~~
++
++This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
++This patch provides the alternative clobber list for r6 targets that won't include
++those registers."
++
++Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to build
++for mips r6 cpus with gcc 10 for the same reason as glibc.
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
++[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ arch/mips/include/asm/vdso/gettimeofday.h | 45 +++++++++++++++++++++++
++ 1 file changed, 45 insertions(+)
++
++diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
++index 0ae9b4cbc153..ea600e0ebfe7 100644
++--- a/arch/mips/include/asm/vdso/gettimeofday.h
+++++ b/arch/mips/include/asm/vdso/gettimeofday.h
++@@ -36,12 +36,21 @@ static __always_inline long gettimeofday_fallback(
++ 	register long nr asm("v0") = __NR_gettimeofday;
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (tv), "r" (tz), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (tv), "r" (tz), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -60,12 +69,21 @@ static __always_inline long clock_gettime_fallback(
++ #endif
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -84,12 +102,21 @@ static __always_inline int clock_getres_fallback(
++ #endif
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -108,12 +135,21 @@ static __always_inline long clock_gettime32_fallback(
++ 	register long nr asm("v0") = __NR_clock_gettime;
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -128,12 +164,21 @@ static __always_inline int clock_getres32_fallback(
++ 	register long nr asm("v0") = __NR_clock_getres;
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++-- 
++2.25.4
++
+diff --git a/board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch b/board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+new file mode 100644
+index 0000000000..a2ac528877
+--- /dev/null
++++ b/board/qemu/mips64r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+@@ -0,0 +1,149 @@
++From cfb381d8f4b64f3752c95b4bdd787be63ef84fb2 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 25 Jul 2020 11:46:01 +0200
++Subject: [PATCH] mips: Do not include hi and lo in clobber list for R6
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++From [1]
++"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
++available to be present in the clobber list anymore, resulting in build failure
++for mips*r6 targets in form of:
++...
++.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
++  146 |  __asm__ volatile (      \
++      |  ^~~~~~~
++
++This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
++This patch provides the alternative clobber list for r6 targets that won't include
++those registers."
++
++Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to build
++for mips r6 cpus with gcc 10 for the same reason as glibc.
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
++[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ arch/mips/include/asm/vdso/gettimeofday.h | 45 +++++++++++++++++++++++
++ 1 file changed, 45 insertions(+)
++
++diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
++index 0ae9b4cbc153..ea600e0ebfe7 100644
++--- a/arch/mips/include/asm/vdso/gettimeofday.h
+++++ b/arch/mips/include/asm/vdso/gettimeofday.h
++@@ -36,12 +36,21 @@ static __always_inline long gettimeofday_fallback(
++ 	register long nr asm("v0") = __NR_gettimeofday;
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (tv), "r" (tz), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (tv), "r" (tz), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -60,12 +69,21 @@ static __always_inline long clock_gettime_fallback(
++ #endif
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -84,12 +102,21 @@ static __always_inline int clock_getres_fallback(
++ #endif
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -108,12 +135,21 @@ static __always_inline long clock_gettime32_fallback(
++ 	register long nr asm("v0") = __NR_clock_gettime;
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++@@ -128,12 +164,21 @@ static __always_inline int clock_getres32_fallback(
++ 	register long nr asm("v0") = __NR_clock_getres;
++ 	register long error asm("a3");
++ 
+++#if __mips_isa_rev >= 6
+++	asm volatile(
+++	"       syscall\n"
+++	: "=r" (ret), "=r" (error)
+++	: "r" (clkid), "r" (ts), "r" (nr)
+++	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+++	  "$14", "$15", "$24", "$25", "memory");
+++#else
++ 	asm volatile(
++ 	"       syscall\n"
++ 	: "=r" (ret), "=r" (error)
++ 	: "r" (clkid), "r" (ts), "r" (nr)
++ 	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
++ 	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+++#endif
++ 
++ 	return error ? -ret : ret;
++ }
++-- 
++2.25.4
++
+diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
+index 16bc692996..d53e8e114d 100644
+--- a/configs/qemu_mips64r6_malta_defconfig
++++ b/configs/qemu_mips64r6_malta_defconfig
+@@ -24,6 +24,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
++BR2_GLOBAL_PATCH_DIR="board/qemu/mips64r6-malta/patches"
+ 
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
+diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
+index 33b91f3ac1..9f4573a4a9 100644
+--- a/configs/qemu_mips64r6el_malta_defconfig
++++ b/configs/qemu_mips64r6el_malta_defconfig
+@@ -24,6 +24,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
++BR2_GLOBAL_PATCH_DIR="board/qemu/mips64r6el-malta/patches"
+ 
+ # Serial port config
+ BR2_TARGET_GENERIC_GETTY=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.4
