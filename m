@@ -1,45 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 21:49:42 +0200
-Subject: [Buildroot] [git commit] package/libopenh264: bump version to 2.1.1
-Message-ID: <20200726194558.5831C8138E@busybox.osuosl.org>
+Date: Sun, 26 Jul 2020 21:50:26 +0200
+Subject: [Buildroot] [git commit] package/freeswitch-mod-bcg729: bump
+ version to 1.0.5
+Message-ID: <20200726194558.6B2328138E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c27568282dcbffe68f67b1851bc1f61bffc1c44
+commit: https://git.buildroot.net/buildroot/commit/?id=fec09364611482438c50e229bf537422383092f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/cisco/openh264/blob/openh264v2.1.1/RELEASES
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenh264/libopenh264.hash | 2 +-
- package/libopenh264/libopenh264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash | 4 ++--
+ package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
-index 349299158e..0689ab961f 100644
---- a/package/libopenh264/libopenh264.hash
-+++ b/package/libopenh264/libopenh264.hash
+diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
+index a863dbfcf7..d7fb58fb6d 100644
+--- a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
++++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  27f185d478066bad0c8837f4554cd8d69cca1d55d5f3dc6a43a8cef1fe6c005f  libopenh264-2.1.0.tar.gz
-+sha256  af173e90fce65f80722fa894e1af0d6b07572292e76de7b65273df4c0a8be678  libopenh264-2.1.1.tar.gz
- sha256  dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
-diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
-index 07196e3dd5..5a1000a6d8 100644
---- a/package/libopenh264/libopenh264.mk
-+++ b/package/libopenh264/libopenh264.mk
+ # Locally computed
+-sha256 0dec5b78f655e175936806396b89b4997c8e543a1c84683a19ea2b6f36e01d7e  freeswitch-mod-bcg729-1.0.4.tar.gz
+-sha256 bb4680b13c3190429464a8308a07d7d891e6454349fb7be856e02405b25b1195  LICENSE
++sha256  ada0640094b5b3b4a767ec360213bfed624e698c9932b2f9ceb76eb1c0f5a246  freeswitch-mod-bcg729-1.0.5.tar.gz
++sha256  bb4680b13c3190429464a8308a07d7d891e6454349fb7be856e02405b25b1195  LICENSE
+diff --git a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
+index f92a490051..d820756c0f 100644
+--- a/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
++++ b/package/freeswitch-mod-bcg729/freeswitch-mod-bcg729.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENH264_VERSION = 2.1.0
-+LIBOPENH264_VERSION = 2.1.1
- LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
- LIBOPENH264_LICENSE = BSD-2-Clause
- LIBOPENH264_LICENSE_FILES = LICENSE
+-FREESWITCH_MOD_BCG729_VERSION = 1.0.4
++FREESWITCH_MOD_BCG729_VERSION = 1.0.5
+ FREESWITCH_MOD_BCG729_SITE = $(call github,xadhoom,mod_bcg729,v$(FREESWITCH_MOD_BCG729_VERSION))
+ FREESWITCH_MOD_BCG729_LICENSE = MPL-1.1
+ FREESWITCH_MOD_BCG729_LICENSE_FILES = LICENSE
