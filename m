@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 25 Jul 2020 19:28:57 -0700
-Subject: [Buildroot] [PATCH 1/5] package/libwebsockets: remove dependency on
- mmu
+Date: Sat, 25 Jul 2020 19:28:58 -0700
+Subject: [Buildroot] [PATCH 2/5] package/libwebsockets: add support for
+ extensions
 In-Reply-To: <20200726022901.295552-1-aduskett@gmail.com>
 References: <20200726022901.295552-1-aduskett@gmail.com>
-Message-ID: <20200726022901.295552-2-aduskett@gmail.com>
+Message-ID: <20200726022901.295552-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,48 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Six years ago, commit b6b5bb518d28850e024b90db1129b7f86e9d416c added the MMU
-dependency for the libwebsockets package. However, according to the git
-history of the CMakeLists.txt file, libwebsockets has supported the vfork
-function for at least the last five years.
+libwebsockets currently depends on zlib, however, as of commit
+13ba5bbc633ea962d46d9f2bfb2e87c9f7e83b62 (from 2013!) zlib is not actually a
+requirement if extensions are not enabled.
 
-After testing with the qemu_arm_versatile_nommu_defconfig and the
-br-arm-cortex-m4-full.config file, no errors occurred when building
-libwebsockets without MMU support.
+By default, libwebsockets sets the "LWS_WITHOUT_EXTENSIONS" option to "ON,"
+which removes the need for zlib as a dependency. Because of this default
+setting, there are two options:
 
-Remove the dependency; it is no longer necessary.
+1) Remove the dependency on zlib, create a new option under Config.in to allow
+a user to enable extensions, add zlib as a dependency, and set
+LWS_WITHOUT_EXTENSIONS to "OFF" if that option is selected.
+
+2) Keep the dependency and explicitly set LWS_WITHOUT_EXTENSIONS to "OFF."
+
+Below are the size differences in bytes:
+  - Without zlib and extensions: 44636
+  - With zlib and without extensions: 44720
+  - With zlib and with extensions: 44732
+
+Considering the size difference between all 3 is an incredible 96 bytes, and
+the difference between what we have now, and enabling extensions is an
+insurmountable 12 bytes, it is safe to keep the dependency on zlib and always
+enable extensions.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libwebsockets/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/libwebsockets/libwebsockets.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index 2b350bf389..1d927bb4ea 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBWEBSOCKETS
- 	bool "libwebsockets"
--	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Libwebsockets is a lightweight pure C library built to use
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 3af34a61ab..6716d52796 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -13,7 +13,8 @@ LIBWEBSOCKETS_INSTALL_STAGING = YES
+ LIBWEBSOCKETS_CONF_OPTS = \
+ 	-DLWS_WITHOUT_TESTAPPS=ON \
+ 	-DLWS_IPV6=ON \
+-	-DLWS_UNIX_SOCK=ON
++	-DLWS_UNIX_SOCK=ON \
++	-DLWS_WITHOUT_EXTENSIONS=OFF
+ 
+ # If LWS_MAX_SMP=1, then there is no code related to pthreads compiled
+ # in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
 -- 
 2.26.2
