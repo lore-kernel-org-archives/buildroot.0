@@ -1,102 +1,122 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 10:08:24 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.4
-Message-ID: <20200726080408.C92AC86D63@busybox.osuosl.org>
+Date: Sun, 26 Jul 2020 10:35:37 +0200
+Subject: [Buildroot] Buildroot 2020.02.4 released
+Message-ID: <87a6zmznae.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dee53013da87dfa4bcb3433bdef79ec43b5a5c24
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 61 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index cd7c130cd7..86ecec8f74 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,62 @@
-+2020.02.4, released July 26th, 2020
-+
-+	Important / security related fixes.
-+
-+	Toolchain:
-+	- Make external toolchain version check also work for
-+	  toolchains configured with --with-gcc-major-version-only
-+
-+	- Do not handle SOURCE_DATE_EPOCH in toolchain wrapper if the
-+	  compiler supports it, fixing an issue with precompiled
-+	  headers
-+
-+	- Ensure debug libs from external toolchains are not installed
-+          into target if debugging is disabled
-+
-+	Download:
-+	- Correct reproducibility issue in handling of git submodules
-+	  for older git versions.
-+
-+	- Fix file locking over NFS
-+
-+	fs: Ensure cpio archive element order is reproducible
-+
-+	Br2-external: Fix error reporting for invalid br2-external trees
-+
-+	Per-package:
-+	- Fix an issue with python3 sysconfig data not getting
-+	correctly expanded
-+
-+	- Fix per-package building for packages using the qmake
-+          infrastructure
-+
-+	Updated/fixed packages: a10disp, asterisk, bind, cdrkit,
-+	checkpolicy, clamav, dbus, docker-cli, docker-engine,
-+	dvb-apps, e2fsprogs, exim, exiv2, freerdp, gnutls, go, grub2,
-+	gssdp, gst1-plugins-good, gst1-plugins-ugly, gupnp,
-+	intel-microcode, iproute2, irrlicht, iwd, jq, kodi, libcamera,
-+	libconfuse, libcurl, libglib2, libhttpserver, libmicrohttpd,
-+	libopenssl, libvncserver, libxml2, libxmlrpc, lxc, mbedtls,
-+	mesa3d, meson, mtools, mutt, nghttp2, ngircd, nodejs, ntp,
-+	open-plc-utils, open2300, openjdk-bin, openssh, oracle-mysql,
-+	paho-mqtt-c, pcre, php, poco, prosody, putty, python-twisted,
-+	python-urllib3, python-validators, python3, qt5xmlpatterns,
-+	redis, rpi-firmware, rtl8821au, samba4, sdl2, sqlite, squid,
-+	syslog-ng, systemd, tcpreplay, tinydtls, upmpdcli, upx, vlc,
-+	webkitgtk, wireguard-linux-compat, wireshark, wpebackend-fdo,
-+	wpewebkit, zstd
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12941: Python GObject fails to build when using BR2_PER_PACKAGE_..
-+	#12946: Grub: Decompressor is too big.
-+	#12986: Mtools: Error converting to codepage 850
-+	#13001: openjdk-bin replaces libfreetype.so from host-freetype
-+	#13011: Incorrect selection of gcc version
-+	#13026: rpi-firmware: must not rename start files
-+	#13031: nodejs: RangeError at new ArrayBuffer()
-+	#13046: Optimize for fast -Ofast is not compliant
-+
- 2020.02.3, released June 3rd, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 1a20c6f358..b2dfce197a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02.3
-+export BR2_VERSION := 2020.02.4
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1591196000
-+BR2_VERSION_EPOCH = 1595750000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2020.02.4 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2020.02.4.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2020.02.4.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.4 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.3 release. The 2020.02.x series is
+supported until April 2021.
+
+- Toolchain:
+  - Make external toolchain version check also work for toolchains
+    configured with --with-gcc-major-version-only
+  - Do not handle SOURCE_DATE_EPOCH in toolchain wrapper if the compiler
+    supports it, fixing an issue with precompiled headers
+  - Ensure debug libs from external toolchains are not installed into
+    target if debugging is disabled
+
+- Download:
+  - Correct reproducibility issue in handling of git submodules for
+    older git versions.
+  - Fix file locking over NFS
+
+- Per-package:
+  - Fix an issue with python3 sysconfig data not getting correctly
+    expanded
+  - Fix per-package building for packages using the qmake infrastructure
+
+- Br2-external: Fix error reporting for invalid br2-external trees
+
+- Security fixes for asterisk, bind, clamav, dbus, docker-cli,
+  docker-engine, freerdp, gnutls, go, gupnp, intel-microcode, libcurl,
+  libglib2, libmicrohttpd, libvncserver, mbedtls, mongodb, mutt,
+  nghttp2, ngircd, nodejs, ntp, pcre, php, putty, python-twisted,
+  python-urllib3, python3, sqlite, squid, tcpreplay, tinydtls, upx, vlc,
+  webkitgtk, wireshark, wpewebkit
+
+- Fixes for download/compilation/runtime/license issues in cdrkit,
+  checkpolicy, dbus, e2fsprogs, exim, exiv2, go, grub2,
+  gst1-plugins-good, gst1-plugins-ugly, iproute2, irrlicht, iwd, jq,
+  libcamera, libconfuse, libhttpserver, libopenssl, libxml2, libxmlrpc,
+  lxc, mesa3d, meson, mtools, nodejs, open-plc-utils, openjdk-bin,
+  openssh, oracle-mysql, paho-mqtt-c, php, prosody, python-validators,
+  qt5xmlpatterns, redis, rpi-firmware, rtl8821au, samba4, sdl2, systemd,
+  wireguard-linux-compat, wpebackend-fdo, zstd
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.4
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02.3..
+
+    34  Fabrice Fontaine
+    16  Bernd Kuhls
+    10  Peter Korsgaard
+     6  Norbert Lange
+     5  Adam Duskett
+     5  Christian Stewart
+     5  Matt Weber
+     4  Baruch Siach
+     4  Danomi Manchego
+     4  Peter Seiderer
+     4  Romain Naour
+     4  Yann E. MORIN
+     3  Adrian Perez de Castro
+     3  Nicolas Robin
+     3  Stefan S?rensen
+     2  James Hilliard
+     2  Martin Bark
+     2  Sergio Prado
+     2  Yegor Yefremov
+     1  Aaron Sierra
+     1  Alejandro Gonz?lez
+     1  Alexandre Belloni
+     1  Antoine Tenart
+     1  Asaf Kahlon
+     1  Bartosz Bilas
+     1  Felix Vollmer
+     1  Frank Hunleth
+     1  John Keeping
+     1  Joris Offouga
+     1  Julien Olivain
+     1  Lyle Franklin
+     1  Maxim Cournoyer
+     1  Myl?ne Josserand
+     1  Nicolas Dufresne
+     1  Sam Voss
+     1  St?phane Veyret
+     1  Thomas De Schampheleire
+     1  Titouan Christophe
+     1  Urja Rannikko
+     1  Yi Zheng
+     1  Yurii Monakov
+
+-- 
+Bye, Peter Korsgaard
