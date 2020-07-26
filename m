@@ -1,40 +1,43 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 26 Jul 2020 10:52:02 +0200
-Subject: [Buildroot] [PATCH] package/moarvm: bump to 2020.07
-Message-ID: <20200726085202.2786192-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 Jul 2020 11:36:08 +0200
+Subject: [Buildroot] [PATCH 1/2] package/librtas: bump to version 2.0.2
+Message-ID: <20200726093609.1233333-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Update indentation in hash file (two spaces)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index fc915944f..23040d9e2 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/librtas/librtas.hash | 4 ++--
+ package/librtas/librtas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/librtas/librtas.hash b/package/librtas/librtas.hash
+index 086d0d7cbc..de0c0a476c 100644
+--- a/package/librtas/librtas.hash
++++ b/package/librtas/librtas.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  db9759f16f76cb6d3b1f4baff9616c5ddb99fbb47ea62f54a5cc251b6ea99dc2  MoarVM-2020.06.tar.gz
-+sha256  da48887a1be0e397586b3470c2627d04c64d1e0caf9305ee7dc8db8db739f7cf  MoarVM-2020.07.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index d2f1a01c7..f49191f17 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
+-sha256 a79fd9cdb2f03e7401027fb80a07f14e29b86cc2d363126d527b211fea85d025 librtas-2.0.1.tar.gz
+-sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c COPYING.LESSER
++sha256  b47b2a6f140347ac265e2c66ddf68293f6cdcc7c0c9a78c6e21ff52846465415  librtas-2.0.2.tar.gz
++sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LESSER
+diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+index 48c8d0143f..c92a9e2fa4 100644
+--- a/package/librtas/librtas.mk
++++ b/package/librtas/librtas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2020.06
-+MOARVM_VERSION = 2020.07
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+-LIBRTAS_VERSION = 2.0.1
++LIBRTAS_VERSION = 2.0.2
+ LIBRTAS_SITE = $(call github,ibm-power-utilities,librtas,v$(LIBRTAS_VERSION))
+ LIBRTAS_LICENSE = LGPL-2.1+
+ LIBRTAS_LICENSE_FILES = COPYING.LESSER
 -- 
-2.25.1
+2.27.0
