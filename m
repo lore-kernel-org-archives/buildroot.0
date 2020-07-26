@@ -1,8 +1,8 @@
 From: D. Olsson <hi@senzilla.io>
-Date: Sun, 26 Jul 2020 10:07:18 +0000
-Subject: [Buildroot] [PATCH v2 4/6] configs/pc_x86_64_defconfig: build the
- EDK2 firmware from source
-Message-ID: <20200726100541.7710-5-hi@senzilla.io>
+Date: Sun, 26 Jul 2020 10:07:28 +0000
+Subject: [Buildroot] [PATCH v2 5/6] boot/arm-trusted-firmware: add EDK2 as
+ BL33 option
+Message-ID: <20200726100541.7710-6-hi@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,49 +11,75 @@ To: buildroot@busybox.net
 
 From: Dick Olsson <hi@senzilla.io>
 
-Prior to this, you had to manually download a pre-built EDK2 flash device
-image (OVMF_CODE.fd) in order to boot this configuration with QEMU.
-Now, the configuration is building EDK2 from source.
+ARM Trusted Firmware (ATF) has the ability to load EDK2 UEFI when dropping
+into EL2. This is done via a new configuration option that build the BL33
+payload with EDK2 images that will run in the EL2 context.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
----
- board/pc/readme.txt             | 9 ++++-----
- configs/pc_x86_64_efi_defconfig | 2 ++
- 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 41aec50d36..c06ffb0a51 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -61,12 +61,11 @@ Run the emulation with:
+---
+
+Revision 2:
+
+ * It was concluded that relying on variables from EDK2 is ok
+  since they are expanded inside _BUILD_CMDS
+ * Now relying on the more specific variable EDK2_EL2_NAME for BL33
+---
+ boot/arm-trusted-firmware/Config.in               | 15 ++++++++++++++-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk |  8 ++++++++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 7d0f6aa4e0..f24813f8e6 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE
+ 	bool "ARM Trusted Firmware (ATF)"
+ 	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
+-           BR2_TARGET_UBOOT
++           (BR2_TARGET_UBOOT || BR2_TARGET_EDK2)
+ 	help
+ 	  Enable this option if you want to build the ATF for your ARM
+ 	  based embedded device.
+@@ -115,6 +115,19 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
  
- qemu-system-x86_64 \
- 	-M pc \
--	-bios </path/to/OVMF_CODE.fd> \
-+	-drive file=output/images/OVMF_CODE.fd,if=pflash,format=raw \
-+	-drive file=output/images/OVMF_VARS.fd,if=pflash,format=raw \
- 	-drive file=output/images/disk.img,if=virtio,format=raw \
- 	-net nic,model=virtio \
- 	-net user
+ endchoice
  
--Note that </path/to/OVMF.fd> needs to point to a valid x86_64 UEFI
--firmware image for qemu. It may be provided by your distribution as a
--edk2 or OVMF package, in path such as
--/usr/share/edk2/ovmf/OVMF_CODE.fd .
-+Note that output/images/OVMF_*.fd are the flash device files built by
-+the EDK2 package.
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index 984fc8f92f..1680cda9bb 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -14,6 +14,8 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
++	bool "Use EDK2 as BL33"
++	depends on BR2_TARGET_EDK2
++	help
++	  This option allows to embed EDK2 as the BL33 part of
++	  the ARM Trusted Firmware. It ensures that the EDK2 package
++	  gets built before ATF, and that the appropriate BL33
++	  variable pointing to the EDK2 is passed when building ATF.
++
++	  Do not choose this option if you intend to build ATF and EDK2
++	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
++	  build system, the dependency between ATF and EDK is reversed.
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 	bool "Use U-Boot as BL33"
+ 	depends on BR2_TARGET_UBOOT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index a3553e36cf..51a5877ba1 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -79,6 +79,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
+ endif
+ endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
  
- # Bootloader
-+BR2_TARGET_EDK2=y
-+BR2_TARGET_EDK2_PLATFORM_OVMF_X64=y
- BR2_TARGET_GRUB2=y
- BR2_TARGET_GRUB2_X86_64_EFI=y
- 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
++# Since the flash device name vary between platforms, we use the variable
++# provided by the EDK2 package for this. Using this variable here is OK
++# as it will expand after all dependencies are resolved, inside _BUILD_CMDS.
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(EDK2_EL2_NAME).fd
++endif
++
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+ ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
+ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
 -- 
 2.20.1
