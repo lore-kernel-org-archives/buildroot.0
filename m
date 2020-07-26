@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 21:47:22 +0200
-Subject: [Buildroot] [git commit] package/moarvm: bump to 2020.07
-Message-ID: <20200726194558.2DAED86D69@busybox.osuosl.org>
+Date: Sun, 26 Jul 2020 21:47:07 +0200
+Subject: [Buildroot] [git commit] package/ncdu: bump to version 1.15.1
+Message-ID: <20200726194558.2C23E8898A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=620cb0e8bd52b9ae802db74e2cfc74da365c999f
+commit: https://git.buildroot.net/buildroot/commit/?id=718b25b65580c10e340e0c9b38ac1760ec711e2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Updated indentation in hash file (two spaces)
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ncdu/ncdu.hash | 6 +++---
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index fc915944f9..23040d9e2d 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  db9759f16f76cb6d3b1f4baff9616c5ddb99fbb47ea62f54a5cc251b6ea99dc2  MoarVM-2020.06.tar.gz
-+sha256  da48887a1be0e397586b3470c2627d04c64d1e0caf9305ee7dc8db8db739f7cf  MoarVM-2020.07.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index d2f1a01c70..f49191f173 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index 285dc9bfa4..be2b6e0788 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,5 +1,5 @@
+-# From https://dev.yorhel.nl/download/ncdu-1.14.2.tar.gz.sha256
+-sha256 947a7f5c1d0cd4e338e72b4f5bc5e2873651442cec3cb012e04ad2c37152c6b1 ncdu-1.14.2.tar.gz
++# From https://dev.yorhel.nl/ncdu
++sha256  b02ddc4dbf1db139cc6fbbe2f54a282770380f0ca5c17089855eab52a9ea3fb0  ncdu-1.15.1.tar.gz
+ 
+ # computed locally
+-sha256 978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05 COPYING
++sha256  978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05  COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index 681c8bd87a..532f145b20 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2020.06
-+MOARVM_VERSION = 2020.07
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+-NCDU_VERSION = 1.14.2
++NCDU_VERSION = 1.15.1
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
