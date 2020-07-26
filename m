@@ -1,45 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 21:46:58 +0200
-Subject: [Buildroot] [git commit] package/libolm: bump to version 3.1.5
-Message-ID: <20200726194558.2053688988@busybox.osuosl.org>
+Date: Sun, 26 Jul 2020 21:49:42 +0200
+Subject: [Buildroot] [git commit] package/libopenh264: bump version to 2.1.1
+Message-ID: <20200726194558.5831C8138E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd05db0e40e9804f237b4c41147db2be14de5d3b
+commit: https://git.buildroot.net/buildroot/commit/?id=0c27568282dcbffe68f67b1851bc1f61bffc1c44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated hash file indentation (two spaces)
+Release notes:
+https://github.com/cisco/openh264/blob/openh264v2.1.1/RELEASES
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libolm/libolm.hash | 4 ++--
- package/libolm/libolm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libolm/libolm.hash b/package/libolm/libolm.hash
-index 613dda3544..f521d30c0b 100644
---- a/package/libolm/libolm.hash
-+++ b/package/libolm/libolm.hash
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index 349299158e..0689ab961f 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256 1ca9926ce71d778fb7352d1ee77513194db8c7f49c0d69d38ac49ec3bafcea38 olm-3.1.4.tar.gz
--sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594 LICENSE
-+sha256  92ac1eccacbff620a1bc1a168ba204893d83bcb72646e456990ebe2480638696  olm-3.1.5.tar.gz
-+sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/libolm/libolm.mk b/package/libolm/libolm.mk
-index 78ee05b3c2..48cb31fb29 100644
---- a/package/libolm/libolm.mk
-+++ b/package/libolm/libolm.mk
+ # Locally calculated
+-sha256  27f185d478066bad0c8837f4554cd8d69cca1d55d5f3dc6a43a8cef1fe6c005f  libopenh264-2.1.0.tar.gz
++sha256  af173e90fce65f80722fa894e1af0d6b07572292e76de7b65273df4c0a8be678  libopenh264-2.1.1.tar.gz
+ sha256  dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index 07196e3dd5..5a1000a6d8 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOLM_VERSION = 3.1.4
-+LIBOLM_VERSION = 3.1.5
- LIBOLM_SOURCE = olm-$(LIBOLM_VERSION).tar.gz
- LIBOLM_SITE = https://gitlab.matrix.org/matrix-org/olm/-/archive/$(LIBOLM_VERSION)
- LIBOLM_LICENSE = Apache-2.0
+-LIBOPENH264_VERSION = 2.1.0
++LIBOPENH264_VERSION = 2.1.1
+ LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2-Clause
+ LIBOPENH264_LICENSE_FILES = LICENSE
