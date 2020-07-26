@@ -1,96 +1,91 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Sun, 26 Jul 2020 22:24:48 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/systemd: pre-create directories
- for services
-Message-ID: <20200726202449.7108-1-nolange79@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jul 2020 23:08:23 +0200
+Subject: [Buildroot] [PATCH] package/grpc: needs host gcc >= 4.9
+Message-ID: <20200726210823.20922-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-various services need directories in /var when they are started,
-and create them if necessary. Creating those before, allows
-those services to start even if /var is read-only.
+On some versions of gcc 4.8, like the one packaged in Ubuntu 14.04 (in
+extended support until 2022-04). Researching the cause for the bug was
+non-conclusive, except for:
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
-v1->v2:
--    dont use a new hook, use SYSTEMD_PERMISSIONS
--    no conditionals, but variables that are set or not
----
- package/systemd/systemd.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+     https://github.com/grpc/grpc/issues/19265
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index c49922d78f..42da1c889f 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -317,12 +317,14 @@ endif
+which ends with the less than informative "I've settled it."
+
+The trails leads to https://github.com/oudalab/co-incidents/issues/29,
+which leads to https://github.com/protocolbuffers/protobuf/issues/5353.
+
+Although the reporter provided a very good initial investigation, with
+bisection of grpc *and* protobuf, the report has just lingered untouched
+for almost two years now. One of the remaining commits in the protobuf
+bisect is this giant hairball:
+
+    https://github.com/protocolbuffers/protobuf/commit/0400cca3236de1ca
+    Integrated internal changes from Google
+    282 changed files with 15,223 additions and 14,041 deletions.
+
+No surprise the reporter of protobuf!5353 got very frustrated to find
+such a monster commit to investigate... :-(
+
+Another lead brings us similar reports, too:
+
+     https://github.com/grpc/grpc/issues/22781
+
+which concludes that "I've already fixed this issue. Can you try it on
+1.29.1?"
+
+But we're already usign 1.30.2, and we still have the issue (so maybe
+it's a different one...)
+
+So, because the issue manifests itself only on an ancient system, Ubuntu
+14.04, with a now ancient gcc 4.8, we just make grpc depend on a host
+gcc >= 4.9.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ package/collectd/Config.in | 1 +
+ package/grpc/Config.in     | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 188be3c0fb..77f088e76d 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -565,6 +565,7 @@ config BR2_PACKAGE_COLLECTD_GRAPHITE
  
- ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
- SYSTEMD_CONF_OPTS += -Dlogind=true
-+SYSTEMD_LOGIND_PERMISSIONS = /var/lib/systemd/linger d 755 0 0 - - - - -
- else
- SYSTEMD_CONF_OPTS += -Dlogind=false
- endif
+ config BR2_PACKAGE_COLLECTD_GRPC
+ 	bool "grpc"
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # grpc
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
+ 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index 45299888ea..8257f7c8a5 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_GRPC
+ 	bool "grpc"
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-grpc fails to build on some gcc-4.8 versions
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+@@ -17,8 +18,9 @@ config BR2_PACKAGE_GRPC
  
- ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINED),y)
- SYSTEMD_CONF_OPTS += -Dmachined=true -Dnss-mymachines=true
-+SYSTEMD_MACHINED_PERMISSIONS = /var/lib/machines d 700 0 0 - - - - -
- else
- SYSTEMD_CONF_OPTS += -Dmachined=false -Dnss-mymachines=false
- endif
-@@ -336,6 +338,7 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_HOMED),y)
- SYSTEMD_CONF_OPTS += -Dhomed=true
- SYSTEMD_DEPENDENCIES += cryptsetup openssl
-+SYSTEMD_HOMED_PERMISSIONS = /var/lib/systemd/home d 755 0 0 - - - - -
- else
- SYSTEMD_CONF_OPTS += -Dhomed=false
- endif
-@@ -380,12 +383,14 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
- SYSTEMD_CONF_OPTS += -Dcoredump=true
- SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * - - - systemd core dump processing
-+SYSTEMD_HOMED_PERMISSIONS = /var/lib/systemd/coredump d 755 0 0 - - - - -
- else
- SYSTEMD_CONF_OPTS += -Dcoredump=false
- endif
+ 	  http://github.com/grpc/grpc
  
- ifeq ($(BR2_PACKAGE_SYSTEMD_PSTORE),y)
- SYSTEMD_CONF_OPTS += -Dpstore=true
-+SYSTEMD_PSTORE_PERMISSIONS = /var/lib/systemd/pstore d 755 0 0 - - - - -
- else
- SYSTEMD_CONF_OPTS += -Dpstore=false
- endif
-@@ -436,6 +441,7 @@ endif
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
- SYSTEMD_CONF_OPTS += -Dtimesyncd=true
- SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - systemd Time Synchronization
-+SYSTEMD_TIMESYNCD_PERMISSIONS = /var/lib/systemd/timesync d 755 systemd-timesync systemd-timesync - - - - -
- else
- SYSTEMD_CONF_OPTS += -Dtimesyncd=false
- endif
-@@ -503,6 +509,19 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
- 	$(SYSTEMD_INSTALL_BOOT_FILES)
- endef
- 
-+define SYSTEMD_PERMISSIONS
-+	/var/spool d 755 0 0 - - - - -
-+	/var/lib d 755 0 0 - - - - -
-+	/var/lib/private d 700 0 0 - - - - -
-+	/var/log/private d 700 0 0 - - - - -
-+	/var/cache/private d 700 0 0 - - - - -
-+	$(SYSTEMD_LOGIND_PERMISSIONS)
-+	$(SYSTEMD_MACHINED_PERMISSIONS)
-+	$(SYSTEMD_HOMED_PERMISSIONS)
-+	$(SYSTEMD_PSTORE_PERMISSIONS)
-+	$(SYSTEMD_TIMESYNCD_PERMISSIONS)
-+endef
-+
- define SYSTEMD_USERS
- 	# udev user groups
- 	- - input -1 * - - - Input device group
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8, host gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		|| !BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
 -- 
-2.27.0
+2.20.1
