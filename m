@@ -1,53 +1,74 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 26 Jul 2020 02:53:33 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libnss: bump version to 3.55
-In-Reply-To: <20200726005333.340972-1-giulio.benetti@benettiengineering.com>
-References: <20200726005333.340972-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200726005333.340972-3-giulio.benetti@benettiengineering.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 25 Jul 2020 19:28:56 -0700
+Subject: [Buildroot] [PATCH 0/5] libwebsockets fixup
+Message-ID: <20200726022901.295552-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 3.55. Unfortunately local patch is still pending
-upstream and not applied and I've just asked why:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
+From: Adam Duskett <Aduskett@gmail.com>
 
-This version requires NSPR 4.27.
+As I was picking through the packages under my name in the developers' file, I
+checked libwebsockets and found that it was quite out of date!
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.55_release_notes
+I started to dig around and found two issues I wanted to fix before updating
+libwebsockets:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+1) libwebsockets compiles just fine without fork() and has had vfork()
+   support for at * least * 5 years (I couldn't find anything further back,
+   but it might have been there even longer.)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index aedc0669de..08ba914d9d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_54_RTM/src/SHA256SUMS
--sha256	dab18bbfcf5e347934cda664df75ce9fd912a5772686c40d3c805e53c08d6e43  nss-3.54.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_55_RTM/src/SHA256SUMS
-+sha256	fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004  nss-3.55.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 8bf7f0d85d..a5e4432f8c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.54
-+LIBNSS_VERSION = 3.55
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+2) zlib hasn't been a requirement since 2013 and is only necessary if
+   LWS_WITHOUT_EXTENSIONS is "ON," which is the default behavior.
+
+As such, the first two patches deal directly with those issues.
+The first removes "depends on BR2_USE_MMU," the second explicitly sets
+LWS_WITHOUT_EXTENSIONS to "OFF." (See the patch for more details and size
+comparisons.)
+
+The 4.0 series of libwebsockets also has several new features and options
+which we may want to enable in a separate patch series, but for this patch
+series, I just wanted to include a check for libglib2 and libmount.
+
+The other options we may want to enable in the future are:
+ - LWS_ROLE_MQTT
+ - LWS_WITH_SYS_ASYNC_DNS
+ - LWS_WITH_SYS_NTPCLIENT
+ - LWS_WITH_SYS_DHCP_CLIENT
+ - LWS_WITH_SECURE_STREAMS
+ - LWS_WITH_STRUCT_JSON
+ - LWS_WITH_SPAWN
+ - LWS_WITH_SQLITE3/LWS_WITH_STRUCT_SQLITE3
+
+Feel free to check out the CMakeLists.txt and the changelog file to see what
+those options do, some of them are quite neat! If we do decide to impliment
+those options, a Config.in entry would be needed for all of them except
+for SQLITE.
+
+Also, mbedtls and wolfssl are supported and have been for quite a while, but
+nobody cares about adding support for those libraries. I sure as heck don't!
+
+I tested the changes on Fedora 32 and CentOS7 with
+"./utils/test-pkg -c ./defconfig -p libwebsockets" and got
+"6 builds, 0 skipped, 0 build failed, 0 legal-info failed" as a result.
+
+Thanks for taking a look at the series!
+
+Adam Duskett (5):
+  package/libwebsockets: remove dependency on mmu
+  package/libwebsockets: add support for extensions
+  package/libwebsockets: bump version to 4.0.20
+  package/libwebsockets: add libglib2 support
+  package/libwebsockets: add fsmount support
+
+ ...ts-txt-fix-static-build-with-openssl.patch | 34 -------------------
+ package/libwebsockets/Config.in               |  1 -
+ package/libwebsockets/libwebsockets.hash      |  4 +--
+ package/libwebsockets/libwebsockets.mk        | 21 ++++++++++--
+ 4 files changed, 20 insertions(+), 40 deletions(-)
+ delete mode 100644 package/libwebsockets/0001-CMakeLists-txt-fix-static-build-with-openssl.patch
+
 -- 
-2.25.1
+2.26.2
