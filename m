@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 17:11:15 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/mosquitto: bump
+Date: Sun, 26 Jul 2020 17:11:21 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mosquitto: bump
  to v1.6.10
-Message-ID: <20200726150713.29E7582A48@busybox.osuosl.org>
+Message-ID: <20200726150707.C8BE37FDE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc28585a4927986426fd26f1f0697c72d450c86d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2c9acdc89857bc1de873eff895057ba8b3e225d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 This release fix some bugs in the broker and client libraries,
 as well as building with below C99 suport.
