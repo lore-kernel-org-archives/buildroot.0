@@ -1,75 +1,96 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sun, 26 Jul 2020 21:55:50 +0200
-Subject: [Buildroot] [PATCH 0/2] weston: fix i.MX support
-In-Reply-To: <20200619125500.524503-1-gary.bisson@boundarydevices.com>
-References: <20200619125500.524503-1-gary.bisson@boundarydevices.com>
-Message-ID: <20200726195550.GA8800@t450s.lan>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sun, 26 Jul 2020 22:24:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/systemd: pre-create directories
+ for services
+Message-ID: <20200726202449.7108-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+various services need directories in /var when they are started,
+and create them if necessary. Creating those before, allows
+those services to start even if /var is read-only.
 
-Gentle ping on this series, do you have any questions?
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+v1->v2:
+-    dont use a new hook, use SYSTEMD_PERMISSIONS
+-    no conditionals, but variables that are set or not
+---
+ package/systemd/systemd.mk | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Note that I got i.MX8M VPU to work using regular GStreamer packages +
-gtreamer-imx-v2 plugin but is only useful if Weston if fixed (as i.MX8*
-graphics only support Wayland backend).
-
-Regards,
-Gary
-
-On Fri, Jun 19, 2020 at 02:54:58PM +0200, Gary Bisson wrote:
-> Hi,
-> 
-> This series aims at fixing the weston support for i.MX processors.
-> 
-> Long time ago, weston-imx was added for i.MX8MQ as part of the weston
-> package. Then it was split from it as the versions differed.
-> 
-> Since then the weston-imx was broken and updating it seems like a bad
-> idea as it now requires forking several other components:
-> - libdrm [1]
-> - waylands-protocols [2]
-> 
-> This series therefore removes weston-imx and adds vivante support to
-> the regular weston package.
-> 
-> Drawback here is that the HDR capabilities of the i.MX8MQ or the GPU2D
-> of the i.MX8M Mini won't be used in Weston. I'd rather have those
-> limitations and use standard weston than forking everything.
-> 
-> Also, note that this series was tested on Nitrogen8M and Nitrogen8M Mini
-> platforms, making sure the Vivante 3D examples are properly running.
-> However in order to compile weston properly with Vivante as egl
-> provider, one patch sent earlier [3] is needed.
-> 
-> Let me know if you have any questions.
-> 
-> Regards,
-> Gary
-> 
-> [1] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-graphics/drm/libdrm_2.4.99.imx.bb?h=zeus-5.4.3-1.0.0
-> [2] https://source.codeaurora.org/external/imx/meta-imx/tree/meta-bsp/recipes-graphics/wayland/wayland-protocols_1.18.imx.bb?h=zeus-5.4.3-1.0.0
-> [3] http://patchwork.ozlabs.org/project/buildroot/patch/20200402130842.918696-3-gary.bisson at boundarydevices.com/
-> 
-> Gary Bisson (2):
->   package/weston: add imx-gpu-viv as possible egl provider
->   package/weston-imx: remove deprecated package
-> 
->  Config.in.legacy                   |   6 ++
->  package/Config.in                  |   1 -
->  package/weston-imx/Config.in       | 114 -----------------------
->  package/weston-imx/weston-imx.hash |   3 -
->  package/weston-imx/weston-imx.mk   | 144 -----------------------------
->  package/weston/Config.in           |   8 +-
->  6 files changed, 10 insertions(+), 266 deletions(-)
->  delete mode 100644 package/weston-imx/Config.in
->  delete mode 100644 package/weston-imx/weston-imx.hash
->  delete mode 100644 package/weston-imx/weston-imx.mk
-> 
-> -- 
-> 2.26.2
-> 
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index c49922d78f..42da1c889f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -317,12 +317,14 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
+ SYSTEMD_CONF_OPTS += -Dlogind=true
++SYSTEMD_LOGIND_PERMISSIONS = /var/lib/systemd/linger d 755 0 0 - - - - -
+ else
+ SYSTEMD_CONF_OPTS += -Dlogind=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINED),y)
+ SYSTEMD_CONF_OPTS += -Dmachined=true -Dnss-mymachines=true
++SYSTEMD_MACHINED_PERMISSIONS = /var/lib/machines d 700 0 0 - - - - -
+ else
+ SYSTEMD_CONF_OPTS += -Dmachined=false -Dnss-mymachines=false
+ endif
+@@ -336,6 +338,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_HOMED),y)
+ SYSTEMD_CONF_OPTS += -Dhomed=true
+ SYSTEMD_DEPENDENCIES += cryptsetup openssl
++SYSTEMD_HOMED_PERMISSIONS = /var/lib/systemd/home d 755 0 0 - - - - -
+ else
+ SYSTEMD_CONF_OPTS += -Dhomed=false
+ endif
+@@ -380,12 +383,14 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
+ SYSTEMD_CONF_OPTS += -Dcoredump=true
+ SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * - - - systemd core dump processing
++SYSTEMD_HOMED_PERMISSIONS = /var/lib/systemd/coredump d 755 0 0 - - - - -
+ else
+ SYSTEMD_CONF_OPTS += -Dcoredump=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_PSTORE),y)
+ SYSTEMD_CONF_OPTS += -Dpstore=true
++SYSTEMD_PSTORE_PERMISSIONS = /var/lib/systemd/pstore d 755 0 0 - - - - -
+ else
+ SYSTEMD_CONF_OPTS += -Dpstore=false
+ endif
+@@ -436,6 +441,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=true
+ SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - systemd Time Synchronization
++SYSTEMD_TIMESYNCD_PERMISSIONS = /var/lib/systemd/timesync d 755 systemd-timesync systemd-timesync - - - - -
+ else
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=false
+ endif
+@@ -503,6 +509,19 @@ define SYSTEMD_INSTALL_IMAGES_CMDS
+ 	$(SYSTEMD_INSTALL_BOOT_FILES)
+ endef
+ 
++define SYSTEMD_PERMISSIONS
++	/var/spool d 755 0 0 - - - - -
++	/var/lib d 755 0 0 - - - - -
++	/var/lib/private d 700 0 0 - - - - -
++	/var/log/private d 700 0 0 - - - - -
++	/var/cache/private d 700 0 0 - - - - -
++	$(SYSTEMD_LOGIND_PERMISSIONS)
++	$(SYSTEMD_MACHINED_PERMISSIONS)
++	$(SYSTEMD_HOMED_PERMISSIONS)
++	$(SYSTEMD_PSTORE_PERMISSIONS)
++	$(SYSTEMD_TIMESYNCD_PERMISSIONS)
++endef
++
+ define SYSTEMD_USERS
+ 	# udev user groups
+ 	- - input -1 * - - - Input device group
+-- 
+2.27.0
