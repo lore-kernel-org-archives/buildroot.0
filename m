@@ -1,100 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 10:41:42 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.05.1
-Message-ID: <20200726084047.CD35F888D1@busybox.osuosl.org>
+Date: Sun, 26 Jul 2020 10:42:51 +0200
+Subject: [Buildroot] [git commit] Update for 2020.02.4
+Message-ID: <20200726084047.DF65D888D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4138c2e98d22d03ff39800401dc15277956bcec7
+commit: https://git.buildroot.net/buildroot/commit/?id=39d71a8c32b6ff496a3c849727ce7cd79fd26f52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit dee53013da87dfa4bcb3433bdef79ec43b5a5c24)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 6f7ead5b51..a14a8e1832 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/CHANGES b/CHANGES
+index 2d1e8e0d16..528a51cf15 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -229,6 +229,65 @@
+ 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
+ 	#12811: bootstrap stuck and no login prompt
  
--      <h3 style="text-align: center;">Latest stable release: <b>2020.05</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.05.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.05.tar.gz">buildroot-2020.05.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.05.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05.1.tar.gz">buildroot-2020.05.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.05.tar.bz2">buildroot-2020.05.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.05.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05.1.tar.bz2">buildroot-2020.05.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 813cf52aae..f06d359713 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.05.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>25 July 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.05.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.05 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-July/287824.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.05.1.tar.bz2">2020.05.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2020.02.4, released July 26th, 2020
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Toolchain:
++	- Make external toolchain version check also work for
++	  toolchains configured with --with-gcc-major-version-only
++
++	- Do not handle SOURCE_DATE_EPOCH in toolchain wrapper if the
++	  compiler supports it, fixing an issue with precompiled
++	  headers
++
++	- Ensure debug libs from external toolchains are not installed
++          into target if debugging is disabled
++
++	Download:
++	- Correct reproducibility issue in handling of git submodules
++	  for older git versions.
++
++	- Fix file locking over NFS
++
++	fs: Ensure cpio archive element order is reproducible
++
++	Br2-external: Fix error reporting for invalid br2-external trees
++
++	Per-package:
++	- Fix an issue with python3 sysconfig data not getting
++	correctly expanded
++
++	- Fix per-package building for packages using the qmake
++          infrastructure
++
++	Updated/fixed packages: a10disp, asterisk, bind, cdrkit,
++	checkpolicy, clamav, dbus, docker-cli, docker-engine,
++	dvb-apps, e2fsprogs, exim, exiv2, freerdp, gnutls, go, grub2,
++	gssdp, gst1-plugins-good, gst1-plugins-ugly, gupnp,
++	intel-microcode, iproute2, irrlicht, iwd, jq, kodi, libcamera,
++	libconfuse, libcurl, libglib2, libhttpserver, libmicrohttpd,
++	libopenssl, libvncserver, libxml2, libxmlrpc, lxc, mbedtls,
++	mesa3d, meson, mongodb, mtools, mutt, nghttp2, ngircd, nodejs,
++	ntp, open-plc-utils, open2300, openjdk-bin, openssh,
++	oracle-mysql, paho-mqtt-c, pcre, php, poco, prosody, putty,
++	python-twisted, python-urllib3, python-validators, python3,
++	qt5xmlpatterns, redis, rpi-firmware, rtl8821au, samba4, sdl2,
++	sqlite, squid, syslog-ng, systemd, tcpreplay, tinydtls,
++	upmpdcli, upx, vlc, webkitgtk, wireguard-linux-compat,
++	wireshark, wpebackend-fdo, wpewebkit, zstd
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12941: Python GObject fails to build when using BR2_PER_PACKAGE_..
++	#12946: Grub: Decompressor is too big.
++	#12986: Mtools: Error converting to codepage 850
++	#13001: openjdk-bin replaces libfreetype.so from host-freetype
++	#13011: Incorrect selection of gcc version
++	#13026: rpi-firmware: must not rename start files
++	#13031: nodejs: RangeError at new ArrayBuffer()
++	#13046: Optimize for fast -Ofast is not compliant
++
+ 2020.02.3, released June 3rd, 2020
+ 
+ 	Important / security related fixes.
