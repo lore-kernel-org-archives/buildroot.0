@@ -1,39 +1,47 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 25 Jul 2020 19:29:01 -0700
-Subject: [Buildroot] [PATCH 5/5] package/libwebsockets: add fsmount support
-In-Reply-To: <20200726022901.295552-1-aduskett@gmail.com>
-References: <20200726022901.295552-1-aduskett@gmail.com>
-Message-ID: <20200726022901.295552-6-aduskett@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Jul 2020 08:02:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump version to
+ 0.5.10
+Message-ID: <20200726060200.207814-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Release notes:
+https://raw.githubusercontent.com/dovecot/pigeonhole/release-0.5.10/NEWS
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reformatted hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libwebsockets/libwebsockets.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 4 ++--
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 3fbbb5d554..8e6d02205a 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -55,6 +55,13 @@ else
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_GLIB=OFF
- endif
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 28a49b13d6..f8e5f1e60f 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256 36da68aae5157b83e21383f711b8977e5b6f5477f369f71e7e22e76a738bbd05  dovecot-2.3-pigeonhole-0.5.9.tar.gz
+-sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
++sha256  48c89cc9f3caa9c5f2454f9dcca74fe251a99749a38062bfab7e5017d329605e  dovecot-2.3-pigeonhole-0.5.10.tar.gz
++sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 95bfa6fc4a..033ae980a5 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-+LIBWEBSOCKETS_DEPENDENCIES += util-linux
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_FSMOUNT=ON
-+else
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_FSMOUNT=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUV),y)
- LIBWEBSOCKETS_DEPENDENCIES += libuv
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBUV=ON
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.9
++DOVECOT_PIGEONHOLE_VERSION = 0.5.10
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
 -- 
-2.26.2
+2.27.0
