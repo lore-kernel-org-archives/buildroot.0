@@ -1,9 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 26 Jul 2020 10:46:13 +0200
-Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.15.1
+Date: Sun, 26 Jul 2020 10:46:14 +0200
+Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.16
 In-Reply-To: <20200726084614.125850-1-gilles.talis@gmail.com>
 References: <20200726084614.125850-1-gilles.talis@gmail.com>
-Message-ID: <20200726084614.125850-2-gilles.talis@gmail.com>
+Message-ID: <20200726084614.125850-3-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +14,35 @@ Updated indentation in hash file (two spaces)
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/ncdu/ncdu.hash | 6 +++---
- package/ncdu/ncdu.mk   | 2 +-
+ package/xapian/xapian.hash | 6 +++---
+ package/xapian/xapian.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index 285dc9bfa4..be2b6e0788 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
+diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
+index 6e1ae3c423..3ebaea7059 100644
+--- a/package/xapian/xapian.hash
++++ b/package/xapian/xapian.hash
 @@ -1,5 +1,5 @@
--# From https://dev.yorhel.nl/download/ncdu-1.14.2.tar.gz.sha256
--sha256 947a7f5c1d0cd4e338e72b4f5bc5e2873651442cec3cb012e04ad2c37152c6b1 ncdu-1.14.2.tar.gz
-+# From https://dev.yorhel.nl/ncdu
-+sha256  b02ddc4dbf1db139cc6fbbe2f54a282770380f0ca5c17089855eab52a9ea3fb0  ncdu-1.15.1.tar.gz
+-# From https://lists.xapian.org/pipermail/xapian-discuss/2020-February/009792.html
+-sha256 b168e95918a01e014fb6a6cbce26e535f80da4d4791bfa5a0e0051fcb6f950ea xapian-core-1.4.15.tar.xz
++# From https://lists.xapian.org/pipermail/xapian-discuss/2020-June/009813.html
++sha256  4937f2f49ff27e39a42150e928c8b45877b0bf456510f0785f50159a5cb6bf70  xapian-core-1.4.16.tar.xz
  
- # computed locally
--sha256 978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05 COPYING
-+sha256  978f49428f21714c973706030c0ef09983cc1e2889a1b7b521dbf8860870cf05  COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index 681c8bd87a..532f145b20 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
+ # locally computed
+-sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
++sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+index 9fbe0b36f8..19d301e980 100644
+--- a/package/xapian/xapian.mk
++++ b/package/xapian/xapian.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NCDU_VERSION = 1.14.2
-+NCDU_VERSION = 1.15.1
- NCDU_SITE = http://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = ncurses
+-XAPIAN_VERSION = 1.4.15
++XAPIAN_VERSION = 1.4.16
+ XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
+ XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
+ XAPIAN_LICENSE = GPL-2.0+
 -- 
 2.25.1
