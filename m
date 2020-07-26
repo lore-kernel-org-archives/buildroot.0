@@ -1,73 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Jul 2020 17:09:10 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python-django:
- security bump to version 3.0.7
-Message-ID: <20200726150713.1E62586CA0@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 26 Jul 2020 20:05:20 +0200
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.07.0
+Message-ID: <20200726180520.487299-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cafddc88462b4b2c0afa2ec43ff1900d307935d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
-
-Fixes the following security issues:
-
-- CVE-2020-13254: Potential data leakage via malformed memcached keys
-
-  In cases where a memcached backend does not perform key validation,
-  passing malformed cache keys could result in a key collision, and
-  potential data leakage.  In order to avoid this vulnerability, key
-  validation is added to the memcached cache backends.
-
-- CVE-2020-13596: Possible XSS via admin ForeignKeyRawIdWidget
-
-  Query parameters for the admin ForeignKeyRawIdWidget were not properly URL
-  encoded, posing an XSS attack vector.  ForeignKeyRawIdWidget now ensures
-  query parameters are correctly URL encoded.
-
-For details, see the announcement:
-https://docs.djangoproject.com/en/dev/releases/3.0.7/
-
-Additionally, 3.0.5..3.0.7 contains a number of non-security related
-bugfixes.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 36d78abceb79ad8b8ea73054cd2e6fcfcc835c4f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index af5e4bb6e0..9690401043 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	0b0299419770eaff86ff3a4af519cd6a  Django-3.0.4.tar.gz
--sha256	50b781f6cbeb98f673aa76ed8e572a019a45e52bdd4ad09001072dfd91ab07c8  Django-3.0.4.tar.gz
-+md5	c3ac98d5503c671d316cf78ded3c9809  Django-3.0.7.tar.gz
-+sha256	5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2  Django-3.0.7.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 0cc5749a9b..d76f6101e9 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index e5ba8cd1cf..bf27481e51 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--PYTHON_DJANGO_VERSION = 3.0.4
-+PYTHON_DJANGO_VERSION = 3.0.7
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1d/38/89ea18b5aeb9b56fff7430388946e8e9dfd7a451f3e6ddb8a9b637f442c1
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/74/ad/8a1bc5e0f8b740792c99c7bef5ecc043018e2b605a2fe1e2513fde586b72
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2020.05.0"
++	bool "2020.07.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2020.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2020.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 8a33453249..17992be7f9 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2020.05.0.tar.bz2.md5
+-md5  31dee7b5715967fab882cabe4e406896  barebox-2020.05.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2020.07.0.tar.bz2.md5
++md5  49f3fba08743d44e84e8d68ed776f05d  barebox-2020.07.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  03e29c2864c3220c676a0cf768ffe2b8f1064eddb60463281c9944625e649b65  barebox-2020.05.0.tar.bz2
++sha256  1956620acc39b5c9b035635ff0b1da2c1b72b791612ef55a72e6272a903fbc4c  barebox-2020.07.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+-- 
+2.27.0
