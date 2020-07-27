@@ -1,152 +1,128 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:11:18 +0200
-Subject: [Buildroot] [PATCH v3 6/9] package/minetest: do not select
- luajit
-In-Reply-To: <CADvTj4q8iYZxC9762dOSn0HfqNsyq+ZUkzYKt57pmP9tJ3ouxw@mail.gmail.com>
-References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
- <20200525004845.3019642-6-james.hilliard1@gmail.com>
- <9bd512a3-e010-62d9-4fe2-841e25abaae5@gmail.com>
- <CADvTj4q8iYZxC9762dOSn0HfqNsyq+ZUkzYKt57pmP9tJ3ouxw@mail.gmail.com>
-Message-ID: <20200727201118.GM19818@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 22:12:24 +0200
+Subject: [Buildroot] [PATCH 5/6] wireless-regdb: add explicit signing
+ key config
+In-Reply-To: <20200702103618.5147-6-dev.kurt@vandijck-laurijssen.be>
+References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
+ <20200702103618.5147-6-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200727221224.1326c3db@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hello Kurt,
 
-On 2020-06-06 16:43 -0600, James Hilliard spake thusly:
-> On Sat, Jun 6, 2020 at 11:05 AM Romain Naour <romain.naour@gmail.com> wrote:
-> > Le 25/05/2020 ? 02:48, James Hilliard a ?crit :
-> > > Since luajit is not a requirement for minetest we should not select it
-> > > instead we should conditionally use it when available.
-> > I never tested minetest without Luajit since I'm testing with a target using efl
-> > + enlightenment that already depend on luajit.
-[--SNIP--]
-> We're not selecting or depending on buildroot's Lua 5.1 here, only making luajit
-> optional, the main reason for this change is that we can't safely
-> select luajit at all,
-> we could depend on it but since it's not actually a required dependency we can
-> just use it conditionally.
+On Thu,  2 Jul 2020 12:36:17 +0200
+Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
 
-As far as I can see, minetest does require a Lua interpreter. What their
-README states is:
+> +if BR2_WIRELESS_REGDB_REBUILD
+> +
+> +config BR2_WIRELESS_REGDB_COMMONNAME
+> +	string "CommonName for x509 cert"
+> +	default "buildroot"
+> +
+> +config BR2_WIRELESS_REGDB_PRIVKEY
+> +	string "private key for signing wireless-regdb"
+> +	default "~/.buildroot"
+> +	help
+> +	  Path to file containing private key to sign wireless-regdb.
+> +	  The key should be in .pem format.
+> +
+> +	  If the file does not exist, a new key will be generated
 
-    ENABLE_LUAJIT=ON    - Build with LuaJIT (much faster than non-JIT Lua)
+Ah, OK, so that's where you handle the thing. If the user wants to keep
+the same private/public key pair across Buildroot rebuilds, he should
+place into the folder pointed to by BR2_WIRELESS_REGDB_PRIVKEY ?
 
-And if one looks at the code, one can see that only parts of the lua
-code is protected behind HAS_LUAJIT, e.g.:
+Can I suggest that instead we make this option empty by default, and in
+this case, a key is generated in $(HOST_DIR) ?
 
-    src/script/cpp_api/s_security.cpp:
-      206 	// Copy safe package fields
-      207 	lua_getfield(L, old_globals, "package");
-      208 	lua_newtable(L);
-      209 	copy_safe(L, package_whitelist, sizeof(package_whitelist));
-      210 	lua_setglobal(L, "package");
-      211 	lua_pop(L, 1);  // Pop old package
-      212
-      213 #if USE_LUAJIT
-      214 	// Copy safe jit functions, if they exist
-      215 	lua_getfield(L, -1, "jit");
-      216 	if (!lua_isnil(L, -1)) {
-      217 		lua_newtable(L);
-      218 		copy_safe(L, jit_whitelist, sizeof(jit_whitelist));
-      219 		lua_setglobal(L, "jit");
-      220 	}
-      221 	lua_pop(L, 1);  // Pop old jit
-      222 #endif
-      223
-      224 	lua_pop(L, 1); // Pop globals_backup
+Anyway, the default value of ~/.buildroot is a bit weird. ~/.buildroot
+looks like a directory more than a file that contains a key.
 
-So, if not laujit, then we need lua, no?
+> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+> index 7c6b140a4a..d60428a8f0 100644
+> --- a/package/wireless-regdb/wireless-regdb.mk
+> +++ b/package/wireless-regdb/wireless-regdb.mk
+> @@ -13,16 +13,34 @@ WIRELESS_REGDB_LICENSE_FILES = LICENSE
+>  
+>  ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
+>  
+> +WIRELESS_REGDB_PRIVKEY = $(call qstrip,$(BR2_WIRELESS_REGDB_PRIVKEY))
+> +WIRELESS_REGDB_PRIVKEYNAME = $(patsubst .%,%,$(notdir $(WIRELESS_REGDB_PRIVKEY)))
 
-Regards,
-Yann E. MORIN.
+I'm not sure what this PRIVKEYNAME is.
 
-> > Best regards,
-> > Romain
-> >
-> > >
-> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > ---
-> > >  package/minetest/Config.in   |  4 ----
-> > >  package/minetest/minetest.mk | 10 ++++++++--
-> > >  2 files changed, 8 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-> > > index 085525534d..19da290df4 100644
-> > > --- a/package/minetest/Config.in
-> > > +++ b/package/minetest/Config.in
-> > > @@ -5,11 +5,9 @@ config BR2_PACKAGE_MINETEST
-> > >       depends on BR2_TOOLCHAIN_HAS_THREADS
-> > >       depends on BR2_PACKAGE_XORG7 # irrlicht
-> > >       depends on BR2_PACKAGE_HAS_LIBGL # irrlicht
-> > > -     depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> > >       select BR2_PACKAGE_IRRLICHT
-> > >       select BR2_PACKAGE_GMP
-> > >       select BR2_PACKAGE_JSONCPP
-> > > -     select BR2_PACKAGE_LUAJIT
-> > >       select BR2_PACKAGE_SQLITE
-> > >       select BR2_PACKAGE_ZLIB
-> > >       # At least one option must be enabled
-> > > @@ -53,13 +51,11 @@ comment "sound support needs a toolchain w/ threads NPTL"
-> > >  endif
-> > >
-> > >  comment "minetest needs a toolchain w/ C++, gcc >= 4.9, threads"
-> > > -     depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> > >       depends on !BR2_INSTALL_LIBSTDCPP \
-> > >               || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-> > >               || !BR2_TOOLCHAIN_HAS_THREADS
-> > >
-> > >  comment "minetest needs X11 and an OpenGL provider"
-> > > -     depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> > >       depends on (BR2_INSTALL_LIBSTDCPP \
-> > >               && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-> > >               && BR2_TOOLCHAIN_HAS_THREADS)
-> > > diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-> > > index e8fe5b45ce..c0301273be 100644
-> > > --- a/package/minetest/minetest.mk
-> > > +++ b/package/minetest/minetest.mk
-> > > @@ -9,12 +9,11 @@ MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
-> > >  MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
-> > >  MINETEST_LICENSE_FILES = LICENSE.txt
-> > >
-> > > -MINETEST_DEPENDENCIES = gmp irrlicht jsoncpp luajit sqlite zlib
-> > > +MINETEST_DEPENDENCIES = gmp irrlicht jsoncpp sqlite zlib
-> > >
-> > >  MINETEST_CONF_OPTS = \
-> > >       -DDEFAULT_RUN_IN_PLACE=OFF \
-> > >       -DENABLE_GLES=OFF \
-> > > -     -DENABLE_LUAJIT=ON \
-> > >       -DENABLE_CURSES=OFF \
-> > >       -DAPPLY_LOCALE_BLACKLIST=OFF \
-> > >       -DENABLE_SYSTEM_GMP=ON \
-> > > @@ -75,6 +74,13 @@ else
-> > >  MINETEST_CONF_OPTS += -DENABLE_SPATIAL=OFF
-> > >  endif
-> > >
-> > > +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> > > +MINETEST_DEPENDENCIES += luajit
-> > > +MINETEST_CONF_OPTS += -DENABLE_LUAJIT=ON
-> > > +else
-> > > +MINETEST_CONF_OPTS += -DENABLE_LUAJIT=OFF
-> > > +endif
-> > > +
-> > >  ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
-> > >  MINETEST_DEPENDENCIES += postgresql
-> > >  MINETEST_CONF_OPTS += -DENABLE_POSTGRESQL=ON
-> > >
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +# make sure PRIVKEYNAME is set
 
+This is not making sure WIRELESS_REGDB_PRIVKEYNAME is set: it is
+setting WIRELESS_REGDB_PRIVKEY.
+
+> +ifeq ($(WIRELESS_REGDB_PRIVKEYNAME),)
+> +WIRELESS_REGDB_PRIVKEY=~/.buildroot
+> +endif
+> +
+> +ifeq ($(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME)),)
+> +BR2_WIRELESS_REGDB_COMMONNAME = "buildroot"
+> +endif
+
+We normally handle this like that:
+
+WIRELESS_REGDB_COMMONNAME = $(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME))
+
+ifeq ($(WIRELESS_REGDB_COMMONNAME),)
+$(error "ERROR: BR2_WIRELESS_REGDB_COMMONNAME is empty")
+endif
+
+>  define WIRELESS_REGDB_PATCH_PYTHON3
+>  	sed -i -e '1 s/python$$/python3/' $(@D)/*.py
+> +	sed -i -e 's/= sforshee$$/= $(call qstrip,$(BR2_WIRELESS_REGDB_COMMONNAME))/' $(@D)/gen-pubcert.sh
+>  endef
+>  
+>  WIRELESS_REGDB_POST_PATCH_HOOKS += WIRELESS_REGDB_PATCH_PYTHON3
+>  
+>  WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
+> +
+
+This is kind of a spurious change, not really related to this commit.
+
+>  define WIRELESS_REGDB_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> -		REGDB_AUTHOR=buildroot
+> +		REGDB_PRIVKEY=$(WIRELESS_REGDB_PRIVKEY) \
+> +		REGDB_PUBKEY=$(WIRELESS_REGDB_PRIVKEYNAME).pub \
+> +		REGDB_PUBCERT=$(WIRELESS_REGDB_PRIVKEYNAME).x509.pem
+
+I don't quite understand how the private key file name relates to the
+public key and public key certificates file names. Could you clarify ?
+
+> +	openssl x509 -in $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509.pem \
+
+Use $(HOST_DIR)/bin/openssl here.
+
+> +		-outform DER \
+> +		-out $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509
+>  endef
+>  endif
+>  
+> @@ -32,8 +50,8 @@ define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
+>  		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+>  	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+>  		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+> -	$(INSTALL) -m 644 -D -T ~/.wireless-regdb-buildroot.key.pub.pem \
+> -		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/buildroot.key.pub.pem
+> +	$(INSTALL) -m 644 -D -T $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).pub \
+> +		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/$(WIRELESS_REGDB_PRIVKEYNAME).pub
+>  endef
+>  endif
+>  
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
