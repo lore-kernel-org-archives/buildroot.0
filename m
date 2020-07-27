@@ -1,72 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 14:51:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: add openssl optional
- dependency
-In-Reply-To: <20200727124145.1825309-1-fontaine.fabrice@gmail.com>
-References: <20200727124145.1825309-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200727125140.GY19818@scaer>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 27 Jul 2020 15:00:22 +0200
+Subject: [Buildroot] [PATCH v2] package/python-matplotlib: add QT5 support
+Message-ID: <20200727130022.180977-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On 2020-07-27 14:41 +0200, Fabrice Fontaine spake thusly:
-> openssl is an optional dependency that is enabled by default since
-> version 0.7.0 and
-> https://github.com/capnproto/capnproto/commit/23db5e3fd91104a0b2881d8f8ab3c10bf9dd8e75
+python-matplotlib may be used in qt5 application. This patch add option to
+enable qt5. Since this backend is automatically enabled when pyqt5 is detected,
+list dependencies is simply an updated (no enable/disable options).
 
-Seeing how they are testing for openssl, will that no fail for a staitc
-link, because they forget to link with -lz in that case ?
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+Changes v1 -> v2
+- move options before comment (Thomas)
+- remove select BR2_PACKAGE_QT5BASE_GUI (already done by python-pyqt5) (Thomas)
+- suppress qt5base to PYTHON_MATPLOTLIB_DEPENDENCIES (Thomas)
+---
+ package/python-matplotlib/Config.in            | 12 ++++++++++++
+ package/python-matplotlib/python-matplotlib.mk |  4 ++++
+ 2 files changed, 16 insertions(+)
 
-      AC_CHECK_LIB(ssl, OPENSSL_init_ssl, [:], [
-        with_openssl=no
-      ], [-lcrypto])
-
-Why don't they yse pkg-config?
-
-Additionally/alternatively, they do have a cmake-based buildsystem. Can
-we switch over?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/capnproto/capnproto.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-> index 34fb885914..2afeb8ffa3 100644
-> --- a/package/capnproto/capnproto.mk
-> +++ b/package/capnproto/capnproto.mk
-> @@ -21,5 +21,12 @@ endif
->  # The actual source to be compiled is within a 'c++' subdirectory
->  CAPNPROTO_SUBDIR = c++
->  
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +CAPNPROTO_CONF_OPTS += --with-openssl
-> +CAPNPROTO_DEPENDENCIES += openssl
-> +else
-> +CAPNPROTO_CONF_OPTS += --without-openssl
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index e6ed8cda2f..cfa0bc30c3 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -23,6 +23,18 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 
+ 	  https://matplotlib.org/
+ 
++if BR2_PACKAGE_PYTHON_MATPLOTLIB
++
++config BR2_PACKAGE_PYTHON_MATPLOTLIB_QT
++	bool "qt display"
++	depends on BR2_PACKAGE_QT5 # python-pyqt5
++	select BR2_PACKAGE_PYTHON_PYQT5
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_FONTCONFIG
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++
++endif
++
+ comment "python-matplotlib needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 
+diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
+index 7082637d09..8d00ac8a07 100644
+--- a/package/python-matplotlib/python-matplotlib.mk
++++ b/package/python-matplotlib/python-matplotlib.mk
+@@ -13,4 +13,8 @@ PYTHON_MATPLOTLIB_DEPENDENCIES = host-pkgconf freetype host-python-numpy \
+ 	libpng python-cycler
+ PYTHON_MATPLOTLIB_SETUP_TYPE = setuptools
+ 
++ifeq ($(BR2_PACKAGE_PYTHON_MATPLOTLIB_QT),y)
++PYTHON_MATPLOTLIB_DEPENDENCIES += python-pyqt5
++endif
++
+ $(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
