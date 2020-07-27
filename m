@@ -1,130 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 10:47:02 +0200
-Subject: [Buildroot] [PATCH 2/2 v4] package/mesa3d: make it aware of
- libglvnd and support it when present
-In-Reply-To: <cover.1595839612.git.yann.morin.1998@free.fr>
-References: <cover.1595839612.git.yann.morin.1998@free.fr>
-Message-ID: <c48baa11cd0c06ec5af3fd4989306c3ec581d0e9.1595839612.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 27 Jul 2020 11:29:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gcc: disable libsanitizer with gcc
+ 7.5 and glibc 2.31 toolchain
+Message-ID: <20200727092949.2435343-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
+From: Romain Naour <romain.naour@smile.fr>
 
-When libglvnd is enabled, mesa3d must be told so, so as it installs its
-libraries with the vendor suffix (e.g. libEGL_mesa.so instead of
-libEGL.so).
+libsanitizer in gcc 7.x fails to build with glibc 2.31. Fixing it would
+require backporting an upstream commit:
 
-Additionally, the provider (in Buildroot parlance) is libglvnd, not mesa3d.
+    https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=4abc46b51af5751d657764d0c44b8a4aeed06302
 
-Signed-off-by: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
-[yann.morin.1998 at free.fr:
-  - don't override the _PROVIDES variable, only assign when needed
-]
+However, the backport is not trivial, as there are a lot of conflicts.
+
+Disable libsanitizer since the gcc 7.5 branch is now closed
+(unmaintained) and it's not a trivial merge.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mesa3d/Config.in | 15 +++++++++------
- package/mesa3d/mesa3d.mk | 15 +++++++++++----
- 2 files changed, 20 insertions(+), 10 deletions(-)
+v4: improve commit log (From Yann)
+---
+ package/gcc/gcc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 11d04b7a3f..5417aeda1a 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -422,7 +422,8 @@ comment "gbm support needs a dri driver or a gallium driver w/ EGL support."
- config BR2_PACKAGE_MESA3D_OPENGL_GLX
- 	bool "OpenGL GLX"
- 	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_HAS_LIBGL if !BR2_PACKAGE_LIBGLVND
-+	select BR2_PACKAGE_LIBGLVND_DISPATCH_GL if BR2_PACKAGE_LIBGLVND
- 	select BR2_PACKAGE_MESA3D_NEEDS_X11
- 	help
- 	  Enable GLX graphic acceleration (OpenGL + X11).
-@@ -432,7 +433,8 @@ comment "OpenGL GLX support needs X11"
- 
- config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	bool "OpenGL EGL"
--	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBEGL if !BR2_PACKAGE_LIBGLVND
-+	select BR2_PACKAGE_LIBGLVND_DISPATCH_EGL if BR2_PACKAGE_LIBGLVND
- 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_MESA3D_GBM
- 	help
-@@ -441,7 +443,8 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 
- config BR2_PACKAGE_MESA3D_OPENGL_ES
- 	bool "OpenGL ES"
--	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_LIBGLES if !BR2_PACKAGE_LIBGLVND
-+	select BR2_PACKAGE_LIBGLVND_DISPATCH_GLES if BR2_PACKAGE_LIBGLVND
- 	help
- 	  Use the Khronos OpenGL ES APIs. This is commonly used on
- 	  embedded systems and represents a subset of the OpenGL API.
-@@ -449,13 +452,13 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
- endif # BR2_PACKAGE_MESA3D_DRIVER
- 
- config BR2_PACKAGE_PROVIDES_LIBGL
--	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX && !BR2_PACKAGE_LIBGLVND
- 
- config BR2_PACKAGE_PROVIDES_LIBEGL
--	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL && !BR2_PACKAGE_LIBGLVND
- 
- config BR2_PACKAGE_PROVIDES_LIBGLES
--	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES && !BR2_PACKAGE_LIBGLVND
- 
- config BR2_PACKAGE_PROVIDES_LIBOPENCL
- 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4a17b2e7a2..d40e6da9c6 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -162,9 +162,9 @@ MESA3D_CONF_OPTS += -Dopengl=true
- # we do not need libva support in mesa3d, therefore disable this option
- MESA3D_CONF_OPTS += -Dgallium-va=false
- 
--# libGL is only provided for a full xorg stack
-+# libGL is only provided for a full xorg stack, without libglvnd
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
--MESA3D_PROVIDES += libgl
-+MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libgl)
- else
- define MESA3D_REMOVE_OPENGL_HEADERS
- 	rm -rf $(STAGING_DIR)/usr/include/GL/
-@@ -224,7 +224,7 @@ MESA3D_CONF_OPTS += \
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index d8260bc87b..b834269adc 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -119,6 +119,16 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath
  endif
  
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
--MESA3D_PROVIDES += libegl
-+MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libegl)
- MESA3D_CONF_OPTS += \
- 	-Degl=true
- else
-@@ -233,7 +233,7 @@ MESA3D_CONF_OPTS += \
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES),y)
--MESA3D_PROVIDES += libgles
-+MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libgles)
- MESA3D_CONF_OPTS += -Dgles1=true -Dgles2=true
- else
- MESA3D_CONF_OPTS += -Dgles1=false -Dgles2=false
-@@ -281,4 +281,11 @@ else
- MESA3D_CONF_OPTS += -Dzstd=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGLVND),y)
-+MESA3D_DEPENDENCIES += libglvnd
-+MESA3D_CONF_OPTS += -Dglvnd=true
-+else
-+MESA3D_CONF_OPTS += -Dglvnd=false
++# Disable libsanitizer due to a build issue with gcc 7.5 and glibc 2.31.
++# It would require to backport the following upstream commit
++# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=4abc46b51af5751d657764d0c44b8a4aeed06302
++# but it conflict with gcc 7.5 libsanitizer code.
++# Disable libsanitizer since the gcc 7.5 branch is now closed
++# (unmaintained) and it's not a trivial merge.
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GLIBC)$(BR2_GCC_VERSION_7_X),yy)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
 +endif
 +
- $(eval $(meson-package))
+ # libsanitizer requires wordexp, not in default uClibc config. Also
+ # doesn't build properly with musl.
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
 -- 
-2.20.1
+2.25.4
