@@ -1,78 +1,32 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 27 Jul 2020 06:37:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: fix build error
-In-Reply-To: <20200726133023.1943702-1-bernd.kuhls@t-online.de>
-References: <20200726133023.1943702-1-bernd.kuhls@t-online.de>
-Message-ID: <CAEyMn7ZxyfWiTypTQXKWEu3u3uBTOVydSUF9JWtVSC4qJsec5A@mail.gmail.com>
+From: David Park <djpark121@gmail.com>
+Date: Sun, 26 Jul 2020 22:21:01 -0700
+Subject: [Buildroot] pc defconfig image does not boot
+Message-ID: <CACef8rpYbbO6p7srvegq0XqwEcVk2LHAiTRsMmLjcpi8CHn8xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi,
 
-Am So., 26. Juli 2020 um 15:30 Uhr schrieb Bernd Kuhls
-<bernd.kuhls@t-online.de>:
->
-> Fixes
-> http://autobuild.buildroot.net/results/5db/5dbce5860f57c1457962aa295857689f49a60bc6/
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+I created a PC disk.img from the pc_x86_64_efi_defconfig config file
+following exactly the instructions outlined in board/pc/readme.txt.
 
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+make pc_x86_64_efi_defconfig
 
-> ---
->  .../0001-sofia-sip-fix-s2tcase.c.patch        | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
->
-> diff --git a/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch b/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
-> new file mode 100644
-> index 0000000000..c4b9270984
-> --- /dev/null
-> +++ b/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
-> @@ -0,0 +1,38 @@
-> +From d66a2e55daf223737c07c59b1be45a2d91212ef6 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 26 Jul 2020 13:47:16 +0200
-> +Subject: [PATCH] [sofia-sip] fix s2tcase.c
-> +
-> +Fixes build error with libcheck:
-> +https://github.com/signalwire/freeswitch/issues/681
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + libs/sofia-sip/s2check/s2tcase.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/libs/sofia-sip/s2check/s2tcase.c b/libs/sofia-sip/s2check/s2tcase.c
-> +index 382aaa3ad7..d67694c2ce 100644
-> +--- a/libs/sofia-sip/s2check/s2tcase.c
-> ++++ b/libs/sofia-sip/s2check/s2tcase.c
-> +@@ -57,7 +57,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
-> +       if (strcmp(*patterns, "*")) {
-> +       printf("%s: selected\n", name);
-> +       }
-> +-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
-> ++      _tcase_add_test(tc, tf, name, signo, start, end);
-> +       return;
-> +     }
-> +   }
-> +@@ -67,7 +67,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
-> +       if (strcmp(*patterns, "*")) {
-> +       printf("%s: selected\n", name);
-> +       }
-> +-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
-> ++      _tcase_add_test(tc, tf, name, signo, start, end);
-> +       return;
-> +     }
-> +   }
-> +--
+Running this disk.img in qemu boots fine with no issues, but when I write
+the image to a pendrive using the listed commands:
 
-This is another solution for fixing the build failures compared to:
+dd if=output/images/disk.img of=/dev/sdc; sync
 
-https://patchwork.ozlabs.org/project/buildroot/patch/20200609082519.15482-1-heiko.thiery at gmail.com/.
+And then insert it into my PC, it doesn't boot all the way. I only see the
+GRUB menu with the Buildroot image listed, but when GRUB tries to run this
+image, I only see "Booting Buildroot", and then nothing else.
 
--- 
-Heiko
+Am I missing some steps here that aren't in the readme?
+
+--
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200726/5da3b9ae/attachment.html>
