@@ -1,41 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 17:19:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elf2flt: bump to version 2019.12
-In-Reply-To: <b35424cf-1d80-49fc-86f0-cf84e0074f6f@gmail.com>
-References: <20200726094338.1276868-1-fontaine.fabrice@gmail.com>
- <20200727065016.GM19818@scaer>
- <b35424cf-1d80-49fc-86f0-cf84e0074f6f@gmail.com>
-Message-ID: <20200727151906.GD19818@scaer>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 27 Jul 2020 17:19:36 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32mp157a_dk1: Bump Kernel and
+ U-Boot
+Message-ID: <1595863177-19305-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Bump kernel to version 5.7.10 and U-Boot to 2020.07
 
-On 2020-07-27 16:25 +0200, Romain Naour spake thusly:
-> Le 27/07/2020 ? 08:50, Yann E. MORIN a ?crit?:
-> > On 2020-07-26 11:43 +0200, Fabrice Fontaine spake thusly:
-> >> Drop first patch (already in version)
-> > Romain, your feedback?
-> This would reintroduce the bug added by
-> https://github.com/uclinux-dev/elf2flt/commit/73325b7f209e0f68887333385184af275531427d
-> The backported patch was removed by:
-> https://git.buildroot.net/buildroot/commit/?id=aa3622758bb08fa517a3054076fca89f7697e550
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ configs/stm32mp157a_dk1_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-So I take that a s "no, or we would have to carry a patch that reverts
-an upstream change", right?
-
-Marked as rejected in patchwork, then. Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index ad10408..be5ea75 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157a-dk1/uboot-fragment.config"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
