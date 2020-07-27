@@ -1,148 +1,51 @@
-From: Marc Chalain <marc.chalain@gmail.com>
-Date: Mon, 27 Jul 2020 17:27:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/alac: new package
-Message-ID: <20200727152720.8427-1-marc.chalain@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Mon, 27 Jul 2020 17:30:56 +0200
+Subject: [Buildroot] [PATCH v2 3/6] configs/aarch64_efi_defconfig: build
+ the EDK2 firmware from source
+In-Reply-To: <20200726100541.7710-4-hi@senzilla.io>
+References: <20200726100541.7710-4-hi@senzilla.io>
+Message-ID: <CAK4VdL04sb1yG0wATrkikbgQSrjMzSEWCicED=6MZD+iTAxFBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Marc Chalain <marc.chalain@smile.fr>
+Hello,
 
-The Apple Lossless Audio Codec (ALAC) is an audio codec developed by Apple and supported on iPhone, iPad, most iPods, Mac and iTunes. ALAC is a data compression method which reduces the size of audio files with no loss of information. A decoded ALAC stream is bit-for-bit identical to the original uncompressed audio file.
+On Sun, Jul 26, 2020 at 12:07 PM D. Olsson <hi@senzilla.io> wrote:
+>
+> From: Dick Olsson <hi@senzilla.io>
+>
+> Prior to this, you had to manually download a pre-built EDK2 flash device
+> image (QEMU_EFI.fd) in order to boot this configuration with QEMU.
+> Now, the configuration is building EDK2 from source.
+>
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
+>
+> ---
+>
+> Revision 2:
+>
+>  * Explicitly added the default EDK2 platform to defconfig
+> ---
+>  board/aarch64-efi/readme.txt  | 8 +++-----
+>  configs/aarch64_efi_defconfig | 2 ++
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/board/aarch64-efi/readme.txt b/board/aarch64-efi/readme.txt
+> index 65a6345b6c..08747027e1 100644
+> --- a/board/aarch64-efi/readme.txt
+> +++ b/board/aarch64-efi/readme.txt
+> @@ -22,13 +22,11 @@ qemu-system-aarch64 \
+>         -cpu cortex-a57 \
+>         -m 512 \
+>         -nographic \
+> -       -bios </path/to/QEMU_EFI.fd> \
+> +       -bios output/images/QEMU_EFI.fd \
+>         -drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
 
-https://macosforge.github.io/alac/
+Should we change this to point to the QEMU_VARS file too as was done
+in patch 4 for board/pc/readme.txt ?
 
-A patch fix problem to link the convert utility with libalac.a
-
-Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
----
- package/Config.in                             |  1 +
- ...rary-and-objects-to-link-all-symbols.patch | 26 ++++++++++++++
- package/alac/Config.in                        | 16 +++++++++
- package/alac/alac.hash                        |  2 ++
- package/alac/alac.mk                          | 35 +++++++++++++++++++
- 5 files changed, 80 insertions(+)
- create mode 100644 package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
- create mode 100644 package/alac/Config.in
- create mode 100644 package/alac/alac.hash
- create mode 100644 package/alac/alac.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 5c30d27b7a..4a03a67a0d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1239,6 +1239,7 @@ endmenu
- menu "Libraries"
- 
- menu "Audio/Sound"
-+	source "package/alac/Config.in"
- 	source "package/alsa-lib/Config.in"
- 	source "package/alure/Config.in"
- 	source "package/aubio/Config.in"
-diff --git a/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-new file mode 100644
-index 0000000000..580a18d3a6
---- /dev/null
-+++ b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-@@ -0,0 +1,26 @@
-+convert-utility: reorder library and objects to link all symbols
-+
-+Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
-+
-+--- a/convert-utility/makefile
-++++ b/convert-utility/makefile
-+@@ -1,7 +1,8 @@
-+ # alacconvert make
-+ 
-+ CFLAGS = -g -O3 -c
-+-LFLAGS = -Wall -L$(CODECDIR) -lalac
-++LFLAGS = -Wall -L$(CODECDIR)
-++LIBS = -lalac
-+ CC = g++
-+ 
-+ SRCDIR = .
-+@@ -30,7 +31,7 @@ CAFFileALAC.o
-+ 
-+ alacconvert:	$(OBJS)
-+ 	(cd $(CODECDIR); $(MAKE))
-+-	$(CC) $(LFLAGS) $(OBJS) -o alacconvert
-++	$(CC) $(LFLAGS) $(OBJS) $(LIBS) -o alacconvert
-+ 
-+ main.o : main.cpp
-+ 	$(CC) -I $(INCLUDES) $(CFLAGS) main.cpp
-+
-diff --git a/package/alac/Config.in b/package/alac/Config.in
-new file mode 100644
-index 0000000000..2f1d4a1077
---- /dev/null
-+++ b/package/alac/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_ALAC
-+	bool "Apple Lossless Audio Codec"
-+	help
-+	  Alac is an audio codec developed by Apple and
-+	  supported on iPhone, iPad, most iPods, Mac and
-+	  iTunes. ALAC is a data compression method which
-+	  reduces the size of audio files with no loss
-+	  of information. A decoded ALAC stream is bit-for-bit
-+	  identical to the original uncompressed audio file
-+
-+	  https://macosforge.github.io/alac/
-+
-+
-+config BR2_PACKAGE_ALAC_CONVERT
-+	bool "binary converter"
-+	depends on BR2_PACKAGE_ALAC
-diff --git a/package/alac/alac.hash b/package/alac/alac.hash
-new file mode 100644
-index 0000000000..9477916558
---- /dev/null
-+++ b/package/alac/alac.hash
-@@ -0,0 +1,2 @@
-+sha256 98635ece42fb1c3fceb75eaa4b5164d866e09f0195b3e7ec4085f1123c5e272f  alac-c38887c5c5e64a4b31108733bd79ca9b2496d987.tar.gz
-+sha256 a337314dd82d26791112c1e5a85725b2eb92f5b7e6f9102fa4eaa2903f77518f  LICENSE
-diff --git a/package/alac/alac.mk b/package/alac/alac.mk
-new file mode 100644
-index 0000000000..64227eaa2e
---- /dev/null
-+++ b/package/alac/alac.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# alac
-+#
-+################################################################################
-+
-+ALAC_VERSION = c38887c5c5e64a4b31108733bd79ca9b2496d987
-+ALAC_SITE =$(call github,macosforge,alac,$(ALAC_VERSION))
-+ALAC_LICENSE = APACHE
-+ALAC_LICENSE_FILES = LICENSE
-+ALAC_INSTALL_STAGING = YES
-+
-+ALAC_MAKE_OPTS =  CC=$(TARGET_CXX)
-+
-+ifeq ($(BR2_PACKAGE_ALAC_CONVERT),y)
-+define ALACCONVERT_BUILD_CMDS
-+	$(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/convert-utility
-+endef
-+define ALAC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/convert-utility/alacconvert $(TARGET_DIR)/usr/bin
-+endef
-+endif
-+
-+define ALAC_BUILD_CMDS
-+	$(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/codec
-+	$(ALACCONVERT_BUILD_CMDS)
-+endef
-+
-+define ALAC_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 644 $(@D)/codec/libalac.a      $(STAGING_DIR)/usr/lib/libalac.a
-+	$(INSTALL) -D -m 644 $(@D)/codec/ALACDecoder.h  $(STAGING_DIR)/usr/include/ALACDecoder.h
-+	$(INSTALL) -D -m 644 $(@D)/codec/ALACEncoder.h  $(STAGING_DIR)/usr/include/ALACEncoder.h
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.17.1
+Otherwise looks good, I tested it and it works for me.
