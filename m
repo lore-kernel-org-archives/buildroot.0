@@ -1,9 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 09:07:22 +0200
-Subject: [Buildroot] [PATCH 0/5] libwebsockets fixup
-In-Reply-To: <20200726022901.295552-1-aduskett@gmail.com>
+Date: Mon, 27 Jul 2020 09:21:00 +0200
+Subject: [Buildroot] [PATCH 3/5] package/libwebsockets: bump version to
+ 4.0.20
+In-Reply-To: <20200726022901.295552-4-aduskett@gmail.com>
 References: <20200726022901.295552-1-aduskett@gmail.com>
-Message-ID: <20200727070722.GO19818@scaer>
+ <20200726022901.295552-4-aduskett@gmail.com>
+Message-ID: <20200727072100.GP19818@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,80 +17,94 @@ Adam, All,
 On 2020-07-25 19:28 -0700, aduskett at gmail.com spake thusly:
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
-> As I was picking through the packages under my name in the developers' file, I
-> checked libwebsockets and found that it was quite out of date!
-> 
-> I started to dig around and found two issues I wanted to fix before updating
-> libwebsockets:
-> 
-> 1) libwebsockets compiles just fine without fork() and has had vfork()
->    support for at * least * 5 years (I couldn't find anything further back,
->    but it might have been there even longer.)
-> 
-> 2) zlib hasn't been a requirement since 2013 and is only necessary if
->    LWS_WITHOUT_EXTENSIONS is "ON," which is the default behavior.
-> 
-> As such, the first two patches deal directly with those issues.
-> The first removes "depends on BR2_USE_MMU," the second explicitly sets
-> LWS_WITHOUT_EXTENSIONS to "OFF." (See the patch for more details and size
-> comparisons.)
-> 
-> The 4.0 series of libwebsockets also has several new features and options
-> which we may want to enable in a separate patch series, but for this patch
-> series, I just wanted to include a check for libglib2 and libmount.
-> 
-> The other options we may want to enable in the future are:
->  - LWS_ROLE_MQTT
->  - LWS_WITH_SYS_ASYNC_DNS
->  - LWS_WITH_SYS_NTPCLIENT
->  - LWS_WITH_SYS_DHCP_CLIENT
->  - LWS_WITH_SECURE_STREAMS
->  - LWS_WITH_STRUCT_JSON
->  - LWS_WITH_SPAWN
->  - LWS_WITH_SQLITE3/LWS_WITH_STRUCT_SQLITE3
+> Other changes:
+>   - Remove upstream patch.
+>   - Change license type to MIT.
+>   - Update license shasum due to the above change.
 
-Ah... Too bad I hadn't seen the cover letter before pushing.. When there
-are new features coming with a version bump, either we handle them with
-proper dependencies, or we forcefully and explicitly disable them, so
-that they are not randomly enabled/disabled depending on the build
-order... See my reply to patch 3...
+Patch applied to master, thanks.
 
-Would you be so kind as to send a patch that explicitly disable those
-bnew features, please?
-
-Otherwise, series applied to master, thanks.
+However, I did explicitly disable the two new features you are
+introducing in the next two patches. But as I did not see the cover
+letter, I did not account for the new ones...
 
 Regards,
 Yann E. MORIN.
 
-> Feel free to check out the CMakeLists.txt and the changelog file to see what
-> those options do, some of them are quite neat! If we do decide to impliment
-> those options, a Config.in entry would be needed for all of them except
-> for SQLITE.
-> 
-> Also, mbedtls and wolfssl are supported and have been for quite a while, but
-> nobody cares about adding support for those libraries. I sure as heck don't!
-> 
-> I tested the changes on Fedora 32 and CentOS7 with
-> "./utils/test-pkg -c ./defconfig -p libwebsockets" and got
-> "6 builds, 0 skipped, 0 build failed, 0 legal-info failed" as a result.
-> 
-> Thanks for taking a look at the series!
-> 
-> Adam Duskett (5):
->   package/libwebsockets: remove dependency on mmu
->   package/libwebsockets: add support for extensions
->   package/libwebsockets: bump version to 4.0.20
->   package/libwebsockets: add libglib2 support
->   package/libwebsockets: add fsmount support
-> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
 >  ...ts-txt-fix-static-build-with-openssl.patch | 34 -------------------
->  package/libwebsockets/Config.in               |  1 -
 >  package/libwebsockets/libwebsockets.hash      |  4 +--
->  package/libwebsockets/libwebsockets.mk        | 21 ++++++++++--
->  4 files changed, 20 insertions(+), 40 deletions(-)
+>  package/libwebsockets/libwebsockets.mk        |  4 +--
+>  3 files changed, 4 insertions(+), 38 deletions(-)
 >  delete mode 100644 package/libwebsockets/0001-CMakeLists-txt-fix-static-build-with-openssl.patch
 > 
+> diff --git a/package/libwebsockets/0001-CMakeLists-txt-fix-static-build-with-openssl.patch b/package/libwebsockets/0001-CMakeLists-txt-fix-static-build-with-openssl.patch
+> deleted file mode 100644
+> index 868685d397..0000000000
+> --- a/package/libwebsockets/0001-CMakeLists-txt-fix-static-build-with-openssl.patch
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -From 5f8134cfe5e7b90a8ce07d27ae737dcc54b523b3 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Wed, 16 Oct 2019 20:09:13 +0200
+> -Subject: [PATCH] CMakeLists.txt: fix static build with openssl
+> -
+> -openssl can depends on -latomic so use pkg-config (if available) to
+> -retrieve these static dependencies otherwise build will fail because
+> -HMAC_CTX_new test will return a wrong result
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/65d0528b208c0a470264f7e2433be89425971dd7
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Retrieved (and backported) from:
+> -https://github.com/warmcat/libwebsockets/commit/5f8134cfe5e7b90a8ce07d27ae737dcc54b523b3]
+> ----
+> - CMakeLists.txt | 3 +++
+> - 1 file changed, 3 insertions(+)
+> -
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index 2693ac56a..888f65e83 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -1803,7 +1803,10 @@ if (LWS_WITH_SSL)
+> - 		if (NOT OPENSSL_FOUND AND NOT LWS_WITH_BORINGSSL)
+> - 			# TODO: Add support for STATIC also.
+> - 		if (NOT LWS_WITH_ESP32)
+> -+			find_package(PkgConfig QUIET)
+> -+			pkg_check_modules(PC_OPENSSL openssl QUIET)
+> - 			find_package(OpenSSL REQUIRED)
+> -+			list(APPEND OPENSSL_LIBRARIES ${PC_OPENSSL_LIBRARIES})
+> - 		endif()
+> - 			set(OPENSSL_INCLUDE_DIRS "${OPENSSL_INCLUDE_DIR}")
+> - 		endif()
+> diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+> index ca0c1db2d5..3963370710 100644
+> --- a/package/libwebsockets/libwebsockets.hash
+> +++ b/package/libwebsockets/libwebsockets.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256	166d6e17cab64bfc10c2a71799c298284540a1fa63f6ea3de5caccb34502243c  libwebsockets-3.2.2.tar.gz
+> -sha256  4d092cd5e062c5ab0cf6408963d74619b5baf1571344410be6aa5bcef512eb70  LICENSE
+> +sha256  a26d243f2642a9b810e7d91f1e66b149d1da978decdca58ce1c9218c454f397e  libwebsockets-4.0.20.tar.gz
+> +sha256  5756db345eb9c21cb06dd7cb69c38ec234657a233f9a186b4f5fa453681bd394  LICENSE
+> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+> index 6716d52796..6c2667b867 100644
+> --- a/package/libwebsockets/libwebsockets.mk
+> +++ b/package/libwebsockets/libwebsockets.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -LIBWEBSOCKETS_VERSION = 3.2.2
+> +LIBWEBSOCKETS_VERSION = 4.0.20
+>  LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
+> -LIBWEBSOCKETS_LICENSE = LGPL-2.1 with exceptions
+> +LIBWEBSOCKETS_LICENSE = MIT with exceptions
+>  LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+>  LIBWEBSOCKETS_DEPENDENCIES = zlib
+>  LIBWEBSOCKETS_INSTALL_STAGING = YES
 > -- 
 > 2.26.2
 > 
