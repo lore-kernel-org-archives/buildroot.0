@@ -1,263 +1,195 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 27 Jul 2020 18:30:39 +0200
-Subject: [Buildroot] [PATCH v2] package/librtlsdr: bump to last commit
-Message-ID: <20200727163039.15873-1-gwenj@trabucayre.com>
+From: Marc Chalain <marc.chalain@gmail.com>
+Date: Mon, 27 Jul 2020 18:36:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/alac: new package
+In-Reply-To: <5f13e688-783b-40ef-fe4d-e8483b135fa4@gmail.com>
+References: <20200727152720.8427-1-marc.chalain@gmail.com>
+ <5f13e688-783b-40ef-fe4d-e8483b135fa4@gmail.com>
+Message-ID: <CAAj6r7pq7-oEbgVzNwDWDb74NFYWTxD=hYB-WnRmcrz_iiQBkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hello,
 
-Last official release is 2 years ago.
+No in fact, I didn't find this library. I just looked for the original
+library from Apple.
+This library is used by shairplay, but it is integrated inside the source
+files.
 
-Current master branch provides fixes and improvements:
-- fix crash with usbfs mmap with usb controler has no DMA support and kernel < 5.6 [1].
-- better SDR dongle configuration
+Best regards,
+Marc
 
-This patch:
-- bump librtlsdr to d794155ba65796a76cd0a436f9709f4601509320 (2020/03/18)
-- adapt 0001-disable_shared_library_target_in_build.patch
-  (http://lists.osmocom.org/pipermail/osmocom-sdr/2020-May/002075.html)
-- add option to enable/disable zerocopy buffer on non arm platform
+Le lun. 27 juil. 2020 ? 18:21, Romain Naour <romain.naour@gmail.com> a
+?crit :
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/core?h=v5.8-rc3&id=a0e710a7def471b8eb779ff551fc27701da49599
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v1 -> v2:
-- update BR2_PACKAGE_LIBRTLSDR_ZEROCOPY option. Now it's enabled by default.
-- Message updated to inform about potential crash.
----
- ...sable_shared_library_target_in_build.patch | 94 ++++++++++++-------
- package/librtlsdr/Config.in                   |  8 ++
- package/librtlsdr/librtlsdr.hash              |  2 +-
- package/librtlsdr/librtlsdr.mk                |  8 +-
- 4 files changed, 75 insertions(+), 37 deletions(-)
-
-diff --git a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
-index b9f53d2393..376aa23344 100644
---- a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
-+++ b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
-@@ -1,44 +1,46 @@
--From d47e3aed12414be59bf77177c93853ec4b24d705 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 2 Jun 2018 16:53:36 +0200
-+From c8878472bf84c656979ea1d07e7ed55b0aa2c939 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Fri, 15 May 2020 16:14:48 +0200
- Subject: [PATCH] disable shared library target in build
- 
- Disable shared library target if BUILD_SHARED_LIBS if OFF.
- 
- Patch retrieved from
--https://git.buildroot.net/buildroot/tree/package/librtlsdr/0001-disable_shared_library_target_in_build.patch?h=2018.05
-+https://git.buildroot.net/buildroot/tree/package/librtlsdr/0001-disable_shared_library_target_in_build.patch?h=2020.02.x
- 
--Patch has been updated to work with 0.5.4 and to be able to keep current
-+Patch has been updated to work with master and to be able to keep current
- behavior of building shared and static version of library if
- BUILD_SHARED_LIBS and BUILD_STATIC_LIBS are both set.
- Moreover, if BUILD_STATIC_LIBS is OFF, only shared version of library
- will be install.
- 
--[Upstream status: https://github.com/steve-m/librtlsdr/pull/46]
-+[Upstream status: http://lists.osmocom.org/pipermail/osmocom-sdr/2020-May/002075.html]
- 
- Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- ---
-- src/CMakeLists.txt | 24 ++++++++++++++++--------
-- 1 file changed, 16 insertions(+), 8 deletions(-)
-+ src/CMakeLists.txt | 30 +++++++++++++++++++++---------
-+ 1 file changed, 21 insertions(+), 9 deletions(-)
- 
- diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 07d64ab..2b7cbae 100644
-+index 33faee7..d82fc87 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -47,16 +47,22 @@ ENDIF(MSVC)
-+@@ -18,6 +18,8 @@
-  ########################################################################
-  # Setup shared library variant
-  ########################################################################
- +option(BUILD_SHARED_LIBS "Build shared library" ON)
- +if(BUILD_SHARED_LIBS)
-- add_library(rtlsdr_shared SHARED ${rtlsdr_srcs})
-- target_link_libraries(rtlsdr_shared ${LIBUSB_LIBRARIES})
-- set_target_properties(rtlsdr_shared PROPERTIES DEFINE_SYMBOL "rtlsdr_EXPORTS")
-- set_target_properties(rtlsdr_shared PROPERTIES OUTPUT_NAME rtlsdr)
-- set_target_properties(rtlsdr_shared PROPERTIES SOVERSION ${MAJOR_VERSION})
-- set_target_properties(rtlsdr_shared PROPERTIES VERSION ${LIBVER})
--+list(APPEND rtlsdr_lib rtlsdr_shared)
-+ add_library(rtlsdr SHARED librtlsdr.c
-+   tuner_e4k.c tuner_fc0012.c tuner_fc0013.c tuner_fc2580.c tuner_r82xx.c)
-+ target_link_libraries(rtlsdr PkgConfig::LIBUSB)
-+@@ -30,10 +32,14 @@ set_target_properties(rtlsdr PROPERTIES OUTPUT_NAME rtlsdr)
-+ set_target_properties(rtlsdr PROPERTIES SOVERSION ${MAJOR_VERSION})
-+ set_target_properties(rtlsdr PROPERTIES VERSION ${LIBVER})
-+ generate_export_header(rtlsdr)
-++list(APPEND rtlsdr_lib rtlsdr)
- +endif()
-  
-  ########################################################################
-@@ -46,60 +48,82 @@ index 07d64ab..2b7cbae 100644
-  ########################################################################
- +option(BUILD_STATIC_LIBS "Build static library" ON)
- +if(BUILD_STATIC_LIBS)
-- add_library(rtlsdr_static STATIC ${rtlsdr_srcs})
-- target_link_libraries(rtlsdr_static ${LIBUSB_LIBRARIES})
-- set_property(TARGET rtlsdr_static APPEND PROPERTY COMPILE_DEFINITIONS "rtlsdr_STATIC" )
--@@ -64,6 +70,8 @@ if(NOT WIN32)
-- # Force same library filename for static and shared variants of the library
-+ add_library(rtlsdr_static STATIC librtlsdr.c
-+   tuner_e4k.c tuner_fc0012.c tuner_fc0013.c tuner_fc2580.c tuner_r82xx.c)
-+ target_link_libraries(rtlsdr_static PkgConfig::LIBUSB)
-+@@ -47,6 +53,8 @@ if(NOT WIN32)
-  set_target_properties(rtlsdr_static PROPERTIES OUTPUT_NAME rtlsdr)
-  endif()
-+ generate_export_header(rtlsdr_static)
- +list(APPEND rtlsdr_lib rtlsdr_static)
- +endif()
-  
-  ########################################################################
-- # Setup libraries used in executables
--@@ -91,33 +99,33 @@ add_executable(rtl_fm rtl_fm.c)
-- add_executable(rtl_eeprom rtl_eeprom.c)
-+ # Set up Windows DLL resource files
-+@@ -90,37 +98,37 @@ add_executable(rtl_eeprom rtl_eeprom.c)
-  add_executable(rtl_adsb rtl_adsb.c)
-  add_executable(rtl_power rtl_power.c)
---set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
--+set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
-+ add_executable(rtl_biast rtl_biast.c)
-+-set(INSTALL_TARGETS rtlsdr rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast)
-++set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast)
-  
---target_link_libraries(rtl_sdr rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_sdr rtlsdr convenience_static
- +target_link_libraries(rtl_sdr ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
---target_link_libraries(rtl_tcp rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_tcp rtlsdr convenience_static
- +target_link_libraries(rtl_tcp ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
---target_link_libraries(rtl_test rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_test rtlsdr convenience_static
- +target_link_libraries(rtl_test ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
---target_link_libraries(rtl_fm rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_fm rtlsdr convenience_static
- +target_link_libraries(rtl_fm ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
---target_link_libraries(rtl_eeprom rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_eeprom rtlsdr convenience_static
- +target_link_libraries(rtl_eeprom ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
---target_link_libraries(rtl_adsb rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_adsb rtlsdr convenience_static
- +target_link_libraries(rtl_adsb ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
---target_link_libraries(rtl_power rtlsdr_shared convenience_static
-+-target_link_libraries(rtl_power rtlsdr convenience_static
- +target_link_libraries(rtl_power ${rtlsdr_lib} convenience_static
-      ${LIBUSB_LIBRARIES}
-      ${CMAKE_THREAD_LIBS_INIT}
-  )
-+-target_link_libraries(rtl_biast rtlsdr convenience_static
-++target_link_libraries(rtl_biast ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+@@ -156,12 +164,16 @@ endif()
-+ ########################################################################
-+ # Install built library files & utilities
-+ ########################################################################
-++if(BUILD_SHARED_LIBS)
-+ install(TARGETS rtlsdr EXPORT RTLSDR-export
-+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # .so/.dylib file
-+   )
-++endif()
-++if(BUILD_STATIC_LIBS)
-+ install(TARGETS rtlsdr_static EXPORT RTLSDR-export
-+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # .so/.dylib file
-+   )
-++endif()
-+ install(TARGETS rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power
-+   DESTINATION ${CMAKE_INSTALL_BINDIR}
-+   )
- -- 
--2.14.1
-+2.26.2
- 
-diff --git a/package/librtlsdr/Config.in b/package/librtlsdr/Config.in
-index c2bf1a9fb1..238659a782 100644
---- a/package/librtlsdr/Config.in
-+++ b/package/librtlsdr/Config.in
-@@ -18,6 +18,14 @@ config BR2_PACKAGE_LIBRTLSDR_DETACH_DRIVER
- 	  automatically detach any kernel driver associated to the
- 	  RTL2832U USB device on startup if one is loaded.
- 
-+config BR2_PACKAGE_LIBRTLSDR_ZEROCOPY
-+	bool "Enable usbfs zero-copy support"
-+	default y
-+	help
-+	  This option allows to use kernel usbfs mmap instead
-+	  of buffers in userspace. If you experiment crash with
-+	  kernel < 5.6, disable this option.
-+
- endif
- 
- comment "librtlsdr needs a toolchain w/ threads"
-diff --git a/package/librtlsdr/librtlsdr.hash b/package/librtlsdr/librtlsdr.hash
-index e7b0e84f4a..920a755033 100644
---- a/package/librtlsdr/librtlsdr.hash
-+++ b/package/librtlsdr/librtlsdr.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 80a5155f3505bca8f1b808f8414d7dcd7c459b662a1cde84d3a2629a6e72ae55  librtlsdr-0.6.0.tar.gz
-+sha256 78c20031287017d057941640dcf05cb7666cfedcfad1b4a1186ed00cabfabc2f  librtlsdr-d794155ba65796a76cd0a436f9709f4601509320.tar.gz
- # License file, locally calculated
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
-index 500ccc5d17..16f2632789 100644
---- a/package/librtlsdr/librtlsdr.mk
-+++ b/package/librtlsdr/librtlsdr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRTLSDR_VERSION = 0.6.0
-+LIBRTLSDR_VERSION = d794155ba65796a76cd0a436f9709f4601509320
- LIBRTLSDR_SITE = $(call github,steve-m,librtlsdr,$(LIBRTLSDR_VERSION))
- LIBRTLSDR_LICENSE = GPL-2.0+
- LIBRTLSDR_LICENSE_FILES = COPYING
-@@ -28,6 +28,12 @@ ifeq ($(BR2_PACKAGE_LIBRTLSDR_DETACH_DRIVER),y)
- LIBRTLSDR_CONF_OPTS += -DDETACH_KERNEL_DRIVER=1
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBRTLSDR_ZEROCOPY),y)
-+LIBRTLSDR_CONF_OPTS += -DENABLE_ZEROCOPY=ON
-+else
-+LIBRTLSDR_CONF_OPTS += -DENABLE_ZEROCOPY=OFF
-+endif
-+
- # In case of static-lib-only builds, CMake's FindThreads.cmake code tries to
- # get the right flags, checking first for -lpthreads, then -lpthread, and lastly
- # for -pthread.
--- 
-2.20.1
+> Hello Marc,
+>
+> Le 27/07/2020 ? 17:27, Marc Chalain a ?crit :
+> > From: Marc Chalain <marc.chalain@smile.fr>
+> >
+> > The Apple Lossless Audio Codec (ALAC) is an audio codec developed by
+> Apple and supported on iPhone, iPad, most iPods, Mac and iTunes. ALAC is a
+> data compression method which reduces the size of audio files with no loss
+> of information. A decoded ALAC stream is bit-for-bit identical to the
+> original uncompressed audio file.
+> >
+> > https://macosforge.github.io/alac/
+> >
+> > A patch fix problem to link the convert utility with libalac.a
+>
+> Did you try with the alac library provided by libaudiofile package ?
+> It's seems libaudiofile provide the same functionality.
+>
+> Best regards,
+> Romain
+>
+> >
+> > Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
+> > ---
+> >  package/Config.in                             |  1 +
+> >  ...rary-and-objects-to-link-all-symbols.patch | 26 ++++++++++++++
+> >  package/alac/Config.in                        | 16 +++++++++
+> >  package/alac/alac.hash                        |  2 ++
+> >  package/alac/alac.mk                          | 35 +++++++++++++++++++
+> >  5 files changed, 80 insertions(+)
+> >  create mode 100644
+> package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
+> >  create mode 100644 package/alac/Config.in
+> >  create mode 100644 package/alac/alac.hash
+> >  create mode 100644 package/alac/alac.mk
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 5c30d27b7a..4a03a67a0d 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -1239,6 +1239,7 @@ endmenu
+> >  menu "Libraries"
+> >
+> >  menu "Audio/Sound"
+> > +     source "package/alac/Config.in"
+> >       source "package/alsa-lib/Config.in"
+> >       source "package/alure/Config.in"
+> >       source "package/aubio/Config.in"
+> > diff --git
+> a/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
+> b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
+> > new file mode 100644
+> > index 0000000000..580a18d3a6
+> > --- /dev/null
+> > +++
+> b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
+> > @@ -0,0 +1,26 @@
+> > +convert-utility: reorder library and objects to link all symbols
+> > +
+> > +Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
+> > +
+> > +--- a/convert-utility/makefile
+> > ++++ b/convert-utility/makefile
+> > +@@ -1,7 +1,8 @@
+> > + # alacconvert make
+> > +
+> > + CFLAGS = -g -O3 -c
+> > +-LFLAGS = -Wall -L$(CODECDIR) -lalac
+> > ++LFLAGS = -Wall -L$(CODECDIR)
+> > ++LIBS = -lalac
+> > + CC = g++
+> > +
+> > + SRCDIR = .
+> > +@@ -30,7 +31,7 @@ CAFFileALAC.o
+> > +
+> > + alacconvert:        $(OBJS)
+> > +     (cd $(CODECDIR); $(MAKE))
+> > +-    $(CC) $(LFLAGS) $(OBJS) -o alacconvert
+> > ++    $(CC) $(LFLAGS) $(OBJS) $(LIBS) -o alacconvert
+> > +
+> > + main.o : main.cpp
+> > +     $(CC) -I $(INCLUDES) $(CFLAGS) main.cpp
+> > +
+> > diff --git a/package/alac/Config.in b/package/alac/Config.in
+> > new file mode 100644
+> > index 0000000000..2f1d4a1077
+> > --- /dev/null
+> > +++ b/package/alac/Config.in
+> > @@ -0,0 +1,16 @@
+> > +config BR2_PACKAGE_ALAC
+> > +     bool "Apple Lossless Audio Codec"
+> > +     help
+> > +       Alac is an audio codec developed by Apple and
+> > +       supported on iPhone, iPad, most iPods, Mac and
+> > +       iTunes. ALAC is a data compression method which
+> > +       reduces the size of audio files with no loss
+> > +       of information. A decoded ALAC stream is bit-for-bit
+> > +       identical to the original uncompressed audio file
+> > +
+> > +       https://macosforge.github.io/alac/
+> > +
+> > +
+> > +config BR2_PACKAGE_ALAC_CONVERT
+> > +     bool "binary converter"
+> > +     depends on BR2_PACKAGE_ALAC
+> > diff --git a/package/alac/alac.hash b/package/alac/alac.hash
+> > new file mode 100644
+> > index 0000000000..9477916558
+> > --- /dev/null
+> > +++ b/package/alac/alac.hash
+> > @@ -0,0 +1,2 @@
+> > +sha256
+> 98635ece42fb1c3fceb75eaa4b5164d866e09f0195b3e7ec4085f1123c5e272f
+> alac-c38887c5c5e64a4b31108733bd79ca9b2496d987.tar.gz
+> > +sha256
+> a337314dd82d26791112c1e5a85725b2eb92f5b7e6f9102fa4eaa2903f77518f  LICENSE
+> > diff --git a/package/alac/alac.mk b/package/alac/alac.mk
+> > new file mode 100644
+> > index 0000000000..64227eaa2e
+> > --- /dev/null
+> > +++ b/package/alac/alac.mk
+> > @@ -0,0 +1,35 @@
+> >
+> +################################################################################
+> > +#
+> > +# alac
+> > +#
+> >
+> +################################################################################
+> > +
+> > +ALAC_VERSION = c38887c5c5e64a4b31108733bd79ca9b2496d987
+> > +ALAC_SITE =$(call github,macosforge,alac,$(ALAC_VERSION))
+> > +ALAC_LICENSE = APACHE
+> > +ALAC_LICENSE_FILES = LICENSE
+> > +ALAC_INSTALL_STAGING = YES
+> > +
+> > +ALAC_MAKE_OPTS =  CC=$(TARGET_CXX)
+> > +
+> > +ifeq ($(BR2_PACKAGE_ALAC_CONVERT),y)
+> > +define ALACCONVERT_BUILD_CMDS
+> > +     $(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/convert-utility
+> > +endef
+> > +define ALAC_INSTALL_TARGET_CMDS
+> > +     $(INSTALL) -D -m 755 $(@D)/convert-utility/alacconvert
+> $(TARGET_DIR)/usr/bin
+> > +endef
+> > +endif
+> > +
+> > +define ALAC_BUILD_CMDS
+> > +     $(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/codec
+> > +     $(ALACCONVERT_BUILD_CMDS)
+> > +endef
+> > +
+> > +define ALAC_INSTALL_STAGING_CMDS
+> > +     $(INSTALL) -D -m 644 $(@D)/codec/libalac.a
+> $(STAGING_DIR)/usr/lib/libalac.a
+> > +     $(INSTALL) -D -m 644 $(@D)/codec/ALACDecoder.h
+> $(STAGING_DIR)/usr/include/ALACDecoder.h
+> > +     $(INSTALL) -D -m 644 $(@D)/codec/ALACEncoder.h
+> $(STAGING_DIR)/usr/include/ALACEncoder.h
+> > +endef
+> > +
+> > +$(eval $(generic-package))
+> >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200727/51d7606c/attachment.html>
