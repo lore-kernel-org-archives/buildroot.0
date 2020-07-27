@@ -1,123 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jul 2020 17:15:42 +0200
-Subject: [Buildroot] [PATCH v3 3/7] package/docker-engine: needs some
- kernel options
-In-Reply-To: <20200621080000.180089-4-francois.perrad@gadz.org> (Francois
- Perrad's message of "Sun, 21 Jun 2020 09:59:56 +0200")
-References: <20200621080000.180089-1-francois.perrad@gadz.org>
- <20200621080000.180089-4-francois.perrad@gadz.org>
-Message-ID: <87ft9dugyp.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 17:19:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/elf2flt: bump to version 2019.12
+In-Reply-To: <b35424cf-1d80-49fc-86f0-cf84e0074f6f@gmail.com>
+References: <20200726094338.1276868-1-fontaine.fabrice@gmail.com>
+ <20200727065016.GM19818@scaer>
+ <b35424cf-1d80-49fc-86f0-cf84e0074f6f@gmail.com>
+Message-ID: <20200727151906.GD19818@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+Romain, All,
 
- > according to https://wiki.gentoo.org/wiki/Docker#Kernel
+On 2020-07-27 16:25 +0200, Romain Naour spake thusly:
+> Le 27/07/2020 ? 08:50, Yann E. MORIN a ?crit?:
+> > On 2020-07-26 11:43 +0200, Fabrice Fontaine spake thusly:
+> >> Drop first patch (already in version)
+> > Romain, your feedback?
+> This would reintroduce the bug added by
+> https://github.com/uclinux-dev/elf2flt/commit/73325b7f209e0f68887333385184af275531427d
+> The backported patch was removed by:
+> https://git.buildroot.net/buildroot/commit/?id=aa3622758bb08fa517a3054076fca89f7697e550
 
-A better source is docker-engine/contrib/check-config.sh. See below for
-the suggestions from it.
+So I take that a s "no, or we would have to carry a patch that reverts
+an upstream change", right?
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > ---
- >  package/docker-engine/docker-engine.mk | 67 ++++++++++++++++++++++++++
- >  1 file changed, 67 insertions(+)
+Marked as rejected in patchwork, then. Thanks!
 
- > diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
- > index 78f6c1261..41600486c 100644
- > --- a/package/docker-engine/docker-engine.mk
- > +++ b/package/docker-engine/docker-engine.mk
- > @@ -79,4 +79,71 @@ define DOCKER_ENGINE_USERS
- >  	- - docker -1 * - - - Docker Application Container Framework
- >  endef
- 
- > +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
- > +define DOCKER_ENGINE_DRIVER_BTRFS_LINUX_CONFIG_FIXUPS
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_BTRFS_FS)
-
-check-config.sh also mentions xattr support for btrfs, so I've added:
-
-  $(call KCONFIG_ENABLE_OPT,CONFIG_BTRFS_FS_POSIX_ACL)
-
- > +endef
- > +endif
- > +
- > +define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG_SWAP)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
-
-MEMCG_SWAP and BLK_CGROUP are optional (E.G. you may be running from an
-initramfs or without swap). I've dropped them.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_FAIR_GROUP_SCHED)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CFS_BANDWIDTH)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_RT_GROUP_SCHED)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
-
-Same for these.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_PROC_PID_CPUSET)
-
-And this.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PERF)
-
-This is afaik not used by docker.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_USER_NS)
-
-User namespace is optional.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_BLOCK)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_THROTTLING)
-
-Same for BLK_CGROUP.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
-
-check-config.sh also mentions CONFIG_NETFILTER_XT_MATCH_IPVS. This
-depends on IPVS support in the kernel to get used. I've added
-_XT_MATCH_IPVS so it gets enabled if IPVS support is turned on.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT)
-
-These are (afaik) not needed.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCHED)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_CGROUP)
-
-Optional.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_L3_MASTER_DEV)
-
-(afaik) not used.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_NET_PRIO)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_NETCLASSID)
-
-Optional.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_MD)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_DM)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_MD_THIN_PROVISIONING)
-
-These are only needed for the non-default devicemapper support, so I
-moved them to a DOCKER_ENGINE_DRIVER_DM_LINUX_CONFIG_FIXUPS conditional.
-
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_PERSISTENT_KEYRINGS)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_ENCRYPTED_KEYS)
- > +	$(call KCONFIG_ENABLE_OPT,CONFIG_KEY_DH_OPERATIONS)
-
-These are (afaik) not used, so dropped.
-
-Committed with these fixes, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
