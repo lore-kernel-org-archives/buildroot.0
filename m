@@ -1,87 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 18:13:19 +0200
-Subject: [Buildroot] [git commit] support/scripts: add check-dotconfig.py
-Message-ID: <20200727161031.7A40B824EE@busybox.osuosl.org>
+Date: Mon, 27 Jul 2020 18:13:45 +0200
+Subject: [Buildroot] [git commit] gitlab-ci: check all defconfigs on every
+ push
+Message-ID: <20200727161031.8BBFB824EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7385ccab18d037ce37a8e8cac4f71ba1ebe2e383
+commit: https://git.buildroot.net/buildroot/commit/?id=2ed3b0a5862eeb2bb5e7c476b990e5c0d6939955
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
-we need to check if the generated configuration file (.config)
-contains all symbols present in the defconfig file.
+The defconfig check has been introduced by the previous
+patch before the building each defconfig but those builds
+are done every week or more.
 
-If not there is an issue with the defconfig.
+Checking if a defconfig is valid can be done on every
+push in the repository since it take few seconds.
 
-This script will be used in .gitlab-ci.yml.
+This would allow to detect as soon as possible a problem
+in a defconfig and eventually avoid breaking the build
+while build testing all defconfig.
 
-Inspired by is_toolchain_usable() function from genrandconfig:
-https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
+Introduce a new job template ".defconfig_check" in
+gitlab-ci.yml.in and modify the generate-gitlab-ci-yml
+to create a job for each defconfig to run the test.
+
+Although, we could have used only one job to do all
+tests, using one job per defconfig allow to identify
+easily in gitlab which defconfig is falling.
+
+Tested:
+https://gitlab.com/kubu93/buildroot/pipelines/138331069
+https://gitlab.com/kubu93/buildroot/pipelines/171223758
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr:
-  - strip defconfig lines when reading them
-  - use a generator to read the defconfig lines
-  - no need to strip() again when building the missing list
-  - testing the list directly, not its len()
-  - simply sys.exit(1) in the error condition
-]
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/check-dotconfig.py | 42 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ support/misc/gitlab-ci.yml.in          | 13 +++++++++++++
+ support/scripts/generate-gitlab-ci-yml |  2 +-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
-new file mode 100755
-index 0000000000..f9a416b743
---- /dev/null
-+++ b/support/scripts/check-dotconfig.py
-@@ -0,0 +1,42 @@
-+#!/usr/bin/env python3
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index 01592f7155..7218ea027e 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -34,6 +34,19 @@ check-package:
+     script:
+         - make check-package
+ 
++.defconfig_check:
++    script:
++        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
++        - make ${DEFCONFIG_NAME}
++        - support/scripts/check-dotconfig.py .config configs/${DEFCONFIG_NAME}
++    artifacts:
++        when: on_failure
++        expire_in: 2 weeks
++        paths:
++            - .config
++    before_script:
++        - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
 +
-+# This scripts check that all lines present in the defconfig are
-+# still present in the .config
-+
-+import sys
-+
-+
-+def main():
-+    if not (len(sys.argv) == 3):
-+        print("Error: incorrect number of arguments")
-+        print("""Usage: check-dotconfig <configfile> <defconfig>""")
-+        sys.exit(1)
-+
-+    configfile = sys.argv[1]
-+    defconfig = sys.argv[2]
-+
-+    # strip() to get rid of trailing \n
-+    with open(configfile) as configf:
-+        configlines = [l.strip() for l in configf.readlines()]
-+
-+    defconfiglines = []
-+    with open(defconfig) as defconfigf:
-+        # strip() to get rid of trailing \n
-+        for line in (line.strip() for line in defconfigf.readlines()):
-+            if line.startswith("BR2_"):
-+                defconfiglines.append(line)
-+            elif line.startswith('# BR2_') and line.endswith(' is not set'):
-+                defconfiglines.append(line)
-+
-+    # Check that all the defconfig lines are still present
-+    missing = [line for line in defconfiglines if line not in configlines]
-+
-+    if missing:
-+        print("WARN: defconfig {} can't be used:".format(defconfig))
-+        for m in missing:
-+            print("      Missing: {}".format(m))
-+        sys.exit(1)
-+
-+
-+if __name__ == "__main__":
-+    main()
+ .defconfig_base:
+     script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 262a7649b2..5cef1146e2 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -10,7 +10,7 @@ cat "${input}"
+     cd configs
+     LC_ALL=C ls -1 *_defconfig
+ ) \
+-    | sed 's/$/: { extends: .defconfig }/'
++    | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
+ 
+ ./support/testing/run-tests -l 2>&1 \
+     | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
