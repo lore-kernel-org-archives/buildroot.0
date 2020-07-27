@@ -1,140 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 12:47:58 +0200
-Subject: [Buildroot] [PATCH v6 1/1] package/nodejs: use system-icu for
- host-nodejs
-In-Reply-To: <CADvTj4rDGKr9KhQMQUgonwTmDTapEpRgf4DCpcAGbQo4P09stA@mail.gmail.com>
-References: <20200727094930.703188-1-james.hilliard1@gmail.com>
- <20200727095354.GR19818@scaer>
- <CADvTj4rDGKr9KhQMQUgonwTmDTapEpRgf4DCpcAGbQo4P09stA@mail.gmail.com>
-Message-ID: <20200727104758.GS19818@scaer>
+Date: Mon, 27 Jul 2020 13:22:39 +0200
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.55
+Message-ID: <20200727111954.700DF8153D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=00b7abf7ebb929f32c4e3b7ec64c6f6b14fa3fcd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-27 04:28 -0600, James Hilliard spake thusly:
-> On Mon, Jul 27, 2020 at 3:54 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2020-07-27 03:49 -0600, James Hilliard spake thusly:
-> > > The nodejs configure.py file orders zlib headers before the bundled ICU
-> > > headers. The zlib headers happen to be located in the system include
-> > > directory, next to some system ICU headers (not bundled). If these are
-> > > built before nodejs is, nodejs will get confused and try to use the
-> > > system ICU headers instead of the bundled ones.
-> > >
-> > > Fix this by always using host-icu.
-[--SNIP--]
-> > > +HOST_NODEJS_CONF_OPTS = \
-> > Why did you need to introduce HOST_NODEJS_CONF_OPTS? Can't we just
-> > change --with-intl where it already is?
-> I thought it was cleaner this way but can change it back.
+Bump version to 3.55. Unfortunately local patch is still pending
+upstream and not applied and I've just asked why:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
 
-No need to respin just for that.
+This version requires NSPR 4.27.
 
-> > > +HOST_NODEJS_CXXFLAGS = -DU_DISABLE_RENAMING=1
-> > You forgot to propagate HOST_CXXFLAGS.
-> Are you sure that's needed with the way the nodejs build system works?
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.55_release_notes
 
-Well, CXXFLAGS are set in $(HOST_CONFIGURE_OPTS):
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libnss/libnss.hash | 6 +++---
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-    $ make printvars VARS=HOST_CONFIGURE_OPTS RAW_VARS=YES
-    [...] CXXFLAGS="$(HOST_CXXFLAGS)" [...]
-
-So, were they used previously? If not, then the commit log should say
-so.
-
-However, I'm afraid they were. They at least contain the CFLAGS, which
-contain the optimisation level (-O2), but mnost importantly, contain the
-CPPFGLAGS, so contains the correct include path to $(HOST_DIR)/include
-
-And it seems the default value for CXXFLAGS.target does use CXXFLAGS:
-
-    tools/gyp/pylib/gyp/generator/make.py:CXXFLAGS.target ?= $(CPPFLAGS) $(CXXFLAGS)
-
-So maybe we need something like:
-
-    HOST_NODEJS_CXXFLAGS = $(HOST_CXXFLAGS) -DU_DISABLE_RENAMING=1
-
-and in the configure and build comands:
-
-    ...
-    $(HOST_CONFIGURE_OPTS) \
-    CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
-    ...
-
-Regards,
-Yann E. MORIN.
-
-> > >  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> > >  NODEJS_DEPENDENCIES += openssl
-> > >  NODEJS_CONF_OPTS += --shared-openssl
-> > > @@ -57,16 +71,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
-> > >               PATH=$(@D)/bin:$(BR_PATH) \
-> > >               PYTHON=$(HOST_DIR)/bin/python2 \
-> > >               $(HOST_DIR)/bin/python2 ./configure \
-> > > -             --prefix=$(HOST_DIR) \
-> > > -             --without-snapshot \
-> > > -             --without-dtrace \
-> > > -             --without-etw \
-> > > -             --shared-openssl \
-> > > -             --shared-openssl-includes=$(HOST_DIR)/include/openssl \
-> > > -             --shared-openssl-libpath=$(HOST_DIR)/lib \
-> > > -             --shared-zlib \
-> > > -             --no-cross-compiling \
-> > > -             --with-intl=small-icu \
-> > > +             $(HOST_NODEJS_CONF_OPTS) \
-> > >       )
-> > >  endef
-> > >
-> > > @@ -81,6 +86,7 @@ define HOST_NODEJS_BUILD_CMDS
-> > >       $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
-> > >               $(MAKE) -C $(@D) \
-> > >               $(HOST_CONFIGURE_OPTS) \
-> > > +             CXXFLAGS.target="$(HOST_NODEJS_CXXFLAGS)" \
-> > >               LDFLAGS.host="$(HOST_LDFLAGS)" \
-> >
-> > Why do we use CXXFLAGS.target but LDFLAGS.host ?
-> Not sure.
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > >               NO_LOAD=cctest.target.mk \
-> > >               PATH=$(@D)/bin:$(BR_PATH)
-> > > @@ -90,6 +96,7 @@ define HOST_NODEJS_INSTALL_CMDS
-> > >       $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
-> > >               $(MAKE) -C $(@D) install \
-> > >               $(HOST_CONFIGURE_OPTS) \
-> > > +             CXXFLAGS.target="$(HOST_NODEJS_CXXFLAGS)" \
-> > >               LDFLAGS.host="$(HOST_LDFLAGS)" \
-> > >               NO_LOAD=cctest.target.mk \
-> > >               PATH=$(@D)/bin:$(BR_PATH)
-> > > --
-> > > 2.25.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index aedc0669de..fcba10b99a 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_54_RTM/src/SHA256SUMS
+-sha256	dab18bbfcf5e347934cda664df75ce9fd912a5772686c40d3c805e53c08d6e43  nss-3.54.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_55_RTM/src/SHA256SUMS
++sha256  fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004  nss-3.55.tar.gz
+ # Locally calculated
+-sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
++sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 8bf7f0d85d..a5e4432f8c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.54
++LIBNSS_VERSION = 3.55
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
