@@ -1,55 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Jul 2020 18:02:12 +0200
-Subject: [Buildroot] [PATCHv3] package/bat: new package
-In-Reply-To: <20200727170126.51d45e8b@windsurf.home>
-References: <20200727140922.2614959-1-romain.naour@gmail.com>
- <20200727170126.51d45e8b@windsurf.home>
-Message-ID: <a6e0c13c-00cf-77ef-b121-f7e08545c63b@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 18:01:44 +0200
+Subject: [Buildroot] [git commit] configs/rock_pi_4_defconfig: remove
+ BR2_TARGET_UBOOT_NEEDS_PYTHON
+Message-ID: <20200727155726.7E0458219D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=c05cf378f1a75b3e592867bda454850bebb6a21a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 27/07/2020 ? 17:01, Thomas Petazzoni a ?crit?:
-> On Mon, 27 Jul 2020 16:09:22 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> +	# less needs ncurses
->> +	select BR2_PACKAGE_NCURSES
-> 
-> less already selects ncurses, so why do we need ncurses here ?
+BR2_TARGET_UBOOT_NEEDS_PYTHON3 is already selected for
+this defconfig, BR2_TARGET_UBOOT_NEEDS_PYTHON and
+BR2_TARGET_UBOOT_NEEDS_PYTHON3 can't be selected at the
+same time.
 
-Indeed.
+Reported by check-dotconfig.py.
 
-> 
->> +BAT_CARGO_OPTS = \
->> +	 --bins \
->> +	 --$(BAT_CARGO_MODE) \
->> +	 --target=$(RUSTC_TARGET_NAME) \
->> +	 --manifest-path=$(@D)/Cargo.toml
->> +
->> +define BAT_BUILD_CMDS
->> +	$(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
->> +	CC_$(subst -,_,$(RUSTC_TARGET_NAME))=$(TARGET_CC) \
-> 
-> I am still not happy with this. There is no reason why this should be
-> passed on a per-package basis, it should be handled by "cargo" and all
-> the cross-compilation configuration it has.
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/657885313
 
-Well, I guess the pkg-cargo.mk infra will handle this.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/rock_pi_4_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-I discovered CC_aarch64_unknown_linux_gnu by looking at a Dockerfile example:
-
-https://github.com/rust-lang/rust/blob/c367798cfd3817ca6ae908ce675d1d99242af148/src/ci/docker/dist-aarch64-linux/Dockerfile#L29
-
-I'm not sure why it's not handled by config.toml...
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/configs/rock_pi_4_defconfig b/configs/rock_pi_4_defconfig
+index 22ef74be82..401a59bac4 100644
+--- a/configs/rock_pi_4_defconfig
++++ b/configs/rock_pi_4_defconfig
+@@ -23,7 +23,6 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYTHON=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
