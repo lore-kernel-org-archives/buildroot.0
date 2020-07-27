@@ -1,176 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Jul 2020 16:25:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elf2flt: bump to version 2019.12
-In-Reply-To: <20200727065016.GM19818@scaer>
-References: <20200726094338.1276868-1-fontaine.fabrice@gmail.com>
- <20200727065016.GM19818@scaer>
-Message-ID: <b35424cf-1d80-49fc-86f0-cf84e0074f6f@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 16:29:18 +0200
+Subject: [Buildroot] [git commit] package/python3-decorator: new package
+Message-ID: <20200727142432.81DCE873C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Fabrice, All
+commit: https://git.buildroot.net/buildroot/commit/?id=d4a0dc5d571cac4f12399d78617db4ff8e55ae12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 27/07/2020 ? 08:50, Yann E. MORIN a ?crit?:
-> Fabrice, All,
-> 
-> On 2020-07-26 11:43 +0200, Fabrice Fontaine spake thusly:
->> Drop first patch (already in version)
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Have you checked the status of both:
-> 
->     https://github.com/uclinux-dev/elf2flt/issues/12
->     https://github.com/uclinux-dev/elf2flt/pull/16
-> 
-> There is an as-yet-unsolved issue with binutils 2.33.1...
-> 
-> Romain, your feedback?
+The host-python-networkx package needs to be built for the
+host-python3, even when the target Python is not necessarily Python
+3.x. Since it depends on host-python-decorator, we need a Python 3
+variant of it, which this patch introduces.
 
-This would reintroduce the bug added by
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-decorator/python-decorator.mk     |  1 +
+ package/python3-decorator/python3-decorator.hash |  1 +
+ package/python3-decorator/python3-decorator.mk   | 16 ++++++++++++++++
+ 3 files changed, 18 insertions(+)
 
-https://github.com/uclinux-dev/elf2flt/commit/73325b7f209e0f68887333385184af275531427d
-
-The backported patch was removed by:
-https://git.buildroot.net/buildroot/commit/?id=aa3622758bb08fa517a3054076fca89f7697e550
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>  ...add-new-relocation-types-for-xtensa.patch} |  0
->>  ...e-properly-when-called-with-a-name-d.patch | 79 -------------------
->>  package/elf2flt/elf2flt.hash                  |  2 +-
->>  package/elf2flt/elf2flt.mk                    |  4 +-
->>  4 files changed, 3 insertions(+), 82 deletions(-)
->>  rename package/elf2flt/{0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch => 0001-elf2flt.c-add-new-relocation-types-for-xtensa.patch} (100%)
->>  delete mode 100644 package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
->>
->> diff --git a/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch b/package/elf2flt/0001-elf2flt.c-add-new-relocation-types-for-xtensa.patch
->> similarity index 100%
->> rename from package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
->> rename to package/elf2flt/0001-elf2flt.c-add-new-relocation-types-for-xtensa.patch
->> diff --git a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
->> deleted file mode 100644
->> index a27c4913fb..0000000000
->> --- a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
->> +++ /dev/null
->> @@ -1,79 +0,0 @@
->> -From b31e9b1bff6832063816b972395179859d1d4619 Mon Sep 17 00:00:00 2001
->> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> -Date: Sun, 13 Aug 2017 16:03:20 +0200
->> -Subject: [PATCH] ld-elf2flt: behave properly when called with a name different
->> - from TARGET_ALIAS
->> -
->> -ld-elf2flt currently handles two cases:
->> -
->> - 1 It is called as the wrapper for <TARGET_ALIAS>-ld, generally
->> -   installed in the bin/ directory of a toolchain.
->> -
->> - 2 It is called as the wrapper for "ld", generally installed in the
->> -   TARGET_ALIAS/bin/ directory of a toolchain.
->> -
->> -Unfortunately, if for some reason it gets called using a FOOBAR-ld
->> -name that is different from <TARGET_ALIAS>-ld, it assumes it is in
->> -case (2), while it really is in case (1). Due to this, the path
->> -mangling logic doesn't work, and it doesn't find ld.real.
->> -
->> -This happens for example when the binary program in bin/ is named
->> -arm-buildroot-uclinux-uclibcgnueabi-ld, but also has a simpler symlink
->> -named arm-linux-ld. In this case,
->> -arm-buildroot-uclinux-uclibcgnueabi-ld is recognized by ld-elf2flt as
->> -containing TARGET_ALIAS, and therefore the proper logic to find
->> -ld.real is applied. However, when arm-linux-ld is used, ld-elf2flt
->> -doesn't find TARGET_ALIAS, and therefore assumes we're being called as
->> -TARGET_ALIAS/bin/ld.. and searches for a program called ld.real in
->> -bin/, which doesn't exist.
->> -
->> -See:
->> -
->> -$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
->> -/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
->> -
->> -$ ./output/host/bin/arm-linux-ld
->> -arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
->> -
->> -$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
->> -/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
->> -
->> -This commit fixes that by inverting the logic: if we're being called
->> -as just "ld", then we assume it's the program in
->> -TARGET_ALIAS/bin/. Otherwise, we're called through some variant of
->> -TARGET-ld.
->> -
->> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> -Submitted-upstream: https://github.com/uclinux-dev/elf2flt/pull/8
->> ----
->> - ld-elf2flt.c | 10 +++++-----
->> - 1 file changed, 5 insertions(+), 5 deletions(-)
->> -
->> -diff --git a/ld-elf2flt.c b/ld-elf2flt.c
->> -index de39fe0..c187c2e 100644
->> ---- a/ld-elf2flt.c
->> -+++ b/ld-elf2flt.c
->> -@@ -506,15 +506,15 @@ int main(int argc, char *argv[])
->> - 	   the host while those in <TARGET_ALIAS>/lib are for the target.
->> - 	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
->> - 	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
->> --	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
->> --		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
->> -+	if (streqn(elf2flt_progname, "ld")) {
->> -+		tmp = concat(argv0_dir, "../../bin", NULL);
->> - 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
->> --			tooldir = concat(tmp, "/", NULL);
->> -+			bindir = concat(tmp, "/", NULL);
->> - 		}
->> - 	} else {
->> --		tmp = concat(argv0_dir, "../../bin", NULL);
->> -+		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
->> - 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
->> --			bindir = concat(tmp, "/", NULL);
->> -+			tooldir = concat(tmp, "/", NULL);
->> - 		}
->> - 	}
->> - 
->> --- 
->> -2.9.4
->> -
->> diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
->> index c4b0697fcd..afa19076b9 100644
->> --- a/package/elf2flt/elf2flt.hash
->> +++ b/package/elf2flt/elf2flt.hash
->> @@ -1,3 +1,3 @@
->>  # Locally calculated
->> -sha256  d63baae6fe0d7fcc50a635be151a6f9e1e83dba30568046a869a395c15bf6284  elf2flt-7e33f28df198c46764021ed14408bd262751e148.tar.gz
->> +sha256  a535facbcdc2f2e86778dff84c99c32eca5eb0138bd09a8dc49da3b47c59f743  elf2flt-2019.12.tar.gz
->>  sha256  f20bc5007904094e3a4e9fbcc3526cdd40893f91d458c3139b308e5c4c0899c6  LICENSE.TXT
->> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
->> index e7edd8b9de..dbbe88d117 100644
->> --- a/package/elf2flt/elf2flt.mk
->> +++ b/package/elf2flt/elf2flt.mk
->> @@ -4,8 +4,8 @@
->>  #
->>  ################################################################################
->>  
->> -ELF2FLT_VERSION = 7e33f28df198c46764021ed14408bd262751e148
->> -ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
->> +ELF2FLT_VERSION = 2019.12
->> +ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,v$(ELF2FLT_VERSION))
->>  ELF2FLT_LICENSE = GPL-2.0+
->>  ELF2FLT_LICENSE_FILES = LICENSE.TXT
->>  
->> -- 
->> 2.27.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
+index 8df1dd70c9..e555f01ba1 100644
+--- a/package/python-decorator/python-decorator.mk
++++ b/package/python-decorator/python-decorator.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# Please keep in sync with package/python3-decorator/python3-decorator.mk
+ PYTHON_DECORATOR_VERSION = 4.4.1
+ PYTHON_DECORATOR_SITE = https://files.pythonhosted.org/packages/dc/c3/9d378af09f5737cfd524b844cd2fbb0d2263a35c11d712043daab290144d
+ PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
+diff --git a/package/python3-decorator/python3-decorator.hash b/package/python3-decorator/python3-decorator.hash
+new file mode 120000
+index 0000000000..f515d3133b
+--- /dev/null
++++ b/package/python3-decorator/python3-decorator.hash
+@@ -0,0 +1 @@
++../python-decorator/python-decorator.hash
+\ No newline at end of file
+diff --git a/package/python3-decorator/python3-decorator.mk b/package/python3-decorator/python3-decorator.mk
+new file mode 100644
+index 0000000000..d809bb5b9b
+--- /dev/null
++++ b/package/python3-decorator/python3-decorator.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python3-decorator
++#
++################################################################################
++
++# Please keep in sync with package/python-decorator/python-decorator.mk
++PYTHON3_DECORATOR_VERSION = 4.4.1
++PYTHON3_DECORATOR_SITE = https://files.pythonhosted.org/packages/dc/c3/9d378af09f5737cfd524b844cd2fbb0d2263a35c11d712043daab290144d
++PYTHON3_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
++PYTHON3_DECORATOR_LICENSE = BSD-2-Clause
++PYTHON3_DECORATOR_LICENSE_FILES = LICENSE.txt
++PYTHON3_DECORATOR_SETUP_TYPE = setuptools
++HOST_PYTHON3_DECORATOR_NEEDS_HOST_PYTHON = python3
++
++$(eval $(host-python-package))
