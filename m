@@ -1,66 +1,126 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 27 Jul 2020 14:15:19 +0200
-Subject: [Buildroot] [PATCH v3, 1/1] package/zbar: bump to version 0.23.1
-In-Reply-To: <20200727113147.GU19818@scaer>
-References: <20200725221016.1064129-1-fontaine.fabrice@gmail.com>
- <20200727113147.GU19818@scaer>
-Message-ID: <CAPi7W80QpwwRg5JCafMWStG3ACrUYV-S+FpSV3h_QBrvGyvkZg@mail.gmail.com>
+From: Kamel Bouhara <kamel.bouhara@bootlin.com>
+Date: Mon, 27 Jul 2020 14:23:36 +0200
+Subject: [Buildroot] [PATCH v2] package/cryptopp: add a target build
+ configuration
+Message-ID: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Currently only a host build is supported for cryptopp, this add a new
+configuration and build support for the make target.
 
-Le lun. 27 juil. 2020 ? 13:31, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->
-> Fabrice, All,
->
-> On 2020-07-26 00:10 +0200, Fabrice Fontaine spake thusly:
-> > - Add new NLS dependency as well as a patch to fix a build failure
-> >   without it: https://github.com/mchehab/zbar/issues/90
-> > - Drop host-gettext (not needed since autoreconf was dropped with
-> >   8729c4ef881b02ff85b7645b0ad309d6ae44fccf)
-> > - Update indentation in hash file (two spaces)
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> [--SNIP--]
-> > +diff --git a/zbar/gettext.h b/zbar/gettext.h
-> > +new file mode 100644
-> > +index 0000000..bd8e87d
-> > +--- /dev/null
-> > ++++ b/zbar/gettext.h
-> > +@@ -0,0 +1,294 @@
-> > ++/* Convenience header for conditional use of GNU <libintl.h>.
-> > ++   Copyright (C) 1995-1998, 2000-2002, 2004-2006, 2009-2018 Free Software
-> > ++   Foundation, Inc.
-> > ++
-> > ++   This program is free software: you can redistribute it and/or modify
-> > ++   it under the terms of the GNU General Public License as published by
-> > ++   the Free Software Foundation; either version 3 of the License, or
-> > ++   (at your option) any later version.
->
-> Whoa, no no...
->
-> zbar is LGP-2.1+, and this header makes it de-facto GPL-3+
->
-> This is fishy, please fix that with upstream before we can update.
-I opened an issue upstream: https://github.com/mchehab/zbar/issues/98
-and they redirected me to https://savannah.gnu.org/bugs/?56863
-So it is very likely that we won't bump zbar any time soon.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-Best Regards,
+Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+---
+Changes in v2:
+	- Fixed indentations issue
+	- Removed unrequired Config.in.host
+	- Added a depends on !BR2_STATIC_LIBS to build only in dynamic
+	configuration.
+	- Fixed inconsistency between TARGET_INSTALL and STAGING_INSTALL
 
-Fabrice
+---
+ package/Config.in                             |  1 +
+ ...ied-SONAME-to-shared-object-for-Linu.patch | 27 +++++++++++++++++++
+ package/cryptopp/Config.in                    |  8 ++++++
+ package/cryptopp/cryptopp.mk                  | 24 +++++++++++++++++
+ 4 files changed, 60 insertions(+)
+ create mode 100644 package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
+ create mode 100644 package/cryptopp/Config.in
+
+diff --git a/package/Config.in b/package/Config.in
+index 9c4843be07..014f57a54a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1279,6 +1279,7 @@ menu "Crypto"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+ 	source "package/cryptodev/Config.in"
++	source "package/cryptopp/Config.in"
+ 	source "package/gcr/Config.in"
+ 	source "package/gnutls/Config.in"
+ 	source "package/libargon2/Config.in"
+diff --git a/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
+new file mode 100644
+index 0000000000..e7edc76313
+--- /dev/null
++++ b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
+@@ -0,0 +1,27 @@
++From 78eb43f50978ffd780cf31b1cea6736dadc6b155 Mon Sep 17 00:00:00 2001
++From: Kamel Bouhara <kamel.bouhara@bootlin.com>
++Date: Mon, 6 Jul 2020 17:10:55 +0200
++Subject: [PATCH] Add fully-qualified SONAME to shared object for Linux
++
++From: http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
++
++Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
++---
++ GNUmakefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/GNUmakefile b/GNUmakefile
++index e7b7b3a6..730e2a6f 100755
++--- a/GNUmakefile
+++++ b/GNUmakefile
++@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
++ 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
++ ifeq ($(HAS_SOLIB_VERSION),1)
++ 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
+++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
++ 	$(LDCONF) $(DESTDIR)$(LIBDIR)
++ endif
++ endif
++--
++2.26.2
++
+diff --git a/package/cryptopp/Config.in b/package/cryptopp/Config.in
+new file mode 100644
+index 0000000000..4ead5339ab
+--- /dev/null
++++ b/package/cryptopp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CRYPTOPP
++	bool "cryptopp"
++	depends on !BR2_STATIC_LIBS
++	help
++	  A free C++ class library of cryptographic schemes
++
++comment "cryptopp needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index f1d19386ab..d83c362b0b 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -34,4 +34,28 @@ define HOST_CRYPTOPP_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-lib
+ endef
+
++define CRYPTOPP_EXTRACT_CMDS
++	$(UNZIP) $(CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
++endef
++
++CRYPTOPP_CXXFLAGS = $(TARGET_CFLAGS) -fPIC
++
++CRYPTOPP_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	CXXFLAGS="$(CRYPTOPP_CXXFLAGS)"
++
++define CRYPTOPP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CRYPTOPP_MAKE_OPTS) shared
++endef
++
++define CRYPTOPP_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install-lib
++endef
++
++define CRYPTOPP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(STAGING_DIR) libcryptopp.pc
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(STAGING_DIR) install-lib
++endef
++
++$(eval $(generic-package))
+ $(eval $(host-generic-package))
+--
+2.27.0
