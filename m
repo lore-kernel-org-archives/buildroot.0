@@ -1,100 +1,173 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 21:15:51 +0200
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx:
- refactor DDR firmware preparation
-Message-ID: <20200727191108.3693180E23@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 21:16:16 +0200
+Subject: [Buildroot] [PATCH v3 7/9] package/efl: depend on lua ABI
+ version 5.1
+In-Reply-To: <53cf1b5f-9859-eaeb-f35d-cdfee0d2773c@gmail.com>
+References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
+ <20200525004845.3019642-7-james.hilliard1@gmail.com>
+ <53cf1b5f-9859-eaeb-f35d-cdfee0d2773c@gmail.com>
+Message-ID: <20200727191616.GH19818@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc23ea2a19999c2328693579f7a5209236b23c2f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2020-06-06 18:36 +0200, Romain Naour spake thusly:
+> Hi James,
+> 
+> Le 25/05/2020 ? 02:48, James Hilliard a ?crit?:
+> > Since efl is compatible with lua interpreters that provide the
+> > version 5.1 ABI we should depend on that instead of unconditionally
+> > selecting luajit.
+> 
+> We had some issues with lua support in previous efl version (1.17.x) [1], can
+> you explain in the commit log that it's safe to add back Lua 5.1 support ?
+> 
+> [1]
+> https://git.buildroot.net/buildroot/commit/?id=92f7591eca0d2b4ff827ed90629be94292c8b102
 
-The logic doing the padding and concatenation of DDR firmware was
-duplicated between the DDR4 and LPDDR4 cases. This commit refactors
-this logic into a single function FIRMWARE_IMX_PREPARE_DDR_FW.
+This was 4 years ago, against EFL 1.15. We're now using EFL 1.22, and so
+we would need to check that the Lu support is still broken or not. Let's
+do that, then, by enabling the build with any Lua 5.1 interpreter, liek
+this patch does. Let's wait for the autobuilders to return broken
+builds.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.mk | 44 ++++++++++------------
- 1 file changed, 19 insertions(+), 25 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 5cfff2da05..eb8595f022 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -22,26 +22,29 @@ endef
- # DDR firmware
- #
- 
--ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
--FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
--define FIRMWARE_IMX_PREPARE_LPDDR4_FW
-+define FIRMWARE_IMX_PREPARE_DDR_FW
- 	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
--		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem_pad.bin
-+		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
- 	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
--		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem_pad.bin
--	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_imem_pad.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_dmem_pad.bin > \
--		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_$(1)_fw.bin
-+		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
-+	cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin > \
-+		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
- endef
- 
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
-+FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
-+
- define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 	# Create padded versions of lpddr4_pmu_* and generate lpddr4_pmu_train_fw.bin.
- 	# lpddr4_pmu_train_fw.bin is needed when generating imx8-boot-sd.bin
- 	# which is done in post-image script.
--	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,1d)
--	$(call FIRMWARE_IMX_PREPARE_LPDDR4_FW,2d)
-+	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-+		lpddr4_pmu_train_1d_imem,lpddr4_pmu_train_1d_dmem,lpddr4_pmu_train_1d_fw)
-+	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-+		lpddr4_pmu_train_2d_imem,lpddr4_pmu_train_2d_dmem,lpddr4_pmu_train_2d_fw)
- 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
- 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
- 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
-@@ -51,24 +54,15 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR4),y)
- FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
--define FIRMWARE_IMX_PREPARE_DDR4_FW
--	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin
--	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin
--	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin > \
--		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_$(1)_201810_fw.bin
--endef
- 
- define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 	# Create padded versions of ddr4_* and generate ddr4_fw.bin.
- 	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
- 	# which is done in post-image script.
--	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,1d)
--	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,2d)
-+	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-+		ddr4_imem_1d_201810,ddr4_dmem_1d_201810,ddr4_1d_201810_fw)
-+	$(call FIRMWARE_IMX_PREPARE_DDR_FW, \
-+		ddr4_imem_2d_201810,ddr4_dmem_2d_201810,ddr4_2d_201810_fw)
- 	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
- 		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
- 		$(BINARIES_DIR)/ddr4_201810_fw.bin
+> Best regards,
+> Romain
+> 
+> > 
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/efl/Config.in |  7 +++----
+> >  package/efl/efl.mk    | 26 ++++++++++++++++++++------
+> >  2 files changed, 23 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/package/efl/Config.in b/package/efl/Config.in
+> > index ff49161163..b074774790 100644
+> > --- a/package/efl/Config.in
+> > +++ b/package/efl/Config.in
+> > @@ -3,7 +3,7 @@ config BR2_PACKAGE_EFL
+> >  	 # g++ issue with 4.4.5, tested with g++ 4.7.2
+> >  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> >  	depends on BR2_INSTALL_LIBSTDCPP
+> > -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+> > +	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+> >  	depends on BR2_USE_MMU
+> >  	depends on BR2_USE_WCHAR # use wchar_t
+> > @@ -13,7 +13,6 @@ config BR2_PACKAGE_EFL
+> >  	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+> >  	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
+> >  	# https://phab.enlightenment.org/T2728
+> > -	select BR2_PACKAGE_LUAJIT # Lua support broken
+> >  	select BR2_PACKAGE_LZ4
+> >  	select BR2_PACKAGE_ZLIB
+> >  	help
+> > @@ -302,9 +301,9 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
+> >  
+> >  endif # BR2_PACKAGE_EFL
+> >  
+> > -comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
+> > +comment "efl needs a toolchain w/ C++, luajit or lua 5.1, dynamic library, gcc >= 4.7, threads, wchar"
+> >  	depends on !BR2_INSTALL_LIBSTDCPP \
+> >  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+> >  		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+> > -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+> > +	depends on !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
+> >  	depends on BR2_USE_MMU
+> > diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+> > index d8364ed76f..ba44738e59 100644
+> > --- a/package/efl/efl.mk
+> > +++ b/package/efl/efl.mk
+> > @@ -20,8 +20,8 @@ EFL_LICENSE_FILES = \
+> >  
+> >  EFL_INSTALL_STAGING = YES
+> >  
+> > -EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+> > -	jpeg luajit lz4 zlib
+> > +EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype \
+> > +	jpeg lz4 zlib
+> >  
+> >  # Configure options:
+> >  # --disable-lua-old: build elua for the target.
+> 
+> Don't forget to update/remove the comment.
+> 
+> > @@ -38,11 +38,9 @@ EFL_CONF_OPTS = \
+> >  	--with-eldbus_codegen=$(HOST_DIR)/bin/eldbus-codegen \
+> >  	--with-elementary-codegen=$(HOST_DIR)/bin/elementary_codegen \
+> >  	--with-elm-prefs-cc=$(HOST_DIR)/bin/elm_prefs_cc \
+> > -	--with-elua=$(HOST_DIR)/bin/elua \
+> >  	--with-eolian-gen=$(HOST_DIR)/bin/eolian_gen \
+> >  	--disable-image-loader-jp2k \
+> >  	--with-net-control=none \
+> > -	--disable-lua-old \
+> >  	--disable-sdl \
+> >  	--disable-spectre \
+> >  	--disable-xinput22 \
+> > @@ -92,6 +90,16 @@ else
+> >  EFL_CONF_OPTS += --disable-fribidi
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> > +EFL_CONF_OPTS += \
+> > +	--with-elua=$(HOST_DIR)/usr/bin/elua \
+> > +	--disable-lua-old
+> > +EFL_DEPENDENCIES += host-luajit luajit
+> > +else ifeq ($(BR2_PACKAGE_LUA),y)
+> > +EFL_CONF_OPTS += --enable-lua-old
+> > +EFL_DEPENDENCIES += host-lua lua
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
+> >  EFL_CONF_OPTS += --enable-gstreamer1
+> >  EFL_DEPENDENCIES += gstreamer1 gst1-plugins-base
+> > @@ -320,7 +328,6 @@ HOST_EFL_DEPENDENCIES = \
+> >  	host-libglib2 \
+> >  	host-libjpeg \
+> >  	host-libpng \
+> > -	host-luajit \
+> >  	host-zlib
+> >  
+> >  # Configure options:
+> > @@ -351,7 +358,6 @@ HOST_EFL_CONF_OPTS += \
+> >  	--disable-libmount \
+> >  	--disable-libraw \
+> >  	--disable-librsvg \
+> > -	--disable-lua-old \
+> >  	--disable-multisense \
+> >  	--disable-physics \
+> >  	--disable-poppler \
+> > @@ -379,6 +385,14 @@ else
+> >  HOST_EFL_CONF_OPTS += --disable-cxx-bindings
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> > +HOST_EFL_CONF_OPTS += --disable-lua-old
+> > +HOST_EFL_DEPENDENCIES += host-luajit
+> > +else ifeq ($(BR2_PACKAGE_LUA),y)
+> > +HOST_EFL_CONF_OPTS += --enable-lua-old
+> > +HOST_EFL_DEPENDENCIES += host-lua
+> > +endif
+> > +
+> >  # Always disable upower system module from host as it's
+> >  # not useful and would try to use the output/host/var
+> >  # system bus which is non-existent and does not contain
+> > 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
