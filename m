@@ -1,168 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 08:50:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elf2flt: bump to version 2019.12
-In-Reply-To: <20200726094338.1276868-1-fontaine.fabrice@gmail.com>
-References: <20200726094338.1276868-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200727065016.GM19818@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 27 Jul 2020 08:51:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: fix missing headers when
+ compiling with Qt 5.15
+Message-ID: <20200727065136.772917-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Fixes
+http://autobuild.buildroot.net/results/832/832226c43549befda7e8c86a52354e7d6adc0a98/
 
-On 2020-07-26 11:43 +0200, Fabrice Fontaine spake thusly:
-> Drop first patch (already in version)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...g-header-when-compiling-with-Qt-5.15.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/vlc/0011-qt-fix-missing-header-when-compiling-with-Qt-5.15.patch
 
-Have you checked the status of both:
-
-    https://github.com/uclinux-dev/elf2flt/issues/12
-    https://github.com/uclinux-dev/elf2flt/pull/16
-
-There is an as-yet-unsolved issue with binutils 2.33.1...
-
-Romain, your feedback?
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...add-new-relocation-types-for-xtensa.patch} |  0
->  ...e-properly-when-called-with-a-name-d.patch | 79 -------------------
->  package/elf2flt/elf2flt.hash                  |  2 +-
->  package/elf2flt/elf2flt.mk                    |  4 +-
->  4 files changed, 3 insertions(+), 82 deletions(-)
->  rename package/elf2flt/{0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch => 0001-elf2flt.c-add-new-relocation-types-for-xtensa.patch} (100%)
->  delete mode 100644 package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-> 
-> diff --git a/package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch b/package/elf2flt/0001-elf2flt.c-add-new-relocation-types-for-xtensa.patch
-> similarity index 100%
-> rename from package/elf2flt/0002-elf2flt.c-add-new-relocation-types-for-xtensa.patch
-> rename to package/elf2flt/0001-elf2flt.c-add-new-relocation-types-for-xtensa.patch
-> diff --git a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch b/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-> deleted file mode 100644
-> index a27c4913fb..0000000000
-> --- a/package/elf2flt/0001-ld-elf2flt-behave-properly-when-called-with-a-name-d.patch
-> +++ /dev/null
-> @@ -1,79 +0,0 @@
-> -From b31e9b1bff6832063816b972395179859d1d4619 Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Sun, 13 Aug 2017 16:03:20 +0200
-> -Subject: [PATCH] ld-elf2flt: behave properly when called with a name different
-> - from TARGET_ALIAS
-> -
-> -ld-elf2flt currently handles two cases:
-> -
-> - 1 It is called as the wrapper for <TARGET_ALIAS>-ld, generally
-> -   installed in the bin/ directory of a toolchain.
-> -
-> - 2 It is called as the wrapper for "ld", generally installed in the
-> -   TARGET_ALIAS/bin/ directory of a toolchain.
-> -
-> -Unfortunately, if for some reason it gets called using a FOOBAR-ld
-> -name that is different from <TARGET_ALIAS>-ld, it assumes it is in
-> -case (2), while it really is in case (1). Due to this, the path
-> -mangling logic doesn't work, and it doesn't find ld.real.
-> -
-> -This happens for example when the binary program in bin/ is named
-> -arm-buildroot-uclinux-uclibcgnueabi-ld, but also has a simpler symlink
-> -named arm-linux-ld. In this case,
-> -arm-buildroot-uclinux-uclibcgnueabi-ld is recognized by ld-elf2flt as
-> -containing TARGET_ALIAS, and therefore the proper logic to find
-> -ld.real is applied. However, when arm-linux-ld is used, ld-elf2flt
-> -doesn't find TARGET_ALIAS, and therefore assumes we're being called as
-> -TARGET_ALIAS/bin/ld.. and searches for a program called ld.real in
-> -bin/, which doesn't exist.
-> -
-> -See:
-> -
-> -$ ./output/host/bin/arm-buildroot-uclinux-uclibcgnueabi-ld
-> -/home/thomas/buildroot/buildroot/output/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-> -
-> -$ ./output/host/bin/arm-linux-ld
-> -arm-linux-ld (ld-elf2flt): error trying to exec '/home/thomas/buildroot/buildroot/output/host/bin/ld.real': execvp: No such file or directory
-> -
-> -$ ./output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld
-> -/home/thomas/buildroot/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: no input files
-> -
-> -This commit fixes that by inverting the logic: if we're being called
-> -as just "ld", then we assume it's the program in
-> -TARGET_ALIAS/bin/. Otherwise, we're called through some variant of
-> -TARGET-ld.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Submitted-upstream: https://github.com/uclinux-dev/elf2flt/pull/8
-> ----
-> - ld-elf2flt.c | 10 +++++-----
-> - 1 file changed, 5 insertions(+), 5 deletions(-)
-> -
-> -diff --git a/ld-elf2flt.c b/ld-elf2flt.c
-> -index de39fe0..c187c2e 100644
-> ---- a/ld-elf2flt.c
-> -+++ b/ld-elf2flt.c
-> -@@ -506,15 +506,15 @@ int main(int argc, char *argv[])
-> - 	   the host while those in <TARGET_ALIAS>/lib are for the target.
-> - 	   Make bindir point to the bin dir for bin/<TARGET_ALIAS>-foo.
-> - 	   Make tooldir point to the bin dir for <TARGET_ALIAS>/bin/foo.  */
-> --	if (streqn(elf2flt_progname, TARGET_ALIAS)) {
-> --		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-> -+	if (streqn(elf2flt_progname, "ld")) {
-> -+		tmp = concat(argv0_dir, "../../bin", NULL);
-> - 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-> --			tooldir = concat(tmp, "/", NULL);
-> -+			bindir = concat(tmp, "/", NULL);
-> - 		}
-> - 	} else {
-> --		tmp = concat(argv0_dir, "../../bin", NULL);
-> -+		tmp = concat(argv0_dir, "../" TARGET_ALIAS "/bin", NULL);
-> - 		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode)) {
-> --			bindir = concat(tmp, "/", NULL);
-> -+			tooldir = concat(tmp, "/", NULL);
-> - 		}
-> - 	}
-> - 
-> --- 
-> -2.9.4
-> -
-> diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-> index c4b0697fcd..afa19076b9 100644
-> --- a/package/elf2flt/elf2flt.hash
-> +++ b/package/elf2flt/elf2flt.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  d63baae6fe0d7fcc50a635be151a6f9e1e83dba30568046a869a395c15bf6284  elf2flt-7e33f28df198c46764021ed14408bd262751e148.tar.gz
-> +sha256  a535facbcdc2f2e86778dff84c99c32eca5eb0138bd09a8dc49da3b47c59f743  elf2flt-2019.12.tar.gz
->  sha256  f20bc5007904094e3a4e9fbcc3526cdd40893f91d458c3139b308e5c4c0899c6  LICENSE.TXT
-> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-> index e7edd8b9de..dbbe88d117 100644
-> --- a/package/elf2flt/elf2flt.mk
-> +++ b/package/elf2flt/elf2flt.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -ELF2FLT_VERSION = 7e33f28df198c46764021ed14408bd262751e148
-> -ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
-> +ELF2FLT_VERSION = 2019.12
-> +ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,v$(ELF2FLT_VERSION))
->  ELF2FLT_LICENSE = GPL-2.0+
->  ELF2FLT_LICENSE_FILES = LICENSE.TXT
->  
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/vlc/0011-qt-fix-missing-header-when-compiling-with-Qt-5.15.patch b/package/vlc/0011-qt-fix-missing-header-when-compiling-with-Qt-5.15.patch
+new file mode 100644
+index 0000000000..1693511937
+--- /dev/null
++++ b/package/vlc/0011-qt-fix-missing-header-when-compiling-with-Qt-5.15.patch
+@@ -0,0 +1,56 @@
++From a44d2f3aa6075fb6e63da75f84a257294d21d161 Mon Sep 17 00:00:00 2001
++From: Pierre Lamot <pierre@videolabs.io>
++Date: Wed, 27 May 2020 11:05:53 +0200
++Subject: [PATCH] qt: fix missing header when compiling with Qt 5.15
++
++Upstream bug report: https://trac.videolan.org/vlc/ticket/24882
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[backported upstream commit for modules/gui/qt/dialogs/plugins.cpp
++ http://git.videolan.org/?p=vlc.git;a=patch;h=0e88143ed2fe8eedfa4d3afdafcd0df901644c1d
++ the other two patches were proposed on the upstream bugtracker]
++---
++ modules/gui/qt/components/playlist/views.cpp | 1 +
++ modules/gui/qt/dialogs/plugins.cpp           | 1 +
++ modules/gui/qt/util/timetooltip.hpp          | 1 +
++ 3 files changed, 3 insertions(+)
++
++diff --git a/modules/gui/qt/components/playlist/views.cpp b/modules/gui/qt/components/playlist/views.cpp
++index ecc6b9918d..d3fd76da1a 100644
++--- a/modules/gui/qt/components/playlist/views.cpp
+++++ b/modules/gui/qt/components/playlist/views.cpp
++@@ -35,6 +35,7 @@
++ #include <QMetaType>
++ #include <QHeaderView>
++ #include <QSvgRenderer>
+++#include <QPainterPath>
++ 
++ #include <assert.h>
++ 
++diff --git a/modules/gui/qt/dialogs/plugins.cpp b/modules/gui/qt/dialogs/plugins.cpp
++index 93c92b9fa6..e05ec0594a 100644
++--- a/modules/gui/qt/dialogs/plugins.cpp
+++++ b/modules/gui/qt/dialogs/plugins.cpp
++@@ -66,6 +66,7 @@
++ #include <QSplitter>
++ #include <QToolButton>
++ #include <QStackedWidget>
+++#include <QPainterPath>
++ 
++ //match the image source (width/height)
++ #define SCORE_ICON_WIDTH_SCALE 4
++diff --git a/modules/gui/qt/util/timetooltip.hpp b/modules/gui/qt/util/timetooltip.hpp
++index b6d7c646c9..f213eac459 100644
++--- a/modules/gui/qt/util/timetooltip.hpp
+++++ b/modules/gui/qt/util/timetooltip.hpp
++@@ -25,6 +25,7 @@
++ #include "qt.hpp"
++ 
++ #include <QWidget>
+++#include <QPainterPath>
++ 
++ class TimeTooltip : public QWidget
++ {
++-- 
++2.27.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
