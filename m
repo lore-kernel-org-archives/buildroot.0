@@ -1,71 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:30:54 +0200
-Subject: [Buildroot] [git commit] package/luainterpreter: add abi version
- options
-Message-ID: <20200727203323.125F17FC94@busybox.osuosl.org>
+Date: Mon, 27 Jul 2020 22:29:54 +0200
+Subject: [Buildroot] [git commit] package/efl: depend on LuaJIT
+Message-ID: <20200727203322.DE94A82AF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97cfd0dc9f5ff68ae37a9c7b5e6857f8c8b1ffb2
+commit: https://git.buildroot.net/buildroot/commit/?id=f3134e71595ba33d2f9f82b9951a61e63f9e8727
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since a number of packages depend on specific ABI version that are
-provided by lua and luajit packages we should have a kconfig variable
-that those packages can depend on.
+Luajit is a provider for luainterpreter. We can't select providers of
+virtual packages; we can only depend on them.
+
+Note also that it is not very clear whether the host and target variants
+of EFL need to be built with the same lua interpreter. Today, this is
+guaranteed as we inly use luajit in both cases. But there were issues
+with lua 5.1 in the past, so stick to only using luajit.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - depend on luajit, not "any" luainterpreter
+  - which keeps the host and target variants built with the same
+    interpreter
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lua/Config.in            | 2 ++
- package/luainterpreter/Config.in | 6 ++++++
- package/luajit/Config.in         | 1 +
- 3 files changed, 9 insertions(+)
+ package/efl/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index ce2e439f63..c267cb6faf 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -20,9 +20,11 @@ choice
- 
- config BR2_PACKAGE_LUA_5_1
- 	bool "Lua 5.1.x"
-+	select BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 
- config BR2_PACKAGE_LUA_5_3
- 	bool "Lua 5.3.x"
-+	select BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_3
- 
- endchoice
- 
-diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
-index 7bc54d862f..a5973063b4 100644
---- a/package/luainterpreter/Config.in
-+++ b/package/luainterpreter/Config.in
-@@ -8,6 +8,12 @@ config BR2_PACKAGE_PROVIDES_LUAINTERPRETER
- config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	string
- 
-+config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-+	bool
-+
-+config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_3
-+	bool
-+
- config BR2_PACKAGE_PROVIDES_HOST_LUAINTERPRETER
- 	string
- 	default "host-lua"
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index f4d6001586..8cfa85684e 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -19,6 +19,7 @@ config BR2_PACKAGE_LUAJIT
- 	# binaries, so check if that option is supported. See
- 	# luajit.mk for details.
- 	select BR2_PACKAGE_HAS_LUAINTERPRETER
-+	select BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index ff49161163..728032018b 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -3,17 +3,16 @@ config BR2_PACKAGE_EFL
+ 	 # g++ issue with 4.4.5, tested with g++ 4.7.2
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR # use wchar_t
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	# https://phab.enlightenment.org/T2728
++	depends on BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+ 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
+-	# https://phab.enlightenment.org/T2728
+-	select BR2_PACKAGE_LUAJIT # Lua support broken
+ 	select BR2_PACKAGE_LZ4
+ 	select BR2_PACKAGE_ZLIB
  	help
- 	  LuaJIT implements the full set of language features defined
+@@ -306,5 +305,4 @@ comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wch
+ 	depends on !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
