@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 17:43:06 +0200
+Date: Mon, 27 Jul 2020 17:43:56 +0200
 Subject: [Buildroot] [PATCH] package/grpc: needs host gcc >= 4.9
-In-Reply-To: <20200727174221.1bad47f3@windsurf.home>
+In-Reply-To: <20200726210823.20922-1-yann.morin.1998@free.fr>
 References: <20200726210823.20922-1-yann.morin.1998@free.fr>
- <BY5PR19MB3668703B0B0C459376B914B4FB750@BY5PR19MB3668.namprd19.prod.outlook.com>
- <20200727174221.1bad47f3@windsurf.home>
-Message-ID: <20200727174306.7fcbc9bc@windsurf.home>
+Message-ID: <20200727174356.303490f4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Jul 2020 17:42:21 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sun, 26 Jul 2020 23:08:23 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> On Sun, 26 Jul 2020 22:11:00 +0000
-> ratbert90 <aduskett@gmail.com> wrote:
-> 
-> > The problem here is two fold:
-> > 1) CentOS7 also comes with gcc4.8 and compiles fine.
-> > 
-> > 2) Ubuntu 14.04 still fails even when using newer GCC versions from a PPA (I tried with gcc 6 and the same error occurred)  
-> 
-> Dammit, I've just seeing this comment now. This e-mail was weirdly
-> formatted and not recorded on patchwork:
-> 
->   https://patchwork.ozlabs.org/project/buildroot/patch/20200726210823.20922-1-yann.morin.1998 at free.fr/
-> 
-> In the light of this, I've gone ahead and reverted the patch, as
-> obviously the problem is not related to the gcc version.
+> So, because the issue manifests itself only on an ancient system, Ubuntu
+> 14.04, with a now ancient gcc 4.8, we just make grpc depend on a host
+> gcc >= 4.9.
 
-Lucky me, someone had pushed to the repo in between, so my "git push"
-was rejected, and I was able to discard the patch before it was pushed
-the official repo \o/
+According to Adam's comment, depending host gcc >= 4.9 is not the right
+thing, unfortunately :-/
+
+>  config BR2_PACKAGE_COLLECTD_GRPC
+>  	bool "grpc"
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # grpc
+
+You had forgotten to update the Config.in comment with this new
+dependency.
 
 Thomas
 -- 
