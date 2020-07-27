@@ -1,65 +1,81 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 27 Jul 2020 15:00:22 +0200
-Subject: [Buildroot] [PATCH v2] package/python-matplotlib: add QT5 support
-Message-ID: <20200727130022.180977-1-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 15:03:13 +0200
+Subject: [Buildroot] [PATCH v2] package/cryptopp: add a target build
+ configuration
+In-Reply-To: <20200727124232.GX19818@scaer>
+References: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
+ <20200727124232.GX19818@scaer>
+Message-ID: <20200727150313.634b6b59@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On Mon, 27 Jul 2020 14:42:32 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-python-matplotlib may be used in qt5 application. This patch add option to
-enable qt5. Since this backend is automatically enabled when pyqt5 is detected,
-list dependencies is simply an updated (no enable/disable options).
+> > +diff --git a/GNUmakefile b/GNUmakefile
+> > +index e7b7b3a6..730e2a6f 100755
+> > +--- a/GNUmakefile
+> > ++++ b/GNUmakefile
+> > +@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
+> > + 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
+> > + ifeq ($(HAS_SOLIB_VERSION),1)
+> > + 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
+> > ++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)  
+> 
+> Why do we need that?
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v1 -> v2
-- move options before comment (Thomas)
-- remove select BR2_PACKAGE_QT5BASE_GUI (already done by python-pyqt5) (Thomas)
-- suppress qt5base to PYTHON_MATPLOTLIB_DEPENDENCIES (Thomas)
----
- package/python-matplotlib/Config.in            | 12 ++++++++++++
- package/python-matplotlib/python-matplotlib.mk |  4 ++++
- 2 files changed, 16 insertions(+)
+Because on the target you need a symlink from the SONAME to the actual
+library. Right now, the Makefile only:
 
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index e6ed8cda2f..cfa0bc30c3 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -23,6 +23,18 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 
- 	  https://matplotlib.org/
- 
-+if BR2_PACKAGE_PYTHON_MATPLOTLIB
-+
-+config BR2_PACKAGE_PYTHON_MATPLOTLIB_QT
-+	bool "qt display"
-+	depends on BR2_PACKAGE_QT5 # python-pyqt5
-+	select BR2_PACKAGE_PYTHON_PYQT5
-+	select BR2_PACKAGE_QT5BASE
-+	select BR2_PACKAGE_QT5BASE_FONTCONFIG
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+
-+endif
-+
- comment "python-matplotlib needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 
-diff --git a/package/python-matplotlib/python-matplotlib.mk b/package/python-matplotlib/python-matplotlib.mk
-index 7082637d09..8d00ac8a07 100644
---- a/package/python-matplotlib/python-matplotlib.mk
-+++ b/package/python-matplotlib/python-matplotlib.mk
-@@ -13,4 +13,8 @@ PYTHON_MATPLOTLIB_DEPENDENCIES = host-pkgconf freetype host-python-numpy \
- 	libpng python-cycler
- PYTHON_MATPLOTLIB_SETUP_TYPE = setuptools
- 
-+ifeq ($(BR2_PACKAGE_PYTHON_MATPLOTLIB_QT),y)
-+PYTHON_MATPLOTLIB_DEPENDENCIES += python-pyqt5
-+endif
-+
- $(eval $(python-package))
+ * Installs the library as libcryptopp.so.8.2.0. It has a SONAME of
+   libcryptopp.so.8.
+
+ * Creates a symlink libcryptopp.so -> libcryptopp.so.8.2.0, which
+   allows to link new applications
+
+ * Does NOT create the libcryptopp.so.8 -> libcryptopp.so.8.2.0 which
+   would allow using the library at runtime.
+
+> > + 	$(LDCONF) $(DESTDIR)$(LIBDIR)  
+
+And it is this invocation of ldconfig that creates it!
+
+> Note that in corss-compilation, running ldconfig is flawed, and we have
+> explcitly idable its use. See commit 9c4072348 (Makefile: drop ldconfig
+> handling).
+
+Yes.
+
+> As a consequence, you want to explcitly configure with LDCONF=/bin/true,
+> see for example package/e2fsprogs/e2fsprogs.mk (for the target variant)
+> (Nothe that a few other packages do something similar as well)
+
+Yes.
+
+> Which means that with your patch and without a call to ldconfig, the .so
+> symlink will no longer exist, and so it will no longer be possible to
+> link against the library.
+
+No correct: the .so symlink still exists. Re-read the patch from Kamel,
+it creates the .so.8 symlink in *addition* to creating the .so symlink,
+which was already there.
+
+> Note that the host variant is not OK either, because not all systems
+> have ldconfig on the host either... See 64d4b34073 (e2fsprogs: do not
+> use ldconfig when building the host variant).
+
+Yes, agreed.
+
+So all what we need is:
+
+ (1) LDCONF=/bin/true
+ (2) An improved commit description for the patch that adds the symlink
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
