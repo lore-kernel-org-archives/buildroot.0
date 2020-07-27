@@ -1,79 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 15:17:05 +0200
-Subject: [Buildroot] [PATCH v2] package/cryptopp: add a target build
- configuration
-In-Reply-To: <20200727150313.634b6b59@windsurf.home>
-References: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
- <20200727124232.GX19818@scaer>
- <20200727150313.634b6b59@windsurf.home>
-Message-ID: <20200727131705.GZ19818@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 15:25:15 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/firmware-imx:
+ install mx8qm-ahab-container.img
+In-Reply-To: <20200220021858.700249-2-thomas.petazzoni@bootlin.com>
+References: <20200220021858.700249-1-thomas.petazzoni@bootlin.com>
+ <20200220021858.700249-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20200727152515.7b9624d3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Kamel, Al,
+On Thu, 20 Feb 2020 03:18:57 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On 2020-07-27 15:03 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 27 Jul 2020 14:42:32 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> This commit ensures the mx8qm-ahab-container.img file gets installed
+> for the i.MX8 platform (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8). This
+> is needed for board/freescale/common/imx/imx8-bootloader-prepare.sh to
+> find this file when creating the bootloader image.
 > 
-> > > +diff --git a/GNUmakefile b/GNUmakefile
-> > > +index e7b7b3a6..730e2a6f 100755
-> > > +--- a/GNUmakefile
-> > > ++++ b/GNUmakefile
-> > > +@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
-> > > + 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
-> > > + ifeq ($(HAS_SOLIB_VERSION),1)
-> > > + 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
-> > > ++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)  
-> > Why do we need that?
-> Because on the target you need a symlink from the SONAME to the actual
-> library. Right now, the Makefile only:
->  * Installs the library as libcryptopp.so.8.2.0. It has a SONAME of
->    libcryptopp.so.8.
->  * Creates a symlink libcryptopp.so -> libcryptopp.so.8.2.0, which
->    allows to link new applications
->  * Does NOT create the libcryptopp.so.8 -> libcryptopp.so.8.2.0 which
->    would allow using the library at runtime.
+> Note that it means that the default FIRMWARE_IMX_INSTALL_TARGET_CMDS
+> that applies to all platforms except i.MX8M, i.MX8MM and i.MX8X also
+> no longer applies to i.MX8. But this is anyway probably relevant, as
+> most likely i.MX8 also needs a special variant of
+> FIRMWARE_IMX_INSTALL_TARGET_CMDS.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> NOTE: some review on this patch from i.MX people would be greatly
+> appreciated. Thanks!
+> ---
+>  package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Ah, I see.
+This patch has been rendered useless by
+https://git.buildroot.org/buildroot/commit/?id=97d54bdcb2185914e232749fa4171601a9ec7f0d
+where the imx-seco package now properly installs ahab-container.img for
+the BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y configuration.
 
-> > > + 	$(LDCONF) $(DESTDIR)$(LIBDIR)  
-> And it is this invocation of ldconfig that creates it!
+So I've marked this patch as not applicable.
 
-Yes, I would know that. ;-)
-
-[--SNIP--]
-> > Which means that with your patch and without a call to ldconfig, the .so
-> > symlink will no longer exist, and so it will no longer be possible to
-> > link against the library.
-> No correct: the .so symlink still exists. Re-read the patch from Kamel,
-> it creates the .so.8 symlink in *addition* to creating the .so symlink,
-> which was already there.
-
-Right. Not sure why, but I saw a 'minus sign' in front of the previous
-line. There is no such minus sign, so the line is not removed, so yes,
-that's OK. Sorry.
-
-> > Note that the host variant is not OK either, because not all systems
-> > have ldconfig on the host either... See 64d4b34073 (e2fsprogs: do not
-> > use ldconfig when building the host variant).
-> Yes, agreed.
-> So all what we need is:
->  (1) LDCONF=/bin/true
->  (2) An improved commit description for the patch that adds the symlink
-
-(3) same as (1), but for the host variant.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
