@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jul 2020 22:06:19 +0200
+Date: Mon, 27 Jul 2020 22:01:10 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x] package/uacme: bump
- version to 1.2.4
-Message-ID: <20200727200252.55AF7821DA@busybox.osuosl.org>
+ version to 1.0.22
+Message-ID: <20200727200252.2A81982AE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26c7864b4e3d5052e6a81a3df5715906728c0581
+commit: https://git.buildroot.net/buildroot/commit/?id=df83838d94972cf4399d5d71f2ea50eb257342c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
-[yann.morin.1998 at free.fr: two spaces in hash file]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 812cc01f6962926769422b5dbc9d652aca5982ac)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 066d552499fac9bab41971530b114776b9ca27c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uacme/uacme.hash | 4 ++--
+ package/uacme/uacme.hash | 2 +-
  package/uacme/uacme.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-index 44cff5cf61..b3ec7ed6f2 100644
+index b8d631d50b..5c68680b54 100644
 --- a/package/uacme/uacme.hash
 +++ b/package/uacme/uacme.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256	7e737eadc4495512f4f41e39b6ed4e14476922e26953f1be3446d69c8e63d189        uacme-1.2.3.tar.gz
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+-sha256	c80bbee3c2ac3a64f70abe23be3b7768039785863170ac062625407a0b61e635        uacme-1.0.21.tar.gz
++sha256	08070779232c9711a227189ee2d3cb55042f6be2ea0aa59525cb7b554c4688b0        uacme-1.0.22.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
 diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index 6df13eced6..7e544fce79 100644
+index 5813399c56..c5931e2682 100644
 --- a/package/uacme/uacme.mk
 +++ b/package/uacme/uacme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UACME_VERSION = 1.2.3
-+UACME_VERSION = 1.2.4
+-UACME_VERSION = 1.0.21
++UACME_VERSION = 1.0.22
  # Released versions are on branch upstream/latest, tagged as
  # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
  # include .tarball-version
