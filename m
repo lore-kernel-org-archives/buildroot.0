@@ -1,45 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jul 2020 22:01:10 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/uacme: bump
- version to 1.0.22
-Message-ID: <20200727200252.2A81982AE8@busybox.osuosl.org>
+Date: Mon, 27 Jul 2020 22:06:31 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/uacme: don't
+ allow ualpn with mbedTLS
+Message-ID: <20200727200252.61473821DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df83838d94972cf4399d5d71f2ea50eb257342c9
+commit: https://git.buildroot.net/buildroot/commit/?id=37b5713442e894cb7e439f6a29d1ed32c81d9bba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+
+ualpn requires mbedTLS to be configured and built with
+MBEDTLS_X509_ALLOW_UNSUPPORTED_CRITICAL_EXTENSION
+which is not the default and can be a security risk.
+
+Therefore make BR2_PACKAGE_UACME_UALPN depend on
+BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS.
+
+Fixes http://autobuild.buildroot.net/results/d241121f8155bad9b6b25c16234576abb7fc940b
+
+See also
+
+https://github.com/ndilieto/uacme/issues/23
+https://github.com/ARMmbed/mbedtls/issues/3241
+https://github.com/ARMmbed/mbedtls/pull/3243
+http://lists.busybox.net/pipermail/buildroot/2020-April/281059.html
+http://lists.busybox.net/pipermail/buildroot/2020-April/281108.html
 
 Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 066d552499fac9bab41971530b114776b9ca27c8)
+(cherry picked from commit 96c3b52132b41716ca445b4c73a1a8886c26e5ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uacme/uacme.hash | 2 +-
- package/uacme/uacme.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uacme/Config.in | 4 ++++
+ package/uacme/uacme.mk  | 6 +++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-index b8d631d50b..5c68680b54 100644
---- a/package/uacme/uacme.hash
-+++ b/package/uacme/uacme.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	c80bbee3c2ac3a64f70abe23be3b7768039785863170ac062625407a0b61e635        uacme-1.0.21.tar.gz
-+sha256	08070779232c9711a227189ee2d3cb55042f6be2ea0aa59525cb7b554c4688b0        uacme-1.0.22.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/Config.in b/package/uacme/Config.in
+index 58b7c534e7..d693436115 100644
+--- a/package/uacme/Config.in
++++ b/package/uacme/Config.in
+@@ -19,6 +19,7 @@ if BR2_PACKAGE_UACME
+ config BR2_PACKAGE_UACME_UALPN
+ 	bool "enable ualpn"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBEV
+ 	help
+ 	  Build and install ualpn, the transparent proxying tls-alpn-01
+@@ -27,4 +28,7 @@ config BR2_PACKAGE_UACME_UALPN
+ comment "ualpn needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
++comment "ualpn needs either OpenSSL or GnuTLS"
++	depends on !(BR2_PACKAGE_OPENSSL || BR2_PACKAGE_GNUTLS)
++
+ endif
 diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index 5813399c56..c5931e2682 100644
+index 7e544fce79..be2aa60811 100644
 --- a/package/uacme/uacme.mk
 +++ b/package/uacme/uacme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -18,12 +18,12 @@ UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ UACME_CONF_OPTS += --with-gnutls
+ UACME_DEPENDENCIES += gnutls
+-else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+-UACME_CONF_OPTS += --with-mbedtls
+-UACME_DEPENDENCIES += mbedtls
+ else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ UACME_CONF_OPTS += --with-openssl
+ UACME_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++UACME_CONF_OPTS += --with-mbedtls
++UACME_DEPENDENCIES += mbedtls
+ endif
  
--UACME_VERSION = 1.0.21
-+UACME_VERSION = 1.0.22
- # Released versions are on branch upstream/latest, tagged as
- # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
- # include .tarball-version
+ ifeq ($(BR2_PACKAGE_UACME_UALPN),y)
