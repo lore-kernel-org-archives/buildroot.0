@@ -1,48 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 17:25:20 +0200
-Subject: [Buildroot] [PATCH] package/cegui: fix selecting the default
- OpenGL renderer
-In-Reply-To: <20200623191907.385318-1-b.bilas@grinn-global.com>
-References: <20200623191907.385318-1-b.bilas@grinn-global.com>
-Message-ID: <20200727172520.15414fdb@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jul 2020 17:26:48 +0200
+Subject: [Buildroot] [PATCH v3 5/7] package/systemd: needs kernel options
+In-Reply-To: <20200621080000.180089-6-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sun, 21 Jun 2020 09:59:58 +0200")
+References: <20200621080000.180089-1-francois.perrad@gadz.org>
+ <20200621080000.180089-6-francois.perrad@gadz.org>
+Message-ID: <87blk1ugg7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Jun 2020 21:19:07 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-> According to the cegui requirements select explicit the default
-> OpenGL renderer based on available possibilities.
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+ > according to https://wiki.gentoo.org/wiki/Systemd#Kernel
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > ---
+ >  package/systemd/systemd.mk | 11 ++++++++++-
+ >  1 file changed, 10 insertions(+), 1 deletion(-)
 
-Applied, with one change. See below.
+ > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+ > index 8e01a0db5..b7213dd12 100644
+ > --- a/package/systemd/systemd.mk
+ > +++ b/package/systemd/systemd.mk
+ > @@ -565,9 +565,18 @@ SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+ >  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+ 
+ >  define SYSTEMD_LINUX_CONFIG_FIXUPS
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
 
-> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-> index 6158ef129c..505d67656a 100644
-> --- a/package/cegui/cegui.mk
-> +++ b/package/cegui/cegui.mk
-> @@ -16,15 +16,25 @@ CEGUI_DEPENDENCIES = glm \
->  		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+I don't see any reference to this anywhere in the systemd code or
+README, so I've dropped this.
 
-We have this here...
+ >  	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
+ > -	$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_BPF)
 
->  		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
->  		$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
-> -		$(if $(BR2_PACKAGE_LIBGLEW),libglew) \
-> +		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+According to the README this is only required for IPAddressDeny= and
+IPAddressAllow= in resource control unit settings, which I don't think
+is used by anuy of the "standard" services - Dropped.
 
-and you're adding it again here. So I dropped this new addition.
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
 
-I also made a few indentation fixes.
+Same for this one.
 
-Thanks for your contribution!
+ > +	$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
 
-Thomas
+This is already taken care of by linux/linux.mk, dropped.
+
+Committed with these changes, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
