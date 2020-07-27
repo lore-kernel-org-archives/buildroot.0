@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 17:43:56 +0200
-Subject: [Buildroot] [PATCH] package/grpc: needs host gcc >= 4.9
-In-Reply-To: <20200726210823.20922-1-yann.morin.1998@free.fr>
-References: <20200726210823.20922-1-yann.morin.1998@free.fr>
-Message-ID: <20200727174356.303490f4@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 27 Jul 2020 17:51:23 +0200
+Subject: [Buildroot] [PATCHv3 2/6] configs/rock_pi_4_defconfig: remove
+ BR2_TARGET_UBOOT_NEEDS_PYTHON
+In-Reply-To: <20200727155127.2703286-1-romain.naour@gmail.com>
+References: <20200727155127.2703286-1-romain.naour@gmail.com>
+Message-ID: <20200727155127.2703286-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 26 Jul 2020 23:08:23 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+BR2_TARGET_UBOOT_NEEDS_PYTHON3 is already selected for
+this defconfig, BR2_TARGET_UBOOT_NEEDS_PYTHON and
+BR2_TARGET_UBOOT_NEEDS_PYTHON3 can't be selected at the
+same time.
 
-> So, because the issue manifests itself only on an ancient system, Ubuntu
-> 14.04, with a now ancient gcc 4.8, we just make grpc depend on a host
-> gcc >= 4.9.
+Reported by check-dotconfig.py.
 
-According to Adam's comment, depending host gcc >= 4.9 is not the right
-thing, unfortunately :-/
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/657885313
 
->  config BR2_PACKAGE_COLLECTD_GRPC
->  	bool "grpc"
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # grpc
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ configs/rock_pi_4_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-You had forgotten to update the Config.in comment with this new
-dependency.
-
-Thomas
+diff --git a/configs/rock_pi_4_defconfig b/configs/rock_pi_4_defconfig
+index 22ef74be82..401a59bac4 100644
+--- a/configs/rock_pi_4_defconfig
++++ b/configs/rock_pi_4_defconfig
+@@ -23,7 +23,6 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_PYTHON=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.4
