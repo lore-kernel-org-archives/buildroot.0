@@ -1,51 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:29:54 +0200
-Subject: [Buildroot] [git commit] package/minetest: depend on LuaJIT
-Message-ID: <20200727203322.EC8F182AF5@busybox.osuosl.org>
+Date: Mon, 27 Jul 2020 22:37:47 +0200
+Subject: [Buildroot] [PATCH v3 9/9] package/luajit: depend on
+ !BR2_PACKAGE_LUA
+In-Reply-To: <20200525004845.3019642-9-james.hilliard1@gmail.com>
+References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
+ <20200525004845.3019642-9-james.hilliard1@gmail.com>
+Message-ID: <20200727203747.GN19818@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e387bc2105a423b7085653fd368b38f383dc17c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+James, All,
 
-Luajit is a provider for luainterpreter. We can't select providers of
-virtual packages; we can only depend on them.
+On 2020-05-24 18:48 -0600, James Hilliard spake thusly:
+> The luajit package is incomaptible with lua so luajit should depend on
+> !BR2_PACKAGE_LUA
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998 at free.fr:
-  - a lua interpreter is needed, so don't drop the dependency
-  - make it a "depends on" rather than a "select"
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/minetest/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+This is not needed. lua and luajit are two provider for the
+luainterpreter package, so the infra already checks for the conditions
+where two or more providers are enabled.
 
-diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-index 085525534d..b8ee175d52 100644
---- a/package/minetest/Config.in
-+++ b/package/minetest/Config.in
-@@ -5,11 +5,10 @@ config BR2_PACKAGE_MINETEST
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_XORG7 # irrlicht
- 	depends on BR2_PACKAGE_HAS_LIBGL # irrlicht
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_IRRLICHT
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_ZLIB
- 	# At least one option must be enabled
-@@ -59,7 +58,6 @@ comment "minetest needs a toolchain w/ C++, gcc >= 4.9, threads"
- 		|| !BR2_TOOLCHAIN_HAS_THREADS
- 
- comment "minetest needs X11 and an OpenGL provider"
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on (BR2_INSTALL_LIBSTDCPP \
- 		&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
- 		&& BR2_TOOLCHAIN_HAS_THREADS)
+So, I've dropped this patch in my respin:
+
+    http://lists.busybox.net/pipermail/buildroot/2020-July/288204.html
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v2 -> v3:
+>   - always depend on lua/luaposix from packages instead of selecting
+> Changes v1 -> v2:
+>   - depend on !BR2_PACKAGE_LUA_5_3 instead of !BR2_PACKAGE_LUA for solarus
+> ---
+>  package/luajit/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+> index 8cfa85684e..33a460772f 100644
+> --- a/package/luajit/Config.in
+> +++ b/package/luajit/Config.in
+> @@ -11,6 +11,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>  
+>  config BR2_PACKAGE_LUAJIT
+>  	bool "luajit"
+> +	depends on !BR2_PACKAGE_LUA
+>  	depends on !BR2_STATIC_LIBS # dlopen
+>  	# Luajit is only available for some target architectures, and
+>  	# has some complexity wrt 32/64. See luajit.mk for details.
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
