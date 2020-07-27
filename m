@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 17:22:07 +0200
-Subject: [Buildroot] [git commit] package/lz4: don't install programs by
- default
-Message-ID: <20200727151939.6089389051@busybox.osuosl.org>
+Date: Mon, 27 Jul 2020 17:25:20 +0200
+Subject: [Buildroot] [PATCH] package/cegui: fix selecting the default
+ OpenGL renderer
+In-Reply-To: <20200623191907.385318-1-b.bilas@grinn-global.com>
+References: <20200623191907.385318-1-b.bilas@grinn-global.com>
+Message-ID: <20200727172520.15414fdb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=739eda1990f94955a5289cafaa7fedfe830e2b9a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Jun 2020 21:19:07 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Commit 2acb27e298c54935f890111fc5897a11350b913b ("package/lz4: make
-program installation optional") make the installation of the lz4
-programs optional. To preserve backward compatibility, this commit
-added a "default y" to the BR2_PACKAGE_LZ4_PROGS.
+> According to the cegui requirements select explicit the default
+> OpenGL renderer based on available possibilities.
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-While Buildroot definitely tries to preserve backward compatibility in
-general, in this case, the backward compatibility would mean that
-everbody would by default install those 220 KB of program, which are
-most likely not needed for the majority of use cases. Installaing them
-by default kind of breaks the Buildroot principle of minimalism.
+Applied, with one change. See below.
 
-In this specific case, it is believed that the principle of minimalism
-wins over the principle of backward compatibility.
+> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+> index 6158ef129c..505d67656a 100644
+> --- a/package/cegui/cegui.mk
+> +++ b/package/cegui/cegui.mk
+> @@ -16,15 +16,25 @@ CEGUI_DEPENDENCIES = glm \
+>  		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lz4/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+We have this here...
 
-diff --git a/package/lz4/Config.in b/package/lz4/Config.in
-index dbe3f2e243..06a4e93dc1 100644
---- a/package/lz4/Config.in
-+++ b/package/lz4/Config.in
-@@ -13,7 +13,6 @@ if BR2_PACKAGE_LZ4
- 
- config BR2_PACKAGE_LZ4_PROGS
- 	bool "install programs"
--	default y
- 	help
- 	  lz4, lz4c, unlz4 and lz4cat binaries
- 
+>  		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
+>  		$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
+> -		$(if $(BR2_PACKAGE_LIBGLEW),libglew) \
+> +		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+
+and you're adding it again here. So I dropped this new addition.
+
+I also made a few indentation fixes.
+
+Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
