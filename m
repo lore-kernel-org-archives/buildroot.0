@@ -1,109 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 22:06:34 +0200
-Subject: [Buildroot] [PATCH 4/6] wireless-regdb: add option to rebuild
-In-Reply-To: <20200702103618.5147-5-dev.kurt@vandijck-laurijssen.be>
-References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
- <20200702103618.5147-5-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200727220634.04995ae4@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jul 2020 22:07:00 +0200
+Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.2.3
+In-Reply-To: <20200508163951.5hf2clb4cysufywb@einstein.dilieto.eu> (Nicola Di
+ Lieto's message of "Fri, 8 May 2020 18:39:51 +0200")
+References: <20200423055104.lljafbjugkwzbzhm@einstein.dilieto.eu>
+ <87mu6isv6z.fsf@dell.be.48ers.dk>
+ <20200508163951.5hf2clb4cysufywb@einstein.dilieto.eu>
+Message-ID: <87h7tsu3h7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kurt,
+>>>>> "Nicola" == Nicola Di Lieto <nicola.dilieto@gmail.com> writes:
 
-Thanks for this new iteration. See some comments below.
+ > On Fri, May 08, 2020 at 10:11:00AM +0200, Peter Korsgaard wrote:
+ >> Does that also affect the 1.0.21 version we have in 2020.02.x? If so,
+ >> what is the impact? Do we need to update to 1.2.3 or cherry pick a
+ >> patch?
+ >> 
 
-On Thu,  2 Jul 2020 12:36:16 +0200
-Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
+ > Yes, all versions prior to 1.2.3 are affected. The impact for the
+ > moment is only with pebble (the non-production standalone let's
+ > encrypt testing server, https://github.com/letsencrypt/pebble).
 
-> diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
-> index 17350a41d8..55347b5e8c 100644
-> --- a/package/wireless-regdb/Config.in
-> +++ b/package/wireless-regdb/Config.in
-> @@ -12,3 +12,18 @@ config BR2_PACKAGE_WIRELESS_REGDB
->  	  application is needed.
->  
->  	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
-> +
-> +if BR2_PACKAGE_WIRELESS_REGDB
-> +
-> +config BR2_WIRELESS_REGDB_REBUILD
-> +	bool "rebuild wireless-regdb"
-> +	help
-> +	  Say no to use the pre-built wireless regdb.
-> +
-> +	  Say yes if you need to deploy a modified wireless-regdb.
-> +	  Deviations to the precompiled upstream wireless-regdb may be required
-> +	  e.g. if you plan to deploy your product outdoor in countries where
-> +	  outdoor and indoor regulations differ.
-> +	  Make sure to deploy your wireless-regdb public key if you use crda
-> +	  or compile them into the kernel.
+ > The production let's encrypt server runs a different software
+ > (boulder) which doesn't trigger this bug, however this may change and
+ > I have no control over whether or when this will happen.
 
-Some of those lines are too long. Run "make check-package", it will
-report some issues.
+ > Therefore I recommend updating to a newer version. Also note that I
+ > released 1.3 about one hour ago which has a few more small fixes and
+ > enhancements, see https://github.com/ndilieto/uacme/blob/master/NEWS
 
-> +ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
-> +
-> +define WIRELESS_REGDB_PATCH_PYTHON3
-> +	sed -i -e '1 s/python$$/python3/' $(@D)/*.py
+Sorry for the slow reponse, I have now updated 2020.02.x to 1.2.4.
 
-Use $(SED) instead of sed -i -e.
-
-> +WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
-> +define WIRELESS_REGDB_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> +		REGDB_AUTHOR=buildroot
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_CRDA),y)
->  define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
->  	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
->  		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
->  	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
->  		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
-> +	$(INSTALL) -m 644 -D -T ~/.wireless-regdb-buildroot.key.pub.pem \
-> +		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/buildroot.key.pub.pem
-
-This line fails:
-
-/usr/bin/install: cannot stat '/home/thomas/.wireless-regdb-buildroot.key.pub.pem': No such file or directory
-
-Indeed, when I read the wireless-regdb Makefile, I don't see how a file
-named like this can be produced. In fact, I believe it is not great for
-the wireless-regdb Makefile to generate files into the user's $HOME
-directory. Is this public/private key pair typically re-generated at
-each Buildroot build ? If that is the case, then it should be stored in
-$(HOST_DIR)/ somewhere.
-
-If this public/private key pair should remain the same for a given
-system, across Buildroot rebuilds of the same configuration, then the
-public/private key pair should be generated separately by the user, and
-passed as argument.
-
-I think your PATCH 5/6 should be squashed into PATCH 4/6, because
-generating those keys into $HOME really isn't good.
-
-I have a couple of other questions/concerns. These don't need to be
-solved, it's more out of curiosity.
-
- - You've changed python-m2crypto to use python3, and the
-   wireless-regdb scripts to also use python3. But crda, which is kind
-   of the companion package to wireless-regdb is using
-   python-pycryptodomex, which is by default installed for
-   host-python2. So it means that one has to build both host-python2
-   and host-python3 :-/
-
- - I'm not really clear on the interaction between wireless-regdb and
-   crda. It's quite weird that crda selects wireless-regdb, but
-   wireless-regdb has some conditional on whether crda is enabled.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
