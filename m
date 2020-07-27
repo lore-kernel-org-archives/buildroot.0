@@ -1,83 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Jul 2020 17:51:27 +0200
-Subject: [Buildroot] [PATCHv3 6/6] gitlab-ci: check all defconfigs on every
- push
-In-Reply-To: <20200727155127.2703286-1-romain.naour@gmail.com>
-References: <20200727155127.2703286-1-romain.naour@gmail.com>
-Message-ID: <20200727155127.2703286-6-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 18:00:17 +0200
+Subject: [Buildroot] [git commit] support/config-fragments: add RISC-V
+ 64-bit uclibc autobuild config
+Message-ID: <20200727155526.C953D81534@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The defconfig check has been introduced by the previous
-patch before the building each defconfig but those builds
-are done every week or more.
+commit: https://git.buildroot.net/buildroot/commit/?id=c79a4d87729e960a4ce915df48557768d53535bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Checking if a defconfig is valid can be done on every
-push in the repository since it take few seconds.
+Add a RISC-V 64-bit autobuild configuration for the internal
+toolchain with uclibc.
 
-This would allow to detect as soon as possible a problem
-in a defconfig and eventually avoid breaking the build
-while build testing all defconfig.
-
-Introduce a new job template ".defconfig_check" in
-gitlab-ci.yml.in and modify the generate-gitlab-ci-yml
-to create a job for each defconfig to run the test.
-
-Although, we could have used only one job to do all
-tests, using one job per defconfig allow to identify
-easily in gitlab which defconfig is falling.
-
-Tested:
-https://gitlab.com/kubu93/buildroot/pipelines/138331069
-https://gitlab.com/kubu93/buildroot/pipelines/171223758
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/misc/gitlab-ci.yml.in          | 13 +++++++++++++
- support/scripts/generate-gitlab-ci-yml |  2 +-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ support/config-fragments/autobuild/br-riscv64-full-internal.config | 4 ++++
+ support/config-fragments/autobuild/toolchain-configs.csv           | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 01592f7155..7218ea027e 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -34,6 +34,19 @@ check-package:
-     script:
-         - make check-package
- 
-+.defconfig_check:
-+    script:
-+        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - make ${DEFCONFIG_NAME}
-+        - support/scripts/check-dotconfig.py .config configs/${DEFCONFIG_NAME}
-+    artifacts:
-+        when: on_failure
-+        expire_in: 2 weeks
-+        paths:
-+            - .config
-+    before_script:
-+        - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
-+
- .defconfig_base:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 262a7649b2..5cef1146e2 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -10,7 +10,7 @@ cat "${input}"
-     cd configs
-     LC_ALL=C ls -1 *_defconfig
- ) \
--    | sed 's/$/: { extends: .defconfig }/'
-+    | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
- 
- ./support/testing/run-tests -l 2>&1 \
-     | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
--- 
-2.25.4
+diff --git a/support/config-fragments/autobuild/br-riscv64-full-internal.config b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+new file mode 100644
+index 0000000000..5c1dfc47e3
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+@@ -0,0 +1,4 @@
++BR2_riscv=y
++BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 9b41e2173b..8511da4ac1 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -53,6 +53,7 @@ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
+ support/config-fragments/autobuild/br-riscv32.config,x86_64
+ support/config-fragments/autobuild/br-riscv64.config,x86_64
++support/config-fragments/autobuild/br-riscv64-full-internal.config,any
+ support/config-fragments/autobuild/br-riscv64-internal-musl.config,any
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
