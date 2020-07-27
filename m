@@ -1,88 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 14:42:32 +0200
-Subject: [Buildroot] [PATCH v2] package/cryptopp: add a target build
- configuration
-In-Reply-To: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
-References: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
-Message-ID: <20200727124232.GX19818@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 14:51:26 +0200
+Subject: [Buildroot] [v2 1/1] package/bat: new package
+In-Reply-To: <74538af2-c667-e50e-4cbb-681957f67a2d@gmail.com>
+References: <20200327174035.11503-1-david.pierret@smile.fr>
+ <74538af2-c667-e50e-4cbb-681957f67a2d@gmail.com>
+Message-ID: <20200727145126.76b6ff3d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kamel, All,
+On Sat, 28 Mar 2020 22:18:29 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-On 2020-07-27 14:23 +0200, Kamel Bouhara spake thusly:
-> Currently only a host build is supported for cryptopp, this add a new
-> configuration and build support for the make target.
+> David, can you add some details about the issue with CC_<target> ?
 > 
-> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> ---
-> Changes in v2:
-> 	- Fixed indentations issue
-> 	- Removed unrequired Config.in.host
-> 	- Added a depends on !BR2_STATIC_LIBS to build only in dynamic
-> 	configuration.
+> It would be great if you can use the upcoming cargo package infra, but this
+> infra doesn't handle CC_<target>.
+> 
+> As you noticed the build fail because we need to set CC_aarch64-none-linux-gnu
+> environment variable for aarch64 target build.
+> 
+> Arnout, Patrick. It seems David discovered a cross-compilation issue with cargo.
+> I reproduced the issue, cargo is using the host compiler instead of the
+> cross-compiler:
+> 
+> error: failed to run custom build command for `libloading v0.5.2`
+> 
+> Caused by:
+>   process didn't exit successfully:
+> `/home/naourr/buildroot/test/bat/build/bat-0.13.0/target/release/build/libloading-0c8de6c7b10afd2b/build-script-build`
+> (exit code: 1)
+> --- stdout
+> cargo:rustc-link-lib=dl
+> TARGET = Some("x86_64-unknown-linux-gnu")
+> OPT_LEVEL = Some("3")
+> HOST = Some("x86_64-unknown-linux-gnu")
+> CC_x86_64-unknown-linux-gnu = None
+> CC_x86_64_unknown_linux_gnu = None
+> HOST_CC = None
+> CC = Some("/home/naourr/buildroot/test/bat/host/bin/aarch64-none-linux-gnu-gcc")
+> CFLAGS_x86_64-unknown-linux-gnu = None
+> CFLAGS_x86_64_unknown_linux_gnu = None
+> HOST_CFLAGS = None
+> CFLAGS = Some("-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -Os  ")
+> CRATE_CC_NO_DEFAULTS = None
+> DEBUG = Some("false")
+> CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+> running: "/home/naourr/buildroot/test/bat/host/bin/aarch64-none-linux-gnu-gcc"
 
-Why can't we build a static library?
+The selected compiler is correct!
 
-[--SNIP--]
-> diff --git a/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
-> new file mode 100644
-> index 0000000000..e7edc76313
-> --- /dev/null
-> +++ b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
-> @@ -0,0 +1,27 @@
-> +From 78eb43f50978ffd780cf31b1cea6736dadc6b155 Mon Sep 17 00:00:00 2001
-> +From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> +Date: Mon, 6 Jul 2020 17:10:55 +0200
-> +Subject: [PATCH] Add fully-qualified SONAME to shared object for Linux
-> +
-> +From: http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
-> +
-> +Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> +---
-> + GNUmakefile | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/GNUmakefile b/GNUmakefile
-> +index e7b7b3a6..730e2a6f 100755
-> +--- a/GNUmakefile
-> ++++ b/GNUmakefile
-> +@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
-> + 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
-> + ifeq ($(HAS_SOLIB_VERSION),1)
-> + 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
-> ++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
+> "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "-m64"
 
-Why do we need that?
+However, probably due to the TARGET value being wrong, an invalid -m64
+option was passed here.
 
-> + 	$(LDCONF) $(DESTDIR)$(LIBDIR)
+That being said, I applied this patch, dropped the CC_something hack to
+reproduce the problem... and it doesn't appear anymore. Could you see
+if it also work for you now ?
 
-Note that in corss-compilation, running ldconfig is flawed, and we have
-explcitly idable its use. See commit 9c4072348 (Makefile: drop ldconfig
-handling).
+Note that I did not even update the "bat" version, but it anyway uses a
+newer version of libloading: it uses 0.5.2 here, while in your case, it
+was using 0c8de6c7b10afd2b (which oddly enough is not a valid commit in
+the rust_libloading Github repository).
 
-As a consequence, you want to explcitly configure with LDCONF=/bin/true,
-see for example package/e2fsprogs/e2fsprogs.mk (for the target variant)
-(Nothe that a few other packages do something similar as well)
+Could you double check that this issue still exists ?
 
-Which means that with your patch and without a call to ldconfig, the .so
-symlink will no longer exist, and so it will no longer be possible to
-link against the library.
-
-Note that the host variant is not OK either, because not all systems
-have ldconfig on the host either... See 64d4b34073 (e2fsprogs: do not
-use ldconfig when building the host variant).
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
