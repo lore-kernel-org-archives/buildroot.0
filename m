@@ -1,44 +1,44 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 27 Jul 2020 17:19:37 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/stm32mp157c_dk2: Bump Kernel and
- U-Boot
-In-Reply-To: <1595863177-19305-1-git-send-email-pjtexier@koncepto.io>
-References: <1595863177-19305-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <1595863177-19305-2-git-send-email-pjtexier@koncepto.io>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 17:19:46 +0200
+Subject: [Buildroot] [git commit] package/cegui: fix indentation
+Message-ID: <20200727151517.9304E82B56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kernel to version 5.7.10 and U-Boot to 2020.07
+commit: https://git.buildroot.net/buildroot/commit/?id=4aa8f5efd9faa416f20877affa153eb1a543cb5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+No functional changes, only whitespace changes.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/stm32mp157c_dk2_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/cegui/cegui.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index ca72049..86e1551 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
--- 
-2.7.4
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 12b2712f33..23919e0151 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -10,13 +10,13 @@ CEGUI_LICENSE = MIT
+ CEGUI_LICENSE_FILES = COPYING
+ CEGUI_INSTALL_STAGING = YES
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
+-		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
+-		   -DCEGUI_BUILD_RENDERER_OGRE=OFF
++	-DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
++	-DCEGUI_BUILD_RENDERER_OGRE=OFF
+ CEGUI_DEPENDENCIES = glm \
+-		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+-		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
+-		$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
+-		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++	$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
++	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
++	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+ # libepoxy support cannot be enabled together with libglew
+ ifeq ($(BR2_PACKAGE_LIBGLEW)$(BR2_PACKAGE_LIBGLU),yy)
