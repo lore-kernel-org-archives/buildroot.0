@@ -1,110 +1,98 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jul 2020 10:13:06 +0200
-Subject: [Buildroot] [git commit] package/mbpfan: new package
-Message-ID: <20200727080816.C59C380FFF@busybox.osuosl.org>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Mon, 27 Jul 2020 11:24:44 +0300
+Subject: [Buildroot] [PATCH v2 5/6] boot/arm-trusted-firmware: add EDK2
+ as BL33 option
+In-Reply-To: <20200726100541.7710-6-hi@senzilla.io>
+References: <20200726100541.7710-6-hi@senzilla.io>
+Message-ID: <20200727082444.GB1615@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1640b0c1f967e394f87eb7a0ca04ae40aade11b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> ARM Trusted Firmware (ATF) has the ability to load EDK2 UEFI when dropping
+> into EL2. This is done via a new configuration option that build the BL33
+> payload with EDK2 images that will run in the EL2 context.
+> 
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
+> 
+> ---
+> 
+> Revision 2:
+> 
+>  * It was concluded that relying on variables from EDK2 is ok
+>   since they are expanded inside _BUILD_CMDS
+>  * Now relying on the more specific variable EDK2_EL2_NAME for BL33
+> ---
+>  boot/arm-trusted-firmware/Config.in               | 15 ++++++++++++++-
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk |  8 ++++++++
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+> index 7d0f6aa4e0..f24813f8e6 100644
+> --- a/boot/arm-trusted-firmware/Config.in
+> +++ b/boot/arm-trusted-firmware/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE
+>  	bool "ARM Trusted Firmware (ATF)"
+>  	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
+> -           BR2_TARGET_UBOOT
+> +           (BR2_TARGET_UBOOT || BR2_TARGET_EDK2)
+>  	help
+>  	  Enable this option if you want to build the ATF for your ARM
+>  	  based embedded device.
+> @@ -115,6 +115,19 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+>  
+>  endchoice
+>  
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
+> +	bool "Use EDK2 as BL33"
+> +	depends on BR2_TARGET_EDK2
+> +	help
+> +	  This option allows to embed EDK2 as the BL33 part of
+> +	  the ARM Trusted Firmware. It ensures that the EDK2 package
+> +	  gets built before ATF, and that the appropriate BL33
+> +	  variable pointing to the EDK2 is passed when building ATF.
+> +
+> +	  Do not choose this option if you intend to build ATF and EDK2
+> +	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
+> +	  build system, the dependency between ATF and EDK is reversed.
 
-Adding mbpfan, a fan control daemon for MacBook laptops.
+Is it possible to 'automate' this restriction by some Config.in rule,
+e.g. depends on !BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA ?
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Peter: add hash file, drop Debian init script, drop systemd symlinks, add
- DEVELOPERS entry]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/mbpfan/Config.in   |  9 +++++++++
- package/mbpfan/mbpfan.hash |  3 +++
- package/mbpfan/mbpfan.mk   | 29 +++++++++++++++++++++++++++++
- 5 files changed, 43 insertions(+)
+> +
+>  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+>  	bool "Use U-Boot as BL33"
+>  	depends on BR2_TARGET_UBOOT
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index a3553e36cf..51a5877ba1 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -79,6 +79,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
+>  endif
+>  endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+>  
+> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
+> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
+> +# Since the flash device name vary between platforms, we use the variable
+> +# provided by the EDK2 package for this. Using this variable here is OK
+> +# as it will expand after all dependencies are resolved, inside _BUILD_CMDS.
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(EDK2_EL2_NAME).fd
+> +endif
+> +
+>  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
+>  ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
+>  ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9105626083..b9cef9185f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -553,6 +553,7 @@ F:	package/docker-engine/
- F:	package/docker-proxy/
- F:	package/fuse-overlayfs/
- F:	package/go/
-+F:	package/mbpfan/
- F:	package/mosh/
- F:	package/pkg-golang.mk
- F:	package/rtl8821au/
-diff --git a/package/Config.in b/package/Config.in
-index 178b4da98a..5c30d27b7a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -490,6 +490,7 @@ endmenu
- 	source "package/luksmeta/Config.in"
- 	source "package/lvm2/Config.in"
- 	source "package/mali-t76x/Config.in"
-+	source "package/mbpfan/Config.in"
- 	source "package/mdadm/Config.in"
- 	source "package/mdevd/Config.in"
- 	source "package/memtest86/Config.in"
-diff --git a/package/mbpfan/Config.in b/package/mbpfan/Config.in
-new file mode 100644
-index 0000000000..231faa2b15
---- /dev/null
-+++ b/package/mbpfan/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_MBPFAN
-+	bool "mbpfan"
-+	depends on BR2_USE_MMU
-+	help
-+	  Mbpfan is a daemon for MacBook laptops which monitors the
-+	  CPU temperature with the coretemp module, and sets the fan
-+	  speeds with the applesmc module.
-+
-+	  https://github.com/linux-on-mac/mbpfan
-diff --git a/package/mbpfan/mbpfan.hash b/package/mbpfan/mbpfan.hash
-new file mode 100644
-index 0000000000..eafd313b4e
---- /dev/null
-+++ b/package/mbpfan/mbpfan.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  52a3a79d99f775fe90917a0958e527ea14ff5b83d010164bd91f7cc3ce046b6a  mbpfan-2.2.1.tar.gz
-+sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  COPYING
-diff --git a/package/mbpfan/mbpfan.mk b/package/mbpfan/mbpfan.mk
-new file mode 100644
-index 0000000000..2455b0a4ca
---- /dev/null
-+++ b/package/mbpfan/mbpfan.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# mbpfan
-+#
-+################################################################################
-+
-+MBPFAN_VERSION = 2.2.1
-+MBPFAN_SITE = $(call github,linux-on-mac,mbpfan,v$(MBPFAN_VERSION))
-+MBPFAN_LICENSE = GPL-3.0+
-+MBPFAN_LICENSE_FILES = COPYING
-+
-+define MBPFAN_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		$(MAKE) CC="$(TARGET_CC)" -C $(@D)
-+endef
-+
-+define MBPFAN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/mbpfan.conf \
-+		$(TARGET_DIR)/etc/mbpfan.conf
-+	$(INSTALL) -m 0755 $(@D)/bin/mbpfan $(TARGET_DIR)/usr/sbin/mbpfan
-+endef
-+
-+define MBPFAN_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/mbpfan.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mbpfan.service
-+endef
-+
-+$(eval $(generic-package))
+This option is not added but not used in this patch series. I see that
+it should not be added for SBSA reference platform since in that case
+EDK2 embeds ATF binaries.
+
+Is it prepared for the upcoming new boards or is it supposed to be used
+by aarch64_efi_defconfig ? In the latter case ATF as well as this new
+BL33 option has to be explicitly specified in board config.
+
+Regards,
+Sergey
