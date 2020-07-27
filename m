@@ -1,50 +1,55 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 27 Jul 2020 08:42:35 +0200
-Subject: [Buildroot] [PATCH] package/fastd: bump to v19
-In-Reply-To: <871rlcxyr1.fsf@dell.be.48ers.dk>
-References: <20200611192504.4058-1-post@lespocky.de>
- <871rlcxyr1.fsf@dell.be.48ers.dk>
-Message-ID: <20200727064234.xgzcmnvpfpcuxhoo@falbala.internal.home.lespocky.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 08:43:26 +0200
+Subject: [Buildroot] [git commit] package/snmppp: fix SNMPv3 with gcc <= 5
+Message-ID: <20200727063916.99F06888CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+commit: https://git.buildroot.net/buildroot/commit/?id=b435912e54671d55143463cc789ceb9ac7a5ce42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-just returning from two weeks holiday ?
+Fixes:
+ - http://autobuild.buildroot.org/results/bfe3faefc007f2e746c9f0af9b7d0926bb72dc9e
 
-On Wed, Jul 15, 2020 at 11:19:14PM +0200, Peter Korsgaard wrote:
-> >>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
-> 
->  > Maintenance release, most important is OpenSSL 1.1+ support. See full
->  > release notes for details:
-> 
->  > https://fastd.readthedocs.io/en/stable/releases/v19.html
-> 
-> Does this mean that fastd 18 is broken with openssl 1.1?, E.G. does this
-> need to be backported to 2020.02.x?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/snmppp/Config.in | 4 ++++
+ package/snmppp/snmppp.mk | 1 +
+ 2 files changed, 5 insertions(+)
 
-From the top of my head, I would say no.  It probably means fastd is
-supposed to work with OpenSSL 1.1 or later now?  It would have caused
-build errors against OpenSSL 1.1 in the past, if that would not have
-been the case, right?
-
-I put upstream in Cc, maybe he can answer this?
-
-Greets
-Alex
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200727/94fa8c20/attachment.asc>
+diff --git a/package/snmppp/Config.in b/package/snmppp/Config.in
+index 8d284673bc..de1a09ca4b 100644
+--- a/package/snmppp/Config.in
++++ b/package/snmppp/Config.in
+@@ -21,10 +21,14 @@ config BR2_PACKAGE_SNMPPP_LOGGING
+ config BR2_PACKAGE_SNMPPP_SNMPV3
+ 	bool "enable SNMPv3"
+ 	default y
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Enable optional support for SNMP++. This selects OpenSSL.
+ 
++comment "SNMPv3 needs a toolchain w/ gcc >= 4.8"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ endif
+ 
+ comment "snmp++ needs a toolchain w/ threads, C++, dynamic library"
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 8090a03818..270c41fc4b 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -14,6 +14,7 @@ SNMPPP_LICENSE = SNMP++
+ SNMPPP_LICENSE_FILES = src/v3.cpp
+ 
+ ifeq ($(BR2_PACKAGE_SNMPPP_SNMPV3),y)
++SNMPPP_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+ SNMPPP_CONF_OPTS += --enable-snmpv3
+ SNMPPP_DEPENDENCIES += openssl
+ else
