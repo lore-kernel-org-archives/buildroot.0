@@ -1,55 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 13:31:47 +0200
-Subject: [Buildroot] [PATCH v3, 1/1] package/zbar: bump to version 0.23.1
-In-Reply-To: <20200725221016.1064129-1-fontaine.fabrice@gmail.com>
-References: <20200725221016.1064129-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200727113147.GU19818@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 13:48:22 +0200
+Subject: [Buildroot] [PATCH v3 00/10] Merge rust and cargo
+In-Reply-To: <20200207180829.165689-1-arnout@mind.be>
+References: <20200207180829.165689-1-arnout@mind.be>
+Message-ID: <20200727134822.3962f4a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello,
 
-On 2020-07-26 00:10 +0200, Fabrice Fontaine spake thusly:
-> - Add new NLS dependency as well as a patch to fix a build failure
->   without it: https://github.com/mchehab/zbar/issues/90
-> - Drop host-gettext (not needed since autoreconf was dropped with
->   8729c4ef881b02ff85b7645b0ad309d6ae44fccf)
-> - Update indentation in hash file (two spaces)
+On Fri,  7 Feb 2020 19:08:19 +0100
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+
+> Eric Le Bihan (7):
+>   package/rust: build and install cargo
+>   package/cargo-bin: install if rust-bin selected
+>   package/rust-bin: host variant depends on host-cargo-bin
+>   package/rust: drop dependency on host-cargo-bin
+>   package/ripgrep: depends on host-rustc
+>   package/cargo: drop package
+>   docs/manual: cargo packages depend on host-rustc
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-[--SNIP--]
-> +diff --git a/zbar/gettext.h b/zbar/gettext.h
-> +new file mode 100644
-> +index 0000000..bd8e87d
-> +--- /dev/null
-> ++++ b/zbar/gettext.h
-> +@@ -0,0 +1,294 @@
-> ++/* Convenience header for conditional use of GNU <libintl.h>.
-> ++   Copyright (C) 1995-1998, 2000-2002, 2004-2006, 2009-2018 Free Software
-> ++   Foundation, Inc.
-> ++
-> ++   This program is free software: you can redistribute it and/or modify
-> ++   it under the terms of the GNU General Public License as published by
-> ++   the Free Software Foundation; either version 3 of the License, or
-> ++   (at your option) any later version.
+> Patrick Havelange (2):
+>   package/rust: bump to 1.40
+>   package/cargo-bin: remove and use cargo-bin from rust-bin package
 
-Whoa, no no...
+Thanks a lot, I have applied the whole series.
 
-zbar is LGP-2.1+, and this header makes it de-facto GPL-3+
+One thing that I find strange is that host-rust-bin gets installed to
+$(HOST_DIR) into the traditional places, and then when you build
+host-rust, it installs *over* host-rust-bin. It was already like that
+prior to your series, so this is not really a change, but I'm wondering
+if we should clarify this. Related to this, this is also non very nice:
 
-This is fishy, please fix that with upstream before we can update.
+                echo 'cargo = "$(HOST_RUST_BIN_DIR)/cargo/bin/cargo"'; \
+                echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
 
-Regards,
-Yann E. MORIN.
+Here, we're pointing directly to the source directory of another
+package, which we generally try to avoid.
 
+So, I'm wondering if we shouldn't be installed host-rust-bin in some
+unusual $(HOST_DIR) location, maybe $(HOST_DIR)/opt/rust-bin/ or
+something like that.
+
+Then:
+
+ - If the host-rustc virtual package uses host-rust-bin as the
+   provider, then we create the appropriate
+   $(HOST_DIR)/bin/{rustc,cargo} symlinks to
+   $(HOST_DIR)/opt/rust-bin/{rustc,cargo}
+
+ - If the host-rustc virtual package uses host-rust as the provider,
+   then host-rust will use $(HOST_DIR)/opt/rust-bin/ to build itself,
+   and then will install $(HOST_DIR)/bin/{rustc,cargo}
+
+Thoughts ?
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
