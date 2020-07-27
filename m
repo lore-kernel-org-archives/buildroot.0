@@ -1,64 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 18:00:17 +0200
-Subject: [Buildroot] [git commit] support/config-fragments: use external
- riscv64 musl toolchain
-Message-ID: <20200727155526.D7BCF8216C@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 27 Jul 2020 18:02:12 +0200
+Subject: [Buildroot] [PATCHv3] package/bat: new package
+In-Reply-To: <20200727170126.51d45e8b@windsurf.home>
+References: <20200727140922.2614959-1-romain.naour@gmail.com>
+ <20200727170126.51d45e8b@windsurf.home>
+Message-ID: <a6e0c13c-00cf-77ef-b121-f7e08545c63b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=468f728dcb5f5666827f364653fc4c8d5814c0ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Move to an external RISC-V 64 bit musl toolchain to ease the load
-on the autobuilders.
+Le 27/07/2020 ? 17:01, Thomas Petazzoni a ?crit?:
+> On Mon, 27 Jul 2020 16:09:22 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> +	# less needs ncurses
+>> +	select BR2_PACKAGE_NCURSES
+> 
+> less already selects ncurses, so why do we need ncurses here ?
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../config-fragments/autobuild/br-riscv64-internal-musl.config   | 3 ---
- support/config-fragments/autobuild/br-riscv64-musl.config        | 9 +++++++++
- support/config-fragments/autobuild/toolchain-configs.csv         | 2 +-
- 3 files changed, 10 insertions(+), 4 deletions(-)
+Indeed.
 
-diff --git a/support/config-fragments/autobuild/br-riscv64-internal-musl.config b/support/config-fragments/autobuild/br-riscv64-internal-musl.config
-deleted file mode 100644
-index 89e7afb276..0000000000
---- a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
-+++ /dev/null
-@@ -1,3 +0,0 @@
--BR2_riscv=y
--BR2_TOOLCHAIN_BUILDROOT_MUSL=y
--BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/br-riscv64-musl.config b/support/config-fragments/autobuild/br-riscv64-musl.config
-new file mode 100644
-index 0000000000..fd6ef822aa
---- /dev/null
-+++ b/support/config-fragments/autobuild/br-riscv64-musl.config
-@@ -0,0 +1,9 @@
-+BR2_riscv=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-musl-2020.02.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 8511da4ac1..7f05064475 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -54,7 +54,7 @@ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
- support/config-fragments/autobuild/br-riscv32.config,x86_64
- support/config-fragments/autobuild/br-riscv64.config,x86_64
- support/config-fragments/autobuild/br-riscv64-full-internal.config,any
--support/config-fragments/autobuild/br-riscv64-internal-musl.config,any
-+support/config-fragments/autobuild/br-riscv64-musl.config,x86_64
- support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
+> 
+>> +BAT_CARGO_OPTS = \
+>> +	 --bins \
+>> +	 --$(BAT_CARGO_MODE) \
+>> +	 --target=$(RUSTC_TARGET_NAME) \
+>> +	 --manifest-path=$(@D)/Cargo.toml
+>> +
+>> +define BAT_BUILD_CMDS
+>> +	$(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
+>> +	CC_$(subst -,_,$(RUSTC_TARGET_NAME))=$(TARGET_CC) \
+> 
+> I am still not happy with this. There is no reason why this should be
+> passed on a per-package basis, it should be handled by "cargo" and all
+> the cross-compilation configuration it has.
+
+Well, I guess the pkg-cargo.mk infra will handle this.
+
+I discovered CC_aarch64_unknown_linux_gnu by looking at a Dockerfile example:
+
+https://github.com/rust-lang/rust/blob/c367798cfd3817ca6ae908ce675d1d99242af148/src/ci/docker/dist-aarch64-linux/Dockerfile#L29
+
+I'm not sure why it's not handled by config.toml...
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
