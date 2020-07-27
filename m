@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:32:59 +0200
-Subject: [Buildroot] [PATCH 8/9 v2] package/solarus: depend on lua ABI
- version 5.1
+Date: Mon, 27 Jul 2020 22:33:00 +0200
+Subject: [Buildroot] [PATCH 9/9 v2] package/luaposix: select bit32 based on
+ lua ABI version 5.1
 In-Reply-To: <cover.1595881971.git.yann.morin.1998@free.fr>
 References: <cover.1595881971.git.yann.morin.1998@free.fr>
-Message-ID: <053f9c5849edf7a5646862c1c7ad6c87007ebdc2.1595881971.git.yann.morin.1998@free.fr>
+Message-ID: <38bcaecb671e2bb943336715c1fd92c8cb3cff23.1595881971.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,27 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-Since solarus is compatible with lua interpreters that provide the
-version 5.1 ABI we should depend on that instead of unconditionally
-selecting luajit.
+Since the bit32 module is needed by all lua ABI 5.1 providers we can
+select based on the lua ABI version instead of both lua 5.1 and luajit.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/solarus/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/luaposix/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/solarus/Config.in b/package/solarus/Config.in
-index 5d15342f3a..cdff62687f 100644
---- a/package/solarus/Config.in
-+++ b/package/solarus/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_SOLARUS
- 	bool "solarus"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
-@@ -12,7 +12,6 @@ config BR2_PACKAGE_SOLARUS
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_LIBPNG # runtime
- 	select BR2_PACKAGE_LIBVORBIS
--	select BR2_PACKAGE_LUAJIT if !BR2_PACKAGE_LUA_5_1
- 	select BR2_PACKAGE_OPENAL
- 	select BR2_PACKAGE_PHYSFS
- 	select BR2_PACKAGE_SDL2
-@@ -26,8 +25,8 @@ config BR2_PACKAGE_SOLARUS
- 	  http://www.solarus-games.org
- 	  https://github.com/solarus-games/solarus
- 
--comment "solarus needs OpenGL and a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library"
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS || BR2_PACKAGE_LUA_5_1
-+comment "solarus needs OpenGL and a toolchain w/ C++, gcc >= 4.8, NPTL, dynamic library, and luajit or lua 5.1"
-+	depends on !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
+index cedb3a6654..85943f9915 100644
+--- a/package/luaposix/Config.in
++++ b/package/luaposix/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LUAPOSIX
+ 	# "bit32" is included in Lua 5.2+. luajit has an equivalent
+ 	# "bit" module, but since it has a different name, luaposix
+ 	# doesn't find it.
+-	select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT # runtime
++	select BR2_PACKAGE_LUA_BIT32 if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1 # runtime
+ 	help
+ 	  This is a POSIX binding for LuaJIT, Lua 5.1 through 5.4;
+ 	  like most libraries it simply binds to C APIs on the
 -- 
 2.20.1
