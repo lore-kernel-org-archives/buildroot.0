@@ -1,73 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:32:57 +0200
-Subject: [Buildroot] [PATCH 0/9 v2] pacakge/lua: introduce ABI versions
- (branch yem/lua-abi)
-Message-ID: <cover.1595881971.git.yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 22:32:52 +0200
+Subject: [Buildroot] [PATCH 1/9 v2] package/efl: depend on LuaJIT
+In-Reply-To: <cover.1595881971.git.yann.morin.1998@free.fr>
+References: <cover.1595881971.git.yann.morin.1998@free.fr>
+Message-ID: <f3134e71595ba33d2f9f82b9951a61e63f9e8727.1595881971.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: James Hilliard <james.hilliard1@gmail.com>
 
-This is a respin of the initial series by James, slighlty massaged by me
-to account for the various feedbacks in the initial iteration.
+Luajit is a provider for luainterpreter. We can't select providers of
+virtual packages; we can only depend on them.
 
-Regards,
-Yann E. MORIN.
+Note also that it is not very clear whether the host and target variants
+of EFL need to be built with the same lua interpreter. Today, this is
+guaranteed as we inly use luajit in both cases. But there were issues
+with lua 5.1 in the past, so stick to only using luajit.
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr:
+  - depend on luajit, not "any" luainterpreter
+  - which keeps the host and target variants built with the same
+    interpreter
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/efl/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit b2f79735f6d64911853d0defe970660fadb4e257
-
-  package/systemd: bump version to 245.7 (2020-07-27 21:17:54 +0200)
-
-
-are available in the git repository at:
-
-  https://git.busybox.net/~ymorin/git/buildroot
-
-for you to fetch changes up to 38bcaecb671e2bb943336715c1fd92c8cb3cff23
-
-  package/luaposix: select bit32 based on lua ABI version 5.1 (2020-07-27 22:30:59 +0200)
-
-
-----------------------------------------------------------------
-James Hilliard (8):
-      package/efl: depend on LuaJIT
-      package/minetest: depend on LuaJIT
-      package/prosody: don't depend on !lua 5.3
-      package/luainterpreter: add abi version options
-      package/sysdig: depend on lua ABI version 5.1
-      package/collectd: depend on luainterpreter for lua support
-      package/solarus: depend on lua ABI version 5.1
-      package/luaposix: select bit32 based on lua ABI version 5.1
-
-Yann E. MORIN (1):
-      package/luainterpreter: gather the ABI version string defaults
-
- package/collectd/Config.in       |  5 ++++-
- package/collectd/collectd.mk     |  2 +-
- package/efl/Config.in            |  6 ++----
- package/lua/Config.in            |  6 ++----
- package/luainterpreter/Config.in |  8 ++++++++
- package/luajit/Config.in         |  4 +---
- package/luaposix/Config.in       |  2 +-
- package/minetest/Config.in       |  4 +---
- package/prosody/Config.in        |  4 ----
- package/solarus/Config.in        |  7 +++----
- package/sysdig/Config.in         | 11 +++++------
- package/sysdig/sysdig.mk         | 13 ++++++++++++-
- 12 files changed, 40 insertions(+), 32 deletions(-)
-
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index ff49161163..728032018b 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -3,17 +3,16 @@ config BR2_PACKAGE_EFL
+ 	 # g++ issue with 4.4.5, tested with g++ 4.7.2
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR # use wchar_t
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	# https://phab.enlightenment.org/T2728
++	depends on BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+ 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
+-	# https://phab.enlightenment.org/T2728
+-	select BR2_PACKAGE_LUAJIT # Lua support broken
+ 	select BR2_PACKAGE_LZ4
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -306,5 +305,4 @@ comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wch
+ 	depends on !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
