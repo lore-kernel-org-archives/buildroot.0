@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:32:53 +0200
-Subject: [Buildroot] [PATCH 2/9 v2] package/minetest: depend on LuaJIT
+Date: Mon, 27 Jul 2020 22:32:54 +0200
+Subject: [Buildroot] [PATCH 3/9 v2] package/prosody: don't depend on !lua 5.3
 In-Reply-To: <cover.1595881971.git.yann.morin.1998@free.fr>
 References: <cover.1595881971.git.yann.morin.1998@free.fr>
-Message-ID: <4e387bc2105a423b7085653fd368b38f383dc17c.1595881971.git.yann.morin.1998@free.fr>
+Message-ID: <afbb8b6a04d8013086088bef74741c81bddf78e9.1595881971.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +12,32 @@ To: buildroot@busybox.net
 
 From: James Hilliard <james.hilliard1@gmail.com>
 
-Luajit is a provider for luainterpreter. We can't select providers of
-virtual packages; we can only depend on them.
+The current version of prosody is compatible with Lua 5.3.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[yann.morin.1998 at free.fr:
-  - a lua interpreter is needed, so don't drop the dependency
-  - make it a "depends on" rather than a "select"
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/minetest/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/prosody/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/minetest/Config.in b/package/minetest/Config.in
-index 085525534d..b8ee175d52 100644
---- a/package/minetest/Config.in
-+++ b/package/minetest/Config.in
-@@ -5,11 +5,10 @@ config BR2_PACKAGE_MINETEST
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_XORG7 # irrlicht
- 	depends on BR2_PACKAGE_HAS_LIBGL # irrlicht
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_IRRLICHT
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_ZLIB
- 	# At least one option must be enabled
-@@ -59,7 +58,6 @@ comment "minetest needs a toolchain w/ C++, gcc >= 4.9, threads"
- 		|| !BR2_TOOLCHAIN_HAS_THREADS
- 
- comment "minetest needs X11 and an OpenGL provider"
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on (BR2_INSTALL_LIBSTDCPP \
- 		&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
- 		&& BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index c32ca20e23..4b7ea94256 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	depends on !BR2_PACKAGE_LUA_5_3
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+ 	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+@@ -21,6 +20,3 @@ config BR2_PACKAGE_PROSODY
+ comment "prosody needs the lua interpreter, dynamic library"
+ 	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+-
+-comment "prosody needs a Lua 5.1/5.2 interpreter"
+-	depends on BR2_PACKAGE_LUA_5_3
 -- 
 2.20.1
