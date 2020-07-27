@@ -1,78 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 22:14:48 +0200
-Subject: [Buildroot] [PATCH 6/6] wireless-regdb: add signing key to
- linux kernel
-In-Reply-To: <20200702103618.5147-7-dev.kurt@vandijck-laurijssen.be>
-References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
- <20200702103618.5147-7-dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20200727221448.1d16c342@windsurf.home>
+Date: Mon, 27 Jul 2020 22:29:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cli11: new package
+In-Reply-To: <20200727193329.GK19818@scaer>
+References: <20200706111715.46462-1-aleksandr.o.makarov@gmail.com>
+ <20200727212345.2d650692@windsurf.home>
+ <20200727193329.GK19818@scaer>
+Message-ID: <20200727222920.51f0cda0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, 27 Jul 2020 21:33:29 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On Thu,  2 Jul 2020 12:36:18 +0200
-Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
+> Yes: the header is not versionned. So if we update, we'll end up with
+> another CLI11.hpp which content is different.
 
-> When rebuilding wireless-regdb, linux kernel needs the signing
-> public key to validate the database.
-> 
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> ---
->  linux/linux.mk                           |  4 ++++
->  package/wireless-regdb/wireless-regdb.mk | 14 ++++++++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index b9f2052ee7..8366afaa03 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -367,6 +367,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  	$(PACKAGES_LINUX_CONFIG_FIXUPS)
->  endef
->  
-> +ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
-> +LINUX_DEPENDENCIES += wireless-regdb
-> +endif
-> +
->  ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
->  # Starting with 4.17, the generated dtc parser code is no longer
->  # shipped with the kernel sources, so we need flex and bison. For
-> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-> index d60428a8f0..74fdfbea20 100644
-> --- a/package/wireless-regdb/wireless-regdb.mk
-> +++ b/package/wireless-regdb/wireless-regdb.mk
-> @@ -42,6 +42,20 @@ define WIRELESS_REGDB_BUILD_CMDS
->  		-outform DER \
->  		-out $(@D)/$(WIRELESS_REGDB_PRIVKEYNAME).x509
->  endef
-> +
-> +# Sarting with 4.15, the kernel can hold public keys for validating
+That is indeed a very good argument. OK, I'll apply Aleksandr's package
+then.
 
-Typoe: Starting
-
-> +# regulatory.db file.
-> +# make sure wireless-regdb is rebuilt before linux
-> +# and fixup kernel to include the signing key
-
-I think those last two lines are not very useful. Especially the "make
-sure wireless-regdb is rebuilt before linux", since this issue is not
-handled here.
-
-> +
-> +define WIRELESS_REGDB_LINUX_FIXUP
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211_CERTIFICATION_ONUS)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS)
-> +	$(call KCONFIG_SET_OPT,CONFIG_CFG80211_EXTRA_REGDB_KEYDIR,"$(WIRELESS_REGDB_DIR)")
-
-It's not really great to point to $(WIRELESS_REGDB_DIR) here. Can we
-instead install the keys somewhere in $(HOST_DIR)/share/wireless-regdb/
-for example, and point to that ?
-
-Thanks!
+Thanks for the feedback.
 
 Thomas
 -- 
