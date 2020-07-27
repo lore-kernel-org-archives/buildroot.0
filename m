@@ -1,195 +1,83 @@
-From: Marc Chalain <marc.chalain@gmail.com>
-Date: Mon, 27 Jul 2020 18:36:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/alac: new package
-In-Reply-To: <5f13e688-783b-40ef-fe4d-e8483b135fa4@gmail.com>
-References: <20200727152720.8427-1-marc.chalain@gmail.com>
- <5f13e688-783b-40ef-fe4d-e8483b135fa4@gmail.com>
-Message-ID: <CAAj6r7pq7-oEbgVzNwDWDb74NFYWTxD=hYB-WnRmcrz_iiQBkQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jul 2020 18:49:18 +0200
+Subject: [Buildroot] [PATCH] Makefile: properly account for custom tags
+ in BR2_VERSION_FULL
+In-Reply-To: <20200720115958.2564971-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 20 Jul 2020 13:59:57 +0200")
+References: <20200720115958.2564971-1-thomas.petazzoni@bootlin.com>
+Message-ID: <877duovr75.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-No in fact, I didn't find this library. I just looked for the original
-library from Apple.
-This library is used by shairplay, but it is integrated inside the source
-files.
+ > BR2_VERSION_FULL is currently defined as follows:
+ >   BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
 
-Best regards,
-Marc
+ > This BR2_VERSION_FULL value then gets used as the "VERSION" variable
+ > in the /etc/os-release file.
 
-Le lun. 27 juil. 2020 ? 18:21, Romain Naour <romain.naour@gmail.com> a
-?crit :
+ > The logic of "setlocalversion" is that if it is exactly on a tag, it
+ > returns nothing.
 
-> Hello Marc,
->
-> Le 27/07/2020 ? 17:27, Marc Chalain a ?crit :
-> > From: Marc Chalain <marc.chalain@smile.fr>
-> >
-> > The Apple Lossless Audio Codec (ALAC) is an audio codec developed by
-> Apple and supported on iPhone, iPad, most iPods, Mac and iTunes. ALAC is a
-> data compression method which reduces the size of audio files with no loss
-> of information. A decoded ALAC stream is bit-for-bit identical to the
-> original uncompressed audio file.
-> >
-> > https://macosforge.github.io/alac/
-> >
-> > A patch fix problem to link the convert utility with libalac.a
->
-> Did you try with the alac library provided by libaudiofile package ?
-> It's seems libaudiofile provide the same functionality.
->
-> Best regards,
-> Romain
->
-> >
-> > Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
-> > ---
-> >  package/Config.in                             |  1 +
-> >  ...rary-and-objects-to-link-all-symbols.patch | 26 ++++++++++++++
-> >  package/alac/Config.in                        | 16 +++++++++
-> >  package/alac/alac.hash                        |  2 ++
-> >  package/alac/alac.mk                          | 35 +++++++++++++++++++
-> >  5 files changed, 80 insertions(+)
-> >  create mode 100644
-> package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-> >  create mode 100644 package/alac/Config.in
-> >  create mode 100644 package/alac/alac.hash
-> >  create mode 100644 package/alac/alac.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 5c30d27b7a..4a03a67a0d 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1239,6 +1239,7 @@ endmenu
-> >  menu "Libraries"
-> >
-> >  menu "Audio/Sound"
-> > +     source "package/alac/Config.in"
-> >       source "package/alsa-lib/Config.in"
-> >       source "package/alure/Config.in"
-> >       source "package/aubio/Config.in"
-> > diff --git
-> a/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-> b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-> > new file mode 100644
-> > index 0000000000..580a18d3a6
-> > --- /dev/null
-> > +++
-> b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-> > @@ -0,0 +1,26 @@
-> > +convert-utility: reorder library and objects to link all symbols
-> > +
-> > +Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
-> > +
-> > +--- a/convert-utility/makefile
-> > ++++ b/convert-utility/makefile
-> > +@@ -1,7 +1,8 @@
-> > + # alacconvert make
-> > +
-> > + CFLAGS = -g -O3 -c
-> > +-LFLAGS = -Wall -L$(CODECDIR) -lalac
-> > ++LFLAGS = -Wall -L$(CODECDIR)
-> > ++LIBS = -lalac
-> > + CC = g++
-> > +
-> > + SRCDIR = .
-> > +@@ -30,7 +31,7 @@ CAFFileALAC.o
-> > +
-> > + alacconvert:        $(OBJS)
-> > +     (cd $(CODECDIR); $(MAKE))
-> > +-    $(CC) $(LFLAGS) $(OBJS) -o alacconvert
-> > ++    $(CC) $(LFLAGS) $(OBJS) $(LIBS) -o alacconvert
-> > +
-> > + main.o : main.cpp
-> > +     $(CC) -I $(INCLUDES) $(CFLAGS) main.cpp
-> > +
-> > diff --git a/package/alac/Config.in b/package/alac/Config.in
-> > new file mode 100644
-> > index 0000000000..2f1d4a1077
-> > --- /dev/null
-> > +++ b/package/alac/Config.in
-> > @@ -0,0 +1,16 @@
-> > +config BR2_PACKAGE_ALAC
-> > +     bool "Apple Lossless Audio Codec"
-> > +     help
-> > +       Alac is an audio codec developed by Apple and
-> > +       supported on iPhone, iPad, most iPods, Mac and
-> > +       iTunes. ALAC is a data compression method which
-> > +       reduces the size of audio files with no loss
-> > +       of information. A decoded ALAC stream is bit-for-bit
-> > +       identical to the original uncompressed audio file
-> > +
-> > +       https://macosforge.github.io/alac/
-> > +
-> > +
-> > +config BR2_PACKAGE_ALAC_CONVERT
-> > +     bool "binary converter"
-> > +     depends on BR2_PACKAGE_ALAC
-> > diff --git a/package/alac/alac.hash b/package/alac/alac.hash
-> > new file mode 100644
-> > index 0000000000..9477916558
-> > --- /dev/null
-> > +++ b/package/alac/alac.hash
-> > @@ -0,0 +1,2 @@
-> > +sha256
-> 98635ece42fb1c3fceb75eaa4b5164d866e09f0195b3e7ec4085f1123c5e272f
-> alac-c38887c5c5e64a4b31108733bd79ca9b2496d987.tar.gz
-> > +sha256
-> a337314dd82d26791112c1e5a85725b2eb92f5b7e6f9102fa4eaa2903f77518f  LICENSE
-> > diff --git a/package/alac/alac.mk b/package/alac/alac.mk
-> > new file mode 100644
-> > index 0000000000..64227eaa2e
-> > --- /dev/null
-> > +++ b/package/alac/alac.mk
-> > @@ -0,0 +1,35 @@
-> >
-> +################################################################################
-> > +#
-> > +# alac
-> > +#
-> >
-> +################################################################################
-> > +
-> > +ALAC_VERSION = c38887c5c5e64a4b31108733bd79ca9b2496d987
-> > +ALAC_SITE =$(call github,macosforge,alac,$(ALAC_VERSION))
-> > +ALAC_LICENSE = APACHE
-> > +ALAC_LICENSE_FILES = LICENSE
-> > +ALAC_INSTALL_STAGING = YES
-> > +
-> > +ALAC_MAKE_OPTS =  CC=$(TARGET_CXX)
-> > +
-> > +ifeq ($(BR2_PACKAGE_ALAC_CONVERT),y)
-> > +define ALACCONVERT_BUILD_CMDS
-> > +     $(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/convert-utility
-> > +endef
-> > +define ALAC_INSTALL_TARGET_CMDS
-> > +     $(INSTALL) -D -m 755 $(@D)/convert-utility/alacconvert
-> $(TARGET_DIR)/usr/bin
-> > +endef
-> > +endif
-> > +
-> > +define ALAC_BUILD_CMDS
-> > +     $(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/codec
-> > +     $(ALACCONVERT_BUILD_CMDS)
-> > +endef
-> > +
-> > +define ALAC_INSTALL_STAGING_CMDS
-> > +     $(INSTALL) -D -m 644 $(@D)/codec/libalac.a
-> $(STAGING_DIR)/usr/lib/libalac.a
-> > +     $(INSTALL) -D -m 644 $(@D)/codec/ALACDecoder.h
-> $(STAGING_DIR)/usr/include/ALACDecoder.h
-> > +     $(INSTALL) -D -m 644 $(@D)/codec/ALACEncoder.h
-> $(STAGING_DIR)/usr/include/ALACEncoder.h
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200727/51d7606c/attachment.html>
+ > If it is on a tag + a number of commits, then it returns only
+ > -XYZ-gABC where XYZ is the number of commits since the last tag, and
+ > ABC the git commit hash (these are extracted from git describe).
+
+ > This output then gets concatenated to BR2_VERSION which gives
+ > something like 2020.05 or 2020.05-00123-g5bc6a.
+
+ > The issue is that when you're on a tag specific to your project, which
+ > is not a Buildroot YYYY.MM tag, then the output of setlocalversion is
+ > empty, and all you get as VERSION in os-release is $(BR2_VERSION)
+ > which is not really nice. Worse, if you have another non-official
+ > Buildroot tag between the last official Buildroot tag/version and
+ > where you are, you will get $(BR2_VERSION)-XYZ-gABC, but XYZ will not
+ > correspond to the number of commits since BR2_VERSION, but since the
+ > last tag that "git describe" as found, which is clearly incorrect.
+
+ > Here is an example: you're on master, "make print-version" (which
+ > displays BR2_VERSION_FULL) will show:
+
+ > $ make print-version
+ > 2020.08-git-00758-gc351877a6e
+
+ > So far so good. Now, you create a tag say 5 commits "before" master,
+ > and show BR2_VERSION_FULL again:
+
+ > $ git tag -a -m "dummy tag" dummy-tag HEAD~5
+ > $ make print-version
+ > 2020.08-git-00005-gc351877a6e
+
+ > This makes you believe you are 5 commits above 2020.08, which is
+ > absolutely wrong.
+
+ > So this commit simplifies the logic of setlocalversion to simply
+ > return what "git describe" provides, and not prepend $(BR2_VERSION) in
+ > the main Makefile. Since official Buildroot tags match official
+ > Buildroot version names, you get the same output when you're on an
+ > official Buildroot tag, or some commits above a Buildroot tag. An in
+ > other cases, you get a sensible output. The logic is also adjusted for
+ > the Mercurial case.
+
+ > In the above situation, with this commit applied, we get:
+
+ > $ make print-version
+ > dummy-tag-6-g6258cdddeb
+
+ > (6 commits instead of 5 as we have this very commit applied, but at
+ > least it's 6 commits on top of the dummy-tag)
+
+ > Finally, if you're not using a version control system, setlocalversion
+ > was already returning nothing, so in this case, the Makefile simply
+ > sets BR2_VERSION_FULL to BR2_VERSION to preserve this behavior.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
