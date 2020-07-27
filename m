@@ -1,67 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 08:52:24 +0200
-Subject: [Buildroot] [PATCH 1/2] package/librtas: bump to version 2.0.2
-In-Reply-To: <20200726093609.1233333-1-fontaine.fabrice@gmail.com>
-References: <20200726093609.1233333-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200727065224.GN19818@scaer>
+Date: Mon, 27 Jul 2020 08:54:26 +0200
+Subject: [Buildroot] [git commit] package/libwebsockets: add support for
+ extensions
+Message-ID: <20200727064957.EEA9686E1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9b0d79ea5e10f485fcd38c4224257ccda3907806
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-26 11:36 +0200, Fabrice Fontaine spake thusly:
-> Update indentation in hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+libwebsockets currently depends on zlib, however, as of commit
+13ba5bbc633ea962d46d9f2bfb2e87c9f7e83b62 (from 2013!) zlib is not actually a
+requirement if extensions are not enabled.
 
-Both applied to master, thanks.
+By default, libwebsockets sets the "LWS_WITHOUT_EXTENSIONS" option to "ON,"
+which removes the need for zlib as a dependency. Because of this default
+setting, there are two options:
 
-Regards,
-Yann E. MORIN.
+1) Remove the dependency on zlib, create a new option under Config.in to allow
+a user to enable extensions, add zlib as a dependency, and set
+LWS_WITHOUT_EXTENSIONS to "OFF" if that option is selected.
 
-> ---
->  package/librtas/librtas.hash | 4 ++--
->  package/librtas/librtas.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/librtas/librtas.hash b/package/librtas/librtas.hash
-> index 086d0d7cbc..de0c0a476c 100644
-> --- a/package/librtas/librtas.hash
-> +++ b/package/librtas/librtas.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 a79fd9cdb2f03e7401027fb80a07f14e29b86cc2d363126d527b211fea85d025 librtas-2.0.1.tar.gz
-> -sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c COPYING.LESSER
-> +sha256  b47b2a6f140347ac265e2c66ddf68293f6cdcc7c0c9a78c6e21ff52846465415  librtas-2.0.2.tar.gz
-> +sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  COPYING.LESSER
-> diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
-> index 48c8d0143f..c92a9e2fa4 100644
-> --- a/package/librtas/librtas.mk
-> +++ b/package/librtas/librtas.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBRTAS_VERSION = 2.0.1
-> +LIBRTAS_VERSION = 2.0.2
->  LIBRTAS_SITE = $(call github,ibm-power-utilities,librtas,v$(LIBRTAS_VERSION))
->  LIBRTAS_LICENSE = LGPL-2.1+
->  LIBRTAS_LICENSE_FILES = COPYING.LESSER
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+2) Keep the dependency and explicitly set LWS_WITHOUT_EXTENSIONS to "OFF."
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Below are the size differences in bytes:
+  - Without zlib and extensions: 44636
+  - With zlib and without extensions: 44720
+  - With zlib and with extensions: 44732
+
+Considering the size difference between all 3 is an incredible 96 bytes, and
+the difference between what we have now, and enabling extensions is an
+insurmountable 12 bytes, it is safe to keep the dependency on zlib and always
+enable extensions.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libwebsockets/libwebsockets.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 3af34a61ab..6716d52796 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -13,7 +13,8 @@ LIBWEBSOCKETS_INSTALL_STAGING = YES
+ LIBWEBSOCKETS_CONF_OPTS = \
+ 	-DLWS_WITHOUT_TESTAPPS=ON \
+ 	-DLWS_IPV6=ON \
+-	-DLWS_UNIX_SOCK=ON
++	-DLWS_UNIX_SOCK=ON \
++	-DLWS_WITHOUT_EXTENSIONS=OFF
+ 
+ # If LWS_MAX_SMP=1, then there is no code related to pthreads compiled
+ # in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
