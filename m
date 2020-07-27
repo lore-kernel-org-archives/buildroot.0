@@ -1,93 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 08:32:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: fix build error
-In-Reply-To: <20200726133023.1943702-1-bernd.kuhls@t-online.de>
-References: <20200726133023.1943702-1-bernd.kuhls@t-online.de>
-Message-ID: <20200727063227.GK19818@scaer>
+From: Tudor Holton <tudor@tudorholton.com>
+Date: Mon, 27 Jul 2020 16:09:32 +1000
+Subject: [Buildroot] pc defconfig image does not boot
+In-Reply-To: <CACef8rpYbbO6p7srvegq0XqwEcVk2LHAiTRsMmLjcpi8CHn8xA@mail.gmail.com>
+References: <CACef8rpYbbO6p7srvegq0XqwEcVk2LHAiTRsMmLjcpi8CHn8xA@mail.gmail.com>
+Message-ID: <084125223ad4566f3570607499ee439e@tudorholton.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hi David, 
 
-On 2020-07-26 15:30 +0200, Bernd Kuhls spake thusly:
-> Fixes
-> http://autobuild.buildroot.net/results/5db/5dbce5860f57c1457962aa295857689f49a60bc6/
+Did you get any errors in your build?  Frequently I find the most common
+reason for this is that the contents of the packages doesn't fit into
+the image size.  It defaults to 120M which is too small for some larger
+packages. 
+
+You can try increasing your image size in Filesystem Images -> Exact
+Size. 
+
+Otherwise, check your build logs and see if there's any complaints when
+building the image, and always do a complete make clean before your make
+in case it's cruft left over from the previous build. 
+
+If you come across build issues after a make clean, drop them and your
+config back to the mailing list and we can have a look. 
+
+Cheers,
+Tudor. 
+
+On 2020-07-27 15:21, David Park wrote:
+
+> Hi, 
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-It would have been nice to have an explanation of what's going on. I've
-provided it in the commit log, and propagated that knowledge to the
-upstream issue.
-
-Applied to master with that info added, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0001-sofia-sip-fix-s2tcase.c.patch        | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
+> I created a PC disk.img from the pc_x86_64_efi_defconfig config file following exactly the instructions outlined in board/pc/readme.txt. 
 > 
-> diff --git a/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch b/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
-> new file mode 100644
-> index 0000000000..c4b9270984
-> --- /dev/null
-> +++ b/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
-> @@ -0,0 +1,38 @@
-> +From d66a2e55daf223737c07c59b1be45a2d91212ef6 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 26 Jul 2020 13:47:16 +0200
-> +Subject: [PATCH] [sofia-sip] fix s2tcase.c
-> +
-> +Fixes build error with libcheck:
-> +https://github.com/signalwire/freeswitch/issues/681
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + libs/sofia-sip/s2check/s2tcase.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/libs/sofia-sip/s2check/s2tcase.c b/libs/sofia-sip/s2check/s2tcase.c
-> +index 382aaa3ad7..d67694c2ce 100644
-> +--- a/libs/sofia-sip/s2check/s2tcase.c
-> ++++ b/libs/sofia-sip/s2check/s2tcase.c
-> +@@ -57,7 +57,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
-> +       if (strcmp(*patterns, "*")) {
-> + 	printf("%s: selected\n", name);
-> +       }
-> +-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
-> ++      _tcase_add_test(tc, tf, name, signo, start, end);
-> +       return;
-> +     }
-> +   }
-> +@@ -67,7 +67,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
-> +       if (strcmp(*patterns, "*")) {
-> + 	printf("%s: selected\n", name);
-> +       }
-> +-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
-> ++      _tcase_add_test(tc, tf, name, signo, start, end);
-> +       return;
-> +     }
-> +   }
-> +-- 
-> +2.27.0
-> +
+> make pc_x86_64_efi_defconfig 
+> 
+> Running this disk.img in qemu boots fine with no issues, but when I write the image to a pendrive using the listed commands: 
+> 
+> dd if=output/images/disk.img of=/dev/sdc; sync 
+> 
+> And then insert it into my PC, it doesn't boot all the way. I only see the GRUB menu with the Buildroot image listed, but when GRUB tries to run this image, I only see "Booting Buildroot", and then nothing else. 
+> 
+> Am I missing some steps here that aren't in the readme? 
+> 
 > -- 
-> 2.27.0
-> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200727/688cde7c/attachment.html>
