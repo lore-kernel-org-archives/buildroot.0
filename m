@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 17:01:26 +0200
-Subject: [Buildroot] [PATCHv3] package/bat: new package
-In-Reply-To: <20200727140922.2614959-1-romain.naour@gmail.com>
-References: <20200727140922.2614959-1-romain.naour@gmail.com>
-Message-ID: <20200727170126.51d45e8b@windsurf.home>
+Date: Mon, 27 Jul 2020 17:06:00 +0200
+Subject: [Buildroot] [PATCH] package/lz4: add option to install library
+ only (without lz4 binary)
+In-Reply-To: <20200523173425.15367-1-edo.rus@gmail.com>
+References: <20200523173425.15367-1-edo.rus@gmail.com>
+Message-ID: <20200727170600.055f2e5e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Jul 2020 16:09:22 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+On Sat, 23 May 2020 20:34:25 +0300
+Ed Spiridonov <edo.rus@gmail.com> wrote:
 
-> +	# less needs ncurses
-> +	select BR2_PACKAGE_NCURSES
+> Often lz4 is used as a library, and not as a standalone program.
+> Excluding lz4 binary will save some space in this case.
+> 
+> Signed-off-by: Ed Spiridonov <edo.rus@gmail.com>
+> ---
+>  package/Config.in     |  2 +-
+>  package/lz4/Config.in |  9 +++++++++
+>  package/lz4/lz4.mk    | 14 ++++++++++++++
+>  3 files changed, 24 insertions(+), 1 deletion(-)
 
-less already selects ncurses, so why do we need ncurses here ?
+Thanks, I have applied to master, after doing a number of changes. See:
 
-> +BAT_CARGO_OPTS = \
-> +	 --bins \
-> +	 --$(BAT_CARGO_MODE) \
-> +	 --target=$(RUSTC_TARGET_NAME) \
-> +	 --manifest-path=$(@D)/Cargo.toml
-> +
-> +define BAT_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
-> +	CC_$(subst -,_,$(RUSTC_TARGET_NAME))=$(TARGET_CC) \
+  https://git.buildroot.org/buildroot/commit/?id=2acb27e298c54935f890111fc5897a11350b913b
 
-I am still not happy with this. There is no reason why this should be
-passed on a per-package basis, it should be handled by "cargo" and all
-the cross-compilation configuration it has.
+I have also complained to upstream lz4 about the fact that their
+program is linked statically against their library, which doubles the
+storage consumption:
+
+  https://github.com/lz4/lz4/issues/888
+
+Best regards,
 
 Thomas
 -- 
