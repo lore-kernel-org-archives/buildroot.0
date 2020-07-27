@@ -1,51 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 13:26:24 +0200
-Subject: [Buildroot] [PATCH 0/2] package/libnss and libnspr version bump
-In-Reply-To: <20200726005333.340972-1-giulio.benetti@benettiengineering.com>
-References: <20200726005333.340972-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200727112624.GT19818@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 13:30:59 +0200
+Subject: [Buildroot] [git commit] package/rust: build and install cargo
+Message-ID: <20200727112613.1932F813E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=914b99cf030a55b2dfeada832a65ee616bfbae6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-07-26 02:53 +0200, Giulio Benetti spake thusly:
-> this patchset bump NSPR and NSS version. NSS 3.55 requires NSPR 4.27 so
-> these 2 patches must be applied subsequently.
-> 
-> I've already built with utils/test-pkg -p libnss and the main 6 builds
-> were OK.
-> 
-> Giulio Benetti (2):
->   package/libnspr: bump version to 4.27
->   package/libnss: bump version to 3.55
+Cargo source code is not provided anymore as a separate tarball but is
+now built along with the Rust compiler. So update rust host variant to
+build Cargo.
 
-Both applied to master, thanks.
+For now, all this will be overwritten again by the host-cargo package,
+but this package will be removed in later commits.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Tested-by: Sam Voss <sam.voss@rockwellcollins.com>
+[Arnout: merge all install commands in HOST_RUST_INSTALL_CMDS]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: David Pierret <david.pierret@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rust/rust.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
->  package/libnspr/libnspr.hash | 4 ++--
->  package/libnspr/libnspr.mk   | 2 +-
->  package/libnss/libnss.hash   | 4 ++--
->  package/libnss/libnss.mk     | 2 +-
->  4 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 25153966f2..6bee04b3b9 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -54,11 +54,14 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'python = "$(HOST_DIR)/bin/python$(HOST_RUST_PYTHON_VERSION)"'; \
+ 		echo 'submodules = false'; \
+ 		echo 'vendor = true'; \
++		echo 'extended = true'; \
++		echo 'tools = ["cargo"]'; \
+ 		echo 'compiler-docs = false'; \
+ 		echo 'docs = false'; \
+ 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
+ 		echo '[install]'; \
+ 		echo 'prefix = "$(HOST_DIR)"'; \
++		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
+ 		echo '[rust]'; \
+ 		echo 'channel = "stable"'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
