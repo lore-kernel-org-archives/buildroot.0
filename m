@@ -1,114 +1,108 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon, 27 Jul 2020 11:08:48 +0300
-Subject: [Buildroot] [PATCH v2 2/6] boot/edk2: new package
-In-Reply-To: <20200726100541.7710-3-hi@senzilla.io>
-References: <20200726100541.7710-3-hi@senzilla.io>
-Message-ID: <20200727080848.GA1615@curiosity>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jul 2020 10:11:43 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/mbpfan: new package
+In-Reply-To: <20200518034858.115510-1-christian@paral.in> (Christian Stewart's
+ message of "Sun, 17 May 2020 20:48:58 -0700")
+References: <20200518034858.115510-1-christian@paral.in>
+Message-ID: <875za9wf5s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-> EDK2 is a modern, feature-rich, cross-platform firmware development
-> environment for the UEFI and PI specifications.
-> 
-> The initial version of this bootloader package makes it possible to
-> build firmware for the following five configurations:
-> 
->  * QEMU x86-64 pc machine
->  * QEMU aarch64 virt machine, booting directly from flash
->  * QEMU aarch64 virt machine, booting via kernel protocol
->  * QEMU aarch64 sbsa-ref machine
->  * ARM FVP vexpress machine
-> 
-> When building for QEMU sbsa-ref and ARM FVP there is a dependency
-> on package/edk2-platforms for additional platform description files.
-> 
-> Signed-off-by: Dick Olsson <hi@senzilla.io>
+ > Adding mbpfan, a fan control daemon for MacBook laptops.
+ > Signed-off-by: Christian Stewart <christian@paral.in>
+ > ---
+ >  package/Config.in        |  1 +
+ >  package/mbpfan/Config.in |  9 +++++++++
+ >  package/mbpfan/mbpfan.mk | 38 ++++++++++++++++++++++++++++++++++++++
 
-...
+You forgot to add a .hash file and an entry in DEVELOPERS.
 
+ >  3 files changed, 48 insertions(+)
+ >  create mode 100644 package/mbpfan/Config.in
+ >  create mode 100644 package/mbpfan/mbpfan.mk
 
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE
->  	bool "ARM Trusted Firmware (ATF)"
->  	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
-> -		   BR2_TARGET_UBOOT
-> +           BR2_TARGET_UBOOT
+ > diff --git a/package/Config.in b/package/Config.in
+ > index c245abbc42..dd5951228b 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -488,6 +488,7 @@ endmenu
+ >  	source "package/luksmeta/Config.in"
+ >  	source "package/lvm2/Config.in"
+ >  	source "package/mali-t76x/Config.in"
+ > +	source "package/mbpfan/Config.in"
+ >  	source "package/mdadm/Config.in"
+ >  	source "package/mdevd/Config.in"
+ >  	source "package/memtest86/Config.in"
+ > diff --git a/package/mbpfan/Config.in b/package/mbpfan/Config.in
+ > new file mode 100644
+ > index 0000000000..231faa2b15
+ > --- /dev/null
+ > +++ b/package/mbpfan/Config.in
+ > @@ -0,0 +1,9 @@
+ > +config BR2_PACKAGE_MBPFAN
+ > +	bool "mbpfan"
+ > +	depends on BR2_USE_MMU
+ > +	help
+ > +	  Mbpfan is a daemon for MacBook laptops which monitors the
+ > +	  CPU temperature with the coretemp module, and sets the fan
+ > +	  speeds with the applesmc module.
+ > +
+ > +	  https://github.com/linux-on-mac/mbpfan
+ > diff --git a/package/mbpfan/mbpfan.mk b/package/mbpfan/mbpfan.mk
+ > new file mode 100644
+ > index 0000000000..e3f3a23377
+ > --- /dev/null
+ > +++ b/package/mbpfan/mbpfan.mk
+ > @@ -0,0 +1,38 @@
+ > +################################################################################
+ > +#
+ > +# mbpfan
+ > +#
+ > +################################################################################
+ > +
+ > +MBPFAN_VERSION = 2.2.1
+ > +MBPFAN_SITE = $(call github,linux-on-mac,mbpfan,v$(MBPFAN_VERSION))
+ > +MBPFAN_LICENSE = GPL-3.0+
+ > +MBPFAN_LICENSE_FILES = COPYING
+ > +
+ > +define MBPFAN_BUILD_CMDS
+ > +	$(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS)" \
+ > +		LDFLAGS="$(TARGET_LDFLAGS)" \
+ > +		$(MAKE) CC="$(TARGET_CC)" -C $(@D)
+ > +endef
+ > +
+ > +define MBPFAN_INSTALL_TARGET_CMDS
+ > +	$(INSTALL) -D -m 0644 $(@D)/mbpfan.conf \
+ > +		$(TARGET_DIR)/etc/mbpfan.conf
+ > +	$(INSTALL) -m 0755 $(@D)/bin/mbpfan $(TARGET_DIR)/usr/sbin/mbpfan
+ > +endef
+ > +
+ > +define MOTION_INSTALL_INIT_SYSV
+ > +	$(INSTALL) -D -m 0755 $(@D)/mbpfan.init.debian \
+ > +		$(TARGET_DIR)/etc/init.d/S99mbpfan
 
-Just a nit: this spurious whitespace change should go to
-the 5th patch in the series.
+mbpfan.init.debian uses a bunch of Debian specific scripts, so that is
+no good.
 
->  	help
->  	  Enable this option if you want to build the ATF for your ARM
->  	  based embedded device.
+ > +endef
+ > +
+ > +define MBPFAN_INSTALL_INIT_SYSTEMD
+ > +	$(INSTALL) -D -m 644 $(@D)/mbpfan.service \
+ > +		$(TARGET_DIR)/usr/lib/systemd/system/mbpfan.service
+ > +
+ > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ > +	ln -fs ../../../../usr/lib/systemd/system/mbpfan.service \
+ > +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mbpfan.service
 
-...
+This is no longer needed, as they are created at image creation time
+(under sysinit.target as that it what the service file states).
 
-> diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
-> new file mode 100644
-> index 0000000000..e889070d0c
-> --- /dev/null
-> +++ b/boot/edk2/edk2.mk
+Committed with these fixes, thanks.
 
-...
-
-> +# Platform configuration.
-> +#
-> +# We set the variable EDK_EL2_NAME for platforms that may load EDK2 as part of
-> +# the EL2 processor context, like ARM Trusted Firmware (ATF). This way, other
-> +# bootloaders know what binary to include in their firmware package.
-> +#
-> +# However, the QEMU SBSA platform is a bit unique as there are different
-> +# implicit assumptions on how this firmware should be packaged and run.
-> +# The EDK2 build system itself will package the ATF binaries.
-> +
-> +ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_X64),y)
-> +EDK2_DEPENDENCIES += host-nasm
-> +EDK2_PACKAGE_NAME = OvmfPkg
-> +EDK2_PLATFORM_NAME = OvmfPkgX64
-> +EDK2_BUILD_DIR = OvmfX64
-> +
-> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU),y)
-> +EDK2_PACKAGE_NAME = ArmVirtPkg
-> +EDK2_PLATFORM_NAME = ArmVirtQemu
-> +EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
-> +
-> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL),y)
-> +EDK2_PACKAGE_NAME = ArmVirtPkg
-> +EDK2_PLATFORM_NAME = ArmVirtQemuKernel
-> +EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
-> +EDK2_EL2_NAME = QEMU_EFI
-> +
-> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64),y)
-> +EDK2_DEPENDENCIES += host-edk2-platforms
-> +EDK2_PACKAGE_NAME = Platform/ARM/VExpressPkg
-> +EDK2_PLATFORM_NAME = ArmVExpress-FVP-AArch64
-> +EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
-> +EDK2_EL2_NAME = FVP_AARCH64_EFI
-> +
-> +else ifeq ($(BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA),y)
-> +EDK2_DEPENDENCIES += host-edk2-platforms arm-trusted-firmware
-> +EDK2_PACKAGE_NAME = Platform/Qemu/SbsaQemu
-> +EDK2_PLATFORM_NAME = SbsaQemu
-> +EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
-> +EDK2_PRE_CONFIGURE_HOOKS += EDK2_OUTPUT_QEMU_SBSA
-> +endif
-> +
-> +# For QEMU SBSA we use EDK2_OUTPUT_BASE (which is already in the EDK2 path) to
-> +# build the package structure that EDK2 expects for this specific platform.
-> +define EDK2_OUTPUT_QEMU_SBSA
-> +	mkdir -p $(EDK2_OUTPUT_BASE)/Platform/Qemu/Sbsa
-> +	ln -srf $(BINARIES_DIR)/{bl1.bin,fip.bin} $(EDK2_OUTPUT_BASE)/Platform/Qemu/Sbsa/
-> +endef
-
-Am I correct assuming that bl1.bin and fip.bin are the ATF binaries
-for  qemu_sbsa platform config ?
-
-Regards,
-Sergey
+-- 
+Bye, Peter Korsgaard
