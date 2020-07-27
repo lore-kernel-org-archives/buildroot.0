@@ -1,42 +1,86 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Jul 2020 17:51:24 +0200
-Subject: [Buildroot] [PATCHv3 3/6] configs/rock_pi_n10_defconfig: remove
- BR2_TARGET_UBOOT_NEEDS_PYTHON
+Date: Mon, 27 Jul 2020 17:51:25 +0200
+Subject: [Buildroot] [PATCHv3 4/6] support/scripts: add check-dotconfig.py
 In-Reply-To: <20200727155127.2703286-1-romain.naour@gmail.com>
 References: <20200727155127.2703286-1-romain.naour@gmail.com>
-Message-ID: <20200727155127.2703286-3-romain.naour@gmail.com>
+Message-ID: <20200727155127.2703286-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_TARGET_UBOOT_NEEDS_PYTHON3 is already selected for
-this defconfig, BR2_TARGET_UBOOT_NEEDS_PYTHON and
-BR2_TARGET_UBOOT_NEEDS_PYTHON3 can't be selected at the
-same time.
+For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
+we need to check if the generated configuration file (.config)
+contains all symbols present in the defconfig file.
 
-Reported by check-dotconfig.py.
+If not there is an issue with the defconfig.
 
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/657885314
+This script will be used in .gitlab-ci.yml.
+
+Inspired by is_toolchain_usable() function from genrandconfig:
+https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/rock_pi_n10_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+v2: update with the improved patch suggested by Yann.
+    http://lists.busybox.net/pipermail/buildroot/2020-April/280679.html
+---
+ support/scripts/check-dotconfig.py | 44 ++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100755 support/scripts/check-dotconfig.py
 
-diff --git a/configs/rock_pi_n10_defconfig b/configs/rock_pi_n10_defconfig
-index bfaa489a20..c622839c89 100644
---- a/configs/rock_pi_n10_defconfig
-+++ b/configs/rock_pi_n10_defconfig
-@@ -23,7 +23,6 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="cf2747360fdd1eb0d51dd01a984c7c62c7f714fe"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n10-rk3399pro"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
+new file mode 100755
+index 0000000000..81c83a8481
+--- /dev/null
++++ b/support/scripts/check-dotconfig.py
+@@ -0,0 +1,44 @@
++#!/usr/bin/env python3
++
++# This scripts check that all lines present in the defconfig are
++# still present in the .config
++
++import sys
++
++
++def main():
++    if not (len(sys.argv) == 3):
++        print("Error: incorrect number of arguments")
++        print("""Usage: check-dotconfig <configfile> <defconfig>""")
++        sys.exit(1)
++
++    configfile = sys.argv[1]
++    defconfig = sys.argv[2]
++
++    # strip() to get rid of trailing \n
++    with open(configfile) as configf:
++        configlines = [l.strip() for l in configf.readlines()]
++
++    defconfiglines = []
++    with open(defconfig) as defconfigf:
++        for line in defconfigf.readlines():
++            # strip() to get rid of trailing \n
++            line = line.strip()
++            if line.startswith("BR2_"):
++                defconfiglines.append(line)
++            elif line.startswith('# BR2_') and line.endswith(' is not set'):
++                defconfiglines.append(line)
++
++    # Check that all the defconfig lines are still present
++    missing = [defconfigline.strip() for defconfigline in defconfiglines
++               if defconfigline not in configlines]
++
++    if len(missing):
++        print("WARN: defconfig {} can't be used:".format(defconfig))
++        for m in missing:
++            print("      Missing: {}".format(m))
++    sys.exit(1 if len(missing) else 0)
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.25.4
