@@ -1,29 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 15:34:54 +0200
-Subject: [Buildroot] [PATCH 3/3] package/python-rpi-ws281x: bump to
- version 4.2.4
-In-Reply-To: <20200610233456.374430-3-grzegorz@blach.pl>
-References: <20200610233456.374430-1-grzegorz@blach.pl>
- <20200610233456.374430-3-grzegorz@blach.pl>
-Message-ID: <20200727153454.12be66c3@windsurf.home>
+Date: Mon, 27 Jul 2020 16:00:38 +0200
+Subject: [Buildroot] [PATCH 01/11] lua: add 5.4.0 version
+In-Reply-To: <20200702202230.1531929-2-francois.perrad@gadz.org>
+References: <20200702202230.1531929-1-francois.perrad@gadz.org>
+ <20200702202230.1531929-2-francois.perrad@gadz.org>
+Message-ID: <20200727160038.6fcf446a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Jun 2020 01:34:52 +0200
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+Hello Fran?ois,
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  .../0001-Fix-cross-compilation.patch          | 83 -------------------
->  .../python-rpi-ws281x/python-rpi-ws281x.hash  |  8 +-
->  .../python-rpi-ws281x/python-rpi-ws281x.mk    |  4 +-
->  3 files changed, 6 insertions(+), 89 deletions(-)
->  delete mode 100644 package/python-rpi-ws281x/0001-Fix-cross-compilation.patch
+Most issues are small details, except the last one, which really needs
+a reply from you.
 
-Applied to master, thanks.
+On Thu,  2 Jul 2020 22:22:20 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
+
+> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+> index ce75af6b0..0b6d2c1dc 100644
+> --- a/package/lua/lua.mk
+> +++ b/package/lua/lua.mk
+> @@ -4,15 +4,19 @@
+>  #
+>  ################################################################################
+>  
+> +ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+> +LUA_VERSION = 5.4.0
+> +else
+>  ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+
+else ifeq
+
+on one line...
+
+>  LUA_VERSION = 5.3.5
+>  else
+>  LUA_VERSION = 5.1.5
+>  endif
+> +endif
+
+... as it avoids the need for that additional endif.
+
+>  LUA_SITE = http://www.lua.org/ftp
+>  LUA_INSTALL_STAGING = YES
+>  LUA_LICENSE = MIT
+> -ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+> +ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
+>  LUA_LICENSE_FILES = doc/readme.html
+>  else
+>  LUA_LICENSE_FILES = COPYRIGHT
+> @@ -22,6 +26,10 @@ LUA_PROVIDES = luainterpreter
+>  
+>  LUA_CFLAGS = -Wall -fPIC -DLUA_USE_POSIX
+>  
+> +ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+> +LUA_CFLAGS += -DLUA_COMPAT_5_3
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+
+This could be changed to:
+
+else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+
+> diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+> index 603c0851b..be85563ba 100644
+> --- a/package/pkg-luarocks.mk
+> +++ b/package/pkg-luarocks.mk
+> @@ -20,9 +20,9 @@
+>  LUAROCKS_RUN_CMD = $(HOST_DIR)/bin/luarocks
+>  LUAROCKS_CFLAGS = $(TARGET_CFLAGS) -fPIC
+>  HOST_LUAROCKS_CFLAGS = $(HOST_CFLAGS) -fPIC
+> -ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+> -LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
+> -HOST_LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
+
+I don't understand why this is being dropped. Could you clarify ?
+
+> +ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+> +LUAROCKS_CFLAGS += -DLUA_COMPAT_5_3
+> +HOST_LUAROCKS_CFLAGS += -DLUA_COMPAT_5_3
+>  endif
+
+Thanks!
 
 Thomas
 -- 
