@@ -1,135 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Jul 2020 15:26:13 +0200
-Subject: [Buildroot] [git commit] package/c-periphery: bump to v2.2.2
-Message-ID: <20200727132122.656F889064@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 15:26:30 +0200
+Subject: [Buildroot] [git commit] package/gcc: disable libsanitizer with gcc
+ 7.5 and glibc 2.31 toolchain
+Message-ID: <20200727132158.AAA4282B50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93362ed129cfe4619483f3e98cad36fe5ce34d93
+commit: https://git.buildroot.net/buildroot/commit/?id=3df30211200da12bb4d4efd84ab79e709751e77a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-c-periphery now supports building on older kernels before 4.8 as there
-are now checks for the new kernel cdev gpio interface.
+libsanitizer in gcc 7.x fails to build with glibc 2.31. Fixing it would
+require backporting an upstream commit:
 
-Also updated hash file to two space format.
+    https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=4abc46b51af5751d657764d0c44b8a4aeed06302
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+However, the backport is not trivial, as there are a lot of conflicts.
+
+Disable libsanitizer since the gcc 7.5 branch is now closed
+(unmaintained) and it's not a trivial merge.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...001-CMakeLists.txt-add-BUILD_TESTS-option.patch | 61 ----------------------
- package/c-periphery/Config.in                      |  4 --
- package/c-periphery/c-periphery.hash               |  4 +-
- package/c-periphery/c-periphery.mk                 |  2 +-
- 4 files changed, 3 insertions(+), 68 deletions(-)
+ package/gcc/gcc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch b/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
-deleted file mode 100644
-index f932ec6366..0000000000
---- a/package/c-periphery/0001-CMakeLists.txt-add-BUILD_TESTS-option.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 7b3f137af40f4355404c146af7d9764c961a2fc7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 7 Jun 2020 09:46:10 +0200
--Subject: [PATCH] CMakeLists.txt: add BUILD_TESTS option
--
--Add an option to enable or disable tests. This will allow the user to
--build c-periphery without threads and will avoid the following build
--failure:
--
--[ 68%] Building C object CMakeFiles/test_serial.dir/tests/test_serial.c.o
--/data/buildroot/buildroot-test/instance-0/output/build/c-periphery-2.2.1/tests/test_gpio_sysfs.c:13:10: fatal error: pthread.h: No such file or directory
-- #include <pthread.h>
--          ^~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/6bbc4de3f857dcb7ff5e6f9fa1441ba4e0af1338
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/vsergeev/c-periphery/pull/26]
-----
-- CMakeLists.txt | 20 ++++++++++++--------
-- 1 file changed, 12 insertions(+), 8 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f442bce..6565557 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,6 +1,8 @@
-- cmake_minimum_required(VERSION 2.6)
-- project(periphery C)
-- 
--+option(BUILD_TESTS "Build tests" ON)
--+
-- # Check for Linux kernel headers
-- include(CheckIncludeFiles)
-- CHECK_INCLUDE_FILES(linux/gpio.h HAVE_LINUX_HEADERS)
--@@ -44,11 +46,13 @@ install(TARGETS periphery DESTINATION ${CMAKE_INSTALL_LIBDIR})
-- install(FILES ${periphery_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
-- install(FILES ${CMAKE_BINARY_DIR}/libperiphery.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-- 
---# Declare tests targets
---foreach(TEST_SOURCE ${periphery_TESTS})
---    get_filename_component(TEST_PROGRAM ${TEST_SOURCE} NAME_WE)
---    add_executable(${TEST_PROGRAM} ${TEST_SOURCE})
---    target_link_libraries(${TEST_PROGRAM} periphery pthread)
---    set(TEST_PROGRAMS ${TEST_PROGRAMS} ${TEST_PROGRAM})
---endforeach()
---add_custom_target(tests DEPENDS periphery ${TEST_PROGRAMS})
--+if(BUILD_TESTS)
--+    # Declare tests targets
--+    foreach(TEST_SOURCE ${periphery_TESTS})
--+        get_filename_component(TEST_PROGRAM ${TEST_SOURCE} NAME_WE)
--+        add_executable(${TEST_PROGRAM} ${TEST_SOURCE})
--+        target_link_libraries(${TEST_PROGRAM} periphery pthread)
--+        set(TEST_PROGRAMS ${TEST_PROGRAMS} ${TEST_PROGRAM})
--+    endforeach()
--+    add_custom_target(tests DEPENDS periphery ${TEST_PROGRAMS})
--+endif()
---- 
--2.26.2
--
-diff --git a/package/c-periphery/Config.in b/package/c-periphery/Config.in
-index cf8675801e..0bfb4b1f11 100644
---- a/package/c-periphery/Config.in
-+++ b/package/c-periphery/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_C_PERIPHERY
- 	bool "c-periphery"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
- 	help
- 	  c-periphery is a set of C wrapper functions for GPIO, SPI,
- 	  I2C, MMIO, and Serial peripheral I/O interface access in
-@@ -15,6 +14,3 @@ config BR2_PACKAGE_C_PERIPHERY
- 	  integration with other projects, and is MIT licensed.
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index d8260bc87b..b834269adc 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -119,6 +119,16 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath
+ endif
  
- 	  https://github.com/vsergeev/c-periphery
--
--comment "c-periphery needs a toolchain w/ kernel headers >= 4.8"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
-index a1842612b9..26f9a73f81 100644
---- a/package/c-periphery/c-periphery.hash
-+++ b/package/c-periphery/c-periphery.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 7afa2a18e0bf0ccb09b832017c61a411a94cff648a9a57f9f9068bcf14a5d972  c-periphery-2.2.1.tar.gz
--sha256 7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
-+sha256  e1ad855dfe8595d0aff306a23eee1d4c4a140212d3cbdc7a6bef5e4d39dc70cc  c-periphery-2.2.2.tar.gz
-+sha256  7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
-diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
-index 3869fc1111..e602e76a94 100644
---- a/package/c-periphery/c-periphery.mk
-+++ b/package/c-periphery/c-periphery.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_PERIPHERY_VERSION = 2.2.1
-+C_PERIPHERY_VERSION = 2.2.2
- C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
- C_PERIPHERY_INSTALL_STAGING = YES
- C_PERIPHERY_LICENSE = MIT
++# Disable libsanitizer due to a build issue with gcc 7.5 and glibc 2.31.
++# It would require to backport the following upstream commit
++# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=4abc46b51af5751d657764d0c44b8a4aeed06302
++# but it conflict with gcc 7.5 libsanitizer code.
++# Disable libsanitizer since the gcc 7.5 branch is now closed
++# (unmaintained) and it's not a trivial merge.
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GLIBC)$(BR2_GCC_VERSION_7_X),yy)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
++endif
++
+ # libsanitizer requires wordexp, not in default uClibc config. Also
+ # doesn't build properly with musl.
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC)$(BR2_TOOLCHAIN_BUILDROOT_MUSL),y)
