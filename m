@@ -1,58 +1,109 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 27 Jul 2020 21:53:56 +0200
-Subject: [Buildroot] [PATCH v3 1/7] configs/guest_*: some new defconfig
-In-Reply-To: <87o8o1uw29.fsf@dell.be.48ers.dk>
-References: <20200621080000.180089-1-francois.perrad@gadz.org>
- <20200621080000.180089-2-francois.perrad@gadz.org>
- <87o8o1uw29.fsf@dell.be.48ers.dk>
-Message-ID: <CAB0FRssErmq8AO_yDOYjGFwjY9=OWOP_x4SDu0WOPwW5GbeOFg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Jul 2020 22:06:34 +0200
+Subject: [Buildroot] [PATCH 4/6] wireless-regdb: add option to rebuild
+In-Reply-To: <20200702103618.5147-5-dev.kurt@vandijck-laurijssen.be>
+References: <20200702103618.5147-1-dev.kurt@vandijck-laurijssen.be>
+ <20200702103618.5147-5-dev.kurt@vandijck-laurijssen.be>
+Message-ID: <20200727220634.04995ae4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 27 juil. 2020 ? 11:49, Peter Korsgaard <peter@korsgaard.com> a
-?crit :
+Hello Kurt,
 
-> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
->
->  > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->  > ---
->  >  DEVELOPERS                     |  1 +
->  >  configs/guest_arm_a7_defconfig | 16 ++++++++++++++++
->  >  configs/guest_arm_a9_defconfig | 18 ++++++++++++++++++
->  >  configs/guest_x86_64_defconfig | 15 +++++++++++++++
->
-> Like Christian, I am not really convinced these defconfigs add any real
-> value.
->
->
-The documentation is the 2nd patch is the most valuable part.
-Can we add board/guest/readme.txt without introducing some
-configs/guest_*_defconfig ?
+Thanks for this new iteration. See some comments below.
 
-Fran?ois
+On Thu,  2 Jul 2020 12:36:16 +0200
+Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
 
+> diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
+> index 17350a41d8..55347b5e8c 100644
+> --- a/package/wireless-regdb/Config.in
+> +++ b/package/wireless-regdb/Config.in
+> @@ -12,3 +12,18 @@ config BR2_PACKAGE_WIRELESS_REGDB
+>  	  application is needed.
+>  
+>  	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
+> +
+> +if BR2_PACKAGE_WIRELESS_REGDB
+> +
+> +config BR2_WIRELESS_REGDB_REBUILD
+> +	bool "rebuild wireless-regdb"
+> +	help
+> +	  Say no to use the pre-built wireless regdb.
+> +
+> +	  Say yes if you need to deploy a modified wireless-regdb.
+> +	  Deviations to the precompiled upstream wireless-regdb may be required
+> +	  e.g. if you plan to deploy your product outdoor in countries where
+> +	  outdoor and indoor regulations differ.
+> +	  Make sure to deploy your wireless-regdb public key if you use crda
+> +	  or compile them into the kernel.
 
-> You have decided to use glibc / 4.15 headers / systemd, which seems
-> pretty random to me.
->
-> If anything, the should build with the oldest kernel headers version we
-> support, so you can use the final docker image on older distributions
-> without getting the dreaded:
->
-> FATAL: kernel too old
->
-> From glibc.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200727/a1ecc0d6/attachment.html>
+Some of those lines are too long. Run "make check-package", it will
+report some issues.
+
+> +ifeq ($(BR2_WIRELESS_REGDB_REBUILD),y)
+> +
+> +define WIRELESS_REGDB_PATCH_PYTHON3
+> +	sed -i -e '1 s/python$$/python3/' $(@D)/*.py
+
+Use $(SED) instead of sed -i -e.
+
+> +WIRELESS_REGDB_DEPENDENCIES += host-python3-m2crypto
+> +define WIRELESS_REGDB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		REGDB_AUTHOR=buildroot
+> +endef
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_CRDA),y)
+>  define  WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
+>  	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
+>  		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+>  	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+>  		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+> +	$(INSTALL) -m 644 -D -T ~/.wireless-regdb-buildroot.key.pub.pem \
+> +		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/buildroot.key.pub.pem
+
+This line fails:
+
+/usr/bin/install: cannot stat '/home/thomas/.wireless-regdb-buildroot.key.pub.pem': No such file or directory
+
+Indeed, when I read the wireless-regdb Makefile, I don't see how a file
+named like this can be produced. In fact, I believe it is not great for
+the wireless-regdb Makefile to generate files into the user's $HOME
+directory. Is this public/private key pair typically re-generated at
+each Buildroot build ? If that is the case, then it should be stored in
+$(HOST_DIR)/ somewhere.
+
+If this public/private key pair should remain the same for a given
+system, across Buildroot rebuilds of the same configuration, then the
+public/private key pair should be generated separately by the user, and
+passed as argument.
+
+I think your PATCH 5/6 should be squashed into PATCH 4/6, because
+generating those keys into $HOME really isn't good.
+
+I have a couple of other questions/concerns. These don't need to be
+solved, it's more out of curiosity.
+
+ - You've changed python-m2crypto to use python3, and the
+   wireless-regdb scripts to also use python3. But crda, which is kind
+   of the companion package to wireless-regdb is using
+   python-pycryptodomex, which is by default installed for
+   host-python2. So it means that one has to build both host-python2
+   and host-python3 :-/
+
+ - I'm not really clear on the interaction between wireless-regdb and
+   crda. It's quite weird that crda selects wireless-regdb, but
+   wireless-regdb has some conditional on whether crda is enabled.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
