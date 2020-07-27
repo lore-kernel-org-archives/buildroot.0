@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 22:32:52 +0200
-Subject: [Buildroot] [PATCH 1/9 v2] package/efl: depend on LuaJIT
+Date: Mon, 27 Jul 2020 22:32:53 +0200
+Subject: [Buildroot] [PATCH 2/9 v2] package/minetest: depend on LuaJIT
 In-Reply-To: <cover.1595881971.git.yann.morin.1998@free.fr>
 References: <cover.1595881971.git.yann.morin.1998@free.fr>
-Message-ID: <f3134e71595ba33d2f9f82b9951a61e63f9e8727.1595881971.git.yann.morin.1998@free.fr>
+Message-ID: <4e387bc2105a423b7085653fd368b38f383dc17c.1595881971.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,51 +15,40 @@ From: James Hilliard <james.hilliard1@gmail.com>
 Luajit is a provider for luainterpreter. We can't select providers of
 virtual packages; we can only depend on them.
 
-Note also that it is not very clear whether the host and target variants
-of EFL need to be built with the same lua interpreter. Today, this is
-guaranteed as we inly use luajit in both cases. But there were issues
-with lua 5.1 in the past, so stick to only using luajit.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 [yann.morin.1998 at free.fr:
-  - depend on luajit, not "any" luainterpreter
-  - which keeps the host and target variants built with the same
-    interpreter
+  - a lua interpreter is needed, so don't drop the dependency
+  - make it a "depends on" rather than a "select"
 ]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/efl/Config.in | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/minetest/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index ff49161163..728032018b 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -3,17 +3,16 @@ config BR2_PACKAGE_EFL
- 	 # g++ issue with 4.4.5, tested with g++ 4.7.2
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
- 	depends on BR2_USE_WCHAR # use wchar_t
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	# https://phab.enlightenment.org/T2728
-+	depends on BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
- 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
--	# https://phab.enlightenment.org/T2728
--	select BR2_PACKAGE_LUAJIT # Lua support broken
- 	select BR2_PACKAGE_LZ4
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -306,5 +305,4 @@ comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wch
- 	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
- 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/minetest/Config.in b/package/minetest/Config.in
+index 085525534d..b8ee175d52 100644
+--- a/package/minetest/Config.in
++++ b/package/minetest/Config.in
+@@ -5,11 +5,10 @@ config BR2_PACKAGE_MINETEST
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_XORG7 # irrlicht
+ 	depends on BR2_PACKAGE_HAS_LIBGL # irrlicht
 -	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_IRRLICHT
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_ZLIB
+ 	# At least one option must be enabled
+@@ -59,7 +58,6 @@ comment "minetest needs a toolchain w/ C++, gcc >= 4.9, threads"
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "minetest needs X11 and an OpenGL provider"
+-	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on (BR2_INSTALL_LIBSTDCPP \
+ 		&& BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+ 		&& BR2_TOOLCHAIN_HAS_THREADS)
 -- 
 2.20.1
