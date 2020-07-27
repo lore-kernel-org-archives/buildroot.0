@@ -1,26 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jul 2020 09:21:57 +0200
-Subject: [Buildroot] [PATCH 2/2] package/tpm2-tools: bump version to
- 4.1.2
-In-Reply-To: <20200525214853.14277-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 25 May 2020 23:48:53 +0200")
-References: <20200525214853.14277-1-peter@korsgaard.com>
- <20200525214853.14277-2-peter@korsgaard.com>
-Message-ID: <87a6zlwhgq.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Jul 2020 09:20:54 +0200
+Subject: [Buildroot] [git commit] package/tpm2-abrmd: bump version to 2.3.2
+Message-ID: <20200727071753.C8C118078E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=56ff08cea09c191353f452a12ca71a6596cccbb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bugfix release with a single fix:
- > - Fix missing handle maps for ESY3 handle breaks. See #1994
+Fixes various initialization / systemd issues. From the changelog:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- Provide meaningful exit codes on initialization failures.
+- Prevent systemd from starting the daemon before udev changes ownership of
+  the TPM device node.
+- Prevent systemd from starting the daemon if there is no TPM device node.
+- Prevent systemd from restarting the daemon if it fails.
+- Add SELinux policy to allow daemon to resolve names.
+- Add SELinux policy boolean (disabled by default) to allow daemon to
+  connect to all unreserved ports.
 
-Committed, thanks.
+Also adjust .hash file white space to match new agreements.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tpm2-abrmd/tpm2-abrmd.hash | 4 ++--
+ package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
+index cff3266bc8..f69cd369bf 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.hash
++++ b/package/tpm2-abrmd/tpm2-abrmd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 63cb59be1fd21e6ae233c37a0aa4a59883a4885a7bfd2c7e69979c5048518d50  tpm2-abrmd-2.3.0.tar.gz
+-sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
++sha256  df02c18882116e19b56aa8c701687c0c0987dd334e6fc002b340cedf6e000d10  tpm2-abrmd-2.3.2.tar.gz
++sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+index e92fda252a..9d22219f67 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.mk
++++ b/package/tpm2-abrmd/tpm2-abrmd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TPM2_ABRMD_VERSION = 2.3.0
++TPM2_ABRMD_VERSION = 2.3.2
+ TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
+ TPM2_ABRMD_LICENSE = BSD-2-Clause
+ TPM2_ABRMD_LICENSE_FILES = LICENSE
