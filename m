@@ -1,73 +1,96 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 27 Jul 2020 15:12:12 -0600
-Subject: [Buildroot] [PATCH v3 9/9] package/luajit: depend on
- !BR2_PACKAGE_LUA
-In-Reply-To: <20200727203747.GN19818@scaer>
-References: <20200525004845.3019642-1-james.hilliard1@gmail.com>
- <20200525004845.3019642-9-james.hilliard1@gmail.com>
- <20200727203747.GN19818@scaer>
-Message-ID: <CADvTj4q-Ex4nsAj4TNOH5bihOwZ+3Lc8Ry_KabuH7+iueNu_+g@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 27 Jul 2020 23:41:35 +0200
+Subject: [Buildroot] [PATCHv3] package/bat: new package
+In-Reply-To: <a6e0c13c-00cf-77ef-b121-f7e08545c63b@gmail.com>
+References: <20200727140922.2614959-1-romain.naour@gmail.com>
+ <20200727170126.51d45e8b@windsurf.home>
+ <a6e0c13c-00cf-77ef-b121-f7e08545c63b@gmail.com>
+Message-ID: <1aef99d1-5bd3-7ab9-2597-d64f8937f7f7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 27, 2020 at 2:38 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2020-05-24 18:48 -0600, James Hilliard spake thusly:
-> > The luajit package is incomaptible with lua so luajit should depend on
-> > !BR2_PACKAGE_LUA
->
-> This is not needed. lua and luajit are two provider for the
-> luainterpreter package, so the infra already checks for the conditions
-> where two or more providers are enabled.
-Without this I am able to select lua and luajit at the same time which shouldn't
-be a valid config from my understanding.
->
-> So, I've dropped this patch in my respin:
->
->     http://lists.busybox.net/pipermail/buildroot/2020-July/288204.html
->
-> Regards,
-> Yann E. MORIN.
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v2 -> v3:
-> >   - always depend on lua/luaposix from packages instead of selecting
-> > Changes v1 -> v2:
-> >   - depend on !BR2_PACKAGE_LUA_5_3 instead of !BR2_PACKAGE_LUA for solarus
-> > ---
-> >  package/luajit/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-> > index 8cfa85684e..33a460772f 100644
-> > --- a/package/luajit/Config.in
-> > +++ b/package/luajit/Config.in
-> > @@ -11,6 +11,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> >
-> >  config BR2_PACKAGE_LUAJIT
-> >       bool "luajit"
-> > +     depends on !BR2_PACKAGE_LUA
-> >       depends on !BR2_STATIC_LIBS # dlopen
-> >       # Luajit is only available for some target architectures, and
-> >       # has some complexity wrt 32/64. See luajit.mk for details.
-> > --
-> > 2.25.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Hi Thomas,
+
+Le 27/07/2020 ? 18:02, Romain Naour a ?crit?:
+> Hi Thomas,
+> 
+> Le 27/07/2020 ? 17:01, Thomas Petazzoni a ?crit?:
+>> On Mon, 27 Jul 2020 16:09:22 +0200
+>> Romain Naour <romain.naour@gmail.com> wrote:
+>>
+>>> +	# less needs ncurses
+>>> +	select BR2_PACKAGE_NCURSES
+>>
+>> less already selects ncurses, so why do we need ncurses here ?
+> 
+> Indeed.
+> 
+>>
+>>> +BAT_CARGO_OPTS = \
+>>> +	 --bins \
+>>> +	 --$(BAT_CARGO_MODE) \
+>>> +	 --target=$(RUSTC_TARGET_NAME) \
+>>> +	 --manifest-path=$(@D)/Cargo.toml
+>>> +
+>>> +define BAT_BUILD_CMDS
+>>> +	$(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
+>>> +	CC_$(subst -,_,$(RUSTC_TARGET_NAME))=$(TARGET_CC) \
+>>
+>> I am still not happy with this. There is no reason why this should be
+>> passed on a per-package basis, it should be handled by "cargo" and all
+>> the cross-compilation configuration it has.
+> 
+> Well, I guess the pkg-cargo.mk infra will handle this.
+> 
+> I discovered CC_aarch64_unknown_linux_gnu by looking at a Dockerfile example:
+> 
+> https://github.com/rust-lang/rust/blob/c367798cfd3817ca6ae908ce675d1d99242af148/src/ci/docker/dist-aarch64-linux/Dockerfile#L29
+> 
+> I'm not sure why it's not handled by config.toml...
+
+Sorry but cargo/rust is in trouble when the toolchain prefix is not listed in
+[1], the toolchain prefix is "lost" when building some VENDOR dependencies and
+the default prefix is used:
+
+--- stdout
+TARGET = Some("aarch64-unknown-linux-gnu")
+OPT_LEVEL = Some("3")
+HOST = Some("x86_64-unknown-linux-gnu")
+CC_aarch64-unknown-linux-gnu = None
+CC_aarch64_unknown_linux_gnu = None
+TARGET_CC = None
+CC = None
+CROSS_COMPILE = None
+CFLAGS_aarch64-unknown-linux-gnu = None
+CFLAGS_aarch64_unknown_linux_gnu = None
+TARGET_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+DEBUG = Some("false")
+CARGO_CFG_TARGET_FEATURE = None
+
+I guess the pkg-cargo infra should at least set:
+CC_$(subst -,_,$(RUSTC_TARGET_NAME))=$(TARGET_CC)
+
+But for now it's per package basis.
+
+Only bat package seems to use VENDOR dependencies. There is no VENDOR directory
+in the ripgrep build directory.
+
+[1]
+https://github.com/rust-lang/rust/blob/c367798cfd3817ca6ae908ce675d1d99242af148/src/librustc_target/spec/mod.rs#L491
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> Romain
+> 
+>>
+>> Thomas
+>>
+> 
