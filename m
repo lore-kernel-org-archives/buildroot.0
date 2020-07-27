@@ -1,134 +1,141 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2020 19:35:24 +0200
-Subject: [Buildroot] [PATCH 2/2 v4] package/mesa3d: make it aware of
- libglvnd and support it when present
-In-Reply-To: <20200727173844.2ac2945f@windsurf.home>
-References: <cover.1595839612.git.yann.morin.1998@free.fr>
- <c48baa11cd0c06ec5af3fd4989306c3ec581d0e9.1595839612.git.yann.morin.1998@free.fr>
- <20200727173844.2ac2945f@windsurf.home>
-Message-ID: <20200727173524.GG19818@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 27 Jul 2020 10:53:48 -0700
+Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump version to
+ 0.10.3
+Message-ID: <20200727175348.1218300-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On 2020-07-27 17:38 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 27 Jul 2020 10:47:02 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > From: Jakub Skrzypnik <jskrzypnik@novomatic-tech.com>
-> > 
-> > When libglvnd is enabled, mesa3d must be told so, so as it installs its
-> > libraries with the vendor suffix (e.g. libEGL_mesa.so instead of
-> > libEGL.so).
-> > 
-> > Additionally, the provider (in Buildroot parlance) is libglvnd, not mesa3d.
-[--SNIP--]
-> >  config BR2_PACKAGE_MESA3D_OPENGL_GLX
-> >  	bool "OpenGL GLX"
-> >  	depends on BR2_PACKAGE_XORG7
-> > -	select BR2_PACKAGE_HAS_LIBGL
-> > +	select BR2_PACKAGE_HAS_LIBGL if !BR2_PACKAGE_LIBGLVND
-> > +	select BR2_PACKAGE_LIBGLVND_DISPATCH_GL if BR2_PACKAGE_LIBGLVND
-> 
-> I don't immediately see a good solution for this, but I find that
-> solution to be quite annoying :-/
+Also remove upstream patch.
 
-At first, I though so too, and I also looked for a better approach,
-but...
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ ...dd-test-for-Wunused-but-set-variable.patch |  2 +-
+ ...diobridge.c-fix-build-without-libogg.patch | 74 -------------------
+ package/janus-gateway/janus-gateway.hash      |  2 +-
+ package/janus-gateway/janus-gateway.mk        |  2 +-
+ 4 files changed, 3 insertions(+), 77 deletions(-)
+ delete mode 100644 package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
 
-> Indeed, I understand that once libglvnd is enabled, the GL-provider is
-> libglvnd, which in the background is using mesa3d. The dance to handle
-> libglvnd in mesa3d is already not nice, and we would have to have the
-> same dance in other GL providers that support libglvnd.
-
-Well, it is not _so_ bad. We could maybe make it a bit simpler, with:
-
-    config BR2_PACKAGE_MESA3D_OPENGL_GLX
-        bool "OpenGL GLX"
-        select BR2_PACKAGE_HAS_LIBGL
-
-We still need to declare emsa3d as providing libgl depending on whether
-libglvnd is enabled, but we can make it a bit more "compact":
-
-    if !BR2_PACKAGE_LIBGLVND
-
-    config BR2_PACKAGE_PROVIDES_LIBGL
-        default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_GLX
-
-    [EGL and GLES too here]
-
-    endif
-
-And in mesa3d.mk too:
-
-    ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
-    MESA3D_PROVIDES += $(if $(BR2_PACKAGE_LIBGLVND),,libgl)
-    [...]
-    endif
-
-But now, in libglvnd, we don't need any extra symbol, we can just re-use
-BR2_PACKAGE_PROVIDES_LIBGL et al.:
-
-    config BR2_PACKAGE_LIBGLVND
-        bool "libglvnd"
-        select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_PROVIDES_LIBGL
-        select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_PROVIDES_LIBGL
-        select BR2_PACKAGE_XLIB_XORGPROTO if BR2_PACKAGE_PROVIDES_LIBGL
-        select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_PROVIDES_LIBGL
-
-    if BR2_PACKAGE_LIBGLVND
-
-    config BR2_PACKAGE_PROVIDES_LIBGL
-        default "libglvnd" if BR2_PACKAGE_HAS_LIBGL
-
-    endif
-
-and in libglvnd.mk:
-
-    ifeq ($(BR2_PACKAGE_PROVIDES_LIBGL),y)
-    LIBGLVND_DEPENDENCIES += xlib_libXext xorgproto
-    LIBGLVND_CONF_OPTS += -Dglx=enabled
-    LIBGLVND_PROVIDES += libgl
-    else
-    LIBGLVND_CONF_OPTS += -Dglx=disabled
-    endif
-
-> OK, here is some vague idea for a possible solution:
->  - We introduce an intermediate "layer" between libgl and GL providers.
-[--SNIP--]
-> I *think* this would perhaps avoid that complexity in mesa3d...
-> obviously for additional complexity in terms of how the virtual
-> packages in GL world all work together.
-
-You are reinventing libglvnd in between libglvnd and actual providers, no?
-
-Also, remember that individual GL providers will still have to function
-as providers without libglvnd, which is not required.
-
-But I would like we progress on the topic, and when we have a second
-candidate for libglvnd use, we can revisit the topic and see if we can
-over-engineer the thing.
-
-Usually, we wait for three or four cases before trying to solve the
-problem in a generic fashion, and so I'd like to do here as well.
-Because so far, only two providers are known to work with libglvnd:
-mewsa3d and nvidia. ATI might be a third one, but I have no clue about
-it. And in the SoC land, there is not much that is libglvnd compatible
-so far, if at all.
-
-So, in the short-to-medium term, we'd at best have three providers. Is
-that enough to delve into a generic infra so far? Not sure...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
+index c68d6b3b02..b54c8cbec6 100644
+--- a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
++++ b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
+@@ -60,7 +60,7 @@ index ca17a29..beef91a 100644
+ +		-Wunsafe-loop-optimizations"
+  esac
+  
+- JANUS_VERSION=101
++ JANUS_VERSION=103
+ diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
+ new file mode 100644
+ index 0000000..51df0c0
+diff --git a/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch b/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
+deleted file mode 100644
+index 1d25b1a071..0000000000
+--- a/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-From b728e30508101093331b08ac617e6315ba82caa1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 20 Jun 2020 15:38:08 +0200
+-Subject: [PATCH] plugins/janus_audiobridge.c: fix build without libogg
+-
+-Build without libogg is broken since commit
+-53761d07c5456424d368c708fda2757e6606a4bf:
+-
+-plugins/janus_audiobridge.c:1337:41: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
+- 1337 |  janus_audiobridge_file_free(participant->annc);
+-      |                                         ^~
+-  CC       plugins/plugins_libjanus_nosip_la-janus_nosip.lo
+-plugins/janus_audiobridge.c: In function 'janus_audiobridge_mixer_thread':
+-plugins/janus_audiobridge.c:6394:9: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
+- 6394 |     if(p->annc == NULL || g_atomic_int_get(&p->destroyed)) {
+-      |         ^~
+-plugins/janus_audiobridge.c:6398:16: warning: implicit declaration of function 'janus_audiobridge_file_read'; did you mean 'janus_audiobridge_mixer_thread'? [-Wimplicit-function-declaration]
+- 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
+-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+-      |                janus_audiobridge_mixer_thread
+-plugins/janus_audiobridge.c:6398:16: warning: nested extern declaration of 'janus_audiobridge_file_read' [-Wnested-externs]
+-plugins/janus_audiobridge.c:6398:45: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
+- 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
+-      |                                             ^~
+-plugins/janus_audiobridge.c:6401:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
+- 6401 |      if(p->annc->started) {
+-      |          ^~
+-plugins/janus_audiobridge.c:6428:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
+- 6428 |     if(!p->annc->started) {
+-      |          ^~
+-plugins/janus_audiobridge.c:6430:7: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
+- 6430 |      p->annc->started = TRUE;
+-      |       ^~
+-  CC       plugins/plugins_libjanus_streaming_la-janus_streaming.lo
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/meetecho/janus-gateway/pull/2238]
+----
+- plugins/janus_audiobridge.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/plugins/janus_audiobridge.c b/plugins/janus_audiobridge.c
+-index 200a1f1d..ee931e24 100644
+---- a/plugins/janus_audiobridge.c
+-+++ b/plugins/janus_audiobridge.c
+-@@ -1334,7 +1334,9 @@ static void janus_audiobridge_participant_free(const janus_refcount *participant
+- 		}
+- 		g_async_queue_unref(participant->outbuf);
+- 	}
+-+#ifdef HAVE_LIBOGG
+- 	janus_audiobridge_file_free(participant->annc);
+-+#endif
+- 	g_free(participant);
+- }
+- 
+-@@ -6385,6 +6387,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
+- 			janus_mutex_unlock(&p->qmutex);
+- 			ps = ps->next;
+- 		}
+-+#ifdef HAVE_LIBOGG
+- 		/* If there are announcements playing, mix those too */
+- 		GList *anncs_list = g_hash_table_get_values(audiobridge->anncs);
+- 		if(anncs_list != NULL) {
+-@@ -6458,6 +6461,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
+- 				ps = ps->next;
+- 			}
+- 		}
+-+#endif
+- 		/* Are we recording the mix? (only do it if there's someone in, though...) */
+- 		if(audiobridge->recording != NULL && g_list_length(participants_list) > 0) {
+- 			for(i=0; i<samples; i++) {
+--- 
+-2.26.2
+-
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index 64af919519..ee71979b88 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  731760e6911908bc523815809487e51320a738f3533f267d4beb83eaa725de85  janus-gateway-0.10.1.tar.gz
++sha256  7f8c58e5c5ed94821ce877169da90c00e4adf81920ed383a2e0ec241960d121b  janus-gateway-0.10.3.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 94d83eb33e..444c396b97 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = 0.10.1
++JANUS_GATEWAY_VERSION = 0.10.3
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
