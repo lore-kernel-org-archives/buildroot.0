@@ -1,118 +1,78 @@
-From: ratbert90 <aduskett@gmail.com>
-Date: Sun, 26 Jul 2020 22:11:00 +0000
-Subject: [Buildroot] [PATCH] package/grpc: needs host gcc >= 4.9
-In-Reply-To: <20200726210823.20922-1-yann.morin.1998@free.fr>
-References: <20200726210823.20922-1-yann.morin.1998@free.fr>
-Message-ID: <BY5PR19MB3668703B0B0C459376B914B4FB750@BY5PR19MB3668.namprd19.prod.outlook.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 27 Jul 2020 06:37:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: fix build error
+In-Reply-To: <20200726133023.1943702-1-bernd.kuhls@t-online.de>
+References: <20200726133023.1943702-1-bernd.kuhls@t-online.de>
+Message-ID: <CAEyMn7ZxyfWiTypTQXKWEu3u3uBTOVydSUF9JWtVSC4qJsec5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Yann;
+Hi Bernd,
 
-________________________________
-From: Yann E. MORIN <yann.morin.1998@gmail.com> on behalf of Yann E. MORIN <yann.morin.1998@free.fr>
-Sent: Sunday, July 26, 2020 14:08
-To: buildroot at buildroot.org
-Cc: Yann E. MORIN; Adam Duskett
-Subject: [PATCH] package/grpc: needs host gcc >= 4.9
+Am So., 26. Juli 2020 um 15:30 Uhr schrieb Bernd Kuhls
+<bernd.kuhls@t-online.de>:
+>
+> Fixes
+> http://autobuild.buildroot.net/results/5db/5dbce5860f57c1457962aa295857689f49a60bc6/
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-On some versions of gcc 4.8, like the one packaged in Ubuntu 14.04 (in
-extended support until 2022-04). Researching the cause for the bug was
-non-conclusive, except for:
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-     https://github.com/grpc/grpc/issues/19265
+> ---
+>  .../0001-sofia-sip-fix-s2tcase.c.patch        | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
+>
+> diff --git a/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch b/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
+> new file mode 100644
+> index 0000000000..c4b9270984
+> --- /dev/null
+> +++ b/package/freeswitch/0001-sofia-sip-fix-s2tcase.c.patch
+> @@ -0,0 +1,38 @@
+> +From d66a2e55daf223737c07c59b1be45a2d91212ef6 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 26 Jul 2020 13:47:16 +0200
+> +Subject: [PATCH] [sofia-sip] fix s2tcase.c
+> +
+> +Fixes build error with libcheck:
+> +https://github.com/signalwire/freeswitch/issues/681
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + libs/sofia-sip/s2check/s2tcase.c | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/libs/sofia-sip/s2check/s2tcase.c b/libs/sofia-sip/s2check/s2tcase.c
+> +index 382aaa3ad7..d67694c2ce 100644
+> +--- a/libs/sofia-sip/s2check/s2tcase.c
+> ++++ b/libs/sofia-sip/s2check/s2tcase.c
+> +@@ -57,7 +57,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
+> +       if (strcmp(*patterns, "*")) {
+> +       printf("%s: selected\n", name);
+> +       }
+> +-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
+> ++      _tcase_add_test(tc, tf, name, signo, start, end);
+> +       return;
+> +     }
+> +   }
+> +@@ -67,7 +67,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
+> +       if (strcmp(*patterns, "*")) {
+> +       printf("%s: selected\n", name);
+> +       }
+> +-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
+> ++      _tcase_add_test(tc, tf, name, signo, start, end);
+> +       return;
+> +     }
+> +   }
+> +--
 
-which ends with the less than informative "I've settled it."
+This is another solution for fixing the build failures compared to:
 
-The trails leads to https://github.com/oudalab/co-incidents/issues/29,
-which leads to https://github.com/protocolbuffers/protobuf/issues/5353.
+https://patchwork.ozlabs.org/project/buildroot/patch/20200609082519.15482-1-heiko.thiery at gmail.com/.
 
-Although the reporter provided a very good initial investigation, with
-bisection of grpc *and* protobuf, the report has just lingered untouched
-for almost two years now. One of the remaining commits in the protobuf
-bisect is this giant hairball:
-
-    https://github.com/protocolbuffers/protobuf/commit/0400cca3236de1ca
-    Integrated internal changes from Google
-    282 changed files with 15,223 additions and 14,041 deletions.
-
-No surprise the reporter of protobuf!5353 got very frustrated to find
-such a monster commit to investigate... :-(
-
-Another lead brings us similar reports, too:
-
-     https://github.com/grpc/grpc/issues/22781
-
-which concludes that "I've already fixed this issue. Can you try it on
-1.29.1?"
-
-But we're already usign 1.30.2, and we still have the issue (so maybe
-it's a different one...)
-
-So, because the issue manifests itself only on an ancient system, Ubuntu
-14.04, with a now ancient gcc 4.8, we just make grpc depend on a host
-gcc >= 4.9.
-
-The problem here is two fold:
-1) CentOS7 also comes with gcc4.8 and compiles fine.
-
-2) Ubuntu 14.04 still fails even when using newer GCC versions from a PPA (I tried with gcc 6 and the same error occurred)
-
-So a user could in theory decide to try and install a newer GCC on Ubuntu 14.04 like I did in testing and will still get a bad experience. :(
-
-I?m not sure what the correct answer to this issue is, but I have a hard time accepting this patch is the proper fix due to the above.
-
-Adam
-
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
----
- package/collectd/Config.in | 1 +
- package/grpc/Config.in     | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 188be3c0fb..77f088e76d 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -565,6 +565,7 @@ config BR2_PACKAGE_COLLECTD_GRAPHITE
-
- config BR2_PACKAGE_COLLECTD_GRPC
-         bool "grpc"
-+       depends on BR2_HOST_GCC_AT_LEAST_4_9 # grpc
-         depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
-         depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
-         depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index 45299888ea..8257f7c8a5 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GRPC
-         bool "grpc"
-+       depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-grpc fails to build on some gcc-4.8 versions
-         depends on BR2_INSTALL_LIBSTDCPP
-         depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
-         depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-@@ -17,8 +18,9 @@ config BR2_PACKAGE_GRPC
-
-           http://github.com/grpc/grpc
-
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8, host gcc >= 4.9"
-         depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
-         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--               || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+               || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-+               || !BR2_HOST_GCC_AT_LEAST_4_9
-         depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
---
-2.20.1
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200726/c7f4d03b/attachment.html>
+-- 
+Heiko
