@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jul 2020 21:16:51 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/stm32mp157c_dk2: Bump Kernel
- and U-Boot
-In-Reply-To: <1595863177-19305-2-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Mon, 27 Jul 2020 17:19:37 +0200")
-References: <1595863177-19305-1-git-send-email-pjtexier@koncepto.io>
- <1595863177-19305-2-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87pn8gu5ss.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Jul 2020 21:18:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to 245.7
+In-Reply-To: <20200727181252.1334365-1-aduskett@gmail.com> (aduskett's message
+ of "Mon, 27 Jul 2020 11:12:52 -0700")
+References: <20200727181252.1334365-1-aduskett@gmail.com>
+Message-ID: <87lfj4u5qn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
- > Bump kernel to version 5.7.10 and U-Boot to 2020.07
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Also drop upstream patch
+
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
 Committed, thanks.
 
