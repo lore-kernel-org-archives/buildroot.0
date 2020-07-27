@@ -1,8 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 27 Jul 2020 10:53:48 -0700
-Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump version to
- 0.10.3
-Message-ID: <20200727175348.1218300-1-aduskett@gmail.com>
+Date: Mon, 27 Jul 2020 11:12:52 -0700
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to 245.7
+Message-ID: <20200727181252.1334365-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,131 +10,116 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Also remove upstream patch.
+Also drop upstream patch
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- ...dd-test-for-Wunused-but-set-variable.patch |  2 +-
- ...diobridge.c-fix-build-without-libogg.patch | 74 -------------------
- package/janus-gateway/janus-gateway.hash      |  2 +-
- package/janus-gateway/janus-gateway.mk        |  2 +-
- 4 files changed, 3 insertions(+), 77 deletions(-)
- delete mode 100644 package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
+ ...-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 -------------------
+ package/systemd/systemd.hash                  |  2 +-
+ package/systemd/systemd.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 73 deletions(-)
+ delete mode 100644 package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
 
-diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-index c68d6b3b02..b54c8cbec6 100644
---- a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-+++ b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-@@ -60,7 +60,7 @@ index ca17a29..beef91a 100644
- +		-Wunsafe-loop-optimizations"
-  esac
-  
-- JANUS_VERSION=101
-+ JANUS_VERSION=103
- diff --git a/m4/ax_check_compile_flag.m4 b/m4/ax_check_compile_flag.m4
- new file mode 100644
- index 0000000..51df0c0
-diff --git a/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch b/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
+diff --git a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
 deleted file mode 100644
-index 1d25b1a071..0000000000
---- a/package/janus-gateway/0003-plugins-janus_audiobridge.c-fix-build-without-libogg.patch
+index 7c1cfe939b..0000000000
+--- a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
 +++ /dev/null
-@@ -1,74 +0,0 @@
--From b728e30508101093331b08ac617e6315ba82caa1 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 20 Jun 2020 15:38:08 +0200
--Subject: [PATCH] plugins/janus_audiobridge.c: fix build without libogg
+@@ -1,71 +0,0 @@
+-From d17eabb1052e7c8c432331a7a782845e36164f01 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+-Date: Tue, 30 Jun 2020 09:56:10 +0200
+-Subject: [PATCH] =?UTF-8?q?Fix=20build=20with=20=C2=B5httpd=200.9.71?=
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--Build without libogg is broken since commit
--53761d07c5456424d368c708fda2757e6606a4bf:
+-The return type of callbacks was changed from int to an enum.
 -
--plugins/janus_audiobridge.c:1337:41: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-- 1337 |  janus_audiobridge_file_free(participant->annc);
--      |                                         ^~
--  CC       plugins/plugins_libjanus_nosip_la-janus_nosip.lo
--plugins/janus_audiobridge.c: In function 'janus_audiobridge_mixer_thread':
--plugins/janus_audiobridge.c:6394:9: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-- 6394 |     if(p->annc == NULL || g_atomic_int_get(&p->destroyed)) {
--      |         ^~
--plugins/janus_audiobridge.c:6398:16: warning: implicit declaration of function 'janus_audiobridge_file_read'; did you mean 'janus_audiobridge_mixer_thread'? [-Wimplicit-function-declaration]
-- 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
--      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
--      |                janus_audiobridge_mixer_thread
--plugins/janus_audiobridge.c:6398:16: warning: nested extern declaration of 'janus_audiobridge_file_read' [-Wnested-externs]
--plugins/janus_audiobridge.c:6398:45: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-- 6398 |     int read = janus_audiobridge_file_read(p->annc, p->decoder, resampled, sizeof(resampled));
--      |                                             ^~
--plugins/janus_audiobridge.c:6401:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-- 6401 |      if(p->annc->started) {
--      |          ^~
--plugins/janus_audiobridge.c:6428:10: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-- 6428 |     if(!p->annc->started) {
--      |          ^~
--plugins/janus_audiobridge.c:6430:7: error: 'janus_audiobridge_participant' {aka 'struct janus_audiobridge_participant'} has no member named 'annc'
-- 6430 |      p->annc->started = TRUE;
--      |       ^~
--  CC       plugins/plugins_libjanus_streaming_la-janus_streaming.lo
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/meetecho/janus-gateway/pull/2238]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[downloaded from upstream commit
+- https://github.com/systemd/systemd/commit/d17eabb1052e7c8c432331a7a782845e36164f01]
 ----
-- plugins/janus_audiobridge.c | 4 ++++
-- 1 file changed, 4 insertions(+)
+- src/journal-remote/journal-gatewayd.c    | 4 ++--
+- src/journal-remote/journal-remote-main.c | 2 +-
+- src/journal-remote/microhttpd-util.h     | 6 ++++++
+- 3 files changed, 9 insertions(+), 3 deletions(-)
 -
--diff --git a/plugins/janus_audiobridge.c b/plugins/janus_audiobridge.c
--index 200a1f1d..ee931e24 100644
----- a/plugins/janus_audiobridge.c
--+++ b/plugins/janus_audiobridge.c
--@@ -1334,7 +1334,9 @@ static void janus_audiobridge_participant_free(const janus_refcount *participant
-- 		}
-- 		g_async_queue_unref(participant->outbuf);
-- 	}
--+#ifdef HAVE_LIBOGG
-- 	janus_audiobridge_file_free(participant->annc);
--+#endif
-- 	g_free(participant);
+-diff --git a/src/journal-remote/journal-gatewayd.c b/src/journal-remote/journal-gatewayd.c
+-index 5177e0d1577..3ab7c98b0b5 100644
+---- a/src/journal-remote/journal-gatewayd.c
+-+++ b/src/journal-remote/journal-gatewayd.c
+-@@ -349,7 +349,7 @@ static int request_parse_range(
+-         return 0;
 - }
 - 
--@@ -6385,6 +6387,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
-- 			janus_mutex_unlock(&p->qmutex);
-- 			ps = ps->next;
-- 		}
--+#ifdef HAVE_LIBOGG
-- 		/* If there are announcements playing, mix those too */
-- 		GList *anncs_list = g_hash_table_get_values(audiobridge->anncs);
-- 		if(anncs_list != NULL) {
--@@ -6458,6 +6461,7 @@ static void *janus_audiobridge_mixer_thread(void *data) {
-- 				ps = ps->next;
-- 			}
-- 		}
+--static int request_parse_arguments_iterator(
+-+static mhd_result request_parse_arguments_iterator(
+-                 void *cls,
+-                 enum MHD_ValueKind kind,
+-                 const char *key,
+-@@ -796,7 +796,7 @@ static int request_handler_machine(
+-         return MHD_queue_response(connection, MHD_HTTP_OK, response);
+- }
+- 
+--static int request_handler(
+-+static mhd_result request_handler(
+-                 void *cls,
+-                 struct MHD_Connection *connection,
+-                 const char *url,
+-diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
+-index 69a111afead..f82d188a8c6 100644
+---- a/src/journal-remote/journal-remote-main.c
+-+++ b/src/journal-remote/journal-remote-main.c
+-@@ -253,7 +253,7 @@ static int process_http_upload(
+-         return mhd_respond(connection, MHD_HTTP_ACCEPTED, "OK.");
+- };
+- 
+--static int request_handler(
+-+static mhd_result request_handler(
+-                 void *cls,
+-                 struct MHD_Connection *connection,
+-                 const char *url,
+-diff --git a/src/journal-remote/microhttpd-util.h b/src/journal-remote/microhttpd-util.h
+-index d90c6bbd4f1..4ca9a5c4f16 100644
+---- a/src/journal-remote/microhttpd-util.h
+-+++ b/src/journal-remote/microhttpd-util.h
+-@@ -47,6 +47,12 @@
+- #  define MHD_create_response_from_fd_at_offset64 MHD_create_response_from_fd_at_offset
+- #endif
+- 
+-+#if MHD_VERSION >= 0x00097002
+-+#  define mhd_result enum MHD_Result
+-+#else
+-+#  define mhd_result int
 -+#endif
-- 		/* Are we recording the mix? (only do it if there's someone in, though...) */
-- 		if(audiobridge->recording != NULL && g_list_length(participants_list) > 0) {
-- 			for(i=0; i<samples; i++) {
---- 
--2.26.2
--
-diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
-index 64af919519..ee71979b88 100644
---- a/package/janus-gateway/janus-gateway.hash
-+++ b/package/janus-gateway/janus-gateway.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  731760e6911908bc523815809487e51320a738f3533f267d4beb83eaa725de85  janus-gateway-0.10.1.tar.gz
-+sha256  7f8c58e5c5ed94821ce877169da90c00e4adf81920ed383a2e0ec241960d121b  janus-gateway-0.10.3.tar.gz
- sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index 94d83eb33e..444c396b97 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
+-+
+- void microhttpd_logger(void *arg, const char *fmt, va_list ap) _printf_(2, 0);
+- 
+- /* respond_oom() must be usable with return, hence this form. */
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 64ba6405b0..a90a54ab56 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  f58424fd2d105503f836ff7d099d762901fb40347de993fce7373d65ff640f5b  systemd-245.6.tar.gz
++sha256  5770df29a89e8249bb4fbdc2018e2ea7bbb4fd01425cc03ece338f04a1d80c7f  systemd-245.7.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+ sha256  f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92  README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b94dc37761..107fcbe66a 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JANUS_GATEWAY_VERSION = 0.10.1
-+JANUS_GATEWAY_VERSION = 0.10.3
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+-SYSTEMD_VERSION = 245.6
++SYSTEMD_VERSION = 245.7
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
 -- 
 2.26.2
