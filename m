@@ -1,100 +1,99 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 27 Jul 2020 05:51:55 -0600
-Subject: [Buildroot] [PATCH v7 1/1] package/nodejs: use system-icu for
- host-nodejs
-Message-ID: <20200727115155.824789-1-james.hilliard1@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2020 13:52:01 +0200
+Subject: [Buildroot] [PATCH v2] gitlab: generate the gitlab-ci
+ configuration before each build
+In-Reply-To: <20200725213558.1368219-1-romain.naour@gmail.com>
+References: <20200725213558.1368219-1-romain.naour@gmail.com>
+Message-ID: <20200727115201.GV19818@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The nodejs configure.py file orders zlib headers before the bundled ICU
-headers. The zlib headers happen to be located in the system include
-directory, next to some system ICU headers (not bundled). If these are
-built before nodejs is, nodejs will get confused and try to use the
-system ICU headers instead of the bundled ones.
+Romain, All,
 
-Fix this by always using host-icu.
+On 2020-07-25 23:35 +0200, Romain Naour spake thusly:
+> Since Gitlab 12.9, Gitlab allow to trigger child pipeline with generated configuration file.
+> See: https://gitlab.com/gitlab-org/gitlab/-/issues/35632
+> 
+> This allow us to stop updating the .gitlab-ci.yml file when a
+> new defconfig is added to Buildroot.
+> 
+> Remove check-gitlab-ci.yml job since it is now uneeded.
+> Remove .gitlab-ci.yml make target.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+[--SNIP--]
+> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> index bde7543c25..ef3edb500d 100644
+> --- a/docs/manual/contribute.txt
+> +++ b/docs/manual/contribute.txt
+> @@ -574,8 +574,7 @@ emulator and provide test case conditions.
+>  Beyond creating the test script, there are a couple of additional steps that
+>  should be taken once you have your initial test case script. The first is
+>  to add yourself to the +DEVELOPERS+ file to be the maintainer of that test
+> -case. The second is to update the Gitlab CI yml by executing
+> -+make .gitlab-ci.yml+.
+> +case. The second is to update the Gitlab CI yml.
 
-Set CXXFLAGS to -DU_DISABLE_RENAMING=1 when building with
-system-icu since host-icu is built with --disable-renaming.
+There is not even this second step to do at all anymore, now that the
+thing is generated in the pipeline. So all we need to document, now is:
 
-Fixes:
- - http://autobuild.buildroot.net/results/1ef947553ec762dba6a6202b1cfc84ceed75dbb2/
+    After creating the test script, add yourself to the +DEVELOPERS+ file to
+    be the maintainer of that test case.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/nodejs/nodejs.mk | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+I've fixed that locally, applied to master and pushed. Thanks.
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 3f35ac7c33..89bd5177a2 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -10,7 +10,7 @@ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
- 	libuv zlib nghttp2 \
- 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
-+HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib host-icu
- NODEJS_INSTALL_STAGING = YES
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
-@@ -26,6 +26,20 @@ NODEJS_CONF_OPTS = \
- 	--cross-compiling \
- 	--dest-os=linux
- 
-+HOST_NODEJS_CONF_OPTS = \
-+	--prefix=$(HOST_DIR) \
-+	--without-snapshot \
-+	--without-dtrace \
-+	--without-etw \
-+	--shared-openssl \
-+	--shared-openssl-includes=$(HOST_DIR)/include/openssl \
-+	--shared-openssl-libpath=$(HOST_DIR)/lib \
-+	--shared-zlib \
-+	--no-cross-compiling \
-+	--with-intl=system-icu
-+
-+HOST_NODEJS_CXXFLAGS = $(HOST_CXXFLAGS) -DU_DISABLE_RENAMING=1
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NODEJS_DEPENDENCIES += openssl
- NODEJS_CONF_OPTS += --shared-openssl
-@@ -57,16 +71,7 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 		PATH=$(@D)/bin:$(BR_PATH) \
- 		PYTHON=$(HOST_DIR)/bin/python2 \
- 		$(HOST_DIR)/bin/python2 ./configure \
--		--prefix=$(HOST_DIR) \
--		--without-snapshot \
--		--without-dtrace \
--		--without-etw \
--		--shared-openssl \
--		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
--		--shared-openssl-libpath=$(HOST_DIR)/lib \
--		--shared-zlib \
--		--no-cross-compiling \
--		--with-intl=small-icu \
-+		$(HOST_NODEJS_CONF_OPTS) \
- 	)
- endef
- 
-@@ -81,6 +86,7 @@ define HOST_NODEJS_BUILD_CMDS
- 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
- 		$(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
-+		CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
- 		LDFLAGS.host="$(HOST_LDFLAGS)" \
- 		NO_LOAD=cctest.target.mk \
- 		PATH=$(@D)/bin:$(BR_PATH)
-@@ -90,6 +96,7 @@ define HOST_NODEJS_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
- 		$(MAKE) -C $(@D) install \
- 		$(HOST_CONFIGURE_OPTS) \
-+		CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
- 		LDFLAGS.host="$(HOST_LDFLAGS)" \
- 		NO_LOAD=cctest.target.mk \
- 		PATH=$(@D)/bin:$(BR_PATH)
+Regards,
+Yann E. MORIN.
+
+>  ==== Debugging a test case
+>  
+> diff --git a/.gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+> similarity index 92%
+> rename from .gitlab-ci.yml.in
+> rename to support/misc/gitlab-ci.yml.in
+> index 1facd2a66f..cf9bf5f9cf 100644
+> --- a/.gitlab-ci.yml.in
+> +++ b/support/misc/gitlab-ci.yml.in
+> @@ -1,8 +1,5 @@
+>  # Configuration for Gitlab-CI.
+>  # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+> -# The .gitlab-ci.yml file is generated from .gitlab-ci.yml.in.
+> -# It needs to be regenerated every time a defconfig is added, using
+> -# "make .gitlab-ci.yml".
+>  
+>  image: buildroot/base:20191027.2027
+>  
+> @@ -32,13 +29,6 @@ check-flake8:
+>      after_script:
+>          - wc -l files.processed
+>  
+> -check-gitlab-ci.yml:
+> -    extends: .check_base
+> -    script:
+> -        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
+> -        - make .gitlab-ci.yml
+> -        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+> -
+>  check-package:
+>      extends: .check_base
+>      script:
+> -- 
+> 2.25.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
