@@ -1,137 +1,95 @@
 From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Tue, 28 Jul 2020 11:53:46 +0200
-Subject: [Buildroot] [PATCH v3] package/cryptopp: add a target build
+Date: Tue, 28 Jul 2020 11:56:25 +0200
+Subject: [Buildroot] [PATCH v2] package/cryptopp: add a target build
  configuration
-Message-ID: <20200728095346.2103418-1-kamel.bouhara@bootlin.com>
+In-Reply-To: <20200727131705.GZ19818@scaer>
+References: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
+ <20200727124232.GX19818@scaer>
+ <20200727150313.634b6b59@windsurf.home>
+ <20200727131705.GZ19818@scaer>
+Message-ID: <20200728095625.GD11306@kb-xps>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently only a host build is supported for cryptopp, this add a new
-configuration and build support for the make target.
+On Mon, Jul 27, 2020 at 03:17:05PM +0200, Yann E. MORIN wrote:
+> Thomas, Kamel, Al,
+>
 
-Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
----
-Changes in v3:
-	- Added explicit configuration with LDCONF=/bin/true to make sure
-	  symlink will exist on both target and host.
-	- Improved patch commit description
+Hello,
 
-Changes in v2:
-	- Fixed indentations issue
-	- Removed unrequired Config.in.host
-	- Added a depends on !BR2_STATIC_LIBS to build only in dynamic
-	configuration.
-	- Fixed inconsistency between TARGET_INSTALL and STAGING_INSTALL
----
- package/Config.in                             |  1 +
- ...ied-SONAME-to-shared-object-for-Linu.patch | 30 +++++++++++++++++++
- package/cryptopp/Config.in                    |  8 +++++
- package/cryptopp/cryptopp.mk                  | 26 +++++++++++++++-
- 4 files changed, 64 insertions(+), 1 deletion(-)
- create mode 100644 package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
- create mode 100644 package/cryptopp/Config.in
+Thanks for you comment, I've just sent a v3 that I hope will fixes
+issues below.
 
-diff --git a/package/Config.in b/package/Config.in
-index 9c4843be07..014f57a54a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1279,6 +1279,7 @@ menu "Crypto"
- 	source "package/botan/Config.in"
- 	source "package/ca-certificates/Config.in"
- 	source "package/cryptodev/Config.in"
-+	source "package/cryptopp/Config.in"
- 	source "package/gcr/Config.in"
- 	source "package/gnutls/Config.in"
- 	source "package/libargon2/Config.in"
-diff --git a/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
-new file mode 100644
-index 0000000000..11f3090767
---- /dev/null
-+++ b/package/cryptopp/0001-Add-fully-qualified-SONAME-to-shared-object-for-Linu.patch
-@@ -0,0 +1,30 @@
-+From 78eb43f50978ffd780cf31b1cea6736dadc6b155 Mon Sep 17 00:00:00 2001
-+From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-+Date: Mon, 6 Jul 2020 17:10:55 +0200
-+Subject: [PATCH] Add fully-qualified SONAME to shared object for Linux
-+
-+From: http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
-+
-+Add SONAME libcryptopp.so.8 required for library runtime and application
-+linking.
-+
-+Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-+---
-+ GNUmakefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/GNUmakefile b/GNUmakefile
-+index e7b7b3a6..730e2a6f 100755
-+--- a/GNUmakefile
-++++ b/GNUmakefile
-+@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
-+ 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
-+ ifeq ($(HAS_SOLIB_VERSION),1)
-+ 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
-++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
-+ 	$(LDCONF) $(DESTDIR)$(LIBDIR)
-+ endif
-+ endif
-+--
-+2.26.2
-+
-diff --git a/package/cryptopp/Config.in b/package/cryptopp/Config.in
-new file mode 100644
-index 0000000000..4ead5339ab
---- /dev/null
-+++ b/package/cryptopp/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CRYPTOPP
-+	bool "cryptopp"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  A free C++ class library of cryptographic schemes
-+
-+comment "cryptopp needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index f1d19386ab..e77287467d 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -31,7 +31,31 @@ define HOST_CRYPTOPP_BUILD_CMDS
- endef
+Regards,
+Kamel
 
- define HOST_CRYPTOPP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-lib
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(HOST_DIR)" LDCONFIG=/bin/true install-lib
- endef
+> On 2020-07-27 15:03 +0200, Thomas Petazzoni spake thusly:
+> > On Mon, 27 Jul 2020 14:42:32 +0200
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> >
+> > > > +diff --git a/GNUmakefile b/GNUmakefile
+> > > > +index e7b7b3a6..730e2a6f 100755
+> > > > +--- a/GNUmakefile
+> > > > ++++ b/GNUmakefile
+> > > > +@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
+> > > > + 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
+> > > > + ifeq ($(HAS_SOLIB_VERSION),1)
+> > > > + 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
+> > > > ++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
+> > > Why do we need that?
+> > Because on the target you need a symlink from the SONAME to the actual
+> > library. Right now, the Makefile only:
+> >  * Installs the library as libcryptopp.so.8.2.0. It has a SONAME of
+> >    libcryptopp.so.8.
+> >  * Creates a symlink libcryptopp.so -> libcryptopp.so.8.2.0, which
+> >    allows to link new applications
+> >  * Does NOT create the libcryptopp.so.8 -> libcryptopp.so.8.2.0 which
+> >    would allow using the library at runtime.
+>
+> Ah, I see.
+>
+> > > > + 	$(LDCONF) $(DESTDIR)$(LIBDIR)
+> > And it is this invocation of ldconfig that creates it!
+>
+> Yes, I would know that. ;-)
+>
+> [--SNIP--]
+> > > Which means that with your patch and without a call to ldconfig, the .so
+> > > symlink will no longer exist, and so it will no longer be possible to
+> > > link against the library.
+> > No correct: the .so symlink still exists. Re-read the patch from Kamel,
+> > it creates the .so.8 symlink in *addition* to creating the .so symlink,
+> > which was already there.
+>
+> Right. Not sure why, but I saw a 'minus sign' in front of the previous
+> line. There is no such minus sign, so the line is not removed, so yes,
+> that's OK. Sorry.
+>
+> > > Note that the host variant is not OK either, because not all systems
+> > > have ldconfig on the host either... See 64d4b34073 (e2fsprogs: do not
+> > > use ldconfig when building the host variant).
+> > Yes, agreed.
+> > So all what we need is:
+> >  (1) LDCONF=/bin/true
+> >  (2) An improved commit description for the patch that adds the symlink
+>
+> (3) same as (1), but for the host variant.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-+define CRYPTOPP_EXTRACT_CMDS
-+	$(UNZIP) $(CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
-+endef
-+
-+CRYPTOPP_CXXFLAGS = $(TARGET_CFLAGS) -fPIC
-+
-+CRYPTOPP_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CXXFLAGS="$(CRYPTOPP_CXXFLAGS)"
-+
-+define CRYPTOPP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(CRYPTOPP_MAKE_OPTS) shared
-+endef
-+
-+define CRYPTOPP_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true install-lib
-+endef
-+
-+define CRYPTOPP_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" libcryptopp.pc
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX="$(STAGING_DIR)" LDCONFIG=/bin/true install-lib
-+endef
-+
-+$(eval $(generic-package))
- $(eval $(host-generic-package))
 --
-2.27.0
+Kamel Bouhara, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
