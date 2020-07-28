@@ -1,37 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 Jul 2020 17:59:31 +0000
-Subject: [Buildroot] [Bug 13101] BR audit2allow support
-In-Reply-To: <bug-13101-163@https.bugs.busybox.net/>
-References: <bug-13101-163@https.bugs.busybox.net/>
-Message-ID: <bug-13101-163-jX12FDiFUj@https.bugs.busybox.net/>
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Date: Tue, 28 Jul 2020 18:31:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: add FFI support
+Message-ID: <20200728163125.2489208-1-tom.marcuzzi@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13101
+Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+---
+ package/php/Config.ext | 6 ++++++
+ package/php/php.mk     | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-Tomas V Arredondo <surf_fanatico@yahoo.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #3 from Tomas V Arredondo <surf_fanatico@yahoo.com> ---
-Solved as of 5.4.53
-
-audit2allow < /var/log/messages
-#============= kernel_t ==============
-
-#!!!! This avc can be allowed using one of the these booleans:
-
-allow_execstack, allow_execmem
-allow kernel_t self:process execmem;
-uname -r
-5.4.53
-
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index b0ab2c9ec7..f8beb25afb 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -427,4 +427,10 @@ config BR2_PACKAGE_PHP_EXT_XSL
+ 	help
+ 	  XSL transformation support
+ 
++config BR2_PACKAGE_PHP_EXT_FFI
++	bool "FFI"
++	select BR2_PACKAGE_LIBFFI
++	help
++	  Foreign Function Interface support
++
+ endmenu
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 48af0f6fdc..1296c50c6d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -333,6 +333,11 @@ PHP_CONF_OPTS += \
+ PHP_DEPENDENCIES += jpeg libpng freetype zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PHP_EXT_FFI),y)
++PHP_CONF_OPTS += --with-ffi
++PHP_DEPENDENCIES += libffi
++endif
++
+ ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
+ define PHP_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.1
