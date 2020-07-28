@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 28 Jul 2020 14:56:07 +0200
-Subject: [Buildroot] [PATCH v2 05/10] package/easybus: temporarily disabled
+Date: Tue, 28 Jul 2020 14:56:10 +0200
+Subject: [Buildroot] [PATCH v2 08/10] package/lua-sdl2: temporarily disabled
  with Lua 5.4
 In-Reply-To: <20200728125613.3153975-1-francois.perrad@gadz.org>
 References: <20200728125613.3153975-1-francois.perrad@gadz.org>
-Message-ID: <20200728125613.3153975-6-francois.perrad@gadz.org>
+Message-ID: <20200728125613.3153975-9-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/easydbus/Config.in | 5 +++--
+ package/lua-sdl2/Config.in | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
-index 1fe8689cc..5f2f3a22b 100644
---- a/package/easydbus/Config.in
-+++ b/package/easydbus/Config.in
-@@ -3,12 +3,13 @@ config BR2_PACKAGE_EASYDBUS
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
+diff --git a/package/lua-sdl2/Config.in b/package/lua-sdl2/Config.in
+index 65f9e7ff4..d0c1b91eb 100644
+--- a/package/lua-sdl2/Config.in
++++ b/package/lua-sdl2/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_SDL2
+ 	bool "lua-sdl2"
+ 	depends on !BR2_STATIC_LIBS
 +	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_SDL2
  	help
- 	  Easy to use DBus library for Lua.
+ 	  Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2,
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LUA_SDL2
  
- 	  https://github.com/mniestroj/easydbus
+ 	  https://github.com/Tangent128/luasdl2
  
--comment "easydbus needs a toolchain w/ wchar, threads"
-+comment "easydbus needs a toolchain w/ wchar, threads, Lua <= 5.3"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
+-comment "lua-sdl2 needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "lua-sdl2 needs a toolchain w/ dynamic library, Lua <= 5.3"
++	depends on BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
 -- 
 2.25.1
