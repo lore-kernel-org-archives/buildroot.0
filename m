@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 28 Jul 2020 15:21:41 +0200
-Subject: [Buildroot] [PATCH v3 04/10] package/lua-messagepack: add support
- of Lua 5.4
+Date: Tue, 28 Jul 2020 15:21:42 +0200
+Subject: [Buildroot] [PATCH v3 05/10] package/easybus: temporarily disabled
+ with Lua 5.4
 In-Reply-To: <20200728132147.3155274-1-francois.perrad@gadz.org>
 References: <20200728132147.3155274-1-francois.perrad@gadz.org>
-Message-ID: <20200728132147.3155274-5-francois.perrad@gadz.org>
+Message-ID: <20200728132147.3155274-6-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-messagepack/lua-messagepack.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/easydbus/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
-index f393a8d02..33d460b4f 100644
---- a/package/lua-messagepack/lua-messagepack.mk
-+++ b/package/lua-messagepack/lua-messagepack.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/easydbus/Config.in b/package/easydbus/Config.in
+index 1fe8689cc..5f2f3a22b 100644
+--- a/package/easydbus/Config.in
++++ b/package/easydbus/Config.in
+@@ -3,12 +3,13 @@ config BR2_PACKAGE_EASYDBUS
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
++	depends on !BR2_PACKAGE_LUA_5_4
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  Easy to use DBus library for Lua.
  
- LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
- LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
- else
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack
+ 	  https://github.com/mniestroj/easydbus
+ 
+-comment "easydbus needs a toolchain w/ wchar, threads"
++comment "easydbus needs a toolchain w/ wchar, threads, Lua <= 5.3"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
 -- 
 2.25.1
