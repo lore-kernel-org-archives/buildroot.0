@@ -1,39 +1,47 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 28 Jul 2020 14:56:12 +0200
-Subject: [Buildroot] [PATCH v2 10/10] package/prosody: temporarily disabled
- with Lua 5.4
-In-Reply-To: <20200728125613.3153975-1-francois.perrad@gadz.org>
-References: <20200728125613.3153975-1-francois.perrad@gadz.org>
-Message-ID: <20200728125613.3153975-11-francois.perrad@gadz.org>
+From: kyle nahrgang <kyle.nahrgang@gmail.com>
+Date: Tue, 28 Jul 2020 09:38:29 -0400
+Subject: [Buildroot] including full external-toolchain
+In-Reply-To: <20200725104603.667a9bd0@windsurf.home>
+References: <CAE0kWpANCLgJ_wrw6C0KaEzMEvJoMHa_WkGpNAv29xjB+CFZVw@mail.gmail.com>
+ <20200725104603.667a9bd0@windsurf.home>
+Message-ID: <CAE0kWpCc_-xCZKT6hjRdLWqk_+=qNeA-YdM4f2opxj-9+cO3rQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/prosody/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Is there a reason that there shouldn't maybe be an advanced option to just
+accept all tools from the toolchain, and skip building any host items?
 
-diff --git a/package/prosody/Config.in b/package/prosody/Config.in
-index 4b7ea9425..d57da00a9 100644
---- a/package/prosody/Config.in
-+++ b/package/prosody/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PROSODY
- 	bool "prosody"
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_PACKAGE_LUA_5_4
- 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
- 	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
- 	select BR2_PACKAGE_LUAEXPAT # runtime
-@@ -20,3 +21,6 @@ config BR2_PACKAGE_PROSODY
- comment "prosody needs the lua interpreter, dynamic library"
- 	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
-+
-+comment "prosody needs a Lua <= 5.3"
-+	depends on BR2_PACKAGE_LUA_5_4
--- 
-2.25.1
+On Sat, Jul 25, 2020 at 4:46 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> On Fri, 24 Jul 2020 08:38:18 -0400
+> kyle nahrgang <kyle.nahrgang@gmail.com> wrote:
+>
+> > In an effort to reduce my build time, I've switched to building an
+> external
+> > toolchain separately from my other projects. When I import this
+> toolchain,
+> > I notice that only the cross compilation tools get linked, and all other
+> > host utilities are rebuilt.
+> >
+> > Is there a reason that buildroot doesn't import all of the host
+> utilities?
+> > Or skip host dependencies that are already installed in the host output?
+>
+> Buildroot today does not have the logic to detect which host tools are
+> already provided, and when they are provided, if they have the right
+> version. So we're not re-using any host tools, with a few exceptions
+> (cmake for example).
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200728/ba79b3e7/attachment.html>
