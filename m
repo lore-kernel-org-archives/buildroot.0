@@ -1,57 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Jul 2020 20:16:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wayland: fix build with toolchains
- without c++
-Message-ID: <20200729181650.6949-1-bernd.kuhls@t-online.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 28 Jul 2020 15:21:37 +0200
+Subject: [Buildroot] [PATCH v3 00/10]  Lua 5.4
+Message-ID: <20200728132147.3155274-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/fb2/fb205601cac2bbf8e70ec2bf4eaf22264d8edc96/
+This pacthset introduces Lua 5.4 serie.
+Lua 5.4.0 is the first release of this new serie.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0002-meson-do-not-check-for-c.patch       | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/wayland/0002-meson-do-not-check-for-c.patch
+Packages which don't support Lua 5.3, don't support Lua 5.4 too.
 
-diff --git a/package/wayland/0002-meson-do-not-check-for-c.patch b/package/wayland/0002-meson-do-not-check-for-c.patch
-new file mode 100644
-index 0000000000..c5819bf477
---- /dev/null
-+++ b/package/wayland/0002-meson-do-not-check-for-c.patch
-@@ -0,0 +1,29 @@
-+From 1df9b73db6541cbc483c6ee1b21dbe0cb6e5cbfa Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Wed, 29 Jul 2020 08:20:41 +0200
-+Subject: [PATCH] meson: do not check for c++
-+
-+Wayland does not need c++, fixes building with toolchains lacking c++.
-+
-+Backported from upstream PR:
-+https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/88
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index b67b101..e47a52d 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1,5 +1,5 @@
-+ project(
-+-	'wayland', 'c', 'cpp',
-++	'wayland', 'c',
-+ 	version: '1.18.0',
-+ 	license: 'MIT',
-+ 	meson_version: '>= 0.47.0',
-+-- 
-+2.27.0
-+
+Packages which need big change, are temporarily disabled (waiting for upstream).
+
+v1 -> v2:
+- refactor after the merge of James serie
+- update after Thomas review
+
+v2 -> v3:
+- more refactor after the merge of James serie
+
+Francois Perrad (10):
+  package/luabitop: depends on lua 5.1
+  package/lua-compat53: depends on lua ABI 5.1
+  lua: add 5.4.0 version
+  package/lua-messagepack: add support of Lua 5.4
+  package/easybus: temporarily disabled with Lua 5.4
+  package/lua-cqueues: temporarily disabled with Lua 5.4
+  package/lua-flu: temporarily disabled with Lua 5.4
+  package/lua-sdl2: temporarily disabled with Lua 5.4
+  package/luv: temporarily disabled with Lua 5.4
+  package/prosody: temporarily disabled with Lua 5.4
+
+ package/easydbus/Config.in                    |  5 +-
+ package/lua-compat53/Config.in                |  2 +-
+ package/lua-cqueues/Config.in                 |  5 +-
+ package/lua-flu/Config.in                     |  5 +-
+ package/lua-http/Config.in                    |  7 +-
+ package/lua-messagepack/lua-messagepack.mk    |  2 +-
+ package/lua-sdl2/Config.in                    |  5 +-
+ package/lua/5.4.0/0001-root-path.patch        | 17 ++++
+ .../lua/5.4.0/0002-shared-libs-for-lua.patch  | 78 +++++++++++++++++++
+ package/lua/5.4.0/0011-linenoise.patch        | 25 ++++++
+ package/lua/Config.in                         |  6 +-
+ package/lua/lua.hash                          |  3 +
+ package/lua/lua.mk                            | 10 ++-
+ package/luabitop/Config.in                    |  6 +-
+ package/luainterpreter/Config.in              |  4 +
+ package/luv/Config.in                         |  5 +-
+ package/pkg-luarocks.mk                       |  3 +
+ package/prosody/Config.in                     |  4 +
+ 18 files changed, 170 insertions(+), 22 deletions(-)
+ create mode 100644 package/lua/5.4.0/0001-root-path.patch
+ create mode 100644 package/lua/5.4.0/0002-shared-libs-for-lua.patch
+ create mode 100644 package/lua/5.4.0/0011-linenoise.patch
+
 -- 
-2.27.0
+2.25.1
