@@ -1,46 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Jul 2020 13:48:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minetest: don't depend on luajit
-In-Reply-To: <CADvTj4q1DeWEpAcpkOsg9GA_dhzogRFV00sMd6YrdzpVMqU0pA@mail.gmail.com>
-References: <20200727205621.2556101-1-james.hilliard1@gmail.com>
- <20200728090907.4f093194@windsurf.home>
- <CADvTj4q1DeWEpAcpkOsg9GA_dhzogRFV00sMd6YrdzpVMqU0pA@mail.gmail.com>
-Message-ID: <20200728134847.5f7e7401@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 Jul 2020 14:42:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix build when __NR_signalfd
+ is not available
+Message-ID: <20200728124238.2824679-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Jul 2020 04:17:26 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/75096a48d2dbda57459523db3ed0952e63f93535
 
-> On Tue, Jul 28, 2020 at 1:09 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Mon, 27 Jul 2020 14:56:21 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >  
-> > > Since minetest has a fallback to a bundled lua when luajit is not
-> > > available we don't need to depend on luajit or any lua version at all.  
-> >
-> > In general, I think we try to not use bundled libraries even when they
-> > exist. If minetest needs a Lua interpreter, it should always use an
-> > external Lua interpreter, I believe.  
-> From my understanding luajit is the only supported external lua
-> interpreter for minetest. So I think it makes sense to not require
-> a specific lua interpreter for flexibility.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...fail-if-__NR_signalfd-is-not-defined.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
 
-I don't understand your reply, as I was not talking about using other
-Lua interpreters.
-
-What I'm saying is that if minetest has a mandatory dependency on
-LuaJIT, then it should *always* use the external LuaJIT and never use
-the bundled one. We prefer external libraries over bundled libraries in
-general in the context of Buildroot.
-
-Thomas
+diff --git a/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch b/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
+new file mode 100644
+index 0000000000..c6e70e0a55
+--- /dev/null
++++ b/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
+@@ -0,0 +1,54 @@
++From 3341e204dc1e1da6ecbc1ffbe59fca33f23ca557 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 28 Jul 2020 12:31:31 +0200
++Subject: [PATCH] syscall: don't fail if __NR_signalfd is not defined
++
++lxc fails to build if __NR_signalfd is not defined since version 4.0.0
++and
++https://github.com/lxc/lxc/commit/bed09c9cc0bec7bbd2442fcce4a2a0f03994cb09
++
++However, some architectures don't define __NR_signalfd but only
++__NR_signalfd4. This is the case for example for nios2 or csky:
++https://github.com/bminor/glibc/blob/f9ac84f92f151e07586c55e14ed628d493a5929d/sysdeps/unix/sysv/linux/nios2/arch-syscall.h
++https://github.com/bminor/glibc/blob/f9ac84f92f151e07586c55e14ed628d493a5929d/sysdeps/unix/sysv/linux/csky/arch-syscall.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/75096a48d2dbda57459523db3ed0952e63f93535
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/lxc/lxc/commit/3341e204dc1e1da6ecbc1ffbe59fca33f23ca557]
++---
++ src/lxc/syscall_numbers.h  | 3 ---
++ src/lxc/syscall_wrappers.h | 2 ++
++ 2 files changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
++index e2e7883786..72e4ffe460 100644
++--- a/src/lxc/syscall_numbers.h
+++++ b/src/lxc/syscall_numbers.h
++@@ -228,9 +228,6 @@
++ 		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
++ 			#define __NR_signalfd 5276
++ 		#endif
++-	#else
++-		#define -1
++-		#warning "__NR_signalfd not defined for your architecture"
++ 	#endif
++ #endif
++ 
++diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
++index 220ef65fde..6aaa437226 100644
++--- a/src/lxc/syscall_wrappers.h
+++++ b/src/lxc/syscall_wrappers.h
++@@ -112,8 +112,10 @@ static inline int signalfd(int fd, const sigset_t *mask, int flags)
++ 	int retval;
++ 
++ 	retval = syscall(__NR_signalfd4, fd, mask, _NSIG / 8, flags);
+++#ifdef __NR_signalfd
++ 	if (errno == ENOSYS && flags == 0)
++ 		retval = syscall(__NR_signalfd, fd, mask, _NSIG / 8);
+++#endif
++ 
++ 	return retval;
++ }
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
