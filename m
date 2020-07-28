@@ -1,95 +1,45 @@
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Tue, 28 Jul 2020 11:56:25 +0200
-Subject: [Buildroot] [PATCH v2] package/cryptopp: add a target build
- configuration
-In-Reply-To: <20200727131705.GZ19818@scaer>
-References: <20200727122336.151322-1-kamel.bouhara@bootlin.com>
- <20200727124232.GX19818@scaer>
- <20200727150313.634b6b59@windsurf.home>
- <20200727131705.GZ19818@scaer>
-Message-ID: <20200728095625.GD11306@kb-xps>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 Jul 2020 12:07:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/easydbus: bump to version 0.1.0
+Message-ID: <20200728100707.2536999-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 27, 2020 at 03:17:05PM +0200, Yann E. MORIN wrote:
-> Thomas, Kamel, Al,
->
+Update indentation in hash file (two spaces)
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/easydbus/easydbus.hash | 4 ++--
+ package/easydbus/easydbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for you comment, I've just sent a v3 that I hope will fixes
-issues below.
-
-Regards,
-Kamel
-
-> On 2020-07-27 15:03 +0200, Thomas Petazzoni spake thusly:
-> > On Mon, 27 Jul 2020 14:42:32 +0200
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> >
-> > > > +diff --git a/GNUmakefile b/GNUmakefile
-> > > > +index e7b7b3a6..730e2a6f 100755
-> > > > +--- a/GNUmakefile
-> > > > ++++ b/GNUmakefile
-> > > > +@@ -1256,6 +1256,7 @@ ifneq ($(wildcard libcryptopp.so$(SOLIB_VERSION_SUFFIX)),)
-> > > > + 	$(CHMOD) 0755 $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_VERSION_SUFFIX)
-> > > > + ifeq ($(HAS_SOLIB_VERSION),1)
-> > > > + 	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so
-> > > > ++	-$(LN) libcryptopp.so$(SOLIB_VERSION_SUFFIX) $(DESTDIR)$(LIBDIR)/libcryptopp.so$(SOLIB_COMPAT_SUFFIX)
-> > > Why do we need that?
-> > Because on the target you need a symlink from the SONAME to the actual
-> > library. Right now, the Makefile only:
-> >  * Installs the library as libcryptopp.so.8.2.0. It has a SONAME of
-> >    libcryptopp.so.8.
-> >  * Creates a symlink libcryptopp.so -> libcryptopp.so.8.2.0, which
-> >    allows to link new applications
-> >  * Does NOT create the libcryptopp.so.8 -> libcryptopp.so.8.2.0 which
-> >    would allow using the library at runtime.
->
-> Ah, I see.
->
-> > > > + 	$(LDCONF) $(DESTDIR)$(LIBDIR)
-> > And it is this invocation of ldconfig that creates it!
->
-> Yes, I would know that. ;-)
->
-> [--SNIP--]
-> > > Which means that with your patch and without a call to ldconfig, the .so
-> > > symlink will no longer exist, and so it will no longer be possible to
-> > > link against the library.
-> > No correct: the .so symlink still exists. Re-read the patch from Kamel,
-> > it creates the .so.8 symlink in *addition* to creating the .so symlink,
-> > which was already there.
->
-> Right. Not sure why, but I saw a 'minus sign' in front of the previous
-> line. There is no such minus sign, so the line is not removed, so yes,
-> that's OK. Sorry.
->
-> > > Note that the host variant is not OK either, because not all systems
-> > > have ldconfig on the host either... See 64d4b34073 (e2fsprogs: do not
-> > > use ldconfig when building the host variant).
-> > Yes, agreed.
-> > So all what we need is:
-> >  (1) LDCONF=/bin/true
-> >  (2) An improved commit description for the patch that adds the symlink
->
-> (3) same as (1), but for the host variant.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+index 49245709f6..08a4f038d7 100644
+--- a/package/easydbus/easydbus.hash
++++ b/package/easydbus/easydbus.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 4626d6af3d9000d7e6ee9723abba7cd5f01d1c52420a80d8259dfa2d884faa11 easydbus-b86721147b265dfefc9a857669408cb6eb3d6560.tar.gz
+-sha256 dec3b3103cd6889045da86fc7da22bd25545966e5bd7c214791b922dec19588b LICENSE
++sha256  8cec24bff40f056d4874ed9d6fb73c9f1efbc5eff14528e1b49f1a162b197f26  easydbus-0.1.0.tar.gz
++sha256  dec3b3103cd6889045da86fc7da22bd25545966e5bd7c214791b922dec19588b  LICENSE
+diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
+index 5e6de73c31..57d0c22392 100644
+--- a/package/easydbus/easydbus.mk
++++ b/package/easydbus/easydbus.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-EASYDBUS_VERSION = b86721147b265dfefc9a857669408cb6eb3d6560
+-EASYDBUS_SITE = $(call github,mniestroj,easydbus,$(EASYDBUS_VERSION))
++EASYDBUS_VERSION = 0.1.0
++EASYDBUS_SITE = $(call github,mniestroj,easydbus,v$(EASYDBUS_VERSION))
+ EASYDBUS_DEPENDENCIES = luainterpreter libglib2
+ EASYDBUS_LICENSE = MIT
+ EASYDBUS_LICENSE_FILES = LICENSE
+-- 
+2.27.0
