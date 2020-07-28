@@ -1,52 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Jul 2020 21:36:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minetest: don't depend on luajit
-In-Reply-To: <20200728134847.5f7e7401@windsurf.home>
-References: <20200727205621.2556101-1-james.hilliard1@gmail.com>
- <20200728090907.4f093194@windsurf.home>
- <CADvTj4q1DeWEpAcpkOsg9GA_dhzogRFV00sMd6YrdzpVMqU0pA@mail.gmail.com>
- <20200728134847.5f7e7401@windsurf.home>
-Message-ID: <20200728193617.GA19695@scaer>
+Date: Tue, 28 Jul 2020 22:25:11 +0200
+Subject: [Buildroot] [PATCH] package/prosody: fix dependency
+In-Reply-To: <CAB0FRsvnTHG4=NhXFHYtO_vkC=B_Fvo-YhmhWqFVg4o97ONStQ@mail.gmail.com>
+References: <20200728062141.2969363-1-francois.perrad@gadz.org>
+ <20200728092104.5f811f75@windsurf.home>
+ <CAB0FRsvnTHG4=NhXFHYtO_vkC=B_Fvo-YhmhWqFVg4o97ONStQ@mail.gmail.com>
+Message-ID: <20200728202511.GA16287@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Fran?ois, All,
 
-On 2020-07-28 13:48 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 28 Jul 2020 04:17:26 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
-> > On Tue, Jul 28, 2020 at 1:09 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > > On Mon, 27 Jul 2020 14:56:21 -0600
-> > > James Hilliard <james.hilliard1@gmail.com> wrote:
-> > > > Since minetest has a fallback to a bundled lua when luajit is not
-> > > > available we don't need to depend on luajit or any lua version at all.  
-> > > In general, I think we try to not use bundled libraries even when they
-> > > exist. If minetest needs a Lua interpreter, it should always use an
-> > > external Lua interpreter, I believe.  
-> > From my understanding luajit is the only supported external lua
-> > interpreter for minetest. So I think it makes sense to not require
-> > a specific lua interpreter for flexibility.
-> I don't understand your reply, as I was not talking about using other
-> Lua interpreters.
-> What I'm saying is that if minetest has a mandatory dependency on
-> LuaJIT, then it should *always* use the external LuaJIT and never use
-> the bundled one. We prefer external libraries over bundled libraries in
-> general in the context of Buildroot.
+On 2020-07-28 11:21 +0200, Fran?ois Perrad spake thusly:
+> Le?mar. 28 juil. 2020 ??09:21, Thomas Petazzoni < [1]thomas.petazzoni@bootlin.com> a ?crit?:
+>   > LuaBitOp is not available with Lua 5.3
+>   The commit log is probably not very clear. Indeed, if LuaBitOp is not
+>   available with Lua 5.3, one would think you would need the external
+>   BR2_PACKAGE_LUABITOP when using something else than 5.1, i.e the
+>   opposite of what your change is doing.
+> 
+>   Shouldn't the commit log rather be:
+> 
+>   ? The luabitop functionality is available built-in in Lua 5.3 and
+>   ? LuaJIT, so only Lua 5.1 needs the additional external luabitop
+>   ? package.
+> 
+>   Could you confirm ?
+> 
+> bitwise operators are built-in in Lua 5.3,
+> LuaBitOp is a built-in library in LuaJIT,
+> so only Lua 5.1 needs the additional external LuaBitOp package.
 
-James, I think both Thomas and I understand your point of view. However,
-I do agree with Thomas on that topic, that we do use external libraries
-over bundled ones, even if that restricts the possibilities.
+OK, thanks for the explanations.
 
-Besides, minetest is a game; it is not a critical component for which we
-could consider bending the rules. Restricting minetest to use the
-external luajit will not be a major hindrance for the overwhelming
-majority of bBuildroot users, if at all (sorry Romain! ;-] ).
+However, luabitop depends on !lua-5.3, and I see in your latest series
+that you extended the dependency to !lua-5.4. Maybe we should also
+fix that, no?
 
-So I've marked this patch as rejected in patchwork.
+That is, we should have:
+
+    config BR2_PACKAGE_LUABITOP
+        depends on BR2_PACKAGE_LUA_5_1
+
+However, you are saying (emphasize mine):
+
+    "only Lua 5.1 **needs** the additional external LuaBitOp"
+
+Does that mean that it can still be used with other versions of Lua?
+
+That is, if we are using lua-5.3, and a package selects luabitop, will
+this fail to build? To run? In other words, is it a problem if a pacakge
+ends up using luabitop on another version of lua?
 
 Regards,
 Yann E. MORIN.
