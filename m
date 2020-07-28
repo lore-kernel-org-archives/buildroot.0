@@ -1,72 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 28 Jul 2020 23:47:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minetest: don't depend on luajit
-In-Reply-To: <CADvTj4pBFitVFsWD1xkVTjFJ7=a2yDEycRX5J06KOi2YYE_EmQ@mail.gmail.com>
-References: <20200727205621.2556101-1-james.hilliard1@gmail.com>
- <20200728090907.4f093194@windsurf.home>
- <CADvTj4q1DeWEpAcpkOsg9GA_dhzogRFV00sMd6YrdzpVMqU0pA@mail.gmail.com>
- <20200728134847.5f7e7401@windsurf.home>
- <CADvTj4pBFitVFsWD1xkVTjFJ7=a2yDEycRX5J06KOi2YYE_EmQ@mail.gmail.com>
-Message-ID: <6008628e-cb56-abee-86d2-1bb4ed95adfc@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed, 29 Jul 2020 00:07:14 +0200
+Subject: [Buildroot] [PATCH v3 0/8] Improving CVE reporting
+In-Reply-To: <20200728095227.7c9af284@windsurf.home>
+References: <20200724154356.2607639-1-gregory.clement@bootlin.com>
+ <20200728095227.7c9af284@windsurf.home>
+Message-ID: <a0a9b50d-46d0-cb29-aca7-ccf611abde57@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James, all,
+Hello all,
 
-Le 28/07/2020 ? 22:44, James Hilliard a ?crit?:
-> On Tue, Jul 28, 2020 at 5:48 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> On Tue, 28 Jul 2020 04:17:26 -0600
->> James Hilliard <james.hilliard1@gmail.com> wrote:
->>
->>> On Tue, Jul 28, 2020 at 1:09 AM Thomas Petazzoni
->>> <thomas.petazzoni@bootlin.com> wrote:
->>>>
->>>> On Mon, 27 Jul 2020 14:56:21 -0600
->>>> James Hilliard <james.hilliard1@gmail.com> wrote:
->>>>
->>>>> Since minetest has a fallback to a bundled lua when luajit is not
->>>>> available we don't need to depend on luajit or any lua version at all.
->>>>
->>>> In general, I think we try to not use bundled libraries even when they
->>>> exist. If minetest needs a Lua interpreter, it should always use an
->>>> external Lua interpreter, I believe.
->>> From my understanding luajit is the only supported external lua
->>> interpreter for minetest. So I think it makes sense to not require
->>> a specific lua interpreter for flexibility.
->>
->> I don't understand your reply, as I was not talking about using other
->> Lua interpreters.
->>
->> What I'm saying is that if minetest has a mandatory dependency on
->> LuaJIT, then it should *always* use the external LuaJIT and never use
->> the bundled one. We prefer external libraries over bundled libraries in
->> general in the context of Buildroot.
-> Oh, it doesn't have a mandatory LuaJIT dependency, the internal version
-> is not LuaJIT but some bundled regular Lua 5.1 variant AFAIK.
+On 28/07/20 09:52, Thomas Petazzoni wrote:
+> 
+> Could you give some specific example of where those AND operators with
+> child nodes are used ? This would help understand what are the
+> situations that make use of this.
+> 
+> Thanks!
+> 
+> Thomas
+> 
 
-When I packaged minetest, I looked at distribution packaging:
+See for example CVE-2019-3699 
+(https://nvd.nist.gov/vuln/detail/CVE-2019-3699). This is about a 
+vulnerability of privoxy when it runs on OpenSuse. This CVE is currently 
+detected for the privoxy package on http://autobuild.buildroot.net/stats/
 
-https://www.archlinux.org/packages/community/x86_64/minetest/
-https://src.fedoraproject.org/rpms/minetest/blob/master/f/minetest.spec#_38
-https://salsa.debian.org/games-team/minetest/-/blob/master/debian/control#L22
+I have extracted the NVD entry from the NVD 2019 json file for 
+convenience: http://paste.awesom.eu/ibNy . The matching CPEs are 
+logically declared as follows:
 
-minetest use luajit when available.
-Only Debian support liblua5.1 when luajit is not supported.
-
-I'm not sure it worth the effort since minetest require x11 and libgl.
-
-Best regards,
-Romain
+AND(
+     privoxy:privoxy <3.0.28-lp151.1.1,
+     opensuse:leap:15.1
+)
 
 
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
+They seem to use this to indicate if a particular distribution/OS is 
+vulnerable to the CVE.
+
+Titouan
