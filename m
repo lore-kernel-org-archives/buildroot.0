@@ -1,37 +1,55 @@
-From: John Keeping <john@metanate.com>
-Date: Tue, 28 Jul 2020 11:45:19 +0100
-Subject: [Buildroot] [PATCH] package/dbus: disable systemd for host build
-Message-ID: <20200728104519.3328479-1-john@metanate.com>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Tue, 28 Jul 2020 12:21:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/easydbus: bump to version 0.1.0
+In-Reply-To: <20200728100707.2536999-1-fontaine.fabrice@gmail.com>
+References: <20200728100707.2536999-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a6zkhre7.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes an issue if host-dbus happens to be rebuilt after systemd, in
-which case it autodetects systemd support but then ignored the prefix
-when installing unit files.  That means that is tries to write to the
-host system's /usr/lib/ which fails.
 
-There is no reason to build and install systemd support in the host
-build, so disable it explicitly.
+Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- package/dbus/dbus.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Update indentation in hash file (two spaces)
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/easydbus/easydbus.hash | 4 ++--
+>  package/easydbus/easydbus.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 312c6ba1d8..3c67625688 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -107,6 +107,7 @@ HOST_DBUS_CONF_OPTS = \
- 	--disable-selinux \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
-+	--disable-systemd \
- 	--without-x \
- 	--with-xml=expat
- 
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+
+>
+> diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+> index 49245709f6..08a4f038d7 100644
+> --- a/package/easydbus/easydbus.hash
+> +++ b/package/easydbus/easydbus.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 4626d6af3d9000d7e6ee9723abba7cd5f01d1c52420a80d8259dfa2d884faa11 easydbus-b86721147b265dfefc9a857669408cb6eb3d6560.tar.gz
+> -sha256 dec3b3103cd6889045da86fc7da22bd25545966e5bd7c214791b922dec19588b LICENSE
+> +sha256  8cec24bff40f056d4874ed9d6fb73c9f1efbc5eff14528e1b49f1a162b197f26  easydbus-0.1.0.tar.gz
+> +sha256  dec3b3103cd6889045da86fc7da22bd25545966e5bd7c214791b922dec19588b  LICENSE
+> diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
+> index 5e6de73c31..57d0c22392 100644
+> --- a/package/easydbus/easydbus.mk
+> +++ b/package/easydbus/easydbus.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -EASYDBUS_VERSION = b86721147b265dfefc9a857669408cb6eb3d6560
+> -EASYDBUS_SITE = $(call github,mniestroj,easydbus,$(EASYDBUS_VERSION))
+> +EASYDBUS_VERSION = 0.1.0
+> +EASYDBUS_SITE = $(call github,mniestroj,easydbus,v$(EASYDBUS_VERSION))
+>  EASYDBUS_DEPENDENCIES = luainterpreter libglib2
+>  EASYDBUS_LICENSE = MIT
+>  EASYDBUS_LICENSE_FILES = LICENSE
+
+
 -- 
-2.27.0
+Marcin Niestr?j
