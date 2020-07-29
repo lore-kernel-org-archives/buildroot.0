@@ -1,11 +1,11 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 29 Jul 2020 13:36:43 -0600
-Subject: [Buildroot] [PATCH v3 07/10] package/lua-flu: temporarily
- disabled with Lua 5.4
-In-Reply-To: <20200728132147.3155274-8-francois.perrad@gadz.org>
+Date: Wed, 29 Jul 2020 13:40:07 -0600
+Subject: [Buildroot] [PATCH v3 04/10] package/lua-messagepack: add
+ support of Lua 5.4
+In-Reply-To: <20200728132147.3155274-5-francois.perrad@gadz.org>
 References: <20200728132147.3155274-1-francois.perrad@gadz.org>
- <20200728132147.3155274-8-francois.perrad@gadz.org>
-Message-ID: <CADvTj4p7apz6+Fua8QQnBDFBPDenj3Y_qNrJFcJ4wZSnsAR1aw@mail.gmail.com>
+ <20200728132147.3155274-5-francois.perrad@gadz.org>
+Message-ID: <CADvTj4qaGTMxQOmikuRZcTMUnweBDQLpE5PheTztWw++OkhXoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +16,24 @@ On Wed, Jul 29, 2020 at 12:35 PM Francois Perrad <fperrad@gmail.com> wrote:
 >
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/lua-flu/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  package/lua-messagepack/lua-messagepack.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/package/lua-flu/Config.in b/package/lua-flu/Config.in
-> index 526dc9008..9b55ce5ab 100644
-> --- a/package/lua-flu/Config.in
-> +++ b/package/lua-flu/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_LUA_FLU
->         depends on !BR2_STATIC_LIBS # libfuse
->         depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
->         depends on BR2_USE_MMU # libfuse
-> +       depends on !BR2_PACKAGE_LUA_5_4
-I think these should probably be for consistency:
-depends on !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_4
->         select BR2_PACKAGE_ATTR
->         select BR2_PACKAGE_LIBFUSE
->         help
-> @@ -13,6 +14,6 @@ config BR2_PACKAGE_LUA_FLU
+> diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
+> index f393a8d02..33d460b4f 100644
+> --- a/package/lua-messagepack/lua-messagepack.mk
+> +++ b/package/lua-messagepack/lua-messagepack.mk
+> @@ -6,7 +6,7 @@
 >
->           http://piratery.net/flu/
->
-> -comment "lua-flu needs a toolchain w/ threads, dynamic library"
-> +comment "lua-flu needs a toolchain w/ threads, dynamic library, Lua <= 5.3"
->         depends on BR2_USE_MMU
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
+>  LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
+>  LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
+> -ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+> +ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
+Might make sense to add/use some helpers for these use cases like:
+BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_AT_LEAST_5_3
+>  LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
+>  else
+>  LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack
 > --
 > 2.25.1
 >
