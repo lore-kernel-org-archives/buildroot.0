@@ -1,54 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2020 02:31:38 +0000
-Subject: [Buildroot] [Bug 13126] New: make fails - bzip2-1.0.6.tar.gz and
- DirectFB-1.7.7.tar.gz aren't tarballs
-Message-ID: <bug-13126-163@https.bugs.busybox.net/>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 30 Jul 2020 06:25:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/feh: bump version to 3.4.1
+Message-ID: <20200730042509.4593-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13126
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-            Bug ID: 13126
-           Summary: make fails - bzip2-1.0.6.tar.gz and
-                    DirectFB-1.7.7.tar.gz aren't tarballs
-           Product: buildroot
-           Version: 2018.02
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: chuckb at craniac.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-I'm cross-compiling for ARCH=arm on a 32-bit Fedora-27 system, (64-bit) Xeon
-processor.  All packages upgraded with yum as of July 29, 2020.
-
-Executing make, the build fails when it gets to bzip2-1.0.6.tar.gz and then
-DirectFB-1.7.7.tar.gz
-
-The problem appears to be that these files, as downloaded during the build, are
-not tarballs.  They're uncompressed html files.
-
-When I retrieved files of the same names from sources.buildroot.net, the build
-appears to proceed normally.  I'm new at this, so it's possible there will be
-problems later, but for now the build is continuing.
-
-My config uses default file sources:
-- sources.buildroot.net
-- cdn.kernel.org/pub
-- ftpmirror.gnu.org
-- rocks.moonscript.org
-- cpan.metacpan.org
-
-buildroot cloned on July 29, 2020.
-
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index c39abd0ee7..eea32dbca5 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 18545ca5c7537268810bec564db9cd3ad1ca98c2a2f23ec243d3bac56cfc0365  feh-3.4.tar.bz2
++sha256 782463034ab0135bc8438515191f986db23a79d502154d23a7c07a7574907b7b  feh-3.4.1.tar.bz2
+ sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 90f8ff6579..8ba9e40dd8 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FEH_VERSION = 3.4
++FEH_VERSION = 3.4.1
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.27.0
