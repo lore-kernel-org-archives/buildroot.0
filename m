@@ -1,40 +1,23 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 30 Jul 2020 06:25:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/feh: bump version to 3.4.1
-Message-ID: <20200730042509.4593-1-petr.vorel@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Jul 2020 08:35:22 +0000
+Subject: [Buildroot] [Bug 13121] wpa_supplicant fails to build without
+ libopenssl enabled
+In-Reply-To: <bug-13121-163@https.bugs.busybox.net/>
+References: <bug-13121-163@https.bugs.busybox.net/>
+Message-ID: <bug-13121-163-RC5DFf4HmV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/feh/feh.hash | 2 +-
- package/feh/feh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=13121
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index c39abd0ee7..eea32dbca5 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 18545ca5c7537268810bec564db9cd3ad1ca98c2a2f23ec243d3bac56cfc0365  feh-3.4.tar.bz2
-+sha256 782463034ab0135bc8438515191f986db23a79d502154d23a7c07a7574907b7b  feh-3.4.1.tar.bz2
- sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 90f8ff6579..8ba9e40dd8 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FEH_VERSION = 3.4
-+FEH_VERSION = 3.4.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
+--- Comment #2 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
+This is a "known" issue, the following patch (which is not yet merged) should
+fix your issue:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200108190439.459316-1-geomatsi at gmail.com/
+
 -- 
-2.27.0
+You are receiving this mail because:
+You are on the CC list for the bug.
