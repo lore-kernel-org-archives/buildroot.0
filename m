@@ -1,27 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:10:23 +0200
-Subject: [Buildroot] [PATCH] package/dbus: disable systemd for host build
-In-Reply-To: <20200728104519.3328479-1-john@metanate.com> (John Keeping's
- message of "Tue, 28 Jul 2020 11:45:19 +0100")
-References: <20200728104519.3328479-1-john@metanate.com>
-Message-ID: <87pn8cb1nk.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Jul 2020 09:11:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 18.8-Leia
+In-Reply-To: <20200728204050.614509-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 28 Jul 2020 22:40:50 +0200")
+References: <20200728204050.614509-1-bernd.kuhls@t-online.de>
+Message-ID: <87lfj0b1lf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Keeping <john@metanate.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > This fixes an issue if host-dbus happens to be rebuilt after systemd, in
- > which case it autodetects systemd support but then ignored the prefix
- > when installing unit files.  That means that is tries to write to the
- > host system's /usr/lib/ which fails.
+ > Removed patch which was applied upstream:
+ > https://github.com/xbmc/xbmc/commit/920cc74da069216d19f724ecf5246cf997861bc6
 
- > There is no reason to build and install systemd support in the host
- > build, so disable it explicitly.
-
- > Signed-off-by: John Keeping <john@metanate.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
