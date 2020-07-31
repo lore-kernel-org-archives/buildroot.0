@@ -1,32 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2020 22:21:34 +0000
-Subject: [Buildroot] [Bug 13126] make fails - bzip2-1.0.6.tar.gz and
- DirectFB-1.7.7.tar.gz aren't tarballs
-In-Reply-To: <bug-13126-163@https.bugs.busybox.net/>
-References: <bug-13126-163@https.bugs.busybox.net/>
-Message-ID: <bug-13126-163-DWqnuJX1SC@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 Jul 2020 09:08:33 +0200
+Subject: [Buildroot] [PATCH 1/3] package/linux-headers: drop support for
+ 5.5.x headers
+In-Reply-To: <20200728071708.18198-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 28 Jul 2020 09:17:06 +0200")
+References: <20200728071708.18198-1-peter@korsgaard.com>
+Message-ID: <87bljwcgb2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13126
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-For bzip the solution (for an original download) should be patch [1],
-for directfb the sources.buildroot.net mirror should have (untested) the right
-source files for download...
+ > The 5.5.x series is now EOL so remove the option and add legacy
+ > handling for it.
 
-The right download should be detected by the stored hash files, see
-package/bzip2/bzip2.hash and package/directfb/directfb.hash (and
-sources.buildroot.net should provide the packages for all buildroot
-releases)...
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-
-[1]
-https://git.buildroot.net/buildroot/commit/?id=f45976b2c759b1630a2886e75312340b3b511f81
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
