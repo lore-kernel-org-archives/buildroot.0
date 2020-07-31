@@ -1,42 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:12:37 +0200
-Subject: [Buildroot] [git commit] package/feh: bump version to 3.4.1
-Message-ID: <20200731071037.33A8D825F7@busybox.osuosl.org>
+Date: Fri, 31 Jul 2020 09:11:52 +0200
+Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
+ version 2.28.4
+Message-ID: <20200731071037.1F173825F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d8caaf0c295e60fadc0dc14039376bfecb379fa
+commit: https://git.buildroot.net/buildroot/commit/?id=4416e0e7bafdb37dc4acff890fb0a5242c19ad27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+This is a minor release which provides fixes for CVE-2020-9862,
+CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
+CVE-2020-9925.
+
+Full release notes can be found at:
+
+  https://wpewebkit.org/release/wpewebkit-2.28.4.html
+
+A detailed security advisory can be found at:
+
+  https://wpewebkit.org/security/WSA-2020-0007.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/feh/feh.hash | 2 +-
- package/feh/feh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index c39abd0ee7..eea32dbca5 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 18545ca5c7537268810bec564db9cd3ad1ca98c2a2f23ec243d3bac56cfc0365  feh-3.4.tar.bz2
-+sha256 782463034ab0135bc8438515191f986db23a79d502154d23a7c07a7574907b7b  feh-3.4.1.tar.bz2
- sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 90f8ff6579..8ba9e40dd8 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index fcc35c5024..1a6fbc8b96 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.28.3.tar.xz.sums
+-md5  0b3655598f340a5c83cc26423fefcf36  wpewebkit-2.28.3.tar.xz
+-sha1  ea03d365584ef5e86ca28cec6ca072a4674e9312  wpewebkit-2.28.3.tar.xz
+-sha256  2539263a4d73c00abfe0205f54770dc1f6d2b635edbe41e748b507254f21e98b  wpewebkit-2.28.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.28.4.tar.xz.sums
++md5  6ab041f6ebdb2e053981de5980c864e7  wpewebkit-2.28.4.tar.xz
++sha1  b31739a86a269eac4ddd5e537cdf954224672450  wpewebkit-2.28.4.tar.xz
++sha256  785d83b99cd45cedb7c4f1f697db773a5a81eb0a42aeeafa3c623053f6fde87a  wpewebkit-2.28.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 22c3d96460..646bdd9384 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FEH_VERSION = 3.4
-+FEH_VERSION = 3.4.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
+-WPEWEBKIT_VERSION = 2.28.3
++WPEWEBKIT_VERSION = 2.28.4
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
