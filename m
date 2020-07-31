@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:13:34 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: drop explicit docker
- kernel options from docker test
-In-Reply-To: <20200727222158.25910-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 28 Jul 2020 00:21:58 +0200")
-References: <20200727222158.25910-1-peter@korsgaard.com>
- <20200727222158.25910-2-peter@korsgaard.com>
-Message-ID: <87zh7g9mxt.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Jul 2020 09:15:15 +0200
+Subject: [Buildroot] [PATCH v4, 1/1] package/zbar: bump to version 0.23.1
+In-Reply-To: <20200728101909.2723100-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 28 Jul 2020 12:19:09 +0200")
+References: <20200728101909.2723100-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9i49mv0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Since commit 0390777bfaff6c6 (package/docker-engine: needs some kernel
- > options), docker-engine now automatically ensures the needed kernel options
- > are enabled, so drop the explicit options from the kernel config.
+ > - Add new NLS dependency as well as a patch to fix a build failure
+ >   without it
+ > - Drop host-gettext (not needed since autoreconf was dropped with
+ >   8729c4ef881b02ff85b7645b0ad309d6ae44fccf)
+ > - Update indentation in hash file (two spaces)
 
- > 23:19:27 TestDockerCompose                        Starting
- > 23:19:28 TestDockerCompose                        Building
- > 00:14:41 TestDockerCompose                        Building done
- > 00:15:30 TestDockerCompose                        Cleaning up
- > .
- > ----------------------------------------------------------------------
- > Ran 1 test in 3362.784s
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v3 -> v4 (after review of Yann E. Morin):
+ >  - Report license issue about gettext.h and retrieve upstream patch:
+ >    https://github.com/mchehab/zbar/issues/98
 
- > OK
+ > Changes v2 -> v3 (after review of Thomas Petazzoni):
+ >  - Drop host-gettext dependency
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Changes v1 -> v2:
+ >  - Correctly pass TARGET_NLS_LIBS to ZBAR_CONF_ENV
 
 Committed, thanks.
 
