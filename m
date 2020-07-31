@@ -1,203 +1,210 @@
 From: Fabrice Goucem <fabrice.goucem@oss.nxp.com>
-Date: Fri, 31 Jul 2020 14:13:32 +0200
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx/imx-m4-demos: new
- package
-Message-ID: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
+Date: Fri, 31 Jul 2020 14:13:33 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/freescale_imx7ulpevkb: new defconfig
+In-Reply-To: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
+References: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
+Message-ID: <20200731121333.3754957-2-fabrice.goucem@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New package to download and install i.MX Cortex-M4 demos
-for following SoCs:
-* i.MX7D
-* i.MX7ULP
-* i.MX8M
-* i.MX8MM
-* i.MX8MN
-* i.MX8QM
-* i.MX8QXP
+Add basic support for NXP's i.MX7 ULP EVK board:
 
-Yocto recipes from where the demos location has been extracted:
-https://source.codeaurora.org/external/imx/meta-imx/tree/meta-sdk/recipes-fsl/m4-demos?h=zeus-5.4.24-2.1.0
+https://www.nxp.com/design/development-boards/i.mx-evaluation-and-development-boards/evaluation-kit-for-the-i.mx-7ulp-applications-processor:MCIMX7ULP-EVK
 
 Signed-off-by: Fabrice Goucem <fabrice.goucem@oss.nxp.com>
-Tested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+
+---
+Changes v6 -> v7:
+  - Updated imx-mcore-demos Yocto's URL (suggested by Gary Bisson)
+  - Renamed package imx-m4-demos to imx-mcore-demos (suggested by Gary
+    Bisson)
+  - Factorised firmware copies in imx-mcore-demos recipe (suggested by Gary Bisson)
+  - Updated all mcore demos (bar i.MX7D) to 2.8.0 (suggested by Gary
+    Bisson)
+
 Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 ---
- DEVELOPERS                                    |  1 +
- board/freescale/common/imx/post-image.sh      | 14 ++++-
- package/freescale-imx/Config.in               | 10 ++++
- .../freescale-imx/imx-mcore-demos/Config.in   | 11 ++++
- .../imx-mcore-demos/imx-mcore-demos.hash      | 10 ++++
- .../imx-mcore-demos/imx-mcore-demos.mk        | 54 +++++++++++++++++++
- 6 files changed, 99 insertions(+), 1 deletion(-)
- create mode 100644 package/freescale-imx/imx-mcore-demos/Config.in
- create mode 100644 package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash
- create mode 100644 package/freescale-imx/imx-mcore-demos/imx-mcore-demos.mk
+ DEVELOPERS                              |  2 +
+ board/freescale/imx7ulpevkb/readme.txt  | 76 +++++++++++++++++++++++++
+ configs/freescale_imx7ulpevkb_defconfig | 29 ++++++++++
+ package/freescale-imx/Config.in         |  8 ++-
+ 4 files changed, 114 insertions(+), 1 deletion(-)
+ create mode 100644 board/freescale/imx7ulpevkb/readme.txt
+ create mode 100644 configs/freescale_imx7ulpevkb_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ee840dbb8b..387eb61c06 100644
+index 387eb61c06..78be02ccc8 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -908,6 +908,7 @@ F:	package/whois/
+@@ -907,7 +907,9 @@ F:	package/whois/
+ 
  N:	Fabrice Goucem <fabrice.goucem@oss.nxp.com>
  F:	board/freescale/imx6ullevk/
++F:	board/freescale/imx7ulpevkb/
  F:	configs/freescale_imx6ullevk_defconfig
-+F:	package/freescale-imx/imx-mcore-demos/
++F:	configs/freescale_imx7ulpevkb_defconfig
+ F:	package/freescale-imx/imx-mcore-demos/
  
  N:	Falco Hyfing <hyfinglists@gmail.com>
- F:	package/python-pymodbus/
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 06ccaac3a4..dc651ac584 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -30,6 +30,18 @@ linux_image()
- 	fi
- }
- 
-+#
-+# mcore_image prints all available MCORE demo file names for the genimage
-+# configuration file
-+#
-+mcore_image()
-+{
-+	if grep -Eq "^BR2_PACKAGE_IMX_MCORE_DEMOS=y$" ${BR2_CONFIG}; then
-+		echo -n ", "
-+		for f in $(ls ${BINARIES_DIR}/mcore_*); do echo -n "$(basename $f), "; done
-+	fi
-+}
+diff --git a/board/freescale/imx7ulpevkb/readme.txt b/board/freescale/imx7ulpevkb/readme.txt
+new file mode 100644
+index 0000000000..d8b0abaee6
+--- /dev/null
++++ b/board/freescale/imx7ulpevkb/readme.txt
+@@ -0,0 +1,76 @@
++*******************************
++Freescale i.MX7ULP EVK B1 board
++*******************************
 +
- genimage_type()
- {
- 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
-@@ -79,7 +91,7 @@ uboot_image()
- 
- main()
- {
--	local FILES="$(dtb_list) $(linux_image)"
-+	local FILES="$(dtb_list) $(linux_image) $(mcore_image)"
- 	local IMXOFFSET="$(imx_offset)"
- 	local UBOOTBIN="$(uboot_image)"
- 	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
++This file documents the Buildroot support for the Freescale i.MX7ULP EVK B1 board.
++
++Build
++=====
++
++First, configure Buildroot for your i.MX7ULP EVK B1 board:
++
++  make freescale_imx7ulpevkb_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ the following files:
++  - boot.vfat
++  - imx7ulp-evkb.dtb
++  - mcore_imx7ulp_erpc_matrix_multiply_rpmsg_rtos_imxcm4.img
++  - mcore_imx7ulp_m4_demo.img
++  - mcore_imx7ulp_rpmsg_lite_pingpong_rtos.img
++  - mcore_imx7ulp_rpmsg_lite_str_echo_rtos.img
++  - mcore_imx7ulp_wireless_uart_bridge.img
++  - rootfs.ext2
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - u-boot.imx
++  - zImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on an SD card. Launch the following
++command as root:
++
++  dd if=./output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/common/imx/genimage.cfg.template.
++
++Flash QSPI with Cortex-M4 demo
++==============================
++
++Cortex-M4 image must be flashed onto QSPI NOR memory to handle PMIC management.
++To do so, stop at u-boot prompt and run the following commands:
++
++  sf probe
++  sf erase 0 30000
++  fatload mmc 0 62000000 m4_imx7ulp_rpmsg_lite_pingpong_rtos.img
++  sf write 62000000 0 30000
++
++Boot the i.MX7ULP EVK B1 board
++==============================
++
++To boot your newly created system (refer to the i.MX 7ULP EVK Quick Start Guide [1] for guidance):
++- insert the SD card in the micro SD slot of the board;
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
++
++References
++==========
++[1] https://www.nxp.com/document/guide/get-started-with-the-mcimx7ulp-evk:GS-MCIMX7ULP-EVK
+diff --git a/configs/freescale_imx7ulpevkb_defconfig b/configs/freescale_imx7ulpevkb_defconfig
+new file mode 100644
+index 0000000000..9402062663
+--- /dev/null
++++ b/configs/freescale_imx7ulpevkb_defconfig
+@@ -0,0 +1,29 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7ulp-evkb"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP=y
++BR2_PACKAGE_IMX_MCORE_DEMOS=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx7ulp_evk"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index b0c7de8436..75c213a1d7 100644
+index 75c213a1d7..cc0d8fc7a8 100644
 --- a/package/freescale-imx/Config.in
 +++ b/package/freescale-imx/Config.in
-@@ -96,10 +96,20 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+@@ -38,7 +38,10 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ 	bool "imx6ul/imx6ull"
  
-+config BR2_PACKAGE_FREESCALE_IMX_HAS_MCORE
-+	bool
-+	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+-	bool "imx7d/imx7ulp"
++	bool "imx7d"
 +
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
- source "package/freescale-imx/imx-kobs/Config.in"
- source "package/freescale-imx/imx-lib/Config.in"
-+source "package/freescale-imx/imx-mcore-demos/Config.in"
- source "package/freescale-imx/imx-m4fwloader/Config.in"
- source "package/freescale-imx/imx-parser/Config.in"
- source "package/freescale-imx/imx-uuc/Config.in"
-diff --git a/package/freescale-imx/imx-mcore-demos/Config.in b/package/freescale-imx/imx-mcore-demos/Config.in
-new file mode 100644
-index 0000000000..705a6c4557
---- /dev/null
-+++ b/package/freescale-imx/imx-mcore-demos/Config.in
-@@ -0,0 +1,11 @@
-+comment "imx-mcore-demos needs an i.MX platform with Cortex-Mx"
-+	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_MCORE
-+
-+config BR2_PACKAGE_IMX_MCORE_DEMOS
-+	bool "imx-mcore-demos"
-+	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_MCORE
-+	help
-+	  Cortex-Mx demo blobs for the Freescale i.MX SoCs.
-+
-+	  This library is provided by Freescale as-is and doesn't have
-+	  an upstream.
-diff --git a/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash
-new file mode 100644
-index 0000000000..13f3092c88
---- /dev/null
-+++ b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash
-@@ -0,0 +1,10 @@
-+# locally computed
-+sha256  cc00d3b936d49b2794a2a99e10129437e70caba3fd26b8379b8c50dd22f73254  imx7d-sabresd-m4-freertos-1.0.1.bin
-+sha256  a8fbe1180b3d20e933a410cd76e60baac7a9f54e8b2bae8b6b8a3e1af550eca6  imx7ulp-m4-demo-2.8.0.bin
-+sha256  2dbfab7fbbe89e89a2881d77c84a6c257699dc73ee6462a813bdd5ad09836b04  imx8mm-m4-demo-2.8.0.bin
-+sha256  e877c7462b6ea87c498563842f42352d204eb28a65f35f7dc1fec643f84abb66  imx8mn-m7-demo-2.8.0.bin
-+sha256  ac88568f63a794530339775a6e49e7928d3d09bcf4ba5edacea1841989e674b0  imx8mq-m4-demo-2.8.0.bin
-+sha256  d06a636b84cd559483091cbdb07b5ce9e15a534bca31d4cb756b33b696c2160b  imx8qm-m4-demo-2.8.0.bin
-+sha256  7800cdbebe07f426cdac50b0e295d64215164a767e79ca58bd917445c50e345f  imx8qx-m4-demo-2.8.0.bin
-+
-+# no hash for license file as it is different for each package listed above
-diff --git a/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.mk b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.mk
-new file mode 100644
-index 0000000000..9e1e9bf7f0
---- /dev/null
-+++ b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# imx-mcore-demos
-+#
-+################################################################################
-+
-+IMX_MCORE_DEMOS_SITE = $(FREESCALE_IMX_SITE)
-+
-+IMX_MCORE_DEMOS_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_MCORE_DEMOS_LICENSE_FILES = COPYING
-+IMX_MCORE_DEMOS_REDISTRIBUTE = NO
-+IMX_MCORE_DEMOS_INSTALL_IMAGES = YES
-+
-+define IMX_MCORE_DEMOS_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_MCORE_DEMOS_DL_DIR)/$(IMX_MCORE_DEMOS_SOURCE))
-+endef
-+
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7),y)
-+IMX_MCORE_DEMOS_VERSION = 1.0.1
-+IMX_MCORE_DEMOS_SOURCE = imx7d-sabresd-m4-freertos-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = bin
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP),y)
-+IMX_MCORE_DEMOS_VERSION = 2.8.0
-+IMX_MCORE_DEMOS_SOURCE = imx7ulp-m4-demo-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = img
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
-+IMX_MCORE_DEMOS_VERSION = 2.8.0
-+IMX_MCORE_DEMOS_SOURCE = imx8qm-m4-demo-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = bin
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
-+IMX_MCORE_DEMOS_VERSION = 2.8.0
-+IMX_MCORE_DEMOS_SOURCE = imx8mq-m4-demo-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = bin
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM),y)
-+IMX_MCORE_DEMOS_VERSION = 2.8.0
-+IMX_MCORE_DEMOS_SOURCE = imx8mm-m4-demo-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = bin
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
-+IMX_MCORE_DEMOS_VERSION = 2.8.0
-+IMX_MCORE_DEMOS_SOURCE = imx8mn-m7-demo-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = bin
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
-+IMX_MCORE_DEMOS_VERSION = 2.8.0
-+IMX_MCORE_DEMOS_SOURCE = imx8qx-m4-demo-$(IMX_MCORE_DEMOS_VERSION).bin
-+EXT = bin
-+endif
-+
-+# Note: firmware names are copied to binaries directory with an "mcore_" prefix, for easier post image scripting
-+
-+define IMX_MCORE_DEMOS_INSTALL_IMAGES_CMDS
-+	for f in $(@D)/*.$(EXT); do cp "$$f" $(BINARIES_DIR)/mcore_$$(basename "$$f"); done
-+endef
-+
-+$(eval $(generic-package))
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP
++	bool "imx7ulp"
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+ 	bool "imx8"
+@@ -68,6 +71,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+ 	default "IMX6S" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
+ 	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ 	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
++	default "IMX7ULP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP
+ 	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+ 	default "IMX8MQ" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+ 	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+@@ -90,6 +94,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+@@ -99,6 +104,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_MCORE
+ 	bool
+ 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
 -- 
 2.27.0
