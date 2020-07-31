@@ -1,55 +1,43 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 31 Jul 2020 17:14:50 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: add systemd
- init
-Message-ID: <20200731151451.3169915-1-francois.perrad@gadz.org>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri, 31 Jul 2020 13:40:52 -0700
+Subject: [Buildroot] [PATCH 1/9] package/libselinux: set the config_lsm
+ kernel config option to selinux
+In-Reply-To: <20200731204100.1171427-1-aduskett@gmail.com>
+References: <20200731204100.1171427-1-aduskett@gmail.com>
+Message-ID: <20200731204100.1171427-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-run with same options as in S40xorg
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Currently, the libselinux package sets the CONFIG_DEFAULT_SECURITY_SELINUX
+kernel option. However, as of kernels >= 5.1, this option is superseded in
+favor of the CONFIG_LSM option, a comma-separated list of LSMs the kernel
+should initialize in order.
+
+As the previous behavior of this package sets the kernel's default and only
+LSM to initialize to SELinux, it is safe to set this string to just selinux.
+If the user wants additional LSM's, they may do so with a custom kernel config.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/x11r7/xserver_xorg-server/xorg.service        | 11 +++++++++++
- .../x11r7/xserver_xorg-server/xserver_xorg-server.mk  |  5 +++++
- 2 files changed, 16 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/xorg.service
+ package/libselinux/libselinux.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/xorg.service b/package/x11r7/xserver_xorg-server/xorg.service
-new file mode 100644
-index 000000000..2745711cf
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xorg.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Xorg server
-+After=network.target
-+
-+[Service]
-+Type=simple
-+ExecStart=/usr/bin/Xorg :0.0 vt01 -s 0 -noreset -allowMouseOpenFail
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8ccc04224..854123981 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -224,6 +224,11 @@ XSERVER_XORG_SERVER_CONF_OPTS += --with-sha1=libsha1
- XSERVER_XORG_SERVER_DEPENDENCIES += libsha1
- endif
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f7397141d5..521dbaaba8 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -111,6 +111,7 @@ define LIBSELINUX_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX)
++	$(call KCONFIG_SET_OPT,CONFIG_LSM,"selinux")
+ endef
  
-+define XSERVER_XORG_SERVER_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/x11r7/xserver_xorg-server/xorg.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/xorg.service
-+endef
-+
- define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
- 		$(TARGET_DIR)/etc/init.d/S40xorg
+ $(eval $(generic-package))
 -- 
-2.25.1
+2.26.2
