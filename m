@@ -1,84 +1,34 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Fri, 31 Jul 2020 14:52:14 +0200
-Subject: [Buildroot] [PATCH 15/15] docs/manual: add a section about
- SELinux
-In-Reply-To: <CANQCQpbDOQyzYkfKuJKQzSN-V5+-KrrmuJSGOPL2wGrfsOEp1w@mail.gmail.com>
-References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
- <20200731101040.1723047-16-antoine.tenart@bootlin.com>
- <CANQCQpbDOQyzYkfKuJKQzSN-V5+-KrrmuJSGOPL2wGrfsOEp1w@mail.gmail.com>
-Message-ID: <159619993383.1725162.13822977480980478846@kwain>
+From: Eugen Hristev <eugen.hristev@microchip.com>
+Date: Fri, 31 Jul 2020 12:02:31 +0300
+Subject: [Buildroot] [PATCH] boot/at91bootstrap3: enable for cortexa7
+Message-ID: <20200731090231.246132-1-eugen.hristev@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matthew,
+Enable this bootloader for cortex a7 based SoCs
 
-Quoting Matthew Weber (2020-07-31 14:15:50)
-> On Fri, Jul 31, 2020 at 5:16 AM Antoine Tenart
-> <antoine.tenart@bootlin.com> wrote:
-> > +
-> > +https://selinuxproject.org[SELinux] is a Linux kernel security module enforcing
-> > +access control policies. In addition to the traditional file permissions and
-> > +access control lists, +SELinux+ allows to write rules for users or processes to
-> > +access specific functions of resources (files, sockets...).
-> > +
-> > ++SELinux+ has three modes of operating: +Enforcing+, +Permissive+ and
-> > ++Disabled+.  If not +Disabled+, the kernel will apply the policy and
-> > +non-authorized actions will be denied in +Enforcing+ mode or logged and reported
-> > +in +Permissive+ mode.  +Permissive+ mode is often used for troubleshooting
-> > +SELinux issues. In Buildroot this is controlled by the
-> > ++BR2_PACKAGE_REFPOLICY_POLICY_STATE_*+ configuration options.
-> 
-> It may be worth also mentioning that the kernel has configuration
-> options that play into if the modes are respected.  For example the
-> kernel could have bootargs set, development mode or policy disabled.
-> Maybe just adding a reference to the kernel.org kconfig would be
-> enough (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/selinux/Kconfig)?
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
 
-I think we could mention other Kconfig options are available in the
-kernel and may have an impact on the SELinux policy behaviour. There's a
-part about the kernel configuration below, I'll add it there.
+This is in preparation for our upcoming sama7g5 SoC featuring cortex A7.
 
-> > +By default in Buildroot the +SELinux+ policy is provided by the upstream
-> > +https://github.com/SELinuxProject/refpolicy[refpolicy] project, enabled with
-> > ++BR2_PACKAGE_REFPOLICY+.
-> > +
-> > +[[enabling-selinux]]
-> > +=== Enabling SELinux support
-> > +
-> > +To have proper support for +SELinux+ in a Buildroot generated system, the
-> > +following configuration needs to be enabled:
-> > +
-> > +* +BR2_PACKAGE_REFPOLICY+
-> > +* +BR2_PACKAGE_POLICYCOREUTILS+
-> > +
-> > +The Linux kernel configuration must also enable +SELinux+ support with
-> > ++CONFIG_SECURITY_SELINUX+, +CONFIG_LSM+ (or using the +lsm+ kernel
-> > +parameter) and extended attributes in filesystems (+CONFIG_EXT2_FS_XATTR+ for
-> > ++ext2+, +CONFIG_SQUASHFS_XATTR+ for +squashfs+, etc...).
-> > +
-> 
-> It looks like Buildroot via libselinux pkg is setting at least the
-> following so the user won't have to be concerned with their kernel
-> support.
+ boot/at91bootstrap3/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Right. I'll keep this part, but say the configuration should be
-magically fixed by libselinux.
-
-> Unsure how to tie this into the documentation as the user won't have
-> to enable more then the filesystem xattrs.  Maybe xattrs would make
-> sense to globally turn on as well?
-
-That should be possible, I don't know to what extend do we want to fix
-the kernel configuration. As other SELinux Kconfig options are already
-turned on by libselinux, I'd say that could make sense.
-
-Thanks!
-Antoine
-
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index faab7635da..bd3873860b 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_AT91BOOTSTRAP3
+ 	bool "AT91 Bootstrap 3"
+-	depends on BR2_arm926t || BR2_cortex_a5
++	depends on BR2_arm926t || BR2_cortex_a5 || BR2_cortex_a7
+ 	help
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+ 	  devices. It integrates algorithms for:
 -- 
-Antoine T?nart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
