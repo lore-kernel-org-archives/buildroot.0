@@ -1,67 +1,78 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 31 Jul 2020 10:07:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: drop gdlib-config
-Message-ID: <20200731080715.150745-1-fontaine.fabrice@gmail.com>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Fri, 31 Jul 2020 12:10:26 +0200
+Subject: [Buildroot] [PATCH 01/15] package/e2fsprogs: set xattrs for the
+ root dir as well
+In-Reply-To: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
+References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
+Message-ID: <20200731101040.1723047-2-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop gdlib-config and use pkg-config to find gd.
-Indeed, gdlib.pc is available since version 2.1.0 and
-https://github.com/libgd/libgd/commit/071a2a94ee9f9e5ce00ff689dfe67a0fcb885ad6
-and gdlib-config has been dropped from version 2.3.0
+The mke2fs binary copies the xattrs of the source directory when
+creating an image, but this logic did not include the root directory of
+the resulting image. A patch was sent upstream to fix this. Include the
+patch in Buildroot to allow creating SELinux ready images at build time.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 ---
- .../nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch  | 9 ++++++---
- package/nginx/nginx.mk                                   | 1 -
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...-xattrs-to-the-root-directory-as-wel.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch
 
-diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-index cea68035e1..31ccf88fff 100644
---- a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-+++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-@@ -9,6 +9,8 @@ dependencies.
- Signed-off-by: Martin Bark <martin@barkynet.com>
- [Peter: updated for 1.15.6]
- Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Fabrice: use pkg-config instead of gdlib-config]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  auto/lib/libgd/conf | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-@@ -17,14 +19,15 @@ diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
- index 67863976..1a4379a5 100644
- --- a/auto/lib/libgd/conf
- +++ b/auto/lib/libgd/conf
--@@ -7,8 +7,8 @@
-+@@ -7,8 +7,9 @@
-      ngx_feature_name=
-      ngx_feature_run=no
-      ngx_feature_incs="#include <gd.h>"
- -    ngx_feature_path=
- -    ngx_feature_libs="-lgd"
--+    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
--+    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
-++    ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I gdlib|
-++			 sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
-++    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs gdlib)"
-      ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);
-                        (void) img"
-      . auto/feature
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index d23c2fd4fa..1f896bc377 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -290,7 +290,6 @@ NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
- define NGINX_CONFIGURE_CMDS
- 	cd $(@D) ; $(NGINX_CONF_ENV) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
--		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
- 		./configure $(NGINX_CONF_OPTS) \
- 			--with-cc-opt="$(TARGET_CFLAGS) $(NGINX_CFLAGS)"
- endef
+diff --git a/package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch b/package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch
+new file mode 100644
+index 000000000000..2e9c3ccef0aa
+--- /dev/null
++++ b/package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch
+@@ -0,0 +1,46 @@
++From 1826d8965057bd84517156a4b75c81bdfdae9ebc Mon Sep 17 00:00:00 2001
++From: Antoine Tenart <antoine.tenart@bootlin.com>
++Date: Wed, 1 Jul 2020 10:06:03 +0200
++Subject: [PATCH] create_inode: set xattrs to the root directory as well
++
++populate_fs do copy the xattrs for all files and directories, but the
++root directory is skipped and as a result its extended attributes aren't
++set. This is an issue when using mkfs to build a full system image that
++can be used with SElinux in enforcing mode without making any runtime
++fix at first boot.
++
++This patch adds logic to set the root directory's extended attributes.
++
++[Uspstream status: sent to the mailing list and has a Reviewed-by tag,
++https://lore.kernel.org/linux-ext4/20200717100846.497546-1-antoine.tenart at bootlin.com/]
++
++Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
++---
++ misc/create_inode.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/misc/create_inode.c b/misc/create_inode.c
++index e8d1df6b55a5..fe66faf1b53d 100644
++--- a/misc/create_inode.c
+++++ b/misc/create_inode.c
++@@ -1050,9 +1050,17 @@ errcode_t populate_fs2(ext2_filsys fs, ext2_ino_t parent_ino,
++ 	file_info.path_max_len = 255;
++ 	file_info.path = calloc(file_info.path_max_len, 1);
++ 
+++	retval = set_inode_xattr(fs, root, source_dir);
+++	if (retval) {
+++		com_err(__func__, retval,
+++			_("while copying xattrs on root directory"));
+++		goto out;
+++	}
+++
++ 	retval = __populate_fs(fs, parent_ino, source_dir, root, &hdlinks,
++ 			       &file_info, fs_callbacks);
++ 
+++out:
++ 	free(file_info.path);
++ 	free(hdlinks.hdl);
++ 	return retval;
++-- 
++2.26.2
++
 -- 
-2.27.0
+2.26.2
