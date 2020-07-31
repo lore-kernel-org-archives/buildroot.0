@@ -1,97 +1,76 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 31 Jul 2020 22:49:05 +0200
-Subject: [Buildroot] [PATCH v1] package/wayland-utils: new package
-Message-ID: <20200731204905.19912-1-ps.report@gmx.net>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Fri, 31 Jul 2020 23:18:45 +0200
+Subject: [Buildroot] [PATCH 1/2] package/systemd: bump version to 246
+Message-ID: <20200731211847.14911-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1] (for details see [2]):
+Add zstd as optional dependency, and
+disable new options for host-systemd.
 
-This is first release of wayland-utils which only contains (for now)
-wayland-info, a utility for displaying information about the Wayland
-protocols supported by a Wayland compositor.
-
-wayland-info is basically a standalone version of weston-info as found
-in weston repository.
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
-[2] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041520.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/Config.in                        |  1 +
- package/wayland-utils/Config.in          | 12 ++++++++++++
- package/wayland-utils/wayland-utils.hash |  6 ++++++
- package/wayland-utils/wayland-utils.mk   | 14 ++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/wayland-utils/Config.in
- create mode 100644 package/wayland-utils/wayland-utils.hash
- create mode 100644 package/wayland-utils/wayland-utils.mk
+ package/systemd/systemd.hash |  4 ++--
+ package/systemd/systemd.mk   | 17 ++++++++++++++---
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 178b4da98a..ed045e0664 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1468,6 +1468,7 @@ menu "Graphics"
- 	source "package/waffle/Config.in"
- 	source "package/wayland/Config.in"
- 	source "package/wayland-protocols/Config.in"
-+	source "package/wayland-utils/Config.in"
- 	source "package/waylandpp/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-diff --git a/package/wayland-utils/Config.in b/package/wayland-utils/Config.in
-new file mode 100644
-index 0000000000..165020f26d
---- /dev/null
-+++ b/package/wayland-utils/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_WAYLAND_UTILS
-+	bool "wayland-utils"
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-+	depends on BR2_PACKAGE_WAYLAND # wayland (wayland-client, wayland-server)
-+	help
-+	  Wayland utils (wayland-info).
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index a90a54ab56..4672e43422 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,6 +1,6 @@
+ # sha256 locally computed
+-sha256  5770df29a89e8249bb4fbdc2018e2ea7bbb4fd01425cc03ece338f04a1d80c7f  systemd-245.7.tar.gz
++sha256  4268bd88037806c61c5cd1c78d869f7f20bf7e7368c63916d47b5d1c3411bd6f  systemd-246.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+-sha256  f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92  README
++sha256  a5ce42cd4614b086ef75aae6663f88f55bdf9e09a83c615c636ca540282528cf  README
+ sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 107fcbe66a..87265c97ad 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 245.7
+-SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
++SYSTEMD_VERSION = 246
++SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+ SYSTEMD_INSTALL_STAGING = YES
+@@ -125,6 +125,13 @@ else
+ SYSTEMD_CONF_OPTS += -Dbzip2=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++SYSTEMD_DEPENDENCIES += zstd
++SYSTEMD_CONF_OPTS += -Dzstd=true
++else
++SYSTEMD_CONF_OPTS += -Dzstd=false
++endif
 +
-+	  http://wayland.freedesktop.org/
-+
-+comment "wayland needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/wayland-utils/wayland-utils.hash b/package/wayland-utils/wayland-utils.hash
-new file mode 100644
-index 0000000000..00b6da4033
---- /dev/null
-+++ b/package/wayland-utils/wayland-utils.hash
-@@ -0,0 +1,6 @@
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
-+md5  714875aefb10e7f683cde24e58d033ad  wayland-utils-1.0.0.tar.xz
-+sha1  b5b8d498a892866d56ffbe862039d7c97acbe7bc  wayland-utils-1.0.0.tar.xz
-+sha256  64fecc4c58e87ae9b302901abe10c2e8af69c7503c221a96ecd0700e0aa268c0  wayland-utils-1.0.0.tar.xz
-+sha512  4c6f1822435b36b3acd361c0c54e56150e8a2697a9c4b2c20a149fcfaafe237e45807df3471884ddf594d89558001099e2d938e3f48988ba6950a0f1e3538db2  wayland-utils-1.0.0.tar.xz
-+sha256  1eba39c11640014a5841dd3017e5245fc31f47e1cf43a3287a286dd6a8de8a1a  COPYING
-diff --git a/package/wayland-utils/wayland-utils.mk b/package/wayland-utils/wayland-utils.mk
-new file mode 100644
-index 0000000000..9c4abe7b08
---- /dev/null
-+++ b/package/wayland-utils/wayland-utils.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# wayland-utils
-+#
-+################################################################################
-+
-+WAYLAND_UTILS_VERSION = 1.0.0
-+WAYLAND_UTILS_SITE = http://wayland.freedesktop.org/releases
-+WAYLAND_UTILS_SOURCE = wayland-utils-$(WAYLAND_UTILS_VERSION).tar.xz
-+WAYLAND_UTILS_LICENSE = MIT
-+WAYLAND_UTILS_LICENSE_FILES = COPYING
-+WAYLAND_UTILS_DEPENDENCIES = host-pkgconf wayland
-+
-+$(eval $(meson-package))
+ ifeq ($(BR2_PACKAGE_LZ4),y)
+ SYSTEMD_DEPENDENCIES += lz4
+ SYSTEMD_CONF_OPTS += -Dlz4=true
+@@ -658,7 +665,11 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dtests=false \
+ 	-Dglib=false \
+ 	-Dacl=false \
+-	-Dsysvinit-path=''
++	-Dsysvinit-path='' \
++	-Dinitrd=false \
++	-Dxdg-autostart=false \
++	-Dkernel-install=false \
++	-Dsystemd-analyze=false
+ 
+ HOST_SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
 -- 
 2.27.0
