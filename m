@@ -1,148 +1,152 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 31 Jul 2020 01:48:21 -0600
-Subject: [Buildroot] [PATCH 1/1] package/meson: update rpath patch to
- upstream version
-Message-ID: <20200731074821.4137503-1-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 31 Jul 2020 09:51:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gd: fix CVE-2018-14553 and
+ CVE-2019-6977
+Message-ID: <20200731075136.141361-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The version of this patch merged by upstream has some changes to rpath
-syntax matching and handling for additional syntax edge cases.
+- Fix CVE-2018-14553 : gdImageClone in gd.c in libgd 2.1.0-rc2 through
+  2.2.5 has a NULL pointer dereference allowing attackers to crash an
+  application via a specific function call sequence.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+- Fix CVE-2019-6977: gdImageColorMatch in gd_color_match.c in the GD
+  Graphics Library (aka LibGD) 2.2.5, as used in the imagecolormatch
+  function in PHP before 5.6.40, 7.x before 7.1.26, 7.2.x before 7.2.14,
+  and 7.3.x before 7.3.1, has a heap-based buffer overflow. This can be
+  exploited by an attacker who is able to trigger imagecolormatch calls
+  with crafted image data.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...003-backends-fix-rpath-match-pattern.patch | 77 +++++++++++++++----
- 1 file changed, 63 insertions(+), 14 deletions(-)
+ ...-pointer-dereference-in-gdImageClone.patch | 44 +++++++++++++++++++
+ ...f-Bounds-Write-on-Heap-CVE-2019-6977.patch | 39 ++++++++++++++++
+ package/gd/gd.mk                              | 13 ++++++
+ 3 files changed, 96 insertions(+)
+ create mode 100644 package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
+ create mode 100644 package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
 
-diff --git a/package/meson/0003-backends-fix-rpath-match-pattern.patch b/package/meson/0003-backends-fix-rpath-match-pattern.patch
-index 5fd5b73ade..f4477b59d2 100644
---- a/package/meson/0003-backends-fix-rpath-match-pattern.patch
-+++ b/package/meson/0003-backends-fix-rpath-match-pattern.patch
-@@ -1,4 +1,4 @@
--From af4ac0284714842535106f3d5f8a973c20e95105 Mon Sep 17 00:00:00 2001
-+From 1ce4258c219fe08b6d6eaa6aa944f27d91d054cb Mon Sep 17 00:00:00 2001
- From: James Hilliard <james.hilliard1@gmail.com>
- Date: Sat, 18 Jul 2020 17:01:33 -0600
- Subject: [PATCH] backends: fix rpath match pattern
-@@ -6,23 +6,45 @@ Subject: [PATCH] backends: fix rpath match pattern
- Since -Wl,-rpath= is not the only valid rpath ldflags syntax we
- need to try and match all valid rpath ldflags.
- 
-+In addition we should prevent -Wl,--just-symbols from being used to
-+set rpath due to inconsistent compiler support.
+diff --git a/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch b/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
+new file mode 100644
+index 0000000000..8234de45a2
+--- /dev/null
++++ b/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
+@@ -0,0 +1,44 @@
++From a93eac0e843148dc2d631c3ba80af17e9c8c860f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?F=C3=A1bio=20Cabral=20Pacheco?= <fcabralpacheco@gmail.com>
++Date: Fri, 20 Dec 2019 12:03:33 -0300
++Subject: [PATCH] Fix potential NULL pointer dereference in gdImageClone()
 +
- Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://github.com/mesonbuild/meson/pull/7472]
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+1ce4258c219fe08b6d6eaa6aa944f27d91d054cb]
- ---
-- mesonbuild/backend/backends.py |  6 ++++--
-- run_unittests.py               | 26 +++++++++++++++-----------
-- 2 files changed, 19 insertions(+), 13 deletions(-)
-+ mesonbuild/backend/backends.py | 30 ++++++++++++++++++++++++--
-+ run_unittests.py               | 39 +++++++++++++++++++++++-----------
-+ 2 files changed, 55 insertions(+), 14 deletions(-)
- 
- diff --git a/mesonbuild/backend/backends.py b/mesonbuild/backend/backends.py
--index cfd3a397f..6f44abc13 100644
-+index cfd3a397f..e053f67e6 100644
- --- a/mesonbuild/backend/backends.py
- +++ b/mesonbuild/backend/backends.py
--@@ -455,9 +455,11 @@ class Backend:
-+@@ -14,6 +14,7 @@
++[Retrieved (and updated to remove .gitignore and tests) from:
++https://github.com/libgd/libgd/commit/a93eac0e843148dc2d631c3ba80af17e9c8c860f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/gd.c                          |  9 +--------
++ tests/gdimageclone/.gitignore     |  1 +
++ tests/gdimageclone/CMakeLists.txt |  1 +
++ tests/gdimageclone/Makemodule.am  |  3 ++-
++ tests/gdimageclone/style.c        | 30 ++++++++++++++++++++++++++++++
++ 5 files changed, 35 insertions(+), 9 deletions(-)
++ create mode 100644 tests/gdimageclone/style.c
++
++diff --git a/src/gd.c b/src/gd.c
++index 592a0286..d564d1f9 100644
++--- a/src/gd.c
+++++ b/src/gd.c
++@@ -2865,14 +2865,6 @@ BGD_DECLARE(gdImagePtr) gdImageClone (gdImagePtr src) {
++ 		}
++ 	}
 + 
-+ from collections import OrderedDict
-+ from functools import lru_cache
-++from pathlib import Path
-+ import enum
-+ import json
-+ import os
-+@@ -455,10 +456,35 @@ class Backend:
-                  args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
-              except Exception:
-                  pass
--+        rpath_regex = re.compile(r'-Wl,-rpath(?:-link)?[=,]([^,@\-][^,]+)')
-++        # Match rpath formats:
-++        # -Wl,-rpath=
-++        # -Wl,-rpath,
-++        rpath_regex = re.compile(r'-Wl,-rpath[=,]([^,]+)')
-++        # Match solaris style compat runpath formats:
-++        # -Wl,-R
-++        # -Wl,-R,
-++        runpath_regex = re.compile(r'-Wl,-R[,]?([^,]+)')
-++        # Match symbols formats:
-++        # -Wl,--just-symbols=
-++        # -Wl,--just-symbols,
-++        symbols_regex = re.compile(r'-Wl,--just-symbols[=,]([^,]+)')
-          for arg in args:
- -            if arg.startswith('-Wl,-rpath='):
- -                for dir in arg.replace('-Wl,-rpath=','').split(':'):
-@@ -30,15 +52,30 @@ index cfd3a397f..6f44abc13 100644
- +            if rpath_match:
- +                for dir in rpath_match.group(1).split(':'):
-                      dirs.add(dir)
-++            runpath_match = runpath_regex.match(arg)
-++            if runpath_match:
-++                for dir in runpath_match.group(1).split(':'):
-++                    # The symbols arg is an rpath if the path is a directory
-++                    if Path(dir).is_dir():
-++                        dirs.add(dir)
-++            symbols_match = symbols_regex.match(arg)
-++            if symbols_match:
-++                for dir in symbols_match.group(1).split(':'):
-++                    # Prevent usage of --just-symbols to specify rpath
-++                    if Path(dir).is_dir():
-++                        raise MesonException('Invalid arg for --just-symbols, {} is a directory.'.format(dir))
-          return dirs
-  
-+     def rpaths_for_bundled_shared_libraries(self, target, exclude_system=True):
- diff --git a/run_unittests.py b/run_unittests.py
--index 820b705b5..2c3ffc2e9 100755
-+index b5294b9f8..73131c75b 100755
- --- a/run_unittests.py
- +++ b/run_unittests.py
--@@ -6421,17 +6421,21 @@ class LinuxlikeTests(BasePlatformTests):
-+@@ -6473,19 +6473,34 @@ class LinuxlikeTests(BasePlatformTests):
-+         self.init(yonder_dir)
-+         self.build()
-          self.install(use_destdir=False)
--         self.new_builddir()
-+-        self.new_builddir()
-  
- -        # Build an app that uses that installed library.
- -        # Supply the rpath to the installed library via LDFLAGS
-@@ -53,14 +90,26 @@ index 820b705b5..2c3ffc2e9 100755
- -        self.assertEqual(got_rpath, yonder_libdir)
- +        # Since rpath has multiple valid formats we need to
- +        # test that they are all properly used.
--+        rpath_formats = ['-Wl,-rpath=', '-Wl,-rpath,', '-Wl,-rpath-link=', '-Wl,-rpath-link,']
--+        for rpath_format in rpath_formats:
-++        rpath_formats = [
-++            ('-Wl,-rpath=', False),
-++            ('-Wl,-rpath,', False),
-++            ('-Wl,--just-symbols=', True),
-++            ('-Wl,--just-symbols,', True),
-++            ('-Wl,-R', False),
-++            ('-Wl,-R,', False)
-++        ]
-++        for rpath_format, exception in rpath_formats:
- +            # Build an app that uses that installed library.
- +            # Supply the rpath to the installed library via LDFLAGS
- +            # (as systems like buildroot and guix are wont to do)
- +            # and verify install preserves that rpath.
-++            self.new_builddir()
- +            env = {'LDFLAGS': rpath_format + yonder_libdir,
- +                   'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
-++            if exception:
-++                with self.assertRaises(subprocess.CalledProcessError):
-++                    self.init(testdir, override_envvars=env)
-++                break
- +            self.init(testdir, override_envvars=env)
- +            self.build()
- +            self.install(use_destdir=False)
++-	if (src->styleLength > 0) {
++-		dst->styleLength = src->styleLength;
++-		dst->stylePos    = src->stylePos;
++-		for (i = 0; i < src->styleLength; i++) {
++-			dst->style[i] = src->style[i];
++-		}
++-	}
++-
++ 	dst->interlace   = src->interlace;
++ 
++ 	dst->alphaBlendingFlag = src->alphaBlendingFlag;
++@@ -2907,6 +2899,7 @@ BGD_DECLARE(gdImagePtr) gdImageClone (gdImagePtr src) {
++ 
++ 	if (src->style) {
++ 		gdImageSetStyle(dst, src->style, src->styleLength);
+++		dst->stylePos = src->stylePos;
++ 	}
++ 
++ 	for (i = 0; i < gdMaxColors; i++) {
+diff --git a/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch b/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
+new file mode 100644
+index 0000000000..11c7575dd4
+--- /dev/null
++++ b/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
+@@ -0,0 +1,39 @@
++From 2e886046f86d0d6bfc14aab94a881259a081e3f4 Mon Sep 17 00:00:00 2001
++From: wilson chen <willson.chenwx@gmail.com>
++Date: Fri, 20 Dec 2019 10:12:04 +0800
++Subject: [PATCH] Fix #497: gdImageColorMatch Out Of Bounds Write on Heap
++ (CVE-2019-6977)
++
++Fixed CVE-2019-6977 and add corresponding testcase.
++
++Original patch by Christoph M. Bechker <cmbecker69@gmx.de>
++https://gist.github.com/cmb69/1f36d285eb297ed326f5c821d7aafced
++
++[Retrieved (and updated to remove .gitignore and tests) from:
++https://github.com/libgd/libgd/commit/2e886046f86d0d6bfc14aab94a881259a081e3f4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/gd_color_match.c                    |  5 ++---
++ tests/gdimagecolormatch/.gitignore      |  1 +
++ tests/gdimagecolormatch/CMakeLists.txt  |  1 +
++ tests/gdimagecolormatch/Makemodule.am   |  1 +
++ tests/gdimagecolormatch/cve_2019_6977.c | 25 +++++++++++++++++++++++++
++ 5 files changed, 30 insertions(+), 3 deletions(-)
++ create mode 100644 tests/gdimagecolormatch/cve_2019_6977.c
++
++diff --git a/src/gd_color_match.c b/src/gd_color_match.c
++index f0842b69..f0194302 100644
++--- a/src/gd_color_match.c
+++++ b/src/gd_color_match.c
++@@ -31,9 +31,8 @@ BGD_DECLARE(int) gdImageColorMatch (gdImagePtr im1, gdImagePtr im2)
++ 		return -4; /* At least 1 color must be allocated */
++ 	}
++ 
++-	buf = (unsigned long *)gdMalloc(sizeof(unsigned long) * 5 * im2->colorsTotal);
++-	memset (buf, 0, sizeof(unsigned long) * 5 * im2->colorsTotal );
++-
+++	buf = (unsigned long *)gdMalloc(sizeof(unsigned long) * 5 * gdMaxColors);
+++	memset (buf, 0, sizeof(unsigned long) * 5 * gdMaxColors );
++ 	for (x=0; x < im1->sx; x++) {
++ 		for( y=0; y<im1->sy; y++ ) {
++ 			color = im2->pixels[y][x];
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index e2a46dca3c..419d9a6384 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -14,6 +14,19 @@ GD_CONFIG_SCRIPTS = gdlib-config
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
+ 
++# 0001-bmp-check-return-value-in-gdImageBmpPtr.patch
++GD_IGNORE_CVES += CVE-2018-1000222
++# 0002-Fix-420-Potential-infinite-loop-in-gdImageCreateFrom.patch
++GD_IGNORE_CVES += CVE-2018-5711
++# 0003-Fix-501-Uninitialized-read-in-gdImageCreateFromXbm-C.patch
++GD_IGNORE_CVES += CVE-2019-11038
++# 0004-Fix-492-Potential-double-free-in-gdImage-Ptr.patch
++GD_IGNORE_CVES += CVE-2019-6978
++# 0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
++GD_IGNORE_CVES += CVE-2018-14553
++# 0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
++GD_IGNORE_CVES += CVE-2019-6977
++
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 -- 
-2.25.1
+2.27.0
