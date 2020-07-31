@@ -1,20 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:09:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/easydbus: bump to version 0.1.0
-In-Reply-To: <20200728100707.2536999-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 28 Jul 2020 12:07:07 +0200")
-References: <20200728100707.2536999-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tuxob1p7.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Jul 2020 09:10:23 +0200
+Subject: [Buildroot] [PATCH] package/dbus: disable systemd for host build
+In-Reply-To: <20200728104519.3328479-1-john@metanate.com> (John Keeping's
+ message of "Tue, 28 Jul 2020 11:45:19 +0100")
+References: <20200728104519.3328479-1-john@metanate.com>
+Message-ID: <87pn8cb1nk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > Update indentation in hash file (two spaces)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > This fixes an issue if host-dbus happens to be rebuilt after systemd, in
+ > which case it autodetects systemd support but then ignored the prefix
+ > when installing unit files.  That means that is tries to write to the
+ > host system's /usr/lib/ which fails.
+
+ > There is no reason to build and install systemd support in the host
+ > build, so disable it explicitly.
+
+ > Signed-off-by: John Keeping <john@metanate.com>
 
 Committed, thanks.
 
