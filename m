@@ -1,35 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:13:21 +0200
-Subject: [Buildroot] [git commit] support/testing: drop explicit
- CGROUPFS_MOUNT from docker test
-Message-ID: <20200731071037.4005B813A1@busybox.osuosl.org>
+Date: Fri, 31 Jul 2020 09:10:16 +0200
+Subject: [Buildroot] [git commit] package/dbus: disable systemd for host
+ build
+Message-ID: <20200731071037.098C7825F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4726cf9517e35eaa9d08a3a4e9a5ac9cbb4da9e4
+commit: https://git.buildroot.net/buildroot/commit/?id=1bfdb3d08daa0a516525965e00ccabdb8a714b39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit 4f8229653 (package/docker-engine: needs more runtime
-dependencies), docker-engine now automatically pulls in cgroupfs-mount, so
-drop the explicit handling of it in TestDockerCompose.
+This fixes an issue if host-dbus happens to be rebuilt after systemd, in
+which case it autodetects systemd support but then ignored the prefix
+when installing unit files.  That means that is tries to write to the
+host system's /usr/lib/ which fails.
 
+There is no reason to build and install systemd support in the host
+build, so disable it explicitly.
+
+Signed-off-by: John Keeping <john@metanate.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_docker_compose.py | 1 -
- 1 file changed, 1 deletion(-)
+ package/dbus/dbus.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index f12e2a6a3d..67ee795f21 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -20,7 +20,6 @@ class TestDockerCompose(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_CA_CERTIFICATES=y
--        BR2_PACKAGE_CGROUPFS_MOUNT=y
-         BR2_PACKAGE_DOCKER_CLI=y
-         BR2_PACKAGE_DOCKER_COMPOSE=y
-         BR2_PACKAGE_DOCKER_ENGINE=y
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 312c6ba1d8..3c67625688 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -107,6 +107,7 @@ HOST_DBUS_CONF_OPTS = \
+ 	--disable-selinux \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
++	--disable-systemd \
+ 	--without-x \
+ 	--with-xml=expat
+ 
