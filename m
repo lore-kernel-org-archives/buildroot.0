@@ -1,51 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:08:53 +0200
-Subject: [Buildroot] [git commit] package/iprutils: bump to version 2.4.18.1
-Message-ID: <20200731071036.E5332825F7@busybox.osuosl.org>
+Date: Fri, 31 Jul 2020 09:06:44 +0200
+Subject: [Buildroot] [git commit] package/linux-headers: drop support for
+ 5.6.x headers
+Message-ID: <20200731071036.CA44D813A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e84a3823797f83fcee4c25328dceb6909c2a0b
+commit: https://git.buildroot.net/buildroot/commit/?id=6699d69d7ed498ec17b311d3fe7252c537cecc96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+The 5.6.x series is now EOL so remove the option and add legacy
+handling for it.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iprutils/iprutils.hash | 10 +++++-----
- package/iprutils/iprutils.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 5 -----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/iprutils/iprutils.hash b/package/iprutils/iprutils.hash
-index 423943b22d..bcad6e6d01 100644
---- a/package/iprutils/iprutils.hash
-+++ b/package/iprutils/iprutils.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/iprdd/files/iprutils%20for%202.6%20kernels/2.4.15/
--md5 e4011051bba7470df3936cbba7dced98  iprutils-2.4.15.1.tar.gz
--sha1 ed6c362ee3c6bd9023ee60d0d1a1ce5543c27c41  iprutils-2.4.15.1.tar.gz
-+# From https://sourceforge.net/projects/iprdd/files/iprutils%20for%202.6%20kernels/2.4.18/
-+md5  df733f504dd4f96abf3272f679b25311  iprutils-2.4.18.1.tar.gz
-+sha1  701a1a9af6890d333904a92f0b01c26b92f821fa  iprutils-2.4.18.1.tar.gz
- # Locally computed:
--sha256 a733e65f8fb19565f2ef5191eaa2a14d816fabed0fc254ab4bbf1a4c7800ebe5  iprutils-2.4.15.1.tar.gz
--sha256 59b4179e61248aff9cd2d6ee4cd1dbbd0ef48836fe2eeee19f4b16459785104a  LICENSE
-+sha256  1c26aee3bf95517fcb844f35ff2711a39b46cbfb50619db1d792c93eeee6f43d  iprutils-2.4.18.1.tar.gz
-+sha256  59b4179e61248aff9cd2d6ee4cd1dbbd0ef48836fe2eeee19f4b16459785104a  LICENSE
-diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-index 1165b3db0f..3fa8223ff6 100644
---- a/package/iprutils/iprutils.mk
-+++ b/package/iprutils/iprutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d9732edc9e..05127ab9c6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
--IPRUTILS_VERSION_MAJOR = 2.4.15
-+IPRUTILS_VERSION_MAJOR = 2.4.18
- IPRUTILS_VERSION = $(IPRUTILS_VERSION_MAJOR).1
- IPRUTILS_SITE = https://downloads.sourceforge.net/project/iprdd/iprutils%20for%202.6%20kernels/$(IPRUTILS_VERSION_MAJOR)
- IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils zlib
+ comment "Legacy options removed in 2020.08"
+ 
++config BR2_KERNEL_HEADERS_5_6
++	bool "kernel headers version 5.6.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 5.6.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_KERNEL_HEADERS_5_5
+ 	bool "kernel headers version 5.5.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 1d435aeb7f..1faf2f904b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  40d318add8cefe3fdb26f19dac7386f5e7b63854ae021e593466902856ce9ded  linux-5.7.1.tar.xz
+-sha256  25504b4de7baf912071d1ed40b13af0689305442b9dea9218fd096d8bd997cf7  linux-5.6.16.tar.xz
+ sha256  103f039f34a9009c42ea643b4f473bda6bb9607d5ad7f63b56b3e2351615fe2e  linux-5.4.45.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  418299385195f09b27e371a35f305f3aff148e7557a341b53460091303aa9bb7  linux-4.4.226.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2e1c991871..3b040a8876 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -55,10 +55,6 @@ config BR2_KERNEL_HEADERS_5_4
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+-config BR2_KERNEL_HEADERS_5_6
+-	bool "Linux 5.6.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+-
+ config BR2_KERNEL_HEADERS_5_7
+ 	bool "Linux 5.7.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+@@ -343,7 +339,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.14.183"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.127"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.45"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.6.16"	if BR2_KERNEL_HEADERS_5_6
+ 	default "5.7.1"		if BR2_KERNEL_HEADERS_5_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
