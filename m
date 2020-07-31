@@ -1,60 +1,54 @@
 From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Fri, 31 Jul 2020 12:10:39 +0200
-Subject: [Buildroot] [PATCH 14/15] package/refpolicy: fix the configure,
- build and install steps
+Date: Fri, 31 Jul 2020 12:10:36 +0200
+Subject: [Buildroot] [PATCH 11/15] package/refpolicy: allow selecting
+ additional modules
 In-Reply-To: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
 References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
-Message-ID: <20200731101040.1723047-15-antoine.tenart@bootlin.com>
+Message-ID: <20200731101040.1723047-12-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The refpolicy configure and build step were not correctly defined. The
-configuration was split between the configure and build step, while both
-the compilation and the installation were done in the install step. Fix
-this by moving all the configuration within the configuration step and
-by adding a call to make in the build step to compile the policy.
+Allow users to select additional modules available in the refpolicy, to
+be built in the binary policy. This will allow non-base modules to be
+selected based on the user use-case and to select extra module
+dependencies when providing out-of-tree modules.
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 ---
- package/refpolicy/refpolicy.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/refpolicy/Config.in    | 5 +++++
+ package/refpolicy/refpolicy.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 51ac71075fb8..5c100168401c 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -95,7 +95,7 @@ define REFPOLICY_CONFIGURE_SYSTEMD
- endef
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index 030b1e93c9bd..73274920000a 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -64,6 +64,11 @@ config BR2_REFPOLICY_EXTRA_MODULES_DIRS
+ 	  Each of those directories must contain the SELinux policy .fc, .if
+ 	  and .te files directly at the top-level, with no sub-directories.
+ 
++config BR2_REFPOLICY_EXTRA_MODULES
++	string "Extra modules to enable"
++	help
++	  List of extra SELinux modules to enable in the refpolicy.
++
  endif
  
--define REFPOLICY_CONFIGURE_CMDS
-+define REFPOLICY_CONFIGURE_BUILD
- 	$(SED) "/OUTPUT_POLICY/c\OUTPUT_POLICY = $(REFPOLICY_POLICY_VERSION)" \
- 		$(@D)/build.conf
- 	$(SED) "/MONOLITHIC/c\MONOLITHIC = y" $(@D)/build.conf
-@@ -103,13 +103,18 @@ define REFPOLICY_CONFIGURE_CMDS
- 	$(REFPOLICY_CONFIGURE_SYSTEMD)
- endef
+ comment "refpolicy needs a toolchain w/ threads"
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index edbb5a228f55..de1fe9217a80 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -47,6 +47,7 @@ REFPOLICY_MODULES = \
+ 	unconfined \
+ 	userdomain \
+ 	$(PACKAGES_SELINUX_MODULES) \
++	$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES)) \
+ 	$(foreach d,$(call qstrip,$(REFPOLICY_EXTRA_MODULES)),\
+ 		$(basename $(notdir $(wildcard $(d)/*.te))))
  
--define REFPOLICY_BUILD_CMDS
-+define REFPOLICY_CONFIGURE_CMDS
-+	$(REFPOLICY_CONFIGURE_BUILD)
- 	$(if $(call qstrip,$(REFPOLICY_EXTRA_MODULES)),\
- 		$(REFPOLICY_COPY_MODULES))
--	$(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) bare conf
-+	$(REFPOLICY_MAKE) -C $(@D) bare conf
- 	$(REFPOLICY_CONFIGURE_MODULES)
- endef
- 
-+define REFPOLICY_BUILD_CMDS
-+	$(REFPOLICY_MAKE) -C $(@D) policy
-+endef
-+
- define REFPOLICY_INSTALL_STAGING_CMDS
- 	$(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
- 		install-src install-headers
 -- 
 2.26.2
