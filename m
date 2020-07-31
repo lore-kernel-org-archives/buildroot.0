@@ -1,34 +1,48 @@
-From: Eugen Hristev <eugen.hristev@microchip.com>
-Date: Fri, 31 Jul 2020 12:02:31 +0300
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: enable for cortexa7
-Message-ID: <20200731090231.246132-1-eugen.hristev@microchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 Jul 2020 15:15:57 +0200
+Subject: [Buildroot] [PATCH 15/15] docs/manual: add a section about
+ SELinux
+In-Reply-To: <159619993383.1725162.13822977480980478846@kwain>
+References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
+ <20200731101040.1723047-16-antoine.tenart@bootlin.com>
+ <CANQCQpbDOQyzYkfKuJKQzSN-V5+-KrrmuJSGOPL2wGrfsOEp1w@mail.gmail.com>
+ <159619993383.1725162.13822977480980478846@kwain>
+Message-ID: <20200731151557.46c222be@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable this bootloader for cortex a7 based SoCs
+On Fri, 31 Jul 2020 14:52:14 +0200
+Antoine Tenart <antoine.tenart@bootlin.com> wrote:
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
+> > Unsure how to tie this into the documentation as the user won't have
+> > to enable more then the filesystem xattrs.  Maybe xattrs would make
+> > sense to globally turn on as well?  
+> 
+> That should be possible, I don't know to what extend do we want to fix
+> the kernel configuration. As other SELinux Kconfig options are already
+> turned on by libselinux, I'd say that could make sense.
 
-This is in preparation for our upcoming sama7g5 SoC featuring cortex A7.
+The problem with xattr is that it is typically a per-filesystem option:
 
- boot/at91bootstrap3/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+./fs/jffs2/Kconfig:config JFFS2_FS_XATTR
+./fs/cifs/Kconfig:config CIFS_XATTR
+./fs/f2fs/Kconfig:config F2FS_FS_XATTR
+./fs/Kconfig:config TMPFS_XATTR
+./fs/reiserfs/Kconfig:config REISERFS_FS_XATTR
+./fs/erofs/Kconfig:config EROFS_FS_XATTR
+./fs/ext2/Kconfig:config EXT2_FS_XATTR
+./fs/squashfs/Kconfig:config SQUASHFS_XATTR
+./fs/ubifs/Kconfig:config UBIFS_FS_XATTR
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index faab7635da..bd3873860b 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_AT91BOOTSTRAP3
- 	bool "AT91 Bootstrap 3"
--	depends on BR2_arm926t || BR2_cortex_a5
-+	depends on BR2_arm926t || BR2_cortex_a5 || BR2_cortex_a7
- 	help
- 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
- 	  devices. It integrates algorithms for:
+Which one do we enable ? All of them, and if the corresponding
+filesystem is not enabled, the option will be re-disabled ? That's a
+possible option, I'm not sure it's really nice but it should work.
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
