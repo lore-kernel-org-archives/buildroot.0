@@ -1,62 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:12:00 +0200
-Subject: [Buildroot] [git commit] package/webkitgtk: security bump to
- version 2.28.4
-Message-ID: <20200731071037.29E64825F7@busybox.osuosl.org>
+Date: Fri, 31 Jul 2020 09:12:37 +0200
+Subject: [Buildroot] [git commit] package/feh: bump version to 3.4.1
+Message-ID: <20200731071037.33A8D825F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b4d5678f1adbde4f41e2039e0a93f714a0db7d4
+commit: https://git.buildroot.net/buildroot/commit/?id=8d8caaf0c295e60fadc0dc14039376bfecb379fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a minor release which provides fixes for CVE-2020-9862,
-CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
-CVE-2020-9925.
-
-Full release notes can be found at:
-
-  https://webkitgtk.org/2020/07/28/webkitgtk2.28.4-released.html
-
-A detailed security advisory can be found at:
-
-  https://webkitgtk.org/security/WSA-2020-0007.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 44263745e4..cdca65a5a8 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.28.3.tar.xz.sums
--md5  a03a4dcd2819baca14fdec5af68b4356  webkitgtk-2.28.3.tar.xz
--sha1  af1d845d373e67fd666105e798a44e2cadaef83c  webkitgtk-2.28.3.tar.xz
--sha256  f0898ac072c220e13a4aee819408421a6cb56a6eb89170ceafe52468b0903522  webkitgtk-2.28.3.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.28.4.tar.xz.sums
-+md5  10e0cce27208dfbd4cf63dd68a9a47d7  webkitgtk-2.28.4.tar.xz
-+sha1  70e9dd80647b30eaaf8a7f5b30d8869cd1254056  webkitgtk-2.28.4.tar.xz
-+sha256  821952e8c9303ed752f1fb1d4283f612c25249d00d705d2b79c2db1bc49c9464  webkitgtk-2.28.4.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index f38ea5d20a..65a4439839 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index c39abd0ee7..eea32dbca5 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 18545ca5c7537268810bec564db9cd3ad1ca98c2a2f23ec243d3bac56cfc0365  feh-3.4.tar.bz2
++sha256 782463034ab0135bc8438515191f986db23a79d502154d23a7c07a7574907b7b  feh-3.4.1.tar.bz2
+ sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 90f8ff6579..8ba9e40dd8 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.28.3
-+WEBKITGTK_VERSION = 2.28.4
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-FEH_VERSION = 3.4
++FEH_VERSION = 3.4.1
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
