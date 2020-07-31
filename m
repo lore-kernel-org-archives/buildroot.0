@@ -1,32 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:12:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
- version 2.28.4
-In-Reply-To: <20200729154020.3460716-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Wed, 29 Jul 2020 18:40:20 +0300")
-References: <20200729154020.3460716-1-aperez@igalia.com>
-Message-ID: <87d04cb1kj.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Jul 2020 09:12:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/feh: bump version to 3.4.1
+In-Reply-To: <20200730042509.4593-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Thu, 30 Jul 2020 06:25:09 +0200")
+References: <20200730042509.4593-1-petr.vorel@gmail.com>
+Message-ID: <878sf0b1jl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > This is a minor release which provides fixes for CVE-2020-9862,
- > CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
- > CVE-2020-9925.
-
- > Full release notes can be found at:
-
- >   https://webkitgtk.org/2020/07/28/webkitgtk2.28.4-released.html
-
- > A detailed security advisory can be found at:
-
- >   https://webkitgtk.org/security/WSA-2020-0007.html
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
 Committed, thanks.
 
