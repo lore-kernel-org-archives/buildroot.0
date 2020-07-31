@@ -1,21 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 Jul 2020 09:08:43 +0200
-Subject: [Buildroot] [PATCH 3/3] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 7}.x series
-In-Reply-To: <20200728071708.18198-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 28 Jul 2020 09:17:08 +0200")
-References: <20200728071708.18198-1-peter@korsgaard.com>
- <20200728071708.18198-3-peter@korsgaard.com>
-Message-ID: <873658cgas.fsf@dell.be.48ers.dk>
+Date: Fri, 31 Jul 2020 09:08:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iprutils: bump to version
+ 2.4.18.1
+In-Reply-To: <20200728085233.2288013-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 28 Jul 2020 10:52:33 +0200")
+References: <20200728085233.2288013-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2n0b1py.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Update indentation in hash file (two spaces)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
