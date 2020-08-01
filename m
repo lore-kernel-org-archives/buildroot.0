@@ -1,92 +1,48 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat,  1 Aug 2020 16:14:13 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pynacl: bump to version 1.4.0
-Message-ID: <20200801221413.1662705-1-james.hilliard1@gmail.com>
+Date: Sat,  1 Aug 2020 16:24:53 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
+ 0.29.21
+Message-ID: <20200801222453.1715682-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to backport a commit to fix a build failure cased by a spurious
-wheel dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...e-spurious-requirement-for-wheel-596.patch | 34 +++++++++++++++++++
- package/python-pynacl/python-pynacl.hash      |  6 ++--
- package/python-pynacl/python-pynacl.mk        |  4 +--
- 3 files changed, 39 insertions(+), 5 deletions(-)
- create mode 100644 package/python-pynacl/0001-Remove-spurious-requirement-for-wheel-596.patch
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pynacl/0001-Remove-spurious-requirement-for-wheel-596.patch b/package/python-pynacl/0001-Remove-spurious-requirement-for-wheel-596.patch
-new file mode 100644
-index 0000000000..4f4a76ce29
---- /dev/null
-+++ b/package/python-pynacl/0001-Remove-spurious-requirement-for-wheel-596.patch
-@@ -0,0 +1,34 @@
-+From 44fb453931c611d4822343debe902cca8e1c8afe Mon Sep 17 00:00:00 2001
-+From: Scott Kitterman <sklist@kitterman.com>
-+Date: Tue, 26 May 2020 20:08:16 -0400
-+Subject: [PATCH] Remove spurious requirement for wheel (#596)
-+
-+* Remove spurious requirement for wheel
-+
-+* Put wheel back in pyproject.toml
-+
-+Co-authored-by: Scott Kitterman <scott@kitterman.com>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+44fb453931c611d4822343debe902cca8e1c8afe]
-+---
-+ setup.py | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 9319c1c..d82a7fe 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -35,8 +35,7 @@ except ImportError:
-+ 
-+ 
-+ requirements = ["six"]
-+-setup_requirements = ["setuptools",
-+-                      "wheel"]
-++setup_requirements = ["setuptools"]
-+ test_requirements = ["pytest>=3.2.1,!=3.3.0",
-+                      "hypothesis>=3.27.0"]
-+ docs_requirements = ["sphinx>=1.6.5",
-+-- 
-+2.25.1
-+
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
-index 9aa8a0eefe..b6ee2baf0e 100644
---- a/package/python-pynacl/python-pynacl.hash
-+++ b/package/python-pynacl/python-pynacl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pynacl/json
--md5	3f3b1272287bc2de8efd8a5fa18bf728  PyNaCl-1.3.0.tar.gz
--sha256	0c6100edd16fefd1557da078c7a31e7b7d7a52ce39fdca2bec29d4f7b6e7600c  PyNaCl-1.3.0.tar.gz
-+md5  8c6c57893327a694c72510fb620e4744  PyNaCl-1.4.0.tar.gz
-+sha256  54e9a2c849c742006516ad56a88f5c74bf2ce92c9f67435187c3c5953b346505  PyNaCl-1.4.0.tar.gz
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 73c6904f60..168d168838 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  0936311ccd09f1164ab2f46ca5cd8c3b  Cython-0.29.17.tar.gz
+-sha256  6361588cb1d82875bcfbad83d7dd66c442099759f895cf547995f00601f9caf2  Cython-0.29.17.tar.gz
++md5  12c5e45af71dcc6dff28cdcbcbef6f39  Cython-0.29.21.tar.gz
++sha256  e57acb89bd55943c8d8bf813763d20b9099cc7165c0f16b707631a7654be9cad  Cython-0.29.21.tar.gz
  # Locally computed sha256 checksums
--sha256	d3174ad63e721d4c9dccb8ad4320848992d314369bc46319720b5802c9153fe9  LICENSE
-+sha256  d3174ad63e721d4c9dccb8ad4320848992d314369bc46319720b5802c9153fe9  LICENSE
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
-index 679b3a7795..1e4155992a 100644
---- a/package/python-pynacl/python-pynacl.mk
-+++ b/package/python-pynacl/python-pynacl.mk
+ sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index cf19e35b8b..308b01e5b2 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYNACL_VERSION = 1.3.0
-+PYTHON_PYNACL_VERSION = 1.4.0
- PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
--PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/61/ab/2ac6dea8489fa713e2b4c6c5b549cc962dd4a842b5998d9e80cf8440b7cd
-+PYTHON_PYNACL_SITE = https://files.pythonhosted.org/packages/cf/5a/25aeb636baeceab15c8e57e66b8aa930c011ec1c035f284170cacb05025e
- PYTHON_PYNACL_LICENSE = Apache-2.0
- PYTHON_PYNACL_LICENSE_FILES = LICENSE
- PYTHON_PYNACL_SETUP_TYPE = setuptools
+-PYTHON_CYTHON_VERSION = 0.29.17
++PYTHON_CYTHON_VERSION = 0.29.21
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/99/36/a3dc962cc6d08749aa4b9d85af08b6e354d09c5468a3e0edc610f44c856b
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/6c/9f/f501ba9d178aeb1f5bf7da1ad5619b207c90ac235d9859961c11829d0160
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 -- 
 2.25.1
