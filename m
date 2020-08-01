@@ -1,11 +1,11 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 1 Aug 2020 14:51:05 -0700
+Date: Sat, 1 Aug 2020 14:43:32 -0700
 Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
  sprintf error
-In-Reply-To: <20200801233410.6ec574ce@gmx.net>
+In-Reply-To: <20200801234043.2daaf5ff@gmx.net>
 References: <20200801203749.424827-1-christian@paral.in>
- <20200801233410.6ec574ce@gmx.net>
-Message-ID: <CA+h8R2qz5aRa5DrkXcN+0Cca_vysEUdLQK+nAN1WMNg3dR08yA@mail.gmail.com>
+ <20200801233410.6ec574ce@gmx.net> <20200801234043.2daaf5ff@gmx.net>
+Message-ID: <CA+h8R2oNMYLqgfcgMZ4g-Vt-W6ip3Hxie-qnXtz8Kg63yXVWeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,23 +15,61 @@ To: buildroot@busybox.net
 Hi Peter,
 
 
-On Sat, Aug 1, 2020, 2:34 PM Peter Seiderer <ps.report@gmx.net> wrote:
 
-> thanks for the patch, but...
+On Sat, Aug 1, 2020, 2:40 PM Peter Seiderer <ps.report@gmx.net> wrote:
 
+> Hello Christian,
+>
+> On Sat, 1 Aug 2020 23:34:10 +0200, Peter Seiderer <ps.report@gmx.net>
+> wrote:
+>
+> > Hello Christian,
+> >
+> >
+> > thanks for the patch, but...
+> >
+> > On Sat,  1 Aug 2020 13:37:49 -0700, Christian Stewart <
+> christian at paral.in> wrote:
+> >
+> > > Fixes compile errors against certain kernels.
+> > >
+> > > Signed-off-by: Christian Stewart <christian@paral.in>
+> > > ---
+> > >  ...f-for-extending-string-which-causes-.patch | 336 ++++++++++++++++++
+> > >  1 file changed, 336 insertions(+)
+> > >  create mode 100644
+> package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > >
+> > > diff --git
+> a/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > > new file mode 100644
+> > > index 0000000000..6753eefdd9
+> > > --- /dev/null
+> > > +++
+> b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > > @@ -0,0 +1,336 @@
+> > > +From cc3262a32ce326d89d597bb8557ce0da05240e98 Mon Sep 17 00:00:00 2001
+> > > +From: Coleman <omegacoleman@gmail.com>
+> > > +Date: Fri, 17 Jul 2020 08:53:00 +0800
+> > > +Subject: [PATCH 3/3] Fix using sprintf for extending string, which
+> causes
+> > > + undefined behavior. (#334)
+> > > +
+> >
+> > The patch should have an note about the upstream source (see [1]), I
+> suspect you
+> > toke the patch from [2]?
+>
+> Or instead simple bump the package source version to the latest git commit
+> (as the patch is upstream committed)... ;-)
+>
 
-> maybe its worth to try some other 'upstream' sources, e.g. as
-> openSUSE [4] does (mentioning previous [5] and [6]), or the first
-> google search result [7] (did not find the time to dig into the
-> different repositories to find out which one is the best)...
+Can't do. The upstream has a commit that we don't follow. Apparently it has
+issues. Look at the PR on the repo.
 
-
-We've been through a number of these over the years. I would not recommend
-switching to another unless there's a specific reason. As far as I know the
-current configuration/upstream works fine with USB RTL cards.
-
-Best,
-Christian
+Thanks,
+christian
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200801/11675c50/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200801/2b0547bc/attachment.html>
