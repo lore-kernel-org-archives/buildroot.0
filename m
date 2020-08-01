@@ -1,47 +1,62 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  1 Aug 2020 16:20:33 +0200
-Subject: [Buildroot] [PATCHv3 3/5] package/terminology: bump to version 1.8.0
+Date: Sat,  1 Aug 2020 16:20:35 +0200
+Subject: [Buildroot] [PATCHv3 5/5] package/efl: keep X11 input 2.2+ enabled
 In-Reply-To: <20200801142035.4060526-1-romain.naour@gmail.com>
 References: <20200801142035.4060526-1-romain.naour@gmail.com>
-Message-ID: <20200801142035.4060526-3-romain.naour@gmail.com>
+Message-ID: <20200801142035.4060526-5-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See:
-https://www.enlightenment.org/news/2020-07-26-terminology-1.8.0
+Since efl 1.23, X11 input 2.2+ has been enabled by default [1].
+
+From [2]:
+"It would be a pretty unusual system to have x and no xinput2.2 support."
+
+While at it, enable explicitely X11 input 2 (enabled by default).
+
+[1] https://git.enlightenment.org/core/efl.git/commit/?id=cf005ac54abdea843e5731765e41e5088275249f
+[2] https://sourceforge.net/p/enlightenment/mailman/message/37065780/
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/terminology/terminology.hash | 6 +++---
- package/terminology/terminology.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/efl/efl.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index ed386fb7b3..3ec74d93c1 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,3 +1,3 @@
--# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.6.0.tar.xz.sha256sum
--sha256  b95cb05653afe0dad77fc038a8d5276c02a9c08d64ac97ddf0cee8087d27bd77  terminology-1.6.0.tar.xz
--sha256  a907d434f4691990ed8f2826ff7546672e9934a26c798351da12ed544dadc628  COPYING
-+# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.8.0.tar.xz.sha256sum
-+sha256  c6f5b003412f25507277702cabe1a11d7190971343c1d6030aa7d3fe5b45765f  terminology-1.8.0.tar.xz
-+sha256  6863ee700fc82b9c3b82a1627136f6935a9eb68e6a64491f20e00b4023c33622  COPYING
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index add80825a7..8200613f8b 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 0ffbcf9f07..6dc38b1626 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -28,7 +28,6 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+ # Configure options:
+ # elua=true: build elua for the target.
+ # sdl=false: disable sdl2 support.
+-# xinput22=false: disable X11 XInput v2.2+ support.
+ # embedded-lz4=false: use liblz4 from lz4 package.
+ # network-backend=none: disable connman networkmanager.
+ EFL_CONF_OPTS = \
+@@ -43,8 +42,7 @@ EFL_CONF_OPTS = \
+ 	-Dnetwork-backend=none \
+ 	-Dpixman=false \
+ 	-Dsdl=false \
+-	-Dvnc-server=false \
+-	-Dxinput22=false
++	-Dvnc-server=false
  
--TERMINOLOGY_VERSION = 1.6.0
-+TERMINOLOGY_VERSION = 1.8.0
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
+ EFL_BINDINGS = luajit
+ 
+@@ -154,7 +152,9 @@ EFL_CONF_OPTS += -Dfb=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
+-EFL_CONF_OPTS += -Dx11=true
++EFL_CONF_OPTS += -Dx11=true \
++	-Dxinput2=true \
++	-Dxinput22=true
+ 
+ EFL_DEPENDENCIES += \
+ 	xlib_libX11 \
 -- 
 2.25.4
