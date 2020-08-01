@@ -1,50 +1,75 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat,  1 Aug 2020 14:10:27 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pycryptodomex: bump to
- version 3.9.8
-Message-ID: <20200801201027.116726-1-james.hilliard1@gmail.com>
+From: Vijay <techvd@gmail.com>
+Date: Sat, 1 Aug 2020 13:21:27 -0700
+Subject: [Buildroot] Cannot get build to use start_x.elf and fixup_x.dat
+ Raspberry Pi 3
+In-Reply-To: <20200801130959.7ca4ac6a@gmx.net>
+References: <CAOnXkYsPPXA5K2gX0nAU58hdoBB6yEt+ov5J7KCa2iF5MLTv_Q@mail.gmail.com>
+ <20200801080648.GA32736@scaer> <20200801130959.7ca4ac6a@gmx.net>
+Message-ID: <CAOnXkYsZK4B=rkK+48kyXQZt8LP8MNxqpKWTp82p-XHFW4-jgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pycryptodomex/python-pycryptodomex.hash | 8 ++++----
- package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Oh my god, that was it! I just assumed the system would automatically pick
+up my changes and rebuild but I should've read the documentation more
+closely. Thanks for the responses. I have everything working now as I
+wanted.
 
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.hash b/package/python-pycryptodomex/python-pycryptodomex.hash
-index 2f2ca3ca7f..df8d2a2f8d 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.hash
-+++ b/package/python-pycryptodomex/python-pycryptodomex.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pycryptodomex/json
--md5	c55b52fc81cbf795fb7c302b0cc19b9f  pycryptodomex-3.9.6.tar.gz
--sha256	c021b66f5b3c4ea0c45422ec3241bfea4a16651e1ee5459a136639d0716ccb3c  pycryptodomex-3.9.6.tar.gz
-+md5  4cede80c602d8814bbfb24a1cdc50dc8  pycryptodomex-3.9.8.tar.gz
-+sha256  48cc2cfc251f04a6142badeb666d1ff49ca6fdfc303fd72579f62b768aaa52b9  pycryptodomex-3.9.8.tar.gz
- # Locally computed sha256 checksums
--sha256	d1af3fab2ef8cc53b6c7f48bdeb178ac874b04faf4ba0159a96b6109f1d393e2  LICENSE.rst
--sha256	8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
-+sha256  d1af3fab2ef8cc53b6c7f48bdeb178ac874b04faf4ba0159a96b6109f1d393e2  LICENSE.rst
-+sha256  8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
-index 1459bb8fc3..7f93d93131 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.mk
-+++ b/package/python-pycryptodomex/python-pycryptodomex.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYCRYPTODOMEX_VERSION = 3.9.6
-+PYTHON_PYCRYPTODOMEX_VERSION = 3.9.8
- PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
--PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/d7/4f/20258a48e6760cff6523a176ecec671c85cad3f199754a8b89728d130aa8
-+PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/f5/79/9d9206688385d1e7a5ff925e7aab1d685636256e34a409037aa7adbbe611
- PYTHON_PYCRYPTODOMEX_SETUP_TYPE = setuptools
- PYTHON_PYCRYPTODOMEX_LICENSE = \
- 	BSD-2-Clause, \
--- 
-2.25.1
+Regards,
+Vijay
+
+On Sat, Aug 1, 2020 at 4:10 AM Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Vijay,
+>
+> On Sat, 1 Aug 2020 10:06:48 +0200, "Yann E. MORIN" <
+> yann.morin.1998 at free.fr> wrote:
+>
+> > Vijay, All,
+> >
+> > On 2020-07-31 18:01 -0700, Vijay spake thusly:
+> > > I'm fairly new to buildroot and cannot find a solution to this problem
+> > > I'm having. Everything works well for me and I'm able to create the SD
+> > > card images to run on my Pi 3. However, I'm trying to get the extended
+> > > ("x") firmware to boot. In the Target Packages > Hardware Handling >
+> > > Firmware section, I'm selecting the extended option. Buildroot is
+> > > building all the different variations of the start.elf (including
+> > > start_x.elf, start_cd.elf) but only using the start.elf file in the
+> > > final image instead of the start_x.elf file (same with fixup.dat). So
+> > > basically whether I select the "default" option on that screen or
+> > > "extended," the resulting boot image is the same. If I manually copy
+> > > the start_x.elf and fixup_x.dat files as start.elf and fixup.dat the
+> > > I get the extended functionality - specifically the camera working.
+> > > I hope all that makes sense. Please let me know if you need any
+> > > further information. Any help is greatly appreciated.
+> >
+> > The corret files are copied to the unqualified names, and the
+> > unqualified names are loaded at boot; see the comment in config.txt
+>
+> And do not forget to re-build the rpi-firmware package (not done
+> automatically
+> by buildroot, see [1], [2]) after changing the options:
+>
+>         make rpi-firmware-rebuild
+>         make
+>
+> Regards,
+> Peter
+>
+> [1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
+> [2] https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+>
+> >
+> > Also, see commit 1bdc0334f, which fixed that recently on master. It was
+> > backported to 2020.05.x, but not to the LTS 2020.02...
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200801/56347aa4/attachment.html>
