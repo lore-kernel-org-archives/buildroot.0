@@ -1,75 +1,363 @@
-From: Vijay <techvd@gmail.com>
-Date: Sat, 1 Aug 2020 13:21:27 -0700
-Subject: [Buildroot] Cannot get build to use start_x.elf and fixup_x.dat
- Raspberry Pi 3
-In-Reply-To: <20200801130959.7ca4ac6a@gmx.net>
-References: <CAOnXkYsPPXA5K2gX0nAU58hdoBB6yEt+ov5J7KCa2iF5MLTv_Q@mail.gmail.com>
- <20200801080648.GA32736@scaer> <20200801130959.7ca4ac6a@gmx.net>
-Message-ID: <CAOnXkYsZK4B=rkK+48kyXQZt8LP8MNxqpKWTp82p-XHFW4-jgw@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat,  1 Aug 2020 13:37:49 -0700
+Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
+ sprintf error
+Message-ID: <20200801203749.424827-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oh my god, that was it! I just assumed the system would automatically pick
-up my changes and rebuild but I should've read the documentation more
-closely. Thanks for the responses. I have everything working now as I
-wanted.
+Fixes compile errors against certain kernels.
 
-Regards,
-Vijay
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ ...f-for-extending-string-which-causes-.patch | 336 ++++++++++++++++++
+ 1 file changed, 336 insertions(+)
+ create mode 100644 package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
 
-On Sat, Aug 1, 2020 at 4:10 AM Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Vijay,
->
-> On Sat, 1 Aug 2020 10:06:48 +0200, "Yann E. MORIN" <
-> yann.morin.1998 at free.fr> wrote:
->
-> > Vijay, All,
-> >
-> > On 2020-07-31 18:01 -0700, Vijay spake thusly:
-> > > I'm fairly new to buildroot and cannot find a solution to this problem
-> > > I'm having. Everything works well for me and I'm able to create the SD
-> > > card images to run on my Pi 3. However, I'm trying to get the extended
-> > > ("x") firmware to boot. In the Target Packages > Hardware Handling >
-> > > Firmware section, I'm selecting the extended option. Buildroot is
-> > > building all the different variations of the start.elf (including
-> > > start_x.elf, start_cd.elf) but only using the start.elf file in the
-> > > final image instead of the start_x.elf file (same with fixup.dat). So
-> > > basically whether I select the "default" option on that screen or
-> > > "extended," the resulting boot image is the same. If I manually copy
-> > > the start_x.elf and fixup_x.dat files as start.elf and fixup.dat the
-> > > I get the extended functionality - specifically the camera working.
-> > > I hope all that makes sense. Please let me know if you need any
-> > > further information. Any help is greatly appreciated.
-> >
-> > The corret files are copied to the unqualified names, and the
-> > unqualified names are loaded at boot; see the comment in config.txt
->
-> And do not forget to re-build the rpi-firmware package (not done
-> automatically
-> by buildroot, see [1], [2]) after changing the options:
->
->         make rpi-firmware-rebuild
->         make
->
-> Regards,
-> Peter
->
-> [1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
-> [2] https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
->
-> >
-> > Also, see commit 1bdc0334f, which fixed that recently on master. It was
-> > backported to 2020.05.x, but not to the LTS 2020.02...
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200801/56347aa4/attachment.html>
+diff --git a/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+new file mode 100644
+index 0000000000..6753eefdd9
+--- /dev/null
++++ b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+@@ -0,0 +1,336 @@
++From cc3262a32ce326d89d597bb8557ce0da05240e98 Mon Sep 17 00:00:00 2001
++From: Coleman <omegacoleman@gmail.com>
++Date: Fri, 17 Jul 2020 08:53:00 +0800
++Subject: [PATCH 3/3] Fix using sprintf for extending string, which causes
++ undefined behavior. (#334)
++
++---
++ core/rtw_mp.c              |   2 +-
++ os_dep/linux/ioctl_linux.c | 108 ++++++++++++++++++-------------------
++ 2 files changed, 55 insertions(+), 55 deletions(-)
++
++diff --git a/core/rtw_mp.c b/core/rtw_mp.c
++index c2e400d..989bb3e 100644
++--- a/core/rtw_mp.c
+++++ b/core/rtw_mp.c
++@@ -1871,7 +1871,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
++ 		} else {
++ 			psd_data = rtw_GetPSDData(pAdapter, i);
++ 		}
++-		sprintf(data, "%s%x ", data, psd_data);
+++		sprintf(data + strlen(data), "%x ", psd_data);
++ 		i++;
++ 	}
++ 
++diff --git a/os_dep/linux/ioctl_linux.c b/os_dep/linux/ioctl_linux.c
++index c74a153..9543fa3 100644
++--- a/os_dep/linux/ioctl_linux.c
+++++ b/os_dep/linux/ioctl_linux.c
++@@ -9080,19 +9080,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
++ //			DBG_871X("0x%02x\t", i);
++-			sprintf(extra, "%s0x%02x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%02x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, PROMContent[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", PROMContent[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, PROMContent[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", PROMContent[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra,"%s\n",extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0], "realmap") == 0) {
++@@ -9107,19 +9107,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
++ //			DBG_871X("0x%02x\t", i);
++-			sprintf(extra, "%s0x%02x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%02x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra,"%s\n",extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0], "rmap") == 0) {
++@@ -9158,7 +9158,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("0x%02x ", data[i]);
++-			sprintf(extra, "%s0x%02X ", extra, data[i]);
+++			sprintf(extra + strlen(extra), "0x%02X ", data[i]);
++ 		}
++ //		DBG_871X("}\n");
++ 	} else if (strcmp(tmp[0], "realraw") == 0) {
++@@ -9174,17 +9174,17 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n0x00\t");
++ 		for (i=0; i< mapLen; i++) {
++ 			//			DBG_871X("%02X", rawdata[i]);
++-			sprintf(extra, "%s%02X", extra, rawdata[i]);
+++			sprintf(extra + strlen(extra), "%02X", rawdata[i]);
++ 			if ((i & 0xF) == 0xF) {
++ 				//				DBG_871X("\n");
++-				sprintf(extra, "%s\n", extra);
++-				sprintf(extra, "%s0x%02x\t", extra, i+1);
+++				sprintf(extra + strlen(extra), "\n");
+++				sprintf(extra + strlen(extra), "0x%02x\t", i+1);
++ 			} else if ((i & 0x7) == 0x7) {
++ 				//				DBG_871X("\t");
++-				sprintf(extra, "%s \t", extra);
+++				sprintf(extra + strlen(extra), " \t");
++ 			} else {
++ 				//				DBG_871X(" ");
++-				sprintf(extra, "%s ", extra);
+++				sprintf(extra + strlen(extra), " ");
++ 			}
++ 		}
++ 		//		DBG_871X("}\n");
++@@ -9269,10 +9269,10 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("%02X", data[i]);
++-			sprintf(extra, "%s%02X", extra, data[i]);
+++			sprintf(extra + strlen(extra), "%02X", data[i]);
++ 			if (i != (cnts-1)) {
++ //				DBG_871X(":");
++-				sprintf(extra,"%s:",extra);
+++				sprintf(extra + strlen(extra), ":");
++ 			}
++ 		}
++ //		DBG_871X("}\n");
++@@ -9330,10 +9330,10 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("0x%02x", data[i]);
++-			sprintf(extra, "%s0x%02X", extra, data[i]);
+++			sprintf(extra + strlen(extra), "0x%02X", data[i]);
++ 			if (i != (cnts-1)) {
++ //				DBG_871X(",");
++-				sprintf(extra,"%s,",extra);
+++				sprintf(extra + strlen(extra), ",");
++ 			}
++ 		}
++ //		DBG_871X("}\n");
++@@ -9355,19 +9355,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=0; i<512; i+=16) { // set 512 because the iwpriv's extra size have limit 0x7FF
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra,"%s\t",extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"btbmap") == 0) {
++@@ -9384,19 +9384,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=512; i<1024 ; i+=16) {
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra,"%s\t",extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"btrmap") == 0) {
++@@ -9436,7 +9436,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ //		DBG_871X("%s: bt efuse data={", __FUNCTION__);
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("0x%02x ", data[i]);
++-			sprintf(extra, "%s 0x%02X ", extra, data[i]);
+++			sprintf(extra + strlen(extra), " 0x%02X ", data[i]);
++ 		}
++ //		DBG_871X("}\n");
++ 		DBG_871X(FUNC_ADPT_FMT ": BT MAC=[%s]\n", FUNC_ADPT_ARG(padapter), extra);
++@@ -9445,19 +9445,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=0; i<512; i+=16) {
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"btbfake") == 0) {
++@@ -9465,19 +9465,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=512; i<1024; i+=16) {
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"wlrfkmap")== 0) {
++@@ -9485,19 +9485,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=0; i<EFUSE_MAP_SIZE; i+=16) {
++ //			DBG_871X("\t0x%02x\t", i);
++-			sprintf(extra, "%s0x%02x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%02x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s %02X", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), " %02X", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 
++@@ -9523,7 +9523,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ 			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
++-			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[addr+i]);
+++			sprintf(extra + strlen(extra), "0x%02X ", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
++ 		}
++ 	} else if (strcmp(tmp[0],"btrfkrmap")== 0) {
++ 		if ((tmp[1]==NULL) || (tmp[2]==NULL)) {
++@@ -9547,7 +9547,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ 			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
++-			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
+++			sprintf(extra + strlen(extra), "0x%02X ", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
++ 		}
++ 	} else {
++ 		sprintf(extra, "Command not found!");
++@@ -10409,7 +10409,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
++ 			pnext++;
++ 			if ( *pnext != '\0' ) {
++ 				strtout = simple_strtoul (pnext , &ptmp, 16);
++-				sprintf( extra, "%s %d" ,extra ,strtout );
+++				sprintf(extra + strlen(extra), " %d"  ,strtout );
++ 			} else {
++ 				break;
++ 			}
++@@ -10443,7 +10443,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
++ 			pnext++;
++ 			if ( *pnext != '\0' ) {
++ 				strtout = simple_strtoul (pnext , &ptmp, 16);
++-				sprintf( extra, "%s %d" ,extra ,strtout );
+++				sprintf(extra + strlen(extra), " %d"  ,strtout );
++ 			} else {
++ 				break;
++ 			}
++@@ -10566,7 +10566,7 @@ static int rtw_mp_read_rf(struct net_device *dev,
++ 		pnext++;
++ 		if ( *pnext != '\0' ) {
++ 			strtou = simple_strtoul (pnext , &ptmp, 16);
++-			sprintf( extra, "%s %d" ,extra ,strtou );
+++			sprintf(extra + strlen(extra), " %d"  ,strtou );
++ 		} else {
++ 			break;
++ 		}
++@@ -12155,14 +12155,14 @@ todo:
++ 				goto exit;
++ 
++ #ifdef CONFIG_RTL8723A
++-			sprintf(extra, "%s %d ", extra, (pMptCtx->mptOutBuf[i]& 0x3f));
+++			sprintf(extra + strlen(extra), " %d ", (pMptCtx->mptOutBuf[i]& 0x3f));
++ #else
++-			sprintf(extra, "%s %d ", extra, (pMptCtx->mptOutBuf[i]& 0x1f));
+++			sprintf(extra + strlen(extra), " %d ", (pMptCtx->mptOutBuf[i]& 0x1f));
++ #endif
++ 		}
++ 	} else {
++ 		for (i=4; i<pMptCtx->mptOutLen; i++) {
++-			sprintf(extra, "%s 0x%x ", extra, pMptCtx->mptOutBuf[i]);
+++			sprintf(extra + strlen(extra), " 0x%x ", pMptCtx->mptOutBuf[i]);
++ 		}
++ 	}
++ 
++-- 
++2.27.0
++
+-- 
+2.28.0
