@@ -1,40 +1,64 @@
-From: Stefan Ott <stefan@ott.net>
-Date: Sat,  1 Aug 2020 02:38:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/unbound: bump version to 1.11.0
-Message-ID: <20200801003851.3739-1-stefan@ott.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 1 Aug 2020 02:59:05 +0200
+Subject: [Buildroot] Status of LLVM
+In-Reply-To: <CAGt4E5vRu+xVXtaze8+6CmWFXSmzJx2PV46bC7STiDnKCqksRw@mail.gmail.com>
+References: <CAGt4E5vRu+xVXtaze8+6CmWFXSmzJx2PV46bC7STiDnKCqksRw@mail.gmail.com>
+Message-ID: <31f39a1d-1436-0952-43e8-561135e6aa60@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Stefan Ott <stefan@ott.net>
----
- package/unbound/unbound.hash | 2 +-
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Markus,
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 52d78e1678..650120d40e 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b73677c21a71cf92f15cc8cfe76a3d875e40f65b6150081c39620b286582d536  unbound-1.10.1.tar.gz
-+sha256 9f2f0798f76eb8f30feaeda7e442ceed479bc54db0e3ac19c052d68685e51ef7  unbound-1.11.0.tar.gz
- sha256 8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index 0917db1def..6cf852ad9d 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNBOUND_VERSION = 1.10.1
-+UNBOUND_VERSION = 1.11.0
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
- UNBOUND_LICENSE = BSD-3-Clause
--- 
-2.28.0
+Le 01/08/2020 ? 02:20, Markus Mayer a ?crit?:
+> Hi all,
+> 
+> Looking through the mailing list archives, I found a patch series
+> proposed last September to support clang as cross-compiler.
+> 
+> http://lists.busybox.net/pipermail/buildroot/2019-September/258744.html
+> 
+> It seems that most patches from this series haven't been pulled into
+> mainline as of yet. What is the current status of using LLVM and clang
+> to build Buildroot? As far as I can tell, there doesn't seem to be
+> support for this right now. What are the plans going forward?
+
+Thanks for your interest for this series!
+For now, we only have llvm/clang packages to deploy libraries on the target.
+This allow to enable llvm-pipe and opencl (libclc) support on the target.
+
+The first patch of this series needs to be upstreamed:
+http://patchwork.ozlabs.org/project/buildroot/patch/20190907094027.9537-2-romain.naour at smile.fr/
+
+It seems that llvm doesn't work well with toolchain using a relocated sysroot
+(--sysroot).
+
+The rest of the series allow using clang as cross-compiler in all package
+infrastructure and for the Linux kernel.
+
+This series should be completed by the compiler-rt from Matthew Weber:
+
+http://patchwork.ozlabs.org/project/buildroot/list/?series=181074
+
+We also had a discussion about using clang as native compiler
+(related to
+https://git.buildroot.net/buildroot/commit/?id=546a4e1c1f5e219566469511c998ec7c7152e5ee)
+
+It would be interesting to enable riscv support for llvm/clang.
+
+But it require some time to work on it, and most of this work has been done on
+spare time.
+
+Best regards,
+Romain
+
+> 
+> Thanks,
+> -Markus
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
