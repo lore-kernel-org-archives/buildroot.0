@@ -1,112 +1,184 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  1 Aug 2020 14:36:57 -0700
-Subject: [Buildroot] [PATCH v1 5/6] package/nvidia-container-toolkit: new
- package
+Date: Sat,  1 Aug 2020 14:36:58 -0700
+Subject: [Buildroot] [PATCH v1 6/6] configs/jetsontx2_defconfig: new nvidia
+ jetson tx2 defconfig
 In-Reply-To: <20200801213658.33869-2-christian@paral.in>
 References: <20200801213658.33869-2-christian@paral.in>
-Message-ID: <20200801213658.33869-5-christian@paral.in>
+Message-ID: <20200801213658.33869-6-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NVIDIA Container Toolkit is a OCI-spec hook for support for mounting GPUs into
-containers.
-
-https://github.com/NVIDIA/nvidia-container-toolkit
+Adds support for the NVIDIA Jetson TX2.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                             |  1 +
- package/nvidia-container-toolkit/Config.in    | 18 +++++++++++
- .../nvidia-container-toolkit.hash             |  3 ++
- .../nvidia-container-toolkit.mk               | 30 +++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/nvidia-container-toolkit/Config.in
- create mode 100644 package/nvidia-container-toolkit/nvidia-container-toolkit.hash
- create mode 100644 package/nvidia-container-toolkit/nvidia-container-toolkit.mk
+ board/jetsontx2             |  1 +
+ board/nvidia/readme.txt     | 85 +++++++++++++++++++++++++++++++++++++
+ configs/jetsontx2_defconfig | 52 +++++++++++++++++++++++
+ 3 files changed, 138 insertions(+)
+ create mode 120000 board/jetsontx2
+ create mode 100644 board/nvidia/readme.txt
+ create mode 100644 configs/jetsontx2_defconfig
 
-diff --git a/package/Config.in b/package/Config.in
-index dd1c6e1395..dc2a68933a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2387,6 +2387,7 @@ menu "System tools"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
- 	source "package/nvidia-container-runtime/Config.in"
-+	source "package/nvidia-container-toolkit/Config.in"
- 	source "package/openrc/Config.in"
- 	source "package/openvmtools/Config.in"
- 	source "package/pamtester/Config.in"
-diff --git a/package/nvidia-container-toolkit/Config.in b/package/nvidia-container-toolkit/Config.in
-new file mode 100644
-index 0000000000..ff75b152a2
+diff --git a/board/jetsontx2 b/board/jetsontx2
+new file mode 120000
+index 0000000000..fe9d31deed
 --- /dev/null
-+++ b/package/nvidia-container-toolkit/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_NVIDIA_CONTAINER_TOOLKIT
-+	bool "nvidia-container-toolkit"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # fexecve
-+	select BR2_PACKAGE_LIBNVIDIA_CONTAINER
-+	select BR2_PACKAGE_NVIDIA_CONTAINER_RUNTIME
-+	help
-+	  NVIDIA Container Toolkit is a OCI-spec hook for
-+	  support for mounting GPUs into containers.
-+
-+	  https://github.com/NVIDIA/nvidia-container-toolkit
-+
-+comment "nvidia-container-toolkit needs a glibc toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
-+		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC
-diff --git a/package/nvidia-container-toolkit/nvidia-container-toolkit.hash b/package/nvidia-container-toolkit/nvidia-container-toolkit.hash
++++ b/board/jetsontx2
+@@ -0,0 +1 @@
++./nvidia
+\ No newline at end of file
+diff --git a/board/nvidia/readme.txt b/board/nvidia/readme.txt
 new file mode 100644
-index 0000000000..7f0f6fc729
+index 0000000000..c3b248d70c
 --- /dev/null
-+++ b/package/nvidia-container-toolkit/nvidia-container-toolkit.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  27acabdc776853d53442b375df0a78ce7cfa2650117d4ab76792cdaa7915c909  nvidia-container-toolkit-1.2.0.tar.gz
-+sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/nvidia-container-toolkit/nvidia-container-toolkit.mk b/package/nvidia-container-toolkit/nvidia-container-toolkit.mk
++++ b/board/nvidia/readme.txt
+@@ -0,0 +1,85 @@
++NVIDIA Jetson TX2
++
++Intro
++=====
++
++This configuration adds support for the Jetson TX2 devkit. It should be
++compatible with the other Jetson-series boards as well, but has not yet been
++tested. (Other boards include the tx2i, nano...)
++
++Building
++========
++
++Configure Buildroot
++-------------------
++
++For Jetson TX2:
++
++  $ make jetsontx2_defconfig
++
++Build the rootfs
++----------------
++
++You may now build your rootfs with:
++
++  $ make
++
++
++Flashing
++========
++
++Once the build process is finished you will have the target binaries in the
++output/images directory, with a symlink to linux4tegra.
++
++Flashing to the internal eMMC is done by booting to the official recovery mode,
++and flashing the system from there. The default factory-flashed TX2 is suitable.
++
++There are a lot of cases where the TX2 will not boot properly unless all of the
++peripherals are fully disconnected, power is disconnected, everything fully
++resets, and then the power is introduced back again.
++
++The recovery mode of the Jetson is used to flash. Entering recovery:
++
++ - Start with the machine powered off + fully unplugged.
++ - Plug in the device to power, and connect a HDMI display.
++ - Connect a micro-USB cable from the host PC to the target board.
++ - Power on the device by holding the start button until the red light is lit.
++ - Hold down the RST button and REC button simultaneously.
++ - Release the RST button while holding down the REC button.
++ - Wait a few seconds, then release the REC button.
++
++To flash over USB:
++
++```
++cd output/images/linux4tegra
++sudo bash ./flash.sh \
++     -I ../rootfs.ext2 \
++     -K ../Image \
++     -L ../u-boot-dtb.bin \
++     -C "ramdisk_size=100000 net.ifnames=0 elevator=deadline" \
++     -d ../tegra186-quill-p3310-1000-c03-00-base.dtb \
++     jetson-tx2-devkit mmcblk0p1
++```
++
++This will run the `flash.sh` script from L4T, and will setup the kernel, u-boot,
++persist + boot-up partition mmcblk0p1. This may overwrite your existing work so
++use it for initial setup only.
++
++## Bootup Process
++
++The TX2 and recent boards boot from the internal eMMC, at mmcblk0p1. The Jetson
++Nano can boot to a SD card.
++
++A "secure boot" process is used, with multiple bootloaders:
++
++ - BootROM -> MB1 (TrustZone)
++ - MB2/BPMP -> (Non-Trustzone)
++ - Cboot (uses Little Kernel)
++ - Uboot
++ - Kernel
++ 
++Uboot is flashed to the mmcblk0p1 emmc partition.
++
++Cboot could be compiled from source, and the source is available from the
++official sources, however, we do not (yet) compile cboot.
++
+diff --git a/configs/jetsontx2_defconfig b/configs/jetsontx2_defconfig
 new file mode 100644
-index 0000000000..5f40b18378
+index 0000000000..55167a7f70
 --- /dev/null
-+++ b/package/nvidia-container-toolkit/nvidia-container-toolkit.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# nvidia-container-toolkit
-+#
-+################################################################################
++++ b/configs/jetsontx2_defconfig
+@@ -0,0 +1,52 @@
++BR2_aarch64=y
++BR2_cortex_a57=y
 +
-+NVIDIA_CONTAINER_TOOLKIT_VERSION = 1.2.0
-+NVIDIA_CONTAINER_TOOLKIT_SITE = $(call github,NVIDIA,nvidia-container-toolkit,v$(NVIDIA_CONTAINER_TOOLKIT_VERSION))
++# enable specific optimizations
++BR2_TARGET_OPTIMIZATION="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
 +
-+NVIDIA_CONTAINER_TOOLKIT_LICENSE = Apache-2.0
-+NVIDIA_CONTAINER_TOOLKIT_LICENSE_FILES = LICENSE
++# Toolchain reference: docs.nvidia.com: "Jetson Linux Driver Package Toolchain"
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_BINUTILS_VERSION_2_32_X=y
 +
-+NVIDIA_CONTAINER_TOOLKIT_DEPENDENCIES = nvidia-container-runtime libnvidia-container
++BR2_SYSTEM_DHCP="eth0"
 +
-+NVIDIA_CONTAINER_TOOLKIT_BUILD_TARGETS = github.com/NVIDIA/container-toolkit/pkg
-+NVIDIA_CONTAINER_TOOLKIT_BIN_NAME = nvidia-container-toolkit
-+NVIDIA_CONTAINER_TOOLKIT_TAGS = cgo static_build
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
 +
-+define NVIDIA_CONTAINER_TOOLKIT_INSTALL_SUPPORT
-+	ln -fs /usr/bin/$(NVIDIA_CONTAINER_TOOLKIT_BIN_NAME) \
-+		$(TARGET_DIR)/usr/bin/nvidia-container-runtime-hook
-+	$(INSTALL) -D -m 644 $(@D)/oci-nvidia-hook.json \
-+		$(TARGET_DIR)/usr/share/containers/oci/hooks.d/oci-nvidia-hook.json
-+	$(INSTALL) -D -m 755 $(@D)/oci-nvidia-hook \
-+		$(TARGET_DIR)/usr/libexec/oci/hooks.d/oci-nvidia-hook
-+endef
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,madisongh,linux-tegra-4.9,0be1a57448010ae60505acf4e2153638455cee7c)/linux-tegra-4.9.140-r1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="tegra"
 +
-+NVIDIA_CONTAINER_TOOLKIT_POST_INSTALL_TARGET_HOOKS += NVIDIA_CONTAINER_TOOLKIT_INSTALL_SUPPORT
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/tegra186-quill-p3310-1000-c03-00-base"
 +
-+$(eval $(golang-package))
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_LINUX4TEGRA=y
++BR2_PACKAGE_NVIDIA_CONTAINER_TOOLKIT=y
++
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
++
++# Required tools to create the image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_JQ=y
++BR2_PACKAGE_HOST_PARTED=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="1024M"
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Uboot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,paralin,u-boot-tegra,e6da093be3cc593ef4294e1922b3391ede9c94da)/u-boot-tegra-e6da09.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="p2771-0000-500"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
++
 -- 
 2.27.0
