@@ -1,48 +1,58 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Sat, 01 Aug 2020 10:12:09 +0200
-Subject: [Buildroot] [PATCH 00/15] Improve SELinux support
-In-Reply-To: <CAFSsvmpUWps7DezP0L2-TH1DHZTzVqP8n+nfZyum88n-BbX-mg@mail.gmail.com>
-References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
- <CAFSsvmrU12Q9p=A0MmAWeK3dScyn4RSQY=69MJD1GcCZ0Bb_tA@mail.gmail.com>
- <CAFSsvmpUWps7DezP0L2-TH1DHZTzVqP8n+nfZyum88n-BbX-mg@mail.gmail.com>
-Message-ID: <159626952921.1725162.3902239621146438561@kwain>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 1 Aug 2020 13:09:59 +0200
+Subject: [Buildroot] Cannot get build to use start_x.elf and fixup_x.dat
+ Raspberry Pi 3
+In-Reply-To: <20200801080648.GA32736@scaer>
+References: <CAOnXkYsPPXA5K2gX0nAU58hdoBB6yEt+ov5J7KCa2iF5MLTv_Q@mail.gmail.com>
+ <20200801080648.GA32736@scaer>
+Message-ID: <20200801130959.7ca4ac6a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Hello Vijay,
 
-Quoting Adam Duskett (2020-07-31 22:48:13)
+On Sat, 1 Aug 2020 10:06:48 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> Vijay, All,
 > 
-> After some testing I figured I would give my thoughts:
+> On 2020-07-31 18:01 -0700, Vijay spake thusly:
+> > I'm fairly new to buildroot and cannot find a solution to this problem
+> > I'm having. Everything works well for me and I'm able to create the SD
+> > card images to run on my Pi 3. However, I'm trying to get the extended
+> > ("x") firmware to boot. In the Target Packages > Hardware Handling >
+> > Firmware section, I'm selecting the extended option. Buildroot is
+> > building all the different variations of the start.elf (including
+> > start_x.elf, start_cd.elf) but only using the start.elf file in the
+> > final image instead of the start_x.elf file (same with fixup.dat). So
+> > basically whether I select the "default" option on that screen or
+> > "extended," the resulting boot image is the same. If I manually copy
+> > the start_x.elf and fixup_x.dat files as start.elf and fixup.dat the
+> > I get the extended functionality - specifically the camera working.
+> > I hope all that?makes sense. Please let me know if you need any
+> > further information. Any help is greatly appreciated.  
 > 
-> 1) with this patch series it seems like host-systemd breaks with several
-> "src/shared/libsystemd-shared-245.so: undefined reference to
-> `$SELINUX_MODULE'" errors.
+> The corret files are copied to the unqualified names, and the
+> unqualified names are loaded at boot; see the comment in config.txt
+
+And do not forget to re-build the rpi-firmware package (not done automatically
+by buildroot, see [1], [2]) after changing the options:
+
+	make rpi-firmware-rebuild
+	make
+
+Regards,
+Peter
+
+[1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
+[2] https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+
 > 
-> The easy fix is to explicitly set -Dselinux=disabled in the
-> HOST_SYSTEMD_CONF_OPTS.
-
-I didn't run into this one, but I'll try reproducing it.
-
-> 2) As I thought, there are several packages that are broken when
-> selinux is enabled still. I know the original goal of this project is
-> not to fix these packages, but if you are interested, here is a quick
-> .te output I made from audit2allow on my Fedora32 system (which is why
-> there are several "allowed in the current policy" warnings.
-
-Thanks! I also have made such a module on my side, to test images in
-enforcing mode. I'm trying to see what could go in the upstream
-refpolicy and what would need to be in "out-of-tree" modules.
-
-In any case, fixing all of those denied actions would be really nice.
-
-Thanks!
-Antoine
-
--- 
-Antoine T?nart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Also, see commit 1bdc0334f, which fixed that recently on master. It was
+> backported to 2020.05.x, but not to the LTS 2020.02...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
