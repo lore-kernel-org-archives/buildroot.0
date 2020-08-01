@@ -1,62 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Aug 2020 14:01:20 +0200
-Subject: [Buildroot] [PATCH] Revert "package/pkg-generic.mk: create
- directories upfront in the configure step"
-Message-ID: <20200801120120.28745-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  1 Aug 2020 14:26:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vdr: fix build with glibc 2.31
+Message-ID: <20200801122604.1010057-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This _partially_ reverts commit 2dbb0660fb4d89f8eac86fcff08e9b3d0a705917.
-
-Indeed, before 2dbb0660fb, the per-package ../host/ directory was
-explicitly created right before it was populated. With 2dbb0660fb, it
-is now created only at the begining of the configure step.
-
-However, some packages may have download or extract host dependencies,
-and when we are trying to rsync them, the destination .../host/
-directory does not yet exist at the download or wxtract steps, thus the
-build fails. E.g., with wget which needs host-lzip if the system does
-not have it yet:
-
-    rsync -a --link-dest=/home/ymorin/dev/buildroot/O/per-package/host-lzip/host/ /home/ymorin/dev/buildroot/O/per-package/host-lzip/host/ /home/ymorin/dev/buildroot/O/per-package/wget/host
-    rsync: mkdir "/home/ymorin/dev/buildroot/O/per-package/wget/host" failed: No such file or directory (2)
-    rsync error: error in file IO (code 11) at main.c(682) [Receiver=3.1.3]
-    make[1]: *** [package/pkg-generic.mk:170: /home/ymorin/dev/buildroot/O/build/wget-1.20.3/.stamp_extracted] Error 11
-
-Kudos to Raphael for pin-pointing the culprit commit.
-
 Fixes:
-    http://autobuild.buildroot.org/results/4c8/4c895c7ac0a635d38f5015b5df0393581ad7b508/
-    and a slew of similar failures
+ - http://autobuild.buildroot.org/results/b8475cfddee94d2938be98356e53328b5cd064b5
 
-Notes:
-An alternatative solution would be to move the creation of the
-directories from the configure step to the download step *and* to the
-rsync step, but this is not so nice in the end... Let's just ensure they
-are created where needed: at the configure step, and when populating
-them.
-
-Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...ility-with-current-versions-of-glibc.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/vdr/0002-Fixed-compatibility-with-current-versions-of-glibc.patch
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index f6de295b7f..ad7a84475a 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -167,6 +167,7 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
- # $2: 'host' or 'target'
- # $3: destination directory
- define per-package-rsync
-+	mkdir -p $(3)
- 	$(foreach pkg,$(1),\
- 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
- 		$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+diff --git a/package/vdr/0002-Fixed-compatibility-with-current-versions-of-glibc.patch b/package/vdr/0002-Fixed-compatibility-with-current-versions-of-glibc.patch
+new file mode 100644
+index 0000000000..32c0e97ac1
+--- /dev/null
++++ b/package/vdr/0002-Fixed-compatibility-with-current-versions-of-glibc.patch
+@@ -0,0 +1,27 @@
++From 930c2cd2eb8947413e88404fa94c66e4e1db5ad6 Mon Sep 17 00:00:00 2001
++From: Klaus Schmidinger <vdr@tvdr.de>
++Date: Mon, 4 May 2020 12:28:31 +0200
++Subject: Fixed compatibility with current versions of glibc
++
++[Retrieved (and updated to remove CONTRIBUTORS and HISTORY) from:
++https://projects.vdr-developer.org/git/vdr.git/commit?id=930c2cd2eb8947413e88404fa94c66e4e1db5ad6]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff --git a/eit.c b/eit.c
++index 72a45e5..d437b44 100644
++--- a/eit.c
+++++ b/eit.c
++@@ -391,7 +391,9 @@ cTDT::cTDT(const u_char *Data)
++   if (abs(diff) > MAX_TIME_DIFF) {
++      mutex.Lock();
++      if (abs(diff) > MAX_ADJ_DIFF) {
++-        if (stime(&dvbtim) == 0)
+++        timespec ts = { 0 };
+++        ts.tv_sec = dvbtim;
+++        if (clock_settime(CLOCK_REALTIME, &ts) == 0)
++            isyslog("system time changed from %s (%ld) to %s (%ld)", *TimeToString(loctim), loctim, *TimeToString(dvbtim), dvbtim);
++         else
++            esyslog("ERROR while setting system time: %m");
++-- 
++cgit v0.10.2
++
 -- 
-2.20.1
+2.27.0
