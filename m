@@ -1,46 +1,396 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat,  1 Aug 2020 15:30:15 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-cbor2: bump to version 5.1.2
-Message-ID: <20200801213015.1474083-1-james.hilliard1@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 1 Aug 2020 23:34:10 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
+ sprintf error
+In-Reply-To: <20200801203749.424827-1-christian@paral.in>
+References: <20200801203749.424827-1-christian@paral.in>
+Message-ID: <20200801233410.6ec574ce@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-cbor2/python-cbor2.hash | 4 ++--
- package/python-cbor2/python-cbor2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello Christian,
 
-diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
-index 70e16cae2d..a643cdbe25 100644
---- a/package/python-cbor2/python-cbor2.hash
-+++ b/package/python-cbor2/python-cbor2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cbor2/json
--md5  b7c3b94ad5b78ba144ed4df9e55ce2ea  cbor2-5.1.0.tar.gz
--sha256  43ce11e8c2fe4971d386d1a60cf83bfa0a4a667b97668ba76acbf5e6398821aa  cbor2-5.1.0.tar.gz
-+md5  693c1bd6635bee8a591a70ea924ad676  cbor2-5.1.2.tar.gz
-+sha256  91759bd0ee5ef0d4fa24144dfa551670730baeca8cf2fff1cc59f734ecd21de6  cbor2-5.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE.txt
-diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-index 850ee7c50d..115eb8d276 100644
---- a/package/python-cbor2/python-cbor2.mk
-+++ b/package/python-cbor2/python-cbor2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CBOR2_VERSION = 5.1.0
-+PYTHON_CBOR2_VERSION = 5.1.2
- PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
--PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/ee/80/bc617b7fd89855649e48eb8242e09535e1b75371ec8389313fa0f97e2a70
-+PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/3f/14/a7cdcab562ee9b599ce409168eb0a5f7c7190a83f23c92c8c310e56d1b58
- PYTHON_CBOR2_SETUP_TYPE = setuptools
- PYTHON_CBOR2_LICENSE = MIT
- PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
--- 
-2.25.1
+
+thanks for the patch, but...
+
+On Sat,  1 Aug 2020 13:37:49 -0700, Christian Stewart <christian@paral.in> wrote:
+
+> Fixes compile errors against certain kernels.
+>
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  ...f-for-extending-string-which-causes-.patch | 336 ++++++++++++++++++
+>  1 file changed, 336 insertions(+)
+>  create mode 100644 package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+>
+> diff --git a/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> new file mode 100644
+> index 0000000000..6753eefdd9
+> --- /dev/null
+> +++ b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> @@ -0,0 +1,336 @@
+> +From cc3262a32ce326d89d597bb8557ce0da05240e98 Mon Sep 17 00:00:00 2001
+> +From: Coleman <omegacoleman@gmail.com>
+> +Date: Fri, 17 Jul 2020 08:53:00 +0800
+> +Subject: [PATCH 3/3] Fix using sprintf for extending string, which causes
+> + undefined behavior. (#334)
+> +
+
+The patch should have an note about the upstream source (see [1]), I suspect you
+toke the patch from [2]?
+
+The patch itself should have your 'Signed-off-by', see [3]...
+
+With this fixed you can add my 'Reviewed-by'...
+
+Or maybe its worth to try some other 'upstream' sources, e.g. as
+openSUSE [4] does (mentioning previous [5] and [6]), or the first
+google search result [7] (did not find the time to dig into the
+different repositories to find out which one is the best)...
+
+Regards,
+Peter
+
+
+[1] https://buildroot.org/downloads/manual/manual.html#_integrating_patches_found_on_the_web
+[2] https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/be57045a0933d64e958878696883e9cf998e1bf3.patch
+[3] https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+[4] https://github.com/gordboy/rtl8812au
+[5] https://github.com/diederikdehaas/rtl8812AU
+[6] https://github.com/maurossi/rtl8812au/
+[7] https://github.com/gnab/rtl8812au
+
+
+> +---
+> + core/rtw_mp.c              |   2 +-
+> + os_dep/linux/ioctl_linux.c | 108 ++++++++++++++++++-------------------
+> + 2 files changed, 55 insertions(+), 55 deletions(-)
+> +
+> +diff --git a/core/rtw_mp.c b/core/rtw_mp.c
+> +index c2e400d..989bb3e 100644
+> +--- a/core/rtw_mp.c
+> ++++ b/core/rtw_mp.c
+> +@@ -1871,7 +1871,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
+> + 		} else {
+> + 			psd_data = rtw_GetPSDData(pAdapter, i);
+> + 		}
+> +-		sprintf(data, "%s%x ", data, psd_data);
+> ++		sprintf(data + strlen(data), "%x ", psd_data);
+> + 		i++;
+> + 	}
+> +
+> +diff --git a/os_dep/linux/ioctl_linux.c b/os_dep/linux/ioctl_linux.c
+> +index c74a153..9543fa3 100644
+> +--- a/os_dep/linux/ioctl_linux.c
+> ++++ b/os_dep/linux/ioctl_linux.c
+> +@@ -9080,19 +9080,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
+> + //			DBG_871X("0x%02x\t", i);
+> +-			sprintf(extra, "%s0x%02x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%02x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", data[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, PROMContent[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", PROMContent[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra, "%s\t", extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", data[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, PROMContent[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", PROMContent[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra,"%s\n",extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> + 	} else if (strcmp(tmp[0], "realmap") == 0) {
+> +@@ -9107,19 +9107,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
+> + //			DBG_871X("0x%02x\t", i);
+> +-			sprintf(extra, "%s0x%02x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%02x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", data[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseInitMap[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra, "%s\t", extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", data[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseInitMap[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra,"%s\n",extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> + 	} else if (strcmp(tmp[0], "rmap") == 0) {
+> +@@ -9158,7 +9158,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		*extra = 0;
+> + 		for (i=0; i<cnts; i++) {
+> + //			DBG_871X("0x%02x ", data[i]);
+> +-			sprintf(extra, "%s0x%02X ", extra, data[i]);
+> ++			sprintf(extra + strlen(extra), "0x%02X ", data[i]);
+> + 		}
+> + //		DBG_871X("}\n");
+> + 	} else if (strcmp(tmp[0], "realraw") == 0) {
+> +@@ -9174,17 +9174,17 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n0x00\t");
+> + 		for (i=0; i< mapLen; i++) {
+> + 			//			DBG_871X("%02X", rawdata[i]);
+> +-			sprintf(extra, "%s%02X", extra, rawdata[i]);
+> ++			sprintf(extra + strlen(extra), "%02X", rawdata[i]);
+> + 			if ((i & 0xF) == 0xF) {
+> + 				//				DBG_871X("\n");
+> +-				sprintf(extra, "%s\n", extra);
+> +-				sprintf(extra, "%s0x%02x\t", extra, i+1);
+> ++				sprintf(extra + strlen(extra), "\n");
+> ++				sprintf(extra + strlen(extra), "0x%02x\t", i+1);
+> + 			} else if ((i & 0x7) == 0x7) {
+> + 				//				DBG_871X("\t");
+> +-				sprintf(extra, "%s \t", extra);
+> ++				sprintf(extra + strlen(extra), " \t");
+> + 			} else {
+> + 				//				DBG_871X(" ");
+> +-				sprintf(extra, "%s ", extra);
+> ++				sprintf(extra + strlen(extra), " ");
+> + 			}
+> + 		}
+> + 		//		DBG_871X("}\n");
+> +@@ -9269,10 +9269,10 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		*extra = 0;
+> + 		for (i=0; i<cnts; i++) {
+> + //			DBG_871X("%02X", data[i]);
+> +-			sprintf(extra, "%s%02X", extra, data[i]);
+> ++			sprintf(extra + strlen(extra), "%02X", data[i]);
+> + 			if (i != (cnts-1)) {
+> + //				DBG_871X(":");
+> +-				sprintf(extra,"%s:",extra);
+> ++				sprintf(extra + strlen(extra), ":");
+> + 			}
+> + 		}
+> + //		DBG_871X("}\n");
+> +@@ -9330,10 +9330,10 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		*extra = 0;
+> + 		for (i=0; i<cnts; i++) {
+> + //			DBG_871X("0x%02x", data[i]);
+> +-			sprintf(extra, "%s0x%02X", extra, data[i]);
+> ++			sprintf(extra + strlen(extra), "0x%02X", data[i]);
+> + 			if (i != (cnts-1)) {
+> + //				DBG_871X(",");
+> +-				sprintf(extra,"%s,",extra);
+> ++				sprintf(extra + strlen(extra), ",");
+> + 			}
+> + 		}
+> + //		DBG_871X("}\n");
+> +@@ -9355,19 +9355,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i=0; i<512; i+=16) { // set 512 because the iwpriv's extra size have limit 0x7FF
+> + //			DBG_871X("0x%03x\t", i);
+> +-			sprintf(extra, "%s0x%03x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%03x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra,"%s\t",extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra, "%s\n", extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> + 	} else if (strcmp(tmp[0],"btbmap") == 0) {
+> +@@ -9384,19 +9384,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i=512; i<1024 ; i+=16) {
+> + //			DBG_871X("0x%03x\t", i);
+> +-			sprintf(extra, "%s0x%03x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%03x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", data[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra,"%s\t",extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", data[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra, "%s\n", extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> + 	} else if (strcmp(tmp[0],"btrmap") == 0) {
+> +@@ -9436,7 +9436,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + //		DBG_871X("%s: bt efuse data={", __FUNCTION__);
+> + 		for (i=0; i<cnts; i++) {
+> + //			DBG_871X("0x%02x ", data[i]);
+> +-			sprintf(extra, "%s 0x%02X ", extra, data[i]);
+> ++			sprintf(extra + strlen(extra), " 0x%02X ", data[i]);
+> + 		}
+> + //		DBG_871X("}\n");
+> + 		DBG_871X(FUNC_ADPT_FMT ": BT MAC=[%s]\n", FUNC_ADPT_ARG(padapter), extra);
+> +@@ -9445,19 +9445,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i=0; i<512; i+=16) {
+> + //			DBG_871X("0x%03x\t", i);
+> +-			sprintf(extra, "%s0x%03x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%03x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra, "%s\t", extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra, "%s\n", extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> + 	} else if (strcmp(tmp[0],"btbfake") == 0) {
+> +@@ -9465,19 +9465,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i=512; i<1024; i+=16) {
+> + //			DBG_871X("0x%03x\t", i);
+> +-			sprintf(extra, "%s0x%03x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%03x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra, "%s\t", extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra, "%s\n", extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> + 	} else if (strcmp(tmp[0],"wlrfkmap")== 0) {
+> +@@ -9485,19 +9485,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		sprintf(extra, "\n");
+> + 		for (i=0; i<EFUSE_MAP_SIZE; i+=16) {
+> + //			DBG_871X("\t0x%02x\t", i);
+> +-			sprintf(extra, "%s0x%02x\t", extra, i);
+> ++			sprintf(extra + strlen(extra), "0x%02x\t", i);
+> + 			for (j=0; j<8; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
+> +-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
+> ++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
+> + 			}
+> + //			DBG_871X("\t");
+> +-			sprintf(extra, "%s\t", extra);
+> ++			sprintf(extra + strlen(extra), "\t");
+> + 			for (; j<16; j++) {
+> + //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
+> +-				sprintf(extra, "%s %02X", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
+> ++				sprintf(extra + strlen(extra), " %02X", pEfuseHal->fakeEfuseModifiedMap[i+j]);
+> + 			}
+> + //			DBG_871X("\n");
+> +-			sprintf(extra, "%s\n", extra);
+> ++			sprintf(extra + strlen(extra), "\n");
+> + 		}
+> + //		DBG_871X("\n");
+> +
+> +@@ -9523,7 +9523,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		*extra = 0;
+> + 		for (i=0; i<cnts; i++) {
+> + 			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
+> +-			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[addr+i]);
+> ++			sprintf(extra + strlen(extra), "0x%02X ", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
+> + 		}
+> + 	} else if (strcmp(tmp[0],"btrfkrmap")== 0) {
+> + 		if ((tmp[1]==NULL) || (tmp[2]==NULL)) {
+> +@@ -9547,7 +9547,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
+> + 		*extra = 0;
+> + 		for (i=0; i<cnts; i++) {
+> + 			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
+> +-			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
+> ++			sprintf(extra + strlen(extra), "0x%02X ", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
+> + 		}
+> + 	} else {
+> + 		sprintf(extra, "Command not found!");
+> +@@ -10409,7 +10409,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
+> + 			pnext++;
+> + 			if ( *pnext != '\0' ) {
+> + 				strtout = simple_strtoul (pnext , &ptmp, 16);
+> +-				sprintf( extra, "%s %d" ,extra ,strtout );
+> ++				sprintf(extra + strlen(extra), " %d"  ,strtout );
+> + 			} else {
+> + 				break;
+> + 			}
+> +@@ -10443,7 +10443,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
+> + 			pnext++;
+> + 			if ( *pnext != '\0' ) {
+> + 				strtout = simple_strtoul (pnext , &ptmp, 16);
+> +-				sprintf( extra, "%s %d" ,extra ,strtout );
+> ++				sprintf(extra + strlen(extra), " %d"  ,strtout );
+> + 			} else {
+> + 				break;
+> + 			}
+> +@@ -10566,7 +10566,7 @@ static int rtw_mp_read_rf(struct net_device *dev,
+> + 		pnext++;
+> + 		if ( *pnext != '\0' ) {
+> + 			strtou = simple_strtoul (pnext , &ptmp, 16);
+> +-			sprintf( extra, "%s %d" ,extra ,strtou );
+> ++			sprintf(extra + strlen(extra), " %d"  ,strtou );
+> + 		} else {
+> + 			break;
+> + 		}
+> +@@ -12155,14 +12155,14 @@ todo:
+> + 				goto exit;
+> +
+> + #ifdef CONFIG_RTL8723A
+> +-			sprintf(extra, "%s %d ", extra, (pMptCtx->mptOutBuf[i]& 0x3f));
+> ++			sprintf(extra + strlen(extra), " %d ", (pMptCtx->mptOutBuf[i]& 0x3f));
+> + #else
+> +-			sprintf(extra, "%s %d ", extra, (pMptCtx->mptOutBuf[i]& 0x1f));
+> ++			sprintf(extra + strlen(extra), " %d ", (pMptCtx->mptOutBuf[i]& 0x1f));
+> + #endif
+> + 		}
+> + 	} else {
+> + 		for (i=4; i<pMptCtx->mptOutLen; i++) {
+> +-			sprintf(extra, "%s 0x%x ", extra, pMptCtx->mptOutBuf[i]);
+> ++			sprintf(extra + strlen(extra), " 0x%x ", pMptCtx->mptOutBuf[i]);
+> + 		}
+> + 	}
+> +
+> +--
+> +2.27.0
+> +
