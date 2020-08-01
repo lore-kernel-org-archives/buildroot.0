@@ -1,62 +1,75 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  1 Aug 2020 16:20:35 +0200
-Subject: [Buildroot] [PATCHv3 5/5] package/efl: keep X11 input 2.2+ enabled
+Date: Sat,  1 Aug 2020 16:20:34 +0200
+Subject: [Buildroot] [PATCHv3 4/5] package/enlightenment: bump to version
+ 0.24.2
 In-Reply-To: <20200801142035.4060526-1-romain.naour@gmail.com>
 References: <20200801142035.4060526-1-romain.naour@gmail.com>
-Message-ID: <20200801142035.4060526-5-romain.naour@gmail.com>
+Message-ID: <20200801142035.4060526-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since efl 1.23, X11 input 2.2+ has been enabled by default [1].
+  - Disable new dependency on polkit for now.
+  - Add OFL license for fonts.
+  - Update COPYING file hash.
+  - Update indentation in hash file (two spaces)
 
-From [2]:
-"It would be a pretty unusual system to have x and no xinput2.2 support."
+See:
+https://www.enlightenment.org/news/e24.2
 
-While at it, enable explicitely X11 input 2 (enabled by default).
+enlightenment 0.24 require efl >= 1.24.
 
-[1] https://git.enlightenment.org/core/efl.git/commit/?id=cf005ac54abdea843e5731765e41e5088275249f
-[2] https://sourceforge.net/p/enlightenment/mailman/message/37065780/
+https://git.enlightenment.org/core/enlightenment.git/commit/?id=4b6467685e7ac9ae68f08bd524f332a908f5fa74
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/efl/efl.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/enlightenment/enlightenment.hash |  7 ++++---
+ package/enlightenment/enlightenment.mk   | 10 ++++++----
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 0ffbcf9f07..6dc38b1626 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -28,7 +28,6 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
- # Configure options:
- # elua=true: build elua for the target.
- # sdl=false: disable sdl2 support.
--# xinput22=false: disable X11 XInput v2.2+ support.
- # embedded-lz4=false: use liblz4 from lz4 package.
- # network-backend=none: disable connman networkmanager.
- EFL_CONF_OPTS = \
-@@ -43,8 +42,7 @@ EFL_CONF_OPTS = \
- 	-Dnetwork-backend=none \
- 	-Dpixman=false \
- 	-Dsdl=false \
--	-Dvnc-server=false \
--	-Dxinput22=false
-+	-Dvnc-server=false
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index f692a67aa1..6f3f518891 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
+@@ -1,3 +1,4 @@
+-# From https://www.enlightenment.org/news/e23_release
+-sha256	b8c5d040875576d3d3ad8572644f92a65e21291bcee6b0d62f74fbfd482afdf8	enlightenment-0.23.0.tar.xz
+-sha256	34dbd501ec9d1c8dcc569c01db9cf9a4b7ee5981614cc9f8f613a97463d27350	COPYING
++# From https://www.enlightenment.org/news/e24.2
++sha256  be18e2f18d6c0b058f633e769863d3cbc4c07b629058ae670dec74cd7906dff1  enlightenment-0.24.2.tar.xz
++sha256  17dda7902d3e1a743f91cf2545f474be93f612768a9e9022593d788ecc83935a  COPYING
++sh&256  f4ba47ef8f4ff588202e721ab10f0208a3fa678147e7f928e6b2820f2e646e13  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 43f79d59da..12827964e1 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
  
- EFL_BINDINGS = luajit
+-ENLIGHTENMENT_VERSION = 0.23.0
++ENLIGHTENMENT_VERSION = 0.24.2
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+-ENLIGHTENMENT_LICENSE = BSD-2-Clause
+-ENLIGHTENMENT_LICENSE_FILES = COPYING
++ENLIGHTENMENT_LICENSE = BSD-2-Clause, OFL-1.1 (font)
++ENLIGHTENMENT_LICENSE_FILES = COPYING \
++	src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
  
-@@ -154,7 +152,9 @@ EFL_CONF_OPTS += -Dfb=false
- endif
+ ENLIGHTENMENT_DEPENDENCIES = \
+ 	host-pkgconf \
+@@ -20,7 +21,8 @@ ENLIGHTENMENT_CONF_OPTS = \
+ 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
+ 	-Deet=$(HOST_DIR)/bin/eet \
+ 	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
+-	-Dpam=false
++	-Dpam=false \
++	-Dpolkit=false
  
- ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
--EFL_CONF_OPTS += -Dx11=true
-+EFL_CONF_OPTS += -Dx11=true \
-+	-Dxinput2=true \
-+	-Dxinput22=true
- 
- EFL_DEPENDENCIES += \
- 	xlib_libX11 \
+ # enlightenment.pc and /usr/lib/enlightenment/modules/*.so
+ ENLIGHTENMENT_INSTALL_STAGING = YES
 -- 
 2.25.4
