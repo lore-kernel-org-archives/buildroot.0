@@ -1,64 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 1 Aug 2020 02:59:05 +0200
-Subject: [Buildroot] Status of LLVM
-In-Reply-To: <CAGt4E5vRu+xVXtaze8+6CmWFXSmzJx2PV46bC7STiDnKCqksRw@mail.gmail.com>
-References: <CAGt4E5vRu+xVXtaze8+6CmWFXSmzJx2PV46bC7STiDnKCqksRw@mail.gmail.com>
-Message-ID: <31f39a1d-1436-0952-43e8-561135e6aa60@gmail.com>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Sat, 01 Aug 2020 10:05:22 +0200
+Subject: [Buildroot] [PATCH 00/15] Improve SELinux support
+In-Reply-To: <CAFSsvmrU12Q9p=A0MmAWeK3dScyn4RSQY=69MJD1GcCZ0Bb_tA@mail.gmail.com>
+References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
+ <CAFSsvmrU12Q9p=A0MmAWeK3dScyn4RSQY=69MJD1GcCZ0Bb_tA@mail.gmail.com>
+Message-ID: <159626912240.1725162.11983986970590198052@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Markus,
+Hi Adam,
 
-Le 01/08/2020 ? 02:20, Markus Mayer a ?crit?:
-> Hi all,
+Quoting Adam Duskett (2020-07-31 19:08:12)
+> On Fri, Jul 31, 2020 at 3:15 AM Antoine Tenart
+> <antoine.tenart@bootlin.com> wrote:
+> >
+> > - Override the location of the refpolicy source and all of the above
+> >   mechanisms, as when designing a fully custom system, one could want to
+> >   provide a fully custom SELinux policy.
 > 
-> Looking through the mailing list archives, I found a patch series
-> proposed last September to support clang as cross-compiler.
-> 
-> http://lists.busybox.net/pipermail/buildroot/2019-September/258744.html
-> 
-> It seems that most patches from this series haven't been pulled into
-> mainline as of yet. What is the current status of using LLVM and clang
-> to build Buildroot? As far as I can tell, there doesn't seem to be
-> support for this right now. What are the plans going forward?
+> Any chance of supporting a modular policy in the future? :)
 
-Thanks for your interest for this series!
-For now, we only have llvm/clang packages to deploy libraries on the target.
-This allow to enable llvm-pipe and opencl (libclc) support on the target.
+I don't have such plans for now, but if someone wants to tackle this I
+believe it should be doable.
 
-The first patch of this series needs to be upstreamed:
-http://patchwork.ozlabs.org/project/buildroot/patch/20190907094027.9537-2-romain.naour at smile.fr/
+Out of curiosity, what would be the use case of having a modular policy
+on a Buildroot generated image where packages can't be installed at
+runtime?
 
-It seems that llvm doesn't work well with toolchain using a relocated sysroot
-(--sysroot).
+> > Finally, the documentation is updated in patch 15 to explain how to use
+> > SELinux within Buildroot.
+> >
+> Perhaps a test-case would be in order as well?
 
-The rest of the series allow using clang as cross-compiler in all package
-infrastructure and for the Linux kernel.
+Yes, I'll send another series with an example qemu selinux defconfig and
+new SELinux tests after this one.
 
-This series should be completed by the compiler-rt from Matthew Weber:
+> Overall, this is a wonderful, long-needed patch series of which I am
+> incredibly excited to review!
 
-http://patchwork.ozlabs.org/project/buildroot/list/?series=181074
+Thanks!
+Antoine
 
-We also had a discussion about using clang as native compiler
-(related to
-https://git.buildroot.net/buildroot/commit/?id=546a4e1c1f5e219566469511c998ec7c7152e5ee)
-
-It would be interesting to enable riscv support for llvm/clang.
-
-But it require some time to work on it, and most of this work has been done on
-spare time.
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> -Markus
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+Antoine T?nart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
