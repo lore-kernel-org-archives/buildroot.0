@@ -1,50 +1,47 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Sat, 01 Aug 2020 10:05:22 +0200
-Subject: [Buildroot] [PATCH 00/15] Improve SELinux support
-In-Reply-To: <CAFSsvmrU12Q9p=A0MmAWeK3dScyn4RSQY=69MJD1GcCZ0Bb_tA@mail.gmail.com>
-References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
- <CAFSsvmrU12Q9p=A0MmAWeK3dScyn4RSQY=69MJD1GcCZ0Bb_tA@mail.gmail.com>
-Message-ID: <159626912240.1725162.11983986970590198052@kwain>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 1 Aug 2020 10:06:48 +0200
+Subject: [Buildroot] Cannot get build to use start_x.elf and fixup_x.dat
+ Raspberry Pi 3
+In-Reply-To: <CAOnXkYsPPXA5K2gX0nAU58hdoBB6yEt+ov5J7KCa2iF5MLTv_Q@mail.gmail.com>
+References: <CAOnXkYsPPXA5K2gX0nAU58hdoBB6yEt+ov5J7KCa2iF5MLTv_Q@mail.gmail.com>
+Message-ID: <20200801080648.GA32736@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Vijay, All,
 
-Quoting Adam Duskett (2020-07-31 19:08:12)
-> On Fri, Jul 31, 2020 at 3:15 AM Antoine Tenart
-> <antoine.tenart@bootlin.com> wrote:
-> >
-> > - Override the location of the refpolicy source and all of the above
-> >   mechanisms, as when designing a fully custom system, one could want to
-> >   provide a fully custom SELinux policy.
-> 
-> Any chance of supporting a modular policy in the future? :)
+On 2020-07-31 18:01 -0700, Vijay spake thusly:
+> I'm fairly new to buildroot and cannot find a solution to this problem
+> I'm having. Everything works well for me and I'm able to create the SD
+> card images to run on my Pi 3. However, I'm trying to get the extended
+> ("x") firmware to boot. In the Target Packages > Hardware Handling >
+> Firmware section, I'm selecting the extended option. Buildroot is
+> building all the different variations of the start.elf (including
+> start_x.elf, start_cd.elf) but only using the start.elf file in the
+> final image instead of the start_x.elf file (same with fixup.dat). So
+> basically whether I select the "default" option on that screen or
+> "extended," the resulting boot image is the same. If I manually copy
+> the start_x.elf and fixup_x.dat files as start.elf and fixup.dat the
+> I get the extended functionality - specifically the camera working.
+> I hope all that?makes sense. Please let me know if you need any
+> further information. Any help is greatly appreciated.
 
-I don't have such plans for now, but if someone wants to tackle this I
-believe it should be doable.
+The corret files are copied to the unqualified names, and the
+unqualified names are loaded at boot; see the comment in config.txt
 
-Out of curiosity, what would be the use case of having a modular policy
-on a Buildroot generated image where packages can't be installed at
-runtime?
+Also, see commit 1bdc0334f, which fixed that recently on master. It was
+backported to 2020.05.x, but not to the LTS 2020.02...
 
-> > Finally, the documentation is updated in patch 15 to explain how to use
-> > SELinux within Buildroot.
-> >
-> Perhaps a test-case would be in order as well?
-
-Yes, I'll send another series with an example qemu selinux defconfig and
-new SELinux tests after this one.
-
-> Overall, this is a wonderful, long-needed patch series of which I am
-> incredibly excited to review!
-
-Thanks!
-Antoine
+Regards,
+Yann E. MORIN.
 
 -- 
-Antoine T?nart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
