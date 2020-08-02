@@ -1,39 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  2 Aug 2020 14:10:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: xvmc needs x11
-Message-ID: <20200802121037.1200692-1-bernd.kuhls@t-online.de>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 2 Aug 2020 09:00:02 -0700
+Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
+ sprintf error
+In-Reply-To: <20200802125758.3ce2215d@gmx.net>
+References: <20200801203749.424827-1-christian@paral.in>
+ <20200801233410.6ec574ce@gmx.net>
+ <CA+h8R2qz5aRa5DrkXcN+0Cca_vysEUdLQK+nAN1WMNg3dR08yA@mail.gmail.com>
+ <CA+h8R2oApXa_RjDPxNXK65S6SNZXgyXvBnEBUy3RuR9BZA=xNQ@mail.gmail.com>
+ <20200802125758.3ce2215d@gmx.net>
+Message-ID: <CA+h8R2p1Enr-B=ALHQBCQCC01Di9U2dn7ftiNxdJ2QL9T3sPzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a follow-up patch to
+Hey Peter,
 
-https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e79ee3b0f91aa3eb1b20d86701a195e3bd9a26d3
+On Sun, Aug 2, 2020 at 3:58 AM Peter Seiderer <ps.report@gmx.net> wrote:
+> Did only a quick test some weeks ago, trying the IBSS mode and to get wifibroadcast
+> to work (both did not work out as far as I remember, so switched to some other cards)...
 
-to make sure that MESA3D_PLATFORMS contains x11 needed by xvmc:
-https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=20.1#n510
+I have a rtl8821au card in the mail to test with (odroid USB module).
 
-Fixes
-http://autobuild.buildroot.net/results/dae/dae41e30d2ac69b768ec0a5b795a2e559c35bcd3/
+By all means, if the aircrack fork will fix these features, then let's
+switch it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> > See: https://github.com/paralin/buildroot/commit/af8d30846e71e378fdcdb632bbbbfe0aaf7bb669
+>
+> Will take a look at it (if I find some spare time ;-)) and try it out...
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 11d04b7a3f..a12ed641a6 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -320,6 +320,7 @@ config BR2_PACKAGE_MESA3D_XVMC
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_MESA3D_NEEDS_X11
- 	select BR2_PACKAGE_XLIB_LIBXV
- 	select BR2_PACKAGE_XLIB_LIBXVMC
- 	help
--- 
-2.27.0
+Appreciated, perhaps you (or someone else who knows) could have a look
+at the depmod errors I was seeing with the fork if you have a moment.
+
+Best regards,
+Christian
