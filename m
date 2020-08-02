@@ -1,63 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Aug 2020 22:22:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: xvmc needs x11
-In-Reply-To: <20200802121037.1200692-1-bernd.kuhls@t-online.de>
-References: <20200802121037.1200692-1-bernd.kuhls@t-online.de>
-Message-ID: <20200802202246.GB2186@scaer>
+Date: Sun, 2 Aug 2020 22:27:11 +0200
+Subject: [Buildroot] [git commit] package/{protobuf,
+ python-protobuf}: bump to version 3.12.4
+Message-ID: <20200802202326.2AD1C83962@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1327d04c8def3d3abac7738288f89477e01c8faf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-08-02 14:10 +0200, Bernd Kuhls spake thusly:
-> This is a follow-up patch to
-> 
-> https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e79ee3b0f91aa3eb1b20d86701a195e3bd9a26d3
-> 
-> to make sure that MESA3D_PLATFORMS contains x11 needed by xvmc:
-> https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=20.1#n510
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/dae/dae41e30d2ac69b768ec0a5b795a2e559c35bcd3/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mesa3d/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 11d04b7a3f..a12ed641a6 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -320,6 +320,7 @@ config BR2_PACKAGE_MESA3D_XVMC
->  	depends on BR2_PACKAGE_XORG7
->  	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
->  		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-> +	select BR2_PACKAGE_MESA3D_NEEDS_X11
->  	select BR2_PACKAGE_XLIB_LIBXV
->  	select BR2_PACKAGE_XLIB_LIBXVMC
->  	help
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 18bb2ace96..aa9d871561 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  f2f180e9343cbb2b9a8482255bfec2176a2cc7fa22de496535a0a0cf38797495  protobuf-cpp-3.12.2.tar.gz
++sha256  ccfbaaba52f67e0e6536a05f3df3f6618620d255513cfca3a07f5935b624e26b  protobuf-cpp-3.12.4.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 08787ef623..04fea3063e 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.12.2
++PROTOBUF_VERSION = 3.12.4
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index ad5b51b591..f723d584d1 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1f9299046b508b528056804fac806e8f429b190526f909288535e4faa37d949a  protobuf-python-3.12.2.tar.gz
++sha256  ddafee267ec4cfa4b0afc74effd5644a96690036ecd2e310056d317f52e605f4  protobuf-python-3.12.4.tar.gz
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
