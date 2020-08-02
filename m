@@ -1,37 +1,42 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 2 Aug 2020 09:00:02 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
- sprintf error
-In-Reply-To: <20200802125758.3ce2215d@gmx.net>
-References: <20200801203749.424827-1-christian@paral.in>
- <20200801233410.6ec574ce@gmx.net>
- <CA+h8R2qz5aRa5DrkXcN+0Cca_vysEUdLQK+nAN1WMNg3dR08yA@mail.gmail.com>
- <CA+h8R2oApXa_RjDPxNXK65S6SNZXgyXvBnEBUy3RuR9BZA=xNQ@mail.gmail.com>
- <20200802125758.3ce2215d@gmx.net>
-Message-ID: <CA+h8R2p1Enr-B=ALHQBCQCC01Di9U2dn7ftiNxdJ2QL9T3sPzQ@mail.gmail.com>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Sun, 02 Aug 2020 19:21:41 +0000
+Subject: [Buildroot] [PATCH 1/1] package/rauc: bump version to 1.4
+Message-ID: <NfT_XpKiCHDCCiBVFkk25JUShSDz3ArDljSA7jF0kvxo6FplXmifMtIttp3DwQ9yKmvD0RBaxNGB3YIgByqid2ieQmec5GwI0f2fa9YjjUg=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Peter,
+Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+---
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sun, Aug 2, 2020 at 3:58 AM Peter Seiderer <ps.report@gmx.net> wrote:
-> Did only a quick test some weeks ago, trying the IBSS mode and to get wifibroadcast
-> to work (both did not work out as far as I remember, so switched to some other cards)...
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index b73eb60d86..51f37f6cb8 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
+-sha256  4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c  rauc-1.3.tar.xz
++# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.4.tar.xz.asc
++sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 5c5bd993ba..1915c783aa 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-I have a rtl8821au card in the mail to test with (odroid USB module).
-
-By all means, if the aircrack fork will fix these features, then let's
-switch it.
-
-> > See: https://github.com/paralin/buildroot/commit/af8d30846e71e378fdcdb632bbbbfe0aaf7bb669
->
-> Will take a look at it (if I find some spare time ;-)) and try it out...
-
-Appreciated, perhaps you (or someone else who knows) could have a look
-at the depmod errors I was seeing with the fork if you have a moment.
-
-Best regards,
-Christian
+-RAUC_VERSION = 1.3
++RAUC_VERSION = 1.4
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
+--
+2.20.1
