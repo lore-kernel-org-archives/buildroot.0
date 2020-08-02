@@ -1,51 +1,52 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 1 Aug 2020 17:33:48 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
- sprintf error
-In-Reply-To: <CA+h8R2qz5aRa5DrkXcN+0Cca_vysEUdLQK+nAN1WMNg3dR08yA@mail.gmail.com>
-References: <20200801203749.424827-1-christian@paral.in>
- <20200801233410.6ec574ce@gmx.net>
- <CA+h8R2qz5aRa5DrkXcN+0Cca_vysEUdLQK+nAN1WMNg3dR08yA@mail.gmail.com>
-Message-ID: <CA+h8R2oApXa_RjDPxNXK65S6SNZXgyXvBnEBUy3RuR9BZA=xNQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  2 Aug 2020 09:34:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security bump
+ version to 1.6.10
+Message-ID: <20200802073413.201022-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Fixes CVE-2020-14344:
+https://lists.x.org/archives/xorg-announce/2020-July/003050.html
 
-On Sat, Aug 1, 2020 at 2:51 PM Christian Stewart <christian@paral.in> wrote:
->
-> Hi Peter,
->
->
-> On Sat, Aug 1, 2020, 2:34 PM Peter Seiderer <ps.report@gmx.net> wrote:
->>
->> maybe its worth to try some other 'upstream' sources, e.g. as
->> openSUSE [4] does (mentioning previous [5] and [6]), or the first
->> google search result [7] (did not find the time to dig into the
->> different repositories to find out which one is the best)...
->
->
-> We've been through a number of these over the years. I would not recommend switching to another unless there's a specific reason. As far as I know the current configuration/upstream works fine with USB RTL cards.
+Removed md5 & sha1 hashes, upstream does not provide them anymore.
 
-See: https://github.com/paralin/buildroot/commit/af8d30846e71e378fdcdb632bbbbfe0aaf7bb669
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 8 +++-----
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-Just out of curiosity I made a patch switching to the aircrack fork,
-but there were some errors at the install step, for example:
-
-depmod: WARNING: /target/lib/modules/4.14.180/extra/88XXau.ko needs
-unknown symbol cfg80211_unlink_bss
-depmod: WARNING: /target/lib/modules/4.14.180/extra/88XXau.ko needs
-unknown symbol ieee80211
-
-Even though the CFG80211 options are enabled in the kernel, and the
-build passes with the old fork.
-
-Maybe there are some path issues going on there.
-
-Looks like the aircrack fork may have better support for packet injection?
-
-Best,
-Christian
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index defaa4c982..d383615457 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-October/003025.html
+-md5 55adbfb6d4370ecac5e70598c4e7eed2  libX11-1.6.9.tar.bz2
+-sha1 62456536411f2540fbd4a3f59ed8af94967124c2  libX11-1.6.9.tar.bz2
+-sha256 9cc7e8d000d6193fa5af580d50d689380b8287052270f5bb26a5fb6b58b2bed1  libX11-1.6.9.tar.bz2
+-sha512 fc18f0dc17ade1fc37402179f52e1f2b9c7b7d3a1a9590fea13046eb0c5193b4796289431cd99388eac01e8e59de77db45d2c9675d4f05ef8cf3ba6382c3dd31  libX11-1.6.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-July/003052.html
++sha256  af48626989b8515c994777896bd7b7ba2bd5b1ef4e1efaee0a55d8852bbe6226  libX11-1.6.10.tar.bz2
++sha512  ad384d8896fbe587f7fd99b0d3cc56fac6e2facbab52fa99174200d06b19dd163a483c998acf3834b3a4a3aa4de0dbbe13919a1c80e6797afe467c7075b403ff  libX11-1.6.10.tar.bz2
+ # Locally computed
+ sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 18949c604d..bfc1c4166e 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBX11_VERSION = 1.6.9
++XLIB_LIBX11_VERSION = 1.6.10
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
+-- 
+2.27.0
