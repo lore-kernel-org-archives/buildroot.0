@@ -1,70 +1,84 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sun, 2 Aug 2020 11:14:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmbim: bump version to 1.24.2
-In-Reply-To: <20200731231930.20337-1-petr.vorel@gmail.com>
-References: <20200731231930.20337-1-petr.vorel@gmail.com>
-Message-ID: <20200802091425.GA74210@x230>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 2 Aug 2020 12:51:41 +0200
+Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: add patch fixing
+ sprintf error
+In-Reply-To: <CA+h8R2oNMYLqgfcgMZ4g-Vt-W6ip3Hxie-qnXtz8Kg63yXVWeg@mail.gmail.com>
+References: <20200801203749.424827-1-christian@paral.in>
+ <20200801233410.6ec574ce@gmx.net> <20200801234043.2daaf5ff@gmx.net>
+ <CA+h8R2oNMYLqgfcgMZ4g-Vt-W6ip3Hxie-qnXtz8Kg63yXVWeg@mail.gmail.com>
+Message-ID: <20200802125141.08c7ea4a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Christian,
 
-> tested (failure in andes-nds32 is due libffi not being ported to
-> nds32le-buildroot-linux-gnu => usual error).
+On Sat, 1 Aug 2020 14:43:32 -0700, Christian Stewart <christian@paral.in> wrote:
 
-> Kind regards,
-> Petr
->                              andes-nds32 [ 1/45]: FAILED
->                              arm-aarch64 [ 2/45]: OK
->                         br-aarch64-glibc [ 3/45]: OK
->                            br-arcle-hs38 [ 4/45]: OK
->                             br-arm-basic [ 5/45]: SKIPPED
->                   br-arm-cortex-a9-glibc [ 6/45]: OK
->                    br-arm-cortex-a9-musl [ 7/45]: OK
->                    br-arm-cortex-m4-full [ 8/45]: SKIPPED
->                              br-arm-full [ 9/45]: OK
->                     br-arm-full-nothread [10/45]: SKIPPED
->                       br-arm-full-static [11/45]: OK
->                 br-i386-pentium-mmx-musl [12/45]: OK
->                    br-i386-pentium4-full [13/45]: OK
->                     br-microblazeel-full [14/45]: OK
->                       br-mipsel-o32-full [15/45]: OK
->                  br-mips32r6-el-hf-glibc [16/45]: OK
->                       br-mips64-n64-full [17/45]: OK
->                  br-mips64r6-el-hf-glibc [18/45]: OK
->                        br-m68k-5208-full [19/45]: SKIPPED
->                       br-m68k-68040-full [20/45]: OK
->                           br-nios2-glibc [21/45]: OK
->                       br-openrisc-uclibc [22/45]: OK
->                   br-powerpc-e500mc-full [23/45]: OK
->                br-powerpc-603e-basic-cpp [24/45]: SKIPPED
->              br-powerpc64le-power8-glibc [25/45]: OK
->                br-powerpc64-power7-glibc [26/45]: OK
->                               br-riscv32 [27/45]: OK
->                               br-riscv64 [28/45]: OK
->                          br-riscv64-musl [29/45]: OK
->                              br-sh4-full [30/45]: OK
->                          br-sparc-uclibc [31/45]: OK
->                         br-sparc64-glibc [32/45]: OK
->                           br-xtensa-full [33/45]: OK
->                     br-x86-64-core2-full [34/45]: OK
->                           br-x86-64-musl [35/45]: OK
->                        linaro-aarch64-be [36/45]: OK
+> Hi Peter,
+>
+>
+>
+> On Sat, Aug 1, 2020, 2:40 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Hello Christian,
+> >
+> > On Sat, 1 Aug 2020 23:34:10 +0200, Peter Seiderer <ps.report@gmx.net>
+> > wrote:
+> >
+> > > Hello Christian,
+> > >
+> > >
+> > > thanks for the patch, but...
+> > >
+> > > On Sat,  1 Aug 2020 13:37:49 -0700, Christian Stewart <
+> > christian at paral.in> wrote:
+> > >
+> > > > Fixes compile errors against certain kernels.
+> > > >
+> > > > Signed-off-by: Christian Stewart <christian@paral.in>
+> > > > ---
+> > > >  ...f-for-extending-string-which-causes-.patch | 336 ++++++++++++++++++
+> > > >  1 file changed, 336 insertions(+)
+> > > >  create mode 100644
+> > package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > > >
+> > > > diff --git
+> > a/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > > > new file mode 100644
+> > > > index 0000000000..6753eefdd9
+> > > > --- /dev/null
+> > > > +++
+> > b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+> > > > @@ -0,0 +1,336 @@
+> > > > +From cc3262a32ce326d89d597bb8557ce0da05240e98 Mon Sep 17 00:00:00 2001
+> > > > +From: Coleman <omegacoleman@gmail.com>
+> > > > +Date: Fri, 17 Jul 2020 08:53:00 +0800
+> > > > +Subject: [PATCH 3/3] Fix using sprintf for extending string, which
+> > causes
+> > > > + undefined behavior. (#334)
+> > > > +
+> > >
+> > > The patch should have an note about the upstream source (see [1]), I
+> > suspect you
+> > > toke the patch from [2]?
+> >
+> > Or instead simple bump the package source version to the latest git commit
+> > (as the patch is upstream committed)... ;-)
+> >
+>
+> Can't do. The upstream has a commit that we don't follow. Apparently it has
+> issues. Look at the PR on the repo.
 
-Tested the rest:
-                          linaro-aarch64 [37/45]: OK
-                              linaro-arm [38/45]: OK
-                     sourcery-arm-armv4t [39/45]: OK
-                            sourcery-arm [40/45]: OK
-                     sourcery-arm-thumb2 [41/45]: OK
-                           sourcery-mips [42/45]: OK
-                         sourcery-mips64 [43/45]: OK
-                          sourcery-nios2 [44/45]: OK
-                         sourcery-x86-64 [45/45]: OK
-45 builds, 5 skipped, 1 build failed, 0 legal-info failed
+Yes, your are right (and thanks for remind me of that point), maybe worth
+a short remark at the commit log...
 
-Kind regards,
-Petr
+Regards,
+Peter
+
+>
+> Thanks,
+> christian
