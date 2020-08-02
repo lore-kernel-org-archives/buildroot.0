@@ -1,62 +1,62 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Sun, 02 Aug 2020 19:28:22 +0000
-Subject: [Buildroot] [PATCH 1/1] package/rauc: bump version to 1.4
-In-Reply-To: <NfT_XpKiCHDCCiBVFkk25JUShSDz3ArDljSA7jF0kvxo6FplXmifMtIttp3DwQ9yKmvD0RBaxNGB3YIgByqid2ieQmec5GwI0f2fa9YjjUg=@protonmail.com>
-References: <NfT_XpKiCHDCCiBVFkk25JUShSDz3ArDljSA7jF0kvxo6FplXmifMtIttp3DwQ9yKmvD0RBaxNGB3YIgByqid2ieQmec5GwI0f2fa9YjjUg=@protonmail.com>
-Message-ID: <utwWeEudKhsbjXh0n0HOT08kaVcro4h3nfzUVOA6LohLdRqMVe6jcOZ6sB_-XTSpTHr-1583zvBpPG-KP4ebF7I3-an9LXX4faPzVOIeNvo=@protonmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Aug 2020 22:15:37 +0200
+Subject: [Buildroot] [git commit] Revert "package/pkg-generic.mk: create
+ directories upfront in the configure step"
+Message-ID: <20200802201217.4D00981FD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added developer to Cc
+commit: https://git.buildroot.net/buildroot/commit/?id=7f74b6168e7d119f1bf7f1da65b1d08a60c2df5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---
-Yair Ben-Avraham
-yairba at protonmail.com
-+31.6.1316.5535
+This _partially_ reverts commit 2dbb0660fb4d89f8eac86fcff08e9b3d0a705917.
 
-??????? Original Message ???????
-On Sunday, August 2, 2020 9:21 PM, Yair Ben-Avraham <yairba@protonmail.com> wrote:
+Indeed, before 2dbb0660fb, the per-package ../host/ directory was
+explicitly created right before it was populated. With 2dbb0660fb, it
+is now created only at the beginning of the configure step.
 
-> Signed-off-by: Yair Ben Avraham yairba at protonmail.com
->
-> package/rauc/rauc.hash | 4 ++--
-> package/rauc/rauc.mk | 2 +-
-> 2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-> index b73eb60d86..51f37f6cb8 100644
-> --- a/package/rauc/rauc.hash
-> +++ b/package/rauc/rauc.hash
-> @@ -1,4 +1,4 @@
->
-> Locally calculated, after verifying against
->
-> ============================================
->
-> -# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
-> -sha256 4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c rauc-1.3.tar.xz
-> +# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.4.tar.xz.asc
-> +sha256 85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967 rauc-1.4.tar.xz
-> sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-> index 5c5bd993ba..1915c783aa 100644
-> --- a/package/rauc/rauc.mk
-> +++ b/package/rauc/rauc.mk
-> @@ -4,7 +4,7 @@
->
-> ==
->
-> ################################################################################
->
-> -RAUC_VERSION = 1.3
-> +RAUC_VERSION = 1.4
-> RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
-> RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
-> RAUC_LICENSE = LGPL-2.1
->
-> ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
->
-> 2.20.1
+However, some packages may have download or extract host dependencies,
+and when we are trying to rsync them, the destination .../host/
+directory does not yet exist at the download or extract steps, thus the
+build fails. E.g., with wget which needs host-lzip if the system does
+not have it yet:
+
+    rsync -a --link-dest=/home/ymorin/dev/buildroot/O/per-package/host-lzip/host/ /home/ymorin/dev/buildroot/O/per-package/host-lzip/host/ /home/ymorin/dev/buildroot/O/per-package/wget/host
+    rsync: mkdir "/home/ymorin/dev/buildroot/O/per-package/wget/host" failed: No such file or directory (2)
+    rsync error: error in file IO (code 11) at main.c(682) [Receiver=3.1.3]
+    make[1]: *** [package/pkg-generic.mk:170: /home/ymorin/dev/buildroot/O/build/wget-1.20.3/.stamp_extracted] Error 11
+
+Kudos to Raphael for pin-pointing the culprit commit.
+
+Fixes:
+    http://autobuild.buildroot.org/results/4c8/4c895c7ac0a635d38f5015b5df0393581ad7b508/
+    and a slew of similar failures
+
+Notes:
+An alternative solution would be to move the creation of the directories
+from the configure step to the download step *and* to the rsync step,
+but this is not so nice in the end... Let's just ensure they are created
+where needed: at the configure step, and when populating them.
+
+Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index b17b5465af..d88a14ab0f 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -163,6 +163,7 @@ ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+ # $2: 'host' or 'target'
+ # $3: destination directory
+ define per-package-rsync
++	mkdir -p $(3)
+ 	$(foreach pkg,$(1),\
+ 		rsync -a --link-dest=$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
+ 		$(PER_PACKAGE_DIR)/$(pkg)/$(2)/ \
