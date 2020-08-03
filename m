@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Aug 2020 18:36:45 +0200
-Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.5.1
-Message-ID: <20200803163649.7FD4A82DE5@busybox.osuosl.org>
+Date: Mon, 3 Aug 2020 18:39:52 +0200
+Subject: [Buildroot] [git commit] package/libmbim: bump version to 1.24.2
+Message-ID: <20200803163649.AE21782DE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=388602832a28a7fb00a95c8ae018702be954810c
+commit: https://git.buildroot.net/buildroot/commit/?id=c12eaf2aa850310acbdf75d1bc1a9e8f4e3225b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-yarl/python-yarl.hash | 6 +++---
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index b3910e9aff..95ee7ef88d 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5	08ba0d6e18f460b44d9e5459f3d217ba  yarl-1.4.2.tar.gz
--sha256	58cd9c469eced558cd81aa3f484b2924e8897049e06889e8ff2510435b7ef74b  yarl-1.4.2.tar.gz
-+md5  a9b20bf0b8a6962e1101b28908a67bf8  yarl-1.5.1.tar.gz
-+sha256  c22c75b5f394f3d47105045ea551e08a3e804dc7e01b37800ca35b58f856c3d6  yarl-1.5.1.tar.gz
- # Locally computed sha256 checksums
--sha256	14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-+sha256  14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 1f9b95a9c9..0b92e6281a 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 828bea0f92..5cd1e51ffd 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  5c0778eb1cd12c3604523134e55183f5147b0cae71150e875b583768f7aa1f38  libmbim-1.22.0.tar.xz
++sha256  32198c099987849c5f442d1cbf4b6e43e645cbdbe9cfdc197b19ddd63c6981e4  libmbim-1.24.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 67cfd2bc0b..f9c1ec9953 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_YARL_VERSION = 1.4.2
-+PYTHON_YARL_VERSION = 1.5.1
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/d6/67/6e2507586eb1cfa6d55540845b0cd05b4b77c414f6bca8b00b45483b976e
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/ac/dd/59768bb3fa08e8b23e91575bca3ff8d2edbfbceebec8c59eaa24c4215791
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+-LIBMBIM_VERSION = 1.22.0
++LIBMBIM_VERSION = 1.24.2
+ LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
