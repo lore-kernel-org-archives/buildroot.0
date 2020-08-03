@@ -1,170 +1,87 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 2 Aug 2020 22:30:59 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/waffle: bump version to 1.6.1
-In-Reply-To: <20200802112106.956286-1-bernd.kuhls@t-online.de>
-References: <20200802112106.956286-1-bernd.kuhls@t-online.de>
-Message-ID: <f0c73d76-5f58-a0e7-2d50-abaeb74c1ff1@gmail.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Mon, 3 Aug 2020 08:18:08 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gdb: bump to version 9.2
+In-Reply-To: <ea5da00c-347b-e6cf-bb82-162d34c517b9@gmail.com>
+References: <20200728051601.30930-1-fido_max@inbox.ru>
+ <ea5da00c-347b-e6cf-bb82-162d34c517b9@gmail.com>
+Message-ID: <45057a5b-f332-57f0-fa99-95c08f54fbf3@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
-
-Le 02/08/2020 ? 13:21, Bernd Kuhls a ?crit?:
-> Release notes for v1.6.1:
-> https://lists.freedesktop.org/archives/mesa-announce/2020-March/000575.html
-> 
-> Reformatted hashes, removed patch 0001 which was applied upstream.
-> 
-> Switched _SITE to gitlab according to release notes for v1.6.0:
-> https://lists.freedesktop.org/archives/mesa-announce/2019-June/000520.html
-> 
-> Added -Dwaffle_has_nacl=OFF to CONF_OPTS to disable nacl support, this
-> avoids adding a dependency to C++ as src/waffle/nacl/nacl_container.cpp
-> is the only C++ file relevant for linux contained in the source code:
-> https://gitlab.freedesktop.org/mesa/waffle/-/commit/6ca943584e593aec2bd4f9c66d91859e63e02d61#9a2aa4db38d3115ed60da621e012c0efc0172aae_27_26
-> 
-> Added support for mesa3d surfaceless egl:
-> https://gitlab.freedesktop.org/mesa/waffle/commit/7318f22c4761035c03e99420edf3e92f07e06c9c
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Since v1.6.0, waffle provide bash-completion scripts, we could add
-bash-completion package in waffle dependencies if enabled:
-
-https://gitlab.freedesktop.org/mesa/waffle/-/blob/maint-1.6/CMakeLists.txt#L189
-
-Best regards,
-Romain
 
 
-> ---
-> v2: bump to v1.6.1
->     disabled nacl support (Romain)
->     added support for mesa3d surfaceless egl (Romain)
+01.08.2020 17:54, Romain Naour ?????:
+> Hello,
 > 
->  ...ags-from-.pc-files-to-waffle-cflags.patch} |  0
->  ...ads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch | 54 -------------------
->  package/waffle/waffle.hash                    |  4 +-
->  package/waffle/waffle.mk                      | 15 ++++--
->  4 files changed, 14 insertions(+), 59 deletions(-)
->  rename package/waffle/{0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch => 0001-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch} (100%)
->  delete mode 100644 package/waffle/0001-third_party-threads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch
+> Le 28/07/2020 ? 07:16, Maxim Kochetkov a ?crit?:
+>> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 > 
-> diff --git a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch b/package/waffle/0001-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-> similarity index 100%
-> rename from package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-> rename to package/waffle/0001-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-> diff --git a/package/waffle/0001-third_party-threads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch b/package/waffle/0001-third_party-threads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch
-> deleted file mode 100644
-> index ef54953e34..0000000000
-> --- a/package/waffle/0001-third_party-threads-Use-PTHREAD_MUTEX_RECURSIVE-by-d.patch
-> +++ /dev/null
-> @@ -1,54 +0,0 @@
-> -From 117456752cf9ac1f24d3cfd917ad34f670c244b8 Mon Sep 17 00:00:00 2001
-> -From: Emil Velikov <emil.l.velikov@gmail.com>
-> -Date: Thu, 19 Mar 2015 22:26:11 +0000
-> -Subject: [PATCH] third_party/threads: Use PTHREAD_MUTEX_RECURSIVE by default
-> -
-> -PTHREAD_MUTEX_RECURSIVE_NP was used for compatibility with old glibc.
-> -Although due to the_GNU_SOURCES define the portable,
-> -PTHREAD_MUTEX_RECURSIVE will be available for Linuxes since at least
-> -1998. Simplify things giving us compatibility with musl which
-> -apparently does not provide the non-portable define.
-> -
-> -Inspired by almost identical commit in mesa aead7fe2e2b(c11/threads: Use
-> -PTHREAD_MUTEX_RECURSIVE by default) by Felix Janda.
-> -
-> -Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
-> -Reviewed-by: Chad Versace <chad.versace@intel.com>
-> -(Romain: cherry picked from commit 3b9b8f5f6d1b99af43e95ec0868404e552a85b73)
-> -Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ----
-> - third_party/threads/threads_posix.c | 10 ++++------
-> - 1 file changed, 4 insertions(+), 6 deletions(-)
-> -
-> -diff --git a/third_party/threads/threads_posix.c b/third_party/threads/threads_posix.c
-> -index 5835e43..e122bf9 100644
-> ---- a/third_party/threads/threads_posix.c
-> -+++ b/third_party/threads/threads_posix.c
-> -@@ -26,6 +26,9 @@
-> -  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-> -  * DEALINGS IN THE SOFTWARE.
-> -  */
-> -+
-> -+#define _GNU_SOURCE
-> -+
-> - #include <stdlib.h>
-> - #ifndef assert
-> - #include <assert.h>
-> -@@ -150,13 +153,8 @@ int mtx_init(mtx_t *mtx, int type)
-> -       && type != (mtx_try|mtx_recursive))
-> -         return thrd_error;
-> -     pthread_mutexattr_init(&attr);
-> --    if ((type & mtx_recursive) != 0) {
-> --#if defined(__linux__) || defined(__linux)
-> --        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
-> --#else
-> -+    if ((type & mtx_recursive) != 0)
-> -         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-> --#endif
-> --    }
-> -     pthread_mutex_init(mtx, &attr);
-> -     pthread_mutexattr_destroy(&attr);
-> -     return thrd_success;
-> --- 
-> -2.14.3
-> -
-> diff --git a/package/waffle/waffle.hash b/package/waffle/waffle.hash
-> index f496927e32..84821312c1 100644
-> --- a/package/waffle/waffle.hash
-> +++ b/package/waffle/waffle.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 d662f6743f688dc5ea4b7d29f558eb54bd8f57350080f04a006693d22e5d1d5b  waffle-1.5.2.tar.gz
-> -sha256 630844d1911c8a1b7b888a1de9097c4860b7e381362fd5aa64141d58ab7ecc9b  LICENSE.txt
-> +sha256  234e65bdd2dd8f7d3bc8e9ad1a7cc80fce78a1deed3a04fe7f1d2c2edac0cd8a  waffle-v1.6.1.tar.bz2
-> +sha256  630844d1911c8a1b7b888a1de9097c4860b7e381362fd5aa64141d58ab7ecc9b  LICENSE.txt
-> diff --git a/package/waffle/waffle.mk b/package/waffle/waffle.mk
-> index 280e295cb3..3b28bb2998 100644
-> --- a/package/waffle/waffle.mk
-> +++ b/package/waffle/waffle.mk
-> @@ -4,8 +4,9 @@
->  #
->  ################################################################################
->  
-> -WAFFLE_VERSION = 1.5.2
-> -WAFFLE_SITE = $(call github,waffle-gl,waffle,v$(WAFFLE_VERSION))
-> +WAFFLE_VERSION = 1.6.1
-> +WAFFLE_SOURCE = waffle-v$(WAFFLE_VERSION).tar.bz2
-> +WAFFLE_SITE = https://gitlab.freedesktop.org/mesa/waffle/-/archive/v$(WAFFLE_VERSION)
->  WAFFLE_INSTALL_STAGING = YES
->  WAFFLE_LICENSE = BSD-2-Clause
->  WAFFLE_LICENSE_FILES = LICENSE.txt
-> @@ -15,7 +16,8 @@ WAFFLE_DEPENDENCIES = host-pkgconf
->  WAFFLE_CONF_OPTS = -Dwaffle_build_tests=OFF \
->  	-Dwaffle_build_examples=OFF \
->  	-Dwaffle_build_manpages=OFF \
-> -	-Dwaffle_build_htmldocs=OFF
-> +	-Dwaffle_build_htmldocs=OFF \
-> +	-Dwaffle_has_nacl=OFF
->  
->  ifeq ($(BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND),y)
->  WAFFLE_DEPENDENCIES += libegl wayland
-> @@ -45,4 +47,11 @@ else
->  WAFFLE_CONF_OPTS += -Dwaffle_has_gbm=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_MESA3D)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
-> +WAFFLE_DEPENDENCIES += mesa3d
-> +WAFFLE_CONF_OPTS += -Dwaffle_has_surfaceless_egl=ON
-> +else
-> +WAFFLE_CONF_OPTS += -Dwaffle_has_surfaceless_egl=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
+> Since gdb 9, we need to build gdb out of source.
+> 
+> Building gdb for the target fail with:
+> 
+> configure: error: GDB must be configured and built in a directory separate from
+> its sources.
+> 
+> To do so, create a dedicated directory for your GDB build and invoke
+> the configure script from that directory:
+> 
+>        $ mkdir build
+>        $ cd build
+>        $ <full path to your sources>/gdb-VERSION/configure [etc...]
+>        $ make
+> 
+
+Yes it is. But I have no idea how to build autotools-package at 
+dedicated directory.
+
+> See:
+> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=043a0010933a6b55081535ecaf7fde9cc1491be0
+> 
+> [...]
+> 
+>> @@ -90,4 +93,5 @@ config BR2_GDB_VERSION
+>>   	default "8.1.1"    if BR2_GDB_VERSION_8_1
+>>   	default "8.2.1"    if BR2_GDB_VERSION_8_2 || !BR2_PACKAGE_HOST_GDB
+>>   	default "8.3.1"    if BR2_GDB_VERSION_8_3
+>> +	default "9.2"      if BR2_GDB_VERSION_9_2
+>>   	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+>> diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+>> index 291c224b0f..54fe0ff2a4 100644
+>> --- a/package/gdb/gdb.hash
+>> +++ b/package/gdb/gdb.hash
+>> @@ -2,6 +2,7 @@
+>>   sha512  7dcd5e8c90de92f577834d887b5f54edb93a07083bfe661bc46c270a6cc4919f0b348e7e2fe8ae4511298a570ef150eeefdc667ef7cf527f0cf60943177ab6c9  gdb-8.1.1.tar.xz
+>>   sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5a9355227d89ff328f7feb0fc411a69394560cafeb9fa75d35d896d11  gdb-8.2.1.tar.xz
+>>   sha512  9053a2dc6b9eb921907afbc4cecc75d635aa76df5e8c4f0e5824ccf57cb206b299c19b127fff000b65c334826ff8304a54ff6098428365a8e997cca886c39e9a  gdb-8.3.1.tar.xz
+>> +sha512  73635f00f343117aa5e2436f1e1597099e2bfb31ef7bb162b273fa1ea282c3fa9b0f52762e70bfc7ad0334addb8d159e9ac7cbe5998ca4f755ea8cf90714d274  gdb-9.2.tar.xz
+>>   
+>>   # Locally calculated (fetched from Github)
+>>   sha512  74346a2a2b2082d35377711946b12c824222005c66813d5648350b101697eac67d3d01617e1daea03e41c196c2b7b4a4b225d1ee58af91dc69731bffed0e5d51  gdb-arc-2020.03-release-gdb.tar.gz
+>> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+>> index 8c74a0e2f6..78a601600a 100644
+>> --- a/package/gdb/gdb.mk
+>> +++ b/package/gdb/gdb.mk
+>> @@ -227,6 +227,7 @@ HOST_GDB_CONF_OPTS = \
+>>   	--without-included-gettext \
+>>   	--with-curses \
+>>   	--without-mpfr \
+>> +	--enable-src-release-build \
+> 
+> Why do you turn this on ?
+
+This option allows to build gdb 9 in source directory.
+
+> 
+> Best regards,
+> Romain
+> 
+> 
+>>   	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
+>>   
+>>   ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
+>>
 > 
