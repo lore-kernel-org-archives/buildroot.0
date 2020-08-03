@@ -1,50 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Aug 2020 18:38:22 +0200
-Subject: [Buildroot] [git commit] package/python-cryptography: bump to
- version 3.0
-Message-ID: <20200803163649.9BB9B8012C@busybox.osuosl.org>
+Date: Mon, 3 Aug 2020 18:36:54 +0200
+Subject: [Buildroot] [git commit] package/python-pycryptodomex: bump to
+ version 3.9.8
+Message-ID: <20200803163649.8A3698012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=300f4a0584d58b600e918b2ced900b798dcb2760
+commit: https://git.buildroot.net/buildroot/commit/?id=9740729bbb1e30213ad57036f44039a4799d2a9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pycryptodomex/python-pycryptodomex.hash | 8 ++++----
+ package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 1323e490dd..c6768ff21a 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.hash b/package/python-pycryptodomex/python-pycryptodomex.hash
+index 2f2ca3ca7f..df8d2a2f8d 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.hash
++++ b/package/python-pycryptodomex/python-pycryptodomex.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cryptography/json
--md5  b1d1802e8874fa7d18e84bfe5607333f  cryptography-2.9.tar.gz
--sha256  0cacd3ef5c604b8e5f59bf2582c076c98a37fe206b31430d0cd08138aff0986e  cryptography-2.9.tar.gz
-+md5  163608a7cb838c6b39360e1e64377d54  cryptography-3.0.tar.gz
-+sha256  8e924dbc025206e97756e8903039662aa58aa9ba357d8e1d8fc29e3092322053  cryptography-3.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pycryptodomex/json
+-md5	c55b52fc81cbf795fb7c302b0cc19b9f  pycryptodomex-3.9.6.tar.gz
+-sha256	c021b66f5b3c4ea0c45422ec3241bfea4a16651e1ee5459a136639d0716ccb3c  pycryptodomex-3.9.6.tar.gz
++md5  4cede80c602d8814bbfb24a1cdc50dc8  pycryptodomex-3.9.8.tar.gz
++sha256  48cc2cfc251f04a6142badeb666d1ff49ca6fdfc303fd72579f62b768aaa52b9  pycryptodomex-3.9.8.tar.gz
  # Locally computed sha256 checksums
- sha256  35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 5e58266e64..6eb7be8d5d 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
+-sha256	d1af3fab2ef8cc53b6c7f48bdeb178ac874b04faf4ba0159a96b6109f1d393e2  LICENSE.rst
+-sha256	8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
++sha256  d1af3fab2ef8cc53b6c7f48bdeb178ac874b04faf4ba0159a96b6109f1d393e2  LICENSE.rst
++sha256  8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
+index 1459bb8fc3..7f93d93131 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.mk
++++ b/package/python-pycryptodomex/python-pycryptodomex.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CRYPTOGRAPHY_VERSION = 2.9
-+PYTHON_CRYPTOGRAPHY_VERSION = 3.0
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/9d/0a/d7060601834b1a0a84845d6ae2cd59be077aafa2133455062e47c9733024
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_PYCRYPTODOMEX_VERSION = 3.9.6
++PYTHON_PYCRYPTODOMEX_VERSION = 3.9.8
+ PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
+-PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/d7/4f/20258a48e6760cff6523a176ecec671c85cad3f199754a8b89728d130aa8
++PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/f5/79/9d9206688385d1e7a5ff925e7aab1d685636256e34a409037aa7adbbe611
+ PYTHON_PYCRYPTODOMEX_SETUP_TYPE = setuptools
+ PYTHON_PYCRYPTODOMEX_LICENSE = \
+ 	BSD-2-Clause, \
