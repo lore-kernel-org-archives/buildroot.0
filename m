@@ -1,42 +1,44 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Mon, 03 Aug 2020 08:56:53 +0000
-Subject: [Buildroot] [PATCH v2 1/1] package/rauc: bump version to 1.4
-Message-ID: <KTOG_jC59vdKgtK3NgiEWU857Q6URAQ6zWUK4ORIl0enkXGOELn5TBss1E5v587yRL4Dsxmk93WuB-QIafW_ZoguoUxoIYyGXGqrAeMjAcw=@protonmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Aug 2020 13:27:51 +0200
+Subject: [Buildroot] Cannot get build to use start_x.elf and fixup_x.dat
+ Raspberry Pi 3
+In-Reply-To: <20200801080648.GA32736@scaer> (Yann E. MORIN's message of "Sat, 
+ 1 Aug 2020 10:06:48 +0200")
+References: <CAOnXkYsPPXA5K2gX0nAU58hdoBB6yEt+ov5J7KCa2iF5MLTv_Q@mail.gmail.com>
+ <20200801080648.GA32736@scaer>
+Message-ID: <87ft94ufyg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
----
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index b73eb60d86..d327122293 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
--sha256  4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c  rauc-1.3.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v1.4/rauc-1.4.tar.xz.asc
-+sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 5c5bd993ba..1915c783aa 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > Vijay, All,
+ > On 2020-07-31 18:01 -0700, Vijay spake thusly:
+ >> I'm fairly new to buildroot and cannot find a solution to this problem
+ >> I'm having. Everything works well for me and I'm able to create the SD
+ >> card images to run on my Pi 3. However, I'm trying to get the extended
+ >> ("x") firmware to boot. In the Target Packages > Hardware Handling >
+ >> Firmware section, I'm selecting the extended option. Buildroot is
+ >> building all the different variations of the start.elf (including
+ >> start_x.elf, start_cd.elf) but only using the start.elf file in the
+ >> final image instead of the start_x.elf file (same with fixup.dat). So
+ >> basically whether I select the "default" option on that screen or
+ >> "extended," the resulting boot image is the same. If I manually copy
+ >> the start_x.elf and fixup_x.dat files as start.elf and fixup.dat the
+ >> I get the extended functionality - specifically the camera working.
+ >> I hope all that?makes sense. Please let me know if you need any
+ >> further information. Any help is greatly appreciated.
 
--RAUC_VERSION = 1.3
-+RAUC_VERSION = 1.4
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
---
-2.20.1
+ > The corret files are copied to the unqualified names, and the
+ > unqualified names are loaded at boot; see the comment in config.txt
+
+ > Also, see commit 1bdc0334f, which fixed that recently on master. It was
+ > backported to 2020.05.x, but not to the LTS 2020.02...
+
+Yes it was, in commit d92af490a5 (included in 2020.02.4).
+
+-- 
+Bye, Peter Korsgaard
