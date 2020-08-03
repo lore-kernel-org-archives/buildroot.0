@@ -1,58 +1,152 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Aug 2020 23:04:04 +0200
-Subject: [Buildroot] [git commit] package/wayland: fix build with toolchains
- without c++
-Message-ID: <20200803210520.EA07A82DF6@busybox.osuosl.org>
+Date: Mon, 3 Aug 2020 23:06:56 +0200
+Subject: [Buildroot] [git commit] package/gd: fix CVE-2018-14553 and
+ CVE-2019-6977
+Message-ID: <20200803210521.052B17FA6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=654b5d934a7cdab7deca16b374322236de08d472
+commit: https://git.buildroot.net/buildroot/commit/?id=6fa1a32dac3cb4ee03fd11bb965cd4b57d14e86a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/fb2/fb205601cac2bbf8e70ec2bf4eaf22264d8edc96/
+- Fix CVE-2018-14553 : gdImageClone in gd.c in libgd 2.1.0-rc2 through
+  2.2.5 has a NULL pointer dereference allowing attackers to crash an
+  application via a specific function call sequence.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- Fix CVE-2019-6977: gdImageColorMatch in gd_color_match.c in the GD
+  Graphics Library (aka LibGD) 2.2.5, as used in the imagecolormatch
+  function in PHP before 5.6.40, 7.x before 7.1.26, 7.2.x before 7.2.14,
+  and 7.3.x before 7.3.1, has a heap-based buffer overflow. This can be
+  exploited by an attacker who is able to trigger imagecolormatch calls
+  with crafted image data.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../wayland/0002-meson-do-not-check-for-c.patch    | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ ...-NULL-pointer-dereference-in-gdImageClone.patch | 44 ++++++++++++++++++++++
+ ...Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch | 39 +++++++++++++++++++
+ package/gd/gd.mk                                   | 13 +++++++
+ 3 files changed, 96 insertions(+)
 
-diff --git a/package/wayland/0002-meson-do-not-check-for-c.patch b/package/wayland/0002-meson-do-not-check-for-c.patch
+diff --git a/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch b/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
 new file mode 100644
-index 0000000000..c5819bf477
+index 0000000000..8234de45a2
 --- /dev/null
-+++ b/package/wayland/0002-meson-do-not-check-for-c.patch
-@@ -0,0 +1,29 @@
-+From 1df9b73db6541cbc483c6ee1b21dbe0cb6e5cbfa Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Wed, 29 Jul 2020 08:20:41 +0200
-+Subject: [PATCH] meson: do not check for c++
++++ b/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
+@@ -0,0 +1,44 @@
++From a93eac0e843148dc2d631c3ba80af17e9c8c860f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?F=C3=A1bio=20Cabral=20Pacheco?= <fcabralpacheco@gmail.com>
++Date: Fri, 20 Dec 2019 12:03:33 -0300
++Subject: [PATCH] Fix potential NULL pointer dereference in gdImageClone()
 +
-+Wayland does not need c++, fixes building with toolchains lacking c++.
-+
-+Backported from upstream PR:
-+https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/88
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Retrieved (and updated to remove .gitignore and tests) from:
++https://github.com/libgd/libgd/commit/a93eac0e843148dc2d631c3ba80af17e9c8c860f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/gd.c                          |  9 +--------
++ tests/gdimageclone/.gitignore     |  1 +
++ tests/gdimageclone/CMakeLists.txt |  1 +
++ tests/gdimageclone/Makemodule.am  |  3 ++-
++ tests/gdimageclone/style.c        | 30 ++++++++++++++++++++++++++++++
++ 5 files changed, 35 insertions(+), 9 deletions(-)
++ create mode 100644 tests/gdimageclone/style.c
 +
-+diff --git a/meson.build b/meson.build
-+index b67b101..e47a52d 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1,5 +1,5 @@
-+ project(
-+-	'wayland', 'c', 'cpp',
-++	'wayland', 'c',
-+ 	version: '1.18.0',
-+ 	license: 'MIT',
-+ 	meson_version: '>= 0.47.0',
-+-- 
-+2.27.0
++diff --git a/src/gd.c b/src/gd.c
++index 592a0286..d564d1f9 100644
++--- a/src/gd.c
+++++ b/src/gd.c
++@@ -2865,14 +2865,6 @@ BGD_DECLARE(gdImagePtr) gdImageClone (gdImagePtr src) {
++ 		}
++ 	}
++ 
++-	if (src->styleLength > 0) {
++-		dst->styleLength = src->styleLength;
++-		dst->stylePos    = src->stylePos;
++-		for (i = 0; i < src->styleLength; i++) {
++-			dst->style[i] = src->style[i];
++-		}
++-	}
++-
++ 	dst->interlace   = src->interlace;
++ 
++ 	dst->alphaBlendingFlag = src->alphaBlendingFlag;
++@@ -2907,6 +2899,7 @@ BGD_DECLARE(gdImagePtr) gdImageClone (gdImagePtr src) {
++ 
++ 	if (src->style) {
++ 		gdImageSetStyle(dst, src->style, src->styleLength);
+++		dst->stylePos = src->stylePos;
++ 	}
++ 
++ 	for (i = 0; i < gdMaxColors; i++) {
+diff --git a/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch b/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
+new file mode 100644
+index 0000000000..11c7575dd4
+--- /dev/null
++++ b/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
+@@ -0,0 +1,39 @@
++From 2e886046f86d0d6bfc14aab94a881259a081e3f4 Mon Sep 17 00:00:00 2001
++From: wilson chen <willson.chenwx@gmail.com>
++Date: Fri, 20 Dec 2019 10:12:04 +0800
++Subject: [PATCH] Fix #497: gdImageColorMatch Out Of Bounds Write on Heap
++ (CVE-2019-6977)
 +
++Fixed CVE-2019-6977 and add corresponding testcase.
++
++Original patch by Christoph M. Bechker <cmbecker69@gmx.de>
++https://gist.github.com/cmb69/1f36d285eb297ed326f5c821d7aafced
++
++[Retrieved (and updated to remove .gitignore and tests) from:
++https://github.com/libgd/libgd/commit/2e886046f86d0d6bfc14aab94a881259a081e3f4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/gd_color_match.c                    |  5 ++---
++ tests/gdimagecolormatch/.gitignore      |  1 +
++ tests/gdimagecolormatch/CMakeLists.txt  |  1 +
++ tests/gdimagecolormatch/Makemodule.am   |  1 +
++ tests/gdimagecolormatch/cve_2019_6977.c | 25 +++++++++++++++++++++++++
++ 5 files changed, 30 insertions(+), 3 deletions(-)
++ create mode 100644 tests/gdimagecolormatch/cve_2019_6977.c
++
++diff --git a/src/gd_color_match.c b/src/gd_color_match.c
++index f0842b69..f0194302 100644
++--- a/src/gd_color_match.c
+++++ b/src/gd_color_match.c
++@@ -31,9 +31,8 @@ BGD_DECLARE(int) gdImageColorMatch (gdImagePtr im1, gdImagePtr im2)
++ 		return -4; /* At least 1 color must be allocated */
++ 	}
++ 
++-	buf = (unsigned long *)gdMalloc(sizeof(unsigned long) * 5 * im2->colorsTotal);
++-	memset (buf, 0, sizeof(unsigned long) * 5 * im2->colorsTotal );
++-
+++	buf = (unsigned long *)gdMalloc(sizeof(unsigned long) * 5 * gdMaxColors);
+++	memset (buf, 0, sizeof(unsigned long) * 5 * gdMaxColors );
++ 	for (x=0; x < im1->sx; x++) {
++ 		for( y=0; y<im1->sy; y++ ) {
++ 			color = im2->pixels[y][x];
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index e2a46dca3c..419d9a6384 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -14,6 +14,19 @@ GD_CONFIG_SCRIPTS = gdlib-config
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
+ 
++# 0001-bmp-check-return-value-in-gdImageBmpPtr.patch
++GD_IGNORE_CVES += CVE-2018-1000222
++# 0002-Fix-420-Potential-infinite-loop-in-gdImageCreateFrom.patch
++GD_IGNORE_CVES += CVE-2018-5711
++# 0003-Fix-501-Uninitialized-read-in-gdImageCreateFromXbm-C.patch
++GD_IGNORE_CVES += CVE-2019-11038
++# 0004-Fix-492-Potential-double-free-in-gdImage-Ptr.patch
++GD_IGNORE_CVES += CVE-2019-6978
++# 0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
++GD_IGNORE_CVES += CVE-2018-14553
++# 0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
++GD_IGNORE_CVES += CVE-2019-6977
++
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
