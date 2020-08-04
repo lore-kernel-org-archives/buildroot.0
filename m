@@ -1,18 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  4 Aug 2020 14:40:42 +0200
-Subject: [Buildroot] [PATCH 1/3] support/scripts/pkg-stats: use aiohttp for
- latest version retrieval
+Date: Tue,  4 Aug 2020 14:40:43 +0200
+Subject: [Buildroot] [PATCH 2/3] support/scripts/pkg-stats: use aiohttp for
+ upstream URL checking
 In-Reply-To: <20200804124044.1217873-1-thomas.petazzoni@bootlin.com>
 References: <20200804124044.1217873-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200804124044.1217873-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20200804124044.1217873-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit reworks the code that retrieves the latest upstream
-version of each package from release-monitoring.org using the aiohttp
+This commit reworks the code that checks if the upstream URL of each
+package (specified by its Config.in file) using the aiohttp
 module. This makes the implementation much more elegant, and avoids
 the problematic multiprocessing Pool which is causing issues in some
 situations.
@@ -20,220 +20,86 @@ situations.
 Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 142 +++++++++++++++++++++-----------------
- 1 file changed, 78 insertions(+), 64 deletions(-)
+ support/scripts/pkg-stats | 45 +++++++++++++++++++++------------------
+ 1 file changed, 24 insertions(+), 21 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index ec4d538758..5a566de3cf 100755
+index 5a566de3cf..3c776a89cb 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -16,7 +16,9 @@
- # along with this program; if not, write to the Free Software
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- 
-+import aiohttp
- import argparse
-+import asyncio
- import datetime
- import fnmatch
- import os
-@@ -26,13 +28,10 @@ import subprocess
- import requests  # URL checking
+@@ -25,14 +25,13 @@ import os
+ from collections import defaultdict
+ import re
+ import subprocess
+-import requests  # URL checking
++import requests  # NVD database download
  import json
  import ijson
--import certifi
  import distutils.version
  import time
  import gzip
  import sys
--from urllib3 import HTTPSConnectionPool
--from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
+-from multiprocessing import Pool
  
  sys.path.append('utils/')
-@@ -54,10 +53,6 @@ CVE_AFFECTS = 1
- CVE_DOESNT_AFFECT = 2
- CVE_UNKNOWN = 3
- 
--# Used to make multiple requests to the same host. It is global
--# because it's used by sub-processes.
--http_pool = None
--
- 
- class Defconfig:
-     def __init__(self, name, path):
-@@ -526,54 +521,88 @@ def check_package_urls(packages):
-     pool.terminate()
+ from getdeveloperlib import parse_developers  # noqa: E402
+@@ -499,26 +498,30 @@ def package_init_make_info():
+             Package.all_ignored_cves[pkgvar] = value.split()
  
  
--def release_monitoring_get_latest_version_by_distro(pool, name):
--    try:
--        req = pool.request('GET', "/api/project/Buildroot/%s" % name)
--    except HTTPError:
--        return (RM_API_STATUS_ERROR, None, None)
--
--    if req.status != 200:
--        return (RM_API_STATUS_NOT_FOUND, None, None)
-+def check_package_latest_version_set_status(pkg, status, version, identifier):
-+    pkg.latest_version = {
-+        "status": status,
-+        "version": version,
-+        "id": identifier,
-+    }
- 
--    data = json.loads(req.data)
-+    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-+        pkg.status['version'] = ('warning', "Release Monitoring API error")
-+    elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
-+        pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
- 
--    if 'version' in data:
--        return (RM_API_STATUS_FOUND_BY_DISTRO, data['version'], data['id'])
-+    if pkg.latest_version['version'] is None:
-+        pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
-+    elif pkg.latest_version['version'] != pkg.current_version:
-+        pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
-     else:
--        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
-+        pkg.status['version'] = ('ok', 'up-to-date')
- 
- 
--def release_monitoring_get_latest_version_by_guess(pool, name):
-+async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
-+    url = "https://release-monitoring.org//api/project/Buildroot/%s" % pkg.name
-     try:
--        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
--    except HTTPError:
--        return (RM_API_STATUS_ERROR, None, None)
-+        async with session.get(url) as resp:
-+            if resp.status != 200:
-+                return False
- 
--    if req.status != 200:
--        return (RM_API_STATUS_NOT_FOUND, None, None)
-+            data = await resp.json()
-+            version = data['version'] if 'version' in data else None
-+            check_package_latest_version_set_status(pkg,
-+                                                    RM_API_STATUS_FOUND_BY_DISTRO,
-+                                                    version,
-+                                                    data['id'])
-+            return True
-+
-+    except (aiohttp.ClientError, asyncio.exceptions.TimeoutError):
-+        if retry:
-+            return await check_package_get_latest_version_by_distro(session, pkg, retry=False)
-+        else:
-+            return False
- 
--    data = json.loads(req.data)
- 
--    projects = data['projects']
--    projects.sort(key=lambda x: x['id'])
-+async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
-+    url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
+-def check_url_status_worker(url, url_status):
+-    if url_status[0] == 'ok':
+-        try:
+-            url_status_code = requests.head(url, timeout=30).status_code
+-            if url_status_code >= 400:
+-                return ("error", "invalid {}".format(url_status_code))
+-        except requests.exceptions.RequestException:
+-            return ("error", "invalid (err)")
+-        return ("ok", "valid")
+-    return url_status
++async def check_url_status(session, pkg, retry=True):
 +    try:
-+        async with session.get(url) as resp:
-+            if resp.status != 200:
-+                return False
-+
-+            data = await resp.json()
-+            projects = data['projects']
-+            projects.sort(key=lambda x: x['id'])
-+
-+            for p in projects:
-+                if p['name'] == pkg.name and 'version' in p:
-+                    check_package_latest_version_set_status(pkg,
-+                                                            RM_API_STATUS_FOUND_BY_DISTRO,
-+                                                            p['version'],
-+                                                            p['id'])
-+            return True
-+
++        async with session.get(pkg.url) as resp:
++            if resp.status >= 400:
++                pkg.status['url'] = ("error", "invalid {}".format(resp.status))
++                return
 +    except (aiohttp.ClientError, asyncio.exceptions.TimeoutError):
 +        if retry:
-+            return await check_package_get_latest_version_by_guess(session, pkg, retry=False)
++            return await check_url_status(session, pkg, retry=False)
 +        else:
-+            return False
++            pkg.status['url'] = ("error", "invalid (err)")
++            return
+ 
++    pkg.status['url'] = ("ok", "valid")
+ 
+-def check_package_urls(packages):
+-    pool = Pool(processes=64)
+-    for pkg in packages:
+-        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.status['url']))
+-    for pkg in packages:
+-        pkg.status['url'] = pkg.url_worker.get(timeout=3600)
+-        del pkg.url_worker
+-    pool.terminate()
 +
- 
--    for p in projects:
--        if p['name'] == name and 'version' in p:
--            return (RM_API_STATUS_FOUND_BY_PATTERN, p['version'], p['id'])
-+async def check_package_latest_version_get(session, pkg):
- 
--    return (RM_API_STATUS_NOT_FOUND, None, None)
-+    if await check_package_get_latest_version_by_distro(session, pkg):
-+        return
- 
-+    if await check_package_get_latest_version_by_guess(session, pkg):
-+        return
- 
--def check_package_latest_version_worker(name):
--    """Wrapper to try both by name then by guess"""
--    print(name)
--    res = release_monitoring_get_latest_version_by_distro(http_pool, name)
--    if res[0] == RM_API_STATUS_NOT_FOUND:
--        res = release_monitoring_get_latest_version_by_guess(http_pool, name)
--    return res
-+    check_package_latest_version_set_status(pkg,
-+                                            RM_API_STATUS_NOT_FOUND,
-+                                            None, None)
- 
- 
--def check_package_latest_version(packages):
-+async def check_package_latest_version(packages):
-     """
-     Fills in the .latest_version field of all Package objects
- 
-@@ -587,33 +616,18 @@ def check_package_latest_version(packages):
-     - id: string containing the id of the project corresponding to this
-       package, as known by release-monitoring.org
-     """
--    global http_pool
--    http_pool = HTTPSConnectionPool('release-monitoring.org', port=443,
--                                    cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
--                                    timeout=30)
--    worker_pool = Pool(processes=64)
--    results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
--    for pkg, r in zip(packages, results):
--        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
- 
-+    for pkg in packages:
-         if not pkg.has_valid_infra:
-             pkg.status['version'] = ("na", "no valid package infra")
--            continue
--
--        if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
--            pkg.status['version'] = ('warning', "Release Monitoring API error")
--        elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
--            pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
--
--        if pkg.latest_version['version'] is None:
--            pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
--        elif pkg.latest_version['version'] != pkg.current_version:
--            pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
--        else:
--            pkg.status['version'] = ('ok', 'up-to-date')
- 
--    worker_pool.terminate()
--    del http_pool
++async def check_package_urls(packages):
 +    tasks = []
 +    connector = aiohttp.TCPConnector(limit_per_host=5)
 +    async with aiohttp.ClientSession(connector=connector) as sess:
-+        packages = [p for p in packages if p.has_valid_infra]
++        packages = [p for p in packages if p.status['url'][0] == 'ok']
 +        for pkg in packages:
-+            tasks.append(check_package_latest_version_get(sess, pkg))
++            tasks.append(check_url_status(sess, pkg))
 +        await asyncio.wait(tasks)
  
  
- def check_package_cves(nvd_path, packages):
-@@ -1057,7 +1071,7 @@ def __main__():
+ def check_package_latest_version_set_status(pkg, status, version, identifier):
+@@ -1069,7 +1072,7 @@ def __main__():
+         pkg.set_url()
+         pkg.set_developers(developers)
      print("Checking URL status")
-     check_package_urls(packages)
+-    check_package_urls(packages)
++    asyncio.run(check_package_urls(packages))
      print("Getting latest versions ...")
--    check_package_latest_version(packages)
-+    asyncio.run(check_package_latest_version(packages))
+     asyncio.run(check_package_latest_version(packages))
      if args.nvd_path:
-         print("Checking packages CVEs")
-         check_package_cves(args.nvd_path, {p.name: p for p in packages})
 -- 
 2.26.2
