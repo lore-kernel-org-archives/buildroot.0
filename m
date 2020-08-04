@@ -1,49 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  4 Aug 2020 12:08:33 +0200
-Subject: [Buildroot] [PATCH] package/ruby: security bump to version 2.4.10
-Message-ID: <20200804100833.13787-1-peter@korsgaard.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 4 Aug 2020 12:15:41 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2020.79
+In-Reply-To: <87eeq78o4n.fsf@dell.be.48ers.dk>
+References: <20200622073933.236001-1-francois.perrad@gadz.org>
+ <87eeq78o4n.fsf@dell.be.48ers.dk>
+Message-ID: <CAAXf6LVqrDFw9QQzjjnGFnSdb_BfBFj6bCnciZGjQHmM2D1nVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hi Peter,
 
-- CVE-2020-10663: Unsafe Object Creation Vulnerability in JSON (Additional
-  fix)
-  https://www.ruby-lang.org/en/news/2020/03/19/json-dos-cve-2020-10663/
+El lun., 22 jun. 2020 a las 11:07, Peter Korsgaard (<peter@korsgaard.com>)
+escribi?:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>
+>  > CBC ciphers, 3DES and hmac-sha1-96 are now disabled by default.
+>
+> Do we expect that to cause compatibility issues?
+>
+> Committed, thanks.
+>
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index d0aac63872..89cab3fcd3 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
--sha256 0c4e000253ef7187feeb940a01a1c7594f28d63aa16f978e892a0e2864f58614  ruby-2.4.9.tar.xz
-+# https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-4-10-released/
-+sha256 d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df  ruby-2.4.10.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 0ac1164332..6f8cb319cb 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).10
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
--- 
-2.20.1
+
+I just want to notify you that this dropbear release 2020.79 also contains
+a security fix: (from the CHANGES file):
+
+         - scp fix for CVE-2018-20685 where a server could modify name of
+output files
+
+and as such this update (or the later one to update to 2020.80) should also
+be applied on the LTS branch.
+
+Thanks,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200804/3396567d/attachment.html>
