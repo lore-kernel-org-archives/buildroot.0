@@ -1,69 +1,49 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Tue, 4 Aug 2020 10:38:12 +0200
-Subject: [Buildroot] [PATCH v2] boot/at91bootstrap3: add dependency to
- host python3
-In-Reply-To: <20200804082906.118090-1-eugen.hristev@microchip.com>
-References: <20200804082906.118090-1-eugen.hristev@microchip.com>
-Message-ID: <20200804083811.hutiunw3gu5ryz7x@falbala.internal.home.lespocky.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  4 Aug 2020 12:08:33 +0200
+Subject: [Buildroot] [PATCH] package/ruby: security bump to version 2.4.10
+Message-ID: <20200804100833.13787-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes the following security issues:
 
-On Tue, Aug 04, 2020 at 11:29:06AM +0300, Eugen Hristev wrote:
-> Starting with version 3.9.3, AT91Bootstrap adds dependency for host
-> python3.
-> Python2 was deprecated so moving to Python3.
-> AT91Bootstrap only requires Python3 at build time, for some scripts that
-> generate specific metadata.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
-> Changes in v2:
-> - fix typo s/boot/build
+- CVE-2020-10663: Unsafe Object Creation Vulnerability in JSON (Additional
+  fix)
+  https://www.ruby-lang.org/en/news/2020/03/19/json-dos-cve-2020-10663/
 
-Acked-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Greets
-Alex
-
-> 
->  boot/at91bootstrap3/at91bootstrap3.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-> index 5cf865c681..a601f35a4b 100644
-> --- a/boot/at91bootstrap3/at91bootstrap3.mk
-> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
-> @@ -6,6 +6,8 @@
->  
->  AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
->  
-> +AT91BOOTSTRAP3_DEPENDENCIES += host-python3
-> +
->  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL),y)
->  AT91BOOTSTRAP3_TARBALL = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL_LOCATION))
->  AT91BOOTSTRAP3_SITE = $(patsubst %/,%,$(dir $(AT91BOOTSTRAP3_TARBALL)))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index d0aac63872..89cab3fcd3 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2019/10/02/ruby-2-4-9-released/
+-sha256 0c4e000253ef7187feeb940a01a1c7594f28d63aa16f978e892a0e2864f58614  ruby-2.4.9.tar.xz
++# https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-4-10-released/
++sha256 d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df  ruby-2.4.10.tar.xz
+ # License files, Locally calculated
+ sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
+ sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 0ac1164332..6f8cb319cb 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).9
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).10
+ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200804/1e5d4d37/attachment.asc>
+2.20.1
