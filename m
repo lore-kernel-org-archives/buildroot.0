@@ -1,42 +1,75 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 4 Aug 2020 12:15:41 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2020.79
-In-Reply-To: <87eeq78o4n.fsf@dell.be.48ers.dk>
-References: <20200622073933.236001-1-francois.perrad@gadz.org>
- <87eeq78o4n.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LVqrDFw9QQzjjnGFnSdb_BfBFj6bCnciZGjQHmM2D1nVQ@mail.gmail.com>
+Date: Tue, 4 Aug 2020 12:23:16 +0200
+Subject: [Buildroot] [PATCH 0/2] Add utils/source-check
+In-Reply-To: <20200504111551.15920-1-patrickdepinguin@gmail.com>
+References: <20200504111551.15920-1-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LW5rpRPjjfsPorqV_8WaQ2sY58WSsZ5PkhV5iNeR+kw1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+El lun., 4 may. 2020 a las 13:14, Thomas De Schampheleire (<
+patrickdepinguin@gmail.com>) escribi?:
 
-El lun., 22 jun. 2020 a las 11:07, Peter Korsgaard (<peter@korsgaard.com>)
-escribi?:
-
-> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 >
->  > CBC ciphers, 3DES and hmac-sha1-96 are now disabled by default.
+> Hello,
 >
-> Do we expect that to cause compatibility issues?
+> Buildroot used to have a 'make source-check' command, which was later
+> removed.
+> Nevertheless, for organizations that use a download mirror and want to
+> efficiently check that all needed files are present without actually
+> downloading, an equivalent is still useful.
 >
-> Committed, thanks.
+> After the addition of the 'show-info' target, this is now possible without
+> polluting the core Buildroot infrastructure.
 >
+> The script is a 'utility', it is not used automatically, just present for
+> the
+> benefit of users.
+>
+> Note: as mentioned in the commit msg, the current script only covers scp
+> and hg
+> downloads, my needs. It could be extended to cover git etc., but it may
+> not be
+> possible to check remotely if a git revision exists on a repository. So for
+> these additional download methods, it may be needed to perform an actual
+> clone?
+>
+>
+> Patch 1 adds BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS and is useful
+> independently
+> from source-check. It addresses the problem where BR2_PRIMARY_SITE_ONLY
+> cannot
+> be used if you also have packages under version control.
+>
+> Patch 2 adds the source-check script.
+>
+>
+>
+> Best regards,
+> Thomas
+>
+> Thomas De Schampheleire (2):
+>   core: add BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS
+>   utils/source-check: new script
+>
+>  Config.in               |  11 +++
+>  package/pkg-download.mk |   8 +-
+>  utils/source-check      | 170 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 188 insertions(+), 1 deletion(-)
+>  create mode 100755 utils/source-check
+>
+> --
+> 2.26.2
+>
+>
+I would like to ping this series for feedback:
 
-
-I just want to notify you that this dropbear release 2020.79 also contains
-a security fix: (from the CHANGES file):
-
-         - scp fix for CVE-2018-20685 where a server could modify name of
-output files
-
-and as such this update (or the later one to update to 2020.80) should also
-be applied on the LTS branch.
-
-Thanks,
-Thomas
+http://patchwork.ozlabs.org/project/buildroot/patch/20200504111551.15920-2-patrickdepinguin at gmail.com/
+http://patchwork.ozlabs.org/project/buildroot/patch/20200504111551.15920-3-patrickdepinguin at gmail.com/
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200804/3396567d/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200804/04c9525c/attachment.html>
