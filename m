@@ -1,65 +1,91 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 4 Aug 2020 15:24:06 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2020.79
-In-Reply-To: <87bljqskpj.fsf@dell.be.48ers.dk>
-References: <20200622073933.236001-1-francois.perrad@gadz.org>
- <87eeq78o4n.fsf@dell.be.48ers.dk>
- <CAAXf6LVqrDFw9QQzjjnGFnSdb_BfBFj6bCnciZGjQHmM2D1nVQ@mail.gmail.com>
- <87bljqskpj.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LU8EVnL9fKZnW07W+AW8w3Cz7qP_eFz_z_4mE3eUX5seQ@mail.gmail.com>
+Date: Tue,  4 Aug 2020 15:37:16 +0200
+Subject: [Buildroot] [PATCH] package/openblas: allow disabling multithreading
+Message-ID: <20200804133716.22902-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-El mar., 4 ago. 2020 a las 13:40, Peter Korsgaard (<peter@korsgaard.com>)
-escribi?:
+Buildroot would automatically enable multithreading in OpenBLAS if the
+architecture supports it. However, one may want to avoid OpenBLAS creating
+threads itself and configure single-threaded operation. To accommodate this
+use case, add a config option for multithreading.
 
-> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> writes:
->
->  > Hi Peter,
->  > El lun., 22 jun. 2020 a las 11:07, Peter Korsgaard (<
-> peter at korsgaard.com>)
->  > escribi?:
->
->  >> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
->  >>
->  >> > CBC ciphers, 3DES and hmac-sha1-96 are now disabled by default.
->  >>
->  >> Do we expect that to cause compatibility issues?
->  >>
->  >> Committed, thanks.
->  >>
->
->
->  > I just want to notify you that this dropbear release 2020.79 also
-> contains
->  > a security fix: (from the CHANGES file):
->
->  >          - scp fix for CVE-2018-20685 where a server could modify name
-> of
->  > output files
->
->  > and as such this update (or the later one to update to 2020.80) should
-> also
->  > be applied on the LTS branch.
->
-> Ahh yes, true. 2020.79 does bring quite some new features / changes
-> though, would a backport of the scp fix be feasible?
->
+When multithreading is disabled, but OpenBLAS functions are called in the
+same application by multiple threads, then locking is mandatory. The
+USE_LOCKING flag was added in version 0.3.7 with following release note:
 
-Seems it would, the fix is a simple patch that applies cleanly on top of
-2019.78.
-https://hg.ucc.asn.au/dropbear/changeset/3080aed32bf1
+    a new option USE_LOCKING was added to ensure thread safety when OpenBLAS
+    itself is built without multithreading but will be called from multiple
+    threads.
 
-I can send a patch.
+However, if one knows that OpenBLAS will only be called from single-threaded
+applications, then passing USE_LOCKING is not necessary, so make it a config
+option too.
 
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200804/c147c7ff/attachment.html>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/openblas/Config.in   | 21 +++++++++++++++++++++
+ package/openblas/openblas.mk |  8 +++++++-
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 3f658c862a..e09f3d0c5a 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -73,4 +73,25 @@ config BR2_PACKAGE_OPENBLAS_TARGET
+ 	string "OpenBLAS target CPU"
+ 	default BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 
++config BR2_PACKAGE_OPENBLAS_USE_THREAD
++	bool "use multithreading"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	help
++	  Tell OpenBLAS to use multithreading, by passing USE_THREAD=1.
++
++config BR2_PACKAGE_OPENBLAS_USE_LOCKING
++	bool "use locking"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Tell OpenBLAS to use locking, by passing USE_LOCKING=1.
++	  Locking is implicitly enabled when USE_THREAD=1, in which case
++	  disabling this option will not have an effect.
++	  However, if USE_THREAD=0 (i.e. OpenBLAS itself will run in
++	  single-threaded mode) but an application makes OpenBLAS
++	  function calls from multiple threads, then locking is
++	  mandatory for correct operation.
++
+ endif
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index 9701df9148..0fd761c89c 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -25,12 +25,18 @@ OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
+ endif
+ 
+ # Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)
++ifeq ($(BR2_PACKAGE_OPENBLAS_USE_THREAD),y)
+ OPENBLAS_MAKE_OPTS += USE_THREAD=1
+ else
+ OPENBLAS_MAKE_OPTS += USE_THREAD=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENBLAS_USE_LOCKING),y)
++OPENBLAS_MAKE_OPTS += USE_LOCKING=1
++else
++OPENBLAS_MAKE_OPTS += USE_LOCKING=0
++endif
++
+ # We don't know if OpenMP is available or not, so disable
+ OPENBLAS_MAKE_OPTS += USE_OPENMP=0
+ 
+-- 
+2.26.2
