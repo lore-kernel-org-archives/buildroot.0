@@ -1,28 +1,46 @@
-From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Date: Tue, 4 Aug 2020 12:47:09 +0200
-Subject: [Buildroot] [PATCH] package/linux-firmware: add options for
- Broadcom BCM4366
-In-Reply-To: <20200518083305.21239-1-zajec5@gmail.com>
-References: <20200518083305.21239-1-zajec5@gmail.com>
-Message-ID: <4d61f883-4055-68c5-be46-a3c377ceccb6@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Aug 2020 13:40:24 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: bump to version 2020.79
+In-Reply-To: <CAAXf6LVqrDFw9QQzjjnGFnSdb_BfBFj6bCnciZGjQHmM2D1nVQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Tue, 4 Aug 2020 12:15:41
+ +0200")
+References: <20200622073933.236001-1-francois.perrad@gadz.org>
+ <87eeq78o4n.fsf@dell.be.48ers.dk>
+ <CAAXf6LVqrDFw9QQzjjnGFnSdb_BfBFj6bCnciZGjQHmM2D1nVQ@mail.gmail.com>
+Message-ID: <87bljqskpj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-On 18.05.2020 10:33, Rafa? Mi?ecki wrote:
-> From: Rafa? Mi?ecki <rafal@milecki.pl>
-> 
-> There are two groups of chipsets in the BCM4366 family requiring two
-> different firmware files. Each is quite big (over 1 MiB) so use
-> separated options for them.
-> 
-> Signed-off-by: Rafa? Mi?ecki <rafal@milecki.pl>
-> ---
-> Yann, Yegor: my previous e-mail didn't reach ML because I wasn't
-> subscribed thus I'm resending it.
+ > Hi Peter,
+ > El lun., 22 jun. 2020 a las 11:07, Peter Korsgaard (<peter@korsgaard.com>)
+ > escribi?:
 
-Can someone review/accept my patch, please?
+ >> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+ >> 
+ >> > CBC ciphers, 3DES and hmac-sha1-96 are now disabled by default.
+ >> 
+ >> Do we expect that to cause compatibility issues?
+ >> 
+ >> Committed, thanks.
+ >> 
+
+
+ > I just want to notify you that this dropbear release 2020.79 also contains
+ > a security fix: (from the CHANGES file):
+
+ >          - scp fix for CVE-2018-20685 where a server could modify name of
+ > output files
+
+ > and as such this update (or the later one to update to 2020.80) should also
+ > be applied on the LTS branch.
+
+Ahh yes, true. 2020.79 does bring quite some new features / changes
+though, would a backport of the scp fix be feasible?
+
+-- 
+Bye, Peter Korsgaard
