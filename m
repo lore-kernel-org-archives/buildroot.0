@@ -1,91 +1,71 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  4 Aug 2020 15:37:16 +0200
-Subject: [Buildroot] [PATCH] package/openblas: allow disabling multithreading
-Message-ID: <20200804133716.22902-1-patrickdepinguin@gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Tue, 04 Aug 2020 15:47:59 +0200
+Subject: [Buildroot] package/boost: Optimization is always -O3
+Message-ID: <52-5f296700-1-3f60f940@29255497>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hi,
 
-Buildroot would automatically enable multithreading in OpenBLAS if the
-architecture supports it. However, one may want to avoid OpenBLAS creating
-threads itself and configure single-threaded operation. To accommodate this
-use case, add a config option for multithreading.
+while doing some debugging on code which uses boost_program_options I stumbled upon a possible issue
+with the boost package.
 
-When multithreading is disabled, but OpenBLAS functions are called in the
-same application by multiple threads, then locking is mandatory. The
-USE_LOCKING flag was added in version 0.3.7 with following release note:
+It seems that the boost object files are always built with the -O3 option.
 
-    a new option USE_LOCKING was added to ensure thread safety when OpenBLAS
-    itself is built without multithreading but will be called from multiple
-    threads.
+I'm building for an arm32 system using gcc 9.2.1.
+My Buildroot 2020.05.1 config contains:
 
-However, if one knows that OpenBLAS will only be called from single-threaded
-applications, then passing USE_LOCKING is not necessary, so make it a config
-option too.
+BR2_OPTIMIZE_S
+BR2_SHARED_LIBS
+BR2_TOOLCHAIN_EXTERNAL
+BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+BR2_PACKAGE_BOOST
+BR2_PACKAGE_BOOST_LAYOUT_SYSTEM
+BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/openblas/Config.in   | 21 +++++++++++++++++++++
- package/openblas/openblas.mk |  8 +++++++-
- 2 files changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 3f658c862a..e09f3d0c5a 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -73,4 +73,25 @@ config BR2_PACKAGE_OPENBLAS_TARGET
- 	string "OpenBLAS target CPU"
- 	default BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 
-+config BR2_PACKAGE_OPENBLAS_USE_THREAD
-+	bool "use multithreading"
-+	default y
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  Tell OpenBLAS to use multithreading, by passing USE_THREAD=1.
-+
-+config BR2_PACKAGE_OPENBLAS_USE_LOCKING
-+	bool "use locking"
-+	default y
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Tell OpenBLAS to use locking, by passing USE_LOCKING=1.
-+	  Locking is implicitly enabled when USE_THREAD=1, in which case
-+	  disabling this option will not have an effect.
-+	  However, if USE_THREAD=0 (i.e. OpenBLAS itself will run in
-+	  single-threaded mode) but an application makes OpenBLAS
-+	  function calls from multiple threads, then locking is
-+	  mandatory for correct operation.
-+
- endif
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index 9701df9148..0fd761c89c 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -25,12 +25,18 @@ OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
- endif
- 
- # Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)
-+ifeq ($(BR2_PACKAGE_OPENBLAS_USE_THREAD),y)
- OPENBLAS_MAKE_OPTS += USE_THREAD=1
- else
- OPENBLAS_MAKE_OPTS += USE_THREAD=0
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENBLAS_USE_LOCKING),y)
-+OPENBLAS_MAKE_OPTS += USE_LOCKING=1
-+else
-+OPENBLAS_MAKE_OPTS += USE_LOCKING=0
-+endif
-+
- # We don't know if OpenMP is available or not, so disable
- OPENBLAS_MAKE_OPTS += USE_OPENMP=0
- 
--- 
-2.26.2
+I adjusted the boost.mk with '-d+2' to get the used build commands.
+
+So when building I see the following:
+
+"/build/build/host/bin/arm-none-linux-gnueabihf-g++"   -fvisibility-inlines-hidden -D_LARGEFILE_SOURCE \
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -fPIC -pthread -O3 -finline-functions -Wno-inline \
+-Wall -fvisibility=hidden  -DBOOST_ALL_NO_LIB=1 -DBOOST_PROGRAM_OPTIONS_DYN_LINK=1 -DNDEBUG  -I"." -c -o \
+"bin.v2/libs/program_options/build/gcc-9.2.1/release/threading-multi/visibility-hidden/positional_options.o" \
+"libs/program_options/src/positional_options.cpp"
+
+Notice how there is -Os followed by an -O3 flag.
+
+The part up to the -Os is the <cxxflags> from the buildroot generated user-config.jam file. 
+Everything after is generated while compiling.
+
+I tinkered around a bit more. When I set "variant=debug" the second -O changes to -O0.
+So this seems depend on the variant and basically ignores the value from the flags.
+
+This jam stuff is pretty complicated to grasp, but I think this basically is defined in [0].
+This is actually documented at [1].
+
+Nevertheless the boost build system knows another parameter: <optimization>
+
+So maybe this would be the way to go to configure the optimization level.
+
+Available values are:
+
+off, speed and space. which translate to -O0, -03 and -Os. (from [2])
+
+So this wouldn't be mappable cleanly to all optimization levels Buildroot knows.
+I didn't find a senseable way to set the -O level manually so it is not overwritten by boost, 
+but maybe somebody has an idea...
+
+If there is interest I could come up with a patch mapping the optimization values.
+
+Regards,
+Michael
+
+
+[0] https://github.com/boostorg/build/blob/develop/src/tools/builtin.jam#L48
+[1] https://boostorg.github.io/build/manual/master/index.html#bbv2.overview.builtins.features
+[2] https://github.com/boostorg/build/blob/master/src/tools/gcc.jam#L707
