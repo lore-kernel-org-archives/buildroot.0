@@ -1,29 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 23:12:10 +0200
-Subject: [Buildroot] [PATCH] package/valgrind: bump version to 3.16.1
-In-Reply-To: <20200805151511.562674-1-buildroot@heine.tech>
-References: <20200805151511.562674-1-buildroot@heine.tech>
-Message-ID: <20200805231210.1a4d79a9@windsurf.home>
+Date: Wed, 5 Aug 2020 23:12:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/meson: update rpath patch to
+ upstream version
+In-Reply-To: <20200731074821.4137503-1-james.hilliard1@gmail.com>
+References: <20200731074821.4137503-1-james.hilliard1@gmail.com>
+Message-ID: <20200805231215.3e33461b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  5 Aug 2020 17:15:10 +0200
-Michael Nosthoff <buildroot@heine.tech> wrote:
+On Fri, 31 Jul 2020 01:48:21 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> * 3.16.1 fixes two critical bugs discovered after 3.16.0 was frozen.
->   for details see [1].
-> * changed SITE from ftp to https.
+> The version of this patch merged by upstream has some changes to rpath
+> syntax matching and handling for additional syntax edge cases.
 > 
-> [1] https://www.valgrind.org/docs/manual/dist.news.html
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/valgrind/valgrind.hash | 4 ++--
->  package/valgrind/valgrind.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  ...003-backends-fix-rpath-match-pattern.patch | 77 +++++++++++++++----
+>  1 file changed, 63 insertions(+), 14 deletions(-)
 
 Applied to master, thanks.
 
