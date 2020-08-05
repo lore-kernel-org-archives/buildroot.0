@@ -1,61 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 23:15:33 +0200
-Subject: [Buildroot] [PATCH v2 1/3] qemu_mips32r6: Do not include hi and
- lo in clobber list for R6
-In-Reply-To: <20200725220641.1370957-1-romain.naour@gmail.com>
-References: <20200725220641.1370957-1-romain.naour@gmail.com>
-Message-ID: <20200805231533.3e75099c@windsurf.home>
+Date: Wed, 5 Aug 2020 23:18:56 +0200
+Subject: [Buildroot] [git commit] package/lxc: fix build when __NR_signalfd
+ is not available
+Message-ID: <20200805211354.CD3518377C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 26 Jul 2020 00:06:39 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e6c428dcc51ec98a4897a45c8e8c7ea10bfe45f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From [1]
-> "GCC 10 (PR 91233) won't silently allow registers that are not architecturally
-> available to be present in the clobber list anymore, resulting in build failure
-> for mips*r6 targets in form of:
-> ...
-> .../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
->   146 |  __asm__ volatile (	 \
->       |  ^~~~~~~
-> 
-> This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
-> This patch provides the alternative clobber list for r6 targets that won't include
-> those registers."
-> 
-> Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to build
-> for mips r6 cpus with gcc 10 for the same reason as glibc.
-> 
-> [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=24640f233b466051ad3a5d2786d2951e43026c9d
-> 
-> Fixes:
-> https://gitlab.com/kubu93/buildroot/-/jobs/655618359
-> https://gitlab.com/kubu93/buildroot/-/jobs/655618360
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> v2: use MIPS_ISA_REV instead of __mips_isa_rev
-> ---
->  ...ude-hi-and-lo-in-clobber-list-for-R6.patch | 149 ++++++++++++++++++
->  ...ude-hi-and-lo-in-clobber-list-for-R6.patch | 149 ++++++++++++++++++
->  configs/qemu_mips32r6_malta_defconfig         |   1 +
->  configs/qemu_mips32r6el_malta_defconfig       |   1 +
->  4 files changed, 300 insertions(+)
->  create mode 100644 board/qemu/mips32r6-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
->  create mode 100644 board/qemu/mips32r6el-malta/patches/linux/0001-mips-Do-not-include-hi-and-lo-in-clobber-list-for-R6.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/75096a48d2dbda57459523db3ed0952e63f93535
 
-Thanks, I've applied the entire series, with slightly reworked commit
-titles.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...on-t-fail-if-__NR_signalfd-is-not-defined.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch b/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
+new file mode 100644
+index 0000000000..c6e70e0a55
+--- /dev/null
++++ b/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
+@@ -0,0 +1,54 @@
++From 3341e204dc1e1da6ecbc1ffbe59fca33f23ca557 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 28 Jul 2020 12:31:31 +0200
++Subject: [PATCH] syscall: don't fail if __NR_signalfd is not defined
++
++lxc fails to build if __NR_signalfd is not defined since version 4.0.0
++and
++https://github.com/lxc/lxc/commit/bed09c9cc0bec7bbd2442fcce4a2a0f03994cb09
++
++However, some architectures don't define __NR_signalfd but only
++__NR_signalfd4. This is the case for example for nios2 or csky:
++https://github.com/bminor/glibc/blob/f9ac84f92f151e07586c55e14ed628d493a5929d/sysdeps/unix/sysv/linux/nios2/arch-syscall.h
++https://github.com/bminor/glibc/blob/f9ac84f92f151e07586c55e14ed628d493a5929d/sysdeps/unix/sysv/linux/csky/arch-syscall.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/75096a48d2dbda57459523db3ed0952e63f93535
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/lxc/lxc/commit/3341e204dc1e1da6ecbc1ffbe59fca33f23ca557]
++---
++ src/lxc/syscall_numbers.h  | 3 ---
++ src/lxc/syscall_wrappers.h | 2 ++
++ 2 files changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
++index e2e7883786..72e4ffe460 100644
++--- a/src/lxc/syscall_numbers.h
+++++ b/src/lxc/syscall_numbers.h
++@@ -228,9 +228,6 @@
++ 		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
++ 			#define __NR_signalfd 5276
++ 		#endif
++-	#else
++-		#define -1
++-		#warning "__NR_signalfd not defined for your architecture"
++ 	#endif
++ #endif
++ 
++diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
++index 220ef65fde..6aaa437226 100644
++--- a/src/lxc/syscall_wrappers.h
+++++ b/src/lxc/syscall_wrappers.h
++@@ -112,8 +112,10 @@ static inline int signalfd(int fd, const sigset_t *mask, int flags)
++ 	int retval;
++ 
++ 	retval = syscall(__NR_signalfd4, fd, mask, _NSIG / 8, flags);
+++#ifdef __NR_signalfd
++ 	if (errno == ENOSYS && flags == 0)
++ 		retval = syscall(__NR_signalfd, fd, mask, _NSIG / 8);
+++#endif
++ 
++ 	return retval;
++ }
