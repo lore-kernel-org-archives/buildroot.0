@@ -1,49 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  5 Aug 2020 14:57:59 +0200
-Subject: [Buildroot] [PATCH] boot/at91bootstrap3: bump version to 3.9.3
-Message-ID: <20200805125800.1279727-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Aug 2020 15:00:15 +0200
+Subject: [Buildroot] [PATCH] package/f2fs-tools: fsck should use correct
+ returncodes
+In-Reply-To: <20200805094229.287492-1-nolange79@gmail.com>
+References: <20200805094229.287492-1-nolange79@gmail.com>
+Message-ID: <20200805150015.7153868a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed,  5 Aug 2020 11:42:28 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 5492ace8fb..25ab30489f 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.9.2"
-+	bool "3.9.3"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -51,7 +51,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 5741b829f5..6671a4ac70 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
-+sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
- sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
+> fsck.f2fs does not implement the returncodes from the fsck interface.
+> This is particularly bad if systemd is used with a root f2fs partition,
+> as it will interpret the rc as order to reboot.
+> 
+> for thread & pending upstream fix see:
+> https://sourceforge.net/p/linux-f2fs/mailman/message/37078057/
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  ...002-f2fs_return_correct_return_value.patch | 127 ++++++++++++++++++
+>  1 file changed, 127 insertions(+)
+>  create mode 100644 package/f2fs-tools/0002-f2fs_return_correct_return_value.patch
+> 
+> diff --git a/package/f2fs-tools/0002-f2fs_return_correct_return_value.patch b/package/f2fs-tools/0002-f2fs_return_correct_return_value.patch
+> new file mode 100644
+> index 0000000000..bcaf7d657e
+> --- /dev/null
+> +++ b/package/f2fs-tools/0002-f2fs_return_correct_return_value.patch
+> @@ -0,0 +1,127 @@
+> +fsck.f2fs does not implement the returncodes from the fsck interface.
+> +This is particularly bad if systemd is used with a root f2fs partition,
+> +as it will interpret the rc as order to reboot.
+> +
+> +see: https://sourceforge.net/p/linux-f2fs/mailman/message/37078057/
+> +
+> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
+
+Could you use the proper Git formatted patch that was posted at
+https://sourceforge.net/p/linux-f2fs/mailman/message/37078057/,
+preserving the authorship, etc. ?
+
+Thanks!
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
