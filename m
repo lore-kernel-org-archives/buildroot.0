@@ -1,71 +1,88 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 5 Aug 2020 17:55:24 +0200
-Subject: [Buildroot] Status of LLVM
-In-Reply-To: <20200805173122.0d201e51@windsurf.home>
-References: <CAGt4E5vRu+xVXtaze8+6CmWFXSmzJx2PV46bC7STiDnKCqksRw@mail.gmail.com>
- <31f39a1d-1436-0952-43e8-561135e6aa60@gmail.com>
- <e54d173f-533b-1abf-1b74-ea8286fe88a2@gmail.com>
- <20200805173122.0d201e51@windsurf.home>
-Message-ID: <00b3fc14-ee83-91a4-827d-988b13254bc9@gmail.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 5 Aug 2020 11:18:24 -0500
+Subject: [Buildroot] [PATCH 1/1] package/libnids: NVD database has been
+ updated
+In-Reply-To: <CANQCQpZH6pt2-vs-9vi7Tw0TFz3HjkT2ftqzGM3vwzot-RU5MQ@mail.gmail.com>
+References: <20200721180555.31453-1-guillaume.bressaix@gmail.com>
+ <20200721204324.58fa9cc2@windsurf.home>
+ <CANQCQpb3NtawUS-fGVDXn+jfvjS2mh1T--r815m8jsnSj0wYHw@mail.gmail.com>
+ <CAJe0E3cP6oppGocO9LuE+-ctjicSq1oRh8p2qD=gZdwi7N+_aQ@mail.gmail.com>
+ <CANQCQpZH6pt2-vs-9vi7Tw0TFz3HjkT2ftqzGM3vwzot-RU5MQ@mail.gmail.com>
+Message-ID: <CANQCQpaMBp6U2vvhVPHqA24osijfPS6PcCOgoduEPg=U61QLdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+It has been fixed but I had to update the wiki notes because there are two
+steps.  The first is a CVE description update by the Mitre/CVE team and the
+second is a CPE assignment update by the dictionary team.  I checked the
+NVD link that Thomas provided and it looks correct to me.
 
-Le 05/08/2020 ? 17:31, Thomas Petazzoni a ?crit?:
-> On Wed, 5 Aug 2020 16:36:12 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> Last year I was able to build an aarch64 system with clang 8 (rootfs + kernel)
->> on a Potato Board.
+On Thu, Jul 30, 2020 at 1:01 PM Matthew Weber <matthew.weber@collins.com>
+wrote:
+
+> Guillaume, I've submitted another request with more detail and hopefully
+> they'll update all the references to the version
+>
+> On Wed, Jul 22, 2020 at 2:34 AM Guillaume Bres <
+> guillaume.bressaix at gmail.com> wrote:
+>
+>> Ugh, looks like they only updated the description and didn't adjust the
+>>> rest of the version references
 >>
->> Recently I tried again with a riscv64 target running under qemu:
 >>
->> https://asciinema.org/a/DDspJVktlVl1Rh97dwLgtYcRY
+>> yes that's what happened ? we may need to wait a little longer
 >>
->> Clang: 10.0
->> kernel: 5.7.12
->> Busybox: 1.31.1 + patch
->> gcc toolchain: Bootlin riscv64--glibc--bleeding-edge-2020.02-2.defconfig
+>> Guillaume W. Bres
+>> Software engineer
+>> <guillaume.bressaix@gmail.com>
 >>
->> I need some time to continue to work on this series and convince upstream to add
->> cland support in Buildroot. But it means more maintenance work for Buildroot
->> maintainers/contributors to fix all packages that fail to build with clang.
->> At least, we need to enable autobuilders testing with clang if this support is
->> added.
-> 
-> I think it makes sense to have support for clang in Buildroot, and we
-> can certainly add testing for clang configurations in our autobuilders.
-> 
-> The one thing that was still a bit unclear for me is whether it is
-> possible to build a system with just clang, without a gcc compiler at
-> all. Indeed, Buildroot isn't really suited/designed for building two
-> different compilers/toolchains.
-
-From my testing, we can build the kernel on x86, Aarch64 and riscv64 if we use a
-recent enough version (5.7 for riscv64 only with clang 10).
-
-We need the gcc toolchain to provide the libc and other object files
-(crtbegin.o) not provided by LLVM/Clang. But the series replace GCC compiler by
-clang in the package infrastructure, so we can even remove gcc from host
-directory (I tested).
-
-We don't need to build a toolchain with Buildroot, we can use an external
-toolchain (I used the Bootlin riscv64 prebuilt toolchain).
-
-For now, we are building host-llvm and host-clang for each build.
-It would be interesting to allow an external prebuilt Clang toolchain.
-
-About bootloaders, I didn't test to build them with clang.
-Maybe for some packages, we still need a gcc compiler.
-
-Best regards,
-Romain
-
-
-> 
-> Thomas
-> 
+>>
+>> Le mar. 21 juil. 2020 ? 22:09, Matthew Weber <matthew.weber@collins.com>
+>> a ?crit :
+>>
+>>> Ugh, looks like they only updated the description and didn't adjust the
+>>> rest of the version references
+>>>
+>>> https://nvd.nist.gov/vuln/detail/CVE-2010-0751#match-5471142
+>>>
+>>> On Tue, Jul 21, 2020 at 1:46 PM Thomas Petazzoni <
+>>> thomas.petazzoni at bootlin.com> wrote:
+>>>
+>>>> On Tue, 21 Jul 2020 20:05:55 +0200
+>>>> guillaume.bressaix at gmail.com wrote:
+>>>>
+>>>> > From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+>>>> >
+>>>> > Thanks to Matthew W. & Thomas, the NVD database has been updated
+>>>> > and CVE-2010-0751 is now declared fixed, see
+>>>> > https://security-tracker.debian.org/tracker/CVE-2010-0751
+>>>> >
+>>>> > Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+>>>>
+>>>> Are you sure it has already been fixed ?
+>>>>
+>>>> https://nvd.nist.gov/vuln/detail/CVE-2010-0751 still marks 1.24 as
+>>>> affected as far as I can see.
+>>>>
+>>>> Thomas
+>>>> --
+>>>> Thomas Petazzoni, CTO, Bootlin
+>>>> Embedded Linux and Kernel engineering
+>>>> https://bootlin.com
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>>
+>>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200805/69fc01a4/attachment-0001.html>
