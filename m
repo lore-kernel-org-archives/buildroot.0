@@ -1,75 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 15:30:06 +0200
-Subject: [Buildroot] [git commit] package/enlightenment: bump to version
- 0.24.2
-Message-ID: <20200805132540.140798156F@busybox.osuosl.org>
+Date: Wed, 5 Aug 2020 15:29:44 +0200
+Subject: [Buildroot] [git commit] package/terminology: bump to version 1.8.0
+Message-ID: <20200805132540.01CE583901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=250d96129409c2e71cf4ade8ad93f6f7e3cc21d9
+commit: https://git.buildroot.net/buildroot/commit/?id=010e1b0fd7b1983d8d5cc337977748c1d5efcc19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Disable new dependency on polkit for now.
-- Add OFL license for fonts.
-- Update COPYING file hash.
-- Update indentation in hash file (two spaces)
-
 See:
-https://www.enlightenment.org/news/e24.2
-
-enlightenment 0.24 require efl >= 1.24.
-
-https://git.enlightenment.org/core/enlightenment.git/commit/?id=4b6467685e7ac9ae68f08bd524f332a908f5fa74
+https://www.enlightenment.org/news/2020-07-26-terminology-1.8.0
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/enlightenment/enlightenment.hash |  7 ++++---
- package/enlightenment/enlightenment.mk   | 10 ++++++----
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ package/terminology/terminology.hash | 6 +++---
+ package/terminology/terminology.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index f692a67aa1..7f0f3f3e7b 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,3 +1,4 @@
--# From https://www.enlightenment.org/news/e23_release
--sha256	b8c5d040875576d3d3ad8572644f92a65e21291bcee6b0d62f74fbfd482afdf8	enlightenment-0.23.0.tar.xz
--sha256	34dbd501ec9d1c8dcc569c01db9cf9a4b7ee5981614cc9f8f613a97463d27350	COPYING
-+# From https://www.enlightenment.org/news/e24.2
-+sha256  be18e2f18d6c0b058f633e769863d3cbc4c07b629058ae670dec74cd7906dff1  enlightenment-0.24.2.tar.xz
-+sha256  17dda7902d3e1a743f91cf2545f474be93f612768a9e9022593d788ecc83935a  COPYING
-+sha256  f4ba47ef8f4ff588202e721ab10f0208a3fa678147e7f928e6b2820f2e646e13  src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 43f79d59da..12827964e1 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index ed386fb7b3..3ec74d93c1 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
+@@ -1,3 +1,3 @@
+-# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.6.0.tar.xz.sha256sum
+-sha256  b95cb05653afe0dad77fc038a8d5276c02a9c08d64ac97ddf0cee8087d27bd77  terminology-1.6.0.tar.xz
+-sha256  a907d434f4691990ed8f2826ff7546672e9934a26c798351da12ed544dadc628  COPYING
++# From https://download.enlightenment.org/rel/apps/terminology/terminology-1.8.0.tar.xz.sha256sum
++sha256  c6f5b003412f25507277702cabe1a11d7190971343c1d6030aa7d3fe5b45765f  terminology-1.8.0.tar.xz
++sha256  6863ee700fc82b9c3b82a1627136f6935a9eb68e6a64491f20e00b4023c33622  COPYING
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index add80825a7..8200613f8b 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ENLIGHTENMENT_VERSION = 0.23.0
-+ENLIGHTENMENT_VERSION = 0.24.2
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
--ENLIGHTENMENT_LICENSE = BSD-2-Clause
--ENLIGHTENMENT_LICENSE_FILES = COPYING
-+ENLIGHTENMENT_LICENSE = BSD-2-Clause, OFL-1.1 (font)
-+ENLIGHTENMENT_LICENSE_FILES = COPYING \
-+	src/modules/wl_weekeyboard/themes/default/fonts/LICENSE.txt
- 
- ENLIGHTENMENT_DEPENDENCIES = \
- 	host-pkgconf \
-@@ -20,7 +21,8 @@ ENLIGHTENMENT_CONF_OPTS = \
- 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
- 	-Deet=$(HOST_DIR)/bin/eet \
- 	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
--	-Dpam=false
-+	-Dpam=false \
-+	-Dpolkit=false
- 
- # enlightenment.pc and /usr/lib/enlightenment/modules/*.so
- ENLIGHTENMENT_INSTALL_STAGING = YES
+-TERMINOLOGY_VERSION = 1.6.0
++TERMINOLOGY_VERSION = 1.8.0
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
