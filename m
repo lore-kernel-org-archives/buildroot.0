@@ -1,111 +1,193 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 22:34:34 +0200
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx/imx-m4-demos: new
- package
-In-Reply-To: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
-References: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
-Message-ID: <20200805223434.56d08a15@windsurf.home>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed, 5 Aug 2020 22:29:38 +0200
+Subject: [Buildroot] [PATCH v2 1/3] support/scripts/pkg-stats: use
+ aiohttp for latest version retrieval
+In-Reply-To: <20200804195248.1238754-2-thomas.petazzoni@bootlin.com>
+References: <20200804195248.1238754-1-thomas.petazzoni@bootlin.com>
+ <20200804195248.1238754-2-thomas.petazzoni@bootlin.com>
+Message-ID: <9ba283a3-53f5-f9d6-77ef-0d8c6665561b@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello Thomas,
 
-Thanks a lot for your patch series. Overall it looks pretty good, but a
-few changes are needed.
+On 4/08/20 21:52, Thomas Petazzoni wrote:
+> This commit reworks the code that retrieves the latest upstream
+> version of each package from release-monitoring.org using the aiohttp
+> module. This makes the implementation much more elegant, and avoids
+> the problematic multiprocessing Pool which is causing issues in some
+> situations.
+> 
+> Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>   support/scripts/pkg-stats | 142 +++++++++++++++++++++-----------------
+>   1 file changed, 78 insertions(+), 64 deletions(-)
+> 
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index ec4d538758..31ff101781 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -16,7 +16,9 @@
+>   # along with this program; if not, write to the Free Software
+>   # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-First a minor detail: your commit title doesn't match the actual
-package name being added. See below for other comments.
+Now that pkg-state uses Python3 only, you should change the shebang line 
+to #!/usr/bin/env python3 as well.
 
-On Fri, 31 Jul 2020 14:13:32 +0200
-Fabrice Goucem <fabrice.goucem@oss.nxp.com> wrote:
+>   
 
->  DEVELOPERS                                    |  1 +
->  board/freescale/common/imx/post-image.sh      | 14 ++++-
+[--SNIP--]
 
-I think this part (changes to post-image.sh) should go into a separate
-commit, after the package addition.
-
-> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-> index 06ccaac3a4..dc651ac584 100755
-> --- a/board/freescale/common/imx/post-image.sh
-> +++ b/board/freescale/common/imx/post-image.sh
-> @@ -30,6 +30,18 @@ linux_image()
->  	fi
->  }
->  
-> +#
-> +# mcore_image prints all available MCORE demo file names for the genimage
-> +# configuration file
-> +#
-> +mcore_image()
-> +{
-> +	if grep -Eq "^BR2_PACKAGE_IMX_MCORE_DEMOS=y$" ${BR2_CONFIG}; then
-> +		echo -n ", "
-> +		for f in $(ls ${BINARIES_DIR}/mcore_*); do echo -n "$(basename $f), "; done
-
-If I look at this, it seems like having the list finish with a comma is
-fine. If that's the case, then I think we should modify the
-linux_image() function so that it echoes a string that is
-comma-terminated, so that the mcore_image() doesn't have to worry about
-this, and looks like dtb_list() in how it handles the comma.
-
-> diff --git a/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash
-> new file mode 100644
-> index 0000000000..13f3092c88
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash
-> @@ -0,0 +1,10 @@
-> +# locally computed
-> +sha256  cc00d3b936d49b2794a2a99e10129437e70caba3fd26b8379b8c50dd22f73254  imx7d-sabresd-m4-freertos-1.0.1.bin
-> +sha256  a8fbe1180b3d20e933a410cd76e60baac7a9f54e8b2bae8b6b8a3e1af550eca6  imx7ulp-m4-demo-2.8.0.bin
-> +sha256  2dbfab7fbbe89e89a2881d77c84a6c257699dc73ee6462a813bdd5ad09836b04  imx8mm-m4-demo-2.8.0.bin
-> +sha256  e877c7462b6ea87c498563842f42352d204eb28a65f35f7dc1fec643f84abb66  imx8mn-m7-demo-2.8.0.bin
-> +sha256  ac88568f63a794530339775a6e49e7928d3d09bcf4ba5edacea1841989e674b0  imx8mq-m4-demo-2.8.0.bin
-> +sha256  d06a636b84cd559483091cbdb07b5ce9e15a534bca31d4cb756b33b696c2160b  imx8qm-m4-demo-2.8.0.bin
-> +sha256  7800cdbebe07f426cdac50b0e295d64215164a767e79ca58bd917445c50e345f  imx8qx-m4-demo-2.8.0.bin
+> -def release_monitoring_get_latest_version_by_guess(pool, name):
+> +async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
+> +    url = "https://release-monitoring.org//api/project/Buildroot/%s" % pkg.name
+>       try:
+> -        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
+> -    except HTTPError:
+> -        return (RM_API_STATUS_ERROR, None, None)
+> +        async with session.get(url) as resp:
+> +            if resp.status != 200:
+> +                return False
+>   
+> -    if req.status != 200:
+> -        return (RM_API_STATUS_NOT_FOUND, None, None)
+> +            data = await resp.json()
+> +            version = data['version'] if 'version' in data else None
+> +            check_package_latest_version_set_status(pkg,
+> +                                                    RM_API_STATUS_FOUND_BY_DISTRO,
+> +                                                    version,
+> +                                                    data['id'])
+> +            return True
 > +
-> +# no hash for license file as it is different for each package listed above
+> +    except (aiohttp.ClientError, asyncio.exceptions.TimeoutError):
+Use asyncio.TimeoutError here. The module asyncio.exceptions was 
+introduced in Python3.8, which is quite recent [1]. Also the public API 
+is asyncio.TimeoutError [2].
 
-Hm, that's is not great, but I don't really have a good/simple solution
-for this.
+> +        if retry:
+> +            return await check_package_get_latest_version_by_distro(session, pkg, retry=False)
+> +        else:
+> +            return False
+>   
+> -    data = json.loads(req.data)
+>   
+> -    projects = data['projects']
+> -    projects.sort(key=lambda x: x['id'])
+> +async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+> +    url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
+> +    try:
+> +        async with session.get(url) as resp:
+> +            if resp.status != 200:
+> +                return False
+> +
+> +            data = await resp.json()
+> +            # filter projects that have the right name and a version defined
+> +            projects = [p for p in data['projects'] if p['name'] == pkg.name and 'version' in p]
+> +            projects.sort(key=lambda x: x['id'])
+> +
+> +            if len(projects) > 0:
+> +                check_package_latest_version_set_status(pkg,
+> +                                                        RM_API_STATUS_FOUND_BY_DISTRO,
+> +                                                        projects[0]['version'],
+> +                                                        projects[0]['id'])
+> +                return True
+> +
+> +    except (aiohttp.ClientError, asyncio.exceptions.TimeoutError):
 
-> +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7),y)
-> +IMX_MCORE_DEMOS_VERSION = 1.0.1
-> +IMX_MCORE_DEMOS_SOURCE = imx7d-sabresd-m4-freertos-$(IMX_MCORE_DEMOS_VERSION).bin
-> +EXT = bin
+Use asyncio.TimeoutError here.
 
-Variables in Buildroot are global, so a variable named just "EXT" is
-not good. It should be IMX_MCORE_DEMOS_FILE_EXT or something like that.
+[--SNIP--]
 
-> +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP),y)
+> @@ -587,33 +616,18 @@ def check_package_latest_version(packages):
+>       - id: string containing the id of the project corresponding to this
+>         package, as known by release-monitoring.org
+>       """
+> -    global http_pool
+> -    http_pool = HTTPSConnectionPool('release-monitoring.org', port=443,
+> -                                    cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
+> -                                    timeout=30)
+> -    worker_pool = Pool(processes=64)
+> -    results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
+> -    for pkg, r in zip(packages, results):
+> -        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+>   
+> +    for pkg in packages:
+>           if not pkg.has_valid_infra:
+>               pkg.status['version'] = ("na", "no valid package infra")
+> -            continue
+> -
+> -        if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+> -            pkg.status['version'] = ('warning', "Release Monitoring API error")
+> -        elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
+> -            pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
+> -
+> -        if pkg.latest_version['version'] is None:
+> -            pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
+> -        elif pkg.latest_version['version'] != pkg.current_version:
+> -            pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
+> -        else:
+> -            pkg.status['version'] = ('ok', 'up-to-date')
+>   
+> -    worker_pool.terminate()
+> -    del http_pool
+> +    tasks = []
+> +    connector = aiohttp.TCPConnector(limit_per_host=5) > +    async with aiohttp.ClientSession(connector=connector, 
+trust_env=True) as sess:
+> +        packages = [p for p in packages if p.has_valid_infra]
+> +        for pkg in packages:
+> +            tasks.append(check_package_latest_version_get(sess, pkg))
+> +        await asyncio.wait(tasks)
 
-This BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP option is only
-introduced in the second patch of the series. I think it would make
-more sense to introduce the i.MX7ULP platform as a separate patch
-earlier in the series.
+We don't really need 3 consecutive for loops here. I would rewrite the 
+function as:
 
-> +# Note: firmware names are copied to binaries directory with an "mcore_" prefix, for easier post image scripting
+async def check_package_latest_version(packages):
+     global check_latest_count
 
-Please wrap long lines.
+     tasks = []
+     connector = aiohttp.TCPConnector(limit_per_host=5)
+     async with aiohttp.ClientSession(connector=connector) as sess:
+         for pkg in packages:
+             if pkg.has_valid_infra:
+                 tasks.append(
+                     check_package_latest_version_get(sess, pkg, 
+len(packages))
+                 )
+             else:
+                 check_latest_count += 1
+                 pkg.status['version'] = ("na", "no valid package infra")
+         await asyncio.wait(tasks)
 
-> +define IMX_MCORE_DEMOS_INSTALL_IMAGES_CMDS
-> +	for f in $(@D)/*.$(EXT); do cp "$$f" $(BINARIES_DIR)/mcore_$$(basename "$$f"); done
 
-Could you try (untested):
+>   
+>   
+>   def check_package_cves(nvd_path, packages):
+> @@ -1057,7 +1071,7 @@ def __main__():
+>       print("Checking URL status")
+>       check_package_urls(packages)
+>       print("Getting latest versions ...")
+> -    check_package_latest_version(packages)
+> +    asyncio.run(check_package_latest_version(packages))
 
-	$(foreach f,$(wildcard $(@D)/*.$(IMX_MCORE_DEMOS_FILE_EXT), \
-		$(INSTALL) -D -m 0644 $(f) $(BINARIES_DIR)/mcore_$(notdir $(f))
-	)
+asyncio.run was introduced in Python3.7 [3], which is quite "recent". 
+You could maybe use an "older" form (that would run down to py3.5):
 
-This is a bit more make-style :-)
+loop = asyncio.get_event_loop()
+loop.run_until_complete(check_package_latest_version(packages))
 
-Thanks!
+>       if args.nvd_path:
+>           print("Checking packages CVEs")
+>           check_package_cves(args.nvd_path, {p.name: p for p in packages})
+> 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] https://bugs.python.org/issue34622
+[2] 
+https://docs.python.org/3.8/library/asyncio-exceptions.html#asyncio.TimeoutError
+[3] https://docs.python.org/3/library/asyncio-task.html#asyncio.run
+
+Kind regards,
+Titouan
