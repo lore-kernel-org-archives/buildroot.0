@@ -1,59 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Aug 2020 21:53:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-rpi-gpio: fix build with
- gcc 10.x
-In-Reply-To: <20200806112301.19985-1-mf@go-sys.de>
-References: <20200806112301.19985-1-mf@go-sys.de>
-Message-ID: <20200806195332.GF2186@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 5 Aug 2020 22:19:44 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/dropbear:
+ backport security fix for CVE-2018-20685
+Message-ID: <20200806200323.2795C8405E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=cb18920c04cb75f3a22c03c6282f951ddb46d3e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-On 2020-08-06 13:23 +0200, Michael Fischer spake thusly:
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
-> ---
->  package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch | 8 ++++++++
->  1 file changed, 8 insertions(+)
->  create mode 100644 package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
-> 
-> diff --git a/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
-> new file mode 100644
-> index 0000000000..1bac987267
-> --- /dev/null
-> +++ b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
-> @@ -0,0 +1,8 @@
-> +--- a/setup.py	2019-07-21 14:49:21.000000000 +0200
-> ++++ b/setup.py	2020-08-06 10:59:51.455133324 +0200
-> +@@ -43,4 +43,4 @@
-> +       url              = 'http://sourceforge.net/projects/raspberry-gpio-python/',
-> +       classifiers      = classifiers,
-> +       packages         = ['RPi','RPi.GPIO'],
-> +-      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c'])])
-> ++      ext_modules      = [Extension('RPi._GPIO', [...],extra_link_args=['-Wl,--allow-multiple-definition'] )])
+The update to 2020.79 contains several other changes that may not be
+appropriate for the LTS branch, hence just backport the single fix.
 
-As Thomas said in his review on another patch of yours, we really want
-to fix the problem, not paper over it.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-scp-Port-OpenSSH-CVE-2018-20685-fix.patch | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-Care to actually fix the code and respin a better fix, please?
-
-Regards,
-Yann E. MORIN.
-
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dropbear/0001-scp-Port-OpenSSH-CVE-2018-20685-fix.patch b/package/dropbear/0001-scp-Port-OpenSSH-CVE-2018-20685-fix.patch
+new file mode 100644
+index 0000000000..4372d615d6
+--- /dev/null
++++ b/package/dropbear/0001-scp-Port-OpenSSH-CVE-2018-20685-fix.patch
+@@ -0,0 +1,24 @@
++# HG changeset patch
++# User Haelwenn Monnier <contact+github.com@hacktivis.me>
++# Date 1590411269 -7200
++#      Mon May 25 14:54:29 2020 +0200
++# Node ID 087c2804147074c95b6a3f35137b4f4b726b1452
++# Parent  009d52ae26d35f3381c801e02318fa9be34be93c
++scp.c: Port OpenSSH CVE-2018-20685 fix (#80)
++
++[backport from 2020.79 to 2019.78 for Buildroot 2020.02.x]
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++
++diff --git a/scp.c b/scp.c
++--- a/scp.c
+++++ b/scp.c
++@@ -935,7 +935,8 @@ sink(int argc, char **argv)
++ 			size = size * 10 + (*cp++ - '0');
++ 		if (*cp++ != ' ')
++ 			SCREWUP("size not delimited");
++-		if ((strchr(cp, '/') != NULL) || (strcmp(cp, "..") == 0)) {
+++		if (*cp == '\0' || strchr(cp, '/') != NULL ||
+++		    strcmp(cp, ".") == 0 || strcmp(cp, "..") == 0) {
++ 			run_err("error: unexpected filename: %s", cp);
++ 			exit(1);
++ 		}
