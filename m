@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 23:12:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: update rpath patch to
- upstream version
-In-Reply-To: <20200731074821.4137503-1-james.hilliard1@gmail.com>
-References: <20200731074821.4137503-1-james.hilliard1@gmail.com>
-Message-ID: <20200805231215.3e33461b@windsurf.home>
+Date: Wed, 5 Aug 2020 23:12:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nginx: drop gdlib-config
+In-Reply-To: <20200731080715.150745-1-fontaine.fabrice@gmail.com>
+References: <20200731080715.150745-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200805231224.56339b9f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 31 Jul 2020 01:48:21 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Fri, 31 Jul 2020 10:07:15 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> The version of this patch merged by upstream has some changes to rpath
-> syntax matching and handling for additional syntax edge cases.
+> Drop gdlib-config and use pkg-config to find gd.
+> Indeed, gdlib.pc is available since version 2.1.0 and
+> https://github.com/libgd/libgd/commit/071a2a94ee9f9e5ce00ff689dfe67a0fcb885ad6
+> and gdlib-config has been dropped from version 2.3.0
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...003-backends-fix-rpath-match-pattern.patch | 77 +++++++++++++++----
->  1 file changed, 63 insertions(+), 14 deletions(-)
+>  .../nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch  | 9 ++++++---
+>  package/nginx/nginx.mk                                   | 1 -
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
