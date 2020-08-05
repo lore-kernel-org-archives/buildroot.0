@@ -1,150 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 22:52:43 +0200
-Subject: [Buildroot] [git commit] package/meson: update rpath patch to
- upstream version
-Message-ID: <20200805210223.CD75583AB0@busybox.osuosl.org>
+Date: Wed, 5 Aug 2020 22:53:37 +0200
+Subject: [Buildroot] [git commit] package/nginx: drop gdlib-config
+Message-ID: <20200805210223.DAF27812D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16ed1d9fbae55779ff4000241366b0461c40977f
+commit: https://git.buildroot.net/buildroot/commit/?id=61ac7fcc6c5ef8c4c6e27e36db1d1ea8431ad79e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The version of this patch merged by upstream has some changes to rpath
-syntax matching and handling for additional syntax edge cases.
+Drop gdlib-config and use pkg-config to find gd.
+Indeed, gdlib.pc is available since version 2.1.0 and
+https://github.com/libgd/libgd/commit/071a2a94ee9f9e5ce00ff689dfe67a0fcb885ad6
+and gdlib-config has been dropped from version 2.3.0
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-backends-fix-rpath-match-pattern.patch    | 77 ++++++++++++++++++----
- 1 file changed, 63 insertions(+), 14 deletions(-)
+ package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch | 9 ++++++---
+ package/nginx/nginx.mk                                      | 1 -
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/0003-backends-fix-rpath-match-pattern.patch b/package/meson/0003-backends-fix-rpath-match-pattern.patch
-index 5fd5b73ade..f4477b59d2 100644
---- a/package/meson/0003-backends-fix-rpath-match-pattern.patch
-+++ b/package/meson/0003-backends-fix-rpath-match-pattern.patch
-@@ -1,4 +1,4 @@
--From af4ac0284714842535106f3d5f8a973c20e95105 Mon Sep 17 00:00:00 2001
-+From 1ce4258c219fe08b6d6eaa6aa944f27d91d054cb Mon Sep 17 00:00:00 2001
- From: James Hilliard <james.hilliard1@gmail.com>
- Date: Sat, 18 Jul 2020 17:01:33 -0600
- Subject: [PATCH] backends: fix rpath match pattern
-@@ -6,23 +6,45 @@ Subject: [PATCH] backends: fix rpath match pattern
- Since -Wl,-rpath= is not the only valid rpath ldflags syntax we
- need to try and match all valid rpath ldflags.
- 
-+In addition we should prevent -Wl,--just-symbols from being used to
-+set rpath due to inconsistent compiler support.
-+
- Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--[Upstream status:
--https://github.com/mesonbuild/meson/pull/7472]
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+1ce4258c219fe08b6d6eaa6aa944f27d91d054cb]
+diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+index cea68035e1..31ccf88fff 100644
+--- a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
++++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+@@ -9,6 +9,8 @@ dependencies.
+ Signed-off-by: Martin Bark <martin@barkynet.com>
+ [Peter: updated for 1.15.6]
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Fabrice: use pkg-config instead of gdlib-config]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  ---
-- mesonbuild/backend/backends.py |  6 ++++--
-- run_unittests.py               | 26 +++++++++++++++-----------
-- 2 files changed, 19 insertions(+), 13 deletions(-)
-+ mesonbuild/backend/backends.py | 30 ++++++++++++++++++++++++--
-+ run_unittests.py               | 39 +++++++++++++++++++++++-----------
-+ 2 files changed, 55 insertions(+), 14 deletions(-)
- 
- diff --git a/mesonbuild/backend/backends.py b/mesonbuild/backend/backends.py
--index cfd3a397f..6f44abc13 100644
-+index cfd3a397f..e053f67e6 100644
- --- a/mesonbuild/backend/backends.py
- +++ b/mesonbuild/backend/backends.py
--@@ -455,9 +455,11 @@ class Backend:
-+@@ -14,6 +14,7 @@
-+ 
-+ from collections import OrderedDict
-+ from functools import lru_cache
-++from pathlib import Path
-+ import enum
-+ import json
-+ import os
-+@@ -455,10 +456,35 @@ class Backend:
-                  args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
-              except Exception:
-                  pass
--+        rpath_regex = re.compile(r'-Wl,-rpath(?:-link)?[=,]([^,@\-][^,]+)')
-++        # Match rpath formats:
-++        # -Wl,-rpath=
-++        # -Wl,-rpath,
-++        rpath_regex = re.compile(r'-Wl,-rpath[=,]([^,]+)')
-++        # Match solaris style compat runpath formats:
-++        # -Wl,-R
-++        # -Wl,-R,
-++        runpath_regex = re.compile(r'-Wl,-R[,]?([^,]+)')
-++        # Match symbols formats:
-++        # -Wl,--just-symbols=
-++        # -Wl,--just-symbols,
-++        symbols_regex = re.compile(r'-Wl,--just-symbols[=,]([^,]+)')
-          for arg in args:
- -            if arg.startswith('-Wl,-rpath='):
- -                for dir in arg.replace('-Wl,-rpath=','').split(':'):
-@@ -30,15 +52,30 @@ index cfd3a397f..6f44abc13 100644
- +            if rpath_match:
- +                for dir in rpath_match.group(1).split(':'):
-                      dirs.add(dir)
-++            runpath_match = runpath_regex.match(arg)
-++            if runpath_match:
-++                for dir in runpath_match.group(1).split(':'):
-++                    # The symbols arg is an rpath if the path is a directory
-++                    if Path(dir).is_dir():
-++                        dirs.add(dir)
-++            symbols_match = symbols_regex.match(arg)
-++            if symbols_match:
-++                for dir in symbols_match.group(1).split(':'):
-++                    # Prevent usage of --just-symbols to specify rpath
-++                    if Path(dir).is_dir():
-++                        raise MesonException('Invalid arg for --just-symbols, {} is a directory.'.format(dir))
-          return dirs
-  
-+     def rpaths_for_bundled_shared_libraries(self, target, exclude_system=True):
- diff --git a/run_unittests.py b/run_unittests.py
--index 820b705b5..2c3ffc2e9 100755
-+index b5294b9f8..73131c75b 100755
- --- a/run_unittests.py
- +++ b/run_unittests.py
--@@ -6421,17 +6421,21 @@ class LinuxlikeTests(BasePlatformTests):
-+@@ -6473,19 +6473,34 @@ class LinuxlikeTests(BasePlatformTests):
-+         self.init(yonder_dir)
-+         self.build()
-          self.install(use_destdir=False)
--         self.new_builddir()
-+-        self.new_builddir()
-  
- -        # Build an app that uses that installed library.
- -        # Supply the rpath to the installed library via LDFLAGS
-@@ -53,14 +90,26 @@ index 820b705b5..2c3ffc2e9 100755
- -        self.assertEqual(got_rpath, yonder_libdir)
- +        # Since rpath has multiple valid formats we need to
- +        # test that they are all properly used.
--+        rpath_formats = ['-Wl,-rpath=', '-Wl,-rpath,', '-Wl,-rpath-link=', '-Wl,-rpath-link,']
--+        for rpath_format in rpath_formats:
-++        rpath_formats = [
-++            ('-Wl,-rpath=', False),
-++            ('-Wl,-rpath,', False),
-++            ('-Wl,--just-symbols=', True),
-++            ('-Wl,--just-symbols,', True),
-++            ('-Wl,-R', False),
-++            ('-Wl,-R,', False)
-++        ]
-++        for rpath_format, exception in rpath_formats:
- +            # Build an app that uses that installed library.
- +            # Supply the rpath to the installed library via LDFLAGS
- +            # (as systems like buildroot and guix are wont to do)
- +            # and verify install preserves that rpath.
-++            self.new_builddir()
- +            env = {'LDFLAGS': rpath_format + yonder_libdir,
- +                   'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
-++            if exception:
-++                with self.assertRaises(subprocess.CalledProcessError):
-++                    self.init(testdir, override_envvars=env)
-++                break
- +            self.init(testdir, override_envvars=env)
- +            self.build()
- +            self.install(use_destdir=False)
+  auto/lib/libgd/conf | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -17,14 +19,15 @@ diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
+ index 67863976..1a4379a5 100644
+ --- a/auto/lib/libgd/conf
+ +++ b/auto/lib/libgd/conf
+-@@ -7,8 +7,8 @@
++@@ -7,8 +7,9 @@
+      ngx_feature_name=
+      ngx_feature_run=no
+      ngx_feature_incs="#include <gd.h>"
+ -    ngx_feature_path=
+ -    ngx_feature_libs="-lgd"
+-+    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
+-+    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
+++    ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I gdlib|
+++			 sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
+++    ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs gdlib)"
+      ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);
+                        (void) img"
+      . auto/feature
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 1180810f51..6b0b318247 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -280,7 +280,6 @@ NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
+ define NGINX_CONFIGURE_CMDS
+ 	cd $(@D) ; $(NGINX_CONF_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+-		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
+ 		./configure $(NGINX_CONF_OPTS) \
+ 			--with-cc-opt="$(TARGET_CFLAGS) $(NGINX_CFLAGS)"
+ endef
