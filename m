@@ -1,63 +1,55 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 5 Aug 2020 16:08:14 +0200
-Subject: [Buildroot] [PATCH 4/5] package/systemd: remove util-linux
- nologin dependency
-In-Reply-To: <20200805155247.0d39b511@windsurf.home>
-References: <20200731215345.19212-1-nolange79@gmail.com>
- <20200731215345.19212-5-nolange79@gmail.com>
- <20200805155247.0d39b511@windsurf.home>
-Message-ID: <CADYdroP2Py-mB7GWxLU=CPr2zFKSCZ-6zFH3ZjcdZG+bcoc8TA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Aug 2020 16:26:25 +0200
+Subject: [Buildroot] [PATCHv2] package/gdb: bump to version 9.2
+In-Reply-To: <20200805140337.427704-1-romain.naour@gmail.com>
+References: <20200805140337.427704-1-romain.naour@gmail.com>
+Message-ID: <20200805162625.23d11ed4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mi., 5. Aug. 2020 um 15:52 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Fri, 31 Jul 2020 23:53:44 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),y)
-> > +SYSTEMD_CONF_OPTS += -Dnologin-path=/usr/sbin/nologin
->
-> nologin is in fact installed in /sbin in a non-merged /usr
-> configuration. I know in the case of systemd, merged /usr is always
-> enabled so that is not a big deal, but I nevertheless changed to
-> /sbin/nologin since it seems to be the canonical location for nologin.
->
-> Applied with this change. Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Hello Romain,
 
-Hello,
+On Wed,  5 Aug 2020 16:03:37 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-I am not terribly concerned with the change, but what happened until now,
-is that meson picked either the host binary or the "default" one from
-systemd (see [1], where this is addressed).
-I'd prefer to pick the default settings from systemd (favoring /usr
-being self-contained), following:
+> From: Maxim Kochetkov <fido_max@inbox.ru>
+> 
+> The in-tree build restriction has been added after the move of gnulib to top level [1] [2].
+> This restriction has been added as a workaround a build issue with gdbserver that still use
+> it's own copy of gnulib.
+> 
+> gnulib is configured a second time if we build in-tree gdb and gdbserver:
+>     configure: error: source directory already configured; run "make distclean" there first
+>     configure: error: .././../../gnulib/configure failed for build-gnulib-gdbserver
+>     configure: error: ./configure failed for gdbserver
+> 
+> Use the same pre-configure-hook as gcc package.
+> 
+> Older gdb version support building out of tree even if it's not required.
+> 
+> There is no in-tree build restriction of we only build gdbserver for the target.
+> 
+> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=73cc72729a184f00bf6fc4d74684a8516ba6b683
+> [2] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=043a0010933a6b55081535ecaf7fde9cc1491be0
+> 
+> See:
+> https://sourceware.org/pipermail/gdb-announce/2020/000122.html
+> https://sourceware.org/pipermail/gdb-announce/2020/000123.html
+> 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> [Romain:
+>     - add in-tree build support
+>     - improve commit log]
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
------------------
-# if -Dxxx-path option is found, use that. Otherwise, check in $PATH,
-# /usr/sbin, /sbin, and fall back to the default from middle column.
-progs = [['quotaon',    '/usr/sbin/quotaon'    ],
-         ['quotacheck', '/usr/sbin/quotacheck' ],
-         ['kmod',       '/usr/bin/kmod'        ],
-         ['kexec',      '/usr/sbin/kexec'      ],
-         ['sulogin',    '/usr/sbin/sulogin'    ],
-         ['mount',      '/usr/bin/mount',      'MOUNT_PATH'],
-         ['umount',     '/usr/bin/umount',     'UMOUNT_PATH'],
-         ['loadkeys',   '/usr/bin/loadkeys',   'KBD_LOADKEYS'],
-         ['setfont',    '/usr/bin/setfont',    'KBD_SETFONT'],
-         ['nologin',    '/usr/sbin/nologin',   ],
------------------
+Following this, should we also do our usual dance: switch to gdb 8.3 as
+the default, and drop support for gdb 8.1 ?
 
-Regards, Norbert
-
-[1] - https://patchwork.ozlabs.org/project/buildroot/patch/20200710234150.185609-2-nolange79 at gmail.com/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
