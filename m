@@ -1,41 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Aug 2020 15:48:56 +0200
-Subject: [Buildroot] [git commit] package/systemd: disable portabled
-Message-ID: <20200805134339.CE4A681358@busybox.osuosl.org>
+Date: Wed, 5 Aug 2020 15:51:50 +0200
+Subject: [Buildroot] [PATCH 1/5] package/systemd: import does not need
+ bzip2 and lz4
+In-Reply-To: <20200731215345.19212-2-nolange79@gmail.com>
+References: <20200731215345.19212-1-nolange79@gmail.com>
+ <20200731215345.19212-2-nolange79@gmail.com>
+Message-ID: <20200805155150.274eacc4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b37fa74380557689f2309370c5bc1e770a1831eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 31 Jul 2020 23:53:41 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-portabled is a container-like service, but so far its still a preview
-and basically unknown as the portablectl is hidden in
-/usr/lib/systemd.
+> Those are optional dependencies.
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/systemd/Config.in | 2 --
+>  1 file changed, 2 deletions(-)
 
-Disable it for now.
+Applied to master, thanks.
 
-See https://systemd.io/PORTABLE_SERVICES/
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/systemd/systemd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 4fcff90512..e356cb1add 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -41,7 +41,8 @@ SYSTEMD_CONF_OPTS += \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount \
- 	-Didn=true \
--	-Dnss-systemd=true
-+	-Dnss-systemd=true \
-+	-Dportabled=false
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
- SYSTEMD_DEPENDENCIES += acl
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
