@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 5 Aug 2020 22:19:44 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/dropbear:
+Date: Wed, 5 Aug 2020 22:18:29 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dropbear:
  backport security fix for CVE-2018-20685
-Message-ID: <20200806200323.2795C8405E@busybox.osuosl.org>
+Message-ID: <20200806200340.8F30184184@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb18920c04cb75f3a22c03c6282f951ddb46d3e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7e90b0171f4c4ab4c8b0f76079255261270ef61b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 The update to 2020.79 contains several other changes that may not be
 appropriate for the LTS branch, hence just backport the single fix.
