@@ -1,129 +1,110 @@
-From: User Name <us53rnam3@gmail.com>
-Date: Thu, 6 Aug 2020 08:53:54 -0400
-Subject: [Buildroot] I need help to solve this error.
-In-Reply-To: <df54940149129e4a0c7e7661497c2662@umbiko.net>
-References: <mailman.13.1596628803.136533.buildroot@busybox.net>
- <df54940149129e4a0c7e7661497c2662@umbiko.net>
-Message-ID: <CA+NfSnLwCAfAkObYVhHDERk_k06D7w=5dM5b44cQuX9zSa4GHw@mail.gmail.com>
+From: Michael Fischer <mf@go-sys.de>
+Date: Thu, 6 Aug 2020 15:03:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump version to 5.4.0
+Message-ID: <20200806130339.20461-1-mf@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok, thanks. Im still trying to repain some issues. jemwarodrierk at debian:~$
-cd
-/home/jemwarodrierk/Bureau/buildroot/toolchain/toolchain/bin/armv7-eabihf--glibc--bleeding-edge-2020.02-2/bin/linux_vita
-jemwarodrierk at debian:~/Bureau/buildroot/toolchain/toolchain/bin/armv7-eabihf--glibc--bleeding-edge-2020.02-2/bin/linux_vita$
-export
-PATH=$PATH:/home/jemwarodrierk/Bureau/buildroot/toolchain/toolchain/bin/armv7-eabihf--glibc--bleeding-edge-2020.02-2/binjemwarodrierk at debian:~/Bureau/buildroot/toolchain/toolchain/bin/armv7-eabihf--glibc--bleeding-edge-2020.02-2/bin/linux_vita$
-make ARCH=arm CROSS_COMPILE=arm-linux- -j
-scripts/kconfig/conf  --syncconfig Kconfig
-*
-* Restart config...
-*
-*
-* Kernel Features
-*
-Symmetric Multi-Processing (SMP) [Y/n/?] y
-  Allow booting SMP kernel on uniprocessor systems (SMP_ON_UP) [N/y/?] n
-  Support cpu topology definition (ARM_CPU_TOPOLOGY) [Y/n/?] y
-    Multi-core scheduler support (SCHED_MC) [N/y/?] n
-    SMT scheduler support (SCHED_SMT) [N/y/?] n
-Architected timer support (HAVE_ARM_ARCH_TIMER) [Y/?] y
-Multi-Cluster Power Management (MCPM) [N/y/?] n
-big.LITTLE support (Experimental) (BIG_LITTLE) [N/y/?] n
-Memory split
-> 1. 3G/1G user/kernel split (VMSPLIT_3G)
-  2. 3G/1G user/kernel split (for full 1G low memory) (VMSPLIT_3G_OPT)
-  3. 2G/2G user/kernel split (VMSPLIT_2G)
-  4. 1G/3G user/kernel split (VMSPLIT_1G)
-choice[1-4?]: 1
-Maximum number of CPUs (2-32) (NR_CPUS) [4] 4
-Support for hot-pluggable CPUs (HOTPLUG_CPU) [Y/?] y
-Support for the ARM Power State Coordination Interface (PSCI) (ARM_PSCI)
-[N/y/?] n
-Timer frequency
-> 1. 100 Hz (HZ_100)
-  2. 200 Hz (HZ_200)
-  3. 250 Hz (HZ_250)
-  4. 300 Hz (HZ_300)
-  5. 500 Hz (HZ_500)
-  6. 1000 Hz (HZ_1000)
-choice[1-6?]: 1
-Compile the kernel in Thumb-2 mode (THUMB2_KERNEL) [N/y/?] n
-Runtime patch udiv/sdiv instructions into __aeabi_{u}idiv()
-(ARM_PATCH_IDIV) [Y/n/?] y
-Use the ARM EABI to compile the kernel (AEABI) [Y/?] y
-  Allow old ABI binaries to run with this kernel (EXPERIMENTAL)
-(OABI_COMPAT) [N/y/?] n
-High Memory Support (HIGHMEM) [N/y/?] n
-Enable use of CPU domains to implement privileged no-access
-(CPU_SW_DOMAIN_PAN) [Y/n/?] y
-Maximum zone order (FORCE_MAX_ZONEORDER) [11] 11
-Use kernel mem{cpy,set}() for {copy_to,clear}_user() (UACCESS_WITH_MEMCPY)
-[N/y/?] n
-Enable seccomp to safely compute untrusted bytecode (SECCOMP) [N/y/?] n
-Enable paravirtualization code (PARAVIRT) [N/y/?] n
-Paravirtual steal time accounting (PARAVIRT_TIME_ACCOUNTING) [N/y/?] n
-Xen guest support on ARM (XEN) [N/y/?] n
-Use a unique stack canary value for each task (STACKPROTECTOR_PER_TASK)
-[Y/n/?] (NEW) y
-*
-* GCC plugins
-*
-GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW) y
-  Compute the cyclomatic complexity of a function
-(GCC_PLUGIN_CYC_COMPLEXITY) [N/y/?] (NEW) y
-  Generate some entropy during boot and runtime (GCC_PLUGIN_LATENT_ENTROPY)
-[N/y/?] (NEW) y
-  Randomize layout of sensitive kernel structures (GCC_PLUGIN_RANDSTRUCT)
-[N/y/?] (NEW) y
-    Use cacheline-aware structure randomization
-(GCC_PLUGIN_RANDSTRUCT_PERFORMANCE) [N/y/?] (NEW) y
-*
-* Memory initialization
-*
-Initialize kernel stack variables at function entry
-> 1. no automatic initialization (weakest) (INIT_STACK_NONE)
-  2. zero-init structs marked for userspace (weak)
-(GCC_PLUGIN_STRUCTLEAK_USER) (NEW)
-  3. zero-init structs passed by reference (strong)
-(GCC_PLUGIN_STRUCTLEAK_BYREF) (NEW)
-  4. zero-init anything passed by reference (very strong)
-(GCC_PLUGIN_STRUCTLEAK_BYREF_ALL) (NEW)
-choice[1-4?]: 4
-Report forcefully initialized variables (GCC_PLUGIN_STRUCTLEAK_VERBOSE)
-[N/y/?] (NEW) y
-Enable heap memory zeroing on allocation by default
-(INIT_ON_ALLOC_DEFAULT_ON) [N/y/?] n
-Enable heap memory zeroing on free by default (INIT_ON_FREE_DEFAULT_ON)
-[N/y/?] n
-y
-/bin/sh: 1: cannot create include/generated/uapi/linux/.version.h.tmp:
-Permission denied
-  UPD     include/generated/uapi/linux/version.h
-mv: impossible d'?valuer 'include/generated/uapi/linux/.version.h.tmp':
-Aucun fichier ou dossier de ce type
-make: *** [Makefile:1162: include/generated/uapi/linux/version.h] Error 1
-make: *** Attente des t?ches non termin?es....
-jemwarodrierk at debian:~/Bureau/buildroot/toolchain/toolchain/bin/armv7-eabihf--glibc--bleeding-edge-2020.02-2/bin/linux_vita$
-y
-bash: y : commande introuvable
-jemwarodrierk at debian:~/Bureau/buildroot/toolchain/toolchain/bin/armv7-eabihf--glibc--bleeding-edge-2020.02-2/bin/linux_vita$
+0001-configure-add-without-demo-option: adapt patch to 5.4.0 version
 
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ ...01-configure-add-without-demo-option.patch | 33 ++++++++++---------
+ package/gnuplot/gnuplot.hash                  |  8 ++---
+ package/gnuplot/gnuplot.mk                    |  2 +-
+ 3 files changed, 22 insertions(+), 21 deletions(-)
 
-Le jeu. 6 ao?t 2020, ? 03 h 10, Andreas Ziegler <br015@umbiko.net> a ?crit :
-
-> > Date: Tue, 4 Aug 2020 15:31:17 -0400
-> > From: User Name <us53rnam3@gmail.com>
-> > To: buildroot at buildroot.org
-> > Subject: [Buildroot] I need help to solve this error.
->
-> > scripts/Kconfig.include:39: compiler 'arm-linux-gcc' not found
->
-> Your external toolchain is not accessible via $PATH.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200806/df2f31a0/attachment.html>
+diff --git a/package/gnuplot/0001-configure-add-without-demo-option.patch b/package/gnuplot/0001-configure-add-without-demo-option.patch
+index a50e6c2c1b..8b94a6ce8b 100644
+--- a/package/gnuplot/0001-configure-add-without-demo-option.patch
++++ b/package/gnuplot/0001-configure-add-without-demo-option.patch
+@@ -4,13 +4,12 @@ Originally written by Anthony Viallard
+ <viallard@syscom-instruments.com>.
+ 
+ [Vincent: adapt patch to 5.0.5 version]
++[Michael: adapt patch to 5.4.0 version]
+ 
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+---- a/configure.ac	2019-11-27 23:52:29.000000000 +0100
+-+++ b/configure.ac	2020-02-13 10:24:50.801842269 +0100
+-@@ -755,6 +755,16 @@ if test "$with_cwdrc" = yes; then
++diff -Naur a/configure.ac b/configure.ac
++--- a/configure.ac	2020-07-12 02:29:47.000000000 +0200
+++++ b/configure.ac	2020-08-06 14:21:17.918756893 +0200
++@@ -713,6 +713,17 @@
+                 [ Define if you want to read .gnuplot from current directory (SECURITY RISK!).])
+  fi
+  
+@@ -24,10 +23,11 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ +AC_ARG_ENABLE(demo,dnl
+ +[  --disable-demo    do not build demo files])
+ +
+- dnl Disable experimental support for nonlinear axes
+- AC_ARG_WITH(nonlinear-axes,dnl
+- [  --without-nonlinear-axes     disable support for nonlinear axes])
+-@@ -1236,6 +1246,24 @@ if test -n "${DIST_CONTACT}"; then
+++
++ dnl Sort help/subtopic tables by row or column
++ AC_ARG_WITH(row-help,dnl
++ [  --with-row-help         format help and subtopic tables by row (default)
++@@ -1095,6 +1106,24 @@
+    AC_DEFINE_UNQUOTED([DIST_CONTACT],["$DIST_CONTACT"],[Contact address for modified and binary distributed gnuplot versions])
+  fi
+  
+@@ -52,14 +52,15 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+  dnl Substitute variables
+  AC_SUBST(PACKAGE)
+  AC_SUBST(VERSION_MAJOR)
+---- a/Makefile.am	2019-11-19 22:57:18.000000000 +0100
+-+++ b/Makefile.am	2020-02-13 10:17:55.753012739 +0100
++diff -Naur a/Makefile.am b/Makefile.am
++--- a/Makefile.am	2020-03-31 19:28:16.000000000 +0200
+++++ b/Makefile.am	2020-08-06 14:34:12.995097799 +0200
+ @@ -1,7 +1,7 @@
+  ## Process this file with automake to produce Makefile.in -*-Makefile-*-
+  AUTOMAKE_OPTIONS = foreign
+  
+--SUBDIRS = config m4 term src docs man demo tutorial share
+-+SUBDIRS = config m4 term src $(DOCSUBDIR) man $(DEMOSUBDIR) tutorial share
++-SUBDIRS = config m4 term src docs man demo share
+++SUBDIRS = config m4 term src $(DOCSUBDIR) man $(DEMOSUBDIR) share
+  
+- EXTRA_DIST = BUGS Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+- Makefile.maint PATCHLEVEL PGPKEYS README RELEASE_NOTES \
++ EXTRA_DIST = BUGS Copyright FAQ.pdf INSTALL INSTALL.gnu \
++ PATCHLEVEL PGPKEYS README RELEASE_NOTES \
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index ef80a29d3d..260b78314e 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.2.8/
+-md5 2df8767c7399bee57a96296d46b4d5fb  gnuplot-5.2.8.tar.gz
+-sha1 dc018b1e0a31b770d4635958badff13498babc4d  gnuplot-5.2.8.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.0/
++md5 ac586178f3b031dea82cd3890cefb21b  gnuplot-5.4.0.tar.gz
++sha1 b4660dff7d047a453c55fd77faba11f63bb2d5ed  gnuplot-5.4.0.tar.gz
+ # Locally computed
+-sha256  60a6764ccf404a1668c140f11cc1f699290ab70daa1151bb58fed6139a28ac37  gnuplot-5.2.8.tar.gz
++sha256  eb4082f03a399fd1e9e2b380cf7a4f785e77023d8dcc7e17570c1b5570a49c47  gnuplot-5.4.0.tar.gz
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index 694b6cb886..ef9ef2ac67 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPLOT_VERSION = 5.2.8
++GNUPLOT_VERSION = 5.4.0
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
+-- 
+2.28.0
