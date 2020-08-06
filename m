@@ -1,157 +1,59 @@
-From: Fabrice Goucem <fabrice.goucem@oss.nxp.com>
-Date: Thu, 06 Aug 2020 21:29:40 +0200
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx/imx-m4-demos: new
- package
-In-Reply-To: <20200805223434.56d08a15@windsurf.home>
-References: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
- <20200805223434.56d08a15@windsurf.home>
-Message-ID: <3219a6e6c7dd7aef222467d35c202cd25ca9a0d8.camel@oss.nxp.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 6 Aug 2020 21:53:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-rpi-gpio: fix build with
+ gcc 10.x
+In-Reply-To: <20200806112301.19985-1-mf@go-sys.de>
+References: <20200806112301.19985-1-mf@go-sys.de>
+Message-ID: <20200806195332.GF2186@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Michael, All,
 
-> Hello Fabrice,
+On 2020-08-06 13:23 +0200, Michael Fischer spake thusly:
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
+> ---
+>  package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>  create mode 100644 package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
 > 
-> Thanks a lot for your patch series. Overall it looks pretty good, but
-> a
-> few changes are needed.
-> 
-> First a minor detail: your commit title doesn't match the actual
-> package name being added. See below for other comments.
-> 
-> On Fri, 31 Jul 2020 14:13:32 +0200
-> Fabrice Goucem <fabrice.goucem@oss.nxp.com> wrote:
-> 
-> >  DEVELOPERS                                    |  1 +
-> >  board/freescale/common/imx/post-image.sh      | 14 ++++-
-> 
-> I think this part (changes to post-image.sh) should go into a
-> separate
-> commit, after the package addition.
+> diff --git a/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
+> new file mode 100644
+> index 0000000000..1bac987267
+> --- /dev/null
+> +++ b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
+> @@ -0,0 +1,8 @@
+> +--- a/setup.py	2019-07-21 14:49:21.000000000 +0200
+> ++++ b/setup.py	2020-08-06 10:59:51.455133324 +0200
+> +@@ -43,4 +43,4 @@
+> +       url              = 'http://sourceforge.net/projects/raspberry-gpio-python/',
+> +       classifiers      = classifiers,
+> +       packages         = ['RPi','RPi.GPIO'],
+> +-      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c'])])
+> ++      ext_modules      = [Extension('RPi._GPIO', [...],extra_link_args=['-Wl,--allow-multiple-definition'] )])
 
-Alrighty.
+As Thomas said in his review on another patch of yours, we really want
+to fix the problem, not paper over it.
 
-> 
-> > diff --git a/board/freescale/common/imx/post-image.sh
-> > b/board/freescale/common/imx/post-image.sh
-> > index 06ccaac3a4..dc651ac584 100755
-> > --- a/board/freescale/common/imx/post-image.sh
-> > +++ b/board/freescale/common/imx/post-image.sh
-> > @@ -30,6 +30,18 @@ linux_image()
-> >  	fi
-> >  }
-> >  
-> > +#
-> > +# mcore_image prints all available MCORE demo file names for the
-> > genimage
-> > +# configuration file
-> > +#
-> > +mcore_image()
-> > +{
-> > +	if grep -Eq "^BR2_PACKAGE_IMX_MCORE_DEMOS=y$" ${BR2_CONFIG};
-> > then
-> > +		echo -n ", "
-> > +		for f in $(ls ${BINARIES_DIR}/mcore_*); do echo -n
-> > "$(basename $f), "; done
-> 
-> If I look at this, it seems like having the list finish with a comma
-> is
-> fine. If that's the case, then I think we should modify the
-> linux_image() function so that it echoes a string that is
-> comma-terminated, so that the mcore_image() doesn't have to worry
-> about
-> this, and looks like dtb_list() in how it handles the comma.
+Care to actually fix the code and respin a better fix, please?
 
-Indeed, having the list finish with a comma is fine. Will make
-linux_image() looks like dtb_list().
+Regards,
+Yann E. MORIN.
 
+> 2.28.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> 
-> > diff --git a/package/freescale-imx/imx-mcore-demos/imx-mcore-
-> > demos.hash b/package/freescale-imx/imx-mcore-demos/imx-mcore-
-> > demos.hash
-> > new file mode 100644
-> > index 0000000000..13f3092c88
-> > --- /dev/null
-> > +++ b/package/freescale-imx/imx-mcore-demos/imx-mcore-demos.hash
-> > @@ -0,0 +1,10 @@
-> > +# locally computed
-> > +sha256  cc00d3b936d49b2794a2a99e10129437e70caba3fd26b8379b8c50dd22
-> > f73254  imx7d-sabresd-m4-freertos-1.0.1.bin
-> > +sha256  a8fbe1180b3d20e933a410cd76e60baac7a9f54e8b2bae8b6b8a3e1af5
-> > 50eca6  imx7ulp-m4-demo-2.8.0.bin
-> > +sha256  2dbfab7fbbe89e89a2881d77c84a6c257699dc73ee6462a813bdd5ad09
-> > 836b04  imx8mm-m4-demo-2.8.0.bin
-> > +sha256  e877c7462b6ea87c498563842f42352d204eb28a65f35f7dc1fec643f8
-> > 4abb66  imx8mn-m7-demo-2.8.0.bin
-> > +sha256  ac88568f63a794530339775a6e49e7928d3d09bcf4ba5edacea1841989
-> > e674b0  imx8mq-m4-demo-2.8.0.bin
-> > +sha256  d06a636b84cd559483091cbdb07b5ce9e15a534bca31d4cb756b33b696
-> > c2160b  imx8qm-m4-demo-2.8.0.bin
-> > +sha256  7800cdbebe07f426cdac50b0e295d64215164a767e79ca58bd917445c5
-> > 0e345f  imx8qx-m4-demo-2.8.0.bin
-> > +
-> > +# no hash for license file as it is different for each package
-> > listed above
-> 
-> Hm, that's is not great, but I don't really have a good/simple
-> solution
-> for this.
-> 
-> > +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7),y)
-> > +IMX_MCORE_DEMOS_VERSION = 1.0.1
-> > +IMX_MCORE_DEMOS_SOURCE = imx7d-sabresd-m4-freertos-
-> > $(IMX_MCORE_DEMOS_VERSION).bin
-> > +EXT = bin
-> 
-> Variables in Buildroot are global, so a variable named just "EXT" is
-> not good. It should be IMX_MCORE_DEMOS_FILE_EXT or something like
-> that.
-
-I was not aware of that. So definitely, yes, I'll rename that variable.
-
-> 
-> > +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP),y)
-> 
-> This BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP option is only
-> introduced in the second patch of the series. I think it would make
-> more sense to introduce the i.MX7ULP platform as a separate patch
-> earlier in the series.
-
-As mentioned in the email related to the i.MX7ULP support, I'll remove
-that part from this patch (related to imx-mcore-demos package
-introduction) and move to the other patch (related to i.MX7 ULP
-support).
-
-> 
-> > +# Note: firmware names are copied to binaries directory with an
-> > "mcore_" prefix, for easier post image scripting
-> 
-> Please wrap long lines.
-
-Sure.
-
-> 
-> > +define IMX_MCORE_DEMOS_INSTALL_IMAGES_CMDS
-> > +	for f in $(@D)/*.$(EXT); do cp "$$f"
-> > $(BINARIES_DIR)/mcore_$$(basename "$$f"); done
-> 
-> Could you try (untested):
-> 
-> 	$(foreach f,$(wildcard $(@D)/*.$(IMX_MCORE_DEMOS_FILE_EXT), \
-> 		$(INSTALL) -D -m 0644 $(f)
-> $(BINARIES_DIR)/mcore_$(notdir $(f))
-> 	)
-> 
-> This is a bit more make-style :-)
-
-Correct.
-I'll do it this way then.
-
-> Thanks!
-> 
-> Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
