@@ -1,125 +1,236 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Aug 2020 23:07:30 +0200
-Subject: [Buildroot] [git commit] Update for 2020.08-rc1
-Message-ID: <20200806210330.449D982875@busybox.osuosl.org>
+Date: Thu, 6 Aug 2020 23:23:29 +0200
+Subject: [Buildroot] Buildroot 2020.08-rc1 released
+Message-ID: <20200806232329.3aafced8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65d7e959cd045604642c4069ce7942585aca9d44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 3 files changed, 34 insertions(+), 13 deletions(-)
+Buildroot 2020.08-rc1 is released - Go download it at:
 
-diff --git a/Makefile b/Makefile
-index a40c9ffac8..faef1a1be3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.08-git
-+export BR2_VERSION := 2020.08-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1591045000
-+BR2_VERSION_EPOCH = 1596746400
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index f52f84cbae..69d63ef961 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2020.05.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc3</b></h3>
-+
-+      <h3 style="text-align: center;">Latest release candidate: <b>2020.08-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.05-rc3.tar.gz">buildroot-2020.05-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.05-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08-rc1.tar.gz">buildroot-2020.08-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.05-rc3.tar.bz2">buildroot-2020.05-rc3.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.05-rc3.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08-rc1.tar.bz2">buildroot-2020.08-rc1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08-rc1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 233b81ea47..164c5e0843 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.08-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>6 August 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.08-rc1 release candidate is out. It is the first
-+	release candidate for 2020.08, which we aim at releasing end
-+	of August 2020. It contains a number of new packages, new
-+	defconfigs, toolchain improvements, package updates and
-+	more. See
-+	the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08-rc1">CHANGES</a>. Go
-+	to the <a href="/downloads/">downloads page</a> to pick up the
-+	<a href="/downloads/buildroot-2020.08-rc1.tar.bz2">2020.08-rc1
-+	release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+http://buildroot.net/downloads/buildroot-2020.08-rc1.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2020.08-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker.
+
+With 989 commits since 2020.05, we're quite significantly below the
+activity of previous cycles. Probably not due to the lack of
+submission, as we still have 480-500 patches waiting in patchwork, but
+mainly due to the lack of review, testing and integration bandwidth.
+These contributions came from 117 contributors, which is a stable count
+compared to previous development cycles.
+
+Besides the usual significant amount of package updates, this release
+brings a number of other changes:
+
+ - Toolchain:
+   - GCC 10.x added, GCC 9.x is the default
+   - binutils 2.34 added, binutils 2.33 is the default, binutils
+     2.31 removed
+   - glibc updated to 2.31
+   - ARC toolchain components updated to 2020.03-release.
+   - Enable uClibc-ng usage for RISC-V 64-bit
+
+ - Infrastructure:
+   - qmake-package was fixed to be compatible with
+   BR2_PER_PACKAGE_DIRECTORIES
+   - complete rewrite of the Gitlab CI Yaml configuration file,
+   now generated directly by the Gitlab CI pipeline itselfs
+
+ - Misc:
+   - cargo and cargo-bin packages removed, as cargo is now part
+   of Rust itself
+
+ - Filesystem: ubinize configuration files can now use
+   BINARIES_DIR to refer to the $(O)/images directory.
+
+ - New packages: bitwise, earlyoom, fuse-overlayfs, gloox,
+   kodi-pvr-octonet, kodi-pvr-zattoo, libabseil-cpp, libcutl, libnids,
+   libnpupnp, libodb, libodb-boost, libodb-mysql, libodb-pgsql,
+   mbpfan, netopeer2, odb, parprouted, python-colorzero,
+   python-gpiozero, python-pybind, python-yatl, python3-decorator,
+   qt5quicktimeline, resiprocate, ttyd, unclutter-xfixes,
+   urandom-scripts,
+
+ - New defconfigs: bananapi_m2_zero, freescale_imx8mnevk,
+   globalscale_espressobin, imx6ullevk, microchip_sama5d27_wlsom1_ek,
+   rock_pi_4, rock_pi_n10
+
+ - Removed packages: cargo, cargo-bin, kodi-peripheral-steamcontroller
+
+See the CHANGES file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08-rc1
+
+git shortlog -s -n 2020.05..
+   182	Fabrice Fontaine
+    95	Bernd Kuhls
+    54	Romain Naour
+    43	Adam Duskett
+    36	Francois Perrad
+    35	James Hilliard
+    34	Peter Seiderer
+    29	Norbert Lange
+    28	Thomas Petazzoni
+    27	Peter Korsgaard
+    27	Sergio Prado
+    22	Heiko Thiery
+    19	Pierre-Jean Texier
+    18	Yann E. MORIN
+    17	Lubomir Rintel
+    16	Baruch Siach
+    15	Angelo Compagnucci
+    15	Antoine Tenart
+    12	Asaf Kahlon
+    11	Stephane Viau
+    10	Giulio Benetti
+     9	Joris Offouga
+     8	Grzegorz Blach
+     8	Gwenhael Goavec-Merou
+     8	Julien Olivain
+     7	Bartosz Bilas
+     7	Christian Stewart
+     7	Eric Le Bihan
+     7	Matt Weber
+     7	Petr Vorel
+     7	Titouan Christophe
+     6	Gary Bisson
+     6	Guillaume W. Bres
+     6	Yegor Yefremov
+     5	Adrian Perez de Castro
+     5	Etienne Carriere
+     5	Joseph Kogut
+     5	J?rg Krause
+     5	Paul Cercueil
+     5	Stefan S?rensen
+     4	Aleksander Morgado
+     4	Danomi Manchego
+     4	Fabio Estevam
+     4	Jared Bents
+     4	Kamel Bouhara
+     4	Maeva Manuel
+     4	Mark Corbin
+     3	Brandon Maier
+     3	Gilles Talis
+     3	Nicolas Robin
+     3	Yair Ben-Avraham
+     2	Alejandro Gonz?lez
+     2	Chris Packham
+     2	Eugen Hristev
+     2	Evgeniy Didin
+     2	Frank Hunleth
+     2	Gon?alo Salazar
+     2	Joachim Nilsson
+     2	John Keeping
+     2	Martin Bark
+     2	Michael Walle
+     2	Nicola Di Lieto
+     2	Patrick Havelange
+     2	Ryan Barnett
+     2	Suniel Mahesh
+     2	S?bastien Szymanski
+     2	Thomas De Schampheleire
+     1	Aaron Sierra
+     1	Alexander Dahl
+     1	Alexandre Belloni
+     1	Andreas Naumann
+     1	Arnout Vandecappelle (Essensium/Mind)
+     1	Ash Charles
+     1	Christoph Muellner
+     1	Christoph M?llner
+     1	Christopher Pelloux
+     1	Dick Olsson
+     1	Ed Spiridonov
+     1	Eloi Bail
+     1	Felix Vollmer
+     1	Gao Xiang
+     1	Gregory CLEMENT
+     1	Ignacy Gaw?dzki
+     1	Ismael Luceno
+     1	Jan Kiszka
+     1	Jianhui Zhao
+     1	Joel Stanley
+     1	Luca Ceresoli
+     1	Lyle Franklin
+     1	Mario Mintel
+     1	Martin Elshuber
+     1	Martin Kepplinger
+     1	Masahiro Yamada
+     1	Maxim Cournoyer
+     1	Michael Nosthoff
+     1	Michael Trimarchi
+     1	Michael Vetter
+     1	Myl?ne Josserand
+     1	Nicolas Cavallari
+     1	Nicolas Dufresne
+     1	Nicolas Serafini
+     1	Owen Walpole
+     1	Pieterjan Camerlynck
+     1	Ramon Fried
+     1	Robert Hancock
+     1	Sam Voss
+     1	Santosh Multhalli
+     1	Sergey Matyukevich
+     1	Stefan Ott
+     1	St?phane Veyret
+     1	Thomas Ruschival
+     1	Tian Yuanhao
+     1	Tom Marcuzzi
+     1	Urja Rannikko
+     1	Vincent Stehl?
+     1	Yi Zheng
+     1	Yurii Monakov
+
+And a special thanks to our patch reviewers (we would need more!):
+
+git log 2020.05.. | grep -Ei '(reviewed|acked)-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+      7 David Pierret <david.pierret@smile.fr>
+      6 Romain Naour <romain.naour@gmail.com>
+      5 Gary Bisson <gary.bisson@boundarydevices.com>
+      4 Maeva Manuel <maeva.manuel@oss.nxp.com>
+      4 Julien Olivain <julien.olivain@oss.nxp.com>
+      3 Luca Ceresoli <luca@lucaceresoli.net>
+      3 J?r?my Rosen <jeremy.rosen@smile.fr>
+      3 Alexander Dahl <post@lespocky.de>
+      2 Stephan Hoffmann <sho@relinux.de>
+      2 Petr Vorel <petr.vorel@gmail.com>
+      1 Yegor Yefremov <yegorslists@googlemail.com>
+      1 Yann E. MORIN <yann.morin.1998@free.fr>
+      1 Titouan Christophe <titouan.christophe@railnova.eu>
+      1 Matthew Weber <matthew.weber@rockwellcollins.com>
+      1 Marcin Niestroj <m.niestroj@grinn-global.com>
+      1 Kieran Bingham <kieran.bingham@ideasonboard.com>
+      1 J?r?my ROSEN <jeremy.rosen@smile.fr>
+      1 Etienne Carriere <etienne.carriere@linaro.org>
+      1 Christian Stewart <christian@paral.in>
+      1 Asaf Kahlon <asafka7@gmail.com>
+      1 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+      1 Alistair Francis <alistair.francis@wdc.com>
+
+You can expect the final 2020.08 release by the end of August. Since
+-rc1 has been released, we will now only merge fixes into the master
+branch, which will become the final 2020.08 release at the end of
+August. However, in order to not stop the merging of new features for
+2020.11, we will open a 'next' branch in which new features and version
+bumps that are not security updates will be merged.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
