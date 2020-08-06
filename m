@@ -1,56 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 6 Aug 2020 22:41:31 +0200
-Subject: [Buildroot] [git commit] boot/uboot: Fix kconfig to use $(BR2_MAKE)
-Message-ID: <20200806203602.7E958807E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-kconfig: Support custom $(MAKE)
+Message-ID: <20200806203602.7379183AB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43dc2007a93194f6126987a2f2716dda1f3f17b5
+commit: https://git.buildroot.net/buildroot/commit/?id=e729d0d4b6d90004bb41e2e81d7e8cb354b990a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-U-Boot must use $(BR2_MAKE) as it uses a Make feature from v4.0. We
-already use $(BR2_MAKE) in the BUILD_CMDS, but the kconfig commands
-still uses $(MAKE). Without this fix, building U-Boot with kconfig will
-fail with the following cryptic error.
-
-> Makefile:37: *** missing separator.  Stop.
+The U-Boot package requires GNU Make v4.0 or later, and so all U-Boot
+"make" commands must use "$(BR2_MAKE)" so they use the host-make
+package. Currently pkg-kconfig is hardcoded to uses $(MAKE), so add a
+way to support $(BR2_MAKE). The package infra for pkg-automake and
+pkg-cmake have a similar problem, and they solved it by defining a
+$(PKG)_MAKE variable, and allowing each package to override it.
 
 Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/uboot/uboot.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/pkg-kconfig.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 8a09969de1..1831466780 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -16,6 +16,7 @@ UBOOT_INSTALL_IMAGES = YES
- 
- # u-boot 2020.01+ needs make 4.0+
- UBOOT_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+UBOOT_MAKE = $(BR2_MAKE)
- 
- ifeq ($(UBOOT_VERSION),custom)
- # Handle custom U-Boot tarballs as specified by the configuration
-@@ -257,7 +258,7 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- define UBOOT_CONFIGURE_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-+		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_BOARD_NAME)_config
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 9d65b21ec5..45faf50e71 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -33,7 +33,7 @@ PKG_KCONFIG_COMMON_OPTS = \
+ # Macro to save the defconfig file
+ # $(1): the name of the package in upper-case letters
+ define kconfig-package-savedefconfig
+-	$($(1)_MAKE_ENV) $(MAKE) -C $($(1)_DIR) \
++	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
+ 		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
  endef
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-@@ -294,7 +295,7 @@ define UBOOT_BUILD_CMDS
- 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-+		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_MAKE_TARGET)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
- 		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+ 
+@@ -89,6 +89,7 @@ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+ 
+ # Default values
++$(2)_MAKE ?= $$(MAKE)
+ $(2)_KCONFIG_EDITORS ?= menuconfig
+ $(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
+@@ -122,7 +123,7 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 	done
+ 
+ $(2)_KCONFIG_MAKE = \
+-	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
+ 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
+ 
+ # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
+@@ -226,7 +227,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
+ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
+ $$($(2)_DIR)/.kconfig_editor_%: PKG=$(2)
+ $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+-	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$($(2)_CONFIGURATOR_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
+ 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
