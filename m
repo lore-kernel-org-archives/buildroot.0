@@ -1,68 +1,33 @@
-From: Mirza Krak <mirza.krak@northern.tech>
-Date: Thu, 6 Aug 2020 12:57:10 +0200
-Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
- to 3.4.0
-In-Reply-To: <20200717145139.50b3254a@windsurf.home>
-References: <20200715173707.584226-1-aduskett@gmail.com>
- <20200717145139.50b3254a@windsurf.home>
-Message-ID: <CADHdJwCSf-MkF4zCT7Yr-n8fq0b4N7c3Y2n7J0QgT_GzW46qPQ@mail.gmail.com>
+From: Michael Fischer <mf@go-sys.de>
+Date: Thu, 6 Aug 2020 13:23:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-rpi-gpio: fix build with gcc
+ 10.x
+Message-ID: <20200806112301.19985-1-mf@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 17, 2020 at 2:51 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Wed, 15 Jul 2020 10:37:04 -0700
-> aduskett at gmail.com wrote:
->
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > Update the following license file hashes due to copyright year changes:
-> >   - vendor/github.com/mendersoftware/mendertesting/LICENSE
-> >   - vendor/github.com/davecgh/go-spew/LICENSE
-> >   - vendor/github.com/stretchr/testify/LICENSE
-> >
-> > Add hashes for the the following new files:
-> >   - vendor/github.com/minio/sha256-simd/LICENSE
-> >   - vendor/gopkg.in/yaml.v2/LICENSE
-> >   - vendor/github.com/klauspost/compress/LICENSE
-> >   - vendor/github.com/russross/blackfriday/v2/LICENSE.txt
-> >   - vendor/github.com/klauspost/pgzip/LICENSE
-> >   - vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
-> >   - vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->
-> I don't know if this is exactly related to this version bump, but after
-> this, I'm seeing my autobuilder fails to remove the output directory,
-> with lots of:
->
-> rm: cannot remove '/home/test/autobuild/run/instance-2/output-1/build/host-mender-artifact-3.4.0/_gopath/pkg/mod/github.com/klauspost/compress at v1.10.5/zip/testdata/utf8-osx.zip': Permission denied
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
 
-Not sure if anyone else has followed up on this, but could not find a
-response so I will try.
-
-This is indeed intentional to the extent that this is how GO works
-when you are using "go mod" (which mender-artifact now does). We are
-not first ones having these problems and there are several tickets
-discussing this, e.g [1]. This should be applicable to any GO package
-in Buildroot that uses "go mod"
-
-There seems to be two ways to get around this,
-
-1. Use 'go clean -modcache' command which should remove these files
-2. Use "-modcacherw" flag of "go mod" which will make these files R/W
-(this is only available after GO 1.14.x [2])
-
-I am not sure how to best incorporate this into Buildroot.
-
-[1]. https://github.com/golang/go/issues/27161
-[2]. https://github.com/golang/go/commit/8ba43eaad8263f26e16846e345389146ec234364
-
+diff --git a/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..1bac987267
+--- /dev/null
++++ b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
+@@ -0,0 +1,8 @@
++--- a/setup.py	2019-07-21 14:49:21.000000000 +0200
+++++ b/setup.py	2020-08-06 10:59:51.455133324 +0200
++@@ -43,4 +43,4 @@
++       url              = 'http://sourceforge.net/projects/raspberry-gpio-python/',
++       classifiers      = classifiers,
++       packages         = ['RPi','RPi.GPIO'],
++-      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c'])])
+++      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c'],extra_link_args=['-Wl,--allow-multiple-definition'] )])
 -- 
-Mirza Krak | Embedded Solutions Architect | https://mender.io
-
- Northern.tech AS | @northerntechHQ
+2.28.0
