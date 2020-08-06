@@ -1,236 +1,196 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Aug 2020 23:23:29 +0200
-Subject: [Buildroot] Buildroot 2020.08-rc1 released
-Message-ID: <20200806232329.3aafced8@windsurf.home>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu,  6 Aug 2020 23:29:37 +0200
+Subject: [Buildroot] [PATCH] package/htpdate: new package
+Message-ID: <20200806212937.1236558-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Adding htpdate, a time syncronization software based on http.
 
-Buildroot 2020.08-rc1 is released - Go download it at:
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/Config.in               |  1 +
+ package/htpdate/Config.in       |  8 +++++
+ package/htpdate/S43htpdate      | 56 +++++++++++++++++++++++++++++++++
+ package/htpdate/htpdate.conf    |  3 ++
+ package/htpdate/htpdate.hash    |  3 ++
+ package/htpdate/htpdate.mk      | 36 +++++++++++++++++++++
+ package/htpdate/htpdate.service | 11 +++++++
+ 7 files changed, 118 insertions(+)
+ create mode 100644 package/htpdate/Config.in
+ create mode 100644 package/htpdate/S43htpdate
+ create mode 100644 package/htpdate/htpdate.conf
+ create mode 100644 package/htpdate/htpdate.hash
+ create mode 100644 package/htpdate/htpdate.mk
+ create mode 100644 package/htpdate/htpdate.service
 
-http://buildroot.net/downloads/buildroot-2020.08-rc1.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2020.08-rc1.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker.
-
-With 989 commits since 2020.05, we're quite significantly below the
-activity of previous cycles. Probably not due to the lack of
-submission, as we still have 480-500 patches waiting in patchwork, but
-mainly due to the lack of review, testing and integration bandwidth.
-These contributions came from 117 contributors, which is a stable count
-compared to previous development cycles.
-
-Besides the usual significant amount of package updates, this release
-brings a number of other changes:
-
- - Toolchain:
-   - GCC 10.x added, GCC 9.x is the default
-   - binutils 2.34 added, binutils 2.33 is the default, binutils
-     2.31 removed
-   - glibc updated to 2.31
-   - ARC toolchain components updated to 2020.03-release.
-   - Enable uClibc-ng usage for RISC-V 64-bit
-
- - Infrastructure:
-   - qmake-package was fixed to be compatible with
-   BR2_PER_PACKAGE_DIRECTORIES
-   - complete rewrite of the Gitlab CI Yaml configuration file,
-   now generated directly by the Gitlab CI pipeline itselfs
-
- - Misc:
-   - cargo and cargo-bin packages removed, as cargo is now part
-   of Rust itself
-
- - Filesystem: ubinize configuration files can now use
-   BINARIES_DIR to refer to the $(O)/images directory.
-
- - New packages: bitwise, earlyoom, fuse-overlayfs, gloox,
-   kodi-pvr-octonet, kodi-pvr-zattoo, libabseil-cpp, libcutl, libnids,
-   libnpupnp, libodb, libodb-boost, libodb-mysql, libodb-pgsql,
-   mbpfan, netopeer2, odb, parprouted, python-colorzero,
-   python-gpiozero, python-pybind, python-yatl, python3-decorator,
-   qt5quicktimeline, resiprocate, ttyd, unclutter-xfixes,
-   urandom-scripts,
-
- - New defconfigs: bananapi_m2_zero, freescale_imx8mnevk,
-   globalscale_espressobin, imx6ullevk, microchip_sama5d27_wlsom1_ek,
-   rock_pi_4, rock_pi_n10
-
- - Removed packages: cargo, cargo-bin, kodi-peripheral-steamcontroller
-
-See the CHANGES file for details:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08-rc1
-
-git shortlog -s -n 2020.05..
-   182	Fabrice Fontaine
-    95	Bernd Kuhls
-    54	Romain Naour
-    43	Adam Duskett
-    36	Francois Perrad
-    35	James Hilliard
-    34	Peter Seiderer
-    29	Norbert Lange
-    28	Thomas Petazzoni
-    27	Peter Korsgaard
-    27	Sergio Prado
-    22	Heiko Thiery
-    19	Pierre-Jean Texier
-    18	Yann E. MORIN
-    17	Lubomir Rintel
-    16	Baruch Siach
-    15	Angelo Compagnucci
-    15	Antoine Tenart
-    12	Asaf Kahlon
-    11	Stephane Viau
-    10	Giulio Benetti
-     9	Joris Offouga
-     8	Grzegorz Blach
-     8	Gwenhael Goavec-Merou
-     8	Julien Olivain
-     7	Bartosz Bilas
-     7	Christian Stewart
-     7	Eric Le Bihan
-     7	Matt Weber
-     7	Petr Vorel
-     7	Titouan Christophe
-     6	Gary Bisson
-     6	Guillaume W. Bres
-     6	Yegor Yefremov
-     5	Adrian Perez de Castro
-     5	Etienne Carriere
-     5	Joseph Kogut
-     5	J?rg Krause
-     5	Paul Cercueil
-     5	Stefan S?rensen
-     4	Aleksander Morgado
-     4	Danomi Manchego
-     4	Fabio Estevam
-     4	Jared Bents
-     4	Kamel Bouhara
-     4	Maeva Manuel
-     4	Mark Corbin
-     3	Brandon Maier
-     3	Gilles Talis
-     3	Nicolas Robin
-     3	Yair Ben-Avraham
-     2	Alejandro Gonz?lez
-     2	Chris Packham
-     2	Eugen Hristev
-     2	Evgeniy Didin
-     2	Frank Hunleth
-     2	Gon?alo Salazar
-     2	Joachim Nilsson
-     2	John Keeping
-     2	Martin Bark
-     2	Michael Walle
-     2	Nicola Di Lieto
-     2	Patrick Havelange
-     2	Ryan Barnett
-     2	Suniel Mahesh
-     2	S?bastien Szymanski
-     2	Thomas De Schampheleire
-     1	Aaron Sierra
-     1	Alexander Dahl
-     1	Alexandre Belloni
-     1	Andreas Naumann
-     1	Arnout Vandecappelle (Essensium/Mind)
-     1	Ash Charles
-     1	Christoph Muellner
-     1	Christoph M?llner
-     1	Christopher Pelloux
-     1	Dick Olsson
-     1	Ed Spiridonov
-     1	Eloi Bail
-     1	Felix Vollmer
-     1	Gao Xiang
-     1	Gregory CLEMENT
-     1	Ignacy Gaw?dzki
-     1	Ismael Luceno
-     1	Jan Kiszka
-     1	Jianhui Zhao
-     1	Joel Stanley
-     1	Luca Ceresoli
-     1	Lyle Franklin
-     1	Mario Mintel
-     1	Martin Elshuber
-     1	Martin Kepplinger
-     1	Masahiro Yamada
-     1	Maxim Cournoyer
-     1	Michael Nosthoff
-     1	Michael Trimarchi
-     1	Michael Vetter
-     1	Myl?ne Josserand
-     1	Nicolas Cavallari
-     1	Nicolas Dufresne
-     1	Nicolas Serafini
-     1	Owen Walpole
-     1	Pieterjan Camerlynck
-     1	Ramon Fried
-     1	Robert Hancock
-     1	Sam Voss
-     1	Santosh Multhalli
-     1	Sergey Matyukevich
-     1	Stefan Ott
-     1	St?phane Veyret
-     1	Thomas Ruschival
-     1	Tian Yuanhao
-     1	Tom Marcuzzi
-     1	Urja Rannikko
-     1	Vincent Stehl?
-     1	Yi Zheng
-     1	Yurii Monakov
-
-And a special thanks to our patch reviewers (we would need more!):
-
-git log 2020.05.. | grep -Ei '(reviewed|acked)-by:' | \
-    sed 's/.*by: //' | sort | uniq -c | sort -n -r
-      7 David Pierret <david.pierret@smile.fr>
-      6 Romain Naour <romain.naour@gmail.com>
-      5 Gary Bisson <gary.bisson@boundarydevices.com>
-      4 Maeva Manuel <maeva.manuel@oss.nxp.com>
-      4 Julien Olivain <julien.olivain@oss.nxp.com>
-      3 Luca Ceresoli <luca@lucaceresoli.net>
-      3 J?r?my Rosen <jeremy.rosen@smile.fr>
-      3 Alexander Dahl <post@lespocky.de>
-      2 Stephan Hoffmann <sho@relinux.de>
-      2 Petr Vorel <petr.vorel@gmail.com>
-      1 Yegor Yefremov <yegorslists@googlemail.com>
-      1 Yann E. MORIN <yann.morin.1998@free.fr>
-      1 Titouan Christophe <titouan.christophe@railnova.eu>
-      1 Matthew Weber <matthew.weber@rockwellcollins.com>
-      1 Marcin Niestroj <m.niestroj@grinn-global.com>
-      1 Kieran Bingham <kieran.bingham@ideasonboard.com>
-      1 J?r?my ROSEN <jeremy.rosen@smile.fr>
-      1 Etienne Carriere <etienne.carriere@linaro.org>
-      1 Christian Stewart <christian@paral.in>
-      1 Asaf Kahlon <asafka7@gmail.com>
-      1 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-      1 Alistair Francis <alistair.francis@wdc.com>
-
-You can expect the final 2020.08 release by the end of August. Since
--rc1 has been released, we will now only merge fixes into the master
-branch, which will become the final 2020.08 release at the end of
-August. However, in order to not stop the merging of new features for
-2020.11, we will open a 'next' branch in which new features and version
-bumps that are not security updates will be merged.
-
-Best regards,
-
-Thomas Petazzoni
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..b1c3d2db92 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2061,6 +2061,7 @@ menu "Networking applications"
+ 	source "package/haproxy/Config.in"
+ 	source "package/hiawatha/Config.in"
+ 	source "package/hostapd/Config.in"
++	source "package/htpdate/Config.in"
+ 	source "package/hplip/Config.in"
+ 	source "package/httping/Config.in"
+ 	source "package/i2pd/Config.in"
+diff --git a/package/htpdate/Config.in b/package/htpdate/Config.in
+new file mode 100644
+index 0000000000..fb0b0f3bf7
+--- /dev/null
++++ b/package/htpdate/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HTPDATE
++	bool "htpdate"
++	depends on BR2_USE_MMU # fork()
++	help
++	  The HTTP Time Protocol (HTP) is used to synchronize a computer's time
++	  with web servers as reference time source.
++
++	  https://github.com/angeloc/htpdate
+diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
+new file mode 100644
+index 0000000000..7b20053f79
+--- /dev/null
++++ b/package/htpdate/S43htpdate
+@@ -0,0 +1,56 @@
++#!/bin/sh
++
++DAEMON="htpdate"
++PIDFILE="/var/run/$DAEMON.pid"
++
++if [ -r "/etc/default/$DAEMON" ]; then
++	. "/etc/default/$DAEMON"
++else
++HTPDATE_OPTS="-a -s -t"
++HTPDATE_HOSTS="https://google.com"
++fi
++
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
++		-- -D -i "$PIDFILE" $HTPDATE_OPTS $HTPDATE_HOSTS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/htpdate/htpdate.conf b/package/htpdate/htpdate.conf
+new file mode 100644
+index 0000000000..0c1b2eae43
+--- /dev/null
++++ b/package/htpdate/htpdate.conf
+@@ -0,0 +1,3 @@
++HTPDATE_OPTS="-a -s -t"
++
++HTPDATE_HOSTS="https://google.com"
+diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
+new file mode 100644
+index 0000000000..bed7f76c81
+--- /dev/null
++++ b/package/htpdate/htpdate.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256 08aee5132b0c73ba01485b907d037fd676d0ad89d2736bbf117ec5c5035b513a  v1.2.4.tar.gz
++sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
+diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
+new file mode 100644
+index 0000000000..3b57fa4da4
+--- /dev/null
++++ b/package/htpdate/htpdate.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# htpdate
++#
++################################################################################
++
++HTPDATE_VERSION = 1.2.4
++HTPDATE_SOURCE = v$(HTPDATE_VERSION).tar.gz
++HTPDATE_SITE = https://github.com/angeloc/htpdate/archive
++HTPDATE_LICENSE = GPL-2.0-or-later
++HTPDATE_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
++HTPDATE_BUILD_DEPENDENCIES = openssl
++endif
++
++define HTPDATE_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HTPDATE_BUILD_OPTS)
++endef
++
++define HTPDATE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define HTPDATE_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/htpdate/S43htpdate \
++		$(TARGET_DIR)/etc/init.d/S43htpdate
++endef
++
++define HTPDATE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/htpdate/htpdate.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/htpdate.service
++endef
++
++$(eval $(generic-package))
+diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
+new file mode 100644
+index 0000000000..300cf9ec8f
+--- /dev/null
++++ b/package/htpdate/htpdate.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=htpdate daemon
++After=network.target
++
++[Service]
++Type=forking
++PIDFile=/var/run/htpdate
++ExecStart=/usr/bin/htpdate -D -i /var/run/htpdate -a -s -t https://www.google.com
++
++[Install]
++WantedBy=multi-user.target
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
