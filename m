@@ -1,84 +1,125 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Aug 2020 22:42:56 +0200
-Subject: [Buildroot] [PATCH 1/2] package/pkg-kconfig: Support custom
- $(MAKE)
-In-Reply-To: <20200804190005.114872-1-brandon.maier@rockwellcollins.com>
-References: <20200804190005.114872-1-brandon.maier@rockwellcollins.com>
-Message-ID: <20200806204256.GH2186@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Aug 2020 23:07:30 +0200
+Subject: [Buildroot] [git commit] Update for 2020.08-rc1
+Message-ID: <20200806210330.449D982875@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brandon, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=65d7e959cd045604642c4069ce7942585aca9d44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-08-04 14:00 -0500, Brandon Maier spake thusly:
-> The U-Boot package requires GNU Make v4.0 or later, and so all U-Boot
-> "make" commands must use "$(BR2_MAKE)" so they use the host-make
-> package. Currently pkg-kconfig is hardcoded to uses $(MAKE), so add a
-> way to support $(BR2_MAKE). The package infra for pkg-automake and
-> pkg-cmake have a similar problem, and they solved it by defining a
-> $(PKG)_MAKE variable, and allowing each package to override it.
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 13 deletions(-)
 
-Both applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-kconfig.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 9d65b21ec5..45faf50e71 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -33,7 +33,7 @@ PKG_KCONFIG_COMMON_OPTS = \
->  # Macro to save the defconfig file
->  # $(1): the name of the package in upper-case letters
->  define kconfig-package-savedefconfig
-> -	$($(1)_MAKE_ENV) $(MAKE) -C $($(1)_DIR) \
-> +	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
->  		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
->  endef
->  
-> @@ -89,6 +89,7 @@ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
->  $(call inner-generic-package,$(1),$(2),$(3),$(4))
->  
->  # Default values
-> +$(2)_MAKE ?= $$(MAKE)
->  $(2)_KCONFIG_EDITORS ?= menuconfig
->  $(2)_KCONFIG_OPTS ?=
->  $(2)_KCONFIG_FIXUP_CMDS ?=
-> @@ -122,7 +123,7 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
->  	done
->  
->  $(2)_KCONFIG_MAKE = \
-> -	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> +	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
->  		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
->  
->  # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
-> @@ -226,7 +227,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
->  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
->  $$($(2)_DIR)/.kconfig_editor_%: PKG=$(2)
->  $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-> -	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> +	$$($(2)_CONFIGURATOR_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
->  		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
->  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
->  	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
-> -- 
-> 2.28.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Makefile b/Makefile
+index a40c9ffac8..faef1a1be3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.08-git
++export BR2_VERSION := 2020.08-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1591045000
++BR2_VERSION_EPOCH = 1596746400
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index f52f84cbae..69d63ef961 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2020.05.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-<!--
+-      <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc3</b></h3>
++
++      <h3 style="text-align: center;">Latest release candidate: <b>2020.08-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.05-rc3.tar.gz">buildroot-2020.05-rc3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.05-rc3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08-rc1.tar.gz">buildroot-2020.08-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.05-rc3.tar.bz2">buildroot-2020.05-rc3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.05-rc3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08-rc1.tar.bz2">buildroot-2020.08-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 233b81ea47..164c5e0843 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.08-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>6 August 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.08-rc1 release candidate is out. It is the first
++	release candidate for 2020.08, which we aim at releasing end
++	of August 2020. It contains a number of new packages, new
++	defconfigs, toolchain improvements, package updates and
++	more. See
++	the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08-rc1">CHANGES</a>. Go
++	to the <a href="/downloads/">downloads page</a> to pick up the
++	<a href="/downloads/buildroot-2020.08-rc1.tar.bz2">2020.08-rc1
++	release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
