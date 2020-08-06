@@ -1,53 +1,109 @@
-From: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-Date: Thu, 6 Aug 2020 16:28:10 +0000
-Subject: [Buildroot] =?gb2312?b?u9i4tDogIG9wZW5zc2ggdG90YWx5IGNhbid0IHVz?=
- =?gb2312?b?ZSBvbiByaXNjdi9hcm02NCB3aXRoIGxhdGVzdCBidWlsZHJvb3Q=?=
-In-Reply-To: <20200806171237.1ba34fc8@windsurf.home>
-References: <VI1PR07MB4590527D56A9FCB9F72F5A1AAB480@VI1PR07MB4590.eurprd07.prod.outlook.com>,
- <20200806171237.1ba34fc8@windsurf.home>
-Message-ID: <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
+From: Fabrice Goucem <fabrice.goucem@oss.nxp.com>
+Date: Thu, 06 Aug 2020 18:57:28 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/freescale_imx7ulpevkb: new
+ defconfig
+In-Reply-To: <20200805225118.0189afd4@windsurf.home>
+References: <20200731121333.3754957-1-fabrice.goucem@oss.nxp.com>
+ <20200731121333.3754957-2-fabrice.goucem@oss.nxp.com>
+ <20200805225118.0189afd4@windsurf.home>
+Message-ID: <b9edfc3c395961381588485123935741b81be22e.camel@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hello Thomas,
 
-Thanks for your reply.
+Thanks for your comments.
 
-I have ever tried to run "sshd --help" after linux is booting up inside the qemu. I see the similar phenomenon, the program is stuck.
+On Wed, 2020-08-05 at 22:51 +0200, Thomas Petazzoni wrote:
+> Hello Fabrice,
+> 
+> Thanks for this patch, see below for some comments.
+> 
+> On Fri, 31 Jul 2020 14:13:33 +0200
+> Fabrice Goucem <fabrice.goucem@oss.nxp.com> wrote:
+> 
+> >  DEVELOPERS                              |  2 +
+> >  board/freescale/imx7ulpevkb/readme.txt  | 76
+> > +++++++++++++++++++++++++
+> >  configs/freescale_imx7ulpevkb_defconfig | 29 ++++++++++
+> >  package/freescale-imx/Config.in         |  8 ++-
+> 
+> This is doing two things at once: adding the IMX7ULP support in
+> package/freescale-imx/Config.in (which should come as a separate
+> patch,
+> and before the imx-m4-demos package) and the imx7ulpevkb defconfig
+> addition. Could you split that up ?
 
-So it should not "the lack of entropy in the random number generator ".
+Chicken and egg situation...
+Package imx-mcore-demos is needed to introduce support to i.MX7ULP EVK.
+What I can do is remove i.MX7ULP support in the initial imx-mcore-demos 
+commit and add it in the i.MX7ULP commit.
 
-Thanks
+> 
+> > diff --git a/package/freescale-imx/Config.in b/package/freescale-
+> > imx/Config.in
+> > index 75c213a1d7..cc0d8fc7a8 100644
+> > --- a/package/freescale-imx/Config.in
+> > +++ b/package/freescale-imx/Config.in
+> > @@ -38,7 +38,10 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+> >  	bool "imx6ul/imx6ull"
+> >  
+> >  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+> > -	bool "imx7d/imx7ulp"
+> > +	bool "imx7d"
+> > +
+> > +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP
+> > +	bool "imx7ulp"
+> 
+> The commit log should detail why you're separating IMX7ULP from IMX7:
+> because they have different imx-m4-demos packages, at least that's
+> what
+> I understood.
 
-________________________________
-???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-????: 2020?8?6? 23:12
-???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; jiaoshuaipeng at yeah.net <jiaoshuaipeng@yeah.net>
-??: Re: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
+Yes, this is exactely why we need to differentiate them. Will add this
+information to the commit log.
 
-On Thu, 6 Aug 2020 14:31:33 +0000
-jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
+> 
+> >  
+> >  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+> >  	bool "imx8"
+> > @@ -68,6 +71,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+> >  	default "IMX6S" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
+> >  	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+> >  	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+> > +	default "IMX7ULP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP
+> >  	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+> >  	default "IMX8MQ" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+> >  	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+> > @@ -90,6 +94,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+> >  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
+> 
+> Are you sure the i.MX7 has a GPU ? According to
+> https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-7-processors:IMX7-SERIES
+> only the i.MX7 ULP has a GPU, unless I'm misreading this.
 
-> Any one ever use openssh8.3 on RISCV/ARM64 with latest buildroot commit ?
->
-> We found the the binary of openssh can generated successfully with the buildroot.
-> But when we run the application sshd or "ssh-keygen -a", it will be stuck.
-> I have used the GDB to find root cause why the program is stuch, i see the stach frame is corrupted.
->
-> we are using the config "qemu_aarch64_virt_defconfig" and "qemu_riscv32_virt_defconfig", and enable the openssh with "make menucofig". qemu version is 5.0.50.  linux kernel version is 5.1.12.
+You are correct.
+However fixing that (that's in master) would not be part of my patch
+which only targets i.MX7 ULP support.
 
-Could this simply due to the lack of entropy in the random number
-generator ?
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200806/337d1d92/attachment.html>
+> > +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+> > @@ -99,6 +104,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+> >  config BR2_PACKAGE_FREESCALE_IMX_HAS_MCORE
+> >  	bool
+> >  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
+> > +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7ULP || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> >  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+> 
+> Best regards,
+> 
+> Thomas
