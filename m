@@ -1,90 +1,201 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Aug 2020 22:56:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version
- to 2.4.46
-In-Reply-To: <20200807192657.GJ2186@scaer>
-References: <20200807171100.220432-1-bernd.kuhls@t-online.de>
- <20200807192657.GJ2186@scaer>
-Message-ID: <20200807225632.41b7c8d0@gmx.net>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri,  7 Aug 2020 22:58:06 +0200
+Subject: [Buildroot] [PATCH v2] package/htpdate: new package
+Message-ID: <20200807205806.1580019-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, *,
+Adding htpdate, a time syncronization software based on http.
 
-On Fri, 7 Aug 2020 21:26:57 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+Changelo
+v1->v2:
+* Fixed service configuration file handling (Thomas P.)
+* Move to use $call github ...) (Thomas P.)
+* Fixed DEPENDECIES (Thomas P.)
+* Move to use $(TARGET_MAKE_ENV)
 
-> Bernd, All,
->
-> On 2020-08-07 19:11 +0200, Bernd Kuhls spake thusly:
-> > Changelog: http://archive.apache.org/dist/httpd/CHANGES_2.4.46
-> >
-> > Release notes: https://downloads.apache.org/httpd/Announcement2.4.html
-> >
-> > Fixes CVE-2020-9490, CVE-2020-11984 & CVE-2020-11993:
-> > https://httpd.apache.org/security/vulnerabilities_24.html
-> >
-> > Added all hashes provided by upstream.
->
-> md5 and sha1 are broken nowadays, so adding them is not interesting at
-> all, when there are better hashes available, which is the case here.
+ DEVELOPERS                      |  1 +
+ package/Config.in               |  1 +
+ package/htpdate/Config.in       |  8 ++++++
+ package/htpdate/S43htpdate      | 51 +++++++++++++++++++++++++++++++++
+ package/htpdate/htpdate.hash    |  3 ++
+ package/htpdate/htpdate.mk      | 35 ++++++++++++++++++++++
+ package/htpdate/htpdate.service | 13 +++++++++
+ 7 files changed, 112 insertions(+)
+ create mode 100644 package/htpdate/Config.in
+ create mode 100644 package/htpdate/S43htpdate
+ create mode 100644 package/htpdate/htpdate.hash
+ create mode 100644 package/htpdate/htpdate.mk
+ create mode 100644 package/htpdate/htpdate.service
 
-If this handling is the new rule, then it is time to update the docs
-stating 'If upstream provides more than one type of hash (e.g. sha1 and sha512),
-then it is best to add all those hashes in the .hash file.'?
-
-Regards,
-Peter
-
->
-> So I've dropped md5 and sha1, and used a single comment to refer to both
-> upstream locations.
->
-> Applied to master, thanks.
->
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/apache/apache.hash | 10 ++++++++--
-> >  package/apache/apache.mk   |  2 +-
-> >  2 files changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-> > index 7b0e4ad8e7..4fe457d701 100644
-> > --- a/package/apache/apache.hash
-> > +++ b/package/apache/apache.hash
-> > @@ -1,4 +1,10 @@
-> > -# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
-> > -sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
-> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.md5
-> > +md5  7d661ea5e736dac5e2761d9f49fe8361  httpd-2.4.46.tar.bz2
-> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha1
-> > +sha1  1b7cd10ff3a2a07a576d77e34f0204d95fa4aceb  httpd-2.4.46.tar.bz2
-> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha256
-> > +sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
-> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha512
-> > +sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
-> >  # Locally computed
-> >  sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-> > diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> > index 068f36e325..203d637fbb 100644
-> > --- a/package/apache/apache.mk
-> > +++ b/package/apache/apache.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -APACHE_VERSION = 2.4.43
-> > +APACHE_VERSION = 2.4.46
-> >  APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
-> >  APACHE_SITE = http://archive.apache.org/dist/httpd
-> >  APACHE_LICENSE = Apache-2.0
-> > --
-> > 2.27.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ee840dbb8b..d712df272a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -208,6 +208,7 @@ F:	package/cups/
+ F:	package/cups-filters/
+ F:	package/fail2ban/
+ F:	package/grep/
++F:	package/htpdate/
+ F:	package/i2c-tools/
+ F:	package/jq/
+ F:	package/libapparmor/
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..b1c3d2db92 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2061,6 +2061,7 @@ menu "Networking applications"
+ 	source "package/haproxy/Config.in"
+ 	source "package/hiawatha/Config.in"
+ 	source "package/hostapd/Config.in"
++	source "package/htpdate/Config.in"
+ 	source "package/hplip/Config.in"
+ 	source "package/httping/Config.in"
+ 	source "package/i2pd/Config.in"
+diff --git a/package/htpdate/Config.in b/package/htpdate/Config.in
+new file mode 100644
+index 0000000000..fb0b0f3bf7
+--- /dev/null
++++ b/package/htpdate/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HTPDATE
++	bool "htpdate"
++	depends on BR2_USE_MMU # fork()
++	help
++	  The HTTP Time Protocol (HTP) is used to synchronize a computer's time
++	  with web servers as reference time source.
++
++	  https://github.com/angeloc/htpdate
+diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
+new file mode 100644
+index 0000000000..75f9a995ff
+--- /dev/null
++++ b/package/htpdate/S43htpdate
+@@ -0,0 +1,51 @@
++#!/bin/sh
++
++DAEMON="htpdate"
++PIDFILE="/var/run/$DAEMON.pid"
++
++HTPDATE_ARGS="-a -s -t https://google.com"
++test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
++		-- -D -i "$PIDFILE" $HTPDATE_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
+new file mode 100644
+index 0000000000..282bcbe7ed
+--- /dev/null
++++ b/package/htpdate/htpdate.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256 08aee5132b0c73ba01485b907d037fd676d0ad89d2736bbf117ec5c5035b513a  htpdate-1.2.4.tar.gz
++sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
+diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
+new file mode 100644
+index 0000000000..2c749f553a
+--- /dev/null
++++ b/package/htpdate/htpdate.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# htpdate
++#
++################################################################################
++
++HTPDATE_VERSION = 1.2.4
++HTPDATE_SITE = $(call github,angeloc,htpdate,v$(HTPDATE_VERSION))
++HTPDATE_LICENSE = GPL-2.0-or-later
++HTPDATE_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
++HTPDATE_DEPENDENCIES += openssl
++endif
++
++define HTPDATE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) CC=$(TARGET_CC) $(MAKE) -C $(@D) $(HTPDATE_BUILD_OPTS)
++endef
++
++define HTPDATE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define HTPDATE_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/htpdate/S43htpdate \
++		$(TARGET_DIR)/etc/init.d/S43htpdate
++endef
++
++define HTPDATE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/htpdate/htpdate.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/htpdate.service
++endef
++
++$(eval $(generic-package))
+diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
+new file mode 100644
+index 0000000000..0c77550813
+--- /dev/null
++++ b/package/htpdate/htpdate.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=htpdate daemon
++After=network.target
++
++[Service]
++Type=forking
++PIDFile=/var/run/htpdate
++Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
++EnvironmentFile=-/etc/default/htpdate
++ExecStart=/usr/bin/htpdate -D -i /var/run/htpdate $HTPDATE_ARGS
++
++[Install]
++WantedBy=multi-user.target
+-- 
+2.25.1
