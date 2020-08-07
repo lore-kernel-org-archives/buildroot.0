@@ -1,77 +1,40 @@
-From: Michael Fischer <mf@go-sys.de>
-Date: Fri, 7 Aug 2020 09:39:03 +0000
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 7 Aug 2020 11:39:43 +0200
 Subject: [Buildroot] [PATCH 1/1] package/python-rpi-gpio: fix build with
  gcc 10.x
-In-Reply-To: <20200806195332.GF2186@scaer>
-References: <20200806112301.19985-1-mf@go-sys.de> <20200806195332.GF2186@scaer>
-Message-ID: <ef7d487902a545dd8269b3b414398241@go-sys.de>
+In-Reply-To: <20200807081727.17947-1-mf@go-sys.de>
+References: <20200807081727.17947-1-mf@go-sys.de>
+Message-ID: <20200807113943.0a962969@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+On Fri, 7 Aug 2020 10:17:27 +0200
+Michael Fischer <mf@go-sys.de> wrote:
 
-okay I have send a new one.
-
-Regards,
-  Michael.
-
-
-
------Urspr?ngliche Nachricht-----
-Von: Yann E. MORIN [mailto:yann.morin.1998 at free.fr] 
-Gesendet: Donnerstag, 6. August 2020 21:54
-An: Michael Fischer <mf@go-sys.de>
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] [PATCH 1/1] package/python-rpi-gpio: fix build with gcc 10.x
-
-Michael, All,
-
-On 2020-08-06 13:23 +0200, Michael Fischer spake thusly:
 > Signed-off-by: Michael Fischer <mf@go-sys.de>
 > ---
->  package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch | 8 ++++++++
->  1 file changed, 8 insertions(+)
->  create mode 100644 
-> package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
+>  ...hon-rpi-gpio-fix-build-with-gcc-10.x.patch | 113 ++++++++++++++++++
+>  1 file changed, 113 insertions(+)
+>  create mode 100644 package/python-rpi-gpio/0001-package-python-rpi-gpio-fix-build-with-gcc-10.x.patch
 > 
-> diff --git a/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch 
-> b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
+> diff --git a/package/python-rpi-gpio/0001-package-python-rpi-gpio-fix-build-with-gcc-10.x.patch b/package/python-rpi-gpio/0001-package-python-rpi-gpio-fix-build-with-gcc-10.x.patch
 > new file mode 100644
-> index 0000000000..1bac987267
+> index 0000000000..961b8b398a
 > --- /dev/null
-> +++ b/package/python-rpi-gpio/0001-Fix-build-with-gcc-10.patch
-> @@ -0,0 +1,8 @@
-> +--- a/setup.py	2019-07-21 14:49:21.000000000 +0200
-> ++++ b/setup.py	2020-08-06 10:59:51.455133324 +0200
-> +@@ -43,4 +43,4 @@
-> +       url              = 'http://sourceforge.net/projects/raspberry-gpio-python/',
-> +       classifiers      = classifiers,
-> +       packages         = ['RPi','RPi.GPIO'],
-> +-      ext_modules      = [Extension('RPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c'])])
-> ++      ext_modules      = [Extension('RPi._GPIO', [...],extra_link_args=['-Wl,--allow-multiple-definition'] )])
+> +++ b/package/python-rpi-gpio/0001-package-python-rpi-gpio-fix-build-with-gcc-10.x.patch
 
-As Thomas said in his review on another patch of yours, we really want to fix the problem, not paper over it.
+All patches need a proper commit log and description, with a
+Signed-off-by line. See:
 
-Care to actually fix the code and respin a better fix, please?
+  https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
-| conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
