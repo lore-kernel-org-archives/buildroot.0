@@ -1,70 +1,80 @@
-From: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-Date: Fri, 7 Aug 2020 02:14:36 +0000
-Subject: [Buildroot] =?gb2312?b?u9i4tDogIG9wZW5zc2ggdG90YWx5IGNhbid0IHVz?=
- =?gb2312?b?ZSBvbiByaXNjdi9hcm02NCB3aXRoIGxhdGVzdCBidWlsZHJvb3Q=?=
-In-Reply-To: <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
-References: <VI1PR07MB4590527D56A9FCB9F72F5A1AAB480@VI1PR07MB4590.eurprd07.prod.outlook.com>,
- <20200806171237.1ba34fc8@windsurf.home>,
- <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
-Message-ID: <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
+From: Vijay <techvd@gmail.com>
+Date: Thu, 6 Aug 2020 19:44:53 -0700
+Subject: [Buildroot] Having trouble getting a simple cmake based custom
+ package to wok
+Message-ID: <CAOnXkYtSxw2+0VKtNTVsD8Eb36nGfAdBNY3hnSWg2tFtM_wwAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All,
+Hi,
 
-Any one has ever used the openssh8.3 built by latest buildroot on arm64/riscv platform?
+I'm trying to add a simple, custom cmake based package to my buildroot
+build. It's just a simple hello world program so that's not very
+interesting. Here is my .mk file, which is the minimum version required I
+believe.
 
-Dose the openssh need support/dependency from the linux kernel side ?
+MYTOOLS_VERSION=1.0
+MYTOOLS_SITE=$(HOME)/Work/mytools
+MYTOOLS_SITE_METHOD=local
 
-Thanks a lot in advance.
+$(eval $(cmake-package))
 
-Joseph
-________________________________
-???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-????: 2020?8?7? 0:28
-???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; Jiaoshuaipeng at yeah.net <Jiaoshuaipeng@yeah.net>
-??: ??: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
+When I configure this and kick off the build, Cmake seems to be having
+trouble with the cross compiler. Below is the output: Is there any
+additional configuration that I need to do?
 
-Dear Thomas,
+I'm using the latest 2020.05.01 version of buildroot.
 
-Thanks for your reply.
+Any help is appreciated.
 
-I have ever tried to run "sshd --help" after linux is booting up inside the qemu. I see the similar phenomenon, the program is stuck.
+Thanks,
+Vijay
 
-So it should not "the lack of entropy in the random number generator ".
+>>> mytools 1.0 Configuring
+(mkdir -p /home/foo/buildroot/output/build/mytools-1.0/ && cd
+/home/foo/buildroot/output/build/mytools-1.0/ && rm -f CMakeCache.txt &&
+PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+ /home/foo/buildroot/output/host/bin/cmake
+/home/foo/buildroot/output/build/mytools-1.0/
+-DCMAKE_TOOLCHAIN_FILE="/home/foo/buildroot/output/host/share/buildroot/toolchainfile.cmake"
+-DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF
+-DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF
+-DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON   )
+-- The C compiler identification is GNU 8.4.0
+-- The CXX compiler identification is unknown
+-- Check for working C compiler:
+/home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc
+-- Check for working C compiler:
+/home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc --
+works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Error at CMakeLists.txt:3 (project):
+  The CMAKE_CXX_COMPILER:
 
-Thanks
+    /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-g++
 
-________________________________
-???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-????: 2020?8?6? 23:12
-???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; jiaoshuaipeng at yeah.net <jiaoshuaipeng@yeah.net>
-??: Re: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
+  is not a full path to an existing compiler tool.
 
-On Thu, 6 Aug 2020 14:31:33 +0000
-jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
+  Tell CMake where to find the compiler by setting either the environment
+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full
+path
+  to the compiler, or to the compiler name if it is in the PATH.
 
-> Any one ever use openssh8.3 on RISCV/ARM64 with latest buildroot commit ?
->
-> We found the the binary of openssh can generated successfully with the buildroot.
-> But when we run the application sshd or "ssh-keygen -a", it will be stuck.
-> I have used the GDB to find root cause why the program is stuch, i see the stach frame is corrupted.
->
-> we are using the config "qemu_aarch64_virt_defconfig" and "qemu_riscv32_virt_defconfig", and enable the openssh with "make menucofig". qemu version is 5.0.50.  linux kernel version is 5.1.12.
 
-Could this simply due to the lack of entropy in the random number
-generator ?
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- Configuring incomplete, errors occurred!
+See also
+"/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeOutput.log".
+See also
+"/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeError.log".
+make[1]: *** [package/pkg-generic.mk:259:
+/home/foo/buildroot/output/build/mytools-1.0/.stamp_configured] Error 1
+make: *** [Makefile:84: _all] Error 2
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200807/ed77da56/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200806/8af56c9a/attachment.html>
