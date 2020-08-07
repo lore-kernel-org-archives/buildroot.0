@@ -1,104 +1,59 @@
-From: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-Date: Fri, 7 Aug 2020 10:08:06 +0000
-Subject: [Buildroot] =?gb2312?b?u9i4tDogILvYuLQ6ICBvcGVuc3NoIHRvdGFseSBj?=
- =?gb2312?b?YW4ndCB1c2Ugb24gcmlzY3YvYXJtNjQgd2l0aCBsYXRlc3QgYnVpbGRyb290?=
-In-Reply-To: <20200807120037.6448d81c@gmx.net>
-References: <VI1PR07MB4590527D56A9FCB9F72F5A1AAB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
- <20200806171237.1ba34fc8@windsurf.home>
- <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
- <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>,
- <20200807120037.6448d81c@gmx.net>
-Message-ID: <VI1PR07MB4590B28AA794D730FF2D330EAB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 7 Aug 2020 12:09:01 +0200
+Subject: [Buildroot] [git commit] package/tftpd: fix build with gcc 10.x
+Message-ID: <20200807100353.6E649842C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=35b014ab8b787e0e44b503fe945b2627dbe41f09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks a lot, I will have a try, if there are some results, I will give a feedback.
+Take a patch from Fedora to fix the build of tftpd with gcc 10.x.
 
-Best Regards,
-Thanks
-Joseph
-________________________________
-???: Peter Seiderer <ps.report@gmx.net>
-????: 2020?8?7? 18:00
-???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-??: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; Jiaoshuaipeng at yeah.net <Jiaoshuaipeng@yeah.net>
-??: Re: [Buildroot] ??: openssh totaly can't use on riscv/arm64 with latest buildroot
+Fixes:
 
-Hello Joseph,
+  http://autobuild.buildroot.net/results/750ddefd2c31872fd44e9ae70d87048d8512849d/
 
-On Fri, 7 Aug 2020 02:14:36 +0000, jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...se-extern-qualifier-to-fix-gcc-10.x-build.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-> Dear All,
->
-> Any one has ever used the openssh8.3 built by latest buildroot on arm64/riscv platform?
-
-Yes, works without problems with the raspberrypi4_64_defconfig on RPi4 hardware...
-
->
-> Dose the openssh need support/dependency from the linux kernel side ?
-
-Strace of 'sshd --help' reveals a 'getrandom()' syscall..., I think
-Thomas hint according 'lack of entropy' is the right one, try with
-newer kernel or an additional entropy source (hardware random
-generator on real hardware, or for qemu haveged or rng-tools or
-something similar)...
-
-Regards,
-Peter
-
->
-> Thanks a lot in advance.
->
-> Joseph
-> ________________________________
-> ???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-> ????: 2020?8?7? 0:28
-> ???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; Jiaoshuaipeng at yeah.net <Jiaoshuaipeng@yeah.net>
-> ??: ??: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
->
-> Dear Thomas,
->
-> Thanks for your reply.
->
-> I have ever tried to run "sshd --help" after linux is booting up inside the qemu. I see the similar phenomenon, the program is stuck.
->
-> So it should not "the lack of entropy in the random number generator ".
->
-> Thanks
->
-> ________________________________
-> ???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ????: 2020?8?6? 23:12
-> ???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-> ??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; jiaoshuaipeng at yeah.net <jiaoshuaipeng@yeah.net>
-> ??: Re: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
->
-> On Thu, 6 Aug 2020 14:31:33 +0000
-> jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
->
-> > Any one ever use openssh8.3 on RISCV/ARM64 with latest buildroot commit ?
-> >
-> > We found the the binary of openssh can generated successfully with the buildroot.
-> > But when we run the application sshd or "ssh-keygen -a", it will be stuck.
-> > I have used the GDB to find root cause why the program is stuch, i see the stach frame is corrupted.
-> >
-> > we are using the config "qemu_aarch64_virt_defconfig" and "qemu_riscv32_virt_defconfig", and enable the openssh with "make menucofig". qemu version is 5.0.50.  linux kernel version is 5.1.12.
->
-> Could this simply due to the lack of entropy in the random number
-> generator ?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200807/3189e7dc/attachment.html>
+diff --git a/package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch b/package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch
+new file mode 100644
+index 0000000000..c964555347
+--- /dev/null
++++ b/package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch
+@@ -0,0 +1,29 @@
++From 6f994166d8571961a08479736ae86c5baa2bb47f Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 7 Aug 2020 12:07:45 +0200
++Subject: [PATCH] Use "extern" qualifier to fix gcc 10.x build
++
++Patch from
++https://src.fedoraproject.org/rpms/tftp/raw/master/f/tftp-hpa-5.2-gcc10.patch.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ tftp/tftp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tftp/tftp.c b/tftp/tftp.c
++index d15da22..d067f96 100644
++--- a/tftp/tftp.c
+++++ b/tftp/tftp.c
++@@ -48,7 +48,7 @@ extern int maxtimeout;
++ #define PKTSIZE    SEGSIZE+4
++ char ackbuf[PKTSIZE];
++ int timeout;
++-sigjmp_buf toplevel;
+++extern sigjmp_buf toplevel;
++ sigjmp_buf timeoutbuf;
++ 
++ static void nak(int, const char *);
++-- 
++2.26.2
++
