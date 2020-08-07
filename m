@@ -1,80 +1,56 @@
-From: Vijay <techvd@gmail.com>
-Date: Thu, 6 Aug 2020 19:44:53 -0700
-Subject: [Buildroot] Having trouble getting a simple cmake based custom
- package to wok
-Message-ID: <CAOnXkYtSxw2+0VKtNTVsD8Eb36nGfAdBNY3hnSWg2tFtM_wwAg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  7 Aug 2020 06:55:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: bump version to
+ 1.6.11
+Message-ID: <20200807045529.94389-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Reformatted license hash.
 
-I'm trying to add a simple, custom cmake based package to my buildroot
-build. It's just a simple hello world program so that's not very
-interesting. Here is my .mk file, which is the minimum version required I
-believe.
+Quoting release notes:
+https://lists.x.org/archives/xorg-announce/2020-August/003053.html
+"This release fixes a regression introduced by the security patches in
+ 1.6.10.
+ See https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues/116 for
+ details."
 
-MYTOOLS_VERSION=1.0
-MYTOOLS_SITE=$(HOME)/Work/mytools
-MYTOOLS_SITE_METHOD=local
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 9 +++++----
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-$(eval $(cmake-package))
-
-When I configure this and kick off the build, Cmake seems to be having
-trouble with the cross compiler. Below is the output: Is there any
-additional configuration that I need to do?
-
-I'm using the latest 2020.05.01 version of buildroot.
-
-Any help is appreciated.
-
-Thanks,
-Vijay
-
->>> mytools 1.0 Configuring
-(mkdir -p /home/foo/buildroot/output/build/mytools-1.0/ && cd
-/home/foo/buildroot/output/build/mytools-1.0/ && rm -f CMakeCache.txt &&
-PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
- /home/foo/buildroot/output/host/bin/cmake
-/home/foo/buildroot/output/build/mytools-1.0/
--DCMAKE_TOOLCHAIN_FILE="/home/foo/buildroot/output/host/share/buildroot/toolchainfile.cmake"
--DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF
--DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF
--DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON   )
--- The C compiler identification is GNU 8.4.0
--- The CXX compiler identification is unknown
--- Check for working C compiler:
-/home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc
--- Check for working C compiler:
-/home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc --
-works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
-CMake Error at CMakeLists.txt:3 (project):
-  The CMAKE_CXX_COMPILER:
-
-    /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-g++
-
-  is not a full path to an existing compiler tool.
-
-  Tell CMake where to find the compiler by setting either the environment
-  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full
-path
-  to the compiler, or to the compiler name if it is in the PATH.
-
-
--- Configuring incomplete, errors occurred!
-See also
-"/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeOutput.log".
-See also
-"/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeError.log".
-make[1]: *** [package/pkg-generic.mk:259:
-/home/foo/buildroot/output/build/mytools-1.0/.stamp_configured] Error 1
-make: *** [Makefile:84: _all] Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200806/8af56c9a/attachment.html>
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index d383615457..b77f98dfb1 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,5 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-July/003052.html
+-sha256  af48626989b8515c994777896bd7b7ba2bd5b1ef4e1efaee0a55d8852bbe6226  libX11-1.6.10.tar.bz2
+-sha512  ad384d8896fbe587f7fd99b0d3cc56fac6e2facbab52fa99174200d06b19dd163a483c998acf3834b3a4a3aa4de0dbbe13919a1c80e6797afe467c7075b403ff  libX11-1.6.10.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-August/003053.html
++sha256  b1cc4b802058be7e3fb438ee2490f66fcc52ac3b2a14f47a22cbf77638e33606  libX11-1.6.11.tar.bz2
++sha512  2cb4e215c1e3ccb327e02586844f8c426068536a0f472a39f12191feace607f61a6a08586f03758248199678c2f6897a984b0f1222bc0d68fd2e02702f4ce0bf  libX11-1.6.11.tar.bz2
++
+ # Locally computed
+-sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
++sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index bfc1c4166e..b0132efd31 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBX11_VERSION = 1.6.10
++XLIB_LIBX11_VERSION = 1.6.11
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
+-- 
+2.27.0
