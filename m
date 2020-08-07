@@ -1,196 +1,96 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri,  7 Aug 2020 13:22:23 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/htop: add patch for fixing build
- with gcc 10
-Message-ID: <20200807102223.1595194-1-fido_max@inbox.ru>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 7 Aug 2020 13:12:56 +0200
+Subject: [Buildroot] Root password and ssh issues
+In-Reply-To: <d0f3148a-c8d3-e5cf-68ee-030699e7abec@bootlin.com>
+References: <12918ca7-601b-3a85-67bd-4b7953840a77@bootlin.com>
+ <20200807115412.3b93cbc4@windsurf.home>
+ <d0f3148a-c8d3-e5cf-68ee-030699e7abec@bootlin.com>
+Message-ID: <20200807131256.5c691f3b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/htop/gcc-10.patch | 170 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 170 insertions(+)
- create mode 100644 package/htop/gcc-10.patch
+Hello Michael,
 
-diff --git a/package/htop/gcc-10.patch b/package/htop/gcc-10.patch
-new file mode 100644
-index 0000000000..1e2ecebb29
---- /dev/null
-+++ b/package/htop/gcc-10.patch
-@@ -0,0 +1,170 @@
-+From dfd9279f87791e36a5212726781c31fbe7110361 Mon Sep 17 00:00:00 2001
-+From: Nathan Scott <nathans@redhat.com>
-+Date: Fri, 10 Jul 2020 10:35:32 +1000
-+Subject: [PATCH] Resolve complation issues with -fno-common (default from
-+ gcc-10)
-+
-+Extends the MakeHeader script to auto-generate correct "extern"
-+function declarations in some cases that it currently does not.
-+
-+Related to https://github.com/hishamhm/htop/pull/981
-+---
-+ CRT.c                 |  4 ++--
-+ CRT.h                 | 28 ++++++++++++++--------------
-+ linux/LinuxProcess.c  |  3 ++-
-+ linux/LinuxProcess.h  | 19 ++++++++++---------
-+ scripts/MakeHeader.py |  4 +++-
-+ 5 files changed, 31 insertions(+), 27 deletions(-)
-+
-+diff --git a/CRT.c b/CRT.c
-+index ca9a10dd..088cd1a4 100644
-+--- a/CRT.c
-++++ b/CRT.c
-+@@ -131,9 +131,9 @@ typedef enum ColorElements_ {
-+    LAST_COLORELEMENT
-+ } ColorElements;
-+ 
-+-void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-++extern void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-+ 
-+-void CRT_handleSIGSEGV(int sgn);
-++extern void CRT_handleSIGSEGV(int sgn);
-+ 
-+ #define KEY_ALT(x) (KEY_F(64 - 26) + (x - 'A'))
-+ 
-+diff --git a/CRT.h b/CRT.h
-+index 933fe068..bc3fb8b7 100644
-+--- a/CRT.h
-++++ b/CRT.h
-+@@ -119,9 +119,9 @@ typedef enum ColorElements_ {
-+    LAST_COLORELEMENT
-+ } ColorElements;
-+ 
-+-void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-++extern void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-+ 
-+-void CRT_handleSIGSEGV(int sgn);
-++extern void CRT_handleSIGSEGV(int sgn);
-+ 
-+ #define KEY_ALT(x) (KEY_F(64 - 26) + (x - 'A'))
-+ 
-+@@ -140,7 +140,7 @@ extern const char **CRT_treeStr;
-+ 
-+ extern int CRT_delay;
-+ 
-+-int* CRT_colors;
-++extern int* CRT_colors;
-+ 
-+ extern int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT];
-+ 
-+@@ -150,21 +150,21 @@ extern int CRT_scrollHAmount;
-+ 
-+ extern int CRT_scrollWheelVAmount;
-+ 
-+-char* CRT_termType;
-++extern char* CRT_termType;
-+ 
-+ // TODO move color scheme to Settings, perhaps?
-+ 
-+ extern int CRT_colorScheme;
-+ 
-+-void *backtraceArray[128];
-++extern void *backtraceArray[128];
-+ 
-+ #if HAVE_SETUID_ENABLED
-+ 
-+ #define DIE(msg) do { CRT_done(); fprintf(stderr, msg); exit(1); } while(0)
-+ 
-+-void CRT_dropPrivileges();
-++extern void CRT_dropPrivileges();
-+ 
-+-void CRT_restorePrivileges();
-++extern void CRT_restorePrivileges();
-+ 
-+ #else
-+ 
-+@@ -179,18 +179,18 @@ void CRT_restorePrivileges();
-+ 
-+ // TODO: pass an instance of Settings instead.
-+ 
-+-void CRT_init(int delay, int colorScheme);
-++extern void CRT_init(int delay, int colorScheme);
-+ 
-+-void CRT_done();
-++extern void CRT_done();
-+ 
-+-void CRT_fatalError(const char* note);
-++extern void CRT_fatalError(const char* note);
-+ 
-+-int CRT_readKey();
-++extern int CRT_readKey();
-+ 
-+-void CRT_disableDelay();
-++extern void CRT_disableDelay();
-+ 
-+-void CRT_enableDelay();
-++extern void CRT_enableDelay();
-+ 
-+-void CRT_setColors(int colorScheme);
-++extern void CRT_setColors(int colorScheme);
-+ 
-+ #endif
-+
-+diff --git a/linux/LinuxProcess.h b/linux/LinuxProcess.h
-+index 6ce3037d..586aa717 100644
-+--- a/linux/LinuxProcess.h
-++++ b/linux/LinuxProcess.h
-+@@ -152,9 +153,9 @@ extern ProcessPidColumn Process_pidColumns[];
-+ 
-+ extern ProcessClass LinuxProcess_class;
-+ 
-+-LinuxProcess* LinuxProcess_new(Settings* settings);
-++extern LinuxProcess* LinuxProcess_new(Settings* settings);
-+ 
-+-void Process_delete(Object* cast);
-++extern void Process_delete(Object* cast);
-+ 
-+ /*
-+ [1] Note that before kernel 2.6.26 a process that has not asked for
-+@@ -166,19 +167,19 @@ extern io_priority;
-+ */
-+ #define LinuxProcess_effectiveIOPriority(p_) (IOPriority_class(p_->ioPriority) == IOPRIO_CLASS_NONE ? IOPriority_tuple(IOPRIO_CLASS_BE, (p_->super.nice + 20) / 5) : p_->ioPriority)
-+ 
-+-IOPriority LinuxProcess_updateIOPriority(LinuxProcess* this);
-++extern IOPriority LinuxProcess_updateIOPriority(LinuxProcess* this);
-+ 
-+-bool LinuxProcess_setIOPriority(LinuxProcess* this, IOPriority ioprio);
-++extern bool LinuxProcess_setIOPriority(LinuxProcess* this, IOPriority ioprio);
-+ 
-+ #ifdef HAVE_DELAYACCT
-+-void LinuxProcess_printDelay(float delay_percent, char* buffer, int n);
-++extern void LinuxProcess_printDelay(float delay_percent, char* buffer, int n);
-+ #endif
-+ 
-+-void LinuxProcess_writeField(Process* this, RichString* str, ProcessField field);
-++extern void LinuxProcess_writeField(Process* this, RichString* str, ProcessField field);
-+ 
-+-long LinuxProcess_compare(const void* v1, const void* v2);
-++extern long LinuxProcess_compare(const void* v1, const void* v2);
-+ 
-+-bool Process_isThread(Process* this);
-++extern bool Process_isThread(Process* this);
-+ 
-+ 
-+ #endif
-+diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
-+index 349531b8..3ef34b88 100755
-+--- a/scripts/MakeHeader.py
-++++ b/scripts/MakeHeader.py
-+@@ -54,8 +54,10 @@
-+          elif line.startswith("typedef struct"):
-+             state = SKIP
-+          elif line[-1] == "{":
-+-            out.write( line[:-2].replace("inline", "extern") + ";\n" )
-++            out.write("extern " + line[:-2].replace("inline ", "") + ";\n")
-+             state = SKIP
-++         elif line[-1] == ";":
-++            out.write("extern " + line + "\n")
-+          else:
-+             out.write( line + "\n")
-+          is_blank = False
--- 
-2.27.0
+On Fri, 7 Aug 2020 12:21:51 +0200, Michael Opdenacker <michael.opdenacker@bootlin.com> wrote:
+
+> Hi Thomas,
+> 
+> Thanks for your quick reply!
+> 
+> 
+> > What is the state of /etc/shadow with the non-working SSH login, and
+> > then the state of /etc/shadow after resetting the password with passwd
+> > ? I think I remember some issues with the expiration date/time of the
+> > password, or something like that.  
+> 
+> 
+> Here are the details
+> 
+> # ls -la /etc/shadow
+> -rw-------??? 1 1000???? 1000?????????? 190 Aug? 7? 2020 /etc/shadow
+> 
+> # cat /etc/shadow
+> root:$5$D1pz/P1l$JCZhyjzCCqmXbnPx7g/mBtNtSSKkMqgctsmV/zBmlR2:::::::
+> daemon:*:::::::
+> bin:*:::::::
+> sys:*:::::::
+> sync:*:::::::
+> mail:*:::::::
+> www-data:*:::::::
+> operator:*:::::::
+> nobody:*:::::::
+> 
+> # passwd
+> Changing password for root
+> New password:
+> Bad password: too short
+> Retype password:
+> passwd: password for root changed by root
+> 
+> # cat /etc/shadow
+> root:$1$SYGd3a37$u2RV/VOsLPqWznY4GR1jU.:13514::::::
+> daemon:*:::::::
+> bin:*:::::::
+> sys:*:::::::
+> sync:*:::::::
+> mail:*:::::::
+> www-data:*:::::::
+> operator:*:::::::
+> nobody:*:::::::
+> 
+> # ls -la /etc/shadow
+> -rw-------??? 1 1000???? 1000?????????? 174 Aug? 7? 2020 /etc/shadow
+> 
+> I set the password the "root" (both in "menuconfig" and then through the
+> "passwd" command). Only after this command can I login through ssh.
+> 
+
+No problem here to login via ssh via preset password (raspberrypi4_64_defconfig with
+additional dropbear enabled):
+
+BR2_PACKAGE_DROPBEAR=y
+BR2_PACKAGE_DROPBEAR_CLIENT=y
+BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS=y
+BR2_PACKAGE_DROPBEAR_SMALL=y
+# BR2_PACKAGE_DROPBEAR_WTMP is not set
+# BR2_PACKAGE_DROPBEAR_LASTLOG is not set
+# BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO is not set
+BR2_PACKAGE_DROPBEAR_LOCALOPTIONS_FILE=""
+
+What looks strange are your /etc/shadow permissions, should give
+root/root for user/group...
+
+What is the /var/log/messages dropbear output for failure/success?
+
+What is your config/defconfig?
+
+Regards,
+Peter
+
+> Cheers,
+> 
+> Michael.
+> 
