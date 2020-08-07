@@ -1,32 +1,45 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Fri, 07 Aug 2020 06:56:39 +0200
-Subject: [Buildroot] I need help to solve this error.
-In-Reply-To: <CA+NfSnLwCAfAkObYVhHDERk_k06D7w=5dM5b44cQuX9zSa4GHw@mail.gmail.com>
-References: <mailman.13.1596628803.136533.buildroot@busybox.net>
- <df54940149129e4a0c7e7661497c2662@umbiko.net>
- <CA+NfSnLwCAfAkObYVhHDERk_k06D7w=5dM5b44cQuX9zSa4GHw@mail.gmail.com>
-Message-ID: <c9c13fe2adb849b17252234c609c03af@umbiko.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  7 Aug 2020 07:52:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.4.9
+Message-ID: <20200807055201.687872-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog of this bugfix release:
+https://www.php.net/ChangeLog-7.php#7.4.9
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-08-06 14:53, User Name wrote:
-> Ok, thanks. Im still trying to repain some issues.
-
-You're welcome.
-
-> /bin/sh: 1: cannot create include/generated/uapi/linux/.version.h.tmp:
-> Permission denied
-
-Did you download /unpack the kernel tree with a different user? Check 
-and adjust owner and directory permissions.
-
-If you integrate the kernel build into your Buildroot instance it would 
-make your life easier.
-
-Regards,
-Andreas
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 47879eecca..d648d90c04 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
++sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1296c50c6d..6e0b5c6e8d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.8
++PHP_VERSION = 7.4.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.27.0
