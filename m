@@ -1,97 +1,70 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 06 Aug 2020 22:03:27 +0000
-Subject: [Buildroot] [Bug 13141] New: Target-finalize fail with "depmod:
- ERROR: Bad version passed"
-Message-ID: <bug-13141-163@https.bugs.busybox.net/>
+From: jiao shuaipeng <jiaoshuaipeng@outlook.com>
+Date: Fri, 7 Aug 2020 02:14:36 +0000
+Subject: [Buildroot] =?gb2312?b?u9i4tDogIG9wZW5zc2ggdG90YWx5IGNhbid0IHVz?=
+ =?gb2312?b?ZSBvbiByaXNjdi9hcm02NCB3aXRoIGxhdGVzdCBidWlsZHJvb3Q=?=
+In-Reply-To: <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
+References: <VI1PR07MB4590527D56A9FCB9F72F5A1AAB480@VI1PR07MB4590.eurprd07.prod.outlook.com>,
+ <20200806171237.1ba34fc8@windsurf.home>,
+ <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
+Message-ID: <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13141
+Dear All,
 
-            Bug ID: 13141
-           Summary: Target-finalize fail with "depmod: ERROR: Bad version
-                    passed"
-           Product: buildroot
-           Version: 2020.02.1
-          Hardware: Other
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: laurent at neko-labs.eu
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Any one has ever used the openssh8.3 built by latest buildroot on arm64/riscv platform?
 
-Hello,
+Dose the openssh need support/dependency from the linux kernel side ?
 
-I've successfully build my system up to 2020.02.
+Thanks a lot in advance.
 
-But when I started to try to build 2020.02.1 and onwards it always failed with
-"depmod: ERROR: Bad version passed" message during TARGET_FINALIZE step.
+Joseph
+________________________________
+???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
+????: 2020?8?7? 0:28
+???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; Jiaoshuaipeng at yeah.net <Jiaoshuaipeng@yeah.net>
+??: ??: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
 
-I managed to find the commit that make my build fail:
+Dear Thomas,
 
-8f5a610fe81676092a6960415717de731f43f8bf
-linux: Allow modprobe for out-of-tree modules
+Thanks for your reply.
 
-When LINUX_TARGET_FINALIZE_HOOKS are call the new LINUX_RUN_DEPMOD function
-fail in my case.
+I have ever tried to run "sshd --help" after linux is booting up inside the qemu. I see the similar phenomenon, the program is stuck.
 
-# Run depmod in a target-finalize hook, to encompass modules installed by
-# packages.
-define LINUX_RUN_DEPMOD
-        $(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
-endef
-LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
+So it should not "the lack of entropy in the random number generator ".
 
-Here is my $(LINUX_VERSION_PROBED): 4.19.78-linux4sam-6.2 
+Thanks
 
-I'm using a buildroot external tree for my board, still I've attached my
-.config file if it can help
+________________________________
+???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+????: 2020?8?6? 23:12
+???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
+??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; jiaoshuaipeng at yeah.net <jiaoshuaipeng@yeah.net>
+??: Re: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
 
-What I don't understand is that if I run manually the depmod command it pass
-successfully :/
+On Thu, 6 Aug 2020 14:31:33 +0000
+jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
 
----> builroot log:
-/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
-`/usr/bin/make  HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
--I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
--Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
-INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null`
+> Any one ever use openssh8.3 on RISCV/ARM64 with latest buildroot commit ?
+>
+> We found the the binary of openssh can generated successfully with the buildroot.
+> But when we run the application sshd or "ssh-keygen -a", it will be stuck.
+> I have used the GDB to find root cause why the program is stuch, i see the stach frame is corrupted.
+>
+> we are using the config "qemu_aarch64_virt_defconfig" and "qemu_riscv32_virt_defconfig", and enable the openssh with "make menucofig". qemu version is 5.0.50.  linux kernel version is 5.1.12.
 
-depmod: ERROR: Bad version passed make[1]:
+Could this simply due to the lack of entropy in the random number
+generator ?
 
-make: *** [Makefile:747: target-finalize] Error 1
-
-
----> My manual commands (that succeed):
-#/usr/bin/make  HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
--I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
--Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
-INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null
-
-4.19.78-linux4sam-6.2
-
-#/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
-4.19.78-linux4sam-6.2
-
-OK
-
-Any help appreciated!
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas
+--
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200807/ed77da56/attachment.html>
