@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 7 Aug 2020 11:58:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/htop: add debian patch for
- fixing build with gcc 10
-In-Reply-To: <20200807084734.1528758-1-fido_max@inbox.ru>
-References: <20200807084734.1528758-1-fido_max@inbox.ru>
-Message-ID: <20200807115808.50affa62@windsurf.home>
+Date: Fri, 7 Aug 2020 12:00:32 +0200
+Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: bump
+ version to 3.9.3
+Message-ID: <20200807095450.C526F842DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxim,
+commit: https://git.buildroot.net/buildroot/commit/?id=ca1604388a86d73c548c6e65eadd13f424685838
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for your contribution!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri,  7 Aug 2020 11:47:34 +0300
-Maxim Kochetkov <fido_max@inbox.ru> wrote:
-
-> +HTOP_PATCH = \
-> +	https://sources.debian.org/data/main/h/htop/2.2.0-3/debian/patches/gcc10.patch
-
-These Debian URLs are unfortunately not stable, so I think we generally
-prefer to bring the patch in Buildroot itself.
-
-However, isn't the patch
-https://github.com/hishamhm/htop/pull/1017/commits/dfd9279f87791e36a5212726781c31fbe7110361
-a bit more complete ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 5492ace8fb..25ab30489f 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.9.2"
++	bool "3.9.3"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -51,7 +51,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 5741b829f5..6671a4ac70 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
++sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
+ sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
