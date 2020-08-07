@@ -1,51 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 7 Aug 2020 12:00:32 +0200
-Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: bump
- version to 3.9.3
-Message-ID: <20200807095450.C526F842DF@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 7 Aug 2020 12:00:37 +0200
+Subject: [Buildroot] 
+ =?utf-8?b?5Zue5aSNOiBvcGVuc3NoIHRvdGFseSBjYW4ndCB1?=
+ =?utf-8?q?se_on_riscv/arm64_with_latest_buildroot?=
+In-Reply-To: <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
+References: <VI1PR07MB4590527D56A9FCB9F72F5A1AAB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
+ <20200806171237.1ba34fc8@windsurf.home>
+ <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
+ <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
+Message-ID: <20200807120037.6448d81c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca1604388a86d73c548c6e65eadd13f424685838
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Joseph,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, 7 Aug 2020 02:14:36 +0000, jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 5492ace8fb..25ab30489f 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.9.2"
-+	bool "3.9.3"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -51,7 +51,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 5741b829f5..6671a4ac70 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
-+sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
- sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
+> Dear All,
+> 
+> Any one has ever used the openssh8.3 built by latest buildroot on arm64/riscv platform?
+
+Yes, works without problems with the raspberrypi4_64_defconfig on RPi4 hardware...
+
+> 
+> Dose the openssh need support/dependency from the linux kernel side ?
+
+Strace of 'sshd --help' reveals a 'getrandom()' syscall..., I think
+Thomas hint according 'lack of entropy' is the right one, try with
+newer kernel or an additional entropy source (hardware random
+generator on real hardware, or for qemu haveged or rng-tools or
+something similar)...
+
+Regards,
+Peter
+
+> 
+> Thanks a lot in advance.
+> 
+> Joseph
+> ________________________________
+> ???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
+> ????: 2020?8?7? 0:28
+> ???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; Jiaoshuaipeng at yeah.net <Jiaoshuaipeng@yeah.net>
+> ??: ??: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
+> 
+> Dear Thomas,
+> 
+> Thanks for your reply.
+> 
+> I have ever tried to run "sshd --help" after linux is booting up inside the qemu. I see the similar phenomenon, the program is stuck.
+> 
+> So it should not "the lack of entropy in the random number generator ".
+> 
+> Thanks
+> 
+> ________________________________
+> ???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ????: 2020?8?6? 23:12
+> ???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
+> ??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; jiaoshuaipeng at yeah.net <jiaoshuaipeng@yeah.net>
+> ??: Re: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
+> 
+> On Thu, 6 Aug 2020 14:31:33 +0000
+> jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
+> 
+> > Any one ever use openssh8.3 on RISCV/ARM64 with latest buildroot commit ?
+> >
+> > We found the the binary of openssh can generated successfully with the buildroot.
+> > But when we run the application sshd or "ssh-keygen -a", it will be stuck.
+> > I have used the GDB to find root cause why the program is stuch, i see the stach frame is corrupted.
+> >
+> > we are using the config "qemu_aarch64_virt_defconfig" and "qemu_riscv32_virt_defconfig", and enable the openssh with "make menucofig". qemu version is 5.0.50.  linux kernel version is 5.1.12.  
+> 
+> Could this simply due to the lack of entropy in the random number
+> generator ?
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
