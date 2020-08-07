@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 7 Aug 2020 11:57:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump version to 5.4.0
-In-Reply-To: <20200806130339.20461-1-mf@go-sys.de>
-References: <20200806130339.20461-1-mf@go-sys.de>
-Message-ID: <20200807115712.28e111a9@windsurf.home>
+Date: Fri, 7 Aug 2020 11:58:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/htop: add debian patch for
+ fixing build with gcc 10
+In-Reply-To: <20200807084734.1528758-1-fido_max@inbox.ru>
+References: <20200807084734.1528758-1-fido_max@inbox.ru>
+Message-ID: <20200807115808.50affa62@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 6 Aug 2020 15:03:39 +0200
-Michael Fischer <mf@go-sys.de> wrote:
+Hello Maxim,
 
-> 0001-configure-add-without-demo-option: adapt patch to 5.4.0 version
-> 
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
-> ---
->  ...01-configure-add-without-demo-option.patch | 33 ++++++++++---------
->  package/gnuplot/gnuplot.hash                  |  8 ++---
->  package/gnuplot/gnuplot.mk                    |  2 +-
->  3 files changed, 22 insertions(+), 21 deletions(-)
+Thanks for your contribution!
 
-Applied to next, thanks.
+On Fri,  7 Aug 2020 11:47:34 +0300
+Maxim Kochetkov <fido_max@inbox.ru> wrote:
+
+> +HTOP_PATCH = \
+> +	https://sources.debian.org/data/main/h/htop/2.2.0-3/debian/patches/gcc10.patch
+
+These Debian URLs are unfortunately not stable, so I think we generally
+prefer to bring the patch in Buildroot itself.
+
+However, isn't the patch
+https://github.com/hishamhm/htop/pull/1017/commits/dfd9279f87791e36a5212726781c31fbe7110361
+a bit more complete ?
+
+Best regards,
 
 Thomas
 -- 
