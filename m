@@ -1,67 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Aug 2020 15:51:09 +0200
-Subject: [Buildroot] Root password and ssh issues
-In-Reply-To: <6b1def36-8387-624c-a51f-21d20505f500@bootlin.com>
-References: <12918ca7-601b-3a85-67bd-4b7953840a77@bootlin.com>
- <20200807115412.3b93cbc4@windsurf.home>
- <d0f3148a-c8d3-e5cf-68ee-030699e7abec@bootlin.com>
- <20200807131256.5c691f3b@gmx.net>
- <1b8d3eda-957d-184d-2bbc-da9d871ccb43@railnova.eu>
- <20200807133552.09637480@gmx.net>
- <6b1def36-8387-624c-a51f-21d20505f500@bootlin.com>
-Message-ID: <20200807155109.5399a89c@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  7 Aug 2020 19:11:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version to
+ 2.4.46
+Message-ID: <20200807171100.220432-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+Changelog: http://archive.apache.org/dist/httpd/CHANGES_2.4.46
 
-On Fri, 7 Aug 2020 15:41:04 +0200, Michael Opdenacker <michael.opdenacker@bootlin.com> wrote:
+Release notes: https://downloads.apache.org/httpd/Announcement2.4.html
 
-> Greetings,
->
-> Thanks for these useful clarifications!
->
-> On 8/7/20 1:35 PM, Peter Seiderer wrote:
-> > ...and should be fixed for uclibc by commit 'package/uclibc: defconfig:
-> > enable sha-256/512 password auth support' ([1])...
-> >
-> > By the way, maybe it would be nice if the buildroot password hash
-> > selection although changes the busybox default via
-> > busybox/.config CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="md5"?
-> >
-> > Regards,
-> > Peter
-> >
-> > [1] https://git.buildroot.net/buildroot/commit/?id=bdd8362a88428ed1c04fc6f4bbcbf7692b2a2b39
->
-> Right, I should have mentioned that I'm using an external uClibc
-> toolchain built by crosstool-ng.
->
-> Do I understand well that the trouble comes from Dropbear (not BusyBox)
-> supporting only MD5 in /etc/shadow, at least when built with my toolchain?
+Fixes CVE-2020-9490, CVE-2020-11984 & CVE-2020-11993:
+https://httpd.apache.org/security/vulnerabilities_24.html
 
-Yes, dropbear trouble, but by indirection of the used libc (here uclibc),
-if possible take a look at your crosstol-ng uclibc .config file and search
-for (for full support):
+Added all hashes provided by upstream.
 
-UCLIBC_HAS_SHA256_CRYPT_IMPL=y
-UCLIBC_HAS_SHA512_CRYPT_IMPL=y
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/apache/apache.hash | 10 ++++++++--
+ package/apache/apache.mk   |  2 +-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-And adjust and rebuild accordingly...
-
-And/or try to lower the buildroot default passoword hash from sha512 to sha256
-in case your uclibc supports sha256 (you can check by testing ssh login after
-setting the password with passwd -a sha256)...
-
-Regards,
-Peter
-
-
->
-> Thanks again,
->
-> Michael.
->
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 7b0e4ad8e7..4fe457d701 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,10 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
+-sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.md5
++md5  7d661ea5e736dac5e2761d9f49fe8361  httpd-2.4.46.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha1
++sha1  1b7cd10ff3a2a07a576d77e34f0204d95fa4aceb  httpd-2.4.46.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha256
++sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha512
++sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 068f36e325..203d637fbb 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.43
++APACHE_VERSION = 2.4.46
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
+-- 
+2.27.0
