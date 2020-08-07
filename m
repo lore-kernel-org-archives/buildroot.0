@@ -1,86 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 7 Aug 2020 12:00:37 +0200
-Subject: [Buildroot] 
- =?utf-8?b?5Zue5aSNOiBvcGVuc3NoIHRvdGFseSBjYW4ndCB1?=
- =?utf-8?q?se_on_riscv/arm64_with_latest_buildroot?=
-In-Reply-To: <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
-References: <VI1PR07MB4590527D56A9FCB9F72F5A1AAB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
- <20200806171237.1ba34fc8@windsurf.home>
- <VI1PR07MB4590B24946F9A63C352677A2AB480@VI1PR07MB4590.eurprd07.prod.outlook.com>
- <VI1PR07MB459024DCDA64676698CAC4F9AB490@VI1PR07MB4590.eurprd07.prod.outlook.com>
-Message-ID: <20200807120037.6448d81c@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 7 Aug 2020 12:02:34 +0200
+Subject: [Buildroot] [git commit] package/feh: update hash of license file
+Message-ID: <20200807095759.718C184204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph,
+commit: https://git.buildroot.net/buildroot/commit/?id=b14f0e5810153a5d062b5eb82a9c244b3375cffc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 7 Aug 2020 02:14:36 +0000, jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
+In commit 8d8caaf0c295e60fadc0dc14039376bfecb379fa ("package/feh: bump
+version to 3.4.1"), feh was bumped from 3.4 to 3.4.1.
 
-> Dear All,
-> 
-> Any one has ever used the openssh8.3 built by latest buildroot on arm64/riscv platform?
+However, the hash of the license file was not updated, even though the
+COPYING file had seen a copyright year update:
 
-Yes, works without problems with the raspberrypi4_64_defconfig on RPi4 hardware...
+-Copyright (C) 2010-2018 Daniel Friesel.
++Copyright (C) 2010-2020 Daniel Friesel.
 
-> 
-> Dose the openssh need support/dependency from the linux kernel side ?
+Let's update the license file hash to fix legal-info.
 
-Strace of 'sshd --help' reveals a 'getrandom()' syscall..., I think
-Thomas hint according 'lack of entropy' is the right one, try with
-newer kernel or an additional entropy source (hardware random
-generator on real hardware, or for qemu haveged or rng-tools or
-something similar)...
+Fixes:
 
-Regards,
-Peter
+  http://autobuild.buildroot.net/results/991fb57bc99c2f44a00c846688f1b3e017b87724/
 
-> 
-> Thanks a lot in advance.
-> 
-> Joseph
-> ________________________________
-> ???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-> ????: 2020?8?7? 0:28
-> ???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; Jiaoshuaipeng at yeah.net <Jiaoshuaipeng@yeah.net>
-> ??: ??: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
-> 
-> Dear Thomas,
-> 
-> Thanks for your reply.
-> 
-> I have ever tried to run "sshd --help" after linux is booting up inside the qemu. I see the similar phenomenon, the program is stuck.
-> 
-> So it should not "the lack of entropy in the random number generator ".
-> 
-> Thanks
-> 
-> ________________________________
-> ???: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ????: 2020?8?6? 23:12
-> ???: jiao shuaipeng <jiaoshuaipeng@outlook.com>
-> ??: buildroot at busybox.net <buildroot@busybox.net>; shuaipeng.jiao at montage-tech.com <shuaipeng.jiao@montage-tech.com>; jiaoshuaipeng at yeah.net <jiaoshuaipeng@yeah.net>
-> ??: Re: [Buildroot] openssh totaly can't use on riscv/arm64 with latest buildroot
-> 
-> On Thu, 6 Aug 2020 14:31:33 +0000
-> jiao shuaipeng <jiaoshuaipeng@outlook.com> wrote:
-> 
-> > Any one ever use openssh8.3 on RISCV/ARM64 with latest buildroot commit ?
-> >
-> > We found the the binary of openssh can generated successfully with the buildroot.
-> > But when we run the application sshd or "ssh-keygen -a", it will be stuck.
-> > I have used the GDB to find root cause why the program is stuch, i see the stach frame is corrupted.
-> >
-> > we are using the config "qemu_aarch64_virt_defconfig" and "qemu_riscv32_virt_defconfig", and enable the openssh with "make menucofig". qemu version is 5.0.50.  linux kernel version is 5.1.12.  
-> 
-> Could this simply due to the lack of entropy in the random number
-> generator ?
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/feh/feh.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index eea32dbca5..20916af640 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+ sha256 782463034ab0135bc8438515191f986db23a79d502154d23a7c07a7574907b7b  feh-3.4.1.tar.bz2
+-sha256 a289176a74d8e5d071456df5d4ee629aeb86f8eeeb6570076fe126f182c6b91d  COPYING
++sha256 2c3a31327dc3cc3331aa6e759d378e4f66d0ece7174a0d5aa137f3cba4bf0509  COPYING
