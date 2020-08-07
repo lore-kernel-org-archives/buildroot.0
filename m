@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 7 Aug 2020 11:54:12 +0200
-Subject: [Buildroot] Root password and ssh issues
-In-Reply-To: <12918ca7-601b-3a85-67bd-4b7953840a77@bootlin.com>
-References: <12918ca7-601b-3a85-67bd-4b7953840a77@bootlin.com>
-Message-ID: <20200807115412.3b93cbc4@windsurf.home>
+Date: Fri, 7 Aug 2020 11:57:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnuplot: bump version to 5.4.0
+In-Reply-To: <20200806130339.20461-1-mf@go-sys.de>
+References: <20200806130339.20461-1-mf@go-sys.de>
+Message-ID: <20200807115712.28e111a9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 7 Aug 2020 11:51:02 +0200
-Michael Opdenacker <michael.opdenacker@bootlin.com> wrote:
+On Thu, 6 Aug 2020 15:03:39 +0200
+Michael Fischer <mf@go-sys.de> wrote:
 
-> Manuel and I have observed a strange phenomenon at least with Buildroot
-> 2020.02.4...
+> 0001-configure-add-without-demo-option: adapt patch to 5.4.0 version
 > 
-> When we generate a root filesystem with Dropbear for ssh, and set the
-> root password through BR2_TARGET_GENERIC_ROOT_PASSWD, we cannot manage
-> to login through ssh.
-> 
-> However, we can login as root on the console with this password, proving
-> that the password was valid. If we then use the "passwd" command from
-> the command line on the target to set the same password again, ssh
-> access starts to work!
-> 
-> Would you have an explanation for this behavior?
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
+> ---
+>  ...01-configure-add-without-demo-option.patch | 33 ++++++++++---------
+>  package/gnuplot/gnuplot.hash                  |  8 ++---
+>  package/gnuplot/gnuplot.mk                    |  2 +-
+>  3 files changed, 22 insertions(+), 21 deletions(-)
 
-What is the state of /etc/shadow with the non-working SSH login, and
-then the state of /etc/shadow after resetting the password with passwd
-? I think I remember some issues with the expiration date/time of the
-password, or something like that.
+Applied to next, thanks.
 
 Thomas
 -- 
