@@ -1,256 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Aug 2020 22:07:29 +0200
-Subject: [Buildroot] [PATCH v2] package/f2fs-tools: fsck should use
- correct returncodes
-In-Reply-To: <20200807092002.155878-1-nolange79@gmail.com>
-References: <20200807092002.155878-1-nolange79@gmail.com>
-Message-ID: <20200807200729.GM2186@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 7 Aug 2020 22:56:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version
+ to 2.4.46
+In-Reply-To: <20200807192657.GJ2186@scaer>
+References: <20200807171100.220432-1-bernd.kuhls@t-online.de>
+ <20200807192657.GJ2186@scaer>
+Message-ID: <20200807225632.41b7c8d0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Hello Yann, *,
 
-On 2020-08-07 11:20 +0200, Norbert Lange spake thusly:
-> fsck.f2fs does not implement the returncodes from the fsck interface.
-> This is particularly bad if systemd is used with a root f2fs partition,
-> as it will interpret the rc as order to reboot.
-> 
-> for thread & pending upstream fix see:
-> https://sourceforge.net/p/linux-f2fs/mailman/message/37079401/
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+On Fri, 7 Aug 2020 21:26:57 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Applied to master, thanks.
+> Bernd, All,
+>
+> On 2020-08-07 19:11 +0200, Bernd Kuhls spake thusly:
+> > Changelog: http://archive.apache.org/dist/httpd/CHANGES_2.4.46
+> >
+> > Release notes: https://downloads.apache.org/httpd/Announcement2.4.html
+> >
+> > Fixes CVE-2020-9490, CVE-2020-11984 & CVE-2020-11993:
+> > https://httpd.apache.org/security/vulnerabilities_24.html
+> >
+> > Added all hashes provided by upstream.
+>
+> md5 and sha1 are broken nowadays, so adding them is not interesting at
+> all, when there are better hashes available, which is the case here.
+
+If this handling is the new rule, then it is time to update the docs
+stating 'If upstream provides more than one type of hash (e.g. sha1 and sha512),
+then it is best to add all those hashes in the .hash file.'?
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
-> v2:
-> - use revised upstream patch
-> - redo the rebase/patch with git
-> - keep the commit intact with author info etc
-> ---
->  .../0002-fsck.f2fs-correct-return-value.patch | 195 ++++++++++++++++++
->  1 file changed, 195 insertions(+)
->  create mode 100644 package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch
-> 
-> diff --git a/package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch b/package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch
-> new file mode 100644
-> index 0000000000..b420e27a0e
-> --- /dev/null
-> +++ b/package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch
-> @@ -0,0 +1,195 @@
-> +From eee12fe5e2e6c5f71bc7cbe25a608b730fd5362e Mon Sep 17 00:00:00 2001
-> +From: Chao Yu <yuchao0@huawei.com>
-> +Date: Fri, 7 Aug 2020 10:02:31 +0800
-> +Subject: [PATCH] fsck.f2fs: correct return value
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +As Norbert Lange reported:
-> +
-> +"
-> +$ fsck.f2fs -a /dev/mmcblk0p5; echo $?
-> +Info: Fix the reported corruption.
-> +Info: Mounted device!
-> +Info: Check FS only on RO mounted device
-> +Error: Failed to open the device!
-> +255
-> +"
-> +
-> +Michael La? reminds:
-> +
-> +"
-> +I think the return value is exactly the problem here. See fsck(8) (
-> +https://linux.die.net/man/8/fsck) which specifies the return values.
-> +Systemd looks at these and decides how to proceed:
-> +
-> +https://github.com/systemd/systemd/blob/a859abf062cef1511e4879c4ee39c6036ebeaec8/src/fsck/fsck.c#L407
-> +
-> +That means, if fsck.f2fs returns 255, then
-> +the FSCK_SYSTEM_SHOULD_REBOOT bit is set and systemd will reboot.
-> +"
-> +
-> +So the problem here is fsck.f2fs didn't return correct value to userspace
-> +apps, result in later unexpected behavior of rebooting, let's fix this.
-> +
-> +Reported-by: Norbert Lange <nolange79@gmail.com>
-> +Reported-by: Michael La? <bevan@bi-co.net>
-> +Signed-off-by: Chao Yu <yuchao0@huawei.com>
-> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> +---
-> + fsck/fsck.h | 11 +++++++++++
-> + fsck/main.c | 45 +++++++++++++++++++++++++++++++--------------
-> + 2 files changed, 42 insertions(+), 14 deletions(-)
-> +
-> +diff --git a/fsck/fsck.h b/fsck/fsck.h
-> +index ccf4a39..c8aeb06 100644
-> +--- a/fsck/fsck.h
-> ++++ b/fsck/fsck.h
-> +@@ -13,6 +13,17 @@
-> + 
-> + #include "f2fs.h"
-> + 
-> ++enum {
-> ++	FSCK_SUCCESS                 = 0,
-> ++	FSCK_ERROR_CORRECTED         = 1 << 0,
-> ++	FSCK_SYSTEM_SHOULD_REBOOT    = 1 << 1,
-> ++	FSCK_ERRORS_LEFT_UNCORRECTED = 1 << 2,
-> ++	FSCK_OPERATIONAL_ERROR       = 1 << 3,
-> ++	FSCK_USAGE_OR_SYNTAX_ERROR   = 1 << 4,
-> ++	FSCK_USER_CANCELLED          = 1 << 5,
-> ++	FSCK_SHARED_LIB_ERROR        = 1 << 7,
-> ++};
-> ++
-> + struct quota_ctx;
-> + 
-> + #define FSCK_UNMATCHED_EXTENT		0x00000001
-> +diff --git a/fsck/main.c b/fsck/main.c
-> +index 8c62a14..b0f2ec3 100644
-> +--- a/fsck/main.c
-> ++++ b/fsck/main.c
-> +@@ -591,7 +591,7 @@ void f2fs_parse_options(int argc, char *argv[])
-> + 	error_out(prog);
-> + }
-> + 
-> +-static void do_fsck(struct f2fs_sb_info *sbi)
-> ++static int do_fsck(struct f2fs_sb_info *sbi)
-> + {
-> + 	struct f2fs_checkpoint *ckpt = F2FS_CKPT(sbi);
-> + 	u32 flag = le32_to_cpu(ckpt->ckpt_flags);
-> +@@ -614,7 +614,7 @@ static void do_fsck(struct f2fs_sb_info *sbi)
-> + 			} else {
-> + 				MSG(0, "[FSCK] F2FS metadata   [Ok..]");
-> + 				fsck_free(sbi);
-> +-				return;
-> ++				return FSCK_SUCCESS;
-> + 			}
-> + 
-> + 			if (!c.ro)
-> +@@ -646,7 +646,7 @@ static void do_fsck(struct f2fs_sb_info *sbi)
-> + 		ret = quota_init_context(sbi);
-> + 		if (ret) {
-> + 			ASSERT_MSG("quota_init_context failure: %d", ret);
-> +-			return;
-> ++			return FSCK_OPERATIONAL_ERROR;
-> + 		}
-> + 	}
-> + 	fsck_chk_orphan_node(sbi);
-> +@@ -654,8 +654,14 @@ static void do_fsck(struct f2fs_sb_info *sbi)
-> + 			F2FS_FT_DIR, TYPE_INODE, &blk_cnt, NULL);
-> + 	fsck_chk_quota_files(sbi);
-> + 
-> +-	fsck_verify(sbi);
-> ++	ret = fsck_verify(sbi);
-> + 	fsck_free(sbi);
-> ++
-> ++	if (!c.bug_on)
-> ++		return FSCK_SUCCESS;
-> ++	if (!ret)
-> ++		return FSCK_ERROR_CORRECTED;
-> ++	return FSCK_ERRORS_LEFT_UNCORRECTED;
-> + }
-> + 
-> + static void do_dump(struct f2fs_sb_info *sbi)
-> +@@ -763,7 +769,7 @@ static int do_sload(struct f2fs_sb_info *sbi)
-> + int main(int argc, char **argv)
-> + {
-> + 	struct f2fs_sb_info *sbi;
-> +-	int ret = 0;
-> ++	int ret = 0, ret2;
-> + 	clock_t start = clock();
-> + 
-> + 	f2fs_init_configuration();
-> +@@ -771,10 +777,15 @@ int main(int argc, char **argv)
-> + 	f2fs_parse_options(argc, argv);
-> + 
-> + 	if (c.func != DUMP && f2fs_devs_are_umounted() < 0) {
-> +-		if (errno == EBUSY)
-> ++		if (errno == EBUSY) {
-> ++			if (c.func == FSCK)
-> ++				return FSCK_OPERATIONAL_ERROR;
-> + 			return -1;
-> ++		}
-> + 		if (!c.ro || c.func == DEFRAG) {
-> + 			MSG(0, "\tError: Not available on mounted device!\n");
-> ++			if (c.func == FSCK)
-> ++				return FSCK_OPERATIONAL_ERROR;
-> + 			return -1;
-> + 		}
-> + 
-> +@@ -789,8 +800,11 @@ int main(int argc, char **argv)
-> + 	}
-> + 
-> + 	/* Get device */
-> +-	if (f2fs_get_device_info() < 0)
-> ++	if (f2fs_get_device_info() < 0) {
-> ++		if (c.func == FSCK)
-> ++			return FSCK_OPERATIONAL_ERROR;
-> + 		return -1;
-> ++	}
-> + 
-> + fsck_again:
-> + 	memset(&gfsck, 0, sizeof(gfsck));
-> +@@ -808,7 +822,7 @@ fsck_again:
-> + 
-> + 	switch (c.func) {
-> + 	case FSCK:
-> +-		do_fsck(sbi);
-> ++		ret = do_fsck(sbi);
-> + 		break;
-> + #ifdef WITH_DUMP
-> + 	case DUMP:
-> +@@ -856,8 +870,8 @@ fsck_again:
-> + 			char ans[255] = {0};
-> + retry:
-> + 			printf("Do you want to fix this partition? [Y/N] ");
-> +-			ret = scanf("%s", ans);
-> +-			ASSERT(ret >= 0);
-> ++			ret2 = scanf("%s", ans);
-> ++			ASSERT(ret2 >= 0);
-> + 			if (!strcasecmp(ans, "y"))
-> + 				c.fix_on = 1;
-> + 			else if (!strcasecmp(ans, "n"))
-> +@@ -869,12 +883,15 @@ retry:
-> + 				goto fsck_again;
-> + 		}
-> + 	}
-> +-	ret = f2fs_finalize_device();
-> +-	if (ret < 0)
-> +-		return ret;
-> ++	ret2 = f2fs_finalize_device();
-> ++	if (ret2) {
-> ++		if (c.func == FSCK)
-> ++			return FSCK_OPERATIONAL_ERROR;
-> ++		return ret2;
-> ++	}
-> + 
-> + 	printf("\nDone: %lf secs\n", (clock() - start) / (double)CLOCKS_PER_SEC);
-> +-	return 0;
-> ++	return ret;
-> + 
-> + out_err:
-> + 	if (sbi->ckpt)
-> +-- 
-> +2.27.0
-> +
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> So I've dropped md5 and sha1, and used a single comment to refer to both
+> upstream locations.
+>
+> Applied to master, thanks.
+>
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > ---
+> >  package/apache/apache.hash | 10 ++++++++--
+> >  package/apache/apache.mk   |  2 +-
+> >  2 files changed, 9 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+> > index 7b0e4ad8e7..4fe457d701 100644
+> > --- a/package/apache/apache.hash
+> > +++ b/package/apache/apache.hash
+> > @@ -1,4 +1,10 @@
+> > -# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
+> > -sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
+> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.md5
+> > +md5  7d661ea5e736dac5e2761d9f49fe8361  httpd-2.4.46.tar.bz2
+> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha1
+> > +sha1  1b7cd10ff3a2a07a576d77e34f0204d95fa4aceb  httpd-2.4.46.tar.bz2
+> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha256
+> > +sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
+> > +# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.sha512
+> > +sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
+> >  # Locally computed
+> >  sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+> > diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+> > index 068f36e325..203d637fbb 100644
+> > --- a/package/apache/apache.mk
+> > +++ b/package/apache/apache.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >
+> > -APACHE_VERSION = 2.4.43
+> > +APACHE_VERSION = 2.4.46
+> >  APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+> >  APACHE_SITE = http://archive.apache.org/dist/httpd
+> >  APACHE_LICENSE = Apache-2.0
+> > --
+> > 2.27.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
