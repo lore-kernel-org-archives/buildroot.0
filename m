@@ -1,65 +1,145 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 7 Aug 2020 21:40:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/smstools3: fix build with gcc
- 10.x
-In-Reply-To: <20200807125852.3739-1-mf@go-sys.de>
-References: <20200807125852.3739-1-mf@go-sys.de>
-Message-ID: <20200807194001.GK2186@scaer>
+Date: Fri, 7 Aug 2020 21:41:48 +0200
+Subject: [Buildroot] [git commit] package/python-rpi-gpio: fix build with
+ gcc 10.x
+Message-ID: <20200807194002.2A7B583FE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2dbf9fd2accc8681c24ef4cd174c368d68b0e06e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-08-07 14:58 +0200, Michael Fischer spake thusly:
-> 0001-fix-build-with-gcc-10.x.patch: Add patch to fix build with gcc 10.x
-> Fetch from: https://salsa.debian.org/debian-mobcom-team/smstools/-/blob/57a358a9eebbe2ca5639cc526f7027944ed95ea1/debian/patches/gcc10.patch
-> 
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
+0001-fix-build-with-gcc-10.x.patch: Add patch to fix build with gcc 10.x
 
-Applied to master, thanks.
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-fix-build-with-gcc-10.x.patch             | 117 +++++++++++++++++++++
+ 1 file changed, 117 insertions(+)
 
-But see a little nit, below...
-
-> ---
->  .../0002-fix-build-with-gcc-10.x.patch        | 753 ++++++++++++++++++
->  1 file changed, 753 insertions(+)
->  create mode 100644 package/smstools3/0002-fix-build-with-gcc-10.x.patch
-> 
-> diff --git a/package/smstools3/0002-fix-build-with-gcc-10.x.patch b/package/smstools3/0002-fix-build-with-gcc-10.x.patch
-> new file mode 100644
-> index 0000000000..3ef6bba0f0
-> --- /dev/null
-> +++ b/package/smstools3/0002-fix-build-with-gcc-10.x.patch
-> @@ -0,0 +1,753 @@
-> +Description: fix of FTBFS with gcc10
-> +Author: Thorsten Alteholz <debian@alteholz.de>
-> +Index: smstools/src/smsd_cfg.h
-
-This 'Index:' line belongs...
-
-> +Fetch from: <https://salsa.debian.org/debian-mobcom-team/smstools/-/blob/57a358a9eebbe2ca5639cc526f7027944ed95ea1/debian/patches/gcc10.patch>
-> +
-> +Signed-off-by: Michael Fischer <mf@go-sys.de>
-> +
-
-... here, just before that '====' line:
-
-> +===================================================================
-> +--- smstools.orig/src/smsd_cfg.h	2020-08-05 19:02:50.536596441 +0000
-> ++++ smstools/src/smsd_cfg.h	2020-08-05 19:33:22.915005150 +0000
-
-Fixed when applying, thanks.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-rpi-gpio/0001-fix-build-with-gcc-10.x.patch b/package/python-rpi-gpio/0001-fix-build-with-gcc-10.x.patch
+new file mode 100644
+index 0000000000..7c7b772894
+--- /dev/null
++++ b/package/python-rpi-gpio/0001-fix-build-with-gcc-10.x.patch
+@@ -0,0 +1,117 @@
++Description: This patch fixes the "multiple definition of" errors with gcc10
++
++Signed-off-by: Michael Fischer <mf@go-sys.de>
++
++diff -purN python-rpi-gpio.org/source/common.h python-rpi-gpio/source/common.h
++--- python-rpi-gpio.org/source/common.h	2019-07-21 14:41:22.000000000 +0200
+++++ python-rpi-gpio/source/common.h	2020-08-07 09:31:33.948575964 +0200
++@@ -30,14 +30,14 @@ SOFTWARE.
++ #define I2C          42
++ #define PWM          43
++ 
++-int gpio_mode;
++-const int pin_to_gpio_rev1[41];
++-const int pin_to_gpio_rev2[41];
++-const int pin_to_gpio_rev3[41];
++-const int (*pin_to_gpio)[41];
++-int gpio_direction[54];
++-rpi_info rpiinfo;
++-int setup_error;
++-int module_setup;
+++extern int gpio_mode;
+++extern const int pin_to_gpio_rev1[41];
+++extern const int pin_to_gpio_rev2[41];
+++extern const int pin_to_gpio_rev3[41];
+++extern const int (*pin_to_gpio)[41];
+++extern int gpio_direction[54];
+++extern rpi_info rpiinfo;
+++extern int setup_error;
+++extern int module_setup;
++ int check_gpio_priv(void);
++ int get_gpio_number(int channel, unsigned int *gpio);
++diff -purN python-rpi-gpio.org/source/constants.h python-rpi-gpio/source/constants.h
++--- python-rpi-gpio.org/source/constants.h	2019-07-21 14:41:22.000000000 +0200
+++++ python-rpi-gpio/source/constants.h	2020-08-07 09:32:15.522196618 +0200
++@@ -23,22 +23,22 @@ SOFTWARE.
++ #define PY_PUD_CONST_OFFSET 20
++ #define PY_EVENT_CONST_OFFSET 30
++ 
++-PyObject *high;
++-PyObject *low;
++-PyObject *input;
++-PyObject *output;
++-PyObject *pwm;
++-PyObject *serial;
++-PyObject *i2c;
++-PyObject *spi;
++-PyObject *unknown;
++-PyObject *board;
++-PyObject *bcm;
++-PyObject *pud_off;
++-PyObject *pud_up;
++-PyObject *pud_down;
++-PyObject *rising_edge;
++-PyObject *falling_edge;
++-PyObject *both_edge;
+++extern PyObject *high;
+++extern PyObject *low;
+++extern PyObject *input;
+++extern PyObject *output;
+++extern PyObject *pwm;
+++extern PyObject *serial;
+++extern PyObject *i2c;
+++extern PyObject *spi;
+++extern PyObject *unknown;
+++extern PyObject *board;
+++extern PyObject *bcm;
+++extern PyObject *pud_off;
+++extern PyObject *pud_up;
+++extern PyObject *pud_down;
+++extern PyObject *rising_edge;
+++extern PyObject *falling_edge;
+++extern PyObject *both_edge;
++ 
++ void define_constants(PyObject *module);
++diff -purN python-rpi-gpio.org/source/event_gpio.c python-rpi-gpio/source/event_gpio.c
++--- python-rpi-gpio.org/source/event_gpio.c	2019-07-21 14:41:22.000000000 +0200
+++++ python-rpi-gpio/source/event_gpio.c	2020-08-07 09:42:05.564483136 +0200
++@@ -57,7 +57,7 @@ struct callback
++ };
++ struct callback *callbacks = NULL;
++ 
++-pthread_t threads;
+++static pthread_t threads;
++ int event_occurred[54] = { 0 };
++ int thread_running = 0;
++ int epfd_thread = -1;
++diff -purN python-rpi-gpio.org/source/py_pwm.h python-rpi-gpio/source/py_pwm.h
++--- python-rpi-gpio.org/source/py_pwm.h	2019-07-21 14:41:22.000000000 +0200
+++++ python-rpi-gpio/source/py_pwm.h	2020-08-07 09:38:49.445646807 +0200
++@@ -20,5 +20,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWAR
++ SOFTWARE.
++ */
++ 
++-PyTypeObject PWMType;
+++extern PyTypeObject PWMType;
++ PyTypeObject *PWM_init_PWMType(void);
++diff -purN python-rpi-gpio.org/source/soft_pwm.c python-rpi-gpio/source/soft_pwm.c
++--- python-rpi-gpio.org/source/soft_pwm.c	2019-07-21 14:41:22.000000000 +0200
+++++ python-rpi-gpio/source/soft_pwm.c	2020-08-07 09:42:40.753160437 +0200
++@@ -25,7 +25,7 @@ SOFTWARE.
++ #include <time.h>
++ #include "c_gpio.h"
++ #include "soft_pwm.h"
++-pthread_t threads;
+++static pthread_t threads;
++ 
++ struct pwm
++ {
++diff -purN python-rpi-gpio.org/source/soft_pwm.h python-rpi-gpio/source/soft_pwm.h
++--- python-rpi-gpio.org/source/soft_pwm.h	2019-07-21 14:41:22.000000000 +0200
+++++ python-rpi-gpio/source/soft_pwm.h	2020-08-07 09:39:25.916811352 +0200
++@@ -26,4 +26,4 @@ void pwm_set_duty_cycle(unsigned int gpi
++ void pwm_set_frequency(unsigned int gpio, float freq);
++ void pwm_start(unsigned int gpio);
++ void pwm_stop(unsigned int gpio);
++-int pwm_exists(unsigned int gpio);
+++extern int pwm_exists(unsigned int gpio);
