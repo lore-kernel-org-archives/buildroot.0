@@ -1,32 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 20:01:19 +0200
-Subject: [Buildroot] [git commit branch/next] configs/nitrogen7: Linux needs
- host-openssl
-Message-ID: <20200812144328.E4AAC81255@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 8 Aug 2020 14:23:24 +0200
+Subject: [Buildroot] [git commit branch/next] package/efl: avoid
+ optimization flags added by meson
+Message-ID: <20200812144328.82FAA85F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f0c58058208296dde6a2d719f4636640c962108
+commit: https://git.buildroot.net/buildroot/commit/?id=caa9aac9054972a115484bafcb176952c1c6543d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Efl's meson build system add some optimization flags related to cpu
+architecture [1]. In the context of Buildroot, such optimization flags
+are already provided by the toolchain wrapper.
+
+For ppc, efl's meson expect the altivec support is available but this is
+not the case for ppc e500 cpus.
+
+Disable native-arch-optimization option to avoid such issue.
+
+[1] https://git.enlightenment.org/core/efl.git/tree/meson.build?h=v1.24.3#n165
+
 Fixes:
+http://autobuild.buildroot.net/results/dd2586be32c25d93eebfaa743c1f7d36915bb0d7
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/674934100
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/nitrogen7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/efl/efl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index 2a1ff2ecc1..4178ca9787 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -39,3 +39,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-nitrogen7 imx7d-nitrogen7-m4"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 6dc38b1626..b8c4a506ad 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -29,6 +29,7 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+ # elua=true: build elua for the target.
+ # sdl=false: disable sdl2 support.
+ # embedded-lz4=false: use liblz4 from lz4 package.
++# native-arch-optimization=false: avoid optimization flags added by meson.
+ # network-backend=none: disable connman networkmanager.
+ EFL_CONF_OPTS = \
+ 	-Davahi=false \
+@@ -39,6 +40,7 @@ EFL_CONF_OPTS = \
+ 	-Delua=true \
+ 	-Dembedded-lz4=false \
+ 	-Dlua-interpreter=luajit \
++	-Dnative-arch-optimization=false \
+ 	-Dnetwork-backend=none \
+ 	-Dpixman=false \
+ 	-Dsdl=false \
