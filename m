@@ -1,36 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:44:48 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python3-cython: new package
-In-Reply-To: <20200728092657.2354762-1-fontaine.fabrice@gmail.com>
-References: <20200728092657.2354762-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200808234448.7d1903e7@windsurf.home>
+From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
+Date: Sat,  8 Aug 2020 23:48:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/watchdog: new package
+Message-ID: <20200808214815.1358140-1-alejandro.gonzalez.correo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Jul 2020 11:26:56 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+watchdog is a flexible watchdog daemon that improves on the already
+available Busybox watchdog daemon by providing more advanced features,
+like defining custom system status checks and executing repair scripts
+to react upon invariants that don't hold.
 
-> The host-setools package needs to be built for the host-python3, even
-> when the target Python is not necessarily Python 3.x. Since it depends
-> on host-python-cython, we need a Python 3 variant of it, which this
-> patch introduces.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-cython/python-cython.mk     |  1 +
->  package/python3-cython/python3-cython.hash |  1 +
->  package/python3-cython/python3-cython.mk   | 16 ++++++++++++++++
->  3 files changed, 18 insertions(+)
->  create mode 120000 package/python3-cython/python3-cython.hash
->  create mode 100644 package/python3-cython/python3-cython.mk
+Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+---
+ package/Config.in              |  1 +
+ package/watchdog/Config.in     | 10 ++++++++++
+ package/watchdog/watchdog.hash |  3 +++
+ package/watchdog/watchdog.mk   | 13 +++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/watchdog/Config.in
+ create mode 100644 package/watchdog/watchdog.hash
+ create mode 100644 package/watchdog/watchdog.mk
 
-Both patches applied to master. Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..768e99d9ed 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2421,6 +2421,7 @@ menu "System tools"
+ 	source "package/tpm2-totp/Config.in"
+ 	source "package/unscd/Config.in"
+ 	source "package/util-linux/Config.in"
++	source "package/watchdog/Config.in"
+ 	source "package/xdg-dbus-proxy/Config.in"
+ 	source "package/xen/Config.in"
+ 	source "package/xvisor/Config.in"
+diff --git a/package/watchdog/Config.in b/package/watchdog/Config.in
+new file mode 100644
+index 0000000000..bf485034d7
+--- /dev/null
++++ b/package/watchdog/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WATCHDOG
++	bool "watchdog"
++	depends on BR2_USE_MMU
++	help
++	  Watchdog is a daemon that periodically pets a watchdog device
++	  if the configured system status checks pass. If they do not,
++	  the daemon may execute repair commands, shutdown the system or
++	  reboot it.
++
++	  https://sourceforge.net/projects/watchdog/
+diff --git a/package/watchdog/watchdog.hash b/package/watchdog/watchdog.hash
+new file mode 100644
+index 0000000000..7366c1b5e1
+--- /dev/null
++++ b/package/watchdog/watchdog.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  b8e7c070e1b72aee2663bdc13b5cc39f76c9232669cfbb1ac0adc7275a3b019d  watchdog-5.16.tar.gz
++sha256  af7f3f94e85080204b37f7c53717a2c94c6b54d7fa516ebd74e008cb4c0391bd  COPYING
+diff --git a/package/watchdog/watchdog.mk b/package/watchdog/watchdog.mk
+new file mode 100644
+index 0000000000..fe95c5c1ff
+--- /dev/null
++++ b/package/watchdog/watchdog.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# watchdog
++#
++################################################################################
++
++WATCHDOG_VERSION = 5.16
++WATCHDOG_SITE = http://downloads.sourceforge.net/sourceforge/watchdog
++WATCHDOG_AUTORECONF = YES
++WATCHDOG_LICENSE = GPL-2.0+
++WATCHDOG_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
