@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:46:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/python3-pyelftools:
- use PYTHON3_PYELFTOOLS_VERSION
-Message-ID: <20200812144330.5D73A85F4A@busybox.osuosl.org>
+Date: Sat, 8 Aug 2020 23:47:56 +0200
+Subject: [Buildroot] [git commit branch/next] package/prosody: luabitop is
+ only needed with Lua 5.1
+Message-ID: <20200812144329.4961185F4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7e6a935c0ceee63b50b891cb1a01fa34e88e663
+commit: https://git.buildroot.net/buildroot/commit/?id=8bd7239ca32f20102aad19dbb3ca647182edbf92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The luabitop package is only available with Lua 5.1. LuaJIT, Lua 5.3
+or more recent versions of Lua have this functionality built-in.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python3-pyelftools/python3-pyelftools.mk | 2 +-
+ package/prosody/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python3-pyelftools/python3-pyelftools.mk b/package/python3-pyelftools/python3-pyelftools.mk
-index ea79aef66d..be49ca2bcf 100644
---- a/package/python3-pyelftools/python3-pyelftools.mk
-+++ b/package/python3-pyelftools/python3-pyelftools.mk
-@@ -6,7 +6,7 @@
- 
- # Please keep in sync with package/python-pyelftools/python-pyelftools.mk
- PYTHON3_PYELFTOOLS_VERSION = 0.25
--PYTHON3_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
-+PYTHON3_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON3_PYELFTOOLS_VERSION).tar.gz
- PYTHON3_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/fa/9a/0674cb1725196568bdbca98304f2efb17368b57af1a4bb3fc772c026f474
- PYTHON3_PYELFTOOLS_LICENSE = Public domain
- PYTHON3_PYELFTOOLS_LICENSE_FILES = LICENSE
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index 4b7ea94256..bb3a5025fa 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PROSODY
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+-	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
++	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1 # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
