@@ -1,63 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:44:14 +0200
-Subject: [Buildroot] [git commit branch/next] package/setools: install for
- host-python3
-Message-ID: <20200812144329.348E785F4A@busybox.osuosl.org>
+Date: Sat, 8 Aug 2020 20:01:19 +0200
+Subject: [Buildroot] [git commit branch/next] configs/nitrogen7: Linux needs
+ host-openssl
+Message-ID: <20200812144328.E4AAC81255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c19526ebc8d12180640c531b1e18a563d63921ec
+commit: https://git.buildroot.net/buildroot/commit/?id=2f0c58058208296dde6a2d719f4636640c962108
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-setools needs python3 since version 4.2.0 and
-https://github.com/SELinuxProject/setools/commit/e292a77c52ed882707c8d165e77914837367313f
-
-However today in Buildroot, when no target python is selected, or when
-BR2_PACKAGE_PYTHON=y, all host python modules are installed for
-host-python, i.e Python 2. But this module won't install in Python 2,
-so let's force its host variant to be installed with Python 3 on the
-host. Of course, for that to work, its dependency must also be built
-for host-python3, so we change it to the newly introduced
-host-python3-cython package.
-
 Fixes:
- - http://autobuild.buildroot.org/results/c2febcea5fbd8a21709721524ae9e9b5fc0896f9
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Adam Duskett <Aduskett@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/674934100
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/setools/Config.in  | 2 +-
- package/setools/setools.mk | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ configs/nitrogen7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index b26029a162..3ab7f55948 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_SETOOLS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_PYTHON3 # python-networkx
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_NETWORKX # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	select BR2_PACKAGE_LIBSELINUX
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 24da3613c4..c1a3a909cb 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -11,7 +11,8 @@ SETOOLS_INSTALL_STAGING = YES
- SETOOLS_LICENSE = GPL-2.0+, LGPL-2.1+
- SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
- SETOOLS_SETUP_TYPE = setuptools
--HOST_SETOOLS_DEPENDENCIES = host-python-cython host-libselinux host-libsepol host-python-networkx
-+HOST_SETOOLS_DEPENDENCIES = host-python3-cython host-libselinux host-libsepol host-python-networkx
-+HOST_SETOOLS_NEEDS_HOST_PYTHON = python3
- 
- define SETOOLS_FIX_SETUP
- 	# By default, setup.py will look for libsepol.a in the host machines
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 2a1ff2ecc1..4178ca9787 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -39,3 +39,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-nitrogen7 imx7d-nitrogen7-m4"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
