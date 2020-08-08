@@ -1,54 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 8 Aug 2020 14:23:24 +0200
-Subject: [Buildroot] [git commit branch/next] package/efl: avoid
- optimization flags added by meson
-Message-ID: <20200812144328.82FAA85F4A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 8 Aug 2020 23:50:13 +0200
+Subject: [Buildroot] [git commit branch/next] package/minizip: fix build
+ with gcc 4.8
+Message-ID: <20200812144329.5369D85F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caa9aac9054972a115484bafcb176952c1c6543d
+commit: https://git.buildroot.net/buildroot/commit/?id=4d1bac8dbeb21c1cfd5b0ef05db25d60d39aa0eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Efl's meson build system add some optimization flags related to cpu
-architecture [1]. In the context of Buildroot, such optimization flags
-are already provided by the toolchain wrapper.
-
-For ppc, efl's meson expect the altivec support is available but this is
-not the case for ppc e500 cpus.
-
-Disable native-arch-optimization option to avoid such issue.
-
-[1] https://git.enlightenment.org/core/efl.git/tree/meson.build?h=v1.24.3#n165
-
 Fixes:
-http://autobuild.buildroot.net/results/dd2586be32c25d93eebfaa743c1f7d36915bb0d7
+ - http://autobuild.buildroot.org/results/b8baff4b86923d29163ce5cc9e391904d81fc90c
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/efl/efl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../minizip/0002-mz.h-fix-build-with-gcc-4.8.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 6dc38b1626..b8c4a506ad 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -29,6 +29,7 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
- # elua=true: build elua for the target.
- # sdl=false: disable sdl2 support.
- # embedded-lz4=false: use liblz4 from lz4 package.
-+# native-arch-optimization=false: avoid optimization flags added by meson.
- # network-backend=none: disable connman networkmanager.
- EFL_CONF_OPTS = \
- 	-Davahi=false \
-@@ -39,6 +40,7 @@ EFL_CONF_OPTS = \
- 	-Delua=true \
- 	-Dembedded-lz4=false \
- 	-Dlua-interpreter=luajit \
-+	-Dnative-arch-optimization=false \
- 	-Dnetwork-backend=none \
- 	-Dpixman=false \
- 	-Dsdl=false \
+diff --git a/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..f9d28a3c75
+--- /dev/null
++++ b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,60 @@
++From d38254c2cfdfa2baceef9e4fa553b74ed2e0247e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 25 Jul 2020 14:36:11 +0200
++Subject: [PATCH] mz.h: fix build with gcc 4.8
++
++gcc 4.8 does not support __has_include directive as a result the build
++will fail on:
++
++/home/naourr/work/instance-1/output-1/build/minizip-2.10.0/mz.h:162:44: error: missing binary operator before token "("
++    (defined(__has_include) && __has_include(<stdint.h>))
++                                            ^
++
++Fix it by appling:
++https://gcc.gnu.org/onlinedocs/gcc-10.1.0/cpp/_005f_005fhas_005finclude.html
++
++Fix #510
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/nmoinvaz/minizip/pull/515]
++---
++ mz.h | 14 ++++++++++----
++ 1 file changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/mz.h b/mz.h
++index 4d3732b..83662e0 100644
++--- a/mz.h
+++++ b/mz.h
++@@ -158,9 +158,12 @@
++ #include <string.h> /* memset, strncpy, strlen */
++ #include <limits.h>
++ 
++-#if defined(HAVE_STDINT_H) || \
++-   (defined(__has_include) && __has_include(<stdint.h>))
+++#if defined(HAVE_STDINT_H)
++ #  include <stdint.h>
+++#elif defined(__has_include)
+++#  if __has_include(<stdint.h>)
+++#    include <stdint.h>
+++#  endif
++ #endif
++ 
++ #ifndef __INT8_TYPE__
++@@ -188,9 +191,12 @@ typedef unsigned int       uint32_t;
++ typedef unsigned long long uint64_t;
++ #endif
++ 
++-#if defined(HAVE_INTTYPES_H) || \
++-   (defined(__has_include) && __has_include(<inttypes.h>))
+++#if defined(HAVE_INTTYPES_H)
++ #  include <inttypes.h>
+++#elif defined(__has_include)
+++#  if __has_include(<inttypes.h>)
+++#    include <inttypes.h>
+++#  endif
++ #endif
++ 
++ #ifndef PRId8
++-- 
++2.27.0
++
