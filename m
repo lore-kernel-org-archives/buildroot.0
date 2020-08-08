@@ -1,201 +1,187 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri,  7 Aug 2020 22:58:06 +0200
-Subject: [Buildroot] [PATCH v2] package/htpdate: new package
-Message-ID: <20200807205806.1580019-1-angelo@amarulasolutions.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Sat, 8 Aug 2020 07:38:30 +0200
+Subject: [Buildroot] Having trouble getting a simple cmake based custom
+ package to wok
+In-Reply-To: <CAOnXkYt=C1E3-04_A6RaUDBTn-iojOiz=ZWRo6zk0KR5NBRs3Q@mail.gmail.com>
+References: <CAOnXkYtSxw2+0VKtNTVsD8Eb36nGfAdBNY3hnSWg2tFtM_wwAg@mail.gmail.com>
+ <20200807060851.djtpcq5skahtz2gi@falbala.internal.home.lespocky.de>
+ <CAOnXkYt=C1E3-04_A6RaUDBTn-iojOiz=ZWRo6zk0KR5NBRs3Q@mail.gmail.com>
+Message-ID: <20200808053829.kvyu3lfddv6fsqe2@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding htpdate, a time syncronization software based on http.
+Hello Vijay,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
-Changelo
-v1->v2:
-* Fixed service configuration file handling (Thomas P.)
-* Move to use $call github ...) (Thomas P.)
-* Fixed DEPENDECIES (Thomas P.)
-* Move to use $(TARGET_MAKE_ENV)
+On Fri, Aug 07, 2020 at 05:31:51PM -0700, Vijay wrote:
+> Thank you Alex! Sorry I should've noticed this problem myself. I had C++
+> enabled in a prior version but forgot to do that in this version. After a
+> clean rebuild the project is compiled correctly now. 
 
- DEVELOPERS                      |  1 +
- package/Config.in               |  1 +
- package/htpdate/Config.in       |  8 ++++++
- package/htpdate/S43htpdate      | 51 +++++++++++++++++++++++++++++++++
- package/htpdate/htpdate.hash    |  3 ++
- package/htpdate/htpdate.mk      | 35 ++++++++++++++++++++++
- package/htpdate/htpdate.service | 13 +++++++++
- 7 files changed, 112 insertions(+)
- create mode 100644 package/htpdate/Config.in
- create mode 100644 package/htpdate/S43htpdate
- create mode 100644 package/htpdate/htpdate.hash
- create mode 100644 package/htpdate/htpdate.mk
- create mode 100644 package/htpdate/htpdate.service
+Good.  However, please answer to the mailinglist, not to me personally
+only.  I don't like to be responsible for personal support. ;-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ee840dbb8b..d712df272a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -208,6 +208,7 @@ F:	package/cups/
- F:	package/cups-filters/
- F:	package/fail2ban/
- F:	package/grep/
-+F:	package/htpdate/
- F:	package/i2c-tools/
- F:	package/jq/
- F:	package/libapparmor/
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..b1c3d2db92 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2061,6 +2061,7 @@ menu "Networking applications"
- 	source "package/haproxy/Config.in"
- 	source "package/hiawatha/Config.in"
- 	source "package/hostapd/Config.in"
-+	source "package/htpdate/Config.in"
- 	source "package/hplip/Config.in"
- 	source "package/httping/Config.in"
- 	source "package/i2pd/Config.in"
-diff --git a/package/htpdate/Config.in b/package/htpdate/Config.in
-new file mode 100644
-index 0000000000..fb0b0f3bf7
---- /dev/null
-+++ b/package/htpdate/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HTPDATE
-+	bool "htpdate"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  The HTTP Time Protocol (HTP) is used to synchronize a computer's time
-+	  with web servers as reference time source.
-+
-+	  https://github.com/angeloc/htpdate
-diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
-new file mode 100644
-index 0000000000..75f9a995ff
---- /dev/null
-+++ b/package/htpdate/S43htpdate
-@@ -0,0 +1,51 @@
-+#!/bin/sh
-+
-+DAEMON="htpdate"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+HTPDATE_ARGS="-a -s -t https://google.com"
-+test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
-+		-- -D -i "$PIDFILE" $HTPDATE_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
-new file mode 100644
-index 0000000000..282bcbe7ed
---- /dev/null
-+++ b/package/htpdate/htpdate.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated:
-+sha256 08aee5132b0c73ba01485b907d037fd676d0ad89d2736bbf117ec5c5035b513a  htpdate-1.2.4.tar.gz
-+sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-new file mode 100644
-index 0000000000..2c749f553a
---- /dev/null
-+++ b/package/htpdate/htpdate.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# htpdate
-+#
-+################################################################################
-+
-+HTPDATE_VERSION = 1.2.4
-+HTPDATE_SITE = $(call github,angeloc,htpdate,v$(HTPDATE_VERSION))
-+HTPDATE_LICENSE = GPL-2.0-or-later
-+HTPDATE_LICENSE_FILES = LICENSE
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
-+HTPDATE_DEPENDENCIES += openssl
-+endif
-+
-+define HTPDATE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) CC=$(TARGET_CC) $(MAKE) -C $(@D) $(HTPDATE_BUILD_OPTS)
-+endef
-+
-+define HTPDATE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define HTPDATE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/htpdate/S43htpdate \
-+		$(TARGET_DIR)/etc/init.d/S43htpdate
-+endef
-+
-+define HTPDATE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/htpdate/htpdate.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/htpdate.service
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
-new file mode 100644
-index 0000000000..0c77550813
---- /dev/null
-+++ b/package/htpdate/htpdate.service
-@@ -0,0 +1,13 @@
-+[Unit]
-+Description=htpdate daemon
-+After=network.target
-+
-+[Service]
-+Type=forking
-+PIDFile=/var/run/htpdate
-+Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
-+EnvironmentFile=-/etc/default/htpdate
-+ExecStart=/usr/bin/htpdate -D -i /var/run/htpdate $HTPDATE_ARGS
-+
-+[Install]
-+WantedBy=multi-user.target
+> However, when it is
+> trying to install my package I have a new error. The system seems to be
+> looking for a install/fast target, which the Makefil does not have.
+
+I have no idea on that problem.  Maybe read the CMake docs again?
+
+https://cmake.org/cmake/help/latest/command/install.html
+
+Greets
+Alex
+
+> Thanks again,
+> Vijay
+> 
+> >>> mytools 1.0 Building
+> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+>  /usr/bin/make -j9  -C /home/foo/buildroot/output/build/mytools-1.0/
+> Scanning dependencies of target mytools
+> [ 50%] Building CXX object CMakeFiles/mytools.dir/mytools.cpp.o
+> [100%] Linking CXX executable mytools
+> [100%] Built target mytools
+> >>> mytools 1.0 Installing to target
+> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+>  /usr/bin/make -j9  DESTDIR=/home/foo/buildroot/output/target install/fast
+> -C /home/foo/buildroot/output/build/mytools-1.0/
+> make[2]: *** No rule to make target 'install/fast'.  Stop.
+> make[1]: *** [package/pkg-generic.mk:364:
+> /home/foo/buildroot/output/build/mytools-1.0/.stamp_target_installed] Error
+> 2
+> make: *** [Makefile:84: _all] Error 2
+> 
+> 
+> On Thu, Aug 6, 2020 at 11:08 PM Alexander Dahl <post@lespocky.de> wrote:
+> 
+> > Hello Vijay,
+> >
+> > On Thu, Aug 06, 2020 at 07:44:53PM -0700, Vijay wrote:
+> > > I'm trying to add a simple, custom cmake based package to my buildroot
+> > > build. It's just a simple hello world program so that's not very
+> > > interesting. Here is my .mk file, which is the minimum version required I
+> > > believe.
+> > >
+> > > MYTOOLS_VERSION=1.0
+> > > MYTOOLS_SITE=$(HOME)/Work/mytools
+> > > MYTOOLS_SITE_METHOD=local
+> > >
+> > > $(eval $(cmake-package))
+> >
+> > Looks okay I guess?
+> >
+> > > When I configure this and kick off the build, Cmake seems to be having
+> > > trouble with the cross compiler. Below is the output: Is there any
+> > > additional configuration that I need to do?
+> > >
+> > > I'm using the latest 2020.05.01 version of buildroot.
+> > >
+> > > Any help is appreciated.
+> > >
+> > > Thanks,
+> > > Vijay
+> > >
+> > > >>> mytools 1.0 Configuring
+> > > (mkdir -p /home/foo/buildroot/output/build/mytools-1.0/ && cd
+> > > /home/foo/buildroot/output/build/mytools-1.0/ && rm -f CMakeCache.txt &&
+> > >
+> > PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+> > >  /home/foo/buildroot/output/host/bin/cmake
+> > > /home/foo/buildroot/output/build/mytools-1.0/
+> > >
+> > -DCMAKE_TOOLCHAIN_FILE="/home/foo/buildroot/output/host/share/buildroot/toolchainfile.cmake"
+> > > -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF
+> > > -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF
+> > -DBUILD_TEST=OFF
+> > > -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON   )
+> > > -- The C compiler identification is GNU 8.4.0
+> > > -- The CXX compiler identification is unknown
+> >
+> > CMake does not find a C++ compiler.
+> >
+> > > -- Check for working C compiler:
+> > > /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc
+> > > -- Check for working C compiler:
+> > > /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc --
+> > > works
+> > > -- Detecting C compiler ABI info
+> > > -- Detecting C compiler ABI info - done
+> > > -- Detecting C compile features
+> > > -- Detecting C compile features - done
+> > > CMake Error at CMakeLists.txt:3 (project):
+> > >   The CMAKE_CXX_COMPILER:
+> > >
+> > >     /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-g++
+> > >
+> > >   is not a full path to an existing compiler tool.
+> > >
+> > >   Tell CMake where to find the compiler by setting either the environment
+> > >   variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full
+> > > path
+> > >   to the compiler, or to the compiler name if it is in the PATH.
+> >
+> > Again: there seems to bee no C++ compiler in your cross toolchain.
+> >
+> > I think you have two possibilities:
+> >
+> > If your hello world project is C only, tell CMake like this in your
+> > CMakeLists.txt file:
+> >
+> >   project(hello C)
+> >
+> > or
+> >
+> >   project(hello
+> >     LANGUAGES C
+> >   )
+> >
+> > (CMake assumes "C CXX" by default here.)
+> >
+> > Or if your hello world uses C++ tell buildroot you need C++ support in
+> > the toolchain:
+> >
+> > make menuconfig -> Toolchain -> Enable C++ support
+> >
+> > HTH & Greets
+> > Alex
+> >
+> > >
+> > >
+> > > -- Configuring incomplete, errors occurred!
+> > > See also
+> > >
+> > "/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeOutput.log".
+> > > See also
+> > > "/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeError.log".
+> > > make[1]: *** [package/pkg-generic.mk:259:
+> > > /home/foo/buildroot/output/build/mytools-1.0/.stamp_configured] Error 1
+> > > make: *** [Makefile:84: _all] Error 2
+> >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
+> > --
+> > /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+> > \ / CAMPAIGN     | speech censured, the first thought forbidden, the
+> >  X  AGAINST      | first freedom denied, chains us all irrevocably.?
+> > / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+> >
+
 -- 
-2.25.1
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200808/17ffae40/attachment.asc>
