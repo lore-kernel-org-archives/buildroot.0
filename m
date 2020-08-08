@@ -1,52 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  8 Aug 2020 11:42:30 +0200
-Subject: [Buildroot] [PATCH] package/efl: avoid optimization flags added by
- meson
-Message-ID: <20200808094230.1593546-1-romain.naour@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 8 Aug 2020 04:29:43 -0700
+Subject: [Buildroot] [PATCH v1 1/6] package/nvidia-modprobe: new package
+In-Reply-To: <CALFsTFUsbwJohwJ4wRtd=jkyd=86jTtukirXW0pFHrHhx5NpwQ@mail.gmail.com>
+References: <20200801213645.33787-1-christian@paral.in>
+ <CALFsTFUsbwJohwJ4wRtd=jkyd=86jTtukirXW0pFHrHhx5NpwQ@mail.gmail.com>
+Message-ID: <CA+h8R2qhP00=MNrQHC88ZG5mE0qCCaDP1MRvS7fHipdE40M6XA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Efl's meson build system add some optimization flags related to cpu
-architecture [1]. In the context of Buildroot, such optimization flags
-are already provided by the toolchain wrapper.
+Hi Asaf,
 
-For ppc, efl's meson expect the altivec support is available but this is
-not the case for ppc e500 cpus.
+On Sat, Aug 8, 2020 at 12:03 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+> > +define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+> > +       $(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
+> > +               $(TARGET_DIR)/usr/bin/nvidia-modprobe
+> > +endef
+>
+> Why do you prefer to call the compiler explicitly instead of using the Makefile?
+> I tested this package with the following change, and it seems to work fine:
+> define NVIDIA_MODPROBE_BUILD_CMDS
+> $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> endef
+>
+> define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+> $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) PREFIX=$(TARGET_DIR)
+> $(MAKE) -C $(@D) install
+> endef
+>
+> Maybe I miss something?
 
-Disable native-arch-optimization option to avoid such issue.
+You tested this?... I don't think so. It doesn't work:
 
-[1] https://git.enlightenment.org/core/efl.git/tree/meson.build?h=v1.24.3#n165
+   LINK         _out/Linux_x86_64/nvidia-modprobe.unstripped
+/bin/sh: build/nvidia-modprobe-450.57/_out/Linux_x86_64/gen-manpage-opts:
+cannot execute binary file: Exec format error
+make[2]: *** [Makefile:149: _out/Linux_x86_64/options.1.inc] Error 126
 
-Fixes:
-http://autobuild.buildroot.net/results/dd2586be32c25d93eebfaa743c1f7d36915bb0d7
+The package as-is from GitHub has an extremely convoluted Makefile
+which does not do what we want in Buildroot.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/efl/efl.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 6dc38b1626..b8c4a506ad 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -29,6 +29,7 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
- # elua=true: build elua for the target.
- # sdl=false: disable sdl2 support.
- # embedded-lz4=false: use liblz4 from lz4 package.
-+# native-arch-optimization=false: avoid optimization flags added by meson.
- # network-backend=none: disable connman networkmanager.
- EFL_CONF_OPTS = \
- 	-Davahi=false \
-@@ -39,6 +40,7 @@ EFL_CONF_OPTS = \
- 	-Delua=true \
- 	-Dembedded-lz4=false \
- 	-Dlua-interpreter=luajit \
-+	-Dnative-arch-optimization=false \
- 	-Dnetwork-backend=none \
- 	-Dpixman=false \
- 	-Dsdl=false \
--- 
-2.25.4
+Best regards,
+Christian
