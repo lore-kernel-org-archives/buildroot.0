@@ -1,57 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 17:55:59 +0200
-Subject: [Buildroot] dmalloc issue on ARC HS38
-Message-ID: <20200808175559.612425c2@windsurf.home>
+Date: Sat, 8 Aug 2020 18:16:52 +0200
+Subject: [Buildroot] [git commit branch/next] package/php: bump version to
+ 7.4.9
+Message-ID: <20200808161101.B7B0C82794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear ARC maintainers,
+commit: https://git.buildroot.net/buildroot/commit/?id=301e319c450b600f02a94fcbf2b45f1d7d584a74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For quite a while, we have been having this build issue of the dmalloc
-package on ARC HS38:
+Changelog of this bugfix release:
+https://www.php.net/ChangeLog-7.php#7.4.9
 
-  http://autobuild.buildroot.net/?reason=dmalloc-5.5.2
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It goes like this:
-
-ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
-ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
-ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
-ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
-
-According to arch/Config.in.arc, we expect that the ELF type of
-binaries should be:
-
-        default "ARCompact"     if BR2_arc750d || BR2_arc770d
-        default "ARCv2"         if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
-
-So for HS38, it should be ARCv2, but for some reason, just for this
-package, the value is ARCompact. Why so? I don't see any special flag
-passed by dmalloc at build time.
-
-Also, another thing that looks suspicious in the build log is:
-
-checking shared library link args... ./configure: line 4467: 15012 Segmentation fault      ( ${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a ) 2>&5
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
-
-It looks like an ARC linker segmentation fault. It might actually be
-related, because when I look at how the .so files are produced:
-
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o libdmalloc.so.t libdmalloc.a
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o libdmallocxx.so.t libdmallocxx.a
-
-it calls ld directly, which is probably why it is producing a .so file
-with the incorrect ELF type.
-
-Could you have a look into this ?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 47879eecca..d648d90c04 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
++sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1296c50c6d..6e0b5c6e8d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.8
++PHP_VERSION = 7.4.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
