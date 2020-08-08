@@ -1,44 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:41:14 +0200
-Subject: [Buildroot] [PATCH v2] package/capnproto: bump version to 0.8.0
-In-Reply-To: <20200516075313.GB31946@coltrane>
-References: <20200516075313.GB31946@coltrane>
-Message-ID: <20200808234114.2c5b12b4@windsurf.home>
+Date: Sat, 8 Aug 2020 23:44:14 +0200
+Subject: [Buildroot] [git commit] package/setools: install for host-python3
+Message-ID: <20200808213835.1C150847BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 16 May 2020 09:53:13 +0200
-Koen Martens <gmc@sonologic.nl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c19526ebc8d12180640c531b1e18a563d63921ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The new version requires an extra features in the
-> toolchain and won't build with a specific gcc
-> bug, therefore two new toolchain options are added
-> as dependencies:
-> 
-> * !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> * BR2_TOOLCHAIN_HAS_UCONTEXT
-> 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
-> 
-> ---
-> changes v1 -> v2:
->   - use !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 instead of
->     BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
->     (suggested by Thomas Petazzoni)
-> ---
->  package/capnproto/Config.in      | 9 +++++++--
->  package/capnproto/capnproto.hash | 2 +-
->  package/capnproto/capnproto.mk   | 2 +-
->  3 files changed, 9 insertions(+), 4 deletions(-)
+setools needs python3 since version 4.2.0 and
+https://github.com/SELinuxProject/setools/commit/e292a77c52ed882707c8d165e77914837367313f
 
-You had forgotten to propagate the dependency to the c-capnproto
-package, so I've done so and applied to next. Thanks!
+However today in Buildroot, when no target python is selected, or when
+BR2_PACKAGE_PYTHON=y, all host python modules are installed for
+host-python, i.e Python 2. But this module won't install in Python 2,
+so let's force its host variant to be installed with Python 3 on the
+host. Of course, for that to work, its dependency must also be built
+for host-python3, so we change it to the newly introduced
+host-python3-cython package.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/c2febcea5fbd8a21709721524ae9e9b5fc0896f9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/setools/Config.in  | 2 +-
+ package/setools/setools.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/setools/Config.in b/package/setools/Config.in
+index b26029a162..3ab7f55948 100644
+--- a/package/setools/Config.in
++++ b/package/setools/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_SETOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_PYTHON3 # python-networkx
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_NETWORKX # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+ 	select BR2_PACKAGE_LIBSELINUX
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 24da3613c4..c1a3a909cb 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -11,7 +11,8 @@ SETOOLS_INSTALL_STAGING = YES
+ SETOOLS_LICENSE = GPL-2.0+, LGPL-2.1+
+ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+ SETOOLS_SETUP_TYPE = setuptools
+-HOST_SETOOLS_DEPENDENCIES = host-python-cython host-libselinux host-libsepol host-python-networkx
++HOST_SETOOLS_DEPENDENCIES = host-python3-cython host-libselinux host-libsepol host-python-networkx
++HOST_SETOOLS_NEEDS_HOST_PYTHON = python3
+ 
+ define SETOOLS_FIX_SETUP
+ 	# By default, setup.py will look for libsepol.a in the host machines
