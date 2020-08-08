@@ -1,57 +1,35 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 8 Aug 2020 10:55:30 -0700
-Subject: [Buildroot] [PATCH v2 2/6] package/linux4tegra: new package
-In-Reply-To: <CALFsTFV1bqm00_-PCXCrneKonKBvuqbn4DMsDCLk2x17f-cMXQ@mail.gmail.com>
-References: <20200808123918.1880533-1-christian@paral.in>
- <20200808123918.1880533-2-christian@paral.in>
- <CALFsTFV1bqm00_-PCXCrneKonKBvuqbn4DMsDCLk2x17f-cMXQ@mail.gmail.com>
-Message-ID: <CA+h8R2rM=q5UehNNfoD7CEA60uXvX+V68o0Cj5aWjynbujgjXQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 8 Aug 2020 19:57:35 +0200
+Subject: [Buildroot] [git commit] configs/nitrogen6sx: Linux needs
+ host-openssl
+Message-ID: <20200808175229.DE5A183772@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Asaf,
+commit: https://git.buildroot.net/buildroot/commit/?id=6429b236d1327503a683c9fc7b77c6b985083fcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Aug 8, 2020 at 7:03 AM Asaf Kahlon <asafka7@gmail.com> wrote:
-> On Sat, Aug 8, 2020 at 3:39 PM Christian Stewart <christian@paral.in> wrote:
-> >
-> > NVIDIA Linux4Tegra utilities and binaries.
-> >
-> > https://developer.nvidia.com/embedded/linux-tegra-archive
-> >
-> > Signed-off-by: Christian Stewart <christian@paral.in>
-> >
-> > v1 -> v2:
-> >
-> >  - cjs: add license hashes
-> >
+The kernel configuration used for the nitrogen6x defconfig needs
+host-openssl.
 
-[snip]
+Fixes:
 
-> > diff --git a/package/linux4tegra/linux4tegra.hash b/package/linux4tegra/linux4tegra.hash
-> > new file mode 100644
-> > index 0000000000..3af19ddeaa
-> > --- /dev/null
-> > +++ b/package/linux4tegra/linux4tegra.hash
-> > @@ -0,0 +1,54 @@
-> > +# locally computed
-> > +sha256 9a2d13b1f4b67fef97a428d54724b23e84e14636eedfa22f338c2d1ea62558e2  Tegra186_Linux_R32.4.3_aarch64.tbz2
-> > +sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE
-> > +sha256 496f3bc5456694cce764d28a93565bb0d0967dbd95256759e4168a9587406949  bootloader/LICENSE.adsp
-> > +sha256 q4885fa44934935d6a178c84a16aec49dae1bd4f41f14bbbd781bafcf704885f  bootloader/LICENSE.bpmp
-> I'm pretty sure the letter 'q' can't be a part of a sha256 checksum :)
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/674934095
 
-Yes... oops... FWIW I set up some CI just now to automatically run
-check-package before I submit.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/nitrogen6sx_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Now it's:
-
-sha256 d4885fa44934935d6a178c84a16aec49dae1bd4f41f14bbbd781bafcf704885f
- bootloader/LICENSE.bpmp
-
-Not sure why this didn't fail during the test build I ran?
-
-Best regards,
-Christian
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index f151d4dc08..d5bf87b086 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -40,3 +40,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-nitrogen6sx imx6sx-nitrogen6sx-m4"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
