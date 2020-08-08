@@ -1,39 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:18:23 +0200
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
- properly delete output dir even with write-protected folders
-In-Reply-To: <20200719121524.GU18825@scaer>
-References: <20200718201836.2408554-1-thomas.petazzoni@bootlin.com>
- <20200718205511.GQ18825@scaer> <20200719121524.GU18825@scaer>
-Message-ID: <20200808231823.403e5fa8@windsurf.home>
+Date: Sat, 8 Aug 2020 23:19:51 +0200
+Subject: [Buildroot] [git commit] package/php: bump version to 7.4.9
+Message-ID: <20200808211405.4567B8377E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=46ed4ac84740b1f377bc16ea335539ab480f22f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Jul 2020 14:15:24 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Changelog of this bugfix release:
+https://www.php.net/ChangeLog-7.php#7.4.9
 
-> We might need to be a little bit more careful, though:
-> 
->     def rm_ro(f, p, _):
->         os.chmod(os.path.dirname(p), stat.S_IWRITE)
->         os.chmod(p, stat.S_IWRITE)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the suggestion! This didn't work as is, since os.chmod()
-sets the permissions, it does not *add* to the existing permissions. So
-doing os.chmod(foo, stat.S_IWRITE) makes the "foo" directory only
-writable, no longer readable/executable.
-
-So I fixed that, and just sent a v2.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 47879eecca..d648d90c04 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
++sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1296c50c6d..6e0b5c6e8d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.8
++PHP_VERSION = 7.4.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
