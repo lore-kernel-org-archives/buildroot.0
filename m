@@ -1,48 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:47:47 +0200
-Subject: [Buildroot] [git commit] package/luabitop: depends on lua 5.1
-Message-ID: <20200808214246.0D68081562@busybox.osuosl.org>
+Date: Sat, 8 Aug 2020 23:47:56 +0200
+Subject: [Buildroot] [git commit] package/prosody: luabitop is only needed
+ with Lua 5.1
+Message-ID: <20200808214246.25D8A81562@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af0357140c6b2addc12a05dccb7397de78e39edd
+commit: https://git.buildroot.net/buildroot/commit/?id=8bd7239ca32f20102aad19dbb3ca647182edbf92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation for the introduction of Lua 5.4, clarify the dependency
-of luabitop: it only makes sense when used with Lua 5.1.
-
-Also update the comment to no longer mention Lua 5.2, since we don't
-support Lua 5.2 in Buildroot anymore.
-
-Note that as explained in https://luajit.org/extensions.html, LuaJit
-already implements luabitop functions, so luabitop is really for Lua
-5.1 only, not for all Lua interpreters that implemented the 5.1 ABI.
+The luabitop package is only available with Lua 5.1. LuaJIT, Lua 5.3
+or more recent versions of Lua have this functionality built-in.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luabitop/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/prosody/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/luabitop/Config.in b/package/luabitop/Config.in
-index a819fe8ae7..656b1c7391 100644
---- a/package/luabitop/Config.in
-+++ b/package/luabitop/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LUABITOP
- 	bool "luabitop"
--	depends on !BR2_PACKAGE_LUA_5_3
-+	depends on BR2_PACKAGE_LUA_5_1
- 	help
- 	  Lua BitOp is a C extension module for Lua 5.1/5.2 which adds
- 	  bitwise operations on numbers.
- 
- 	  http://bitop.luajit.org
- 
--comment "luabitop needs a Lua 5.1/5.2 interpreter"
--	depends on BR2_PACKAGE_LUA_5_3
-+comment "luabitop needs Lua 5.1"
-+	depends on !BR2_PACKAGE_LUA_5_1
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index 4b7ea94256..bb3a5025fa 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PROSODY
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+-	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
++	select BR2_PACKAGE_LUABITOP if BR2_PACKAGE_LUA_5_1 # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+ 	select BR2_PACKAGE_LUASEC # runtime
+ 	select BR2_PACKAGE_LUASOCKET # runtime
