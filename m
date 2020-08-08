@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 8 Aug 2020 04:29:43 -0700
-Subject: [Buildroot] [PATCH v1 1/6] package/nvidia-modprobe: new package
-In-Reply-To: <CALFsTFUsbwJohwJ4wRtd=jkyd=86jTtukirXW0pFHrHhx5NpwQ@mail.gmail.com>
-References: <20200801213645.33787-1-christian@paral.in>
- <CALFsTFUsbwJohwJ4wRtd=jkyd=86jTtukirXW0pFHrHhx5NpwQ@mail.gmail.com>
-Message-ID: <CA+h8R2qhP00=MNrQHC88ZG5mE0qCCaDP1MRvS7fHipdE40M6XA@mail.gmail.com>
+Date: Sat, 8 Aug 2020 04:58:39 -0700
+Subject: [Buildroot] [PATCH v1 2/6] package/linux4tegra: new package
+In-Reply-To: <CALFsTFW7Rf4BbrKrNi-aygTD0eDFFPcRxCD1WCjnRWspV8CUjA@mail.gmail.com>
+References: <20200801213658.33869-2-christian@paral.in>
+ <CALFsTFW7Rf4BbrKrNi-aygTD0eDFFPcRxCD1WCjnRWspV8CUjA@mail.gmail.com>
+Message-ID: <CA+h8R2qCgeUhse+9Lwfs82JX1NmHRM31mHkXLeFdjMU-dC79nQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,163 @@ To: buildroot@busybox.net
 
 Hi Asaf,
 
-On Sat, Aug 8, 2020 at 12:03 AM Asaf Kahlon <asafka7@gmail.com> wrote:
-> > +define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
-> > +       $(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
-> > +               $(TARGET_DIR)/usr/bin/nvidia-modprobe
+On Sat, Aug 8, 2020 at 12:19 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+> > +++ b/package/linux4tegra/linux4tegra.hash
+> > @@ -0,0 +1,2 @@
+> > +# locally computed
+> > +sha256 9a2d13b1f4b67fef97a428d54724b23e84e14636eedfa22f338c2d1ea62558e2  Tegra186_Linux_R32.4.3_aarch64.tbz2
+> You should add the hash for license files too...
+
+This seems like a lot, but I have it now for the V2:
+
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ bootloader/LICENSE
+sha256 496f3bc5456694cce764d28a93565bb0d0967dbd95256759e4168a9587406949
+ bootloader/LICENSE.adsp
+sha256 q4885fa44934935d6a178c84a16aec49dae1bd4f41f14bbbd781bafcf704885f
+ bootloader/LICENSE.bpmp
+sha256 fd4513e2857a0d91c521dfbb924733563b55d5a2d42d4fb688d2506ed34df0c4
+ bootloader/LICENSE.bpmp_t194
+sha256 205a391eb9cfc69854cc0c3082de204d30124607cedecbdd3f47420b5f37f302
+ bootloader/LICENSE.camera-rtcpu
+sha256 3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1
+ bootloader/LICENSE.cboot
+sha256 3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1
+ bootloader/LICENSE.cboot_t194
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ bootloader/LICENSE.chkbdinfo
+sha256 7bf7d9fae6472452d585ec38dd684daa86dc83638984d1cb14ee35239a868543
+ bootloader/LICENSE.mce_c10_prod_cr
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ bootloader/LICENSE.mkbctpart
+sha256 9b0ccf575cfd9febc97b8f9967216f06341db2d44abc69df92c3127cc1a2608f
+ bootloader/LICENSE.mkbootimg
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ bootloader/LICENSE.mkgpt
+sha256 cddaa9d5583a7705cd4734a6af4b421bca9016ba6af854c51efbfcbe19a4a893
+ bootloader/LICENSE.nv_smd_generator
+sha256 7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713
+ bootloader/LICENSE.spe.bin
+sha256 7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713
+ bootloader/LICENSE.spe_t194.bin
+sha256 0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72
+ bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware
+sha256 0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72
+ bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware
+sha256 5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130
+ bootloader/LICENSE.tos-trusty.img.trusty
+sha256 0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72
+ bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware
+sha256 5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130
+ bootloader/LICENSE.tos-trusty_t194.img.trusty
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ nv_tegra/LICENSE
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ nv_tegra/LICENSE
+sha256 a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d
+ nv_tegra/LICENSE.brcm_patchram_plus
+sha256 88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad
+ nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img
+sha256 1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d
+ nv_tegra/LICENSE.libnvargus
+sha256 7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5
+ nv_tegra/LICENSE.libnvcam_imageencoder
+sha256 c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245
+ nv_tegra/LICENSE.libnveventlib
+sha256 1f1bf0c752f072a447b1013fc9d76268ddf098c37ddc63988d60e4973cbee2f4
+ nv_tegra/LICENSE.libnvscf
+sha256 c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245
+ nv_tegra/LICENSE.libnvtracebuf
+sha256 b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200
+ nv_tegra/LICENSE.libtegrav4l2
+sha256 8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686
+ nv_tegra/LICENSE.minigbm
+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
+ nv_tegra/LICENSE.nvbootctrl
+sha256 fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6
+ nv_tegra/LICENSE.nvdla
+sha256 8b6a8553e4a1668a6267b9789bd69ffe105bffd8f2af59e2fc74a5910bb159ab
+ nv_tegra/LICENSE.weston
+sha256 a34730970264d619f352598bf30295ad505a60fc3a493add8aa851645ce3ea47
+ nv_tegra/LICENSE.weston-data
+sha256 88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad
+ nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img
+sha256 a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus
+sha256 89786bfd7060f6a60feae03257da6f3206b0f777352cf750c67b3b560dd087a5
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt
+sha256 1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus
+sha256 7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder
+sha256 c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib
+sha256 c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf
+sha256 dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2
+sha256 dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert
+sha256 b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2
+sha256 fbef9c34b63148c0e670e6ac07705b25bebcc1f963b48bf7447ee61cfaadcc1e
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1
+sha256 8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm
+sha256 fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla
+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt
+sha256 f3f3ecff94537e7d5944fdbae7c6bd02d5eddca8fe1c29d8699ff2e54d26cebc
+ nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors
+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
+ nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl
+sha256 5f28c11f8b1b3f97b9d42c74b85371ebf4127f241b799279bcecd69f7ee542dc
+ nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
+
+
+> > +LINUX4TEGRA_INSTALL_IMAGES = YES
+> > +
+> > +define LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
+> > +       @mkdir -p $(@D)/nv_tegra/nvidia_drivers
+> > +       $(call suitable-extractor,nvidia_drivers.tbz2) \
+> > +               $(@D)/nv_tegra/nvidia_drivers.tbz2 | \
+> > +               $(TAR) -C $(@D)/nv_tegra/nvidia_drivers $(TAR_OPTIONS) -
 > > +endef
->
-> Why do you prefer to call the compiler explicitly instead of using the Makefile?
-> I tested this package with the following change, and it seems to work fine:
-> define NVIDIA_MODPROBE_BUILD_CMDS
-> $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> endef
->
-> define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
-> $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) PREFIX=$(TARGET_DIR)
-> $(MAKE) -C $(@D) install
-> endef
->
-> Maybe I miss something?
+> > +
+> > +LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
+> > +
+> > +define LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
+> > +       @mkdir -p $(@D)/nv_tegra/nvidia_configs
+> > +       $(call suitable-extractor,config.tbz2) \
+> > +               $(@D)/nv_tegra/config.tbz2 | \
+> > +               $(TAR) -C $(@D)/nv_tegra/nvidia_configs $(TAR_OPTIONS) -
+> > +endef
+> > +
+> > +LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
+> > +
+> > +define LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
+> > +       @mkdir -p $(@D)/nv_tegra/nvidia_tools
+> > +       $(call suitable-extractor,nv_tools.tbz2) \
+> > +               $(@D)/nv_tegra/nv_tools.tbz2 | \
+> > +               $(TAR) -C $(@D)/nv_tegra/nvidia_tools $(TAR_OPTIONS) -
+> > +endef
+> > +
+> > +LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
+> > +
+> > +# symlink linux4tegra to the target dir.
+> > +define LINUX4TEGRA_INSTALL_IMAGES_CMDS
+> > +       ln -fs $(@D) $(BINARIES_DIR)/linux4tegra
 
-You tested this?... I don't think so. It doesn't work:
+> I'm not sure I understand what is the purpose of that symlink on the images dir.
+> Who's going to use or reference that link?
+> Maybe a comment with a little description of this link would help.
 
-   LINK         _out/Linux_x86_64/nvidia-modprobe.unstripped
-/bin/sh: build/nvidia-modprobe-450.57/_out/Linux_x86_64/gen-manpage-opts:
-cannot execute binary file: Exec format error
-make[2]: *** [Makefile:149: _out/Linux_x86_64/options.1.inc] Error 126
-
-The package as-is from GitHub has an extremely convoluted Makefile
-which does not do what we want in Buildroot.
+The idea is that you need to access the flash.sh script to flash the
+target. The flash script depends on other directories inside the
+linux4tegra dir. By creating the symlink you can understand the path
+to the build/linux4tegra-$(VERSION) directory without running
+Buildroot.
 
 Best regards,
 Christian
