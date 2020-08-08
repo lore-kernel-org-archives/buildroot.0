@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:40:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: add openssl optional
- dependency
-In-Reply-To: <20200727125140.GY19818@scaer>
-References: <20200727124145.1825309-1-fontaine.fabrice@gmail.com>
- <20200727125140.GY19818@scaer>
-Message-ID: <20200808234052.4e6ff454@windsurf.home>
+Date: Sat, 8 Aug 2020 23:41:14 +0200
+Subject: [Buildroot] [PATCH v2] package/capnproto: bump version to 0.8.0
+In-Reply-To: <20200516075313.GB31946@coltrane>
+References: <20200516075313.GB31946@coltrane>
+Message-ID: <20200808234114.2c5b12b4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Jul 2020 14:51:40 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sat, 16 May 2020 09:53:13 +0200
+Koen Martens <gmc@sonologic.nl> wrote:
 
-> On 2020-07-27 14:41 +0200, Fabrice Fontaine spake thusly:
-> > openssl is an optional dependency that is enabled by default since
-> > version 0.7.0 and
-> > https://github.com/capnproto/capnproto/commit/23db5e3fd91104a0b2881d8f8ab3c10bf9dd8e75  
+> The new version requires an extra features in the
+> toolchain and won't build with a specific gcc
+> bug, therefore two new toolchain options are added
+> as dependencies:
 > 
-> Seeing how they are testing for openssl, will that no fail for a staitc
-> link, because they forget to link with -lz in that case ?
+> * !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> * BR2_TOOLCHAIN_HAS_UCONTEXT
 > 
->       AC_CHECK_LIB(ssl, OPENSSL_init_ssl, [:], [
->         with_openssl=no
->       ], [-lcrypto])
+> Signed-off-by: Koen Martens <gmc@sonologic.nl>
 > 
-> Why don't they yse pkg-config?
+> ---
+> changes v1 -> v2:
+>   - use !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 instead of
+>     BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+>     (suggested by Thomas Petazzoni)
+> ---
+>  package/capnproto/Config.in      | 9 +++++++--
+>  package/capnproto/capnproto.hash | 2 +-
+>  package/capnproto/capnproto.mk   | 2 +-
+>  3 files changed, 9 insertions(+), 4 deletions(-)
 
-It is weird, we don't have any build failures for this. I would assume
-that any configuration where OpenSSL gets built before capnproto (by
-chance) and is static should exhibit a build failure, but it's not the
-case.
+You had forgotten to propagate the dependency to the c-capnproto
+package, so I've done so and applied to next. Thanks!
 
 Thomas
 -- 
