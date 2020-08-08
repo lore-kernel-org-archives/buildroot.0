@@ -1,41 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 18:29:30 +0200
-Subject: [Buildroot] [git commit branch/next] package/luv: disable
+Date: Sat, 8 Aug 2020 18:29:16 +0200
+Subject: [Buildroot] [git commit branch/next] package/lua-sdl2: disable
  temporarily with Lua 5.4
-Message-ID: <20200808162412.61F1B8157B@busybox.osuosl.org>
+Message-ID: <20200808162412.57E808404C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f547f2a7e06a8e37c769b11dc0959acdfded2f9e
+commit: https://git.buildroot.net/buildroot/commit/?id=567a8a7f1f29b826d64a4f985e8643b343f0b69c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luv/Config.in | 5 +++--
+ package/lua-sdl2/Config.in | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-index 434cb3b459..3be204cab3 100644
---- a/package/luv/Config.in
-+++ b/package/luv/Config.in
-@@ -4,13 +4,14 @@ config BR2_PACKAGE_LUV
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+diff --git a/package/lua-sdl2/Config.in b/package/lua-sdl2/Config.in
+index 65f9e7ff41..d0c1b91eb1 100644
+--- a/package/lua-sdl2/Config.in
++++ b/package/lua-sdl2/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_SDL2
+ 	bool "lua-sdl2"
+ 	depends on !BR2_STATIC_LIBS
 +	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_SDL2
  	help
- 	  libuv bindings for LuaJIT and Lua.
+ 	  Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2,
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LUA_SDL2
  
- 	  https://github.com/luvit/luv
+ 	  https://github.com/Tangent128/luasdl2
  
--comment "luv needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "luv needs a toolchain w/ NPTL, dynamic library, Lua <= 5.3"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-comment "lua-sdl2 needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "lua-sdl2 needs a toolchain w/ dynamic library, Lua <= 5.3"
++	depends on BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
