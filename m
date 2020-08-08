@@ -1,187 +1,145 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Sat, 8 Aug 2020 07:38:30 +0200
-Subject: [Buildroot] Having trouble getting a simple cmake based custom
- package to wok
-In-Reply-To: <CAOnXkYt=C1E3-04_A6RaUDBTn-iojOiz=ZWRo6zk0KR5NBRs3Q@mail.gmail.com>
-References: <CAOnXkYtSxw2+0VKtNTVsD8Eb36nGfAdBNY3hnSWg2tFtM_wwAg@mail.gmail.com>
- <20200807060851.djtpcq5skahtz2gi@falbala.internal.home.lespocky.de>
- <CAOnXkYt=C1E3-04_A6RaUDBTn-iojOiz=ZWRo6zk0KR5NBRs3Q@mail.gmail.com>
-Message-ID: <20200808053829.kvyu3lfddv6fsqe2@falbala.internal.home.lespocky.de>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 8 Aug 2020 10:02:49 +0300
+Subject: [Buildroot] [PATCH v1 1/6] package/nvidia-modprobe: new package
+In-Reply-To: <20200801213645.33787-1-christian@paral.in>
+References: <20200801213645.33787-1-christian@paral.in>
+Message-ID: <CALFsTFUsbwJohwJ4wRtd=jkyd=86jTtukirXW0pFHrHhx5NpwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vijay,
+Hello,
 
-On Fri, Aug 07, 2020 at 05:31:51PM -0700, Vijay wrote:
-> Thank you Alex! Sorry I should've noticed this problem myself. I had C++
-> enabled in a prior version but forgot to do that in this version. After a
-> clean rebuild the project is compiled correctly now. 
+On Sun, Aug 2, 2020 at 12:36 AM Christian Stewart <christian@paral.in> wrote:
+>
+> nvidia-modprobe package adds a utility and headers for probing the NVIDIA
+> hardware at runtime.
+>
+> https://github.com/NVIDIA/nvidia-modprobe
+>
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/Config.in                            |  1 +
+>  package/nvidia-modprobe/Config.in            | 12 ++++++
+>  package/nvidia-modprobe/nvidia-modprobe.hash |  3 ++
+>  package/nvidia-modprobe/nvidia-modprobe.mk   | 45 ++++++++++++++++++++
+>  4 files changed, 61 insertions(+)
+>  create mode 100644 package/nvidia-modprobe/Config.in
+>  create mode 100644 package/nvidia-modprobe/nvidia-modprobe.hash
+>  create mode 100644 package/nvidia-modprobe/nvidia-modprobe.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 015a7f1054..3349641371 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -501,6 +501,7 @@ endmenu
+>         source "package/nanocom/Config.in"
+>         source "package/neard/Config.in"
+>         source "package/nvidia-driver/Config.in"
+> +       source "package/nvidia-modprobe/Config.in"
+>         source "package/nvidia-tegra23/Config.in"
+>         source "package/nvme/Config.in"
+>         source "package/ofono/Config.in"
+> diff --git a/package/nvidia-modprobe/Config.in b/package/nvidia-modprobe/Config.in
+> new file mode 100644
+> index 0000000000..35953a33d4
+> --- /dev/null
+> +++ b/package/nvidia-modprobe/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_NVIDIA_MODPROBE
+> +       bool "nvidia-modprobe"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
+> +       help
+> +         nvidia-modprobe package adds a utility and headers for
+> +         probing the NVIDIA hardware at runtime.
+> +
+> +         https://github.com/NVIDIA/nvidia-modprobe
+> +
+> +comment "nvidia-modprobe needs a glibc toolchain w/ threads"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC
+> diff --git a/package/nvidia-modprobe/nvidia-modprobe.hash b/package/nvidia-modprobe/nvidia-modprobe.hash
+> new file mode 100644
+> index 0000000000..99908680f0
+> --- /dev/null
+> +++ b/package/nvidia-modprobe/nvidia-modprobe.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 396b4102d3075a2dee3024652fae206a1b38ace54b8efb1e2c20757a11ec19f1  nvidia-modprobe-450.57.tar.gz
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/nvidia-modprobe/nvidia-modprobe.mk b/package/nvidia-modprobe/nvidia-modprobe.mk
+> new file mode 100644
+> index 0000000000..7eeee6716c
+> --- /dev/null
+> +++ b/package/nvidia-modprobe/nvidia-modprobe.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# nvidia-modprobe
+> +#
+> +################################################################################
+> +
+> +NVIDIA_MODPROBE_VERSION = 450.57
+> +NVIDIA_MODPROBE_SITE = $(call github,NVIDIA,nvidia-modprobe,$(NVIDIA_MODPROBE_VERSION))
+> +NVIDIA_MODPROBE_LICENSE = GPL-2
+> +NVIDIA_MODPROBE_LICENSE_FILES = COPYING
+> +
+> +NVIDIA_MODPROBE_DEPENDENCIES = host-pkgconf
+> +NVIDIA_MODPROBE_INSTALL_STAGING = YES
+> +
+> +define NVIDIA_MODPROBE_BUILD_CMDS
+> +       mkdir -p $(@D)/bin
+> +       $(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+> +               -I $(@D)/common-utils -I $(@D)/modprobe-utils \
+> +               -o $(@D)/bin/nvidia-modprobe \
+> +               -DNV_LINUX=true -DPROGRAM_NAME=\"nvidia-modprobe\" \
+> +               -DNVIDIA_VERSION=\"$(NVIDIA_MODPROBE_VERSION)\" \
+> +               $(@D)/nvidia-modprobe.c $(@D)/modprobe-utils/nvidia-modprobe-utils.c \
+> +               $(@D)/modprobe-utils/pci-sysfs.c $(@D)/common-utils/common-utils.c \
+> +               $(@D)/common-utils/msg.c $(@D)/common-utils/nvgetopt.c
+> +endef
+> +
+> +define NVIDIA_MODPROBE_INSTALL_STAGING_CMDS
+> +       $(INSTALL) -D -m 644 $(@D)/modprobe-utils/nvidia-modprobe-utils.h \
+> +               $(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-modprobe-utils.h
+> +       $(INSTALL) -D -m 644 $(@D)/modprobe-utils/pci-enum.h \
+> +               $(STAGING_DIR)/usr/include/nvidia-modprobe-utils/pci-enum.h
+> +       $(INSTALL) -D -m 644 $(@D)/common-utils/common-utils.h \
+> +               $(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-common-utils.h
+> +       $(INSTALL) -D -m 644 $(@D)/common-utils/msg.h \
+> +               $(STAGING_DIR)/usr/include/nvidia-modprobe-utils/msg.h
+> +       $(INSTALL) -D -m 644 $(@D)/common-utils/nvgetopt.h \
+> +               $(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvgetopt.h
+> +endef
+> +
+> +define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
+> +               $(TARGET_DIR)/usr/bin/nvidia-modprobe
+> +endef
 
-Good.  However, please answer to the mailinglist, not to me personally
-only.  I don't like to be responsible for personal support. ;-)
+Why do you prefer to call the compiler explicitly instead of using the Makefile?
+I tested this package with the following change, and it seems to work fine:
+define NVIDIA_MODPROBE_BUILD_CMDS
+$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+endef
 
-> However, when it is
-> trying to install my package I have a new error. The system seems to be
-> looking for a install/fast target, which the Makefil does not have.
+define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) PREFIX=$(TARGET_DIR)
+$(MAKE) -C $(@D) install
+endef
 
-I have no idea on that problem.  Maybe read the CMake docs again?
+Maybe I miss something?
+> +
+> +$(eval $(generic-package))
+> --
+> 2.27.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-https://cmake.org/cmake/help/latest/command/install.html
-
-Greets
-Alex
-
-> Thanks again,
-> Vijay
-> 
-> >>> mytools 1.0 Building
-> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
->  /usr/bin/make -j9  -C /home/foo/buildroot/output/build/mytools-1.0/
-> Scanning dependencies of target mytools
-> [ 50%] Building CXX object CMakeFiles/mytools.dir/mytools.cpp.o
-> [100%] Linking CXX executable mytools
-> [100%] Built target mytools
-> >>> mytools 1.0 Installing to target
-> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
->  /usr/bin/make -j9  DESTDIR=/home/foo/buildroot/output/target install/fast
-> -C /home/foo/buildroot/output/build/mytools-1.0/
-> make[2]: *** No rule to make target 'install/fast'.  Stop.
-> make[1]: *** [package/pkg-generic.mk:364:
-> /home/foo/buildroot/output/build/mytools-1.0/.stamp_target_installed] Error
-> 2
-> make: *** [Makefile:84: _all] Error 2
-> 
-> 
-> On Thu, Aug 6, 2020 at 11:08 PM Alexander Dahl <post@lespocky.de> wrote:
-> 
-> > Hello Vijay,
-> >
-> > On Thu, Aug 06, 2020 at 07:44:53PM -0700, Vijay wrote:
-> > > I'm trying to add a simple, custom cmake based package to my buildroot
-> > > build. It's just a simple hello world program so that's not very
-> > > interesting. Here is my .mk file, which is the minimum version required I
-> > > believe.
-> > >
-> > > MYTOOLS_VERSION=1.0
-> > > MYTOOLS_SITE=$(HOME)/Work/mytools
-> > > MYTOOLS_SITE_METHOD=local
-> > >
-> > > $(eval $(cmake-package))
-> >
-> > Looks okay I guess?
-> >
-> > > When I configure this and kick off the build, Cmake seems to be having
-> > > trouble with the cross compiler. Below is the output: Is there any
-> > > additional configuration that I need to do?
-> > >
-> > > I'm using the latest 2020.05.01 version of buildroot.
-> > >
-> > > Any help is appreciated.
-> > >
-> > > Thanks,
-> > > Vijay
-> > >
-> > > >>> mytools 1.0 Configuring
-> > > (mkdir -p /home/foo/buildroot/output/build/mytools-1.0/ && cd
-> > > /home/foo/buildroot/output/build/mytools-1.0/ && rm -f CMakeCache.txt &&
-> > >
-> > PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-> > >  /home/foo/buildroot/output/host/bin/cmake
-> > > /home/foo/buildroot/output/build/mytools-1.0/
-> > >
-> > -DCMAKE_TOOLCHAIN_FILE="/home/foo/buildroot/output/host/share/buildroot/toolchainfile.cmake"
-> > > -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF
-> > > -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF
-> > -DBUILD_TEST=OFF
-> > > -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON   )
-> > > -- The C compiler identification is GNU 8.4.0
-> > > -- The CXX compiler identification is unknown
-> >
-> > CMake does not find a C++ compiler.
-> >
-> > > -- Check for working C compiler:
-> > > /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc
-> > > -- Check for working C compiler:
-> > > /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc --
-> > > works
-> > > -- Detecting C compiler ABI info
-> > > -- Detecting C compiler ABI info - done
-> > > -- Detecting C compile features
-> > > -- Detecting C compile features - done
-> > > CMake Error at CMakeLists.txt:3 (project):
-> > >   The CMAKE_CXX_COMPILER:
-> > >
-> > >     /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-g++
-> > >
-> > >   is not a full path to an existing compiler tool.
-> > >
-> > >   Tell CMake where to find the compiler by setting either the environment
-> > >   variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full
-> > > path
-> > >   to the compiler, or to the compiler name if it is in the PATH.
-> >
-> > Again: there seems to bee no C++ compiler in your cross toolchain.
-> >
-> > I think you have two possibilities:
-> >
-> > If your hello world project is C only, tell CMake like this in your
-> > CMakeLists.txt file:
-> >
-> >   project(hello C)
-> >
-> > or
-> >
-> >   project(hello
-> >     LANGUAGES C
-> >   )
-> >
-> > (CMake assumes "C CXX" by default here.)
-> >
-> > Or if your hello world uses C++ tell buildroot you need C++ support in
-> > the toolchain:
-> >
-> > make menuconfig -> Toolchain -> Enable C++ support
-> >
-> > HTH & Greets
-> > Alex
-> >
-> > >
-> > >
-> > > -- Configuring incomplete, errors occurred!
-> > > See also
-> > >
-> > "/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeOutput.log".
-> > > See also
-> > > "/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeError.log".
-> > > make[1]: *** [package/pkg-generic.mk:259:
-> > > /home/foo/buildroot/output/build/mytools-1.0/.stamp_configured] Error 1
-> > > make: *** [Makefile:84: _all] Error 2
-> >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> > --
-> > /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-> > \ / CAMPAIGN     | speech censured, the first thought forbidden, the
-> >  X  AGAINST      | first freedom denied, chains us all irrevocably.?
-> > / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-> >
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200808/17ffae40/attachment.asc>
+Regards,
+Asaf.
