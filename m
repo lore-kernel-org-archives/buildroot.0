@@ -1,72 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:58:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/python3-pycryptodomex:
- new package
-Message-ID: <20200812144329.5DB4E85F4A@busybox.osuosl.org>
+Date: Sat, 8 Aug 2020 19:51:31 +0200
+Subject: [Buildroot] [git commit branch/next]
+ configs/globalscale_espressobin: Linux needs host-openssl
+Message-ID: <20200812144328.BF55385F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd78244174d42e7970b28044326c3f438da841cb
+commit: https://git.buildroot.net/buildroot/commit/?id=d1caf8b5018dc5a915b6670206ac39791906b430
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package will ensure that pycryptodomex is built for Python 3.
-Comments in both python-pycryptodome and python3-pycryptodomex are
-added to ensure they stay in sync.
+The kernel configuration used for the globalscale_espressobin
+defconfig needs host-openssl.
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/674933954
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pycryptodomex/python-pycryptodomex.mk |  1 +
- .../python3-pycryptodomex/python3-pycryptodomex.hash |  1 +
- .../python3-pycryptodomex/python3-pycryptodomex.mk   | 20 ++++++++++++++++++++
- 3 files changed, 22 insertions(+)
+ configs/globalscale_espressobin_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
-index 7f93d93131..5123acb8ec 100644
---- a/package/python-pycryptodomex/python-pycryptodomex.mk
-+++ b/package/python-pycryptodomex/python-pycryptodomex.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
+index c0b9f69559..50cfc6b530 100644
+--- a/configs/globalscale_espressobin_defconfig
++++ b/configs/globalscale_espressobin_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extr
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin marvell/armada-3720-espressobin-emmc marvell/armada-3720-espressobin-v7 marvell/armada-3720-espressobin-v7-emmc"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
-+# Please keep in sync with package/python3-pycryptodomex/python3-pycryptodomex.mk
- PYTHON_PYCRYPTODOMEX_VERSION = 3.9.8
- PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
- PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/f5/79/9d9206688385d1e7a5ff925e7aab1d685636256e34a409037aa7adbbe611
-diff --git a/package/python3-pycryptodomex/python3-pycryptodomex.hash b/package/python3-pycryptodomex/python3-pycryptodomex.hash
-new file mode 120000
-index 0000000000..0c6761d8a4
---- /dev/null
-+++ b/package/python3-pycryptodomex/python3-pycryptodomex.hash
-@@ -0,0 +1 @@
-+../python-pycryptodomex/python-pycryptodomex.hash
-\ No newline at end of file
-diff --git a/package/python3-pycryptodomex/python3-pycryptodomex.mk b/package/python3-pycryptodomex/python3-pycryptodomex.mk
-new file mode 100644
-index 0000000000..92ac248d51
---- /dev/null
-+++ b/package/python3-pycryptodomex/python3-pycryptodomex.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# python3-pycryptodomex
-+#
-+################################################################################
-+
-+# Please keep in sync with package/python-pycryptodomex/python-pycryptodomex.mk
-+PYTHON3_PYCRYPTODOMEX_VERSION = 3.9.8
-+PYTHON3_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON3_PYCRYPTODOMEX_VERSION).tar.gz
-+PYTHON3_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/f5/79/9d9206688385d1e7a5ff925e7aab1d685636256e34a409037aa7adbbe611
-+PYTHON3_PYCRYPTODOMEX_SETUP_TYPE = setuptools
-+PYTHON3_PYCRYPTODOMEX_LICENSE = \
-+	BSD-2-Clause, \
-+	Public Domain (pycrypto original code), \
-+	OCB patent license (OCB mode)
-+PYTHON3_PYCRYPTODOMEX_LICENSE_FILES = LICENSE.rst Doc/LEGAL/COPYRIGHT.pycrypto
-+HOST_PYTHON3_PYCRYPTODOMEX_DL_SUBDIR = python-pycryptodomex
-+HOST_PYTHON3_PYCRYPTODOMEX_NEEDS_HOST_PYTHON = python3
-+
-+$(eval $(host-python-package))
+ # Filesystem
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Marvell ESPRESSObin"
