@@ -1,306 +1,161 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat,  8 Aug 2020 05:39:14 -0700
-Subject: [Buildroot] [PATCH v2 2/6] package/linux4tegra: new package
+Date: Sat,  8 Aug 2020 05:39:15 -0700
+Subject: [Buildroot] [PATCH v2 3/6] package/nvidia-container-runtime: new
+ package
 In-Reply-To: <20200808123918.1880533-1-christian@paral.in>
 References: <20200808123918.1880533-1-christian@paral.in>
-Message-ID: <20200808123918.1880533-2-christian@paral.in>
+Message-ID: <20200808123918.1880533-3-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NVIDIA Linux4Tegra utilities and binaries.
+NVIDIA Container Runtime is a fork of runc which adds support for mounting GPUs
+into containers.
 
-https://developer.nvidia.com/embedded/linux-tegra-archive
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-
-v1 -> v2:
-
- - cjs: add license hashes
+https://github.com/NVIDIA/nvidia-container-runtime
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                             |   1 +
- ...for-flashing-Buildroot-produced-disk.patch |  58 +++++++++
- package/linux4tegra/Config.in                 |   6 +
- package/linux4tegra/linux4tegra.hash          |  54 +++++++++
- package/linux4tegra/linux4tegra.mk            | 114 ++++++++++++++++++
- 5 files changed, 233 insertions(+)
- create mode 100644 package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
- create mode 100644 package/linux4tegra/Config.in
- create mode 100644 package/linux4tegra/linux4tegra.hash
- create mode 100644 package/linux4tegra/linux4tegra.mk
+ package/Config.in                             |  1 +
+ package/nvidia-container-runtime/Config.in    | 16 +++++++++
+ package/nvidia-container-runtime/config.toml  | 20 +++++++++++
+ package/nvidia-container-runtime/daemon.json  | 12 +++++++
+ .../nvidia-container-runtime.hash             |  3 ++
+ .../nvidia-container-runtime.mk               | 33 +++++++++++++++++++
+ 6 files changed, 85 insertions(+)
+ create mode 100644 package/nvidia-container-runtime/Config.in
+ create mode 100644 package/nvidia-container-runtime/config.toml
+ create mode 100644 package/nvidia-container-runtime/daemon.json
+ create mode 100644 package/nvidia-container-runtime/nvidia-container-runtime.hash
+ create mode 100644 package/nvidia-container-runtime/nvidia-container-runtime.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3349641371..0d34824128 100644
+index 0d34824128..dfa02217d9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -481,6 +481,7 @@ endmenu
- 	source "package/libuio/Config.in"
- 	source "package/linux-backports/Config.in"
- 	source "package/linux-serial-test/Config.in"
-+	source "package/linux4tegra/Config.in"
- 	source "package/linuxconsoletools/Config.in"
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
-diff --git a/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch b/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
+@@ -2385,6 +2385,7 @@ menu "System tools"
+ 	source "package/netifrc/Config.in"
+ 	source "package/numactl/Config.in"
+ 	source "package/nut/Config.in"
++	source "package/nvidia-container-runtime/Config.in"
+ 	source "package/openrc/Config.in"
+ 	source "package/openvmtools/Config.in"
+ 	source "package/pamtester/Config.in"
+diff --git a/package/nvidia-container-runtime/Config.in b/package/nvidia-container-runtime/Config.in
 new file mode 100644
-index 0000000000..4ace27bddc
+index 0000000000..c029002149
 --- /dev/null
-+++ b/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
-@@ -0,0 +1,58 @@
-+From fbd0d35995a23351d4b50ed0b814442a6873ded2 Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@paral.in>
-+Date: Fri, 17 Jul 2020 13:58:43 -0700
-+Subject: [PATCH] Adjust flash.sh for flashing Buildroot-produced disk image
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+---
-+ flash.sh | 19 ++++++++++---------
-+ 1 file changed, 10 insertions(+), 9 deletions(-)
-+
-+diff --git a/flash.sh b/flash.sh
-+index 38c0cbb..c27b41b 100755
-+--- a/flash.sh
-++++ b/flash.sh
-+@@ -1339,9 +1339,10 @@ elif [ "${target_rootdev}" == "internal" ] || \
-+ 		usage allunknown 1;
-+ 	fi
-+ 
-+-	cmdline+="root=PARTUUID=${rootfsuuid} rw rootwait rootfstype=ext4 "
-++	# cmdline+="root=PARTUUID=${rootfsuuid} rw rootwait rootfstype=ext4 "
-++	cmdline+="root=/dev/${target_rootdev} rw rootwait"
-+ else
-+-	cmdline+="root=/dev/${target_rootdev} rw rootwait rootfstype=ext4 "
-++	cmdline+="root=/dev/${target_rootdev} rw rootwait"
-+ fi;
-+ 
-+ if [ "${CMDLINE_ADD}" != "" ]; then
-+@@ -1512,11 +1513,7 @@ if [ "${write_image_name}" != "" ]; then
-+ 	fi
-+ fi
-+ 
-+-if [ "${INITRD_IN_BOOTIMG}" = "yes" ]; then
-+-	ramdisk=initrd;
-+-else
-+-	ramdisk="/dev/null"
-+-fi
-++ramdisk="/dev/null"
-+ echo -n "Making Boot image... ";
-+ MKBOOTARG+="--kernel ${kernel_image} ";
-+ MKBOOTARG+="--ramdisk ${ramdisk} ";
-+@@ -1977,8 +1974,12 @@ if [ "${reuse_systemimg}" = "true" ] || [ "${skip_systemimg}" = "true" ]; then
-+ elif [ "${rootdev_type}" = "internal" ]; then
-+ 	APP_TAG+="-e s/APPFILE/${localsysfile}/ ";
-+ 	if [ "${target_partname}" = "" -o "${target_partname}" = "APP" ]; then
-+-		build_fsimg "$localsysfile" "$fillpat" \
-+-		    "$rootfssize" "$rootfs_type" "$rootfs_dir" "$cmdline";
-++    echo "Skipping image build and setting target_partfile to INITRD."
-++    # target_partfile=${INITRD}
-++    # cp ${INITRD} ./system.img
-++    ln -fs ${INITRD} ./system.img
-++		#build_fsimg "$localsysfile" "$fillpat" \
-++		#    "$rootfssize" "$rootfs_type" "$rootfs_dir" "$cmdline";
-+ 	fi;
-+ elif [ "${rootdev_type}" = "network" -o "${rootdev_type}" = "external" ]; then
-+ 	APP_TAG+="-e s/APPFILE/${localsysfile}/ ";
-+-- 
-+2.27.0
-+
-diff --git a/package/linux4tegra/Config.in b/package/linux4tegra/Config.in
-new file mode 100644
-index 0000000000..06d449e21e
---- /dev/null
-+++ b/package/linux4tegra/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LINUX4TEGRA
-+	bool "linux4tegra"
++++ b/package/nvidia-container-runtime/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_NVIDIA_CONTAINER_RUNTIME
++	bool "nvidia-container-runtime"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_GLIBC # fexecve
 +	help
-+	  NVIDIA Linux4Tegra utilities and binaries.
++	  NVIDIA Container Runtime is a fork of runc which adds
++	  support for mounting GPUs into containers.
 +
-+	  https://developer.nvidia.com/embedded/linux-tegra-archive
-diff --git a/package/linux4tegra/linux4tegra.hash b/package/linux4tegra/linux4tegra.hash
++	  https://github.com/NVIDIA/nvidia-container-runtime
++
++comment "nvidia-container-runtime needs a glibc toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS && \
++		BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC
+diff --git a/package/nvidia-container-runtime/config.toml b/package/nvidia-container-runtime/config.toml
 new file mode 100644
-index 0000000000..3af19ddeaa
+index 0000000000..21ee9a22b5
 --- /dev/null
-+++ b/package/linux4tegra/linux4tegra.hash
-@@ -0,0 +1,54 @@
-+# locally computed
-+sha256	9a2d13b1f4b67fef97a428d54724b23e84e14636eedfa22f338c2d1ea62558e2  Tegra186_Linux_R32.4.3_aarch64.tbz2
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE
-+sha256	496f3bc5456694cce764d28a93565bb0d0967dbd95256759e4168a9587406949  bootloader/LICENSE.adsp
-+sha256	q4885fa44934935d6a178c84a16aec49dae1bd4f41f14bbbd781bafcf704885f  bootloader/LICENSE.bpmp
-+sha256	fd4513e2857a0d91c521dfbb924733563b55d5a2d42d4fb688d2506ed34df0c4  bootloader/LICENSE.bpmp_t194
-+sha256	205a391eb9cfc69854cc0c3082de204d30124607cedecbdd3f47420b5f37f302  bootloader/LICENSE.camera-rtcpu
-+sha256	3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1  bootloader/LICENSE.cboot
-+sha256	3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1  bootloader/LICENSE.cboot_t194
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.chkbdinfo
-+sha256	7bf7d9fae6472452d585ec38dd684daa86dc83638984d1cb14ee35239a868543  bootloader/LICENSE.mce_c10_prod_cr
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.mkbctpart
-+sha256	9b0ccf575cfd9febc97b8f9967216f06341db2d44abc69df92c3127cc1a2608f  bootloader/LICENSE.mkbootimg
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.mkgpt
-+sha256	cddaa9d5583a7705cd4734a6af4b421bca9016ba6af854c51efbfcbe19a4a893  bootloader/LICENSE.nv_smd_generator
-+sha256	7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713  bootloader/LICENSE.spe.bin
-+sha256	7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713  bootloader/LICENSE.spe_t194.bin
-+sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware
-+sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware
-+sha256	5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130  bootloader/LICENSE.tos-trusty.img.trusty
-+sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware
-+sha256	5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130  bootloader/LICENSE.tos-trusty_t194.img.trusty
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/LICENSE
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/LICENSE
-+sha256	a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d  nv_tegra/LICENSE.brcm_patchram_plus
-+sha256	88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad  nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img
-+sha256	1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d  nv_tegra/LICENSE.libnvargus
-+sha256	7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5  nv_tegra/LICENSE.libnvcam_imageencoder
-+sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/LICENSE.libnveventlib
-+sha256	1f1bf0c752f072a447b1013fc9d76268ddf098c37ddc63988d60e4973cbee2f4  nv_tegra/LICENSE.libnvscf
-+sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/LICENSE.libnvtracebuf
-+sha256	b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200  nv_tegra/LICENSE.libtegrav4l2
-+sha256	8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  nv_tegra/LICENSE.minigbm
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  nv_tegra/LICENSE.nvbootctrl
-+sha256	fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6  nv_tegra/LICENSE.nvdla
-+sha256	8b6a8553e4a1668a6267b9789bd69ffe105bffd8f2af59e2fc74a5910bb159ab  nv_tegra/LICENSE.weston
-+sha256	a34730970264d619f352598bf30295ad505a60fc3a493add8aa851645ce3ea47  nv_tegra/LICENSE.weston-data
-+sha256	88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad  nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img
-+sha256	a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus
-+sha256	89786bfd7060f6a60feae03257da6f3206b0f777352cf750c67b3b560dd087a5  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt
-+sha256	1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus
-+sha256	7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder
-+sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib
-+sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf
-+sha256	dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2
-+sha256	dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert
-+sha256	b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2
-+sha256	fbef9c34b63148c0e670e6ac07705b25bebcc1f963b48bf7447ee61cfaadcc1e  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1
-+sha256	8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm
-+sha256	fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla
-+sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt
-+sha256	f3f3ecff94537e7d5944fdbae7c6bd02d5eddca8fe1c29d8699ff2e54d26cebc  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors
-+sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl
-+sha256	5f28c11f8b1b3f97b9d42c74b85371ebf4127f241b799279bcecd69f7ee542dc  nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
-\ No newline at end of file
-diff --git a/package/linux4tegra/linux4tegra.mk b/package/linux4tegra/linux4tegra.mk
++++ b/package/nvidia-container-runtime/config.toml
+@@ -0,0 +1,20 @@
++# see below:
++# https://raw.githubusercontent.com/NVIDIA/nvidia-container-toolkit/master/config/config.toml.debian
++
++disable-require = false
++#swarm-resource = "DOCKER_RESOURCE_GPU"
++
++[nvidia-container-cli]
++#root = "/run/nvidia/driver"
++#path = "/usr/bin/nvidia-container-cli"
++environment = []
++#debug = "/var/log/nvidia-container-toolkit.log"
++#ldcache = "/etc/ld.so.cache"
++load-kmods = true
++#no-cgroups = false
++#user = "root:video"
++ldconfig = "@/sbin/ldconfig"
++#alpha-merge-visible-devices-envvars = false
++
++[nvidia-container-runtime]
++#debug = "/var/log/nvidia-container-runtime.log"
+diff --git a/package/nvidia-container-runtime/daemon.json b/package/nvidia-container-runtime/daemon.json
 new file mode 100644
-index 0000000000..74cb19723e
+index 0000000000..bc01c904ce
 --- /dev/null
-+++ b/package/linux4tegra/linux4tegra.mk
-@@ -0,0 +1,114 @@
++++ b/package/nvidia-container-runtime/daemon.json
+@@ -0,0 +1,12 @@
++{
++  "experimental": true,
++  "exec-opts": [
++    "native.cgroupdriver=systemd"
++  ],
++  "runtimes": {
++    "nvidia": {
++      "runtimeArgs": [],
++      "path": "/usr/bin/nvidia-container-runtime"
++    }
++  }
++}
+diff --git a/package/nvidia-container-runtime/nvidia-container-runtime.hash b/package/nvidia-container-runtime/nvidia-container-runtime.hash
+new file mode 100644
+index 0000000000..38d4663276
+--- /dev/null
++++ b/package/nvidia-container-runtime/nvidia-container-runtime.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  c3a2bb76ae1893499e81388e43b791a90c9bced52c473378bbe4333e07604439  nvidia-container-runtime-3.3.0.tar.gz
++sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/nvidia-container-runtime/nvidia-container-runtime.mk b/package/nvidia-container-runtime/nvidia-container-runtime.mk
+new file mode 100644
+index 0000000000..8d9694d2ae
+--- /dev/null
++++ b/package/nvidia-container-runtime/nvidia-container-runtime.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# linux4tegra
++# nvidia-container-runtime
 +#
 +################################################################################
 +
-+LINUX4TEGRA_VERSION = 32.4.3
-+LINUX4TEGRA_SITE = https://developer.nvidia.com/embedded/L4T/r32_Release_v4.3/t186ref_release_aarch64
-+LINUX4TEGRA_SOURCE = Tegra186_Linux_R$(LINUX4TEGRA_VERSION)_aarch64.tbz2
++NVIDIA_CONTAINER_RUNTIME_VERSION = 3.3.0
++NVIDIA_CONTAINER_RUNTIME_SITE = $(call github,NVIDIA,nvidia-container-runtime,v$(NVIDIA_CONTAINER_RUNTIME_VERSION))
++NVIDIA_CONTAINER_RUNTIME_LICENSE = Apache-2.0
++NVIDIA_CONTAINER_RUNTIME_LICENSE_FILES = LICENSE
 +
-+LINUX4TEGRA_LICENSE = NVIDIA Software License, GPL-2.0, LGPL, Apache-2.0, MIT
-+LINUX4TEGRA_LICENSE_FILES = \
-+	bootloader/LICENSE \
-+	bootloader/LICENSE.adsp \
-+	bootloader/LICENSE.bpmp \
-+	bootloader/LICENSE.bpmp_t194 \
-+	bootloader/LICENSE.camera-rtcpu \
-+	bootloader/LICENSE.cboot \
-+	bootloader/LICENSE.cboot_t194 \
-+	bootloader/LICENSE.chkbdinfo \
-+	bootloader/LICENSE.mce_c10_prod_cr \
-+	bootloader/LICENSE.mkbctpart \
-+	bootloader/LICENSE.mkbootimg \
-+	bootloader/LICENSE.mkgpt \
-+	bootloader/LICENSE.nv_smd_generator \
-+	bootloader/LICENSE.spe.bin \
-+	bootloader/LICENSE.spe_t194.bin \
-+	bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware \
-+	bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware \
-+	bootloader/LICENSE.tos-trusty.img.trusty \
-+	bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware \
-+	bootloader/LICENSE.tos-trusty_t194.img.trusty \
-+	nv_tegra/LICENSE \
-+	nv_tegra/LICENSE \
-+	nv_tegra/LICENSE.brcm_patchram_plus \
-+	nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img \
-+	nv_tegra/LICENSE.libnvargus \
-+	nv_tegra/LICENSE.libnvcam_imageencoder \
-+	nv_tegra/LICENSE.libnveventlib \
-+	nv_tegra/LICENSE.libnvscf \
-+	nv_tegra/LICENSE.libnvtracebuf \
-+	nv_tegra/LICENSE.libtegrav4l2 \
-+	nv_tegra/LICENSE.minigbm \
-+	nv_tegra/LICENSE.nvbootctrl \
-+	nv_tegra/LICENSE.nvdla \
-+	nv_tegra/LICENSE.weston \
-+	nv_tegra/LICENSE.weston-data \
-+	nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2 \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2 \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1 \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt \
-+	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors \
-+	nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl \
-+	nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
++NVIDIA_CONTAINER_RUNTIME_LDFLAGS = -X main.gitCommit=$(NVIDIA_CONTAINER_RUNTIME_VERSION)
++NVIDIA_CONTAINER_RUNTIME_TAGS = cgo static_build
 +
-+LINUX4TEGRA_INSTALL_IMAGES = YES
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++NVIDIA_CONTAINER_RUNTIME_TAGS += seccomp
++NVIDIA_CONTAINER_RUNTIME_DEPENDENCIES += libseccomp host-pkgconf
++endif
 +
-+define LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
-+	@mkdir -p $(@D)/nv_tegra/nvidia_drivers
-+	$(call suitable-extractor,nvidia_drivers.tbz2) \
-+		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
-+		$(TAR) -C $(@D)/nv_tegra/nvidia_drivers $(TAR_OPTIONS) -
++NVIDIA_CONTAINER_RUNTIME_GOMOD = github.com/NVIDIA/nvidia-container-runtime
++NVIDIA_CONTAINER_RUNTIME_BUILD_TARGETS = github.com/NVIDIA/nvidia-container-runtime/src
++NVIDIA_CONTAINER_RUNTIME_BIN_NAME = nvidia-container-runtime
++
++define NVIDIA_CONTAINER_RUNTIME_INSTALL_SUPPORT
++	$(INSTALL) -D -m 644 $(NVIDIA_CONTAINER_RUNTIME_PKGDIR)/config.toml \
++		$(TARGET_DIR)/etc/nvidia-container-runtime/config.toml
++	$(INSTALL) -D -m 644 $(NVIDIA_CONTAINER_RUNTIME_PKGDIR)/daemon.json \
++		$(TARGET_DIR)/etc/docker/daemon.json
 +endef
 +
-+LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
++NVIDIA_CONTAINER_RUNTIME_POST_INSTALL_TARGET_HOOKS += NVIDIA_CONTAINER_RUNTIME_INSTALL_SUPPORT
 +
-+define LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
-+	@mkdir -p $(@D)/nv_tegra/nvidia_configs
-+	$(call suitable-extractor,config.tbz2) \
-+		$(@D)/nv_tegra/config.tbz2 | \
-+		$(TAR) -C $(@D)/nv_tegra/nvidia_configs $(TAR_OPTIONS) -
-+endef
-+
-+LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
-+
-+define LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
-+	@mkdir -p $(@D)/nv_tegra/nvidia_tools
-+	$(call suitable-extractor,nv_tools.tbz2) \
-+		$(@D)/nv_tegra/nv_tools.tbz2 | \
-+		$(TAR) -C $(@D)/nv_tegra/nvidia_tools $(TAR_OPTIONS) -
-+endef
-+
-+LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
-+
-+# symlink linux4tegra to the target dir.
-+define LINUX4TEGRA_INSTALL_IMAGES_CMDS
-+	ln -fs $(@D) $(BINARIES_DIR)/linux4tegra
-+endef
-+
-+LINUX4TEGRA_RSYNC = \
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-+		--keep-dirlinks --exclude=ld.so.conf.d
-+
-+define LINUX4TEGRA_INSTALL_TARGET_CMDS
-+	# install nvidia_drivers
-+	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_drivers/ $(TARGET_DIR)/
-+	# install nvidia_configs
-+	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_configs/ $(TARGET_DIR)/
-+	# install nvidia_tools
-+	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_tools/ $(TARGET_DIR)/
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(golang-package))
 -- 
 2.28.0
