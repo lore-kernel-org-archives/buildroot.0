@@ -1,58 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 18:18:42 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.6.11
-Message-ID: <20200808161304.E9E7782814@busybox.osuosl.org>
+Date: Sat, 8 Aug 2020 18:19:05 +0200
+Subject: [Buildroot] [git commit] package/libcamera: needs faligned-new
+Message-ID: <20200808161320.4599B82814@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de47f7b494b795c4efe020e976af51b4b6b73dcb
+commit: https://git.buildroot.net/buildroot/commit/?id=f1c7d55458e337ab578a07dec257cdaa320ba9c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted license hash.
+Fixes:
 
-Quoting release notes:
-https://lists.x.org/archives/xorg-announce/2020-August/003053.html
-"This release fixes a regression introduced by the security patches in
- 1.6.10.
- See https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues/116 for
- details."
+  - http://autobuild.buildroot.net/results/2db7292e251ce81d31187c3a9eb36dbc9236bd07
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  ../src/libcamera/v4l2_videodevice.cpp: In member function 'int libcamera::V4L2VideoDevice::allocateBuffers(unsigned int, std::vector<std::unique_ptr<libcamera::FrameBuffer> >*)':
+  ../src/libcamera/v4l2_videodevice.cpp:1139:39: error: 'new' of type 'libcamera::V4L2BufferCache' with extended alignment 8 [-Werror=aligned-new=]
+   1139 |  cache_ = new V4L2BufferCache(*buffers);
+        |                                       ^
+  ../src/libcamera/v4l2_videodevice.cpp:1139:39: note: uses 'void* operator new(std::size_t)', which does not have an alignment parameter
+  ../src/libcamera/v4l2_videodevice.cpp:1139:39: note: use '-faligned-new' to enable C++17 over-aligned new support
+  ../src/libcamera/v4l2_videodevice.cpp: In member function 'int libcamera::V4L2VideoDevice::importBuffers(unsigned int)':
+  ../src/libcamera/v4l2_videodevice.cpp:1315:36: error: 'new' of type 'libcamera::V4L2BufferCache' with extended alignment 8 [-Werror=aligned-new=]
+   1315 |  cache_ = new V4L2BufferCache(count);
+        |                                    ^
+  ../src/libcamera/v4l2_videodevice.cpp:1315:36: note: uses 'void* operator new(std::size_t)', which does not have an alignment parameter
+  ../src/libcamera/v4l2_videodevice.cpp:1315:36: note: use '-faligned-new' to enable C++17 over-aligned new support
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 9 +++++----
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libcamera/libcamera.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index d383615457..b77f98dfb1 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,5 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-July/003052.html
--sha256  af48626989b8515c994777896bd7b7ba2bd5b1ef4e1efaee0a55d8852bbe6226  libX11-1.6.10.tar.bz2
--sha512  ad384d8896fbe587f7fd99b0d3cc56fac6e2facbab52fa99174200d06b19dd163a483c998acf3834b3a4a3aa4de0dbbe13919a1c80e6797afe467c7075b403ff  libX11-1.6.10.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003053.html
-+sha256  b1cc4b802058be7e3fb438ee2490f66fcc52ac3b2a14f47a22cbf77638e33606  libX11-1.6.11.tar.bz2
-+sha512  2cb4e215c1e3ccb327e02586844f8c426068536a0f472a39f12191feace607f61a6a08586f03758248199678c2f6897a984b0f1222bc0d68fd2e02702f4ce0bf  libX11-1.6.11.tar.bz2
-+
- # Locally computed
--sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-+sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index bfc1c4166e..b0132efd31 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index a39e9f1c3e..9739f715a1 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -36,6 +36,10 @@ LIBCAMERA_LICENSE_FILES = \
+ 	LICENSES/CC0-1.0.txt \
+ 	LICENSES/CC-BY-SA-4.0.txt
  
--XLIB_LIBX11_VERSION = 1.6.10
-+XLIB_LIBX11_VERSION = 1.6.11
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y)
++LIBCAMERA_CXXFLAGS = -faligned-new
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAMERA_V4L2),y)
+ LIBCAMERA_CONF_OPTS += -Dv4l2=true
+ else
