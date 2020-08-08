@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 19:59:32 +0200
-Subject: [Buildroot] [git commit] configs/nitrogen6x: Linux needs
- host-openssl
-Message-ID: <20200808175421.3754F81414@busybox.osuosl.org>
+Date: Sat, 8 Aug 2020 20:01:19 +0200
+Subject: [Buildroot] [git commit] configs/nitrogen7: Linux needs host-openssl
+Message-ID: <20200808175816.C70E1815BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbdef3e0a5415c6bd5d7b07ce8af9d1b42fdac8e
+commit: https://git.buildroot.net/buildroot/commit/?id=2f0c58058208296dde6a2d719f4636640c962108
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The kernel configuration used for the nitrogen6x defconfig needs
-host-openssl.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/674934098
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/674934100
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/nitrogen6x_defconfig | 1 +
+ configs/nitrogen7_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 9c24dadbc0..01d49bb09c 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -40,3 +40,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 2a1ff2ecc1..4178ca9787 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -39,3 +39,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
  BR2_LINUX_KERNEL_INSTALL_TARGET=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6dl-nitrogen6_som2 imx6q-nitrogen6_som2 imx6qp-nitrogen6_som2 imx6q-nitrogen6_max imx6qp-nitrogen6_max imx6q-sabrelite"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-nitrogen7 imx7d-nitrogen7-m4"
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
