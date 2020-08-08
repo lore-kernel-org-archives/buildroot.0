@@ -1,103 +1,57 @@
-From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
-Date: Sat,  8 Aug 2020 15:13:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stress-ng: bump version to 0.11.17
-Message-ID: <20200808131356.852691-1-alejandro.gonzalez.correo@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 8 Aug 2020 16:56:08 +0300
+Subject: [Buildroot] [PATCH v1 1/6] package/nvidia-modprobe: new package
+In-Reply-To: <CA+h8R2qhP00=MNrQHC88ZG5mE0qCCaDP1MRvS7fHipdE40M6XA@mail.gmail.com>
+References: <20200801213645.33787-1-christian@paral.in>
+ <CALFsTFUsbwJohwJ4wRtd=jkyd=86jTtukirXW0pFHrHhx5NpwQ@mail.gmail.com>
+ <CA+h8R2qhP00=MNrQHC88ZG5mE0qCCaDP1MRvS7fHipdE40M6XA@mail.gmail.com>
+Message-ID: <CALFsTFUtZg=7H02EuegHc3UPMZUeezs1v-YZRwLNv47bfs4A0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps stress-ng version to 0.11.17.
+Hello,
 
-This version includes the patch that fixes musl build at commit
-03416938871388243d28621f4b59ce532231f11c, and also fixes a
-"Invalid syntax in conditional" build error in a Makefile.
+On Sat, Aug 8, 2020 at 2:29 PM Christian Stewart <christian@paral.in> wrote:
+>
+> Hi Asaf,
+>
+> On Sat, Aug 8, 2020 at 12:03 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+> > > +define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+> > > +       $(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
+> > > +               $(TARGET_DIR)/usr/bin/nvidia-modprobe
+> > > +endef
+> >
+> > Why do you prefer to call the compiler explicitly instead of using the Makefile?
+> > I tested this package with the following change, and it seems to work fine:
+> > define NVIDIA_MODPROBE_BUILD_CMDS
+> > $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> > endef
+> >
+> > define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+> > $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) PREFIX=$(TARGET_DIR)
+> > $(MAKE) -C $(@D) install
+> > endef
+> >
+> > Maybe I miss something?
+>
+> You tested this?... I don't think so. It doesn't work:
+>
+>    LINK         _out/Linux_x86_64/nvidia-modprobe.unstripped
+> /bin/sh: build/nvidia-modprobe-450.57/_out/Linux_x86_64/gen-manpage-opts:
+> cannot execute binary file: Exec format error
+> make[2]: *** [Makefile:149: _out/Linux_x86_64/options.1.inc] Error 126
+>
+> The package as-is from GitHub has an extremely convoluted Makefile
+> which does not do what we want in Buildroot.
+Yeah, you seem to be right.
+I tested it with another toolchain, but it indeed does not work on the
+jetsontx2 toolchain...
 
-Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
----
- ...tress-ng.h-suppress-kernel-sysinfo.h.patch | 49 -------------------
- package/stress-ng/stress-ng.hash              |  2 +-
- package/stress-ng/stress-ng.mk                |  2 +-
- 3 files changed, 2 insertions(+), 51 deletions(-)
- delete mode 100644 package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
+>
+> Best regards,
+> Christian
 
-diff --git a/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch b/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
-deleted file mode 100644
-index cc8b1a1b67..0000000000
---- a/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 8c223daf10319f15570a74ed83a1d655fdbd4a7b Mon Sep 17 00:00:00 2001
--Message-Id: <8c223daf10319f15570a74ed83a1d655fdbd4a7b.1592540443.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 19 Jun 2020 07:10:24 +0300
--Subject: [PATCH] stress-ng.h: suppress kernel sysinfo.h
--
--The kernel sysinfo.h (indirectly included from genetlink.h) defines
--struct sysinfo. This collides with musl libc definition of the same
--struct.
--
--Fixes this build issue:
--
--In file included from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:5,
--                 from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netlink.h:5,
--                 from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/genetlink.h:6,
--                 from stress-ng.h:464,
--                 from stress-access.c:25:
--.../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:8:8: error: redefinition of ?struct sysinfo?
-- struct sysinfo {
--        ^~~~~~~
--In file included from stress-ng.h:389,
--                 from stress-access.c:25:
--.../arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
-- struct sysinfo {
--        ^~~~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/ColinIanKing/stress-ng/pull/69
--
-- stress-ng.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/stress-ng.h b/stress-ng.h
--index 1a662938c1d9..e8aa0efe7527 100644
----- a/stress-ng.h
--+++ b/stress-ng.h
--@@ -387,6 +387,8 @@
-- 
-- #if defined(HAVE_SYS_SYSINFO_H)
-- #include <sys/sysinfo.h>
--+/* Suppress kernel sysinfo to avoid collision with musl */
--+#define _LINUX_SYSINFO_H
-- #endif
-- 
-- #if defined(HAVE_SYS_SYSMACROS_H)
---- 
--2.27.0
--
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 9993c759ba..5250a22475 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b21436fdbd9dc482a3fd95ae27cccf0097d0f226361ea3785215f7a4ad50136b  stress-ng-0.11.14.tar.xz
-+sha256  860291dd3a18b985b3483190a627bbede2b5c52113766c1921001b3fb4b83af0  stress-ng-0.11.17.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 61bc07d60a..57464e9bbf 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.11.14
-+STRESS_NG_VERSION = 0.11.17
- STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
- STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
--- 
-2.28.0
+Asaf
