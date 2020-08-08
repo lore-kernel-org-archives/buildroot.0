@@ -1,89 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Aug 2020 23:50:13 +0200
-Subject: [Buildroot] [git commit branch/next] package/minizip: fix build
- with gcc 4.8
-Message-ID: <20200812144329.5369D85F4A@busybox.osuosl.org>
+Date: Sun, 9 Aug 2020 00:13:43 +0200
+Subject: [Buildroot] [git commit branch/next]
+ configs/qemu_arm_vexpress_tz_defconfig: bump ATF version, cleanup config
+Message-ID: <20200812144329.6F67885F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d1bac8dbeb21c1cfd5b0ef05db25d60d39aa0eb
+commit: https://git.buildroot.net/buildroot/commit/?id=4af9a7487f18914b32af2f9384b8a104e62b096a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/b8baff4b86923d29163ce5cc9e391904d81fc90c
+Bump to a later version of ATF and cleanup the Python
+configuration. Previously this configuration had to work around Python
+3 issues with OP-TEE. Now this relies on OP-TEE properly building
+itself with host-python3.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../minizip/0002-mz.h-fix-build-with-gcc-4.8.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ configs/qemu_arm_vexpress_tz_defconfig | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..f9d28a3c75
---- /dev/null
-+++ b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,60 @@
-+From d38254c2cfdfa2baceef9e4fa553b74ed2e0247e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 25 Jul 2020 14:36:11 +0200
-+Subject: [PATCH] mz.h: fix build with gcc 4.8
-+
-+gcc 4.8 does not support __has_include directive as a result the build
-+will fail on:
-+
-+/home/naourr/work/instance-1/output-1/build/minizip-2.10.0/mz.h:162:44: error: missing binary operator before token "("
-+    (defined(__has_include) && __has_include(<stdint.h>))
-+                                            ^
-+
-+Fix it by appling:
-+https://gcc.gnu.org/onlinedocs/gcc-10.1.0/cpp/_005f_005fhas_005finclude.html
-+
-+Fix #510
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nmoinvaz/minizip/pull/515]
-+---
-+ mz.h | 14 ++++++++++----
-+ 1 file changed, 10 insertions(+), 4 deletions(-)
-+
-+diff --git a/mz.h b/mz.h
-+index 4d3732b..83662e0 100644
-+--- a/mz.h
-++++ b/mz.h
-+@@ -158,9 +158,12 @@
-+ #include <string.h> /* memset, strncpy, strlen */
-+ #include <limits.h>
-+ 
-+-#if defined(HAVE_STDINT_H) || \
-+-   (defined(__has_include) && __has_include(<stdint.h>))
-++#if defined(HAVE_STDINT_H)
-+ #  include <stdint.h>
-++#elif defined(__has_include)
-++#  if __has_include(<stdint.h>)
-++#    include <stdint.h>
-++#  endif
-+ #endif
-+ 
-+ #ifndef __INT8_TYPE__
-+@@ -188,9 +191,12 @@ typedef unsigned int       uint32_t;
-+ typedef unsigned long long uint64_t;
-+ #endif
-+ 
-+-#if defined(HAVE_INTTYPES_H) || \
-+-   (defined(__has_include) && __has_include(<inttypes.h>))
-++#if defined(HAVE_INTTYPES_H)
-+ #  include <inttypes.h>
-++#elif defined(__has_include)
-++#  if __has_include(<inttypes.h>)
-++#    include <inttypes.h>
-++#  endif
-+ #endif
-+ 
-+ #ifndef PRId8
-+-- 
-+2.27.0
-+
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index 37244cc969..7ded044016 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -27,7 +27,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca15_a7"
+ # TF-A for booting OP-TEE secure and uboot/linux non secure
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -40,13 +40,6 @@ BR2_PACKAGE_OPTEE_BENCHMARK=y
+ BR2_PACKAGE_OPTEE_EXAMPLES=y
+ BR2_PACKAGE_OPTEE_TEST=y
+ 
+-# OP-TEE components needs host-python3 interpreter and its modules
+-BR2_PACKAGE_HOST_PYTHON3=y
+-# Select python3 on the target to make sure Buildroot builds host-python using
+-# python3 and builds all host-python modules for python3.
+-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+-BR2_PACKAGE_PYTHON3=y
+-
+ # U-boot for booting the dear Linux kernel
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
