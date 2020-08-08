@@ -1,207 +1,71 @@
-From: Vijay <techvd@gmail.com>
-Date: Sat, 8 Aug 2020 12:14:45 -0700
-Subject: [Buildroot] Having trouble getting a simple cmake based custom
- package to wok
-In-Reply-To: <20200808053829.kvyu3lfddv6fsqe2@falbala.internal.home.lespocky.de>
-References: <CAOnXkYtSxw2+0VKtNTVsD8Eb36nGfAdBNY3hnSWg2tFtM_wwAg@mail.gmail.com>
- <20200807060851.djtpcq5skahtz2gi@falbala.internal.home.lespocky.de>
- <CAOnXkYt=C1E3-04_A6RaUDBTn-iojOiz=ZWRo6zk0KR5NBRs3Q@mail.gmail.com>
- <20200808053829.kvyu3lfddv6fsqe2@falbala.internal.home.lespocky.de>
-Message-ID: <CAOnXkYu+5tHNBPy718b8t=ShL=X4+sK9SsZ0FYPbjRwSW8dbRQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2020 23:12:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version
+ to 2.4.46
+In-Reply-To: <20200808122312.GO2186@scaer> (Yann E. MORIN's message of "Sat, 8
+ Aug 2020 14:23:12 +0200")
+References: <20200807171100.220432-1-bernd.kuhls@t-online.de>
+ <20200807192657.GJ2186@scaer> <20200807225632.41b7c8d0@gmx.net>
+ <20200808122312.GO2186@scaer>
+Message-ID: <87o8nkyh95.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, I hit Reply instead of Reply All.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Fri, Aug 7, 2020 at 10:38 PM Alexander Dahl <post@lespocky.de> wrote:
+Hi,
 
-> Hello Vijay,
->
-> On Fri, Aug 07, 2020 at 05:31:51PM -0700, Vijay wrote:
-> > Thank you Alex! Sorry I should've noticed this problem myself. I had C++
-> > enabled in a prior version but forgot to do that in this version. After a
-> > clean rebuild the project is compiled correctly now.
->
-> Good.  However, please answer to the mailinglist, not to me personally
-> only.  I don't like to be responsible for personal support. ;-)
->
-> > However, when it is
-> > trying to install my package I have a new error. The system seems to be
-> > looking for a install/fast target, which the Makefil does not have.
->
-> I have no idea on that problem.  Maybe read the CMake docs again?
->
-> https://cmake.org/cmake/help/latest/command/install.html
->
-> Greets
-> Alex
->
-> > Thanks again,
-> > Vijay
-> >
-> > >>> mytools 1.0 Building
-> >
-> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-> >  /usr/bin/make -j9  -C /home/foo/buildroot/output/build/mytools-1.0/
-> > Scanning dependencies of target mytools
-> > [ 50%] Building CXX object CMakeFiles/mytools.dir/mytools.cpp.o
-> > [100%] Linking CXX executable mytools
-> > [100%] Built target mytools
-> > >>> mytools 1.0 Installing to target
-> >
-> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-> >  /usr/bin/make -j9  DESTDIR=/home/foo/buildroot/output/target
-> install/fast
-> > -C /home/foo/buildroot/output/build/mytools-1.0/
-> > make[2]: *** No rule to make target 'install/fast'.  Stop.
-> > make[1]: *** [package/pkg-generic.mk:364:
-> > /home/foo/buildroot/output/build/mytools-1.0/.stamp_target_installed]
-> Error
-> > 2
-> > make: *** [Makefile:84: _all] Error 2
-> >
-> >
-> > On Thu, Aug 6, 2020 at 11:08 PM Alexander Dahl <post@lespocky.de> wrote:
-> >
-> > > Hello Vijay,
-> > >
-> > > On Thu, Aug 06, 2020 at 07:44:53PM -0700, Vijay wrote:
-> > > > I'm trying to add a simple, custom cmake based package to my
-> buildroot
-> > > > build. It's just a simple hello world program so that's not very
-> > > > interesting. Here is my .mk file, which is the minimum version
-> required I
-> > > > believe.
-> > > >
-> > > > MYTOOLS_VERSION=1.0
-> > > > MYTOOLS_SITE=$(HOME)/Work/mytools
-> > > > MYTOOLS_SITE_METHOD=local
-> > > >
-> > > > $(eval $(cmake-package))
-> > >
-> > > Looks okay I guess?
-> > >
-> > > > When I configure this and kick off the build, Cmake seems to be
-> having
-> > > > trouble with the cross compiler. Below is the output: Is there any
-> > > > additional configuration that I need to do?
-> > > >
-> > > > I'm using the latest 2020.05.01 version of buildroot.
-> > > >
-> > > > Any help is appreciated.
-> > > >
-> > > > Thanks,
-> > > > Vijay
-> > > >
-> > > > >>> mytools 1.0 Configuring
-> > > > (mkdir -p /home/foo/buildroot/output/build/mytools-1.0/ && cd
-> > > > /home/foo/buildroot/output/build/mytools-1.0/ && rm -f
-> CMakeCache.txt &&
-> > > >
-> > >
-> PATH="/home/foo/buildroot/output/host/bin:/home/foo/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-> > > >  /home/foo/buildroot/output/host/bin/cmake
-> > > > /home/foo/buildroot/output/build/mytools-1.0/
-> > > >
-> > >
-> -DCMAKE_TOOLCHAIN_FILE="/home/foo/buildroot/output/host/share/buildroot/toolchainfile.cmake"
-> > > > -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF
-> -DBUILD_DOC=OFF
-> > > > -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF
-> > > -DBUILD_TEST=OFF
-> > > > -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON   )
-> > > > -- The C compiler identification is GNU 8.4.0
-> > > > -- The CXX compiler identification is unknown
-> > >
-> > > CMake does not find a C++ compiler.
-> > >
-> > > > -- Check for working C compiler:
-> > > > /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc
-> > > > -- Check for working C compiler:
-> > > >
-> /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-gcc --
-> > > > works
-> > > > -- Detecting C compiler ABI info
-> > > > -- Detecting C compiler ABI info - done
-> > > > -- Detecting C compile features
-> > > > -- Detecting C compile features - done
-> > > > CMake Error at CMakeLists.txt:3 (project):
-> > > >   The CMAKE_CXX_COMPILER:
-> > > >
-> > > >
->  /home/foo/buildroot/output/host/bin/x86_64-buildroot-linux-uclibc-g++
-> > > >
-> > > >   is not a full path to an existing compiler tool.
-> > > >
-> > > >   Tell CMake where to find the compiler by setting either the
-> environment
-> > > >   variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the
-> full
-> > > > path
-> > > >   to the compiler, or to the compiler name if it is in the PATH.
-> > >
-> > > Again: there seems to bee no C++ compiler in your cross toolchain.
-> > >
-> > > I think you have two possibilities:
-> > >
-> > > If your hello world project is C only, tell CMake like this in your
-> > > CMakeLists.txt file:
-> > >
-> > >   project(hello C)
-> > >
-> > > or
-> > >
-> > >   project(hello
-> > >     LANGUAGES C
-> > >   )
-> > >
-> > > (CMake assumes "C CXX" by default here.)
-> > >
-> > > Or if your hello world uses C++ tell buildroot you need C++ support in
-> > > the toolchain:
-> > >
-> > > make menuconfig -> Toolchain -> Enable C++ support
-> > >
-> > > HTH & Greets
-> > > Alex
-> > >
-> > > >
-> > > >
-> > > > -- Configuring incomplete, errors occurred!
-> > > > See also
-> > > >
-> > >
-> "/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeOutput.log".
-> > > > See also
-> > > >
-> "/home/foo/buildroot/output/build/mytools-1.0/CMakeFiles/CMakeError.log".
-> > > > make[1]: *** [package/pkg-generic.mk:259:
-> > > > /home/foo/buildroot/output/build/mytools-1.0/.stamp_configured]
-> Error 1
-> > > > make: *** [Makefile:84: _all] Error 2
-> > >
-> > > > _______________________________________________
-> > > > buildroot mailing list
-> > > > buildroot at busybox.net
-> > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > >
-> > >
-> > > --
-> > > /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-> > > \ / CAMPAIGN     | speech censured, the first thought forbidden, the
-> > >  X  AGAINST      | first freedom denied, chains us all irrevocably.?
-> > > / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-> > >
->
-> --
-> /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-> \ / CAMPAIGN     | speech censured, the first thought forbidden, the
->  X  AGAINST      | first freedom denied, chains us all irrevocably.?
-> / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200808/13ab9df3/attachment.html>
+ > The hashes are there to guarantee that the archives have not be tampered
+ > with, so that we know that:
+
+ >  1. there was no technical issue downloading the archive (e.g. partial
+ >     download, proxy playing tricks, etc...),
+
+ >  2. upstream did not re-release the same version with a different
+ >     content, so that we know our patches would or would not apply for
+ >     example,
+
+ >  3. the source code has not been tampered with, so that no ill source
+ >     code has been injected (either in-transit, or if upstream got
+ >     compromised).
+
+ > md5 is broken, there is no point in using it. If that's the only thing
+ > upstream provides, we can carry it, but if upstream provides better
+ > hashes, md5 brings nothing to address the above, especially point 3.
+
+ > sha1 is not yet fully broken, but it is no longer trusted, and everyone
+ > is moving away from it. If upstream only provides sha1, we can carry it,
+ > but if upstream provides better hashes, then we should not _add_ sha1
+ > (but we can continue to update an existing one we already carry). While
+ > sha1 is still OK-ish to address accidental tampering (point 1) or
+ > non-malicious modifications (point 2, and even then), it is now
+ > useless to address malicious tampering (point 3).
+
+ > This is the point of view hashes should be looked at from.
+
+ > In this case, upstream provides two strong hashes, sha256 and sha512;
+ > adding md5 is totally useless, while adding sha1 is borderline useless.
+
+ > For the records:
+
+ >   - md5 [0] was introduced 1991, and the first security issues were
+ >     identified in 1993, and the first collisions reported in 1996.
+
+ >   - sha1 [1] was introduced in 1995, is considered weak since 2005 (15
+ >     years ago!), disallowed for signatures by NIST since 2013, and
+ >     chosen-prefix attacks are a thing since this year.
+
+This is all true, but generating a single rogue file with BOTH a md5 and
+sha1 collision and still being a valid compressed tarball is extremely
+unlikely, so I have no issues with listing them (together with a
+manually calculated sha256) if upstream doesn't provide sha256 or
+better.
+
+If upstream does provide sha256 or better then there indeed isn't much
+point in adding the older hashes as well.
+
+-- 
+Bye, Peter Korsgaard
