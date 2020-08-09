@@ -1,133 +1,124 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Aug 2020 11:40:58 +0200
-Subject: [Buildroot] [PATCH buildroot-test v2] scripts/autobuild-run:
- properly delete output dir even with write-protected folders
-In-Reply-To: <20200808211712.1013417-1-thomas.petazzoni@bootlin.com>
-References: <20200808211712.1013417-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200809094058.GQ2186@scaer>
+Date: Sun, 9 Aug 2020 13:55:45 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: set default aufs series and
+ version based on kernel version
+In-Reply-To: <20200808231411.105185-1-james.hilliard1@gmail.com>
+References: <20200808231411.105185-1-james.hilliard1@gmail.com>
+Message-ID: <20200809115545.GR2186@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-08-08 23:17 +0200, Thomas Petazzoni spake thusly:
-> We're already deleting the output directory before a new build with
-> "rm -rf" so that write protected files are removed as well, which
-> shutil.rmtree() doesn't do.
-> 
-> However "rm -rf" fails on write protected folders.
-> 
-> So instead, switch back to using shutil.rmtree(), with an error
-> handling function that takes care of setting write permissions if
-> needed.
+James, All,
 
-    ... that takes care of setting permissions sufficient to allow removal:
+On 2020-08-08 17:14 -0600, James Hilliard spake thusly:
+> Set default commits for aufs to the latest available commit in each
+> version specific branch.
 
-      - rwx on directories, so we can readdir() and traverse directories,
-        and remove them,
+No, this is not correct: you are using the kernel headers version, while
+the aufs version depends on the running kernel version.
 
-      - rw on files, so we can remove them.
+For external toolchains, the defaults is thus most probably very wrong,
+as the kernel headers version are rarely, if ever, matching the running
+kernel one. And for internal toolchains, even though the default is to
+have the headers match the running kernel version, this is not
+guaranteed either.
 
-But see also a comment later on [0]...
+I prefer there is no default, than an incorrect one.
 
-> This solves an autobuild-run failure that occurs when the output
-> directory cannot be deleted due to write-protected directories. This
-> is happening with mender-artefact Go modules for example.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> 
-> Changes since v1:
-> 
-> - Instead of calling "chmod +x" as a shell command, use the "onerror"
+Also, you forgot to add hashes for all those versions.
 
-'chmod +r', not '+x' ;-) No worries, that's not in the commit log.
-
->   callback of shutil.rmtree() to properly set permissions. Compared to
->   what Yann E. Morin had suggested, we need to not just set the write
->   permission, but also other permissions: if only the write permission
->   is there, we can't enter a directory.
-> 
->   Note that we considered reading the existing permission with
->   os.stat(), and then adding just the write permission on top of
->   that. But during our testing, we ended up with a folder with only
->   write permissions (due to testing a previous version that was only
->   setting the write permission) and that was causing shutil.rmtree()
->   to fail. So to be on the safe side, we simply reset the permissions
->   to something we know we will be able to delete.
-> 
->  scripts/autobuild-run | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index e475ea8..856c1bf 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -139,6 +139,7 @@ import re
->  import shutil
->  import signal
->  import subprocess
-> +import stat
->  import sys
->  from time import localtime, strftime
->  from distutils.version import StrictVersion
-> @@ -176,6 +177,14 @@ else:
->  HUNG_BUILD_TIMEOUT = 120 # mins
->  VERSION = 1
->  
-> +def rm_ro(f, p, _):
-> +    os.chmod(os.path.dirname(p), stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
-> +    if os.path.isdir(p):
-> +        os.chmod(p, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
-> +    else:
-> +        os.chmod(p, stat.S_IREAD | stat.S_IWRITE)
-> +    f(p)
-
-[0] we don't care if the files end up with the 'x' bit set before we
-remove them, so you could simplify the code by always setting rwx, and
-not care whether this is a directory or a file.
-
-Also, you could use stat.S_IRWXU, which is a combination of
-stat.S_IREAD, stat.S_IWRITE, and stat.S_IEXEC.
-
-    def rm_ro(f, p, _):
-        os.chmod(os.path.dirname(p), stat.S_IRWXU)
-        os.chmod(p, stat.S_IRWXU)
-        f(p)
-
-And you could have defined the function just above the code that uses
-it, i.e. ...
-
->  def log_write(logf, msg):
->      logf.write("[%s] %s\n" % (strftime("%a, %d %b %Y %H:%M:%S", localtime()), msg))
->      logf.flush()
-> @@ -384,13 +393,12 @@ class Builder:
->  
-
-... right here, as a sub-function of prepare_build(), but this is a
-minor detail.
+Finally, this is a huge and long list, that will be very difficult to
+maintain, so I am not very much in favour of this patch.
 
 Regards,
 Yann E. MORIN.
 
->          # Create an empty output directory. We remove it first, in case a previous build was aborted.
->          if os.path.exists(self.outputdir):
-> -            # shutil.rmtree doesn't remove write-protected files
-> -            subprocess.call(["rm", "-rf", self.outputdir])
-> +            shutil.rmtree(self.outputdir, onerror=rm_ro)
->          os.mkdir(self.outputdir)
->  
->          # If it exists, remove the other output directory used for reproducibility testing
->          if os.path.exists(self.outputdir_2):
-> -            subprocess.call(["rm", "-rf", self.outputdir_2])
-> +            shutil.rmtree(self.outputdir_2, onerror=rm_ro)
->          with open(os.path.join(self.outputdir, "branch"), "w") as branchf:
->              branchf.write(branch)
->  
-> -- 
-> 2.26.2
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  linux/Config.ext.in | 53 ++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 52 insertions(+), 1 deletion(-)
 > 
+> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+> index 734a52a533..ce58de238e 100644
+> --- a/linux/Config.ext.in
+> +++ b/linux/Config.ext.in
+> @@ -99,6 +99,9 @@ if BR2_LINUX_KERNEL_EXT_AUFS
+>  
+>  choice
+>  	bool "aufs-standalone series"
+> +	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> +	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+> +	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+>  	help
+>  	  Select the major series of this version. This must match the
+>  	  major version of your kernel (e.g. for kernels 3.x, select
+> @@ -127,7 +130,55 @@ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES
+>  
+>  config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+>  	string "aufs-standalone version"
+> -	default ""
+> +	default "ac34d21c4044d0232f5ff74e5543e3793071c671" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+> +	default "2ab5ec25767c8acf116ef7f8d3a896d0c357593e" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+> +	default "9ba4e2c61e93f74711fe858f49bd255f5d829fb4" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+> +	default "caffea77e5b1141c844a8a5fce066bfba42736cd" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> +	default "26428f642dce5b1c1455fa73ac77c3b51bafdd85" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+> +	default "45f6f8eb62d2208316ad09bf9cce7d88537270f4" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+> +	default "d051ff358d1072d71103b076ca2d7d163a17a3f8" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+> +	default "25f304c2c8c866b551ba7dc0c26b8fc1bbac95fa" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> +	default "13c40c206b7a50bcc116bb512682ef588e0c985c" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+> +	default "0f5cf9757022f1dc050623455a196140e4f63eaa" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+> +	default "c0cdacc30e85486a06a3b0d0a4c91accfd62e95d" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+> +	default "4662af5e51c2191aac6bea3fd1f1bc853e33bb12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+> +	default "425ecd2b0837d5d7c12a0aae7c6c05910ead5cef" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+> +	default "05375f52cab37d77602dd8cdb4a6b34a45de7689" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+> +	default "105ac5581e1792f80f4520d4ab4072dfb863c818" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+> +	default "78cbc7ffc120b21092a984808865f226764eed3b" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+> +	default "31266c01bd88e0053f53f4580adcca03175947b2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+> +	default "7a4d033447c622911653ff190dd5296b831468e1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
+> +	default "aa5ef5e7a628817b6c2c89acddfc7976bb758bb6" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
+> +	default "34be418bd4f0bb069e3971c76f5a8d8a6038558a" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+> +	default "f1590cdde901ad19fa9800b1a35b557270f29fc0" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
+> +	default "0228f4bae07367afbcccc7b1c98ec438c35fb60e" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
+> +	default "058f6e23530e4b38f60725537ad151098ee74437" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+> +	default "655770239032bc4dec1e591016e1a3a5307c9f6c" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+> +	default "7b00655846641e84c87f9af94985f48e4bb0f2df" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+> +	default "09faae00f970d044ccd90ea8cc9a34545b3ac24d" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+> +	default "7696ae969ebcef1b7a74d0d0aeae8857dfb972c1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+> +	default "779216b4d28c295a6f52787dc35962e6dedcdc8c" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+> +	default "f3daf663294ae51cde1105450705a83d7f0abf84" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+> +	default "2a2a3ee407810b4a3e19c3d5cfdb7f371d5df835" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+> +	default "b5a25205ee21187e20e1d998f98763d09f442c26" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+> +	default "a511fd5b5b4a311c906e200ef8abc42d1387b94d" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> +	default "cb287d372de85fad6a15afa198d7526383037381" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+> +	default "19702ee73cdc4a102593969537938f3183d4b841" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+> +	default "b279b0bb265eb0c71c0420becd127c90f09b0003" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+> +	default "b8ca8d15cf8e635d310acab5e571e31399a842b2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+> +	default "fcc197ae3a575b6f1b2aa1e51fe250eaadd4292b" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> +	default "35fd8e89d9cbd3b665dd11c3ae901ac52b07bcbb" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+> +	default "4a8ee1833947c5aba704bf09fad612f4c4ecd827" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+> +	default "f88513f985e153aaf3e2950622c2a2329c3c3f8f" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+> +	default "e98c69e26250b411e51cc92bf73df2f0829d0759" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+> +	default "27b5f7469fe5259aa489e92fdb6d88900ec8c0a4" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+> +	default "82d56105d0bdbdf5959b16f788fed4f6a530373f" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+> +	default "3e310a136e71bb284a959d95c77f5b7af132280b" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+> +	default "bfbe10165cbfc0cd7b1d7e9c878f1a3f2b6872f1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+> +	default "df60b373c5f6c22835fdb8521b12973e9d6e06df" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+> +	default "5809bf47aeb6e8257691287f9a218660c110acc5" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> +	default "269a613efab1718fd587c2bfc945d095b57f56e2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+> +	default "aa3d7447003abd5e3c437de52d8da2e6203390ac" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+>  	help
+>  	  The version you choose must match that of your kernel.
+>  	  Usually, the sha1 of the cset you want to use; avoid using a
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
