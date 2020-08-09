@@ -1,43 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Aug 2020 22:37:14 +0200
-Subject: [Buildroot] [git commit branch/next] package/mtd: crypto support
- needs headers >= 4.12
-Message-ID: <20200812144329.CB71985F4A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Aug 2020 18:55:20 +0200
+Subject: [Buildroot] [git commit branch/next] package/libabseil-cpp: fix
+ build on RISC-V 32-bits
+Message-ID: <20200812144329.88EC485F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70e6762aa0204fed687eab068157a79a0ec7aad9
+commit: https://git.buildroot.net/buildroot/commit/?id=f1455b56ebe721dfea562a4bb159d848f93db679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-crypto support includes <linux/hash_info.h> since version 2.1.2 and
-https://github.com/sigma-star/mtd-utils/commit/a739b59efe7996e3bdcbe8b17743dc05ac7c110a
-
-However, linux/hash_info.h is only exported since kernel 4.12:
-https://github.com/torvalds/linux/commit/fcc8487d477a3452a1d0ccbdd4c5e0e1e3cb8bed
+This commit backports an upstream patch that fixes the build on RISC-V
+32-bits.
 
 Fixes:
- - http://autobuild.buildroot.org/results/dbaeed9e9e2af191166808d2d6d6d3c2e5051c2c
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  http://autobuild.buildroot.net/results/c6c2c99bdba8c840d52fe0464d26aca169ea1d90/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mtd/mtd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../0003-Fix-build-on-riscv32-675.patch            | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 8220a5ace8..1186fa52d5 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -21,7 +21,8 @@ endif
- ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
- MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
- MTD_CONF_OPTS += --with-ubifs
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+# crypto needs linux/hash_info.h
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy)
- MTD_DEPENDENCIES += openssl
- MTD_CONF_OPTS += --with-crypto
- else
+diff --git a/package/libabseil-cpp/0003-Fix-build-on-riscv32-675.patch b/package/libabseil-cpp/0003-Fix-build-on-riscv32-675.patch
+new file mode 100644
+index 0000000000..0077c5fe9b
+--- /dev/null
++++ b/package/libabseil-cpp/0003-Fix-build-on-riscv32-675.patch
+@@ -0,0 +1,77 @@
++From 3f347c46272886a099852a4cd303ecf37a054de8 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Mon, 18 May 2020 10:23:50 -0700
++Subject: [PATCH] Fix build on riscv32 (#675)
++
++[Backport from upstream commit 3f347c46272886a099852a4cd303ecf37a054de8]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ absl/base/internal/direct_mmap.h        | 5 +++++
++ absl/base/internal/spinlock_linux.inc   | 8 ++++++++
++ absl/synchronization/internal/waiter.cc | 8 ++++++++
++ 3 files changed, 21 insertions(+)
++
++diff --git a/absl/base/internal/direct_mmap.h b/absl/base/internal/direct_mmap.h
++index 5618867..16accf0 100644
++--- a/absl/base/internal/direct_mmap.h
+++++ b/absl/base/internal/direct_mmap.h
++@@ -61,6 +61,10 @@ extern "C" void* __mmap2(void*, size_t, int, int, int, size_t);
++ #endif
++ #endif  // __BIONIC__
++ 
+++#if defined(__NR_mmap2) && !defined(SYS_mmap2)
+++#define SYS_mmap2 __NR_mmap2
+++#endif
+++
++ namespace absl {
++ ABSL_NAMESPACE_BEGIN
++ namespace base_internal {
++@@ -72,6 +76,7 @@ inline void* DirectMmap(void* start, size_t length, int prot, int flags, int fd,
++ #if defined(__i386__) || defined(__ARM_ARCH_3__) || defined(__ARM_EABI__) || \
++     (defined(__mips__) && _MIPS_SIM == _MIPS_SIM_ABI32) ||                   \
++     (defined(__PPC__) && !defined(__PPC64__)) ||                             \
+++    (defined(__riscv) && __riscv_xlen == 32) ||                              \
++     (defined(__s390__) && !defined(__s390x__))
++   // On these architectures, implement mmap with mmap2.
++   static int pagesize = 0;
++diff --git a/absl/base/internal/spinlock_linux.inc b/absl/base/internal/spinlock_linux.inc
++index 323edd6..e31c6ed 100644
++--- a/absl/base/internal/spinlock_linux.inc
+++++ b/absl/base/internal/spinlock_linux.inc
++@@ -46,6 +46,14 @@ static_assert(sizeof(std::atomic<uint32_t>) == sizeof(int),
++ #endif
++ #endif
++ 
+++#if defined(__NR_futex_time64) && !defined(SYS_futex_time64)
+++#define SYS_futex_time64 __NR_futex_time64
+++#endif
+++
+++#if defined(SYS_futex_time64) && !defined(SYS_futex)
+++#define SYS_futex SYS_futex_time64
+++#endif
+++
++ extern "C" {
++ 
++ ABSL_ATTRIBUTE_WEAK void AbslInternalSpinLockDelay(
++diff --git a/absl/synchronization/internal/waiter.cc b/absl/synchronization/internal/waiter.cc
++index 2949f5a..b6150b9 100644
++--- a/absl/synchronization/internal/waiter.cc
+++++ b/absl/synchronization/internal/waiter.cc
++@@ -86,6 +86,14 @@ static void MaybeBecomeIdle() {
++ #endif
++ #endif
++ 
+++#if defined(__NR_futex_time64) && !defined(SYS_futex_time64)
+++#define SYS_futex_time64 __NR_futex_time64
+++#endif
+++
+++#if defined(SYS_futex_time64) && !defined(SYS_futex)
+++#define SYS_futex SYS_futex_time64
+++#endif
+++
++ class Futex {
++  public:
++   static int WaitUntil(std::atomic<int32_t> *v, int32_t val,
++-- 
++2.26.2
++
