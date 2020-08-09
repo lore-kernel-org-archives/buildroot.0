@@ -1,92 +1,125 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat,  8 Aug 2020 17:14:11 -0600
-Subject: [Buildroot] [PATCH 1/1] linux: set default aufs series and version
- based on kernel version
-Message-ID: <20200808231411.105185-1-james.hilliard1@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sun,  9 Aug 2020 11:35:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/librtlsdr: bump to more recent
+ upstream master version
+Message-ID: <20200809093538.126676-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set default commits for aufs to the latest available commit in each
-version specific branch.
+Since 948666dfde1e0a5d149442f80facc162a83016ad, librtlsdr in Buildroot is no longer
+built from an official release, but from a commit on the master branch. However, the
+commit that was referenced has a broken pkgconfig file templating, such that
+other packages using `pkgconfig --libs librtlsdr` as part of their build process
+(such as dump1090) could not be built anymore:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Before 948666dfde1e0a5d149442f80facc162a83016ad:
+$ cat staging/usr/lib/pkgconfig/librtlsdr.pc
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: RTL-SDR Library
+Description: C Utility Library
+Version: 0.6.0
+Cflags: -I${includedir}/
+Libs: -L${libdir} -lrtlsdr -lusb-1.0
+Libs.private:
+
+On 948666dfde1e0a5d149442f80facc162a83016ad:
+$ cat staging/usr/lib/pkgconfig/librtlsdr.pc
+prefix=
+exec_prefix=
+libdir=
+includedir=
+
+Name: RTL-SDR Library
+Description: C Utility Library
+Version: 7082
+Cflags: -I${includedir}/
+Libs: -L${libdir} -lrtlsdr
+Libs.private:  -lusb-1.0
+
+In the meantime, upstream released a bugfix for that ([1]), so we bump to that
+commit as well, and update the only patch for shared libs accordingly, because
+upstream also added a new tool called `rtl_biast` in the meantime.
+
+Finaly, we update the hash file to the two-spaces convention.
+
+Fixes: http://autobuild.buildroot.net/results/b4c/b4cdcb59cc61c51c024197a64865ad4b60023d0c/
+
+[1]: https://github.com/steve-m/librtlsdr/commit/ed0317e6a58c098874ac58b769cf2e609c18d9a5
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- linux/Config.ext.in | 53 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ .../0001-disable_shared_library_target_in_build.patch    | 9 +++++----
+ package/librtlsdr/librtlsdr.hash                         | 4 ++--
+ package/librtlsdr/librtlsdr.mk                           | 2 +-
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 734a52a533..ce58de238e 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -99,6 +99,9 @@ if BR2_LINUX_KERNEL_EXT_AUFS
+diff --git a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
+index 376aa23344..2fb63465de 100644
+--- a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
++++ b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
+@@ -1,4 +1,4 @@
+-From c8878472bf84c656979ea1d07e7ed55b0aa2c939 Mon Sep 17 00:00:00 2001
++From 9a1c2587d4ef18e2026811deabd024eb7577d9ce Mon Sep 17 00:00:00 2001
+ From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ Date: Fri, 15 May 2020 16:14:48 +0200
+ Subject: [PATCH] disable shared library target in build
+@@ -19,12 +19,13 @@ will be install.
+ Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ ---
+  src/CMakeLists.txt | 30 +++++++++++++++++++++---------
+  1 file changed, 21 insertions(+), 9 deletions(-)
  
- choice
- 	bool "aufs-standalone series"
-+	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-+	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	default BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	help
- 	  Select the major series of this version. This must match the
- 	  major version of your kernel (e.g. for kernels 3.x, select
-@@ -127,7 +130,55 @@ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES
+ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 33faee7..d82fc87 100644
++index de93044..13b7b1a 100644
+ --- a/src/CMakeLists.txt
+ +++ b/src/CMakeLists.txt
+ @@ -18,6 +18,8 @@
+@@ -121,9 +122,9 @@ index 33faee7..d82fc87 100644
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # .so/.dylib file
+    )
+ +endif()
+- install(TARGETS rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power
++ install(TARGETS rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power rtl_biast
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+ -- 
+-2.26.2
++2.25.3
  
- config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
- 	string "aufs-standalone version"
--	default ""
-+	default "ac34d21c4044d0232f5ff74e5543e3793071c671" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-+	default "2ab5ec25767c8acf116ef7f8d3a896d0c357593e" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-+	default "9ba4e2c61e93f74711fe858f49bd255f5d829fb4" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-+	default "caffea77e5b1141c844a8a5fce066bfba42736cd" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	default "26428f642dce5b1c1455fa73ac77c3b51bafdd85" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
-+	default "45f6f8eb62d2208316ad09bf9cce7d88537270f4" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
-+	default "d051ff358d1072d71103b076ca2d7d163a17a3f8" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-+	default "25f304c2c8c866b551ba7dc0c26b8fc1bbac95fa" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-+	default "13c40c206b7a50bcc116bb512682ef588e0c985c" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
-+	default "0f5cf9757022f1dc050623455a196140e4f63eaa" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-+	default "c0cdacc30e85486a06a3b0d0a4c91accfd62e95d" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
-+	default "4662af5e51c2191aac6bea3fd1f1bc853e33bb12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
-+	default "425ecd2b0837d5d7c12a0aae7c6c05910ead5cef" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
-+	default "05375f52cab37d77602dd8cdb4a6b34a45de7689" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+	default "105ac5581e1792f80f4520d4ab4072dfb863c818" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-+	default "78cbc7ffc120b21092a984808865f226764eed3b" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-+	default "31266c01bd88e0053f53f4580adcca03175947b2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+	default "7a4d033447c622911653ff190dd5296b831468e1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-+	default "aa5ef5e7a628817b6c2c89acddfc7976bb758bb6" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+	default "34be418bd4f0bb069e3971c76f5a8d8a6038558a" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
-+	default "f1590cdde901ad19fa9800b1a35b557270f29fc0" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8
-+	default "0228f4bae07367afbcccc7b1c98ec438c35fb60e" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+	default "058f6e23530e4b38f60725537ad151098ee74437" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+	default "655770239032bc4dec1e591016e1a3a5307c9f6c" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-+	default "7b00655846641e84c87f9af94985f48e4bb0f2df" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+	default "09faae00f970d044ccd90ea8cc9a34545b3ac24d" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+	default "7696ae969ebcef1b7a74d0d0aeae8857dfb972c1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-+	default "779216b4d28c295a6f52787dc35962e6dedcdc8c" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-+	default "f3daf663294ae51cde1105450705a83d7f0abf84" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	default "2a2a3ee407810b4a3e19c3d5cfdb7f371d5df835" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
-+	default "b5a25205ee21187e20e1d998f98763d09f442c26" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-+	default "a511fd5b5b4a311c906e200ef8abc42d1387b94d" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	default "cb287d372de85fad6a15afa198d7526383037381" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	default "19702ee73cdc4a102593969537938f3183d4b841" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	default "b279b0bb265eb0c71c0420becd127c90f09b0003" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+	default "b8ca8d15cf8e635d310acab5e571e31399a842b2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	default "fcc197ae3a575b6f1b2aa1e51fe250eaadd4292b" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	default "35fd8e89d9cbd3b665dd11c3ae901ac52b07bcbb" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	default "4a8ee1833947c5aba704bf09fad612f4c4ecd827" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	default "f88513f985e153aaf3e2950622c2a2329c3c3f8f" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-+	default "e98c69e26250b411e51cc92bf73df2f0829d0759" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	default "27b5f7469fe5259aa489e92fdb6d88900ec8c0a4" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	default "82d56105d0bdbdf5959b16f788fed4f6a530373f" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
-+	default "3e310a136e71bb284a959d95c77f5b7af132280b" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	default "bfbe10165cbfc0cd7b1d7e9c878f1a3f2b6872f1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	default "df60b373c5f6c22835fdb8521b12973e9d6e06df" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+	default "5809bf47aeb6e8257691287f9a218660c110acc5" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	default "269a613efab1718fd587c2bfc945d095b57f56e2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-+	default "aa3d7447003abd5e3c437de52d8da2e6203390ac" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	help
- 	  The version you choose must match that of your kernel.
- 	  Usually, the sha1 of the cset you want to use; avoid using a
+diff --git a/package/librtlsdr/librtlsdr.hash b/package/librtlsdr/librtlsdr.hash
+index 920a755033..e4b0871db3 100644
+--- a/package/librtlsdr/librtlsdr.hash
++++ b/package/librtlsdr/librtlsdr.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 78c20031287017d057941640dcf05cb7666cfedcfad1b4a1186ed00cabfabc2f  librtlsdr-d794155ba65796a76cd0a436f9709f4601509320.tar.gz
++sha256  f09ff5ba2fa1780071321ba22885b9d1a16ac9d4b944a97e39b6921960439301  librtlsdr-ed0317e6a58c098874ac58b769cf2e609c18d9a5.tar.gz
+ # License file, locally calculated
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
+index 16f2632789..47586bdfb2 100644
+--- a/package/librtlsdr/librtlsdr.mk
++++ b/package/librtlsdr/librtlsdr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRTLSDR_VERSION = d794155ba65796a76cd0a436f9709f4601509320
++LIBRTLSDR_VERSION = ed0317e6a58c098874ac58b769cf2e609c18d9a5
+ LIBRTLSDR_SITE = $(call github,steve-m,librtlsdr,$(LIBRTLSDR_VERSION))
+ LIBRTLSDR_LICENSE = GPL-2.0+
+ LIBRTLSDR_LICENSE_FILES = COPYING
 -- 
-2.25.1
+2.25.3
