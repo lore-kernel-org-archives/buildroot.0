@@ -1,64 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Aug 2020 21:24:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.9.3
-In-Reply-To: <20200809172719.117517-1-asafka7@gmail.com>
-References: <20200809172719.117517-1-asafka7@gmail.com>
-Message-ID: <20200809192413.GD13263@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun,  9 Aug 2020 21:38:12 +0200
+Subject: [Buildroot] [PATCH v2 0/5] Bootlin toolchains integration into
+ Buildroot
+Message-ID: <20200809193818.1139805-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, All,
+Hello,
 
-On 2020-08-09 20:27 +0300, Asaf Kahlon spake thusly:
-> Drop patch (already in version).
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  ...op_mt-as-a-macro-on-uclibc-and-MacOS.patch | 52 -------------------
->  package/libfuse3/libfuse3.hash                |  2 +-
->  package/libfuse3/libfuse3.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 54 deletions(-)
->  delete mode 100644 package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
-[--SNIP--]
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index 1e959640e2..9401ac9523 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBFUSE3_VERSION = 3.9.2
-> +LIBFUSE3_VERSION = 3.9.3
+This patch series integrate the Bootlin toolchains (from
+https://toolchains.bootlin.com) as toolchain profiles in Buildroot, so
+that they can easily be used.
 
-So, upstream has been clumsy: they tagged 3.9.4 (2020-08-09 12:49:29),
-then tagged 3.9.3 (2020-08-09 12:52:00); both tag point to the same
-commit, though.
+Since there is ~150 toolchains, it is not practical to add them
+manually, so this patch series adds a script that generates the
+toolchain-external-bootlin/ package using the information provided at
+https://toolchains.bootlin.com/downloads/releases/toolchains/.
 
-But to avoid false positive about version check, I think we'd better
-bump to 3.9.4.
+In addition to adding the toolchain package itself, we also add one
+test case for each toolchain, to verify that its integration in
+Buildroot is working fine.
 
-Regards,
-Yann E. MORIN.
+This series is also available at:
 
->  LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
->  LIBFUSE3_LICENSE = LGPL-2.1
->  LIBFUSE3_LICENSE_FILES = LICENSE
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  https://github.com/tpetazzoni/buildroot/commits/bl-toolchains
+
+Since the first version, I have taken into account the changes
+suggested by Titouan, see PATCH 1 for the details. The other patches
+are either unchanged, or the changes are just the result of the script
+generating a slightly different output due to changes in the script
+itself.
+
+Best regards,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (5):
+  support/scripts/gen-bootlin-toolchains: add new script to support
+    Bootlin toolchains
+  support/testing/tests/toolchain/test_external: support non-ELF
+    toolchains
+  toolchain/toolchain-external/toolchain-external-bootlin: add
+    auto-generated files
+  toolchain/toolchain-external/toolchain-external-bootlin: finalize
+    package addition
+  support/testing/test/toolchain/test_external_bootlin: new test cases
+
+ support/scripts/gen-bootlin-toolchains        |  475 +++
+ .../testing/tests/toolchain/test_external.py  |   14 +-
+ .../tests/toolchain/test_external_bootlin.py  | 2354 +++++++++++
+ toolchain/toolchain-external/Config.in        |    6 +
+ .../toolchain-external-bootlin/Config.in      |    9 +
+ .../Config.in.options                         | 3587 +++++++++++++++++
+ .../toolchain-external-bootlin.hash           |  308 ++
+ .../toolchain-external-bootlin.mk             |  927 +++++
+ 8 files changed, 7675 insertions(+), 5 deletions(-)
+ create mode 100755 support/scripts/gen-bootlin-toolchains
+ create mode 100644 support/testing/tests/toolchain/test_external_bootlin.py
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
