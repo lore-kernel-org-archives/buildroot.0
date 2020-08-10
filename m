@@ -1,84 +1,111 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 10 Aug 2020 12:18:39 +0200
-Subject: [Buildroot] [PATCH] package/lua-cqueues: bump to version 20200726
-Message-ID: <20200810101839.3855928-1-francois.perrad@gadz.org>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Mon, 10 Aug 2020 12:39:22 +0200
+Subject: [Buildroot] [PATCH] package/networkd-dispatcher: new package
+Message-ID: <20200810103921.828138-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-supports Lua 5.4
+Networkd-dispatcher is a dispatcher daemon for systemd-networkd
+connection status changes. This daemon is similar to
+NetworkManager-dispatcher, but is much more limited in the types of
+events it supports due to the limited nature of systemd-networkd.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/lua-cqueues/Config.in        | 5 ++---
- package/lua-cqueues/lua-cqueues.hash | 2 +-
- package/lua-cqueues/lua-cqueues.mk   | 2 +-
- package/lua-http/Config.in           | 5 ++---
- 4 files changed, 6 insertions(+), 8 deletions(-)
+ DEVELOPERS                                    |  3 +++
+ package/Config.in                             |  1 +
+ package/networkd-dispatcher/Config.in         | 21 ++++++++++++++++
+ .../networkd-dispatcher.mk                    | 25 +++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/networkd-dispatcher/Config.in
+ create mode 100644 package/networkd-dispatcher/networkd-dispatcher.mk
 
-diff --git a/package/lua-cqueues/Config.in b/package/lua-cqueues/Config.in
-index c319fbdf4..60f022848 100644
---- a/package/lua-cqueues/Config.in
-+++ b/package/lua-cqueues/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LUA_CQUEUES
- 	bool "lua-cqueues"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Continuation Queues: Embeddable asynchronous networking,
-@@ -9,5 +8,5 @@ config BR2_PACKAGE_LUA_CQUEUES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ee840dbb8b..afe0d507be 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1824,6 +1824,9 @@ N:	Michael Fischer <mf@go-sys.de>
+ F:	package/gnuplot/
+ F:	package/sdl2/
  
- 	  http://25thandclement.com/~william/projects/cqueues.html
- 
--comment "lua-cqueues needs a toolchain w/ threads, Lua <= 5.3"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
-+comment "lua-cqueues needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lua-cqueues/lua-cqueues.hash b/package/lua-cqueues/lua-cqueues.hash
-index e12cdc642..5803a60d5 100644
---- a/package/lua-cqueues/lua-cqueues.hash
-+++ b/package/lua-cqueues/lua-cqueues.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  45b4a0105c096eee5840b69e8e0078eb7b5d61a23aeca30db710f1caac3ec399  lua-cqueues-20200603.tar.gz
-+sha256  9e112edd246da5cfca264314b70325a0b63665cb87a00e45ee3ae4f194000d52  lua-cqueues-20200726.tar.gz
- sha256  5f4b1f94047790eadf8fd0f9a8e3bd2895bea4c9a2c0f8bf7cd8c8e57caa5219  LICENSE
-diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
-index bfa1df744..6d842eca9 100644
---- a/package/lua-cqueues/lua-cqueues.mk
-+++ b/package/lua-cqueues/lua-cqueues.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_CQUEUES_VERSION = 20200603
-+LUA_CQUEUES_VERSION = 20200726
- LUA_CQUEUES_SITE = $(call github,wahern,cqueues,rel-$(LUA_CQUEUES_VERSION))
- LUA_CQUEUES_LICENSE = MIT
- LUA_CQUEUES_LICENSE_FILES = LICENSE
-diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
-index 76eff7f29..8eefd481b 100644
---- a/package/lua-http/Config.in
-+++ b/package/lua-http/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LUA_HTTP
- 	bool "lua-http"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS    # luaossl & lua-cqueues
--	depends on !BR2_PACKAGE_LUA_5_4 # lua-cqueues
- 	select BR2_PACKAGE_LPEG # runtime
- 	select BR2_PACKAGE_LUA_BASEXX # runtime
- 	select BR2_PACKAGE_LUA_BINARYHEAP # runtime
-@@ -16,5 +15,5 @@ config BR2_PACKAGE_LUA_HTTP
- 
- 	  https://daurnimator.github.io/lua-http/
- 
--comment "lua-http needs a toolchain w/ threads, Lua <= 5.3"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
-+comment "lua-http needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
++N:  Michael Nosthoff <buildroot@heine.tech>
++F:  package/networkd-dispatcher/
++
+ N:	Michael Rommel <rommel@layer-7.net>
+ F:	package/knock/
+ F:	package/python-crc16/
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..c637b5427f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2130,6 +2130,7 @@ menu "Networking applications"
+ 	source "package/netstat-nat/Config.in"
+ 	source "package/network-manager/Config.in"
+ 	source "package/network-manager-openvpn/Config.in"
++	source "package/networkd-dispatcher/Config.in"
+ 	source "package/nfacct/Config.in"
+ 	source "package/nftables/Config.in"
+ 	source "package/nginx/Config.in"
+diff --git a/package/networkd-dispatcher/Config.in b/package/networkd-dispatcher/Config.in
+new file mode 100644
+index 0000000000..3a5b80d534
+--- /dev/null
++++ b/package/networkd-dispatcher/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_NETWORKD_DISPATCHER
++	bool "networkd-dispatcher"
++	depends on BR2_USE_MMU # python-gobject
++	depends on BR2_USE_WCHAR # dbus-python
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # python-gobject
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
++	depends on BR2_TOOLCHAIN_USES_GLIBC # python-gobject
++	depends on BR2_PACKAGE_DBUS # dbus-python
++	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS # python-gobject
++	depends on BR2_PACKAGE_PYTHON3 # runtime
++	depends on BR2_PACKAGE_SYSTEMD_NETWORKD # runtime
++	select BR2_PACKAGE_DBUS_PYTHON
++	select BR2_PACKAGE_PYTHON_GOBJECT
++	help
++	  Networkd-dispatcher is a dispatcher daemon for
++	  systemd-networkd connection status changes.
++	  This daemon is similar to NetworkManager-dispatcher,
++	  but is much more limited in the types of events it
++	  supports due to the limited nature of systemd-networkd.
++
++	  https://gitlab.com/craftyguy/networkd-dispatcher
+diff --git a/package/networkd-dispatcher/networkd-dispatcher.mk b/package/networkd-dispatcher/networkd-dispatcher.mk
+new file mode 100644
+index 0000000000..b3ca91b099
+--- /dev/null
++++ b/package/networkd-dispatcher/networkd-dispatcher.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# networkd-dispatcher
++#
++################################################################################
++
++NETWORKD_DISPATCHER_VERSION = 2.0.1
++NETWORKD_DISPATCHER_SOURCE = networkd-dispatcher-$(NETWORKD_DISPATCHER_VERSION).tar.bz2
++NETWORKD_DISPATCHER_SITE = https://gitlab.com/craftyguy/networkd-dispatcher/-/archive/$(NETWORKD_DISPATCHER_VERSION)
++NETWORKD_DISPATCHER_LICENSE = GPL-3.0
++NETWORKD_DISPATCHER_LICENSE_FILES = LICENSE
++
++define NETWORKD_DISPATCHER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/networkd-dispatcher $(TARGET_DIR)/usr/bin/networkd-dispatcher
++	mkdir -p $(TARGET_DIR)/etc/networkd-dispatcher/{routable,dormant,no-carrier,off,carrier,degraded,configuring,configured}.d
++endef
++
++define NETWORKD_DISPATCHER_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/networkd-dispatcher.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/networkd-dispatcher.service
++	$(INSTALL) -D -m 0644 $(@D)/networkd-dispatcher.conf \
++		$(TARGET_DIR)/etc/conf.d/networkd-dispatcher.conf
++endef
++
++$(eval $(generic-package))
 -- 
 2.25.1
