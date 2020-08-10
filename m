@@ -1,198 +1,64 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Mon, 10 Aug 2020 07:57:56 +0300
-Subject: [Buildroot] [PATCH v3 1/1] package/htop: add patch for fixing build
- with gcc 10
-Message-ID: <20200810045756.11462-1-fido_max@inbox.ru>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 10 Aug 2020 08:41:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
+ security fix for CVE-2020-14347
+Message-ID: <20200810064109.447089-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- ...ve-complation-issues-with-fno-common.patch | 173 ++++++++++++++++++
- 1 file changed, 173 insertions(+)
- create mode 100644 package/htop/0002-Resolve-complation-issues-with-fno-common.patch
+Release notes:
+https://lists.x.org/archives/xorg-announce/2020-July/003051.html
 
-diff --git a/package/htop/0002-Resolve-complation-issues-with-fno-common.patch b/package/htop/0002-Resolve-complation-issues-with-fno-common.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../1.20.8/0007-fix-for-ZDI-11426.patch       | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
+
+diff --git a/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
 new file mode 100644
-index 0000000000..097a8df7ea
+index 0000000000..ce623b24cb
 --- /dev/null
-+++ b/package/htop/0002-Resolve-complation-issues-with-fno-common.patch
-@@ -0,0 +1,173 @@
-+From dfd9279f87791e36a5212726781c31fbe7110361 Mon Sep 17 00:00:00 2001
-+From: Nathan Scott <nathans@redhat.com>
-+Date: Fri, 10 Jul 2020 10:35:32 +1000
-+Subject: [PATCH] Resolve complation issues with -fno-common (default from
-+ gcc-10)
++++ b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
+@@ -0,0 +1,36 @@
++From aac28e162e5108510065ad4c323affd6deffd816 Mon Sep 17 00:00:00 2001
++From: Matthieu Herrb <matthieu@herrb.eu>
++Date: Sat, 25 Jul 2020 19:33:50 +0200
++Subject: [PATCH] fix for ZDI-11426
 +
-+Extends the MakeHeader script to auto-generate correct "extern"
-+function declarations in some cases that it currently does not.
++Avoid leaking un-initalized memory to clients by zeroing the
++whole pixmap on initial allocation.
 +
-+Related to https://github.com/hishamhm/htop/pull/981
++This vulnerability was discovered by:
++Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
 +
-+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-+Fetch from: https://github.com/hishamhm/htop/commit/dfd9279f87791e36a5212726781c31fbe7110361.patch
++Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
++Reviewed-by: Alan Coopersmith <alan.coopersmith@oracle.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream commit
++ https://gitlab.freedesktop.org/xorg/xserver/-/commit/aac28e162e5108510065ad4c323affd6deffd816]
 +---
-+ CRT.c                 |  4 ++--
-+ CRT.h                 | 28 ++++++++++++++--------------
-+ linux/LinuxProcess.c  |  3 ++-
-+ linux/LinuxProcess.h  | 19 ++++++++++---------
-+ scripts/MakeHeader.py |  4 +++-
-+ 5 files changed, 31 insertions(+), 27 deletions(-)
++ dix/pixmap.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/CRT.c b/CRT.c
-+index ca9a10dd..088cd1a4 100644
-+--- a/CRT.c
-++++ b/CRT.c
-+@@ -131,9 +131,9 @@ typedef enum ColorElements_ {
-+    LAST_COLORELEMENT
-+ } ColorElements;
++diff --git a/dix/pixmap.c b/dix/pixmap.c
++index 1186d7dbbf..5a0146bbb6 100644
++--- a/dix/pixmap.c
+++++ b/dix/pixmap.c
++@@ -116,7 +116,7 @@ AllocatePixmap(ScreenPtr pScreen, int pixDataSize)
++     if (pScreen->totalPixmapSize > ((size_t) - 1) - pixDataSize)
++         return NullPixmap;
 + 
-+-void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-++extern void CRT_fatalError(const char* note) __attribute__ ((noreturn));
++-    pPixmap = malloc(pScreen->totalPixmapSize + pixDataSize);
+++    pPixmap = calloc(1, pScreen->totalPixmapSize + pixDataSize);
++     if (!pPixmap)
++         return NullPixmap;
 + 
-+-void CRT_handleSIGSEGV(int sgn);
-++extern void CRT_handleSIGSEGV(int sgn);
-+ 
-+ #define KEY_ALT(x) (KEY_F(64 - 26) + (x - 'A'))
-+ 
-+diff --git a/CRT.h b/CRT.h
-+index 933fe068..bc3fb8b7 100644
-+--- a/CRT.h
-++++ b/CRT.h
-+@@ -119,9 +119,9 @@ typedef enum ColorElements_ {
-+    LAST_COLORELEMENT
-+ } ColorElements;
-+ 
-+-void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-++extern void CRT_fatalError(const char* note) __attribute__ ((noreturn));
-+ 
-+-void CRT_handleSIGSEGV(int sgn);
-++extern void CRT_handleSIGSEGV(int sgn);
-+ 
-+ #define KEY_ALT(x) (KEY_F(64 - 26) + (x - 'A'))
-+ 
-+@@ -140,7 +140,7 @@ extern const char **CRT_treeStr;
-+ 
-+ extern int CRT_delay;
-+ 
-+-int* CRT_colors;
-++extern int* CRT_colors;
-+ 
-+ extern int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT];
-+ 
-+@@ -150,21 +150,21 @@ extern int CRT_scrollHAmount;
-+ 
-+ extern int CRT_scrollWheelVAmount;
-+ 
-+-char* CRT_termType;
-++extern char* CRT_termType;
-+ 
-+ // TODO move color scheme to Settings, perhaps?
-+ 
-+ extern int CRT_colorScheme;
-+ 
-+-void *backtraceArray[128];
-++extern void *backtraceArray[128];
-+ 
-+ #if HAVE_SETUID_ENABLED
-+ 
-+ #define DIE(msg) do { CRT_done(); fprintf(stderr, msg); exit(1); } while(0)
-+ 
-+-void CRT_dropPrivileges();
-++extern void CRT_dropPrivileges();
-+ 
-+-void CRT_restorePrivileges();
-++extern void CRT_restorePrivileges();
-+ 
-+ #else
-+ 
-+@@ -179,18 +179,18 @@ void CRT_restorePrivileges();
-+ 
-+ // TODO: pass an instance of Settings instead.
-+ 
-+-void CRT_init(int delay, int colorScheme);
-++extern void CRT_init(int delay, int colorScheme);
-+ 
-+-void CRT_done();
-++extern void CRT_done();
-+ 
-+-void CRT_fatalError(const char* note);
-++extern void CRT_fatalError(const char* note);
-+ 
-+-int CRT_readKey();
-++extern int CRT_readKey();
-+ 
-+-void CRT_disableDelay();
-++extern void CRT_disableDelay();
-+ 
-+-void CRT_enableDelay();
-++extern void CRT_enableDelay();
-+ 
-+-void CRT_setColors(int colorScheme);
-++extern void CRT_setColors(int colorScheme);
-+ 
-+ #endif
++-- 
++GitLab
 +
-+diff --git a/linux/LinuxProcess.h b/linux/LinuxProcess.h
-+index 6ce3037d..586aa717 100644
-+--- a/linux/LinuxProcess.h
-++++ b/linux/LinuxProcess.h
-+@@ -152,9 +153,9 @@ extern ProcessPidColumn Process_pidColumns[];
-+ 
-+ extern ProcessClass LinuxProcess_class;
-+ 
-+-LinuxProcess* LinuxProcess_new(Settings* settings);
-++extern LinuxProcess* LinuxProcess_new(Settings* settings);
-+ 
-+-void Process_delete(Object* cast);
-++extern void Process_delete(Object* cast);
-+ 
-+ /*
-+ [1] Note that before kernel 2.6.26 a process that has not asked for
-+@@ -166,19 +167,19 @@ extern io_priority;
-+ */
-+ #define LinuxProcess_effectiveIOPriority(p_) (IOPriority_class(p_->ioPriority) == IOPRIO_CLASS_NONE ? IOPriority_tuple(IOPRIO_CLASS_BE, (p_->super.nice + 20) / 5) : p_->ioPriority)
-+ 
-+-IOPriority LinuxProcess_updateIOPriority(LinuxProcess* this);
-++extern IOPriority LinuxProcess_updateIOPriority(LinuxProcess* this);
-+ 
-+-bool LinuxProcess_setIOPriority(LinuxProcess* this, IOPriority ioprio);
-++extern bool LinuxProcess_setIOPriority(LinuxProcess* this, IOPriority ioprio);
-+ 
-+ #ifdef HAVE_DELAYACCT
-+-void LinuxProcess_printDelay(float delay_percent, char* buffer, int n);
-++extern void LinuxProcess_printDelay(float delay_percent, char* buffer, int n);
-+ #endif
-+ 
-+-void LinuxProcess_writeField(Process* this, RichString* str, ProcessField field);
-++extern void LinuxProcess_writeField(Process* this, RichString* str, ProcessField field);
-+ 
-+-long LinuxProcess_compare(const void* v1, const void* v2);
-++extern long LinuxProcess_compare(const void* v1, const void* v2);
-+ 
-+-bool Process_isThread(Process* this);
-++extern bool Process_isThread(Process* this);
-+ 
-+ 
-+ #endif
-+diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
-+index 349531b8..3ef34b88 100755
-+--- a/scripts/MakeHeader.py
-++++ b/scripts/MakeHeader.py
-+@@ -54,8 +54,10 @@
-+          elif line.startswith("typedef struct"):
-+             state = SKIP
-+          elif line[-1] == "{":
-+-            out.write( line[:-2].replace("inline", "extern") + ";\n" )
-++            out.write("extern " + line[:-2].replace("inline ", "") + ";\n")
-+             state = SKIP
-++         elif line[-1] == ";":
-++            out.write("extern " + line + "\n")
-+          else:
-+             out.write( line + "\n")
-+          is_blank = False
 -- 
 2.27.0
