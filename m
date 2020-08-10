@@ -1,88 +1,204 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 10 Aug 2020 19:13:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librtlsdr: bump to more recent
- upstream master version
-In-Reply-To: <CAEyMn7ZMfGw_SyXUP5QUYXZUXW-86giR8VEtk7e8OrO85z4OSg@mail.gmail.com>
-References: <20200809093538.126676-1-titouan.christophe@railnova.eu>
- <CAEyMn7ZMfGw_SyXUP5QUYXZUXW-86giR8VEtk7e8OrO85z4OSg@mail.gmail.com>
-Message-ID: <20200810191308.2ac9a9c1@x230_1.trabucayre.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 10 Aug 2020 19:08:47 +0000
+Subject: [Buildroot] [Bug 13146] New: raspberrypi3_defconfig: "Inappropriate
+ ioctl for device" almost at end when sdcard.img is created
+Message-ID: <bug-13146-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=13146
 
-On Mon, 10 Aug 2020 07:27:32 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+            Bug ID: 13146
+           Summary: raspberrypi3_defconfig: "Inappropriate ioctl for
+                    device" almost at end when sdcard.img is created
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: marie.maurer at mmeacs.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> Hi Titouan,
-> 
-> Am So., 9. Aug. 2020 um 11:36 Uhr schrieb Titouan Christophe <
-> titouan.christophe at railnova.eu>:  
-> 
-> > Since 948666dfde1e0a5d149442f80facc162a83016ad, librtlsdr in Buildroot is
-> > no longer
-> > built from an official release, but from a commit on the master branch.
-> > However, the
-> > commit that was referenced has a broken pkgconfig file templating, such
-> > that
-> > other packages using `pkgconfig --libs librtlsdr` as part of their build
-> > process
-> > (such as dump1090) could not be built anymore:
-> >
-> > Before 948666dfde1e0a5d149442f80facc162a83016ad:
-> > $ cat staging/usr/lib/pkgconfig/librtlsdr.pc
-> > prefix=/usr
-> > exec_prefix=${prefix}
-> > libdir=${exec_prefix}/lib
-> > includedir=${prefix}/include
-> >
-> > Name: RTL-SDR Library
-> > Description: C Utility Library
-> > Version: 0.6.0
-> > Cflags: -I${includedir}/
-> > Libs: -L${libdir} -lrtlsdr -lusb-1.0
-> > Libs.private:
-> >
-> > On 948666dfde1e0a5d149442f80facc162a83016ad:
-> > $ cat staging/usr/lib/pkgconfig/librtlsdr.pc
-> > prefix=
-> > exec_prefix=
-> > libdir=
-> > includedir=
-> >
-> > Name: RTL-SDR Library
-> > Description: C Utility Library
-> > Version: 7082
-> > Cflags: -I${includedir}/
-> > Libs: -L${libdir} -lrtlsdr
-> > Libs.private:  -lusb-1.0
-> >
-> > In the meantime, upstream released a bugfix for that ([1]), so we bump to
-> > that
-> > commit as well, and update the only patch for shared libs accordingly,
-> > because
-> > upstream also added a new tool called `rtl_biast` in the meantime.
-> >
-> > Finaly, we update the hash file to the two-spaces convention.
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/b4c/b4cdcb59cc61c51c024197a64865ad4b60023d0c/
-> >
-> > [1]:
-> > https://github.com/steve-m/librtlsdr/commit/ed0317e6a58c098874ac58b769cf2e609c18d9a5
-> >
-> > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> >  
-> 
-> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-> 
-> -- 
-> Heiko
+Buildroot 2020-08-rc1 (make raspberrypi3_defconfig)
+All default settings, on Ubuntu 20.04 LTS
 
-Thanks for this fix.
-Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+?
 
-Gwen
+Creating regular file
+/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rootfs.ext2
+
+64-bit filesystem support is not enabled.  The larger fields afforded by this
+feature enable full-strength checksumming.  Pass -O 64bit to rectify.
+
+Creating filesystem with 122880 1k blocks and 30720 inodes
+
+Filesystem UUID: c2097238-7b0a-451c-b38f-efe1a3cb7ebc
+
+Superblock backups stored on blocks:
+
+        8193, 24577, 40961, 57345, 73729
+
+
+
+Allocating group tables: done
+
+Writing inode tables: done
+
+Creating journal (4096 blocks): done
+
+Copying files into the device: done
+
+Writing superblocks and filesystem accounting information: done
+
+
+
+ln -sf rootfs.ext2
+/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rootfs.ext4
+
+>>>   Executing post-image script board/raspberrypi3/post-image.sh
+
+board/raspberrypi3/genimage-raspberrypi3.cfg:34: no sub-section title/index for
+'config'
+
+INFO: cmd: "mkdir -p
+"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp""
+(stderr):
+
+INFO: cmd: "rm -rf
+"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp"/*"
+(stderr):
+
+INFO: cmd: "mkdir -p
+"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp""
+(stderr):
+
+INFO: cmd: "cp -a "/tmp/tmp.gaxNr8y31f"
+"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp/root""
+(stderr):
+
+INFO: cmd: "find
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp/root'
+-depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+'/tmp/tmp.gaxNr8y31f/{}'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp/root/{}'"
+(stderr):
+
+INFO: cmd: "mkdir -p
+"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images""
+(stderr):
+
+INFO: vfat(boot.vfat): cmd: "dd if=/dev/zero
+of="/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat"
+seek=33554432 count=0 bs=1 2>/dev/null" (stderr):
+
+INFO: vfat(boot.vfat): cmd: "mkdosfs  
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'"
+(stderr):
+
+INFO: vfat(boot.vfat): adding file 'bcm2710-rpi-3-b.dtb' as
+'bcm2710-rpi-3-b.dtb' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/bcm2710-rpi-3-b.dtb'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'bcm2710-rpi-3-b-plus.dtb' as
+'bcm2710-rpi-3-b-plus.dtb' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/bcm2710-rpi-3-b-plus.dtb'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'bcm2710-rpi-cm3.dtb' as
+'bcm2710-rpi-cm3.dtb' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/bcm2710-rpi-cm3.dtb'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'rpi-firmware/bootcode.bin' as
+'rpi-firmware/bootcode.bin' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/bootcode.bin'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'rpi-firmware/cmdline.txt' as
+'rpi-firmware/cmdline.txt' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/cmdline.txt'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'rpi-firmware/config.txt' as
+'rpi-firmware/config.txt' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/config.txt'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'rpi-firmware/fixup.dat' as
+'rpi-firmware/fixup.dat' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/fixup.dat'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'rpi-firmware/start.elf' as
+'rpi-firmware/start.elf' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/start.elf'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'rpi-firmware/overlays' as
+'rpi-firmware/overlays' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/overlays'
+'::'" (stderr):
+
+INFO: vfat(boot.vfat): adding file 'zImage' as 'zImage' ...
+
+INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
+'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/zImage'
+'::'" (stderr):
+
+INFO: hdimage(sdcard.img): adding partition 'boot' (in MBR) from 'boot.vfat'
+...
+
+ERROR: hdimage(sdcard.img): fiemap
+/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat:
+25 Inappropriate ioctl for device
+
+ERROR: hdimage(sdcard.img): failed to write image partition 'boot'
+
+INFO: hdimage(sdcard.img): cmd: "rm -f
+"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/sdcard.img""
+(stderr):
+
+ERROR: hdimage(sdcard.img): failed to generate sdcard.img
+
+make: *** [Makefile:835: target-post-image] Error 1
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
