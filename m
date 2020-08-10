@@ -1,45 +1,32 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Mon, 10 Aug 2020 08:43:32 +0000
-Subject: [Buildroot] [PATCH 1/1] package/rauc: fix build with c99 and above
- compilers
-Message-ID: <77h6nf0oxQxZiMllMN73fCQn07DZqLnfhClIcPrhY3sjad303S0Z8W77XaYAFCT1IbAbZFAPgX2jt2xAfCkecSZscDO0xAZCebaQFOMkbAc=@protonmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 10 Aug 2020 10:59:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-gunicorn: select
+ python-setuptools
+Message-ID: <20200810085920.447530-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- fix build inline functions
-- fix signature path
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13111
 
-Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rauc/rauc.hash | 2 +-
- package/rauc/rauc.mk   | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/python-gunicorn/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 51f37f6cb8..d327122293 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.4.tar.xz.asc
-+# https://github.com/rauc/rauc/releases/download/v1.4/rauc-1.4.tar.xz.asc
- sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 1915c783aa..553467f618 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -30,6 +30,8 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- RAUC_DEPENDENCIES += systemd
- endif
-
-+RAUC_CFLAGS += -fgnu89-inline
-+
- define RAUC_INSTALL_INIT_SYSTEMD
- 	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
- 	printf '[Install]\nWantedBy=multi-user.target\n' \
---
-2.20.1
+diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+index 518157bf93..b3d11cf199 100644
+--- a/package/python-gunicorn/Config.in
++++ b/package/python-gunicorn/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_GUNICORN
+ 	bool "python-gunicorn"
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+-- 
+2.27.0
