@@ -1,31 +1,45 @@
-From: Andreas Hilse <andreas.hilse@ipcomm.de>
-Date: Mon, 10 Aug 2020 10:39:06 +0200 (CEST)
-Subject: [Buildroot] sysklogd 1.6: messages from klogd are logged to
- user facility
-In-Reply-To: <008501d66bd6$7ac48080$704d8180$@ipcomm.de>
-References: <01bd01d66b51$a7eba690$f7c2f3b0$@ipcomm.de>
- <20200805225153.7e4bb864@windsurf.home>
- <008501d66bd6$7ac48080$704d8180$@ipcomm.de>
-Message-ID: <006a01d66ef1$b5af8140$210e83c0$@ipcomm.de>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Mon, 10 Aug 2020 08:43:32 +0000
+Subject: [Buildroot] [PATCH 1/1] package/rauc: fix build with c99 and above
+ compilers
+Message-ID: <77h6nf0oxQxZiMllMN73fCQn07DZqLnfhClIcPrhY3sjad303S0Z8W77XaYAFCT1IbAbZFAPgX2jt2xAfCkecSZscDO0xAZCebaQFOMkbAc=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+- fix build inline functions
+- fix signature path
 
-Latest sysklogd 2.1.2 fixes the issue.
+Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
+---
+ package/rauc/rauc.hash | 2 +-
+ package/rauc/rauc.mk   | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-I'm trying to upgrade the sysklogd package and like to clarify some things
-before submitting a patch.
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 51f37f6cb8..d327122293 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.4.tar.xz.asc
++# https://github.com/rauc/rauc/releases/download/v1.4/rauc-1.4.tar.xz.asc
+ sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 1915c783aa..553467f618 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -30,6 +30,8 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ RAUC_DEPENDENCIES += systemd
+ endif
 
-Package now provides its own logger tool which could interfere with the
-same from busybox or util-linux.
-I already made it a selectable option in the Config.in but is there
-anything to be done concerning busybox/util-linux?
-
-klogd has been removed from the package, functionality is now in syslogd.
-
-Best regards
-Andreas
++RAUC_CFLAGS += -fgnu89-inline
++
+ define RAUC_INSTALL_INIT_SYSTEMD
+ 	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+--
+2.20.1
