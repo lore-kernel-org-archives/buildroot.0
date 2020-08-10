@@ -1,105 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Aug 2020 22:31:25 +0200
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: use
- aiohttp for upstream URL checking
-Message-ID: <20200812144329.BA06D85F4A@busybox.osuosl.org>
+Date: Mon, 10 Aug 2020 16:45:39 +0200
+Subject: [Buildroot] [git commit branch/next] package/libabseil-cpp: make
+ check-package happy
+Message-ID: <20200812144329.A7C5C85F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c3221ac20c1bc374a44a727d0f552041a4a7247
+commit: https://git.buildroot.net/buildroot/commit/?id=32c8fa8522cff21d0845bb1c2199fc1e958a527e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit reworks the code that checks if the upstream URL of each
-package (specified by its Config.in file) using the aiohttp
-module. This makes the implementation much more elegant, and avoids
-the problematic multiprocessing Pool which is causing issues in some
-situations.
+The "depends on" must be after the "default" properties.
 
-Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/677751258
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 46 +++++++++++++++++++++++++---------------------
- 1 file changed, 25 insertions(+), 21 deletions(-)
+ package/libabseil-cpp/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 3423c44815..70e7fa7a0c 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -25,14 +25,13 @@ import os
- from collections import defaultdict
- import re
- import subprocess
--import requests  # URL checking
-+import requests  # NVD database download
- import json
- import ijson
- import distutils.version
- import time
- import gzip
- import sys
--from multiprocessing import Pool
+diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
+index 5e20a82856..8018e7b264 100644
+--- a/package/libabseil-cpp/Config.in
++++ b/package/libabseil-cpp/Config.in
+@@ -2,7 +2,6 @@
+ # architectures that are supported, and for which ucontext is used.
+ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	bool
+-	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
+ 	default y if BR2_aarch64 || BR2_aarch64_be
+ 	default y if BR2_arm || BR2_armeb
+ 	default y if BR2_i386
+@@ -10,6 +9,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	default y if BR2_riscv
+ 	default y if BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
  
- sys.path.append('utils/')
- from getdeveloperlib import parse_developers  # noqa: E402
-@@ -499,26 +498,30 @@ def package_init_make_info():
-             Package.all_ignored_cves[pkgvar] = value.split()
- 
- 
--def check_url_status_worker(url, url_status):
--    if url_status[0] == 'ok':
--        try:
--            url_status_code = requests.head(url, timeout=30).status_code
--            if url_status_code >= 400:
--                return ("error", "invalid {}".format(url_status_code))
--        except requests.exceptions.RequestException:
--            return ("error", "invalid (err)")
--        return ("ok", "valid")
--    return url_status
-+async def check_url_status(session, pkg, retry=True):
-+    try:
-+        async with session.get(pkg.url) as resp:
-+            if resp.status >= 400:
-+                pkg.status['url'] = ("error", "invalid {}".format(resp.status))
-+                return
-+    except (aiohttp.ClientError, asyncio.TimeoutError):
-+        if retry:
-+            return await check_url_status(session, pkg, retry=False)
-+        else:
-+            pkg.status['url'] = ("error", "invalid (err)")
-+            return
- 
-+    pkg.status['url'] = ("ok", "valid")
- 
--def check_package_urls(packages):
--    pool = Pool(processes=64)
--    for pkg in packages:
--        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.status['url']))
--    for pkg in packages:
--        pkg.status['url'] = pkg.url_worker.get(timeout=3600)
--        del pkg.url_worker
--    pool.terminate()
-+
-+async def check_package_urls(packages):
-+    tasks = []
-+    connector = aiohttp.TCPConnector(limit_per_host=5)
-+    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
-+        packages = [p for p in packages if p.status['url'][0] == 'ok']
-+        for pkg in packages:
-+            tasks.append(check_url_status(sess, pkg))
-+        await asyncio.wait(tasks)
- 
- 
- def check_package_latest_version_set_status(pkg, status, version, identifier):
-@@ -1068,7 +1071,8 @@ def __main__():
-         pkg.set_url()
-         pkg.set_developers(developers)
-     print("Checking URL status")
--    check_package_urls(packages)
-+    loop = asyncio.get_event_loop()
-+    loop.run_until_complete(check_package_urls(packages))
-     print("Getting latest versions ...")
-     loop = asyncio.get_event_loop()
-     loop.run_until_complete(check_package_latest_version(packages))
+ config BR2_PACKAGE_LIBABSEIL_CPP
+ 	bool "libabseil-cpp"
