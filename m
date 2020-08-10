@@ -1,204 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Aug 2020 19:08:47 +0000
-Subject: [Buildroot] [Bug 13146] New: raspberrypi3_defconfig: "Inappropriate
- ioctl for device" almost at end when sdcard.img is created
-Message-ID: <bug-13146-163@https.bugs.busybox.net/>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Mon, 10 Aug 2020 21:00:35 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-wtforms: Bump to version
+ 2.3.3
+In-Reply-To: <20200810190038.3338-1-grzegorz@blach.pl>
+References: <20200810190038.3338-1-grzegorz@blach.pl>
+Message-ID: <20200810190038.3338-2-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13146
+Add docs/license.rst to PYTHON_WTFORMS_LICENSE_FILES
 
-            Bug ID: 13146
-           Summary: raspberrypi3_defconfig: "Inappropriate ioctl for
-                    device" almost at end when sdcard.img is created
-           Product: buildroot
-           Version: unspecified
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: marie.maurer at mmeacs.de
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-wtforms/python-wtforms.hash | 4 ++--
+ package/python-wtforms/python-wtforms.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Buildroot 2020-08-rc1 (make raspberrypi3_defconfig)
-All default settings, on Ubuntu 20.04 LTS
-
-?
-
-Creating regular file
-/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rootfs.ext2
-
-64-bit filesystem support is not enabled.  The larger fields afforded by this
-feature enable full-strength checksumming.  Pass -O 64bit to rectify.
-
-Creating filesystem with 122880 1k blocks and 30720 inodes
-
-Filesystem UUID: c2097238-7b0a-451c-b38f-efe1a3cb7ebc
-
-Superblock backups stored on blocks:
-
-        8193, 24577, 40961, 57345, 73729
-
-
-
-Allocating group tables: done
-
-Writing inode tables: done
-
-Creating journal (4096 blocks): done
-
-Copying files into the device: done
-
-Writing superblocks and filesystem accounting information: done
-
-
-
-ln -sf rootfs.ext2
-/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rootfs.ext4
-
->>>   Executing post-image script board/raspberrypi3/post-image.sh
-
-board/raspberrypi3/genimage-raspberrypi3.cfg:34: no sub-section title/index for
-'config'
-
-INFO: cmd: "mkdir -p
-"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp""
-(stderr):
-
-INFO: cmd: "rm -rf
-"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp"/*"
-(stderr):
-
-INFO: cmd: "mkdir -p
-"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp""
-(stderr):
-
-INFO: cmd: "cp -a "/tmp/tmp.gaxNr8y31f"
-"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp/root""
-(stderr):
-
-INFO: cmd: "find
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp/root'
--depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
-'/tmp/tmp.gaxNr8y31f/{}'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/genimage.tmp/root/{}'"
-(stderr):
-
-INFO: cmd: "mkdir -p
-"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images""
-(stderr):
-
-INFO: vfat(boot.vfat): cmd: "dd if=/dev/zero
-of="/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat"
-seek=33554432 count=0 bs=1 2>/dev/null" (stderr):
-
-INFO: vfat(boot.vfat): cmd: "mkdosfs  
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'"
-(stderr):
-
-INFO: vfat(boot.vfat): adding file 'bcm2710-rpi-3-b.dtb' as
-'bcm2710-rpi-3-b.dtb' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/bcm2710-rpi-3-b.dtb'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'bcm2710-rpi-3-b-plus.dtb' as
-'bcm2710-rpi-3-b-plus.dtb' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/bcm2710-rpi-3-b-plus.dtb'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'bcm2710-rpi-cm3.dtb' as
-'bcm2710-rpi-cm3.dtb' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/bcm2710-rpi-cm3.dtb'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'rpi-firmware/bootcode.bin' as
-'rpi-firmware/bootcode.bin' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/bootcode.bin'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'rpi-firmware/cmdline.txt' as
-'rpi-firmware/cmdline.txt' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/cmdline.txt'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'rpi-firmware/config.txt' as
-'rpi-firmware/config.txt' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/config.txt'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'rpi-firmware/fixup.dat' as
-'rpi-firmware/fixup.dat' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/fixup.dat'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'rpi-firmware/start.elf' as
-'rpi-firmware/start.elf' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/start.elf'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'rpi-firmware/overlays' as
-'rpi-firmware/overlays' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/rpi-firmware/overlays'
-'::'" (stderr):
-
-INFO: vfat(boot.vfat): adding file 'zImage' as 'zImage' ...
-
-INFO: vfat(boot.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -bsp -i
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat'
-'/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/zImage'
-'::'" (stderr):
-
-INFO: hdimage(sdcard.img): adding partition 'boot' (in MBR) from 'boot.vfat'
-...
-
-ERROR: hdimage(sdcard.img): fiemap
-/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/boot.vfat:
-25 Inappropriate ioctl for device
-
-ERROR: hdimage(sdcard.img): failed to write image partition 'boot'
-
-INFO: hdimage(sdcard.img): cmd: "rm -f
-"/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/images/sdcard.img""
-(stderr):
-
-ERROR: hdimage(sdcard.img): failed to generate sdcard.img
-
-make: *** [Makefile:835: target-post-image] Error 1
-
+diff --git a/package/python-wtforms/python-wtforms.hash b/package/python-wtforms/python-wtforms.hash
+index 431a20cea1..ed9bfd1a23 100644
+--- a/package/python-wtforms/python-wtforms.hash
++++ b/package/python-wtforms/python-wtforms.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/wtforms/json
+-md5  bff06943e59671581af07f80d14bda5f  WTForms-2.3.1.tar.gz
+-sha256  861a13b3ae521d6700dac3b2771970bd354a63ba7043ecc3a82b5288596a1972  WTForms-2.3.1.tar.gz
++md5  2b6ea167a71c6becf20f0934417fd06c  WTForms-2.3.3.tar.gz
++sha256  81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c  WTForms-2.3.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cf40d60ff34f6b2b68a53d220f8b66567b5ac8dd1119b37b62fd15e9518fe59b  LICENSE.rst
+ sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
+diff --git a/package/python-wtforms/python-wtforms.mk b/package/python-wtforms/python-wtforms.mk
+index c47bd0b748..23280a6fe5 100644
+--- a/package/python-wtforms/python-wtforms.mk
++++ b/package/python-wtforms/python-wtforms.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WTFORMS_VERSION = 2.3.1
++PYTHON_WTFORMS_VERSION = 2.3.3
+ PYTHON_WTFORMS_SOURCE = WTForms-$(PYTHON_WTFORMS_VERSION).tar.gz
+-PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/68/7a/4ce1636e03a25585f3e1436179232a66c25e53ef17f01b4384d16ace6d61
++PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/dd/3f/f25d26b1c66896e2876124a12cd8be8f606abf4e1890a20f3ca04e4a1555
+ PYTHON_WTFORMS_SETUP_TYPE = setuptools
+ PYTHON_WTFORMS_LICENSE = BSD-3-Clause
+-PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst
++PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst docs/license.rst
+ 
+ $(eval $(python-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.27.0
