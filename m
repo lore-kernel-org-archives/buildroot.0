@@ -1,197 +1,122 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 11 Aug 2020 21:40:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ettercap: new package
-In-Reply-To: <1597171064-13491-2-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1597171064-13491-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1597171064-13491-2-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <aeb4021e-f5d1-8156-bf51-2a94a16b3b4f@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 11 Aug 2020 21:41:16 +0200
+Subject: [Buildroot] SSHD issue between 2015 and 2020 versions
+In-Reply-To: <20200811210822.41e1fc62@gmx.net>
+References: <CAN34foxnvLRtSV7GM_=PM6vHZyo6HmeXVCSrjDpyTpRNzK7nGQ@mail.gmail.com>
+ <20200811000920.18474f68@gmx.net>
+ <CAN34fozMdTf65Y9Ks6e4yri=qdy=+S0vOV1M7DZH22aPpULjyw@mail.gmail.com>
+ <20200811210822.41e1fc62@gmx.net>
+Message-ID: <20200811214116.27072437@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jugurtha,
+Hello Stephen,
 
-Le 11/08/2020 ? 20:37, Jugurtha BELKALEM via buildroot a ?crit?:
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> 
-> Fix missing libpcap
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> 
-> Fix comments
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> 
-> Fix invalid utf-8 error
+On Tue, 11 Aug 2020 21:08:22 +0200, Peter Seiderer via buildroot <buildroot@busybox.net> wrote:
 
-It seems you squashed some commit before sending the patch, don't forget to
-remove duplicate lines and improve the git log.
+> Hello Stephen,
+>
+> On Tue, 11 Aug 2020 10:02:16 -0400, Stephen Beckwith via buildroot <buildroot@busybox.net> wrote:
+>
+> > Peter,
+> >   Thank you for your reply.  As I pointed out in the document:
+> > 2020 Buildroot creates a "full_users_table.txt" in the
+> > output/build/buildroot_fs directory, whereas the 2015 version puts a
+> > _users_table.txt in the output/build directory.  In the case of the 2015
+> > Buildroot, this file is "empty", whereas the 2020 Buildroot has an entry in
+> > this file that seems to be placed there by the Buildroot infrastructure.
+> > Why?  (I realize infrastructure changes occur between releases and we're
+> > making a might big leap here).
+> > I did update the Buildroot configuration via menuconfig (we save off a
+> > defconfig) since there are new default options for packages,etc in the new
+> > Buildroot release.
+> > A "simple build" is not possible, due to the nature of our setup using an
+> > external tree for the proprietary code.
+> > I did a build from "scratch" (we call extraclean, removes the output
+> > directory and does a complete re-setup of the target information we use).
+> > This builds fine, without opensshd enabled in the configuration.  I then
+> > use menuconfig to enable opensshd (in target packages->networking) and do a
+> > "make" here and I get this error at the end when we package up the entire
+> > system.  the opensshd itself builds correctly.
+> > The contents of the full_users_table.txt file comes from the
+> > sshd-sysusers.conf file in the 2020 Buildroot openssh package.  We do NOT
+> > use systemd or Device Tree.  Yet this is defined as the OPENSSH_USERS in
+> > the opensshd.mk file, how does this then get to the full_users_table.txt???
+>
+> For a reference see [1] at 'LIBFOO_USERS'...
+>
+> > I have enclosed the .config file used to build WITH opensshd enabled.
+>
+> After a quick look at your config file (nothing suspicious) I would suspect
+> the content of the overlays/post-build-script (search for sshd there):
+>
+> BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_SP_DEV_PATH)/src/rootfs-overlay $(BR2_EXTERNAL_SP_DEV_PATH)/platform/mendo/rootfs-overlay"
+> BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_SP_DEV_PATH)/scripts/post_rootfs_build.sh"
 
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> ---
+In your attachment 'sshd-BR_ML-Post-0810.rtf' you write:
 
-The log between two version of the patch should be below "---" line.
+	 - yes there is a sshd user in the passwd file
 
-v2: Fix missing libpcap
-    Fix invalid utf-8 error
+Do your mean target/etc/passwd? If yes it must(?) come from one of the rootfs-overlays...,
+remove the sshd line there (from passwd, shadow and group)...and try again...
 
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  .../0001-Fix-invalid-utf-8-is-not-supported.patch  | 31 ++++++++++++++++++++++
->  package/ettercap/Config.in                         | 24 +++++++++++++++++
->  package/ettercap/ettercap.hash                     |  3 +++
->  package/ettercap/ettercap.mk                       | 15 +++++++++++
->  6 files changed, 75 insertions(+)
->  create mode 100644 package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
->  create mode 100644 package/ettercap/Config.in
->  create mode 100644 package/ettercap/ettercap.hash
->  create mode 100644 package/ettercap/ettercap.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ee840db..fee80f0 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1395,6 +1395,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
->  F:	package/qt5/qt5wayland/
->  
->  N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> +F:	package/ettercap/
->  F:	package/python-cycler/
->  F:	package/python-matplotlib/
->  
-> diff --git a/package/Config.in b/package/Config.in
-> index d7e79f4..db886a1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2042,6 +2042,7 @@ menu "Networking applications"
->  	source "package/ebtables/Config.in"
->  	source "package/ejabberd/Config.in"
->  	source "package/ethtool/Config.in"
-> +	source "package/ettercap/Config.in"
->  	source "package/faifa/Config.in"
->  	source "package/fail2ban/Config.in"
->  	source "package/fastd/Config.in"
-> diff --git a/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch b/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
-> new file mode 100644
-> index 0000000..0c6a923
-> --- /dev/null
-> +++ b/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
-> @@ -0,0 +1,31 @@
-> +From b00e1efceaae979ed103abf343fc44812b48de62 Mon Sep 17 00:00:00 2001
-> +From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> +Date: Tue, 11 Aug 2020 20:11:25 +0200
-> +Subject: [PATCH] Fix invalid utf-8 is not supported
-> +
-> +Fixes fatal error message generated even when
-> +utf-8 is available.
-> +Ettercap requires gettext package and works fine.
+Regards,
+Peter
 
-I don't recall what was the issue and why we really need to remove those lines.
-So even with gettext we need to remove them ?
-
-> +
-> +Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> +---
-> + src/ec_format.c | 3 ---
-> + 1 file changed, 3 deletions(-)
-> +
-> +diff --git a/src/ec_format.c b/src/ec_format.c
-> +index 5c9b850..b3e7f21 100644
-> +--- a/src/ec_format.c
-> ++++ b/src/ec_format.c
-> +@@ -418,9 +418,6 @@ int set_utf8_encoding(u_char *fromcode)
-> +    /* make sure encoding type is supported */
-> +    cd = iconv_open("UTF-8", (const char*)fromcode);
-> +    
-> +-   if (cd == (iconv_t)(-1))
-> +-      SEMIFATAL_ERROR("The conversion from %s to UTF-8 is not supported.", fromcode);
-> +-   
-> +    iconv_close(cd);
-> + 
-> +    utf8_encoding = strdup((const char*)fromcode);
-> +-- 
-> +2.7.4
-> +
-> diff --git a/package/ettercap/Config.in b/package/ettercap/Config.in
-> new file mode 100644
-> index 0000000..b11834a
-> --- /dev/null
-> +++ b/package/ettercap/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_ETTERCAP
-> +	bool "ettercap"
-> +	depends on BR2_PACKAGE_NCURSES
-> +	depends on BR2_PACKAGE_NCURSES_WCHAR
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_OPENSSL
-
-Openssl is a virtual package, by default libopenssl is used but it can be
-replaced by libressl. Did you test with libressl ?
-
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_GEOIP
-> +	select BR2_PACKAGE_LIBNET
-> +	select BR2_PACKAGE_LIBPCAP
-> +	select BR2_PACKAGE_ETHTOOL # runtime
-> +	select BR2_PACKAGE_GETTEXT # runtime
-
-We really need gettext on the target ?
-
-> +	select BR2_PACKAGE_LIBPTHREAD_STUB # runtime
-> +	select BR2_PACKAGE_ZLIB # runtime
-> +	help
-> +	  Ettercap is a comprehensive suite for man
-> +	  in the middle attacks. It features sniffing of
-> +	  live connections, content filtering on the fly
-> +	  and many other interesting tricks. It supports
-> +	  active and passive dissection of many protocols
-> +	  and includes many features for network and
-> +	  host analysis.
-> +
-> +	  http://www.ettercap-project.org/
-> diff --git a/package/ettercap/ettercap.hash b/package/ettercap/ettercap.hash
-> new file mode 100644
-> index 0000000..21f7df4
-> --- /dev/null
-> +++ b/package/ettercap/ettercap.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 d0c3ef88dfc284b61d3d5b64d946c1160fd04276b448519c1ae4438a9cdffaf3  ettercap-v0.8.3.1.tar.gz
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/ettercap/ettercap.mk b/package/ettercap/ettercap.mk
-> new file mode 100644
-> index 0000000..d419094
-> --- /dev/null
-> +++ b/package/ettercap/ettercap.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# ettercap
-> +#
-> +################################################################################
-> +
-> +ETTERCAP_VERSION = v0.8.3.1
-
-I think we prefer using 0.8.3.1 as version number...
-> +ETTERCAP_SITE = $(call github,Ettercap,ettercap,$(ETTERCAP_VERSION))
-                                                   ^^
-and add "v" before $(ETTERCAP_VERSION)
-
-> +ETTERCAP_LICENSE = GPL-2.0+
-> +ETTERCAP_LICENSE_FILES = LICENSE
-> +ETTERCAP_SUPPORTS_IN_SOURCE_BUILD = NO
-> +ETTERCAP_DEPENDENCIES = ncurses libopenssl libcurl geoip libnet libpcap
-
-We prefer the dependencies list alphabetically sorted
-
-Best regards,
-Romain
-
-
-> +ETTERCAP_CONF_OPTS = -DENABLE_GTK=OFF
-> +
-> +$(eval $(cmake-package))
-> 
+>
+> And/or the following change of mkusers ([2])...
+>
+> Regards,
+> Peter
+>
+> [1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+> [2] https://git.buildroot.net/buildroot/commit/?id=497f7134fca4b111499b2fd23501d7e048303e7c
+>
+> >
+> > I look forward to your reply.
+> >
+> > Regards,
+> > Stephen Beckwith
+> >
+> >
+> > On Mon, Aug 10, 2020 at 6:09 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > > Hello Stephen,
+> > >
+> > > On Mon, 10 Aug 2020 17:03:05 -0400, Stephen Beckwith <
+> > > embeddedsteve at gmail.com> wrote:
+> > >
+> > > > Please see the attached document that describes an issue that I've
+> > > > encountered when migrating from Buildroot 2015.08.1 to Buildroot 2020.02.
+> > > > At this point, I cannot include ssh/sshd for inclusion in the system,
+> > > which
+> > > > is necessary.
+> > >
+> > > Hard to determine what is causing your failure:
+> > >
+> > >         mkusers: user 'sshd' already exists with group 'users' (wants
+> > > 'sshd')
+> > >
+> > > Does it happen with an simple build? Or with your re-started one?
+> > >
+> > > Please provide a .config/defconfig file from your failing buildroot
+> > > configuration...
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > > >
+> > > > Any pointers/suggestions would be greatly appreciated.
+> > > >
+> > > > Regards,
+> > > > Stephen Beckwith
+> > >
+> > >
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
