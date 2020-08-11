@@ -1,44 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Aug 2020 17:10:24 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/mtd: crypto support needs headers >= 4.12
-Message-ID: <20200811151024.2261022-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Aug 2020 15:47:42 +0000
+Subject: [Buildroot] [Bug 13146] raspberrypi3_defconfig: "Inappropriate
+ ioctl for device" almost at end when sdcard.img is created
+In-Reply-To: <bug-13146-163@https.bugs.busybox.net/>
+References: <bug-13146-163@https.bugs.busybox.net/>
+Message-ID: <bug-13146-163-OW5LBfUOkl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-crypto support includes <linux/hash_info.h> since version 2.1.2 and
-https://github.com/sigma-star/mtd-utils/commit/a739b59efe7996e3bdcbe8b17743dc05ac7c110a
+https://bugs.busybox.net/show_bug.cgi?id=13146
 
-However, linux/hash_info.h is only exported since kernel 4.12:
-https://github.com/torvalds/linux/commit/fcc8487d477a3452a1d0ccbdd4c5e0e1e3cb8bed
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Fixes:
- - http://autobuild.buildroot.org/results/dbaeed9e9e2af191166808d2d6d6d3c2e5051c2c
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|---                         |WORKSFORME
+             Status|NEW                         |RESOLVED
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Replace wrong linux-headers dependency by headers >= 4.12
+--- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+I've just given a test-build in Ubuntu 20.04, on augfs over ext4 (in docker),
+and the build succeeds without issue (as ;aready reported by Peter).
 
- package/mtd/mtd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Can you provide more info on your running environment:
+  - what distribution?
+  - what filesystem?
+  - are you running in WSL (windows Subsystem for Linux)? What version?
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 8220a5ace8..1186fa52d5 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -21,7 +21,8 @@ endif
- ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
- MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
- MTD_CONF_OPTS += --with-ubifs
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+# crypto needs linux/hash_info.h
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy)
- MTD_DEPENDENCIES += openssl
- MTD_CONF_OPTS += --with-crypto
- else
+Note that running under WSL1 is not guaranteed to work. WSL2 is also very
+very seldom tested.
+
 -- 
-2.27.0
+You are receiving this mail because:
+You are on the CC list for the bug.
