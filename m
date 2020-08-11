@@ -1,38 +1,82 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Aug 2020 15:47:42 +0000
-Subject: [Buildroot] [Bug 13146] raspberrypi3_defconfig: "Inappropriate
- ioctl for device" almost at end when sdcard.img is created
-In-Reply-To: <bug-13146-163@https.bugs.busybox.net/>
-References: <bug-13146-163@https.bugs.busybox.net/>
-Message-ID: <bug-13146-163-OW5LBfUOkl@https.bugs.busybox.net/>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 11 Aug 2020 12:44:29 -0300
+Subject: [Buildroot] [PATCH] configs/ci20: Use upstream Linux and U-Boot
+Message-ID: <20200811154429.436747-1-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13146
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+The vendor kernel we are currently selecting no longer builds,
+and fails with a ton of:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |WORKSFORME
-             Status|NEW                         |RESOLVED
+                 from include/linux/list.h:8,
+                 from include/linux/module.h:9,
+                 from arch/mips/jz4740/prom.c:16:
+include/linux/log2.h:22:1: error: ignoring attribute 'noreturn' because it conflicts with attribute 'const' [-Werror=a
+ttributes]
+   22 | int ____ilog2_NaN(void);
+      | ^~~
 
---- Comment #6 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-I've just given a test-build in Ubuntu 20.04, on augfs over ext4 (in docker),
-and the build succeeds without issue (as ;aready reported by Peter).
+We can't afford to fix that, so let's just move to upstream
+kernel and bootloader. It doesn't make much sense to keep
+using an unsupported kernel and bootloader at this point.
 
-Can you provide more info on your running environment:
-  - what distribution?
-  - what filesystem?
-  - are you running in WSL (windows Subsystem for Linux)? What version?
+This means we will be missing some of the features supported
+by the vendor (such as HDMI support), but it is what it is.
 
-Note that running under WSL1 is not guaranteed to work. WSL2 is also very
-very seldom tested.
+Linux v5.7 and v5.4 have been tested to boot fine, the latter
+is picked for the defconfig.
 
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ configs/ci20_defconfig | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 8f2604b07c8e..081fb6e52ee6 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -2,9 +2,8 @@
+ BR2_mipsel=y
+ BR2_mips_xburst=y
+ # BR2_MIPS_SOFT_FLOAT is not set
+-
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_KERNEL_HEADERS_AS_KERNEL=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
+@@ -15,19 +14,16 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci20/genimage.cfg"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MIPS,CI20_linux,7dff33297116643485ca37141d804eddd793e834)/linux-7dff33297116643485ca37141d804eddd793e834.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
+ BR2_LINUX_KERNEL_DEFCONFIG="ci20"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+ # u-boot
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
+-BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
+-BR2_TARGET_UBOOT_PATCH="board/ci20/patches/uboot"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_LATEST_VERSION=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ci20_mmc"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.27.0
