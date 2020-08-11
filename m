@@ -1,40 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Aug 2020 23:50:15 +0200
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: add Gwenhael
- Goavec-Merou for librtlsdr
-Message-ID: <20200812144330.0C96C85F4A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Aug 2020 22:42:31 +0200
+Subject: [Buildroot] [git commit branch/next] package/python3-decorator: use
+ PYTHON3_DECORATOR_VERSION
+Message-ID: <20200812144329.DD82185F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72df067afedff0318e61523c982f0c39df94adde
+commit: https://git.buildroot.net/buildroot/commit/?id=b37cfcbf9f74b1eac5a1f958ad33ed7489ea530d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Even though librtlsdr was initially introduced by Jason Pruitt in
-2014, and Jason is still listed in the DEVELOPERS file for this
-package, in recent times it's mainly Gwenhael who has been taking of
-this package. Let's reflect that in the DEVELOPERS file so that
-Gwenhael gets notified when there are librtlsdr issues.
-
-Cc: Jason Pruitt <jrspruitt@gmail.com>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/python3-decorator/python3-decorator.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ee840dbb8b..42fa5a4956 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1087,6 +1087,7 @@ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- F:	package/gnuradio/
- F:	package/gqrx/
- F:	package/gr-osmosdr/
-+F:	package/librtlsdr/
- F:	package/libusbgx/
- F:	package/matio/
- F:	package/python-cheetah/
+diff --git a/package/python3-decorator/python3-decorator.mk b/package/python3-decorator/python3-decorator.mk
+index d809bb5b9b..c14f10fbf4 100644
+--- a/package/python3-decorator/python3-decorator.mk
++++ b/package/python3-decorator/python3-decorator.mk
+@@ -7,7 +7,7 @@
+ # Please keep in sync with package/python-decorator/python-decorator.mk
+ PYTHON3_DECORATOR_VERSION = 4.4.1
+ PYTHON3_DECORATOR_SITE = https://files.pythonhosted.org/packages/dc/c3/9d378af09f5737cfd524b844cd2fbb0d2263a35c11d712043daab290144d
+-PYTHON3_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
++PYTHON3_DECORATOR_SOURCE = decorator-$(PYTHON3_DECORATOR_VERSION).tar.gz
+ PYTHON3_DECORATOR_LICENSE = BSD-2-Clause
+ PYTHON3_DECORATOR_LICENSE_FILES = LICENSE.txt
+ PYTHON3_DECORATOR_SETUP_TYPE = setuptools
