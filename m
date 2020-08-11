@@ -1,94 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Aug 2020 23:50:15 +0200
-Subject: [Buildroot] [git commit branch/next] package/librtlsdr: fix version
- fetching when code is extracted from tarball
-Message-ID: <20200812144330.03B2185F4B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Aug 2020 22:39:02 +0200
+Subject: [Buildroot] [git commit branch/next] package/libfuse3: bump to
+ version 3.9.4
+Message-ID: <20200812144329.D58C985F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ea2c8e90805b007560d8b039dff4e3e2275fc55
+commit: https://git.buildroot.net/buildroot/commit/?id=1005ad6756ef82acaf365449b99130ca085c7be4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-librtlsdr currently fails to build on the autobuilders, as it fails
-for out of tree builds. Indeed, there is some CMake logic in librtlsdr
-that determines the version using Git. This works fine when librtlsdr
-is fetched from Git of course. But in the context of Buildroot,
-librtlsdr is extracted from a tarball.
+Drop patch (already in version). The commit list between 3.9.2 and
+3.9.4 is just made of fixes:
 
-For an in-tree build, the "git describe" invocation goes all the way
-up to the Buildroot .git/ metadata, and uses that as the librtlsdr
-version (it's of course wrong, but the build works). In an out-of-tree
-build, there is no parent directory with .git/ metadata, so Git fails,
-the VERSION variable is empty and later CMake aborts the build because
-of that.
+db9b4fa148e6c22c0d4b4c567fa65d1cd5368152 Released 3.9.4
+50cbca799c1f9b010fabaa0dd4a387f29d140873 fuse_send_data_iov(): correctly calculate total buffer size.
+7b3e3899157566875280a8b860eb5ad5c73eadc1 Define fuse_session_loop_mt as a macro on uclibc and MacOS (#532)
+c5e8684b5a2f3400af6d7a3edcaeb3ce8ffc51b5 Fixed typo in command to compile program (#536)
+e8a9e84672dcaa892d4708c163f768dc177b6d4c Doc fixes (#537)
+d1deae6968c49d83334e874c33abfe15824c4548 Fix FreeBSD CI (#539)
+48450411647ca0818821af7b05b819ceff92ae7c Fix: crash on failure to set locale (#529)
+9e1c2a4959c16c0b50090dd822389ad9acb08111 fuse_lowlevel: Move assert for se before dereferencing it with se->debug (#530)
+7471156354002c6547aa6c3a4f39a3262f435ba4 Fixed minor print alignment issue in iconv_help(), replacing tab with space (#519)
+9fa4dc1661f085d4e89a54d75acc3347d52f33fa Fix the typo "filed" -> "field" in fuse manpage (#524)
+717c8b8b3ed815f14e5607a995d0113446e3fb0b README: Correct the directory name from 'examples' to 'example' (#526)
+032db1ab298d62c4d0c5be1f9fb2df299aec2346 docs: Replace `mesonconf` with `meson configure` (#528)
+06342ca60ed822b856990915f127d8beddc0d1f6 libfuse: Assign NULL to "old" to avoid free it twice (#522)
+5021d6a0a100d4987be126e87b7ee5fbfc17bbdc Typo fixed. (#520)
 
-We fix that by adjusting the version retrieving logic to only use Git
-if a .git/ metadata folder is found at the root of the librtlsdr
-source tree. The patch has been submitted upstream.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ea52be1da8ed03272db06679d5a0a441ffe6ea0c/
-
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...es-Version.cmake-don-t-use-Git-version-if.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ ...on_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch | 52 ----------------------
+ package/libfuse3/libfuse3.hash                     |  2 +-
+ package/libfuse3/libfuse3.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 54 deletions(-)
 
-diff --git a/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
-new file mode 100644
-index 0000000000..9c808edd41
---- /dev/null
-+++ b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
-@@ -0,0 +1,47 @@
-+From feb5d9c6b7bcec788f9b01781c205e31fff260e7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 11 Aug 2020 23:07:08 +0200
-+Subject: [PATCH] cmake/Modules/Version.cmake: don't use Git version if not in
-+ a Git repo
-+
-+If the librtlsdr code comes from a tarball, it doesn't have any .git/
-+metadata, and therefore even if Git (as a tool) is found, the logic in
-+cmake/Modules/Version.cmake fails finding a version through Git:
-+
-+-- Extracting version information from git describe...
-+fatal: Not a git repository (or any of the parent directories): .git
-+
-+As a consequence, the VERSION variable is empty, which later causes
-+cmake to bail out with:
-+
-+CMake Error at /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/WriteBasicConfigVersionFile.cmake:43 (message):
-+  No VERSION specified for WRITE_BASIC_CONFIG_VERSION_FILE()
-+Call Stack (most recent call first):
-+  /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/CMakePackageConfigHelpers.cmake:225 (write_basic_config_version_file)
-+  CMakeLists.txt:173 (write_basic_package_version_file)
-+
-+To avoid this, we only use Git to determine the version if the cmake
-+project top-level source directory has a .git/ folder.
-+
-+Upstream: https://github.com/librtlsdr/librtlsdr/pull/75
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ cmake/Modules/Version.cmake | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/cmake/Modules/Version.cmake b/cmake/Modules/Version.cmake
-+index 2d4e76d..6f67fa4 100644
-+--- a/cmake/Modules/Version.cmake
-++++ b/cmake/Modules/Version.cmake
-+@@ -32,7 +32,7 @@ set(PATCH_VERSION ${VERSION_INFO_PATCH_VERSION})
-+ ########################################################################
-+ find_package(Git QUIET)
-+ 
-+-if(GIT_FOUND)
-++if(GIT_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/.git)
-+     message(STATUS "Extracting version information from git describe...")
-+     execute_process(
-+         COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=4 --long
-+-- 
-+2.26.2
-+
+diff --git a/package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch b/package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
+deleted file mode 100644
+index bd9181ac1d..0000000000
+--- a/package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 7b3e3899157566875280a8b860eb5ad5c73eadc1 Mon Sep 17 00:00:00 2001
+-From: asafkahlon <35964924+asafkahlon@users.noreply.github.com>
+-Date: Sun, 9 Aug 2020 14:37:26 +0300
+-Subject: [PATCH] Define fuse_session_loop_mt as a macro on uclibc and MacOS
+- (#532)
+-
+-On uclibc and MacOS we don't use versioned symbols. Hence,
+-there's no definition for fuse_session_loop_mt on those cases
+-and the linker won't be able to resolve calls to fuse_session_loop_mt()
+-
+-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+-[Retrieved from: https://github.com/libfuse/libfuse/pull/532]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998 at free.fr: update to use upstream commit]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- include/fuse_lowlevel.h | 5 +++++
+- lib/fuse_versionscript  | 1 +
+- 2 files changed, 6 insertions(+)
+-
+-diff --git a/include/fuse_lowlevel.h b/include/fuse_lowlevel.h
+-index e2b4617..f2ef622 100644
+---- a/include/fuse_lowlevel.h
+-+++ b/include/fuse_lowlevel.h
+-@@ -1982,7 +1982,12 @@ int fuse_session_loop(struct fuse_session *se);
+- int fuse_session_loop_mt_31(struct fuse_session *se, int clone_fd);
+- #define fuse_session_loop_mt(se, clone_fd) fuse_session_loop_mt_31(se, clone_fd)
+- #else
+-+#if (!defined(__UCLIBC__) && !defined(__APPLE__))
+- int fuse_session_loop_mt(struct fuse_session *se, struct fuse_loop_config *config);
+-+#else
+-+int fuse_session_loop_mt_32(struct fuse_session *se, struct fuse_loop_config *config);
+-+#define fuse_session_loop_mt(se, config) fuse_session_loop_mt_32(se, config)
+-+#endif
+- #endif
+- 
+- /**
+-diff --git a/lib/fuse_versionscript b/lib/fuse_versionscript
+-index 235abf4..a06f768 100644
+---- a/lib/fuse_versionscript
+-+++ b/lib/fuse_versionscript
+-@@ -146,6 +146,7 @@ FUSE_3.2 {
+- 	global:
+- 		fuse_session_loop_mt;
+- 		fuse_session_loop_mt_31;
+-+		fuse_session_loop_mt_32;
+- 		fuse_loop_mt;
+- 		fuse_loop_mt_31;
+- } FUSE_3.1;
+--- 
+-2.20.1
+-
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index c7f371368a..8fd37ff47a 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  b4409255cbda6f6975ca330f5b04cb335b823a95ddd8c812c3d224ec53478fc0  libfuse3-3.9.2.tar.gz
++sha256  9e076ae757a09cac9ce1beb50b3361ae83a831e5abc0f1bf5cdf771cd1320338  libfuse3-3.9.4.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index 1e959640e2..6e679fe5a8 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.9.2
++LIBFUSE3_VERSION = 3.9.4
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
