@@ -1,51 +1,59 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Aug 2020 11:49:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fping: bump to version 5.0
-Message-ID: <20200811094920.1857292-1-fontaine.fabrice@gmail.com>
+Date: Tue, 11 Aug 2020 12:12:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: security bump to
+ version 2.36.12
+Message-ID: <20200811101213.2117766-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump will fix a build failure with gcc 10 thanks to
-https://github.com/schweikert/fping/commit/0ed73181eb54e3f2dc744271c0329620972a85ab
+- Fix CVE-2017-6312: Integer overflow in io-ico.c in gdk-pixbuf allows
+  context-dependent attackers to cause a denial of service (segmentation
+  fault and application crash) via a crafted image entry offset in an
+  ICO file, which triggers an out-of-bounds read, related to compiler
+  optimizations.
+- Fix CVE-2017-6313: Integer underflow in the load_resources function in
+  io-icns.c in gdk-pixbuf allows context-dependent attackers to cause a
+  denial of service (out-of-bounds read and program crash) via a crafted
+  image entry size in an ICO file.
+- Fix CVE-2017-6314: The make_available_at_least function in io-tiff.c
+  in gdk-pixbuf allows context-dependent attackers to cause a denial of
+  service (infinite loop) via a large TIFF file.
 
 Also update indentation in hash file (two spaces)
 
-Fixes:
- - http://autobuild.buildroot.org/results/f5c8e546200594e2367444e93e31aa615bd73796
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fping/fping.hash | 4 ++--
- package/fping/fping.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.hash | 6 +++---
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index 0aa0330b5a..0b2233f379 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 9cb947f195..8fa178b55c 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.10.sha256sum
+-sha256 f8f6fa896b89475c73b6e9e8d2a2b062fc359c4b4ccb8e96470d6ab5da949ace  gdk-pixbuf-2.36.10.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.12.sha256sum
++sha256  fff85cf48223ab60e3c3c8318e2087131b590fd6f1737e42cb3759a3b427a334  gdk-pixbuf-2.36.12.tar.xz
  # Locally calculated
--sha256 7d339674b6a95aae1d8ad487ff5056fd95b474c3650938268f6a905c3771b64a  fping-4.2.tar.gz
-+sha256  ed38c0b9b64686a05d1b3bc1d66066114a492e04e44eef1821d43b1263cd57b8  fping-5.0.tar.gz
- 
- # Hash for license file
--sha256 6051b27e4b4a648f7bc8b329024da53a6e95ce88fcf0ccc259c371a74b741757  COPYING
-+sha256  6051b27e4b4a648f7bc8b329024da53a6e95ce88fcf0ccc259c371a74b741757  COPYING
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index 5d3ad59e56..24aca32367 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
-@@ -4,7 +4,7 @@
- #
+-sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
++sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index b7937a48e9..0266e04978 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--FPING_VERSION = 4.2
-+FPING_VERSION = 5.0
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+ GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).12
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.0+
 -- 
 2.27.0
