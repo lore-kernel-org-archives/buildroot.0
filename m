@@ -1,63 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Aug 2020 21:28:52 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5webengine: examples need
- qt5svg
-In-Reply-To: <20200811203155.76632009@gmx.net>
-References: <20200810203841.26171-1-ps.report@gmx.net>
- <20200811203155.76632009@gmx.net>
-Message-ID: <20200811212852.387f7769@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Aug 2020 19:31:53 +0000
+Subject: [Buildroot] [Bug 13146] raspberrypi3_defconfig: "Inappropriate
+ ioctl for device" almost at end when sdcard.img is created
+In-Reply-To: <bug-13146-163@https.bugs.busybox.net/>
+References: <bug-13146-163@https.bugs.busybox.net/>
+Message-ID: <bug-13146-163-aXdhXRkrjt@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=13146
 
-+Yann in Cc for Kconfig expertise.
+--- Comment #10 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Yann E. MORIN from comment #6)
 
-On Tue, 11 Aug 2020 20:31:55 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
-
-> package/qt5/qt5base/Config.in:1:error: recursive dependency detected!
-> package/qt5/qt5base/Config.in:1:	symbol BR2_PACKAGE_QT5BASE is selected by BR2_PACKAGE_QT5SVG
-
-Right, this makes sense.
-
-> package/qt5/qt5svg/Config.in:1:	symbol BR2_PACKAGE_QT5SVG is selected by BR2_PACKAGE_QT5BASE_EXAMPLES
-
-This doesn't make any sense to me:
-
-config BR2_PACKAGE_QT5BASE_EXAMPLES
-        bool "Compile and install examples (with code)"
-        select BR2_PACKAGE_QT5BASE_NETWORK
-        select BR2_PACKAGE_QT5BASE_XML
-        help
-          If unsure, say N.
-
-Neither BR2_PACKAGE_QT5BASE_NETWORK nor BR2_PACKAGE_QT5BASE_XML are
-selecting BR2_PACKAGE_QT5SVG.
-
-Or perhaps it is the line added by your patch:
-
-	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5BASE_EXAMPLES
-
-which causes this statement ?
-
-> package/qt5/qt5base/Config.in:42:	symbol BR2_PACKAGE_QT5BASE_EXAMPLES depends on BR2_PACKAGE_QT5BASE
-
-This obviously makes sense.
-
-> For a resolution refer to Documentation/kbuild/kconfig-language.txt
-> subsection "Kconfig recursive dependency limitations"
-> 
-> Regards,
-> Peter
-> 
-
-
+Is resolved/worksforme not a little harsh as there is definitely a existing
+problem (and a fix for it) and not yet determined if it is caused by the 
+filesystem and/or a WSL?
 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
