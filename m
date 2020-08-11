@@ -1,103 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Aug 2020 23:33:28 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5webengine: examples need
- qt5svg
-In-Reply-To: <20200811212852.387f7769@windsurf.home>
-References: <20200810203841.26171-1-ps.report@gmx.net>
- <20200811203155.76632009@gmx.net>
- <20200811212852.387f7769@windsurf.home>
-Message-ID: <20200811213328.GG13263@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Aug 2020 23:36:44 +0200
+Subject: [Buildroot] [PATCH] package/librtlsdr: fix version fetching when
+ code is extracted from tarball
+Message-ID: <20200811213644.514004-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter, All,
+librtlsdr currently fails to build on the autobuilders, as it fails
+for out of tree builds. Indeed, there is some CMake logic in librtlsdr
+that determines the version using Git. This works fine when librtlsdr
+is fetched from Git of course. But in the context of Buildroot,
+librtlsdr is extracted from a tarball.
 
-On 2020-08-11 21:28 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 11 Aug 2020 20:31:55 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
-> > package/qt5/qt5base/Config.in:1:error: recursive dependency detected!
-> > package/qt5/qt5base/Config.in:1:	symbol BR2_PACKAGE_QT5BASE is selected by BR2_PACKAGE_QT5SVG
-> Right, this makes sense.
-> 
-> > package/qt5/qt5svg/Config.in:1:	symbol BR2_PACKAGE_QT5SVG is selected by BR2_PACKAGE_QT5BASE_EXAMPLES
-> This doesn't make any sense to me:
-[--SNIP--]
-> Or perhaps it is the line added by your patch:
-> 	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5BASE_EXAMPLES
-> which causes this statement ?
+For an in-tree build, the "git describe" invocation goes all the way
+up to the Buildroot .git/ metadata, and uses that as the librtlsdr
+version (it's of course wrong, but the build works). In an out-of-tree
+build, there is no parent directory with .git/ metadata, so Git fails,
+the VERSION variable is empty and later CMake aborts the build because
+of that.
 
-AFAICS, yes.
+We fix that by adjusting the version retrieving logic to only use Git
+if a .git/ metadata folder is found at the root of the librtlsdr
+source tree. The patch has been submitted upstream.
 
-> > package/qt5/qt5base/Config.in:42:	symbol BR2_PACKAGE_QT5BASE_EXAMPLES depends on BR2_PACKAGE_QT5BASE
-> This obviously makes sense.
+Fixes:
 
-The whole problem we have is that the qt5 symbol is dual;
+  http://autobuild.buildroot.net/results/ea52be1da8ed03272db06679d5a0a441ffe6ea0c/
 
-  - BR2_PACKAGE_QT5 that enables the whole Qt5 stack
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...rsion.cmake-don-t-use-Git-version-if.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
 
-  - BR2_PACKAGE_QT5BASE that enables the core component
-
-However, BR2_PACKAGE_QT5 selects BR2_PACKAGE_QT5BASE, and BR2_PACKAGE_QT5BASE
-depends on BR2_PACKAGE_QT5.
-
-So both are either enabled or disabled at the same time:
-
-    N N: valid
-    N Y: impossible
-    Y N: impossible
-    Y Y: valid
-
-But kcnfig can't see that the recursive dependency is resolved by
-construction of the two symbols, as shown in the validity matrix.
-
-I think we should change all qt5 packages to switch their dependency
-onto the package, not the stack, and drop explicit select or depends
-since this is implied by the top-level:
-
-    diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-    index 5c544ecec4..954e257879 100644
-    --- a/package/qt5/Config.in
-    +++ b/package/qt5/Config.in
-    @@ -36,8 +36,9 @@ menuconfig BR2_PACKAGE_QT5
-     	  http://qt.io
-     
-     if BR2_PACKAGE_QT5
-    -source "package/qt5/qt53d/Config.in"
-     source "package/qt5/qt5base/Config.in"
-    +if BR2_PACKAGE_QT5BASE
-    +source "package/qt5/qt53d/Config.in"
-     source "package/qt5/qt5charts/Config.in"
-     source "package/qt5/qt5connectivity/Config.in"
-     source "package/qt5/qt5declarative/Config.in"
-    @@ -66,4 +67,5 @@ source "package/qt5/qt5websockets/Config.in"
-     source "package/qt5/qt5webview/Config.in"
-     source "package/qt5/qt5x11extras/Config.in"
-     source "package/qt5/qt5xmlpatterns/Config.in"
-    -endif
-    +endif # QT5BASE
-    +endif # QT5
-    diff --git a/package/qt5/qt5svg/Config.in b/package/qt5/qt5svg/Config.in
-    index bc80b62674..1c4e90d1d9 100644
-    --- a/package/qt5/qt5svg/Config.in
-    +++ b/package/qt5/qt5svg/Config.in
-    @@ -1,6 +1,6 @@
-     config BR2_PACKAGE_QT5SVG
-     	bool "qt5svg"
-    -	select BR2_PACKAGE_QT5BASE
-     	select BR2_PACKAGE_QT5BASE_GUI
-     	help
-     	  Qt is a cross-platform application and UI framework for
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
+new file mode 100644
+index 0000000000..9c808edd41
+--- /dev/null
++++ b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
+@@ -0,0 +1,47 @@
++From feb5d9c6b7bcec788f9b01781c205e31fff260e7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 11 Aug 2020 23:07:08 +0200
++Subject: [PATCH] cmake/Modules/Version.cmake: don't use Git version if not in
++ a Git repo
++
++If the librtlsdr code comes from a tarball, it doesn't have any .git/
++metadata, and therefore even if Git (as a tool) is found, the logic in
++cmake/Modules/Version.cmake fails finding a version through Git:
++
++-- Extracting version information from git describe...
++fatal: Not a git repository (or any of the parent directories): .git
++
++As a consequence, the VERSION variable is empty, which later causes
++cmake to bail out with:
++
++CMake Error at /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/WriteBasicConfigVersionFile.cmake:43 (message):
++  No VERSION specified for WRITE_BASIC_CONFIG_VERSION_FILE()
++Call Stack (most recent call first):
++  /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/CMakePackageConfigHelpers.cmake:225 (write_basic_config_version_file)
++  CMakeLists.txt:173 (write_basic_package_version_file)
++
++To avoid this, we only use Git to determine the version if the cmake
++project top-level source directory has a .git/ folder.
++
++Upstream: https://github.com/librtlsdr/librtlsdr/pull/75
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ cmake/Modules/Version.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/cmake/Modules/Version.cmake b/cmake/Modules/Version.cmake
++index 2d4e76d..6f67fa4 100644
++--- a/cmake/Modules/Version.cmake
+++++ b/cmake/Modules/Version.cmake
++@@ -32,7 +32,7 @@ set(PATCH_VERSION ${VERSION_INFO_PATCH_VERSION})
++ ########################################################################
++ find_package(Git QUIET)
++ 
++-if(GIT_FOUND)
+++if(GIT_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/.git)
++     message(STATUS "Extracting version information from git describe...")
++     execute_process(
++         COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=4 --long
++-- 
++2.26.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
