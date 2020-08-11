@@ -1,122 +1,67 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 11 Aug 2020 21:41:16 +0200
-Subject: [Buildroot] SSHD issue between 2015 and 2020 versions
-In-Reply-To: <20200811210822.41e1fc62@gmx.net>
-References: <CAN34foxnvLRtSV7GM_=PM6vHZyo6HmeXVCSrjDpyTpRNzK7nGQ@mail.gmail.com>
- <20200811000920.18474f68@gmx.net>
- <CAN34fozMdTf65Y9Ks6e4yri=qdy=+S0vOV1M7DZH22aPpULjyw@mail.gmail.com>
- <20200811210822.41e1fc62@gmx.net>
-Message-ID: <20200811214116.27072437@gmx.net>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Tue, 11 Aug 2020 20:00:35 +0000
+Subject: [Buildroot] [arc-buildroot] dmalloc issue on ARC HS38
+In-Reply-To: <20200808175559.612425c2@windsurf.home>
+References: <20200808175559.612425c2@windsurf.home>
+Message-ID: <CH2PR12MB41044C85361322A9F585C8BDD9450@CH2PR12MB4104.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stephen,
+Hi Thomas,
 
-On Tue, 11 Aug 2020 21:08:22 +0200, Peter Seiderer via buildroot <buildroot@busybox.net> wrote:
+I am currently investigating this issue as well as other ARC-related(arc-gdb, apcupsd, etc.).
+I will send fixes as soon as possible.
 
-> Hello Stephen,
->
-> On Tue, 11 Aug 2020 10:02:16 -0400, Stephen Beckwith via buildroot <buildroot@busybox.net> wrote:
->
-> > Peter,
-> >   Thank you for your reply.  As I pointed out in the document:
-> > 2020 Buildroot creates a "full_users_table.txt" in the
-> > output/build/buildroot_fs directory, whereas the 2015 version puts a
-> > _users_table.txt in the output/build directory.  In the case of the 2015
-> > Buildroot, this file is "empty", whereas the 2020 Buildroot has an entry in
-> > this file that seems to be placed there by the Buildroot infrastructure.
-> > Why?  (I realize infrastructure changes occur between releases and we're
-> > making a might big leap here).
-> > I did update the Buildroot configuration via menuconfig (we save off a
-> > defconfig) since there are new default options for packages,etc in the new
-> > Buildroot release.
-> > A "simple build" is not possible, due to the nature of our setup using an
-> > external tree for the proprietary code.
-> > I did a build from "scratch" (we call extraclean, removes the output
-> > directory and does a complete re-setup of the target information we use).
-> > This builds fine, without opensshd enabled in the configuration.  I then
-> > use menuconfig to enable opensshd (in target packages->networking) and do a
-> > "make" here and I get this error at the end when we package up the entire
-> > system.  the opensshd itself builds correctly.
-> > The contents of the full_users_table.txt file comes from the
-> > sshd-sysusers.conf file in the 2020 Buildroot openssh package.  We do NOT
-> > use systemd or Device Tree.  Yet this is defined as the OPENSSH_USERS in
-> > the opensshd.mk file, how does this then get to the full_users_table.txt???
->
-> For a reference see [1] at 'LIBFOO_USERS'...
->
-> > I have enclosed the .config file used to build WITH opensshd enabled.
->
-> After a quick look at your config file (nothing suspicious) I would suspect
-> the content of the overlays/post-build-script (search for sshd there):
->
-> BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_SP_DEV_PATH)/src/rootfs-overlay $(BR2_EXTERNAL_SP_DEV_PATH)/platform/mendo/rootfs-overlay"
-> BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_SP_DEV_PATH)/scripts/post_rootfs_build.sh"
+Best regards,
+Evgeniy Didin
 
-In your attachment 'sshd-BR_ML-Post-0810.rtf' you write:
+-----Original Message-----
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
+Sent: Saturday, August 8, 2020 6:56 PM
+To: ARC Maintainers <arc-buildroot@synopsys.com>
+Cc: buildroot at uclibc.org
+Subject: [arc-buildroot] dmalloc issue on ARC HS38
 
-	 - yes there is a sshd user in the passwd file
+Dear ARC maintainers,
 
-Do your mean target/etc/passwd? If yes it must(?) come from one of the rootfs-overlays...,
-remove the sshd line there (from passwd, shadow and group)...and try again...
+For quite a while, we have been having this build issue of the dmalloc package on ARC HS38:
 
-Regards,
-Peter
+  https://urldefense.com/v3/__http://autobuild.buildroot.net/?reason=dmalloc-5.5.2__;!!A4F2R9G_pg!PoHjeFRllJw9Z-29IUdLH6tjFiBZST81gzh5LZPolssbfs48opcYULUQ4zAlLGTJCol5Lg$ 
 
->
-> And/or the following change of mkusers ([2])...
->
-> Regards,
-> Peter
->
-> [1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
-> [2] https://git.buildroot.net/buildroot/commit/?id=497f7134fca4b111499b2fd23501d7e048303e7c
->
-> >
-> > I look forward to your reply.
-> >
-> > Regards,
-> > Stephen Beckwith
-> >
-> >
-> > On Mon, Aug 10, 2020 at 6:09 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > Hello Stephen,
-> > >
-> > > On Mon, 10 Aug 2020 17:03:05 -0400, Stephen Beckwith <
-> > > embeddedsteve at gmail.com> wrote:
-> > >
-> > > > Please see the attached document that describes an issue that I've
-> > > > encountered when migrating from Buildroot 2015.08.1 to Buildroot 2020.02.
-> > > > At this point, I cannot include ssh/sshd for inclusion in the system,
-> > > which
-> > > > is necessary.
-> > >
-> > > Hard to determine what is causing your failure:
-> > >
-> > >         mkusers: user 'sshd' already exists with group 'users' (wants
-> > > 'sshd')
-> > >
-> > > Does it happen with an simple build? Or with your re-started one?
-> > >
-> > > Please provide a .config/defconfig file from your failing buildroot
-> > > configuration...
-> > >
-> > > Regards,
-> > > Peter
-> > >
-> > > >
-> > > > Any pointers/suggestions would be greatly appreciated.
-> > > >
-> > > > Regards,
-> > > > Stephen Beckwith
-> > >
-> > >
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+It goes like this:
+
+ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
+ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
+ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
+ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
+
+According to arch/Config.in.arc, we expect that the ELF type of binaries should be:
+
+        default "ARCompact"     if BR2_arc750d || BR2_arc770d
+        default "ARCv2"         if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
+
+So for HS38, it should be ARCv2, but for some reason, just for this package, the value is ARCompact. Why so? I don't see any special flag passed by dmalloc at build time.
+
+Also, another thing that looks suspicious in the build log is:
+
+checking shared library link args... ./configure: line 4467: 15012 Segmentation fault      ( ${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a ) 2>&5
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
+
+It looks like an ARC linker segmentation fault. It might actually be related, because when I look at how the .so files are produced:
+
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o libdmalloc.so.t libdmalloc.a /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o libdmallocxx.so.t libdmallocxx.a
+
+it calls ld directly, which is probably why it is producing a .so file with the incorrect ELF type.
+
+Could you have a look into this ?
+
+Thanks a lot,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://urldefense.com/v3/__https://bootlin.com__;!!A4F2R9G_pg!PoHjeFRllJw9Z-29IUdLH6tjFiBZST81gzh5LZPolssbfs48opcYULUQ4zAlLGRuGFwNaQ$ 
