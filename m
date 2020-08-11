@@ -1,38 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 11 Aug 2020 00:09:20 +0200
-Subject: [Buildroot] SSHD issue between 2015 and 2020 versions
-In-Reply-To: <CAN34foxnvLRtSV7GM_=PM6vHZyo6HmeXVCSrjDpyTpRNzK7nGQ@mail.gmail.com>
-References: <CAN34foxnvLRtSV7GM_=PM6vHZyo6HmeXVCSrjDpyTpRNzK7nGQ@mail.gmail.com>
-Message-ID: <20200811000920.18474f68@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Aug 2020 06:59:50 +0000
+Subject: [Buildroot] [Bug 13146] raspberrypi3_defconfig: "Inappropriate
+ ioctl for device" almost at end when sdcard.img is created
+In-Reply-To: <bug-13146-163@https.bugs.busybox.net/>
+References: <bug-13146-163@https.bugs.busybox.net/>
+Message-ID: <bug-13146-163-wb4RFLdAPI@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Stephen,
+https://bugs.busybox.net/show_bug.cgi?id=13146
 
-On Mon, 10 Aug 2020 17:03:05 -0400, Stephen Beckwith <embeddedsteve@gmail.com> wrote:
+--- Comment #2 from Marie Maurer <marie.maurer@mmeacs.de> ---
+Some additional information:
 
-> Please see the attached document that describes an issue that I've
-> encountered when migrating from Buildroot 2015.08.1 to Buildroot 2020.02.
-> At this point, I cannot include ssh/sshd for inclusion in the system, which
-> is necessary.
+I compiled in WSL (Ubuntu 20.04 LTS) under Windows 10:
 
-Hard to determine what is causing your failure:
+marie at 2020L009:~$ mount
+rootfs on / type lxfs (rw,noatime)
+none on /dev type tmpfs (rw,noatime,mode=755)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,noatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,noatime)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,noatime,gid=5,mode=620)
+none on /run type tmpfs (rw,nosuid,noexec,noatime,mode=755)
+none on /run/lock type tmpfs (rw,nosuid,nodev,noexec,noatime)
+none on /run/shm type tmpfs (rw,nosuid,nodev,noatime)
+none on /run/user type tmpfs (rw,nosuid,nodev,noexec,noatime,mode=755)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,relatime)
+tmpfs on /sys/fs/cgroup type tmpfs (rw,nosuid,nodev,noexec,relatime,mode=755)
+cgroup on /sys/fs/cgroup/devices type cgroup
+(rw,nosuid,nodev,noexec,relatime,devices)
+C:\ on /mnt/c type drvfs (rw,noatime,uid=1000,gid=1000,case=off)
+marie at 2020L009:~$ pwd
+/home/marie
 
-	mkusers: user 'sshd' already exists with group 'users' (wants 'sshd')
-
-Does it happen with an simple build? Or with your re-started one?
-
-Please provide a .config/defconfig file from your failing buildroot
-configuration...
-
-Regards,
-Peter
-
->
-> Any pointers/suggestions would be greatly appreciated.
->
-> Regards,
-> Stephen Beckwith
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
