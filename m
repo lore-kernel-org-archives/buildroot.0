@@ -1,72 +1,79 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 11 Aug 2020 23:26:18 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5webengine: examples need
- qt5svg
-In-Reply-To: <20200811212852.387f7769@windsurf.home>
-References: <20200810203841.26171-1-ps.report@gmx.net>
- <20200811203155.76632009@gmx.net>
- <20200811212852.387f7769@windsurf.home>
-Message-ID: <20200811232618.445b47da@gmx.net>
+Date: Tue, 11 Aug 2020 23:31:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version
+ to 2.4.46
+In-Reply-To: <87o8nkyh95.fsf@dell.be.48ers.dk>
+References: <20200807171100.220432-1-bernd.kuhls@t-online.de>
+ <20200807192657.GJ2186@scaer> <20200807225632.41b7c8d0@gmx.net>
+ <20200808122312.GO2186@scaer> <87o8nkyh95.fsf@dell.be.48ers.dk>
+Message-ID: <20200811233149.4bf7233d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, *,
+Hello Yann, Peter,
 
-On Tue, 11 Aug 2020 21:28:52 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, 08 Aug 2020 23:12:06 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Hello,
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 >
-> +Yann in Cc for Kconfig expertise.
+> Hi,
 >
-> On Tue, 11 Aug 2020 20:31:55 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
+>  > The hashes are there to guarantee that the archives have not be tampered
+>  > with, so that we know that:
 >
-> > package/qt5/qt5base/Config.in:1:error: recursive dependency detected!
-> > package/qt5/qt5base/Config.in:1:	symbol BR2_PACKAGE_QT5BASE is selected by BR2_PACKAGE_QT5SVG
+>  >  1. there was no technical issue downloading the archive (e.g. partial
+>  >     download, proxy playing tricks, etc...),
 >
-> Right, this makes sense.
+>  >  2. upstream did not re-release the same version with a different
+>  >     content, so that we know our patches would or would not apply for
+>  >     example,
 >
-> > package/qt5/qt5svg/Config.in:1:	symbol BR2_PACKAGE_QT5SVG is selected by BR2_PACKAGE_QT5BASE_EXAMPLES
+>  >  3. the source code has not been tampered with, so that no ill source
+>  >     code has been injected (either in-transit, or if upstream got
+>  >     compromised).
 >
-> This doesn't make any sense to me:
+>  > md5 is broken, there is no point in using it. If that's the only thing
+>  > upstream provides, we can carry it, but if upstream provides better
+>  > hashes, md5 brings nothing to address the above, especially point 3.
 >
-> config BR2_PACKAGE_QT5BASE_EXAMPLES
->         bool "Compile and install examples (with code)"
->         select BR2_PACKAGE_QT5BASE_NETWORK
->         select BR2_PACKAGE_QT5BASE_XML
->         help
->           If unsure, say N.
+>  > sha1 is not yet fully broken, but it is no longer trusted, and everyone
+>  > is moving away from it. If upstream only provides sha1, we can carry it,
+>  > but if upstream provides better hashes, then we should not _add_ sha1
+>  > (but we can continue to update an existing one we already carry). While
+>  > sha1 is still OK-ish to address accidental tampering (point 1) or
+>  > non-malicious modifications (point 2, and even then), it is now
+>  > useless to address malicious tampering (point 3).
 >
-> Neither BR2_PACKAGE_QT5BASE_NETWORK nor BR2_PACKAGE_QT5BASE_XML are
-> selecting BR2_PACKAGE_QT5SVG.
+>  > This is the point of view hashes should be looked at from.
 >
-> Or perhaps it is the line added by your patch:
+>  > In this case, upstream provides two strong hashes, sha256 and sha512;
+>  > adding md5 is totally useless, while adding sha1 is borderline useless.
 >
-> 	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5BASE_EXAMPLES
+>  > For the records:
 >
-> which causes this statement ?
+>  >   - md5 [0] was introduced 1991, and the first security issues were
+>  >     identified in 1993, and the first collisions reported in 1996.
 >
-> > package/qt5/qt5base/Config.in:42:	symbol BR2_PACKAGE_QT5BASE_EXAMPLES depends on BR2_PACKAGE_QT5BASE
+>  >   - sha1 [1] was introduced in 1995, is considered weak since 2005 (15
+>  >     years ago!), disallowed for signatures by NIST since 2013, and
+>  >     chosen-prefix attacks are a thing since this year.
 >
-> This obviously makes sense.
+> This is all true, but generating a single rogue file with BOTH a md5 and
+> sha1 collision and still being a valid compressed tarball is extremely
+> unlikely, so I have no issues with listing them (together with a
+> manually calculated sha256) if upstream doesn't provide sha256 or
+> better.
+>
+> If upstream does provide sha256 or better then there indeed isn't much
+> point in adding the older hashes as well.
+>
 
-One option to break the recursive dependency is to delete the
-redundant 'select BR2_PACKAGE_QT5BASE' from all packages already
-depending/selecting BR2_PACKAGE_QT5, see v2 of suggested patch...
+Totally agree with the given arguments for omitting redundant hashes (and
+always wondered why the docs suggested otherwise)...., time to update
+the docs to reflect this?
 
 Regards,
 Peter
-
->
-> > For a resolution refer to Documentation/kbuild/kconfig-language.txt
-> > subsection "Kconfig recursive dependency limitations"
-> >
-> > Regards,
-> > Peter
-> >
->
->
->
