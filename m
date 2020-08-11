@@ -1,67 +1,39 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Tue, 11 Aug 2020 20:00:35 +0000
-Subject: [Buildroot] [arc-buildroot] dmalloc issue on ARC HS38
-In-Reply-To: <20200808175559.612425c2@windsurf.home>
-References: <20200808175559.612425c2@windsurf.home>
-Message-ID: <CH2PR12MB41044C85361322A9F585C8BDD9450@CH2PR12MB4104.namprd12.prod.outlook.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 11 Aug 2020 20:10:03 +0000
+Subject: [Buildroot] [Bug 13146] raspberrypi3_defconfig: "Inappropriate
+ ioctl for device" almost at end when sdcard.img is created
+In-Reply-To: <bug-13146-163@https.bugs.busybox.net/>
+References: <bug-13146-163@https.bugs.busybox.net/>
+Message-ID: <bug-13146-163-m1ZBKlDDCk@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=13146
 
-I am currently investigating this issue as well as other ARC-related(arc-gdb, apcupsd, etc.).
-I will send fixes as soon as possible.
+--- Comment #12 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Peter Seiderer from comment #10)
 
-Best regards,
-Evgeniy Didin
+> Is resolved/worksforme not a little harsh as there is definitely a existing
+> problem (and a fix for it) and not yet determined if it is caused by the
+> filesystem and/or a WSL?
 
------Original Message-----
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
-Sent: Saturday, August 8, 2020 6:56 PM
-To: ARC Maintainers <arc-buildroot@synopsys.com>
-Cc: buildroot at uclibc.org
-Subject: [arc-buildroot] dmalloc issue on ARC HS38
+genimage does not work on WSL1 (from a previous IRC discussion some weeks
+ago); WSL1 was too limited to be really workable anyway. It *might* work on
+WSL2 (WSL2 is usually much better since it is in fact just a VM in disguise).
 
-Dear ARC maintainers,
+And yes, "works for me", because, yes, it works for me on a *real* Linux
+machine, and that's what Buildroot is made to run on:
 
-For quite a while, we have been having this build issue of the dmalloc package on ARC HS38:
+https://buildroot.org/manual.html#requirement
 
-  https://urldefense.com/v3/__http://autobuild.buildroot.net/?reason=dmalloc-5.5.2__;!!A4F2R9G_pg!PoHjeFRllJw9Z-29IUdLH6tjFiBZST81gzh5LZPolssbfs48opcYULUQ4zAlLGTJCol5Lg$ 
+Quoting: "Buildroot is designed to run on Linux systems."
 
-It goes like this:
+If it works on other systems, all the better. If it does not and you can
+come with a non-invasive fix, good, please send it. Otherwise, meh.
 
-ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
-ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
-ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
-ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
-
-According to arch/Config.in.arc, we expect that the ELF type of binaries should be:
-
-        default "ARCompact"     if BR2_arc750d || BR2_arc770d
-        default "ARCv2"         if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
-
-So for HS38, it should be ARCv2, but for some reason, just for this package, the value is ARCompact. Why so? I don't see any special flag passed by dmalloc at build time.
-
-Also, another thing that looks suspicious in the build log is:
-
-checking shared library link args... ./configure: line 4467: 15012 Segmentation fault      ( ${LD-ld} -shared --whole-archive -soname conftest.so -o conftest.so.t conftest.a ) 2>&5
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
-
-It looks like an ARC linker segmentation fault. It might actually be related, because when I look at how the .so files are produced:
-
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o libdmalloc.so.t libdmalloc.a /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arc-buildroot-linux-gnu-ld -G -o libdmallocxx.so.t libdmallocxx.a
-
-it calls ld directly, which is probably why it is producing a .so file with the incorrect ELF type.
-
-Could you have a look into this ?
-
-Thanks a lot,
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://urldefense.com/v3/__https://bootlin.com__;!!A4F2R9G_pg!PoHjeFRllJw9Z-29IUdLH6tjFiBZST81gzh5LZPolssbfs48opcYULUQ4zAlLGRuGFwNaQ$ 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
