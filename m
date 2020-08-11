@@ -1,115 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Aug 2020 23:54:51 +0200
-Subject: [Buildroot] [PATCH] package/librtlsdr: fix version fetching
- when code is extracted from tarball
-In-Reply-To: <20200811213644.514004-1-thomas.petazzoni@bootlin.com>
-References: <20200811213644.514004-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200811215451.GH13263@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Aug 2020 23:58:33 +0200
+Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
+ to 3.4.0
+In-Reply-To: <20200715173707.584226-1-aduskett@gmail.com>
+References: <20200715173707.584226-1-aduskett@gmail.com>
+Message-ID: <20200811235833.03115c8b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2020-08-11 23:36 +0200, Thomas Petazzoni spake thusly:
-> librtlsdr currently fails to build on the autobuilders, as it fails
-> for out of tree builds. Indeed, there is some CMake logic in librtlsdr
-> that determines the version using Git. This works fine when librtlsdr
-> is fetched from Git of course. But in the context of Buildroot,
-> librtlsdr is extracted from a tarball.
-> 
-> For an in-tree build, the "git describe" invocation goes all the way
-> up to the Buildroot .git/ metadata, and uses that as the librtlsdr
-> version (it's of course wrong, but the build works). In an out-of-tree
-> build, there is no parent directory with .git/ metadata, so Git fails,
-> the VERSION variable is empty and later CMake aborts the build because
-> of that.
-> 
-> We fix that by adjusting the version retrieving logic to only use Git
-> if a .git/ metadata folder is found at the root of the librtlsdr
-> source tree. The patch has been submitted upstream.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/ea52be1da8ed03272db06679d5a0a441ffe6ea0c/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Matt since his autobuilders are causing issues.
++Christian for some more Go expertise.
 
-Applied to master, thanks.
+On Wed, 15 Jul 2020 10:37:04 -0700
+aduskett at gmail.com wrote:
 
-Also applied, the patch that adds Gwenhael as developper to librtlsdr.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...rsion.cmake-don-t-use-Git-version-if.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> diff --git a/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
-> new file mode 100644
-> index 0000000000..9c808edd41
-> --- /dev/null
-> +++ b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
-> @@ -0,0 +1,47 @@
-> +From feb5d9c6b7bcec788f9b01781c205e31fff260e7 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Tue, 11 Aug 2020 23:07:08 +0200
-> +Subject: [PATCH] cmake/Modules/Version.cmake: don't use Git version if not in
-> + a Git repo
-> +
-> +If the librtlsdr code comes from a tarball, it doesn't have any .git/
-> +metadata, and therefore even if Git (as a tool) is found, the logic in
-> +cmake/Modules/Version.cmake fails finding a version through Git:
-> +
-> +-- Extracting version information from git describe...
-> +fatal: Not a git repository (or any of the parent directories): .git
-> +
-> +As a consequence, the VERSION variable is empty, which later causes
-> +cmake to bail out with:
-> +
-> +CMake Error at /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/WriteBasicConfigVersionFile.cmake:43 (message):
-> +  No VERSION specified for WRITE_BASIC_CONFIG_VERSION_FILE()
-> +Call Stack (most recent call first):
-> +  /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/CMakePackageConfigHelpers.cmake:225 (write_basic_config_version_file)
-> +  CMakeLists.txt:173 (write_basic_package_version_file)
-> +
-> +To avoid this, we only use Git to determine the version if the cmake
-> +project top-level source directory has a .git/ folder.
-> +
-> +Upstream: https://github.com/librtlsdr/librtlsdr/pull/75
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + cmake/Modules/Version.cmake | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/cmake/Modules/Version.cmake b/cmake/Modules/Version.cmake
-> +index 2d4e76d..6f67fa4 100644
-> +--- a/cmake/Modules/Version.cmake
-> ++++ b/cmake/Modules/Version.cmake
-> +@@ -32,7 +32,7 @@ set(PATCH_VERSION ${VERSION_INFO_PATCH_VERSION})
-> + ########################################################################
-> + find_package(Git QUIET)
-> + 
-> +-if(GIT_FOUND)
-> ++if(GIT_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/.git)
-> +     message(STATUS "Extracting version information from git describe...")
-> +     execute_process(
-> +         COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=4 --long
-> +-- 
-> +2.26.2
-> +
-> -- 
-> 2.26.2
+> Update the following license file hashes due to copyright year changes:
+>   - vendor/github.com/mendersoftware/mendertesting/LICENSE
+>   - vendor/github.com/davecgh/go-spew/LICENSE
+>   - vendor/github.com/stretchr/testify/LICENSE
 > 
+> Add hashes for the the following new files:
+>   - vendor/github.com/minio/sha256-simd/LICENSE
+>   - vendor/gopkg.in/yaml.v2/LICENSE
+>   - vendor/github.com/klauspost/compress/LICENSE
+>   - vendor/github.com/russross/blackfriday/v2/LICENSE.txt
+>   - vendor/github.com/klauspost/pgzip/LICENSE
+>   - vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
+>   - vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
+This is causing some significant amount of build failures in the
+autobuilders:
+
+  http://autobuild.buildroot.net/?reason=host-mender%
+
+It fails only on Matthew Weber autobuilders, which don't have a
+"normal" access to Internet, and the build fails with errors such as:
+
+go: github.com/davecgh/go-spew at v1.1.1: Get https://proxy.golang.org/github.com/davecgh/go-spew/@v/v1.1.1.mod: proxyconnect tcp: read tcp 192.168.6.146:34964->128.24.38.25:9091: read: connection reset by peer
+
+go: github.com/davecgh/go-spew at v1.1.1: Get https://proxy.golang.org/github.com/davecgh/go-spew/@v/v1.1.1.mod: proxyconnect tcp: net/http: TLS handshake timeout
+
+Can this be fixed somehow ?
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
