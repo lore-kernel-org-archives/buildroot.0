@@ -1,110 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Aug 2020 18:55:20 +0200
-Subject: [Buildroot] [git commit branch/next] package/libabseil-cpp: fix
- build on RISC-V 32-bits
-Message-ID: <20200812144329.88EC485F4A@busybox.osuosl.org>
+Date: Tue, 11 Aug 2020 23:50:15 +0200
+Subject: [Buildroot] [git commit branch/next] package/librtlsdr: fix version
+ fetching when code is extracted from tarball
+Message-ID: <20200812144330.03B2185F4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1455b56ebe721dfea562a4bb159d848f93db679
+commit: https://git.buildroot.net/buildroot/commit/?id=4ea2c8e90805b007560d8b039dff4e3e2275fc55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit backports an upstream patch that fixes the build on RISC-V
-32-bits.
+librtlsdr currently fails to build on the autobuilders, as it fails
+for out of tree builds. Indeed, there is some CMake logic in librtlsdr
+that determines the version using Git. This works fine when librtlsdr
+is fetched from Git of course. But in the context of Buildroot,
+librtlsdr is extracted from a tarball.
+
+For an in-tree build, the "git describe" invocation goes all the way
+up to the Buildroot .git/ metadata, and uses that as the librtlsdr
+version (it's of course wrong, but the build works). In an out-of-tree
+build, there is no parent directory with .git/ metadata, so Git fails,
+the VERSION variable is empty and later CMake aborts the build because
+of that.
+
+We fix that by adjusting the version retrieving logic to only use Git
+if a .git/ metadata folder is found at the root of the librtlsdr
+source tree. The patch has been submitted upstream.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/c6c2c99bdba8c840d52fe0464d26aca169ea1d90/
+  http://autobuild.buildroot.net/results/ea52be1da8ed03272db06679d5a0a441ffe6ea0c/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0003-Fix-build-on-riscv32-675.patch            | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ ...es-Version.cmake-don-t-use-Git-version-if.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/libabseil-cpp/0003-Fix-build-on-riscv32-675.patch b/package/libabseil-cpp/0003-Fix-build-on-riscv32-675.patch
+diff --git a/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
 new file mode 100644
-index 0000000000..0077c5fe9b
+index 0000000000..9c808edd41
 --- /dev/null
-+++ b/package/libabseil-cpp/0003-Fix-build-on-riscv32-675.patch
-@@ -0,0 +1,77 @@
-+From 3f347c46272886a099852a4cd303ecf37a054de8 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Mon, 18 May 2020 10:23:50 -0700
-+Subject: [PATCH] Fix build on riscv32 (#675)
++++ b/package/librtlsdr/0002-cmake-Modules-Version.cmake-don-t-use-Git-version-if.patch
+@@ -0,0 +1,47 @@
++From feb5d9c6b7bcec788f9b01781c205e31fff260e7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 11 Aug 2020 23:07:08 +0200
++Subject: [PATCH] cmake/Modules/Version.cmake: don't use Git version if not in
++ a Git repo
 +
-+[Backport from upstream commit 3f347c46272886a099852a4cd303ecf37a054de8]
++If the librtlsdr code comes from a tarball, it doesn't have any .git/
++metadata, and therefore even if Git (as a tool) is found, the logic in
++cmake/Modules/Version.cmake fails finding a version through Git:
++
++-- Extracting version information from git describe...
++fatal: Not a git repository (or any of the parent directories): .git
++
++As a consequence, the VERSION variable is empty, which later causes
++cmake to bail out with:
++
++CMake Error at /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/WriteBasicConfigVersionFile.cmake:43 (message):
++  No VERSION specified for WRITE_BASIC_CONFIG_VERSION_FILE()
++Call Stack (most recent call first):
++  /home/test/autobuild/run/instance-1/output-1/host/share/cmake-3.15/Modules/CMakePackageConfigHelpers.cmake:225 (write_basic_config_version_file)
++  CMakeLists.txt:173 (write_basic_package_version_file)
++
++To avoid this, we only use Git to determine the version if the cmake
++project top-level source directory has a .git/ folder.
++
++Upstream: https://github.com/librtlsdr/librtlsdr/pull/75
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ absl/base/internal/direct_mmap.h        | 5 +++++
-+ absl/base/internal/spinlock_linux.inc   | 8 ++++++++
-+ absl/synchronization/internal/waiter.cc | 8 ++++++++
-+ 3 files changed, 21 insertions(+)
++ cmake/Modules/Version.cmake | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/absl/base/internal/direct_mmap.h b/absl/base/internal/direct_mmap.h
-+index 5618867..16accf0 100644
-+--- a/absl/base/internal/direct_mmap.h
-++++ b/absl/base/internal/direct_mmap.h
-+@@ -61,6 +61,10 @@ extern "C" void* __mmap2(void*, size_t, int, int, int, size_t);
-+ #endif
-+ #endif  // __BIONIC__
++diff --git a/cmake/Modules/Version.cmake b/cmake/Modules/Version.cmake
++index 2d4e76d..6f67fa4 100644
++--- a/cmake/Modules/Version.cmake
+++++ b/cmake/Modules/Version.cmake
++@@ -32,7 +32,7 @@ set(PATCH_VERSION ${VERSION_INFO_PATCH_VERSION})
++ ########################################################################
++ find_package(Git QUIET)
 + 
-++#if defined(__NR_mmap2) && !defined(SYS_mmap2)
-++#define SYS_mmap2 __NR_mmap2
-++#endif
-++
-+ namespace absl {
-+ ABSL_NAMESPACE_BEGIN
-+ namespace base_internal {
-+@@ -72,6 +76,7 @@ inline void* DirectMmap(void* start, size_t length, int prot, int flags, int fd,
-+ #if defined(__i386__) || defined(__ARM_ARCH_3__) || defined(__ARM_EABI__) || \
-+     (defined(__mips__) && _MIPS_SIM == _MIPS_SIM_ABI32) ||                   \
-+     (defined(__PPC__) && !defined(__PPC64__)) ||                             \
-++    (defined(__riscv) && __riscv_xlen == 32) ||                              \
-+     (defined(__s390__) && !defined(__s390x__))
-+   // On these architectures, implement mmap with mmap2.
-+   static int pagesize = 0;
-+diff --git a/absl/base/internal/spinlock_linux.inc b/absl/base/internal/spinlock_linux.inc
-+index 323edd6..e31c6ed 100644
-+--- a/absl/base/internal/spinlock_linux.inc
-++++ b/absl/base/internal/spinlock_linux.inc
-+@@ -46,6 +46,14 @@ static_assert(sizeof(std::atomic<uint32_t>) == sizeof(int),
-+ #endif
-+ #endif
-+ 
-++#if defined(__NR_futex_time64) && !defined(SYS_futex_time64)
-++#define SYS_futex_time64 __NR_futex_time64
-++#endif
-++
-++#if defined(SYS_futex_time64) && !defined(SYS_futex)
-++#define SYS_futex SYS_futex_time64
-++#endif
-++
-+ extern "C" {
-+ 
-+ ABSL_ATTRIBUTE_WEAK void AbslInternalSpinLockDelay(
-+diff --git a/absl/synchronization/internal/waiter.cc b/absl/synchronization/internal/waiter.cc
-+index 2949f5a..b6150b9 100644
-+--- a/absl/synchronization/internal/waiter.cc
-++++ b/absl/synchronization/internal/waiter.cc
-+@@ -86,6 +86,14 @@ static void MaybeBecomeIdle() {
-+ #endif
-+ #endif
-+ 
-++#if defined(__NR_futex_time64) && !defined(SYS_futex_time64)
-++#define SYS_futex_time64 __NR_futex_time64
-++#endif
-++
-++#if defined(SYS_futex_time64) && !defined(SYS_futex)
-++#define SYS_futex SYS_futex_time64
-++#endif
-++
-+ class Futex {
-+  public:
-+   static int WaitUntil(std::atomic<int32_t> *v, int32_t val,
++-if(GIT_FOUND)
+++if(GIT_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/.git)
++     message(STATUS "Extracting version information from git describe...")
++     execute_process(
++         COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=4 --long
 +-- 
 +2.26.2
 +
