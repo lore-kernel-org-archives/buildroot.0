@@ -1,32 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Aug 2020 22:43:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump to version 3.9.4
-In-Reply-To: <20200810041840.24613-1-asafka7@gmail.com>
-References: <20200810041840.24613-1-asafka7@gmail.com>
-Message-ID: <20200811224306.6bb3d1e1@windsurf.home>
+Date: Tue, 11 Aug 2020 22:43:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python3-decorator: use
+ PYTHON3_DECORATOR_VERSION
+In-Reply-To: <20200810082711.92757-1-fontaine.fabrice@gmail.com>
+References: <20200810082711.92757-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200811224320.1fbe8371@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 10 Aug 2020 07:18:40 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+On Mon, 10 Aug 2020 10:27:11 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Drop patch (already in version).
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...op_mt-as-a-macro-on-uclibc-and-MacOS.patch | 52 -------------------
->  package/libfuse3/libfuse3.hash                |  2 +-
->  package/libfuse3/libfuse3.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 54 deletions(-)
->  delete mode 100644 package/libfuse3/0001-Define-fuse_session_loop_mt-as-a-macro-on-uclibc-and-MacOS.patch
+>  package/python3-decorator/python3-decorator.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-As the number of changes between 3.9.2 and 3.9.4 is very small, and
-only made of fixes, I applied this to master.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
