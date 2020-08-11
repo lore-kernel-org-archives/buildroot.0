@@ -1,69 +1,249 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:45:34 +0200
-Subject: [Buildroot] [git commit branch/next] package/atest: fix build with
- gcc 10
-Message-ID: <20200812144330.42EAF85F4A@busybox.osuosl.org>
+Date: Tue, 11 Aug 2020 22:31:23 +0200
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: use
+ aiohttp for latest version retrieval
+Message-ID: <20200812144329.B166A85F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf8d7fe24a2c045af096dcce280dc90299a1a9bb
+commit: https://git.buildroot.net/buildroot/commit/?id=68093f477828863977381989023f7401e2fdeed3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/887c466b3703449239eedaf86f3f4dd2a2dc8afe
+This commit reworks the code that retrieves the latest upstream
+version of each package from release-monitoring.org using the aiohttp
+module. This makes the implementation much more elegant, and avoids
+the problematic multiprocessing Pool which is causing issues in some
+situations.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since we're now using some async functionality, the script is Python
+3.x only, so the shebang is changed to make this clear.
+
+Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../atest/0001-seq.h-fix-build-with-gcc-10.patch   | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ support/scripts/pkg-stats | 148 +++++++++++++++++++++++++---------------------
+ 1 file changed, 81 insertions(+), 67 deletions(-)
 
-diff --git a/package/atest/0001-seq.h-fix-build-with-gcc-10.patch b/package/atest/0001-seq.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..c0ae042b01
---- /dev/null
-+++ b/package/atest/0001-seq.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,40 @@
-+From fb374e0775fd9772a2cd7b99a5c21f96f7fe2a9a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 10 Aug 2020 12:12:07 +0200
-+Subject: [PATCH] seq.h: fix build with gcc 10
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ec4d538758..3423c44815 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ # Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ #
+@@ -16,7 +16,9 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
++import aiohttp
+ import argparse
++import asyncio
+ import datetime
+ import fnmatch
+ import os
+@@ -26,13 +28,10 @@ import subprocess
+ import requests  # URL checking
+ import json
+ import ijson
+-import certifi
+ import distutils.version
+ import time
+ import gzip
+ import sys
+-from urllib3 import HTTPSConnectionPool
+-from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
+ 
+ sys.path.append('utils/')
+@@ -54,10 +53,6 @@ CVE_AFFECTS = 1
+ CVE_DOESNT_AFFECT = 2
+ CVE_UNKNOWN = 3
+ 
+-# Used to make multiple requests to the same host. It is global
+-# because it's used by sub-processes.
+-http_pool = None
+-
+ 
+ class Defconfig:
+     def __init__(self, name, path):
+@@ -526,54 +521,88 @@ def check_package_urls(packages):
+     pool.terminate()
+ 
+ 
+-def release_monitoring_get_latest_version_by_distro(pool, name):
+-    try:
+-        req = pool.request('GET', "/api/project/Buildroot/%s" % name)
+-    except HTTPError:
+-        return (RM_API_STATUS_ERROR, None, None)
+-
+-    if req.status != 200:
+-        return (RM_API_STATUS_NOT_FOUND, None, None)
++def check_package_latest_version_set_status(pkg, status, version, identifier):
++    pkg.latest_version = {
++        "status": status,
++        "version": version,
++        "id": identifier,
++    }
+ 
+-    data = json.loads(req.data)
++    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
++        pkg.status['version'] = ('warning', "Release Monitoring API error")
++    elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
++        pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
+ 
+-    if 'version' in data:
+-        return (RM_API_STATUS_FOUND_BY_DISTRO, data['version'], data['id'])
++    if pkg.latest_version['version'] is None:
++        pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
++    elif pkg.latest_version['version'] != pkg.current_version:
++        pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
+     else:
+-        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
++        pkg.status['version'] = ('ok', 'up-to-date')
+ 
+ 
+-def release_monitoring_get_latest_version_by_guess(pool, name):
++async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
++    url = "https://release-monitoring.org//api/project/Buildroot/%s" % pkg.name
+     try:
+-        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
+-    except HTTPError:
+-        return (RM_API_STATUS_ERROR, None, None)
++        async with session.get(url) as resp:
++            if resp.status != 200:
++                return False
+ 
+-    if req.status != 200:
+-        return (RM_API_STATUS_NOT_FOUND, None, None)
++            data = await resp.json()
++            version = data['version'] if 'version' in data else None
++            check_package_latest_version_set_status(pkg,
++                                                    RM_API_STATUS_FOUND_BY_DISTRO,
++                                                    version,
++                                                    data['id'])
++            return True
 +
-+Rename state structure to avoid the following build failure with gcc
-+10.0:
++    except (aiohttp.ClientError, asyncio.TimeoutError):
++        if retry:
++            return await check_package_get_latest_version_by_distro(session, pkg, retry=False)
++        else:
++            return False
+ 
+-    data = json.loads(req.data)
+ 
+-    projects = data['projects']
+-    projects.sort(key=lambda x: x['id'])
++async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
++    url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
++    try:
++        async with session.get(url) as resp:
++            if resp.status != 200:
++                return False
 +
-+/bin/bash ./libtool  --tag=CC   --mode=link /home/test/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -include config.h   -Wall -Wno-sign-compare -Wno-strict-aliasing  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o atest atest.o seq.o alsa.o capture.o playback.o loopback_delay.o -L/home/test/autobuild/run/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lasound -lev
-+libtool: link: /home/test/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -include config.h -Wall -Wno-sign-compare -Wno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o atest atest.o seq.o alsa.o capture.o playback.o loopback_delay.o  -L/home/test/autobuild/run/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib /home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libasound.so -ldl -lpthread -lrt /home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libev.so -lm -Wl,-rpath -Wl,/home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -Wl,-rpath -Wl,/home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: seq.o:(.bss+0x8): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: capture.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: playback.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: loopback_delay.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
++            data = await resp.json()
++            # filter projects that have the right name and a version defined
++            projects = [p for p in data['projects'] if p['name'] == pkg.name and 'version' in p]
++            projects.sort(key=lambda x: x['id'])
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/887c466b3703449239eedaf86f3f4dd2a2dc8afe
++            if len(projects) > 0:
++                check_package_latest_version_set_status(pkg,
++                                                        RM_API_STATUS_FOUND_BY_DISTRO,
++                                                        projects[0]['version'],
++                                                        projects[0]['id'])
++                return True
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/amouiche/atest/pull/3]
-+---
-+ seq.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++    except (aiohttp.ClientError, asyncio.TimeoutError):
++        if retry:
++            return await check_package_get_latest_version_by_guess(session, pkg, retry=False)
++        else:
++            return False
+ 
+-    for p in projects:
+-        if p['name'] == name and 'version' in p:
+-            return (RM_API_STATUS_FOUND_BY_PATTERN, p['version'], p['id'])
+ 
+-    return (RM_API_STATUS_NOT_FOUND, None, None)
++async def check_package_latest_version_get(session, pkg):
+ 
++    if await check_package_get_latest_version_by_distro(session, pkg):
++        return
+ 
+-def check_package_latest_version_worker(name):
+-    """Wrapper to try both by name then by guess"""
+-    print(name)
+-    res = release_monitoring_get_latest_version_by_distro(http_pool, name)
+-    if res[0] == RM_API_STATUS_NOT_FOUND:
+-        res = release_monitoring_get_latest_version_by_guess(http_pool, name)
+-    return res
++    if await check_package_get_latest_version_by_guess(session, pkg):
++        return
+ 
++    check_package_latest_version_set_status(pkg,
++                                            RM_API_STATUS_NOT_FOUND,
++                                            None, None)
+ 
+-def check_package_latest_version(packages):
 +
-+diff --git a/seq.h b/seq.h
-+index 0fa1a95..b7ba8d1 100644
-+--- a/seq.h
-++++ b/seq.h
-+@@ -30,7 +30,7 @@ enum seq_stat_e {
-+     NULL_FRAME = 0,
-+     INVALID_FRAME,
-+     VALID_FRAME,
-+-} state;
-++};
-+ 
-+ 
-+ struct seq_info {
-+-- 
-+2.27.0
-+
++async def check_package_latest_version(packages):
+     """
+     Fills in the .latest_version field of all Package objects
+ 
+@@ -587,33 +616,17 @@ def check_package_latest_version(packages):
+     - id: string containing the id of the project corresponding to this
+       package, as known by release-monitoring.org
+     """
+-    global http_pool
+-    http_pool = HTTPSConnectionPool('release-monitoring.org', port=443,
+-                                    cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
+-                                    timeout=30)
+-    worker_pool = Pool(processes=64)
+-    results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
+-    for pkg, r in zip(packages, results):
+-        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+-
+-        if not pkg.has_valid_infra:
+-            pkg.status['version'] = ("na", "no valid package infra")
+-            continue
+-
+-        if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+-            pkg.status['version'] = ('warning', "Release Monitoring API error")
+-        elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
+-            pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
+ 
+-        if pkg.latest_version['version'] is None:
+-            pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
+-        elif pkg.latest_version['version'] != pkg.current_version:
+-            pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
+-        else:
+-            pkg.status['version'] = ('ok', 'up-to-date')
++    for pkg in [p for p in packages if not p.has_valid_infra]:
++        pkg.status['version'] = ("na", "no valid package infra")
+ 
+-    worker_pool.terminate()
+-    del http_pool
++    tasks = []
++    connector = aiohttp.TCPConnector(limit_per_host=5)
++    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
++        packages = [p for p in packages if p.has_valid_infra]
++        for pkg in packages:
++            tasks.append(check_package_latest_version_get(sess, pkg))
++        await asyncio.wait(tasks)
+ 
+ 
+ def check_package_cves(nvd_path, packages):
+@@ -1057,7 +1070,8 @@ def __main__():
+     print("Checking URL status")
+     check_package_urls(packages)
+     print("Getting latest versions ...")
+-    check_package_latest_version(packages)
++    loop = asyncio.get_event_loop()
++    loop.run_until_complete(check_package_latest_version(packages))
+     if args.nvd_path:
+         print("Checking packages CVEs")
+         check_package_cves(args.nvd_path, {p.name: p for p in packages})
