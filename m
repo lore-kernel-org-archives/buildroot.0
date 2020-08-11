@@ -1,62 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Aug 2020 15:46:12 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/mariadb: patch
- mariadb_config to add sysroot path
-In-Reply-To: <20200213174655.17309-1-bluemrp9@gmail.com>
-References: <20200213174655.17309-1-bluemrp9@gmail.com>
-Message-ID: <20200811154612.777ac5d5@windsurf.home>
+From: Stephen Beckwith <embeddedsteve@gmail.com>
+Date: Tue, 11 Aug 2020 10:02:16 -0400
+Subject: [Buildroot] SSHD issue between 2015 and 2020 versions
+In-Reply-To: <20200811000920.18474f68@gmx.net>
+References: <CAN34foxnvLRtSV7GM_=PM6vHZyo6HmeXVCSrjDpyTpRNzK7nGQ@mail.gmail.com>
+ <20200811000920.18474f68@gmx.net>
+Message-ID: <CAN34fozMdTf65Y9Ks6e4yri=qdy=+S0vOV1M7DZH22aPpULjyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+Peter,
+  Thank you for your reply.  As I pointed out in the document:
+2020 Buildroot creates a "full_users_table.txt" in the
+output/build/buildroot_fs directory, whereas the 2015 version puts a
+_users_table.txt in the output/build directory.  In the case of the 2015
+Buildroot, this file is "empty", whereas the 2020 Buildroot has an entry in
+this file that seems to be placed there by the Buildroot infrastructure.
+Why?  (I realize infrastructure changes occur between releases and we're
+making a might big leap here).
+I did update the Buildroot configuration via menuconfig (we save off a
+defconfig) since there are new default options for packages,etc in the new
+Buildroot release.
+A "simple build" is not possible, due to the nature of our setup using an
+external tree for the proprietary code.
+I did a build from "scratch" (we call extraclean, removes the output
+directory and does a complete re-setup of the target information we use).
+This builds fine, without opensshd enabled in the configuration.  I then
+use menuconfig to enable opensshd (in target packages->networking) and do a
+"make" here and I get this error at the end when we package up the entire
+system.  the opensshd itself builds correctly.
+The contents of the full_users_table.txt file comes from the
+sshd-sysusers.conf file in the 2020 Buildroot openssh package.  We do NOT
+use systemd or Device Tree.  Yet this is defined as the OPENSSH_USERS in
+the opensshd.mk file, how does this then get to the full_users_table.txt???
+I have enclosed the .config file used to build WITH opensshd enabled.
 
-On Thu, 13 Feb 2020 09:46:55 -0800
-Ryan Coe <bluemrp9@gmail.com> wrote:
+I look forward to your reply.
 
-> This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
-> mariadb_config and mysql_config incorrectly returns host paths for
-> include paths and library paths.
-> 
-> Upstream report and status:
-> https://jira.mariadb.org/browse/CONC-454
-> https://github.com/mariadb-corporation/mariadb-connector-c/pull/127
-> 
-> Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Regards,
+Stephen Beckwith
 
-I am getting back to this older e-mail, because today I tried to use
-mysql_config when MariaDB is the MySQL provider, and it doesn't work,
-because it calls mariadb_config, which itself is a program compiled for
-the target:
 
-$ ./output/staging/usr/bin/mysql_config --cflags
-/lib/ld-uClibc.so.0: No such file or directory
-/lib/ld-uClibc.so.0: No such file or directory
-/lib/ld-uClibc.so.0: No such file or directory
-/lib/ld-uClibc.so.0: No such file or directory
+On Mon, Aug 10, 2020 at 6:09 PM Peter Seiderer <ps.report@gmx.net> wrote:
 
-And indeed:
-
-$ file output/staging/usr/bin/mariadb_config 
-output/staging/usr/bin/mariadb_config: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, with debug_info, not stripped
-
-In other projects, the <something>_config program is a script, so it
-works fine on the host.
-
-How have you been using mariadb_config ?
-
-Here, the issue is that we don't have a consistent behavior between
-oracle-mysql (which installs a working
-$(STAGING_DIR)/usr/bin/mysql_config) and mariadb (which doesn't install
-a working $(STAGING_DIR)/usr/bin/mysql_config).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hello Stephen,
+>
+> On Mon, 10 Aug 2020 17:03:05 -0400, Stephen Beckwith <
+> embeddedsteve at gmail.com> wrote:
+>
+> > Please see the attached document that describes an issue that I've
+> > encountered when migrating from Buildroot 2015.08.1 to Buildroot 2020.02.
+> > At this point, I cannot include ssh/sshd for inclusion in the system,
+> which
+> > is necessary.
+>
+> Hard to determine what is causing your failure:
+>
+>         mkusers: user 'sshd' already exists with group 'users' (wants
+> 'sshd')
+>
+> Does it happen with an simple build? Or with your re-started one?
+>
+> Please provide a .config/defconfig file from your failing buildroot
+> configuration...
+>
+> Regards,
+> Peter
+>
+> >
+> > Any pointers/suggestions would be greatly appreciated.
+> >
+> > Regards,
+> > Stephen Beckwith
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200811/4e5ae379/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_configFile
+Type: application/octet-stream
+Size: 129256 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200811/4e5ae379/attachment.obj>
