@@ -1,79 +1,103 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 11 Aug 2020 23:31:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump version
- to 2.4.46
-In-Reply-To: <87o8nkyh95.fsf@dell.be.48ers.dk>
-References: <20200807171100.220432-1-bernd.kuhls@t-online.de>
- <20200807192657.GJ2186@scaer> <20200807225632.41b7c8d0@gmx.net>
- <20200808122312.GO2186@scaer> <87o8nkyh95.fsf@dell.be.48ers.dk>
-Message-ID: <20200811233149.4bf7233d@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Aug 2020 23:33:28 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5webengine: examples need
+ qt5svg
+In-Reply-To: <20200811212852.387f7769@windsurf.home>
+References: <20200810203841.26171-1-ps.report@gmx.net>
+ <20200811203155.76632009@gmx.net>
+ <20200811212852.387f7769@windsurf.home>
+Message-ID: <20200811213328.GG13263@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, Peter,
+Thomas, Peter, All,
 
-On Sat, 08 Aug 2020 23:12:06 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+On 2020-08-11 21:28 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 11 Aug 2020 20:31:55 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+> > package/qt5/qt5base/Config.in:1:error: recursive dependency detected!
+> > package/qt5/qt5base/Config.in:1:	symbol BR2_PACKAGE_QT5BASE is selected by BR2_PACKAGE_QT5SVG
+> Right, this makes sense.
+> 
+> > package/qt5/qt5svg/Config.in:1:	symbol BR2_PACKAGE_QT5SVG is selected by BR2_PACKAGE_QT5BASE_EXAMPLES
+> This doesn't make any sense to me:
+[--SNIP--]
+> Or perhaps it is the line added by your patch:
+> 	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5BASE_EXAMPLES
+> which causes this statement ?
 
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
-> Hi,
->
->  > The hashes are there to guarantee that the archives have not be tampered
->  > with, so that we know that:
->
->  >  1. there was no technical issue downloading the archive (e.g. partial
->  >     download, proxy playing tricks, etc...),
->
->  >  2. upstream did not re-release the same version with a different
->  >     content, so that we know our patches would or would not apply for
->  >     example,
->
->  >  3. the source code has not been tampered with, so that no ill source
->  >     code has been injected (either in-transit, or if upstream got
->  >     compromised).
->
->  > md5 is broken, there is no point in using it. If that's the only thing
->  > upstream provides, we can carry it, but if upstream provides better
->  > hashes, md5 brings nothing to address the above, especially point 3.
->
->  > sha1 is not yet fully broken, but it is no longer trusted, and everyone
->  > is moving away from it. If upstream only provides sha1, we can carry it,
->  > but if upstream provides better hashes, then we should not _add_ sha1
->  > (but we can continue to update an existing one we already carry). While
->  > sha1 is still OK-ish to address accidental tampering (point 1) or
->  > non-malicious modifications (point 2, and even then), it is now
->  > useless to address malicious tampering (point 3).
->
->  > This is the point of view hashes should be looked at from.
->
->  > In this case, upstream provides two strong hashes, sha256 and sha512;
->  > adding md5 is totally useless, while adding sha1 is borderline useless.
->
->  > For the records:
->
->  >   - md5 [0] was introduced 1991, and the first security issues were
->  >     identified in 1993, and the first collisions reported in 1996.
->
->  >   - sha1 [1] was introduced in 1995, is considered weak since 2005 (15
->  >     years ago!), disallowed for signatures by NIST since 2013, and
->  >     chosen-prefix attacks are a thing since this year.
->
-> This is all true, but generating a single rogue file with BOTH a md5 and
-> sha1 collision and still being a valid compressed tarball is extremely
-> unlikely, so I have no issues with listing them (together with a
-> manually calculated sha256) if upstream doesn't provide sha256 or
-> better.
->
-> If upstream does provide sha256 or better then there indeed isn't much
-> point in adding the older hashes as well.
->
+AFAICS, yes.
 
-Totally agree with the given arguments for omitting redundant hashes (and
-always wondered why the docs suggested otherwise)...., time to update
-the docs to reflect this?
+> > package/qt5/qt5base/Config.in:42:	symbol BR2_PACKAGE_QT5BASE_EXAMPLES depends on BR2_PACKAGE_QT5BASE
+> This obviously makes sense.
+
+The whole problem we have is that the qt5 symbol is dual;
+
+  - BR2_PACKAGE_QT5 that enables the whole Qt5 stack
+
+  - BR2_PACKAGE_QT5BASE that enables the core component
+
+However, BR2_PACKAGE_QT5 selects BR2_PACKAGE_QT5BASE, and BR2_PACKAGE_QT5BASE
+depends on BR2_PACKAGE_QT5.
+
+So both are either enabled or disabled at the same time:
+
+    N N: valid
+    N Y: impossible
+    Y N: impossible
+    Y Y: valid
+
+But kcnfig can't see that the recursive dependency is resolved by
+construction of the two symbols, as shown in the validity matrix.
+
+I think we should change all qt5 packages to switch their dependency
+onto the package, not the stack, and drop explicit select or depends
+since this is implied by the top-level:
+
+    diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+    index 5c544ecec4..954e257879 100644
+    --- a/package/qt5/Config.in
+    +++ b/package/qt5/Config.in
+    @@ -36,8 +36,9 @@ menuconfig BR2_PACKAGE_QT5
+     	  http://qt.io
+     
+     if BR2_PACKAGE_QT5
+    -source "package/qt5/qt53d/Config.in"
+     source "package/qt5/qt5base/Config.in"
+    +if BR2_PACKAGE_QT5BASE
+    +source "package/qt5/qt53d/Config.in"
+     source "package/qt5/qt5charts/Config.in"
+     source "package/qt5/qt5connectivity/Config.in"
+     source "package/qt5/qt5declarative/Config.in"
+    @@ -66,4 +67,5 @@ source "package/qt5/qt5websockets/Config.in"
+     source "package/qt5/qt5webview/Config.in"
+     source "package/qt5/qt5x11extras/Config.in"
+     source "package/qt5/qt5xmlpatterns/Config.in"
+    -endif
+    +endif # QT5BASE
+    +endif # QT5
+    diff --git a/package/qt5/qt5svg/Config.in b/package/qt5/qt5svg/Config.in
+    index bc80b62674..1c4e90d1d9 100644
+    --- a/package/qt5/qt5svg/Config.in
+    +++ b/package/qt5/qt5svg/Config.in
+    @@ -1,6 +1,6 @@
+     config BR2_PACKAGE_QT5SVG
+     	bool "qt5svg"
+    -	select BR2_PACKAGE_QT5BASE
+     	select BR2_PACKAGE_QT5BASE_GUI
+     	help
+     	  Qt is a cross-platform application and UI framework for
 
 Regards,
-Peter
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
