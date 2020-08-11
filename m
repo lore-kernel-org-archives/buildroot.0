@@ -1,82 +1,50 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 11 Aug 2020 12:44:29 -0300
-Subject: [Buildroot] [PATCH] configs/ci20: Use upstream Linux and U-Boot
-Message-ID: <20200811154429.436747-1-ezequiel@vanguardiasur.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Aug 2020 17:57:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtd: crypto support needs
+ linux-headers
+In-Reply-To: <CAPi7W80cauJfB1B1WG_MLp0Ae-jSf+r2hyfT1KY_y6fv2biBOA@mail.gmail.com>
+References: <20200811091917.1545019-1-fontaine.fabrice@gmail.com>
+ <20200811123010.4355db2a@windsurf.home>
+ <CAPi7W80cauJfB1B1WG_MLp0Ae-jSf+r2hyfT1KY_y6fv2biBOA@mail.gmail.com>
+Message-ID: <20200811155740.GE13263@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ezequiel Garcia <ezequiel@collabora.com>
+Fabrice, All,
 
-The vendor kernel we are currently selecting no longer builds,
-and fails with a ton of:
+On 2020-08-11 17:01 +0200, Fabrice Fontaine via buildroot spake thusly:
+> Le mar. 11 ao?t 2020 ? 12:30, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+> > On Tue, 11 Aug 2020 11:19:17 +0200
+> > Fabrice Fontaine via buildroot <buildroot@busybox.net> wrote:
+> > > crypto support needs linux-headers as it includes <linux/hash_info.h>
+> > > since version 2.1.2 and
+> > You can't do that, as linux-headers is only used for the internal
+> > toolchain backend. Also the kernel headers are already present in all
+> > toolchains, so how could this change anything ?
+> I was not aware that kernel headers were already present in all
+> toolchains. Thanks for spotting my mistake. I'll send a v2 adding a
+> dependency on headers 4.12 as this is the real issue.
 
-                 from include/linux/list.h:8,
-                 from include/linux/module.h:9,
-                 from arch/mips/jz4740/prom.c:16:
-include/linux/log2.h:22:1: error: ignoring attribute 'noreturn' because it conflicts with attribute 'const' [-Werror=a
-ttributes]
-   22 | int ____ilog2_NaN(void);
-      | ^~~
+Yes.
 
-We can't afford to fix that, so let's just move to upstream
-kernel and bootloader. It doesn't make much sense to keep
-using an unsupported kernel and bootloader at this point.
+> However, it should be noted that we have an "issue" with the iputils
+> package as it has an optional dependency on linux-headers since commit
+> 9ffcd9279e5505535a73cf1200b3a86fd425cf32.
+> I assume that this dependency is also not needed?
 
-This means we will be missing some of the features supported
-by the vendor (such as HDMI support), but it is what it is.
+s/not needed/incorrect/, yes
 
-Linux v5.7 and v5.4 have been tested to boot fine, the latter
-is picked for the defconfig.
+Regards,
+Yann E. MORIN.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- configs/ci20_defconfig | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
-
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 8f2604b07c8e..081fb6e52ee6 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -2,9 +2,8 @@
- BR2_mipsel=y
- BR2_mips_xburst=y
- # BR2_MIPS_SOFT_FLOAT is not set
--
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_KERNEL_HEADERS_AS_KERNEL=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
-@@ -15,19 +14,16 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci20/genimage.cfg"
- 
- # kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,MIPS,CI20_linux,7dff33297116643485ca37141d804eddd793e834)/linux-7dff33297116643485ca37141d804eddd793e834.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="ci20"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
- # u-boot
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
--BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa"
--BR2_TARGET_UBOOT_PATCH="board/ci20/patches/uboot"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_LATEST_VERSION=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ci20_mmc"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
-2.27.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
