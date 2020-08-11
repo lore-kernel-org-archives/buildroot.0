@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Aug 2020 10:25:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/atest: fix build with gcc 10
-Message-ID: <20200811082516.1189869-1-fontaine.fabrice@gmail.com>
+Date: Tue, 11 Aug 2020 10:42:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/aircrack-ng: fix build with gcc 10
+Message-ID: <20200811084207.1355635-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,59 +9,127 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/887c466b3703449239eedaf86f3f4dd2a2dc8afe
+ - http://autobuild.buildroot.org/results/98ab591a88e06a985b0a7aac5abbf665289134b4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-seq.h-fix-build-with-gcc-10.patch    | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/atest/0001-seq.h-fix-build-with-gcc-10.patch
+ .../0001-Expand-packed-definition.patch       | 26 +++++++
+ .../0002-Fix-duplicated-symbols.patch         | 74 +++++++++++++++++++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 package/aircrack-ng/0001-Expand-packed-definition.patch
+ create mode 100644 package/aircrack-ng/0002-Fix-duplicated-symbols.patch
 
-diff --git a/package/atest/0001-seq.h-fix-build-with-gcc-10.patch b/package/atest/0001-seq.h-fix-build-with-gcc-10.patch
+diff --git a/package/aircrack-ng/0001-Expand-packed-definition.patch b/package/aircrack-ng/0001-Expand-packed-definition.patch
 new file mode 100644
-index 0000000000..c0ae042b01
+index 0000000000..f0c033a1aa
 --- /dev/null
-+++ b/package/atest/0001-seq.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,40 @@
-+From fb374e0775fd9772a2cd7b99a5c21f96f7fe2a9a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 10 Aug 2020 12:12:07 +0200
-+Subject: [PATCH] seq.h: fix build with gcc 10
++++ b/package/aircrack-ng/0001-Expand-packed-definition.patch
+@@ -0,0 +1,26 @@
++From d4496006ac1e0c99908108b998ae39afb0658733 Mon Sep 17 00:00:00 2001
++From: Joseph Benden <joe@benden.us>
++Date: Tue, 7 Jul 2020 11:42:40 -0700
++Subject: [PATCH] Expand __packed definition.
 +
-+Rename state structure to avoid the following build failure with gcc
-+10.0:
-+
-+/bin/bash ./libtool  --tag=CC   --mode=link /home/test/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -include config.h   -Wall -Wno-sign-compare -Wno-strict-aliasing  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o atest atest.o seq.o alsa.o capture.o playback.o loopback_delay.o -L/home/test/autobuild/run/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lasound -lev
-+libtool: link: /home/test/autobuild/run/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -include config.h -Wall -Wno-sign-compare -Wno-strict-aliasing -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o atest atest.o seq.o alsa.o capture.o playback.o loopback_delay.o  -L/home/test/autobuild/run/instance-0/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib /home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libasound.so -ldl -lpthread -lrt /home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libev.so -lm -Wl,-rpath -Wl,/home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -Wl,-rpath -Wl,/home/test/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: seq.o:(.bss+0x8): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: capture.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: playback.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: loopback_delay.o:(.bss+0x0): multiple definition of `state'; atest.o:(.bss+0xbc): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/887c466b3703449239eedaf86f3f4dd2a2dc8afe
-+
++Signed-off-by: Joseph Benden <joe@benden.us>
++[Retrieved from:
++https://github.com/aircrack-ng/aircrack-ng/commit/d4496006ac1e0c99908108b998ae39afb0658733]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/amouiche/atest/pull/3]
 +---
-+ seq.h | 2 +-
++ lib/radiotap/radiotap.h | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/seq.h b/seq.h
-+index 0fa1a95..b7ba8d1 100644
-+--- a/seq.h
-++++ b/seq.h
-+@@ -30,7 +30,7 @@ enum seq_stat_e {
-+     NULL_FRAME = 0,
-+     INVALID_FRAME,
-+     VALID_FRAME,
-+-} state;
-++};
++diff --git a/lib/radiotap/radiotap.h b/lib/radiotap/radiotap.h
++index 57f784b8d..bb5a41dfc 100644
++--- a/lib/radiotap/radiotap.h
+++++ b/lib/radiotap/radiotap.h
++@@ -56,7 +56,7 @@ struct ieee80211_radiotap_header {
++ 	 * @it_present: (first) present word
++ 	 */
++ 	uint32_t it_present;
++-} __packed;
+++} __attribute__((__packed__));
 + 
-+ 
-+ struct seq_info {
-+-- 
-+2.27.0
++ /* version is always 0 */
++ #define PKTHDR_RADIOTAP_VERSION	0
+diff --git a/package/aircrack-ng/0002-Fix-duplicated-symbols.patch b/package/aircrack-ng/0002-Fix-duplicated-symbols.patch
+new file mode 100644
+index 0000000000..f181580808
+--- /dev/null
++++ b/package/aircrack-ng/0002-Fix-duplicated-symbols.patch
+@@ -0,0 +1,74 @@
++From f6f1396807607f5649d20631db517cfca3a1f5c4 Mon Sep 17 00:00:00 2001
++From: Joseph Benden <joe@benden.us>
++Date: Tue, 7 Jul 2020 11:44:40 -0700
++Subject: [PATCH] Fix duplicated symbols.
 +
++Signed-off-by: Joseph Benden <joe@benden.us>
++[Retrieved from:
++https://github.com/aircrack-ng/aircrack-ng/commit/f6f1396807607f5649d20631db517cfca3a1f5c4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/airodump-ng/airodump-ng.c                 | 2 --
++ src/airventriloquist-ng/airventriloquist-ng.c | 6 +++---
++ src/tkiptun-ng/tkiptun-ng.c                   | 4 ++--
++ 3 files changed, 5 insertions(+), 7 deletions(-)
++
++diff --git a/src/airodump-ng/airodump-ng.c b/src/airodump-ng/airodump-ng.c
++index 3ae6994dd..e72bc88e2 100644
++--- a/src/airodump-ng/airodump-ng.c
+++++ b/src/airodump-ng/airodump-ng.c
++@@ -92,8 +92,6 @@
++ #include "radiotap/radiotap_iter.h"
++ 
++ struct devices dev;
++-uint8_t h80211[4096] __attribute__((aligned(16)));
++-uint8_t tmpbuf[4096] __attribute__((aligned(16)));
++ 
++ static const unsigned char llcnull[] = {0, 0, 0, 0};
++ 
++diff --git a/src/airventriloquist-ng/airventriloquist-ng.c b/src/airventriloquist-ng/airventriloquist-ng.c
++index ac6b7647e..267d95540 100644
++--- a/src/airventriloquist-ng/airventriloquist-ng.c
+++++ b/src/airventriloquist-ng/airventriloquist-ng.c
++@@ -173,7 +173,7 @@ static struct local_options
++ } lopt;
++ 
++ struct devices dev;
++-struct wif *_wi_in, *_wi_out;
+++extern struct wif *_wi_in, *_wi_out;
++ 
++ struct ARP_req
++ {
++@@ -195,8 +195,8 @@ struct APt
++ };
++ 
++ unsigned long nb_pkt_sent;
++-u_int8_t h80211[4096];
++-static u_int8_t tmpbuf[4096];
+++extern u_int8_t h80211[4096];
+++extern u_int8_t tmpbuf[4096];
++ 
++ static int tcp_test(const char * ip_str, const short port)
++ {
++diff --git a/src/tkiptun-ng/tkiptun-ng.c b/src/tkiptun-ng/tkiptun-ng.c
++index dc67f5d58..43db0bc23 100644
++--- a/src/tkiptun-ng/tkiptun-ng.c
+++++ b/src/tkiptun-ng/tkiptun-ng.c
++@@ -267,7 +267,7 @@ static struct local_options
++ 
++ // unused, but needed for link
++ struct devices dev;
++-struct wif *_wi_in, *_wi_out;
+++extern struct wif *_wi_in, *_wi_out;
++ 
++ struct ARP_req
++ {
++@@ -289,7 +289,7 @@ struct APt
++ };
++ 
++ unsigned long nb_pkt_sent;
++-unsigned char h80211[4096];
+++extern unsigned char h80211[4096];
++ static unsigned char srcbuf[4096];
++ static char strbuf[512];
++ static int alarmed;
 -- 
 2.27.0
