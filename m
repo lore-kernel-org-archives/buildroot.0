@@ -1,42 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 12 Aug 2020 22:18:46 +0200
-Subject: [Buildroot] [PATCH v1] package/rtl8188eu: bump version to 0924dc8f
-Message-ID: <20200812201846.17416-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 12 Aug 2020 22:25:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bellagio: fix build with gcc 10
+Message-ID: <20200812202508.2874057-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- fixes compile against linux-5.4.x
+Fixes:
+ - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...e_resource_manager.-h-c-fix-build-wi.patch | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 88c128aa35..b16986176d 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cc872aa0991c044d35abfcc81543bad950c6aae487e37d5a09d1cbf8c4cb3058  rtl8188eu-4b0ecca485b9f11f58670b69aa9f90ecad7da02f.tar.gz
-+sha256  24656123468506760974edf4a9087f6c77d13228fa6b6ce899c12c359a5dc1e7  rtl8188eu-0924dc8fe0845358ed5b3c4c673126069469b3fc.tar.gz
- sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index f292bba134..686b2ea9d2 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8188EU_VERSION = 4b0ecca485b9f11f58670b69aa9f90ecad7da02f
-+RTL8188EU_VERSION = 0924dc8fe0845358ed5b3c4c673126069469b3fc
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+diff --git a/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
+new file mode 100644
+index 0000000000..1a2777cb18
+--- /dev/null
++++ b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
+@@ -0,0 +1,57 @@
++From be9f72bc5fa05de466f9151ac399c17027b58b24 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 12 Aug 2020 21:38:51 +0200
++Subject: [PATCH] src/omx_reference_resource_manager.{h,c}: fix build with gcc
++ 10
++
++Move globalIndex, listOfcomponentRegistered, globalComponentList and
++globalWaitingComponentList from header to source file to fix the build
++with gcc 10 which default to -fno-common:
++https://gcc.gnu.org/gcc-10/porting_to.html
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/omxil/bugs/63]
++---
++ src/omx_reference_resource_manager.c | 5 +++++
++ src/omx_reference_resource_manager.h | 6 ------
++ 2 files changed, 5 insertions(+), 6 deletions(-)
++
++diff --git a/src/omx_reference_resource_manager.c b/src/omx_reference_resource_manager.c
++index ee7766b..5983611 100644
++--- a/src/omx_reference_resource_manager.c
+++++ b/src/omx_reference_resource_manager.c
++@@ -30,6 +30,11 @@
++ #include "base/omx_base_component.h"
++ #include "queue.h"
++ 
+++int globalIndex;
+++NameIndexType *listOfcomponentRegistered;
+++ComponentListType **globalComponentList;
+++ComponentListType **globalWaitingComponentList;
+++
++ /**
++  * This is the static base pointer of the list
++  */
++diff --git a/src/omx_reference_resource_manager.h b/src/omx_reference_resource_manager.h
++index ba8dad9..75e4f93 100644
++--- a/src/omx_reference_resource_manager.h
+++++ b/src/omx_reference_resource_manager.h
++@@ -48,12 +48,6 @@ struct NameIndexType {
++ 	int max_components;
++ };
++ 
++-
++-int globalIndex;
++-NameIndexType *listOfcomponentRegistered;
++-ComponentListType **globalComponentList;
++-ComponentListType **globalWaitingComponentList;
++-
++ OMX_ERRORTYPE RM_RegisterComponent(char *name, int max_components);
++ OMX_ERRORTYPE addElemToList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp, int index, OMX_BOOL bIsWaiting);
++ OMX_ERRORTYPE removeElemFromList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp);
++-- 
++2.27.0
++
 -- 
-2.28.0
+2.27.0
