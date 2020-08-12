@@ -1,29 +1,37 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 12 Aug 2020 06:01:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: drop wrong
- linux-headers dependency
-In-Reply-To: <20200811223740.2473421-1-fontaine.fabrice@gmail.com>
-References: <20200811223740.2473421-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200812040144.GA125203@x230>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Wed, 12 Aug 2020 09:09:23 +0200
+Subject: [Buildroot] [PATCH] package/ettercap: new package
+In-Reply-To: <20200811225120.622906-1-romain.naour@gmail.com>
+References: <20200811225120.622906-1-romain.naour@gmail.com>
+Message-ID: <CAHpTZwmq=ZNjT1erTCS1qWom3NGHRuH0jhEjnhUz2O9a9AKjTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hi Romain,
 
-> Commit 9ffcd9279e5505535a73cf1200b3a86fd425cf32 wrongly added a
-> linux-headers dependency when switching to meson.
+Thank's for your answer.
 
-> Remove it as headers are always provided by the toolchain.
+On Wed, Aug 12, 2020 at 12:51 AM Romain Naour <romain.naour@gmail.com>
+wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Thanks!
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+> From: Jugurtha BELKALEM via buildroot <buildroot@busybox.net>
+>
+> TODO
+>
+> Q: is geoip really needed or used ?
+> Because there is no GeoIP.dat file in the rootfs
+> (/usr/local/share/GeoIP/GeoIP.dat).
+> Note: Fedora disabled GeoIP support for Ettercap!
+>
 
-BTW next release (which should be soon) will not depend on any crypto library
-(md5 implementation is included).
+Yes geoip is required to build ettercap. GeoIP.dat can be provided by the
+user (they can be downloaded from maxmind website) to improve Ettercap IP
+tracking results (but ettercap works fine without them).
 
-Kind regards,
-Petr
+Best regards.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200812/43ff8ff1/attachment.html>
