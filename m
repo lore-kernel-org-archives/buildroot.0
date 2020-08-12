@@ -1,36 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:41:53 +0200
-Subject: [Buildroot] configs/arcturus_ucls1012a: bump kernel to 4.14.140
- and u-boot version to 2019.10
-In-Reply-To: <34880163-6f5d-1417-cb2f-8633cbef3489@ArcturusNetworks.com>
-References: <20200808185725.40db193f@windsurf.home>
- <34880163-6f5d-1417-cb2f-8633cbef3489@ArcturusNetworks.com>
-Message-ID: <20200812164153.35a6f546@windsurf.home>
+Date: Wed, 12 Aug 2020 16:42:17 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-hiredis: bump
+ to version 1.1.0
+Message-ID: <20200812143611.9853582821@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 10 Aug 2020 10:58:17 -0400
-Michael Durrant <mdurrant@ArcturusNetworks.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5e55791981a909eb609574ab1a321e208c4fde05
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Fixes: 
->   
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/674933582
-> 
-> Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
-> Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
-> ---
->  board/arcturus/aarch64-ucls1012a/post-build.sh | 5 +++++
->  configs/arcturus_ucls1012a_defconfig           | 9 +++++----
->  2 files changed, 10 insertions(+), 4 deletions(-)
->  create mode 100755 board/arcturus/aarch64-ucls1012a/post-build.sh
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-hiredis/python-hiredis.hash | 8 ++++----
+ package/python-hiredis/python-hiredis.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index 1a013bb3a2..091532dd2a 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5	ad421ea848734c7be5c10689caa2a6f1  hiredis-1.0.1.tar.gz
+-sha256	aa59dd63bb3f736de4fc2d080114429d5d369dfb3265f771778e8349d67a97a4  hiredis-1.0.1.tar.gz
++md5  430294afb3ebb37ebc7cc05bf3e5a389  hiredis-1.1.0.tar.gz
++sha256  996021ef33e0f50b97ff2d6b5f422a0fe5577de21a8873b58a779a5ddd1c3132  hiredis-1.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
+-sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
++sha256  70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
++sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index 435918feb6..7d871d1f03 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_HIREDIS_VERSION = 1.0.1
++PYTHON_HIREDIS_VERSION = 1.1.0
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/7f/5c/62e5c6b811b4dcef4125b4a01f76db82c496d79299dd67053b8f9c0732c0
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/3d/9f/abc69e73055f73d42ddf9c46b3e01a08b9e74b579b8fc413cbd31112a749
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = BSD-3-Clause
+ PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
