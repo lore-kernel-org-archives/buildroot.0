@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:46:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/aircrack-ng: fix build with gcc
- 10
-In-Reply-To: <20200811084207.1355635-1-fontaine.fabrice@gmail.com>
-References: <20200811084207.1355635-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200812164631.5bdad886@windsurf.home>
+Date: Wed, 12 Aug 2020 16:46:56 +0200
+Subject: [Buildroot] [git commit] package/python3-pyelftools: use
+ PYTHON3_PYELFTOOLS_VERSION
+Message-ID: <20200812144103.7D02E812A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 11 Aug 2020 10:42:07 +0200
-Fabrice Fontaine via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d7e6a935c0ceee63b50b891cb1a01fa34e88e663
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/98ab591a88e06a985b0a7aac5abbf665289134b4
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Expand-packed-definition.patch       | 26 +++++++
->  .../0002-Fix-duplicated-symbols.patch         | 74 +++++++++++++++++++
->  2 files changed, 100 insertions(+)
->  create mode 100644 package/aircrack-ng/0001-Expand-packed-definition.patch
->  create mode 100644 package/aircrack-ng/0002-Fix-duplicated-symbols.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python3-pyelftools/python3-pyelftools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python3-pyelftools/python3-pyelftools.mk b/package/python3-pyelftools/python3-pyelftools.mk
+index ea79aef66d..be49ca2bcf 100644
+--- a/package/python3-pyelftools/python3-pyelftools.mk
++++ b/package/python3-pyelftools/python3-pyelftools.mk
+@@ -6,7 +6,7 @@
+ 
+ # Please keep in sync with package/python-pyelftools/python-pyelftools.mk
+ PYTHON3_PYELFTOOLS_VERSION = 0.25
+-PYTHON3_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
++PYTHON3_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON3_PYELFTOOLS_VERSION).tar.gz
+ PYTHON3_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/fa/9a/0674cb1725196568bdbca98304f2efb17368b57af1a4bb3fc772c026f474
+ PYTHON3_PYELFTOOLS_LICENSE = Public domain
+ PYTHON3_PYELFTOOLS_LICENSE_FILES = LICENSE
