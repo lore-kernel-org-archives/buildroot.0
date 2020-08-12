@@ -1,84 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 12 Aug 2020 22:25:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bellagio: fix build with gcc 10
-Message-ID: <20200812202508.2874057-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Aug 2020 23:07:19 +0000
+Subject: [Buildroot] [Bug 13156] New: package live555 new license
+Message-ID: <bug-13156-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
+https://bugs.busybox.net/show_bug.cgi?id=13156
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...e_resource_manager.-h-c-fix-build-wi.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
+            Bug ID: 13156
+           Summary: package live555 new license
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: jonathan.phenix at videotron.ca
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
-new file mode 100644
-index 0000000000..1a2777cb18
---- /dev/null
-+++ b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
-@@ -0,0 +1,57 @@
-+From be9f72bc5fa05de466f9151ac399c17027b58b24 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 12 Aug 2020 21:38:51 +0200
-+Subject: [PATCH] src/omx_reference_resource_manager.{h,c}: fix build with gcc
-+ 10
-+
-+Move globalIndex, listOfcomponentRegistered, globalComponentList and
-+globalWaitingComponentList from header to source file to fix the build
-+with gcc 10 which default to -fno-common:
-+https://gcc.gnu.org/gcc-10/porting_to.html
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://sourceforge.net/p/omxil/bugs/63]
-+---
-+ src/omx_reference_resource_manager.c | 5 +++++
-+ src/omx_reference_resource_manager.h | 6 ------
-+ 2 files changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/omx_reference_resource_manager.c b/src/omx_reference_resource_manager.c
-+index ee7766b..5983611 100644
-+--- a/src/omx_reference_resource_manager.c
-++++ b/src/omx_reference_resource_manager.c
-+@@ -30,6 +30,11 @@
-+ #include "base/omx_base_component.h"
-+ #include "queue.h"
-+ 
-++int globalIndex;
-++NameIndexType *listOfcomponentRegistered;
-++ComponentListType **globalComponentList;
-++ComponentListType **globalWaitingComponentList;
-++
-+ /**
-+  * This is the static base pointer of the list
-+  */
-+diff --git a/src/omx_reference_resource_manager.h b/src/omx_reference_resource_manager.h
-+index ba8dad9..75e4f93 100644
-+--- a/src/omx_reference_resource_manager.h
-++++ b/src/omx_reference_resource_manager.h
-+@@ -48,12 +48,6 @@ struct NameIndexType {
-+ 	int max_components;
-+ };
-+ 
-+-
-+-int globalIndex;
-+-NameIndexType *listOfcomponentRegistered;
-+-ComponentListType **globalComponentList;
-+-ComponentListType **globalWaitingComponentList;
-+-
-+ OMX_ERRORTYPE RM_RegisterComponent(char *name, int max_components);
-+ OMX_ERRORTYPE addElemToList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp, int index, OMX_BOOL bIsWaiting);
-+ OMX_ERRORTYPE removeElemFromList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp);
-+-- 
-+2.27.0
-+
+The current license in git master is LGPL-2.1+ which used to be right. It's now
+LGPL-3.0+, including the currently packaged version 2020.06.25. This can be
+verified by unpacking
+http://sources.buildroot.org/live555/live.2020.06.25.tar.gz
+
 -- 
-2.27.0
+You are receiving this mail because:
+You are on the CC list for the bug.
