@@ -1,75 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:41:06 +0200
-Subject: [Buildroot] [git commit branch/next] configs/arcturus_ucls1012a:
- bump kernel to 4.14.140 and u-boot version to 2019.10
-Message-ID: <20200812144330.27FC285F4A@busybox.osuosl.org>
+Date: Wed, 12 Aug 2020 16:45:51 +0200
+Subject: [Buildroot] [git commit branch/next] package/aircrack-ng: fix build
+ with gcc 10
+Message-ID: <20200812144330.4B8A385F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1353f14556eab3b6b0232f25466acd8c394ea3e1
+commit: https://git.buildroot.net/buildroot/commit/?id=b1f03aef306eb596b8061be20b4baa1a018bd890
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes:
+ - http://autobuild.buildroot.org/results/98ab591a88e06a985b0a7aac5abbf665289134b4
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/674933582
-
-Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
-Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/arcturus/aarch64-ucls1012a/post-build.sh | 5 +++++
- configs/arcturus_ucls1012a_defconfig           | 9 +++++----
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ .../0001-Expand-packed-definition.patch            | 26 ++++++++
+ .../aircrack-ng/0002-Fix-duplicated-symbols.patch  | 74 ++++++++++++++++++++++
+ 2 files changed, 100 insertions(+)
 
-diff --git a/board/arcturus/aarch64-ucls1012a/post-build.sh b/board/arcturus/aarch64-ucls1012a/post-build.sh
-new file mode 100755
-index 0000000000..f8ba78095f
+diff --git a/package/aircrack-ng/0001-Expand-packed-definition.patch b/package/aircrack-ng/0001-Expand-packed-definition.patch
+new file mode 100644
+index 0000000000..f0c033a1aa
 --- /dev/null
-+++ b/board/arcturus/aarch64-ucls1012a/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
++++ b/package/aircrack-ng/0001-Expand-packed-definition.patch
+@@ -0,0 +1,26 @@
++From d4496006ac1e0c99908108b998ae39afb0658733 Mon Sep 17 00:00:00 2001
++From: Joseph Benden <joe@benden.us>
++Date: Tue, 7 Jul 2020 11:42:40 -0700
++Subject: [PATCH] Expand __packed definition.
 +
-+mkdir -p ${TARGET_DIR}/lib/firmware
-+cp -f ${BUILD_DIR}/linux-custom/firmware/ppfe/* ${TARGET_DIR}/lib/firmware/
-+cp -f ${BUILD_DIR}/linux-custom/br2-ucls1012a.its ${BINARIES_DIR}/
-diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
-index fceaed0db7..fd33ebf1f6 100644
---- a/configs/arcturus_ucls1012a_defconfig
-+++ b/configs/arcturus_ucls1012a_defconfig
-@@ -1,20 +1,21 @@
- # Architecture
- BR2_aarch64=y
- 
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
- 
- # System settings
- BR2_TARGET_GENERIC_HOSTNAME="ucls1012a"
- BR2_TARGET_GENERIC_ISSUE="Welcome to uCLS1012A-SOM"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_OVERLAY="board/arcturus/aarch64-ucls1012a/rootfs_overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/arcturus/aarch64-ucls1012a/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/arcturus/aarch64-ucls1012a/post-image.sh"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-kernel,v0.2.1935)/linux-v0.2.1935.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-kernel,v.20.31)/linux-v.20.31.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="ucls1012a"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arcturus/arc-ucls1012a"
-@@ -27,7 +28,7 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-uboot,v0.2.1935)/uboot-v0.2.1935.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCLS1012A-uboot,v.20.31)/uboot-v.20.31.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="UCLS1012A_QSPI128"
- 
- # Tools
++Signed-off-by: Joseph Benden <joe@benden.us>
++[Retrieved from:
++https://github.com/aircrack-ng/aircrack-ng/commit/d4496006ac1e0c99908108b998ae39afb0658733]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/radiotap/radiotap.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/radiotap/radiotap.h b/lib/radiotap/radiotap.h
++index 57f784b8d..bb5a41dfc 100644
++--- a/lib/radiotap/radiotap.h
+++++ b/lib/radiotap/radiotap.h
++@@ -56,7 +56,7 @@ struct ieee80211_radiotap_header {
++ 	 * @it_present: (first) present word
++ 	 */
++ 	uint32_t it_present;
++-} __packed;
+++} __attribute__((__packed__));
++ 
++ /* version is always 0 */
++ #define PKTHDR_RADIOTAP_VERSION	0
+diff --git a/package/aircrack-ng/0002-Fix-duplicated-symbols.patch b/package/aircrack-ng/0002-Fix-duplicated-symbols.patch
+new file mode 100644
+index 0000000000..f181580808
+--- /dev/null
++++ b/package/aircrack-ng/0002-Fix-duplicated-symbols.patch
+@@ -0,0 +1,74 @@
++From f6f1396807607f5649d20631db517cfca3a1f5c4 Mon Sep 17 00:00:00 2001
++From: Joseph Benden <joe@benden.us>
++Date: Tue, 7 Jul 2020 11:44:40 -0700
++Subject: [PATCH] Fix duplicated symbols.
++
++Signed-off-by: Joseph Benden <joe@benden.us>
++[Retrieved from:
++https://github.com/aircrack-ng/aircrack-ng/commit/f6f1396807607f5649d20631db517cfca3a1f5c4]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/airodump-ng/airodump-ng.c                 | 2 --
++ src/airventriloquist-ng/airventriloquist-ng.c | 6 +++---
++ src/tkiptun-ng/tkiptun-ng.c                   | 4 ++--
++ 3 files changed, 5 insertions(+), 7 deletions(-)
++
++diff --git a/src/airodump-ng/airodump-ng.c b/src/airodump-ng/airodump-ng.c
++index 3ae6994dd..e72bc88e2 100644
++--- a/src/airodump-ng/airodump-ng.c
+++++ b/src/airodump-ng/airodump-ng.c
++@@ -92,8 +92,6 @@
++ #include "radiotap/radiotap_iter.h"
++ 
++ struct devices dev;
++-uint8_t h80211[4096] __attribute__((aligned(16)));
++-uint8_t tmpbuf[4096] __attribute__((aligned(16)));
++ 
++ static const unsigned char llcnull[] = {0, 0, 0, 0};
++ 
++diff --git a/src/airventriloquist-ng/airventriloquist-ng.c b/src/airventriloquist-ng/airventriloquist-ng.c
++index ac6b7647e..267d95540 100644
++--- a/src/airventriloquist-ng/airventriloquist-ng.c
+++++ b/src/airventriloquist-ng/airventriloquist-ng.c
++@@ -173,7 +173,7 @@ static struct local_options
++ } lopt;
++ 
++ struct devices dev;
++-struct wif *_wi_in, *_wi_out;
+++extern struct wif *_wi_in, *_wi_out;
++ 
++ struct ARP_req
++ {
++@@ -195,8 +195,8 @@ struct APt
++ };
++ 
++ unsigned long nb_pkt_sent;
++-u_int8_t h80211[4096];
++-static u_int8_t tmpbuf[4096];
+++extern u_int8_t h80211[4096];
+++extern u_int8_t tmpbuf[4096];
++ 
++ static int tcp_test(const char * ip_str, const short port)
++ {
++diff --git a/src/tkiptun-ng/tkiptun-ng.c b/src/tkiptun-ng/tkiptun-ng.c
++index dc67f5d58..43db0bc23 100644
++--- a/src/tkiptun-ng/tkiptun-ng.c
+++++ b/src/tkiptun-ng/tkiptun-ng.c
++@@ -267,7 +267,7 @@ static struct local_options
++ 
++ // unused, but needed for link
++ struct devices dev;
++-struct wif *_wi_in, *_wi_out;
+++extern struct wif *_wi_in, *_wi_out;
++ 
++ struct ARP_req
++ {
++@@ -289,7 +289,7 @@ struct APt
++ };
++ 
++ unsigned long nb_pkt_sent;
++-unsigned char h80211[4096];
+++extern unsigned char h80211[4096];
++ static unsigned char srcbuf[4096];
++ static char strbuf[512];
++ static int alarmed;
