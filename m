@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 10 Aug 2020 16:45:39 +0200
-Subject: [Buildroot] [git commit branch/next] package/libabseil-cpp: make
- check-package happy
-Message-ID: <20200812144329.A7C5C85F4A@busybox.osuosl.org>
+Date: Wed, 12 Aug 2020 16:47:10 +0200
+Subject: [Buildroot] [git commit branch/next] package/iputils: drop wrong
+ linux-headers dependency
+Message-ID: <20200812144330.66CAC85F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32c8fa8522cff21d0845bb1c2199fc1e958a527e
+commit: https://git.buildroot.net/buildroot/commit/?id=d1d89d37c02e3d8224fb6f812e87fef5612a771a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The "depends on" must be after the "default" properties.
+Commit 9ffcd9279e5505535a73cf1200b3a86fd425cf32 wrongly added a
+linux-headers dependency when switching to meson.
 
-Fixes:
+Remove it as headers are always provided by the toolchain.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/677751258
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libabseil-cpp/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/iputils/iputils.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 5e20a82856..8018e7b264 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -2,7 +2,6 @@
- # architectures that are supported, and for which ucontext is used.
- config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	bool
--	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
- 	default y if BR2_aarch64 || BR2_aarch64_be
- 	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386
-@@ -10,6 +9,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_riscv
- 	default y if BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 0d260891e2..d09bc58b34 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -40,13 +40,8 @@ IPUTILS_DEPENDENCIES += libgcrypt
+ else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=openssl
+ IPUTILS_DEPENDENCIES += openssl
+-else ifeq ($(BR2_PACKAGE_LINUX_HEADERS),y)
+-IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
+-IPUTILS_DEPENDENCIES += linux-headers
+ else
+-IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+-# BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
+-IPUTILS_NINFOD = n
++IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
+ endif
  
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
