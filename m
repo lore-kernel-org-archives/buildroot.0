@@ -1,48 +1,45 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Wed, 12 Aug 2020 19:16:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.1.4
-Message-ID: <20200812171614.4812-1-juju@cotds.org>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Wed, 12 Aug 2020 20:18:21 +0300
+Subject: [Buildroot] [PATCH v2] package/apcupsd: add -lstdc++ for ARC7* and
+ SPARC
+Message-ID: <20200812171821.2517-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since v2.1.3:
-https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.4
-- fix an uninitialized memory access possibly triggering an FPE trap
-- fix several regressions introduced in 2.1.3:
-  - fluid_synth_start() failed for certain presets
-  - fix a NULL dereference in jack driver
-  - fix a stack-based overflow when creating the synth
+For some reason apcupsd is not building for ARC700 and SPARC,
+adding "-lstdc++" solves the issue.
 
-Signed-off-by: Julien Olivain <juju@cotds.org>
+Fixes:
+http://autobuild.buildroot.org/results/3be/3bedf404de0ea42ee3ba624cded65d310a847af9//
+http://autobuild.buildroot.org/results/6ab/6ab4e8021aad13bc153a6c22e87a77bf2bdc21e0//
+
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 ---
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes since v1:
+-Removed commented lines
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 70bbebf63c..9469305cdc 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  645fbfd7c04543c6d3bf415eab8250527813b8dc8e6d6972dbcc8cb525e1d409  fluidsynth-2.1.3.tar.gz
-+sha256  6e4f3e4a957d03812765bd0e400f61cd6c9fdb4bf10970e5cdaea8487d54b250  fluidsynth-2.1.4.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 452ab7e497..828a5cab8f 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/apcupsd/apcupsd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+index 410bce9aec..d2001419d6 100644
+--- a/package/apcupsd/apcupsd.mk
++++ b/package/apcupsd/apcupsd.mk
+@@ -18,6 +18,10 @@ APCUPSD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libusb`"
+ endif
+ endif
  
--FLUIDSYNTH_VERSION = 2.1.3
-+FLUIDSYNTH_VERSION = 2.1.4
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
++ifeq ($(BR2_arc770d)$(BR2_arc750d)$(BR2_sparc),y)
++APCUPSD_CONF_ENV += LIBS+="-lstdc++"
++endif
++
+ ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
+ APCUPSD_CONF_OPTS += --enable-apcsmart
+ else
 -- 
-2.26.2
+2.16.2
