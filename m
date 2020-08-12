@@ -1,38 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:29:04 +0200
-Subject: [Buildroot] [PATCH 6/7] support/docker: use python3-flake8
+Date: Wed, 12 Aug 2020 16:29:02 +0200
+Subject: [Buildroot] [PATCH 4/7] utils/getdeveloperlib.py: use raw strings
+ for re.compile/re.match
 In-Reply-To: <20200812142906.598755-1-thomas.petazzoni@bootlin.com>
 References: <20200812142906.598755-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200812142906.598755-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20200812142906.598755-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-support/scripts/pkg-stats now uses some Python 3.x only constructs
-("async" and related keywords), so we must use the Python 3.x flake8.
+Fixes the following Python 3.x flake8 warning:
+
+W605 invalid escape sequence '\s'
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/docker/Dockerfile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/getdeveloperlib.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 03acde85d2..8c555dcf7a 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -36,10 +36,10 @@ RUN apt-get install -y --no-install-recommends \
-         libncurses5-dev \
-         locales \
-         mercurial \
--        python-flake8 \
-         python-nose2 \
-         python-pexpect \
-         python3 \
-+        python3-flake8 \
-         python3-nose2 \
-         python3-pexpect \
-         qemu-system-arm \
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index 239ffa340b..dc0cc07cc7 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -10,7 +10,7 @@ import unittest
+ # Patch parsing functions
+ #
+ 
+-FIND_INFRA_IN_PATCH = re.compile("^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
++FIND_INFRA_IN_PATCH = re.compile(r"^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
+ 
+ 
+ def analyze_patch(patch):
+@@ -33,7 +33,7 @@ def analyze_patch(patch):
+     return (files, infras)
+ 
+ 
+-FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
++FIND_INFRA_IN_MK = re.compile(r"^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
+ 
+ 
+ def fname_get_package_infra(fname):
+@@ -178,7 +178,7 @@ def parse_arches_from_config_in(fname):
+                 parsing_arches = True
+                 continue
+             if parsing_arches:
+-                m = re.match("^\s*default \"([^\"]*)\".*", line)
++                m = re.match(r"^\s*default \"([^\"]*)\".*", line)
+                 if m:
+                     arches.add(m.group(1))
+                 else:
+@@ -192,7 +192,7 @@ def parse_developer_architectures(fnames):
+     developer is working on."""
+     arches = set()
+     for fname in fnames:
+-        if not re.match("^.*/arch/Config\.in\..*$", fname):
++        if not re.match(r"^.*/arch/Config\.in\..*$", fname):
+             continue
+         arches = arches | parse_arches_from_config_in(fname)
+     return arches
+@@ -201,7 +201,7 @@ def parse_developer_architectures(fnames):
+ def parse_developer_infras(fnames):
+     infras = set()
+     for fname in fnames:
+-        m = re.match("^package/pkg-([^.]*).mk$", fname)
++        m = re.match(r"^package/pkg-([^.]*).mk$", fname)
+         if m:
+             infras.add(m.group(1))
+     return infras
 -- 
 2.26.2
