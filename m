@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Aug 2020 16:48:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/cage: bump to version
- 0.1.2.1
-Message-ID: <20200812144301.B79AE80749@busybox.osuosl.org>
+Date: Wed, 12 Aug 2020 16:48:36 +0200
+Subject: [Buildroot] [git commit branch/next] package/wlroots: bump to
+ version 0.11.0
+Message-ID: <20200812144301.AF36D85F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22c7cfc3580d78d8381be5f1724806cbc3cc402e
+commit: https://git.buildroot.net/buildroot/commit/?id=0bc9c89612cc1f41f9a64f6e889f8bcd8a871e30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-requires at least wlroots 0.11
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cage/cage.hash | 2 +-
- package/cage/cage.mk   | 4 ++--
+ package/wlroots/wlroots.hash | 4 ++--
+ package/wlroots/wlroots.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-index 3177474960..5cae952d72 100644
---- a/package/cage/cage.hash
-+++ b/package/cage/cage.hash
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 20f7313bba..636f391011 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
 @@ -1,5 +1,5 @@
- # Generated locally
--sha256 2f9bc2bd3c61cddb0d3b406754c4906eabf5a5d1aade26eb361dffccff2601e3  cage-6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d.tar.gz
-+sha256 38a3e3968f00cc58fe1d9448e972cfac7d1efa30c48699f09032f264101a55ac  cage-0.1.2.1.tar.gz
+-# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.10.1/wlroots-0.10.1.tar.gz.sig
+-sha256  b84baefbaff7bb04b3d2c43cbacef1a433e2cd65111f8fbf4bfc5faaa4b34b08  wlroots-0.10.1.tar.gz
++# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.11.0/wlroots-0.11.0.tar.gz.sig
++sha256  a7645e77229aab4942748c621be8bdb8b073d94f35f3e032b867246862bf2d01  wlroots-0.11.0.tar.gz
  
  # Hashes for license files:
- sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-index 3d259912cc..9fc01d36c1 100644
---- a/package/cage/cage.mk
-+++ b/package/cage/cage.mk
-@@ -4,8 +4,8 @@
+ sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 988643485f..7923e94325 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CAGE_VERSION = 6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d
--CAGE_SITE = $(call github,Hjdskes,cage,$(CAGE_VERSION))
-+CAGE_VERSION = 0.1.2.1
-+CAGE_SITE = https://github.com/Hjdskes/cage/releases/download/v$(CAGE_VERSION)
- CAGE_LICENSE = MIT
- CAGE_LICENSE_FILES = LICENSE
- CAGE_DEPENDENCIES = host-pkgconf wlroots
+-WLROOTS_VERSION = 0.10.1
++WLROOTS_VERSION = 0.11.0
+ WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
+ WLROOTS_LICENSE = MIT
+ WLROOTS_LICENSE_FILES = LICENSE
