@@ -1,132 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Aug 2020 22:31:26 +0200
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats:
- show progress of upstream URL and latest version
-Message-ID: <20200812144329.C28B285F4A@busybox.osuosl.org>
+Date: Wed, 12 Aug 2020 16:44:27 +0200
+Subject: [Buildroot] [git commit branch/next] package/fping: bump to version
+ 5.0
+Message-ID: <20200812144330.318F785F4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fea2e39974410fcff51a775ff2a2335cb55c870
+commit: https://git.buildroot.net/buildroot/commit/?id=60dc3d5fe8367848801c06151e55ffff7c30253d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit slightly improves the output of pkg-stats by showing the
-progress of the upstream URL checks and latest version retrieval, on a
-package basis:
+This bump will fix a build failure with gcc 10 thanks to
+https://github.com/schweikert/fping/commit/0ed73181eb54e3f2dc744271c0329620972a85ab
 
-Checking URL status
-[0001/0062] curlpp
-[0002/0062] cmocka
-[0003/0062] snappy
-[0004/0062] nload
-[...]
-[0060/0062] librtas
-[0061/0062] libsilk
-[0062/0062] jhead
-Getting latest versions ...
-[0001/0064] libglob
-[0002/0064] perl-http-daemon
-[0003/0064] shadowsocks-libev
-[...]
-[0061/0064] lua-flu
-[0062/0064] python-aiohttp-security
-[0063/0064] ljlinenoise
-[0064/0064] matchbox-lib
+Also update indentation in hash file (two spaces)
 
-Note that the above sample was run on 64 packages. Only 62 packages
-appear for the URL status check, because packages that do not have any
-URL in their Config.in file, or don't have any Config.in file at all,
-are not checked and therefore not accounted.
+Fixes:
+ - http://autobuild.buildroot.org/results/f5c8e546200594e2367444e93e31aa615bd73796
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 31 ++++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ package/fping/fping.hash | 4 ++--
+ package/fping/fping.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 70e7fa7a0c..303af2f588 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -498,20 +498,31 @@ def package_init_make_info():
-             Package.all_ignored_cves[pkgvar] = value.split()
+diff --git a/package/fping/fping.hash b/package/fping/fping.hash
+index 0aa0330b5a..0b2233f379 100644
+--- a/package/fping/fping.hash
++++ b/package/fping/fping.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 7d339674b6a95aae1d8ad487ff5056fd95b474c3650938268f6a905c3771b64a  fping-4.2.tar.gz
++sha256  ed38c0b9b64686a05d1b3bc1d66066114a492e04e44eef1821d43b1263cd57b8  fping-5.0.tar.gz
  
+ # Hash for license file
+-sha256 6051b27e4b4a648f7bc8b329024da53a6e95ce88fcf0ccc259c371a74b741757  COPYING
++sha256  6051b27e4b4a648f7bc8b329024da53a6e95ce88fcf0ccc259c371a74b741757  COPYING
+diff --git a/package/fping/fping.mk b/package/fping/fping.mk
+index 5d3ad59e56..24aca32367 100644
+--- a/package/fping/fping.mk
++++ b/package/fping/fping.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--async def check_url_status(session, pkg, retry=True):
-+check_url_count = 0
-+
-+
-+async def check_url_status(session, pkg, npkgs, retry=True):
-+    global check_url_count
-+
-     try:
-         async with session.get(pkg.url) as resp:
-             if resp.status >= 400:
-                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
-+                check_url_count += 1
-+                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
-                 return
-     except (aiohttp.ClientError, asyncio.TimeoutError):
-         if retry:
--            return await check_url_status(session, pkg, retry=False)
-+            return await check_url_status(session, pkg, npkgs, retry=False)
-         else:
-             pkg.status['url'] = ("error", "invalid (err)")
-+            check_url_count += 1
-+            print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
-             return
- 
-     pkg.status['url'] = ("ok", "valid")
-+    check_url_count += 1
-+    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
- 
- 
- async def check_package_urls(packages):
-@@ -520,7 +531,7 @@ async def check_package_urls(packages):
-     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
-         packages = [p for p in packages if p.status['url'][0] == 'ok']
-         for pkg in packages:
--            tasks.append(check_url_status(sess, pkg))
-+            tasks.append(check_url_status(sess, pkg, len(packages)))
-         await asyncio.wait(tasks)
- 
- 
-@@ -592,17 +603,27 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
-             return False
- 
- 
--async def check_package_latest_version_get(session, pkg):
-+check_latest_count = 0
-+
-+
-+async def check_package_latest_version_get(session, pkg, npkgs):
-+    global check_latest_count
- 
-     if await check_package_get_latest_version_by_distro(session, pkg):
-+        check_latest_count += 1
-+        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
-         return
- 
-     if await check_package_get_latest_version_by_guess(session, pkg):
-+        check_latest_count += 1
-+        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
-         return
- 
-     check_package_latest_version_set_status(pkg,
-                                             RM_API_STATUS_NOT_FOUND,
-                                             None, None)
-+    check_latest_count += 1
-+    print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
- 
- 
- async def check_package_latest_version(packages):
-@@ -628,7 +649,7 @@ async def check_package_latest_version(packages):
-     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
-         packages = [p for p in packages if p.has_valid_infra]
-         for pkg in packages:
--            tasks.append(check_package_latest_version_get(sess, pkg))
-+            tasks.append(check_package_latest_version_get(sess, pkg, len(packages)))
-         await asyncio.wait(tasks)
- 
- 
+-FPING_VERSION = 4.2
++FPING_VERSION = 5.0
+ FPING_SITE = http://fping.org/dist
+ FPING_LICENSE = BSD-like
+ FPING_LICENSE_FILES = COPYING
