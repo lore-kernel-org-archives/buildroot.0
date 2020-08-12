@@ -1,57 +1,42 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 12 Aug 2020 11:05:21 -0300
-Subject: [Buildroot] [PATCH] configs/ci20: Use upstream Linux and U-Boot
-In-Reply-To: <20200812114133.492bb1e3@windsurf.home>
-References: <20200811154429.436747-1-ezequiel@vanguardiasur.com.ar>
- <20200812114133.492bb1e3@windsurf.home>
-Message-ID: <CAAEAJfDpnZQ1HZ+3tAeMybSnAYNLwMvOKORKPT-OKE10ice-7w@mail.gmail.com>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Wed, 12 Aug 2020 17:07:20 +0300
+Subject: [Buildroot] [PATCH] package/apcupsd: add -lstdc++ for ARC7* and
+ SPARC
+Message-ID: <20200812140720.43524-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 12 Aug 2020 at 06:41, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 11 Aug 2020 12:44:29 -0300
-> Ezequiel Garcia via buildroot <buildroot@busybox.net> wrote:
->
-> > From: Ezequiel Garcia <ezequiel@collabora.com>
-> >
-> > The vendor kernel we are currently selecting no longer builds,
-> > and fails with a ton of:
-> >
-> >                  from include/linux/list.h:8,
-> >                  from include/linux/module.h:9,
-> >                  from arch/mips/jz4740/prom.c:16:
-> > include/linux/log2.h:22:1: error: ignoring attribute 'noreturn' because it conflicts with attribute 'const' [-Werror=a
-> > ttributes]
-> >    22 | int ____ilog2_NaN(void);
-> >       | ^~~
-> >
-> > We can't afford to fix that, so let's just move to upstream
-> > kernel and bootloader. It doesn't make much sense to keep
-> > using an unsupported kernel and bootloader at this point.
-> >
-> > This means we will be missing some of the features supported
-> > by the vendor (such as HDMI support), but it is what it is.
-> >
-> > Linux v5.7 and v5.4 have been tested to boot fine, the latter
-> > is picked for the defconfig.
->
-> I've added a reference to the Gitlab CI failure here.
->
-> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> > +BR2_TARGET_UBOOT_LATEST_VERSION=y
->
-> And changed this to use a fixed version instead of "latest version", so
-> that we're sure this defconfig will continue to build a U-Boot version
-> that was tested by someone.
->
+For some reason apcupsd is not building for ARC700 and SPARC,
+adding "-lstdc++" solves the issue.
 
-Great, Thanks!
+Fixes:
+http://autobuild.buildroot.org/results/3be/3bedf404de0ea42ee3ba624cded65d310a847af9//
+http://autobuild.buildroot.org/results/6ab/6ab4e8021aad13bc153a6c22e87a77bf2bdc21e0//
 
-Ezequiel
+Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+---
+ package/apcupsd/apcupsd.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+index 410bce9aec..67a37d6af8 100644
+--- a/package/apcupsd/apcupsd.mk
++++ b/package/apcupsd/apcupsd.mk
+@@ -18,6 +18,12 @@ APCUPSD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libusb`"
+ endif
+ endif
+ 
++ifeq ($(BR2_arc770d)$(BR2_arc750d)$(BR2_sparc),y)
++#TARGET_LDFLAGS += -lstdc++
++APCUPSD_CONF_ENV += LIBS+="-lstdc++"
++endif
++#APCUPSD_CONF_ENV += LIBS+="-lstdc++"
++
+ ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
+ APCUPSD_CONF_OPTS += --enable-apcsmart
+ else
+-- 
+2.16.2
