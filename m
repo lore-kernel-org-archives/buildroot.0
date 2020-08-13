@@ -1,49 +1,82 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 13 Aug 2020 13:04:37 -0700
-Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
- to 3.4.0
-In-Reply-To: <CA+h8R2oxbeA9Fcfs-aEjpWb_4QC7WbijYW5hm84GAvC3iWP00w@mail.gmail.com>
-References: <20200715173707.584226-1-aduskett@gmail.com>
- <20200811235833.03115c8b@windsurf.home>
- <CA+h8R2qLY-5FbL_HTjwTH_i=w3ky_=C=17n48_=18-E=9mUYVg@mail.gmail.com>
- <20200812102236.631c057f@windsurf.home>
- <CAFSsvmqzkM2N2syEMc1AZeeRdvQ-HRtkK4zFSOp3q-qumYmCKQ@mail.gmail.com>
- <CA+h8R2oxbeA9Fcfs-aEjpWb_4QC7WbijYW5hm84GAvC3iWP00w@mail.gmail.com>
-Message-ID: <CAFSsvmrrpXkZNcmwy5ukrX4k2XqPGp-kQpNxqq=PN+mG+ir0Tw@mail.gmail.com>
+From: Avi Shukron <avraham.shukron@gmail.com>
+Date: Thu, 13 Aug 2020 23:11:22 +0300
+Subject: [Buildroot] [PATCH] libbacktrace: new package
+Message-ID: <20200813201123.609907-1-avraham.shukron@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian;
+libbacktrace is a C library that may be linked into a C/C++ program to
+produce symbolic backtraces.
 
-Just as a note, the go-modules series breaks mender-artifact, and the
-.mk file needs to be modified
-to add a "./" before cli/mender-artifact.
-IE:
-HOST_MENDER_ARTIFACT_BUILD_TARGETS = ./cli/mender-artifact
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+---
+ package/Config.in                      |  1 +
+ package/libbacktrace/Config.in         |  7 +++++++
+ package/libbacktrace/libbacktrace.hash |  3 +++
+ package/libbacktrace/libbacktrace.mk   | 16 ++++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/libbacktrace/Config.in
+ create mode 100644 package/libbacktrace/libbacktrace.hash
+ create mode 100644 package/libbacktrace/libbacktrace.mk
 
-Adam
-
-On Thu, Aug 13, 2020 at 12:39 PM Christian Stewart <christian@paral.in> wrote:
->
-> Hi,
->
-> Don't merge. This will download stuff out-of-band with the main
-> Buildroot download mechanism.
->
-> On Thu, Aug 13, 2020 at 11:52 AM Adam Duskett <aduskett@gmail.com> wrote:
-> > I submitted a patch based on Mirza's suggestion above which works as expected:
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20200813184947.4042927-1-aduskett at gmail.com/
->
-> > > Do we have an intermediate solution for 2020.08 ? Would reverting the
-> > > mender-artifact bump resolve the issue ?
->
-> Please just roll it back and then consider the full Go modules patch later on.
->
-> I went about submitting that series in a particular way to avoid
-> breaking the Buildroot download system.
->
-> Best regards,
-> Christian Stewart
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..cf65919091 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -179,6 +179,7 @@ menu "Development tools"
+ 	source "package/subversion/Config.in"
+ 	source "package/tree/Config.in"
+ 	source "package/yasm/Config.in"
++	source "package/libbacktrace/Config.in"
+ endmenu
+ 
+ menu "Filesystem and flash utilities"
+diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
+new file mode 100644
+index 0000000000..0f940dd588
+--- /dev/null
++++ b/package/libbacktrace/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBBACKTRACE
++	bool "libbacktrace"
++	help
++	  A C library that may be linked into a C/C++ program to
++	  produce symbolic backtraces
++
++	  https://github.com/ianlancetaylor/libbacktrace
+diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
+new file mode 100644
+index 0000000000..9c73990677
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
++sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
+diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
+new file mode 100644
+index 0000000000..4179295cea
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libbacktrace
++#
++################################################################################
++
++LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
++LIBBACKTRACE_SITE = https://github.com/ianlancetaylor/libbacktrace/archive
++LIBBACKTRACE_SOURCE = $(LIBBACKTRACE_VERSION).tar.gz
++
++LIBBACKTRACE_LICENSE = BSD
++LIBBACKTRACE_LICENSE_FILES = LICENSE
++
++LIBBACKTRACE_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.25.1
