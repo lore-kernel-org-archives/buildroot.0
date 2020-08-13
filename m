@@ -1,66 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 23:23:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: add openssl optional
- dependency
-In-Reply-To: <20200809165215.GB13263@scaer>
-References: <20200727124145.1825309-1-fontaine.fabrice@gmail.com>
- <20200727125140.GY19818@scaer>
- <20200808234052.4e6ff454@windsurf.home>
- <20200809165215.GB13263@scaer>
-Message-ID: <20200813232326.0ea90e56@windsurf.home>
+Date: Thu, 13 Aug 2020 23:23:54 +0200
+Subject: [Buildroot] [git commit] package/mender-artifact: use github helper
+ for site URL
+Message-ID: <20200813211740.40E2F86137@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 9 Aug 2020 18:52:15 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9b7591bb3647cfa3a283b7b83b26d87896dfc6ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> So, I got the answer, at least partially:
-> 
->   - the code snippet above is only executed when auto-detection is done
-> 
->     - before this patch, it would alwasys fail in static builds, so
->       capnproto would always be built without ssl/tls support, and a
->       shared build would depend on the build ordering;
-> 
->     - with this patch, we explicitly enable or disable openssl support,
->       so the code snippet is not executed.
-> 
->   - the dependency on openssl is only used to build a library, that is
->     not used to link an executable in capnproto, and does not seem to be
->     used by of our in-tree packages that use capnproto.
-> 
-> And indeed, the link forget -lz )indentation mine):
-> 
->     /bin/bash ./libtool --tag=CXX \
->         --mode=link /home/ymorin/dev/buildroot/O/host/bin/arm-linux-g++ \
->         [...] \
->         -DKJ_HAS_OPENSSL \
->         -o libkj-tls.la \
->         [...] \
->         -lssl -lcrypto -latomic
-> 
-> so indeed, no -lz.
-> 
-> Furthermre, capnproto does install a bunch of .pc file, but installs
-> none for libkj-tls. And none of the .pc files insalled ever reference
-> libkj-tls or ssl or crypto.
-> 
-> That's why we have no build failure in our autobuilders.
-> 
-> Yet, I wonder how openssl support works in capnproto, and if this patch
-> ever makes sense in the context of Buildroot...
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mender-artifact/mender-artifact.hash | 2 +-
+ package/mender-artifact/mender-artifact.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Thanks for the exhaustive research! I think we should not only look at
-packages that are in Buildroot: people may be having their own custom
-stuff that links against libkj-tls, so overall I think the patch makes
-sense. There is something that optionally links against OpenSSL in
-capnproto, so we should have an optional dependency on OpenSSL.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+index 09e66617bb..a9fba2971e 100644
+--- a/package/mender-artifact/mender-artifact.hash
++++ b/package/mender-artifact/mender-artifact.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540  3.4.0.tar.gz
++sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540  mender-artifact-3.4.0.tar.gz
+ sha256  08b0209abb7e87bb1d21aca8a40693b7d29406d1edffd443f17c59d5d68f6467  LIC_FILES_CHKSUM.sha256
+ 
+ # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 67fdc44b9d..b2310d5bc2 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ HOST_MENDER_ARTIFACT_VERSION = 3.4.0
+-HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
+-HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
++HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
+ HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
+ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	LICENSE \
