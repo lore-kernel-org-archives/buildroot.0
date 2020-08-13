@@ -1,53 +1,54 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 13 Aug 2020 13:20:44 -0700
-Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
- to 3.4.0
-In-Reply-To: <CAFSsvmrrpXkZNcmwy5ukrX4k2XqPGp-kQpNxqq=PN+mG+ir0Tw@mail.gmail.com>
-References: <20200715173707.584226-1-aduskett@gmail.com>
- <20200811235833.03115c8b@windsurf.home>
- <CA+h8R2qLY-5FbL_HTjwTH_i=w3ky_=C=17n48_=18-E=9mUYVg@mail.gmail.com>
- <20200812102236.631c057f@windsurf.home>
- <CAFSsvmqzkM2N2syEMc1AZeeRdvQ-HRtkK4zFSOp3q-qumYmCKQ@mail.gmail.com>
- <CA+h8R2oxbeA9Fcfs-aEjpWb_4QC7WbijYW5hm84GAvC3iWP00w@mail.gmail.com>
- <CAFSsvmrrpXkZNcmwy5ukrX4k2XqPGp-kQpNxqq=PN+mG+ir0Tw@mail.gmail.com>
-Message-ID: <CA+h8R2qOfg8H7OgTgrCRHrsq1WyNua4C8H1+Pd2a4Aio31D7iA@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu, 13 Aug 2020 13:29:52 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/mender-artifact: do not download
+ modules during the build process
+Message-ID: <20200813202952.926828-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Thu, Aug 13, 2020 at 1:04 PM Adam Duskett <aduskett@gmail.com> wrote:
-> Just as a note, the go-modules series breaks mender-artifact, and the
-> .mk file needs to be modified
-> to add a "./" before cli/mender-artifact.
-> IE:
-> HOST_MENDER_ARTIFACT_BUILD_TARGETS = ./cli/mender-artifact
+By default, go will attempt to download needed modules before building, which
+is not desirable. This behavior also causes permission issues when cleaning,
+as go downloads modules as read-only by default. Because mender-artifact
+includes the modules in the vendor directory, mod=vendor prevents the package
+from downloading the go modules during the build process and prevents
+permission issues when cleaning.
 
-The series needs a few adjustments for host-go packages... I'm doing a
-small cleanup + testing pass and will submit a new revision today,
-including a patch adjusting the host-mender package build target.
+Fixes:
+http://autobuild.buildroot.net/results/d5bcaca73ae74fe8b0ebd39b6331564cd639fb66
 
-Note:
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Reword commit message
+  - Add a comment in the .mk file
 
-I recommend changing the SITE to
+ package/mender-artifact/mender-artifact.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-HOST_MENDER_ARTIFACT_SITE = $(call
-github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
-
-corresponding hash:
-
-sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540
- mender-artifact-3.4.0.tar.gz
-
-(vs 3.4.0.tar.gz filename before).
-
-After the new series revision it will be:
-
-HOST_MENDER_ARTIFACT_BUILD_TARGETS =
-github.com/mendersoftware/mender-artifact/cli/mender-artifact
-
-Best regards,
-Christian
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index c81ec9ba53..67fdc44b9d 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -31,6 +31,14 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ 
++# By default, go will attempt to download needed modules before building, which
++# is not desirable. This behavior also causes permission issues when cleaning,
++# as go downloads modules as read-only by default. Because mender-artifact
++# includes the modules in the vendor directory, mod=vendor prevents the package
++# from downloading the go modules during the build process and prevents
++# permission issues when cleaning.
++HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
++
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
+ HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
+-- 
+2.26.2
