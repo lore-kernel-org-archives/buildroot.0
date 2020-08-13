@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 11:44:11 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] gitlab-ci: convert
+Date: Thu, 13 Aug 2020 11:43:09 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] gitlab-ci: convert
  only/except to rules
-Message-ID: <20200813093901.1964386072@busybox.osuosl.org>
+Message-ID: <20200813093932.6D3548606C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07a07db32f3600067a0b5b72d04afd23930f5d32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6cbf1b57b0af51313274bc5c173655fdfa80fa00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 only/except keywords will be deprecated by upcoming gitlab release,
 upstream recommend to use rules keyword instead [1][2][3][4][5].
@@ -56,7 +56,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 46 insertions(+), 30 deletions(-)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fa8e077a07..389592e3b7 100644
+index b4dad3173e..e246e69588 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
 @@ -7,9 +7,10 @@
@@ -73,7 +73,7 @@ index fa8e077a07..389592e3b7 100644
  
  check-DEVELOPERS:
      extends: .check_base
-@@ -76,17 +77,21 @@ check-package:
+@@ -69,17 +70,21 @@ check-package:
      extends: .defconfig_base
      # Running the defconfigs for every push is too much, so limit to
      # explicit triggers through the API.
@@ -101,7 +101,7 @@ index fa8e077a07..389592e3b7 100644
      before_script:
          - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
  
-@@ -110,17 +115,20 @@ one-defconfig:
+@@ -103,17 +108,20 @@ one-defconfig:
      extends: .runtime_test_base
      # Running the runtime tests for every push is too much, so limit to
      # explicit triggers through the API.
@@ -129,7 +129,7 @@ index fa8e077a07..389592e3b7 100644
          - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
  aarch64_efi_defconfig: { extends: .defconfig }
 diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 6b09730a65..1facd2a66f 100644
+index 7e6a7598ae..3cb0915433 100644
 --- a/.gitlab-ci.yml.in
 +++ b/.gitlab-ci.yml.in
 @@ -7,9 +7,10 @@
@@ -146,7 +146,7 @@ index 6b09730a65..1facd2a66f 100644
  
  check-DEVELOPERS:
      extends: .check_base
-@@ -76,17 +77,21 @@ check-package:
+@@ -69,17 +70,21 @@ check-package:
      extends: .defconfig_base
      # Running the defconfigs for every push is too much, so limit to
      # explicit triggers through the API.
@@ -174,7 +174,7 @@ index 6b09730a65..1facd2a66f 100644
      before_script:
          - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
  
-@@ -110,16 +115,19 @@ one-defconfig:
+@@ -103,16 +108,19 @@ one-defconfig:
      extends: .runtime_test_base
      # Running the runtime tests for every push is too much, so limit to
      # explicit triggers through the API.
