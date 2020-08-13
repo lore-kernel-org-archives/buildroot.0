@@ -1,26 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 23:08:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-gunicorn: select
- python-setuptools
-In-Reply-To: <20200810085920.447530-1-fontaine.fabrice@gmail.com>
-References: <20200810085920.447530-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200813230832.7a78884b@windsurf.home>
+Date: Thu, 13 Aug 2020 23:08:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP
+ for internal TLS implementation
+In-Reply-To: <20200108190439.459316-1-geomatsi@gmail.com>
+References: <20200108190439.459316-1-geomatsi@gmail.com>
+Message-ID: <20200813230848.16f715d0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 10 Aug 2020 10:59:20 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed,  8 Jan 2020 22:04:39 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-> Fixes:
->  - https://bugs.buildroot.org/show_bug.cgi?id=13111
+> EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
+> TLS implementation. This patch disables TEAP support in wpa_supplicant
+> when internal TLS implementation is selected. Similar fix for hostapd
+> package has already been merged to Buildroot: see commit 47d14e3b1c20
+> ("package/hostapd: disable TEAP for internal TLS implementation").
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> TEAP is still an experimental feature that is not recommmended for
+> production use. Currently it should not be used for anything else
+> than experimentation and interoperability testing. Those who needs
+> experimenting with TEAP are encouraged to enable openssl in their
+> buildroot configuration.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
+> 
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 > ---
->  package/python-gunicorn/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/wpa_supplicant/wpa_supplicant.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
