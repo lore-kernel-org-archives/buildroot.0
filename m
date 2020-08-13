@@ -1,36 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 21:59:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bellagio: fix build with gcc 10
-In-Reply-To: <20200812202508.2874057-1-fontaine.fabrice@gmail.com>
-References: <20200812202508.2874057-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200813215922.154cf34b@windsurf.home>
+Date: Thu, 13 Aug 2020 21:59:36 +0200
+Subject: [Buildroot] [git commit] package/cpio: fix build with gcc 10
+Message-ID: <20200813195322.380C081841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 12 Aug 2020 22:25:08 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0428b87a6a559cbcba4f2620bc6c77332e9f55b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +diff --git a/src/omx_reference_resource_manager.c b/src/omx_reference_resource_manager.c
-> +index ee7766b..5983611 100644
-> +--- a/src/omx_reference_resource_manager.c
-> ++++ b/src/omx_reference_resource_manager.c
-> +@@ -30,6 +30,11 @@
-> + #include "base/omx_base_component.h"
-> + #include "queue.h"
-> + 
-> ++int globalIndex;
-> ++NameIndexType *listOfcomponentRegistered;
-> ++ComponentListType **globalComponentList;
-> ++ComponentListType **globalWaitingComponentList;
+Fixes:
+ - http://autobuild.buildroot.org/results/22fefd9774cbd6648d67f29826f47f1978e9c069
 
-If these symbols are really only used in this file, then they should
-preferably be declared with the static qualifier.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cpio/0001-Minor-fix.patch | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cpio/0001-Minor-fix.patch b/package/cpio/0001-Minor-fix.patch
+new file mode 100644
+index 0000000000..429df7d5f8
+--- /dev/null
++++ b/package/cpio/0001-Minor-fix.patch
+@@ -0,0 +1,30 @@
++From 641d3f489cf6238bb916368d4ba0d9325a235afb Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Mon, 20 Jan 2020 07:45:39 +0200
++Subject: Minor fix * src/global.c: Remove superfluous declaration of
++ program_name
++
++[Retrieved from:
++https://git.savannah.gnu.org/cgit/cpio.git/commit/?id=641d3f489cf6238bb916368d4ba0d9325a235afb]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/global.c | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/src/global.c b/src/global.c
++index fb3abe9..acf92bc 100644
++--- a/src/global.c
+++++ b/src/global.c
++@@ -184,9 +184,6 @@ unsigned int warn_option = 0;
++ /* Extract to standard output? */
++ bool to_stdout_option = false;
++ 
++-/* The name this program was run with.  */
++-char *program_name;
++-
++ /* A pointer to either lstat or stat, depending on whether
++    dereferencing of symlinks is done for input files.  */
++ int (*xstat) ();
++-- 
++cgit v1.2.1
++
