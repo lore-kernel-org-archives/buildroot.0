@@ -1,85 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 21:33:38 +0200
-Subject: [Buildroot] [git commit] package/bellagio: fix build with gcc 10
-Message-ID: <20200813192727.3A6A382879@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 13 Aug 2020 12:39:10 -0700
+Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
+ to 3.4.0
+In-Reply-To: <CAFSsvmqzkM2N2syEMc1AZeeRdvQ-HRtkK4zFSOp3q-qumYmCKQ@mail.gmail.com>
+References: <20200715173707.584226-1-aduskett@gmail.com>
+ <20200811235833.03115c8b@windsurf.home>
+ <CA+h8R2qLY-5FbL_HTjwTH_i=w3ky_=C=17n48_=18-E=9mUYVg@mail.gmail.com>
+ <20200812102236.631c057f@windsurf.home>
+ <CAFSsvmqzkM2N2syEMc1AZeeRdvQ-HRtkK4zFSOp3q-qumYmCKQ@mail.gmail.com>
+Message-ID: <CA+h8R2oxbeA9Fcfs-aEjpWb_4QC7WbijYW5hm84GAvC3iWP00w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8d2316e375c756a50e22acb1cb3cf5a2a182b98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
+Don't merge. This will download stuff out-of-band with the main
+Buildroot download mechanism.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...erence_resource_manager.-h-c-fix-build-wi.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+On Thu, Aug 13, 2020 at 11:52 AM Adam Duskett <aduskett@gmail.com> wrote:
+> I submitted a patch based on Mirza's suggestion above which works as expected:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20200813184947.4042927-1-aduskett at gmail.com/
 
-diff --git a/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
-new file mode 100644
-index 0000000000..1a2777cb18
---- /dev/null
-+++ b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
-@@ -0,0 +1,57 @@
-+From be9f72bc5fa05de466f9151ac399c17027b58b24 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 12 Aug 2020 21:38:51 +0200
-+Subject: [PATCH] src/omx_reference_resource_manager.{h,c}: fix build with gcc
-+ 10
-+
-+Move globalIndex, listOfcomponentRegistered, globalComponentList and
-+globalWaitingComponentList from header to source file to fix the build
-+with gcc 10 which default to -fno-common:
-+https://gcc.gnu.org/gcc-10/porting_to.html
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://sourceforge.net/p/omxil/bugs/63]
-+---
-+ src/omx_reference_resource_manager.c | 5 +++++
-+ src/omx_reference_resource_manager.h | 6 ------
-+ 2 files changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/omx_reference_resource_manager.c b/src/omx_reference_resource_manager.c
-+index ee7766b..5983611 100644
-+--- a/src/omx_reference_resource_manager.c
-++++ b/src/omx_reference_resource_manager.c
-+@@ -30,6 +30,11 @@
-+ #include "base/omx_base_component.h"
-+ #include "queue.h"
-+ 
-++int globalIndex;
-++NameIndexType *listOfcomponentRegistered;
-++ComponentListType **globalComponentList;
-++ComponentListType **globalWaitingComponentList;
-++
-+ /**
-+  * This is the static base pointer of the list
-+  */
-+diff --git a/src/omx_reference_resource_manager.h b/src/omx_reference_resource_manager.h
-+index ba8dad9..75e4f93 100644
-+--- a/src/omx_reference_resource_manager.h
-++++ b/src/omx_reference_resource_manager.h
-+@@ -48,12 +48,6 @@ struct NameIndexType {
-+ 	int max_components;
-+ };
-+ 
-+-
-+-int globalIndex;
-+-NameIndexType *listOfcomponentRegistered;
-+-ComponentListType **globalComponentList;
-+-ComponentListType **globalWaitingComponentList;
-+-
-+ OMX_ERRORTYPE RM_RegisterComponent(char *name, int max_components);
-+ OMX_ERRORTYPE addElemToList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp, int index, OMX_BOOL bIsWaiting);
-+ OMX_ERRORTYPE removeElemFromList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp);
-+-- 
-+2.27.0
-+
+> > Do we have an intermediate solution for 2020.08 ? Would reverting the
+> > mender-artifact bump resolve the issue ?
+
+Please just roll it back and then consider the full Go modules patch later on.
+
+I went about submitting that series in a particular way to avoid
+breaking the Buildroot download system.
+
+Best regards,
+Christian Stewart
