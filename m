@@ -1,43 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 21:12:23 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/dbus: disable
- systemd for host build
-Message-ID: <20200813190734.EF4B082761@busybox.osuosl.org>
+Date: Thu, 13 Aug 2020 21:14:26 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/webkitgtk:
+ security bump to version 2.28.4
+Message-ID: <20200813190812.29C2186061@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bd799aa49023e899b882284bb1203a3eff19239
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=96907d96cae1d0fa55d1f64e9317a06a426a96fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This fixes an issue if host-dbus happens to be rebuilt after systemd, in
-which case it autodetects systemd support but then ignored the prefix
-when installing unit files.  That means that is tries to write to the
-host system's /usr/lib/ which fails.
+This is a minor release which provides fixes for CVE-2020-9862,
+CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
+CVE-2020-9925.
 
-There is no reason to build and install systemd support in the host
-build, so disable it explicitly.
+Full release notes can be found at:
 
-Signed-off-by: John Keeping <john@metanate.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
+  https://webkitgtk.org/2020/07/28/webkitgtk2.28.4-released.html
+
+A detailed security advisory can be found at:
+
+  https://webkitgtk.org/security/WSA-2020-0007.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1bfdb3d08daa0a516525965e00ccabdb8a714b39)
+(cherry picked from commit 0b4d5678f1adbde4f41e2039e0a93f714a0db7d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 5c2a5fb2cc..952eff1fc7 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -107,6 +107,7 @@ HOST_DBUS_CONF_OPTS = \
- 	--disable-selinux \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
-+	--disable-systemd \
- 	--without-x \
- 	--with-xml=expat
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 44263745e4..cdca65a5a8 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.28.3.tar.xz.sums
+-md5  a03a4dcd2819baca14fdec5af68b4356  webkitgtk-2.28.3.tar.xz
+-sha1  af1d845d373e67fd666105e798a44e2cadaef83c  webkitgtk-2.28.3.tar.xz
+-sha256  f0898ac072c220e13a4aee819408421a6cb56a6eb89170ceafe52468b0903522  webkitgtk-2.28.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.28.4.tar.xz.sums
++md5  10e0cce27208dfbd4cf63dd68a9a47d7  webkitgtk-2.28.4.tar.xz
++sha1  70e9dd80647b30eaaf8a7f5b30d8869cd1254056  webkitgtk-2.28.4.tar.xz
++sha256  821952e8c9303ed752f1fb1d4283f612c25249d00d705d2b79c2db1bc49c9464  webkitgtk-2.28.4.tar.xz
  
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index f38ea5d20a..65a4439839 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.28.3
++WEBKITGTK_VERSION = 2.28.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
