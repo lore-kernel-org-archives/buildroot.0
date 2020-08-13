@@ -1,54 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 23:36:51 +0200
-Subject: [Buildroot] [PATCH v2] package/cvs: fix mktime related compile
- failure
-In-Reply-To: <20200528215912.30258-1-ps.report@gmx.net>
-References: <20200528215912.30258-1-ps.report@gmx.net>
-Message-ID: <20200813233651.0e5cc9f6@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Aug 2020 23:38:02 +0200
+Subject: [Buildroot] [PATCH] system: set default PATH according to
+ BR2_ROOTFS_MERGED_USR
+In-Reply-To: <20200808155527.24726-1-paul@crapouillou.net>
+References: <20200808155527.24726-1-paul@crapouillou.net>
+Message-ID: <20200813213802.GM13263@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 May 2020 23:59:12 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Paul, All,
 
-> Use ac_cv_func_working_mktime=yes to force the use of a provided
-> mktime implementation instead of compiling the failing own one.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/5bcd8f4235002da682cc900f866116d2fe87f1c8
-> 
->   mktime.c: In function 'ydhms_diff':
->   mktime.c:106:52: error: size of array 'a' is negative
->    #define verify(name, assertion) struct name { char a[(assertion) ? 1 : -1]; }
->                                                       ^
->   mktime.c:170:3: note: in expansion of macro 'verify'
->      verify (long_int_year_and_yday_are_wide_enough,
->      ^~~~~~
-> 
-> with the failure/assert comming from the lines:
-> 
->   verify (long_int_year_and_yday_are_wide_enough,
->           INT_MAX <= LONG_MAX / 2 || TIME_T_MAX <= UINT_MAX);
-> 
-> which fails since the y2038 time_t conversion from 32bit to 64bit
-> (musl libc).
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On 2020-08-08 17:55 +0200, Paul Cercueil spake thusly:
+> Use "/usr/bin:/usr/sbin" as the default path if BR2_ROOTFS_MERGED_USR
+> is enabled, otherwise use "/bin:/sbin:/usr/bin:/usr/sbin".
+
+Why? Is it fixing an issue, or is it just for the beauty of it?
+
+However, see below...
+
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
-> Changes v1 -> v2:
->   - enhance commit log (as suggested by Thomas Petazzoni)
-> ---
->  package/cvs/cvs.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  system/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 5063797976..b8b7c16529 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -402,7 +402,8 @@ endif # BR2_ROOTFS_SKELETON_DEFAULT
+>  
+>  config BR2_SYSTEM_DEFAULT_PATH
+>  	string "Set the system's default PATH"
+> -	default "/bin:/sbin:/usr/bin:/usr/sbin"
 
-Applied to master, thanks.
+This default is a bit unfortunate. Traditionally, distributions have a
+default set to /usr/sbin:/usr/bin:/sbin:/bin (i.e. exactly the reverse
+order that we have).
 
-Thomas
+However, we have that to keep the behaviour prior to 375f7488758.
+
+> +	default "/usr/bin:/usr/sbin" if BR2_ROOTFS_MERGED_USR
+> +	default "/bin:/sbin:/usr/bin:/usr/sbin" if !BR2_ROOTFS_MERGED_USR
+
+I have no strong opinion, but I wonder why you had to do that...
+
+Regards,
+Yann E. MORIN.
+
+>  	help
+>  	  Sets the system's default PATH. It is being used in
+>  	  /etc/profile in the skeleton-init-common package and by some
+> -- 
+> 2.28.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
