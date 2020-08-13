@@ -1,202 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 11:43:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] gitlab-ci: convert
- only/except to rules
-Message-ID: <20200813093932.6D3548606C@busybox.osuosl.org>
+Date: Thu, 13 Aug 2020 12:02:14 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tpm2-abrmd: bump version to
+ 2.3.2
+In-Reply-To: <20200525214853.14277-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 25 May 2020 23:48:52 +0200")
+References: <20200525214853.14277-1-peter@korsgaard.com>
+Message-ID: <87zh6y7tjt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cbf1b57b0af51313274bc5c173655fdfa80fa00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-only/except keywords will be deprecated by upcoming gitlab release,
-upstream recommend to use rules keyword instead [1][2][3][4][5].
+ > Fixes various initialization / systemd issues. From the changelog:
+ > - Provide meaningful exit codes on initialization failures.
+ > - Prevent systemd from starting the daemon before udev changes ownership of
+ >   the TPM device node.
+ > - Prevent systemd from starting the daemon if there is no TPM device node.
+ > - Prevent systemd from restarting the daemon if it fails.
+ > - Add SELinux policy to allow daemon to resolve names.
+ > - Add SELinux policy boolean (disabled by default) to allow daemon to
+ >   connect to all unreserved ports.
 
-This patch convert .gitlab-ci.yml to use rules, no functional
-changes intended.
+ > Also adjust .hash file white space to match new agreements.
 
-After this patch, we should still have the following behaviour
-while pushing commit, tag, branches:
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-     - to trigger only the check-* jobs:
-       $ git push gitlab HEAD:<name>
+Committed to 2020.02.x and 2020.05.x, thanks.
 
-     - to trigger all defconfigs and all check-* jobs:
-       $ git push gitlab HEAD:<name>-defconfigs
-
-     - to trigger all runtime tests and all check-* jobs:
-       $ git push gitlab HEAD:<name>-runtime-tests
-
-     - to trigger one defconfig job:
-       $ git push gitlab HEAD:<name>-<defconfig name>
-
-     - to trigger one runtime job:
-       $ git push gitlab HEAD:<name>-<test case name>
-
-[1] https://gitlab.com/gitlab-org/gitlab/-/commit/7eaaa597e24bf24743bdd8f8d1d51ade83b3f6de
-[2] https://about.gitlab.com/releases/2020/06/22/gitlab-13-1-released/#templates-to-simplify-initial-rules-keyword-configuration
-[3] https://about.gitlab.com/releases/2020/05/22/gitlab-13-0-released/#auto-devops-and-secure-configuration-templates-are-changing-to-%60rules%60-instead-of-%60only/except%60
-[4] https://gitlab.com/gitlab-org/gitlab/issues/27449
-[5] https://gitlab.com/groups/gitlab-org/-/epics/2783
-[6] https://buildroot.org/downloads/manual/manual.html#_using_the_run_tests_framework
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 35de2fdcf76e50004b150269b8ec03db7992acd8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .gitlab-ci.yml    | 38 +++++++++++++++++++++++---------------
- .gitlab-ci.yml.in | 38 +++++++++++++++++++++++---------------
- 2 files changed, 46 insertions(+), 30 deletions(-)
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index b4dad3173e..e246e69588 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -7,9 +7,10 @@
- image: buildroot/base:20191027.2027
- 
- .check_base:
--    except:
--        - /^.*-.*_defconfig$/
--        - /^.*-tests\..*$/
-+    rules:
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
-+          when: never
-+        - when: always
- 
- check-DEVELOPERS:
-     extends: .check_base
-@@ -69,17 +70,21 @@ check-package:
-     extends: .defconfig_base
-     # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
--    only:
--        - triggers
--        - tags
--        - /-defconfigs$/
-+    rules:
-+        # For tags, create a pipeline.
-+        - if: '$CI_COMMIT_TAG'
-+        # For pipeline created by using a trigger token.
-+        - if: '$CI_PIPELINE_TRIGGERED'
-+        # For the branch or tag name named *-defconfigs, create a pipeline.
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
-     before_script:
-         - DEFCONFIG_NAME=${CI_JOB_NAME}
- 
- one-defconfig:
-     extends: .defconfig_base
--    only:
--        - /^.*-.*_defconfig$/
-+    rules:
-+        # For the branch or tag name named *-*_defconfigs, create a pipeline.
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/'
-     before_script:
-         - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
- 
-@@ -103,17 +108,20 @@ one-defconfig:
-     extends: .runtime_test_base
-     # Running the runtime tests for every push is too much, so limit to
-     # explicit triggers through the API.
--    only:
--        - triggers
--        - tags
--        - /-runtime-tests$/
-+    rules:
-+        # For tags, create a pipeline.
-+        - if: '$CI_COMMIT_TAG'
-+        # For pipeline created by using a trigger token.
-+        - if: '$CI_PIPELINE_TRIGGERED'
-+        # For the branch or tag name named *-runtime-tests, create a pipeline.
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-runtime-tests$/'
-     before_script:
-         - TEST_CASE_NAME=${CI_JOB_NAME}
- 
- one-runtime_test:
-     extends: .runtime_test_base
--    only:
--        - /^.*-tests\..*$/
-+    rules:
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
-     before_script:
-         - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
- aarch64_efi_defconfig: { extends: .defconfig }
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 7e6a7598ae..3cb0915433 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -7,9 +7,10 @@
- image: buildroot/base:20191027.2027
- 
- .check_base:
--    except:
--        - /^.*-.*_defconfig$/
--        - /^.*-tests\..*$/
-+    rules:
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
-+          when: never
-+        - when: always
- 
- check-DEVELOPERS:
-     extends: .check_base
-@@ -69,17 +70,21 @@ check-package:
-     extends: .defconfig_base
-     # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
--    only:
--        - triggers
--        - tags
--        - /-defconfigs$/
-+    rules:
-+        # For tags, create a pipeline.
-+        - if: '$CI_COMMIT_TAG'
-+        # For pipeline created by using a trigger token.
-+        - if: '$CI_PIPELINE_TRIGGERED'
-+        # For the branch or tag name named *-defconfigs, create a pipeline.
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
-     before_script:
-         - DEFCONFIG_NAME=${CI_JOB_NAME}
- 
- one-defconfig:
-     extends: .defconfig_base
--    only:
--        - /^.*-.*_defconfig$/
-+    rules:
-+        # For the branch or tag name named *-*_defconfigs, create a pipeline.
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/'
-     before_script:
-         - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
- 
-@@ -103,16 +108,19 @@ one-defconfig:
-     extends: .runtime_test_base
-     # Running the runtime tests for every push is too much, so limit to
-     # explicit triggers through the API.
--    only:
--        - triggers
--        - tags
--        - /-runtime-tests$/
-+    rules:
-+        # For tags, create a pipeline.
-+        - if: '$CI_COMMIT_TAG'
-+        # For pipeline created by using a trigger token.
-+        - if: '$CI_PIPELINE_TRIGGERED'
-+        # For the branch or tag name named *-runtime-tests, create a pipeline.
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-runtime-tests$/'
-     before_script:
-         - TEST_CASE_NAME=${CI_JOB_NAME}
- 
- one-runtime_test:
-     extends: .runtime_test_base
--    only:
--        - /^.*-tests\..*$/
-+    rules:
-+        - if: '$CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
-     before_script:
-         - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
+-- 
+Bye, Peter Korsgaard
