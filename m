@@ -1,80 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Aug 2020 23:21:12 +0200
-Subject: [Buildroot] [PATCH v2 1/5]
- support/scripts/gen-bootlin-toolchains: add new script to support Bootlin
- toolchains
-In-Reply-To: <20200809193818.1139805-2-thomas.petazzoni@bootlin.com>
-References: <20200809193818.1139805-1-thomas.petazzoni@bootlin.com>
- <20200809193818.1139805-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20200813212112.GK13263@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Aug 2020 23:23:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/capnproto: add openssl optional
+ dependency
+In-Reply-To: <20200809165215.GB13263@scaer>
+References: <20200727124145.1825309-1-fontaine.fabrice@gmail.com>
+ <20200727125140.GY19818@scaer>
+ <20200808234052.4e6ff454@windsurf.home>
+ <20200809165215.GB13263@scaer>
+Message-ID: <20200813232326.0ea90e56@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sun, 9 Aug 2020 18:52:15 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2020-08-09 21:38 +0200, Thomas Petazzoni spake thusly:
-> https://toolchains.bootlin.com/ has been providing for a few years a
-> number of ready-to-use pre-built toolchains, for a wide range of
-> architectures (which it turns out, are all built using Buildroot).
+> So, I got the answer, at least partially:
 > 
-> While toolchains.bootlin.com provides Buildroot config fragments to
-> easily use those toolchains with Buildroot (see [0] for example), this
-> is not visible anywhere. So instead, we would like to add support for
-> these toolchains in Buildroot just like we have existing support for
-> Linaro, ARM, Synopsys, etc. toolchains.
+>   - the code snippet above is only executed when auto-detection is done
 > 
-> [0] https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/fragments/aarch64--glibc--bleeding-edge-2020.02-2.frag
+>     - before this patch, it would alwasys fail in static builds, so
+>       capnproto would always be built without ssl/tls support, and a
+>       shared build would depend on the build ordering;
 > 
-> However, the number of toolchains provided by toolchains.bootlin.com
-> is really large, and they are regularly updated. Maintaining that
-> manually would be time consuming and error-prone. So instead, this
-> commit introduces a script that automatically generates:
+>     - with this patch, we explicitly enable or disable openssl support,
+>       so the code snippet is not executed.
 > 
->  - toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
->  - toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
->  - toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
->  - support/testing/tests/toolchain/test_external_bootlin.py
+>   - the dependency on openssl is only used to build a library, that is
+>     not used to link an executable in capnproto, and does not seem to be
+>     used by of our in-tree packages that use capnproto.
 > 
-> We create a single external toolchain package, with a Kconfig "choice"
-> as a sub-option to select the toolchain variant to be used. The script
-> contains a Python dict that provides the mapping between the
-> toolchains provided by toolchains.bootlin.com, and the architecture
-> options/variants they are applicable to.
-
-I think it would be much better if that metadata were to be available on
-and served by toolchains.bootlin.com, possibly as a json blob (which
-maps very well to, and looks very much like, the python dict). Maybe one
-small json blurb for each toolchain.
-
-That way, when you add or remove toolchains, you are also responsible
-for updating that metadata on your side, and then the script is more
-generic.
-
-Otherwise, that script will get out of sync when / if you change the
-configuration of a toolchain (e.g. if the x86-i686 toolchain bumps to at
-least i486 instead of i386).
-
-I haven't seriously reviewed the rest of the script, though, as Titouan
-did.
-
-Regards,
-Yann E. MORIN.
-
-> The test cases allow to verify that the toolchain configuration is
-> correct, and that it is able to build a Busybox based system. It
-> doesn't do any runtime testing as such testing is already done by
-> toolchains.bootlin.com: the test cases here are only meant to verify
-> that the toolchain-external-bootlin package works as expected.
+> And indeed, the link forget -lz )indentation mine):
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>     /bin/bash ./libtool --tag=CXX \
+>         --mode=link /home/ymorin/dev/buildroot/O/host/bin/arm-linux-g++ \
+>         [...] \
+>         -DKJ_HAS_OPENSSL \
+>         -o libkj-tls.la \
+>         [...] \
+>         -lssl -lcrypto -latomic
+> 
+> so indeed, no -lz.
+> 
+> Furthermre, capnproto does install a bunch of .pc file, but installs
+> none for libkj-tls. And none of the .pc files insalled ever reference
+> libkj-tls or ssl or crypto.
+> 
+> That's why we have no build failure in our autobuilders.
+> 
+> Yet, I wonder how openssl support works in capnproto, and if this patch
+> ever makes sense in the context of Buildroot...
 
+Thanks for the exhaustive research! I think we should not only look at
+packages that are in Buildroot: people may be having their own custom
+stuff that links against libkj-tls, so overall I think the patch makes
+sense. There is something that optionally links against OpenSSL in
+capnproto, so we should have an optional dependency on OpenSSL.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
