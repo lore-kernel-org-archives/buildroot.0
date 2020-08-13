@@ -1,280 +1,51 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu, 13 Aug 2020 15:05:26 +0200
-Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
-In-Reply-To: <1597323926-20271-1-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1597323926-20271-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1597323926-20271-3-git-send-email-jugurtha.belkalem@smile.fr>
+From: Michael Fischer <mf@go-sys.de>
+Date: Thu, 13 Aug 2020 13:35:24 +0000
+Subject: [Buildroot] OpenSSH login problem
+Message-ID: <b0c1b4805e9b4d1a9fd45ef4b552ab0a@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bcc is a front-end tool for eBPF :
-https://github.com/iovisor/bcc/blob/master/README.md.
-eBPF is the most powerful Linux tracer, and bcc
-allows to write eBPF scripts in C and PYTHON3.
+Dear all,
 
-bcc can help to troubleshoot issues quickly on
-embedded systems (as long as Linux kernel
-version >= 4.1).
+I have a problem with the OpenSSH login on my raspberry. 
+I can't login via ssh, after entering the username, the sever closed the connection.
 
-bcc can also make it easy to create observabilty tools,
-SDN configuration, ddos mitigation, intrusion detection
-and secure containers. More information is available at:
-http://www.brendangregg.com/ebpf.html.
+I have checked it with the commit 01632805ab4be2bea4010ba1e46ab71f52d175a9 and this version works with the same configuration.
+The actual commit doesn't work but  both commits have the same OpenSSH version.
 
-BCC can be tested on the target :
-$ mount -t debugfs none /sys/kernel/debug
-$ mkdir -p /lib/modules/KERNEL_VERSION/build
-$ cd /lib/modules/KERNEL_VERSION//build
-$ cp /sys/kernel/kheaders.tar.xz .
-$ unxz kheaders.tar.xz
-$ tar xf kheaders.tar
-$ cd /usr/share/bcc/examples/tracing
-$ ./disksnoop.py
+OpenSSH Version is:  OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/bcc/0001-fix-aarch64-cross-compile.patch | 65 ++++++++++++++++++++++++
- package/bcc/Config.in                            | 49 ++++++++++++++++++
- package/bcc/bcc.hash                             |  3 ++
- package/bcc/bcc.mk                               | 63 +++++++++++++++++++++++
- 6 files changed, 182 insertions(+)
- create mode 100644 package/bcc/0001-fix-aarch64-cross-compile.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.hash
- create mode 100644 package/bcc/bcc.mk
+My SSHD logofile:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 42fa5a4..bd836a6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1396,6 +1396,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
- 
- N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/bcc/
- F:	package/python-cycler/
- F:	package/python-matplotlib/
- 
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4..8ec3932 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -83,6 +83,7 @@ menu "Compressors and decompressors"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-+	source "package/bcc/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-diff --git a/package/bcc/0001-fix-aarch64-cross-compile.patch b/package/bcc/0001-fix-aarch64-cross-compile.patch
-new file mode 100644
-index 0000000..6b42797
---- /dev/null
-+++ b/package/bcc/0001-fix-aarch64-cross-compile.patch
-@@ -0,0 +1,65 @@
-+From 5a5b0f04484e00c88e7be902101367d6d591fb96 Mon Sep 17 00:00:00 2001
-+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Date: Thu, 2 May 2019 11:06:23 +0200
-+Subject: [PATCH] cmake/luajit: Provide the target architecture to luaJIT while
-+ cross-compiling
-+
-+Unlike CMAKE_SYSTEM_PROCESSOR which identifies aarch64
-+as a valid architecture, luajit does not recognize it.
-+luajit defines aarch64 as arm64.
-+
-+LuaJIT doesn't use usual arch naming, so we have to convert
-+between CMake and Luajit for each architectures while
-+cross-compiling.
-+
-+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+v2: Do the same for other architecture supported by LuaJIT.
-+https://github.com/iovisor/bcc/pull/2480
-+---
-+ src/lua/CMakeLists.txt | 29 ++++++++++++++++++++++++++++-
-+ 1 file changed, 28 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/lua/CMakeLists.txt b/src/lua/CMakeLists.txt
-+index 7541d48df..226e1b1d2 100644
-+--- a/src/lua/CMakeLists.txt
-++++ b/src/lua/CMakeLists.txt
-+@@ -13,9 +13,36 @@ if (LUAJIT_LIBRARIES AND LUAJIT)
-+ 		DEPENDS ${SRC_LUA} ${CMAKE_CURRENT_SOURCE_DIR}/squishy
-+ 	)
-+ 
-++	# LuaJIT doesn't use usual arch naming, so we have to convert
-++	# between CMake and Luajit while cross-compiling.
-++	if (CMAKE_CROSSCOMPILING)
-++		SET (LUAJIT_TARGET_ARCH "-a")
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L30
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L65
-++		if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64_be")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64be")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86)$")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x86")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mips")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mipsel")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "ppc")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x64")
-++		else()
-++			MESSAGE(FATAL_ERROR "${CMAKE_SYSTEM_PROCESSOR} is not supported by LuaJIT")
-++		endif()
-++	endif()
-++
-+ 	ADD_CUSTOM_COMMAND(
-+ 		OUTPUT bcc.o
-+-		COMMAND ${LUAJIT} -bg bcc.lua bcc.o
-++		COMMAND ${LUAJIT} -bg bcc.lua ${LUAJIT_TARGET_ARCH} bcc.o
-+ 		DEPENDS bcc.lua
-+ 	)
-+ 
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
-new file mode 100644
-index 0000000..a3cc402
---- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,49 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
-+	depends on BR2_LINUX_KERNEL # needs kernel sources on the target
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # clang
-+	depends on BR2_INSTALL_LIBSTDCPP # clang
-+	select BR2_PACKAGE_AUDIT # runtime
-+	select BR2_PACKAGE_CLANG
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_FLEX # needs FlexLexer.h
-+	select BR2_PACKAGE_IPERF3 # runtime
-+	select BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_NETPERF # runtime
-+	select BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_XZ # Decompress kernel headers required by BCC
-+	help
-+	  BPF Compiler Collection (BCC)
-+
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples. It makes use of extended BPF (Berkeley Packet
-+	  Filters), formally known as eBPF, a new feature that was
-+	  first added to Linux 3.15. Much of what BCC uses requires
-+	  Linux 4.1 and above.
-+
-+	  Note: Before using bcc, you need either :
-+	  - Copy the kernel source code to target folder
-+	  /lib/module/<kernel version>/build.
-+	  - Compile kernel with CONFIG_IKHEADERS (kernel_ver > 5.2)
-+	  and use generated headers to populate
-+	  /lib/module/<kernel version>/build.
-+
-+	  That's because the clang frontend build eBPF code at runtime.
-+
-+	  https://github.com/iovisor/bcc
-+
-+comment "bcc needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "bcc needs a glibc toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
-new file mode 100644
-index 0000000..e01a2e8
---- /dev/null
-+++ b/package/bcc/bcc.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 518f2ee52139dcc69c589be7a6171928dc2c1cf2cdb7d0c1468134166aa84ca1  bcc-v0.15.0.tar.gz
-+sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
-new file mode 100644
-index 0000000..f6a2e12
---- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,63 @@
-+################################################################################
-+#
-+# bcc
-+#
-+################################################################################
-+
-+BCC_VERSION = v0.15.0
-+BCC_SITE = https://github.com/iovisor/bcc.git
-+BCC_SITE_METHOD = git
-+BCC_GIT_SUBMODULES = YES
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+# libbcc.so and libbpf.so
-+BCC_INSTALL_STAGING = YES
-+BCC_DEPENDENCIES = host-bison host-flex host-luajit clang elfutils flex llvm \
-+		   luajit
-+
-+# ENABLE_LLVM_SHARED=ON to use llvm.so.
-+# Force REVISION otherwise bcc will use git describe to generate a version number.
-+BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
-+	-DREVISION=$(BCC_VERSION) \
-+	-DENABLE_CLANG_JIT=ON \
-+	-DENABLE_MAN=OFF
-+
-+# BCC compiles src/python/setup.py.in into /src/python.
-+# The generated compiled folder (/src/python/bcc-python/bcc) should
-+# be copied to target python's site-packages directory.
-+define BCC_INSTALL_PYTHON_BCC
-+       cp -r $(BUILD_DIR)/bcc-$(BCC_VERSION)/src/python/bcc-python/bcc \
-+               $(TARGET_DIR)/usr/lib/python3.*/site-packages/
-+endef
-+BCC_POST_INSTALL_TARGET_HOOKS += BCC_INSTALL_PYTHON_BCC
-+
-+define BCC_LINUX_CONFIG_FIXUPS
-+       # Enable kernel support for eBPF
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_BPF)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_BPF)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_BPF_JIT)
-+       # [for Linux kernel versions 4.1 through 4.6]
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_BPF_JIT)
-+       # [for Linux kernel versions 4.7 and later]
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_EBPF_JIT)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_BPF_EVENTS)
-+       # [for Linux kernel versions 5.3 and later]
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_IKHEADERS)
-+       # For running bcc networking examples on vanilla kernel
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCH_SFQ)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_POLICE)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_GACT)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
-+       # Testing
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_KPROBES)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_FTRACE)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_BPFILTER)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_BPF)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_ACT)
-+       $(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
-+endef
-+
-+$(eval $(cmake-package))
--- 
-2.7.4
+debug2: parse_server_config_depth: config reprocess config len 236
+debug3: auth_shadow_acctexpired: today 18487 sp_expire -1 days left -18488
+debug3: account expiration disabled
+debug3: mm_answer_pwnamallow: sending MONITOR_ANS_PWNAM: 1
+debug3: mm_request_send entering: type 9
+debug2: monitor_read: 8 used once, disabling now
+debug2: input_userauth_request: setting up authctxt for root [preauth]
+debug3: mm_inform_authserv entering [preauth]
+debug3: mm_request_send entering: type 4 [preauth]
+debug2: input_userauth_request: try method none [preauth]
+debug3: mm_request_receive entering
+debug3: monitor_read: checking request 4
+debug3: mm_answer_authserv: service=ssh-connection, style=
+debug2: monitor_read: 4 used once, disabling now
+debug3: user_specific_delay: user specific delay 0.000ms [preauth]
+debug3: ensure_minimum_time_since: elapsed 10.528ms, delaying 10.089ms (requested 5.154ms) [preauth]
+debug1: monitor_read_log: child log fd closed
+debug3: mm_request_receive entering
+debug1: do_cleanup
+debug1: Killing privsep child 390
+
+I don't know what is going wrong.
+Console login works and ftp also.
+
+Any help is welcome, I have no more idea where to look.
+
+
+thanks,
+  Michael.
