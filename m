@@ -1,54 +1,60 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 13 Aug 2020 13:29:52 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/mender-artifact: do not download
- modules during the build process
-Message-ID: <20200813202952.926828-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Aug 2020 22:36:03 +0200
+Subject: [Buildroot] [PATCH] package/live555: update licenses
+In-Reply-To: <20200813082235.890148-1-buildroot@heine.tech>
+References: <20200813082235.890148-1-buildroot@heine.tech>
+Message-ID: <20200813223603.4ab40f85@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello Michael,
 
-By default, go will attempt to download needed modules before building, which
-is not desirable. This behavior also causes permission issues when cleaning,
-as go downloads modules as read-only by default. Because mender-artifact
-includes the modules in the vendor directory, mod=vendor prevents the package
-from downloading the go modules during the build process and prevents
-permission issues when cleaning.
+Thanks for your contribution!
 
-Fixes:
-http://autobuild.buildroot.net/results/d5bcaca73ae74fe8b0ebd39b6331564cd639fb66
+On Thu, 13 Aug 2020 10:22:35 +0200
+Michael Nosthoff <buildroot@heine.tech> wrote:
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - Reword commit message
-  - Add a comment in the .mk file
+> The included license files indicate that the project is licensed
+> under GPL3.0 and LGPL3.0.
+> 
+> Even though the project site [1] only mentions LGPL.
+> 
+> - Add GPL-3.0+
+> - Bump LGPL License to 3.0+
+> - add the LGPL license file included in download
+> 
+> [1] http://live555.com/liveMedia/faq.html#copyright-and-license
 
- package/mender-artifact/mender-artifact.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+In fact, there are no sources files under GPL-3.0: all the source files
+indicate LGPL-3.0. So the presence of this COPYING file with the
+GPL-3.0 license text seems to be a mistake.
 
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index c81ec9ba53..67fdc44b9d 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -31,6 +31,14 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
- 
-+# By default, go will attempt to download needed modules before building, which
-+# is not desirable. This behavior also causes permission issues when cleaning,
-+# as go downloads modules as read-only by default. Because mender-artifact
-+# includes the modules in the vendor directory, mod=vendor prevents the package
-+# from downloading the go modules during the build process and prevents
-+# permission issues when cleaning.
-+HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
-+
- HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
- 
- HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
+So I've adjusted your commit to only mention the LGPL-3.0 license, 
+added a comment in live555.mk about why we don't think anything is
+under GPL-3.0 and applied to master.
+
+Also, it's worth mentioning that the live555 developers themselves
+don't seem to understand the LGPL very well. In the second bullet point
+at http://live555.com/liveMedia/faq.html#copyright-and-license, they
+claim:
+
+  If you distribute a product (whether software or hardware; whether
+  free or for pay) that uses the LIVE555 library code, then you must -
+  when requested by either a customer, or Live Networks, Inc. - upgrade
+  it as soon as possible to use the latest version of the LIVE555
+  library code
+
+This is clearly _NOT_ a requirement of the LGPL, and a license that
+would have this requirement would not be a free software / open source
+license.
+
+Best regards,
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
