@@ -1,32 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 20:42:32 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: fix build against gnutls
- with proxy disabled
-In-Reply-To: <0d5ec0a6230311820188e71d6a650fd58e74ee11.1595961209.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 28 Jul 2020 21:33:29 +0300")
-References: <0d5ec0a6230311820188e71d6a650fd58e74ee11.1595961209.git.baruch@tkos.co.il>
-Message-ID: <87a6yy5qw7.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Aug 2020 20:40:29 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/prosody: don't
+ depend on !lua 5.3
+Message-ID: <20200813183625.51B1E82724@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=98645393ed3611985e6703d1f5ee34eb1cd330ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > Add upstream patch (#4) fixing build with gnutls when
- > BR2_PACKAGE_LIBCURL_PROXY_SUPPORT is disabled.
+The current version of prosody is compatible with Lua 5.3.
 
- > Patch #4 depends on #3 to apply so add this one as well.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit afbb8b6a04d8013086088bef74741c81bddf78e9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/prosody/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/31d7204869ff71319ea055688c919a646bfb200b/
- > http://autobuild.buildroot.net/results/f8d2fb919475cdff4a36ad93071048ee09193b98/
- > http://autobuild.buildroot.net/results/2f07a0ac1240a6040a3509d2ebf06906a31fd172/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index c32ca20e23..4b7ea94256 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+-	depends on !BR2_PACKAGE_LUA_5_3
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+ 	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+@@ -21,6 +20,3 @@ config BR2_PACKAGE_PROSODY
+ comment "prosody needs the lua interpreter, dynamic library"
+ 	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+-
+-comment "prosody needs a Lua 5.1/5.2 interpreter"
+-	depends on BR2_PACKAGE_LUA_5_3
