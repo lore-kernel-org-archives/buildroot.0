@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 20:42:16 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libcurl: fix
+Date: Thu, 13 Aug 2020 20:42:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libcurl: fix
  build against gnutls with proxy disabled
-Message-ID: <20200813183625.5EE7682724@busybox.osuosl.org>
+Message-ID: <20200813183631.DFA9683A90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1599158afc2f28e05c22e7b276787b2b044acaa5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2ea0d106c97a0d862b3ad5cc92233bd44adfbbf3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Add upstream patch (#4) fixing build with gnutls when
 BR2_PACKAGE_LIBCURL_PROXY_SUPPORT is disabled.
