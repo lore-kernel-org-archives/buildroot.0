@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 21:14:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
+Date: Thu, 13 Aug 2020 21:14:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
  version 2.28.4
-In-Reply-To: <20200729142252.3411989-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Wed, 29 Jul 2020 17:22:52 +0300")
-References: <20200729142252.3411989-1-aperez@igalia.com>
-Message-ID: <871rka4au1.fsf@dell.be.48ers.dk>
+In-Reply-To: <20200729154020.3460716-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Wed, 29 Jul 2020 18:40:20 +0300")
+References: <20200729154020.3460716-1-aperez@igalia.com>
+Message-ID: <87wo222w9g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,11 +20,11 @@ To: buildroot@busybox.net
 
  > Full release notes can be found at:
 
- >   https://wpewebkit.org/release/wpewebkit-2.28.4.html
+ >   https://webkitgtk.org/2020/07/28/webkitgtk2.28.4-released.html
 
  > A detailed security advisory can be found at:
 
- >   https://wpewebkit.org/security/WSA-2020-0007.html
+ >   https://webkitgtk.org/security/WSA-2020-0007.html
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
