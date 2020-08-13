@@ -1,43 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 23:08:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP
- for internal TLS implementation
-In-Reply-To: <20200108190439.459316-1-geomatsi@gmail.com>
-References: <20200108190439.459316-1-geomatsi@gmail.com>
-Message-ID: <20200813230848.16f715d0@windsurf.home>
+Date: Thu, 13 Aug 2020 23:09:34 +0200
+Subject: [Buildroot] [git commit] package/qt5webengine: examples need qt5svg
+Message-ID: <20200813210328.EB83986300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Jan 2020 22:04:39 +0300
-Sergey Matyukevich <geomatsi@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0adc024c22556bb201cacb976ecc3c589569f424
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
-> TLS implementation. This patch disables TEAP support in wpa_supplicant
-> when internal TLS implementation is selected. Similar fix for hostapd
-> package has already been merged to Buildroot: see commit 47d14e3b1c20
-> ("package/hostapd: disable TEAP for internal TLS implementation").
-> 
-> TEAP is still an experimental feature that is not recommmended for
-> production use. Currently it should not be used for anything else
-> than experimentation and interoperability testing. Those who needs
-> experimenting with TEAP are encouraged to enable openssl in their
-> buildroot configuration.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
->  package/wpa_supplicant/wpa_supplicant.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
 
-Applied to master, thanks.
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/674934350
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  make[3]: Entering directory '.../build/qt5webengine-5.15.0/examples/webenginewidgets'
+  Project ERROR: Unknown module(s) in QT: svg
+  Makefile:47: recipe for target 'sub-pdfviewer-make_first' failed
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5webengine/Config.in       | 1 +
+ package/qt5/qt5webengine/qt5webengine.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 215afbb616..9879345e1e 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -54,6 +54,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+ 	select BR2_PACKAGE_QT5QUICKCONTROLS
+ 	select BR2_PACKAGE_QT5QUICKCONTROLS2
++	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5BASE_EXAMPLES
+ 	select BR2_PACKAGE_QT5WEBCHANNEL
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_QT5BASE_XCB
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR if BR2_PACKAGE_QT5BASE_XCB
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 4abcf45964..9101f35937 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -18,6 +18,10 @@ QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
+ QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
+ 	LICENSE.GPLv3 LICENSE.LGPL3 $(QT5WEBENGINE_CHROMIUM_LICENSE_FILES)
+ 
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++QT5WEBENGINE_DEPENDENCIES += qt5svg
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+ QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
+ 	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst
