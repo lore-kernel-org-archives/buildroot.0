@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 11:33:55 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] DEVELOPERS: add Angelo
+Date: Thu, 13 Aug 2020 11:33:20 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: add Angelo
  Compagnucci to several packages
-Message-ID: <20200813092931.A643985AB0@busybox.osuosl.org>
+Message-ID: <20200813092936.102B585B06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e49fb2d492499c47407965aad2bc04f9bfb721c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=883e514f5bc6877a9031c1567c64451ac695df24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 This patch adds some packages I contributed to my entry.
 
@@ -23,12 +23,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 23ee2ab35e..5d58fb2994 100644
+index 66ef194dd4..3bc9f4dd4c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -199,19 +199,26 @@ F:	package/rauc/
+@@ -186,18 +186,25 @@ F:	package/rauc/
+ 
  N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
- F:	package/apparmor/
  F:	package/corkscrew/
 +F:	package/cups/
 +F:	package/cups-filters/
@@ -36,7 +36,6 @@ index 23ee2ab35e..5d58fb2994 100644
 +F:	package/grep/
  F:	package/i2c-tools/
 +F:	package/jq/
- F:	package/libapparmor/
 +F:	package/libb64/
  F:	package/mender/
  F:	package/mender-artifact/
