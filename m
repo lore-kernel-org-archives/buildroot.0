@@ -1,154 +1,153 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 13 Aug 2020 16:45:49 +0200
-Subject: [Buildroot] [PATCH 2/2] package/grpc: bump version to 1.31.0
-In-Reply-To: <20200813144549.1262366-1-buildroot@heine.tech>
-References: <20200813144549.1262366-1-buildroot@heine.tech>
-Message-ID: <20200813144549.1262366-3-buildroot@heine.tech>
+From: Michael Fischer <mf@go-sys.de>
+Date: Thu, 13 Aug 2020 14:51:50 +0000
+Subject: [Buildroot] OpenSSH login problem
+In-Reply-To: <2377-5f354c00-1-2fb87dc0@59447183>
+References: <b0c1b4805e9b4d1a9fd45ef4b552ab0a@go-sys.de>
+ <2377-5f354c00-1-2fb87dc0@59447183>
+Message-ID: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Related changes:
- - add dependency on Google RE2 package
- - update patches to new offsets
+Hi Michael,
+ here is the log, the connection is closed from the server.
 
-Tested on Ubuntu 20.04
+PS: All settings between the commits are the same. 
+The difference between this is only a git pull.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- .../grpc/0001-target-build-using-host-plugin.patch   |  4 ++--
- ...detect-the-availability-of-pthread_setname_.patch |  7 +++----
- package/grpc/Config.in                               |  3 ++-
- package/grpc/grpc.hash                               |  2 +-
- package/grpc/grpc.mk                                 | 12 +++++++-----
- 5 files changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/package/grpc/0001-target-build-using-host-plugin.patch b/package/grpc/0001-target-build-using-host-plugin.patch
-index ac2bf8cc38..5b3c6a6fae 100644
---- a/package/grpc/0001-target-build-using-host-plugin.patch
-+++ b/package/grpc/0001-target-build-using-host-plugin.patch
-@@ -20,7 +20,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index be695c2..45c2fcb 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -10844,6 +10844,18 @@ target_link_libraries(grpc_cli
-+@@ -11043,6 +11043,18 @@ target_link_libraries(grpc_cli
-  endif()
-  if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
-  
-@@ -39,7 +39,7 @@ index be695c2..45c2fcb 100644
-  add_executable(grpc_cpp_plugin
-    src/compiler/cpp_plugin.cc
-  )
--@@ -10877,6 +10889,7 @@ if(gRPC_INSTALL)
-+@@ -11077,6 +11089,7 @@ if(gRPC_INSTALL)
-      ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
-    )
-  endif()
-diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-index 4b7253f7aa..c8b1dc8e73 100644
---- a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-+++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -20,7 +20,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index 45c2fcb..0b2be4f 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -177,6 +177,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-+@@ -180,6 +180,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-  endif()
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-  
-@@ -37,7 +37,7 @@ diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codeg
- index 4f213ff..55ecd9d 100644
- --- a/include/grpc/impl/codegen/port_platform.h
- +++ b/include/grpc/impl/codegen/port_platform.h
--@@ -195,7 +195,9 @@
-+@@ -163,7 +163,9 @@
-  #endif /* _LP64 */
-  #ifdef __GLIBC__
-  #define GPR_POSIX_CRASH_HANDLER 1
-@@ -48,5 +48,4 @@ index 4f213ff..55ecd9d 100644
-  #else /* musl libc */
-  #define GPR_MUSL_LIBC_COMPAT 1
- -- 
--2.26.2
--
-+2.26.63
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index a2da3f4c53..2eb7c1de1c 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf, re2
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_GRPC
- 	select BR2_PACKAGE_LIBABSEIL_CPP
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PROTOBUF
-+	select BR2_PACKAGE_RE2
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  A language-neutral, platform-neutral, open source, remote
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index f0586e4b18..20368068d9 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ba74b97a2f1b4e22ec5fb69d639d849d2069fb58ea7d6579a31f800af6fe3b6c  grpc-1.30.2.tar.gz
-+sha256  1236514199d3deb111a6dd7f6092f67617cd2b147f7eda7adbafccea95de7381  grpc-1.31.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 087deac0c6..208abd90c8 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.30.2
-+GRPC_VERSION = 1.31.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
-@@ -12,10 +12,10 @@ GRPC_LICENSE_FILES = LICENSE
- GRPC_INSTALL_STAGING = YES
- 
- # Need to use host grpc_cpp_plugin during cross compilation.
--GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf zlib libabseil-cpp
--HOST_GRPC_DEPENDENCIES = host-c-ares host-openssl host-protobuf host-zlib \
--	host-libabseil-cpp
--
-+GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf re2 zlib libabseil-cpp
-+HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protobuf \
-+	host-re2 host-zlib
-+	
- # gRPC_CARES_PROVIDER=package won't work because it requires c-ares to have
- # installed a cmake config file, but buildroot uses c-ares' autotools build,
- # which doesn't do this.  These CARES settings trick the gRPC cmake code into
-@@ -24,6 +24,7 @@ GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
-+	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package \
- 	-DgRPC_ABSL_PROVIDER=package \
-@@ -66,6 +67,7 @@ HOST_GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
-+	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package \
- 	-DgRPC_ABSL_PROVIDER=package
--- 
-2.25.1
+OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 20: Applying options for *
+debug1: Connecting to 192.168.1.194 [192.168.1.194] port 22.
+debug1: Connection established.
+debug1: identity file /root/.ssh/id_rsa type -1
+debug1: identity file /root/.ssh/id_rsa-cert type -1
+debug1: identity file /root/.ssh/id_dsa type -1
+debug1: identity file /root/.ssh/id_dsa-cert type -1
+debug1: identity file /root/.ssh/id_ecdsa type -1
+debug1: identity file /root/.ssh/id_ecdsa-cert type -1
+debug1: identity file /root/.ssh/id_ecdsa_sk type -1
+debug1: identity file /root/.ssh/id_ecdsa_sk-cert type -1
+debug1: identity file /root/.ssh/id_ed25519 type -1
+debug1: identity file /root/.ssh/id_ed25519-cert type -1
+debug1: identity file /root/.ssh/id_ed25519_sk type -1
+debug1: identity file /root/.ssh/id_ed25519_sk-cert type -1
+debug1: identity file /root/.ssh/id_xmss type -1
+debug1: identity file /root/.ssh/id_xmss-cert type -1
+debug1: Local version string SSH-2.0-OpenSSH_8.3
+debug1: Remote protocol version 2.0, remote software version OpenSSH_8.3
+debug1: match: OpenSSH_8.3 pat OpenSSH* compat 0x04000000
+debug1: Authenticating to 192.168.1.194:22 as 'root'
+debug1: SSH2_MSG_KEXINIT sent
+debug1: SSH2_MSG_KEXINIT received
+debug1: kex: algorithm: curve25519-sha256
+debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+debug1: kex: server->client cipher: chacha20-poly1305 at openssh.com MAC: <implicit> compression: none
+debug1: kex: client->server cipher: chacha20-poly1305 at openssh.com MAC: <implicit> compression: none
+debug1: kex: curve25519-sha256 need=64 dh_need=64
+debug1: kex: curve25519-sha256 need=64 dh_need=64
+debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1: Server host key: ecdsa-sha2-nistp256 SHA256:RCq6wRn5ZZrwZ7wY84zaMFMdG1mhIorheFPFhbwBz+0
+debug1: Host '[192.168.1.194]:22' is known and matches the ECDSA host key.
+debug1: Found key in /root/.ssh/known_hosts:1
+debug1: rekey out after 134217728 blocks
+debug1: SSH2_MSG_NEWKEYS sent
+debug1: expecting SSH2_MSG_NEWKEYS
+debug1: SSH2_MSG_NEWKEYS received
+debug1: rekey in after 134217728 blocks
+debug1: Will attempt key: /root/.ssh/id_rsa 
+debug1: Will attempt key: /root/.ssh/id_dsa 
+debug1: Will attempt key: /root/.ssh/id_ecdsa 
+debug1: Will attempt key: /root/.ssh/id_ecdsa_sk 
+debug1: Will attempt key: /root/.ssh/id_ed25519 
+debug1: Will attempt key: /root/.ssh/id_ed25519_sk 
+debug1: Will attempt key: /root/.ssh/id_xmss 
+debug1: SSH2_MSG_EXT_INFO received
+debug1: kex_input_ext_info: server-sig-algs=<ssh-ed25519,sk-ssh-ed25519 at openssh.com,ssh-rsa,rsa-sha2-256,rsa-sha2-512,ssh-dss,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ecdsa-sha2-nistp256@openssh.com>
+debug1: SSH2_MSG_SERVICE_ACCEPT received
+Connection closed by 192.168.1.194 port 22
+
+Regards,
+  Michael.
+
+
+> On Thursday, August 13, 2020 16:35 CEST, Michael Nosthoff <buildroot@heine.tech>
+> wrote:
+> 
+> Hi Michael,
+> 
+> On Thursday, August 13, 2020 15:35 CEST, Michael Fischer <mf@go-sys.de>
+> wrote:
+> 
+> > Dear all,
+> >
+> > I have a problem with the OpenSSH login on my raspberry.
+> > I can't login via ssh, after entering the username, the sever closed the
+> connection.
+> >
+> > I have checked it with the commit
+> 01632805ab4be2bea4010ba1e46ab71f52d175a9 and this version works with
+> the same configuration.
+> > The actual commit doesn't work but  both commits have the same OpenSSH
+> version.
+> >
+> > OpenSSH Version is:  OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
+> >
+> > My SSHD logofile:
+> >
+> > debug2: parse_server_config_depth: config reprocess config len 236
+> > debug3: auth_shadow_acctexpired: today 18487 sp_expire -1 days left -
+> 18488
+> > debug3: account expiration disabled
+> > debug3: mm_answer_pwnamallow: sending MONITOR_ANS_PWNAM: 1
+> > debug3: mm_request_send entering: type 9
+> > debug2: monitor_read: 8 used once, disabling now
+> > debug2: input_userauth_request: setting up authctxt for root [preauth]
+> > debug3: mm_inform_authserv entering [preauth]
+> > debug3: mm_request_send entering: type 4 [preauth]
+> > debug2: input_userauth_request: try method none [preauth]
+> > debug3: mm_request_receive entering
+> > debug3: monitor_read: checking request 4
+> > debug3: mm_answer_authserv: service=ssh-connection, style=
+> > debug2: monitor_read: 4 used once, disabling now
+> > debug3: user_specific_delay: user specific delay 0.000ms [preauth]
+> > debug3: ensure_minimum_time_since: elapsed 10.528ms, delaying
+> 10.089ms (requested 5.154ms) [preauth]
+> > debug1: monitor_read_log: child log fd closed
+> > debug3: mm_request_receive entering
+> > debug1: do_cleanup
+> > debug1: Killing privsep child 390
+> >
+> > I don't know what is going wrong.
+> > Console login works and ftp also.
+> >
+> > Any help is welcome, I have no more idea where to look.
+> >
+> 
+> Could you run the Client with the -v flag? So you could see if actually the client
+> or the server is closing the connection.
+> A pretty common problem is often a mismatch in available authentication
+> mechanisms (commonly "publickey,password").
+> 
+> Also what sometimes is an issue is the permissions of the users .ssh folder on
+> the server side.
+> If it is globally readable sshd in many configurations refuses to authenticate
+> against it.
+> 
+> Regards,
+> Michael
+> 
+> >
+> > thanks,
+> >   Michael.
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> 
