@@ -1,58 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 12:00:53 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tpm2-abrmd: bump
- version to 2.3.2
-Message-ID: <20200813095627.DEA3D85F44@busybox.osuosl.org>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Thu, 13 Aug 2020 13:41:38 +0200
+Subject: [Buildroot] [PATCH v2 1/5]
+ support/scripts/gen-bootlin-toolchains: add new script to support Bootlin
+ toolchains
+In-Reply-To: <20200809193818.1139805-2-thomas.petazzoni@bootlin.com>
+References: <20200809193818.1139805-1-thomas.petazzoni@bootlin.com>
+ <20200809193818.1139805-2-thomas.petazzoni@bootlin.com>
+Message-ID: <4168571a-d237-d489-656e-c1fa159858cd@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e427ca5a9dee572d377ee2b5e700606364585f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hello Thomas,
 
-Fixes various initialization / systemd issues. From the changelog:
+Glad to see the Bootlin toolchains landing soon in Buildroot :)
 
-- Provide meaningful exit codes on initialization failures.
-- Prevent systemd from starting the daemon before udev changes ownership of
-  the TPM device node.
-- Prevent systemd from starting the daemon if there is no TPM device node.
-- Prevent systemd from restarting the daemon if it fails.
-- Add SELinux policy to allow daemon to resolve names.
-- Add SELinux policy boolean (disabled by default) to allow daemon to
-  connect to all unreserved ports.
+On 9/08/20 21:38, Thomas Petazzoni wrote:
+> https://toolchains.bootlin.com/ has been providing for a few years a
+> number of ready-to-use pre-built toolchains, for a wide range of
+> architectures (which it turns out, are all built using Buildroot).
+> 
+> While toolchains.bootlin.com provides Buildroot config fragments to
+> easily use those toolchains with Buildroot (see [0] for example), this
+> is not visible anywhere. So instead, we would like to add support for
+> these toolchains in Buildroot just like we have existing support for
+> Linaro, ARM, Synopsys, etc. toolchains.
+> 
+> [0] https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/fragments/aarch64--glibc--bleeding-edge-2020.02-2.frag
+> 
+> However, the number of toolchains provided by toolchains.bootlin.com
+> is really large, and they are regularly updated. Maintaining that
+> manually would be time consuming and error-prone. So instead, this
+> commit introduces a script that automatically generates:
+> 
+>   - toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+>   - toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
+>   - toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
+>   - support/testing/tests/toolchain/test_external_bootlin.py
+> 
+> We create a single external toolchain package, with a Kconfig "choice"
+> as a sub-option to select the toolchain variant to be used. The script
+> contains a Python dict that provides the mapping between the
+> toolchains provided by toolchains.bootlin.com, and the architecture
+> options/variants they are applicable to.
+> 
+> The test cases allow to verify that the toolchain configuration is
+> correct, and that it is able to build a Busybox based system. It
+> doesn't do any runtime testing as such testing is already done by
+> toolchains.bootlin.com: the test cases here are only meant to verify
+> that the toolchain-external-bootlin package works as expected.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Also adjust .hash file white space to match new agreements.
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 56ff08cea09c191353f452a12ca71a6596cccbb7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm2-abrmd/tpm2-abrmd.hash | 4 ++--
- package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
-index cff3266bc8..f69cd369bf 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.hash
-+++ b/package/tpm2-abrmd/tpm2-abrmd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 63cb59be1fd21e6ae233c37a0aa4a59883a4885a7bfd2c7e69979c5048518d50  tpm2-abrmd-2.3.0.tar.gz
--sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-+sha256  df02c18882116e19b56aa8c701687c0c0987dd334e6fc002b340cedf6e000d10  tpm2-abrmd-2.3.2.tar.gz
-+sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-index e92fda252a..9d22219f67 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.mk
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_ABRMD_VERSION = 2.3.0
-+TPM2_ABRMD_VERSION = 2.3.2
- TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
- TPM2_ABRMD_LICENSE = BSD-2-Clause
- TPM2_ABRMD_LICENSE_FILES = LICENSE
+Best regards,
+
+Titouan
