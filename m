@@ -1,58 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 11:39:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libwebsockets:
- remove dependency on mmu
-Message-ID: <20200813093503.D1E5C852FA@busybox.osuosl.org>
+Date: Thu, 13 Aug 2020 11:44:53 +0200
+Subject: [Buildroot] [PATCH] gitlab-ci: convert only/except to rules
+In-Reply-To: <20200718154713.38825-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 18 Jul 2020 17:47:13 +0200")
+References: <20200718154713.38825-1-romain.naour@gmail.com>
+Message-ID: <877du298x6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=043391091006c93d2b15efc67b297c1ea4e7e27c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Six years ago, commit b6b5bb518d28850e024b90db1129b7f86e9d416c added the MMU
-dependency for the libwebsockets package. However, according to the git
-history of the CMakeLists.txt file, libwebsockets has supported the vfork
-function for at least the last five years.
+ > only/except keywords will be deprecated by upcoming gitlab release,
+ > upstream recommend to use rules keyword instead [1][2][3][4][5].
 
-After testing with the qemu_arm_versatile_nommu_defconfig and the
-br-arm-cortex-m4-full.config file, no errors occurred when building
-libwebsockets without MMU support.
+ > This patch convert .gitlab-ci.yml to use rules, no functional
+ > changes intended.
 
-Remove the dependency; it is no longer necessary. Update the reverse
-dependencies as needed.
+ > After this patch, we should still have the following behaviour
+ > while pushing commit, tag, branches:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ad953b0149abf13715d7bcfbe8eac1a1b6e6c2c5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/janus-gateway/Config.in | 1 -
- package/libwebsockets/Config.in | 1 -
- 2 files changed, 2 deletions(-)
+ >      - to trigger only the check-* jobs:
+ >        $ git push gitlab HEAD:<name>
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 9b70fa0cad..6b0f62d374 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -89,7 +89,6 @@ config BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS
- 
- config BR2_PACKAGE_JANUS_GATEWAY_WEBSOCKETS
- 	bool "WebSockets"
--	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBWEBSOCKETS
- 
- endif
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index 2b350bf389..1d927bb4ea 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBWEBSOCKETS
- 	bool "libwebsockets"
--	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Libwebsockets is a lightweight pure C library built to use
+ >      - to trigger all defconfigs and all check-* jobs:
+ >        $ git push gitlab HEAD:<name>-defconfigs
+
+ >      - to trigger all runtime tests and all check-* jobs:
+ >        $ git push gitlab HEAD:<name>-runtime-tests
+
+ >      - to trigger one defconfig job:
+ >        $ git push gitlab HEAD:<name>-<defconfig name>
+
+ >      - to trigger one runtime job:
+ >        $ git push gitlab HEAD:<name>-<test case name>
+
+ > [1] https://gitlab.com/gitlab-org/gitlab/-/commit/7eaaa597e24bf24743bdd8f8d1d51ade83b3f6de
+ > [2] https://about.gitlab.com/releases/2020/06/22/gitlab-13-1-released/#templates-to-simplify-initial-rules-keyword-configuration
+ > [3] https://about.gitlab.com/releases/2020/05/22/gitlab-13-0-released/#auto-devops-and-secure-configuration-templates-are-changing-to-%60rules%60-instead-of-%60only/except%60
+ > [4] https://gitlab.com/gitlab-org/gitlab/issues/27449
+ > [5] https://gitlab.com/groups/gitlab-org/-/epics/2783
+ > [6] https://buildroot.org/downloads/manual/manual.html#_using_the_run_tests_framework
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
