@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 11:39:28 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libwebsockets:
+Date: Thu, 13 Aug 2020 11:39:09 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libwebsockets:
  remove dependency on mmu
-Message-ID: <20200813093457.29B3B852FA@busybox.osuosl.org>
+Message-ID: <20200813093503.D1E5C852FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70f082a125423f9503e074b9aa6f5f079fab49a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=043391091006c93d2b15efc67b297c1ea4e7e27c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Six years ago, commit b6b5bb518d28850e024b90db1129b7f86e9d416c added the MMU
 dependency for the libwebsockets package. However, according to the git
@@ -34,10 +34,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 deletions(-)
 
 diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index fc32546717..fc840ae8e2 100644
+index 9b70fa0cad..6b0f62d374 100644
 --- a/package/janus-gateway/Config.in
 +++ b/package/janus-gateway/Config.in
-@@ -85,7 +85,6 @@ config BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS
+@@ -89,7 +89,6 @@ config BR2_PACKAGE_JANUS_GATEWAY_UNIX_SOCKETS
  
  config BR2_PACKAGE_JANUS_GATEWAY_WEBSOCKETS
  	bool "WebSockets"
