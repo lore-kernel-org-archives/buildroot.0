@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 21:58:47 +0200
+Date: Thu, 13 Aug 2020 21:59:22 +0200
 Subject: [Buildroot] [PATCH 1/1] package/bellagio: fix build with gcc 10
 In-Reply-To: <20200812202508.2874057-1-fontaine.fabrice@gmail.com>
 References: <20200812202508.2874057-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200813215847.51b7e20c@windsurf.home>
+Message-ID: <20200813215922.154cf34b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,21 @@ To: buildroot@busybox.net
 On Wed, 12 Aug 2020 22:25:08 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...e_resource_manager.-h-c-fix-build-wi.patch | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
+> +diff --git a/src/omx_reference_resource_manager.c b/src/omx_reference_resource_manager.c
+> +index ee7766b..5983611 100644
+> +--- a/src/omx_reference_resource_manager.c
+> ++++ b/src/omx_reference_resource_manager.c
+> +@@ -30,6 +30,11 @@
+> + #include "base/omx_base_component.h"
+> + #include "queue.h"
+> + 
+> ++int globalIndex;
+> ++NameIndexType *listOfcomponentRegistered;
+> ++ComponentListType **globalComponentList;
+> ++ComponentListType **globalWaitingComponentList;
 
-Applied to master, thanks.
+If these symbols are really only used in this file, then they should
+preferably be declared with the static qualifier.
 
 Thomas
 -- 
