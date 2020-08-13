@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 21:12:16 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/dbus: disable
+Date: Thu, 13 Aug 2020 21:12:23 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dbus: disable
  systemd for host build
-Message-ID: <20200813190729.84553815DE@busybox.osuosl.org>
+Message-ID: <20200813190734.EF4B082761@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06922cf95883c21c7495555d954fc83946355833
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3bd799aa49023e899b882284bb1203a3eff19239
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 This fixes an issue if host-dbus happens to be rebuilt after systemd, in
 which case it autodetects systemd support but then ignored the prefix
