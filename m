@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 23:23:54 +0200
-Subject: [Buildroot] [git commit] package/mender-artifact: use github helper
- for site URL
-Message-ID: <20200813211740.40E2F86137@busybox.osuosl.org>
+Date: Thu, 13 Aug 2020 23:24:04 +0200
+Subject: [Buildroot] [git commit] package/capnproto: add openssl optional
+ dependency
+Message-ID: <20200813211750.A31BB81F58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b7591bb3647cfa3a283b7b83b26d87896dfc6ea
+commit: https://git.buildroot.net/buildroot/commit/?id=c20798bca282e298c07e98e7749349256b4b9ef7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+openssl is an optional dependency that is enabled by default since
+version 0.7.0 and
+https://github.com/capnproto/capnproto/commit/23db5e3fd91104a0b2881d8f8ab3c10bf9dd8e75
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.hash | 2 +-
- package/mender-artifact/mender-artifact.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/capnproto/capnproto.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index 09e66617bb..a9fba2971e 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540  3.4.0.tar.gz
-+sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540  mender-artifact-3.4.0.tar.gz
- sha256  08b0209abb7e87bb1d21aca8a40693b7d29406d1edffd443f17c59d5d68f6467  LIC_FILES_CHKSUM.sha256
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index 34fb885914..2afeb8ffa3 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -21,5 +21,12 @@ endif
+ # The actual source to be compiled is within a 'c++' subdirectory
+ CAPNPROTO_SUBDIR = c++
  
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 67fdc44b9d..b2310d5bc2 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- HOST_MENDER_ARTIFACT_VERSION = 3.4.0
--HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
--HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
-+HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	LICENSE \
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++CAPNPROTO_CONF_OPTS += --with-openssl
++CAPNPROTO_DEPENDENCIES += openssl
++else
++CAPNPROTO_CONF_OPTS += --without-openssl
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
