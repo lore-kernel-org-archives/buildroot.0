@@ -1,28 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Aug 2020 21:07:24 +0000
-Subject: [Buildroot] [Bug 13121] wpa_supplicant fails to build without
- libopenssl enabled
-In-Reply-To: <bug-13121-163@https.bugs.busybox.net/>
-References: <bug-13121-163@https.bugs.busybox.net/>
-Message-ID: <bug-13121-163-GBSJUA7kJp@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Aug 2020 23:08:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-gunicorn: select
+ python-setuptools
+In-Reply-To: <20200810085920.447530-1-fontaine.fabrice@gmail.com>
+References: <20200810085920.447530-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200813230832.7a78884b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13121
+On Mon, 10 Aug 2020 10:59:20 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=13111
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/python-gunicorn/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Applied to master, thanks.
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Thanks! Fixed in commit bb27efbce75071d7c9b36bc5a896d166e01c1aa1
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
