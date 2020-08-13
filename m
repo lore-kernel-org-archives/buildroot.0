@@ -1,44 +1,50 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 13 Aug 2020 14:18:16 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/mender-artifact: use github
- helper for site URL
-Message-ID: <20200813211816.226194-1-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Aug 2020 23:19:49 +0200
+Subject: [Buildroot] [git commit] package/mender-artifact: do not download
+ modules during the build process
+Message-ID: <20200813211335.63608862EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/mender-artifact/mender-artifact.hash | 2 +-
- package/mender-artifact/mender-artifact.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=235636409fddadfdfcaaaaf69f815fc349bcd69f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index 09e66617bb..a9fba2971e 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540  3.4.0.tar.gz
-+sha256  c085479a6e2ae598687a15b646bfaaa68e5d76d08382bdcc4a27a9b4021d6540  mender-artifact-3.4.0.tar.gz
- sha256  08b0209abb7e87bb1d21aca8a40693b7d29406d1edffd443f17c59d5d68f6467  LIC_FILES_CHKSUM.sha256
- 
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+By default, go will attempt to download needed modules before building, which
+is not desirable. This behavior also causes permission issues when cleaning,
+as go downloads modules as read-only by default. Because mender-artifact
+includes the modules in the vendor directory, mod=vendor prevents the package
+from downloading the go modules during the build process and prevents
+permission issues when cleaning.
+
+Fixes:
+http://autobuild.buildroot.net/results/d5bcaca73ae74fe8b0ebd39b6331564cd639fb66
+
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mender-artifact/mender-artifact.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
 diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index c81ec9ba53..78cd9fda4e 100644
+index c81ec9ba53..67fdc44b9d 100644
 --- a/package/mender-artifact/mender-artifact.mk
 +++ b/package/mender-artifact/mender-artifact.mk
-@@ -5,8 +5,7 @@
- ################################################################################
+@@ -31,6 +31,14 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
  
- HOST_MENDER_ARTIFACT_VERSION = 3.4.0
--HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
--HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
-+HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	LICENSE \
--- 
-2.28.0
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ 
++# By default, go will attempt to download needed modules before building, which
++# is not desirable. This behavior also causes permission issues when cleaning,
++# as go downloads modules as read-only by default. Because mender-artifact
++# includes the modules in the vendor directory, mod=vendor prevents the package
++# from downloading the go modules during the build process and prevents
++# permission issues when cleaning.
++HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
++
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
+ HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
