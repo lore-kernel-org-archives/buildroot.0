@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Thu, 13 Aug 2020 14:32:16 -0700
-Subject: [Buildroot] [PATCH v4 3/7] package/docker-containerd: fix go-module
- package identifier/targets
+Date: Thu, 13 Aug 2020 14:32:19 -0700
+Subject: [Buildroot] [PATCH v4 6/7] package/docker-proxy: fix go-module
+ package identifier
 In-Reply-To: <20200813213220.260112-1-christian@paral.in>
 References: <20200813213220.260112-1-christian@paral.in>
-Message-ID: <20200813213220.260112-3-christian@paral.in>
+Message-ID: <20200813213220.260112-6-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-containerd/docker-containerd.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ package/docker-proxy/docker-proxy.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 5a44489065..8b17e6997a 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -9,13 +9,14 @@ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINER
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+index 8843266c30..41ae07da09 100644
+--- a/package/docker-proxy/docker-proxy.mk
++++ b/package/docker-proxy/docker-proxy.mk
+@@ -12,9 +12,7 @@ DOCKER_PROXY_LICENSE_FILES = LICENSE
  
--DOCKER_CONTAINERD_WORKSPACE = vendor
+ DOCKER_PROXY_DEPENDENCIES = host-pkgconf
+ 
+-DOCKER_PROXY_WORKSPACE = gopath
 -
-+DOCKER_CONTAINERD_GOMOD = github.com/containerd/containerd
- DOCKER_CONTAINERD_LDFLAGS = \
--	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
--
--DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
-+	-X $(DOCKER_CONTAINERD_GOMOD).GitCommit=$(DOCKER_CONTAINERD_VERSION)
+-DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
++DOCKER_PROXY_BUILD_TARGETS = github.com/docker/libnetwork/cmd/proxy
  
-+DOCKER_CONTAINERD_BUILD_TARGETS = \
-+	$(DOCKER_CONTAINERD_GOMOD)/cmd/ctr \
-+	$(DOCKER_CONTAINERD_GOMOD)/cmd/containerd \
-+	$(DOCKER_CONTAINERD_GOMOD)/cmd/containerd-shim
- DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ define DOCKER_PROXY_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/bin/proxy $(TARGET_DIR)/usr/bin/docker-proxy
 -- 
 2.28.0
