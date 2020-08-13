@@ -1,29 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 18:43:02 +0200
-Subject: [Buildroot] [git commit] package/docker-engine: needs more
- runtime dependencies
-In-Reply-To: <20200727082207.7697488F25@busybox.osuosl.org> (Peter Korsgaard's
- message of "Mon, 27 Jul 2020 10:13:44 +0200")
-References: <20200727082207.7697488F25@busybox.osuosl.org>
-Message-ID: <87d03u7azt.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Aug 2020 18:42:20 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/docker-engine:
+ needs more runtime dependencies
+Message-ID: <20200813163701.A1BB5856EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9e3e5279b9a84dd356c66f39e1c251e4140ffb9c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=4f822965367cef8526ca0b3bac1ad090e5eeadb2
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+fix error:
+	failed to start daemon: Devices cgroup isn't mounted
 
- > fix error:
- > 	failed to start daemon: Devices cgroup isn't mounted
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4f822965367cef8526ca0b3bac1ad090e5eeadb2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 1fd229fcbb..4fe6956abd 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
+ 	depends on BR2_USE_MMU # docker-containerd
++	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
+ 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
