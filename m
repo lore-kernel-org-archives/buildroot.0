@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 11:30:13 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] linux: bump CIP kernel to
+Date: Thu, 13 Aug 2020 11:27:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] linux: bump CIP kernel to
  version 4.19.132-cip30
-Message-ID: <20200813092413.441138606E@busybox.osuosl.org>
+Message-ID: <20200813092521.C5C748264C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5da6123c4ae8900d7970d029394f0ad18c8ea56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=17041efcf97b0301698a57daccc0a913d37a3c5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 This patch bumps Linux CIP to version 4.19.132-cip30
 
@@ -24,11 +24,11 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index 4f98b8dcfa..814290d48b 100644
+index c19ccb70a8..f4de414433 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -30,7 +30,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.6)"
+ 	bool "Latest version (5.4)"
  
  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
 -	bool "Latest CIP SLTS version (4.19.118-cip25)"
@@ -39,17 +39,17 @@ index 4f98b8dcfa..814290d48b 100644
 @@ -129,7 +129,7 @@ endif
  config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "5.6.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.4.45" if BR2_LINUX_KERNEL_LATEST_VERSION
 -	default "4.19.118-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
 +	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default "4.19.115-cip24-rt9" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
  		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 5ceb4247ae..3d5a73aa70 100644
+index 39a75711db..3ca616b1c5 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -8,7 +8,7 @@ sha256  460a8c168fe5c60ce5b30015a4e4bf348d93a89f8b949de1f90779567ef345ca  linux-
+@@ -6,7 +6,7 @@ sha256  460a8c168fe5c60ce5b30015a4e4bf348d93a89f8b949de1f90779567ef345ca  linux-
  sha256  4265afef56819b04656107a5abecde205c5bc5fb04b2e81447955e7e45db8085  linux-4.14.183.tar.xz
  sha256  82af886bc588b5c8d7474beb2bac13810ee3ed07da356a2553c81ae8e52e586f  linux-4.19.127.tar.xz
  # Locally computed
