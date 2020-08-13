@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 18:43:51 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/nodejs: use
+Date: Thu, 13 Aug 2020 18:43:45 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/nodejs: use
  system-icu for host-nodejs
-Message-ID: <20200813163810.BAE0981DCA@busybox.osuosl.org>
+Message-ID: <20200813163814.3DB0D822B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d9b02e88cf94ffe87629c333e608c82a5cee284
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b620a7962bf996f43c53f116fea7168371a0282d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 The nodejs configure.py file orders zlib headers before the bundled ICU
 headers. The zlib headers happen to be located in the system include
