@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 18:42:20 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/docker-engine:
+Date: Thu, 13 Aug 2020 18:42:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/docker-engine:
  needs more runtime dependencies
-Message-ID: <20200813163701.A1BB5856EB@busybox.osuosl.org>
+Message-ID: <20200813163705.D08EF856EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e3e5279b9a84dd356c66f39e1c251e4140ffb9c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3cb9d2ecabdf56d2a80610089f64e90e5edd58b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 fix error:
 	failed to start daemon: Devices cgroup isn't mounted
