@@ -1,61 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Aug 2020 22:03:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-spidev: switch to
- setuptools
-In-Reply-To: <20200813182141.3332301-1-fontaine.fabrice@gmail.com>
-References: <20200813182141.3332301-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200813200340.GI13263@scaer>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 13 Aug 2020 13:04:37 -0700
+Subject: [Buildroot] [PATCH 1/4] package/mender-artifact: bump version
+ to 3.4.0
+In-Reply-To: <CA+h8R2oxbeA9Fcfs-aEjpWb_4QC7WbijYW5hm84GAvC3iWP00w@mail.gmail.com>
+References: <20200715173707.584226-1-aduskett@gmail.com>
+ <20200811235833.03115c8b@windsurf.home>
+ <CA+h8R2qLY-5FbL_HTjwTH_i=w3ky_=C=17n48_=18-E=9mUYVg@mail.gmail.com>
+ <20200812102236.631c057f@windsurf.home>
+ <CAFSsvmqzkM2N2syEMc1AZeeRdvQ-HRtkK4zFSOp3q-qumYmCKQ@mail.gmail.com>
+ <CA+h8R2oxbeA9Fcfs-aEjpWb_4QC7WbijYW5hm84GAvC3iWP00w@mail.gmail.com>
+Message-ID: <CAFSsvmrrpXkZNcmwy5ukrX4k2XqPGp-kQpNxqq=PN+mG+ir0Tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Christian;
 
-On 2020-08-13 20:21 +0200, Fabrice Fontaine spake thusly:
-> spidev uses setuptools since version 3.5 and
-> https://github.com/doceme/py-spidev/commit/3bb2f3b4061f62f283ec2a525e2de60d7f572b41
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/619b9e9844e33fa8e111d6db09eee8450fedb660
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Just as a note, the go-modules series breaks mender-artifact, and the
+.mk file needs to be modified
+to add a "./" before cli/mender-artifact.
+IE:
+HOST_MENDER_ARTIFACT_BUILD_TARGETS = ./cli/mender-artifact
 
-Applied to master, thanks.
+Adam
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-spidev/python-spidev.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/python-spidev/python-spidev.mk b/package/python-spidev/python-spidev.mk
-> index a3da332926..e1065610a7 100644
-> --- a/package/python-spidev/python-spidev.mk
-> +++ b/package/python-spidev/python-spidev.mk
-> @@ -7,7 +7,7 @@
->  PYTHON_SPIDEV_VERSION = 3.5
->  PYTHON_SPIDEV_SOURCE = spidev-$(PYTHON_SPIDEV_VERSION).tar.gz
->  PYTHON_SPIDEV_SITE = https://files.pythonhosted.org/packages/62/56/de649e7d95f9fcfaf965a6eb937b4a46bc77ef21487c99cde1a7a0546040
-> -PYTHON_SPIDEV_SETUP_TYPE = distutils
-> +PYTHON_SPIDEV_SETUP_TYPE = setuptools
->  PYTHON_SPIDEV_LICENSE = MIT
->  PYTHON_SPIDEV_LICENSE_FILES = README.md
->  
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Thu, Aug 13, 2020 at 12:39 PM Christian Stewart <christian@paral.in> wrote:
+>
+> Hi,
+>
+> Don't merge. This will download stuff out-of-band with the main
+> Buildroot download mechanism.
+>
+> On Thu, Aug 13, 2020 at 11:52 AM Adam Duskett <aduskett@gmail.com> wrote:
+> > I submitted a patch based on Mirza's suggestion above which works as expected:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20200813184947.4042927-1-aduskett at gmail.com/
+>
+> > > Do we have an intermediate solution for 2020.08 ? Would reverting the
+> > > mender-artifact bump resolve the issue ?
+>
+> Please just roll it back and then consider the full Go modules patch later on.
+>
+> I went about submitting that series in a particular way to avoid
+> breaking the Buildroot download system.
+>
+> Best regards,
+> Christian Stewart
