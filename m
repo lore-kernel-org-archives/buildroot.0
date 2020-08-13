@@ -1,30 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 21:33:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ima-evm-utils: bump version to
- 1.3.1
-In-Reply-To: <20200812191221.29100-1-petr.vorel@gmail.com>
-References: <20200812191221.29100-1-petr.vorel@gmail.com>
-Message-ID: <20200813213303.60ac2529@windsurf.home>
+Date: Thu, 13 Aug 2020 21:33:38 +0200
+Subject: [Buildroot] [git commit] package/bellagio: fix build with gcc 10
+Message-ID: <20200813192727.3A6A382879@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 12 Aug 2020 21:12:21 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a8d2316e375c756a50e22acb1cb3cf5a2a182b98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Dropped patches from this release.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Minor update, but still contain some other needed fixes.
+Fixes:
+ - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
 
-As it contained really few commits, and basically only fixes, I applied
-to master. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...erence_resource_manager.-h-c-fix-build-wi.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
+new file mode 100644
+index 0000000000..1a2777cb18
+--- /dev/null
++++ b/package/bellagio/0006-src-omx_reference_resource_manager.-h-c-fix-build-wi.patch
+@@ -0,0 +1,57 @@
++From be9f72bc5fa05de466f9151ac399c17027b58b24 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 12 Aug 2020 21:38:51 +0200
++Subject: [PATCH] src/omx_reference_resource_manager.{h,c}: fix build with gcc
++ 10
++
++Move globalIndex, listOfcomponentRegistered, globalComponentList and
++globalWaitingComponentList from header to source file to fix the build
++with gcc 10 which default to -fno-common:
++https://gcc.gnu.org/gcc-10/porting_to.html
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0c02f845eabfbc276ee5989520a3c77fc47289ab
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/omxil/bugs/63]
++---
++ src/omx_reference_resource_manager.c | 5 +++++
++ src/omx_reference_resource_manager.h | 6 ------
++ 2 files changed, 5 insertions(+), 6 deletions(-)
++
++diff --git a/src/omx_reference_resource_manager.c b/src/omx_reference_resource_manager.c
++index ee7766b..5983611 100644
++--- a/src/omx_reference_resource_manager.c
+++++ b/src/omx_reference_resource_manager.c
++@@ -30,6 +30,11 @@
++ #include "base/omx_base_component.h"
++ #include "queue.h"
++ 
+++int globalIndex;
+++NameIndexType *listOfcomponentRegistered;
+++ComponentListType **globalComponentList;
+++ComponentListType **globalWaitingComponentList;
+++
++ /**
++  * This is the static base pointer of the list
++  */
++diff --git a/src/omx_reference_resource_manager.h b/src/omx_reference_resource_manager.h
++index ba8dad9..75e4f93 100644
++--- a/src/omx_reference_resource_manager.h
+++++ b/src/omx_reference_resource_manager.h
++@@ -48,12 +48,6 @@ struct NameIndexType {
++ 	int max_components;
++ };
++ 
++-
++-int globalIndex;
++-NameIndexType *listOfcomponentRegistered;
++-ComponentListType **globalComponentList;
++-ComponentListType **globalWaitingComponentList;
++-
++ OMX_ERRORTYPE RM_RegisterComponent(char *name, int max_components);
++ OMX_ERRORTYPE addElemToList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp, int index, OMX_BOOL bIsWaiting);
++ OMX_ERRORTYPE removeElemFromList(ComponentListType **list, OMX_COMPONENTTYPE *openmaxStandComp);
++-- 
++2.27.0
++
