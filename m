@@ -1,64 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 21:14:06 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wpewebkit:
- security bump to version 2.28.4
-Message-ID: <20200813190818.0974383912@busybox.osuosl.org>
+Date: Thu, 13 Aug 2020 21:14:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
+ version 2.28.4
+In-Reply-To: <20200729142252.3411989-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Wed, 29 Jul 2020 17:22:52 +0300")
+References: <20200729142252.3411989-1-aperez@igalia.com>
+Message-ID: <871rka4au1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b420fc037f34337e7ed9074a28300270cd4cc15
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-This is a minor release which provides fixes for CVE-2020-9862,
-CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
-CVE-2020-9925.
+ > This is a minor release which provides fixes for CVE-2020-9862,
+ > CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
+ > CVE-2020-9925.
 
-Full release notes can be found at:
+ > Full release notes can be found at:
 
-  https://wpewebkit.org/release/wpewebkit-2.28.4.html
+ >   https://wpewebkit.org/release/wpewebkit-2.28.4.html
 
-A detailed security advisory can be found at:
+ > A detailed security advisory can be found at:
 
-  https://wpewebkit.org/security/WSA-2020-0007.html
+ >   https://wpewebkit.org/security/WSA-2020-0007.html
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4416e0e7bafdb37dc4acff890fb0a5242c19ad27)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index fcc35c5024..1a6fbc8b96 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.28.3.tar.xz.sums
--md5  0b3655598f340a5c83cc26423fefcf36  wpewebkit-2.28.3.tar.xz
--sha1  ea03d365584ef5e86ca28cec6ca072a4674e9312  wpewebkit-2.28.3.tar.xz
--sha256  2539263a4d73c00abfe0205f54770dc1f6d2b635edbe41e748b507254f21e98b  wpewebkit-2.28.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.28.4.tar.xz.sums
-+md5  6ab041f6ebdb2e053981de5980c864e7  wpewebkit-2.28.4.tar.xz
-+sha1  b31739a86a269eac4ddd5e537cdf954224672450  wpewebkit-2.28.4.tar.xz
-+sha256  785d83b99cd45cedb7c4f1f697db773a5a81eb0a42aeeafa3c623053f6fde87a  wpewebkit-2.28.4.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 22c3d96460..646bdd9384 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.28.3
-+WPEWEBKIT_VERSION = 2.28.4
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
