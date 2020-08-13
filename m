@@ -1,67 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 23:37:10 +0200
-Subject: [Buildroot] [git commit] package/18xx-ti-utils: fix build with gcc
- 10
-Message-ID: <20200813213959.DDFFF86062@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 13 Aug 2020 14:52:20 -0700
+Subject: [Buildroot] [PATCH v4 1/7] package/go: implement go modules
+ integration
+In-Reply-To: <20200813234501.138cc5ec@windsurf.home>
+References: <20200813213220.260112-1-christian@paral.in>
+ <20200813234501.138cc5ec@windsurf.home>
+Message-ID: <CA+h8R2oznYQTfhveDz=p=caq8e_j1_jxZSCaq=xJsg_9fgPZ8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=079c7d238ed5d67a0dd9d736d6025b9e0561d43b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hey Thomas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/df2d04de4b2e5003f3fc56c9e84db5054bd4d499
+On Thu, Aug 13, 2020 at 2:45 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> I think this sort of series would greatly benefit from having a
+> detailed cover letter. I believe one of the reason why this series has
+> been stalled for so much time is because none of the Buildroot
+> maintainers are very familiar with the overall Go ecosystem. So in some
+> sense, you need to educate us: explain how it was working before, what
+> are the changes, what are the possible solutions, which one you have
+> chosen and why, etc.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-plt.h-fix-build-with-gcc-10.patch         | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+This makes sense, and I'm happy to explain.
 
-diff --git a/package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch b/package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..36480dfccb
---- /dev/null
-+++ b/package/18xx-ti-utils/0001-plt.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,38 @@
-+From 12d3b3c01b0ec28d45427754541a8156939346d9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 13 Aug 2020 23:24:05 +0200
-+Subject: [PATCH] plt.h: fix build with gcc 10
-+
-+Drop EFUSE_PARAMETER_TYPE_ENM to fix the following build failure with
-+gcc 10:
-+
-+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -L/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/lib nvs.o misc_cmds.o calibrator.o plt.o wl18xx_plt.o ini.o -lm -lnl-3 -lnl-genl-3 -o calibrator
-+/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: misc_cmds.o:(.bss+0x0): multiple definition of `EFUSE_PARAMETER_TYPE_ENM'; nvs.o:(.bss+0x0): first defined here
-+/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: calibrator.o: in function `.LANCHOR0':
-+calibrator.c:(.bss+0xc): multiple definition of `EFUSE_PARAMETER_TYPE_ENM'; nvs.o:(.bss+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/df2d04de4b2e5003f3fc56c9e84db5054bd4d499
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to sudharshan <sudharshan@ti.com>]
-+---
-+ plt.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/plt.h b/plt.h
-+index 8b534a9..43d5dbc 100644
-+--- a/plt.h
-++++ b/plt.h
-+@@ -399,7 +399,7 @@ enum EFUSE_PARAMETER_TYPE_ENMT {
-+ 	TX_BIP_PD_BUFFER_VBIAS_ERROR_E,
-+ 	EFUSE_NUMBER_OF_PARAMETERS_E,
-+ 	EFUSE_LAST_PARAMETER_E = (EFUSE_NUMBER_OF_PARAMETERS_E - 1)
-+-} EFUSE_PARAMETER_TYPE_ENM;
-++};
-+ 
-+ int get_mac_addr(int ifc_num, unsigned char *mac_addr);
-+ 
-+-- 
-+2.27.0
-+
+I had hoped that the commit message in patch #1 would explain in a
+succinct way.
+
+It boils down to: Go has "packages" which have "import paths" such as
+"my/package/is/here."
+
+Previously Go would determine the path to a package by, approximately,
+taking the absolute path to the package, and removing the $GOPATH
+prefix.
+
+For example: the path to "my/golang/package" would be
+$GOPATH/src/my/golang/package
+
+In Buildroot we extract the code into a build dir, not a GOPATH tree,
+so we previously created a "fake gopath" to tell the Go compiler the
+root import path to the code.
+
+This change instead uses the go.mod file to determine the root import path.
+
+Does this clear things up? Should I explain further in any part?
+
+Best regards,
+Christian
+
+> On Thu, 13 Aug 2020 14:32:14 -0700
+> Christian Stewart <christian@paral.in> wrote:
+>
+> > The Go compiler needs to know the "import path" to the root of package source
+> > repositories. Previously, this was done by creating a fake _gopath in the build
+> > directory and symlinking the package source into that path.
+> >
+> > Go has deprecated the GOPATH mechanism in favor of a new approach - Modules -
+> > which specifies the root import path (and dependencies) in a "go.mod" file.
+> >
+> > This commit moves Buildroot to use the new go.mod approach. Both host and target
+> > Go packages compile correctly with small tweaks adjusting the build target
+> > specifier.
+> >
+> > Note: the Go module system will NOT download sources from the Internet due to
+> > GOPROXY=off and -mod=vendor. All Buildroot packages currently have "vendor"
+> > directories included with dependencies' source code.
+> >
+> > The environment variables passed to Go during host and target package
+> > compilation have been fixed to correctly pass CC, CXX, CFLAGS, and so on.
+> >
+> > Reference: https://github.com/golang/go/wiki/Modules
