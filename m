@@ -1,60 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 22:36:03 +0200
-Subject: [Buildroot] [PATCH] package/live555: update licenses
-In-Reply-To: <20200813082235.890148-1-buildroot@heine.tech>
-References: <20200813082235.890148-1-buildroot@heine.tech>
-Message-ID: <20200813223603.4ab40f85@windsurf.home>
+Date: Thu, 13 Aug 2020 22:36:24 +0200
+Subject: [Buildroot] [git commit] package/live555: license is now LGPL-3.0+
+ and not LGPL-2.1+
+Message-ID: <20200813203011.8839986300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+commit: https://git.buildroot.net/buildroot/commit/?id=650c5408bd944270f965b4ee5cbc6126c332fc9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution!
+The live555 source code includes both a COPYING file (with the GPL-3.0
+license text) and a COPYING.LESSER file (with the LGPL-3.0 license
+text). However, all source files indicate a LGPL-3.0 license, and none
+of them indicate a GPL-3.0 license. In addition,
+http://live555.com/liveMedia/faq.html#copyright-and-license says the
+source code is under the LGPL.
 
-On Thu, 13 Aug 2020 10:22:35 +0200
-Michael Nosthoff <buildroot@heine.tech> wrote:
+So, we:
 
-> The included license files indicate that the project is licensed
-> under GPL3.0 and LGPL3.0.
-> 
-> Even though the project site [1] only mentions LGPL.
-> 
-> - Add GPL-3.0+
-> - Bump LGPL License to 3.0+
-> - add the LGPL license file included in download
-> 
-> [1] http://live555.com/liveMedia/faq.html#copyright-and-license
+- Bump LGPL License to 3.0+
+- Add a comment about the GPL-3.0 license
 
-In fact, there are no sources files under GPL-3.0: all the source files
-indicate LGPL-3.0. So the presence of this COPYING file with the
-GPL-3.0 license text seems to be a mistake.
+Fixes:
 
-So I've adjusted your commit to only mention the LGPL-3.0 license, 
-added a comment in live555.mk about why we don't think anything is
-under GPL-3.0 and applied to master.
+- https://bugs.busybox.net/show_bug.cgi?id=13156
 
-Also, it's worth mentioning that the live555 developers themselves
-don't seem to understand the LGPL very well. In the second bullet point
-at http://live555.com/liveMedia/faq.html#copyright-and-license, they
-claim:
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/live555/live555.hash | 2 +-
+ package/live555/live555.mk   | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-  If you distribute a product (whether software or hardware; whether
-  free or for pay) that uses the LIVE555 library code, then you must -
-  when requested by either a customer, or Live Networks, Inc. - upgrade
-  it as soon as possible to use the latest version of the LIVE555
-  library code
-
-This is clearly _NOT_ a requirement of the LGPL, and a license that
-would have this requirement would not be a free software / open source
-license.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 867e0befd0..52ca068288 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -2,4 +2,4 @@
+ md5  327bc53f60361c6d703d52e86f476f11  live.2020.06.25.tar.gz
+ # Locally generated
+ sha256  f206309f10d281990889b7a0c92c26a7fa55ac0e8568bf594b9b27433b4db585  live.2020.06.25.tar.gz
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index b2313886b1..e7be6024c9 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -7,8 +7,12 @@
+ LIVE555_VERSION = 2020.06.25
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+-LIVE555_LICENSE = LGPL-2.1+
+-LIVE555_LICENSE_FILES = COPYING
++# There is a COPYING file with the GPL-3.0 license text, but none of
++# the source files appear to be released under GPL-3.0, and the
++# project web site says it's licensed under the LGPL:
++# http://live555.com/liveMedia/faq.html#copyright-and-license
++LIVE555_LICENSE = LGPL-3.0+
++LIVE555_LICENSE_FILES = COPYING.LESSER
+ LIVE555_INSTALL_STAGING = YES
+ 
+ LIVE555_CFLAGS = $(TARGET_CFLAGS)
