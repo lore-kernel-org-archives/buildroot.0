@@ -1,34 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 21:14:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
- version 2.28.4
-In-Reply-To: <20200729154020.3460716-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Wed, 29 Jul 2020 18:40:20 +0300")
-References: <20200729154020.3460716-1-aperez@igalia.com>
-Message-ID: <87wo222w9g.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 13 Aug 2020 21:23:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: fix module
+ permissions
+In-Reply-To: <20200813184947.4042927-1-aduskett@gmail.com>
+References: <20200813184947.4042927-1-aduskett@gmail.com>
+Message-ID: <20200813212356.5f9d17d3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+On Thu, 13 Aug 2020 11:49:47 -0700
+aduskett at gmail.com wrote:
 
- > This is a minor release which provides fixes for CVE-2020-9862,
- > CVE-2020-9893, CVE-2020-9894, CVE-2020-9895, CVE-2020-9915, and
- > CVE-2020-9925.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Modules downloaded with "go mod" are downloaded as read-only, which the Go
+> maintainers have intentionally done.
+> https://github.com/golang/go/issues/27161
+> 
+> As mender-artifact now uses go modules, when cleaning, a user will receive
+> permission-denied errors due to the above issue.
+> 
+> The fix, however, is relatively straight forward. Setting the "-mod=vendor"
+> flag in the GO_ENV will set go modules to read/write, which allows
+> "make clean" to work correctly.
+> 
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
- > Full release notes can be found at:
+Thanks, but will this fix the host-mender-artifact download issues as
+well ?
 
- >   https://webkitgtk.org/2020/07/28/webkitgtk2.28.4-released.html
+Best regards,
 
- > A detailed security advisory can be found at:
-
- >   https://webkitgtk.org/security/WSA-2020-0007.html
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
