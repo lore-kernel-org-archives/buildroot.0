@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Aug 2020 20:36:31 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/efl: depend on
+Date: Thu, 13 Aug 2020 20:34:53 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/efl: depend on
  LuaJIT
-Message-ID: <20200813183032.857B48375A@busybox.osuosl.org>
+Message-ID: <20200813183038.273B4856C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=785925c0ebc123f4bf6b0a274e84ffa86ffc6c8f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e28229bc7a31ede50ff87d4fba748a38cdb8cd1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Luajit is a provider for luainterpreter. We can't select providers of
 virtual packages; we can only depend on them.
