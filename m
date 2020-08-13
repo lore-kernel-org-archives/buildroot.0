@@ -1,22 +1,32 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 13 Aug 2020 19:38:30 +0200
-Subject: [Buildroot] {name,
- open}_to_handle_at() not implemented on uclibc-ng (iproute2 5.8.0
- dependency)
-Message-ID: <20200813173830.GA28354@dell5510>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Aug 2020 20:02:28 +0200
+Subject: [Buildroot] [git commit] package/docker-engine: needs some
+ kernel options
+In-Reply-To: <20200727152220.9307686CA5@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Mon, 27 Jul 2020 17:27:09 +0200")
+References: <20200727152220.9307686CA5@busybox.osuosl.org>
+Message-ID: <87v9hm5sqz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-does anybody plan to implement {name,open}_to_handle_at() in uclibc-ng?
-These are new dependencies for iproute2.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=0390777bfaff6c63acf02160a9b97e2a2066b573
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2 years ago it was just removed from bits/fcntl.h in 42ff2bba8 ("uClibc-ng does
-not implement name_to_handle_at").
+ > according to https://wiki.gentoo.org/wiki/Docker#Kernel /
+ > docker-engine/contrib/check-config.sh.
 
-Kind regards,
-Petr
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > [Peter: synchronize with contrib/check-config.sh, only enforce DM options if
+ >  device mapper driver is enabled]
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.05.x, thanks (2020.02.x does not have the
+LINUX_CONFIG_FIXUPS infrastructure).
+
+-- 
+Bye, Peter Korsgaard
