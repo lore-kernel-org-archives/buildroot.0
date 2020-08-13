@@ -1,66 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Aug 2020 22:36:24 +0200
-Subject: [Buildroot] [git commit] package/live555: license is now LGPL-3.0+
- and not LGPL-2.1+
-Message-ID: <20200813203011.8839986300@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 13 Aug 2020 20:36:49 +0000
+Subject: [Buildroot] [Bug 13156] package live555 new license
+In-Reply-To: <bug-13156-163@https.bugs.busybox.net/>
+References: <bug-13156-163@https.bugs.busybox.net/>
+Message-ID: <bug-13156-163-aF1h2V4DGf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=650c5408bd944270f965b4ee5cbc6126c332fc9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=13156
 
-The live555 source code includes both a COPYING file (with the GPL-3.0
-license text) and a COPYING.LESSER file (with the LGPL-3.0 license
-text). However, all source files indicate a LGPL-3.0 license, and none
-of them indicate a GPL-3.0 license. In addition,
-http://live555.com/liveMedia/faq.html#copyright-and-license says the
-source code is under the LGPL.
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
-So, we:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-- Bump LGPL License to 3.0+
-- Add a comment about the GPL-3.0 license
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Thanks, fixed by
+https://git.buildroot.org/buildroot/commit/?id=650c5408bd944270f965b4ee5cbc6126c332fc9f
 
-Fixes:
-
-- https://bugs.busybox.net/show_bug.cgi?id=13156
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/live555/live555.hash | 2 +-
- package/live555/live555.mk   | 8 ++++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index 867e0befd0..52ca068288 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -2,4 +2,4 @@
- md5  327bc53f60361c6d703d52e86f476f11  live.2020.06.25.tar.gz
- # Locally generated
- sha256  f206309f10d281990889b7a0c92c26a7fa55ac0e8568bf594b9b27433b4db585  live.2020.06.25.tar.gz
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index b2313886b1..e7be6024c9 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -7,8 +7,12 @@
- LIVE555_VERSION = 2020.06.25
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
--LIVE555_LICENSE = LGPL-2.1+
--LIVE555_LICENSE_FILES = COPYING
-+# There is a COPYING file with the GPL-3.0 license text, but none of
-+# the source files appear to be released under GPL-3.0, and the
-+# project web site says it's licensed under the LGPL:
-+# http://live555.com/liveMedia/faq.html#copyright-and-license
-+LIVE555_LICENSE = LGPL-3.0+
-+LIVE555_LICENSE_FILES = COPYING.LESSER
- LIVE555_INSTALL_STAGING = YES
- 
- LIVE555_CFLAGS = $(TARGET_CFLAGS)
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
