@@ -1,59 +1,170 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 Aug 2020 18:30:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: add openal optional dependency
-Message-ID: <20200814163026.1547032-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 14 Aug 2020 21:12:58 +0200
+Subject: [Buildroot] [PATCH] package/pulseview: fix build with recent Qt
+ versions
+Message-ID: <20200814191258.984535-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mpd/Config.in | 12 ++++++++++++
- package/mpd/mpd.mk    |  7 +++++++
- 2 files changed, 19 insertions(+)
+This commit backports an upstream commit to fix the build of pulseview
+with recent Qt versions.
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 1b3ab8fa5d..791fb0f54a 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -286,6 +286,18 @@ comment "jack support needs a toolchain w/ dynamic library"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS
- 
-+config BR2_PACKAGE_MPD_OPENAL
-+	bool "openal"
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_OPENAL
-+	help
-+	  Enable OpenAL output support.
+Note that pulseview has a 0.4.2 version (newer than our 0.4.1) but it
+doesn't have the fix we need. And 0.4.2 now requires additional Qt
+translation tools, so the update to 0.4.2 is anyway not
+straightforward.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c9e27a91905dfda0ba1ddb12c7910316d3ee82ef/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...place-obsolete-deprecated-Qt-methods.patch | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
+ create mode 100644 package/pulseview/0002-Replace-obsolete-deprecated-Qt-methods.patch
+
+diff --git a/package/pulseview/0002-Replace-obsolete-deprecated-Qt-methods.patch b/package/pulseview/0002-Replace-obsolete-deprecated-Qt-methods.patch
+new file mode 100644
+index 0000000000..42cdc467be
+--- /dev/null
++++ b/package/pulseview/0002-Replace-obsolete-deprecated-Qt-methods.patch
+@@ -0,0 +1,133 @@
++From caacc9bc622238ca48674ea6f40d07466e4b97a5 Mon Sep 17 00:00:00 2001
++From: Valentin Ochs <a@0au.de>
++Date: Sat, 20 Jun 2020 16:01:27 +0200
++Subject: [PATCH] Replace obsolete/deprecated Qt methods
 +
-+comment "openal support needs a toolchain w/ NPTL"
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++[Thomas: Backport from upstream commit
++ae726b70a7ada9a4be5808e00f0c951318479684, one conflict manually
++resolved in pv/util.cpp.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ pv/util.cpp                     | 21 +++++++++++++++++++--
++ pv/util.hpp                     | 10 ++++++++++
++ pv/views/trace/decodetrace.cpp  |  3 ++-
++ pv/views/trace/ruler.cpp        |  2 +-
++ pv/widgets/timestampspinbox.cpp |  2 +-
++ 5 files changed, 33 insertions(+), 5 deletions(-)
 +
- config BR2_PACKAGE_MPD_OSS
- 	bool "oss"
- 	help
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index b8df04f084..a3b90aa55f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -200,6 +200,13 @@ else
- MPD_CONF_OPTS += -Dneighbor=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_OPENAL),y)
-+MPD_DEPENDENCIES += openal
-+MPD_CONF_OPTS += -Dopenal=enabled
-+else
-+MPD_CONF_OPTS += -Dopenal=disabled
-+endif
++diff --git a/pv/util.cpp b/pv/util.cpp
++index 49b9467c..2a63038d 100644
++--- a/pv/util.cpp
+++++ b/pv/util.cpp
++@@ -137,7 +137,7 @@ QString format_time_si(const Timestamp& v, SIPrefix prefix,
++ 	QString s;
++ 	QTextStream ts(&s);
++ 	if (sign && !v.is_zero())
++-		ts << forcesign;
+++		ts.setNumberFlags(ts.numberFlags() | QTextStream::ForceSign);
++ 	ts << qSetRealNumberPrecision(precision) << (v * multiplier) << ' '
++ 		<< prefix << unit;
++ 
++@@ -171,7 +171,7 @@ QString format_value_si(double v, SIPrefix prefix, unsigned precision,
++ 	QString s;
++ 	QTextStream ts(&s);
++ 	if (sign && (v != 0))
++-		ts << forcesign;
+++		ts.setNumberFlags(ts.numberFlags() | QTextStream::ForceSign);
++ 	ts.setRealNumberNotation(QTextStream::FixedNotation);
++ 	ts.setRealNumberPrecision(precision);
++ 	ts << (v * multiplier) << ' ' << prefix << unit;
++@@ -281,5 +281,22 @@ vector<string> split_string(string text, string separator)
++ 	return result;
++ }
++ 
+++/**
+++ * Return the width of a string in a given font.
+++ *
+++ * @param[in] metric metrics of the font
+++ * @param[in] string the string whose width should be determined
+++ *
+++ * @return width of the string in pixels
+++ */
+++std::streamsize text_width(const QFontMetrics &metric, const QString &string)
+++{
+++#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+++	return metric.horizontalAdvance(string);
+++#else
+++	return metric.width(string);
+++#endif
+++}
+++
++ } // namespace util
++ } // namespace pv
++diff --git a/pv/util.hpp b/pv/util.hpp
++index dd7be222..ad904f85 100644
++--- a/pv/util.hpp
+++++ b/pv/util.hpp
++@@ -30,6 +30,7 @@
++ 
++ #include <QMetaType>
++ #include <QString>
+++#include <QFontMetrics>
++ 
++ using std::string;
++ using std::vector;
++@@ -137,6 +138,15 @@ QString format_time_minutes(const Timestamp& t, signed precision = 0,
++ 
++ vector<string> split_string(string text, string separator);
++ 
+++/**
+++ * Return the width of a string in a given font.
+++ * @param[in] metric metrics of the font
+++ * @param[in] string the string whose width should be determined
+++ *
+++ * @return width of the string in pixels
+++ */
+++std::streamsize text_width(const QFontMetrics &metric, const QString &string);
+++
++ } // namespace util
++ } // namespace pv
++ 
++diff --git a/pv/views/trace/decodetrace.cpp b/pv/views/trace/decodetrace.cpp
++index 9c7196bf..1ee7ae9f 100644
++--- a/pv/views/trace/decodetrace.cpp
+++++ b/pv/views/trace/decodetrace.cpp
++@@ -103,7 +103,8 @@ DecodeTrace::DecodeTrace(pv::Session &session,
++ 
++ 	// Determine shortest string we want to see displayed in full
++ 	QFontMetrics m(QApplication::font());
++-	min_useful_label_width_ = m.width("XX"); // e.g. two hex characters
+++	// e.g. two hex characters
+++	min_useful_label_width_ = util::text_width(m, "XX");
++ 
++ 	// For the base color, we want to start at a very different color for
++ 	// every decoder stack, so multiply the index with a number that is
++diff --git a/pv/views/trace/ruler.cpp b/pv/views/trace/ruler.cpp
++index acea8a36..68134966 100644
++--- a/pv/views/trace/ruler.cpp
+++++ b/pv/views/trace/ruler.cpp
++@@ -218,7 +218,7 @@ void Ruler::paintEvent(QPaintEvent*)
++ 		const int rightedge = width();
++ 		const int x_tick = tick.first;
++ 		if ((x_tick > leftedge) && (x_tick < rightedge)) {
++-			const int x_left_bound = QFontMetrics(font()).width(tick.second) / 2;
+++			const int x_left_bound = util::text_width(QFontMetrics(font()), tick.second) / 2;
++ 			const int x_right_bound = rightedge - x_left_bound;
++ 			const int x_legend = min(max(x_tick, x_left_bound), x_right_bound);
++ 			p.drawText(x_legend, ValueMargin, 0, text_height,
++diff --git a/pv/widgets/timestampspinbox.cpp b/pv/widgets/timestampspinbox.cpp
++index 21b3d0d7..383aed1f 100644
++--- a/pv/widgets/timestampspinbox.cpp
+++++ b/pv/widgets/timestampspinbox.cpp
++@@ -75,7 +75,7 @@ QSize TimestampSpinBox::minimumSizeHint() const
++ {
++ 	const QFontMetrics fm(fontMetrics());
++ 	const int l = round(value_).str().size() + precision_ + 10;
++-	const int w = fm.width(QString(l, '0'));
+++	const int w = util::text_width(fm, QString(l, '0'));
++ 	const int h = lineEdit()->minimumSizeHint().height();
++ 	return QSize(w, h);
++ }
++-- 
++2.26.2
 +
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
- MPD_DEPENDENCIES += opus libogg
- MPD_CONF_OPTS += -Dopus=enabled
 -- 
-2.27.0
+2.26.2
