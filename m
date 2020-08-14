@@ -1,61 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Aug 2020 22:49:24 +0200
-Subject: [Buildroot] [git commit] package/mpd: add openal optional dependency
-Message-ID: <20200814205156.6B1128643A@busybox.osuosl.org>
+Date: Fri, 14 Aug 2020 22:58:27 +0200
+Subject: [Buildroot] [git commit] package/supertux: fix build with boost
+ 1.73.0
+Message-ID: <20200814205210.A39C585F4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23dee8e0b9088319fb984c85d9e3ba6ae1f3cc47
+commit: https://git.buildroot.net/buildroot/commit/?id=14552122ac46028b78f05eeed1154da2ba87b174
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+ - http://autobuild.buildroot.org/results/0f02877a665b2281266df4b23c72a7c113906c31
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/Config.in | 12 ++++++++++++
- package/mpd/mpd.mk    |  7 +++++++
- 2 files changed, 19 insertions(+)
+ .../supertux/0002-Fix-build-with-boost-1-73.patch  | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 1b3ab8fa5d..791fb0f54a 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -286,6 +286,18 @@ comment "jack support needs a toolchain w/ dynamic library"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS
- 
-+config BR2_PACKAGE_MPD_OPENAL
-+	bool "openal"
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_OPENAL
-+	help
-+	  Enable OpenAL output support.
+diff --git a/package/supertux/0002-Fix-build-with-boost-1-73.patch b/package/supertux/0002-Fix-build-with-boost-1-73.patch
+new file mode 100644
+index 0000000000..000e5abcab
+--- /dev/null
++++ b/package/supertux/0002-Fix-build-with-boost-1-73.patch
+@@ -0,0 +1,25 @@
++From 4221d54385b69d6c40eff2c67bc6bad7ed165a44 Mon Sep 17 00:00:00 2001
++From: Lars Wendler <polynomial-c@gentoo.org>
++Date: Sat, 9 May 2020 03:04:02 +0200
++Subject: [PATCH] Fix build with boost-1.73
 +
-+comment "openal support needs a toolchain w/ NPTL"
-+	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++[Retrieved from:
++https://github.com/SuperTux/supertux/commit/4221d54385b69d6c40eff2c67bc6bad7ed165a44]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/editor/object_settings.hpp | 2 ++
++ 1 file changed, 2 insertions(+)
 +
- config BR2_PACKAGE_MPD_OSS
- 	bool "oss"
- 	help
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index b8df04f084..a3b90aa55f 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -200,6 +200,13 @@ else
- MPD_CONF_OPTS += -Dneighbor=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_OPENAL),y)
-+MPD_DEPENDENCIES += openal
-+MPD_CONF_OPTS += -Dopenal=enabled
-+else
-+MPD_CONF_OPTS += -Dopenal=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_OPUS),y)
- MPD_DEPENDENCIES += opus libogg
- MPD_CONF_OPTS += -Dopus=enabled
++diff --git a/src/editor/object_settings.hpp b/src/editor/object_settings.hpp
++index bc9049a94e..15b77b1e46 100644
++--- a/src/editor/object_settings.hpp
+++++ b/src/editor/object_settings.hpp
++@@ -22,6 +22,8 @@
++ 
++ #include "editor/object_option.hpp"
++ 
+++#include <algorithm>
+++
++ class Color;
++ enum class Direction;
++ enum class WalkMode;
