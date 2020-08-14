@@ -1,40 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Aug 2020 21:39:42 +0200
-Subject: [Buildroot] [PATCH 6/7] support/docker: use python3-flake8
-In-Reply-To: <4ca982bd-b01a-4d8d-8456-2e513fafcea9@railnova.eu>
-References: <20200812142906.598755-1-thomas.petazzoni@bootlin.com>
- <20200812142906.598755-7-thomas.petazzoni@bootlin.com>
- <4ca982bd-b01a-4d8d-8456-2e513fafcea9@railnova.eu>
-Message-ID: <20200814213942.567a8687@windsurf.home>
+Date: Fri, 14 Aug 2020 21:52:30 +0200
+Subject: [Buildroot] [PATCH v3 0/5] Bootlin toolchains integration into
+ Buildroot
+Message-ID: <20200814195235.986905-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Aug 2020 00:20:18 +0200
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+Hello,
 
-> > diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-> > index 03acde85d2..8c555dcf7a 100644
-> > --- a/support/docker/Dockerfile
-> > +++ b/support/docker/Dockerfile
-> > @@ -36,10 +36,10 @@ RUN apt-get install -y --no-install-recommends \
-> >           libncurses5-dev \
-> >           locales \
-> >           mercurial \
-> > -        python-flake8 \
-> >           python-nose2 \
-> >           python-pexpect \  
-> 
-> Out of curiosity, why keeping the py2 packages here ? Couldn't all the 
-> scripts be run in python3 now ?
+This patch series integrate the Bootlin toolchains (from
+https://toolchains.bootlin.com) as toolchain profiles in Buildroot, so
+that they can easily be used.
 
-The runtime test infrastructure is using Python 3.x nowadays, so I
-think we could drop those Python 2.x dependencies.
+Since there is ~150 toolchains, it is not practical to add them
+manually, so this patch series adds a script that generates the
+toolchain-external-bootlin/ package using the information provided at
+https://toolchains.bootlin.com/downloads/releases/toolchains/.
 
-Thomas
+In addition to adding the toolchain package itself, we also add one
+test case for each toolchain, to verify that its integration in
+Buildroot is working fine.
+
+This series is also available at:
+
+  https://github.com/tpetazzoni/buildroot/commits/bl-toolchains
+
+Since v2, the script was changed to not use the htmllistparse Python
+module, and instead simply download the HTTP listing and applies a
+simple regexp to extract the list of files. We have verified that the
+script output is strictly identical to what is was before.
+
+Best regards,
+
+Thomas Petazzoni
+
+Thomas Petazzoni (5):
+  support/scripts/gen-bootlin-toolchains: add new script to support
+    Bootlin toolchains
+  support/testing/tests/toolchain/test_external: support non-ELF
+    toolchains
+  toolchain/toolchain-external/toolchain-external-bootlin: add
+    auto-generated files
+  toolchain/toolchain-external/toolchain-external-bootlin: finalize
+    package addition
+  support/testing/test/toolchain/test_external_bootlin: new test cases
+
+ support/scripts/gen-bootlin-toolchains        |  473 +++
+ .../testing/tests/toolchain/test_external.py  |   14 +-
+ .../tests/toolchain/test_external_bootlin.py  | 2354 +++++++++++
+ toolchain/toolchain-external/Config.in        |    6 +
+ .../toolchain-external-bootlin/Config.in      |    9 +
+ .../Config.in.options                         | 3587 +++++++++++++++++
+ .../toolchain-external-bootlin.hash           |  308 ++
+ .../toolchain-external-bootlin.mk             |  927 +++++
+ 8 files changed, 7673 insertions(+), 5 deletions(-)
+ create mode 100755 support/scripts/gen-bootlin-toolchains
+ create mode 100644 support/testing/tests/toolchain/test_external_bootlin.py
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
