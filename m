@@ -1,500 +1,231 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Fri, 14 Aug 2020 14:19:48 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/qemu_*: bump kernel version to
- 5.4.58
-Message-ID: <1597407588-20890-1-git-send-email-jugurtha.belkalem@smile.fr>
+From: Michael Fischer <mf@go-sys.de>
+Date: Fri, 14 Aug 2020 13:22:44 +0000
+Subject: [Buildroot] OpenSSH login problem
+In-Reply-To: <52-5f356200-5-2c492440@36238474>
+References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
+ <52-5f356200-5-2c492440@36238474>
+Message-ID: <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump configs/qemu_* to latest longterm kernel 5.4.42.
+Hi 
+  Michael
 
-All defconfig using a specific kernel version (csky, risc32) are not
-taken into account.
+it seems to be a glibc bug.
 
-Build and runtime tested: https://gitlab.com/jugurthaB/buildroot/-/pipelines/177882458
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=965932
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
- configs/qemu_aarch64_virt_defconfig        | 2 +-
- configs/qemu_arm_versatile_defconfig       | 2 +-
- configs/qemu_arm_versatile_nommu_defconfig | 2 +-
- configs/qemu_arm_vexpress_defconfig        | 2 +-
- configs/qemu_arm_vexpress_tz_defconfig     | 2 +-
- configs/qemu_m68k_mcf5208_defconfig        | 2 +-
- configs/qemu_m68k_q800_defconfig           | 2 +-
- configs/qemu_microblazebe_mmu_defconfig    | 2 +-
- configs/qemu_microblazeel_mmu_defconfig    | 2 +-
- configs/qemu_mips32r2_malta_defconfig      | 2 +-
- configs/qemu_mips32r2el_malta_defconfig    | 2 +-
- configs/qemu_mips32r6_malta_defconfig      | 2 +-
- configs/qemu_mips32r6el_malta_defconfig    | 2 +-
- configs/qemu_mips64el_malta_defconfig      | 2 +-
- configs/qemu_mips64r6_malta_defconfig      | 2 +-
- configs/qemu_mips64r6el_malta_defconfig    | 2 +-
- configs/qemu_nios2_10m50_defconfig         | 2 +-
- configs/qemu_or1k_defconfig                | 2 +-
- configs/qemu_ppc64_e5500_defconfig         | 2 +-
- configs/qemu_ppc64_pseries_defconfig       | 2 +-
- configs/qemu_ppc64le_pseries_defconfig     | 2 +-
- configs/qemu_ppc_g3beige_defconfig         | 2 +-
- configs/qemu_ppc_mac99_defconfig           | 2 +-
- configs/qemu_ppc_mpc8544ds_defconfig       | 2 +-
- configs/qemu_ppc_virtex_ml507_defconfig    | 2 +-
- configs/qemu_riscv64_virt_defconfig        | 2 +-
- configs/qemu_sh4_r2d_defconfig             | 2 +-
- configs/qemu_sh4eb_r2d_defconfig           | 2 +-
- configs/qemu_sparc64_sun4u_defconfig       | 2 +-
- configs/qemu_sparc_ss10_defconfig          | 2 +-
- configs/qemu_x86_64_defconfig              | 2 +-
- configs/qemu_x86_defconfig                 | 2 +-
- configs/qemu_xtensa_lx60_defconfig         | 2 +-
- configs/qemu_xtensa_lx60_nommu_defconfig   | 2 +-
- 34 files changed, 34 insertions(+), 34 deletions(-)
+https://salsa.debian.org/glibc-team/glibc/-/commit/b1488bfda31968a724afa3ba212001a807603efd
 
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index 9f22987..67dccc6 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -21,7 +21,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index ba9e13d..6dc2123 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
-index 481802d..4108e70 100644
---- a/configs/qemu_arm_versatile_nommu_defconfig
-+++ b/configs/qemu_arm_versatile_nommu_defconfig
-@@ -31,7 +31,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-nommu.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 45f7369..f99b87c 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -23,7 +23,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 7ded044..815a798 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -18,7 +18,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
-index 58d5987..0806dc0 100644
---- a/configs/qemu_m68k_mcf5208_defconfig
-+++ b/configs/qemu_m68k_mcf5208_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-index d7aa545..b54d502 100644
---- a/configs/qemu_m68k_q800_defconfig
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 5f856d5..a989e55 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 41eb67c..ccd679f 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
-diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
-index 0fca8e2..f56e95b 100644
---- a/configs/qemu_mips32r2_malta_defconfig
-+++ b/configs/qemu_mips32r2_malta_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
-index 3fd5df1..9548a82 100644
---- a/configs/qemu_mips32r2el_malta_defconfig
-+++ b/configs/qemu_mips32r2el_malta_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
-index d0147b4..935fc4c 100644
---- a/configs/qemu_mips32r6_malta_defconfig
-+++ b/configs/qemu_mips32r6_malta_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
-index f240f86..dfaf11a 100644
---- a/configs/qemu_mips32r6el_malta_defconfig
-+++ b/configs/qemu_mips32r6el_malta_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index 27423ee..06e80b3 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
-index d53e8e1..035c664 100644
---- a/configs/qemu_mips64r6_malta_defconfig
-+++ b/configs/qemu_mips64r6_malta_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
-index 9f4573a..26e9458 100644
---- a/configs/qemu_mips64r6el_malta_defconfig
-+++ b/configs/qemu_mips64r6el_malta_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
-index 400cbde..cfb83ff 100644
---- a/configs/qemu_nios2_10m50_defconfig
-+++ b/configs/qemu_nios2_10m50_defconfig
-@@ -1,7 +1,7 @@
- BR2_nios2=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="10m50"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux.fragment"
- BR2_TARGET_ROOTFS_INITRAMFS=y
-diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
-index d60a728..4ccb58e 100644
---- a/configs/qemu_or1k_defconfig
-+++ b/configs/qemu_or1k_defconfig
-@@ -15,7 +15,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
- 
-diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
-index 4706c09..1e030f5 100644
---- a/configs/qemu_ppc64_e5500_defconfig
-+++ b/configs/qemu_ppc64_e5500_defconfig
-@@ -15,7 +15,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
-index 20458f7..91d0c52 100644
---- a/configs/qemu_ppc64_pseries_defconfig
-+++ b/configs/qemu_ppc64_pseries_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
-index 250d1b2..effc3cf 100644
---- a/configs/qemu_ppc64le_pseries_defconfig
-+++ b/configs/qemu_ppc64le_pseries_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index e5ffd46..c04260c 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
-index a21cea6..33e8194 100644
---- a/configs/qemu_ppc_mac99_defconfig
-+++ b/configs/qemu_ppc_mac99_defconfig
-@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 9a25168..98a10b3 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index ea4f42f..6425e1a 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -19,7 +19,7 @@ BR2_POWERPC_SOFT_FLOAT=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index 38104cc..01633d5 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_IMAGE=y
- 
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 3bd5794..a465547 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -21,7 +21,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
-index 591e1e8..24a9f21 100644
---- a/configs/qemu_sh4eb_r2d_defconfig
-+++ b/configs/qemu_sh4eb_r2d_defconfig
-@@ -20,7 +20,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
-index db5ac52..254f2d9 100644
---- a/configs/qemu_sparc64_sun4u_defconfig
-+++ b/configs/qemu_sparc64_sun4u_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
- 
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 37d88de..1fdebfc 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -19,7 +19,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
- 
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 336974f..60b4468 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -21,7 +21,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
- 
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 7b67ff0..ef38d98 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
- 
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index c0496ac..79ae11d 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -21,7 +21,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index a7ff4e2..09a3888 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -25,7 +25,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.42"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--- 
-2.7.4
+
+Regards,
+  Michael
+
+> 
+> Hi,
+> 
+> I try to rephrase what you did to see if I understood it correctly:
+> 
+> You built a Raspberry Pi BR Image based on commit
+> 01632805ab4be2bea4010ba1e46ab71f52d175a9
+> from the Buildroot git. OpenSSH works.
+> Then you did a git pull, did a "make clean && make" and with the resulting
+> image you can't login via ssh.
+> 
+> Is this correct?
+> 
+> This assumed I tried the following:
+> 
+> git log --oneline
+> 01632805ab4be2bea4010ba1e46ab71f52d175a9..origin/master
+> (origin/master is currently at
+> d1d89d37c02e3d8224fb6f812e87fef5612a771a)
+> 
+> From the result I can tell that the OpenSSH package hasn't changed. So it has
+> to be some lib or something in the Filesystem.
+> 
+> One commit that looks like it could be the troublemaker is:
+> 
+> 060599fc23 package/rpi-userland: bump version to 188d3bf
+> 
+> But else this might be a good idea to try to debug using git bisect and move
+> through the tree to see when it breaks.
+> 
+> I don't really have a Pi at hand right now. But to reproduce someone would
+> need a minimal BR configuration which shows the issue. Can you provide that?
+> 
+> Regards,
+> Michael
+> 
+> 
+> On Thursday, August 13, 2020 16:51 CEST, Michael Fischer <mf@go-sys.de>
+> wrote:
+> 
+> > Hi Michael,
+> >  here is the log, the connection is closed from the server.
+> >
+> > PS: All settings between the commits are the same.
+> > The difference between this is only a git pull.
+> >
+> >
+> > OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
+> > debug1: Reading configuration data /etc/ssh/ssh_config
+> > debug1: /etc/ssh/ssh_config line 20: Applying options for *
+> > debug1: Connecting to 192.168.1.194 [192.168.1.194] port 22.
+> > debug1: Connection established.
+> > debug1: identity file /root/.ssh/id_rsa type -1
+> > debug1: identity file /root/.ssh/id_rsa-cert type -1
+> > debug1: identity file /root/.ssh/id_dsa type -1
+> > debug1: identity file /root/.ssh/id_dsa-cert type -1
+> > debug1: identity file /root/.ssh/id_ecdsa type -1
+> > debug1: identity file /root/.ssh/id_ecdsa-cert type -1
+> > debug1: identity file /root/.ssh/id_ecdsa_sk type -1
+> > debug1: identity file /root/.ssh/id_ecdsa_sk-cert type -1
+> > debug1: identity file /root/.ssh/id_ed25519 type -1
+> > debug1: identity file /root/.ssh/id_ed25519-cert type -1
+> > debug1: identity file /root/.ssh/id_ed25519_sk type -1
+> > debug1: identity file /root/.ssh/id_ed25519_sk-cert type -1
+> > debug1: identity file /root/.ssh/id_xmss type -1
+> > debug1: identity file /root/.ssh/id_xmss-cert type -1
+> > debug1: Local version string SSH-2.0-OpenSSH_8.3
+> > debug1: Remote protocol version 2.0, remote software version
+> > OpenSSH_8.3
+> > debug1: match: OpenSSH_8.3 pat OpenSSH* compat 0x04000000
+> > debug1: Authenticating to 192.168.1.194:22 as 'root'
+> > debug1: SSH2_MSG_KEXINIT sent
+> > debug1: SSH2_MSG_KEXINIT received
+> > debug1: kex: algorithm: curve25519-sha256
+> > debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+> > debug1: kex: server->client cipher: chacha20-poly1305 at openssh.com
+> MAC:
+> > <implicit> compression: none
+> > debug1: kex: client->server cipher: chacha20-poly1305 at openssh.com
+> MAC:
+> > <implicit> compression: none
+> > debug1: kex: curve25519-sha256 need=64 dh_need=64
+> > debug1: kex: curve25519-sha256 need=64 dh_need=64
+> > debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+> > debug1: Server host key: ecdsa-sha2-nistp256
+> > SHA256:RCq6wRn5ZZrwZ7wY84zaMFMdG1mhIorheFPFhbwBz+0
+> > debug1: Host '[192.168.1.194]:22' is known and matches the ECDSA host
+> key.
+> > debug1: Found key in /root/.ssh/known_hosts:1
+> > debug1: rekey out after 134217728 blocks
+> > debug1: SSH2_MSG_NEWKEYS sent
+> > debug1: expecting SSH2_MSG_NEWKEYS
+> > debug1: SSH2_MSG_NEWKEYS received
+> > debug1: rekey in after 134217728 blocks
+> > debug1: Will attempt key: /root/.ssh/id_rsa
+> > debug1: Will attempt key: /root/.ssh/id_dsa
+> > debug1: Will attempt key: /root/.ssh/id_ecdsa
+> > debug1: Will attempt key: /root/.ssh/id_ecdsa_sk
+> > debug1: Will attempt key: /root/.ssh/id_ed25519
+> > debug1: Will attempt key: /root/.ssh/id_ed25519_sk
+> > debug1: Will attempt key: /root/.ssh/id_xmss
+> > debug1: SSH2_MSG_EXT_INFO received
+> > debug1: kex_input_ext_info:
+> > server-sig-algs=<ssh-ed25519,sk-ssh-ed25519@openssh.com,ssh-rsa,rsa-sh
+> > a2-256,rsa-sha2-512,ssh-dss,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ec
+> > dsa-sha2-nistp521,sk-ecdsa-sha2-nistp256 at openssh.com>
+> > debug1: SSH2_MSG_SERVICE_ACCEPT received Connection closed by
+> > 192.168.1.194 port 22
+> >
+> > Regards,
+> >   Michael.
+> >
+> >
+> > > On Thursday, August 13, 2020 16:35 CEST, Michael Nosthoff
+> > > <buildroot@heine.tech>
+> > > wrote:
+> > >
+> > > Hi Michael,
+> > >
+> > > On Thursday, August 13, 2020 15:35 CEST, Michael Fischer
+> > > <mf@go-sys.de>
+> > > wrote:
+> > >
+> > > > Dear all,
+> > > >
+> > > > I have a problem with the OpenSSH login on my raspberry.
+> > > > I can't login via ssh, after entering the username, the sever
+> > > > closed the
+> > > connection.
+> > > >
+> > > > I have checked it with the commit
+> > > 01632805ab4be2bea4010ba1e46ab71f52d175a9 and this version works
+> with
+> > > the same configuration.
+> > > > The actual commit doesn't work but  both commits have the same
+> > > > OpenSSH
+> > > version.
+> > > >
+> > > > OpenSSH Version is:  OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
+> > > >
+> > > > My SSHD logofile:
+> > > >
+> > > > debug2: parse_server_config_depth: config reprocess config len 236
+> > > > debug3: auth_shadow_acctexpired: today 18487 sp_expire -1 days
+> > > > left -
+> > > 18488
+> > > > debug3: account expiration disabled
+> > > > debug3: mm_answer_pwnamallow: sending MONITOR_ANS_PWNAM: 1
+> > > > debug3: mm_request_send entering: type 9
+> > > > debug2: monitor_read: 8 used once, disabling now
+> > > > debug2: input_userauth_request: setting up authctxt for root
+> > > > [preauth]
+> > > > debug3: mm_inform_authserv entering [preauth]
+> > > > debug3: mm_request_send entering: type 4 [preauth]
+> > > > debug2: input_userauth_request: try method none [preauth]
+> > > > debug3: mm_request_receive entering
+> > > > debug3: monitor_read: checking request 4
+> > > > debug3: mm_answer_authserv: service=ssh-connection, style=
+> > > > debug2: monitor_read: 4 used once, disabling now
+> > > > debug3: user_specific_delay: user specific delay 0.000ms [preauth]
+> > > > debug3: ensure_minimum_time_since: elapsed 10.528ms, delaying
+> > > 10.089ms (requested 5.154ms) [preauth]
+> > > > debug1: monitor_read_log: child log fd closed
+> > > > debug3: mm_request_receive entering
+> > > > debug1: do_cleanup
+> > > > debug1: Killing privsep child 390
+> > > >
+> > > > I don't know what is going wrong.
+> > > > Console login works and ftp also.
+> > > >
+> > > > Any help is welcome, I have no more idea where to look.
+> > > >
+> > >
+> > > Could you run the Client with the -v flag? So you could see if
+> > > actually the client or the server is closing the connection.
+> > > A pretty common problem is often a mismatch in available
+> > > authentication mechanisms (commonly "publickey,password").
+> > >
+> > > Also what sometimes is an issue is the permissions of the users .ssh
+> > > folder on the server side.
+> > > If it is globally readable sshd in many configurations refuses to
+> > > authenticate against it.
+> > >
+> > > Regards,
+> > > Michael
+> > >
+> > > >
+> > > > thanks,
+> > > >   Michael.
+> > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> > >
+> > >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> 
