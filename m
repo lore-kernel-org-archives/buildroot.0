@@ -1,62 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Aug 2020 00:00:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kmsxx: fix build with gcc 10
-Message-ID: <20200814220046.1956454-1-fontaine.fabrice@gmail.com>
+From: Avi Shukron <avraham.shukron@gmail.com>
+Date: Sat, 15 Aug 2020 01:34:54 +0300
+Subject: [Buildroot] [PATCH v2] libbacktrace: new package
+In-Reply-To: <20200813204540.GJ13263@scaer>
+References: <20200813204540.GJ13263@scaer>
+Message-ID: <20200814223455.629710-1-avraham.shukron@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/7777cd9496e8f8cdb093c3f82c550eebedda0b5d
+A C library that may be linked into a C/C++ program to produce
+symbolic backtraces.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
 ---
- ...0001-fix-compiler-errors-with-gcc-10.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch
+ package/Config.in                      |  1 +
+ package/libbacktrace/Config.in         |  7 +++++++
+ package/libbacktrace/libbacktrace.hash |  3 +++
+ package/libbacktrace/libbacktrace.mk   | 15 +++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/libbacktrace/Config.in
+ create mode 100644 package/libbacktrace/libbacktrace.hash
+ create mode 100644 package/libbacktrace/libbacktrace.mk
 
-diff --git a/package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch b/package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..7460d3f006 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -170,6 +170,7 @@ menu "Development tools"
+ 	source "package/grep/Config.in"
+ 	source "package/jo/Config.in"
+ 	source "package/jq/Config.in"
++	source "package/libbacktrace/Config.in"
+ 	source "package/libtool/Config.in"
+ 	source "package/make/Config.in"
+ 	source "package/patch/Config.in"
+diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
 new file mode 100644
-index 0000000000..6ec080af97
+index 0000000000..0f940dd588
 --- /dev/null
-+++ b/package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch
-@@ -0,0 +1,35 @@
-+From aa54634ce7cbbfc844de945e73a9f34cdcb9bb12 Mon Sep 17 00:00:00 2001
-+From: Peter Trompeter <christoph@zen.fritz.box>
-+Date: Fri, 15 May 2020 15:20:47 +0200
-+Subject: [PATCH] fix compiler errors with gcc 10
++++ b/package/libbacktrace/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBBACKTRACE
++	bool "libbacktrace"
++	help
++	  A C library that may be linked into a C/C++ program to
++	  produce symbolic backtraces
 +
-+[Retrieved from:
-+https://github.com/tomba/kmsxx/commit/aa54634ce7cbbfc844de945e73a9f34cdcb9bb12]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ kms++/inc/kms++/pixelformats.h | 1 +
-+ kms++util/src/opts.cpp         | 1 +
-+ 2 files changed, 2 insertions(+)
++	  https://github.com/ianlancetaylor/libbacktrace
+diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
+new file mode 100644
+index 0000000000..ecd530a33b
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
++sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
+diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
+new file mode 100644
+index 0000000000..fb1f6c058a
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libbacktrace
++#
++################################################################################
 +
-+diff --git a/kms++/inc/kms++/pixelformats.h b/kms++/inc/kms++/pixelformats.h
-+index 784717d..4e73d5d 100644
-+--- a/kms++/inc/kms++/pixelformats.h
-++++ b/kms++/inc/kms++/pixelformats.h
-+@@ -2,6 +2,7 @@
-+ 
-+ #include <cstdint>
-+ #include <string>
-++#include <stdexcept>
-+ 
-+ namespace kms
-+ {
-+diff --git a/kms++util/src/opts.cpp b/kms++util/src/opts.cpp
-+index afef452..5a14b84 100644
-+--- a/kms++util/src/opts.cpp
-++++ b/kms++util/src/opts.cpp
-+@@ -1,4 +1,5 @@
-+ #include <algorithm>
-++#include <stdexcept>
-+ 
-+ #include <unistd.h>
-+ #include <getopt.h>
++LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
++LIBBACKTRACE_SITE = $(call github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
++
++LIBBACKTRACE_LICENSE = BSD-3C-like
++LIBBACKTRACE_LICENSE_FILES = LICENSE
++
++LIBBACKTRACE_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
 -- 
-2.27.0
+2.25.1
