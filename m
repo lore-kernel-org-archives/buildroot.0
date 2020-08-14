@@ -1,16 +1,17 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 14 Aug 2020 23:19:37 +0200
-Subject: [Buildroot] [PATCH 1/4] package/mpd: add libsidplay2 optional
- dependency
-Message-ID: <20200814211940.1598502-1-fontaine.fabrice@gmail.com>
+Date: Fri, 14 Aug 2020 23:19:39 +0200
+Subject: [Buildroot] [PATCH 3/4] package/mpd: add zziplib optional dependency
+In-Reply-To: <20200814211940.1598502-1-fontaine.fabrice@gmail.com>
+References: <20200814211940.1598502-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200814211940.1598502-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsidplay2 is an optional dependency since version 0.15.0 and
-https://github.com/MusicPlayerDaemon/MPD/commit/1136f6fb7a2a6a0a5bfba0dcf99410d1bbf04252
+zziplib is an optional dependency since version 0.15.0 and
+https://github.com/MusicPlayerDaemon/MPD/commit/e216e01ab3db0d9bea179b043276401d38bfd957
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -19,39 +20,39 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  2 files changed, 13 insertions(+)
 
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 791fb0f54a..baaaa7f1ae 100644
+index eb4c28617e..f1f8d99465 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -165,6 +165,12 @@ config BR2_PACKAGE_MPD_OPUS
- 	  Enable opus input support.
- 	  Select this if you want to play back OPUS encoded files.
+@@ -34,6 +34,12 @@ config BR2_PACKAGE_MPD_SQLITE
+ 	  Enable sqlite database support.
+ 	  If you don't use sqlite it will use an ASCII database.
  
-+config BR2_PACKAGE_MPD_SIDPLAY
-+	bool "sidplay"
-+	select BR2_PACKAGE_LIBSIDPLAY2
++config BR2_PACKAGE_MPD_ZZIP
++	bool "zzip"
++	select BR2_PACKAGE_ZZIPLIB
 +	help
-+	  Enable C64 SID support.
++	  Enable ZIP archive support.
 +
- config BR2_PACKAGE_MPD_TREMOR
- 	bool "tremor"
- 	depends on !BR2_PACKAGE_MPD_VORBIS
+ comment "Commercial services"
+ 
+ config BR2_PACKAGE_MPD_QOBUZ
 diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a3b90aa55f..51bc1719a7 100644
+index 5e66997b26..566b105f61 100644
 --- a/package/mpd/mpd.mk
 +++ b/package/mpd/mpd.mk
-@@ -241,6 +241,13 @@ else
- MPD_CONF_OPTS += -Dshout=disabled
+@@ -317,6 +317,13 @@ else
+ MPD_CONF_OPTS += -Dwavpack=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_MPD_SIDPLAY),y)
-+MPD_DEPENDENCIES += libsidplay2
-+MPD_CONF_OPTS += -Dsidplay=enabled
++ifeq ($(BR2_PACKAGE_MPD_ZZIP),y)
++MPD_DEPENDENCIES += zziplib
++MPD_CONF_OPTS += -Dzzip=enabled
 +else
-+MPD_CONF_OPTS += -Dsidplay=disabled
++MPD_CONF_OPTS += -Dzzip=disabled
 +endif
 +
- ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
- MPD_DEPENDENCIES += yajl
- MPD_CONF_OPTS += -Dsoundcloud=enabled
+ define MPD_INSTALL_EXTRA_FILES
+ 	$(INSTALL) -m 0644 -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
+ endef
 -- 
 2.27.0
