@@ -1,7 +1,7 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Fri, 14 Aug 2020 16:38:05 +0200
+Date: Fri, 14 Aug 2020 16:39:23 +0200
 Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng: bump to version 1.2.1
-Message-ID: <1597415885-30801-1-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1597415963-30955-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,7 +26,7 @@ Version 1.1.4 is deprecated (2013) which must be updated by current version.
 
 Note : old download link (https://fedorahosted.org/)
        has been stopped from being maintained as the project moved to
-       https://fedorahosted.org/releases/i/p/iptraf-ng.
+       https://github.com/iptraf-ng/iptraf-ng.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
