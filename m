@@ -1,231 +1,213 @@
-From: Michael Fischer <mf@go-sys.de>
-Date: Fri, 14 Aug 2020 13:22:44 +0000
-Subject: [Buildroot] OpenSSH login problem
-In-Reply-To: <52-5f356200-5-2c492440@36238474>
-References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
- <52-5f356200-5-2c492440@36238474>
-Message-ID: <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Fri, 14 Aug 2020 16:38:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng: bump to version 1.2.1
+Message-ID: <1597415885-30801-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi 
-  Michael
+IPTraf-ng is a console-based network monitoring program for Linux that
+displays information about IP traffic. It returns such information as:
 
-it seems to be a glibc bug.
+- Current TCP connections
+- UDP, ICMP, OSPF, and other types of IP packets
+- Packet and byte counts on TCP connections
+- IP, TCP, UDP, ICMP, non-IP, and other packet and byte counts
+- TCP/UDP counts by ports
+- Packet counts by packet sizes
+- Packet and byte counts by IP address
+- Interface activity
+- Flag statuses on TCP packets
+- LAN station statistics
 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=965932
+Version 1.1.4 is deprecated (2013) which must be updated by current version.
 
-https://salsa.debian.org/glibc-team/glibc/-/commit/b1488bfda31968a724afa3ba212001a807603efd
+Note : old download link (https://fedorahosted.org/)
+       has been stopped from being maintained as the project moved to
+       https://fedorahosted.org/releases/i/p/iptraf-ng.
 
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+---
+ ...-not-found-issue-during-cross-compilation.patch | 102 +++++++++++++++++++++
+ package/iptraf-ng/Config.in                        |   7 +-
+ package/iptraf-ng/iptraf-ng.hash                   |   3 +-
+ package/iptraf-ng/iptraf-ng.mk                     |  19 +++-
+ 4 files changed, 120 insertions(+), 11 deletions(-)
+ create mode 100644 package/iptraf-ng/0001-Fix-file-not-found-issue-during-cross-compilation.patch
 
-Regards,
-  Michael
-
-> 
-> Hi,
-> 
-> I try to rephrase what you did to see if I understood it correctly:
-> 
-> You built a Raspberry Pi BR Image based on commit
-> 01632805ab4be2bea4010ba1e46ab71f52d175a9
-> from the Buildroot git. OpenSSH works.
-> Then you did a git pull, did a "make clean && make" and with the resulting
-> image you can't login via ssh.
-> 
-> Is this correct?
-> 
-> This assumed I tried the following:
-> 
-> git log --oneline
-> 01632805ab4be2bea4010ba1e46ab71f52d175a9..origin/master
-> (origin/master is currently at
-> d1d89d37c02e3d8224fb6f812e87fef5612a771a)
-> 
-> From the result I can tell that the OpenSSH package hasn't changed. So it has
-> to be some lib or something in the Filesystem.
-> 
-> One commit that looks like it could be the troublemaker is:
-> 
-> 060599fc23 package/rpi-userland: bump version to 188d3bf
-> 
-> But else this might be a good idea to try to debug using git bisect and move
-> through the tree to see when it breaks.
-> 
-> I don't really have a Pi at hand right now. But to reproduce someone would
-> need a minimal BR configuration which shows the issue. Can you provide that?
-> 
-> Regards,
-> Michael
-> 
-> 
-> On Thursday, August 13, 2020 16:51 CEST, Michael Fischer <mf@go-sys.de>
-> wrote:
-> 
-> > Hi Michael,
-> >  here is the log, the connection is closed from the server.
-> >
-> > PS: All settings between the commits are the same.
-> > The difference between this is only a git pull.
-> >
-> >
-> > OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
-> > debug1: Reading configuration data /etc/ssh/ssh_config
-> > debug1: /etc/ssh/ssh_config line 20: Applying options for *
-> > debug1: Connecting to 192.168.1.194 [192.168.1.194] port 22.
-> > debug1: Connection established.
-> > debug1: identity file /root/.ssh/id_rsa type -1
-> > debug1: identity file /root/.ssh/id_rsa-cert type -1
-> > debug1: identity file /root/.ssh/id_dsa type -1
-> > debug1: identity file /root/.ssh/id_dsa-cert type -1
-> > debug1: identity file /root/.ssh/id_ecdsa type -1
-> > debug1: identity file /root/.ssh/id_ecdsa-cert type -1
-> > debug1: identity file /root/.ssh/id_ecdsa_sk type -1
-> > debug1: identity file /root/.ssh/id_ecdsa_sk-cert type -1
-> > debug1: identity file /root/.ssh/id_ed25519 type -1
-> > debug1: identity file /root/.ssh/id_ed25519-cert type -1
-> > debug1: identity file /root/.ssh/id_ed25519_sk type -1
-> > debug1: identity file /root/.ssh/id_ed25519_sk-cert type -1
-> > debug1: identity file /root/.ssh/id_xmss type -1
-> > debug1: identity file /root/.ssh/id_xmss-cert type -1
-> > debug1: Local version string SSH-2.0-OpenSSH_8.3
-> > debug1: Remote protocol version 2.0, remote software version
-> > OpenSSH_8.3
-> > debug1: match: OpenSSH_8.3 pat OpenSSH* compat 0x04000000
-> > debug1: Authenticating to 192.168.1.194:22 as 'root'
-> > debug1: SSH2_MSG_KEXINIT sent
-> > debug1: SSH2_MSG_KEXINIT received
-> > debug1: kex: algorithm: curve25519-sha256
-> > debug1: kex: host key algorithm: ecdsa-sha2-nistp256
-> > debug1: kex: server->client cipher: chacha20-poly1305 at openssh.com
-> MAC:
-> > <implicit> compression: none
-> > debug1: kex: client->server cipher: chacha20-poly1305 at openssh.com
-> MAC:
-> > <implicit> compression: none
-> > debug1: kex: curve25519-sha256 need=64 dh_need=64
-> > debug1: kex: curve25519-sha256 need=64 dh_need=64
-> > debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
-> > debug1: Server host key: ecdsa-sha2-nistp256
-> > SHA256:RCq6wRn5ZZrwZ7wY84zaMFMdG1mhIorheFPFhbwBz+0
-> > debug1: Host '[192.168.1.194]:22' is known and matches the ECDSA host
-> key.
-> > debug1: Found key in /root/.ssh/known_hosts:1
-> > debug1: rekey out after 134217728 blocks
-> > debug1: SSH2_MSG_NEWKEYS sent
-> > debug1: expecting SSH2_MSG_NEWKEYS
-> > debug1: SSH2_MSG_NEWKEYS received
-> > debug1: rekey in after 134217728 blocks
-> > debug1: Will attempt key: /root/.ssh/id_rsa
-> > debug1: Will attempt key: /root/.ssh/id_dsa
-> > debug1: Will attempt key: /root/.ssh/id_ecdsa
-> > debug1: Will attempt key: /root/.ssh/id_ecdsa_sk
-> > debug1: Will attempt key: /root/.ssh/id_ed25519
-> > debug1: Will attempt key: /root/.ssh/id_ed25519_sk
-> > debug1: Will attempt key: /root/.ssh/id_xmss
-> > debug1: SSH2_MSG_EXT_INFO received
-> > debug1: kex_input_ext_info:
-> > server-sig-algs=<ssh-ed25519,sk-ssh-ed25519@openssh.com,ssh-rsa,rsa-sh
-> > a2-256,rsa-sha2-512,ssh-dss,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ec
-> > dsa-sha2-nistp521,sk-ecdsa-sha2-nistp256 at openssh.com>
-> > debug1: SSH2_MSG_SERVICE_ACCEPT received Connection closed by
-> > 192.168.1.194 port 22
-> >
-> > Regards,
-> >   Michael.
-> >
-> >
-> > > On Thursday, August 13, 2020 16:35 CEST, Michael Nosthoff
-> > > <buildroot@heine.tech>
-> > > wrote:
-> > >
-> > > Hi Michael,
-> > >
-> > > On Thursday, August 13, 2020 15:35 CEST, Michael Fischer
-> > > <mf@go-sys.de>
-> > > wrote:
-> > >
-> > > > Dear all,
-> > > >
-> > > > I have a problem with the OpenSSH login on my raspberry.
-> > > > I can't login via ssh, after entering the username, the sever
-> > > > closed the
-> > > connection.
-> > > >
-> > > > I have checked it with the commit
-> > > 01632805ab4be2bea4010ba1e46ab71f52d175a9 and this version works
-> with
-> > > the same configuration.
-> > > > The actual commit doesn't work but  both commits have the same
-> > > > OpenSSH
-> > > version.
-> > > >
-> > > > OpenSSH Version is:  OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
-> > > >
-> > > > My SSHD logofile:
-> > > >
-> > > > debug2: parse_server_config_depth: config reprocess config len 236
-> > > > debug3: auth_shadow_acctexpired: today 18487 sp_expire -1 days
-> > > > left -
-> > > 18488
-> > > > debug3: account expiration disabled
-> > > > debug3: mm_answer_pwnamallow: sending MONITOR_ANS_PWNAM: 1
-> > > > debug3: mm_request_send entering: type 9
-> > > > debug2: monitor_read: 8 used once, disabling now
-> > > > debug2: input_userauth_request: setting up authctxt for root
-> > > > [preauth]
-> > > > debug3: mm_inform_authserv entering [preauth]
-> > > > debug3: mm_request_send entering: type 4 [preauth]
-> > > > debug2: input_userauth_request: try method none [preauth]
-> > > > debug3: mm_request_receive entering
-> > > > debug3: monitor_read: checking request 4
-> > > > debug3: mm_answer_authserv: service=ssh-connection, style=
-> > > > debug2: monitor_read: 4 used once, disabling now
-> > > > debug3: user_specific_delay: user specific delay 0.000ms [preauth]
-> > > > debug3: ensure_minimum_time_since: elapsed 10.528ms, delaying
-> > > 10.089ms (requested 5.154ms) [preauth]
-> > > > debug1: monitor_read_log: child log fd closed
-> > > > debug3: mm_request_receive entering
-> > > > debug1: do_cleanup
-> > > > debug1: Killing privsep child 390
-> > > >
-> > > > I don't know what is going wrong.
-> > > > Console login works and ftp also.
-> > > >
-> > > > Any help is welcome, I have no more idea where to look.
-> > > >
-> > >
-> > > Could you run the Client with the -v flag? So you could see if
-> > > actually the client or the server is closing the connection.
-> > > A pretty common problem is often a mismatch in available
-> > > authentication mechanisms (commonly "publickey,password").
-> > >
-> > > Also what sometimes is an issue is the permissions of the users .ssh
-> > > folder on the server side.
-> > > If it is globally readable sshd in many configurations refuses to
-> > > authenticate against it.
-> > >
-> > > Regards,
-> > > Michael
-> > >
-> > > >
-> > > > thanks,
-> > > >   Michael.
-> > > >
-> > > > _______________________________________________
-> > > > buildroot mailing list
-> > > > buildroot at busybox.net
-> > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > >
-> > >
-> > >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-> 
+diff --git a/package/iptraf-ng/0001-Fix-file-not-found-issue-during-cross-compilation.patch b/package/iptraf-ng/0001-Fix-file-not-found-issue-during-cross-compilation.patch
+new file mode 100644
+index 0000000..609403e
+--- /dev/null
++++ b/package/iptraf-ng/0001-Fix-file-not-found-issue-during-cross-compilation.patch
+@@ -0,0 +1,102 @@
++From e4fde25079ac22bd26e4583bf696bc11cca038f8 Mon Sep 17 00:00:00 2001
++From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
++Date: Fri, 14 Aug 2020 15:54:18 +0200
++Subject: [PATCH 1/1] Fix file not found issue during cross compilation
++
++Files in src/tui include iptraf-ng-compat.h as if it was in
++the same folder. Header's relative location must be explicitly
++defined otherwise compilation throws error : NO SUCH FILE.
++
++PR : https://github.com/iptraf-ng/iptraf-ng/pull/30.
++
++Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
++---
++ src/tui/input.c    | 2 +-
++ src/tui/labels.c   | 2 +-
++ src/tui/listbox.c  | 2 +-
++ src/tui/menurt.c   | 2 +-
++ src/tui/msgboxes.c | 2 +-
++ src/tui/winops.c   | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/tui/input.c b/src/tui/input.c
++index 8ed6081..a5f63ea 100644
++--- a/src/tui/input.c
+++++ b/src/tui/input.c
++@@ -7,7 +7,7 @@ input.c - a custom keyboard input module
++ 
++ ***/
++ 
++-#include "iptraf-ng-compat.h"
+++#include "../iptraf-ng-compat.h"
++ 
++ #include "input.h"
++ 
++diff --git a/src/tui/labels.c b/src/tui/labels.c
++index e4e11fb..4dd8991 100644
++--- a/src/tui/labels.c
+++++ b/src/tui/labels.c
++@@ -6,7 +6,7 @@
++  * user interface library
++  */
++ 
++-#include "iptraf-ng-compat.h"
+++#include "../iptraf-ng-compat.h"
++ 
++ #include "winops.h"
++ 
++diff --git a/src/tui/listbox.c b/src/tui/listbox.c
++index daecf66..31c394c 100644
++--- a/src/tui/listbox.c
+++++ b/src/tui/listbox.c
++@@ -5,7 +5,7 @@
++  * listbox.c - scrollable listbox management module
++  */
++ 
++-#include "iptraf-ng-compat.h"
+++#include "../iptraf-ng-compat.h"
++ 
++ #include "winops.h"
++ #include "labels.h"
++diff --git a/src/tui/menurt.c b/src/tui/menurt.c
++index fb3f002..49e6754 100644
++--- a/src/tui/menurt.c
+++++ b/src/tui/menurt.c
++@@ -7,7 +7,7 @@ menurt.c - ncurses-based menu definition module
++ 
++ ***/
++ 
++-#include "iptraf-ng-compat.h"
+++#include "../iptraf-ng-compat.h"
++ 
++ #include "menurt.h"
++ #include "winops.h"
++diff --git a/src/tui/msgboxes.c b/src/tui/msgboxes.c
++index 76ae4fa..3e29282 100644
++--- a/src/tui/msgboxes.c
+++++ b/src/tui/msgboxes.c
++@@ -5,7 +5,7 @@
++  * msgboxes.c - message and error box display functions
++  */
++ 
++-#include "iptraf-ng-compat.h"
+++#include "../iptraf-ng-compat.h"
++ 
++ #include "winops.h"
++ 
++diff --git a/src/tui/winops.c b/src/tui/winops.c
++index d866281..36ac663 100644
++--- a/src/tui/winops.c
+++++ b/src/tui/winops.c
++@@ -7,7 +7,7 @@ winops.c - screen configuration and setup functions
++ 
++ ***/
++ 
++-#include "iptraf-ng-compat.h"
+++#include "../iptraf-ng-compat.h"
++ 
++ void tx_stdwinset(WINDOW * win)
++ {
++-- 
++2.7.4
++
+diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
+index 5c3b484..f240daf 100644
+--- a/package/iptraf-ng/Config.in
++++ b/package/iptraf-ng/Config.in
+@@ -3,11 +3,10 @@ config BR2_PACKAGE_IPTRAF_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  IPTraf-ng is a ncurses-based network monitoring utility. It
+-	  gathers data like TCP connection packet and byte counts,
+-	  interface statistics and activity indicators.
++	  IPTraf-ng is a console-based network monitoring program for
++	  Linux that gathers displays information about IP traffic.
+ 
+-	  https://fedorahosted.org/iptraf-ng/
++	  https://github.com/iptraf-ng/iptraf-ng
+ 
+ 	  IPTraf-ng is a fork of original IPTraf v3.0.0
+ 	  (http://iptraf.seul.org).
+diff --git a/package/iptraf-ng/iptraf-ng.hash b/package/iptraf-ng/iptraf-ng.hash
+index 0a257ec..67f0ee2 100644
+--- a/package/iptraf-ng/iptraf-ng.hash
++++ b/package/iptraf-ng/iptraf-ng.hash
+@@ -1,4 +1,3 @@
+-# From https://fedorahosted.org/releases/i/p/iptraf-ng/iptraf-ng-1.1.4.tar.gz.sum
+-sha1	a2e51b0dd6b8c80583fc25d055850c96b3d2f544	iptraf-ng-1.1.4.tar.gz
+ # Locally computed
++sha256	a53fa7bd5472e7103c5922e067912432c2a2f2a549a49334d2d1727f2e98e1ec  iptraf-ng-v1.2.1.tar.gz
+ sha256  4e49bef38f621aac4a870da4b30011c7b7abc7256b218daec1c425b08448ae1e  LICENSE
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index ac572b9..1138b7a 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -4,16 +4,25 @@
+ #
+ ################################################################################
+ 
+-IPTRAF_NG_VERSION = 1.1.4
+-IPTRAF_NG_SITE = https://fedorahosted.org/releases/i/p/iptraf-ng
++IPTRAF_NG_VERSION = v1.2.1
++IPTRAF_NG_SITE = https://github.com/iptraf-ng/iptraf-ng.git
++IPTRAF_NG_SITE_METHOD = git
+ IPTRAF_NG_LICENSE = GPL-2.0+
+ IPTRAF_NG_LICENSE_FILES = LICENSE
++IPTRAF_NG_INSTALL_TARGET = YES
+ IPTRAF_NG_DEPENDENCIES = ncurses
+ 
++
+ IPTRAF_NG_MAKE_ENV = \
+ 	NCURSES_LDFLAGS="-lpanel -lncurses"
+ 
+-IPTRAF_NG_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+-$(eval $(autotools-package))
++define IPTRAF_NG_BUILD_CMDS
++	$(MAKE) HOME=$(HOST_DIR)/usr/ $(TARGET_CONFIGURE_OPTS) \
++	$(IPTRAF_NG_MAKE_ENV) -C $(@D) all
++endef
++define IPTRAF_NG_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/iptraf-ng $(TARGET_DIR)/usr/bin/iptraf-ng
++endef
++
++$(eval $(generic-package))
+-- 
+2.7.4
