@@ -1,49 +1,45 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 13 Aug 2020 16:23:51 -0700
-Subject: [Buildroot] [PATCH 1/1] package/avahi: fix building against
- gobject-introspection
-Message-ID: <20200813232351.1552307-1-aduskett@gmail.com>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Fri, 14 Aug 2020 07:53:35 +0200
+Subject: [Buildroot] Compiling the kernel via buildroot
+In-Reply-To: <mailman.8310.1597343819.162353.buildroot@busybox.net>
+References: <mailman.8310.1597343819.162353.buildroot@busybox.net>
+Message-ID: <8eaf36d7b9ff5934c3f4145228c44738@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hi Isaac,
 
-Currently, if gobject-introspection is built before avahi, avahi will fail
-to build with several undefined reference errors due to several .libs
-directories not being in the PATH when linking the .gir file.
+On 2020-08-13 20:36, buildroot-request at busybox.net wrote:
 
-To resolve this issue, do the following if gobject-introspection is selected:
-  - Add gobject-introspection to AVAHI_DEPENDENCIES
-  - Add --enable-gobject to AVAHI_CONF_OPTS
-  - Add the appropriate directories to GIR_EXTRA_LIBS_PATH.
+> I am new on this mailing list. Is this the email for questions
+> regarding buildroot?
 
-Fixes:
-http://autobuild.buildroot.net/results/b9bf7cea8be9231552a10e8ea828bf24394402ba
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/avahi/avahi.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+This mailing list mostly handles development related requests and bug 
+reports.
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 73db37545f..3e858083af 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -94,6 +94,13 @@ else
- AVAHI_CONF_OPTS += --disable-glib --disable-gobject
- endif
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+AVAHI_DEPENDENCIES += gobject-introspection
-+AVAHI_CONF_OPTS += --enable-gobject
-+AVAHI_MAKE_ENV += \
-+	GIR_EXTRA_LIBS_PATH="$(@D)/avahi-gobject/.libs:$(@D)/avahi-common/.libs:$(@D)/avahi-client/.libs:$(@D)/avahi-glib/.libs"
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- AVAHI_CONF_ENV += \
- 	am_cv_pathless_PYTHON=python \
--- 
-2.26.2
+> 1. When doing a change in the linux kernel, do i have to build the 
+> kernel
+> in the kernel tree and then call buildroot? Or will build root see the
+> changes and build them automatically?
+
+The Buildroot workflow will handle the kernel build for you. A single 
+change inside a source tree is not detected by Buildroot, you have to 
+manually start the kernel rebuild by invoking 'make linux-rebuild', see 
+also https://buildroot.org/downloads/manual/manual.html#rebuild-pkg
+
+> 2. Is this possible to rebuild a single module instead of all modules?
+
+If the kernel module is inside the kernel source tree, you will probably 
+need to rebuild the whole kernel (that means everything that is 
+downstream of your change).
+
+So if you just have a single additional module, consider creating a 
+Buildroot package. For examples see one of the Realtek driver packages, 
+e.g. package/rtl8188eu. You can find the documentation here: 
+https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_building_kernel_modules
+
+Regards,
+Andreas
