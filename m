@@ -1,39 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Aug 2020 23:08:34 +0200
-Subject: [Buildroot] [git commit] support/docker: drop Python 2.x modules
-Message-ID: <20200814210234.C3BBD81604@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 14 Aug 2020 23:11:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: fix building against
+ gobject-introspection
+In-Reply-To: <20200813232351.1552307-1-aduskett@gmail.com>
+References: <20200813232351.1552307-1-aduskett@gmail.com>
+Message-ID: <20200814231115.71cf2a73@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23f7fa874b63bbc0e999cf4e904c7d3f3a8d7904
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 13 Aug 2020 16:23:51 -0700
+aduskett at gmail.com wrote:
 
-Since commit 4a40d36f131890941c1e482eb5f28ebcd81cb7a3
-("support/testing: switch to Python 3 only") our runtime testing
-infrastructure is Python 3.x only.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Currently, if gobject-introspection is built before avahi, avahi will fail
+> to build with several undefined reference errors due to several .libs
+> directories not being in the PATH when linking the .gir file.
+> 
+> To resolve this issue, do the following if gobject-introspection is selected:
+>   - Add gobject-introspection to AVAHI_DEPENDENCIES
+>   - Add --enable-gobject to AVAHI_CONF_OPTS
+>   - Add the appropriate directories to GIR_EXTRA_LIBS_PATH.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b9bf7cea8be9231552a10e8ea828bf24394402ba
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/avahi/avahi.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index 73db37545f..3e858083af 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -94,6 +94,13 @@ else
+>  AVAHI_CONF_OPTS += --disable-glib --disable-gobject
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> +AVAHI_DEPENDENCIES += gobject-introspection
+> +AVAHI_CONF_OPTS += --enable-gobject
 
-Therefore, it is no longer needed to have python-nose2 and
-python-pexpect in the Docker container used to run our Gitlab CI jobs.
+This is wrong. The gobject option is not about gobject-introspection.
+From the configure.ac:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/docker/Dockerfile | 2 --
- 1 file changed, 2 deletions(-)
+AC_ARG_ENABLE(gobject,
+        AS_HELP_STRING([--disable-gobject],[Disable use of GLib GObject]),
+        [case "${enableval}" in
+                yes) HAVE_GOBJECT=yes ;;
+                no)  HAVE_GOBJECT=no ;;
+                *) AC_MSG_ERROR(bad value ${enableval} for --enable-gobject) ;;
+        esac],
+        [HAVE_GOBJECT=yes])
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 8c555dcf7a..a9bacca3a0 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -36,8 +36,6 @@ RUN apt-get install -y --no-install-recommends \
-         libncurses5-dev \
-         locales \
-         mercurial \
--        python-nose2 \
--        python-pexpect \
-         python3 \
-         python3-flake8 \
-         python3-nose2 \
+if test "x$HAVE_GOBJECT" = "xyes" ; then
+        PKG_CHECK_MODULES(GOBJECT, [ glib-2.0 >= 2.4.0 gobject-2.0 ])
+        AC_SUBST(GOBJECT_CFLAGS)
+        AC_SUBST(GOBJECT_LIBS)
+fi
+AM_CONDITIONAL(HAVE_GOBJECT, test "x$HAVE_GOBJECT" = "xyes")
+
+The proper option is --enable-introspection / --disable-introspection.
+
+> +AVAHI_MAKE_ENV += \
+> +	GIR_EXTRA_LIBS_PATH="$(@D)/avahi-gobject/.libs:$(@D)/avahi-common/.libs:$(@D)/avahi-client/.libs:$(@D)/avahi-glib/.libs"
+
+I see OpenEmbedded is doing the same thing:
+http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-connectivity/avahi/avahi.inc?h=rocko#n73
+
+Still, I find that atrocious :-/
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
