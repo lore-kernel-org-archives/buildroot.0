@@ -1,54 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Aug 2020 22:58:27 +0200
-Subject: [Buildroot] [git commit] package/supertux: fix build with boost
- 1.73.0
-Message-ID: <20200814205210.A39C585F4F@busybox.osuosl.org>
+Date: Fri, 14 Aug 2020 23:00:07 +0200
+Subject: [Buildroot] [git commit] package/redis: bump to version 6.0.6
+Message-ID: <20200814205347.B6C7D860AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14552122ac46028b78f05eeed1154da2ba87b174
+commit: https://git.buildroot.net/buildroot/commit/?id=605a0e02abf7fdde9e5b6a3fd7ec08d507e2298f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/0f02877a665b2281266df4b23c72a7c113906c31
+From the release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+================================================================================
+Redis 6.0.6     Released Mon Jul 20 09:31:30 IDT 2020
+================================================================================
+
+Upgrade urgency MODERATE: several bugs with moderate impact are fixed here.
+
+The most important issues are listed here:
+
+* Fix crash when enabling CLIENT TRACKING with prefix
+* EXEC always fails with EXECABORT and multi-state is cleared
+* RESTORE ABSTTL won't store expired keys into the db
+* redis-cli better handling of non-pritable key names
+* TLS: Ignore client cert when tls-auth-clients off
+* Tracking: fix invalidation message on flush
+* Notify systemd on Sentinel startup
+* Fix crash on a misuse of STRALGO
+* Few fixes in module API
+* Fix a few rare leaks (STRALGO error misuse, Sentinel)
+* Fix a possible invalid access in defrag of scripts (unlikely to cause real harm)
+
+New features:
+
+* LPOS command to search in a list
+* Use user+pass for MIGRATE in redis-cli and redis-benchmark in cluster mode
+* redis-cli support TLS for --pipe, --rdb and --replica options
+* TLS: Session caching configuration support
+================================================================================
+
+Also, the reference hashes repo has moved to redis/redis-hashes
+probably because the original maintainer has stepped down, see
+http://antirez.com/news/133
+
+Finally, the copyright year in the COPYING file has been updated,
+and so does its sha256 checksum.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../supertux/0002-Fix-build-with-boost-1-73.patch  | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ package/redis/redis.hash | 6 +++---
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/supertux/0002-Fix-build-with-boost-1-73.patch b/package/supertux/0002-Fix-build-with-boost-1-73.patch
-new file mode 100644
-index 0000000000..000e5abcab
---- /dev/null
-+++ b/package/supertux/0002-Fix-build-with-boost-1-73.patch
-@@ -0,0 +1,25 @@
-+From 4221d54385b69d6c40eff2c67bc6bad7ed165a44 Mon Sep 17 00:00:00 2001
-+From: Lars Wendler <polynomial-c@gentoo.org>
-+Date: Sat, 9 May 2020 03:04:02 +0200
-+Subject: [PATCH] Fix build with boost-1.73
-+
-+[Retrieved from:
-+https://github.com/SuperTux/supertux/commit/4221d54385b69d6c40eff2c67bc6bad7ed165a44]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/editor/object_settings.hpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/editor/object_settings.hpp b/src/editor/object_settings.hpp
-+index bc9049a94e..15b77b1e46 100644
-+--- a/src/editor/object_settings.hpp
-++++ b/src/editor/object_settings.hpp
-+@@ -22,6 +22,8 @@
-+ 
-+ #include "editor/object_option.hpp"
-+ 
-++#include <algorithm>
-++
-+ class Color;
-+ enum class Direction;
-+ enum class WalkMode;
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 97e8d451e6..840019415d 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/antirez/redis-hashes/blob/master/README
+-sha256  42cf86a114d2a451b898fcda96acd4d01062a7dbaaad2801d9164a36f898f596  redis-6.0.5.tar.gz
++# From https://github.com/redis/redis-hashes/blob/master/README
++sha256  12ad49b163af5ef39466e8d2f7d212a58172116e5b441eebecb4e6ca22363d94  redis-6.0.6.tar.gz
+ 
+ # Locally calculated
+-sha256  cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
++sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 192e6fa9f8..33c764a0d5 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.5
++REDIS_VERSION = 6.0.6
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
