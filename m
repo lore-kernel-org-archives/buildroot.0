@@ -1,30 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Aug 2020 21:37:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: fix building against
- gobject-introspection
-In-Reply-To: <CAFSsvmqhCPXYn9A8pXOy5bi2h35KJZ92r-EWms9Ra7yG2HW=xA@mail.gmail.com>
-References: <20200813232351.1552307-1-aduskett@gmail.com>
- <20200814133934.26a33b17@windsurf.home>
- <CAFSsvmqhCPXYn9A8pXOy5bi2h35KJZ92r-EWms9Ra7yG2HW=xA@mail.gmail.com>
-Message-ID: <20200814213721.62d58c25@windsurf.home>
+Date: Fri, 14 Aug 2020 21:39:42 +0200
+Subject: [Buildroot] [PATCH 6/7] support/docker: use python3-flake8
+In-Reply-To: <4ca982bd-b01a-4d8d-8456-2e513fafcea9@railnova.eu>
+References: <20200812142906.598755-1-thomas.petazzoni@bootlin.com>
+ <20200812142906.598755-7-thomas.petazzoni@bootlin.com>
+ <4ca982bd-b01a-4d8d-8456-2e513fafcea9@railnova.eu>
+Message-ID: <20200814213942.567a8687@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Aug 2020 12:27:46 -0700
-Adam Duskett <aduskett@gmail.com> wrote:
+On Fri, 14 Aug 2020 00:20:18 +0200
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-> > This really isn't very neat. Isn't there a better solution?
-> >  
-> Maybe? But that's why the GIR_EXTRA_LABS_PATH macro exists, is for
-> situations just like this.
+> > diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> > index 03acde85d2..8c555dcf7a 100644
+> > --- a/support/docker/Dockerfile
+> > +++ b/support/docker/Dockerfile
+> > @@ -36,10 +36,10 @@ RUN apt-get install -y --no-install-recommends \
+> >           libncurses5-dev \
+> >           locales \
+> >           mercurial \
+> > -        python-flake8 \
+> >           python-nose2 \
+> >           python-pexpect \  
+> 
+> Out of curiosity, why keeping the py2 packages here ? Couldn't all the 
+> scripts be run in python3 now ?
 
-It seems absolutely awful that within the build of a package this kind
-of variable is needed. If it was to point to libraries installed by
-other packages, why not. But here, the package build system itself is
-not capable of finding its own libraries?
+The runtime test infrastructure is using Python 3.x nowadays, so I
+think we could drop those Python 2.x dependencies.
 
 Thomas
 -- 
