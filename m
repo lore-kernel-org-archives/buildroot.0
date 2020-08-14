@@ -1,74 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Aug 2020 21:56:11 +0200
-Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: use raw strings
- for re.compile/re.match
-Message-ID: <20200814195008.D46E686449@busybox.osuosl.org>
+Date: Fri, 14 Aug 2020 21:56:17 +0200
+Subject: [Buildroot] [git commit] utils/scanpypi: use raw strings in
+ re.compile/re.sub
+Message-ID: <20200814195008.E19C386444@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5b848d7192e615ead72419dcf5ce7286cf07a82
+commit: https://git.buildroot.net/buildroot/commit/?id=f9150a6a3d0650acdc61eb56ac354cda319e345b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following Python 3.x flake8 warning:
 
-W605 invalid escape sequence '\s'
+W605 invalid escape sequence '\w'
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/getdeveloperlib.py | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ utils/scanpypi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index 239ffa340b..dc0cc07cc7 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -10,7 +10,7 @@ import unittest
- # Patch parsing functions
- #
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 212dbea85e..51bc249f9e 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -96,10 +96,10 @@ def pkg_buildroot_name(pkg_name):
+     Keyword arguments:
+     pkg_name -- String to rename
+     """
+-    name = re.sub('[^\w-]', '', pkg_name.lower())
++    name = re.sub(r'[^\w-]', '', pkg_name.lower())
+     name = name.replace('_', '-')
+     prefix = 'python-'
+-    pattern = re.compile('^(?!' + prefix + ')(.+?)$')
++    pattern = re.compile(r'^(?!' + prefix + ')(.+?)$')
+     name = pattern.sub(r'python-\1', name)
+     return name
  
--FIND_INFRA_IN_PATCH = re.compile("^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
-+FIND_INFRA_IN_PATCH = re.compile(r"^\+\$\(eval \$\((host-)?([^-]*)-package\)\)$")
+@@ -337,7 +337,7 @@ class BuildrootPackage():
+             self.pkg_req = None
+             return set()
+         self.pkg_req = self.setup_metadata['install_requires']
+-        self.pkg_req = [re.sub('([-.\w]+).*', r'\1', req)
++        self.pkg_req = [re.sub(r'([-.\w]+).*', r'\1', req)
+                         for req in self.pkg_req]
  
- 
- def analyze_patch(patch):
-@@ -33,7 +33,7 @@ def analyze_patch(patch):
-     return (files, infras)
- 
- 
--FIND_INFRA_IN_MK = re.compile("^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
-+FIND_INFRA_IN_MK = re.compile(r"^\$\(eval \$\((host-)?([^-]*)-package\)\)$")
- 
- 
- def fname_get_package_infra(fname):
-@@ -178,7 +178,7 @@ def parse_arches_from_config_in(fname):
-                 parsing_arches = True
-                 continue
-             if parsing_arches:
--                m = re.match("^\s*default \"([^\"]*)\".*", line)
-+                m = re.match(r"^\s*default \"([^\"]*)\".*", line)
-                 if m:
-                     arches.add(m.group(1))
-                 else:
-@@ -192,7 +192,7 @@ def parse_developer_architectures(fnames):
-     developer is working on."""
-     arches = set()
-     for fname in fnames:
--        if not re.match("^.*/arch/Config\.in\..*$", fname):
-+        if not re.match(r"^.*/arch/Config\.in\..*$", fname):
-             continue
-         arches = arches | parse_arches_from_config_in(fname)
-     return arches
-@@ -201,7 +201,7 @@ def parse_developer_architectures(fnames):
- def parse_developer_infras(fnames):
-     infras = set()
-     for fname in fnames:
--        m = re.match("^package/pkg-([^.]*).mk$", fname)
-+        m = re.match(r"^package/pkg-([^.]*).mk$", fname)
-         if m:
-             infras.add(m.group(1))
-     return infras
+         # get rid of commented lines and also strip the package strings
+@@ -451,7 +451,7 @@ class BuildrootPackage():
+                 "Mozilla Public License 2.0": "MPL-2.0",
+                 "Zope Public License": "ZPL"
+                 }
+-            regexp = re.compile('^License :* *.* *:+ (.*)( \(.*\))?$')
++            regexp = re.compile(r'^License :* *.* *:+ (.*)( \(.*\))?$')
+             classifiers_licenses = [regexp.sub(r"\1", lic)
+                                     for lic in self.metadata['info']['classifiers']
+                                     if regexp.match(lic)]
