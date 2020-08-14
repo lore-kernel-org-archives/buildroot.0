@@ -1,15 +1,15 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Fri, 14 Aug 2020 14:18:09 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
+Date: Fri, 14 Aug 2020 14:19:48 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/qemu_*: bump kernel version to
  5.4.58
-Message-ID: <1597407489-20798-1-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1597407588-20890-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump configs/qemu_* to lastest longterm kernel 5.4.42.
+Bump configs/qemu_* to latest longterm kernel 5.4.42.
 
 All defconfig using a specific kernel version (csky, risc32) are not
 taken into account.
