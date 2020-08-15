@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Aug 2020 22:30:14 +0200
-Subject: [Buildroot] [PATCH] Revert "toolchain/toolchain-buildroot:
- enable uclibc for riscv64"
-In-Reply-To: <20200815141039.4774-1-thomas.petazzoni@bootlin.com>
-References: <20200815141039.4774-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200815203014.GA24264@scaer>
+Date: Sat, 15 Aug 2020 22:39:24 +0200
+Subject: [Buildroot] [PATCH] package/keepalived: ipset support only
+ makes sense when iptables is enabled
+In-Reply-To: <20200815195851.282863-1-thomas.petazzoni@bootlin.com>
+References: <20200815195851.282863-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200815203924.GB24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +13,114 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2020-08-15 16:10 +0200, Thomas Petazzoni spake thusly:
-> This reverts commit bd9810e176273914eca1208bcba23f0de9e446b3. Indeed,
-> while uClibc-ng has support for RISC-V 64-bit, this support lacks the
-> __riscv_flush_icache() function call, which is used by some GCC
-> builtins used for example in libffi.
+On 2020-08-15 21:58 +0200, Thomas Petazzoni spake thusly:
+> In keepalived, ipset is only used when iptables support is
+> enabled. The configure.ac script is quite convoluted, but one can
+> clearly see:
 > 
-> Due to this missing __riscv_flush_icache(), anything that links
-> against libffi fails to build:
+> AS_IF([test .$enable_iptables != .no],
+>   [
+>    ... testing for iptables ...
+>     if test $USE_IPTABLES = Yes; then
+>       dnl ----[Check for ipset libraries]----
+>       SAV_CPPFLAGS="$CPPFLAGS"
+>       CPPFLAGS="$CPPFLAGS $kernelinc"
+>       if test "${enable_libipset}" != no; then
+>       ... testing for libipset ...
+>     fi
+>   ]
 > 
-> /home/test/autobuild/run/instance-0/output-1/host/bin/riscv64-buildroot-linux-uclibc-gcc  -o gobject/gobject-query gobject/gobject-query.p/gobject-query.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group glib/libglib-2.0.so.0.6400.4 gobject/libgobject-2.0.so.0.6400.4 -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/../glib:$ORIGIN/' -Wl,-rpath-link,/home/test/autobuild/run/instance-0/output-1/build/libglib2-2.64.4/build/glib -Wl,-rpath-link,/home/test/autobuild/run/instance-0/output-1/build/libglib2-2.64.4/build/gobject
-> /home/test/autobuild/run/instance-0/output-1/host/lib/gcc/riscv64-buildroot-linux-uclibc/9.3.0/../../../../riscv64-buildroot-linux-uclibc/bin/ld: /home/test/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-uclibc/sysroot/usr/lib64/libffi.so.7: undefined reference to `__riscv_flush_icache'
-> collect2: error: ld returned 1 exit status
+> So, the libipset library is only tested and used if iptables is
+> enabled. This is also visible by the code that shows at the end of the
+> configure script which features are enabled:
 > 
-> Note that this commit means that
-> support/config-fragments/autobuild/br-riscv64-full-internal.config
-> will be back to using glibc as the C library, but that is OK, until
-> uClibc-ng is fixed to implemented __riscv_flush_icache().
+> echo "Use iptables             : ${USE_IPTABLES}"
+> if test .$USE_IPTABLES = .Yes; then
+>   echo "Use libipset             : ${USE_LIBIPSET}"
+> fi
 > 
-> This uClibc-ng issue has been reported upstream at
-> https://mailman.uclibc-ng.org/pipermail/devel/2020-August/002022.html.
+> Once again, the libipset support only makes sense when iptables is
+> enabled.
+> 
+> However, the configure.ac script also has some logic to detect if a
+> --<something>-libipset option is passed while iptables is enabled:
+> 
+> AS_IF([test .$enable_iptables = .no],
+>     AS_IF([test .$enable_libipset != .], [AC_MSG_ERROR([disable-libipset requires vrrp and iptables])])
+>   )
+> 
+> The error message is quite misleading because it is in fact displayed
+> as soon as a --<something>-libipset is passed not just
+> --disable-libipset.
+> 
+> In the context of Buildroot, we are always passing a
+> --<something>-libipset, regardless of whether iptables support is
+> enabled or not, which makes the build error out:
+> 
+> configure: error: disable-libipset requires vrrp and iptables
+> 
+> This commit fixes that by enclosing the libipset logic inside the
+> iptables condition. When iptables is not available, we pass
+> --disable-iptables and that's it, nothing else is needed. When
+> iptables is available, we pass --enable-iptables *and*
+> --enable-libipset or --disable-libipset depending on the availability
+> of libipset.
+> 
+> This has been tested successfully with the following combinations:
+> 
+>  - keepalived, without iptables or libipset
+>  - keepalived, with iptables, but without libipset
+>  - keepalived, without iptables, but with libipset. In this case
+>    libipset is obviously not used.
+>  - keepalived, with iptables and with libipset. Both are used. Note
+>    that you will not see the keepalived binary linked with libipset.so
+>    in "readelf -d" because keepalived dlopen()s the libipset.so
+>    library by default.
 > 
 > Fixes:
 > 
->   http://autobuild.buildroot.net/results/ec1185ad1fd8863a3990143a0af2ace987761a27/
+>   http://autobuild.buildroot.org/results/a1712b2cc3ad878e6876325ec7d4c434d0d9d11b/
+>   (case with --disable-libipset --disable-iptables)
+> 
+>   http://autobuild.buildroot.net/results/4567e3b0a0510e8a615781178ff5bbbd835a92c3/
+>   (case with --enable-libipset --disable-iptables)
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to master, thanks.
 
-OTOH, I was wondering why we were not adding an exclusion in the
-genrandconfig script, like we do for all the other libffi limitations...
-
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/uclibc/Config.in                |  1 -
->  toolchain/toolchain-buildroot/Config.in | 13 ++++++-------
->  2 files changed, 6 insertions(+), 8 deletions(-)
+>  package/keepalived/keepalived.mk | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index f4d4f06462..de2885bc92 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -101,7 +101,6 @@ config BR2_UCLIBC_TARGET_ARCH
->  	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->  	default "or1k"     if BR2_or1k
->  	default "powerpc"  if BR2_powerpc
-> -	default "riscv64"  if BR2_RISCV_64
->  	default "sh"	   if BR2_sh
->  	default "sparc"	   if BR2_sparc
->  	default "xtensa"   if BR2_xtensa
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 068f91c875..418d5cb387 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -27,13 +27,12 @@ choice
+> diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+> index df1ab6d306..1a42d0c880 100644
+> --- a/package/keepalived/keepalived.mk
+> +++ b/package/keepalived/keepalived.mk
+> @@ -32,16 +32,16 @@ else
+>  KEEPALIVED_CONF_OPTS += --disable-libnl
+>  endif
 >  
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  	bool "uClibc-ng"
-> -	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
-> -		   BR2_arm     || BR2_armeb      || \
-> -		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
-> -		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
-> -		   BR2_or1k    || BR2_powerpc    || BR2_RISCV_64   || \
-> -		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
-> -		   BR2_xtensa  || BR2_x86_64
-> +	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
-> +		   BR2_arm     || BR2_armeb    || \
-> +		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
-> +		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> +		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
-> +		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
->  	select BR2_TOOLCHAIN_USES_UCLIBC
->  	help
->  	  This option selects uClibc-ng as the C library for the
+> +ifeq ($(BR2_PACKAGE_IPTABLES),y)
+> +KEEPALIVED_DEPENDENCIES += iptables
+> +KEEPALIVED_CONF_OPTS += --enable-iptables
+> +# ipset support only makes sense when iptables support is enabled.
+>  ifeq ($(BR2_PACKAGE_IPSET),y)
+>  KEEPALIVED_DEPENDENCIES += ipset
+>  KEEPALIVED_CONF_OPTS += --enable-libipset
+>  else
+>  KEEPALIVED_CONF_OPTS += --disable-libipset
+>  endif
+> -
+> -ifeq ($(BR2_PACKAGE_IPTABLES),y)
+> -KEEPALIVED_DEPENDENCIES += iptables
+> -KEEPALIVED_CONF_OPTS += --enable-iptables
+>  else
+>  KEEPALIVED_CONF_OPTS += --disable-iptables
+>  endif
 > -- 
 > 2.26.2
 > 
