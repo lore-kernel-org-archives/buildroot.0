@@ -1,79 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 15 Aug 2020 16:10:38 +0200
-Subject: [Buildroot] [PATCH] Revert "toolchain/toolchain-buildroot: enable
- uclibc for riscv64"
-Message-ID: <20200815141039.4774-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 15 Aug 2020 16:14:08 +0200
+Subject: [Buildroot] [git commit] package/kmsxx: fix build with gcc 10
+Message-ID: <20200815140813.E7E12822A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit bd9810e176273914eca1208bcba23f0de9e446b3. Indeed,
-while uClibc-ng has support for RISC-V 64-bit, this support lacks the
-__riscv_flush_icache() function call, which is used by some GCC
-builtins used for example in libffi.
-
-Due to this missing __riscv_flush_icache(), anything that links
-against libffi fails to build:
-
-/home/test/autobuild/run/instance-0/output-1/host/bin/riscv64-buildroot-linux-uclibc-gcc  -o gobject/gobject-query gobject/gobject-query.p/gobject-query.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group glib/libglib-2.0.so.0.6400.4 gobject/libgobject-2.0.so.0.6400.4 -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/../glib:$ORIGIN/' -Wl,-rpath-link,/home/test/autobuild/run/instance-0/output-1/build/libglib2-2.64.4/build/glib -Wl,-rpath-link,/home/test/autobuild/run/instance-0/output-1/build/libglib2-2.64.4/build/gobject
-/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/riscv64-buildroot-linux-uclibc/9.3.0/../../../../riscv64-buildroot-linux-uclibc/bin/ld: /home/test/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-uclibc/sysroot/usr/lib64/libffi.so.7: undefined reference to `__riscv_flush_icache'
-collect2: error: ld returned 1 exit status
-
-Note that this commit means that
-support/config-fragments/autobuild/br-riscv64-full-internal.config
-will be back to using glibc as the C library, but that is OK, until
-uClibc-ng is fixed to implemented __riscv_flush_icache().
-
-This uClibc-ng issue has been reported upstream at
-https://mailman.uclibc-ng.org/pipermail/devel/2020-August/002022.html.
+commit: https://git.buildroot.net/buildroot/commit/?id=d82fa9e022f7f7781df8f1124430aa31688bf827
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
+ - http://autobuild.buildroot.org/results/7777cd9496e8f8cdb093c3f82c550eebedda0b5d
 
-  http://autobuild.buildroot.net/results/ec1185ad1fd8863a3990143a0af2ace987761a27/
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uclibc/Config.in                |  1 -
- toolchain/toolchain-buildroot/Config.in | 13 ++++++-------
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ .../0001-fix-compiler-errors-with-gcc-10.patch     | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index f4d4f06462..de2885bc92 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -101,7 +101,6 @@ config BR2_UCLIBC_TARGET_ARCH
- 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	default "or1k"     if BR2_or1k
- 	default "powerpc"  if BR2_powerpc
--	default "riscv64"  if BR2_RISCV_64
- 	default "sh"	   if BR2_sh
- 	default "sparc"	   if BR2_sparc
- 	default "xtensa"   if BR2_xtensa
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 068f91c875..418d5cb387 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -27,13 +27,12 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	bool "uClibc-ng"
--	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
--		   BR2_arm     || BR2_armeb      || \
--		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
--		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
--		   BR2_or1k    || BR2_powerpc    || BR2_RISCV_64   || \
--		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
--		   BR2_xtensa  || BR2_x86_64
-+	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
-+		   BR2_arm     || BR2_armeb    || \
-+		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
-+		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-+		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
-+		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
- 	select BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  This option selects uClibc-ng as the C library for the
--- 
-2.26.2
+diff --git a/package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch b/package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch
+new file mode 100644
+index 0000000000..6ec080af97
+--- /dev/null
++++ b/package/kmsxx/0001-fix-compiler-errors-with-gcc-10.patch
+@@ -0,0 +1,35 @@
++From aa54634ce7cbbfc844de945e73a9f34cdcb9bb12 Mon Sep 17 00:00:00 2001
++From: Peter Trompeter <christoph@zen.fritz.box>
++Date: Fri, 15 May 2020 15:20:47 +0200
++Subject: [PATCH] fix compiler errors with gcc 10
++
++[Retrieved from:
++https://github.com/tomba/kmsxx/commit/aa54634ce7cbbfc844de945e73a9f34cdcb9bb12]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ kms++/inc/kms++/pixelformats.h | 1 +
++ kms++util/src/opts.cpp         | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/kms++/inc/kms++/pixelformats.h b/kms++/inc/kms++/pixelformats.h
++index 784717d..4e73d5d 100644
++--- a/kms++/inc/kms++/pixelformats.h
+++++ b/kms++/inc/kms++/pixelformats.h
++@@ -2,6 +2,7 @@
++ 
++ #include <cstdint>
++ #include <string>
+++#include <stdexcept>
++ 
++ namespace kms
++ {
++diff --git a/kms++util/src/opts.cpp b/kms++util/src/opts.cpp
++index afef452..5a14b84 100644
++--- a/kms++util/src/opts.cpp
+++++ b/kms++util/src/opts.cpp
++@@ -1,4 +1,5 @@
++ #include <algorithm>
+++#include <stdexcept>
++ 
++ #include <unistd.h>
++ #include <getopt.h>
