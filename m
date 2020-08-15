@@ -1,98 +1,114 @@
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Sat, 15 Aug 2020 16:26:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/easyframes: new package
-Message-ID: <20200815142631.1054530-1-horatiu.vultur@microchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 15 Aug 2020 21:58:51 +0200
+Subject: [Buildroot] [PATCH] package/keepalived: ipset support only makes
+ sense when iptables is enabled
+Message-ID: <20200815195851.282863-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/easyframes/Config.in       | 13 +++++++++++++
- package/easyframes/easyframes.hash |  1 +
- package/easyframes/easyframes.mk   | 16 ++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/easyframes/Config.in
- create mode 100644 package/easyframes/easyframes.hash
- create mode 100644 package/easyframes/easyframes.mk
+In keepalived, ipset is only used when iptables support is
+enabled. The configure.ac script is quite convoluted, but one can
+clearly see:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 35840ec9a8..dd1ec8903c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1109,6 +1109,9 @@ F:	package/gauche/
- F:	package/gmrender-resurrect/
- F:	package/squeezelite/
+AS_IF([test .$enable_iptables != .no],
+  [
+   ... testing for iptables ...
+    if test $USE_IPTABLES = Yes; then
+      dnl ----[Check for ipset libraries]----
+      SAV_CPPFLAGS="$CPPFLAGS"
+      CPPFLAGS="$CPPFLAGS $kernelinc"
+      if test "${enable_libipset}" != no; then
+      ... testing for libipset ...
+    fi
+  ]
+
+So, the libipset library is only tested and used if iptables is
+enabled. This is also visible by the code that shows at the end of the
+configure script which features are enabled:
+
+echo "Use iptables             : ${USE_IPTABLES}"
+if test .$USE_IPTABLES = .Yes; then
+  echo "Use libipset             : ${USE_LIBIPSET}"
+fi
+
+Once again, the libipset support only makes sense when iptables is
+enabled.
+
+However, the configure.ac script also has some logic to detect if a
+--<something>-libipset option is passed while iptables is enabled:
+
+AS_IF([test .$enable_iptables = .no],
+    AS_IF([test .$enable_libipset != .], [AC_MSG_ERROR([disable-libipset requires vrrp and iptables])])
+  )
+
+The error message is quite misleading because it is in fact displayed
+as soon as a --<something>-libipset is passed not just
+--disable-libipset.
+
+In the context of Buildroot, we are always passing a
+--<something>-libipset, regardless of whether iptables support is
+enabled or not, which makes the build error out:
+
+configure: error: disable-libipset requires vrrp and iptables
+
+This commit fixes that by enclosing the libipset logic inside the
+iptables condition. When iptables is not available, we pass
+--disable-iptables and that's it, nothing else is needed. When
+iptables is available, we pass --enable-iptables *and*
+--enable-libipset or --disable-libipset depending on the availability
+of libipset.
+
+This has been tested successfully with the following combinations:
+
+ - keepalived, without iptables or libipset
+ - keepalived, with iptables, but without libipset
+ - keepalived, without iptables, but with libipset. In this case
+   libipset is obviously not used.
+ - keepalived, with iptables and with libipset. Both are used. Note
+   that you will not see the keepalived binary linked with libipset.so
+   in "readelf -d" because keepalived dlopen()s the libipset.so
+   library by default.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/a1712b2cc3ad878e6876325ec7d4c434d0d9d11b/
+  (case with --disable-libipset --disable-iptables)
+
+  http://autobuild.buildroot.net/results/4567e3b0a0510e8a615781178ff5bbbd835a92c3/
+  (case with --enable-libipset --disable-iptables)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/keepalived/keepalived.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/keepalived/keepalived.mk b/package/keepalived/keepalived.mk
+index df1ab6d306..1a42d0c880 100644
+--- a/package/keepalived/keepalived.mk
++++ b/package/keepalived/keepalived.mk
+@@ -32,16 +32,16 @@ else
+ KEEPALIVED_CONF_OPTS += --disable-libnl
+ endif
  
-+N:	Horatiu Vultur <horatiu.vultur@microchip.com>
-+F:	package/easyframes/
-+
- N:	Ian Haylock <haylocki@yahoo.co.uk>
- F:	package/python-rpi-gpio/
- 
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..3965d523c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2039,6 +2039,7 @@ menu "Networking applications"
- 	source "package/dnsmasq/Config.in"
- 	source "package/drbd-utils/Config.in"
- 	source "package/dropbear/Config.in"
-+	source "package/easyframes/Config.in"
- 	source "package/ebtables/Config.in"
- 	source "package/ejabberd/Config.in"
- 	source "package/ethtool/Config.in"
-diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
-new file mode 100644
-index 0000000000..bed5de0ce0
---- /dev/null
-+++ b/package/easyframes/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_EASYFRAMES
-+	bool "easyframes"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  This is a small and simple command-line tool for network testing.
-+	  The tool makes it simple to compose a frame, inject and express what
-+	  and where frames are expected to be received.
-+
-+	  https://github.com/microchip-ung/easyframes
-diff --git a/package/easyframes/easyframes.hash b/package/easyframes/easyframes.hash
-new file mode 100644
-index 0000000000..371e927170
---- /dev/null
-+++ b/package/easyframes/easyframes.hash
-@@ -0,0 +1 @@
-+sha256 998d260f0e2dd3206201e566af176ebf20298185f040c3c8bf085e054aeed10f easyframes-25f3aad30a7d8c7844cb08a95a1048959553a503.tar.gz
-diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
-new file mode 100644
-index 0000000000..8b22bac03b
---- /dev/null
-+++ b/package/easyframes/easyframes.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# easyframes
-+#
-+################################################################################
-+
-+EASYFRAMES_VERSION = 25f3aad30a7d8c7844cb08a95a1048959553a503
-+EASYFRAMES_SITE_METHOD = git
-+EASYFRAMES_SITE = https://github.com/microchip-ung/easyframes
-+EASYFRAMES_INSTALL_STAGING = YES
-+EASYFRAMES_DEPENDENCIES = zlib libpcap
-+
-+EASYFRAMES_LICENSE = MIT
-+EASYFRAMES_LICENSE_FILES = COPYING
-+
-+$(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_IPTABLES),y)
++KEEPALIVED_DEPENDENCIES += iptables
++KEEPALIVED_CONF_OPTS += --enable-iptables
++# ipset support only makes sense when iptables support is enabled.
+ ifeq ($(BR2_PACKAGE_IPSET),y)
+ KEEPALIVED_DEPENDENCIES += ipset
+ KEEPALIVED_CONF_OPTS += --enable-libipset
+ else
+ KEEPALIVED_CONF_OPTS += --disable-libipset
+ endif
+-
+-ifeq ($(BR2_PACKAGE_IPTABLES),y)
+-KEEPALIVED_DEPENDENCIES += iptables
+-KEEPALIVED_CONF_OPTS += --enable-iptables
+ else
+ KEEPALIVED_CONF_OPTS += --disable-iptables
+ endif
 -- 
-2.27.0
+2.26.2
