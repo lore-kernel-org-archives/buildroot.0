@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 15 Aug 2020 23:30:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: fix patch to
- address musl builds
-In-Reply-To: <20200430194421.5530-1-vfazio@xes-inc.com>
-References: <20200430194421.5530-1-vfazio@xes-inc.com>
-Message-ID: <20200815233021.3a0cfb4b@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 Aug 2020 23:57:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpv: link with libatomic if needed
+Message-ID: <20200815215730.3901102-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 30 Apr 2020 14:44:21 -0500
-Vincent Fazio <vfazio@xes-inc.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/12f4580429427b6b546184366f74da16f83d692c
 
-> From: Vincent Fazio <vfazio@gmail.com>
-> 
-> Previously, __WORDSIZE was being used to define RADIX_BITS.
-> 
-> __WORDSIZE is not defined consistently via limits.h across all libc
-> variants, so use LONG_BIT instead.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/b5cb347a98dc64f77982633c0fc48d14030aa5b6/
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  ...TS.patch => 0001-Use-LONG_BIT-to-define-RADIX_BITS.patch} | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->  rename package/ibm-sw-tpm2/{0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch => 0001-Use-LONG_BIT-to-define-RADIX_BITS.patch} (91%)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpv/mpv.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 8619de5a8e..6801a0468f 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -235,4 +235,8 @@ else
+ MPV_CONF_OPTS += --disable-x11
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++MPV_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++endif
++
+ $(eval $(waf-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
