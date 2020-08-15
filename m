@@ -1,61 +1,125 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Aug 2020 10:28:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bird: fix build with gcc 10
-Message-ID: <20200815082818.2062142-1-fontaine.fabrice@gmail.com>
+From: Avraham Shukron <avraham.shukron@gmail.com>
+Date: Sat, 15 Aug 2020 11:59:30 +0300
+Subject: [Buildroot] [PATCH v2] libbacktrace: new package
+In-Reply-To: <CALFsTFVBXOyu8_h=w2wivC2kgQvR92C+aJ=7G_CCBS0SFvOm8g@mail.gmail.com>
+References: <20200813204540.GJ13263@scaer>
+ <20200814223455.629710-1-avraham.shukron@gmail.com>
+ <CALFsTFVBXOyu8_h=w2wivC2kgQvR92C+aJ=7G_CCBS0SFvOm8g@mail.gmail.com>
+Message-ID: <CAJX3zAtdEn9gkt5eGxFmEvDhj3akD=Yr3ZFE=RFbV-vtZzKWzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/3e01f490d76be03f21a0680eb162a0c0267fc1b9
+The only appropriate submenu under "Libraries" is alongside libunwind under
+"Other",
+which is kinda saying "I don't know where else to put it". Anyway - I don't
+think it is
+important too much as long as it is searchable in a place that makes sense.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/bird/0002-Added-missing-extern.patch | 34 ++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/bird/0002-Added-missing-extern.patch
+I'll send v3 soon.
 
-diff --git a/package/bird/0002-Added-missing-extern.patch b/package/bird/0002-Added-missing-extern.patch
-new file mode 100644
-index 0000000000..00aab3e92b
---- /dev/null
-+++ b/package/bird/0002-Added-missing-extern.patch
-@@ -0,0 +1,34 @@
-+From 4bbc10614f3431c37e6352f5a6ea5c693c31021e Mon Sep 17 00:00:00 2001
-+From: Maria Matejka <mq@ucw.cz>
-+Date: Tue, 4 Feb 2020 10:11:16 +0100
-+Subject: [PATCH] Added missing extern
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Thanks to Robert Scheck <bird@robert-scheck.de> who reported it
-+and Toke H?iland-J?rgensen <toke@toke.dk> who suggested this patch.
-+
-+[Retrieved from:
-+https://gitlab.nic.cz/labs/bird/-/commit/4bbc10614f3431c37e6352f5a6ea5c693c31021e]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ nest/route.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nest/route.h b/nest/route.h
-+index d2a07f09..b927db5f 100644
-+--- a/nest/route.h
-++++ b/nest/route.h
-+@@ -458,7 +458,7 @@ typedef struct rta {
-+ 					   protocol-specific metric is availabe */
-+ 
-+ 
-+-const char * rta_dest_names[RTD_MAX];
-++extern const char * rta_dest_names[RTD_MAX];
-+ 
-+ static inline const char *rta_dest_name(uint n)
-+ { return (n < RTD_MAX) ? rta_dest_names[n] : "???"; }
-+-- 
-+2.26.2
-+
--- 
-2.27.0
+On Sat, Aug 15, 2020 at 8:12 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+
+> Hello,
+>
+> On Sat, Aug 15, 2020 at 1:35 AM Avi Shukron <avraham.shukron@gmail.com>
+> wrote:
+> >
+> > A C library that may be linked into a C/C++ program to produce
+> > symbolic backtraces.
+> >
+> > Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+> > ---
+> >  package/Config.in                      |  1 +
+> >  package/libbacktrace/Config.in         |  7 +++++++
+> >  package/libbacktrace/libbacktrace.hash |  3 +++
+> >  package/libbacktrace/libbacktrace.mk   | 15 +++++++++++++++
+> >  4 files changed, 26 insertions(+)
+> >  create mode 100644 package/libbacktrace/Config.in
+> >  create mode 100644 package/libbacktrace/libbacktrace.hash
+> >  create mode 100644 package/libbacktrace/libbacktrace.mk
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index d7e79f4795..7460d3f006 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -170,6 +170,7 @@ menu "Development tools"
+> >         source "package/grep/Config.in"
+> >         source "package/jo/Config.in"
+> >         source "package/jq/Config.in"
+> > +       source "package/libbacktrace/Config.in"
+> Comparing to other packages in the "development tools" menu, I don't
+> think this is the correct place for libbacktrace.
+> In my opinion, it should be placed on one of the submenus under
+> "libraries".
+>
+> >         source "package/libtool/Config.in"
+> >         source "package/make/Config.in"
+> >         source "package/patch/Config.in"
+> > diff --git a/package/libbacktrace/Config.in
+> b/package/libbacktrace/Config.in
+> > new file mode 100644
+> > index 0000000000..0f940dd588
+> > --- /dev/null
+> > +++ b/package/libbacktrace/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_LIBBACKTRACE
+> > +       bool "libbacktrace"
+> > +       help
+> > +         A C library that may be linked into a C/C++ program to
+> > +         produce symbolic backtraces
+> > +
+> > +         https://github.com/ianlancetaylor/libbacktrace
+> > diff --git a/package/libbacktrace/libbacktrace.hash
+> b/package/libbacktrace/libbacktrace.hash
+> > new file mode 100644
+> > index 0000000000..ecd530a33b
+> > --- /dev/null
+> > +++ b/package/libbacktrace/libbacktrace.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally computed:
+> > +sha256
+> 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5
+> libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
+> > +sha256
+> ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
+> > diff --git a/package/libbacktrace/libbacktrace.mk
+> b/package/libbacktrace/libbacktrace.mk
+> > new file mode 100644
+> > index 0000000000..fb1f6c058a
+> > --- /dev/null
+> > +++ b/package/libbacktrace/libbacktrace.mk
+> > @@ -0,0 +1,15 @@
+> >
+> +################################################################################
+> > +#
+> > +# libbacktrace
+> > +#
+> >
+> +################################################################################
+> > +
+> > +LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
+> > +LIBBACKTRACE_SITE = $(call
+> github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
+> > +
+> > +LIBBACKTRACE_LICENSE = BSD-3C-like
+> > +LIBBACKTRACE_LICENSE_FILES = LICENSE
+> > +
+> > +LIBBACKTRACE_INSTALL_STAGING = YES
+> > +
+> > +$(eval $(autotools-package))
+> > --
+> > 2.25.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> Regards,
+> Asaf.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200815/ec0bb0e7/attachment.html>
