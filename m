@@ -1,81 +1,51 @@
-From: Avi Shukron <avraham.shukron@gmail.com>
-Date: Sat, 15 Aug 2020 12:11:27 +0300
-Subject: [Buildroot] [PATCH v3] libbacktrace: new package
-Message-ID: <20200815091127.638233-1-avraham.shukron@gmail.com>
+From: Andrey Nechypurenko <andreynech@gmail.com>
+Date: Sat, 15 Aug 2020 14:25:42 +0200
+Subject: [Buildroot] Package for .NET Core runtime
+In-Reply-To: <20200813212833.3a8f4005@windsurf.home>
+References: <CAOiXNkB1uAiKUczr42uOtXQLR1ZujhhWOCyADfaUQqzVEcAH_w@mail.gmail.com>
+ <20200813212833.3a8f4005@windsurf.home>
+Message-ID: <CAOiXNkAoGPo+dsXjkkvC=mCE+r0X2SzoxN9wMaU1B1tL1+3HYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A C library that may be linked into a C/C++ program to produce
-symbolic backtraces.
+Hi Thomas,
 
-Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
----
- package/Config.in                      |  1 +
- package/libbacktrace/Config.in         |  7 +++++++
- package/libbacktrace/libbacktrace.hash |  3 +++
- package/libbacktrace/libbacktrace.mk   | 15 +++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/libbacktrace/Config.in
- create mode 100644 package/libbacktrace/libbacktrace.hash
- create mode 100644 package/libbacktrace/libbacktrace.mk
+> Thanks for the contribution and the details? The package doesn't seem
+> to be that complicated. Do you think you could take the time to address
+> the few issues you've pointed out, and submit it as a proper patch for
+> inclusion ?
 
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..629a45fb0a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1831,6 +1831,7 @@ menu "Other"
- 	source "package/libatomic_ops/Config.in"
- 	source "package/libavl/Config.in"
- 	source "package/libb64/Config.in"
-+	source "package/libbacktrace/Config.in"
- 	source "package/libbsd/Config.in"
- 	source "package/libcap/Config.in"
- 	source "package/libcap-ng/Config.in"
-diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
-new file mode 100644
-index 0000000000..0f940dd588
---- /dev/null
-+++ b/package/libbacktrace/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBBACKTRACE
-+	bool "libbacktrace"
-+	help
-+	  A C library that may be linked into a C/C++ program to
-+	  produce symbolic backtraces
-+
-+	  https://github.com/ianlancetaylor/libbacktrace
-diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
-new file mode 100644
-index 0000000000..ecd530a33b
---- /dev/null
-+++ b/package/libbacktrace/libbacktrace.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
-+sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
-diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
-new file mode 100644
-index 0000000000..fb1f6c058a
---- /dev/null
-+++ b/package/libbacktrace/libbacktrace.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libbacktrace
-+#
-+################################################################################
-+
-+LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
-+LIBBACKTRACE_SITE = $(call github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
-+
-+LIBBACKTRACE_LICENSE = BSD-3C-like
-+LIBBACKTRACE_LICENSE_FILES = LICENSE
-+
-+LIBBACKTRACE_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
--- 
-2.25.1
+It would be interesting for me to improve the package and I would
+definitely try to do it. However, I could not commit to any particular
+deadline since tasks with higher priority could preempt this activity
+:-) . I will post to the list when I progress on this.
+
+> In any case, could you give some details on how this .NET Core runtime
+> is meant to be used ? For example, would I need to take the SDK for
+> x86-64 from https://dotnet.microsoft.com/download/dotnet-core/3.1,
+> build a program with it, place the binary on the target, where it can
+> run thanks to the .NET Core runtime you have packaged ?
+
+Yes, that is right. The host compiler generates binaries which could
+be executed on the target. As I understand, .NET Core runtime is
+essentially a bunch of libraries which are required to run the
+application. Advantage of having the runtime installed ist that these
+libraries could be used by multiple applications. As an alternative,
+on the host, it is possible to generate so-called self-contained
+applications. They contain the binary itself and the copy of runtime.
+So if there are multiple applications, runtime can save the space on
+target. Whether the application is self-contained or framework
+(runtime) dependent is controlled by compilation with --self-contained
+parameter:
+$ dotnet publish -c Release -r linux-arm --self-contained false
+
+What would be really cool is to provide support for .NET Core
+applications similar to how it is made, for example, with Golang
+($(eval $(golang-package))). Together with the runtime package it will
+enable a rather smooth way to build .NET applications with Buildroot.
+
+Regards,
+Andrey.
