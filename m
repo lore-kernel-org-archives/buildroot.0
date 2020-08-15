@@ -1,59 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 15 Aug 2020 16:04:07 +0200
-Subject: [Buildroot] Package for .NET Core runtime
-In-Reply-To: <CAOiXNkAoGPo+dsXjkkvC=mCE+r0X2SzoxN9wMaU1B1tL1+3HYw@mail.gmail.com>
-References: <CAOiXNkB1uAiKUczr42uOtXQLR1ZujhhWOCyADfaUQqzVEcAH_w@mail.gmail.com>
- <20200813212833.3a8f4005@windsurf.home>
- <CAOiXNkAoGPo+dsXjkkvC=mCE+r0X2SzoxN9wMaU1B1tL1+3HYw@mail.gmail.com>
-Message-ID: <20200815160407.3c712daa@windsurf.home>
+Date: Sat, 15 Aug 2020 16:10:38 +0200
+Subject: [Buildroot] [PATCH] Revert "toolchain/toolchain-buildroot: enable
+ uclibc for riscv64"
+Message-ID: <20200815141039.4774-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andrey,
+This reverts commit bd9810e176273914eca1208bcba23f0de9e446b3. Indeed,
+while uClibc-ng has support for RISC-V 64-bit, this support lacks the
+__riscv_flush_icache() function call, which is used by some GCC
+builtins used for example in libffi.
 
-On Sat, 15 Aug 2020 14:25:42 +0200
-Andrey Nechypurenko <andreynech@gmail.com> wrote:
+Due to this missing __riscv_flush_icache(), anything that links
+against libffi fails to build:
 
-> It would be interesting for me to improve the package and I would
-> definitely try to do it. However, I could not commit to any particular
-> deadline since tasks with higher priority could preempt this activity
-> :-) . I will post to the list when I progress on this.
+/home/test/autobuild/run/instance-0/output-1/host/bin/riscv64-buildroot-linux-uclibc-gcc  -o gobject/gobject-query gobject/gobject-query.p/gobject-query.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group glib/libglib-2.0.so.0.6400.4 gobject/libgobject-2.0.so.0.6400.4 -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/../glib:$ORIGIN/' -Wl,-rpath-link,/home/test/autobuild/run/instance-0/output-1/build/libglib2-2.64.4/build/glib -Wl,-rpath-link,/home/test/autobuild/run/instance-0/output-1/build/libglib2-2.64.4/build/gobject
+/home/test/autobuild/run/instance-0/output-1/host/lib/gcc/riscv64-buildroot-linux-uclibc/9.3.0/../../../../riscv64-buildroot-linux-uclibc/bin/ld: /home/test/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-uclibc/sysroot/usr/lib64/libffi.so.7: undefined reference to `__riscv_flush_icache'
+collect2: error: ld returned 1 exit status
 
-No worries, we also don't have any specific deadline in Buildroot :-)
+Note that this commit means that
+support/config-fragments/autobuild/br-riscv64-full-internal.config
+will be back to using glibc as the C library, but that is OK, until
+uClibc-ng is fixed to implemented __riscv_flush_icache().
 
-Perhaps you could start by sending with "git send-email" the patch you
-already have, so we can start giving some initial feedback ?
+This uClibc-ng issue has been reported upstream at
+https://mailman.uclibc-ng.org/pipermail/devel/2020-August/002022.html.
 
-> Yes, that is right. The host compiler generates binaries which could
-> be executed on the target. As I understand, .NET Core runtime is
-> essentially a bunch of libraries which are required to run the
-> application. Advantage of having the runtime installed ist that these
-> libraries could be used by multiple applications. As an alternative,
-> on the host, it is possible to generate so-called self-contained
-> applications. They contain the binary itself and the copy of runtime.
-> So if there are multiple applications, runtime can save the space on
-> target. Whether the application is self-contained or framework
-> (runtime) dependent is controlled by compilation with --self-contained
-> parameter:
-> $ dotnet publish -c Release -r linux-arm --self-contained false
-> 
-> What would be really cool is to provide support for .NET Core
-> applications similar to how it is made, for example, with Golang
-> ($(eval $(golang-package))). Together with the runtime package it will
-> enable a rather smooth way to build .NET applications with Buildroot.
+Fixes:
 
-Thanks for those details! Considering what you said, I believe it would
-make sense to also package the .NET SDK as a host package in Buildroot,
-so that a user can easily have both the compiler on the build machine
-and the runtime on the target machine. What do you think ?
+  http://autobuild.buildroot.net/results/ec1185ad1fd8863a3990143a0af2ace987761a27/
 
-Best regards,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uclibc/Config.in                |  1 -
+ toolchain/toolchain-buildroot/Config.in | 13 ++++++-------
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-Thomas Petazzoni
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index f4d4f06462..de2885bc92 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -101,7 +101,6 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default "or1k"     if BR2_or1k
+ 	default "powerpc"  if BR2_powerpc
+-	default "riscv64"  if BR2_RISCV_64
+ 	default "sh"	   if BR2_sh
+ 	default "sparc"	   if BR2_sparc
+ 	default "xtensa"   if BR2_xtensa
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 068f91c875..418d5cb387 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -27,13 +27,12 @@ choice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc-ng"
+-	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
+-		   BR2_arm     || BR2_armeb      || \
+-		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
+-		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
+-		   BR2_or1k    || BR2_powerpc    || BR2_RISCV_64   || \
+-		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
+-		   BR2_xtensa  || BR2_x86_64
++	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
++		   BR2_arm     || BR2_armeb    || \
++		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
++		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
++		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  This option selects uClibc-ng as the C library for the
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
