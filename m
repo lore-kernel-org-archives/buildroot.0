@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 15 Aug 2020 10:20:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/drbd-utils: fix build with gcc 10
-Message-ID: <20200815082034.2056096-1-fontaine.fabrice@gmail.com>
+Date: Sat, 15 Aug 2020 10:28:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bird: fix build with gcc 10
+Message-ID: <20200815082818.2062142-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,50 +9,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/e444f46cd6e6d767592b17b83095737d0508a475
+ - http://autobuild.buildroot.org/results/3e01f490d76be03f21a0680eb162a0c0267fc1b9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-setup_options-definitions-as-extern.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/drbd-utils/0001-v84-Make-setup_options-definitions-as-extern.patch
+ package/bird/0002-Added-missing-extern.patch | 34 ++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/bird/0002-Added-missing-extern.patch
 
-diff --git a/package/drbd-utils/0001-v84-Make-setup_options-definitions-as-extern.patch b/package/drbd-utils/0001-v84-Make-setup_options-definitions-as-extern.patch
+diff --git a/package/bird/0002-Added-missing-extern.patch b/package/bird/0002-Added-missing-extern.patch
 new file mode 100644
-index 0000000000..3a7e32950e
+index 0000000000..00aab3e92b
 --- /dev/null
-+++ b/package/drbd-utils/0001-v84-Make-setup_options-definitions-as-extern.patch
-@@ -0,0 +1,31 @@
-+From a513dea1cf000164fd87e56525d098a426131a86 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Wed, 12 Aug 2020 12:59:38 -0700
-+Subject: [PATCH] v84: Make setup_options definitions as extern
++++ b/package/bird/0002-Added-missing-extern.patch
+@@ -0,0 +1,34 @@
++From 4bbc10614f3431c37e6352f5a6ea5c693c31021e Mon Sep 17 00:00:00 2001
++From: Maria Matejka <mq@ucw.cz>
++Date: Tue, 4 Feb 2020 10:11:16 +0100
++Subject: [PATCH] Added missing extern
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+This is already defined in drbdadm_main.c, therefore make this
-+declaration to be extern for other modules
++Thanks to Robert Scheck <bird@robert-scheck.de> who reported it
++and Toke H?iland-J?rgensen <toke@toke.dk> who suggested this patch.
 +
-+Fixes compatibility with gcc-10 which uses -fno-common by default
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +[Retrieved from:
-+https://github.com/LINBIT/drbd-utils/commit/a513dea1cf000164fd87e56525d098a426131a86]
++https://gitlab.nic.cz/labs/bird/-/commit/4bbc10614f3431c37e6352f5a6ea5c693c31021e]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ user/v84/drbdadm.h | 2 +-
++ nest/route.h | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/user/v84/drbdadm.h b/user/v84/drbdadm.h
-+index ed63d78c..8469f1c4 100644
-+--- a/user/v84/drbdadm.h
-++++ b/user/v84/drbdadm.h
-+@@ -251,7 +251,7 @@ struct setup_option {
-+ 	bool explicit;
-+ 	char *option;
-+ };
-+-struct setup_option *setup_options;
-++extern struct setup_option *setup_options;
++diff --git a/nest/route.h b/nest/route.h
++index d2a07f09..b927db5f 100644
++--- a/nest/route.h
+++++ b/nest/route.h
++@@ -458,7 +458,7 @@ typedef struct rta {
++ 					   protocol-specific metric is availabe */
 + 
-+ extern void add_setup_option(bool explicit, char *option);
 + 
++-const char * rta_dest_names[RTD_MAX];
+++extern const char * rta_dest_names[RTD_MAX];
++ 
++ static inline const char *rta_dest_name(uint n)
++ { return (n < RTD_MAX) ? rta_dest_names[n] : "???"; }
++-- 
++2.26.2
++
 -- 
 2.27.0
