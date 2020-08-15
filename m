@@ -1,54 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 15 Aug 2020 22:02:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/keepalived: don't use --{en,
- dis}able-iptables
-In-Reply-To: <20200714165800.995534-1-fontaine.fabrice@gmail.com>
-References: <20200714165800.995534-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200815220213.55cc0ccd@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 15 Aug 2020 22:14:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pistache: link with libatomic when
+ needed
+Message-ID: <20200815201415.3723205-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+pistache does not mandatory link with libatomic since
+https://github.com/oktal/pistache/commit/4ed3f8e148dae203730139ae3c1c4c87bfc86c02
+however the logic is broken due to an unknown issue in CheckAtomic.cmake.
 
-On Tue, 14 Jul 2020 18:58:00 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Instead of trying to fix it, just link with -latomic if needed
 
-> Commit 5fcee496df262fcc304ad22738441df35a960a67 wrongly replaced
-> --{en,dis}able-libiptc by --{en,dis}able-iptables.
-> 
-> Indeed, this will raise the following build failure if
-> --disable-iptables and --disable-ipset are both set:
-> 
-> configure: error: disable-libipset requires vrrp and iptables
-> 
-> The issue is that when iptables flag is set, it will first check for
-> libiptc and then for ipset so setting --disable-iptables will disable
-> libiptc and ipset (which is not what we wants)
-> 
-> As iptables flag is enabled by default, just drop
-> --{en,dis}able-iptables to keep it simple
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a1712b2cc3ad878e6876325ec7d4c434d0d9d11b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/17f05238a3479f5b0c9ef8f9bb42210f6fc14fff
 
-I was not very convinced by this explanation, so I dug deeper into this
-issue. The configure.ac is far from being crystal clear, but I think I
-got to the bottom of this, and submitted what I consider a better patch:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pistache/pistache.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-  https://patchwork.ozlabs.org/project/buildroot/patch/20200815195851.282863-1-thomas.petazzoni at bootlin.com/
-
-The commit log contains an extensive description of how I came up with
-the alternate solution.
-
-Thanks!
-
-Thomas
+diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
+index 4d6bd283ea..0ca64a05ae 100644
+--- a/package/pistache/pistache.mk
++++ b/package/pistache/pistache.mk
+@@ -18,4 +18,8 @@ else
+ PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=OFF
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++PISTACHE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
++endif
++
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
