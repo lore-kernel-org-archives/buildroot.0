@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Aug 2020 22:06:20 +0200
-Subject: [Buildroot] OpenSSH login problem
-In-Reply-To: <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
-References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
- <52-5f356200-5-2c492440@36238474>
- <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
- <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
-Message-ID: <20200816220620.65159d1d@windsurf.home>
+Date: Sun, 16 Aug 2020 22:13:39 +0200
+Subject: [Buildroot] [PATCH] package/xen: bump version to 4.14.0
+In-Reply-To: <20200816025307.395-1-alistair@alistair23.me>
+References: <20200816025307.395-1-alistair@alistair23.me>
+Message-ID: <20200816221339.26be05af@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 16 Aug 2020 12:59:02 -0700
-Christian Stewart <christian@paral.in> wrote:
+On Sat, 15 Aug 2020 19:53:07 -0700
+Alistair Francis <alistair@alistair23.me> wrote:
 
-> FWIW I actually had the same, was trying to test an odroid XU4 and the
-> SSH server was immediately closing the connection. I double-checked
-> that openssh was at the latest version & I was on the latest buildroot
-> master as well, and assumed at the time it must have had something to
-> do with the kernel bump I was testing.
+> Bump the Xen package to the latest release. We can also remove a patch
+> to change the CFLAGS as it is no longer required.
 > 
-> Now I'm thinking maybe this was causing it. Will test again later today.
+> Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> ---
+>  ...e-linux-limits.h-for-XATTR_SIZE_MAX.patch} |  0
+>  ...x-build-with-CFLAGS-from-environment.patch | 36 -------------------
+>  package/xen/xen.hash                          |  2 +-
+>  package/xen/xen.mk                            |  2 +-
+>  4 files changed, 2 insertions(+), 38 deletions(-)
+>  rename package/xen/{0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch => 0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch} (100%)
+>  delete mode 100644 package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
 
-Could you try applying:
-
- https://github.com/openssh/openssh-portable/commit/beee0ef61866cb567b9abc23bd850f922e59e3f0
- https://github.com/openssh/openssh-portable/commit/69298ebfc2c066acee5d187eac8ce9f38c796630
-
-and see if it helps ?
-
-Thanks,
+You had forgotten to update the hash of the license file, which had
+changed. I've done that, and applied to next. Thanks!
 
 Thomas
 -- 
