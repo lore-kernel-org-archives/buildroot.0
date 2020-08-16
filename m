@@ -1,78 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Aug 2020 22:50:08 +0200
-Subject: [Buildroot] [PATCH v2] configs/rock_pi_n8: new defconfig
-In-Reply-To: <1594986634-10056-1-git-send-email-sunil@amarulasolutions.com>
-References: <20200714214814.53fe99a0@windsurf.home>
- <1594986634-10056-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <20200816225008.2d97bea2@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Aug 2020 23:02:10 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/pistache: fix detection of atomic
+In-Reply-To: <20200816105409.1051225-1-fontaine.fabrice@gmail.com>
+References: <20200816105409.1051225-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200816210210.GI24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fabrice, All,
 
-I have applied to next, after a few changes. See below for some
-comments.
-
-On Fri, 17 Jul 2020 17:20:34 +0530
-Suniel Mahesh <sunil@amarulasolutions.com> wrote:
-
-> Add initial support for RK3288 SOM based radxa rockpi-n8
-> target with below features:
+On 2020-08-16 12:54 +0200, Fabrice Fontaine spake thusly:
+> pistache does not mandatory link with libatomic since
+> https://github.com/oktal/pistache/commit/4ed3f8e148dae203730139ae3c1c4c87bfc86c02
+> however the logic is broken because the C language is not enabled
 > 
-> 	- Custom U-Boot 2020.07-rc4
-> 	  https://github.com/amarula/u-boot-amarula.git
-> 	  commit: "ba120841bf40ebaed049d64bb4f980083a1cf6b7"
-> 	- Custom Linux 5.7.0-rc1
-> 	  https://github.com/amarula/linux-amarula.git
-> 	  commit: "5dcb0132685b07beb82065c5d7521e6c555c55b6"
+> Fixes:
+>  - http://autobuild.buildroot.org/results/17f05238a3479f5b0c9ef8f9bb42210f6fc14fff
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Could you do a round of update on the defconfigs you've added recently
-and try to use non-rc versions of U-Boot/Linux ? And preferably
-upstream U-Boot/Linux versions instead of Amarula ones.
+Applied to master, thanks.
 
->  .gitlab-ci.yml                      |  1 +
+Don't forget to push that upstream, now! ;-)
 
-Changing the .gitlab-ci.yml is no longer needed (but it was back when
-you created this patch, so this is just FYI).
+Regards,
+Yann E. MORIN.
 
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/amarula/linux-amarula.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5dcb0132685b07beb82065c5d7521e6c555c55b6"
-> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-> +BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-rock-pi-n8"
-
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-
-was missing here.
-
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Fix logic instead of adding -latomic
+> 
+>  ...-add-C-language-to-project-statement.patch | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
+> 
+> diff --git a/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch b/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
+> new file mode 100644
+> index 0000000000..c393a48d0d
+> --- /dev/null
+> +++ b/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
+> @@ -0,0 +1,70 @@
+> +From a50fc9bde098e4e89584a5da9f94f620c11b6733 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 16 Aug 2020 12:31:46 +0200
+> +Subject: [PATCH] CMakeLists.txt: add C language to project statement
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
 > +
-> +# Filesystem
-> +BR2_TARGET_GENERIC_HOSTNAME="rockpi-n8"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N8"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+> +This will fix the detection of atomic:
+> +
+> +-- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB
+> +-- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB - Failed
+> +-- Looking for __atomic_load_8 in atomic
+> +-- Looking for __atomic_load_8 in atomic - not found
+> +CMake Error at CMakeModules/CheckAtomic.cmake:76 (message):
+> +  Host compiler appears to require libatomic for 64-bit operations, but
+> +  cannot find it.
+> +Call Stack (most recent call first):
+> +  CMakeLists.txt:19 (include)
+> +
+> +Indeed if C language is not enabled, the test will be run with the C++
+> +compiler resulting in the following error:
+> +
+> +Building CXX object CMakeFiles/cmTC_fad22.dir/CheckFunctionExists.cxx.o
+> +/tmp/instance-0/output-1/host/bin/mipsel-linux-g++ --sysroot=/tmp/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -D_FORTIFY_SOURCE=1 -Wall -Wconversion -pedantic -Wextra -Wno-missing-field-initializers -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG   -o CMakeFiles/cmTC_fad22.dir/CheckFunctionExists.cxx.o -c /tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
+> +<command-line>: error: new declaration 'char __atomic_load_8()' ambiguates built-in declaration 'long long unsigned int __atomic_load_8(const volatile void*, int)' [-fpermissive]
+> +/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx:7:3: note: in expansion of macro 'CHECK_FUNCTION_EXISTS'
+> +   CHECK_FUNCTION_EXISTS(void);
+> +   ^~~~~~~~~~~~~~~~~~~~~
+> +/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx: In function 'int main(int, char**)':
+> +/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx:17:25: error: too few arguments to function 'long long unsigned int __atomic_load_8(const volatile void*, int)'
+> +   CHECK_FUNCTION_EXISTS();
+> +                         ^
+> +
+> +whereas with a C compiler, we'll get:
+> +
+> +Building C object CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o
+> +/home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc --sysroot=/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG   -o CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+> +<command-line>: warning: conflicting types for built-in function ?__atomic_load_8? [-Wbuiltin-declaration-mismatch]
+> +/usr/share/cmake-3.16/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ?CHECK_FUNCTION_EXISTS?
+> +   CHECK_FUNCTION_EXISTS(void);
+> +   ^~~~~~~~~~~~~~~~~~~~~
+> +Linking C executable cmTC_4b0f4
+> +/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b0f4.dir/link.txt --verbose=1
+> +/home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc --sysroot=/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG    CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o  -o cmTC_4b0f4  -latomic
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/2bf06c6a9e55b449ec5875cf9415a9e55b2065d6
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +---
+> + CMakeLists.txt | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index edc73c5..0286647 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+> + set(CMAKE_CXX_EXTENSIONS OFF)
+> + 
+> + project (pistache
+> +-    LANGUAGES CXX)
+> ++    LANGUAGES C CXX)
+> + 
+> + include(GNUInstallDirs)
+> + 
+> +-- 
+> +2.27.0
+> +
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This was not needed, our default of 60 MB is fine.
-
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-
-This was apparently not needed, since you're now using a zImage.
-
-Appplied with those changes. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
