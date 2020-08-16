@@ -1,65 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2020 23:03:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: disable werror
-In-Reply-To: <20200816100656.979726-1-fontaine.fabrice@gmail.com>
-References: <20200816100656.979726-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200816210336.GJ24264@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Aug 2020 22:50:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/libbacktrace: new
+ package
+Message-ID: <20200816210733.12BF480066@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a30cf5c135f51c0cf6c62699d5f93b3abffa2c65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2020-08-16 12:06 +0200, Fabrice Fontaine spake thusly:
-> This will fix the following build failure:
-> 
-> ../src/gstreamer/gstlibcameraallocator.cpp: In static member function 'static GQuark FrameWrap::getQuark()':
-> /home/peko/autobuild/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gatomic.h:128:15: error: variable 'gapg_temp_atomic' set but not used [-Werror=unused-but-set-variable]
->      gpointer *gapg_temp_atomic = (gpointer *)(atomic);                       \
->                ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c28500d4cc55fbd2bac87f2c11759ddc9163bc91
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+A C library that may be linked into a C/C++ program to produce
+symbolic backtraces.
 
-Applied to master, thanks.
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in                      |  1 +
+ package/libbacktrace/Config.in         |  7 +++++++
+ package/libbacktrace/libbacktrace.hash |  3 +++
+ package/libbacktrace/libbacktrace.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libcamera/libcamera.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-> index 9739f715a1..34911cee79 100644
-> --- a/package/libcamera/libcamera.mk
-> +++ b/package/libcamera/libcamera.mk
-> @@ -15,7 +15,8 @@ LIBCAMERA_DEPENDENCIES = \
->  LIBCAMERA_CONF_OPTS = \
->  	-Dandroid=false \
->  	-Ddocumentation=false \
-> -	-Dtest=false
-> +	-Dtest=false \
-> +	-Dwerror=false
->  LIBCAMERA_INSTALL_STAGING = YES
->  LIBCAMERA_LICENSE = \
->  	LGPL-2.1+ (library), \
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index d8d9b7617f..b5285a66a2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1833,6 +1833,7 @@ menu "Other"
+ 	source "package/libatomic_ops/Config.in"
+ 	source "package/libavl/Config.in"
+ 	source "package/libb64/Config.in"
++	source "package/libbacktrace/Config.in"
+ 	source "package/libbsd/Config.in"
+ 	source "package/libcap/Config.in"
+ 	source "package/libcap-ng/Config.in"
+diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
+new file mode 100644
+index 0000000000..0f940dd588
+--- /dev/null
++++ b/package/libbacktrace/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBBACKTRACE
++	bool "libbacktrace"
++	help
++	  A C library that may be linked into a C/C++ program to
++	  produce symbolic backtraces
++
++	  https://github.com/ianlancetaylor/libbacktrace
+diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
+new file mode 100644
+index 0000000000..ecd530a33b
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
++sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
+diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
+new file mode 100644
+index 0000000000..8f812228e3
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libbacktrace
++#
++################################################################################
++
++LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
++LIBBACKTRACE_SITE = $(call github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
++LIBBACKTRACE_LICENSE = BSD-3C-like
++LIBBACKTRACE_LICENSE_FILES = LICENSE
++LIBBACKTRACE_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
