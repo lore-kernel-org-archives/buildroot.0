@@ -1,41 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Aug 2020 12:06:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcamera: disable werror
-Message-ID: <20200816100656.979726-1-fontaine.fabrice@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sun, 16 Aug 2020 12:13:29 +0200
+Subject: [Buildroot] [PATCH v3 1/5]
+ support/scripts/gen-bootlin-toolchains: add new script to support Bootlin
+ toolchains
+In-Reply-To: <20200814195235.986905-2-thomas.petazzoni@bootlin.com>
+References: <20200814195235.986905-1-thomas.petazzoni@bootlin.com>
+ <20200814195235.986905-2-thomas.petazzoni@bootlin.com>
+Message-ID: <16887404-57d2-0809-7f45-9e90f4321539@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix the following build failure:
+Hello Thomas and all,
 
-../src/gstreamer/gstlibcameraallocator.cpp: In static member function 'static GQuark FrameWrap::getQuark()':
-/home/peko/autobuild/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gatomic.h:128:15: error: variable 'gapg_temp_atomic' set but not used [-Werror=unused-but-set-variable]
-     gpointer *gapg_temp_atomic = (gpointer *)(atomic);                       \
-               ^
+On 14/08/20 21:52, Thomas Petazzoni wrote:
+> https://toolchains.bootlin.com/ has been providing for a few years a
+> number of ready-to-use pre-built toolchains, for a wide range of
+> architectures (which it turns out, are all built using Buildroot).
+> 
+> While toolchains.bootlin.com provides Buildroot config fragments to
+> easily use those toolchains with Buildroot (see [0] for example), this
+> is not visible anywhere. So instead, we would like to add support for
+> these toolchains in Buildroot just like we have existing support for
+> Linaro, ARM, Synopsys, etc. toolchains.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c28500d4cc55fbd2bac87f2c11759ddc9163bc91
+[--SNIP--]
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcamera/libcamera.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> +def get_toolchains():
+> +    toolchains = list()
+> +    for arch, details in arches.items():
+> +        print(arch)
+> +        url = os.path.join(BASE_URL, arch, "available_toolchains")
+> +        page = requests.get(url).text
+> +        fnames = sorted(re.findall(r'<td><a href="(\w[^"]+)"', page))
+> +        print(fnames)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 9739f715a1..34911cee79 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -15,7 +15,8 @@ LIBCAMERA_DEPENDENCIES = \
- LIBCAMERA_CONF_OPTS = \
- 	-Dandroid=false \
- 	-Ddocumentation=false \
--	-Dtest=false
-+	-Dtest=false \
-+	-Dwerror=false
- LIBCAMERA_INSTALL_STAGING = YES
- LIBCAMERA_LICENSE = \
- 	LGPL-2.1+ (library), \
--- 
-2.27.0
+This print(fnames) call should be removed. Besides this tiny remark,
+
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+
+
+Best regards,
+
+Titouan
