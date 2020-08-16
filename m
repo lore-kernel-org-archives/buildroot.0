@@ -1,63 +1,73 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Aug 2020 10:45:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez-alsa: update gcc 10 patch
-Message-ID: <20200816084523.475742-1-fontaine.fabrice@gmail.com>
+Date: Sun, 16 Aug 2020 10:50:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpv: atomic is mandatory
+Message-ID: <20200816085027.476250-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update patch by adding the missing update on src/ofono-iface.h from
-https://github.com/Arkq/bluez-alsa/commit/30a23dd7ce9b00c702fa48545f6b03038f9e17c6
-
-Fixes:
- - http://autobuild.buildroot.org/results/9200bdab254e24ecacd345c00216a3d87c014dfc
+__sync builtins have been dropped since version 0.24.0 and
+https://github.com/mpv-player/mpv/commit/c3205d294e519f994829d9355eb133670729aab4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-fix-build-issue-with-gcc-10.patch    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/mpv/Config.in   | 4 ++--
+ package/tovid/Config.in | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
-index 65a67c35c5..b0b1f72721 100644
---- a/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
-+++ b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
-@@ -10,6 +10,8 @@ does not apply on current used version in buildroot.
- [1] https://github.com/Arkq/bluez-alsa/commit/30a23dd7ce9b00c702fa48545f6b03038f9e17c6
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 32910f2245..697ad57ba6 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPV
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+@@ -25,6 +25,6 @@ config BR2_PACKAGE_MPV
  
- Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+[Fabrice: also update src/ofono-iface.h]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  src/bluealsa-dbus.c  | 4 ++++
-  src/bluealsa-iface.c | 2 ++
-@@ -113,6 +115,26 @@ index cfdbff8..190101e 100644
-  /**
-   * Structure describing registered D-Bus object. */
-  struct dbus_object_data {
-+ diff --git a/src/ofono-iface.h b/src/ofono-iface.h
-+index d5a6715..d5b9065 100644
-+--- a/src/ofono-iface.h
-++++ b/src/ofono-iface.h
-+@@ -1,6 +1,6 @@
-+ /*
-+  * BlueALSA - ofono-iface.h
-+- * Copyright (c) 2016-2019 Arkadiusz Bokowy
-++ * Copyright (c) 2016-2020 Arkadiusz Bokowy
-+  *               2018 Thierry Bultel
-+  *
-+  * This file is a part of bluez-alsa.
-+@@ -27,6 +27,6 @@
-+ #define OFONO_AUDIO_CODEC_CVSD 0x01
-+ #define OFONO_AUDIO_CODEC_MSBC 0x02
-+ 
-+-const GDBusInterfaceInfo ofono_iface_hf_audio_agent;
-++extern const GDBusInterfaceInfo ofono_iface_hf_audio_agent;
-+ 
-+ #endif
- -- 
- 2.20.1
- 
+ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+diff --git a/package/tovid/Config.in b/package/tovid/Config.in
+index d5b7a28314..f4ddcfa4a0 100644
+--- a/package/tovid/Config.in
++++ b/package/tovid/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_TOVID
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # mpv
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mpv
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC # mpv
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC # mpv
+ 	# The below dependencies are runtime dependencies only
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
+@@ -31,7 +31,7 @@ config BR2_PACKAGE_TOVID
+ comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.5"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 \
+ 		|| !BR2_INSTALL_LIBSTDCPP \
+@@ -41,7 +41,7 @@ comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.5"
+ comment "tovid depends on python or python3"
+ 	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
 -- 
 2.27.0
