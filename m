@@ -1,89 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2020 22:49:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: fix build with jasper
- >= 2.0.17
-In-Reply-To: <20200816120341.1090911-1-fontaine.fabrice@gmail.com>
-References: <20200816120341.1090911-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200816204928.GH24264@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Aug 2020 22:50:08 +0200
+Subject: [Buildroot] [PATCH v2] configs/rock_pi_n8: new defconfig
+In-Reply-To: <1594986634-10056-1-git-send-email-sunil@amarulasolutions.com>
+References: <20200714214814.53fe99a0@windsurf.home>
+ <1594986634-10056-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <20200816225008.2d97bea2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello,
 
-On 2020-08-16 14:03 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/8da00d4b079195f45fe74d879b10db05d74d0559
+I have applied to next, after a few changes. See below for some
+comments.
+
+On Fri, 17 Jul 2020 17:20:34 +0530
+Suniel Mahesh <sunil@amarulasolutions.com> wrote:
+
+> Add initial support for RK3288 SOM based radxa rockpi-n8
+> target with below features:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 	- Custom U-Boot 2020.07-rc4
+> 	  https://github.com/amarula/u-boot-amarula.git
+> 	  commit: "ba120841bf40ebaed049d64bb4f980083a1cf6b7"
+> 	- Custom Linux 5.7.0-rc1
+> 	  https://github.com/amarula/linux-amarula.git
+> 	  commit: "5dcb0132685b07beb82065c5d7521e6c555c55b6"
 
-Applied to master, thanks.
+Could you do a round of update on the defconfigs you've added recently
+and try to use non-rc versions of U-Boot/Linux ? And preferably
+upstream U-Boot/Linux versions instead of Amarula ones.
 
-Regards,
-Yann E. MORIN.
+>  .gitlab-ci.yml                      |  1 +
 
-> ---
->  ...0001-Fix-build-of-grfmt_jpeg2000-cpp.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-> 
-> diff --git a/package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch b/package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-> new file mode 100644
-> index 0000000000..e54fab852a
-> --- /dev/null
-> +++ b/package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-> @@ -0,0 +1,37 @@
-> +From f66fc199a20882c546fa31142e9c0f5a8b3cf983 Mon Sep 17 00:00:00 2001
-> +From: Florian Jung <flo@windfis.ch>
-> +Date: Wed, 29 Jul 2020 18:51:55 +0200
-> +Subject: [PATCH] Fix build of grfmt_jpeg2000.cpp
+Changing the .gitlab-ci.yml is no longer needed (but it was back when
+you created this patch, so this is just FYI).
+
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/amarula/linux-amarula.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="5dcb0132685b07beb82065c5d7521e6c555c55b6"
+> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+> +BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-rock-pi-n8"
+
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+
+was missing here.
+
 > +
-> +libjasper has recently changed `jas_matrix_get` from a macro to an inline function
-> +(389951d071 in https://github.com/jasper-software/jasper), causing the build to fail.
-> +
-> +[Retrieved from:
-> +https://github.com/opencv/opencv/commit/f66fc199a20882c546fa31142e9c0f5a8b3cf983]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + modules/imgcodecs/src/grfmt_jpeg2000.cpp | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/modules/imgcodecs/src/grfmt_jpeg2000.cpp b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-> +index fe69f80c86f..0f4d28d6f4d 100644
-> +--- a/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-> ++++ b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-> +@@ -377,7 +377,7 @@ bool  Jpeg2KDecoder::readComponent8u( uchar *data, void *_buffer,
-> + 
-> +     for( y = 0; y < yend - ystart; )
-> +     {
-> +-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-> ++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-> +         uchar* dst = data + (y - yoffset) * step - xoffset;
-> + 
-> +         if( xstep == 1 )
-> +@@ -443,7 +443,7 @@ bool  Jpeg2KDecoder::readComponent16u( unsigned short *data, void *_buffer,
-> + 
-> +     for( y = 0; y < yend - ystart; )
-> +     {
-> +-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-> ++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-> +         ushort* dst = data + (y - yoffset) * step - xoffset;
-> + 
-> +         if( xstep == 1 )
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +# Filesystem
+> +BR2_TARGET_GENERIC_HOSTNAME="rockpi-n8"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPI-N8"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
 
+This was not needed, our default of 60 MB is fine.
+
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+
+This was apparently not needed, since you're now using a zImage.
+
+Appplied with those changes. Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
