@@ -1,55 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Aug 2020 23:14:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/qemu: bump to version
- 5.1.0
-Message-ID: <20200816213646.D956D842BC@busybox.osuosl.org>
+Date: Sun, 16 Aug 2020 23:30:34 +0200
+Subject: [Buildroot] [git commit branch/next] package/re2: new package
+Message-ID: <20200816213646.E06327FA97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52f188140cd28e90103edf67db6c2cabb979f5d6
+commit: https://git.buildroot.net/buildroot/commit/?id=4410ed7a1f519aa8217702f0defb2caf6cb01fbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release 5.1.0 brought new changes like :
-- New architecture support for AVR CPUs
-- New ARMv8.2 TTS2UXN architecture feature support
-- Parameter 'mem' of the '-numa' option is not supported anymore.
+RE2 is a fast, safe, thread-friendly alternative to backtracking
+regular expression engines like those used in PCRE, Perl, and
+Python. It is a C++ library.
 
-See:
-https://wiki.qemu.org/ChangeLog/5.1
-https://www.qemu.org/2020/08/11/qemu-5-1-0/
-
-Build results available at : https://gitlab.com/jugurthaB/buildroot/-/pipelines/177823315.
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in     |  1 +
+ package/re2/Config.in | 14 ++++++++++++++
+ package/re2/re2.hash  |  3 +++
+ package/re2/re2.mk    | 17 +++++++++++++++++
+ 4 files changed, 35 insertions(+)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 7199d433cf..317c0b1a4e 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 2f13a92a0fa5c8b69ff0796b59b86b080bbb92ebad5d301a7724dd06b5e78cb6  qemu-5.0.0.tar.xz
-+sha256 c9174eb5933d9eb5e61f541cd6d1184cd3118dfe4c5c4955bc1bdc4d390fa4e5  qemu-5.1.0.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index c2872a2748..69850ec938 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QEMU_VERSION = 5.0.0
-+QEMU_VERSION = 5.1.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+diff --git a/package/Config.in b/package/Config.in
+index b5285a66a2..81ee3273f8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1945,6 +1945,7 @@ menu "Text and terminal handling"
+ 	source "package/pcre/Config.in"
+ 	source "package/pcre2/Config.in"
+ 	source "package/popt/Config.in"
++	source "package/re2/Config.in"
+ 	source "package/readline/Config.in"
+ 	source "package/slang/Config.in"
+ 	source "package/tclap/Config.in"
+diff --git a/package/re2/Config.in b/package/re2/Config.in
+new file mode 100644
+index 0000000000..004185a4b6
+--- /dev/null
++++ b/package/re2/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_RE2
++	bool "re2"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
++	help
++	  RE2 is a fast, safe, thread-friendly alternative
++	  to backtracking regular expression engines like
++	  those used in PCRE, Perl, and Python.
++	  It is a C++ library.
++
++	  https://github.com/google/re2
++
++comment "re2 needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+new file mode 100644
+index 0000000000..b8a80513b7
+--- /dev/null
++++ b/package/re2/re2.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256  6f4c8514249cd65b9e85d3e6f4c35595809a63ad71c5d93083e4d1dcdf9e0cd6  re2-2020-08-01.tar.gz
++sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+new file mode 100644
+index 0000000000..0a3c204661
+--- /dev/null
++++ b/package/re2/re2.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# re2
++#
++################################################################################
++
++RE2_VERSION = 2020-08-01
++RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
++RE2_LICENSE = BSD-3-Clause
++RE2_LICENSE_FILES = LICENSE
++RE2_INSTALL_STAGING = YES
++
++RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
++HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
