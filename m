@@ -1,77 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2020 22:45:39 +0200
-Subject: [Buildroot] [git commit] package/fluidsynth: fix build with gcc 4.8
-Message-ID: <20200816203913.4701185F4F@busybox.osuosl.org>
+Date: Sun, 16 Aug 2020 22:47:05 +0200
+Subject: [Buildroot] [PATCH v3] libbacktrace: new package
+In-Reply-To: <20200815091127.638233-1-avraham.shukron@gmail.com>
+References: <20200815091127.638233-1-avraham.shukron@gmail.com>
+Message-ID: <20200816204705.GF24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afff20241c30a46088c942036b67ab541d654acd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Avi, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/13cbba871db56ef8657a3d13c6ac8e1b4da0d244
+On 2020-08-15 12:11 +0300, Avi Shukron spake thusly:
+> A C library that may be linked into a C/C++ program to produce
+> symbolic backtraces.
+> 
+> Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...001-CMakeLists.txt-fix-build-with-gcc-4.8.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-diff --git a/package/fluidsynth/0001-CMakeLists.txt-fix-build-with-gcc-4.8.patch b/package/fluidsynth/0001-CMakeLists.txt-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..1e906f53bb
---- /dev/null
-+++ b/package/fluidsynth/0001-CMakeLists.txt-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,49 @@
-+From a810e30a3d560d3e6ced41c74032c54ea365a88e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 16 Aug 2020 20:17:26 +0200
-+Subject: [PATCH] CMakeLists.txt: fix build with gcc 4.8
-+
-+-Werror=incompatible-pointer-types is unconditionally used since version
-+2.1.4 and 137a14e106d75d1260f78acc1a19c5a936ef75b2. This will raise a
-+build failure when checking for threads on gcc 4.8:
-+
-+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-none-linux-gnueabi-gcc --sysroot=/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot -DTESTKEYWORD=inline  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -W -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wno-unused-parameter -Wdeclaration-after-statement -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Wbad-function-cast -Wcast-align   -DNDEBUG -fPIE   -o CMakeFiles/cmTC_98946.dir/CheckIncludeFile.c.o   -c /home/buildroot/autobuild/run/instance-3/output-1/build/fluidsynth-2.1.4/CMakeFiles/CMakeTmp/CheckIncludeFile.c
-+cc1: error: -Werror=incompatible-pointer-types: no option -Wincompatible-pointer-types
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/13cbba871db56ef8657a3d13c6ac8e1b4da0d244
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/FluidSynth/fluidsynth/pull/661]
-+---
-+ CMakeLists.txt | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 7844889..0f6c169 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -146,6 +146,7 @@ endif ( POLICY CMP0063 )
-+ include ( DefaultDirs )
-+ 
-+ # Basic C library checks
-++include ( CheckCCompilerFlag )
-+ include ( CheckSTDC )
-+ include ( CheckIncludeFile )
-+ include ( CheckFunctionExists )
-+@@ -196,7 +197,11 @@ if ( CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_C_C
-+   endif ( NOT APPLE AND NOT OS2 )
-+ 
-+   # define some warning flags
-+-  set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -W -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wno-unused-parameter -Wdeclaration-after-statement -Werror=implicit-function-declaration -Werror=incompatible-pointer-types" )
-++  set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -W -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wno-unused-parameter -Wdeclaration-after-statement -Werror=implicit-function-declaration" )
-++  check_c_compiler_flag ( "-Werror=incompatible-pointer-types" HAVE_INCOMPATIBLE_POINTER_TYPES )
-++  if ( HAVE_INCOMPATIBLE_POINTER_TYPES )
-++    set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=incompatible-pointer-types" )
-++  endif ( HAVE_INCOMPATIBLE_POINTER_TYPES ) 
-+ 
-+   # prepend to build type specific flags, to allow users to override
-+   set ( CMAKE_C_FLAGS_DEBUG "-g ${CMAKE_C_FLAGS_DEBUG}" )
-+-- 
-+2.27.0
-+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/Config.in                      |  1 +
+>  package/libbacktrace/Config.in         |  7 +++++++
+>  package/libbacktrace/libbacktrace.hash |  3 +++
+>  package/libbacktrace/libbacktrace.mk   | 15 +++++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/libbacktrace/Config.in
+>  create mode 100644 package/libbacktrace/libbacktrace.hash
+>  create mode 100644 package/libbacktrace/libbacktrace.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index d7e79f4795..629a45fb0a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1831,6 +1831,7 @@ menu "Other"
+>  	source "package/libatomic_ops/Config.in"
+>  	source "package/libavl/Config.in"
+>  	source "package/libb64/Config.in"
+> +	source "package/libbacktrace/Config.in"
+>  	source "package/libbsd/Config.in"
+>  	source "package/libcap/Config.in"
+>  	source "package/libcap-ng/Config.in"
+> diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
+> new file mode 100644
+> index 0000000000..0f940dd588
+> --- /dev/null
+> +++ b/package/libbacktrace/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_LIBBACKTRACE
+> +	bool "libbacktrace"
+> +	help
+> +	  A C library that may be linked into a C/C++ program to
+> +	  produce symbolic backtraces
+> +
+> +	  https://github.com/ianlancetaylor/libbacktrace
+> diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
+> new file mode 100644
+> index 0000000000..ecd530a33b
+> --- /dev/null
+> +++ b/package/libbacktrace/libbacktrace.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
+> +sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
+> diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
+> new file mode 100644
+> index 0000000000..fb1f6c058a
+> --- /dev/null
+> +++ b/package/libbacktrace/libbacktrace.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# libbacktrace
+> +#
+> +################################################################################
+> +
+> +LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
+> +LIBBACKTRACE_SITE = $(call github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
+> +
+> +LIBBACKTRACE_LICENSE = BSD-3C-like
+> +LIBBACKTRACE_LICENSE_FILES = LICENSE
+> +
+> +LIBBACKTRACE_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 2.25.1
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
