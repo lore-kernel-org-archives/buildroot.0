@@ -1,102 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2020 23:01:18 +0200
-Subject: [Buildroot] [git commit] package/pistache: fix detection of atomic
-Message-ID: <20200816205547.48DC581950@busybox.osuosl.org>
+Date: Sun, 16 Aug 2020 23:02:53 +0200
+Subject: [Buildroot] [git commit] package/libcamera: disable werror
+Message-ID: <20200816205633.122A88662A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3311a07782e70c392f9fd112bba356d606f8777
+commit: https://git.buildroot.net/buildroot/commit/?id=868207d7921df5548f0ed2179c2563b77efa520e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pistache does not mandatory link with libatomic since
-https://github.com/oktal/pistache/commit/4ed3f8e148dae203730139ae3c1c4c87bfc86c02
-however the logic is broken because the C language is not enabled
+This will fix the following build failure:
+
+../src/gstreamer/gstlibcameraallocator.cpp: In static member function 'static GQuark FrameWrap::getQuark()':
+/home/peko/autobuild/instance-1/output-1/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gatomic.h:128:15: error: variable 'gapg_temp_atomic' set but not used [-Werror=unused-but-set-variable]
+     gpointer *gapg_temp_atomic = (gpointer *)(atomic);                       \
+               ^
 
 Fixes:
- - http://autobuild.buildroot.org/results/17f05238a3479f5b0c9ef8f9bb42210f6fc14fff
+ - http://autobuild.buildroot.org/results/c28500d4cc55fbd2bac87f2c11759ddc9163bc91
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...s.txt-add-C-language-to-project-statement.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ package/libcamera/libcamera.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch b/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
-new file mode 100644
-index 0000000000..c393a48d0d
---- /dev/null
-+++ b/package/pistache/0001-CMakeLists.txt-add-C-language-to-project-statement.patch
-@@ -0,0 +1,70 @@
-+From a50fc9bde098e4e89584a5da9f94f620c11b6733 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 16 Aug 2020 12:31:46 +0200
-+Subject: [PATCH] CMakeLists.txt: add C language to project statement
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This will fix the detection of atomic:
-+
-+-- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB
-+-- Performing Test HAVE_CXX_ATOMICS64_WITHOUT_LIB - Failed
-+-- Looking for __atomic_load_8 in atomic
-+-- Looking for __atomic_load_8 in atomic - not found
-+CMake Error at CMakeModules/CheckAtomic.cmake:76 (message):
-+  Host compiler appears to require libatomic for 64-bit operations, but
-+  cannot find it.
-+Call Stack (most recent call first):
-+  CMakeLists.txt:19 (include)
-+
-+Indeed if C language is not enabled, the test will be run with the C++
-+compiler resulting in the following error:
-+
-+Building CXX object CMakeFiles/cmTC_fad22.dir/CheckFunctionExists.cxx.o
-+/tmp/instance-0/output-1/host/bin/mipsel-linux-g++ --sysroot=/tmp/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -D_FORTIFY_SOURCE=1 -Wall -Wconversion -pedantic -Wextra -Wno-missing-field-initializers -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG   -o CMakeFiles/cmTC_fad22.dir/CheckFunctionExists.cxx.o -c /tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
-+<command-line>: error: new declaration 'char __atomic_load_8()' ambiguates built-in declaration 'long long unsigned int __atomic_load_8(const volatile void*, int)' [-fpermissive]
-+/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx:7:3: note: in expansion of macro 'CHECK_FUNCTION_EXISTS'
-+   CHECK_FUNCTION_EXISTS(void);
-+   ^~~~~~~~~~~~~~~~~~~~~
-+/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx: In function 'int main(int, char**)':
-+/tmp/instance-0/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx:17:25: error: too few arguments to function 'long long unsigned int __atomic_load_8(const volatile void*, int)'
-+   CHECK_FUNCTION_EXISTS();
-+                         ^
-+
-+whereas with a C compiler, we'll get:
-+
-+Building C object CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o
-+/home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc --sysroot=/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG   -o CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
-+<command-line>: warning: conflicting types for built-in function ???__atomic_load_8??? [-Wbuiltin-declaration-mismatch]
-+/usr/share/cmake-3.16/Modules/CheckFunctionExists.c:7:3: note: in expansion of macro ???CHECK_FUNCTION_EXISTS???
-+   CHECK_FUNCTION_EXISTS(void);
-+   ^~~~~~~~~~~~~~~~~~~~~
-+Linking C executable cmTC_4b0f4
-+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b0f4.dir/link.txt --verbose=1
-+/home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc --sysroot=/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DCHECK_FUNCTION_EXISTS=__atomic_load_8  -DNDEBUG    CMakeFiles/cmTC_4b0f4.dir/CheckFunctionExists.c.o  -o cmTC_4b0f4  -latomic
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2bf06c6a9e55b449ec5875cf9415a9e55b2065d6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index edc73c5..0286647 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
-+ set(CMAKE_CXX_EXTENSIONS OFF)
-+ 
-+ project (pistache
-+-    LANGUAGES CXX)
-++    LANGUAGES C CXX)
-+ 
-+ include(GNUInstallDirs)
-+ 
-+-- 
-+2.27.0
-+
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 9739f715a1..34911cee79 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -15,7 +15,8 @@ LIBCAMERA_DEPENDENCIES = \
+ LIBCAMERA_CONF_OPTS = \
+ 	-Dandroid=false \
+ 	-Ddocumentation=false \
+-	-Dtest=false
++	-Dtest=false \
++	-Dwerror=false
+ LIBCAMERA_INSTALL_STAGING = YES
+ LIBCAMERA_LICENSE = \
+ 	LGPL-2.1+ (library), \
