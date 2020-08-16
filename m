@@ -1,87 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 16 Aug 2020 11:01:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bandwidthd: fix build with gcc 10
-Message-ID: <20200816090132.516521-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Aug 2020 11:27:21 +0200
+Subject: [Buildroot] [git commit] package/bluez-alsa: update gcc 10 patch
+Message-ID: <20200816092111.4EAFB7FAA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0b25fd13c71682ce720ab0383c8efbf65f006852
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update patch by adding the missing update on src/ofono-iface.h from
+https://github.com/Arkq/bluez-alsa/commit/30a23dd7ce9b00c702fa48545f6b03038f9e17c6
+
 Fixes:
- - http://autobuild.buildroot.org/results/6308c8ee38b6017215038d47c009b238113bd36f
+ - http://autobuild.buildroot.org/results/9200bdab254e24ecacd345c00216a3d87c014dfc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...c-bandwidthd.h-fix-build-with-gcc-10.patch | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
+ .../0001-fix-build-issue-with-gcc-10.patch         | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch b/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..e7d0dec8d6
---- /dev/null
-+++ b/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,60 @@
-+From dde68ed77114d7b19bfed3068edefc9dc0644445 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 16 Aug 2020 10:21:46 +0200
-+Subject: [PATCH] src/bandwidthd.h: fix build with gcc 10
-+
-+Remove SubnetTable[SUBNET_NUM] and IpTable[IP_NUM] from bandwidthd.h as
-+they are already in bandwidthd.c otherwise the build with gcc 10 will
-+fail on:
-+
-+/home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o bandwidthd bandwidthd.o graph.o extensions.o sqlight.o parser.o lexer.o pgsql.o  -lpcap -lgd -lm -lresolv  -L/home/buildroot/autobuild/instance-2/output-1/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lpng16 -lz  -L/home/buildroot/autobuild/instance-2/output-1/host/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-gnueabihf/sysroot/usr/lib/.libs -lnl-genl-3 -lnl-3
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: graph.o:(.bss+0x4b0): multiple definition of `IpTable'; bandwidthd.o:(.bss+0x3e0): first defined here
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: graph.o:(.bss+0x18c): multiple definition of `SubnetTable'; bandwidthd.o:(.bss+0x88): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6308c8ee38b6017215038d47c009b238113bd36f
-+
+diff --git a/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
+index 65a67c35c5..b0b1f72721 100644
+--- a/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
++++ b/package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
+@@ -10,6 +10,8 @@ does not apply on current used version in buildroot.
+ [1] https://github.com/Arkq/bluez-alsa/commit/30a23dd7ce9b00c702fa48545f6b03038f9e17c6
+ 
+ Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++[Fabrice: also update src/ofono-iface.h]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nroach44/bandwidthd/pull/1]
-+---
-+ src/bandwidthd.h | 4 ++--
-+ src/graph.c      | 1 +
-+ 2 files changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/bandwidthd.h b/src/bandwidthd.h
-+index 870fdf7..eb4c830 100644
-+--- a/src/bandwidthd.h
-++++ b/src/bandwidthd.h
-+@@ -134,7 +134,7 @@ struct SubnetData
-+ {
-+   uint32_t ip;
-+   uint32_t mask;
-+-} SubnetTable[SUBNET_NUM];
-++};
+ ---
+  src/bluealsa-dbus.c  | 4 ++++
+  src/bluealsa-iface.c | 2 ++
+@@ -113,6 +115,26 @@ index cfdbff8..190101e 100644
+  /**
+   * Structure describing registered D-Bus object. */
+  struct dbus_object_data {
++ diff --git a/src/ofono-iface.h b/src/ofono-iface.h
++index d5a6715..d5b9065 100644
++--- a/src/ofono-iface.h
+++++ b/src/ofono-iface.h
++@@ -1,6 +1,6 @@
++ /*
++  * BlueALSA - ofono-iface.h
++- * Copyright (c) 2016-2019 Arkadiusz Bokowy
+++ * Copyright (c) 2016-2020 Arkadiusz Bokowy
++  *               2018 Thierry Bultel
++  *
++  * This file is a part of bluez-alsa.
++@@ -27,6 +27,6 @@
++ #define OFONO_AUDIO_CODEC_CVSD 0x01
++ #define OFONO_AUDIO_CODEC_MSBC 0x02
 + 
-+ struct Statistics
-+ {
-+@@ -157,7 +157,7 @@ struct IPData
-+   uint32_t ip;			// Host byte order
-+   struct Statistics Send;
-+   struct Statistics Receive;
-+-} IpTable[IP_NUM];
-++};
++-const GDBusInterfaceInfo ofono_iface_hf_audio_agent;
+++extern const GDBusInterfaceInfo ofono_iface_hf_audio_agent;
 + 
-+ struct SummaryData
-+ {
-+diff --git a/src/graph.c b/src/graph.c
-+index b4b68f0..058e8c7 100644
-+--- a/src/graph.c
-++++ b/src/graph.c
-+@@ -18,6 +18,7 @@
-+ #include <resolv.h>
 + #endif
-+ 
-++extern struct SubnetData SubnetTable[SUBNET_NUM];
-+ extern unsigned int SubnetCount;
-+ extern struct config config;
-+ 
-+-- 
-+2.27.0
-+
--- 
-2.27.0
+ -- 
+ 2.20.1
+ 
