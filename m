@@ -1,79 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2020 23:45:49 +0200
-Subject: [Buildroot] [PATCH v3 2/5]
- support/testing/tests/toolchain/test_external: support non-ELF toolchains
-In-Reply-To: <20200814195235.986905-3-thomas.petazzoni@bootlin.com>
-References: <20200814195235.986905-1-thomas.petazzoni@bootlin.com>
- <20200814195235.986905-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20200816214549.GK24264@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Aug 2020 23:46:32 +0200
+Subject: [Buildroot] [PATCH 1/2] package/re2: new package
+In-Reply-To: <20200813144549.1262366-2-buildroot@heine.tech>
+References: <20200813144549.1262366-1-buildroot@heine.tech>
+ <20200813144549.1262366-2-buildroot@heine.tech>
+Message-ID: <20200816234632.1bf3fbd2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Thu, 13 Aug 2020 16:45:48 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-On 2020-08-14 21:52 +0200, Thomas Petazzoni spake thusly:
-> The TestExternalToolchain() base class implement a test checking if
-> the ELF interpreter that is advertised by Busybox really exists in the
-> rootfs. Of course, this only makes sense with ELF toolchains. Until
-> now, only ELF toolchains were tested, but we are going to use
-> TestExternalToolchain() with non-ELF toolchains as well, so let's make
-> this conditional.
+> RE2 is a fast, safe, thread-friendly alternative to backtracking
+> regular expression engines like those used in PCRE, Perl, and
+> Python. It is a C++ library.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-Since Titopuan reviewed the other patches, I looked at that one
-k it to me to handle that one.
-
-Applied to next, after fixing as per my previous review:
-    http://lists.busybox.net/pipermail/buildroot/2020-August/289221.html
-
-Thanks.
-
-I'll see the rest of the series later...
-
-Regards,
-Yann E. MORIN.
+Thanks, I've applied to master, with a few changes.
 
 > ---
->  support/testing/tests/toolchain/test_external.py | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-> index 881d2b00db..1818ae0498 100644
-> --- a/support/testing/tests/toolchain/test_external.py
-> +++ b/support/testing/tests/toolchain/test_external.py
-> @@ -26,11 +26,15 @@ class TestExternalToolchain(infra.basetest.BRTest):
->              path = os.path.join(self.builddir, "target", d)
->              self.assertFalse(has_broken_links(path))
->  
-> -        interp = infra.get_elf_prog_interpreter(self.builddir,
-> -                                                self.toolchain_prefix,
-> -                                                "bin/busybox")
-> -        interp_path = os.path.join(self.builddir, "target", interp[1:])
-> -        self.assertTrue(os.path.exists(interp_path))
-> +        with open(os.path.join(self.builddir, ".config")) as configf:
-> +            configlines = configf.readlines()
-> +
-> +        if "BR2_BINFMT_ELF=y\n" in configlines:
-> +            interp = infra.get_elf_prog_interpreter(self.builddir,
-> +                                                    self.toolchain_prefix,
-> +                                                    "bin/busybox")
-> +            interp_path = os.path.join(self.builddir, "target", interp[1:])
-> +            self.assertTrue(os.path.exists(interp_path))
->  
->  
->  class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
-> -- 
-> 2.26.2
-> 
+>  package/Config.in     |  1 +
+>  package/re2/Config.in | 12 ++++++++++++
+>  package/re2/re2.hash  |  3 +++
+>  package/re2/re2.mk    | 25 +++++++++++++++++++++++++
+>  4 files changed, 41 insertions(+)
 
+You forgot to add an entry in the DEVELOPERS file, so I've done so.
+
+> diff --git a/package/re2/Config.in b/package/re2/Config.in
+> new file mode 100644
+> index 0000000000..d1dcb693ea
+> --- /dev/null
+> +++ b/package/re2/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_RE2
+> +	bool "re2"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+
+Even though it uses std::atomic, I'm not sure it needs the atomic
+intrinsics of the compiler. Indeed, I tried building for SPARC, where
+the atomic built-ins are implemented in the libatomic.so library, and
+even without linking to this library, re2 builds fine.
+
+So I've dropped this dependency. We'll see if we have any build
+failure, and we can adjust.
+
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
+> +	help
+> +	  RE2 is a fast, safe, thread-friendly alternative
+> +	  to backtracking regular expression engines like
+> +	  those used in PCRE, Perl, and Python.
+> +	  It is a C++ library.
+> +
+> +	  https://github.com/google/re2
+
+You forgot a Config.in comment about the dependency (C++, gcc >= 4.8),
+so I've added that.
+
+
+> +RE2_VERSION = 2020-08-01
+> +RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+> +RE2_LICENSE = BSD
+
+BSD is not specific enough. In this case, it should have been BSD-3-Clause.
+
+> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+> +RE2_CONF_OPTS += \
+> +	-DBUILD_SHARED_LIBS=ON
+> +HOST_RE2_CONF_OPTS += \
+> +	-DBUILD_SHARED_LIBS=ON
+
+This was not needed: BUILD_SHARED_LIBS is handled by the cmake-package
+infrastructure.
+
+Thanks, applied with those changes!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
