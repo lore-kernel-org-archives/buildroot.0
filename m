@@ -1,59 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Aug 2020 00:16:04 +0200
-Subject: [Buildroot] [PATCH] system: set default PATH according to
- BR2_ROOTFS_MERGED_USR
-In-Reply-To: <20200808155527.24726-1-paul@crapouillou.net>
-References: <20200808155527.24726-1-paul@crapouillou.net>
-Message-ID: <20200816221604.GL24264@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 17 Aug 2020 00:34:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iftop: fix build with gcc 10
+Message-ID: <20200816223451.1490784-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Paul, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/55a8581f11e776439782c228441ef1c8c1243386
 
-On 2020-08-08 17:55 +0200, Paul Cercueil spake thusly:
-> Use "/usr/bin:/usr/sbin" as the default path if BR2_ROOTFS_MERGED_USR
-> is enabled, otherwise use "/bin:/sbin:/usr/bin:/usr/sbin".
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...01-ui_common.h-fix-build-with-gcc-10.patch | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch
 
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  system/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 5063797976..b8b7c16529 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -402,7 +402,8 @@ endif # BR2_ROOTFS_SKELETON_DEFAULT
->  
->  config BR2_SYSTEM_DEFAULT_PATH
->  	string "Set the system's default PATH"
-> -	default "/bin:/sbin:/usr/bin:/usr/sbin"
-> +	default "/usr/bin:/usr/sbin" if BR2_ROOTFS_MERGED_USR
-> +	default "/bin:/sbin:/usr/bin:/usr/sbin" if !BR2_ROOTFS_MERGED_USR
->  	help
->  	  Sets the system's default PATH. It is being used in
->  	  /etc/profile in the skeleton-init-common package and by some
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch b/package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..4bee03eb1b
+--- /dev/null
++++ b/package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,60 @@
++From 18a9f7732944bfe45023f9dd7528295e7d43e678 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 12 Aug 2020 22:31:33 +0200
++Subject: [PATCH] ui_common.h: fix build with gcc 10
++
++Define global variables as extern in header to fix the build with gcc 10
++which default to -fno-common: https://gcc.gnu.org/gcc-10/porting_to.html
++
++Fixes:
++ - http://autobuild.buildroot.org/results/55a8581f11e776439782c228441ef1c8c1243386
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to iftop-users at lists.beasts.org]
++---
++ ui_common.c |  6 ++++++
++ ui_common.h | 10 +++++-----
++ 2 files changed, 11 insertions(+), 5 deletions(-)
++
++diff --git a/ui_common.c b/ui_common.c
++index dcf6646..b1027ec 100644
++--- a/ui_common.c
+++++ b/ui_common.c
++@@ -17,6 +17,12 @@
++ 
++ #include "ui_common.h"
++ 
+++sorted_list_type screen_list;
+++host_pair_line totals;
+++int peaksent, peakrecv, peaktotal;
+++hash_type* screen_hash;
+++hash_type* service_hash;
+++
++ /* 2, 10 and 40 seconds */
++ int history_divs[HISTORY_DIVISIONS] = {1, 5, 20};
++ 
++diff --git a/ui_common.h b/ui_common.h
++index 63ae5bb..add72fe 100644
++--- a/ui_common.h
+++++ b/ui_common.h
++@@ -33,12 +33,12 @@ typedef struct host_pair_line_tag {
++ 
++ extern options_t options;
++ 
++-sorted_list_type screen_list;
++-host_pair_line totals;
++-int peaksent, peakrecv, peaktotal;
+++extern sorted_list_type screen_list;
+++extern host_pair_line totals;
+++extern int peaksent, peakrecv, peaktotal;
++ extern history_type history_totals;
++-hash_type* screen_hash;
++-hash_type* service_hash;
+++extern hash_type* screen_hash;
+++extern hash_type* service_hash;
++ 
++ void analyse_data(void);
++ void screen_list_init(void);
++-- 
++2.27.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
