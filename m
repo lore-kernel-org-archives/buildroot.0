@@ -1,84 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Aug 2020 23:46:32 +0200
-Subject: [Buildroot] [PATCH 1/2] package/re2: new package
-In-Reply-To: <20200813144549.1262366-2-buildroot@heine.tech>
+Date: Sun, 16 Aug 2020 23:47:07 +0200
+Subject: [Buildroot] [PATCH 2/2] package/grpc: bump version to 1.31.0
+In-Reply-To: <20200813144549.1262366-3-buildroot@heine.tech>
 References: <20200813144549.1262366-1-buildroot@heine.tech>
- <20200813144549.1262366-2-buildroot@heine.tech>
-Message-ID: <20200816234632.1bf3fbd2@windsurf.home>
+ <20200813144549.1262366-3-buildroot@heine.tech>
+Message-ID: <20200816234707.22ca85a1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 13 Aug 2020 16:45:48 +0200
+On Thu, 13 Aug 2020 16:45:49 +0200
 Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-> RE2 is a fast, safe, thread-friendly alternative to backtracking
-> regular expression engines like those used in PCRE, Perl, and
-> Python. It is a C++ library.
+> Related changes:
+>  - add dependency on Google RE2 package
+>  - update patches to new offsets
+> 
+> Tested on Ubuntu 20.04
 > 
 > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
-Thanks, I've applied to master, with a few changes.
-
 > ---
->  package/Config.in     |  1 +
->  package/re2/Config.in | 12 ++++++++++++
->  package/re2/re2.hash  |  3 +++
->  package/re2/re2.mk    | 25 +++++++++++++++++++++++++
->  4 files changed, 41 insertions(+)
+>  .../grpc/0001-target-build-using-host-plugin.patch   |  4 ++--
+>  ...detect-the-availability-of-pthread_setname_.patch |  7 +++----
+>  package/grpc/Config.in                               |  3 ++-
+>  package/grpc/grpc.hash                               |  2 +-
+>  package/grpc/grpc.mk                                 | 12 +++++++-----
+>  5 files changed, 15 insertions(+), 13 deletions(-)
 
-You forgot to add an entry in the DEVELOPERS file, so I've done so.
+Applied to next, thanks. Note that you had forgotten to propagate the
+BR2_TOOLCHAIN_HAS_ATOMIC dependency of the re2 package, but since I
+dropped that dependency for now, that's OK.
 
-> diff --git a/package/re2/Config.in b/package/re2/Config.in
-> new file mode 100644
-> index 0000000000..d1dcb693ea
-> --- /dev/null
-> +++ b/package/re2/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_RE2
-> +	bool "re2"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-
-Even though it uses std::atomic, I'm not sure it needs the atomic
-intrinsics of the compiler. Indeed, I tried building for SPARC, where
-the atomic built-ins are implemented in the libatomic.so library, and
-even without linking to this library, re2 builds fine.
-
-So I've dropped this dependency. We'll see if we have any build
-failure, and we can adjust.
-
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
-> +	help
-> +	  RE2 is a fast, safe, thread-friendly alternative
-> +	  to backtracking regular expression engines like
-> +	  those used in PCRE, Perl, and Python.
-> +	  It is a C++ library.
-> +
-> +	  https://github.com/google/re2
-
-You forgot a Config.in comment about the dependency (C++, gcc >= 4.8),
-so I've added that.
-
-
-> +RE2_VERSION = 2020-08-01
-> +RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
-> +RE2_LICENSE = BSD
-
-BSD is not specific enough. In this case, it should have been BSD-3-Clause.
-
-> +ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> +RE2_CONF_OPTS += \
-> +	-DBUILD_SHARED_LIBS=ON
-> +HOST_RE2_CONF_OPTS += \
-> +	-DBUILD_SHARED_LIBS=ON
-
-This was not needed: BUILD_SHARED_LIBS is handled by the cmake-package
-infrastructure.
-
-Thanks, applied with those changes!
+Thanks,
 
 Thomas
 -- 
