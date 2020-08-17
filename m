@@ -1,51 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Aug 2020 16:42:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v1.6.11
-In-Reply-To: <20200817091055.203521-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Mon, 17 Aug 2020 11:10:55 +0200")
-References: <20200817091055.203521-1-titouan.christophe@railnova.eu>
-Message-ID: <87imdh1gh2.fsf@dell.be.48ers.dk>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 17 Aug 2020 16:43:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version 6.4.3
+In-Reply-To: <20200430095332.98544-1-thomas.claveirole@green-communications.fr>
+References: <20200430095332.98544-1-thomas.claveirole@green-communications.fr>
+Message-ID: <20200817144304.235841-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Mosquitto 1.6.11 is a bugfix release, read the whole announcement on
- > http://mosquitto.org/blog/2020/08/version-1-6-11-released/
-
- > From the changelog of the client library:
- > mosquitto_loop_start() now sets a thread name on Linux, FreeBSD, NetBSD,
- > and OpenBSD. Closes #1777.
- > This is done with pthread_setname_np; so mosquitto now requires
- > BR2_TOOLCHAIN_HAS_THREADS_NPTL.
-
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
- > ---
- >  package/mosquitto/Config.in      | 4 ++++
- >  package/mosquitto/mosquitto.hash | 4 ++--
- >  package/mosquitto/mosquitto.mk   | 2 +-
- >  3 files changed, 7 insertions(+), 3 deletions(-)
-
- > diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
- > index b4effa36be..21cd56c492 100644
- > --- a/package/mosquitto/Config.in
- > +++ b/package/mosquitto/Config.in
- > @@ -1,5 +1,6 @@
- >  config BR2_PACKAGE_MOSQUITTO
- >  	bool "mosquitto"
- > +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # pthread_setname_np
-
-We have logic to build mosquitto without threading support
-(WITH_THREADING=no), so this should normally not be needed. From a quick
-look, it does look like the pthread.h include in the new code isn't
-inside the WITH_THREADING conditional, but that is easy to fix.
-
-For non-NPTL threads we could perhaps just build mosquitto without
-threading support rather than having to propagate the NPTL dependency
-(unless collectd/shairport-sync needs the threading API).
-
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index f1678507d7..2774b8064b 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
++sha256	8371bbca2f7b33be0db5b416a78bc9559dd8f9afb6a406994daeeecf7b37f3f6	v6.4.3-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 65a1fe00fa..c3e137adcd 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLAYERS_VERSION = 6.2.1
++OPENLAYERS_VERSION = 6.4.3
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
 -- 
-Bye, Peter Korsgaard
+2.28.0
