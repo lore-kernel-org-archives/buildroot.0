@@ -1,32 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Aug 2020 15:14:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.55.1
-In-Reply-To: <20200816124806.2726538-1-james.hilliard1@gmail.com>
-References: <20200816124806.2726538-1-james.hilliard1@gmail.com>
-Message-ID: <20200817151421.1323bb5a@windsurf.home>
+From: Olivier Dautricourt <olivier.dautricourt@orolia.com>
+Date: Mon, 17 Aug 2020 15:23:36 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gpsd: add GPSD_PYTHON config option
+In-Reply-To: <20200817132336.1110072-1-olivier.dautricourt@orolia.com>
+References: <20200817132336.1110072-1-olivier.dautricourt@orolia.com>
+Message-ID: <20200817132336.1110072-2-olivier.dautricourt@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 16 Aug 2020 06:48:06 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+The scons script will install the gps library in the target python3
+directory, as well as useful tools like ubxtool.
 
-> Drop fix rpath match pattern patch which is now upstream.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...003-backends-fix-rpath-match-pattern.patch | 123 ------------------
->  package/meson/meson.hash                      |   4 +-
->  package/meson/meson.mk                        |   2 +-
->  3 files changed, 3 insertions(+), 126 deletions(-)
->  delete mode 100644 package/meson/0003-backends-fix-rpath-match-pattern.patch
+Signed-off-by: Olivier Dautricourt <olivier.dautricourt@orolia.com>
+---
+ package/gpsd/Config.in | 5 +++++
+ package/gpsd/gpsd.mk   | 7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 5dd57c34b8..39054098ba 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -229,4 +229,9 @@ config BR2_PACKAGE_GPSD_UBX
+ 	help
+ 	  uBlox UBX binary support
+ 
++config BR2_PACKAGE_GPSD_PYTHON
++	bool "Python library"
++	help
++	  gps Python library
++
+ endif
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 62c4c611c3..d2e5d57ca8 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -23,7 +23,6 @@ GPSD_SCONS_OPTS = \
+ 	prefix=/usr \
+ 	sysroot=$(STAGING_DIR) \
+ 	strip=no \
+-	python=no \
+ 	qt=no \
+ 	systemd=$(if $(BR2_INIT_SYSTEMD),yes,no)
+ 
+@@ -186,6 +185,12 @@ endif
+ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
+ GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
+ endif
++ifeq ($(BR2_PACKAGE_GPSD_PYTHON), y)
++GPSD_SCONS_OPTS += python=yes
++GPSD_SCONS_OPTS += python_libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
++else
++GPSD_SCONS_OPTS += python=no
++endif
+ 
+ GPSD_SCONS_ENV += \
+ 	LDFLAGS="$(GPSD_LDFLAGS)" \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
