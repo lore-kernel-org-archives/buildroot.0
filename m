@@ -1,92 +1,125 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Aug 2020 12:07:20 +0200
-Subject: [Buildroot] [PATCHv2] package/gdb: bump to version 9.2
-In-Reply-To: <20200805140337.427704-1-romain.naour@gmail.com>
-References: <20200805140337.427704-1-romain.naour@gmail.com>
-Message-ID: <20200817120720.5a440cc0@windsurf.home>
+Date: Mon, 17 Aug 2020 12:15:57 +0200
+Subject: [Buildroot] [git commit] package/collectd: add DPDK_TELEMETRY option
+Message-ID: <20200817100942.610228388A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain, Maxim,
+commit: https://git.buildroot.net/buildroot/commit/?id=44e0b6014f7e67901af346af8f6a9452b095ddd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Aug 2020 16:03:37 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+DPDK support is available since version 5.11.0 and
+https://github.com/collectd/collectd/commit/00cbd4d2c016a676db476ae66bbc58d6bf11a6a0
 
-> From: Maxim Kochetkov <fido_max@inbox.ru>
-> 
-> The in-tree build restriction has been added after the move of gnulib to top level [1] [2].
-> This restriction has been added as a workaround a build issue with gdbserver that still use
-> it's own copy of gnulib.
-> 
-> gnulib is configured a second time if we build in-tree gdb and gdbserver:
->     configure: error: source directory already configured; run "make distclean" there first
->     configure: error: .././../../gnulib/configure failed for build-gnulib-gdbserver
->     configure: error: ./configure failed for gdbserver
-> 
-> Use the same pre-configure-hook as gcc package.
-> 
-> Older gdb version support building out of tree even if it's not required.
-> 
-> There is no in-tree build restriction of we only build gdbserver for the target.
-> 
-> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=73cc72729a184f00bf6fc4d74684a8516ba6b683
-> [2] https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=043a0010933a6b55081535ecaf7fde9cc1491be0
-> 
-> See:
-> https://sourceware.org/pipermail/gdb-announce/2020/000122.html
-> https://sourceware.org/pipermail/gdb-announce/2020/000123.html
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> [Romain:
->     - add in-tree build support
->     - improve commit log]
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+It depends on jansson and is currently enabled by default raising the
+following build failure on musl:
 
-I've applied to next, and also changed the default gdb version to 8.3,
-and dropped support for gdb 8.1.
+src/dpdk_telemetry.c:43:10: fatal error: sys/unistd.h: No such file or directory
+ #include <sys/unistd.h>
+          ^~~~~~~~~~~~~~
 
->  ...e-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch | 55 ++++++++++++++++
->  ...-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch | 43 +++++++++++++
->  package/gdb/9.2/0003-use-asm-sgidefs.h.patch  | 40 ++++++++++++
->  .../0004-gdbserver-fix-build-for-m68k.patch   | 62 +++++++++++++++++++
->  ...fork-inferior-include-linux-ptrace.h.patch | 53 ++++++++++++++++
+Fixes:
+ - http://autobuild.buildroot.org/results/aafb8c72f147fefc7a988c45e4dc17de48b07a95
 
-Do you know if there is a chance to get rid of those patches at some
-point?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...01-src-dpdk_telemetry.c-fix-build-on-musl.patch | 37 ++++++++++++++++++++++
+ package/collectd/Config.in                         |  7 ++++
+ package/collectd/collectd.mk                       |  5 +++
+ 3 files changed, 49 insertions(+)
 
-> +# Since gdb 9, in-tree builds for GDB are not allowed anymore,
-> +# so we create a 'build' subdirectory in the gcc sources, and
-
-                                                ^^^ gdb
-
-> +# build from there.
-> +define GDB_CONFIGURE_SYMLINK
-> +	mkdir -p $(@D)/$(GDB_SUBDIR)
-> +	ln -sf ../configure $(@D)/$(GDB_SUBDIR)/configure
-> +endef
-> +GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
-> +
->  endif
->  
->  # For the host variant, we really want to build with XML support,
-> @@ -251,6 +261,17 @@ else
->  HOST_GDB_CONF_OPTS += --disable-sim
->  endif
->  
-> +# Since gdb 9, in-tree builds for GDB are not allowed anymore,
-> +# so we create a 'build' subdirectory in the gcc sources, and
-
-                                                ^^^ gdb
-
-(I have fixed this when applying).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch b/package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch
+new file mode 100644
+index 0000000000..8378cd0d33
+--- /dev/null
++++ b/package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch
+@@ -0,0 +1,37 @@
++From 70318d6bcf7ef89e1a73fc775d33f4c854aed484 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 14 Apr 2020 14:49:19 +0200
++Subject: [PATCH] src/dpdk_telemetry.c: fix build on musl
++
++Include unistd.h instead of sys/unistd.h to fix the following build
++failure on musl:
++
++src/dpdk_telemetry.c:43:10: fatal error: sys/unistd.h: No such file or directory
++ #include <sys/unistd.h>
++          ^~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/aafb8c72f147fefc7a988c45e4dc17de48b07a95
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/collectd/collectd/pull/3439]
++---
++ src/dpdk_telemetry.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/dpdk_telemetry.c b/src/dpdk_telemetry.c
++index b46e8574..cfee5f12 100755
++--- a/src/dpdk_telemetry.c
+++++ b/src/dpdk_telemetry.c
++@@ -40,7 +40,7 @@
++ #include <sys/queue.h>
++ #include <sys/socket.h>
++ #include <sys/un.h>
++-#include <sys/unistd.h>
+++#include <unistd.h>
++ 
++ #define BUF_SIZE 100000
++ #define PLUGIN_NAME "dpdk_telemetry"
++-- 
++2.25.1
++
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index cd5d876e80..a467a8a4ca 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -213,6 +213,13 @@ config BR2_PACKAGE_COLLECTD_DNS
+ 	help
+ 	  Collects statistics of DNS traffic using libpcap.
+ 
++config BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY
++	bool "dpdk_telemetry"
++	select BR2_PACKAGE_JANSSON
++	help
++	  Collects DPDK ethernet device metrics via dpdk_telemetry
++	  library.
++
+ config BR2_PACKAGE_COLLECTD_DRBD
+ 	bool "drbd"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 6d084dbe42..ad16c72912 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -66,6 +66,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DF),--enable-df,--disable-df) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DISK),--enable-disk,--disable-disk) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),--enable-dns,--disable-dns) \
++	$(if $(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),--enable-dpdk_telemetry,--disable-dpdk_telemetry) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DRBD),--enable-drbd,--disable-drbd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_EMPTY_COUNTER),--enable-match_empty_counter,--disable-match_empty_counter) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ENTROPY),--enable-entropy,--disable-entropy) \
+@@ -156,6 +157,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
++	$(if $(BR2_PACKAGE_COLLECTD_DPKD_TELEMETRY),jansson) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+@@ -186,6 +188,9 @@ COLLECTD_DEPENDENCIES = \
+ ifeq ($(BR2_PACKAGE_GRPC),y)
+ COLLECTD_CONF_OPTS += --with-libgrpc++=$(STAGING_DIR)/usr
+ endif
++ifeq ($(BR2_PACKAGE_JANSSON),y)
++COLLECTD_CONF_OPTS += --with-libjansson=$(STAGING_DIR)/usr
++endif
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ COLLECTD_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr
+ endif
