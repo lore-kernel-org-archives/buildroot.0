@@ -1,10 +1,9 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 17 Aug 2020 12:10:49 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-more-itertools: bump to
- version 8.4.0
+Date: Mon, 17 Aug 2020 12:10:50 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 19.0.2
 In-Reply-To: <20200817091050.272237-1-asafka7@gmail.com>
 References: <20200817091050.272237-1-asafka7@gmail.com>
-Message-ID: <20200817091050.272237-3-asafka7@gmail.com>
+Message-ID: <20200817091050.272237-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-more-itertools/python-more-itertools.hash | 4 ++--
- package/python-more-itertools/python-more-itertools.mk   | 4 ++--
+ package/python-pyzmq/python-pyzmq.hash | 4 ++--
+ package/python-pyzmq/python-pyzmq.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
-index 1b4ffef2b6..189498ec5e 100644
---- a/package/python-more-itertools/python-more-itertools.hash
-+++ b/package/python-more-itertools/python-more-itertools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/more-itertools/json
--md5  55e7e0a5eabc5a57bc8353c65c6f9965  more-itertools-8.2.0.tar.gz
--sha256  b1ddb932186d8a6ac451e1d95844b382f55e12686d51ca0c68b6f61f2ab7a507  more-itertools-8.2.0.tar.gz
-+md5  0912041c05148ed079984cff69af2e99  more-itertools-8.4.0.tar.gz
-+sha256  68c70cc7167bdf5c7c9d8f6954a7837089c6a36bf565383919bb595efb8a17e5  more-itertools-8.4.0.tar.gz
+diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
+index 2bbaad009a..ecf6489249 100644
+--- a/package/python-pyzmq/python-pyzmq.hash
++++ b/package/python-pyzmq/python-pyzmq.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pyzmq/json
+-md5  4650e45ebcf8e08620211c0e720d6066  pyzmq-19.0.0.tar.gz
+-sha256  13a5638ab24d628a6ade8f794195e1a1acd573496c3b85af2f1183603b7bf5e0  pyzmq-19.0.1.tar.gz
++md5  200abc1a75bdcfff7adf61304f46f55e  pyzmq-19.0.2.tar.gz
++sha256  296540a065c8c21b26d63e3cea2d1d57902373b16e4256afe46422691903a438  pyzmq-19.0.2.tar.gz
  # Locally computed sha256 checksums
- sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
-diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
-index 334ef5e13a..ef21f4d27d 100644
---- a/package/python-more-itertools/python-more-itertools.mk
-+++ b/package/python-more-itertools/python-more-itertools.mk
+ sha256  aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2  COPYING.BSD
+ sha256  44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d  COPYING.LESSER
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index 84d339f745..d1f4314a1e 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MORE_ITERTOOLS_VERSION = 8.2.0
-+PYTHON_MORE_ITERTOOLS_VERSION = 8.4.0
- PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
--PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/a0/47/6ff6d07d84c67e3462c50fa33bf649cda859a8773b53dc73842e84455c05
-+PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/67/4a/16cb3acf64709eb0164e49ba463a42dc45366995848c4f0cf770f57b8120
- PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
- PYTHON_MORE_ITERTOOLS_LICENSE = MIT
- PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
+-PYTHON_PYZMQ_VERSION = 19.0.1
++PYTHON_PYZMQ_VERSION = 19.0.2
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+-PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/86/08/e5fc492317cc9d65b32d161c6014d733e8ab20b5e78e73eca63f53b17004
++PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/05/77/7483975d84fe1fd24cc67881ba7810e0e7b3ee6c2a0e002a5d6703cca49b
+ PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
+ # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
+ PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
 -- 
 2.26.2
