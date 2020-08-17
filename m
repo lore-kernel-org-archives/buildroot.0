@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Aug 2020 14:52:49 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Analysis of build results
-In-Reply-To: <CALFsTFX6QETkRT5zui2YzmZat3qg-L4HbX_ebMx_GD6Z4xD-jQ@mail.gmail.com>
-References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
- <20200816000914.5ad801d9@windsurf.home>
- <CALFsTFX6QETkRT5zui2YzmZat3qg-L4HbX_ebMx_GD6Z4xD-jQ@mail.gmail.com>
-Message-ID: <20200817145249.4d02374c@windsurf.home>
+Date: Mon, 17 Aug 2020 15:12:28 +0200
+Subject: [Buildroot] [git commit branch/next] package/exfatprogs: bump to
+ version 1.0.4
+Message-ID: <20200817130558.CDC8482168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Asaf,
+commit: https://git.buildroot.net/buildroot/commit/?id=51a8edc99c17d07e3063bd09a27db500f0d6f97a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 17 Aug 2020 15:18:41 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/exfatprogs/exfatprogs.hash | 2 +-
+ package/exfatprogs/exfatprogs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > >     or1k     |          zeromq-4.3.2          | NOK | http://autobuild.buildroot.net/results/538474abda90082eec91ca9017e91b4427e4f54b |  
-> >
-> > Broken binutils:
-> >
-> >   /home/test/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.32 assertion fail elf32-or1k.c:2331
-> >
-> > Would be useful to test with newer binutils.  
-> I tried both with binutils 2.33.1 and binutils 2.34.
-> Both failed with the same error...
-
-Thanks for the additional research! I guess the next steps are:
-
- - Report the bug to binutils upstream
-
- - Identify if there is a work-around. But while for gcc issues we
-   often work-around by disabling optimizations, for binutils it is not
-   always possible to find a simple work-around.
-
-If there's no workaround, then we can add a
-BR2_TOOLCHAIN_HAS_BINUTILS_BUG_xyz Config.in bool and add the
-appropriate dependencies.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/exfatprogs/exfatprogs.hash b/package/exfatprogs/exfatprogs.hash
+index 6beb2777c2..d251bce5e6 100644
+--- a/package/exfatprogs/exfatprogs.hash
++++ b/package/exfatprogs/exfatprogs.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e73863d2f27901834e0dae678ecbb3d899e206d6036cca27d9b24b9479487f65  exfatprogs-1.0.3.tar.gz
++sha256  982883f208a694962dff0654f4421a1a726d7d71068a0c84b93a10688179a186  exfatprogs-1.0.4.tar.gz
+ sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/exfatprogs/exfatprogs.mk b/package/exfatprogs/exfatprogs.mk
+index a78cde3373..56db82cd8a 100644
+--- a/package/exfatprogs/exfatprogs.mk
++++ b/package/exfatprogs/exfatprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXFATPROGS_VERSION = 1.0.3
++EXFATPROGS_VERSION = 1.0.4
+ EXFATPROGS_SITE = https://github.com/exfatprogs/exfatprogs/releases/download/$(EXFATPROGS_VERSION)
+ EXFATPROGS_LICENSE = GPL-2.0+
+ EXFATPROGS_LICENSE_FILES = COPYING
