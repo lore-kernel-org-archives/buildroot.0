@@ -1,53 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 17 Aug 2020 12:15:57 +0200
-Subject: [Buildroot] [git commit] package/collectd: add InfluxDB support
-Message-ID: <20200817100942.718EB82775@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/collectd: add buddyinfo option
+Message-ID: <20200817100942.8E3BE82775@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19e08a5ace06ba071783b2574fc4c6625cca65bf
+commit: https://git.buildroot.net/buildroot/commit/?id=3f80c62825773508843b0ed94c7ab4f979eda223
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-InfluxDB support is available since version 5.11.0 and
-https://github.com/collectd/collectd/commit/605fcdcddeefb23b945203079e5c87625ce0e336
+buddyinfo is available since version 5.11.0 and
+https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
+
+It is currently enabled by default
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/collectd/Config.in   | 6 ++++++
+ package/collectd/Config.in   | 5 +++++
  package/collectd/collectd.mk | 1 +
- 2 files changed, 7 insertions(+)
+ 2 files changed, 6 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index a467a8a4ca..e3e3c5401f 100644
+index ca45130c4d..4f54944cbc 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -644,6 +644,12 @@ config BR2_PACKAGE_COLLECTD_WRITEHTTP
- 	  Sends values collected to a web-server using HTTP POST and
- 	  PUTVAL.
- 
-+config BR2_PACKAGE_COLLECTD_WRITEINFLUXDBUDP
-+	bool "write_influxdb_udp"
-+	help
-+	  Sends data to an instance of InfluxDB using the "Line
-+	  Protocol".
-+
- config BR2_PACKAGE_COLLECTD_WRITELOG
- 	bool "write_log"
+@@ -131,6 +131,11 @@ config BR2_PACKAGE_COLLECTD_BIND
  	help
+ 	  Collects BIND DNS statistics.
+ 
++config BR2_PACKAGE_COLLECTD_BUDDYINFO
++	bool "buddyinfo"
++	help
++	  Statistics from buddyinfo file about memory fragmentation.
++
+ config BR2_PACKAGE_COLLECTD_CAPABILITIES
+ 	bool "capabilities"
+ 	depends on BR2_aarch64 || BR2_i386 || BR2_x86_64 # dmidecode
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index ad16c72912..ad79e1cb0b 100644
+index b36975daf0..2eed6b2c16 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -140,6 +140,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_VMEM),--enable-vmem,--disable-vmem) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WIRELESS),--enable-wireless,--disable-wireless) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),--enable-write_http,--disable-write_http) \
-+	$(if $(BR2_PACKAGE_COLLECTD_WRITEINFLUXDBUDP),--enable-write_influxdb_udp,--disable-write_influxdb_udp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITELOG),--enable-write_log,--disable-write_log) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS),--enable-write_prometheus,--disable-write_prometheus) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEREDIS),--enable-write_redis,--disable-write_redis) \
+@@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
++	$(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
