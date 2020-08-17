@@ -1,87 +1,23 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 17 Aug 2020 00:34:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iftop: fix build with gcc 10
-Message-ID: <20200816223451.1490784-1-fontaine.fabrice@gmail.com>
+From: Tomas V. Arredondo <surf_fanatico@yahoo.com>
+Date: Mon, 17 Aug 2020 03:50:58 +0000 (UTC)
+Subject: [Buildroot] updating modules.conf?
+References: <1493087963.2947865.1597636258601.ref@mail.yahoo.com>
+Message-ID: <1493087963.2947865.1597636258601@mail.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/55a8581f11e776439782c228441ef1c8c1243386
+Hi,
+Really sorry to bother... I have a couple of questions, really appreciate any help...
+Basically looking to disable modules and create others in modules.conf.? I don't see an obvious way of doing that as I tried adding my changes to a modules.conf patch but it failed given that the modules.conf file gets built and was not downloaded so it was not available for patching :-(
+I did see a patch from 2016 that talked about updating modules.conf but the BR2_ option is not available anymore:?https://lists.buildroot.org/pipermail/buildroot/2016-April/158109.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...01-ui_common.h-fix-build-with-gcc-10.patch | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch
-
-diff --git a/package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch b/package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..4bee03eb1b
---- /dev/null
-+++ b/package/iftop/0001-ui_common.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,60 @@
-+From 18a9f7732944bfe45023f9dd7528295e7d43e678 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 12 Aug 2020 22:31:33 +0200
-+Subject: [PATCH] ui_common.h: fix build with gcc 10
-+
-+Define global variables as extern in header to fix the build with gcc 10
-+which default to -fno-common: https://gcc.gnu.org/gcc-10/porting_to.html
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/55a8581f11e776439782c228441ef1c8c1243386
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to iftop-users at lists.beasts.org]
-+---
-+ ui_common.c |  6 ++++++
-+ ui_common.h | 10 +++++-----
-+ 2 files changed, 11 insertions(+), 5 deletions(-)
-+
-+diff --git a/ui_common.c b/ui_common.c
-+index dcf6646..b1027ec 100644
-+--- a/ui_common.c
-++++ b/ui_common.c
-+@@ -17,6 +17,12 @@
-+ 
-+ #include "ui_common.h"
-+ 
-++sorted_list_type screen_list;
-++host_pair_line totals;
-++int peaksent, peakrecv, peaktotal;
-++hash_type* screen_hash;
-++hash_type* service_hash;
-++
-+ /* 2, 10 and 40 seconds */
-+ int history_divs[HISTORY_DIVISIONS] = {1, 5, 20};
-+ 
-+diff --git a/ui_common.h b/ui_common.h
-+index 63ae5bb..add72fe 100644
-+--- a/ui_common.h
-++++ b/ui_common.h
-+@@ -33,12 +33,12 @@ typedef struct host_pair_line_tag {
-+ 
-+ extern options_t options;
-+ 
-+-sorted_list_type screen_list;
-+-host_pair_line totals;
-+-int peaksent, peakrecv, peaktotal;
-++extern sorted_list_type screen_list;
-++extern host_pair_line totals;
-++extern int peaksent, peakrecv, peaktotal;
-+ extern history_type history_totals;
-+-hash_type* screen_hash;
-+-hash_type* service_hash;
-++extern hash_type* screen_hash;
-++extern hash_type* service_hash;
-+ 
-+ void analyse_data(void);
-+ void screen_list_init(void);
-+-- 
-+2.27.0
-+
--- 
-2.27.0
+"> +REFPOLICY_MODULES_FILE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_MODULES_FILE))> +define REFPOLICY_CUSTOM_MODULES_CONF> +? ? ? ?cp $(REFPOLICY_MODULES_FILE) $(@D)/policy/modules.conf> +endef> +endif> +> +define REFPOLICY_CONFIGURE_CMDS> +? ? ? ?$(REFPOLICY_GIT_SUBMODULE_SETUP)
+Goes away after submodules are supported."? <= submodules?
+The other question is about the?S00selinux labelling script mentioned in the above patch, I see that it used semanage which is not available.? I have seen other versions with the fixfiles script (also not available in BR2 selinux I believe).??Does anyone know of any examples anywhere?? Appreciate the time.
+Thanks a lot,Tomas Arredondo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200817/f62ac144/attachment-0001.html>
