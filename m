@@ -1,94 +1,128 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 17 Aug 2020 23:43:36 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Analysis of build results
-In-Reply-To: <20200816000914.5ad801d9@windsurf.home>
-References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
- <20200816000914.5ad801d9@windsurf.home>
-Message-ID: <c3d6e69b-ee5a-ade0-e505-abc7006738b3@gmail.com>
+Date: Mon, 17 Aug 2020 23:55:45 +0200
+Subject: [Buildroot] [PATCH] support/testing: add openssh runtime test
+Message-ID: <20200817215545.8271-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+From: Romain Naour <romain.naour@smile.fr>
 
-Le 16/08/2020 ? 00:09, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> Frank, Gwenhael, Romain, Adam, ARC maintainers, Peter, there are some
-> questions/issues for you below.
-> 
-> Everybody else: please help fixing autobuilder issues !
-> 
-> See below some preliminary analysis of all build failures that occurred
-> on August 14.
-> 
-> On Sat, 15 Aug 2020 08:01:40 -0000
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
->>     master   | 121 | 67  |  0  | 188 |
-> 
-> So we're still at about ~30% of failures, which isn't exactly good.
-> 
-> 
->>    x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/84eb9bb82255878d6a58772cb96d253a5c02f625 |     
->>    x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/2ddfabda83a42d06b6b9689bc83882c59d1b8db6 |     
->>    x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/ce3f75b5a259924924c934e784b58feed2705be8 |     
-> 
-> A wonderful:
-> 
-> ./boost/thread/thread_time.hpp:32:60: internal compiler error: Segmentation fault
-> 
-> This is failing only with this toolchain, which uses gcc 6.2.0. We're
-> using the version 2016.11-19 of this toolchain, which is really old,
-> and Mentor Graphics has published newer versions
-> (https://sourcery.mentor.com/GNUToolchain/subscription51456) but they
-> are no longer publicly available.
-> 
-> So I would advocate for dropping support for this toolchain. I'll send
-> a patch doing that.
+This new runtime test is based on test_dropbear.py. The only required change
+is to use "-oStrictHostKeyChecking=no" instead of "-y" to accept the new key.
 
-+1
+Since the base test infra only provide a uClibc-ng toolchain, add a second
+test using a glibc based internal toolchain.
 
-> 
->>     arm      |          eigen-3.3.7           | NOK | http://autobuild.buildroot.net/results/0b972b4e63cac9ae95dcac78e031d7b19e2e4e0d |     
-> 
-> Detects Fortran (even though that dependency is not expressed in the
-> eigen package), but fails to use it.
-> 
-> It would be good to explicitly disable using Fortran in this package.
-> Romain, is this something you could have a look at ?
+For example, this allow to trigger the openssh 8.1p bug with glibc 2.31 [1].
 
-This is not an obvious fix, eigen try to detect libblas dependency and check for
-Fortran compiler because the complete list of supported languages is not
-provided (project(Eigen3))
+[1] https://bugs.archlinux.org/task/65386
 
-https://gitlab.kitware.com/cmake/cmake/-/issues/18348
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ DEVELOPERS                                    |  1 +
+ support/testing/tests/package/test_openssh.py | 67 +++++++++++++++++++
+ .../tests/package/test_openssh/post-build.sh  |  4 ++
+ 3 files changed, 72 insertions(+)
+ create mode 100644 support/testing/tests/package/test_openssh.py
+ create mode 100755 support/testing/tests/package/test_openssh/post-build.sh
 
-I'm not sure why we define unconditionally CMAKE_CXX_COMPILER even if
-BR2_INSTALL_LIBSTDCPP is not set, while CMAKE_Fortran_COMPILER is set only when
-TOOLCHAIN_HAS_FORTRAN is set.
-
-https://git.buildroot.net/buildroot/tree/support/misc/toolchainfile.cmake.in#n70
-
->
-> 
->>  aarch64_be  |         supertux-0.6.0         | NOK | http://autobuild.buildroot.net/results/0f02877a665b2281266df4b23c72a7c113906c31 |     
-> 
-> /tmp/instance-0/output-1/build/supertux-0.6.0/src/editor/object_settings.cpp:223:26: error: 'remove_if' is not a member of 'std'
->      m_options.erase(std::remove_if(m_options.begin(), m_options.end(),
-> 
-> Romain, supertux is your thing, could you have a look ?
-
-Already fixed by 14552122ac46028b78f05eeed1154da2ba87b174
-
-Best regards,
-Romain
-
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 35840ec9a8..bba3fd6029 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2244,6 +2244,7 @@ F:	package/waffle/
+ F:	package/xenomai/
+ F:	package/zziplib/
+ F:	support/testing/tests/package/test_glxinfo.py
++F:	support/testing/tests/package/test_openssh.py
+ F:	toolchain/
+ 
+ N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
+diff --git a/support/testing/tests/package/test_openssh.py b/support/testing/tests/package/test_openssh.py
+new file mode 100644
+index 0000000000..a231071c44
+--- /dev/null
++++ b/support/testing/tests/package/test_openssh.py
+@@ -0,0 +1,67 @@
++import os
++
++import infra.basetest
++
++
++class TestOpensshBase(infra.basetest.BRTest):
++    passwd = "testpwd"
++    opensshconfig = \
++        """
++        BR2_TARGET_GENERIC_ROOT_PASSWD="{}"
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_PACKAGE_OPENSSH=y
++        BR2_PACKAGE_SSHPASS=y
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """.format(
++            passwd,
++            infra.filepath("tests/package/test_openssh/post-build.sh"))
++
++    def openssh_test(self):
++        self.emulator.login(self.passwd)
++        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "sshpass -p {} ssh -oStrictHostKeyChecking=no localhost /bin/true".format(self.passwd)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++
++class TestOpenSshuClibc(TestOpensshBase):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        TestOpensshBase.opensshconfig + \
++        """
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img,
++                                    "-net", "nic",
++                                    "-net", "user"])
++        self.openssh_test()
++
++
++class TestOpenSshGlibc(TestOpensshBase):
++    config = \
++        TestOpensshBase.opensshconfig + \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++        BR2_KERNEL_HEADERS_4_19=y
++        BR2_TOOLCHAIN_BUILDROOT_CXX=y
++        BR2_PACKAGE_RNG_TOOLS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img,
++                                    "-net", "nic",
++                                    "-net", "user"])
++        self.openssh_test()
+diff --git a/support/testing/tests/package/test_openssh/post-build.sh b/support/testing/tests/package/test_openssh/post-build.sh
+new file mode 100755
+index 0000000000..4c876ce554
+--- /dev/null
++++ b/support/testing/tests/package/test_openssh/post-build.sh
+@@ -0,0 +1,4 @@
++#!/usr/bin/env bash
++
++sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g'  ${TARGET_DIR}/etc/ssh/sshd_config
++sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g'  ${TARGET_DIR}/etc/ssh/sshd_config
+-- 
+2.25.4
