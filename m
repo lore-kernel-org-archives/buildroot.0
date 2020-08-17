@@ -1,49 +1,75 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 17 Aug 2020 12:10:50 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 19.0.2
-In-Reply-To: <20200817091050.272237-1-asafka7@gmail.com>
-References: <20200817091050.272237-1-asafka7@gmail.com>
-Message-ID: <20200817091050.272237-4-asafka7@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 17 Aug 2020 11:10:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v1.6.11
+Message-ID: <20200817091055.203521-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-pyzmq/python-pyzmq.hash | 4 ++--
- package/python-pyzmq/python-pyzmq.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Mosquitto 1.6.11 is a bugfix release, read the whole announcement on
+http://mosquitto.org/blog/2020/08/version-1-6-11-released/
 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index 2bbaad009a..ecf6489249 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
+From the changelog of the client library:
+mosquitto_loop_start() now sets a thread name on Linux, FreeBSD, NetBSD,
+and OpenBSD. Closes #1777.
+This is done with pthread_setname_np; so mosquitto now requires
+BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/mosquitto/Config.in      | 4 ++++
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 3 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index b4effa36be..21cd56c492 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MOSQUITTO
+ 	bool "mosquitto"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # pthread_setname_np
+ 	help
+ 	  Eclipse Mosquitto is an open source (EPL/EDL licensed) message
+ 	  broker that implements the MQTT protocol versions 5.0, 3.1.1
+@@ -19,6 +20,9 @@ config BR2_PACKAGE_MOSQUITTO
+ 
+ 	  http://mosquitto.org/
+ 
++comment "mosquitto needs nptl"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++
+ config BR2_PACKAGE_MOSQUITTO_BROKER
+ 	bool "install the mosquitto broker"
+ 	default y
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 482962490e..1470a93aa7 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
 @@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyzmq/json
--md5  4650e45ebcf8e08620211c0e720d6066  pyzmq-19.0.0.tar.gz
--sha256  13a5638ab24d628a6ade8f794195e1a1acd573496c3b85af2f1183603b7bf5e0  pyzmq-19.0.1.tar.gz
-+md5  200abc1a75bdcfff7adf61304f46f55e  pyzmq-19.0.2.tar.gz
-+sha256  296540a065c8c21b26d63e3cea2d1d57902373b16e4256afe46422691903a438  pyzmq-19.0.2.tar.gz
- # Locally computed sha256 checksums
- sha256  aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2  COPYING.BSD
- sha256  44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d  COPYING.LESSER
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index 84d339f745..d1f4314a1e 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-1.6.10.tar.gz.asc
+-sha256  92d1807717f0f6d57d1ac1207ffdb952e8377e916c7b0bb4718f745239774232  mosquitto-1.6.10.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-1.6.11.tar.gz.asc
++sha256  b02d8f1368c40d5779ee125c37daf9003608eb47d7fbb04c5b938c76c1230a1f  mosquitto-1.6.11.tar.gz
+ 
+ # License files
+ sha256  cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index cdd515e1a4..1e3e854bda 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYZMQ_VERSION = 19.0.1
-+PYTHON_PYZMQ_VERSION = 19.0.2
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/86/08/e5fc492317cc9d65b32d161c6014d733e8ab20b5e78e73eca63f53b17004
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/05/77/7483975d84fe1fd24cc67881ba7810e0e7b3ee6c2a0e002a5d6703cca49b
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+-MOSQUITTO_VERSION = 1.6.10
++MOSQUITTO_VERSION = 1.6.11
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
 -- 
-2.26.2
+2.25.3
