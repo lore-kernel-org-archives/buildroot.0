@@ -1,88 +1,48 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Mon, 17 Aug 2020 16:26:54 -0400
-Subject: [Buildroot] [PATCH 1/1] package/lttng-tools: fix build with musl
-In-Reply-To: <20200817201335.3767619-1-fontaine.fabrice@gmail.com>
-References: <20200817201335.3767619-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAB4xu_2sQ0U2JPsujSXnup1waHJiFo0WM2LyBfT-uKMO90gSfw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 17 Aug 2020 22:42:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: add patch fixing
+ sprintf error
+In-Reply-To: <20200813234209.3b6dd3e1@windsurf.home>
+References: <20200808173800.2034897-1-christian@paral.in>
+ <20200813232744.12d34e1b@windsurf.home>
+ <CA+h8R2qWhbuQj_weOPZk9NeR2C_9CQ1zAZfogtO69og5Eyqs5A@mail.gmail.com>
+ <20200813234209.3b6dd3e1@windsurf.home>
+Message-ID: <20200817224251.3e2be53d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 17, 2020 at 4:13 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
+Hello Thomas,
+
+On Thu, 13 Aug 2020 23:42:09 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> On Thu, 13 Aug 2020 14:31:26 -0700
+> Christian Stewart <christian@paral.in> wrote:
 >
-> Fixes:
->  - http://autobuild.buildroot.org/results/0c49b3e90361ced63cad4807dbe1b13c595f5f97
+> > > Applied to master, thanks. I have to say the snippet of code that is
+> > > being patched here does not give a very good feel of the rtl8821au
+> > > code base :-/
+> >
+> > After years of struggling with USB rtl cards (and helping others do
+> > the same) I have to agree.
+>
+> And nobody ever thought of taking all these crappy out of tree WiFi
+> drivers, submit them for drivers/staging/ inclusion in the upstream
+> kernel, and progressively clean them up ?
 
-Why is this only an error with musl?
+For some there are already staging alternatives (see [1], [2], [3], [4], [5])...
 
-Would you mind submitting this to upstream too?
+Regards,
+Peter
 
-Thanks,
 
-Phil
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/rtl8188eu
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/rtl8192e
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/rtl8192u
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/rtl8712
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/rtl8723bs
 
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...nts-ns-tp.h-Fix-build-with-musl-libc.patch | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
->
-> diff --git a/package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch b/package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
-> new file mode 100644
-> index 0000000000..e3e0f3a777
-> --- /dev/null
-> +++ b/package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
-> @@ -0,0 +1,46 @@
-> +From 73f906d4d6806afb1962751ccb0fe6c15f320d94 Mon Sep 17 00:00:00 2001
-> +From: Ovidiu Panait <ovidiu.panait@windriver.com>
-> +Date: Mon, 18 May 2020 16:39:26 +0300
-> +Subject: [PATCH] tests: gen-ust-events-ns/tp.h: Fix build with musl libc
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fix the following build error with musl libc:
-> +In file included from ../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.h:14,
-> +                 from ../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.c:10:
-> +../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.h:17:10: error: unknown type name 'ino_t'; did you mean 'int8_t'?
-> +   17 |  TP_ARGS(ino_t, ns_ino),
-> +      |          ^~~~~
-> +../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.h:17:10: error: unknown type name 'ino_t'; did you mean 'int8_t'?
-> +   17 |  TP_ARGS(ino_t, ns_ino),
-> +      |          ^~~~~
-> +../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/./tp.h:17:2: error: unknown type name 'ino_t'; did you mean 'int8_t'?
-> +   17 |  TP_ARGS(ino_t, ns_ino),
-> +      |  ^~~~~~~
-> +../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/./tp.h:17:2: error: unknown type name 'ino_t'; did you mean 'int8_t'?
-> +   17 |  TP_ARGS(ino_t, ns_ino),
-> +      |  ^~~~~~~
-> +
-> +Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-> +Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
-> +Change-Id: Ic7a73c6754fc30a62bdf6519062c07be65a2eaba
-> +[Retrieved from:
-> +https://github.com/lttng/lttng-tools/commit/73f906d4d6806afb1962751ccb0fe6c15f320d94]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + tests/utils/testapp/gen-ust-events-ns/tp.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/tests/utils/testapp/gen-ust-events-ns/tp.h b/tests/utils/testapp/gen-ust-events-ns/tp.h
-> +index 4dbfed51a..e0ddb29a6 100644
-> +--- a/tests/utils/testapp/gen-ust-events-ns/tp.h
-> ++++ b/tests/utils/testapp/gen-ust-events-ns/tp.h
-> +@@ -11,6 +11,7 @@
-> + #if !defined(_TRACEPOINT_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
-> + #define _TRACEPOINT_TP_H
-> +
-> ++#include <sys/types.h>
-> + #include <lttng/tracepoint.h>
-> +
-> + TRACEPOINT_EVENT(tp, tptest,
-> --
-> 2.27.0
->
+> Thomas
