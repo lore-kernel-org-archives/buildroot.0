@@ -1,43 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Aug 2020 15:12:28 +0200
-Subject: [Buildroot] [git commit branch/next] package/exfatprogs: bump to
- version 1.0.4
-Message-ID: <20200817130558.CDC8482168@busybox.osuosl.org>
+Date: Mon, 17 Aug 2020 12:41:04 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-pyzmq: bump to
+ version 19.0.2
+Message-ID: <20200817130558.C0D3282168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51a8edc99c17d07e3063bd09a27db500f0d6f97a
+commit: https://git.buildroot.net/buildroot/commit/?id=838c85c512ed0c9e8b77d975ac28e7f4ae1f008c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/exfatprogs/exfatprogs.hash | 2 +-
- package/exfatprogs/exfatprogs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyzmq/python-pyzmq.hash | 4 ++--
+ package/python-pyzmq/python-pyzmq.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/exfatprogs/exfatprogs.hash b/package/exfatprogs/exfatprogs.hash
-index 6beb2777c2..d251bce5e6 100644
---- a/package/exfatprogs/exfatprogs.hash
-+++ b/package/exfatprogs/exfatprogs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e73863d2f27901834e0dae678ecbb3d899e206d6036cca27d9b24b9479487f65  exfatprogs-1.0.3.tar.gz
-+sha256  982883f208a694962dff0654f4421a1a726d7d71068a0c84b93a10688179a186  exfatprogs-1.0.4.tar.gz
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/exfatprogs/exfatprogs.mk b/package/exfatprogs/exfatprogs.mk
-index a78cde3373..56db82cd8a 100644
---- a/package/exfatprogs/exfatprogs.mk
-+++ b/package/exfatprogs/exfatprogs.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
+index 2bbaad009a..ecf6489249 100644
+--- a/package/python-pyzmq/python-pyzmq.hash
++++ b/package/python-pyzmq/python-pyzmq.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pyzmq/json
+-md5  4650e45ebcf8e08620211c0e720d6066  pyzmq-19.0.0.tar.gz
+-sha256  13a5638ab24d628a6ade8f794195e1a1acd573496c3b85af2f1183603b7bf5e0  pyzmq-19.0.1.tar.gz
++md5  200abc1a75bdcfff7adf61304f46f55e  pyzmq-19.0.2.tar.gz
++sha256  296540a065c8c21b26d63e3cea2d1d57902373b16e4256afe46422691903a438  pyzmq-19.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2  COPYING.BSD
+ sha256  44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d  COPYING.LESSER
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index 84d339f745..d1f4314a1e 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--EXFATPROGS_VERSION = 1.0.3
-+EXFATPROGS_VERSION = 1.0.4
- EXFATPROGS_SITE = https://github.com/exfatprogs/exfatprogs/releases/download/$(EXFATPROGS_VERSION)
- EXFATPROGS_LICENSE = GPL-2.0+
- EXFATPROGS_LICENSE_FILES = COPYING
+-PYTHON_PYZMQ_VERSION = 19.0.1
++PYTHON_PYZMQ_VERSION = 19.0.2
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+-PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/86/08/e5fc492317cc9d65b32d161c6014d733e8ab20b5e78e73eca63f53b17004
++PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/05/77/7483975d84fe1fd24cc67881ba7810e0e7b3ee6c2a0e002a5d6703cca49b
+ PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
+ # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
+ PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
