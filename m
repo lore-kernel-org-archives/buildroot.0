@@ -1,47 +1,51 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon, 17 Aug 2020 15:52:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-netaddr: bump to version
- 0.8.0
-Message-ID: <1597672337-14533-1-git-send-email-jugurtha.belkalem@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 Aug 2020 16:42:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v1.6.11
+In-Reply-To: <20200817091055.203521-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Mon, 17 Aug 2020 11:10:55 +0200")
+References: <20200817091055.203521-1-titouan.christophe@railnova.eu>
+Message-ID: <87imdh1gh2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
- package/python-netaddr/python-netaddr.hash | 4 ++--
- package/python-netaddr/python-netaddr.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
-index c834721..91b2007 100644
---- a/package/python-netaddr/python-netaddr.hash
-+++ b/package/python-netaddr/python-netaddr.hash
-@@ -1,5 +1,5 @@
- # md5 from https://pypi.python.org/pypi/netaddr/json
--md5 51019ef59c93f3979bcb37d3b8527e07 netaddr-0.7.19.tar.gz
-+md5 34cad578473b66ad77bc3b2a7613ed4a netaddr-0.8.0.tar.gz
- # Locally computed
--sha256 38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd netaddr-0.7.19.tar.gz
-+sha256 d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243 netaddr-0.8.0.tar.gz
- sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
-diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
-index a539845..e3ffe4e 100644
---- a/package/python-netaddr/python-netaddr.mk
-+++ b/package/python-netaddr/python-netaddr.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_NETADDR_VERSION = 0.7.19
-+PYTHON_NETADDR_VERSION = 0.8.0
- PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
--PYTHON_NETADDR_SITE = https://pypi.python.org/packages/0c/13/7cbb180b52201c07c796243eeff4c256b053656da5cfe3916c3f5b57b3a0
-+PYTHON_NETADDR_SITE = https://pypi.python.org/packages/c3/3b/fe5bda7a3e927d9008c897cf1a0858a9ba9924a6b4750ec1824c9e617587
- PYTHON_NETADDR_LICENSE = BSD-3-Clause
- PYTHON_NETADDR_LICENSE_FILES = LICENSE
- PYTHON_NETADDR_SETUP_TYPE = setuptools
+ > Mosquitto 1.6.11 is a bugfix release, read the whole announcement on
+ > http://mosquitto.org/blog/2020/08/version-1-6-11-released/
+
+ > From the changelog of the client library:
+ > mosquitto_loop_start() now sets a thread name on Linux, FreeBSD, NetBSD,
+ > and OpenBSD. Closes #1777.
+ > This is done with pthread_setname_np; so mosquitto now requires
+ > BR2_TOOLCHAIN_HAS_THREADS_NPTL.
+
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > ---
+ >  package/mosquitto/Config.in      | 4 ++++
+ >  package/mosquitto/mosquitto.hash | 4 ++--
+ >  package/mosquitto/mosquitto.mk   | 2 +-
+ >  3 files changed, 7 insertions(+), 3 deletions(-)
+
+ > diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+ > index b4effa36be..21cd56c492 100644
+ > --- a/package/mosquitto/Config.in
+ > +++ b/package/mosquitto/Config.in
+ > @@ -1,5 +1,6 @@
+ >  config BR2_PACKAGE_MOSQUITTO
+ >  	bool "mosquitto"
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # pthread_setname_np
+
+We have logic to build mosquitto without threading support
+(WITH_THREADING=no), so this should normally not be needed. From a quick
+look, it does look like the pthread.h include in the new code isn't
+inside the WITH_THREADING conditional, but that is easy to fix.
+
+For non-NPTL threads we could perhaps just build mosquitto without
+threading support rather than having to propagate the NPTL dependency
+(unless collectd/shairport-sync needs the threading API).
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
