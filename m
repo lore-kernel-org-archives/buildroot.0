@@ -1,54 +1,73 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Mon, 17 Aug 2020 14:27:12 -0500
-Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: fix glibc build errors
-Message-ID: <20200817192712.32481-1-vfazio@xes-inc.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 17 Aug 2020 22:13:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lttng-tools: fix build with musl
+Message-ID: <20200817201335.3767619-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vincent Fazio <vfazio@gmail.com>
-
-In order to not have to define all architecture bitness variants in
-src/LibSupport.h to conditionally define RADIX_BITS, a patch was created
-to depend on LONG_BIT being defined via limits.h
-
-For glibc, LONG_BIT is behind a _XOPEN_SOURCE define guard so patch the
-makefile to define this macro as well as _DEFAULT_SOURCE.
-
-Defining _XOPEN_SOURCE requires _DEFAULT_SOURCE to be explicitly defined
-for builds to succeed as it is no longer impliclty defined when
-_XOPEN_SOURCE is defined.
-
 Fixes:
-	http://autobuild.buildroot.net/results/bc145dd23c80a0660300766d0c114a00ed2e52b6/
-	http://autobuild.buildroot.net/results/1d84e70c30d4d0719274aa4f3edc01772beb24a3/
+ - http://autobuild.buildroot.org/results/0c49b3e90361ced63cad4807dbe1b13c595f5f97
 
-Fixes: 19bd089004 ("package/ibm-sw-tpm2: fix patch to address musl builds")
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ibm-sw-tpm2/0002-Add-required-defines.patch | 11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 package/ibm-sw-tpm2/0002-Add-required-defines.patch
+ ...nts-ns-tp.h-Fix-build-with-musl-libc.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
 
-diff --git a/package/ibm-sw-tpm2/0002-Add-required-defines.patch b/package/ibm-sw-tpm2/0002-Add-required-defines.patch
+diff --git a/package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch b/package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
 new file mode 100644
-index 0000000000..c9e2f19bd2
+index 0000000000..e3e0f3a777
 --- /dev/null
-+++ b/package/ibm-sw-tpm2/0002-Add-required-defines.patch
-@@ -0,0 +1,11 @@
-+--- a/src/makefile
-++++ b/src/makefile
-+@@ -46,6 +46,8 @@ CCFLAGS = -Wall  			\
-+ 	 -c -ggdb -O0 			\
-+ 	-DTPM_POSIX			\
-+ 	-D_POSIX_			\
-++	-D_DEFAULT_SOURCE		\
-++	-D_XOPEN_SOURCE			\
-+ 	-DTPM_NUVOTON
++++ b/package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
+@@ -0,0 +1,46 @@
++From 73f906d4d6806afb1962751ccb0fe6c15f320d94 Mon Sep 17 00:00:00 2001
++From: Ovidiu Panait <ovidiu.panait@windriver.com>
++Date: Mon, 18 May 2020 16:39:26 +0300
++Subject: [PATCH] tests: gen-ust-events-ns/tp.h: Fix build with musl libc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fix the following build error with musl libc:
++In file included from ../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.h:14,
++                 from ../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.c:10:
++../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.h:17:10: error: unknown type name 'ino_t'; did you mean 'int8_t'?
++   17 |  TP_ARGS(ino_t, ns_ino),
++      |          ^~~~~
++../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/tp.h:17:10: error: unknown type name 'ino_t'; did you mean 'int8_t'?
++   17 |  TP_ARGS(ino_t, ns_ino),
++      |          ^~~~~
++../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/./tp.h:17:2: error: unknown type name 'ino_t'; did you mean 'int8_t'?
++   17 |  TP_ARGS(ino_t, ns_ino),
++      |  ^~~~~~~
++../../../../../lttng-tools-2.12.0/tests/utils/testapp/gen-ust-events-ns/./tp.h:17:2: error: unknown type name 'ino_t'; did you mean 'int8_t'?
++   17 |  TP_ARGS(ino_t, ns_ino),
++      |  ^~~~~~~
++
++Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
++Signed-off-by: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
++Change-Id: Ic7a73c6754fc30a62bdf6519062c07be65a2eaba
++[Retrieved from:
++https://github.com/lttng/lttng-tools/commit/73f906d4d6806afb1962751ccb0fe6c15f320d94]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tests/utils/testapp/gen-ust-events-ns/tp.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tests/utils/testapp/gen-ust-events-ns/tp.h b/tests/utils/testapp/gen-ust-events-ns/tp.h
++index 4dbfed51a..e0ddb29a6 100644
++--- a/tests/utils/testapp/gen-ust-events-ns/tp.h
+++++ b/tests/utils/testapp/gen-ust-events-ns/tp.h
++@@ -11,6 +11,7 @@
++ #if !defined(_TRACEPOINT_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
++ #define _TRACEPOINT_TP_H
 + 
-+ # add this line for big endian platforms
+++#include <sys/types.h>
++ #include <lttng/tracepoint.h>
++ 
++ TRACEPOINT_EVENT(tp, tptest,
 -- 
-2.28.0
+2.27.0
