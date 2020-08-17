@@ -1,47 +1,69 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon, 17 Aug 2020 17:53:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-requests : bump to version
- 2.24.0
-Message-ID: <1597679613-16485-1-git-send-email-jugurtha.belkalem@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Aug 2020 18:15:32 +0200
+Subject: [Buildroot] [PATCH v2] package/apcupsd: add -lstdc++ for ARC7*
+ and SPARC
+In-Reply-To: <CADvTj4rHF5+nE-Po09w5Gyhu8ttkqJ4P_oGx_8K3UukVMxX-wQ@mail.gmail.com>
+References: <20200812171821.2517-1-Evgeniy.Didin@synopsys.com>
+ <20200817072505.GM24264@scaer>
+ <CADvTj4rHF5+nE-Po09w5Gyhu8ttkqJ4P_oGx_8K3UukVMxX-wQ@mail.gmail.com>
+Message-ID: <20200817161532.GO24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
- package/python-requests/python-requests.hash | 4 ++--
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+James, All,
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index b252e3a..84bf2a1 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5  abfdc28db1065bbd0bc32592ac9d27a6  requests-2.23.0.tar.gz
--sha256  b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6  requests-2.23.0.tar.gz
-+md5  b54bff26a389e5932e8b1c4983a99ce7  requests-2.24.0.tar.gz
-+sha256  b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b  requests-2.24.0.tar.gz
- # Locally computed sha256 checksums
- sha256  8837a2f33a61bcee175c028ff16d1c160aba48a3aebe1495ace709be4e62636b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 9d36346..eb3997f 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- # Please keep in sync with package/python3-requests/python3-requests.mk
--PYTHON_REQUESTS_VERSION = 2.23.0
-+PYTHON_REQUESTS_VERSION = 2.24.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/da/67/672b422d9daf07365259958912ba533a0ecab839d4084c487a5fe9a5405f
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+On 2020-08-17 01:51 -0600, James Hilliard spake thusly:
+> On Mon, Aug 17, 2020 at 1:25 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Evgeniy, James, All,
+> >
+> > On 2020-08-12 20:18 +0300, Evgeniy Didin spake thusly:
+> > > For some reason apcupsd is not building for ARC700 and SPARC,
+> > > adding "-lstdc++" solves the issue.
+> >
+> > So, as Thomas already replied, this is not an acceptable explanation.
+> >
+> > The real question is "why are they forgetting to link with -lstdc++ when
+> > linking a C++ program to begin with?"
+> Well from my understanding they are intentionally linking with -lsupc++
+> instead of -lstdc++, but for some reason -lsupc++ is broken on certain
+> platforms for linking apcupsd.
+> See: https://gcc.gnu.org/onlinedocs/libstdc++/faq.html#faq.what_is_libsupcxx
+
+Fact is, I don't understand *why* they would write a C++ program and not
+link with the g++ compiler.
+
+The rationales exposed bu apcupsd are:
+
+  - that CUPS does not have a dependency on C++, but that is not even true
+    nowadays;
+
+  - that they need to be binary-portable across distributions, which is
+    somewhat useless for distros as they do build from scratch, and we
+    do also build from source and are not caring about portability.
+
+So I'm still unsure why using gcc, but I think that trying (and failing)
+to reinvent the linker logic is flawed IMHO.
+
+So, my opinion is still that we should use g++ to do the link of a C++
+program.
+
+Besides, we're not going to fix existing toolchains and we need to move
+forward.
+
+I'm siding with Thomas here, that adding the explicit linking with
+-lstdc++ is not the ebst way to solve it, adn rather that we want to
+patch configure to use g++ to link.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
