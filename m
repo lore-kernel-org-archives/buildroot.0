@@ -1,41 +1,40 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon, 17 Aug 2020 17:22:26 +0200
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 17 Aug 2020 17:36:51 +0200
 Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version
  6.4.3
-In-Reply-To: <20200817144304.235841-1-thomas.claveirole@green-communications.fr>
+In-Reply-To: <CAHpTZwkUZK_keH1wvjDFvKLF9DgTWp1QYCAqZGKzL32U8yLPmw@mail.gmail.com>
 References: <20200430095332.98544-1-thomas.claveirole@green-communications.fr>
  <20200817144304.235841-1-thomas.claveirole@green-communications.fr>
-Message-ID: <CAHpTZwkUZK_keH1wvjDFvKLF9DgTWp1QYCAqZGKzL32U8yLPmw@mail.gmail.com>
+ <CAHpTZwkUZK_keH1wvjDFvKLF9DgTWp1QYCAqZGKzL32U8yLPmw@mail.gmail.com>
+Message-ID: <13659576.xXyXIKi9BV@houde>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Jugurtha,
 
-On Mon, Aug 17, 2020 at 4:49 PM Thomas Claveirole <
-thomas.claveirole@green-communications.fr> wrote:
+> It would be great if you can add LICENSE HASH value (LICENSE.md
+> <https://github.com/openlayers/openlayers/blob/main/LICENSE.md
+> >) as well to the hash file.
 
-> Signed-off-by: Thomas Claveirole <
-> thomas.claveirole at green-communications.fr>
-> ---
->  # Locally computed:
-> -sha256 e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101
->       v6.2.1-dist.zip
-> +sha256 8371bbca2f7b33be0db5b416a78bc9559dd8f9afb6a406994daeeecf7b37f3f6
->       v6.4.3-dist.zip
->
->
-It would be great if you can add LICENSE HASH value (LICENSE.md
-<https://github.com/openlayers/openlayers/blob/main/LICENSE.md>) as well to
-the hash file.
+As stated in the openlayers.mk file:
 
-Thanks.
+# There's no separate license file in the archive, only minified files.
 
-Best regards.
 
-jugurtha.
+I don't think I should add a license hash in the .hash file for a
+file that does not exist in the archive we do download.  Is there
+something I misunderstood?
+
+Cheers,
+-- 
+Thomas Claveirole <thomas.claveirole@green-communications.fr>
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200817/31e1ec13/attachment.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: This is a digitally signed message part.
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200817/2f259461/attachment.asc>
