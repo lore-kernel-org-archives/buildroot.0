@@ -1,52 +1,64 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 17 Aug 2020 03:08:27 -0600
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: fix missing
- __exchange_and_add symbol
-In-Reply-To: <20200817072802.GN24264@scaer>
-References: <20200513073537.17950-1-james.hilliard1@gmail.com>
- <20200513112247.146a1477@windsurf.home>
- <CADvTj4oYoW71OET1Zp829y3PJY-Anx8xhChBATdCsGnXv5xQdw@mail.gmail.com>
- <20200817072802.GN24264@scaer>
-Message-ID: <CADvTj4qUrPSQPPkN8NJOH41eYeD2m10OCO6Ls4w2AzyfU9ETmw@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 17 Aug 2020 12:10:47 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python{3}-psutil: bump to version
+ 5.7.2
+Message-ID: <20200817091050.272237-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 17, 2020 at 1:28 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> James, All,
->
-> On 2020-05-13 03:43 -0600, James Hilliard spake thusly:
-> > On Wed, May 13, 2020 at 3:22 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > > On Wed, 13 May 2020 01:35:37 -0600
-> > > James Hilliard <james.hilliard1@gmail.com> wrote:
-> > > > It seems libsupc++.a is missing __exchange_and_add for uclibc on some
-> > > > platforms so link with libstdc++ as well on sparc and arcle.
-> [--SNIP--]
-> > > Meh. We really want to fix that in uClibc, if it's a uClibc issue.
-> > Well no idea if it's a bug in uClibc but the failures seem to be
-> > limited to builds
-> > using uClibc. The libsupc++.a library appears to be originating from
-> > gcc, I don't
-> > really know why this issues seems to be specific to uClibc and those 2 archs.
->
-> Pleas see the reply I wrote to another similar patch:
-Not sure if that's really getting at the real issue, I found this which seems
-likely to be related to the root cause of the failure:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70560
->
->     http://lists.busybox.net/pipermail/buildroot/2020-August/289411.html
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ package/python3-psutil/python3-psutil.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 0000d6033c..1a053cc368 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  ed7b0f11ed214bcabbe76b7cf52f3ae3  psutil-5.7.0.tar.gz
+-sha256  685ec16ca14d079455892f25bd124df26ff9137664af445563c1bd36629b5e0e  psutil-5.7.0.tar.gz
++md5  50bf39b4faa268ba1da8a9730bb38bb6  psutil-5.7.2.tar.gz
++sha256  90990af1c3c67195c44c9a889184f84f5b2320dce3ee3acbd054e3ba0b4a7beb  psutil-5.7.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 08bb2fd7bd..19d97a6f97 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python3-psutil/python3-psutil.mk
+-PYTHON_PSUTIL_VERSION = 5.7.0
++PYTHON_PSUTIL_VERSION = 5.7.2
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c4/b8/3512f0e93e0db23a71d82485ba256071ebef99b227351f0f5540f744af41
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b528e18515999b0c8e698c136db78f62df34eee89cee205f1
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+diff --git a/package/python3-psutil/python3-psutil.mk b/package/python3-psutil/python3-psutil.mk
+index ddd4b6b7d3..febf0d3edb 100644
+--- a/package/python3-psutil/python3-psutil.mk
++++ b/package/python3-psutil/python3-psutil.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python-psutil/python-psutil.mk
+-PYTHON3_PSUTIL_VERSION = 5.7.0
++PYTHON3_PSUTIL_VERSION = 5.7.2
+ PYTHON3_PSUTIL_SOURCE = psutil-$(PYTHON3_PSUTIL_VERSION).tar.gz
+-PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/c4/b8/3512f0e93e0db23a71d82485ba256071ebef99b227351f0f5540f744af41
++PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b528e18515999b0c8e698c136db78f62df34eee89cee205f1
+ PYTHON3_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON3_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON3_PSUTIL_LICENSE_FILES = LICENSE
+-- 
+2.26.2
