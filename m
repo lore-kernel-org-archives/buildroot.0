@@ -1,68 +1,94 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 17 Aug 2020 14:36:11 -0700
-Subject: [Buildroot] OpenSSH login problem
-In-Reply-To: <20200816220620.65159d1d@windsurf.home>
-References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
- <52-5f356200-5-2c492440@36238474>
- <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
- <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
- <20200816220620.65159d1d@windsurf.home>
-Message-ID: <CA+h8R2qO01wwrEJdTx2puEbDv6mv31YxyAjG5nCn6hosPAW_aQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 17 Aug 2020 23:43:36 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Analysis of build results
+In-Reply-To: <20200816000914.5ad801d9@windsurf.home>
+References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
+ <20200816000914.5ad801d9@windsurf.home>
+Message-ID: <c3d6e69b-ee5a-ade0-e505-abc7006738b3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Hi Thomas, All,
 
-On Sun, Aug 16, 2020 at 1:06 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> On Sun, 16 Aug 2020 12:59:02 -0700
-> Christian Stewart <christian@paral.in> wrote:
+Le 16/08/2020 ? 00:09, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> Frank, Gwenhael, Romain, Adam, ARC maintainers, Peter, there are some
+> questions/issues for you below.
+> 
+> Everybody else: please help fixing autobuilder issues !
+> 
+> See below some preliminary analysis of all build failures that occurred
+> on August 14.
+> 
+> On Sat, 15 Aug 2020 08:01:40 -0000
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>>     master   | 121 | 67  |  0  | 188 |
+> 
+> So we're still at about ~30% of failures, which isn't exactly good.
+> 
+> 
+>>    x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/84eb9bb82255878d6a58772cb96d253a5c02f625 |     
+>>    x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/2ddfabda83a42d06b6b9689bc83882c59d1b8db6 |     
+>>    x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/ce3f75b5a259924924c934e784b58feed2705be8 |     
+> 
+> A wonderful:
+> 
+> ./boost/thread/thread_time.hpp:32:60: internal compiler error: Segmentation fault
+> 
+> This is failing only with this toolchain, which uses gcc 6.2.0. We're
+> using the version 2016.11-19 of this toolchain, which is really old,
+> and Mentor Graphics has published newer versions
+> (https://sourcery.mentor.com/GNUToolchain/subscription51456) but they
+> are no longer publicly available.
+> 
+> So I would advocate for dropping support for this toolchain. I'll send
+> a patch doing that.
+
++1
+
+> 
+>>     arm      |          eigen-3.3.7           | NOK | http://autobuild.buildroot.net/results/0b972b4e63cac9ae95dcac78e031d7b19e2e4e0d |     
+> 
+> Detects Fortran (even though that dependency is not expressed in the
+> eigen package), but fails to use it.
+> 
+> It would be good to explicitly disable using Fortran in this package.
+> Romain, is this something you could have a look at ?
+
+This is not an obvious fix, eigen try to detect libblas dependency and check for
+Fortran compiler because the complete list of supported languages is not
+provided (project(Eigen3))
+
+https://gitlab.kitware.com/cmake/cmake/-/issues/18348
+
+I'm not sure why we define unconditionally CMAKE_CXX_COMPILER even if
+BR2_INSTALL_LIBSTDCPP is not set, while CMAKE_Fortran_COMPILER is set only when
+TOOLCHAIN_HAS_FORTRAN is set.
+
+https://git.buildroot.net/buildroot/tree/support/misc/toolchainfile.cmake.in#n70
+
 >
-> > FWIW I actually had the same, was trying to test an odroid XU4 and the
-> > SSH server was immediately closing the connection. I double-checked
-> > that openssh was at the latest version & I was on the latest buildroot
-> > master as well, and assumed at the time it must have had something to
-> > do with the kernel bump I was testing.
-> >
-> > Now I'm thinking maybe this was causing it. Will test again later today.
->
-> Could you try applying:
->
->  https://github.com/openssh/openssh-portable/commit/beee0ef61866cb567b9abc23bd850f922e59e3f0
->  https://github.com/openssh/openssh-portable/commit/69298ebfc2c066acee5d187eac8ce9f38c796630
->
-> and see if it helps ?
+> 
+>>  aarch64_be  |         supertux-0.6.0         | NOK | http://autobuild.buildroot.net/results/0f02877a665b2281266df4b23c72a7c113906c31 |     
+> 
+> /tmp/instance-0/output-1/build/supertux-0.6.0/src/editor/object_settings.cpp:223:26: error: 'remove_if' is not a member of 'std'
+>      m_options.erase(std::remove_if(m_options.begin(), m_options.end(),
+> 
+> Romain, supertux is your thing, could you have a look ?
 
-Tests run against buildroot master - at commit hash:
+Already fixed by 14552122ac46028b78f05eeed1154da2ba87b174
 
-1396b06a1ee9a86055488de593be93ae2585ceb1
-
-== Test 1: pi3 w/ gcc 10 glibc binutils 2.34
-
-PASS - defconfig:
-
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-BR2_BINUTILS_VERSION_2_34_X=y
-BR2_GCC_VERSION_10_X=y
-
-openssh works as expected.
-
-== Test 2: odroid xu4 with gcc 9, binutils 2.33.1
-
-have not had a chance to test yet but this was the one that didn't work before.
-
-BR2_arm=y
-BR2_cortex_a15_a7=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+Best regards,
+Romain
 
 
-best regards,
-Christian
+> 
+> Thanks,
+> 
+> Thomas
+> 
