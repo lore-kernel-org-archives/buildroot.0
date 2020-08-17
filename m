@@ -1,43 +1,36 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Mon, 17 Aug 2020 17:29:00 -0400
-Subject: [Buildroot] [PATCH 1/1] package/lttng-tools: fix build with musl
-In-Reply-To: <20200817231848.3015a6fc@windsurf.home>
-References: <20200817201335.3767619-1-fontaine.fabrice@gmail.com>
- <CAB4xu_2sQ0U2JPsujSXnup1waHJiFo0WM2LyBfT-uKMO90gSfw@mail.gmail.com>
- <20200817231848.3015a6fc@windsurf.home>
-Message-ID: <CAB4xu_1pZjKqEAT25gVOaKkbZdgBxEBpeDjNoXF0BdEuyakRpw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 17 Aug 2020 23:30:48 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Analysis of build results
+In-Reply-To: <20200817225400.31abb874@gmx.net>
+References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
+ <20200816000914.5ad801d9@windsurf.home>
+ <20200817225400.31abb874@gmx.net>
+Message-ID: <20200817233048.1bab8e39@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 17, 2020 at 5:18 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 17 Aug 2020 16:26:54 -0400
-> Philippe Proulx <eeppeliteloop@gmail.com> wrote:
->
-> > Why is this only an error with musl?
+On Mon, 17 Aug 2020 22:54:00 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> > Peter (Seiderer), any idea ?
 > >
-> > Would you mind submitting this to upstream too?
->
-> It is already upstream, it's mentioned in the patch from Fabrice:
+> > /home/buildroot/autobuild/run/instance-2/output-1/build/qt5base-5.15.0/include/QtCore/../../src/corelib/kernel/qmetatype.h:1160:135: error: ambiguous class template instantiation for 'struct QtMetaTypePrivate::ContainerCapabilitiesImpl<QList<QVariant>, void>'
+> >  
+> 
+> Could not reproduce the failures locally, but they are still from the host qmake tool
+> compile (not from the cross-compile), maybe the equivalent to
+> 'depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5' for the host compiler is needed?
 
-Sorry!
+Do you have confirmation that this error is related to the compiler
+having to be gcc >= 5.x ?
 
-Good.
+If that's the case, we can add a dependency to BR2_HOST_GCC_AT_LEAST_5.
 
-Phil
-
->
-> +[Retrieved from:
-> +https://github.com/lttng/lttng-tools/commit/73f906d4d6806afb1962751ccb0fe6c15f320d94]
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
