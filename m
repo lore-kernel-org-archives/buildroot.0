@@ -1,25 +1,36 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Tue, 18 Aug 2020 20:26:28 +0300
-Subject: [Buildroot] [Question] How to depend on a feature in libc
-Message-ID: <CAJX3zAvDehsPYF_kQSOT5xeynDYn_q=M64vBKueLvWtKmnymQg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 18 Aug 2020 20:20:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix build with
+ dpdk_telemetry
+Message-ID: <20200818182011.4144074-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all!
+Fix typo added by 44e0b6014f7e67901af346af8f6a9452b095ddd5
 
-I want to add a package that has an optional feature that requires the
-<fenv.h> header from C99.
-Apparently, this module is optional in uClibc, and it is not included in
-the default config.
+Fixes:
+ - http://autobuild.buildroot.org/results/770293a007d683cb6f82f1fd3bcc20967e2b4bed
 
-I want my package's Config.in file to define a boolean config entry
-that depends on
-whether or not the selected libc has <fenv.h>.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-How can I do that?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200818/a57c4c10/attachment.html>
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 2eed6b2c16..21da8fddc8 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -161,7 +161,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
+-	$(if $(BR2_PACKAGE_COLLECTD_DPKD_TELEMETRY),jansson) \
++	$(if $(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),jansson) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+-- 
+2.27.0
