@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:27:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: xvmc needs x11
-In-Reply-To: <20200802121037.1200692-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 2 Aug 2020 14:10:37 +0200")
-References: <20200802121037.1200692-1-bernd.kuhls@t-online.de>
-Message-ID: <87eeo40yb5.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Aug 2020 17:28:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: bump version
+ to 1.6.11
+In-Reply-To: <20200807045529.94389-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 7 Aug 2020 06:55:29 +0200")
+References: <20200807045529.94389-1-bernd.kuhls@t-online.de>
+Message-ID: <87a6ys0y8t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > This is a follow-up patch to
- > https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e79ee3b0f91aa3eb1b20d86701a195e3bd9a26d3
-
- > to make sure that MESA3D_PLATFORMS contains x11 needed by xvmc:
- > https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=20.1#n510
-
- > Fixes
- > http://autobuild.buildroot.net/results/dae/dae41e30d2ac69b768ec0a5b795a2e559c35bcd3/
+ > Reformatted license hash.
+ > Quoting release notes:
+ > https://lists.x.org/archives/xorg-announce/2020-August/003053.html
+ > "This release fixes a regression introduced by the security patches in
+ >  1.6.10.
+ >  See https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues/116 for
+ >  details."
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
