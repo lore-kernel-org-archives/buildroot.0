@@ -1,91 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Aug 2020 11:00:40 +0200
-Subject: [Buildroot] [git commit] support/scripts: make CVE class
- independent of the Packaage class
-Message-ID: <20200902161637.23DFB85EB9@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 22:24:35 +0200
+Subject: [Buildroot] [git commit] package/python-netaddr: bump to version
+ 0.8.0
+Message-ID: <20200902161635.4E52785EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a2f69d672f51f96eef377139c9e77001ae4a0e9
+commit: https://git.buildroot.net/buildroot/commit/?id=5d8211412c714c72df083afd3424d071aa87d44b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The affects method of the CVE uses the Package class defined in
-pkg-stats. The purpose of migrating the CVE class outside of pkg-stats
-was to be able to reuse it from other scripts. So let's remove the
-Package dependency and only use the needed information.
-
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/cve.py    | 10 +++++-----
- support/scripts/pkg-stats | 14 ++++++++------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ package/python-netaddr/python-netaddr.hash | 4 ++--
+ package/python-netaddr/python-netaddr.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index e812da810c..6396019e0e 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -190,21 +190,21 @@ class CVE:
-         """The set of package names referred by this CVE definition"""
-         return set(p['product'] for p in self.each_cpe())
+diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
+index c834721d2c..91b200768f 100644
+--- a/package/python-netaddr/python-netaddr.hash
++++ b/package/python-netaddr/python-netaddr.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/netaddr/json
+-md5 51019ef59c93f3979bcb37d3b8527e07 netaddr-0.7.19.tar.gz
++md5 34cad578473b66ad77bc3b2a7613ed4a netaddr-0.8.0.tar.gz
+ # Locally computed
+-sha256 38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd netaddr-0.7.19.tar.gz
++sha256 d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243 netaddr-0.8.0.tar.gz
+ sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
+diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
+index a539845d54..e3ffe4e85b 100644
+--- a/package/python-netaddr/python-netaddr.mk
++++ b/package/python-netaddr/python-netaddr.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--    def affects(self, br_pkg):
-+    def affects(self, name, version, cve_ignore_list):
-         """
-         True if the Buildroot Package object passed as argument is affected
-         by this CVE.
-         """
--        if br_pkg.is_cve_ignored(self.identifier):
-+        if self.identifier in cve_ignore_list:
-             return self.CVE_DOESNT_AFFECT
- 
--        pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
-+        pkg_version = distutils.version.LooseVersion(version)
-         if not hasattr(pkg_version, "version"):
--            print("Cannot parse package '%s' version '%s'" % (br_pkg.name, br_pkg.current_version))
-+            print("Cannot parse package '%s' version '%s'" % (name, version))
-             pkg_version = None
- 
-         for cpe in self.each_cpe():
--            if cpe['product'] != br_pkg.name:
-+            if cpe['product'] != name:
-                 continue
-             if cpe['v_start'] == '-':
-                 return self.CVE_AFFECTS
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 5e2213fb5c..be586a2c2e 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -236,11 +236,12 @@ class Package:
-                     self.status['pkg-check'] = ("error", "{} warnings".format(self.warnings))
-                 return
- 
--    def is_cve_ignored(self, cve):
-+    @property
-+    def ignored_cves(self):
-         """
--        Tells if the CVE is ignored by the package
-+        Give the list of CVEs ignored by the package
-         """
--        return cve in self.all_ignored_cves.get(self.pkgvar(), [])
-+        return list(self.all_ignored_cves.get(self.pkgvar(), []))
- 
-     def set_developers(self, developers):
-         """
-@@ -536,9 +537,10 @@ def check_package_cves(nvd_path, packages):
- 
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
--            if pkg_name in packages and cve.affects(packages[pkg_name]) == cve.CVE_AFFECTS:
--                packages[pkg_name].cves.append(cve.identifier)
--
-+            if pkg_name in packages:
-+                pkg = packages[pkg_name]
-+                if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves) == cve.CVE_AFFECTS :
-+                    pkg.cves.append(cve.identifier)
- 
- def calculate_stats(packages):
-     stats = defaultdict(int)
+-PYTHON_NETADDR_VERSION = 0.7.19
++PYTHON_NETADDR_VERSION = 0.8.0
+ PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
+-PYTHON_NETADDR_SITE = https://pypi.python.org/packages/0c/13/7cbb180b52201c07c796243eeff4c256b053656da5cfe3916c3f5b57b3a0
++PYTHON_NETADDR_SITE = https://pypi.python.org/packages/c3/3b/fe5bda7a3e927d9008c897cf1a0858a9ba9924a6b4750ec1824c9e617587
+ PYTHON_NETADDR_LICENSE = BSD-3-Clause
+ PYTHON_NETADDR_LICENSE_FILES = LICENSE
+ PYTHON_NETADDR_SETUP_TYPE = setuptools
