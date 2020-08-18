@@ -1,56 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:28:11 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/x11r7/xlib_libX11: security bump version to 1.6.10
-Message-ID: <20200818153621.4F06A82671@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 17:36:09 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/cups: add proper
+ init script
+Message-ID: <20200818153621.9C140868CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c35e7bc7ed175a443a057641b4dc2c397b1750c8
+commit: https://git.buildroot.net/buildroot/commit/?id=408392d26ff064a02debc2f2511db1da5005649f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes CVE-2020-14344:
-https://lists.x.org/archives/xorg-announce/2020-July/003050.html
+Cups service for systemv was erroneously installed in /etc/rcX.d and
+therefore not working. Also, its init script installed in /etc/init.d
+was definitely not a Buildroot-style init script.
 
-Removed md5 & sha1 hashes, upstream does not provide them anymore.
+This patch adds a Buildroot style init script instead of using the
+example provided by the package.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2f81258db1fccb0f7000b580f25ab33d26bf5e4b)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 04226ac6b7104f17f22091be8f5ce43c56abd210)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 8 +++-----
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/cups/S81cupsd | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ package/cups/cups.mk  |  8 +++++++-
+ 2 files changed, 55 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index defaa4c982..d383615457 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-October/003025.html
--md5 55adbfb6d4370ecac5e70598c4e7eed2  libX11-1.6.9.tar.bz2
--sha1 62456536411f2540fbd4a3f59ed8af94967124c2  libX11-1.6.9.tar.bz2
--sha256 9cc7e8d000d6193fa5af580d50d689380b8287052270f5bb26a5fb6b58b2bed1  libX11-1.6.9.tar.bz2
--sha512 fc18f0dc17ade1fc37402179f52e1f2b9c7b7d3a1a9590fea13046eb0c5193b4796289431cd99388eac01e8e59de77db45d2c9675d4f05ef8cf3ba6382c3dd31  libX11-1.6.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-July/003052.html
-+sha256  af48626989b8515c994777896bd7b7ba2bd5b1ef4e1efaee0a55d8852bbe6226  libX11-1.6.10.tar.bz2
-+sha512  ad384d8896fbe587f7fd99b0d3cc56fac6e2facbab52fa99174200d06b19dd163a483c998acf3834b3a4a3aa4de0dbbe13919a1c80e6797afe467c7075b403ff  libX11-1.6.10.tar.bz2
- # Locally computed
- sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 18949c604d..bfc1c4166e 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cups/S81cupsd b/package/cups/S81cupsd
+new file mode 100644
+index 0000000000..45d0cbcc22
+--- /dev/null
++++ b/package/cups/S81cupsd
+@@ -0,0 +1,48 @@
++#!/bin/sh
++
++DAEMON="cupsd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- -C /etc/cups/cupsd.conf -s /etc/cups/cups-files
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 18f01d8484..53b0e2ab08 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -21,7 +21,8 @@ CUPS_CONF_OPTS = \
+ 	--with-docdir=/usr/share/cups/doc-root \
+ 	--disable-gssapi \
+ 	--disable-pam \
+-	--libdir=/usr/lib
++	--libdir=/usr/lib \
++	--without-rcdir
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
+ 	host-autoconf \
+@@ -71,4 +72,9 @@ else
+ CUPS_CONF_OPTS += --disable-avahi
+ endif
  
--XLIB_LIBX11_VERSION = 1.6.9
-+XLIB_LIBX11_VERSION = 1.6.10
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
++define CUPS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
++		$(TARGET_DIR)/etc/init.d/S81cupsd
++endef
++
+ $(eval $(autotools-package))
