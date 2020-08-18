@@ -1,44 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:06:49 +0200
-Subject: [Buildroot] [git commit] package/libnspr: bump version to 4.28
-Message-ID: <20200902161636.CC7AE85EB9@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 23:29:31 +0200
+Subject: [Buildroot] [git commit] package/snmppp: bump to version 3.4.2
+Message-ID: <20200902161635.601C285EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e7aad6cfb502bd50504974e6be4e5d28d6690e6
+commit: https://git.buildroot.net/buildroot/commit/?id=cb13451d5cba272cf121cb06cc58ec951a47b9b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The src/v3.cpp source file, used as a license file, has seen a few
+modifications (hence the change of hash) but none of these changes are
+related to licensing.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
+ package/snmppp/snmppp.hash | 4 ++--
+ package/snmppp/snmppp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 3889a00d07..ec3d783503 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.27/src/SHA256SUMS
--sha256  6d495192b6ab00a3c28db053492cf794329f7c0351a5728db198111a1816e89b  nspr-4.27.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.28/src/SHA256SUMS
-+sha256  63defc8e19a80b6f98fcc7d5a89e84ea703c0b50aa6bc13bf7ad071adf433b56  nspr-4.28.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 8510d29e36..f43811d5d1 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
+diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
+index 320581fb91..2dcf836fc7 100644
+--- a/package/snmppp/snmppp.hash
++++ b/package/snmppp/snmppp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  ea7b676e48c7a53c380c406bc6163b7057df74a6a1bf9f3cc1f13ba246225907  snmp++-3.4.1.tar.gz
+-sha256  bf7bcfe654a7b4f30374035016e563d0f654af2c8306692ebcc53c3d7e655420  src/v3.cpp
++sha256  a3eb75e2310c315d9b2c2094154c7cd9b46684adb80a4b36b8957dcc09af4041  snmp++-3.4.2.tar.gz
++sha256  f6fd4321c7eb6e51a272f91f964aea7f53039bb2b55f690d5a9d042f3a5d79b9  src/v3.cpp
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 270c41fc4b..601e28e207 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.27
-+LIBNSPR_VERSION = 4.28
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-SNMPPP_VERSION = 3.4.1
++SNMPPP_VERSION = 3.4.2
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+ SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
