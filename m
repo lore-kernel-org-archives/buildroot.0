@@ -1,177 +1,114 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 18 Aug 2020 20:38:31 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] uclibc: backport Add {name,
- open}_to_handle_at() implementation
-Message-ID: <20200818183832.7947-1-petr.vorel@gmail.com>
+Date: Tue, 18 Aug 2020 20:38:32 +0200
+Subject: [Buildroot] [RFC PATCH 2/2] package/iproute2: bump version to 5.8.0
+In-Reply-To: <20200818183832.7947-1-petr.vorel@gmail.com>
+References: <20200818183832.7947-1-petr.vorel@gmail.com>
+Message-ID: <20200818183832.7947-2-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Required for iproute2 v5.8.0.
-
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
 Hi,
 
-I tested this just on intel build (didn't run it).
-Running build with ./utils/test-pkg didn't help, thus I'm not sure it's
-correct. I also expect that the patch [1] needs some correction.
+this requires previous patch for uclibc and also my previous musl patch [1].
 
 Kind regards,
 Petr
 
-[1] https://patchwork.ozlabs.org/project/uclibc-ng/patch/20200818165626.2702-1-petr.vorel at gmail.com/
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20200818163642.20407-1-petr.vorel at gmail.com/
 
- ...me-open-_to_handle_at-implementation.patch | 139 ++++++++++++++++++
- 1 file changed, 139 insertions(+)
- create mode 100644 package/uclibc/0002-Add-name-open-_to_handle_at-implementation.patch
+ .../0001-devlink-update-include-files.patch   | 55 -------------------
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 57 deletions(-)
+ delete mode 100644 package/iproute2/0001-devlink-update-include-files.patch
 
-diff --git a/package/uclibc/0002-Add-name-open-_to_handle_at-implementation.patch b/package/uclibc/0002-Add-name-open-_to_handle_at-implementation.patch
-new file mode 100644
-index 0000000000..f2b6d29d5a
---- /dev/null
-+++ b/package/uclibc/0002-Add-name-open-_to_handle_at-implementation.patch
-@@ -0,0 +1,139 @@
-+From dbd1982f7733fb3898aef80ceb56e7707691ca43 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <petr.vorel@gmail.com>
-+Date: Tue, 18 Aug 2020 18:26:37 +0200
-+Subject: [PATCH 1/1] Add {name,open}_to_handle_at() implementation
-+
-+copied from musl 1.2.1.
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[ Upstream status: https://patchwork.ozlabs.org/project/uclibc-ng/patch/20200818165626.2702-1-petr.vorel at gmail.com/ ]
-+---
-+ include/fcntl.h                               | 12 +++++++
-+ libc/sysdeps/linux/common/Makefile.in         |  2 ++
-+ libc/sysdeps/linux/common/name_to_handle_at.c | 36 +++++++++++++++++++
-+ libc/sysdeps/linux/common/open_by_handle_at.c | 34 ++++++++++++++++++
-+ 4 files changed, 84 insertions(+)
-+ create mode 100644 libc/sysdeps/linux/common/name_to_handle_at.c
-+ create mode 100644 libc/sysdeps/linux/common/open_by_handle_at.c
-+
-+diff --git a/include/fcntl.h b/include/fcntl.h
-+index e8a781f28..02d4b0110 100644
-+--- a/include/fcntl.h
-++++ b/include/fcntl.h
-+@@ -281,6 +281,18 @@ extern int fallocate64 (int __fd, int __mode, __off64_t __offset, __off64_t __le
-+ # endif
-+ #endif
-+ 
-++#if (defined __UCLIBC_LINUX_SPECIFIC__ && defined __USE_GNU)
-++struct file_handle {
-++	unsigned handle_bytes;
-++	int handle_type;
-++	unsigned char f_handle[];
-++};
-++
-++int name_to_handle_at(int dirfd, const char *pathname,
-++	struct file_handle *handle, int *mount_id, int flags);
-++int open_by_handle_at(int mount_fd, struct file_handle *handle, int flags);
-++#endif
-++
-+ __END_DECLS
-+ 
-+ #endif /* fcntl.h  */
-+diff --git a/libc/sysdeps/linux/common/Makefile.in b/libc/sysdeps/linux/common/Makefile.in
-+index f114a5bd1..9562de52c 100644
-+--- a/libc/sysdeps/linux/common/Makefile.in
-++++ b/libc/sysdeps/linux/common/Makefile.in
-+@@ -32,6 +32,8 @@ CSRC-$(UCLIBC_LINUX_SPECIFIC) += \
-+ 	iopl.c \
-+ 	modify_ldt.c \
-+ 	module.c \
-++	name_to_handle_at.c \
-++	open_by_handle_at.c \
-+ 	personality.c \
-+ 	pipe2.c \
-+ 	ppoll.c \
-+diff --git a/libc/sysdeps/linux/common/name_to_handle_at.c b/libc/sysdeps/linux/common/name_to_handle_at.c
-+new file mode 100644
-+index 000000000..20c67cbca
-+--- /dev/null
-++++ b/libc/sysdeps/linux/common/name_to_handle_at.c
-+@@ -0,0 +1,36 @@
-++/*
-++ * Copyright ? 2005-2020 Rich Felker, et al.
-++ *
-++ * Permission is hereby granted, free of charge, to any person obtaining
-++ * a copy of this software and associated documentation files (the
-++ * "Software"), to deal in the Software without restriction, including
-++ * without limitation the rights to use, copy, modify, merge, publish,
-++ * distribute, sublicense, and/or sell copies of the Software, and to
-++ * permit persons to whom the Software is furnished to do so, subject to
-++ * the following conditions:
-++ *
-++ * The above copyright notice and this permission notice shall be
-++ * included in all copies or substantial portions of the Software.
-++ *
-++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-++ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-++ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-++ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-++ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-++ *
-++ * Imported from musl C library
-++ */
-++
-++#include <sys/syscall.h>
-++
-++#ifdef __NR_open_by_handle_at
-++#include <fcntl.h>
-++int name_to_handle_at(int dirfd, const char *pathname,
-++	struct file_handle *handle, int *mount_id, int flags)
-++{
-++	return INLINE_SYSCALL(name_to_handle_at, 5, dirfd, pathname, handle,
-++			      mount_id, flags);
-++}
-++#endif
-+diff --git a/libc/sysdeps/linux/common/open_by_handle_at.c b/libc/sysdeps/linux/common/open_by_handle_at.c
-+new file mode 100644
-+index 000000000..5e65648a6
-+--- /dev/null
-++++ b/libc/sysdeps/linux/common/open_by_handle_at.c
-+@@ -0,0 +1,34 @@
-++/*
-++ * Copyright ? 2005-2020 Rich Felker, et al.
-++ *
-++ * Permission is hereby granted, free of charge, to any person obtaining
-++ * a copy of this software and associated documentation files (the
-++ * "Software"), to deal in the Software without restriction, including
-++ * without limitation the rights to use, copy, modify, merge, publish,
-++ * distribute, sublicense, and/or sell copies of the Software, and to
-++ * permit persons to whom the Software is furnished to do so, subject to
-++ * the following conditions:
-++ *
-++ * The above copyright notice and this permission notice shall be
-++ * included in all copies or substantial portions of the Software.
-++ *
-++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-++ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-++ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-++ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-++ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-++ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-++ *
-++ * Imported from musl C library
-++ */
-++
-++#include <sys/syscall.h>
-++
-++#ifdef __NR_open_by_handle_at
-++#include <fcntl.h>
-++int open_by_handle_at(int mount_fd, struct file_handle *handle, int flags)
-++{
-++	return INLINE_SYSCALL(open_by_handle_at, 3, mount_fd, handle, flags);
-++}
-++#endif
-+-- 
-+2.28.0
-+
+diff --git a/package/iproute2/0001-devlink-update-include-files.patch b/package/iproute2/0001-devlink-update-include-files.patch
+deleted file mode 100644
+index 8cc6e4ec60..0000000000
+--- a/package/iproute2/0001-devlink-update-include-files.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 12fafa27c7b306e6c397e858f4d5a8159500f659 Mon Sep 17 00:00:00 2001
+-From: Stephen Hemminger <stephen@networkplumber.org>
+-Date: Thu, 11 Jun 2020 09:46:46 -0700
+-Subject: devlink: update include files
+-
+-Use the tool iwyu to get more complete list of includes for
+-all the bits used by devlink.
+-
+-This should also fix build with musl libc.
+-
+-Fixes: c4dfddccef4e ("fix JSON output of mon command")
+-Reported-off-by: Dan Robertson <dan@dlrobertson.com>
+-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+-
+-[Retrieved from:
+-https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=12fafa27c7b306e6c397e858f4d5a8159500f659]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- devlink/devlink.c | 9 ++++++++-
+- 1 file changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/devlink/devlink.c b/devlink/devlink.c
+-index 507972c3..ce2e4676 100644
+---- a/devlink/devlink.c
+-+++ b/devlink/devlink.c
+-@@ -19,18 +19,25 @@
+- #include <limits.h>
+- #include <errno.h>
+- #include <inttypes.h>
+-+#include <signal.h>
+-+#include <time.h>
+-+#include <netinet/in.h>
+-+#include <arpa/inet.h>
+- #include <sys/sysinfo.h>
+- #define _LINUX_SYSINFO_H /* avoid collision with musl header */
+- #include <linux/genetlink.h>
+- #include <linux/devlink.h>
+-+#include <linux/netlink.h>
+- #include <libmnl/libmnl.h>
+- #include <netinet/ether.h>
+-+#include <sys/select.h>
+-+#include <sys/socket.h>
+- #include <sys/types.h>
+- 
+- #include "SNAPSHOT.h"
+- #include "list.h"
+- #include "mnlg.h"
+--#include "json_writer.h"
+-+#include "json_print.h"
+- #include "utils.h"
+- #include "namespace.h"
+- 
+--- 
+-cgit 1.2.3-1.el7
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index b2a9e21e11..4d82de4c46 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  725dc7ba94aae54c6f8d4223ca055d9fb4fe89d6994b1c03bfb4411c4dd10f21  iproute2-5.7.0.tar.xz
++sha256  cfcd1f890290f8c8afcc91d9444ad929b9252c16f9ab3f286c50dd3c59dc646e  iproute2-5.8.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 1b71f5c06a..98fbe4f3cd 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.7.0
++IPROUTE2_VERSION = 5.8.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.28.0
