@@ -1,51 +1,68 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Tue, 18 Aug 2020 07:18:34 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-08-17
-In-Reply-To: <20200818075812.52A4F87590@hemlock.osuosl.org>
-References: <20200818075812.52A4F87590@hemlock.osuosl.org>
-Message-ID: <71f37fbc-e9a8-3cb8-b756-4f76073cb608@xes-inc.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Tue, 18 Aug 2020 06:05:12 -0700
+Subject: [Buildroot] [PATCH v4 1/1] package/mariadb: patch
+ mariadb_config to add sysroot path
+In-Reply-To: <20200811154612.777ac5d5@windsurf.home>
+References: <20200213174655.17309-1-bluemrp9@gmail.com>
+ <20200811154612.777ac5d5@windsurf.home>
+Message-ID: <2077e37f-9bd5-9c66-7d90-249abc67f47a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
 
 
-On 8/18/20 2:58 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Autobuild statistics for 2020-08-17
-> ===================================
-> 
->        branch |  OK | NOK | TIM | TOT |
->    2020.02.x  | 26  |  1  |  0  | 27  |
->    2020.05.x  | 17  |  5  |  0  | 22  |
->      master   | 149 | 63  |  0  | 212 |
->       next    | 38  | 22  |  0  | 60  |
-> 
-> Classification of failures by reason for master
-> -----------------------------------------------
-> 
->                ibm-sw-tpm2-1563 | 21
->                  qt5base-5.15.0 | 8
+Good morning.
 
->     mipsel    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/2848836c266777f519fa2eabef633285b67f86ac |
->    sparc64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/12bb9aaea83f8f6abf4f2fc2465275e66278ee9a |
->    mips64el   |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/b50957c8948fc9074177c371f364f0fda278838f |
->    aarch64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/58eb80e58e9ad41e7f747719886110322375e905 |
 
-Should be resolved by
-
-http://patchwork.ozlabs.org/project/buildroot/patch/20200817192712.32481-1-vfazio at xes-inc.com/
-
-> ================================
-> 
-> 
-
--- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+On 8/11/2020 6:46 AM, Thomas Petazzoni wrote:
+> Hello Ryan,
+>
+> On Thu, 13 Feb 2020 09:46:55 -0800
+> Ryan Coe <bluemrp9@gmail.com> wrote:
+>
+>> This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
+>> mariadb_config and mysql_config incorrectly returns host paths for
+>> include paths and library paths.
+>>
+>> Upstream report and status:
+>> https://jira.mariadb.org/browse/CONC-454
+>> https://github.com/mariadb-corporation/mariadb-connector-c/pull/127
+>>
+>> Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
+>> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> I am getting back to this older e-mail, because today I tried to use
+> mysql_config when MariaDB is the MySQL provider, and it doesn't work,
+> because it calls mariadb_config, which itself is a program compiled for
+> the target:
+>
+> $ ./output/staging/usr/bin/mysql_config --cflags
+> /lib/ld-uClibc.so.0: No such file or directory
+> /lib/ld-uClibc.so.0: No such file or directory
+> /lib/ld-uClibc.so.0: No such file or directory
+> /lib/ld-uClibc.so.0: No such file or directory
+>
+> And indeed:
+>
+> $ file output/staging/usr/bin/mariadb_config
+> output/staging/usr/bin/mariadb_config: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, with debug_info, not stripped
+>
+> In other projects, the <something>_config program is a script, so it
+> works fine on the host.
+>
+> How have you been using mariadb_config ?
+I actually haven't used mariadb_config for anything.? My typical usage 
+would include MariaDB and PHP mysqlnd.
+>
+> Here, the issue is that we don't have a consistent behavior between
+> oracle-mysql (which installs a working
+> $(STAGING_DIR)/usr/bin/mysql_config) and mariadb (which doesn't install
+> a working $(STAGING_DIR)/usr/bin/mysql_config).
+Makes sense.? Do you have an opinion on how to proceed?? Thanks.
+>
+> Thanks!
+>
+> Thomas
