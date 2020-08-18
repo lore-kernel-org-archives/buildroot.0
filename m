@@ -1,37 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:23:27 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] support/testing: drop
- explicit CGROUPFS_MOUNT from docker test
-Message-ID: <20200818153621.30E9C86312@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 17:39:41 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] boot/at91bootstrap3:
+ enable for cortexa7
+Message-ID: <20200818153621.B57BD868CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3957a66827a7f28daab370d1746dad4c2f499635
+commit: https://git.buildroot.net/buildroot/commit/?id=c0cef3d444ea05541b8170863eb591ffa9fb853a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Since commit 4f8229653 (package/docker-engine: needs more runtime
-dependencies), docker-engine now automatically pulls in cgroupfs-mount, so
-drop the explicit handling of it in TestDockerCompose.
+Enable this bootloader for cortex a7 based SoCs: support for the
+sama7g5 SoC is now in upstream at91bootstrap3, and it is a Cortex-A7
+based SoC.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4726cf9517e35eaa9d08a3a4e9a5ac9cbb4da9e4)
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 33003a47c505ba38b58f7f58c34b7a7c50879b24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_docker_compose.py | 1 -
- 1 file changed, 1 deletion(-)
+ boot/at91bootstrap3/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index f12e2a6a3d..67ee795f21 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -20,7 +20,6 @@ class TestDockerCompose(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_CA_CERTIFICATES=y
--        BR2_PACKAGE_CGROUPFS_MOUNT=y
-         BR2_PACKAGE_DOCKER_CLI=y
-         BR2_PACKAGE_DOCKER_COMPOSE=y
-         BR2_PACKAGE_DOCKER_ENGINE=y
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index faab7635da..bd3873860b 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_TARGET_AT91BOOTSTRAP3
+ 	bool "AT91 Bootstrap 3"
+-	depends on BR2_arm926t || BR2_cortex_a5
++	depends on BR2_arm926t || BR2_cortex_a5 || BR2_cortex_a7
+ 	help
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+ 	  devices. It integrates algorithms for:
