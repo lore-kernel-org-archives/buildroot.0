@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 23:47:37 +0200
-Subject: [Buildroot] [PATCH 2/2] package/thermald: disable werror
-In-Reply-To: <CAPi7W81dt63=ADrSpzzTQi1CkYp2DN1JB=Jf0PcgHM_5cQbreQ@mail.gmail.com>
-References: <20200817183612.2826191-1-fontaine.fabrice@gmail.com>
- <20200817183612.2826191-2-fontaine.fabrice@gmail.com>
- <20200818164003.4a89e241@windsurf.home>
- <CAPi7W81dt63=ADrSpzzTQi1CkYp2DN1JB=Jf0PcgHM_5cQbreQ@mail.gmail.com>
-Message-ID: <20200818234737.4d36d655@windsurf.home>
+Date: Tue, 18 Aug 2020 23:49:08 +0200
+Subject: [Buildroot] [git commit] package/mpd: add libmodplug optional
+ dependency
+Message-ID: <20200818214248.DD8A87F87A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Aug 2020 16:47:41 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a597a2020f7435625e071e837336e3ee54825542
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Because, the patch fixing the build failure does not apply cleanly on
-> current version.
-> So, instead of backporting my patch, I thought it would be easier to
-> bump to the latest official release.
+libmodplug is an optional dependency since version 0.15.0 and
+https://github.com/MusicPlayerDaemon/MPD/commit/d838a1ad24a9eaac44367e34506373b4b71e4ff0
 
-Except we are now wait past -rc1, so we try to avoid merging version
-bumps in master, otherwise we'll never manage to stabilize the master
-branch.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd/Config.in | 6 ++++++
+ package/mpd/mpd.mk    | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-So in this sort of situation, we want:
-
- - PATCH 1/2 that fixes the build issue, which we apply to master and
-   next
-
- - PATCH 2/2 which does the version bump
-
-Could you rework in this direction ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index baaaa7f1ae..eb4c28617e 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -140,6 +140,12 @@ config BR2_PACKAGE_MPD_MAD
+ 	  Enable mad input support.
+ 	  Select this if you want to play back MP3 files.
+ 
++config BR2_PACKAGE_MPD_MODPLUG
++	bool "modplug"
++	select BR2_PACKAGE_LIBMODPLUG
++	help
++	  Enable Modplug decoder support.
++
+ config BR2_PACKAGE_MPD_MPG123
+ 	bool "mpg123"
+ 	select BR2_PACKAGE_LIBID3TAG
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 51bc1719a7..5e66997b26 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -180,6 +180,13 @@ else
+ MPD_CONF_OPTS += -Dmad=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_MODPLUG),y)
++MPD_DEPENDENCIES += libmodplug
++MPD_CONF_OPTS += -Dmodplug=enabled
++else
++MPD_CONF_OPTS += -Dmodplug=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_MPG123),y)
+ MPD_DEPENDENCIES += libid3tag mpg123
+ MPD_CONF_OPTS += -Dmpg123=enabled
