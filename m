@@ -1,30 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:36:21 +0200
-Subject: [Buildroot] [git commit] package/cups: add proper init script
-In-Reply-To: <20200804205508.952708377E@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Tue, 4 Aug 2020 23:00:10 +0200")
-References: <20200804205508.952708377E@busybox.osuosl.org>
-Message-ID: <87o8n8ynii.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Aug 2020 17:39:06 +0200
+Subject: [Buildroot] [PATCH] package/ruby: security bump to version
+ 2.4.10
+In-Reply-To: <20200804100833.13787-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 4 Aug 2020 12:08:33 +0200")
+References: <20200804100833.13787-1-peter@korsgaard.com>
+Message-ID: <87h7t0yndx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=04226ac6b7104f17f22091be8f5ce43c56abd210
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixes the following security issues:
+ > - CVE-2020-10663: Unsafe Object Creation Vulnerability in JSON (Additional
+ >   fix)
+ >   https://www.ruby-lang.org/en/news/2020/03/19/json-dos-cve-2020-10663/
 
- > Cups service for systemv was erroneously installed in /etc/rcX.d and
- > therefore not working. Also, its init script installed in /etc/init.d
- > was definitely not a Buildroot-style init script.
-
- > This patch adds a Buildroot style init script instead of using the
- > example provided by the package.
-
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
