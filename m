@@ -1,59 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 23:49:17 +0200
-Subject: [Buildroot] [git commit] package/mpd: add zziplib optional
+Date: Tue, 18 Aug 2020 23:49:23 +0200
+Subject: [Buildroot] [git commit] package/mpd: add libid3tag optional
  dependency
-Message-ID: <20200818214248.ED9287F87A@busybox.osuosl.org>
+Message-ID: <20200818214249.05D057F87A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdb80f0a89eebb36a0a1a99c3509fb0e2cfbce1e
+commit: https://git.buildroot.net/buildroot/commit/?id=486d2d5ee049b433d911b785a6553e55aecfdb7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-zziplib is an optional dependency since version 0.15.0 and
-https://github.com/MusicPlayerDaemon/MPD/commit/e216e01ab3db0d9bea179b043276401d38bfd957
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/Config.in | 6 ++++++
+ package/mpd/Config.in | 8 ++++++++
  package/mpd/mpd.mk    | 7 +++++++
- 2 files changed, 13 insertions(+)
+ 2 files changed, 15 insertions(+)
 
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index eb4c28617e..f1f8d99465 100644
+index f1f8d99465..fbde82ab58 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -34,6 +34,12 @@ config BR2_PACKAGE_MPD_SQLITE
- 	  Enable sqlite database support.
- 	  If you don't use sqlite it will use an ASCII database.
+@@ -395,6 +395,14 @@ config BR2_PACKAGE_MPD_UPNP
+ 	help
+ 	  Enable MPD UPnP client support.
  
-+config BR2_PACKAGE_MPD_ZZIP
-+	bool "zzip"
-+	select BR2_PACKAGE_ZZIPLIB
-+	help
-+	  Enable ZIP archive support.
++comment "Tag plugins"
 +
- comment "Commercial services"
- 
- config BR2_PACKAGE_MPD_QOBUZ
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 5e66997b26..566b105f61 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -317,6 +317,13 @@ else
- MPD_CONF_OPTS += -Dwavpack=disabled
++config BR2_PACKAGE_MPD_ID3TAG
++	bool "id3tag"
++	select BR2_PACKAGE_LIBID3TAG
++	help
++	  Enable ID3 support.
++
  endif
  
-+ifeq ($(BR2_PACKAGE_MPD_ZZIP),y)
-+MPD_DEPENDENCIES += zziplib
-+MPD_CONF_OPTS += -Dzzip=enabled
+ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 566b105f61..65f9c6f2e0 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -110,6 +110,13 @@ else
+ MPD_CONF_OPTS += -Dhttpd=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MPD_ID3TAG),y)
++MPD_DEPENDENCIES += libid3tag
++MPD_CONF_OPTS += -Did3tag=enabled
 +else
-+MPD_CONF_OPTS += -Dzzip=disabled
++MPD_CONF_OPTS += -Did3tag=disabled
 +endif
 +
- define MPD_INSTALL_EXTRA_FILES
- 	$(INSTALL) -m 0644 -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
- endef
+ ifeq ($(BR2_PACKAGE_MPD_JACK2),y)
+ MPD_DEPENDENCIES += jack2
+ MPD_CONF_OPTS += -Djack=enabled
