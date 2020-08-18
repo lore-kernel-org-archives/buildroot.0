@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 23:44:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump version
- to 2.3.11.3
-In-Reply-To: <20200818165436.145310-2-bernd.kuhls@t-online.de>
-References: <20200818165436.145310-1-bernd.kuhls@t-online.de>
- <20200818165436.145310-2-bernd.kuhls@t-online.de>
-Message-ID: <20200818234442.6fcdb64b@windsurf.home>
+Date: Tue, 18 Aug 2020 23:44:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix build with
+ dpdk_telemetry
+In-Reply-To: <20200818182011.4144074-1-fontaine.fabrice@gmail.com>
+References: <20200818182011.4144074-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200818234454.3c2216d2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Aug 2020 18:54:36 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Tue, 18 Aug 2020 20:20:11 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Release notes:
-> https://dovecot.org/pipermail/dovecot-news/2020-August/000440.html
+> Fix typo added by 44e0b6014f7e67901af346af8f6a9452b095ddd5
 > 
-> Fixes the following CVEs:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/770293a007d683cb6f82f1fd3bcc20967e2b4bed
 > 
-> * CVE-2020-12100: Parsing mails with a large number of MIME parts could
->   have resulted in excessive CPU usage or a crash due to running out of
->   stack memory.
-> * CVE-2020-12673: Dovecot's NTLM implementation does not correctly check
->   message buffer size, which leads to reading past allocation which can
->   lead to crash.
-> * CVE-2020-10967: lmtp/submission: Issuing the RCPT command with an
->   address that has the empty quoted string as local-part causes the lmtp
->   service to crash.
-> * CVE-2020-12674: Dovecot's RPA mechanism implementation accepts
->   zero-length message, which leads to assert-crash later on.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/dovecot/dovecot.hash | 2 +-
->  package/dovecot/dovecot.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/collectd/collectd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
