@@ -1,44 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:24:28 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/mesa3d: xvmc
- needs x11
-Message-ID: <20200818153629.1271481628@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 17:27:59 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ package/x11r7/xlib_libX11: security bump version to 1.6.10
+Message-ID: <20200818153629.1D00381628@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8037f433d477f7467b32641b0783d66472eb836d
+commit: https://git.buildroot.net/buildroot/commit/?id=6829809de0f9703d00b8303fa518ed4f45019117
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This is a follow-up patch to
+Fixes CVE-2020-14344:
+https://lists.x.org/archives/xorg-announce/2020-July/003050.html
 
-https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e79ee3b0f91aa3eb1b20d86701a195e3bd9a26d3
-
-to make sure that MESA3D_PLATFORMS contains x11 needed by xvmc:
-https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=20.1#n510
-
-Fixes
-http://autobuild.buildroot.net/results/dae/dae41e30d2ac69b768ec0a5b795a2e559c35bcd3/
+Removed md5 & sha1 hashes, upstream does not provide them anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c35fe399cdae023005a1d156fd913ad6d7f7d177)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2f81258db1fccb0f7000b580f25ab33d26bf5e4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 8 +++-----
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 11d04b7a3f..a12ed641a6 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -320,6 +320,7 @@ config BR2_PACKAGE_MESA3D_XVMC
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
- 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
-+	select BR2_PACKAGE_MESA3D_NEEDS_X11
- 	select BR2_PACKAGE_XLIB_LIBXV
- 	select BR2_PACKAGE_XLIB_LIBXVMC
- 	help
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index defaa4c982..d383615457 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-October/003025.html
+-md5 55adbfb6d4370ecac5e70598c4e7eed2  libX11-1.6.9.tar.bz2
+-sha1 62456536411f2540fbd4a3f59ed8af94967124c2  libX11-1.6.9.tar.bz2
+-sha256 9cc7e8d000d6193fa5af580d50d689380b8287052270f5bb26a5fb6b58b2bed1  libX11-1.6.9.tar.bz2
+-sha512 fc18f0dc17ade1fc37402179f52e1f2b9c7b7d3a1a9590fea13046eb0c5193b4796289431cd99388eac01e8e59de77db45d2c9675d4f05ef8cf3ba6382c3dd31  libX11-1.6.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-July/003052.html
++sha256  af48626989b8515c994777896bd7b7ba2bd5b1ef4e1efaee0a55d8852bbe6226  libX11-1.6.10.tar.bz2
++sha512  ad384d8896fbe587f7fd99b0d3cc56fac6e2facbab52fa99174200d06b19dd163a483c998acf3834b3a4a3aa4de0dbbe13919a1c80e6797afe467c7075b403ff  libX11-1.6.10.tar.bz2
+ # Locally computed
+ sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 18949c604d..bfc1c4166e 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBX11_VERSION = 1.6.9
++XLIB_LIBX11_VERSION = 1.6.10
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
