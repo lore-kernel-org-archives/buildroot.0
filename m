@@ -1,68 +1,39 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue, 18 Aug 2020 06:05:12 -0700
-Subject: [Buildroot] [PATCH v4 1/1] package/mariadb: patch
- mariadb_config to add sysroot path
-In-Reply-To: <20200811154612.777ac5d5@windsurf.home>
-References: <20200213174655.17309-1-bluemrp9@gmail.com>
- <20200811154612.777ac5d5@windsurf.home>
-Message-ID: <2077e37f-9bd5-9c66-7d90-249abc67f47a@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Aug 2020 15:29:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: fix glibc build
+ errors
+In-Reply-To: <20200817192712.32481-1-vfazio@xes-inc.com>
+References: <20200817192712.32481-1-vfazio@xes-inc.com>
+Message-ID: <20200818152909.2029354a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello Vincent,
 
+Thanks for having looked into this issue!
 
-Good morning.
+On Mon, 17 Aug 2020 14:27:12 -0500
+Vincent Fazio <vfazio@xes-inc.com> wrote:
 
+> diff --git a/package/ibm-sw-tpm2/0002-Add-required-defines.patch b/package/ibm-sw-tpm2/0002-Add-required-defines.patch
+> new file mode 100644
+> index 0000000000..c9e2f19bd2
+> --- /dev/null
+> +++ b/package/ibm-sw-tpm2/0002-Add-required-defines.patch
 
-On 8/11/2020 6:46 AM, Thomas Petazzoni wrote:
-> Hello Ryan,
->
-> On Thu, 13 Feb 2020 09:46:55 -0800
-> Ryan Coe <bluemrp9@gmail.com> wrote:
->
->> This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
->> mariadb_config and mysql_config incorrectly returns host paths for
->> include paths and library paths.
->>
->> Upstream report and status:
->> https://jira.mariadb.org/browse/CONC-454
->> https://github.com/mariadb-corporation/mariadb-connector-c/pull/127
->>
->> Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
->> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> I am getting back to this older e-mail, because today I tried to use
-> mysql_config when MariaDB is the MySQL provider, and it doesn't work,
-> because it calls mariadb_config, which itself is a program compiled for
-> the target:
->
-> $ ./output/staging/usr/bin/mysql_config --cflags
-> /lib/ld-uClibc.so.0: No such file or directory
-> /lib/ld-uClibc.so.0: No such file or directory
-> /lib/ld-uClibc.so.0: No such file or directory
-> /lib/ld-uClibc.so.0: No such file or directory
->
-> And indeed:
->
-> $ file output/staging/usr/bin/mariadb_config
-> output/staging/usr/bin/mariadb_config: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, with debug_info, not stripped
->
-> In other projects, the <something>_config program is a script, so it
-> works fine on the host.
->
-> How have you been using mariadb_config ?
-I actually haven't used mariadb_config for anything.? My typical usage 
-would include MariaDB and PHP mysqlnd.
->
-> Here, the issue is that we don't have a consistent behavior between
-> oracle-mysql (which installs a working
-> $(STAGING_DIR)/usr/bin/mysql_config) and mariadb (which doesn't install
-> a working $(STAGING_DIR)/usr/bin/mysql_config).
-Makes sense.? Do you have an opinion on how to proceed?? Thanks.
->
-> Thanks!
->
-> Thomas
+All patches must have a proper Git commit message, with a description
+and Signed-off-by line.
+
+However, in this case, I think this shouldn't be a separate 0002 patch:
+the patch 0001 that makes use of LONG_BIT should be adjusted.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
