@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:28:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: bump version
- to 1.6.11
-In-Reply-To: <20200807045529.94389-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 7 Aug 2020 06:55:29 +0200")
-References: <20200807045529.94389-1-bernd.kuhls@t-online.de>
-Message-ID: <87a6ys0y8t.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Aug 2020 17:28:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security
+ bump version to 1.6.10
+In-Reply-To: <20200802073413.201022-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 2 Aug 2020 09:34:13 +0200")
+References: <20200802073413.201022-1-bernd.kuhls@t-online.de>
+Message-ID: <875z9g0y8e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Reformatted license hash.
- > Quoting release notes:
- > https://lists.x.org/archives/xorg-announce/2020-August/003053.html
- > "This release fixes a regression introduced by the security patches in
- >  1.6.10.
- >  See https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues/116 for
- >  details."
+ > Fixes CVE-2020-14344:
+ > https://lists.x.org/archives/xorg-announce/2020-July/003050.html
+
+ > Removed md5 & sha1 hashes, upstream does not provide them anymore.
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
