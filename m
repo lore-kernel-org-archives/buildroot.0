@@ -1,108 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:35:59 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/cups: add proper
- init script
-Message-ID: <20200818153629.63BFD81628@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 18 Aug 2020 18:36:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/musl: bump to version 1.2.1
+Message-ID: <20200818163642.20407-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3392aa912fc32d059ef445ca089ab77ca4165b58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
-
-Cups service for systemv was erroneously installed in /etc/rcX.d and
-therefore not working. Also, its init script installed in /etc/init.d
-was definitely not a Buildroot-style init script.
-
-This patch adds a Buildroot style init script instead of using the
-example provided by the package.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 04226ac6b7104f17f22091be8f5ce43c56abd210)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/cups/S81cupsd | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
- package/cups/cups.mk  |  8 +++++++-
- 2 files changed, 55 insertions(+), 1 deletion(-)
+Hi Thomas,
 
-diff --git a/package/cups/S81cupsd b/package/cups/S81cupsd
-new file mode 100644
-index 0000000000..45d0cbcc22
---- /dev/null
-+++ b/package/cups/S81cupsd
-@@ -0,0 +1,48 @@
-+#!/bin/sh
-+
-+DAEMON="cupsd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- -C /etc/cups/cupsd.conf -s /etc/cups/cups-files
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 18f01d8484..53b0e2ab08 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -21,7 +21,8 @@ CUPS_CONF_OPTS = \
- 	--with-docdir=/usr/share/cups/doc-root \
- 	--disable-gssapi \
- 	--disable-pam \
--	--libdir=/usr/lib
-+	--libdir=/usr/lib \
-+	--without-rcdir
- CUPS_CONFIG_SCRIPTS = cups-config
- CUPS_DEPENDENCIES = \
- 	host-autoconf \
-@@ -71,4 +72,9 @@ else
- CUPS_CONF_OPTS += --disable-avahi
- endif
+this is also a dependency for for iproute2 v5.8.0 (for ss) as it
+contains commit 3e14bbcd ("wireup linux/name_to_handle_at and name_to_handle_at syscalls")
+
+Kind regards,
+Petr
+
+ package/musl/musl.hash | 4 ++--
+ package/musl/musl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 9d8b61e165..a988cf772b 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# https://musl.libc.org/releases/musl-1.2.0.tar.gz.asc
+-sha256  c6de7b191139142d3f9a7b5b702c9cae1b5ee6e7f57e582da9328629408fd4e8  musl-1.2.0.tar.gz
++# https://musl.libc.org/releases/musl-1.2.1.tar.gz.asc
++sha256  68af6e18539f646f9c41a3a2bb25be4a5cfa5a8f65f0bb647fd2bbfdf877e84b  musl-1.2.1.tar.gz
+ sha256  afe1df384787fce3577f3356b8b0d417381483f7c704eacb63f8050349fac77a  COPYRIGHT
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 9482c0b246..bc4237968d 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define CUPS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
-+		$(TARGET_DIR)/etc/init.d/S81cupsd
-+endef
-+
- $(eval $(autotools-package))
+-MUSL_VERSION = 1.2.0
++MUSL_VERSION = 1.2.1
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
+-- 
+2.28.0
