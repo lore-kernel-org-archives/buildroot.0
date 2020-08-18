@@ -1,38 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2020 17:39:31 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] boot/at91bootstrap3:
- enable for cortexa7
-Message-ID: <20200818153629.7B9DC81628@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 17:24:28 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/mesa3d: xvmc
+ needs x11
+Message-ID: <20200818153629.1271481628@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4af86b818891f79a312147a43377d920fa9b803d
+commit: https://git.buildroot.net/buildroot/commit/?id=8037f433d477f7467b32641b0783d66472eb836d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Enable this bootloader for cortex a7 based SoCs: support for the
-sama7g5 SoC is now in upstream at91bootstrap3, and it is a Cortex-A7
-based SoC.
+This is a follow-up patch to
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 33003a47c505ba38b58f7f58c34b7a7c50879b24)
+https://git.buildroot.net/buildroot/commit/package/mesa3d?id=e79ee3b0f91aa3eb1b20d86701a195e3bd9a26d3
+
+to make sure that MESA3D_PLATFORMS contains x11 needed by xvmc:
+https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=20.1#n510
+
+Fixes
+http://autobuild.buildroot.net/results/dae/dae41e30d2ac69b768ec0a5b795a2e559c35bcd3/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c35fe399cdae023005a1d156fd913ad6d7f7d177)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/at91bootstrap3/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index faab7635da..bd3873860b 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -1,6 +1,6 @@
- config BR2_TARGET_AT91BOOTSTRAP3
- 	bool "AT91 Bootstrap 3"
--	depends on BR2_arm926t || BR2_cortex_a5
-+	depends on BR2_arm926t || BR2_cortex_a5 || BR2_cortex_a7
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 11d04b7a3f..a12ed641a6 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -320,6 +320,7 @@ config BR2_PACKAGE_MESA3D_XVMC
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
+ 		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_MESA3D_NEEDS_X11
+ 	select BR2_PACKAGE_XLIB_LIBXV
+ 	select BR2_PACKAGE_XLIB_LIBXVMC
  	help
- 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
- 	  devices. It integrates algorithms for:
