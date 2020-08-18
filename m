@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 22:30:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gpsd: bump version to 3.21
-In-Reply-To: <20200818172119.GA48223@orolia.com>
-References: <20200817132336.1110072-1-olivier.dautricourt@orolia.com>
- <20200818164919.498452cc@windsurf.home>
- <20200818172119.GA48223@orolia.com>
-Message-ID: <20200818223041.485653f7@windsurf.home>
+Date: Tue, 18 Aug 2020 22:25:01 +0200
+Subject: [Buildroot] [git commit branch/next] package/openlayers: bump to
+ version 6.4.3
+Message-ID: <20200818211240.7FBC3812A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Olivier,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc5f24c07010585ca97d3dd6f59744251a4eb3bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 18 Aug 2020 19:21:19 +0200
-Olivier Dautricourt <olivier.dautricourt@orolia.com> wrote:
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > > - removed unnecessary patch
-> > > - removed obsolete gpsd options:
-> > >       GPSD_CONTROLSEND  
-> Option was just removed upstream (e720403069dd6ca)
-> Reason given was: "It overlapped RECONFIGURE_ENABLE in strange ways".
-> This was preventing gpsctl to configure receivers, but i guess this
-> option is not relevant anymore.
-> 
-> > >       GPSD_RECONFIGURE  
-> Replaced with -p (--passive) runtime option.
-> This is to prevent gpsd to auto-configure receivers.
-> 
-> > >       GPSD_FIXED_PORT_SPEED  
-> This option was already removed in 3.20.
-> It is replaced with -s <speed> runtime option.
-> FIXED_STOP_BITS was also replaced with -f <framing> opt but this was never
-> included in the buildroot configuration anyway.
-
-Then I think we need Config.in.legacy handling for the removal of those
-3 options.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index f1678507d7..2774b8064b 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
++sha256	8371bbca2f7b33be0db5b416a78bc9559dd8f9afb6a406994daeeecf7b37f3f6	v6.4.3-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 65a1fe00fa..c3e137adcd 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLAYERS_VERSION = 6.2.1
++OPENLAYERS_VERSION = 6.4.3
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
