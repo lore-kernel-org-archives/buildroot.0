@@ -1,104 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Aug 2020 22:11:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iprutils: fix build with gcc 4.8
-In-Reply-To: <20200818191224.518904-1-fontaine.fabrice@gmail.com>
-References: <20200818191224.518904-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200818201102.GQ24264@scaer>
+Date: Tue, 18 Aug 2020 22:16:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpi-userland: add support for
+ aarch64 build
+In-Reply-To: <CA+h8R2oRLfVOG4m9_mbg_hHhZNxggQLZt_8JBTOL8poQwaP+DQ@mail.gmail.com>
+References: <20200818191130.2888592-1-christian@paral.in>
+ <20200818193338.GP24264@scaer>
+ <CA+h8R2oRLfVOG4m9_mbg_hHhZNxggQLZt_8JBTOL8poQwaP+DQ@mail.gmail.com>
+Message-ID: <20200818201612.GR24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Christian., All,
 
-On 2020-08-18 21:12 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/41fde4aa06f7c025bb05aa594716643b9010358f
+On 2020-08-18 12:48 -0700, Christian Stewart spake thusly:
+> On Tue, Aug 18, 2020 at 12:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2020-08-18 12:11 -0700, Christian Stewart spake thusly:
+> > > Tested on Pi4 Model B (aarch64).
+> >
+> > There was previous proposal for this:
+> >
+> >     http://lists.busybox.net/pipermail/buildroot/2020-June/285000.html
+> >     http://lists.busybox.net/pipermail/buildroot/2020-January/271588.html
+> >
+> > where it wsa noticed and pointed out that not all libraries were
+> > installed for tghe 64-bit variants, and that parts of the 64-bit
+> > support even git reverted upstream:
+> >
+> >     https://github.com/raspberrypi/userland/commit/f97b1af1b3e653f9da2c1a3643479bfd469e3b74
+> >
+> > How does that patch address these issues?
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> I don't think this is relevant anymore.
+> 
+> In the userland commit you link just above, they disable some things
+> when targeting ARM64. We set ARM64 correctly in this patch with
+> -DARM64=ON if BR2_aarch64, so this addresses everything correctly.
 
-Issues are with glibc version, not gcc version, so I tweaked the patch'
-commit and the commit log accordingly, and applied to master, thanks.
+So, this would, amongst others, not build:
+
+  - MMAL, so no low-level programming,
+
+  - interface/khronos, so no OpenGL EGL/GLES, no OpenVG,
+
+  - middleware/openmaxil, so no OpenMAX
+
+Unless I'm missing something non-obvious, I do not see how that can be
+irrelevant...
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  ...gure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch | 44 +++++++++++++++++++
->  package/iprutils/iprutils.mk                  |  2 +
->  2 files changed, 46 insertions(+)
->  create mode 100644 package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch
-> 
-> diff --git a/package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch b/package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch
-> new file mode 100644
-> index 0000000000..76085b4a3c
-> --- /dev/null
-> +++ b/package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch
-> @@ -0,0 +1,44 @@
-> +From 068f37c100e105fd8edcae07762613e8e33c5282 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 18 Aug 2020 20:26:58 +0200
-> +Subject: [PATCH] configure.ac: add AC_USE_SYSTEM_EXTENSIONS
-> +
-> +Build with gcc 4.8 will raise two errors, one on uint, the other one on
-> +alphasort:
-> +
-> +In file included from iprdump.c:17:0:
-> +iprlib.h:1866:2: error: unknown type name 'uint'
-> +  uint supported_with_min_ucode_level;
-> +  ^
-> +
-> +iprlib.c: In function 'ipr_get_pci_slots':
-> +iprlib.c:1999:48: error: 'alphasort' undeclared (first use in this function)
-> +  num_slots = scandir(rootslot, &slotdir, NULL, alphasort);
-> +                                                ^
-> +
-> +Fix them by adding AC_USE_SYSTEM_EXTENSIONS in configure.ac
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/41fde4aa06f7c025bb05aa594716643b9010358f
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/bjking1/iprutils/pull/4]
-> +---
-> + configure.ac | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 462a8b5..7f5fa7d 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -14,6 +14,7 @@ AC_INIT([iprutils], [2.4.19.1], [iprdd-devel at lists.sourceforge.net])
-> + 
-> + AM_INIT_AUTOMAKE([1.9 foreign])
-> + AC_CONFIG_MACRO_DIR([build-aux])
-> ++AC_USE_SYSTEM_EXTENSIONS
-> + 
-> + # Checks for programs.
-> + AC_PROG_CC
-> +-- 
-> +2.27.0
-> +
-> diff --git a/package/iprutils/iprutils.mk b/package/iprutils/iprutils.mk
-> index 3fa8223ff6..9595125ac9 100644
-> --- a/package/iprutils/iprutils.mk
-> +++ b/package/iprutils/iprutils.mk
-> @@ -10,5 +10,7 @@ IPRUTILS_SITE = https://downloads.sourceforge.net/project/iprdd/iprutils%20for%2
->  IPRUTILS_DEPENDENCIES = ncurses libsysfs pciutils zlib
->  IPRUTILS_LICENSE = Common Public License Version 1.0
->  IPRUTILS_LICENSE_FILES = LICENSE
-> +# We"re patching configure.ac
-> +IPRUTILS_AUTORECONF = YES
->  
->  $(eval $(autotools-package))
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
