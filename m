@@ -1,87 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 16:43:40 +0200
-Subject: [Buildroot] [git commit] package/ibm-sw-tpm2: fix glibc build errors
-Message-ID: <20200818143702.2932785F46@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 16:45:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/gensio: bump to
+ version 2.1.4
+Message-ID: <20200818144024.A00D1868CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34e7f88f67b77066f73894dc8e42bca3c076fa6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=e63410165ced1b7db867eae613f9b3b70350d146
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In order to not have to define all architecture bitness variants in
-src/LibSupport.h to conditionally define RADIX_BITS, a patch was created
-to depend on LONG_BIT being defined via limits.h
-
-For glibc, LONG_BIT is behind a _XOPEN_SOURCE define guard so patch the
-makefile to define this macro as well as _DEFAULT_SOURCE.
-
-Defining _XOPEN_SOURCE requires _DEFAULT_SOURCE to be explicitly defined
-for builds to succeed as it is no longer impliclty defined when
-_XOPEN_SOURCE is defined.
-
-Fixes:
-	http://autobuild.buildroot.net/results/bc145dd23c80a0660300766d0c114a00ed2e52b6/
-	http://autobuild.buildroot.net/results/1d84e70c30d4d0719274aa4f3edc01772beb24a3/
-
-Fixes: 19bd089004 ("package/ibm-sw-tpm2: fix patch to address musl builds")
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Use-LONG_BIT-to-define-RADIX_BITS.patch   | 24 ++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-index 3a7e02ba7a..d72239f42b 100644
---- a/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-+++ b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-@@ -1,4 +1,4 @@
--From 24a352fc99ebde22235b05b18615817ef7f4263c Mon Sep 17 00:00:00 2001
-+From 7c32c58f4ce802d2682038f73bb8c8f850237f89 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Sun, 26 Apr 2020 15:33:39 +0200
- Subject: [PATCH] Use LONG_BIT to define RADIX_BITS
-@@ -6,14 +6,17 @@ Subject: [PATCH] Use LONG_BIT to define RADIX_BITS
- This allows to avoid having to support each CPU architecture
- individually.
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index 067c9d39cc..b83f21abd0 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  1281387def2b137f762ce4a8869fbb4f  gensio-2.1.1.tar.gz
+-sha1  4fb43270449e1f2312be87e56aff8173d285e3f1  gensio-2.1.1.tar.gz
++md5  e2547078bd73d62abda343515f1368ee  gensio-2.1.4.tar.gz
++sha1  f8c0e787fad22a71b10f1d8eefea83617f489bdb  gensio-2.1.4.tar.gz
+ # Locally computed:
+-sha256  e81df2c55d8830ac4f3c28eda54c3f690c4b62e186ea3879815b101a4902a703  gensio-2.1.1.tar.gz
++sha256  1f5a29aabfb35886893cfda5cd78192db67e96de796dbf9758dbecd4077a3fd8  gensio-2.1.4.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 7cdd340b14..89b7be9cdc 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+Also, add the necessary defines in the makefile to expose LONG_BIT
-+
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
- ---
-  src/LibSupport.h | 17 +++--------------
-- 1 file changed, 3 insertions(+), 14 deletions(-)
-+ src/makefile     |  2 ++
-+ 2 files changed, 5 insertions(+), 14 deletions(-)
- 
- diff --git a/src/LibSupport.h b/src/LibSupport.h
--index b2e6a51..f064d20 100644
-+index b2e6a51..0b59d18 100644
- --- a/src/LibSupport.h
- +++ b/src/LibSupport.h
- @@ -64,20 +64,9 @@
-@@ -40,6 +43,19 @@ index b2e6a51..f064d20 100644
-  
-  // These macros use the selected libraries to the proper include files.
-  #define LIB_QUOTE(_STRING_) #_STRING_
-+diff --git a/src/makefile b/src/makefile
-+index f124e78..9af1e51 100644
-+--- a/src/makefile
-++++ b/src/makefile
-+@@ -46,6 +46,8 @@ CCFLAGS = -Wall  			\
-+ 	 -c -ggdb -O0 			\
-+ 	-DTPM_POSIX			\
-+ 	-D_POSIX_			\
-++	-D_DEFAULT_SOURCE		\
-++	-D_XOPEN_SOURCE			\
-+ 	-DTPM_NUVOTON
-+ 
-+ # add this line for big endian platforms
- -- 
--2.25.3
-+2.28.0
- 
+-GENSIO_VERSION = 2.1.1
++GENSIO_VERSION = 2.1.4
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
