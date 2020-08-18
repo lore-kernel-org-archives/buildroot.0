@@ -1,80 +1,47 @@
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Tue, 18 Aug 2020 23:30:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/easyframes: new package
-In-Reply-To: <CAHpTZwmH+8oW1OEWP5aErmyd=f-_DV=sL=KGupTU0EDq3NO9ww@mail.gmail.com>
-References: <20200815142631.1054530-1-horatiu.vultur@microchip.com>
- <CAHpTZwmH+8oW1OEWP5aErmyd=f-_DV=sL=KGupTU0EDq3NO9ww@mail.gmail.com>
-Message-ID: <20200818213032.7kpxskbhylkqb46s@soft-dev3.localdomain>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Aug 2020 23:30:40 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-urllib3: bump
+ to version 1.25.10
+Message-ID: <20200818212412.6DD958230F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 08/17/2020 10:09, Jugurtha BELKALEM wrote:
-> 
-> 
-> Hi Horatiu,
-Hi Jugurtha,
+commit: https://git.buildroot.net/buildroot/commit/?id=f737aaac1eebc43d21ee1f6681a9fe9972bfe88c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for the commnents. I will fix all the issues in the next version and
-I will try to remove the C++ dependency.
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-urllib3/python-urllib3.hash | 2 +-
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> 
-> On Sat, Aug 15, 2020 at 4:27 PM Horatiu Vultur via buildroot <buildroot at busybox.net<mailto:buildroot@busybox.net>> wrote:
-> Signed-off-by: Horatiu Vultur <horatiu.vultur at microchip.com<mailto:horatiu.vultur@microchip.com>>
-> ---
-> 
-> +++ b/package/easyframes/easyframes.hash
-> @@ -0,0 +1 @@
-> +sha256 998d260f0e2dd3206201e566af176ebf20298185f040c3c8bf085e054aeed10f easyframes-25f3aad30a7d8c7844cb08a95a1048959553a503.tar.gz
-> diff --git a/package/easyframes/easyframes.mk<http://easyframes.mk> b/package/easyframes/easyframes.mk<http://easyframes.mk>
-> 
-> Please add COPYING LICENSE HASH to the hash file and insert a comment at the beginning of the file to say how the hashes were computed. For example :
-> 
-> # locally calculated
-> sha256 998d260f0e2dd3206201e566af176ebf20298185f040c3c8bf085e054aeed10f easyframes-25f3aad30a7d8c7844cb08a95a1048959553a503.tar.gz
-> 
-> sha256 HASH_VALUE_OF_COPYING_FILE  COPYING
-> 
-> new file mode 100644
-> index 0000000000..8b22bac03b
-> --- /dev/null
-> +++ b/package/easyframes/easyframes.mk<http://easyframes.mk>
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# easyframes
-> +#
-> +################################################################################
-> +
-> +EASYFRAMES_VERSION = 25f3aad30a7d8c7844cb08a95a1048959553a503
-> 
-> I see that you are one of projet's maintainers, It is better if you can create a tag for a stable release and use it to create your buildroot package. for example :
-> EASYFRAMES_VERSION = 25f3aad30a7d8c7844cb08a95a1048959553a503 => should become EASYFRAMES_VERSION = 1.0.0.
-> 
-> +EASYFRAMES_SITE_METHOD = git
-> +EASYFRAMES_SITE = https://github.com/microchip-ung/easyframes
-> 
-> Please, use github call method to download your package : $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION)).
-> 
-> 
-> +EASYFRAMES_INSTALL_STAGING = YES
-> +EASYFRAMES_DEPENDENCIES = zlib libpcap
-> 
-> Dependencies should be sorted alphabetically, EASYFRAMES_DEPENDENCIES = libpcap zlib
-> 
-> +EASYFRAMES_LICENSE = MIT
-> +EASYFRAMES_LICENSE_FILES = COPYING
-> +
-> +$(eval $(cmake-package))
-> --
-> 2.27.0
-> 
-> Best regards,
-> 
-> Jugurtha.
-> 
-
--- 
-/Horatiu
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index b1602350bd..6be3671a3c 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,4 +1,4 @@
+ # sha256 from https://pypi.org/pypi/urllib3/json
+-sha256	3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527  urllib3-1.25.9.tar.gz
++sha256	91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a  urllib3-1.25.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index b17a4c0cb6..e64ff136ab 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URLLIB3_VERSION = 1.25.9
++PYTHON_URLLIB3_VERSION = 1.25.10
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/05/8c/40cd6949373e23081b3ea20d5594ae523e681b6f472e600fbc95ed046a36
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_SETUP_TYPE = setuptools
