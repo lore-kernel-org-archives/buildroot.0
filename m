@@ -1,211 +1,360 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 07:58:06 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-08-17
-Message-ID: <20200818075812.52A4F87590@hemlock.osuosl.org>
+From: Michael Fischer <mf@go-sys.de>
+Date: Tue, 18 Aug 2020 08:57:23 +0000
+Subject: [Buildroot] OpenSSH login problem
+In-Reply-To: <20200817233310.0e513ec1@gmx.net>
+References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
+ <20200817233310.0e513ec1@gmx.net>
+Message-ID: <5332211bbaed45d9a1ac495924ddc146@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Autobuild statistics for 2020-08-17
-===================================
-
-      branch |  OK | NOK | TIM | TOT |
-  2020.02.x  | 26  |  1  |  0  | 27  |
-  2020.05.x  | 17  |  5  |  0  | 22  |
-    master   | 149 | 63  |  0  | 212 |
-     next    | 38  | 22  |  0  | 60  |
-
-Classification of failures by reason for master
------------------------------------------------
-
-              ibm-sw-tpm2-1563 | 21
-                qt5base-5.15.0 | 8 
-dvb-apps-3d43b280298c39a67d... | 5 
-               libunwind-1.4.0 | 3 
-                     avahi-0.8 | 2 
-             kismet-2016-07-R1 | 2 
-            lttng-tools-2.12.1 | 2 
-                 openal-1.20.1 | 2 
-                       unknown | 2 
-               apparmor-2.13.4 | 1 
-                  assimp-5.0.1 | 1 
-               collectd-5.11.0 | 1 
-                  dnsmasq-2.81 | 1 
-          gstreamer1-mm-1.10.0 | 1 
-                  ifplugd-0.28 | 1 
-                  luajit-2.1.2 | 1 
-                   mimic-1.1.0 | 1 
-                  ndisc6-1.0.4 | 1 
-                 opencv3-3.4.9 | 1 
-                samba4-4.11.10 | 1 
-              spandsp-20180108 | 1 
-                thermald-1.9.1 | 1 
-                      tio-1.32 | 1 
-                    vlc-3.0.11 | 1 
-                  zeromq-4.3.2 | 1 
+Hello Peter,
+this is my defconfig, now I will test it with the raspberrypi3 defconfig, maybe that will help me.
 
 
-Detail of failures for master
------------------------------
+BR2_HOST_GCC_AT_LEAST_9=y
+BR2_ARCH_HAS_MMU_OPTIONAL=y
+BR2_arm=y
+BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ABI="aapcs-linux"
+BR2_GCC_TARGET_CPU="cortex-a53"
+BR2_GCC_TARGET_FPU="fp-armv8"
+BR2_GCC_TARGET_FLOAT_ABI="hard"
+BR2_GCC_TARGET_MODE="arm"
+BR2_BINFMT_SUPPORTS_SHARED=y
+BR2_READELF_ARCH_NAME="ARM"
+BR2_BINFMT_ELF=y
+BR2_ARM_CPU_HAS_NEON=y
+BR2_ARM_CPU_HAS_FPU=y
+BR2_ARM_CPU_HAS_VFPV2=y
+BR2_ARM_CPU_HAS_VFPV3=y
+BR2_ARM_CPU_HAS_VFPV4=y
+BR2_ARM_CPU_HAS_FP_ARMV8=y
+BR2_ARM_CPU_HAS_ARM=y
+BR2_ARM_CPU_HAS_THUMB2=y
+BR2_ARM_CPU_ARMV8A=y
+BR2_cortex_a53=y
+BR2_ARM_EABIHF=y
+BR2_ARM_FPU_FP_ARMV8=y
+BR2_ARM_INSTRUCTIONS_ARM=y
+BR2_DEFCONFIG="/home/michael/buildroot/configs/raspberrypi3_defconfig"
+BR2_OPTIMIZE_S=y
+BR2_SHARED_LIBS=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_LIBC="glibc"
+BR2_KERNEL_HEADERS_AS_KERNEL=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+BR2_PACKAGE_LINUX_HEADERS=y
+BR2_PACKAGE_GLIBC=y
+BR2_PACKAGE_GLIBC_UTILS=y
+BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI=y
+BR2_BINUTILS_VERSION_2_34_X=y
+BR2_BINUTILS_VERSION="2.34"
+BR2_BINUTILS_ENABLE_LTO=y
+BR2_BINUTILS_EXTRA_CONFIG_OPTIONS=""
+BR2_GCC_VERSION_10_X=y
+BR2_GCC_SUPPORTS_DLANG=y
+BR2_GCC_VERSION="10.2.0"
+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_GCC_ENABLE_LTO=y
+BR2_GCC_ENABLE_OPENMP=y
+BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS=y
+BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS=y
+BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK=y
+BR2_TOOLCHAIN_HAS_NATIVE_RPC=y
+BR2_USE_WCHAR=y
+BR2_ENABLE_LOCALE=y
+BR2_INSTALL_LIBSTDCPP=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST="4.19"
+BR2_TOOLCHAIN_GCC_AT_LEAST_10=y
+BR2_TOOLCHAIN_GCC_AT_LEAST="10"
+BR2_TARGET_GENERIC_PASSWD_SHA256=y
+BR2_TARGET_GENERIC_PASSWD_METHOD="sha-256"
+BR2_TARGET_ENABLE_ROOT_LOGIN=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
+BR2_LINUX_KERNEL_VERSION="custom"
+BR2_LINUX_KERNEL_PATCH=""
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/michael/workspace/buildroot/kernel.config"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=""
+BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="/home/michael/workspace/buildroot/overlay/BlueBox/Config/Icons/boot.png"
+BR2_PACKAGE_BUSYBOX=y
+BR2_PACKAGE_BUSYBOX_CONFIG="/home/michael/workspace/buildroot/busybox.config"
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/d2e540bcaff135efb4d1a42808899cf14eeedae7 |     
-    m68k     |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/dfdd223a9bdfa416ea0e66e521dbbb2f08960133 |     
-   mipsel    |           avahi-0.8            | NOK | http://autobuild.buildroot.net/results/94e48c44b2033c48a332ebc6c5c4c29f60319de1 | ORPH
-  aarch64    |           avahi-0.8            | NOK | http://autobuild.buildroot.net/results/820ec9d77aeee82fa208783d3bf54a896d272776 | ORPH
-  powerpc    |        collectd-5.11.0         | NOK | http://autobuild.buildroot.net/results/5b951b9a88b9e1e512cda41fa40bd70ba9d2ec25 |     
-    sh4      |          dnsmasq-2.81          | NOK | http://autobuild.buildroot.net/results/f17fac691773f7d812e4eb26db56d17587587eb3 |     
-  powerpc    | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/43520f68362dea7c6eb84c22cf7a0fb20c5a205d |     
-    arm      | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/c7ecd7efe3079cfb5950814df66373f86babce73 |     
-    arc      | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/a9ddc956c34e014c5c58e057d7b774935d52ffcb |     
-  mips64el   | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/2636d8a0024e27e7669ea3f26c7003d6017543f6 |     
-  aarch64    | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/51edc80e07d43399504b50d3e1bc018ae1b9526f |     
-  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/1d4e2e9244976874aada7066e92eb0b77e3989a2 |     
-   mipsel    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/2848836c266777f519fa2eabef633285b67f86ac |     
-  sparc64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/12bb9aaea83f8f6abf4f2fc2465275e66278ee9a |     
-  mips64el   |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/b50957c8948fc9074177c371f364f0fda278838f |     
-  aarch64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/58eb80e58e9ad41e7f747719886110322375e905 |     
-    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/0d4c1f77583e95e48a1ae9418cee5a08844bbb7d |     
- aarch64_be  |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/1dcf483cc7758652a1b4051c3042f53ea071b6bb |     
-    i686     |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/ec3214e74c3ce098a41f2c1c039c43d6833d89a0 |     
-   x86_64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/5519756b54c1acbe5e45c6f68b88e27e4e301dae |     
-    sh4      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/83fb0f0201c3bd1758f4239f7f14adfae5541216 |     
-  aarch64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/4e86627a9b1c8be7d282197b20b0464755b6e1cf |     
-  sparc64    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/48f7bcb498dd56027e4683352977bb1c366aa904 |     
-    arc      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/74eb7604307f1572f01d21690eb6b077e48a1aea |     
-microblazeel |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/3457f7d6474fb812dcc1c9ffbbc9983e8120abd7 |     
-    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/73383d63a97892b5e6762feabc054999788bb5e0 |     
-  powerpc    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/892832bf1f2e33467407b55403be97d5054b283a |     
-    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/0ab98e30b0c0e2bcd08ae7097ee59796c2b654e3 |     
-microblazeel |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/1bbaa27c6f9e7c2dc32c3a2fcc35630b631d1527 |     
-  mips64el   |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/55522742438af75161f66b8fc0e81d16a34d4296 |     
-    arm      |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/60a26893846a3826e042b77762c82e993965e832 |     
- powerpc64   |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/980191a52b6cb85768451e8b73c19b5659a1e538 |     
-  riscv32    |        ibm-sw-tpm2-1563        | NOK | http://autobuild.buildroot.net/results/3eabbc5419a9895a47fd3fa37c056eccccc0e143 |     
-    arm      |          ifplugd-0.28          | NOK | http://autobuild.buildroot.net/results/63f7c6fc4a2a30c8eb0298856a2615f816d50299 |     
-    arc      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/feb2d8401405ab26ef19cb6704c54a7f782074b6 | ORPH
-    arm      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/5a964a0c94990371127670b5b713037eb6be29e4 | ORPH
-    arm      |        libunwind-1.4.0         | NOK | http://autobuild.buildroot.net/results/dad61a90a27a97f275efd238ee22be704eab0063 | ORPH
-    arm      |        libunwind-1.4.0         | NOK | http://autobuild.buildroot.net/results/48b25726a37dc5d3e2f8c0b62a129f5b0516d03e | ORPH
-    arm      |        libunwind-1.4.0         | NOK | http://autobuild.buildroot.net/results/ba7bdd3afbd54457a7ece14a4521e4923dbe4ea5 | ORPH
-    i586     |       lttng-tools-2.12.1       | NOK | http://autobuild.buildroot.net/results/238a694fe3cae671db15f65033ba7f4f00ab9cbd |     
-    arm      |       lttng-tools-2.12.1       | NOK | http://autobuild.buildroot.net/results/0c49b3e90361ced63cad4807dbe1b13c595f5f97 |     
-  powerpc    |          luajit-2.1.2          | NOK | http://autobuild.buildroot.net/results/eca5096a7207ebc60adba78cb1aa435f3a5dd909 |     
-  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/9ec87847190fe23f03e0081f52a42580ed60334d |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/ffb6b6f0ae418470ed1e12fb1eea3d703f1607bb | ORPH
-    arm      |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/4a7a3285f6a17d603c01358f586dab47b4cb5b82 |     
-    or1k     |         openal-1.20.1          | NOK | http://autobuild.buildroot.net/results/054a11caf1961af68fd89671d023697de67e7d18 |     
-   x86_64    |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/c9c26f33f03bdb13d9c3d82ebb4c9d3a9c40f34c |     
-  powerpc    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/6ff4d261237a324308dfacd7d08cfc43c6aad61a |     
-  riscv32    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/c90f23780a1baecaaf3ccdc7c2ef87422cd9ed50 |     
-   xtensa    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/923577c52c685ce7ffb39f062d9de748a3219a4c |     
-    arm      |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/47f686cc90e965721874286cdf12d7d25867df9d |     
- powerpc64   |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/b24e4d18d2422cf9f9ee34d2d6044980ea187191 |     
-   x86_64    |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/c0222d45b4f82defd2bdc0c1d5a43f496e24a041 |     
-    i586     |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/28103b31572f7611cfd42142b4b7811e539f7ee9 |     
-  mips64el   |         qt5base-5.15.0         | NOK | http://autobuild.buildroot.net/results/545732455200fad27e69d9928605652b2b6fe138 |     
-  mips64el   |         samba4-4.11.10         | NOK | http://autobuild.buildroot.net/results/937dd7a2f85390de05dcca14780b8f28257f662a |     
-    i686     |        spandsp-20180108        | NOK | http://autobuild.buildroot.net/results/62f75b1ef94c920b272f6c0de3ddca1e65eca9b3 |     
-   x86_64    |         thermald-1.9.1         | NOK | http://autobuild.buildroot.net/results/80a126c225a9e9cbfdc30882c4ce00517d853d8b |     
-  sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/8216430ea476ad379e4c51ed0f474564fcf6d67b |     
-   nios2     |            unknown             | NOK | http://autobuild.buildroot.net/results/58d052569e782e8154abc445c21f4dc0f760fb1f |     
-  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/7af4803ba2d9789f149cb92505998592e94ce3d1 |     
-    i586     |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/a0bc5fe6913baef758923404701b0fad4e9d442f |     
-    or1k     |          zeromq-4.3.2          | NOK | http://autobuild.buildroot.net/results/46bd754a37ac4e34c4f52ce1235b29ecfafbb667 |     
-
-
-Classification of failures by reason for 2020.02.x
---------------------------------------------------
-
-             host-pango-1.44.6 | 1 
-
-
-Detail of failures for 2020.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/82edfde47963afe7aaf9b32f548601282e8c3a96 | ORPH
+Regards,
+  Michael
 
 
-Classification of failures by reason for 2020.05.x
---------------------------------------------------
-
-                  assimp-5.0.1 | 1 
-              asterisk-16.10.0 | 1 
-               log4cplus-2.0.5 | 1 
-                suricata-4.1.8 | 1 
-                  zeromq-4.3.2 | 1 
-
-
-Detail of failures for 2020.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/71e6da42be7a24e0cb68ce964eacc5f25d112b90 |     
-   x86_64    |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/242a0d024938d60213fe3bf475c8d1ece7174977 |     
-    arc      |        log4cplus-2.0.5         | NOK | http://autobuild.buildroot.net/results/aa03c786a2e3db5e852abeb80f89f23b28b4ad05 |     
-    m68k     |         suricata-4.1.8         | NOK | http://autobuild.buildroot.net/results/8aaa86c17109963c200925a75305202a70a0f183 |     
-    or1k     |          zeromq-4.3.2          | NOK | http://autobuild.buildroot.net/results/7b644d0858265ee565d67c7beb8b8507752b8e57 |     
-
-
-Classification of failures by reason for next
----------------------------------------------
-
-                       unknown | 4 
-              host-grpc-1.31.0 | 3 
-                  boost-1.73.0 | 2 
-                 gnuplot-5.4.0 | 2 
-               libglib2-2.64.4 | 2 
-                  assimp-5.0.1 | 1 
-              asterisk-16.10.0 | 1 
-                    bird-2.0.7 | 1 
-dvb-apps-3d43b280298c39a67d... | 1 
-      gst1-plugins-base-1.16.2 | 1 
-              keepalived-2.1.4 | 1 
-libcamera-565f95d64ff92e871... | 1 
-pistache-f2f5a50fbfb5b8ef6c... | 1 
-              python-pyqt5-5.7 | 1 
-
-
-Detail of failures for next
----------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |          assimp-5.0.1          | NOK | http://autobuild.buildroot.net/results/2e6f998716453cab16ba1c9d30ac740a5153c74f |     
-   x86_64    |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/e4853f8d542e10d2faac42fbfbc0ad0c76c1e6c1 |     
-    arm      |           bird-2.0.7           | NOK | http://autobuild.buildroot.net/results/572cee22987bccbc08c87d5c8111c1d05f3e90d6 |     
-   x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/95642e75a9a790970907f3ee29c8099b14023187 |     
-   x86_64    |          boost-1.73.0          | NOK | http://autobuild.buildroot.net/results/3be3e747054883cd0ec816829c59e4e14b6ecfee |     
-    arm      | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/ef9ec7a3026a1ae45df9b6debaa81853e508837b |     
-   x86_64    |         gnuplot-5.4.0          | NOK | http://autobuild.buildroot.net/results/51175270383a5b78e45d7f0a8c865efacedf1302 |     
-    m68k     |         gnuplot-5.4.0          | NOK | http://autobuild.buildroot.net/results/e7d6e8b938a38df5fcbbe63b6e6c71a53864976a |     
-    sh4      |    gst1-plugins-base-1.16.2    | NOK | http://autobuild.buildroot.net/results/ed3df76b6e50761f91de93677438048bff34b9bc |     
- powerpc64   |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/fb21f0912ebb1f50fa1d22684682261d5dae67d2 |     
-  riscv64    |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/67f2ed1120167a8bda321a1f9aad4123dab2f12e |     
-  aarch64    |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/1a90edf78d7a3b466c0aa5937b347475ff99b26d |     
-    sh4      |        keepalived-2.1.4        | NOK | http://autobuild.buildroot.net/results/30fda3f70f7271e06771b68d1fbd7d4d6f331c9b |     
-    m68k     | libcamera-565f95d64ff92e871... | NOK | http://autobuild.buildroot.net/results/554a9e4c09e3508833c7e502268cd1cf30e286c7 |     
-  riscv64    |        libglib2-2.64.4         | NOK | http://autobuild.buildroot.net/results/f4012e881a1d26389fdd2cccec2ee041955d2d65 |     
-  riscv64    |        libglib2-2.64.4         | NOK | http://autobuild.buildroot.net/results/f989955466c22055844100b12dd6c3a59cd3df4e |     
-    arc      | pistache-f2f5a50fbfb5b8ef6c... | NOK | http://autobuild.buildroot.net/results/a74c02b49a851f9f086365c6913ae9d7c58fac33 | ORPH
-   sparc     |        python-pyqt5-5.7        | NOK | http://autobuild.buildroot.net/results/4becd968698212b54e1f7f2e747bbe5330928747 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/f9401203b293f6de2268368f266bf7cb79c7ce59 |     
-  powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/d6eb6b069008ce91ab1e51ae53bf16ac314e59ea |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/3a13c992cf773f01ae859bcc1c43865cfd30316b |     
-  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/ad3e034cd1476acdf1066f695929b0ce8e404d77 |     
-
-
-Gitlab CI results for 2020-08-17
-================================
-
-
--- 
-http://autobuild.buildroot.net
+> To: Michael Nosthoff via buildroot <buildroot@busybox.net>
+> Cc: Michael Nosthoff <buildroot@heine.tech>; Michael Fischer <mf@go-
+> sys.de>
+>  Re: [Buildroot] OpenSSH login problem
+> 
+> Hello Michael (Fischer),
+> 
+> On Thu, 13 Aug 2020 17:54:31 +0200, Michael Nosthoff via buildroot
+> <buildroot@busybox.net> wrote:
+> 
+> > Hi,
+> >
+> > I try to rephrase what you did to see if I understood it correctly:
+> >
+> > You built a Raspberry Pi BR Image based on commit
+> > 01632805ab4be2bea4010ba1e46ab71f52d175a9
+> > from the Buildroot git. OpenSSH works.
+> > Then you did a git pull, did a "make clean && make" and with the resulting
+> image you can't login via ssh.
+> >
+> > Is this correct?
+> >
+> > This assumed I tried the following:
+> >
+> > git log --oneline
+> > 01632805ab4be2bea4010ba1e46ab71f52d175a9..origin/master
+> > (origin/master is currently at
+> > d1d89d37c02e3d8224fb6f812e87fef5612a771a)
+> >
+> > From the result I can tell that the OpenSSH package hasn't changed. So
+> > it has to be some lib or something in the Filesystem.
+> >
+> > One commit that looks like it could be the troublemaker is:
+> >
+> > 060599fc23 package/rpi-userland: bump version to 188d3bf
+> >
+> > But else this might be a good idea to try to debug using git bisect
+> > and move through the tree to see when it breaks.
+> >
+> > I don't really have a Pi at hand right now. But to reproduce someone
+> > would need a minimal BR configuration which shows the issue. Can you
+> provide that?
+> 
+> Could not reproduce the problem on RPi3 Model B+ with the following
+> defconfig (with buildroot-master up to commit
+> d1c3f077e24a41f004945f94aceb6f059c58e423):
+> 
+> BR2_arm=y
+> BR2_cortex_a53=y
+> BR2_ARM_FPU_NEON_VFPV4=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_SYSTEM_DHCP="eth0"
+> BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+> BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
+> github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/li
+> nux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
+> BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-
+> plus bcm2710-rpi-cm3"
+> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> BR2_PACKAGE_STRACE=y
+> BR2_PACKAGE_RPI_FIRMWARE=y
+> BR2_PACKAGE_OPENSSH=y
+> BR2_TARGET_ROOTFS_EXT2=y
+> BR2_TARGET_ROOTFS_EXT2_4=y
+> BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> # BR2_TARGET_ROOTFS_TAR is not set
+> BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> BR2_PACKAGE_HOST_GENIMAGE=y
+> BR2_PACKAGE_HOST_MTOOLS=y
+> 
+> 
+> Mind to share your .config/defconfig file? Which (exact) hardware do you use?
+> 
+> Regards,
+> Peter
+> 
+> 
+> >
+> > Regards,
+> > Michael
+> >
+> >
+> > On Thursday, August 13, 2020 16:51 CEST, Michael Fischer <mf@go-sys.de>
+> wrote:
+> >
+> > > Hi Michael,
+> > >  here is the log, the connection is closed from the server.
+> > >
+> > > PS: All settings between the commits are the same.
+> > > The difference between this is only a git pull.
+> > >
+> > >
+> > > OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
+> > > debug1: Reading configuration data /etc/ssh/ssh_config
+> > > debug1: /etc/ssh/ssh_config line 20: Applying options for *
+> > > debug1: Connecting to 192.168.1.194 [192.168.1.194] port 22.
+> > > debug1: Connection established.
+> > > debug1: identity file /root/.ssh/id_rsa type -1
+> > > debug1: identity file /root/.ssh/id_rsa-cert type -1
+> > > debug1: identity file /root/.ssh/id_dsa type -1
+> > > debug1: identity file /root/.ssh/id_dsa-cert type -1
+> > > debug1: identity file /root/.ssh/id_ecdsa type -1
+> > > debug1: identity file /root/.ssh/id_ecdsa-cert type -1
+> > > debug1: identity file /root/.ssh/id_ecdsa_sk type -1
+> > > debug1: identity file /root/.ssh/id_ecdsa_sk-cert type -1
+> > > debug1: identity file /root/.ssh/id_ed25519 type -1
+> > > debug1: identity file /root/.ssh/id_ed25519-cert type -1
+> > > debug1: identity file /root/.ssh/id_ed25519_sk type -1
+> > > debug1: identity file /root/.ssh/id_ed25519_sk-cert type -1
+> > > debug1: identity file /root/.ssh/id_xmss type -1
+> > > debug1: identity file /root/.ssh/id_xmss-cert type -1
+> > > debug1: Local version string SSH-2.0-OpenSSH_8.3
+> > > debug1: Remote protocol version 2.0, remote software version
+> > > OpenSSH_8.3
+> > > debug1: match: OpenSSH_8.3 pat OpenSSH* compat 0x04000000
+> > > debug1: Authenticating to 192.168.1.194:22 as 'root'
+> > > debug1: SSH2_MSG_KEXINIT sent
+> > > debug1: SSH2_MSG_KEXINIT received
+> > > debug1: kex: algorithm: curve25519-sha256
+> > > debug1: kex: host key algorithm: ecdsa-sha2-nistp256
+> > > debug1: kex: server->client cipher: chacha20-poly1305 at openssh.com
+> > > MAC: <implicit> compression: none
+> > > debug1: kex: client->server cipher: chacha20-poly1305 at openssh.com
+> > > MAC: <implicit> compression: none
+> > > debug1: kex: curve25519-sha256 need=64 dh_need=64
+> > > debug1: kex: curve25519-sha256 need=64 dh_need=64
+> > > debug1: expecting SSH2_MSG_KEX_ECDH_REPLY
+> > > debug1: Server host key: ecdsa-sha2-nistp256
+> > > SHA256:RCq6wRn5ZZrwZ7wY84zaMFMdG1mhIorheFPFhbwBz+0
+> > > debug1: Host '[192.168.1.194]:22' is known and matches the ECDSA host
+> key.
+> > > debug1: Found key in /root/.ssh/known_hosts:1
+> > > debug1: rekey out after 134217728 blocks
+> > > debug1: SSH2_MSG_NEWKEYS sent
+> > > debug1: expecting SSH2_MSG_NEWKEYS
+> > > debug1: SSH2_MSG_NEWKEYS received
+> > > debug1: rekey in after 134217728 blocks
+> > > debug1: Will attempt key: /root/.ssh/id_rsa
+> > > debug1: Will attempt key: /root/.ssh/id_dsa
+> > > debug1: Will attempt key: /root/.ssh/id_ecdsa
+> > > debug1: Will attempt key: /root/.ssh/id_ecdsa_sk
+> > > debug1: Will attempt key: /root/.ssh/id_ed25519
+> > > debug1: Will attempt key: /root/.ssh/id_ed25519_sk
+> > > debug1: Will attempt key: /root/.ssh/id_xmss
+> > > debug1: SSH2_MSG_EXT_INFO received
+> > > debug1: kex_input_ext_info:
+> > > server-sig-algs=<ssh-ed25519,sk-ssh-ed25519@openssh.com,ssh-rsa,rsa-
+> > > sha2-256,rsa-sha2-512,ssh-dss,ecdsa-sha2-nistp256,ecdsa-sha2-nistp38
+> > > 4,ecdsa-sha2-nistp521,sk-ecdsa-sha2-nistp256 at openssh.com>
+> > > debug1: SSH2_MSG_SERVICE_ACCEPT received Connection closed by
+> > > 192.168.1.194 port 22
+> > >
+> > > Regards,
+> > >   Michael.
+> > >
+> > >
+> > > > On Thursday, August 13, 2020 16:35 CEST, Michael Nosthoff
+> > > > <buildroot@heine.tech>
+> > > > wrote:
+> > > >
+> > > > Hi Michael,
+> > > >
+> > > > On Thursday, August 13, 2020 15:35 CEST, Michael Fischer
+> > > > <mf@go-sys.de>
+> > > > wrote:
+> > > >
+> > > > > Dear all,
+> > > > >
+> > > > > I have a problem with the OpenSSH login on my raspberry.
+> > > > > I can't login via ssh, after entering the username, the sever
+> > > > > closed the
+> > > > connection.
+> > > > >
+> > > > > I have checked it with the commit
+> > > > 01632805ab4be2bea4010ba1e46ab71f52d175a9 and this version
+> works
+> > > > with the same configuration.
+> > > > > The actual commit doesn't work but  both commits have the same
+> > > > > OpenSSH
+> > > > version.
+> > > > >
+> > > > > OpenSSH Version is:  OpenSSH_8.3p1, OpenSSL 1.1.1g  21 Apr 2020
+> > > > >
+> > > > > My SSHD logofile:
+> > > > >
+> > > > > debug2: parse_server_config_depth: config reprocess config len
+> > > > > 236
+> > > > > debug3: auth_shadow_acctexpired: today 18487 sp_expire -1 days
+> > > > > left -
+> > > > 18488
+> > > > > debug3: account expiration disabled
+> > > > > debug3: mm_answer_pwnamallow: sending MONITOR_ANS_PWNAM:
+> 1
+> > > > > debug3: mm_request_send entering: type 9
+> > > > > debug2: monitor_read: 8 used once, disabling now
+> > > > > debug2: input_userauth_request: setting up authctxt for root
+> > > > > [preauth]
+> > > > > debug3: mm_inform_authserv entering [preauth]
+> > > > > debug3: mm_request_send entering: type 4 [preauth]
+> > > > > debug2: input_userauth_request: try method none [preauth]
+> > > > > debug3: mm_request_receive entering
+> > > > > debug3: monitor_read: checking request 4
+> > > > > debug3: mm_answer_authserv: service=ssh-connection, style=
+> > > > > debug2: monitor_read: 4 used once, disabling now
+> > > > > debug3: user_specific_delay: user specific delay 0.000ms
+> > > > > [preauth]
+> > > > > debug3: ensure_minimum_time_since: elapsed 10.528ms, delaying
+> > > > 10.089ms (requested 5.154ms) [preauth]
+> > > > > debug1: monitor_read_log: child log fd closed
+> > > > > debug3: mm_request_receive entering
+> > > > > debug1: do_cleanup
+> > > > > debug1: Killing privsep child 390
+> > > > >
+> > > > > I don't know what is going wrong.
+> > > > > Console login works and ftp also.
+> > > > >
+> > > > > Any help is welcome, I have no more idea where to look.
+> > > > >
+> > > >
+> > > > Could you run the Client with the -v flag? So you could see if
+> > > > actually the client or the server is closing the connection.
+> > > > A pretty common problem is often a mismatch in available
+> > > > authentication mechanisms (commonly "publickey,password").
+> > > >
+> > > > Also what sometimes is an issue is the permissions of the users
+> > > > .ssh folder on the server side.
+> > > > If it is globally readable sshd in many configurations refuses to
+> > > > authenticate against it.
+> > > >
+> > > > Regards,
+> > > > Michael
+> > > >
+> > > > >
+> > > > > thanks,
+> > > > >   Michael.
+> > > > >
+> > > > > _______________________________________________
+> > > > > buildroot mailing list
+> > > > > buildroot at busybox.net
+> > > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > > >
+> > > >
+> > > >
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> 
