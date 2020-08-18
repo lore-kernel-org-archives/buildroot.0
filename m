@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 16:45:59 +0200
-Subject: [Buildroot] [git commit branch/next] package/gensio: bump to
- version 2.1.4
-Message-ID: <20200818144024.A00D1868CE@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 16:46:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/ser2net: bump to
+ version 4.2.1
+Message-ID: <20200818144024.B23A5868CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e63410165ced1b7db867eae613f9b3b70350d146
+commit: https://git.buildroot.net/buildroot/commit/?id=64c2733088c06ff6d348d394357a98f115c1edac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gensio/gensio.hash | 6 +++---
- package/gensio/gensio.mk   | 2 +-
+ package/ser2net/ser2net.hash | 6 +++---
+ package/ser2net/ser2net.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index 067c9d39cc..b83f21abd0 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index 359ab98ed3..1f108418e2 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,6 +1,6 @@
  # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  1281387def2b137f762ce4a8869fbb4f  gensio-2.1.1.tar.gz
--sha1  4fb43270449e1f2312be87e56aff8173d285e3f1  gensio-2.1.1.tar.gz
-+md5  e2547078bd73d62abda343515f1368ee  gensio-2.1.4.tar.gz
-+sha1  f8c0e787fad22a71b10f1d8eefea83617f489bdb  gensio-2.1.4.tar.gz
+-md5  eb08bf2822d5c4293f798d9d8f3c1b66  ser2net-4.1.8.tar.gz
+-sha1  e3538f37b99f33a417c34e7b98eb9423262ff19a  ser2net-4.1.8.tar.gz
++md5  db112efce759e70caf91765fa47920fa  ser2net-4.2.1.tar.gz
++sha1  2f406a209c4a93544146e338ae92b938c421493a  ser2net-4.2.1.tar.gz
  # Locally computed:
--sha256  e81df2c55d8830ac4f3c28eda54c3f690c4b62e186ea3879815b101a4902a703  gensio-2.1.1.tar.gz
-+sha256  1f5a29aabfb35886893cfda5cd78192db67e96de796dbf9758dbecd4077a3fd8  gensio-2.1.4.tar.gz
+-sha256  cffb5147021202b064eb0a9389d0db63d1bb2dcde5a896f7785f97b1b5f51a72  ser2net-4.1.8.tar.gz
++sha256  a0d84c71a6bc75d73737461708f964084c6bbfe0cc1ef4725b4cd9cc35de14c0  ser2net-4.2.1.tar.gz
  sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
- sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 7cdd340b14..89b7be9cdc 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 861f954f76..3589e813c8 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GENSIO_VERSION = 2.1.1
-+GENSIO_VERSION = 2.1.4
- GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+-SER2NET_VERSION = 4.1.8
++SER2NET_VERSION = 4.2.1
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPL-2.0+
+ SER2NET_LICENSE_FILES = COPYING
