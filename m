@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 22:25:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/openlayers: bump to
- version 6.4.3
-Message-ID: <20200818211240.7FBC3812A0@busybox.osuosl.org>
+Date: Tue, 18 Aug 2020 22:24:35 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-netaddr: bump
+ to version 0.8.0
+Message-ID: <20200818211240.71CA182502@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc5f24c07010585ca97d3dd6f59744251a4eb3bd
+commit: https://git.buildroot.net/buildroot/commit/?id=5d8211412c714c72df083afd3424d071aa87d44b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-netaddr/python-netaddr.hash | 4 ++--
+ package/python-netaddr/python-netaddr.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index f1678507d7..2774b8064b 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
-+sha256	8371bbca2f7b33be0db5b416a78bc9559dd8f9afb6a406994daeeecf7b37f3f6	v6.4.3-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 65a1fe00fa..c3e137adcd 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
+index c834721d2c..91b200768f 100644
+--- a/package/python-netaddr/python-netaddr.hash
++++ b/package/python-netaddr/python-netaddr.hash
+@@ -1,5 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/netaddr/json
+-md5 51019ef59c93f3979bcb37d3b8527e07 netaddr-0.7.19.tar.gz
++md5 34cad578473b66ad77bc3b2a7613ed4a netaddr-0.8.0.tar.gz
+ # Locally computed
+-sha256 38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd netaddr-0.7.19.tar.gz
++sha256 d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243 netaddr-0.8.0.tar.gz
+ sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
+diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
+index a539845d54..e3ffe4e85b 100644
+--- a/package/python-netaddr/python-netaddr.mk
++++ b/package/python-netaddr/python-netaddr.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--OPENLAYERS_VERSION = 6.2.1
-+OPENLAYERS_VERSION = 6.4.3
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+-PYTHON_NETADDR_VERSION = 0.7.19
++PYTHON_NETADDR_VERSION = 0.8.0
+ PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
+-PYTHON_NETADDR_SITE = https://pypi.python.org/packages/0c/13/7cbb180b52201c07c796243eeff4c256b053656da5cfe3916c3f5b57b3a0
++PYTHON_NETADDR_SITE = https://pypi.python.org/packages/c3/3b/fe5bda7a3e927d9008c897cf1a0858a9ba9924a6b4750ec1824c9e617587
+ PYTHON_NETADDR_LICENSE = BSD-3-Clause
+ PYTHON_NETADDR_LICENSE_FILES = LICENSE
+ PYTHON_NETADDR_SETUP_TYPE = setuptools
