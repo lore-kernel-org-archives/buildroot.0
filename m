@@ -1,124 +1,148 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Aug 2020 22:47:44 +0200
-Subject: [Buildroot] [git commit] package/gdbm: fix build with gcc 10
-Message-ID: <20200819204619.CD5C6819A4@busybox.osuosl.org>
+Date: Wed, 19 Aug 2020 22:53:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdbm: fix build with gcc 10
+In-Reply-To: <20200819163751.2013284-1-fontaine.fabrice@gmail.com>
+References: <20200819163751.2013284-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200819205342.GU24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0112af04e1818c5d58ba14685e00dacc3bf1797
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/39c405096908e1d15f2462b990717215bea0750f
+On 2020-08-19 18:37 +0200, Fabrice Fontaine spake thusly:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/39c405096908e1d15f2462b990717215bea0750f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gdbm/0001-fix-build-with-gcc-10.patch | 96 +++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/gdbm/0001-fix-build-with-gcc-10.patch b/package/gdbm/0001-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..cd1417c81a
---- /dev/null
-+++ b/package/gdbm/0001-fix-build-with-gcc-10.patch
-@@ -0,0 +1,96 @@
-+From 9fecb6ce056f25837dffac95260d5a80b9f468c0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 19 Aug 2020 10:37:07 +0200
-+Subject: [PATCH] fix build with gcc 10
-+
-+Move initialisation of global variables to main functions to fix the
-+following build failure with gcc 10:
-+
-+/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x2c): multiple definition of `parseopt_program_args'; gdbm_dump.o:(.data.rel.local+0x28): first defined here
-+/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x30): multiple definition of `parseopt_program_doc'; gdbm_dump.o:(.data.rel.local+0x2c): first defined here
-+/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x2c): multiple definition of `parseopt_program_args'; gdbm_load.o:(.data.rel.local+0xa0): first defined here
-+/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x30): multiple definition of `parseopt_program_doc'; gdbm_load.o:(.data.rel.local+0xa4): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/d09b5368bb624df629296359a5abcdd37ba61e9e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to Sergey Poznyakoff <gray@gnu.org>]
-+---
-+ src/gdbm_dump.c | 5 +++--
-+ src/gdbm_load.c | 5 +++--
-+ src/gdbmtool.c  | 5 +++--
-+ 3 files changed, 9 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/gdbm_dump.c b/src/gdbm_dump.c
-+index 82fb5af..67574ac 100644
-+--- a/src/gdbm_dump.c
-++++ b/src/gdbm_dump.c
-+@@ -19,8 +19,6 @@
-+ # include "gdbmapp.h"
-+ # include "gdbmdefs.h"
-+ 
-+-char *parseopt_program_doc = "dump a GDBM database to a file";
-+-char *parseopt_program_args = "DB_FILE [FILE]";
-+ struct gdbm_option optab[] = {
-+   { 'H', "format", "binary|ascii|0|1", N_("select dump format") },
-+   { 0 }
-+@@ -36,6 +34,9 @@ main (int argc, char **argv)
-+   char *dbname, *filename;
-+   FILE *fp;
-+ 
-++  parseopt_program_doc = "dump a GDBM database to a file";
-++  parseopt_program_args = "DB_FILE [FILE]";
-++
-+ #ifdef HAVE_SETLOCALE
-+   setlocale (LC_ALL, "");
-+ #endif
-+diff --git a/src/gdbm_load.c b/src/gdbm_load.c
-+index 2d96ada..1b2739c 100644
-+--- a/src/gdbm_load.c
-++++ b/src/gdbm_load.c
-+@@ -29,8 +29,6 @@ int mode;
-+ uid_t owner_uid;
-+ gid_t owner_gid;
-+ 
-+-char *parseopt_program_doc = "load a GDBM database from a file";
-+-char *parseopt_program_args = "FILE [DB_FILE]";
-+ struct gdbm_option optab[] = {
-+   { 'r', "replace", NULL, N_("replace records in the existing database") },
-+   { 'm', "mode", N_("MODE"), N_("set file mode") },
-+@@ -100,6 +98,9 @@ main (int argc, char **argv)
-+   int cache_size = 0;
-+   int block_size = 0;
-+   
-++  parseopt_program_doc = "load a GDBM database from a file";
-++  parseopt_program_args = "FILE [DB_FILE]";
-++
-+ #ifdef HAVE_SETLOCALE
-+   setlocale (LC_ALL, "");
-+ #endif
-+diff --git a/src/gdbmtool.c b/src/gdbmtool.c
-+index bbadbae..69bc3b1 100644
-+--- a/src/gdbmtool.c
-++++ b/src/gdbmtool.c
-+@@ -1535,8 +1535,6 @@ command_lookup (const char *str, struct locus *loc, struct command **pcmd)
-+   return found->tok;
-+ }
-+ 
-+-char *parseopt_program_doc = N_("examine and/or modify a GDBM database");
-+-char *parseopt_program_args = N_("DBFILE [COMMAND [ARG ...]]");
-+ 
-+ enum {
-+   OPT_LEX_TRACE = 256,
-+@@ -2053,6 +2051,9 @@ main (int argc, char *argv[])
-+   char *source = NULL;
-+   instream_t input = NULL;
-+   
-++  parseopt_program_doc = N_("examine and/or modify a GDBM database");
-++  parseopt_program_args = N_("DBFILE [COMMAND [ARG ...]]");
-++
-+   set_progname (argv[0]);
-+ #if GDBM_DEBUG_ENABLE
-+   gdbm_debug_printer = debug_printer;
-+-- 
-+2.27.0
-+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/gdbm/0001-fix-build-with-gcc-10.patch | 96 +++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+>  create mode 100644 package/gdbm/0001-fix-build-with-gcc-10.patch
+> 
+> diff --git a/package/gdbm/0001-fix-build-with-gcc-10.patch b/package/gdbm/0001-fix-build-with-gcc-10.patch
+> new file mode 100644
+> index 0000000000..cd1417c81a
+> --- /dev/null
+> +++ b/package/gdbm/0001-fix-build-with-gcc-10.patch
+> @@ -0,0 +1,96 @@
+> +From 9fecb6ce056f25837dffac95260d5a80b9f468c0 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 19 Aug 2020 10:37:07 +0200
+> +Subject: [PATCH] fix build with gcc 10
+> +
+> +Move initialisation of global variables to main functions to fix the
+> +following build failure with gcc 10:
+> +
+> +/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x2c): multiple definition of `parseopt_program_args'; gdbm_dump.o:(.data.rel.local+0x28): first defined here
+> +/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x30): multiple definition of `parseopt_program_doc'; gdbm_dump.o:(.data.rel.local+0x2c): first defined here
+> +/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x2c): multiple definition of `parseopt_program_args'; gdbm_load.o:(.data.rel.local+0xa0): first defined here
+> +/tmp/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./libgdbmapp.a(parseopt.o):(.bss+0x30): multiple definition of `parseopt_program_doc'; gdbm_load.o:(.data.rel.local+0xa4): first defined here
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/d09b5368bb624df629296359a5abcdd37ba61e9e
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: sent to Sergey Poznyakoff <gray@gnu.org>]
+> +---
+> + src/gdbm_dump.c | 5 +++--
+> + src/gdbm_load.c | 5 +++--
+> + src/gdbmtool.c  | 5 +++--
+> + 3 files changed, 9 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/src/gdbm_dump.c b/src/gdbm_dump.c
+> +index 82fb5af..67574ac 100644
+> +--- a/src/gdbm_dump.c
+> ++++ b/src/gdbm_dump.c
+> +@@ -19,8 +19,6 @@
+> + # include "gdbmapp.h"
+> + # include "gdbmdefs.h"
+> + 
+> +-char *parseopt_program_doc = "dump a GDBM database to a file";
+> +-char *parseopt_program_args = "DB_FILE [FILE]";
+> + struct gdbm_option optab[] = {
+> +   { 'H', "format", "binary|ascii|0|1", N_("select dump format") },
+> +   { 0 }
+> +@@ -36,6 +34,9 @@ main (int argc, char **argv)
+> +   char *dbname, *filename;
+> +   FILE *fp;
+> + 
+> ++  parseopt_program_doc = "dump a GDBM database to a file";
+> ++  parseopt_program_args = "DB_FILE [FILE]";
+> ++
+> + #ifdef HAVE_SETLOCALE
+> +   setlocale (LC_ALL, "");
+> + #endif
+> +diff --git a/src/gdbm_load.c b/src/gdbm_load.c
+> +index 2d96ada..1b2739c 100644
+> +--- a/src/gdbm_load.c
+> ++++ b/src/gdbm_load.c
+> +@@ -29,8 +29,6 @@ int mode;
+> + uid_t owner_uid;
+> + gid_t owner_gid;
+> + 
+> +-char *parseopt_program_doc = "load a GDBM database from a file";
+> +-char *parseopt_program_args = "FILE [DB_FILE]";
+> + struct gdbm_option optab[] = {
+> +   { 'r', "replace", NULL, N_("replace records in the existing database") },
+> +   { 'm', "mode", N_("MODE"), N_("set file mode") },
+> +@@ -100,6 +98,9 @@ main (int argc, char **argv)
+> +   int cache_size = 0;
+> +   int block_size = 0;
+> +   
+> ++  parseopt_program_doc = "load a GDBM database from a file";
+> ++  parseopt_program_args = "FILE [DB_FILE]";
+> ++
+> + #ifdef HAVE_SETLOCALE
+> +   setlocale (LC_ALL, "");
+> + #endif
+> +diff --git a/src/gdbmtool.c b/src/gdbmtool.c
+> +index bbadbae..69bc3b1 100644
+> +--- a/src/gdbmtool.c
+> ++++ b/src/gdbmtool.c
+> +@@ -1535,8 +1535,6 @@ command_lookup (const char *str, struct locus *loc, struct command **pcmd)
+> +   return found->tok;
+> + }
+> + 
+
+> +-char *parseopt_program_doc = N_("examine and/or modify a GDBM database");
+> +-char *parseopt_program_args = N_("DBFILE [COMMAND [ARG ...]]");
+> + 
+> + enum {
+> +   OPT_LEX_TRACE = 256,
+> +@@ -2053,6 +2051,9 @@ main (int argc, char *argv[])
+> +   char *source = NULL;
+> +   instream_t input = NULL;
+> +   
+> ++  parseopt_program_doc = N_("examine and/or modify a GDBM database");
+> ++  parseopt_program_args = N_("DBFILE [COMMAND [ARG ...]]");
+> ++
+> +   set_progname (argv[0]);
+> + #if GDBM_DEBUG_ENABLE
+> +   gdbm_debug_printer = debug_printer;
+> +-- 
+> +2.27.0
+> +
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
