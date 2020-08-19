@@ -1,94 +1,67 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 19 Aug 2020 21:33:27 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Analysis
- of build results
-In-Reply-To: <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
-References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
- <20200816000914.5ad801d9@windsurf.home>,
- <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>,
- <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
-Message-ID: <BN8PR12MB3330AC7ACC6277A4688ECE68A15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Aug 2020 23:34:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dieharder: fix build with gcc 10
+In-Reply-To: <20200819163418.2012787-1-fontaine.fabrice@gmail.com>
+References: <20200819163418.2012787-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200819213442.GW24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Fabrice, All,
 
-> Hi Thomas, all,
+On 2020-08-19 18:34 +0200, Fabrice Fontaine spake thusly:
+> Disable -fno-common with dieharder, there is more than 100 variables to
+> fix and upstream seems dead.
 > 
-> > >     arc      |        log4cplus-2.0.5         | NOK | http://autobuild.buildroot.net/results/a7732fdb2ba526a114d9fb759814236c5332f8d7/  |    
-> > 
-> > undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
-> > 
-> > This is happening only on ARC700. Perhaps a variant of ARC that doesn't
-> > support atomic instructions?
-> > 
-> > ARC maintainers, could you have a look please ?
-> > 
-> > >     arc      |           wampcc-1.6           | NOK | http://autobuild.buildroot.net/results/c3b67d8a5faf7ff06b08a0591f22b1fa4963c2ee/  | ORPH
-> > 
-> > /home/test/autobuild/run/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: ../libs/wampcc/libwampcc.so.6.0.0: undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
-> > collect2: error: ld returned 1 exit status
-> > 
-> > This looks very similar to the log4cplus build issue above, also
-> > happens only on ARC: http://autobuild.buildroot.net/?reason=wampcc-1.6
-> > 
-> > ARC maintainers, could you have a look ?
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ba70d111cd1f2029a193a88af3b44daf6ef27786
 > 
-> Ok so that happens because of misconfiguration of libstdc++.
-> 
-> When it gets configured we use not true final Buildroot's GCC (read-on...)
-> but just an intermediate "xgcc". And so when libstdc++ is checking for
-> atomics support it gets this:
-> -------------------------------->8-----------------------------
-> cat << EOF > /tmp/yourfilehere
-> int
-> main ()
-> {
->   #if __GCC_ATOMIC_INT_LOCK_FREE <= 1
->   # error atomic int not always lock free
->   #endif
->   return 0;
-> }
-> EOF
-> 
-> configure:81594: .../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/xgcc \
-> -B.../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/ \
-> -B.../output/host/arc-buildroot-linux-uclibc/bin/ \
-> -B.../output/host/arc-buildroot-linux-uclibc/lib/ \
-> -isystem .../output/host/arc-buildroot-linux-uclibc/include \
-> -isystem .../output/host/arc-buildroot-linux-uclibc/sys-include \
-> -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os conftest.c >&5
-> conftest.c: In function 'main':
-> conftest.c:240:13: error: #error atomic int not always lock free
->   240 |           # error atomic int not always lock free
->       |             ^~~~~
-> -------------------------------->8-----------------------------
-> 
-> And that's because "xgcc" uses its default configuration, i.e. "-mcpu=arc700",
-> and this one is w/o atomics. To make GCC using atomics we need to pass an extra option
-> to the driver with "-matomics" and... we do it via wrapper, see:
-> -------------------------------->8-----------------------------
-> strace -s 1000 .../output/host/bin/arc-linux-gcc -c test.c 2> >(grep execve)
-> execve(".../output/host/bin/arc-linux-gcc", [".../output/host/bin/arc-linux-gcc", "-c", "test.c"], [/* 136 vars */]) = 0
-> execve(".../output/host/bin/arc-linux-gcc.br_real", [".../output/host/bin/arc-linux-gcc.br_real", "--sysroot", ".../output/host/arc-buildroot-linux-uclibc/sysroot", "-matomic", "-Wl,-z,max-page-size=8192", "-c", "test.c"], [/* 136 vars */]) = 0
-> -------------------------------->8-----------------------------
-> 
-> Note how "arc-linux-gcc" nicely takes care of implicit handling of extra options.
-> 
-> So I guess it's clear what was the reason. What's not clear is how to solve
-> that problem properly, any guesses/hints?
-> 
-> In the meantime I'll be looking at opencv issues.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-And as for OpenCV it's an upstream problem, see https://github.com/opencv/opencv/issues/17984.
-Well and Fabrice already fixed that :)
+Initially, I was not very happy that we just papered over the problem,
+but this is too daunting to fix, and indeed upstream is not very well
+alive it seems: last release in 2011, no public VCS... It's a bit
+shamefull that we have a security-related package that is so old an
+unmaintained... :-(
 
-1. OpenCV: https://git.buildroot.org/buildroot/commit?id=521854251f5a1e1082dbed503772969cd5797c41
-2. OpenCV3: https://git.buildroot.org/buildroot/commit/?id=594201acb5b4b59bf43fc7c8c024b6e42c0569e7
+Applied to master, thanks.
 
-So we're good now :)
+Regards,
+Yann E. MORIN.
 
--Alexey
+> ---
+>  package/dieharder/dieharder.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
+> index c3eee64553..cbf28922fd 100644
+> --- a/package/dieharder/dieharder.mk
+> +++ b/package/dieharder/dieharder.mk
+> @@ -36,4 +36,9 @@ endif
+>  # parallel build fail, disable it
+>  DIEHARDER_MAKE = $(MAKE1)
+>  
+> +# Too many fixes needed to build with -fno-common which is default since gcc 10
+> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10),y)
+> +DIEHARDER_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fcommon"
+> +endif
+> +
+>  $(eval $(autotools-package))
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
