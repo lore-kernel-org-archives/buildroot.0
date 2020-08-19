@@ -1,58 +1,100 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 19 Aug 2020 13:54:09 -0700
-Subject: [Buildroot] [PATCH 1/1] package/rpi-userland: add support for
- aarch64 build
-In-Reply-To: <20200818201612.GR24264@scaer>
-References: <20200818191130.2888592-1-christian@paral.in>
- <20200818193338.GP24264@scaer>
- <CA+h8R2oRLfVOG4m9_mbg_hHhZNxggQLZt_8JBTOL8poQwaP+DQ@mail.gmail.com>
- <20200818201612.GR24264@scaer>
-Message-ID: <CA+h8R2rB+_t02w2YbqBR74_9iEg67EPZB4o_tGUrqSeuz7Ekjg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Aug 2020 22:59:40 +0200
+Subject: [Buildroot] [git commit] package/dump1090: fix build with gcc 10
+Message-ID: <20200819211210.BBC6F81EB1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=99ab724a3a734bd7fc9f38f908ae8eb5d94c2b09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+ - http://autobuild.buildroot.org/results/88dc97fcaa649014edb3b54a5dd4bd8ec4715bbd
 
-On Tue, Aug 18, 2020 at 1:16 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > In the userland commit you link just above, they disable some things
-> > when targeting ARM64. We set ARM64 correctly in this patch with
-> > -DARM64=ON if BR2_aarch64, so this addresses everything correctly.
->
-> So, this would, amongst others, not build:
->
->   - MMAL, so no low-level programming,
->
->   - interface/khronos, so no OpenGL EGL/GLES, no OpenVG,
->
->   - middleware/openmaxil, so no OpenMAX
->
-> Unless I'm missing something non-obvious, I do not see how that can be
-> irrelevant...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-dump1090.h-fix-build-with-gcc-10.patch    | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-Of course, not having everything is not irrelevant. However, this is
-something we expect the rpi-userland developers to address, not the
-Buildroot developers, correct?
-
-As far as I can tell, adding this patch will install the tools that
-the rpi developers currently have deemed compatible with aarch64. This
-is vcgencmd and others. This basically would add early support for
-aarch64 to rpi-userland in Buildroot. Although not everything is
-there, installing the package with the parts that are compatible with
-that arch makes sense, right?
-
-As an example: I was writing a package which adds support for the
-argon one fan controller for pi 4. It added a dependency for
-rpi-userland for the vcgencmd command. I wrote this patch so that
-vcgencmd and the package will be installed correctly, and also so that
-my package which depends on RPI_USERLAND, could also build and be
-installed. Everything works as expected.
-
-Other packages that depend on the arm-only binaries should already
-have BR2_arm dependency anyway, correct?
-
-Best regards,
-Christian Stewart
+diff --git a/package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch b/package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..eeda03bcf0
+--- /dev/null
++++ b/package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,72 @@
++From 02153cb0b2d1083dcd587798d9ef7ce963739622 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 19 Aug 2020 18:46:17 +0200
++Subject: [PATCH] dump1090.h: fix build with gcc 10
++
++Fix the following build failures on gcc 10 (where -fno-common is enabled
++by default):
++
++/home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: interactive.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: multiple definition of `Modes'; /home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: interactive.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: multiple definition of `Modes'; dump1090.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: first defined here
++
++/home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: interactive.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:238: multiple definition of `tDF'; dump1090.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:238: first defined here
++/home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: view1090.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/88dc97fcaa649014edb3b54a5dd4bd8ec4715bbd
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/MalcolmRobb/dump1090/pull/96]
++---
++ dump1090.c | 3 +++
++ dump1090.h | 4 ++--
++ view1090.c | 3 +++
++ 3 files changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/dump1090.c b/dump1090.c
++index 60882fc..1482224 100644
++--- a/dump1090.c
+++++ b/dump1090.c
++@@ -29,6 +29,9 @@
++ //
++ #include "coaa.h"
++ #include "dump1090.h"
+++
+++struct modes Modes;
+++
++ //
++ // ============================= Utility functions ==========================
++ //
++diff --git a/dump1090.h b/dump1090.h
++index 9ad4de0..283e760 100644
++--- a/dump1090.h
+++++ b/dump1090.h
++@@ -235,10 +235,10 @@ struct stDF {
++     uint64_t         llTimestamp;                // Timestamp at which the this packet was received
++     uint32_t         addr;                       // Timestamp at which the this packet was received
++     unsigned char    msg[MODES_LONG_MSG_BYTES];  // the binary
++-} tDF;
+++};
++ 
++ // Program global state
++-struct {                             // Internal state
+++extern struct modes {                             // Internal state
++     pthread_t       reader_thread;
++ 
++     pthread_mutex_t data_mutex;      // Mutex to synchronize buffer access
++diff --git a/view1090.c b/view1090.c
++index 0b9b8b9..cc072fc 100644
++--- a/view1090.c
+++++ b/view1090.c
++@@ -29,6 +29,9 @@
++ //
++ #include "coaa.h"
++ #include "view1090.h"
+++
+++struct modes Modes;
+++
++ //
++ // ============================= Utility functions ==========================
++ //
++-- 
++2.27.0
++
