@@ -1,83 +1,126 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 19 Aug 2020 20:31:17 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Analysis
- of build results
-In-Reply-To: <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
-References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
- <20200816000914.5ad801d9@windsurf.home>,
- <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
-Message-ID: <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Aug 2020 22:13:43 +0200
+Subject: [Buildroot] [git commit] support/testing: add openssh runtime test
+Message-ID: <20200819203050.BA81082287@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=243d500f8d3fe5b9810932b49e0edf2a310cfb6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >     arc      |        log4cplus-2.0.5         | NOK | http://autobuild.buildroot.net/results/a7732fdb2ba526a114d9fb759814236c5332f8d7/  |    
-> 
-> undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
-> 
-> This is happening only on ARC700. Perhaps a variant of ARC that doesn't
-> support atomic instructions?
-> 
-> ARC maintainers, could you have a look please ?
-> 
-> >     arc      |           wampcc-1.6           | NOK | http://autobuild.buildroot.net/results/c3b67d8a5faf7ff06b08a0591f22b1fa4963c2ee/  | ORPH
-> 
-> /home/test/autobuild/run/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: ../libs/wampcc/libwampcc.so.6.0.0: undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
-> collect2: error: ld returned 1 exit status
-> 
-> This looks very similar to the log4cplus build issue above, also
-> happens only on ARC: http://autobuild.buildroot.net/?reason=wampcc-1.6
-> 
-> ARC maintainers, could you have a look ?
+This new runtime test is based on test_dropbear.py. The only required change
+is to use "-oStrictHostKeyChecking=no" instead of "-y" to accept the new key.
 
-Ok so that happens because of misconfiguration of libstdc++.
+Since the base test infra only provide a uClibc-ng toolchain, add a second
+test using a glibc based internal toolchain.
 
-When it gets configured we use not true final Buildroot's GCC (read-on...)
-but just an intermediate "xgcc". And so when libstdc++ is checking for
-atomics support it gets this:
--------------------------------->8-----------------------------
-cat << EOF > /tmp/yourfilehere
-int
-main ()
-{
-  #if __GCC_ATOMIC_INT_LOCK_FREE <= 1
-  # error atomic int not always lock free
-  #endif
-  return 0;
-}
-EOF
+For example, this allow to trigger the openssh 8.1p bug with glibc 2.31 [1].
 
-configure:81594: .../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/xgcc \
--B.../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/ \
--B.../output/host/arc-buildroot-linux-uclibc/bin/ \
--B.../output/host/arc-buildroot-linux-uclibc/lib/ \
--isystem .../output/host/arc-buildroot-linux-uclibc/include \
--isystem .../output/host/arc-buildroot-linux-uclibc/sys-include \
--c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os conftest.c >&5
-conftest.c: In function 'main':
-conftest.c:240:13: error: #error atomic int not always lock free
-  240 |           # error atomic int not always lock free
-      |             ^~~~~
--------------------------------->8-----------------------------
+[1] https://bugs.archlinux.org/task/65386
 
-And that's because "xgcc" uses its default configuration, i.e. "-mcpu=arc700",
-and this one is w/o atomics. To make GCC using atomics we need to pass an extra option
-to the driver with "-matomics" and... we do it via wrapper, see:
--------------------------------->8-----------------------------
-strace -s 1000 .../output/host/bin/arc-linux-gcc -c test.c 2> >(grep execve)
-execve(".../output/host/bin/arc-linux-gcc", [".../output/host/bin/arc-linux-gcc", "-c", "test.c"], [/* 136 vars */]) = 0
-execve(".../output/host/bin/arc-linux-gcc.br_real", [".../output/host/bin/arc-linux-gcc.br_real", "--sysroot", ".../output/host/arc-buildroot-linux-uclibc/sysroot", "-matomic", "-Wl,-z,max-page-size=8192", "-c", "test.c"], [/* 136 vars */]) = 0
--------------------------------->8-----------------------------
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+yann.morin.1998 at free.fr:
+  - deduplicate the whole test
+  - don't provide any NIC, we only need and use lo
+  - simplify post-build script (append with cat, don't munge with sed)
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                                         |  1 +
+ support/testing/tests/package/test_openssh.py      | 60 ++++++++++++++++++++++
+ .../tests/package/test_openssh/post-build.sh       |  6 +++
+ 3 files changed, 67 insertions(+)
 
-Note how "arc-linux-gcc" nicely takes care of implicit handling of extra options.
-
-So I guess it's clear what was the reason. What's not clear is how to solve
-that problem properly, any guesses/hints?
-
-In the meantime I'll be looking at opencv issues.
-
--Alexey
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 35840ec9a8..bba3fd6029 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2244,6 +2244,7 @@ F:	package/waffle/
+ F:	package/xenomai/
+ F:	package/zziplib/
+ F:	support/testing/tests/package/test_glxinfo.py
++F:	support/testing/tests/package/test_openssh.py
+ F:	toolchain/
+ 
+ N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
+diff --git a/support/testing/tests/package/test_openssh.py b/support/testing/tests/package/test_openssh.py
+new file mode 100644
+index 0000000000..6f981d42ca
+--- /dev/null
++++ b/support/testing/tests/package/test_openssh.py
+@@ -0,0 +1,60 @@
++import os
++
++import infra.basetest
++
++
++class TestOpensshBase(infra.basetest.BRTest):
++    passwd = "testpwd"
++    opensshconfig = \
++        """
++        BR2_TARGET_GENERIC_ROOT_PASSWD="{}"
++        BR2_PACKAGE_OPENSSH=y
++        BR2_PACKAGE_SSHPASS=y
++        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """.format(
++            passwd,
++            infra.filepath("tests/package/test_openssh/post-build.sh"))
++
++    def openssh_test(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", img,
++                                    "-nic", "none"])
++        self.emulator.login(self.passwd)
++
++        cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:22"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++        cmd = "sshpass -p {} ssh -oStrictHostKeyChecking=no localhost /bin/true".format(self.passwd)
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++
++
++class TestOpenSshuClibc(TestOpensshBase):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        TestOpensshBase.opensshconfig + \
++        """
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        self.openssh_test()
++
++
++class TestOpenSshGlibc(TestOpensshBase):
++    config = \
++        TestOpensshBase.opensshconfig + \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++        BR2_KERNEL_HEADERS_4_19=y
++        BR2_TOOLCHAIN_BUILDROOT_CXX=y
++        BR2_PACKAGE_RNG_TOOLS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        """
++
++    def test_run(self):
++        self.openssh_test()
+diff --git a/support/testing/tests/package/test_openssh/post-build.sh b/support/testing/tests/package/test_openssh/post-build.sh
+new file mode 100755
+index 0000000000..5a81ede564
+--- /dev/null
++++ b/support/testing/tests/package/test_openssh/post-build.sh
+@@ -0,0 +1,6 @@
++#!/usr/bin/env bash
++
++cat <<_EOF_ >>"${TARGET_DIR}/etc/ssh/sshd_config"
++PermitRootLogin yes
++PasswordAuthentication yes
++_EOF_
