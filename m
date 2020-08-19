@@ -1,99 +1,96 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 Aug 2020 20:40:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dump1090: fix build with gcc 10
-Message-ID: <20200819184018.2341818-1-fontaine.fabrice@gmail.com>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Wed, 19 Aug 2020 20:54:32 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/easyframes: new package
+Message-ID: <20200819185432.3090732-1-horatiu.vultur@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/88dc97fcaa649014edb3b54a5dd4bd8ec4715bbd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- ...001-dump1090.h-fix-build-with-gcc-10.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/easyframes/Config.in       | 10 ++++++++++
+ package/easyframes/easyframes.hash |  3 +++
+ package/easyframes/easyframes.mk   | 15 +++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/easyframes/Config.in
+ create mode 100644 package/easyframes/easyframes.hash
+ create mode 100644 package/easyframes/easyframes.mk
 
-diff --git a/package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch b/package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 35840ec9a8..dd1ec8903c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1109,6 +1109,9 @@ F:	package/gauche/
+ F:	package/gmrender-resurrect/
+ F:	package/squeezelite/
+ 
++N:	Horatiu Vultur <horatiu.vultur@microchip.com>
++F:	package/easyframes/
++
+ N:	Ian Haylock <haylocki@yahoo.co.uk>
+ F:	package/python-rpi-gpio/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..3965d523c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2039,6 +2039,7 @@ menu "Networking applications"
+ 	source "package/dnsmasq/Config.in"
+ 	source "package/drbd-utils/Config.in"
+ 	source "package/dropbear/Config.in"
++	source "package/easyframes/Config.in"
+ 	source "package/ebtables/Config.in"
+ 	source "package/ejabberd/Config.in"
+ 	source "package/ethtool/Config.in"
+diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
 new file mode 100644
-index 0000000000..eeda03bcf0
+index 0000000000..eca9ff3a60
 --- /dev/null
-+++ b/package/dump1090/0001-dump1090.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,72 @@
-+From 02153cb0b2d1083dcd587798d9ef7ce963739622 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 19 Aug 2020 18:46:17 +0200
-+Subject: [PATCH] dump1090.h: fix build with gcc 10
++++ b/package/easyframes/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_EASYFRAMES
++	bool "easyframes"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  This is a small and simple command-line tool for network testing.
++	  The tool makes it simple to compose a frame, inject and express what
++	  and where frames are expected to be received.
 +
-+Fix the following build failures on gcc 10 (where -fno-common is enabled
-+by default):
++	  https://github.com/microchip-ung/easyframes
+diff --git a/package/easyframes/easyframes.hash b/package/easyframes/easyframes.hash
+new file mode 100644
+index 0000000000..07c516fb6d
+--- /dev/null
++++ b/package/easyframes/easyframes.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256 bd26de2de60e55ea092053c66cf4482f15ed6353961b175ddb376c46b536e86b easyframes-v0.2.tar.gz
++sha256 24f37598e822a1411fb7164ce7eb3ef120aea8279016399abc282c2381ce3f57 COPYING
+diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
+new file mode 100644
+index 0000000000..218fe3b238
+--- /dev/null
++++ b/package/easyframes/easyframes.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# easyframes
++#
++################################################################################
 +
-+/home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: interactive.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: multiple definition of `Modes'; /home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: interactive.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: multiple definition of `Modes'; dump1090.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: first defined here
++EASYFRAMES_VERSION = v0.2
++EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION))
++EASYFRAMES_INSTALL_STAGING = YES
++EASYFRAMES_DEPENDENCIES = libpcap
 +
-+/home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: interactive.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:238: multiple definition of `tDF'; dump1090.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:238: first defined here
-+/home/test/autobuild/run/instance-0/output-1/per-package/dump1090/host/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: view1090.o:/home/test/autobuild/run/instance-0/output-1/build/dump1090-bff92c4ad772a0a8d433f788d39dae97e00e4dbe/dump1090.h:373: first defined here
++EASYFRAMES_LICENSE = MIT
++EASYFRAMES_LICENSE_FILES = COPYING
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/88dc97fcaa649014edb3b54a5dd4bd8ec4715bbd
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/MalcolmRobb/dump1090/pull/96]
-+---
-+ dump1090.c | 3 +++
-+ dump1090.h | 4 ++--
-+ view1090.c | 3 +++
-+ 3 files changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/dump1090.c b/dump1090.c
-+index 60882fc..1482224 100644
-+--- a/dump1090.c
-++++ b/dump1090.c
-+@@ -29,6 +29,9 @@
-+ //
-+ #include "coaa.h"
-+ #include "dump1090.h"
-++
-++struct modes Modes;
-++
-+ //
-+ // ============================= Utility functions ==========================
-+ //
-+diff --git a/dump1090.h b/dump1090.h
-+index 9ad4de0..283e760 100644
-+--- a/dump1090.h
-++++ b/dump1090.h
-+@@ -235,10 +235,10 @@ struct stDF {
-+     uint64_t         llTimestamp;                // Timestamp at which the this packet was received
-+     uint32_t         addr;                       // Timestamp at which the this packet was received
-+     unsigned char    msg[MODES_LONG_MSG_BYTES];  // the binary
-+-} tDF;
-++};
-+ 
-+ // Program global state
-+-struct {                             // Internal state
-++extern struct modes {                             // Internal state
-+     pthread_t       reader_thread;
-+ 
-+     pthread_mutex_t data_mutex;      // Mutex to synchronize buffer access
-+diff --git a/view1090.c b/view1090.c
-+index 0b9b8b9..cc072fc 100644
-+--- a/view1090.c
-++++ b/view1090.c
-+@@ -29,6 +29,9 @@
-+ //
-+ #include "coaa.h"
-+ #include "view1090.h"
-++
-++struct modes Modes;
-++
-+ //
-+ // ============================= Utility functions ==========================
-+ //
-+-- 
-+2.27.0
-+
++$(eval $(cmake-package))
 -- 
 2.27.0
