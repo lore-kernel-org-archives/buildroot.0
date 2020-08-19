@@ -1,62 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 19 Aug 2020 23:34:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dieharder: fix build with gcc 10
-In-Reply-To: <20200819163418.2012787-1-fontaine.fabrice@gmail.com>
-References: <20200819163418.2012787-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200819213442.GW24264@scaer>
+Date: Wed, 19 Aug 2020 23:42:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpi-userland: add support for
+ aarch64 build
+In-Reply-To: <CA+h8R2rB+_t02w2YbqBR74_9iEg67EPZB4o_tGUrqSeuz7Ekjg@mail.gmail.com>
+References: <20200818191130.2888592-1-christian@paral.in>
+ <20200818193338.GP24264@scaer>
+ <CA+h8R2oRLfVOG4m9_mbg_hHhZNxggQLZt_8JBTOL8poQwaP+DQ@mail.gmail.com>
+ <20200818201612.GR24264@scaer>
+ <CA+h8R2rB+_t02w2YbqBR74_9iEg67EPZB4o_tGUrqSeuz7Ekjg@mail.gmail.com>
+Message-ID: <20200819214204.GX24264@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Christian, All,
 
-On 2020-08-19 18:34 +0200, Fabrice Fontaine spake thusly:
-> Disable -fno-common with dieharder, there is more than 100 variables to
-> fix and upstream seems dead.
+On 2020-08-19 13:54 -0700, Christian Stewart spake thusly:
+> On Tue, Aug 18, 2020 at 1:16 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > In the userland commit you link just above, they disable some things
+> > > when targeting ARM64. We set ARM64 correctly in this patch with
+> > > -DARM64=ON if BR2_aarch64, so this addresses everything correctly.
+> >
+> > So, this would, amongst others, not build:
+> >
+> >   - MMAL, so no low-level programming,
+> >
+> >   - interface/khronos, so no OpenGL EGL/GLES, no OpenVG,
+> >
+> >   - middleware/openmaxil, so no OpenMAX
+> >
+> > Unless I'm missing something non-obvious, I do not see how that can be
+> > irrelevant...
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ba70d111cd1f2029a193a88af3b44daf6ef27786
+> Of course, not having everything is not irrelevant. However, this is
+> something we expect the rpi-userland developers to address, not the
+> Buildroot developers, correct?
+
+Right, but the package in Buildroot still declares providing libegl,
+libgels, vg, and max, which is clearly wrong in this case.
+
+With just your patch, the package would still advertise providing those,
+but they would not be built. Any pacjage that "just" needs a GL/GLES
+provider (and has ptherwise no requirement on the arcitecture) would
+fail to build.
+
+That is what was pointed out in the first review (which I already
+pointed to):
+
+    http://lists.busybox.net/pipermail/buildroot/2020-January/271588.html
+
+... which already had a proposal patch to fix the provider side of the
+package, and also identifies all the delta between what is installed for
+arm and for aarch64.
+
+> As far as I can tell, adding this patch will install the tools that
+> the rpi developers currently have deemed compatible with aarch64. This
+> is vcgencmd and others. This basically would add early support for
+> aarch64 to rpi-userland in Buildroot. Although not everything is
+> there, installing the package with the parts that are compatible with
+> that arch makes sense, right?
+
+No, see above about the GL and stuff provider.
+
+> As an example: I was writing a package which adds support for the
+> argon one fan controller for pi 4. It added a dependency for
+> rpi-userland for the vcgencmd command. I wrote this patch so that
+> vcgencmd and the package will be installed correctly, and also so that
+> my package which depends on RPI_USERLAND, could also build and be
+> installed. Everything works as expected.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Other packages that depend on the arm-only binaries should already
+> have BR2_arm dependency anyway, correct?
 
-Initially, I was not very happy that we just papered over the problem,
-but this is too daunting to fix, and indeed upstream is not very well
-alive it seems: last release in 2011, no public VCS... It's a bit
-shamefull that we have a security-related package that is so old an
-unmaintained... :-(
-
-Applied to master, thanks.
+Not necessarily: packages that need a EGL/GLES provider could be
+enabled, and they have no idea about arm or aarch64 (or even other
+archs).
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/dieharder/dieharder.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/dieharder/dieharder.mk b/package/dieharder/dieharder.mk
-> index c3eee64553..cbf28922fd 100644
-> --- a/package/dieharder/dieharder.mk
-> +++ b/package/dieharder/dieharder.mk
-> @@ -36,4 +36,9 @@ endif
->  # parallel build fail, disable it
->  DIEHARDER_MAKE = $(MAKE1)
->  
-> +# Too many fixes needed to build with -fno-common which is default since gcc 10
-> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10),y)
-> +DIEHARDER_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fcommon"
-> +endif
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Best regards,
+> Christian Stewart
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
