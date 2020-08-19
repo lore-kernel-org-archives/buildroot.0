@@ -1,96 +1,83 @@
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Wed, 19 Aug 2020 20:54:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/easyframes: new package
-Message-ID: <20200819185432.3090732-1-horatiu.vultur@microchip.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 19 Aug 2020 20:31:17 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Analysis
+ of build results
+In-Reply-To: <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
+References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
+ <20200816000914.5ad801d9@windsurf.home>,
+ <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
+Message-ID: <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/easyframes/Config.in       | 10 ++++++++++
- package/easyframes/easyframes.hash |  3 +++
- package/easyframes/easyframes.mk   | 15 +++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/easyframes/Config.in
- create mode 100644 package/easyframes/easyframes.hash
- create mode 100644 package/easyframes/easyframes.mk
+Hi Thomas, all,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 35840ec9a8..dd1ec8903c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1109,6 +1109,9 @@ F:	package/gauche/
- F:	package/gmrender-resurrect/
- F:	package/squeezelite/
- 
-+N:	Horatiu Vultur <horatiu.vultur@microchip.com>
-+F:	package/easyframes/
-+
- N:	Ian Haylock <haylocki@yahoo.co.uk>
- F:	package/python-rpi-gpio/
- 
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..3965d523c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2039,6 +2039,7 @@ menu "Networking applications"
- 	source "package/dnsmasq/Config.in"
- 	source "package/drbd-utils/Config.in"
- 	source "package/dropbear/Config.in"
-+	source "package/easyframes/Config.in"
- 	source "package/ebtables/Config.in"
- 	source "package/ejabberd/Config.in"
- 	source "package/ethtool/Config.in"
-diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
-new file mode 100644
-index 0000000000..eca9ff3a60
---- /dev/null
-+++ b/package/easyframes/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_EASYFRAMES
-+	bool "easyframes"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  This is a small and simple command-line tool for network testing.
-+	  The tool makes it simple to compose a frame, inject and express what
-+	  and where frames are expected to be received.
-+
-+	  https://github.com/microchip-ung/easyframes
-diff --git a/package/easyframes/easyframes.hash b/package/easyframes/easyframes.hash
-new file mode 100644
-index 0000000000..07c516fb6d
---- /dev/null
-+++ b/package/easyframes/easyframes.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 bd26de2de60e55ea092053c66cf4482f15ed6353961b175ddb376c46b536e86b easyframes-v0.2.tar.gz
-+sha256 24f37598e822a1411fb7164ce7eb3ef120aea8279016399abc282c2381ce3f57 COPYING
-diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
-new file mode 100644
-index 0000000000..218fe3b238
---- /dev/null
-+++ b/package/easyframes/easyframes.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# easyframes
-+#
-+################################################################################
-+
-+EASYFRAMES_VERSION = v0.2
-+EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION))
-+EASYFRAMES_INSTALL_STAGING = YES
-+EASYFRAMES_DEPENDENCIES = libpcap
-+
-+EASYFRAMES_LICENSE = MIT
-+EASYFRAMES_LICENSE_FILES = COPYING
-+
-+$(eval $(cmake-package))
--- 
-2.27.0
+> >     arc      |        log4cplus-2.0.5         | NOK | http://autobuild.buildroot.net/results/a7732fdb2ba526a114d9fb759814236c5332f8d7/  |    
+> 
+> undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
+> 
+> This is happening only on ARC700. Perhaps a variant of ARC that doesn't
+> support atomic instructions?
+> 
+> ARC maintainers, could you have a look please ?
+> 
+> >     arc      |           wampcc-1.6           | NOK | http://autobuild.buildroot.net/results/c3b67d8a5faf7ff06b08a0591f22b1fa4963c2ee/  | ORPH
+> 
+> /home/test/autobuild/run/instance-3/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: ../libs/wampcc/libwampcc.so.6.0.0: undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
+> collect2: error: ld returned 1 exit status
+> 
+> This looks very similar to the log4cplus build issue above, also
+> happens only on ARC: http://autobuild.buildroot.net/?reason=wampcc-1.6
+> 
+> ARC maintainers, could you have a look ?
+
+Ok so that happens because of misconfiguration of libstdc++.
+
+When it gets configured we use not true final Buildroot's GCC (read-on...)
+but just an intermediate "xgcc". And so when libstdc++ is checking for
+atomics support it gets this:
+-------------------------------->8-----------------------------
+cat << EOF > /tmp/yourfilehere
+int
+main ()
+{
+  #if __GCC_ATOMIC_INT_LOCK_FREE <= 1
+  # error atomic int not always lock free
+  #endif
+  return 0;
+}
+EOF
+
+configure:81594: .../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/xgcc \
+-B.../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/ \
+-B.../output/host/arc-buildroot-linux-uclibc/bin/ \
+-B.../output/host/arc-buildroot-linux-uclibc/lib/ \
+-isystem .../output/host/arc-buildroot-linux-uclibc/include \
+-isystem .../output/host/arc-buildroot-linux-uclibc/sys-include \
+-c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os conftest.c >&5
+conftest.c: In function 'main':
+conftest.c:240:13: error: #error atomic int not always lock free
+  240 |           # error atomic int not always lock free
+      |             ^~~~~
+-------------------------------->8-----------------------------
+
+And that's because "xgcc" uses its default configuration, i.e. "-mcpu=arc700",
+and this one is w/o atomics. To make GCC using atomics we need to pass an extra option
+to the driver with "-matomics" and... we do it via wrapper, see:
+-------------------------------->8-----------------------------
+strace -s 1000 .../output/host/bin/arc-linux-gcc -c test.c 2> >(grep execve)
+execve(".../output/host/bin/arc-linux-gcc", [".../output/host/bin/arc-linux-gcc", "-c", "test.c"], [/* 136 vars */]) = 0
+execve(".../output/host/bin/arc-linux-gcc.br_real", [".../output/host/bin/arc-linux-gcc.br_real", "--sysroot", ".../output/host/arc-buildroot-linux-uclibc/sysroot", "-matomic", "-Wl,-z,max-page-size=8192", "-c", "test.c"], [/* 136 vars */]) = 0
+-------------------------------->8-----------------------------
+
+Note how "arc-linux-gcc" nicely takes care of implicit handling of extra options.
+
+So I guess it's clear what was the reason. What's not clear is how to solve
+that problem properly, any guesses/hints?
+
+In the meantime I'll be looking at opencv issues.
+
+-Alexey
