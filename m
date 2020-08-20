@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Aug 2020 00:01:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elixir: fix host-erlang
- dependency
-In-Reply-To: <20200820103034.11094-1-frank.vanbever@essensium.com>
-References: <20200820103034.11094-1-frank.vanbever@essensium.com>
-Message-ID: <20200821000136.7e56c3d0@windsurf.home>
+Date: Fri, 21 Aug 2020 00:10:27 +0200
+Subject: [Buildroot] [PATCH 1/1]
+ package/gstreamer1/gstreamer1-editing-services: disable introspection
+In-Reply-To: <20200820183210.775080-1-fontaine.fabrice@gmail.com>
+References: <20200820183210.775080-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200821001027.6be3cea0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Aug 2020 12:30:34 +0200
-Frank Vanbever <frank.vanbever@essensium.com> wrote:
+On Thu, 20 Aug 2020 20:32:10 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Make it explicit that host-elixir depends on host-erlang. This fixes the
-> build in cases where BR2_PER_PACKAGE_DIRECTORIES is set.
+> Disable introspection as it raises a build failure with autotools.
+> It could be enabled after bumping to upcoming 1.18.x and switching to
+> messon. We can't switch now as version 1.16.2 don't allow to disable
+> examples/tools through meson
 > 
 > Fixes:
-> - http://autobuild.buildroot.net/results/a3a37eb724ca5689f8e83c9b2af04d07afa80315/
+>  - http://autobuild.buildroot.org/results/36eb875fba2847b32df05f31d8f8ca9f0ecde36f
 > 
-> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/elixir/elixir.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../gstreamer1-editing-services.mk                            | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
 Applied to master, thanks.
 
