@@ -1,41 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 20 Aug 2020 20:32:10 +0200
-Subject: [Buildroot] [PATCH 1/1]
- package/gstreamer1/gstreamer1-editing-services: disable introspection
-Message-ID: <20200820183210.775080-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 20 Aug 2020 11:47:51 -0700
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add option for
+ intel iwlwifi 22260
+Message-ID: <20200820184751.326872-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable introspection as it raises a build failure with autotools.
-It could be enabled after bumping to upcoming 1.18.x and switching to
-messon. We can't switch now as version 1.16.2 don't allow to disable
-examples/tools through meson
-
-Fixes:
- - http://autobuild.buildroot.org/results/36eb875fba2847b32df05f31d8f8ca9f0ecde36f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- .../gstreamer1-editing-services.mk                            | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/linux-firmware/Config.in         | 6 ++++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index e2bb747d0a..4b0b61e877 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -18,7 +18,9 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_GST1_VALIDATE),gst1-validate) \
- 	libxml2
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 2d729716aa..37c0270e9f 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -133,6 +133,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
+ 	help
+ 	  Firmware files for the Broadcom bcm43xxx, SoftMAC and FullMAC.
  
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS = --disable-benchmarks
-+GSTREAMER1_EDITING_SERVICES_CONF_OPTS = \
-+	--disable-benchmarks \
-+	--disable-introspection
++config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22260
++	bool "Intel iwlwifi 22260"
++	help
++	  Firmware files for the Intel Wifi 22260 devices supported by
++	  the iwlwifi kernel driver.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160
+ 	bool "Intel iwlwifi 3160"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index c5c14db5b7..8735161792 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -376,6 +376,11 @@ LINUX_FIRMWARE_FILES += wil6210.*
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
+ endif
  
- # examples need GTK2/3 with X11 backend
- ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3_X11),)
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_22260),y)
++LINUX_FIRMWARE_FILES += iwlwifi-cc-a0-*.ucode
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160),y)
+ LINUX_FIRMWARE_FILES += iwlwifi-3160-*.ucode
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
 -- 
-2.27.0
+2.28.0
