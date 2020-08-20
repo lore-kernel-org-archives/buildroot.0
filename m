@@ -1,28 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 20 Aug 2020 21:30:06 +0000
-Subject: [Buildroot] [Bug 13166] python-rpi-gpio: does not work against
- aarch64, unintentional side-effect of gcc-10 patch
-In-Reply-To: <bug-13166-163@https.bugs.busybox.net/>
-References: <bug-13166-163@https.bugs.busybox.net/>
-Message-ID: <bug-13166-163-wFvL1fhRPE@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Aug 2020 23:55:27 +0200
+Subject: [Buildroot] [git commit] package/elixir: fix host-erlang dependency
+Message-ID: <20200820214914.64BDF82DBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13166
+commit: https://git.buildroot.net/buildroot/commit/?id=d059946df0ed896872dcb83cf49635c374e2c203
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #5 from Christian Stewart <christian@paral.in> ---
-Thanks Yann. The patch I attached to this bug actually doesn't work anyway, the
-module still fails at runtime:
+There is no target elixir package, so setting a value to
+ELIXIR_DEPENDENCIES has no effect, HOST_ELIXIR_DEPENDENCIES must be
+used instead.
 
-  File "usr/lib/python3.8/site-packages/RPi/GPIO/__init__.py", line 23, in
-<module>
-SystemError: Type does not define the tp_name field.
+Fixes:
 
-Feel free to send me any patch for testing.
+  http://autobuild.buildroot.net/results/a3a37eb724ca5689f8e83c9b2af04d07afa80315/
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/elixir/elixir.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/elixir/elixir.mk b/package/elixir/elixir.mk
+index 7a545d43b0..6d935516f4 100644
+--- a/package/elixir/elixir.mk
++++ b/package/elixir/elixir.mk
+@@ -8,7 +8,7 @@ ELIXIR_VERSION = 1.9.4
+ ELIXIR_SITE = $(call github,elixir-lang,elixir,v$(ELIXIR_VERSION))
+ ELIXIR_LICENSE = Apache-2.0
+ ELIXIR_LICENSE_FILES = LICENSE
+-ELIXIR_DEPENDENCIES = host-erlang
++HOST_ELIXIR_DEPENDENCIES = host-erlang
+ 
+ define HOST_ELIXIR_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) compile
