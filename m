@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Aug 2020 00:11:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: fix build without NLS
-In-Reply-To: <20200819214808.2979319-1-fontaine.fabrice@gmail.com>
-References: <20200819214808.2979319-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200821001103.0caf1312@windsurf.home>
+Date: Fri, 21 Aug 2020 00:11:21 +0200
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+ to 0.5.11
+Message-ID: <20200820220440.E8D4D81390@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Aug 2020 23:48:08 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bbb4e2104606bc55ba070d53cc4d90c878ef74b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> nls is enabled by default in meson_options.txt (which is available since
-> version 1.22.0). NLS was explicitly disabled for host-efl in commit
-> 6deaa3d50de166ce187e8b15c70394a8eb844c03 but nothing was done for the
-> target resulting in the following build failure:
-> 
-> ../src/lib/elementary/elm_priv.h:189:25: warning: implicit declaration of function '_elm_dgettext'; did you mean 'dgettext'? [-Wimplicit-function-declaration]
->  #  define E_(string)    _elm_dgettext(string)
->                          ^~~~~~~~~~~~~
-> 
-> /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: src/lib/elementary/libelementary.so.1.24.3.p/elc_hoversel.c.o: in function `_access_state_cb':
-> elc_hoversel.c:(.text+0x1210): undefined reference to `_elm_dgettext'
-> 
-> So enable nls dependening on BR2_SYSTEM_ENABLE_NLS and add
-> TARGET_NLS_DEPENDENCIES to EFL_DEPENDENCIES
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/5985b39b87c5c392b4f9b65c12008ec7b3a143fe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/efl/efl.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2020-August/000439.html
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index f8e5f1e60f..7f4b8579c1 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256  48c89cc9f3caa9c5f2454f9dcca74fe251a99749a38062bfab7e5017d329605e  dovecot-2.3-pigeonhole-0.5.10.tar.gz
++sha256  0b972a441f680545ddfacd2f41fb2a705fb03249d46ed5ce7e01fe68b6cfb5f0  dovecot-2.3-pigeonhole-0.5.11.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 033ae980a5..d7068cd873 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.10
++DOVECOT_PIGEONHOLE_VERSION = 0.5.11
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
