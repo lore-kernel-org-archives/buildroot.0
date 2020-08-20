@@ -1,227 +1,41 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 20 Aug 2020 19:06:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/igd2-for-linux: fix build with gcc
- 10
-Message-ID: <20200820170641.375139-1-fontaine.fabrice@gmail.com>
+Date: Thu, 20 Aug 2020 20:32:10 +0200
+Subject: [Buildroot] [PATCH 1/1]
+ package/gstreamer1/gstreamer1-editing-services: disable introspection
+Message-ID: <20200820183210.775080-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Disable introspection as it raises a build failure with autotools.
+It could be enabled after bumping to upcoming 1.18.x and switching to
+messon. We can't switch now as version 1.16.2 don't allow to disable
+examples/tools through meson
+
 Fixes:
- - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
+ - http://autobuild.buildroot.org/results/36eb875fba2847b32df05f31d8f8ca9f0ecde36f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-fix-build-with-gcc-10.patch          | 199 ++++++++++++++++++
- 1 file changed, 199 insertions(+)
- create mode 100644 package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
+ .../gstreamer1-editing-services.mk                            | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..32474a3adb
---- /dev/null
-+++ b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
-@@ -0,0 +1,199 @@
-+From 23ed73623810a0894c8efd9eb79dd38483794a3b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Thu, 20 Aug 2020 18:17:03 +0200
-+Subject: [PATCH] fix build with gcc 10
-+
-+This will fix build failures with -fno-common which is enabled by
-+default with gcc 10
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+[Retrieved from:
-+https://github.com/Orange-OpenSource/igd2-for-linux/commit/23ed73623810a0894c8efd9eb79dd38483794a3b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ linuxigd2/src/gatedevice.c | 37 +++++++++++++++++++++++++++++++++
-+ linuxigd2/src/gatedevice.h | 42 +++++++++-----------------------------
-+ linuxigd2/src/pinholev6.c  |  2 ++
-+ linuxigd2/src/pinholev6.h  |  2 +-
-+ linuxigd2/src/pmlist.c     |  5 +++++
-+ linuxigd2/src/pmlist.h     |  2 +-
-+ linuxigd2/src/wanipv6fw.h  |  3 ---
-+ 7 files changed, 56 insertions(+), 37 deletions(-)
-+
-+diff --git a/linuxigd2/src/gatedevice.c b/linuxigd2/src/gatedevice.c
-+index 8be53e5..a50525d 100644
-+--- a/linuxigd2/src/gatedevice.c
-++++ b/linuxigd2/src/gatedevice.c
-+@@ -41,6 +41,43 @@
-+ #include "wanipv6fw.h"
-+ #include "config.h"
-+ 
-++// Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
-++TimerThread gExpirationTimerThread;
-++
-++// IGD Device Globals
-++UpnpDevice_Handle deviceHandle;
-++UpnpDevice_Handle deviceHandleIPv6;
-++UpnpDevice_Handle deviceHandleIPv6UlaGua;
-++char *gateUDN;
-++char *wanUDN;
-++char *wanConnectionUDN;
-++char *lanUDN;
-++long int startup_time;
-++unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
-++long int idle_time;
-++
-++// State Variables
-++char ConnectionType[50];
-++char PossibleConnectionTypes[50];
-++char ConnectionStatus[20];
-++char LastConnectionError[35];
-++long int AutoDisconnectTime;
-++long int IdleDisconnectTime;
-++long int WarnDisconnectDelay;
-++int RSIPAvailable;
-++int NATEnabled;
-++char ExternalIPAddress[INET6_ADDRSTRLEN];
-++int PortMappingNumberOfEntries;
-++int PortMappingEnabled;
-++char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
-++long int SystemUpdateID;
-++
-++// WANEthLinkConfig state variables
-++char EthernetLinkStatus[12];
-++
-++char FirewallEnabled[2];
-++char InboundPinholeAllowed[2];
-++
-+ //Definitions for mapping expiration timer thread
-+ static ThreadPool gExpirationThreadPool;
-+ static ThreadPoolJob gEventUpdateJob;
-+diff --git a/linuxigd2/src/gatedevice.h b/linuxigd2/src/gatedevice.h
-+index 28d6b21..dbaa0c2 100644
-+--- a/linuxigd2/src/gatedevice.h
-++++ b/linuxigd2/src/gatedevice.h
-+@@ -33,42 +33,20 @@
-+ #include "util.h"
-+ 
-+ // Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
-+-TimerThread gExpirationTimerThread;
-++extern TimerThread gExpirationTimerThread;
-+ 
-+ // IGD Device Globals
-+-UpnpDevice_Handle deviceHandle;
-+-UpnpDevice_Handle deviceHandleIPv6;
-+-UpnpDevice_Handle deviceHandleIPv6UlaGua;
-+-char *gateUDN;
-+-char *wanUDN;
-+-char *wanConnectionUDN;
-+-char *lanUDN;
-+-long int startup_time;
-+-unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
-+-long int idle_time;
-+-
-+-// State Variables
-+-char ConnectionType[50];
-+-char PossibleConnectionTypes[50];
-+-char ConnectionStatus[20];
-+-char LastConnectionError[35];
-+-long int AutoDisconnectTime;
-+-long int IdleDisconnectTime;
-+-long int WarnDisconnectDelay;
-+-int RSIPAvailable;
-+-int NATEnabled;
-+-char ExternalIPAddress[INET6_ADDRSTRLEN];
-+-int PortMappingNumberOfEntries;
-+-int PortMappingEnabled;
-+-char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
-+-long int SystemUpdateID;
-+-
-+-// WANEthLinkConfig state variables
-+-char EthernetLinkStatus[12];
-++extern UpnpDevice_Handle deviceHandle;
-++extern UpnpDevice_Handle deviceHandleIPv6;
-++extern UpnpDevice_Handle deviceHandleIPv6UlaGua;
-++extern char *gateUDN;
-++extern char *wanUDN;
-++extern char *wanConnectionUDN;
-++extern char *lanUDN;
-+ 
-+ // Linked list for portmapping entries
-+-struct portMap *pmlist_Head;
-+-struct portMap *pmlist_Current;
-++extern struct portMap *pmlist_Head;
-++extern struct portMap *pmlist_Current;
-+ 
-+ // WanIPConnection Actions
-+ int EventHandler(Upnp_EventType EventType, void *Event, void *Cookie);
-+diff --git a/linuxigd2/src/pinholev6.c b/linuxigd2/src/pinholev6.c
-+index 44e8a19..78f886d 100644
-+--- a/linuxigd2/src/pinholev6.c
-++++ b/linuxigd2/src/pinholev6.c
-+@@ -41,6 +41,8 @@ extern "C" {
-+ #include "gatedevice.h"
-+ #include "pinholev6.h"
-+ 
-++struct pinholev6 *ph_first;
-++
-+ static const char * add_rule_str = "ip6tables -I %s " //upnp forward chain
-+         "-i %s "        //input interface
-+         "-o %s "        //output interface
-+diff --git a/linuxigd2/src/pinholev6.h b/linuxigd2/src/pinholev6.h
-+index 295b9f9..353ae27 100644
-+--- a/linuxigd2/src/pinholev6.h
-++++ b/linuxigd2/src/pinholev6.h
-+@@ -37,7 +37,7 @@ struct pinholev6 {
-+ 
-+     struct pinholev6 *next;
-+ 
-+-} *ph_first;
-++};
-+ 
-+ struct phv6_expirationEvent
-+ {
-+diff --git a/linuxigd2/src/pmlist.c b/linuxigd2/src/pmlist.c
-+index 1b3fe05..95d0c61 100644
-+--- a/linuxigd2/src/pmlist.c
-++++ b/linuxigd2/src/pmlist.c
-+@@ -41,6 +41,11 @@
-+ #include "iptc.h"
-+ #endif
-+ 
-++// Linked list for portmapping entries
-++struct portMap *pmlist_Head;
-++struct portMap *pmlist_Current;
-++struct portMap *pmlist_Tail;
-++
-+ /**
-+  * Create new portMap struct of rule to add iptables. 
-+  * portMap-struct is internal presentation of iptables rule in IGD. 
-+diff --git a/linuxigd2/src/pmlist.h b/linuxigd2/src/pmlist.h
-+index 436d228..017500d 100644
-+--- a/linuxigd2/src/pmlist.h
-++++ b/linuxigd2/src/pmlist.h
-+@@ -57,7 +57,7 @@ struct portMap
-+ 
-+     struct portMap* next;
-+     struct portMap* prev;
-+-} *pmlist_Head, *pmlist_Tail, *pmlist_Current;
-++};
-+ 
-+ //struct portMap* pmlist_NewNode(void);
-+ struct portMap* pmlist_NewNode(int enabled, long int duration, char *remoteHost,
-+diff --git a/linuxigd2/src/wanipv6fw.h b/linuxigd2/src/wanipv6fw.h
-+index 55419fe..a50d267 100644
-+--- a/linuxigd2/src/wanipv6fw.h
-++++ b/linuxigd2/src/wanipv6fw.h
-+@@ -46,9 +46,6 @@ extern "C" {
-+ #define ERR_SRC_ADD_WILDCARD        708
-+ #define ERR_NO_TRAFFIC              709
-+ 
-+-char FirewallEnabled[2];
-+-char InboundPinholeAllowed[2];
-+-
-+ //-----------------------------------------------------------------------------
-+ 
-+ int InitFirewallv6(void);
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index e2bb747d0a..4b0b61e877 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+@@ -18,7 +18,9 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_GST1_VALIDATE),gst1-validate) \
+ 	libxml2
+ 
+-GSTREAMER1_EDITING_SERVICES_CONF_OPTS = --disable-benchmarks
++GSTREAMER1_EDITING_SERVICES_CONF_OPTS = \
++	--disable-benchmarks \
++	--disable-introspection
+ 
+ # examples need GTK2/3 with X11 backend
+ ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3_X11),)
 -- 
 2.27.0
