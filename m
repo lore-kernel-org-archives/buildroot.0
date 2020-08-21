@@ -1,203 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 Aug 2020 22:41:39 +0200
-Subject: [Buildroot] [PATCH 3/3] package/gmrender-resurrect: add libupnp
- 1.14.x support
-In-Reply-To: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
-References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200821204139.3682940-3-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Aug 2020 22:51:04 +0200
+Subject: [Buildroot] [PATCH] package/chrony: security bump to version 3.5.1
+Message-ID: <20200821205105.733-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using libupnp 1.14.x is needed to fix CallStranger a.k.a. CVE-2020-12695
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-2020-14367: Insecure writing of pidfile
+-------------------------------------------
+
+When chronyd is configured to save the pidfile in a directory where the
+chrony user has write permissions (e.g. /var/run/chrony - the default
+since chrony-3.4), an attacker that compromised the chrony user account
+could create a symbolic link at the location of the pidfile to make
+chronyd starting with root privileges follow the symlink and write its
+process ID to a file for which the chrony user doesn't have write
+permissions, causing a denial of service, or data loss.
+
+This issue was reported by Matthias Gerstner of SUSE.
+
+For further details, see the oss-security posting:
+https://www.openwall.com/lists/oss-security/2020/08/21/1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Drop-UpnpInit.patch                  | 174 ++++++++++++++++++
- 1 file changed, 174 insertions(+)
- create mode 100644 package/gmrender-resurrect/0001-Drop-UpnpInit.patch
+ package/chrony/chrony.hash | 7 +++----
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/gmrender-resurrect/0001-Drop-UpnpInit.patch b/package/gmrender-resurrect/0001-Drop-UpnpInit.patch
-new file mode 100644
-index 0000000000..dc3541e446
---- /dev/null
-+++ b/package/gmrender-resurrect/0001-Drop-UpnpInit.patch
-@@ -0,0 +1,174 @@
-+From d3264ebc98a17fae00004dff5f5608bbc07b83e2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 21 Aug 2020 21:29:00 +0200
-+Subject: [PATCH] Drop UpnpInit
-+
-+UpnpInit has been dropped from libupnp 1.14.x as it can't be fixed
-+against CallStranger a.k.a. CVE-2020-12695 so replace it by UpnpInit2
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ dist-scripts/centos7/README.md     |  2 +-
-+ dist-scripts/debian/gmediarender.1 |  8 ++------
-+ dist-scripts/fedora/README.md      |  2 +-
-+ src/main.c                         | 13 ++++---------
-+ src/upnp_device.c                  | 18 +++++++++---------
-+ src/upnp_device.h                  |  2 +-
-+ 6 files changed, 18 insertions(+), 27 deletions(-)
-+
-+diff --git a/dist-scripts/centos7/README.md b/dist-scripts/centos7/README.md
-+index 278d777..ed82fb6 100644
-+--- a/dist-scripts/centos7/README.md
-++++ b/dist-scripts/centos7/README.md
-+@@ -45,7 +45,7 @@ Additional configuration is also recommended, sice there's no configuration file
-+     # vi /etc/systemd/system/gmediarender.service.d/customize.conf   # or nano, or emacs, or whatever editor you like
-+     [Service]
-+     ExecStart=
-+-    ExecStart=/usr/bin/gmediarender --port=49494 --ip-address=<your_IP_address> -f "DLNA Renderer GMediaRender"
-++    ExecStart=/usr/bin/gmediarender --port=49494 --interface-name=<your_interface_name> -f "DLNA Renderer GMediaRender"
-+ 
-+     # systemctl daemon-reload
-+     # systemctl start gmediarender.service
-+diff --git a/dist-scripts/debian/gmediarender.1 b/dist-scripts/debian/gmediarender.1
-+index 96123ff..2d663c9 100644
-+--- a/dist-scripts/debian/gmediarender.1
-++++ b/dist-scripts/debian/gmediarender.1
-+@@ -50,12 +50,8 @@ Usually, it is desirable for the renderer
-+ to show up on controllers under a recognisable and unique name. This is 
-+ the option to set that name.
-+ .TP
-+-.B \-I, \-\-ip\-address \fI\<ip-address\>\fP
-+-The local IP address the service is running and advertised on.  
-+-
-+-This can 
-+-only be a single address, and must be explicitly specified (i.e. not 
-+-0.0.0.0).
-++.B \-I, \-\-ip\-address \fI\<interface-name\>\fP
-++The local interface name the service is running and advertised on.
-+ .TP
-+ .B \-p, \-\-port \fI\<port>\fP
-+ Port to listen to. [49152..65535].
-+diff --git a/dist-scripts/fedora/README.md b/dist-scripts/fedora/README.md
-+index 7b9ea4b..45aa536 100644
-+--- a/dist-scripts/fedora/README.md
-++++ b/dist-scripts/fedora/README.md
-+@@ -43,7 +43,7 @@ Additional configuration is also recommended, sice there's no configuration file
-+     # vi /etc/systemd/system/gmediarender.service.d/customize.conf   # or nano, or emacs, or whatever editor you like
-+     [Service]
-+     ExecStart=
-+-    ExecStart=/usr/bin/gmediarender --port=49494 --ip-address=<your_IP_address> -f "DLNA Renderer GMediaRender"
-++    ExecStart=/usr/bin/gmediarender --port=49494 --interface-name=<your_interface_name> -f "DLNA Renderer GMediaRender"
-+ 
-+     # systemctl daemon-reload
-+     # systemctl start gmediarender.service
-+diff --git a/src/main.c b/src/main.c
-+index ef720e3..2030c49 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -69,11 +69,7 @@ static gboolean show_transport_scpd = FALSE;
-+ static gboolean show_outputs = FALSE;
-+ static gboolean daemon_mode = FALSE;
-+ 
-+-// IP-address seems strange in libupnp: they actually don't bind to
-+-// that address, but to INADDR_ANY (miniserver.c in upnp library).
-+-// Apparently they just use this for the advertisement ? Anyway, 0.0.0.0 would
-+-// not work.
-+-static const gchar *ip_address = NULL;
-++static const gchar *interface_name = NULL;
-+ static int listen_port = 49494;
-+ 
-+ #ifdef GMRENDER_UUID
-+@@ -92,9 +88,8 @@ static const gchar *mime_filter = NULL;
-+ static GOptionEntry option_entries[] = {
-+ 	{ "version", 0, 0, G_OPTION_ARG_NONE, &show_version,
-+ 	  "Output version information and exit", NULL },
-+-	{ "ip-address", 'I', 0, G_OPTION_ARG_STRING, &ip_address,
-+-	  "The local IP address the service is running and advertised "
-+-	  "(only one, 0.0.0.0 won't work)", NULL },
-++	{ "interface-name", 'I', 0, G_OPTION_ARG_STRING, &interface_name,
-++	  "The local interface name the service is running and advertised", NULL },
-+ 	// The following is not very reliable, as libupnp does not set
-+ 	// SO_REUSEADDR by default, so it might increment (sending patch).
-+ 	{ "port", 'p', 0, G_OPTION_ARG_INT, &listen_port,
-+@@ -302,7 +297,7 @@ int main(int argc, char **argv)
-+ 			  listen_port);
-+ 		return EXIT_FAILURE;
-+ 	}
-+-	device = upnp_device_init(upnp_renderer, ip_address, listen_port);
-++	device = upnp_device_init(upnp_renderer, interface_name, listen_port);
-+ 	if (device == NULL) {
-+ 		Log_error("main", "ERROR: Failed to initialize UPnP device");
-+ 		return EXIT_FAILURE;
-+diff --git a/src/upnp_device.c b/src/upnp_device.c
-+index db65e4f..3151238 100644
-+--- a/src/upnp_device.c
-++++ b/src/upnp_device.c
-+@@ -416,13 +416,13 @@ static UPNP_CALLBACK(event_handler, EventType, event, userdata)
-+ 
-+ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
-+ 				  struct upnp_device *result_device,
-+-				  const char *ip_address,
-++				  const char *interface_name,
-+ 				  unsigned short port)
-+ {
-+ 	int rc;
-+ 	char *buf;
-+ 
-+-	rc = UpnpInit(ip_address, port);
-++	rc = UpnpInit2(interface_name, port);
-+ 	/* There have been situations reported in which UPNP had issues
-+ 	 * initializing right after network came up. #129
-+ 	 */
-+@@ -430,13 +430,13 @@ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
-+ 	static const int kRetryTimeMs = 1000;
-+ 	while (rc != UPNP_E_SUCCESS && retries_left--) {
-+ 		usleep(kRetryTimeMs * 1000);
-+-		Log_error("upnp", "UpnpInit(ip=%s, port=%d) Error: %s (%d). Retrying... (%ds)",
-+-			  ip_address, port, UpnpGetErrorMessage(rc), rc, retries_left);
-+-		rc = UpnpInit(ip_address, port);
-++		Log_error("upnp", "UpnpInit2(interface=%s, port=%d) Error: %s (%d). Retrying... (%ds)",
-++			  interface_name, port, UpnpGetErrorMessage(rc), rc, retries_left);
-++		rc = UpnpInit2(interface_name, port);
-+ 	}
-+ 	if (UPNP_E_SUCCESS != rc) {
-+-		Log_error("upnp", "UpnpInit(ip=%s, port=%d) Error: %s (%d). Giving up.",
-+-			  ip_address, port, UpnpGetErrorMessage(rc), rc);
-++		Log_error("upnp", "UpnpInit2(interface=%s, port=%d) Error: %s (%d). Giving up.",
-++			  interface_name, port, UpnpGetErrorMessage(rc), rc);
-+ 		return FALSE;
-+ 	}
-+ 	Log_info("upnp", "Registered IP=%s port=%d\n",
-+@@ -483,7 +483,7 @@ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
-+ }
-+ 
-+ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
-+-				     const char *ip_address,
-++				     const char *interface_name,
-+ 				     unsigned short port)
-+ {
-+ 	int rc;
-+@@ -516,7 +516,7 @@ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
-+ 		webserver_register_buf(srv->scpd_url, buf, "text/xml");
-+ 	}
-+ 
-+-	if (!initialize_device(device_def, result_device, ip_address, port)) {
-++	if (!initialize_device(device_def, result_device, interface_name, port)) {
-+ 		UpnpFinish();
-+ 		free(result_device);
-+ 		return NULL;
-+diff --git a/src/upnp_device.h b/src/upnp_device.h
-+index 3e635e1..8c8e783 100644
-+--- a/src/upnp_device.h
-++++ b/src/upnp_device.h
-+@@ -49,7 +49,7 @@ struct upnp_device;
-+ struct action_event;
-+ 
-+ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
-+-				     const char *ip_address,
-++				     const char *interface_name,
-+ 				     unsigned short port);
-+ 
-+ void upnp_device_shutdown(struct upnp_device *device);
-+-- 
-+2.28.0
-+
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index c31c6893aa..57ce91ac80 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,5 +1,4 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2019/05/msg00001.html
+-md5 5f66338bc940a9b51eede8f391e7bed3  chrony-3.5.tar.gz
+-sha1 79e9aeace143550300387a99f17bff04b45673f7  chrony-3.5.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
++sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
+ # Locally calculated
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index d7f5c05183..f8938a80f5 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 3.5
++CHRONY_VERSION = 3.5.1
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
 -- 
-2.28.0
+2.20.1
