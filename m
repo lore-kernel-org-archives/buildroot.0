@@ -1,57 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 21 Aug 2020 23:26:12 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.11.22
-Message-ID: <20200821212612.9029-1-peter@korsgaard.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 21 Aug 2020 14:31:34 -0700
+Subject: [Buildroot] [PATCH 1/2] package/python-rpi-gpio: fix gcc-10
+ compatibility patch
+In-Reply-To: <194d16369082b685f29eec6974e967ee4b5009a8.1598027701.git.yann.morin.1998@free.fr>
+References: <cover.1598027701.git.yann.morin.1998@free.fr>
+ <194d16369082b685f29eec6974e967ee4b5009a8.1598027701.git.yann.morin.1998@free.fr>
+Message-ID: <CA+h8R2pfx-_K_W7jDTBPWaSqh0cDrP=vnfPf6xHC1BwM5sL1sA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hi Yann,
 
-CVE-2020-8622: A truncated TSIG response can lead to an assertion failure
-https://kb.isc.org/docs/cve-2020-8622
+Thanks for the fix.
 
-CVE-2020-8623: A flaw in native PKCS#11 code can lead to a remotely
-triggerable assertion failure in pk11.c
-https://kb.isc.org/docs/cve-2020-8623
+On Fri, Aug 21, 2020 at 9:35 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Although the patch makes the package build OK, it fails at runtime
+> when the module is imported, because of missing symbols:
+>
+>     ImportError: /usr/lib/python3.8/site-packages/RPi/_GPIO.cpython-38-aarch64-linux-gnu.so: undefined symbol: high
+>
+> Fix that by making sure the symbols are declared once, but only once.
+>
+> Fixes: #13166
+>
+> Reported-by: Christian Stewart <christian@paral.in>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-CVE-2020-8624: update-policy rules of type "subdomain" are enforced incorrectly
-https://kb.isc.org/docs/cve-2020-8624
+Tested-by: Christian Stewart <christian@paral.in>
 
-For more details, see the release notes:
-https://downloads.isc.org/isc/bind9/9.11.22/RELEASE-NOTES-bind-9.11.22.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 282b2aeba3..4ba0182b1c 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.22/bind-9.11.22.tar.gz.asc
- # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
--sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
-+sha256  afc6d8015006f1cabf699ff19f517bb8fd9c1811e5231f26baf51c3550262ac9  bind-9.11.22.tar.gz
- sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 80f8defca8..18fc4845f9 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.20
-+BIND_VERSION = 9.11.22
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
--- 
-2.20.1
+Best,
+Christian
