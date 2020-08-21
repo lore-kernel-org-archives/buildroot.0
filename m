@@ -1,51 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 Aug 2020 21:18:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ncftp: fix build with gcc 10
-Message-ID: <20200821191842.3237320-1-fontaine.fabrice@gmail.com>
+Date: Fri, 21 Aug 2020 22:41:37 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to version
+ 1.14.0
+Message-ID: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/78822bc0e0039e8f8949011a256cac022863276f
+Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ncftp/0001-fix-gcc-10.patch | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/ncftp/0001-fix-gcc-10.patch
+ package/libupnp18/libupnp18.hash | 6 +++---
+ package/libupnp18/libupnp18.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ncftp/0001-fix-gcc-10.patch b/package/ncftp/0001-fix-gcc-10.patch
-new file mode 100644
-index 0000000000..8ff9c44c50
---- /dev/null
-+++ b/package/ncftp/0001-fix-gcc-10.patch
-@@ -0,0 +1,24 @@
-+Fix build with gcc 10
-+
-+Add missing extern to gBm to fix the following build failure with
-+-fno-common which is enabled by default with gcc 10:
-+
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: bookmark.o:(.bss+0x10): multiple definition of `gBm'; gpshare.o:(.bss+0x24): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/78822bc0e0039e8f8949011a256cac022863276f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Nura ncftp-3.2.6-orig/sh_util/gpshare.c ncftp-3.2.6/sh_util/gpshare.c
-+--- ncftp-3.2.6-orig/sh_util/gpshare.c	2020-08-21 10:46:34.173816750 +0200
-++++ ncftp-3.2.6/sh_util/gpshare.c	2020-08-21 10:52:25.407976319 +0200
-+@@ -28,7 +28,7 @@
-+ 
-+ static int gIsAtty1 = 1, gIsAtty2 = 1;
-+ extern int gLoadedBm, gBookmarkMatchMode;
-+-Bookmark gBm;
-++extern Bookmark gBm;
-+ 
-+ double
-+ FileSize(double size, const char **uStr0, double *uMult0)
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+index ba9ce1bcdf..cd693ef0eb 100644
+--- a/package/libupnp18/libupnp18.hash
++++ b/package/libupnp18/libupnp18.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
+-sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
++# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.14.0/libupnp-1.14.0.tar.bz2.sha1
++sha1  b14cff9ddd7cfe7f0e4bf552387122a31770f51f  libupnp-1.14.0.tar.bz2
+ # Locally computed:
+-sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
++sha256  ecb23d4291968c8a7bdd4eb16fc2250dbacc16b354345a13342d67f571d35ceb  libupnp-1.14.0.tar.bz2
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index f17a1a720d..fb6c548c47 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNP18_VERSION = 1.8.7
++LIBUPNP18_VERSION = 1.14.0
+ LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
+ LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
+ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
 -- 
 2.28.0
