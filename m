@@ -1,71 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 21 Aug 2020 18:13:34 +0200
-Subject: [Buildroot] Error configuring eudev
-In-Reply-To: <CAOiXNkBVORsGuNporGcJhsWOYy06auQ3Mkfh0kh6ZHkyt7qmxQ@mail.gmail.com>
-References: <CAOiXNkBVORsGuNporGcJhsWOYy06auQ3Mkfh0kh6ZHkyt7qmxQ@mail.gmail.com>
-Message-ID: <20200821161334.GB17579@scaer>
+Date: Fri, 21 Aug 2020 18:35:28 +0200
+Subject: [Buildroot] [PATCH 0/2] package/python-rpi-gopi: really fix for
+ gcc-10, plus runtime test (branch yem/fixes)
+Message-ID: <cover.1598027701.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andrey, All,
+Hello All!
 
-On 2020-08-21 14:21 +0200, Andrey Nechypurenko spake thusly:
-> I am currently playing with an STM32MP157C-DK2 board (using 2020.05.1
-> Buildroot's defconfig) and would like to run hardware accelerated
-> graphics. Since X is not cool anymore :-) I decided to run weston.
-> 
-> Weston package requires udev. So I selected tmpfs+eudev for /dev
-> management since this is the only option which makes weston appear in
-> menuconfig. After that, attempt to build the image leads to the error
-> during configuration of eudev:
-> 
-> checking for blkid >= 2.20... no
-> configure: error: *** blkid support requested but not found
+A previous patch was applied, that indeed made the gc-10 build succeed
+(because, -fno-common). However, that patch only looked at quiescing
+the build errors, and thus broke runtime, see #13166;
 
-This is usually the case when you change some settings in the
-menuconfig, but do not start the build from scratch:
+    ImportError: /usr/lib/python3.8/site-packages/RPi/_GPIO.cpython-38-aarch64-linux-gnu.so: undefined symbol: high
 
-    https://buildroot.org/downloads/manual/manual.html#full-rebuild
+To avoid this situation, add a (limited) runtime test.
 
-Did you run 'make clean' before restarting your build? If not, try so.
 
 Regards,
 Yann E. MORIN.
 
-> However, blkid is selected as part of the util-linux and as far as I
-> can tell has been built. It seams like configure script of the eudev
-> trying to invoke pkg-config to find blkid, so I was searching for .pc
-> files from blkid in build directory:
-> 
-> $ find ./ -name blkid.pc
-> ./host/lib/pkgconfig/blkid.pc
-> ./build/host-util-linux-2.35.1/libblkid/blkid.pc
-> 
-> I was slightly surprised to see them in the host/ directory. Libraries
-> are also installed in host/ :
-> 
-> $ find ./ -name "libblkid*"
-> ./host/share/man/man3/libblkid.3
-> ./host/lib/libblkid.so.1
-> ./host/lib/libblkid.la
-> ./host/lib/libblkid.so.1.1.0
-> ./host/lib/libblkid.so
-> 
-> Is it how it meant to be? Then what might be the reasons why eudev
-> could not find it?
-> 
-> Anyway I would be very thankful for any hints how to overcome this
-> problem and achieve my goal to run wayland/weston?
-> 
-> Thank you,
-> Andrey.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+The following changes since commit 09e5e3dbdd4eade0190bb2bd303115dbb4336f9b
+
+  package/igd2-for-linux: fix build with gcc 10 (2020-08-21 00:20:34 +0200)
+
+
+are available in the git repository at:
+
+  https://git.busybox.net/~ymorin/git/buildroot
+
+for you to fetch changes up to 748705989a4a29b9a0a1bc565d1adf83a8a70f45
+
+  support/tests: add runtime test for python-rpi-gpio (2020-08-21 18:29:42 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/python-rpi-gpio: fix gcc-10 compatibility patch
+      support/tests: add runtime test for python-rpi-gpio
+
+ .../0001-fix-build-with-gcc-10.x.patch             | 66 ++++++++++++++++------
+ .../tests/package/sample_python_rpi_gpio.py        |  6 ++
+ .../testing/tests/package/test_python_rpi_gpio.py  | 11 ++++
+ 3 files changed, 65 insertions(+), 18 deletions(-)
+ create mode 100644 support/testing/tests/package/sample_python_rpi_gpio.py
+ create mode 100644 support/testing/tests/package/test_python_rpi_gpio.py
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
