@@ -1,81 +1,105 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 22 Aug 2020 23:32:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netopeer2: set MODULES_{OWNER,
- GROUP}
-In-Reply-To: <20200822210535.2392001-1-fontaine.fabrice@gmail.com>
-References: <20200822210535.2392001-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAEyMn7ZMoibzBx84zRoq9QPgDpS8TADz49y=2c8+k+QdQZQhdA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Aug 2020 00:04:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad: fix
+ deactivation of opencv
+Message-ID: <20200822220411.2823899-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frabrice,
+Build can fail if opencv3 is built before gst1-plugins-bad because
+-Dopencv=disabled does not work since
+https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/22c6a4085f8792d8af0cdabfe1664d55ca2dee11
 
+Fixes:
+ - http://autobuild.buildroot.org/results/19605057c4956d97e9e65068680485db637282db
 
-Am Sa., 22. Aug. 2020 um 23:06 Uhr schrieb Fabrice Fontaine <
-fontaine.fabrice@gmail.com>:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...s-gst-opencv-meson.build-fix-disable.patch | 73 +++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-bad/0002-gst-libs-gst-opencv-meson.build-fix-disable.patch
 
-> Set MODULES_{OWNER,GROUP} to root, this will avoid the following build
-> failure on one of the autobuilders:
->
-> CMake Error at CMakeLists.txt:80 (message):
->   Learning server module group failed: id: cannot find name for group ID
-> 8000
->
-> Fixes:
->  -
-> http://autobuild.buildroot.org/results/b2b5c26b03a71fcbf956789aaa8bf6638e6c0994
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/netopeer2/netopeer2.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/
-> netopeer2.mk
-> index 641666e8d3..acef908f60 100644
-> --- a/package/netopeer2/netopeer2.mk
-> +++ b/package/netopeer2/netopeer2.mk
-> @@ -11,7 +11,10 @@ NETOPEER2_LICENSE = BSD-3-Clause
->  NETOPEER2_LICENSE_FILES = LICENSE
->  NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
->
-> -NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if
-> $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
-> +NETOPEER2_CONF_OPTS = \
-> +       -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF) \
-> +       -DMODULES_OWNER=root \
-> +       -DMODULES_GROUP=root
->
->  define NETOPEER2_INSTALL_INIT_SYSV
->         $(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
-> --
-> 2.28.0
->
-
-Thank you for trying to fix the problem but unfortunately it seems not to
-solve the problem.
-
-I did a quick test by running utils/test-pkg:
-
--- Installing:
-/home/hthiery/br-test-pkg/br-arm-full/target/usr/share/yang/modules/netopeer2/ietf-netconf at 2013-09-29.yang
--- Installing:
-/home/hthiery/br-test-pkg/br-arm-full/target/usr/bin/netopeer2-server
--- Installing missing sysrepo modules...
-[ERR]: Changing owner of
-"/home/hthiery/br-test-pkg/br-arm-full/target/etc/sysrepo/data/ietf-netconf-acm.startup"
-failed (Operation not permitted).
-sysrepoctl error: Failed to change module "ietf-netconf-acm" access
-(Operation not authorized)
-
-I also think about the isse and want to try disabling the permission change
-option for the build in buildroot. But had no time to do it for now.
-
+diff --git a/package/gstreamer1/gst1-plugins-bad/0002-gst-libs-gst-opencv-meson.build-fix-disable.patch b/package/gstreamer1/gst1-plugins-bad/0002-gst-libs-gst-opencv-meson.build-fix-disable.patch
+new file mode 100644
+index 0000000000..c5227077cb
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-bad/0002-gst-libs-gst-opencv-meson.build-fix-disable.patch
+@@ -0,0 +1,73 @@
++From 507594ab8f21d6217446bb52c29a602318602246 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 22 Aug 2020 23:33:48 +0200
++Subject: [PATCH] gst-libs/gst/opencv/meson.build: fix disable
++
++opencv can't be disabled since commit
++22c6a4085f8792d8af0cdabfe1664d55ca2dee11
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1533]
++---
++ gst-libs/gst/opencv/meson.build | 56 +++++++++++++++++----------------
++ 1 file changed, 29 insertions(+), 27 deletions(-)
++
++diff --git a/gst-libs/gst/opencv/meson.build b/gst-libs/gst/opencv/meson.build
++index 6cc4602f3..716ceaabf 100644
++--- a/gst-libs/gst/opencv/meson.build
+++++ b/gst-libs/gst/opencv/meson.build
++@@ -9,27 +9,29 @@ opencv_headers = [
++   'gstopencvvideofilter.h',
++ ]
++ 
++-opencv_dep = dependency('opencv', version : '>= 3.0.0', required : false)
++-if not opencv_dep.found()
++-  opencv_dep = dependency('opencv4', version : '>= 4.0.0', required : false)
++-endif
++-if opencv_dep.found()
+++if not get_option('opencv').disabled()
+++  opencv_dep = dependency('opencv', version : '>= 3.0.0', required : false)
+++  if not opencv_dep.found()
+++    opencv_dep = dependency('opencv4', version : '>= 4.0.0', required : false)
+++  endif
+++  if opencv_dep.found()
++-  gstopencv = library('gstopencv-' + api_version,
++-    opencv_sources,
++-    c_args : gst_plugins_bad_args + ['-DBUILDING_GST_OPENCV'],
++-    include_directories : [configinc, libsinc],
++-    version : libversion,
++-    soversion : soversion,
++-  darwin_versions : osxversion,
++-    install : true,
++-    dependencies : [gstbase_dep, gstvideo_dep, opencv_dep],
++-  )
+++    gstopencv = library('gstopencv-' + api_version,
+++      opencv_sources,
+++      c_args : gst_plugins_bad_args + ['-DBUILDING_GST_OPENCV'],
+++      include_directories : [configinc, libsinc],
+++      version : libversion,
+++      soversion : soversion,
+++    darwin_versions : osxversion,
+++      install : true,
+++      dependencies : [gstbase_dep, gstvideo_dep, opencv_dep],
+++    )
++ 
++-  gstopencv_dep = declare_dependency(link_with: gstopencv,
++-    include_directories : [libsinc],
++-    dependencies : [gstvideo_dep, opencv_dep])
+++    gstopencv_dep = declare_dependency(link_with: gstopencv,
+++      include_directories : [libsinc],
+++      dependencies : [gstvideo_dep, opencv_dep])
++ 
++-  install_headers(opencv_headers, subdir : 'gstreamer-1.0/gst/opencv')
++-elif get_option('opencv').enabled()
++-  error('OpenCV support enabled but required dependencies were not found.')
+++    install_headers(opencv_headers, subdir : 'gstreamer-1.0/gst/opencv')
+++  elif get_option('opencv').enabled()
+++    error('OpenCV support enabled but required dependencies were not found.')
+++  endif
++ endif
++-- 
++2.28.0
++
 -- 
-Heiko
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200822/3393f54a/attachment.html>
+2.28.0
