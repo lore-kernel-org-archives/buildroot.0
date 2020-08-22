@@ -1,54 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Aug 2020 14:18:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: disable opencv
- python and cpp example
-Message-ID: <20200822121840.757051-1-fontaine.fabrice@gmail.com>
+Date: Sat, 22 Aug 2020 15:02:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix build with luajit
+Message-ID: <20200822130243.1432461-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-numpy is an optional dependency since
-https://github.com/jacksonliam/mjpg-streamer/commit/545c1a1d3abf72bb7a97c870c78e85dd0845f63a
-
-This dependency will raise the following build failure if python-numpy
-is found on the host:
-
-aarch64_be-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/lib/python3/dist-packages/numpy/core/include'
-
-because mjpg-streamer uses the python executable to retrieve the include
-directory:
-
--- Found PythonLibs: /home/peko/autobuild/instance-0/output-1/host/aarch64_be-buildroot-linux-gnu/sysroot/usr/lib/libpython3.8.so (found version "3.8.5")
--- Found PythonInterp: /usr/bin/python3.5 (found version "3.5.3")
--- Found NUMPY: /usr/lib/python3/dist-packages/numpy/core/include
-
-So disable python filter as well as cpp example while at it
+Build with luajit has been enabled with commit
+911a9bf5739d94545cc482c765f876a9ff73e304 however the build fails because
+collectd does not find liblua
 
 Fixes:
- - http://autobuild.buildroot.org/results/e6795fa8ed5d8514b3e10ea1135afb31eab22b7e
+ - http://autobuild.buildroot.org/results/31302b47fb70eb442cd000f4b9f27a9e12432cc3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mjpg-streamer/mjpg-streamer.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/collectd/collectd.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index 64404e21fa..46f3f50104 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -23,7 +23,10 @@ MJPG_STREAMER_DEPENDENCIES += libv4l
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 21da8fddc8..25ffaa7468 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -198,6 +198,9 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ COLLECTD_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr
  endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI)$(BR2_PACKAGE_OPENCV3_LIB_IMGPROC)$(BR2_PACKAGE_OPENCV3_LIB_VIDEOIO),yyy)
--MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_OPENCV=ON
-+MJPG_STREAMER_CONF_OPTS += \
-+	-DPLUGIN_INPUT_OPENCV=ON \
-+	-DPLUGIN_CVFILTER_CPP=OFF \
-+	-DPLUGIN_CVFILTER_PY=OFF
- MJPG_STREAMER_DEPENDENCIES += host-pkgconf opencv3
- else
- MJPG_STREAMER_CONF_OPTS += -DPLUGIN_INPUT_OPENCV=OFF
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++COLLECTD_CONF_ENV += LIBLUA_PKG_CONFIG_NAME=luajit
++endif
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ COLLECTD_CONF_OPTS += --with-libmysql=$(STAGING_DIR)/usr
+ endif
 -- 
 2.28.0
