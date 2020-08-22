@@ -1,40 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Aug 2020 17:52:37 +0200
-Subject: [Buildroot] [git commit] package/collectd: fix build with luajit
-Message-ID: <20200822154549.8F29D82875@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 22 Aug 2020 20:22:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ripgrep: fix debug build
+Message-ID: <20200822182237.1834735-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=094351c72301c30645407ecf93dcd539976f2a56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+There is no --debug mode for cargo resulting in the following build
+failure since the addition of this package with commit
+4b0d1ef6ac00c5170a3fb9d15d06b3d3172e0c97:
 
-Build with luajit has been enabled with commit
-911a9bf5739d94545cc482c765f876a9ff73e304 however the build fails because
-collectd does not find liblua
+error: Unknown flag: '--debug'
 
 Fixes:
- - http://autobuild.buildroot.org/results/31302b47fb70eb442cd000f4b9f27a9e12432cc3
+ - http://autobuild.buildroot.org/results/58e74bb056ec65680ecebaa559aa14bdebbf5c85
+ - http://autobuild.buildroot.org/results/28c6364a89a6044d5a036614f7a6e59815efb770
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/collectd/collectd.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/ripgrep/ripgrep.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 21da8fddc8..25ffaa7468 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -198,6 +198,9 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- COLLECTD_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr
- endif
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+COLLECTD_CONF_ENV += LIBLUA_PKG_CONFIG_NAME=luajit
-+endif
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- COLLECTD_CONF_OPTS += --with-libmysql=$(STAGING_DIR)/usr
- endif
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 832c076f26..ac9038945c 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -11,12 +11,11 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
+ 
+ RIPGREP_DEPENDENCIES = host-rustc
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+ 
+ RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
+ 
+ RIPGREP_CARGO_OPTS = \
+-	--$(RIPGREP_CARGO_MODE) \
++	--release \
+ 	--target=$(RUSTC_TARGET_NAME) \
+ 	--manifest-path=$(@D)/Cargo.toml
+ 
+-- 
+2.28.0
