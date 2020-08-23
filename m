@@ -1,57 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Aug 2020 19:06:50 +0200
-Subject: [Buildroot] [git commit] package/php: drop
- BR2_PACKAGE_PHP_EXT_HASH
-In-Reply-To: <20200823165655.328FB814F6@busybox.osuosl.org>
-References: <20200823165655.328FB814F6@busybox.osuosl.org>
-Message-ID: <20200823190650.7bc12a8a@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Aug 2020 19:33:52 +0200
+Subject: [Buildroot] [PATCH] package/qt5: needs host gcc >= 5.0 for full
+ C++11
+Message-ID: <20200823173352.17610-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 23 Aug 2020 19:03:20 +0200
-Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Building qmake requires full C++11, which boils down to gcc >= 5.0,
+which is what upstream advertises as a requirement anyway:
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=de9e0f1f00cc4491ef67722b93fb77040ef63043
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> hash extension can't be disabled since version 7.4.0 and
-> https://github.com/php/php-src/commit/bf344425812b0f6156d0a8a54ed7bc38054f7636
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  Config.in.legacy       | 6 ++++++
->  package/php/Config.ext | 7 -------
->  package/php/php.mk     | 1 -
->  3 files changed, 6 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index cf7aaf75a5..957cbb8b3c 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2020.08"
->  
-> +config BR2_PACKAGE_PHP_EXT_HASH
-> +	bool "php hash extension is mandatory"
-> +	select BR2_LEGACY
-> +	help
-> +	  Since php 7.4.0, hash extension can't be disabled.
+    https://doc.qt.io/qt-5.15/supported-platforms.html
 
-In this sort of situation, we generally don't add any legacy handling.
-Indeed, since the feature is now mandatory... the default behavior will
-always be OK.
+    Distribution   | Architecture     | Compiler
+    Generic Linux  | x86 and x86_64   | GCC (5 or later), ICC 18.x
 
-People who could be annoyed are people who had this feature disabled...
-which is now always enabled. But the legacy handling will anyway not
-help those people.
+Fixes:
+    http://autobuild.buildroot.org/results/c3e/c3ee971a72f268e72b69a647e8fd00a8cee7dc91/
+    http://autobuild.buildroot.org/results/89c/89c9a88b4e1195e952528574263201d4fbc27570/
+    [...]
 
-Thomas
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
+---
+ package/pinentry/Config.in  | 1 +
+ package/qt5/Config.in       | 5 +++--
+ package/wireshark/Config.in | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 40e5b3eedd..d3afd63216 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -61,6 +61,7 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_HOST_GCC_AT_LEAST_5
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on !BR2_arc
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 5c544ecec4..e897c7cbcb 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -11,18 +11,19 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	# ARM needs BLX, so v5t+
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 
+-comment "Qt5 needs a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
++comment "Qt5 needs host g++ >= 5.0, and a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	depends on !BR2_arc
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		!BR2_HOST_GCC_AT_LEAST_5 || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ menuconfig BR2_PACKAGE_QT5
+ 	bool "Qt5"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_HOST_GCC_AT_LEAST_5 # Full C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11, GCC_BUG_57694
+ 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+ 	# no built-in double-conversion support
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index e3a9b01991..c40135c9c0 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	bool "Qt5 GUI"
+ 	default y
+ 	depends on BR2_INSTALL_LIBSTDCPP # qt5
++	depends on BR2_HOST_GCC_AT_LEAST_5 # qt5
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # qt5
+ 	depends on !BR2_arc # qt5
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
