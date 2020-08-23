@@ -1,63 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Aug 2020 11:37:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.6.0
-Message-ID: <20200823093737.3243619-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Aug 2020 12:00:27 +0200
+Subject: [Buildroot] [PATCH] package/tpm2-abrmd: bump to version 2.3.3
+Message-ID: <20200823100027.7567-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump is needed to fix a build failure with gcc 10:
-https://savannah.nongnu.org/support/?func=detailitem&item_id=110186#options
+Bugfix release with a single fix:
 
-Here is an extratc of the bug report:
+Fixed:
+  - Fixed handle resource leak exhausting TPM resources.
 
-"It is not a bug to have variables with the same name in different source
-files. The bug was the missing keyword "static".
+https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.3.3
 
-But there was a different bug that was not tolerated by GCC 10. It was
-same strange data type conversions in dav_coda.c. The resolution was to
-drop coda altogether because there is still fuse which is better suited
-anyway.
-
-The new release 1.6.0 should fix all these problems. Please tell me if
-there are still problems with GCC 10."
-
-Also update indentation in hash file (two spaces)
-
-Fixes:
- - http://autobuild.buildroot.org/results/42beafade6fd31927c8db14bc52110c0fc5b17c2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/davfs2/davfs2.hash | 4 ++--
- package/davfs2/davfs2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tpm2-abrmd/tpm2-abrmd.hash | 2 +-
+ package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
-index b8ac0af1b5..88a314d1c2 100644
---- a/package/davfs2/davfs2.hash
-+++ b/package/davfs2/davfs2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 417476cdcfd53966b2dcfaf12455b54f315959b488a89255ab4b44586153d801  davfs2-1.5.6.tar.gz
-+sha256  2e6b675685bd917772be60f0999ae098c80f79ff20dc131e8fec4547cbb63b50  davfs2-1.6.0.tar.gz
- # License file, locally calculated
--sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-+sha256  0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index a73093a52a..a82e9d2f7c 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
+index f69cd369bf..1c6e739056 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.hash
++++ b/package/tpm2-abrmd/tpm2-abrmd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  df02c18882116e19b56aa8c701687c0c0987dd334e6fc002b340cedf6e000d10  tpm2-abrmd-2.3.2.tar.gz
++sha256  1e587808c6739079d59f124d9c1a0058f8d34dd84f1f656c946667fa0a181c48  tpm2-abrmd-2.3.3.tar.gz
+ sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
+index 9d22219f67..0584ba928a 100644
+--- a/package/tpm2-abrmd/tpm2-abrmd.mk
++++ b/package/tpm2-abrmd/tpm2-abrmd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAVFS2_VERSION = 1.5.6
-+DAVFS2_VERSION = 1.6.0
- DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
- DAVFS2_LICENSE = GPL-3.0+
- DAVFS2_LICENSE_FILES = COPYING
+-TPM2_ABRMD_VERSION = 2.3.2
++TPM2_ABRMD_VERSION = 2.3.3
+ TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
+ TPM2_ABRMD_LICENSE = BSD-2-Clause
+ TPM2_ABRMD_LICENSE_FILES = LICENSE
 -- 
-2.28.0
+2.20.1
