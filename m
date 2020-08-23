@@ -1,48 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Aug 2020 13:23:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: disable opencv
- python and cpp example
-In-Reply-To: <20200822121840.757051-1-fontaine.fabrice@gmail.com>
-References: <20200822121840.757051-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200823132343.37e7c861@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Aug 2020 15:03:18 +0200
+Subject: [Buildroot] [git commit] package/owfs: fix build with gcc 10
+Message-ID: <20200823125641.1702A82108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Aug 2020 14:18:40 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8d57f13b7a9de24b507e16e6f3ad61920fff6501
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> python-numpy is an optional dependency since
-> https://github.com/jacksonliam/mjpg-streamer/commit/545c1a1d3abf72bb7a97c870c78e85dd0845f63a
-> 
-> This dependency will raise the following build failure if python-numpy
-> is found on the host:
-> 
-> aarch64_be-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/lib/python3/dist-packages/numpy/core/include'
-> 
-> because mjpg-streamer uses the python executable to retrieve the include
-> directory:
-> 
-> -- Found PythonLibs: /home/peko/autobuild/instance-0/output-1/host/aarch64_be-buildroot-linux-gnu/sysroot/usr/lib/libpython3.8.so (found version "3.8.5")
-> -- Found PythonInterp: /usr/bin/python3.5 (found version "3.5.3")
-> -- Found NUMPY: /usr/lib/python3/dist-packages/numpy/core/include
-> 
-> So disable python filter as well as cpp example while at it
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e6795fa8ed5d8514b3e10ea1135afb31eab22b7e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mjpg-streamer/mjpg-streamer.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/7e9c33d7a1613826f85716403a00dce03dd8daf2
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/owfs/0001-Fix-compilation-with-GCC10.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/owfs/0001-Fix-compilation-with-GCC10.patch b/package/owfs/0001-Fix-compilation-with-GCC10.patch
+new file mode 100644
+index 0000000000..49b703ee28
+--- /dev/null
++++ b/package/owfs/0001-Fix-compilation-with-GCC10.patch
+@@ -0,0 +1,41 @@
++From 43a4bc6b750c37f585d03b14941f3633ed5348d8 Mon Sep 17 00:00:00 2001
++From: "Azamat H. Hackimov" <azamat.hackimov@gmail.com>
++Date: Tue, 9 Jun 2020 11:30:38 +0300
++Subject: [PATCH] Fix compilation with GCC10
++
++Fixed compilation with -fno-common, which enabled in GCC 10 by default.
++See https://bugs.gentoo.org/707438.
++[Retrieved from:
++https://github.com/owfs/owfs/commit/43a4bc6b750c37f585d03b14941f3633ed5348d8]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ module/owserver/src/c/owserver.c       | 2 ++
++ module/owserver/src/include/owserver.h | 2 +-
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/module/owserver/src/c/owserver.c b/module/owserver/src/c/owserver.c
++index db29988e..2ed29161 100644
++--- a/module/owserver/src/c/owserver.c
+++++ b/module/owserver/src/c/owserver.c
++@@ -36,6 +36,8 @@
++ 
++ #include "owserver.h"
++ 
+++pthread_mutex_t persistence_mutex ;
+++
++ /* --- Prototypes ------------ */
++ static void SetupAntiloop(int argc, char **argv);
++ 
++diff --git a/module/owserver/src/include/owserver.h b/module/owserver/src/include/owserver.h
++index 8be582f0..a257ed02 100644
++--- a/module/owserver/src/include/owserver.h
+++++ b/module/owserver/src/include/owserver.h
++@@ -18,7 +18,7 @@
++ #include "ow.h"
++ #include "ow_connection.h"
++ 
++-pthread_mutex_t persistence_mutex ;
+++extern pthread_mutex_t persistence_mutex ;
++ #define PERSISTENCELOCK    _MUTEX_LOCK(   persistence_mutex ) ;
++ #define PERSISTENCEUNLOCK  _MUTEX_UNLOCK( persistence_mutex ) ;
++ 
