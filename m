@@ -1,45 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 22:32:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openfpgaloader: needs gcc >= 4.9
-In-Reply-To: <20200823200116.GK8728@scaer>
-References: <20200820204158.1237689-1-fontaine.fabrice@gmail.com>
- <20200823200116.GK8728@scaer>
-Message-ID: <20200823203202.GL8728@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Aug 2020 22:32:36 +0200
+Subject: [Buildroot] [PATCH] package/xen: add upstream security fix for
+ XSA-327
+Message-ID: <20200823203236.6175-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FAbrice, All,
+Fixes the following security issue:
 
-On 2020-08-23 22:01 +0200, Yann E. MORIN spake thusly:
-> On 2020-08-20 22:41 +0200, Fabrice Fontaine spake thusly:
-> > openfpgaloader needs C++11 as specified in CMakeLists.txt:
-> > set(CMAKE_CXX_STANDARD 11)
-> > 
-> > The build on gcc 4.8 fails on:
-> > 
-> > /home/buildroot/autobuild/instance-1/output-1/build/openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61/src/spiFlash.cpp: In member function 'void SPIFlash::jtag_write_read(uint8_t, uint8_t*, uint8_t*, uint16_t)':
-> > /home/buildroot/autobuild/instance-1/output-1/build/openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61/src/spiFlash.cpp:92:43: error: variable-sized object 'jtx' may not be initialized
-> >   uint8_t jtx[xfer_len] = {reverseByte(cmd)};
-> >                                            ^
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/f3f3cc216ae42bb8a8925b0df7c1a3cc79b027d7
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Applied to master, thanks.
+CVE-2020-15564: Missing alignment check in VCPUOP_register_vcpu_info
 
-Not quite yet, in fact...
+For further details, see the advisory:
 
-Regards,
-Yann E. MORIN.
+https://xenbits.xenproject.org/xsa/advisory-327.html
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xen/xen.hash | 1 +
+ package/xen/xen.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index ab5f9d9083..0dd2f571a9 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,4 @@
+ # Locally computed
+ sha256  b97ce363e55b12c992063f4466c43cba0a6386ceb7a747b4dc670311f337ef01  xen-4.13.1.tar.gz
++sha256  1d057695d5b74ce2857204103e943caeaf773bc4fb9d91ea78016e01a9147ed7  xsa327.patch
+ sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 15742b5127..ee5e9847fe 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -6,6 +6,8 @@
+ 
+ XEN_VERSION = 4.13.1
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
++XEN_PATCH = \
++	https://xenbits.xenproject.org/xsa/xsa327.patch
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+ XEN_DEPENDENCIES = host-acpica host-python3
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
