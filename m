@@ -1,91 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 11:28:19 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gstreamer1/gst1-plugins-bad: fix deactivation of opencv
-In-Reply-To: <20200823090429.2916770-1-fontaine.fabrice@gmail.com>
-References: <20200823090429.2916770-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200823092819.GB8728@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Aug 2020 11:37:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.6.0
+Message-ID: <20200823093737.3243619-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+This bump is needed to fix a build failure with gcc 10:
+https://savannah.nongnu.org/support/?func=detailitem&item_id=110186#options
 
-On 2020-08-23 11:04 +0200, Fabrice Fontaine spake thusly:
-> Build can fail if opencv3 is built before gst1-plugins-bad because
-> -Dopencv=disabled does not work in meson (i.e. since commit
-> 5d6c408e9535be4b5ba0c8a49215d2d03dcb5cd5)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/19605057c4956d97e9e65068680485db637282db
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Here is an extratc of the bug report:
 
-Applied to master, thanks.
+"It is not a bug to have variables with the same name in different source
+files. The bug was the missing keyword "static".
 
-Regards,
-Yann E. MORIN.
+But there was a different bug that was not tolerated by GCC 10. It was
+same strange data type conversions in dav_coda.c. The resolution was to
+drop coda altogether because there is still fuse which is better suited
+anyway.
 
-> ---
-> Changes v1 -> v2:
->  - Update commit log: the issue is there since the switch to meson
->  - Simplify patch
-> 
->  ...son-allow-the-user-to-disable-opencv.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch b/package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch
-> new file mode 100644
-> index 0000000000..02e91e33ed
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch
-> @@ -0,0 +1,31 @@
-> +From 1bc387f8feaab9020be72e88cf26ccc1a67a6a10 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 22 Aug 2020 23:33:48 +0200
-> +Subject: [PATCH] meson: allow the user to disable opencv
-> +
-> +Allow the user to really disable opencv through meson (i.e.
-> +-Dopencv=disabled).
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/1533]
-> +---
-> + gst-libs/gst/opencv/meson.build | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/gst-libs/gst/opencv/meson.build b/gst-libs/gst/opencv/meson.build
-> +index 6cc4602f3..fb6c46e40 100644
-> +--- a/gst-libs/gst/opencv/meson.build
-> ++++ b/gst-libs/gst/opencv/meson.build
-> +@@ -13,7 +13,7 @@ opencv_dep = dependency('opencv', version : '>= 3.0.0', required : false)
-> + if not opencv_dep.found()
-> +   opencv_dep = dependency('opencv4', version : '>= 4.0.0', required : false)
-> + endif
-> +-if opencv_dep.found()
-> ++if not get_option('opencv').disabled() and opencv_dep.found()
-> +   gstopencv = library('gstopencv-' + api_version,
-> +     opencv_sources,
-> +     c_args : gst_plugins_bad_args + ['-DBUILDING_GST_OPENCV'],
-> +-- 
-> +2.28.0
-> +
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The new release 1.6.0 should fix all these problems. Please tell me if
+there are still problems with GCC 10."
 
+Also update indentation in hash file (two spaces)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/42beafade6fd31927c8db14bc52110c0fc5b17c2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/davfs2/davfs2.hash | 4 ++--
+ package/davfs2/davfs2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
+index b8ac0af1b5..88a314d1c2 100644
+--- a/package/davfs2/davfs2.hash
++++ b/package/davfs2/davfs2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 417476cdcfd53966b2dcfaf12455b54f315959b488a89255ab4b44586153d801  davfs2-1.5.6.tar.gz
++sha256  2e6b675685bd917772be60f0999ae098c80f79ff20dc131e8fec4547cbb63b50  davfs2-1.6.0.tar.gz
+ # License file, locally calculated
+-sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
++sha256  0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index a73093a52a..a82e9d2f7c 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAVFS2_VERSION = 1.5.6
++DAVFS2_VERSION = 1.6.0
+ DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
+ DAVFS2_LICENSE = GPL-3.0+
+ DAVFS2_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
