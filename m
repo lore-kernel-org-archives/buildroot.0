@@ -1,92 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 15:04:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/owfs: fix build with gcc 10
-In-Reply-To: <20200823101835.3604516-1-fontaine.fabrice@gmail.com>
-References: <20200823101835.3604516-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200823130419.GC8728@scaer>
+Date: Sun, 23 Aug 2020 15:12:46 +0200
+Subject: [Buildroot] [git commit] docs/manual: fix typo
+Message-ID: <20200823130554.BD81381F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=531e96e98cc8cd6fb839349ea0f86c9d5706ec0f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-08-23 12:18 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/7e9c33d7a1613826f85716403a00dce03dd8daf2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+depednencies -> dependencies
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ docs/manual/adding-packages-qmake.txt | 2 +-
+ docs/manual/adding-packages-waf.txt   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0001-Fix-compilation-with-GCC10.patch     | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/owfs/0001-Fix-compilation-with-GCC10.patch
-> 
-> diff --git a/package/owfs/0001-Fix-compilation-with-GCC10.patch b/package/owfs/0001-Fix-compilation-with-GCC10.patch
-> new file mode 100644
-> index 0000000000..49b703ee28
-> --- /dev/null
-> +++ b/package/owfs/0001-Fix-compilation-with-GCC10.patch
-> @@ -0,0 +1,41 @@
-> +From 43a4bc6b750c37f585d03b14941f3633ed5348d8 Mon Sep 17 00:00:00 2001
-> +From: "Azamat H. Hackimov" <azamat.hackimov@gmail.com>
-> +Date: Tue, 9 Jun 2020 11:30:38 +0300
-> +Subject: [PATCH] Fix compilation with GCC10
-> +
-> +Fixed compilation with -fno-common, which enabled in GCC 10 by default.
-> +See https://bugs.gentoo.org/707438.
-> +[Retrieved from:
-> +https://github.com/owfs/owfs/commit/43a4bc6b750c37f585d03b14941f3633ed5348d8]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + module/owserver/src/c/owserver.c       | 2 ++
-> + module/owserver/src/include/owserver.h | 2 +-
-> + 2 files changed, 3 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/module/owserver/src/c/owserver.c b/module/owserver/src/c/owserver.c
-> +index db29988e..2ed29161 100644
-> +--- a/module/owserver/src/c/owserver.c
-> ++++ b/module/owserver/src/c/owserver.c
-> +@@ -36,6 +36,8 @@
-> + 
-> + #include "owserver.h"
-> + 
-> ++pthread_mutex_t persistence_mutex ;
-> ++
-> + /* --- Prototypes ------------ */
-> + static void SetupAntiloop(int argc, char **argv);
-> + 
-> +diff --git a/module/owserver/src/include/owserver.h b/module/owserver/src/include/owserver.h
-> +index 8be582f0..a257ed02 100644
-> +--- a/module/owserver/src/include/owserver.h
-> ++++ b/module/owserver/src/include/owserver.h
-> +@@ -18,7 +18,7 @@
-> + #include "ow.h"
-> + #include "ow_connection.h"
-> + 
-> +-pthread_mutex_t persistence_mutex ;
-> ++extern pthread_mutex_t persistence_mutex ;
-> + #define PERSISTENCELOCK    _MUTEX_LOCK(   persistence_mutex ) ;
-> + #define PERSISTENCEUNLOCK  _MUTEX_UNLOCK( persistence_mutex ) ;
-> + 
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/docs/manual/adding-packages-qmake.txt b/docs/manual/adding-packages-qmake.txt
+index 8d26023904..e1621e914e 100644
+--- a/docs/manual/adding-packages-qmake.txt
++++ b/docs/manual/adding-packages-qmake.txt
+@@ -34,7 +34,7 @@ will automatically download the tarball from this location.
+ 
+ On line 10, we tell Buildroot what options to enable for libfoo.
+ 
+-On line 11, we tell Buildroot the depednencies of libfoo.
++On line 11, we tell Buildroot the dependencies of libfoo.
+ 
+ Finally, on line line 13, we invoke the +qmake-package+
+ macro that generates all the Makefile rules that actually allows the
+diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
+index ffc004c290..101cddf1f1 100644
+--- a/docs/manual/adding-packages-waf.txt
++++ b/docs/manual/adding-packages-waf.txt
+@@ -34,7 +34,7 @@ will automatically download the tarball from this location.
+ 
+ On line 10, we tell Buildroot what options to enable for libfoo.
+ 
+-On line 11, we tell Buildroot the depednencies of libfoo.
++On line 11, we tell Buildroot the dependencies of libfoo.
+ 
+ Finally, on line line 13, we invoke the +waf-package+
+ macro that generates all the Makefile rules that actually allows the
