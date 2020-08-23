@@ -1,85 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 19:03:20 +0200
-Subject: [Buildroot] [git commit] package/php: drop BR2_PACKAGE_PHP_EXT_HASH
-Message-ID: <20200823165655.328FB814F6@busybox.osuosl.org>
+Date: Sun, 23 Aug 2020 19:02:20 +0200
+Subject: [Buildroot] [git commit] package/php: drop --with-libxml-dir
+Message-ID: <20200823165655.28FDE7FC20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de9e0f1f00cc4491ef67722b93fb77040ef63043
+commit: https://git.buildroot.net/buildroot/commit/?id=6f3e2697379f78e5e3cd1fd19fea853bbea2abbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-hash extension can't be disabled since version 7.4.0 and
-https://github.com/php/php-src/commit/bf344425812b0f6156d0a8a54ed7bc38054f7636
+--with-libxml-dir has been dropped since version 7.4.0 and
+https://github.com/php/php-src/commit/29d1b7fd521af288e9f04d784f59a2d15b494a30
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy       | 6 ++++++
- package/php/Config.ext | 7 -------
- package/php/php.mk     | 1 -
- 3 files changed, 6 insertions(+), 8 deletions(-)
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cf7aaf75a5..957cbb8b3c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2020.08"
- 
-+config BR2_PACKAGE_PHP_EXT_HASH
-+	bool "php hash extension is mandatory"
-+	select BR2_LEGACY
-+	help
-+	  Since php 7.4.0, hash extension can't be disabled.
-+
- config BR2_PACKAGE_EFL_GIF
- 	bool "efl evas gif loader is mandatory"
- 	select BR2_LEGACY
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 556276da97..44afea010b 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -65,11 +65,6 @@ config BR2_PACKAGE_PHP_EXT_ZLIB
- 
- comment "Cryptography extensions"
- 
--config BR2_PACKAGE_PHP_EXT_HASH
--	bool "hash"
--	help
--	  HASH message digest framework
--
- comment "libargon2 needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS
-@@ -136,7 +131,6 @@ endif
- 
- config BR2_PACKAGE_PHP_EXT_MYSQLI
- 	bool "Mysqli"
--	select BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  MySQL Improved extension support
- 
-@@ -168,7 +162,6 @@ if BR2_PACKAGE_PHP_EXT_PDO
- 
- config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
- 	bool "MySQL"
--	select BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  PDO driver for MySQL
- 
 diff --git a/package/php/php.mk b/package/php/php.mk
-index ef9c7e8644..d9516ae127 100644
+index 6e0b5c6e8d..ef9c7e8644 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -97,7 +97,6 @@ PHP_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_POSIX),--enable-posix) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_SESSION),--enable-session) \
--	$(if $(BR2_PACKAGE_PHP_EXT_HASH),--enable-hash) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_DOM),--enable-dom) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_SIMPLEXML),--enable-simplexml) \
- 	$(if $(BR2_PACKAGE_PHP_EXT_SOAP),--enable-soap) \
+@@ -151,7 +151,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+ PHP_CONF_ENV += php_cv_libxml_build_works=yes
+-PHP_CONF_OPTS += --with-libxml --with-libxml-dir=$(STAGING_DIR)/usr
++PHP_CONF_OPTS += --with-libxml
+ PHP_DEPENDENCIES += libxml2
+ endif
+ 
