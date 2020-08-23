@@ -1,47 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Aug 2020 16:53:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: ffi needs dynamic library
-Message-ID: <20200823145320.3967619-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Aug 2020 16:55:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: drop --with-libxml-dir
+Message-ID: <20200823145543.3967761-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FFI support in php has been added with commit
-e16f05c0f00081d446ebee56d9f3ad3cf41da1ae, it depends on dynamic library
-otherwise the build will fail on:
-
-/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ext/ffi/ffi.o: in function `zim_FFI_cdef':
-ffi.c:(.text+0xe78): undefined reference to `DL_LOAD'
-
-Fixes:
- - http://autobuild.buildroot.org/results/3380b7b6777d1c5fcb53c855b003466fa3bf2079
+--with-libxml-dir has been dropped since version 7.4.0 and
+https://github.com/php/php-src/commit/29d1b7fd521af288e9f04d784f59a2d15b494a30
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/php/Config.ext | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 33a6455366..3a86bf95b7 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -424,12 +424,13 @@ config BR2_PACKAGE_PHP_EXT_XSL
+diff --git a/package/php/php.mk b/package/php/php.mk
+index daadc10c75..d9516ae127 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -150,7 +150,7 @@ endif
  
- config BR2_PACKAGE_PHP_EXT_FFI
- 	bool "FFI"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  Foreign Function Interface support
+ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+ PHP_CONF_ENV += php_cv_libxml_build_works=yes
+-PHP_CONF_OPTS += --with-libxml --with-libxml-dir=$(STAGING_DIR)/usr
++PHP_CONF_OPTS += --with-libxml
+ PHP_DEPENDENCIES += libxml2
+ endif
  
--comment "PHP FFI extension needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "PHP FFI extension needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- endmenu
 -- 
 2.28.0
