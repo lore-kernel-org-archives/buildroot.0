@@ -1,47 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Aug 2020 12:00:27 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-abrmd: bump to version 2.3.3
-Message-ID: <20200823100027.7567-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Aug 2020 12:18:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/owfs: fix build with gcc 10
+Message-ID: <20200823101835.3604516-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bugfix release with a single fix:
+Fixes:
+ - http://autobuild.buildroot.org/results/7e9c33d7a1613826f85716403a00dce03dd8daf2
 
-Fixed:
-  - Fixed handle resource leak exhausting TPM resources.
-
-https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.3.3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tpm2-abrmd/tpm2-abrmd.hash | 2 +-
- package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-compilation-with-GCC10.patch     | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/owfs/0001-Fix-compilation-with-GCC10.patch
 
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
-index f69cd369bf..1c6e739056 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.hash
-+++ b/package/tpm2-abrmd/tpm2-abrmd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  df02c18882116e19b56aa8c701687c0c0987dd334e6fc002b340cedf6e000d10  tpm2-abrmd-2.3.2.tar.gz
-+sha256  1e587808c6739079d59f124d9c1a0058f8d34dd84f1f656c946667fa0a181c48  tpm2-abrmd-2.3.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-index 9d22219f67..0584ba928a 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.mk
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_ABRMD_VERSION = 2.3.2
-+TPM2_ABRMD_VERSION = 2.3.3
- TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
- TPM2_ABRMD_LICENSE = BSD-2-Clause
- TPM2_ABRMD_LICENSE_FILES = LICENSE
+diff --git a/package/owfs/0001-Fix-compilation-with-GCC10.patch b/package/owfs/0001-Fix-compilation-with-GCC10.patch
+new file mode 100644
+index 0000000000..49b703ee28
+--- /dev/null
++++ b/package/owfs/0001-Fix-compilation-with-GCC10.patch
+@@ -0,0 +1,41 @@
++From 43a4bc6b750c37f585d03b14941f3633ed5348d8 Mon Sep 17 00:00:00 2001
++From: "Azamat H. Hackimov" <azamat.hackimov@gmail.com>
++Date: Tue, 9 Jun 2020 11:30:38 +0300
++Subject: [PATCH] Fix compilation with GCC10
++
++Fixed compilation with -fno-common, which enabled in GCC 10 by default.
++See https://bugs.gentoo.org/707438.
++[Retrieved from:
++https://github.com/owfs/owfs/commit/43a4bc6b750c37f585d03b14941f3633ed5348d8]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ module/owserver/src/c/owserver.c       | 2 ++
++ module/owserver/src/include/owserver.h | 2 +-
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/module/owserver/src/c/owserver.c b/module/owserver/src/c/owserver.c
++index db29988e..2ed29161 100644
++--- a/module/owserver/src/c/owserver.c
+++++ b/module/owserver/src/c/owserver.c
++@@ -36,6 +36,8 @@
++ 
++ #include "owserver.h"
++ 
+++pthread_mutex_t persistence_mutex ;
+++
++ /* --- Prototypes ------------ */
++ static void SetupAntiloop(int argc, char **argv);
++ 
++diff --git a/module/owserver/src/include/owserver.h b/module/owserver/src/include/owserver.h
++index 8be582f0..a257ed02 100644
++--- a/module/owserver/src/include/owserver.h
+++++ b/module/owserver/src/include/owserver.h
++@@ -18,7 +18,7 @@
++ #include "ow.h"
++ #include "ow_connection.h"
++ 
++-pthread_mutex_t persistence_mutex ;
+++extern pthread_mutex_t persistence_mutex ;
++ #define PERSISTENCELOCK    _MUTEX_LOCK(   persistence_mutex ) ;
++ #define PERSISTENCEUNLOCK  _MUTEX_UNLOCK( persistence_mutex ) ;
++ 
 -- 
-2.20.1
+2.28.0
