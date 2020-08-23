@@ -1,68 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Aug 2020 12:18:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/owfs: fix build with gcc 10
-Message-ID: <20200823101835.3604516-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Aug 2020 13:15:12 +0200
+Subject: [Buildroot] [PATCH 1/3] support/config-fragments/autobuild: stop
+ testing Sourcery AMD64 toolchain
+Message-ID: <20200823111515.119215-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/7e9c33d7a1613826f85716403a00dce03dd8daf2
+This toolchain uses an old gcc 6.2.0, and newer versions of the
+toolchain are no longer publicly available. This old gcc 6.2.0 causes
+build issues of Boost, which are unfixable without updating the
+toolchain. As we're about to drop support for this toolchain entirely,
+we must stop testing it in our autobuilder infrastructure.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Fix-compilation-with-GCC10.patch     | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/owfs/0001-Fix-compilation-with-GCC10.patch
+ support/config-fragments/autobuild/sourcery-x86-64.config | 4 ----
+ support/config-fragments/autobuild/toolchain-configs.csv  | 1 -
+ 2 files changed, 5 deletions(-)
+ delete mode 100644 support/config-fragments/autobuild/sourcery-x86-64.config
 
-diff --git a/package/owfs/0001-Fix-compilation-with-GCC10.patch b/package/owfs/0001-Fix-compilation-with-GCC10.patch
-new file mode 100644
-index 0000000000..49b703ee28
---- /dev/null
-+++ b/package/owfs/0001-Fix-compilation-with-GCC10.patch
-@@ -0,0 +1,41 @@
-+From 43a4bc6b750c37f585d03b14941f3633ed5348d8 Mon Sep 17 00:00:00 2001
-+From: "Azamat H. Hackimov" <azamat.hackimov@gmail.com>
-+Date: Tue, 9 Jun 2020 11:30:38 +0300
-+Subject: [PATCH] Fix compilation with GCC10
-+
-+Fixed compilation with -fno-common, which enabled in GCC 10 by default.
-+See https://bugs.gentoo.org/707438.
-+[Retrieved from:
-+https://github.com/owfs/owfs/commit/43a4bc6b750c37f585d03b14941f3633ed5348d8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ module/owserver/src/c/owserver.c       | 2 ++
-+ module/owserver/src/include/owserver.h | 2 +-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/module/owserver/src/c/owserver.c b/module/owserver/src/c/owserver.c
-+index db29988e..2ed29161 100644
-+--- a/module/owserver/src/c/owserver.c
-++++ b/module/owserver/src/c/owserver.c
-+@@ -36,6 +36,8 @@
-+ 
-+ #include "owserver.h"
-+ 
-++pthread_mutex_t persistence_mutex ;
-++
-+ /* --- Prototypes ------------ */
-+ static void SetupAntiloop(int argc, char **argv);
-+ 
-+diff --git a/module/owserver/src/include/owserver.h b/module/owserver/src/include/owserver.h
-+index 8be582f0..a257ed02 100644
-+--- a/module/owserver/src/include/owserver.h
-++++ b/module/owserver/src/include/owserver.h
-+@@ -18,7 +18,7 @@
-+ #include "ow.h"
-+ #include "ow_connection.h"
-+ 
-+-pthread_mutex_t persistence_mutex ;
-++extern pthread_mutex_t persistence_mutex ;
-+ #define PERSISTENCELOCK    _MUTEX_LOCK(   persistence_mutex ) ;
-+ #define PERSISTENCEUNLOCK  _MUTEX_UNLOCK( persistence_mutex ) ;
-+ 
+diff --git a/support/config-fragments/autobuild/sourcery-x86-64.config b/support/config-fragments/autobuild/sourcery-x86-64.config
+deleted file mode 100644
+index 6c7ad4c5b7..0000000000
+--- a/support/config-fragments/autobuild/sourcery-x86-64.config
++++ /dev/null
+@@ -1,4 +0,0 @@
+-BR2_x86_64=y
+-BR2_x86_steamroller=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 7f05064475..eaaac3d24b 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -69,4 +69,3 @@ support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
+ support/config-fragments/autobuild/sourcery-mips64.config,x86
+ support/config-fragments/autobuild/sourcery-mips.config,x86
+ support/config-fragments/autobuild/sourcery-nios2.config,x86
+-support/config-fragments/autobuild/sourcery-x86-64.config,x86
 -- 
-2.28.0
+2.26.2
