@@ -1,13 +1,16 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Aug 2020 11:04:29 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gstreamer1/gst1-plugins-bad: fix deactivation of opencv
-Message-ID: <20200823090429.2916770-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Aug 2020 11:27:33 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: fix
+ deactivation of opencv
+Message-ID: <20200823092055.D12B6821DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=a4bd80de755877e530cc7cefb4e277d9ea8cbd14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Build can fail if opencv3 is built before gst1-plugins-bad because
 -Dopencv=disabled does not work in meson (i.e. since commit
@@ -17,14 +20,10 @@ Fixes:
  - http://autobuild.buildroot.org/results/19605057c4956d97e9e65068680485db637282db
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2:
- - Update commit log: the issue is there since the switch to meson
- - Simplify patch
-
- ...son-allow-the-user-to-disable-opencv.patch | 31 +++++++++++++++++++
+ ...02-meson-allow-the-user-to-disable-opencv.patch | 31 ++++++++++++++++++++++
  1 file changed, 31 insertions(+)
- create mode 100644 package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch
 
 diff --git a/package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch b/package/gstreamer1/gst1-plugins-bad/0002-meson-allow-the-user-to-disable-opencv.patch
 new file mode 100644
@@ -63,5 +62,3 @@ index 0000000000..02e91e33ed
 +-- 
 +2.28.0
 +
--- 
-2.28.0
