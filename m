@@ -1,65 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 15:30:55 +0200
-Subject: [Buildroot] [git commit] package/chrony: security bump to version
- 3.5.1
-Message-ID: <20200823132435.620DA82DA2@busybox.osuosl.org>
+Date: Sun, 23 Aug 2020 15:30:56 +0200
+Subject: [Buildroot] [git commit] package/bind: security bump to version
+ 9.11.22
+Message-ID: <20200823132435.72CF882DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15484553f3d7e5d1a2a7dfb017ba40ad42b975e4
+commit: https://git.buildroot.net/buildroot/commit/?id=4b126afd27cbcbc4e536a48fd22b676d22e2dc7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
-CVE-2020-14367: Insecure writing of pidfile
--------------------------------------------
+CVE-2020-8622: A truncated TSIG response can lead to an assertion failure
+https://kb.isc.org/docs/cve-2020-8622
 
-When chronyd is configured to save the pidfile in a directory where the
-chrony user has write permissions (e.g. /var/run/chrony - the default
-since chrony-3.4), an attacker that compromised the chrony user account
-could create a symbolic link at the location of the pidfile to make
-chronyd starting with root privileges follow the symlink and write its
-process ID to a file for which the chrony user doesn't have write
-permissions, causing a denial of service, or data loss.
+CVE-2020-8623: A flaw in native PKCS#11 code can lead to a remotely
+triggerable assertion failure in pk11.c
+https://kb.isc.org/docs/cve-2020-8623
 
-This issue was reported by Matthias Gerstner of SUSE.
+CVE-2020-8624: update-policy rules of type "subdomain" are enforced incorrectly
+https://kb.isc.org/docs/cve-2020-8624
 
-For further details, see the oss-security posting:
-https://www.openwall.com/lists/oss-security/2020/08/21/1
+For more details, see the release notes:
+https://downloads.isc.org/isc/bind9/9.11.22/RELEASE-NOTES-bind-9.11.22.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/chrony/chrony.hash | 7 +++----
- package/chrony/chrony.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index c31c6893aa..57ce91ac80 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,5 +1,4 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2019/05/msg00001.html
--md5 5f66338bc940a9b51eede8f391e7bed3  chrony-3.5.tar.gz
--sha1 79e9aeace143550300387a99f17bff04b45673f7  chrony-3.5.tar.gz
-+# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
-+sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
- # Locally calculated
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index d7f5c05183..f8938a80f5 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 282b2aeba3..4ba0182b1c 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.22/bind-9.11.22.tar.gz.asc
+ # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
+-sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
++sha256  afc6d8015006f1cabf699ff19f517bb8fd9c1811e5231f26baf51c3550262ac9  bind-9.11.22.tar.gz
+ sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 80f8defca8..18fc4845f9 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHRONY_VERSION = 3.5
-+CHRONY_VERSION = 3.5.1
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
+-BIND_VERSION = 9.11.20
++BIND_VERSION = 9.11.22
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
