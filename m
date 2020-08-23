@@ -1,33 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 23 Aug 2020 21:31:21 +0000
-Subject: [Buildroot] [Bug 13166] python-rpi-gpio: does not work against
- aarch64, unintentional side-effect of gcc-10 patch
-In-Reply-To: <bug-13166-163@https.bugs.busybox.net/>
-References: <bug-13166-163@https.bugs.busybox.net/>
-Message-ID: <bug-13166-163-IbT2Muz8r6@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Aug 2020 23:33:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kismet: fix build with gcc 9
+In-Reply-To: <20200822202350.2341347-1-fontaine.fabrice@gmail.com>
+References: <20200822202350.2341347-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200823233337.0540a172@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13166
+Hello Fabrice,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+On Sat, 22 Aug 2020 22:23:50 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+> + typedef struct {
+> +-	struct cmsghdr header;
+> + 	int            fd;
+> ++	struct cmsghdr header;
 
---- Comment #9 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Christian, All,
+Are you sure this fix is correct ?
 
-Fixed with commit ae6bd1eb44. Thanks for the report.
+The cmsghdr structure, as its name suggest, is meant to be the "header
+of a message", and that's why it has this zero-length array at the end,
+to access the payload of the message. I am not sure what the
+consequences are in this specific case, but do you have some
+evidence/explanation that this is correct, beyond "it builds fine" ?
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
