@@ -1,62 +1,73 @@
-From: Jeff Tchang <jeff.tchang@gmail.com>
-Date: Sun, 23 Aug 2020 10:43:43 -0700
-Subject: [Buildroot] Unable to bake in an initramfs filesystem into kernel
- image
-Message-ID: <CAG+zT3rM=eaW6oykBgiVdPd4fnZF=efbgBok6Q8WCy2QQ2EnDw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Aug 2020 21:39:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ripgrep: fix debug build
+In-Reply-To: <20200822182237.1834735-1-fontaine.fabrice@gmail.com>
+References: <20200822182237.1834735-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200823193928.GJ8728@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using an older buildroot version (2016.02) and was wondering if there
-was an issue building an embedded initramfs filesystem into the kernel
-image.
+Fabrice, All,
 
-I am able to build an image and boot from it but I get
+Question for a cargo expert! See below!
 
-[    0.000000] Initrd not found or empty - disabling initrd
+On 2020-08-22 20:22 +0200, Fabrice Fontaine spake thusly:
+> There is no --debug mode for cargo resulting in the following build
+> failure since the addition of this package with commit
+> 4b0d1ef6ac00c5170a3fb9d15d06b3d3172e0c97:
+> 
+> error: Unknown flag: '--debug'
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/58e74bb056ec65680ecebaa559aa14bdebbf5c85
+>  - http://autobuild.buildroot.org/results/28c6364a89a6044d5a036614f7a6e59815efb770
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/ripgrep/ripgrep.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+> index 832c076f26..ac9038945c 100644
+> --- a/package/ripgrep/ripgrep.mk
+> +++ b/package/ripgrep/ripgrep.mk
+> @@ -11,12 +11,11 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
+>  
+>  RIPGREP_DEPENDENCIES = host-rustc
+>  RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+> -RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+>  
+>  RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
+>  
+>  RIPGREP_CARGO_OPTS = \
+> -	--$(RIPGREP_CARGO_MODE) \
+> +	--release \
 
-in the kernel log. This leads to me to believe that my image does not have
-any initramfs root filesystem in it. I run mkimage to verify and it looks
-like it doesn't:
+Wouldn't we need to pass --release only when in non-debug builds, i.e:
 
-# mkimage -l output/images/uImage.lzma
+    $(if $(BR2_ENABLE_DEBUG),,--release)
 
-Image Name:   Linux-3.10.14
+Regards,
+Yann E. MORIN.
 
-Created:      Sun Aug 23 16:22:20 2020
+>  	--target=$(RUSTC_TARGET_NAME) \
+>  	--manifest-path=$(@D)/Cargo.toml
+>  
+> -- 
+> 2.28.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Image Type:   MIPS Linux Kernel Image (lzma compressed)
-
-Data Size:    2488545 Bytes = 2430.22 kB = 2.37 MB
-
-Load Address: 80010000
-
-Entry Point:  80467a30
-
-
-My expectation here is that I would see multiple images.
-
-I did a make linux-dirclean and make again after tweaking a few things and
-still got roughly the same output. My defconfig is here:
-https://gist.github.com/tachang/136da666e5cf650e14be7bbca0069465
-
-I do see output that says
-
->>>   Rebuilding kernel with initramfs
-
-
-so not sure what is going on here. Do I need to pass in a kernel command
-line to make sure the kernel reads the initramfs from the one baked in?
-
-I am using busybox as the /init file. I have tried specifying the directory
-where I have the initramfs root, manually cpio'ing it up and passing that
-file, and also just telling buildroot to embed the rootfs into the image.
-
-Kernel boot log is also in the Github gist.
-
--Jeff
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200823/b6d601bc/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
