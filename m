@@ -1,49 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Aug 2020 22:32:36 +0200
-Subject: [Buildroot] [PATCH] package/xen: add upstream security fix for
- XSA-327
-Message-ID: <20200823203236.6175-1-peter@korsgaard.com>
+Date: Sun, 23 Aug 2020 22:39:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to v7.72.0
+In-Reply-To: <20200819125640.142469-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Wed, 19 Aug 2020 14:56:40 +0200")
+References: <20200819125640.142469-1-titouan.christophe@railnova.eu>
+Message-ID: <87wo1pxfkr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-CVE-2020-15564: Missing alignment check in VCPUOP_register_vcpu_info
+ > This new version fixes, amongst many other things, CVE-2020-8231
+ > (https://curl.haxx.se/docs/CVE-2020-8231.html). See the full changelog
+ > on https://curl.haxx.se/changes.html#7_72_0 .
 
-For further details, see the advisory:
+ > Also drop the 4 patches, that have all been released upstream.
 
-https://xenbits.xenproject.org/xsa/advisory-327.html
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xen/xen.hash | 1 +
- package/xen/xen.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+Committed after adjusting subject to mark this as a security fix, thanks.
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index ab5f9d9083..0dd2f571a9 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,4 @@
- # Locally computed
- sha256  b97ce363e55b12c992063f4466c43cba0a6386ceb7a747b4dc670311f337ef01  xen-4.13.1.tar.gz
-+sha256  1d057695d5b74ce2857204103e943caeaf773bc4fb9d91ea78016e01a9147ed7  xsa327.patch
- sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 15742b5127..ee5e9847fe 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -6,6 +6,8 @@
- 
- XEN_VERSION = 4.13.1
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-+XEN_PATCH = \
-+	https://xenbits.xenproject.org/xsa/xsa327.patch
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_DEPENDENCIES = host-acpica host-python3
 -- 
-2.20.1
+Bye, Peter Korsgaard
