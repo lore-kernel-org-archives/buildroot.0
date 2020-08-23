@@ -1,91 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 15:29:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5imageformats: fix build
- with jasper
-In-Reply-To: <20200822182535.1835260-2-fontaine.fabrice@gmail.com>
-References: <20200822182535.1835260-1-fontaine.fabrice@gmail.com>
- <20200822182535.1835260-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200823132909.GF8728@scaer>
+Date: Sun, 23 Aug 2020 15:30:55 +0200
+Subject: [Buildroot] [git commit] package/chrony: security bump to version
+ 3.5.1
+Message-ID: <20200823132435.620DA82DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=15484553f3d7e5d1a2a7dfb017ba40ad42b975e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-08-22 20:25 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/ea3bc0d3110cb54421ecf433317ca79ca0ff834a
->  - http://autobuild.buildroot.org/results/6831dfdd1ecaaa3812de481882040c1742a72aec
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security issues:
 
-Applied to master, thanks.
+CVE-2020-14367: Insecure writing of pidfile
+-------------------------------------------
 
-Regards,
-Yann E. MORIN.
+When chronyd is configured to save the pidfile in a directory where the
+chrony user has write permissions (e.g. /var/run/chrony - the default
+since chrony-3.4), an attacker that compromised the chrony user account
+could create a symbolic link at the location of the pidfile to make
+chronyd starting with root privileges follow the symlink and write its
+process ID to a file for which the chrony user doesn't have write
+permissions, causing a denial of service, or data loss.
 
-> ---
->  .../0001-fix-build-on-Arch-Linux.patch        | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/qt5/qt5imageformats/0001-fix-build-on-Arch-Linux.patch
-> 
-> diff --git a/package/qt5/qt5imageformats/0001-fix-build-on-Arch-Linux.patch b/package/qt5/qt5imageformats/0001-fix-build-on-Arch-Linux.patch
-> new file mode 100644
-> index 0000000000..c348c65260
-> --- /dev/null
-> +++ b/package/qt5/qt5imageformats/0001-fix-build-on-Arch-Linux.patch
-> @@ -0,0 +1,37 @@
-> +From 704868db61be1542c2d9e2b75ead00c45c56cc36 Mon Sep 17 00:00:00 2001
-> +From: "Evgeniy A. Dushistov" <dushistov@mail.ru>
-> +Date: Sat, 15 Aug 2020 15:09:08 +0300
-> +Subject: fix build on Arch Linux
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +qtimageformats/src/plugins/imageformats/jp2/qjp2handler.cpp:844:41:
-> +error: no declaration of ?pow?
-> +  844 |     const double jasperRate = minRate + pow((double(quality) / double(maxQuality)), 2) * maxRate;
-> +
-> +Pick-to: 5.15
-> +Change-Id: I085996c2db2251903b2a3e52e6e648831637c8f9
-> +Reviewed-by: Shawn Rutledge <shawn.rutledge@qt.io>
-> +[Retrieved from:
-> +https://code.qt.io/cgit/qt/qtimageformats.git/commit/?id=704868db61be1542c2d9e2b75ead00c45c56cc36]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/plugins/imageformats/jp2/qjp2handler.cpp | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/src/plugins/imageformats/jp2/qjp2handler.cpp b/src/plugins/imageformats/jp2/qjp2handler.cpp
-> +index 4311d26..05c7bc1 100644
-> +--- a/src/plugins/imageformats/jp2/qjp2handler.cpp
-> ++++ b/src/plugins/imageformats/jp2/qjp2handler.cpp
-> +@@ -45,6 +45,7 @@
-> + #include "qcolor.h"
-> + 
-> + #include <jasper/jasper.h>
-> ++#include <math.h> // for pow
-> + 
-> + QT_BEGIN_NAMESPACE
-> + 
-> +-- 
-> +cgit v1.2.1
-> +
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This issue was reported by Matthias Gerstner of SUSE.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+For further details, see the oss-security posting:
+https://www.openwall.com/lists/oss-security/2020/08/21/1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/chrony/chrony.hash | 7 +++----
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index c31c6893aa..57ce91ac80 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,5 +1,4 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2019/05/msg00001.html
+-md5 5f66338bc940a9b51eede8f391e7bed3  chrony-3.5.tar.gz
+-sha1 79e9aeace143550300387a99f17bff04b45673f7  chrony-3.5.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
++sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
+ # Locally calculated
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index d7f5c05183..f8938a80f5 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 3.5
++CHRONY_VERSION = 3.5.1
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
