@@ -1,71 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 19:05:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: ffi needs dynamic library
-In-Reply-To: <20200823145320.3967619-1-fontaine.fabrice@gmail.com>
-References: <20200823145320.3967619-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200823170510.GI8728@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Aug 2020 19:06:50 +0200
+Subject: [Buildroot] [git commit] package/php: drop
+ BR2_PACKAGE_PHP_EXT_HASH
+In-Reply-To: <20200823165655.328FB814F6@busybox.osuosl.org>
+References: <20200823165655.328FB814F6@busybox.osuosl.org>
+Message-ID: <20200823190650.7bc12a8a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+On Sun, 23 Aug 2020 19:03:20 +0200
+Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-On 2020-08-23 16:53 +0200, Fabrice Fontaine spake thusly:
-> FFI support in php has been added with commit
-> e16f05c0f00081d446ebee56d9f3ad3cf41da1ae, it depends on dynamic library
-> otherwise the build will fail on:
+> commit: https://git.buildroot.net/buildroot/commit/?id=de9e0f1f00cc4491ef67722b93fb77040ef63043
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ext/ffi/ffi.o: in function `zim_FFI_cdef':
-> ffi.c:(.text+0xe78): undefined reference to `DL_LOAD'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3380b7b6777d1c5fcb53c855b003466fa3bf2079
+> hash extension can't be disabled since version 7.4.0 and
+> https://github.com/php/php-src/commit/bf344425812b0f6156d0a8a54ed7bc38054f7636
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Your 3 php-related patches applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > ---
->  package/php/Config.ext | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  Config.in.legacy       | 6 ++++++
+>  package/php/Config.ext | 7 -------
+>  package/php/php.mk     | 1 -
+>  3 files changed, 6 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/php/Config.ext b/package/php/Config.ext
-> index 33a6455366..3a86bf95b7 100644
-> --- a/package/php/Config.ext
-> +++ b/package/php/Config.ext
-> @@ -424,12 +424,13 @@ config BR2_PACKAGE_PHP_EXT_XSL
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index cf7aaf75a5..957cbb8b3c 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,12 @@ endif
 >  
->  config BR2_PACKAGE_PHP_EXT_FFI
->  	bool "FFI"
-> +	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_LIBFFI
->  	help
->  	  Foreign Function Interface support
+>  comment "Legacy options removed in 2020.08"
 >  
-> -comment "PHP FFI extension needs a toolchain w/ threads"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "PHP FFI extension needs a toolchain w/ threads, dynamic library"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
->  
->  endmenu
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +config BR2_PACKAGE_PHP_EXT_HASH
+> +	bool "php hash extension is mandatory"
+> +	select BR2_LEGACY
+> +	help
+> +	  Since php 7.4.0, hash extension can't be disabled.
 
+In this sort of situation, we generally don't add any legacy handling.
+Indeed, since the feature is now mandatory... the default behavior will
+always be OK.
+
+People who could be annoyed are people who had this feature disabled...
+which is now always enabled. But the legacy handling will anyway not
+help those people.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
