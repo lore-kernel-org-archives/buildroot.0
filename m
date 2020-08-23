@@ -1,82 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Aug 2020 15:32:00 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.22
-In-Reply-To: <20200821212612.9029-1-peter@korsgaard.com>
-References: <20200821212612.9029-1-peter@korsgaard.com>
-Message-ID: <20200823133200.GH8728@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Aug 2020 16:16:14 +0200
+Subject: [Buildroot] [PATCH 1/2] package/qt5/qt5imageformats: add
+ optional dependencies
+In-Reply-To: <20200823132822.GE8728@scaer>
+References: <20200822182535.1835260-1-fontaine.fabrice@gmail.com>
+ <20200823132822.GE8728@scaer>
+Message-ID: <CAPi7W81omS4-KyyEbDtKTiG72CFhdEksuTQQx=YYNb=5_R-Dzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi Yann,
 
-On 2020-08-21 23:26 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> CVE-2020-8622: A truncated TSIG response can lead to an assertion failure
-> https://kb.isc.org/docs/cve-2020-8622
-> 
-> CVE-2020-8623: A flaw in native PKCS#11 code can lead to a remotely
-> triggerable assertion failure in pk11.c
-> https://kb.isc.org/docs/cve-2020-8623
-> 
-> CVE-2020-8624: update-policy rules of type "subdomain" are enforced incorrectly
-> https://kb.isc.org/docs/cve-2020-8624
-> 
-> For more details, see the release notes:
-> https://downloads.isc.org/isc/bind9/9.11.22/RELEASE-NOTES-bind-9.11.22.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Le dim. 23 ao?t 2020 ? 15:28, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>
+> On 2020-08-22 20:25 +0200, Fabrice Fontaine spake thusly:
+> > Add optional dependencies which are enabled by default:
+> >  - libmng and tiff are optional dependencies since version 5.0.0 and
+> >    https://github.com/qt/qtimageformats/commit/5373e3e821c7f43d9c941384437b1d39d6e9d47e
+> >  - webp is an optional dependency since version 5.3.0 and
+> >    https://github.com/qt/qtimageformats/commit/4522b350e53471c2ebc6d4692736ee4708445b66
+> >  - jasper is an optional dependency since version 5.7.0 and
+> >    https://github.com/qt/qtimageformats/commit/2d59367241aafbfe6acb30202f64e30697028bd9
+> >
+> > Ideally we should use the configure options to disable those
+> > dependencies if needed especially webp to avoid using the embedded one
+> > These options are defined here:
+> > https://code.qt.io/cgit/qt/qtimageformats.git/tree/config_help.txt
+> > but I'm not skilled enough with the qmake-infrastructure
+>
+> https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_qmake_based_packages
+> It would probably be something along the lines of:
+>
+>     ifeq ($(BR2_PACKAGE_JASPER),y)
+>     QT5IMAGEFORMATS_DEPENDENCIES += jasper
+>     QT5IMAGEFORMATS_CONF_OPTS += QT_CONFIG+=jasper
+>     else
+>     QT5IMAGEFORMATS_CONF_OPTS += QT_CONFIG-=jasper
+>     endif
+This doesn't work, this has no effect on the build (i.e. jasper is
+enabled if it is found on the system even if I passed QT_CONFIG -=
+jasper or more importantly the embedded webp is used even if I passed
+QT_CONFIG -= webp).
 
-Security fix => applied to master, thanks.
+>> qt5imageformats 5.15.0 Configuring
+cd /home/fabrice/buildroot/output/build/qt5imageformats-5.15.0/ &&
+PATH="/home/fabrice/buildroot/output/host/bin:/home/fabrice/buildroot/output/host/sbin:/home/fabrice/perl5/bin:/home/fabrice/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+ /home/fabrice/buildroot/output/host/bin/qmake -spec
+devices/linux-buildroot-g++ QT_CONFIG-=jasper QT_CONFIG-=tiff
+QT_CONFIG-=webp
+Info: creating stash file
+/home/fabrice/buildroot/output/build/qt5imageformats-5.15.0/.qmake.stash
+Info: creating cache file
+/home/fabrice/buildroot/output/build/qt5imageformats-5.15.0/.qmake.cache
 
-Regards,
-Yann E. MORIN.
+Running configuration tests...
+Done running configuration tests.
 
-> ---
->  package/bind/bind.hash | 4 ++--
->  package/bind/bind.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-> index 282b2aeba3..4ba0182b1c 100644
-> --- a/package/bind/bind.hash
-> +++ b/package/bind/bind.hash
-> @@ -1,4 +1,4 @@
-> -# Verified from https://ftp.isc.org/isc/bind9/9.11.20/bind-9.11.20.tar.gz.asc
-> +# Verified from https://ftp.isc.org/isc/bind9/9.11.22/bind-9.11.22.tar.gz.asc
->  # with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
-> -sha256  306831a738a275693bbe1d6839a09b34a2c8b5c26f8a42ea57ef000a6a99c2b6  bind-9.11.20.tar.gz
-> +sha256  afc6d8015006f1cabf699ff19f517bb8fd9c1811e5231f26baf51c3550262ac9  bind-9.11.22.tar.gz
->  sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> index 80f8defca8..18fc4845f9 100644
-> --- a/package/bind/bind.mk
-> +++ b/package/bind/bind.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BIND_VERSION = 9.11.20
-> +BIND_VERSION = 9.11.22
->  BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
->  # bind does not support parallel builds.
->  BIND_MAKE = $(MAKE1)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Configure summary:
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Further Image Formats:
+  JasPer ................................. yes
+  MNG .................................... no
+  TIFF ................................... yes
+    Using system libtiff ................. no
+  WEBP ................................... yes
+    Using system libwebp ................. no
+
+From my understanding, the build option should be -webp=system or
+-webp=no but this option is not recognized by qmake but I know nearly
+nothing about Qt.
+>
+> Would you rework this patch, and split it into four patches, one for
+> each optional dependency, please?
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/qt5/qt5imageformats/qt5imageformats.mk | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+> > index ffb094d566..33631a39b2 100644
+> > --- a/package/qt5/qt5imageformats/qt5imageformats.mk
+> > +++ b/package/qt5/qt5imageformats/qt5imageformats.mk
+> > @@ -12,4 +12,10 @@ QT5IMAGEFORMATS_INSTALL_STAGING = YES
+> >  QT5IMAGEFORMATS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+> >  QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+> >
+> > +QT5IMAGEFORMATS_DEPENDENCIES += \
+> > +     $(if $(BR2_PACKAGE_JASPER),jasper) \
+> > +     $(if $(BR2_PACKAGE_LIBMNG),libmng) \
+> > +     $(if $(BR2_PACKAGE_TIFF),tiff) \
+> > +     $(if $(BR2_PACKAGE_WEBP),webp)
+
+> > +
+> >  $(eval $(qmake-package))
+> > --
+> > 2.28.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
+
+Fabrice
