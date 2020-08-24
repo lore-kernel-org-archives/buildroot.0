@@ -1,74 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:54:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.6.0
-In-Reply-To: <20200823093737.3243619-1-fontaine.fabrice@gmail.com>
-References: <20200823093737.3243619-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200824225404.0efafc90@windsurf.home>
+Date: Mon, 24 Aug 2020 22:41:44 +0200
+Subject: [Buildroot] [git commit branch/next] package/libuhttpd: bump
+ version to 3.2.0
+Message-ID: <20200824204854.9532582905@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=699d4d6242ddc49f495c9c82748e85b82da496bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 23 Aug 2020 11:37:37 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> This bump is needed to fix a build failure with gcc 10:
-> https://savannah.nongnu.org/support/?func=detailitem&item_id=110186#options
-> 
-> Here is an extratc of the bug report:
-> 
-> "It is not a bug to have variables with the same name in different source
-> files. The bug was the missing keyword "static".
-> 
-> But there was a different bug that was not tolerated by GCC 10. It was
-> same strange data type conversions in dav_coda.c. The resolution was to
-> drop coda altogether because there is still fuse which is better suited
-> anyway.
-> 
-> The new release 1.6.0 should fix all these problems. Please tell me if
-> there are still problems with GCC 10."
-> 
-> Also update indentation in hash file (two spaces)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/42beafade6fd31927c8db14bc52110c0fc5b17c2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-I've applied to master. I'm never really happy to apply version bumps
-to master this late in the cycle.
-
-But davfs2 is maintained with CVS, which makes it super annoying [*] to
-track which specific changes between 1.5.6 and 1.6.0 fixed the gcc10
-build.
-
-And also, the changelog for 1.6.0 is just:
-
-"""
-The new release brings:
-
-    The coda module is dropped. It would have required some serious
-    maintenance. But the fuse kernel file system is better suited
-    anyway. So coda is no longer required.
-
-    The neon library from version 0.31 on has a workaround for
-    SharePoint's href-bug. davfs2 can use this workaround.
-
-    Some minor bug fixes (see the ChangeLog file).
-"""
-
-So it's not too bad. So I've applied to master.
-
-[*] "super annoying" = "would require to dive back into how CVS works,
-which is something any reasonable person on earth has long forgotten"
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 49b40688b5..22357cd5eb 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  cd76cf9a5d8c7f81832ab1b229ce3ff10137f161085f0170c128e43c49e905a4  libuhttpd-3.1.4.tar.gz
++sha256  b47623f023d6a1218f2cb078bcc9019949a7f30acce79423e524a481d4bc834d  libuhttpd-3.2.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 9c026cff02..1bb071b3e4 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUHTTPD_VERSION = 3.1.4
++LIBUHTTPD_VERSION = 3.2.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
