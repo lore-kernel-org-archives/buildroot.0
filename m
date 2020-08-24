@@ -1,94 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:36:59 +0200
-Subject: [Buildroot] [PATCH] package/ibm-sw-tpm2: re-fix build with
- uClibc-ng and older glibcs
-In-Reply-To: <20200823211816.108469-1-thomas.petazzoni@bootlin.com>
-References: <20200823211816.108469-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200824223659.721b1b78@windsurf.home>
+Date: Mon, 24 Aug 2020 22:38:51 +0200
+Subject: [Buildroot] [git commit] package/hostapd: add upstream 2020-1
+ security patches
+Message-ID: <20200824203141.B1A4683FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 23 Aug 2020 23:18:15 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9b020359b141f5316276079cbea8001649bcec0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> In commit 26e37cef1627faa1f5ab8935482e2b2bc3465c33, we started using
-> __WORDSIZE to get the size of longs on the given architecture, in
-> order to support all CPU architectures.
-> 
-> Unfortunately, __WORDSIZE is not enabled in musl, so in
-> 19bd08900448aa45b506320ad2ab912f789e6e5e, we switched to using
-> LONG_BIT instead of __WORDSIZE.
-> 
-> However, LONG_BIT is not readily available on glibc, you need
-> _XOPEN_SOURCE to be defined, which was done in
-> a34e7f88f67b77066f73894dc8e42bca3c076fa6.
-> 
-> However, in a34e7f88f67b77066f73894dc8e42bca3c076fa6, _XOPEN_SOURCE
-> was just defined, with no specific value. This caused the build to
-> break again on uClibc-ng and older glibcs, because clock_gettime() and
-> CLOCK_MONOTONIC were no longer defined. In both uClibc-ng and glibc,
-> CLOCK_MONOTONIC is only defined if __USE_POSIX199309 is defined. It
-> turns out that simply defining _XOPEN_SOURCE with no value does not
-> lead to __USE_POSIX199309 being defined in uClibc-ng and old glibcs,
-> while it is defined in newer glibcs.
-> 
-> The difference comes from the following snippet of code, which is
-> present in recent enough glibc's <feature.h> but not uClibc-ng's or
-> older glibc's <feature.h>:
-> 
-> /* If none of the ANSI/POSIX macros are defined, or if _DEFAULT_SOURCE
->    is defined, use POSIX.1-2008 (or another version depending on
->    _XOPEN_SOURCE).  */
-> 
-> So the fact that we are defining _DEFAULT_SOURCE makes it assume that
-> we're using POSIX 2008.09, which obviously includes POSIX 1993.09.
-> 
-> Due to the lack of this code snippet, uClibc-ng <features.h> only
-> enables:
-> 
->      !defined _POSIX_SOURCE && !defined _POSIX_C_SOURCE)
-> 
-> but not:
-> 
-> So we need an _XOPEN_SOURCE level of at least 500 for POSIX 1993.09
-> definitions to be available.
-> 
-> This is confirmed by the feature_test_macros man page, which states:
-> 
->                   _XOPEN_SOURCE < 500
->                          _POSIX_C_SOURCE is defined with the value 2.
-> 
->                   500 <= _XOPEN_SOURCE < 600
->                          _POSIX_C_SOURCE is defined with the value 199506L.
-> 
-> When this is fixed, another issue arises with older glibc toolchains
-> (such as Sourcery ARM), where fd_set is no longer defined. Inded, with
-> POSIX-1.2001 being enabled, we need to include <sys/select.h> to
-> access the fd_set definition and friends (see man fd_set for details).
-> 
-> This commit was tested with two glibc toolchains (recent and old), one
-> uClibc-ng toolchain and one musl toolchain.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/e20f9474fc0217036faa6561df33fa983466ddfe/
->   (uClibc-ng)
-> 
->   http://autobuild.buildroot.net/results/b5d944389fc96ef2c5e0608fe4ac34149e5f9739/
->   (glibc)
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...01-Use-LONG_BIT-to-define-RADIX_BITS.patch | 31 ++++++++++++++-----
->  1 file changed, 23 insertions(+), 8 deletions(-)
+Fixes the following security vulnerabilities:
 
-Applied to master, thanks.
+CVE-2020-12695: The Open Connectivity Foundation UPnP specification before
+2020-04-17 does not forbid the acceptance of a subscription request with a
+delivery URL on a different network segment than the fully qualified
+event-subscription URL, aka the CallStranger issue.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+For details, see the advisory:
+https://w1.fi/security/2020-1/upnp-subscribe-misbehavior-wps-ap.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hostapd/hostapd.hash | 3 +++
+ package/hostapd/hostapd.mk   | 7 +++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index bf5016acc3..e2f76c12d9 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,3 +1,6 @@
+ # Locally calculated
+ sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
++sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
++sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
++sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
+ sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index b94a0e4578..676e36d8ba 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -8,6 +8,10 @@ HOSTAPD_VERSION = 2.9
+ HOSTAPD_SITE = http://w1.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
++HOSTAPD_PATCH = \
++	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
++	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
++	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
+ HOSTAPD_DEPENDENCIES = host-pkgconf
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
+ HOSTAPD_LICENSE = BSD-3-Clause
+@@ -16,6 +20,9 @@ HOSTAPD_LICENSE_FILES = README
+ # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+ HOSTAPD_IGNORE_CVES += CVE-2019-16275
+ 
++# 0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
++HOSTAPD_IGNORE_CVES += CVE-2020-12695
++
+ HOSTAPD_CONFIG_SET =
+ 
+ HOSTAPD_CONFIG_ENABLE = \
