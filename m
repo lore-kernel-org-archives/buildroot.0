@@ -1,44 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:54:54 +0200
-Subject: [Buildroot] [git commit branch/next] package/nut: install to staging
-Message-ID: <20200824204854.B597682905@busybox.osuosl.org>
+Date: Mon, 24 Aug 2020 22:55:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/collectd: add nut
+ support
+Message-ID: <20200824204854.BEA3083F7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb73b7250d0dbd5c81bc25e02978d73cf93667eb
+commit: https://git.buildroot.net/buildroot/commit/?id=5956b08878fe2a57eff159095803218b10797dd0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Needed for collectd plugin.
-
-Added --with-dev to enable install of pkgconfig files:
-https://github.com/networkupstools/nut/blob/master/lib/Makefile.am#L3
+The NUT plugin has status "supported":
+https://collectd.org/wiki/index.php/Plugin:NUT
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nut/nut.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/collectd/Config.in   | 11 +++++++++++
+ package/collectd/collectd.mk |  4 +++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-index 4ea9947128..593d19926a 100644
---- a/package/nut/nut.mk
-+++ b/package/nut/nut.mk
-@@ -9,6 +9,7 @@ NUT_VERSION = $(NUT_VERSION_MAJOR).4
- NUT_SITE = http://www.networkupstools.org/source/$(NUT_VERSION_MAJOR)
- NUT_LICENSE = GPL-2.0+, GPL-3.0+ (python scripts), GPL/Artistic (perl client)
- NUT_LICENSE_FILES = COPYING LICENSE-GPL2 LICENSE-GPL3
-+NUT_INSTALL_STAGING = YES
- NUT_DEPENDENCIES = host-pkgconf
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index cd5d876e80..a21f230294 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -364,6 +364,17 @@ config BR2_PACKAGE_COLLECTD_NTPD
+ 	help
+ 	  Queries an NTP server and extracts parameters.
  
- # Our patch changes m4 macros, so we need to autoreconf
-@@ -21,6 +22,7 @@ NUT_MAKE = $(MAKE1)
- # since the default location (/var/state/ups) maybe readonly.
- NUT_CONF_OPTS = \
- 	--with-altpidpath=/var/run/upsd \
-+	--with-dev \
- 	--without-hal
- 
- # For uClibc-based toolchains, nut forgets to link with -lm
++config BR2_PACKAGE_COLLECTD_NUT
++	bool "nut"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_NUT
++	help
++	  The NUT plugin collects uninterruptible power supply (UPS)
++	  statistics using the Network UPS Tools (NUT).
++
++comment "nut needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_COLLECTD_OLSRD
+ 	bool "olsrd"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 6d084dbe42..e74dafaa2e 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -18,7 +18,7 @@ COLLECTD_PLUGINS_DISABLE = \
+ 	apple_sensors aquaero ascent barometer dbi dpdkstat email \
+ 	gmond hddtemp intel_rdt ipmi java lpar \
+ 	madwifi mbmon mic multimeter netapp notify_desktop numa \
+-	nut oracle perl pf pinba powerdns python routeros \
++	oracle perl pf pinba powerdns python routeros \
+ 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
+ 	tokyotyrant turbostat uuid varnish virt vserver write_kafka \
+ 	write_mongodb xencpu xmms zfs_arc zone
+@@ -103,6 +103,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL),--enable-notify_email,--disable-notify_email) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_NAGIOS),--enable-notify_nagios,--disable-notify_nagios) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NTPD),--enable-ntpd,--disable-ntpd) \
++	$(if $(BR2_PACKAGE_COLLECTD_NUT),--enable-nut,--disable-nut) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_OLSRD),--enable-olsrd,--disable-olsrd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ONEWIRE),--enable-onewire,--disable-onewire) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_OPENLDAP),--enable-openldap,--disable-openldap) \
+@@ -168,6 +169,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NETLINK),libmnl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NGINX),libcurl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL),libesmtp) \
++	$(if $(BR2_PACKAGE_COLLECTD_NUT),nut) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ONEWIRE),owfs) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_OPENLDAP),openldap) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_PING),liboping) \
