@@ -1,69 +1,139 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:05:52 +0200
-Subject: [Buildroot] [git commit] package/ipmitool: fix build with gcc 10
-Message-ID: <20200824195916.C1C438137F@busybox.osuosl.org>
+Date: Mon, 24 Aug 2020 22:07:55 +0200
+Subject: [Buildroot] [git commit] package/netopeer2: add patch to solve
+ issue with empty group name
+Message-ID: <20200824200047.C011B82D93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddb4a931e9a718fa9bc31f7fffd714da750ea9d4
+commit: https://git.buildroot.net/buildroot/commit/?id=3a4a96cf1127db7e81f8cc65ebe404a678a65d4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/b6231d601d6051c97d3c2a0ed3065df03648c40d
+When building on a host that has no name specified for the used group in
+/etc/group the script in install step will fail due to missing group name.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+CMake Error at CMakeLists.txt:80 (message):
+  Learning server module group failed: id: cannot find name for group ID 8000
+
+The patch was taken from upstream and modified manually because of merge
+conflicts.
+
+Fixes:
+http://autobuild.buildroot.net/results/f197ca1def9dc1292e1e784757f2da9d95484431/
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...mfwupg-move-variable-definition-to-c-file.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ ...TURE-support-using-current-user-for-SR-mo.patch | 98 ++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch b/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
+diff --git a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch b/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
 new file mode 100644
-index 0000000000..0b49160ba4
+index 0000000000..45257b2ff4
 --- /dev/null
-+++ b/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
-@@ -0,0 +1,40 @@
-+From c3939dac2c060651361fc71516806f9ab8c38901 Mon Sep 17 00:00:00 2001
-+From: Vaclav Dolezal <vdolezal@redhat.com>
-+Date: Thu, 23 Jan 2020 11:26:32 +0100
-+Subject: [PATCH] hpmfwupg: move variable definition to .c file
++++ b/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+@@ -0,0 +1,98 @@
++From 36ee1f33bceb0c2a7899e28d75c0d05408b561f1 Mon Sep 17 00:00:00 2001
++From: Michal Vasko <mvasko@cesnet.cz>
++Date: Mon, 24 Aug 2020 13:47:40 +0200
++Subject: [PATCH] scripts FEATURE support using current user for SR modules
 +
-+Signed-off-by: Vaclav Dolezal <vdolezal@redhat.com>
-+[Retrieved from:
-+https://github.com/ipmitool/ipmitool/commit/c3939dac2c060651361fc71516806f9ab8c38901]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Mostly for special cases user/group configuration
++when the user/group cannot be retrieved normally.
++
++Fixes #701
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++[patch taken from upstream:
++https://github.com/CESNET/netopeer2/commit/12a82701e10651fbdedb1524b27edf3bb2377488]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 +---
-+ include/ipmitool/ipmi_hpmfwupg.h | 2 +-
-+ lib/ipmi_hpmfwupg.c              | 2 ++
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
++ CMakeLists.txt   | 10 +++++-----
++ scripts/setup.sh | 23 +++++++++++++++++++----
++ 2 files changed, 24 insertions(+), 9 deletions(-)
 +
-+diff --git a/include/ipmitool/ipmi_hpmfwupg.h b/include/ipmitool/ipmi_hpmfwupg.h
-+index de65292b..07f597be 100644
-+--- a/include/ipmitool/ipmi_hpmfwupg.h
-++++ b/include/ipmitool/ipmi_hpmfwupg.h
-+@@ -800,7 +800,7 @@ typedef struct _VERSIONINFO {
-+ 	char descString[HPMFWUPG_DESC_STRING_LENGTH + 1];
-+ }VERSIONINFO, *PVERSIONINFO;
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2d4175e..95e7e61 100755
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -68,19 +68,19 @@ if(NOT MODULES_OWNER)
++     OUTPUT_VARIABLE MODULES_OWNER OUTPUT_STRIP_TRAILING_WHITESPACE
++     ERROR_VARIABLE ERROR_STR OUTPUT_STRIP_TRAILING_WHITESPACE)
++     if(RET)
++-        message(FATAL_ERROR "Learning server module user failed: ${ERROR_STR}")
+++        message(WARNING "Learning server module user failed (${ERROR_STR}), the current user will be used.")
++     endif()
++ endif()
++-set(MODULES_OWNER "${MODULES_OWNER}" CACHE STRING "System user that will become the owner of server modules")
++-if(NOT MODULES_GROUP)
+++set(MODULES_OWNER "${MODULES_OWNER}" CACHE STRING "System user that will become the owner of server modules, empty means the current user")
+++if(NOT MODULES_GROUP AND MODULES_OWNER)
++     execute_process(COMMAND id -gn ${MODULES_OWNER} RESULT_VARIABLE RET
++     OUTPUT_VARIABLE MODULES_GROUP OUTPUT_STRIP_TRAILING_WHITESPACE
++     ERROR_VARIABLE ERROR_STR OUTPUT_STRIP_TRAILING_WHITESPACE)
++     if(RET)
++-        message(FATAL_ERROR "Learning server module group failed: ${ERROR_STR}")
+++        message(WARNING "Learning server module group failed (${ERROR_STR}), the current user group will be used.")
++     endif()
++ endif()
++-set(MODULES_GROUP "${MODULES_GROUP}" CACHE STRING "System group that the server modules will belong to")
+++set(MODULES_GROUP "${MODULES_GROUP}" CACHE STRING "System group that the server modules will belong to, empty means the current user group")
 + 
-+-VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
-++extern VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
++ # set prefix for the PID file
++ if(NOT PIDFILE_PREFIX)
++diff --git a/scripts/setup.sh b/scripts/setup.sh
++index 7175bc4..b5d1406 100755
++--- a/scripts/setup.sh
+++++ b/scripts/setup.sh
++@@ -1,7 +1,8 @@
++ #!/bin/bash
 + 
-+ #define TARGET_VER (0x01)
-+ #define ROLLBACK_VER (0x02)
-+diff --git a/lib/ipmi_hpmfwupg.c b/lib/ipmi_hpmfwupg.c
-+index 4aa8cecd..d63d2c15 100644
-+--- a/lib/ipmi_hpmfwupg.c
-++++ b/lib/ipmi_hpmfwupg.c
-+@@ -50,6 +50,8 @@
++-# env variables NP2_MODULE_DIR, NP2_MODULE_PERMS, NP2_MODULE_OWNER, NP2_MODULE_GROUP must be defined when executing this script!
++-if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" -o -z "$NP2_MODULE_OWNER" -o -z "$NP2_MODULE_GROUP" ]; then
+++# env variables NP2_MODULE_DIR, NP2_MODULE_PERMS must be defined and NP2_MODULE_OWNER, NP2_MODULE_GROUP will be used if
+++# defined when executing this script!
+++if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" ]; then
++     echo "Required environment variables not defined!"
++     exit 1
++ fi
++@@ -33,7 +34,14 @@ MODULES=(
 + 
-+ extern int verbose;
++ # functions
++ INSTALL_MODULE() {
++-    $SYSREPOCTL -a -i $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
+++    CMD="'$SYSREPOCTL' -a -i $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
+++    if [ ! -z ${OWNER} ]; then
+++        CMD="$CMD -o '$OWNER'"
+++    fi
+++    if [ ! -z ${GROUP} ]; then
+++        CMD="$CMD -g '$GROUP'"
+++    fi
+++    eval $CMD
++     local rc=$?
++     if [ $rc -ne 0 ]; then
++         exit $rc
++@@ -41,7 +49,14 @@ INSTALL_MODULE() {
++ }
 + 
-++VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
-++
-+ int HpmfwupgUpgrade(struct ipmi_intf *intf, char *imageFilename,
-+ 		int activate, int, int);
-+ int HpmfwupgValidateImageIntegrity(struct HpmfwupgUpgradeCtx *pFwupgCtx);
++ UPDATE_MODULE() {
++-    $SYSREPOCTL -a -U $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
+++    CMD="'$SYSREPOCTL' -a -U $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
+++    if [ ! -z ${OWNER} ]; then
+++        CMD="$CMD -o '$OWNER'"
+++    fi
+++    if [ ! -z ${GROUP} ]; then
+++        CMD="$CMD -g '$GROUP'"
+++    fi
+++    eval $CMD
++     local rc=$?
++     if [ $rc -ne 0 ]; then
++         exit $rc
++-- 
++2.20.1
++
