@@ -1,187 +1,96 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 24 Aug 2020 14:49:02 -0500
-Subject: [Buildroot] [PATCH 1/1] package/netopeer2: add patch to solve
- issue with empty group name
-In-Reply-To: <20200824124147.23051-1-heiko.thiery@gmail.com>
-References: <20200824124147.23051-1-heiko.thiery@gmail.com>
-Message-ID: <CANQCQpa4DHmdnZpgSY4W49rHMyR0-p4omUwMXxhO5652beC7tQ@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 24 Aug 2020 22:04:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ipmitool: fix build with gcc 10
+In-Reply-To: <20200824182438.1940277-1-fontaine.fabrice@gmail.com>
+References: <20200824182438.1940277-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAEyMn7ZnqfJRUn8sX83Y63gqzK06vFR3RtuL6XR1DQaxvJR48w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko,
+Hi,
 
+Am Mo., 24. Aug. 2020 um 20:25 Uhr schrieb Fabrice Fontaine <
+fontaine.fabrice@gmail.com>:
 
-On Mon, Aug 24, 2020 at 7:43 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> When building on a host that has no name specified for the used group in
-> /etc/group the script in install step will fail due to missing group name.
->
-> CMake Error at CMakeLists.txt:80 (message):
->   Learning server module group failed: id: cannot find name for group ID 8000
->
-
-When cross compiling we still don't want it to actually be using the
-host systems users/groups as part of the build.  However with how
-Buildroot finalizes the root filesystem this will all get fixed up
-before a user would use the rootfs on target.
-
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-> The patch was taken from upstream and modified manually because of merge
-> conflicts.
->
 > Fixes:
-> http://autobuild.buildroot.net/results/f197ca1def9dc1292e1e784757f2da9d95484431/
+>  -
+> http://autobuild.buildroot.org/results/b6231d601d6051c97d3c2a0ed3065df03648c40d
 >
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+
 > ---
->  ...support-using-current-user-for-SR-mo.patch | 98 +++++++++++++++++++
->  1 file changed, 98 insertions(+)
->  create mode 100644 package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+>  ...g-move-variable-definition-to-c-file.patch | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644
+> package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
 >
-> diff --git a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch b/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+> diff --git
+> a/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
+> b/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
 > new file mode 100644
-> index 0000000000..45257b2ff4
+> index 0000000000..0b49160ba4
 > --- /dev/null
-> +++ b/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-> @@ -0,0 +1,98 @@
-> +From 36ee1f33bceb0c2a7899e28d75c0d05408b561f1 Mon Sep 17 00:00:00 2001
-> +From: Michal Vasko <mvasko@cesnet.cz>
-> +Date: Mon, 24 Aug 2020 13:47:40 +0200
-> +Subject: [PATCH] scripts FEATURE support using current user for SR modules
+> +++
+> b/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
+> @@ -0,0 +1,40 @@
+> +From c3939dac2c060651361fc71516806f9ab8c38901 Mon Sep 17 00:00:00 2001
+> +From: Vaclav Dolezal <vdolezal@redhat.com>
+> +Date: Thu, 23 Jan 2020 11:26:32 +0100
+> +Subject: [PATCH] hpmfwupg: move variable definition to .c file
 > +
-> +Mostly for special cases user/group configuration
-> +when the user/group cannot be retrieved normally.
+> +Signed-off-by: Vaclav Dolezal <vdolezal@redhat.com>
+> +[Retrieved from:
 > +
-> +Fixes #701
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +[patch taken from upstream:
-> +https://github.com/CESNET/netopeer2/commit/12a82701e10651fbdedb1524b27edf3bb2377488]
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> https://github.com/ipmitool/ipmitool/commit/c3939dac2c060651361fc71516806f9ab8c38901
+> ]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > +---
-> + CMakeLists.txt   | 10 +++++-----
-> + scripts/setup.sh | 23 +++++++++++++++++++----
-> + 2 files changed, 24 insertions(+), 9 deletions(-)
+> + include/ipmitool/ipmi_hpmfwupg.h | 2 +-
+> + lib/ipmi_hpmfwupg.c              | 2 ++
+> + 2 files changed, 3 insertions(+), 1 deletion(-)
 > +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 2d4175e..95e7e61 100755
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -68,19 +68,19 @@ if(NOT MODULES_OWNER)
-> +     OUTPUT_VARIABLE MODULES_OWNER OUTPUT_STRIP_TRAILING_WHITESPACE
-> +     ERROR_VARIABLE ERROR_STR OUTPUT_STRIP_TRAILING_WHITESPACE)
-> +     if(RET)
-> +-        message(FATAL_ERROR "Learning server module user failed: ${ERROR_STR}")
-> ++        message(WARNING "Learning server module user failed (${ERROR_STR}), the current user will be used.")
-> +     endif()
-> + endif()
-> +-set(MODULES_OWNER "${MODULES_OWNER}" CACHE STRING "System user that will become the owner of server modules")
-> +-if(NOT MODULES_GROUP)
-> ++set(MODULES_OWNER "${MODULES_OWNER}" CACHE STRING "System user that will become the owner of server modules, empty means the current user")
-> ++if(NOT MODULES_GROUP AND MODULES_OWNER)
-> +     execute_process(COMMAND id -gn ${MODULES_OWNER} RESULT_VARIABLE RET
-> +     OUTPUT_VARIABLE MODULES_GROUP OUTPUT_STRIP_TRAILING_WHITESPACE
-> +     ERROR_VARIABLE ERROR_STR OUTPUT_STRIP_TRAILING_WHITESPACE)
-> +     if(RET)
-> +-        message(FATAL_ERROR "Learning server module group failed: ${ERROR_STR}")
-> ++        message(WARNING "Learning server module group failed (${ERROR_STR}), the current user group will be used.")
-> +     endif()
-> + endif()
-> +-set(MODULES_GROUP "${MODULES_GROUP}" CACHE STRING "System group that the server modules will belong to")
-> ++set(MODULES_GROUP "${MODULES_GROUP}" CACHE STRING "System group that the server modules will belong to, empty means the current user group")
+> +diff --git a/include/ipmitool/ipmi_hpmfwupg.h
+> b/include/ipmitool/ipmi_hpmfwupg.h
+> +index de65292b..07f597be 100644
+> +--- a/include/ipmitool/ipmi_hpmfwupg.h
+> ++++ b/include/ipmitool/ipmi_hpmfwupg.h
+> +@@ -800,7 +800,7 @@ typedef struct _VERSIONINFO {
+> +       char descString[HPMFWUPG_DESC_STRING_LENGTH + 1];
+> + }VERSIONINFO, *PVERSIONINFO;
 > +
-> + # set prefix for the PID file
-> + if(NOT PIDFILE_PREFIX)
-> +diff --git a/scripts/setup.sh b/scripts/setup.sh
-> +index 7175bc4..b5d1406 100755
-> +--- a/scripts/setup.sh
-> ++++ b/scripts/setup.sh
-> +@@ -1,7 +1,8 @@
-> + #!/bin/bash
+> +-VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
+> ++extern VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
 > +
-> +-# env variables NP2_MODULE_DIR, NP2_MODULE_PERMS, NP2_MODULE_OWNER, NP2_MODULE_GROUP must be defined when executing this script!
-> +-if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" -o -z "$NP2_MODULE_OWNER" -o -z "$NP2_MODULE_GROUP" ]; then
-> ++# env variables NP2_MODULE_DIR, NP2_MODULE_PERMS must be defined and NP2_MODULE_OWNER, NP2_MODULE_GROUP will be used if
-> ++# defined when executing this script!
-> ++if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" ]; then
-> +     echo "Required environment variables not defined!"
-> +     exit 1
-> + fi
-> +@@ -33,7 +34,14 @@ MODULES=(
+> + #define TARGET_VER (0x01)
+> + #define ROLLBACK_VER (0x02)
+> +diff --git a/lib/ipmi_hpmfwupg.c b/lib/ipmi_hpmfwupg.c
+> +index 4aa8cecd..d63d2c15 100644
+> +--- a/lib/ipmi_hpmfwupg.c
+> ++++ b/lib/ipmi_hpmfwupg.c
+> +@@ -50,6 +50,8 @@
 > +
-> + # functions
-> + INSTALL_MODULE() {
-> +-    $SYSREPOCTL -a -i $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
-> ++    CMD="'$SYSREPOCTL' -a -i $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
-> ++    if [ ! -z ${OWNER} ]; then
-> ++        CMD="$CMD -o '$OWNER'"
-> ++    fi
-> ++    if [ ! -z ${GROUP} ]; then
-> ++        CMD="$CMD -g '$GROUP'"
-> ++    fi
-> ++    eval $CMD
-> +     local rc=$?
-> +     if [ $rc -ne 0 ]; then
-> +         exit $rc
-> +@@ -41,7 +49,14 @@ INSTALL_MODULE() {
-> + }
+> + extern int verbose;
 > +
-> + UPDATE_MODULE() {
-> +-    $SYSREPOCTL -a -U $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
-> ++    CMD="'$SYSREPOCTL' -a -U $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
-> ++    if [ ! -z ${OWNER} ]; then
-> ++        CMD="$CMD -o '$OWNER'"
-> ++    fi
-> ++    if [ ! -z ${GROUP} ]; then
-> ++        CMD="$CMD -g '$GROUP'"
-> ++    fi
-> ++    eval $CMD
-> +     local rc=$?
-> +     if [ $rc -ne 0 ]; then
-> +         exit $rc
-> +--
-> +2.20.1
-> +
+> ++VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
+> ++
+> + int HpmfwupgUpgrade(struct ipmi_intf *intf, char *imageFilename,
+> +               int activate, int, int);
+> + int HpmfwupgValidateImageIntegrity(struct HpmfwupgUpgradeCtx *pFwupgCtx);
 > --
-> 2.20.1
+> 2.28.0
 >
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
-
-
-ALPHA BRAVO COLLINS | Aerospace Redefined
-
-         __ l __
-
- \- - - -o-(_)-o- - - -/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200824/0bf76026/attachment.html>
