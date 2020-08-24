@@ -1,101 +1,131 @@
-From: Olivier Dautricourt <olivier.dautricourt@orolia.com>
-Date: Mon, 24 Aug 2020 11:35:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gpsd: add GPSD_PYTHON config
- option
-In-Reply-To: <875z98a2ax.fsf@tarshish>
-References: <20200824080449.10036-1-olivier.dautricourt@orolia.com>
- <20200824080449.10036-2-olivier.dautricourt@orolia.com>
- <875z98a2ax.fsf@tarshish>
-Message-ID: <20200824093544.GA31482@orolia.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Aug 2020 11:58:22 +0200
+Subject: [Buildroot] [PATCH] package/trousers: add upstream security fix
+Message-ID: <20200824095822.6505-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 08/24/2020 11:14, Baruch Siach wrote:
-> Hi Olivier,
-> 
-> On Mon, Aug 24 2020, Olivier Dautricourt wrote:
-> 
-> > The scons script will install the gps library in the target python3
-> > directory, as well as useful tools like ubxtool.
-> >
-> > Signed-off-by: Olivier Dautricourt <olivier.dautricourt@orolia.com>
-> > ---
-> >  package/gpsd/Config.in | 5 +++++
-> >  package/gpsd/gpsd.mk   | 7 ++++++-
-> >  2 files changed, 11 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-> > index 5dd57c34b8..39054098ba 100644
-> > --- a/package/gpsd/Config.in
-> > +++ b/package/gpsd/Config.in
-> > @@ -229,4 +229,9 @@ config BR2_PACKAGE_GPSD_UBX
-> >       help
-> >         uBlox UBX binary support
-> >
-> > +config BR2_PACKAGE_GPSD_PYTHON
-> > +     bool "Python library"
-> 
-> 'depends on BR2_PACKAGE_PYTHON3' maybe?
-> 
-> What is the size impact of the python library? In the likely case it is
-> orders of magnitude smaller than gpsd itself, you should install it
-> unconditionally when BR2_PACKAGE_PYTHON3 is enabled.
+Fixes the following security issues:
 
-Ok i'll drop the GPSD_PYTHON option.
-> 
-> baruch
-> 
-> > +     help
-> > +       gps Python library
-> > +
-> >  endif
-> > diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-> > index 62c4c611c3..d2e5d57ca8 100644
-> > --- a/package/gpsd/gpsd.mk
-> > +++ b/package/gpsd/gpsd.mk
-> > @@ -23,7 +23,6 @@ GPSD_SCONS_OPTS = \
-> >       prefix=/usr \
-> >       sysroot=$(STAGING_DIR) \
-> >       strip=no \
-> > -     python=no \
-> >       qt=no \
-> >       systemd=$(if $(BR2_INIT_SYSTEMD),yes,no)
-> >
-> > @@ -186,6 +185,12 @@ endif
-> >  ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
-> >  GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
-> >  endif
-> > +ifeq ($(BR2_PACKAGE_GPSD_PYTHON), y)
-> 
-> We don't add space before 'y'.
-> 
-> > +GPSD_SCONS_OPTS += python=yes
-> > +GPSD_SCONS_OPTS += python_libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
-> 
-> Is there build time dependency on python3? If so, you should also add
-> python3 to GPSD_DEPENDENCIES.
-There is no build time dependency on python3 for the library.
-the scons script only copies the .py files into the site-packages directory.
-> 
-> baruch
-> 
-> > +else
-> > +GPSD_SCONS_OPTS += python=no
-> > +endif
-> >
-> >  GPSD_SCONS_ENV += \
-> >       LDFLAGS="$(GPSD_LDFLAGS)" \
-> 
-> --
->                                                      ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+CVE-2020-24332
+If the tcsd daemon is started with root privileges,
+the creation of the system.data file is prone to symlink attacks
 
-I'll send a V2 for this patch (2/2).
+CVE-2020-24330
+If the tcsd daemon is started with root privileges,
+it fails to drop the root gid after it is no longer needed
 
-Regards,
+CVE-2020-24331
+If the tcsd daemon is started with root privileges,
+the tss user has read and write access to the /etc/tcsd.conf file
+
+For details, see the advisory:
+https://www.openwall.com/lists/oss-security/2020/05/20/3
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-security-issues-that-are-present-if.patch | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
+ create mode 100644 package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+
+diff --git a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+new file mode 100644
+index 0000000000..609245dad8
+--- /dev/null
++++ b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+@@ -0,0 +1,90 @@
++From e74dd1d96753b0538192143adf58d04fcd3b242b Mon Sep 17 00:00:00 2001
++From: Matthias Gerstner <mgerstner@suse.de>
++Date: Fri, 14 Aug 2020 22:14:36 -0700
++Subject: [PATCH] Correct multiple security issues that are present if the tcsd
++ is started by root instead of the tss user.
++
++Patch fixes the following 3 CVEs:
++
++CVE-2020-24332
++If the tcsd daemon is started with root privileges,
++the creation of the system.data file is prone to symlink attacks
++
++CVE-2020-24330
++If the tcsd daemon is started with root privileges,
++it fails to drop the root gid after it is no longer needed
++
++CVE-2020-24331
++If the tcsd daemon is started with root privileges,
++the tss user has read and write access to the /etc/tcsd.conf file
++
++Authored-by: Matthias Gerstner <mgerstner@suse.de>
++Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/tcs/ps/tcsps.c   |  2 +-
++ src/tcsd/svrside.c   |  1 +
++ src/tcsd/tcsd_conf.c | 10 +++++-----
++ 3 files changed, 7 insertions(+), 6 deletions(-)
++
++diff --git a/src/tcs/ps/tcsps.c b/src/tcs/ps/tcsps.c
++index e47154b..85d45a9 100644
++--- a/src/tcs/ps/tcsps.c
+++++ b/src/tcs/ps/tcsps.c
++@@ -72,7 +72,7 @@ get_file()
++ 	}
++ 
++ 	/* open and lock the file */
++-	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR, 0600);
+++	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR|O_NOFOLLOW, 0600);
++ 	if (system_ps_fd < 0) {
++ 		LogError("system PS: open() of %s failed: %s",
++ 				tcsd_options.system_ps_file, strerror(errno));
++diff --git a/src/tcsd/svrside.c b/src/tcsd/svrside.c
++index 1ae1636..1c12ff3 100644
++--- a/src/tcsd/svrside.c
+++++ b/src/tcsd/svrside.c
++@@ -473,6 +473,7 @@ main(int argc, char **argv)
++ 		}
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
+++	setgid(pwd->pw_gid);
++ 	setuid(pwd->pw_uid);
++ #endif
++ #endif
++diff --git a/src/tcsd/tcsd_conf.c b/src/tcsd/tcsd_conf.c
++index a31503d..ea8ea13 100644
++--- a/src/tcsd/tcsd_conf.c
+++++ b/src/tcsd/tcsd_conf.c
++@@ -743,7 +743,7 @@ conf_file_init(struct tcsd_config *conf)
++ #ifndef SOLARIS
++ 	struct group *grp;
++ 	struct passwd *pw;
++-	mode_t mode = (S_IRUSR|S_IWUSR);
+++	mode_t mode = (S_IRUSR|S_IWUSR|S_IRGRP);
++ #endif /* SOLARIS */
++ 	TSS_RESULT result;
++ 
++@@ -798,15 +798,15 @@ conf_file_init(struct tcsd_config *conf)
++ 	}
++ 
++ 	/* make sure user/group TSS owns the conf file */
++-	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
+++	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
++ 		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
++-				TSS_USER_NAME, TSS_GROUP_NAME);
+++				"root", TSS_GROUP_NAME);
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
++ 
++-	/* make sure only the tss user can manipulate the config file */
+++	/* make sure only the tss user can read (but not manipulate) the config file */
++ 	if (((stat_buf.st_mode & 0777) ^ mode) != 0) {
++-		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
+++		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
++ #endif /* SOLARIS */
++-- 
++2.20.1
++
 -- 
-Olivier Dautricourt
+2.20.1
