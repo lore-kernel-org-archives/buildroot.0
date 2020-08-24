@@ -1,104 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 13:58:02 +0200
-Subject: [Buildroot] [git commit] package/wayland-utils: new package
-Message-ID: <20200902161637.806DA85EB9@busybox.osuosl.org>
+Date: Mon, 24 Aug 2020 22:54:43 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.1.6
+Message-ID: <20200902161636.2027D85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce49a59ff7d064bc4493e21900841364c7aa4f66
+commit: https://git.buildroot.net/buildroot/commit/?id=b5a1fe3d2909b054c861a4cad8930ffb72559e09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From [1] (for details see [2]):
-
-This is first release of wayland-utils which only contains (for now)
-wayland-info, a utility for displaying information about the Wayland
-protocols supported by a Wayland compositor.
-
-wayland-info is basically a standalone version of weston-info as found
-in weston repository.
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
-[2] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041520.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/wayland-utils/Config.in          |  7 +++++++
- package/wayland-utils/wayland-utils.hash |  6 ++++++
- package/wayland-utils/wayland-utils.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5b783a7fe4..9b90367a81 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2073,6 +2073,7 @@ F:	package/quotatool/
- F:	package/racehound/
- F:	package/redir/
- F:	package/uredir/
-+F:	package/wayland-utils/
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 92b1db7741..27cee7388f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
- F:	package/sdl2_gfx/
-diff --git a/package/Config.in b/package/Config.in
-index f5cdf7c55a..a29bd7ab99 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1472,6 +1472,7 @@ menu "Graphics"
- 	source "package/waffle/Config.in"
- 	source "package/wayland/Config.in"
- 	source "package/wayland-protocols/Config.in"
-+	source "package/wayland-utils/Config.in"
- 	source "package/waylandpp/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-diff --git a/package/wayland-utils/Config.in b/package/wayland-utils/Config.in
-new file mode 100644
-index 0000000000..3ff7f2efe9
---- /dev/null
-+++ b/package/wayland-utils/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_WAYLAND_UTILS
-+	bool "wayland-utils"
-+	depends on BR2_PACKAGE_WAYLAND # wayland-client, wayland-server
-+	help
-+	  Wayland utils (wayland-info).
-+
-+	  https://gitlab.freedesktop.org/ofourdan/wayland-utils
-diff --git a/package/wayland-utils/wayland-utils.hash b/package/wayland-utils/wayland-utils.hash
-new file mode 100644
-index 0000000000..00b6da4033
---- /dev/null
-+++ b/package/wayland-utils/wayland-utils.hash
-@@ -0,0 +1,6 @@
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
-+md5  714875aefb10e7f683cde24e58d033ad  wayland-utils-1.0.0.tar.xz
-+sha1  b5b8d498a892866d56ffbe862039d7c97acbe7bc  wayland-utils-1.0.0.tar.xz
-+sha256  64fecc4c58e87ae9b302901abe10c2e8af69c7503c221a96ecd0700e0aa268c0  wayland-utils-1.0.0.tar.xz
-+sha512  4c6f1822435b36b3acd361c0c54e56150e8a2697a9c4b2c20a149fcfaafe237e45807df3471884ddf594d89558001099e2d938e3f48988ba6950a0f1e3538db2  wayland-utils-1.0.0.tar.xz
-+sha256  1eba39c11640014a5841dd3017e5245fc31f47e1cf43a3287a286dd6a8de8a1a  COPYING
-diff --git a/package/wayland-utils/wayland-utils.mk b/package/wayland-utils/wayland-utils.mk
-new file mode 100644
-index 0000000000..9c4abe7b08
---- /dev/null
-+++ b/package/wayland-utils/wayland-utils.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# wayland-utils
-+#
-+################################################################################
-+
-+WAYLAND_UTILS_VERSION = 1.0.0
-+WAYLAND_UTILS_SITE = http://wayland.freedesktop.org/releases
-+WAYLAND_UTILS_SOURCE = wayland-utils-$(WAYLAND_UTILS_VERSION).tar.xz
-+WAYLAND_UTILS_LICENSE = MIT
-+WAYLAND_UTILS_LICENSE_FILES = COPYING
-+WAYLAND_UTILS_DEPENDENCIES = host-pkgconf wayland
-+
-+$(eval $(meson-package))
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.1.5
++MESA3D_HEADERS_VERSION = 20.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 8974fa3cc2..e589eaeaff 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-August/000592.html
+-sha256  fac1861e6e0bf1aec893f8d86dbfb9d8a0f426ff06b05256df10e3ad7e02c69b  mesa-20.1.5.tar.xz
+-sha512  47796bf2cccfd054ff25f571747754e0ab9b42fe87644ea320b3d9497d63b3013e9b7e59ea0516bbd1a38b5594e0d185bf5a36230ea5c5974e7ff889cee2601e  mesa-20.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-August/000595.html
++sha256  23bed40114b03ad640c95bfe72cc879ed2f941d0d481b77b5204a1fc567fa93c  mesa-20.1.6.tar.xz
++sha512  5ef28334ecb7effaaf597ea3efe0406af62419e6fa629e835d843161ab8d83515626ec0f0495c4cc66af9e5669398ac96c16ca626e4965a9831e1704c995fb09  mesa-20.1.6.tar.xz
+ 
+ # License
+ sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 74c5818006..5f1ed5ebfb 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.1.5
++MESA3D_VERSION = 20.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
