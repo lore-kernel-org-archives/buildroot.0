@@ -1,89 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 24 Aug 2020 11:14:14 +0300
-Subject: [Buildroot] [PATCH 2/2] package/gpsd: add GPSD_PYTHON config
- option
-In-Reply-To: <20200824080449.10036-2-olivier.dautricourt@orolia.com>
-References: <20200824080449.10036-1-olivier.dautricourt@orolia.com>
- <20200824080449.10036-2-olivier.dautricourt@orolia.com>
-Message-ID: <875z98a2ax.fsf@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Aug 2020 10:25:06 +0200
+Subject: [Buildroot] [git commit] package/php: drop
+ BR2_PACKAGE_PHP_EXT_HASH
+In-Reply-To: <20200823190650.7bc12a8a@windsurf.home>
+References: <20200823165655.328FB814F6@busybox.osuosl.org>
+ <20200823190650.7bc12a8a@windsurf.home>
+Message-ID: <20200824082506.GB10811@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Olivier,
+Thomas, All,
 
-On Mon, Aug 24 2020, Olivier Dautricourt wrote:
+On 2020-08-23 19:06 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 23 Aug 2020 19:03:20 +0200
+> Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> 
+> > commit: https://git.buildroot.net/buildroot/commit/?id=de9e0f1f00cc4491ef67722b93fb77040ef63043
+> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > 
+> > hash extension can't be disabled since version 7.4.0 and
+> > https://github.com/php/php-src/commit/bf344425812b0f6156d0a8a54ed7bc38054f7636
+> > 
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > ---
+> >  Config.in.legacy       | 6 ++++++
+> >  package/php/Config.ext | 7 -------
+> >  package/php/php.mk     | 1 -
+> >  3 files changed, 6 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/Config.in.legacy b/Config.in.legacy
+> > index cf7aaf75a5..957cbb8b3c 100644
+> > --- a/Config.in.legacy
+> > +++ b/Config.in.legacy
+> > @@ -146,6 +146,12 @@ endif
+> >  
+> >  comment "Legacy options removed in 2020.08"
+> >  
+> > +config BR2_PACKAGE_PHP_EXT_HASH
+> > +	bool "php hash extension is mandatory"
+> > +	select BR2_LEGACY
+> > +	help
+> > +	  Since php 7.4.0, hash extension can't be disabled.
+> 
+> In this sort of situation, we generally don't add any legacy handling.
+> Indeed, since the feature is now mandatory... the default behavior will
+> always be OK.
+> 
+> People who could be annoyed are people who had this feature disabled...
+> which is now always enabled. But the legacy handling will anyway not
+> help those people.
 
-> The scons script will install the gps library in the target python3
-> directory, as well as useful tools like ubxtool.
->
-> Signed-off-by: Olivier Dautricourt <olivier.dautricourt@orolia.com>
-> ---
->  package/gpsd/Config.in | 5 +++++
->  package/gpsd/gpsd.mk   | 7 ++++++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-> index 5dd57c34b8..39054098ba 100644
-> --- a/package/gpsd/Config.in
-> +++ b/package/gpsd/Config.in
-> @@ -229,4 +229,9 @@ config BR2_PACKAGE_GPSD_UBX
->  	help
->  	  uBlox UBX binary support
->  
-> +config BR2_PACKAGE_GPSD_PYTHON
-> +	bool "Python library"
+Damn. indeed... I'll push a commit to drop it.
 
-'depends on BR2_PACKAGE_PYTHON3' maybe?
-
-What is the size impact of the python library? In the likely case it is
-orders of magnitude smaller than gpsd itself, you should install it
-unconditionally when BR2_PACKAGE_PYTHON3 is enabled.
-
-baruch
-
-> +	help
-> +	  gps Python library
-> +
->  endif
-> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-> index 62c4c611c3..d2e5d57ca8 100644
-> --- a/package/gpsd/gpsd.mk
-> +++ b/package/gpsd/gpsd.mk
-> @@ -23,7 +23,6 @@ GPSD_SCONS_OPTS = \
->  	prefix=/usr \
->  	sysroot=$(STAGING_DIR) \
->  	strip=no \
-> -	python=no \
->  	qt=no \
->  	systemd=$(if $(BR2_INIT_SYSTEMD),yes,no)
->  
-> @@ -186,6 +185,12 @@ endif
->  ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
->  GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
->  endif
-> +ifeq ($(BR2_PACKAGE_GPSD_PYTHON), y)
-
-We don't add space before 'y'.
-
-> +GPSD_SCONS_OPTS += python=yes
-> +GPSD_SCONS_OPTS += python_libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
-
-Is there build time dependency on python3? If so, you should also add
-python3 to GPSD_DEPENDENCIES.
-
-baruch
-
-> +else
-> +GPSD_SCONS_OPTS += python=no
-> +endif
->  
->  GPSD_SCONS_ENV += \
->  	LDFLAGS="$(GPSD_LDFLAGS)" \
+Regards,
+Yann E. MORIN.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
