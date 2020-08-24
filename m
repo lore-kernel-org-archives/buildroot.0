@@ -1,93 +1,109 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 24 Aug 2020 14:48:57 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-pycups: new package
-Message-ID: <20200824214857.4090659-1-joseph.kogut@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 24 Aug 2020 23:33:38 +0000
+Subject: [Buildroot] [Bug 13141] Target-finalize fail with "depmod: ERROR:
+ Bad version passed"
+In-Reply-To: <bug-13141-163@https.bugs.busybox.net/>
+References: <bug-13141-163@https.bugs.busybox.net/>
+Message-ID: <bug-13141-163-iy1AF4SsNu@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pycups/Config.in          |  7 +++++++
- package/python-pycups/python-pycups.hash |  5 +++++
- package/python-pycups/python-pycups.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/python-pycups/Config.in
- create mode 100644 package/python-pycups/python-pycups.hash
- create mode 100644 package/python-pycups/python-pycups.mk
+https://bugs.busybox.net/show_bug.cgi?id=13141
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bba3fd6029..74e05d640a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1385,6 +1385,7 @@ F:	package/libnss/
- F:	package/lld/
- F:	package/llvm/
- F:	package/python-cython/
-+F:	package/python-pycups/
- F:	package/python-raven/
- F:	package/python-schedule/
- F:	package/python-sentry-sdk/
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..61a5ec8dc9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1080,6 +1080,7 @@ menu "External python modules"
- 	source "package/python-pycli/Config.in"
- 	source "package/python-pycparser/Config.in"
- 	source "package/python-pycryptodomex/Config.in"
-+	source "package/python-pycups/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pydantic/Config.in"
- 	source "package/python-pyelftools/Config.in"
-diff --git a/package/python-pycups/Config.in b/package/python-pycups/Config.in
-new file mode 100644
-index 0000000000..eeaf70c9e6
---- /dev/null
-+++ b/package/python-pycups/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYCUPS
-+	bool "python-pycups"
-+	depends on BR2_PACKAGE_CUPS
-+	help
-+	  Python bindings for libcups.
-+
-+	  https://github.com/zdohnal/pycups
-diff --git a/package/python-pycups/python-pycups.hash b/package/python-pycups/python-pycups.hash
-new file mode 100644
-index 0000000000..d1498b61cf
---- /dev/null
-+++ b/package/python-pycups/python-pycups.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pycups/json
-+md5  41eef188b86d01ccfdbaaa05cf0f6ca4  pycups-2.0.1.tar.gz
-+sha256  57434ce5f62548eb12949ca8217f066f4eeb21a5d6ab8b13471dce350e380c90  pycups-2.0.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
-new file mode 100644
-index 0000000000..7572040325
---- /dev/null
-+++ b/package/python-pycups/python-pycups.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pycups
-+#
-+################################################################################
-+
-+PYTHON_PYCUPS_VERSION = 2.0.1
-+PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
-+PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
-+PYTHON_PYCUPS_SETUP_TYPE = distutils
-+PYTHON_PYCUPS_LICENSE = GNU General Public License (GPL)
-+PYTHON_PYCUPS_LICENSE_FILES = COPYING
-+PYTHON_PYCUPS_DEPENDENCIES = cups
-+
-+$(eval $(python-package))
+--- Comment #3 from laurent at neko-labs.eu ---
+Hi yann,
+
+> make V=1:
+if grep -q "CONFIG_MODULES=y"
+/home/buildroot/output/build/linux-linux4sam_6.2/.config; then
+/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
+`/usr/bin/make  HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
+-I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
+-Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
+INSTALL_MOD_PATH=/home/buildroot/output/target
+CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
+DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
+/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
+kernelrelease 2>/dev/null`; fi
+depmod: ERROR: Bad version passed make[1]:
+make: *** [Makefile:747: target-finalize] Error 1
+make : on quitte le r?pertoire ? /home/buildroot ?
+make : on entre dans le r?pertoire ? /home/buildroot ?
+
+> Adding printf 'probed linux version:"%s"\n'
+>
+># Run depmod in a target-finalize hook, to encompass modules installed by
+># packages.
+>define LINUX_RUN_DEPMOD
+>        printf 'probed linux version:"%s"\n' "$(LINUX_VERSION_PROBED)"
+>        if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
+>                $(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) >$(LINUX_VERSION_PROBED); \
+>        fi
+>endef
+>LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
+
+printf 'probed linux version:"%s"\n' "`/usr/bin/make 
+HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
+-I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
+-Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
+INSTALL_MOD_PATH=/home/buildroot/output/target
+CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
+DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
+/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
+kernelrelease 2>/dev/null`"
+probed linux version:"make[1]: Entering directory '/home/buildroot'
+4.19.78-linux4sam-6.2
+make[1]: Leaving directory '/home/buildroot/output/build/linux-linux4sam_6.2'"
+if grep -q "CONFIG_MODULES=y"
+/home/buildroot/output/build/linux-linux4sam_6.2/.config; then
+/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
+`/usr/bin/make  HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
+-I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
+-Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
+INSTALL_MOD_PATH=/home/buildroot/output/target
+CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
+DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
+/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
+kernelrelease 2>/dev/null`; fi
+depmod: ERROR: Bad version passed make[1]:
+make: *** [Makefile:747: target-finalize] Error 1
+make?: on quitte le r?pertoire ??/home/buildroot??
+make?: on entre dans le r?pertoire ??/home/buildroot??
+
+>Removing ccache usage
+printf 'probed linux version:"%s"\n' "`/usr/bin/make  HOSTCC="/usr/bin/gcc -O2
+-I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
+-Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
+INSTALL_MOD_PATH=/home/buildroot/output/target
+CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
+DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
+/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
+kernelrelease 2>/dev/null`"
+probed linux version:"make[1]: Entering directory '/home/buildroot'
+4.19.78-linux4sam-6.2
+make[1]: Leaving directory '/home/buildroot/output/build/linux-linux4sam_6.2'"
+if grep -q "CONFIG_MODULES=y"
+/home/buildroot/output/build/linux-linux4sam_6.2/.config; then
+/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
+`/usr/bin/make  HOSTCC="/usr/bin/gcc -O2 -I/home/buildroot/output/host/include
+-L/home/buildroot/output/host/lib -Wl,-rpath,/home/buildroot/output/host/lib"
+ARCH=arm INSTALL_MOD_PATH=/home/buildroot/output/target
+CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
+DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
+/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
+kernelrelease 2>/dev/null`; fi
+depmod: ERROR: Bad version passed make[1]:
+make: *** [Makefile:747: target-finalize] Error 1
+
+
+For the empty line, I added it to empathize the result, it was not there, you
+are right.
+
+Laurent
+
 -- 
-2.28.0
+You are receiving this mail because:
+You are on the CC list for the bug.
