@@ -1,19 +1,21 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 24 Aug 2020 13:40:28 +0200
-Subject: [Buildroot] [PATCH 2/2] package/openfpgaloader: frop ftdipp
-In-Reply-To: <20200824114028.1309375-1-fontaine.fabrice@gmail.com>
-References: <20200824114028.1309375-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200824114028.1309375-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Aug 2020 14:00:17 +0200
+Subject: [Buildroot] [git commit] package/openfpgaloader: drop ftdipp
+Message-ID: <20200824115428.1A20180271@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d0ad2496cd3579fbe8910d7eebf16589012cdb42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 ftdipp is not needed since version 0.1 and
 https://github.com/trabucayre/openFPGALoader/commit/3df577b70638c37885eef3a27b8931261b259e47
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/openfpgaloader/Config.in | 7 ++-----
  1 file changed, 2 insertions(+), 5 deletions(-)
@@ -39,5 +41,3 @@ index cda20b4347..5bf496627b 100644
 -		!BR2_INSTALL_LIBSTDCPP
 +comment "openfpgaloader needs a toolchain w/ threads, C++"
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--- 
-2.28.0
