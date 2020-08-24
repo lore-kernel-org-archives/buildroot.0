@@ -1,54 +1,67 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 24 Aug 2020 20:21:21 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/kismet: fix build with gcc >= 9
-Message-ID: <20200824182121.1929324-1-fontaine.fabrice@gmail.com>
+Date: Mon, 24 Aug 2020 20:24:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ipmitool: fix build with gcc 10
+Message-ID: <20200824182438.1940277-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kismet fails to build with gcc >= 9 on:
-
-In file included from /home/buildroot/autobuild/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/sys/socket.h:39,
-                 from ipc_remote.h:61,
-                 from ipc_remote.cc:34:
-/home/buildroot/autobuild/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/bits/socket.h:289:33: error: flexible array member 'cmsghdr::__cmsg_data' not at end of 'struct<unnamed>'
-  289 |     __extension__ unsigned char __cmsg_data __flexarr; /* Ancillary data.  */
-      |                                 ^~~~~~~~~~~
-
-Adding -std=c++11 fix the build and can be removed as soon as kismet is
-bumped to latest version as the offending code has been removed. It
-should be noted that kismet builds fine with gcc 8 so it remains unclear
-why this build failure is raised only with gcc >= 9 (build failure
-confirmed with gcc 9 and 10)
-
 Fixes:
- - http://autobuild.buildroot.org/results/85f7c746ae1cc19f8839f892f0c280dcb0444ea9
+ - http://autobuild.buildroot.org/results/b6231d601d6051c97d3c2a0ed3065df03648c40d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Drop incorrect patch and use -std=c++11
+ ...g-move-variable-definition-to-c-file.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
 
- package/kismet/kismet.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index d3946d65f3..49ec6d1467 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -17,6 +17,11 @@ KISMET_AUTORECONF = YES
- 
- KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
-+# flexible array member 'cmsghdr::__cmsg_data' not at end of 'struct<unnamed>'
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9),y)
-+KISMET_CXXFLAGS += -std=c++11
-+endif
+diff --git a/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch b/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
+new file mode 100644
+index 0000000000..0b49160ba4
+--- /dev/null
++++ b/package/ipmitool/0007-hpmfwupg-move-variable-definition-to-c-file.patch
+@@ -0,0 +1,40 @@
++From c3939dac2c060651361fc71516806f9ab8c38901 Mon Sep 17 00:00:00 2001
++From: Vaclav Dolezal <vdolezal@redhat.com>
++Date: Thu, 23 Jan 2020 11:26:32 +0100
++Subject: [PATCH] hpmfwupg: move variable definition to .c file
 +
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- KISMET_CXXFLAGS += -O0
- endif
++Signed-off-by: Vaclav Dolezal <vdolezal@redhat.com>
++[Retrieved from:
++https://github.com/ipmitool/ipmitool/commit/c3939dac2c060651361fc71516806f9ab8c38901]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/ipmitool/ipmi_hpmfwupg.h | 2 +-
++ lib/ipmi_hpmfwupg.c              | 2 ++
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/include/ipmitool/ipmi_hpmfwupg.h b/include/ipmitool/ipmi_hpmfwupg.h
++index de65292b..07f597be 100644
++--- a/include/ipmitool/ipmi_hpmfwupg.h
+++++ b/include/ipmitool/ipmi_hpmfwupg.h
++@@ -800,7 +800,7 @@ typedef struct _VERSIONINFO {
++ 	char descString[HPMFWUPG_DESC_STRING_LENGTH + 1];
++ }VERSIONINFO, *PVERSIONINFO;
++ 
++-VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
+++extern VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
++ 
++ #define TARGET_VER (0x01)
++ #define ROLLBACK_VER (0x02)
++diff --git a/lib/ipmi_hpmfwupg.c b/lib/ipmi_hpmfwupg.c
++index 4aa8cecd..d63d2c15 100644
++--- a/lib/ipmi_hpmfwupg.c
+++++ b/lib/ipmi_hpmfwupg.c
++@@ -50,6 +50,8 @@
++ 
++ extern int verbose;
++ 
+++VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
+++
++ int HpmfwupgUpgrade(struct ipmi_intf *intf, char *imageFilename,
++ 		int activate, int, int);
++ int HpmfwupgValidateImageIntegrity(struct HpmfwupgUpgradeCtx *pFwupgCtx);
 -- 
 2.28.0
