@@ -1,32 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:56:36 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/nut: install to staging
-In-Reply-To: <20200822085643.922674-1-bernd.kuhls@t-online.de>
-References: <20200822085643.922674-1-bernd.kuhls@t-online.de>
-Message-ID: <20200824225636.57c87e5d@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Aug 2020 23:32:41 +0200
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: stop
+ testing Sourcery AMD64 toolchain
+Message-ID: <20200824213005.C5B0080841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Aug 2020 10:56:42 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=868ca33a7b42d1b4e56d09bd31d1c53448bcadeb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Needed for collectd plugin.
-> 
-> Added --with-dev to enable install of pkgconfig files:
-> https://github.com/networkupstools/nut/blob/master/lib/Makefile.am#L3
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/nut/nut.mk | 2 ++
->  1 file changed, 2 insertions(+)
+This toolchain uses an old gcc 6.2.0, and newer versions of the
+toolchain are no longer publicly available. This old gcc 6.2.0 causes
+build issues of Boost, which are unfixable without updating the
+toolchain. As we're about to drop support for this toolchain entirely,
+we must stop testing it in our autobuilder infrastructure.
 
-Both applied to next. Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/config-fragments/autobuild/sourcery-x86-64.config | 4 ----
+ support/config-fragments/autobuild/toolchain-configs.csv  | 1 -
+ 2 files changed, 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/config-fragments/autobuild/sourcery-x86-64.config b/support/config-fragments/autobuild/sourcery-x86-64.config
+deleted file mode 100644
+index 6c7ad4c5b7..0000000000
+--- a/support/config-fragments/autobuild/sourcery-x86-64.config
++++ /dev/null
+@@ -1,4 +0,0 @@
+-BR2_x86_64=y
+-BR2_x86_steamroller=y
+-BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 7f05064475..eaaac3d24b 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -69,4 +69,3 @@ support/config-fragments/autobuild/sourcery-arm-thumb2.config,x86
+ support/config-fragments/autobuild/sourcery-mips64.config,x86
+ support/config-fragments/autobuild/sourcery-mips.config,x86
+ support/config-fragments/autobuild/sourcery-nios2.config,x86
+-support/config-fragments/autobuild/sourcery-x86-64.config,x86
