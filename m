@@ -1,50 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:42:31 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-sh: bump to
- version 1.13.1
-Message-ID: <20200824204854.A28AE82905@busybox.osuosl.org>
+Date: Mon, 24 Aug 2020 22:54:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.1.6
+Message-ID: <20200824204854.ACA4482905@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e43a12039302c6aff927d95c237cb6f2c82ebb83
+commit: https://git.buildroot.net/buildroot/commit/?id=b5a1fe3d2909b054c861a4cad8930ffb72559e09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sh/python-sh.hash | 6 +++---
- package/python-sh/python-sh.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sh/python-sh.hash b/package/python-sh/python-sh.hash
-index cc9ba214b8..fffdd20c15 100644
---- a/package/python-sh/python-sh.hash
-+++ b/package/python-sh/python-sh.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/sh/json
--md5 a8351aef25d25f707c17e0a7a6280251 sh-1.12.14.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/sh/json
-+md5  7e3dd3a6b49c06db93746994a68cb8cf  sh-1.13.1.tar.gz
-+sha256  97a3d2205e3c6a842d87ebbc9ae93acae5a352b1bc4609b428d0fd5bb9e286a3  sh-1.13.1.tar.gz
- # Locally computed
--sha256  b52bf5833ed01c7b5c5fb73a7f71b3d98d48e9b9b8764236237bdc7ecae850fc  sh-1.12.14.tar.gz
- sha256  d8491c6e236568d04f7c8c07f2f1b8f5d142706dab6ab88f6e0d2dd476b6c706  LICENSE.txt
-diff --git a/package/python-sh/python-sh.mk b/package/python-sh/python-sh.mk
-index dfe80d5628..21c0fb3d77 100644
---- a/package/python-sh/python-sh.mk
-+++ b/package/python-sh/python-sh.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 92b1db7741..27cee7388f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.1.5
++MESA3D_HEADERS_VERSION = 20.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 8974fa3cc2..e589eaeaff 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-August/000592.html
+-sha256  fac1861e6e0bf1aec893f8d86dbfb9d8a0f426ff06b05256df10e3ad7e02c69b  mesa-20.1.5.tar.xz
+-sha512  47796bf2cccfd054ff25f571747754e0ab9b42fe87644ea320b3d9497d63b3013e9b7e59ea0516bbd1a38b5594e0d185bf5a36230ea5c5974e7ff889cee2601e  mesa-20.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-August/000595.html
++sha256  23bed40114b03ad640c95bfe72cc879ed2f941d0d481b77b5204a1fc567fa93c  mesa-20.1.6.tar.xz
++sha512  5ef28334ecb7effaaf597ea3efe0406af62419e6fa629e835d843161ab8d83515626ec0f0495c4cc66af9e5669398ac96c16ca626e4965a9831e1704c995fb09  mesa-20.1.6.tar.xz
+ 
+ # License
+ sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 74c5818006..5f1ed5ebfb 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_SH_VERSION = 1.12.14
-+PYTHON_SH_VERSION = 1.13.1
- PYTHON_SH_SOURCE = sh-$(PYTHON_SH_VERSION).tar.gz
--PYTHON_SH_SITE = https://pypi.python.org/packages/7c/71/199d27d3e7e78bf448bcecae0105a1d5b29173ffd2bbadaa95a74c156770
-+PYTHON_SH_SITE = https://files.pythonhosted.org/packages/c9/3b/2c9a22bf1c48ced7ff3a11d4a862682c21d825c35f9d025811ad9808d263
- PYTHON_SH_SETUP_TYPE = setuptools
- PYTHON_SH_LICENSE = MIT
- PYTHON_SH_LICENSE_FILES = LICENSE.txt
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.1.5
++MESA3D_VERSION = 20.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
