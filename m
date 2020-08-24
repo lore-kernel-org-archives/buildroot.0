@@ -1,77 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Aug 2020 10:59:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openfpgaloader: needs gcc >= 4.9
-In-Reply-To: <20200820204158.1237689-1-fontaine.fabrice@gmail.com>
-References: <20200820204158.1237689-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200824085941.GE10811@scaer>
+Date: Mon, 24 Aug 2020 11:02:08 +0200
+Subject: [Buildroot] [git commit] package/ripgrep: fix debug build
+Message-ID: <20200824085615.9B70183C02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d67ff44850fdb7f5159d2b6c3310e7501231a24f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-08-20 22:41 +0200, Fabrice Fontaine spake thusly:
-> openfpgaloader needs C++11 as specified in CMakeLists.txt:
-> set(CMAKE_CXX_STANDARD 11)
-> 
-> The build on gcc 4.8 fails on:
-> 
-> /home/buildroot/autobuild/instance-1/output-1/build/openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61/src/spiFlash.cpp: In member function 'void SPIFlash::jtag_write_read(uint8_t, uint8_t*, uint8_t*, uint16_t)':
-> /home/buildroot/autobuild/instance-1/output-1/build/openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61/src/spiFlash.cpp:92:43: error: variable-sized object 'jtx' may not be initialized
->   uint8_t jtx[xfer_len] = {reverseByte(cmd)};
->                                            ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f3f3cc216ae42bb8a8925b0df7c1a3cc79b027d7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+There is no --debug mode for cargo resulting in the following build
+failure since the addition of this package with commit
+4b0d1ef6ac00c5170a3fb9d15d06b3d3172e0c97:
 
-We now have a version that has this fix (as well as others), so this
-patch is no longer needed. Thanks for prompting the update! :-)
+error: Unknown flag: '--debug'
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/58e74bb056ec65680ecebaa559aa14bdebbf5c85
+ - http://autobuild.buildroot.org/results/28c6364a89a6044d5a036614f7a6e59815efb770
 
-> ---
->  package/openfpgaloader/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
-> index 9835b84b64..493fa09c84 100644
-> --- a/package/openfpgaloader/Config.in
-> +++ b/package/openfpgaloader/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_OPENFPGALOADER
->  	depends on BR2_PACKAGE_HAS_UDEV
->  	depends on BR2_INSTALL_LIBSTDCPP # libftdipp1
->  	depends on BR2_USE_WCHAR # libftdipp1
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
->  	select BR2_PACKAGE_ARGP_STANDALONE \
->  	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL # argp
->  	select BR2_PACKAGE_LIBFTDI1
-> @@ -13,6 +14,7 @@ config BR2_PACKAGE_OPENFPGALOADER
->  
->  	  https://github.com/trabucayre/openFPGALoader/
->  
-> -comment "openfpgaloader needs udev, a toolchain w/ threads, wchar, C++"
-> +comment "openfpgaloader needs udev, a toolchain w/ threads, wchar, C++, gcc >= 4.9"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-> -		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_UDEV
-> +		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_UDEV || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: keep the default 'dev' mode when in debug]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/ripgrep/ripgrep.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 832c076f26..5f58630ffe 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -11,12 +11,11 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
+ 
+ RIPGREP_DEPENDENCIES = host-rustc
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+ 
+ RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
+ 
+ RIPGREP_CARGO_OPTS = \
+-	--$(RIPGREP_CARGO_MODE) \
++	$(if $(BR2_ENABLE_DEBUG),,--release) \
+ 	--target=$(RUSTC_TARGET_NAME) \
+ 	--manifest-path=$(@D)/Cargo.toml
+ 
