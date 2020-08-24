@@ -1,46 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Aug 2020 18:03:37 +0200
-Subject: [Buildroot] Problem adding a new package tpm2-tss-engine
-In-Reply-To: <VI1PR03MB45286A4A50F37EBB0DC2E56298560@VI1PR03MB4528.eurprd03.prod.outlook.com>
-References: <VI1PR03MB45286A4A50F37EBB0DC2E56298560@VI1PR03MB4528.eurprd03.prod.outlook.com>
-Message-ID: <20200824160337.GB2246@scaer>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Tue, 25 Aug 2020 00:14:17 +0800
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.2.0
+Message-ID: <20200824161417.16610-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marie, All,
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-08-24 14:06 +0000, Marie Maurer spake thusly:
-> Hello,
-[--SNIP--]
-> TPM2_TSS_AUTORECONF = YES
-
-Typo in the name of that variable; it should be TPM2_TSS_ENGINE_AUTORECONF.
-
-Run 'make check-package' which should hint at such typoes.
-
-> define TPM2_TSS_ENGINE_PRE_CONFIGURE_BOOTSTRAP
->     cd $(@D)/ && ./bootstrap
-> endef
-> TPM2_TSS_ENGINE_PRE_CONFIGURE_HOOKS += TPM2_TSS_ENGINE_PRE_CONFIGURE_BOOTSTRAP
-
-No need for this hook, since you have _AUTORECONF, above.
-
-Also, such hooks are usually bad, because such bootstrap scripts usually
-do not have the proper variables and options that are needed to properly
-autoreconf in the Buildroot context.
-
-So I guess your issue stems from the typo in the _AUTORECONF variable.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 49b40688b5..22357cd5eb 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  cd76cf9a5d8c7f81832ab1b229ce3ff10137f161085f0170c128e43c49e905a4  libuhttpd-3.1.4.tar.gz
++sha256  b47623f023d6a1218f2cb078bcc9019949a7f30acce79423e524a481d4bc834d  libuhttpd-3.2.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 9c026cff02..1bb071b3e4 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUHTTPD_VERSION = 3.1.4
++LIBUHTTPD_VERSION = 3.2.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
