@@ -1,65 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:51:25 +0200
-Subject: [Buildroot] [git commit] package/davfs2: bump to version 1.6.0
-Message-ID: <20200824204422.AD70483C0B@busybox.osuosl.org>
+Date: Mon, 24 Aug 2020 22:54:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.6.0
+In-Reply-To: <20200823093737.3243619-1-fontaine.fabrice@gmail.com>
+References: <20200823093737.3243619-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200824225404.0efafc90@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afc8119d3c3aaa4e047302043cf88234f91fdd06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This bump is needed to fix a build failure with gcc 10:
-https://savannah.nongnu.org/support/?func=detailitem&item_id=110186#options
+On Sun, 23 Aug 2020 11:37:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Here is an extract of the bug report:
+> This bump is needed to fix a build failure with gcc 10:
+> https://savannah.nongnu.org/support/?func=detailitem&item_id=110186#options
+> 
+> Here is an extratc of the bug report:
+> 
+> "It is not a bug to have variables with the same name in different source
+> files. The bug was the missing keyword "static".
+> 
+> But there was a different bug that was not tolerated by GCC 10. It was
+> same strange data type conversions in dav_coda.c. The resolution was to
+> drop coda altogether because there is still fuse which is better suited
+> anyway.
+> 
+> The new release 1.6.0 should fix all these problems. Please tell me if
+> there are still problems with GCC 10."
+> 
+> Also update indentation in hash file (two spaces)
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/42beafade6fd31927c8db14bc52110c0fc5b17c2
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-"It is not a bug to have variables with the same name in different source
-files. The bug was the missing keyword "static".
+I've applied to master. I'm never really happy to apply version bumps
+to master this late in the cycle.
 
-But there was a different bug that was not tolerated by GCC 10. It was
-same strange data type conversions in dav_coda.c. The resolution was to
-drop coda altogether because there is still fuse which is better suited
-anyway.
+But davfs2 is maintained with CVS, which makes it super annoying [*] to
+track which specific changes between 1.5.6 and 1.6.0 fixed the gcc10
+build.
 
-The new release 1.6.0 should fix all these problems. Please tell me if
-there are still problems with GCC 10."
+And also, the changelog for 1.6.0 is just:
 
-Also update indentation in hash file (two spaces)
+"""
+The new release brings:
 
-Fixes:
- - http://autobuild.buildroot.org/results/42beafade6fd31927c8db14bc52110c0fc5b17c2
+    The coda module is dropped. It would have required some serious
+    maintenance. But the fuse kernel file system is better suited
+    anyway. So coda is no longer required.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/davfs2/davfs2.hash | 4 ++--
- package/davfs2/davfs2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+    The neon library from version 0.31 on has a workaround for
+    SharePoint's href-bug. davfs2 can use this workaround.
 
-diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
-index b8ac0af1b5..88a314d1c2 100644
---- a/package/davfs2/davfs2.hash
-+++ b/package/davfs2/davfs2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 417476cdcfd53966b2dcfaf12455b54f315959b488a89255ab4b44586153d801  davfs2-1.5.6.tar.gz
-+sha256  2e6b675685bd917772be60f0999ae098c80f79ff20dc131e8fec4547cbb63b50  davfs2-1.6.0.tar.gz
- # License file, locally calculated
--sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-+sha256  0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index a73093a52a..a82e9d2f7c 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAVFS2_VERSION = 1.5.6
-+DAVFS2_VERSION = 1.6.0
- DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
- DAVFS2_LICENSE = GPL-3.0+
- DAVFS2_LICENSE_FILES = COPYING
+    Some minor bug fixes (see the ChangeLog file).
+"""
+
+So it's not too bad. So I've applied to master.
+
+[*] "super annoying" = "would require to dive back into how CVS works,
+which is something any reasonable person on earth has long forgotten"
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
