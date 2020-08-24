@@ -1,285 +1,54 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon, 24 Aug 2020 20:17:40 +0200
-Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
-In-Reply-To: <20200824181740.12878-1-jugurtha.belkalem@smile.fr>
-References: <20200824181740.12878-1-jugurtha.belkalem@smile.fr>
-Message-ID: <20200824181740.12878-2-jugurtha.belkalem@smile.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 Aug 2020 20:21:21 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/kismet: fix build with gcc >= 9
+Message-ID: <20200824182121.1929324-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bcc is a front-end tool for eBPF :
-https://github.com/iovisor/bcc/blob/master/README.md.
-eBPF is the most powerful Linux tracer, and bcc
-allows to write eBPF scripts in C and PYTHON3.
+kismet fails to build with gcc >= 9 on:
 
-bcc can help to troubleshoot issues quickly on
-embedded systems (as long as Linux kernel
-version >= 4.1).
+In file included from /home/buildroot/autobuild/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/sys/socket.h:39,
+                 from ipc_remote.h:61,
+                 from ipc_remote.cc:34:
+/home/buildroot/autobuild/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/bits/socket.h:289:33: error: flexible array member 'cmsghdr::__cmsg_data' not at end of 'struct<unnamed>'
+  289 |     __extension__ unsigned char __cmsg_data __flexarr; /* Ancillary data.  */
+      |                                 ^~~~~~~~~~~
 
-bcc can also make it easy to create observabilty tools,
-SDN configuration, ddos mitigation, intrusion detection
-and secure containers. More information is available at:
-http://www.brendangregg.com/ebpf.html.
+Adding -std=c++11 fix the build and can be removed as soon as kismet is
+bumped to latest version as the offending code has been removed. It
+should be noted that kismet builds fine with gcc 8 so it remains unclear
+why this build failure is raised only with gcc >= 9 (build failure
+confirmed with gcc 9 and 10)
 
-BCC can be tested on the target :
-$ mount -t debugfs none /sys/kernel/debug
-$ mkdir -p /lib/modules/KERNEL_VERSION/build
-$ cd /lib/modules/KERNEL_VERSION//build
-$ cp /sys/kernel/kheaders.tar.xz .
-$ unxz kheaders.tar.xz
-$ tar xf kheaders.tar
-$ cd /usr/share/bcc/examples/tracing
-$ ./disksnoop.py
+Fixes:
+ - http://autobuild.buildroot.org/results/85f7c746ae1cc19f8839f892f0c280dcb0444ea9
 
-V3
-- Bump to version 0.16.0.
-- Add required python dependency.
-- Remove unnecessary and duplicated
-  kernel flags (#Testing section) in bcc.mk.
--------------
-V2
-- Add eBPF's required Kernel flags.
-- Fix submodule source fetch problem.
-- Add toolchain dependency.
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/bcc/0001-fix-aarch64-cross-compile.patch | 65 ++++++++++++++++++++++++
- package/bcc/Config.in                            | 49 ++++++++++++++++++
- package/bcc/bcc.hash                             |  3 ++
- package/bcc/bcc.mk                               | 57 +++++++++++++++++++++
- 6 files changed, 176 insertions(+)
- create mode 100644 package/bcc/0001-fix-aarch64-cross-compile.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.hash
- create mode 100644 package/bcc/bcc.mk
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Drop incorrect patch and use -std=c++11
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 42fa5a4..bd836a6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1396,6 +1396,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
+ package/kismet/kismet.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index d3946d65f3..49ec6d1467 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -17,6 +17,11 @@ KISMET_AUTORECONF = YES
  
- N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/bcc/
- F:	package/python-cycler/
- F:	package/python-matplotlib/
+ KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
  
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4..8ec3932 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -83,6 +83,7 @@ menu "Compressors and decompressors"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-+	source "package/bcc/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-diff --git a/package/bcc/0001-fix-aarch64-cross-compile.patch b/package/bcc/0001-fix-aarch64-cross-compile.patch
-new file mode 100644
-index 0000000..6b42797
---- /dev/null
-+++ b/package/bcc/0001-fix-aarch64-cross-compile.patch
-@@ -0,0 +1,65 @@
-+From 5a5b0f04484e00c88e7be902101367d6d591fb96 Mon Sep 17 00:00:00 2001
-+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Date: Thu, 2 May 2019 11:06:23 +0200
-+Subject: [PATCH] cmake/luajit: Provide the target architecture to luaJIT while
-+ cross-compiling
++# flexible array member 'cmsghdr::__cmsg_data' not at end of 'struct<unnamed>'
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_9),y)
++KISMET_CXXFLAGS += -std=c++11
++endif
 +
-+Unlike CMAKE_SYSTEM_PROCESSOR which identifies aarch64
-+as a valid architecture, luajit does not recognize it.
-+luajit defines aarch64 as arm64.
-+
-+LuaJIT doesn't use usual arch naming, so we have to convert
-+between CMake and Luajit for each architectures while
-+cross-compiling.
-+
-+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+v2: Do the same for other architecture supported by LuaJIT.
-+https://github.com/iovisor/bcc/pull/2480
-+---
-+ src/lua/CMakeLists.txt | 29 ++++++++++++++++++++++++++++-
-+ 1 file changed, 28 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/lua/CMakeLists.txt b/src/lua/CMakeLists.txt
-+index 7541d48df..226e1b1d2 100644
-+--- a/src/lua/CMakeLists.txt
-++++ b/src/lua/CMakeLists.txt
-+@@ -13,9 +13,36 @@ if (LUAJIT_LIBRARIES AND LUAJIT)
-+ 		DEPENDS ${SRC_LUA} ${CMAKE_CURRENT_SOURCE_DIR}/squishy
-+ 	)
-+ 
-++	# LuaJIT doesn't use usual arch naming, so we have to convert
-++	# between CMake and Luajit while cross-compiling.
-++	if (CMAKE_CROSSCOMPILING)
-++		SET (LUAJIT_TARGET_ARCH "-a")
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L30
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L65
-++		if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64_be")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64be")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86)$")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x86")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mips")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mipsel")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "ppc")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x64")
-++		else()
-++			MESSAGE(FATAL_ERROR "${CMAKE_SYSTEM_PROCESSOR} is not supported by LuaJIT")
-++		endif()
-++	endif()
-++
-+ 	ADD_CUSTOM_COMMAND(
-+ 		OUTPUT bcc.o
-+-		COMMAND ${LUAJIT} -bg bcc.lua bcc.o
-++		COMMAND ${LUAJIT} -bg bcc.lua ${LUAJIT_TARGET_ARCH} bcc.o
-+ 		DEPENDS bcc.lua
-+ 	)
-+ 
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
-new file mode 100644
-index 0000000..cf03927
---- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,49 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
-+	depends on BR2_LINUX_KERNEL # needs kernel sources on the target
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # clang
-+	depends on BR2_INSTALL_LIBSTDCPP # clang
-+	select BR2_PACKAGE_AUDIT # runtime
-+	select BR2_PACKAGE_CLANG
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_FLEX # needs FlexLexer.h
-+	select BR2_PACKAGE_IPERF3 # runtime
-+	select BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_NETPERF # runtime
-+	select BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_XZ # Decompress kernel headers required by BCC
-+	help
-+	  BPF Compiler Collection (BCC)
-+
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples. It makes use of extended BPF (Berkeley Packet
-+	  Filters), formally known as eBPF, a new feature that was
-+	  first added to Linux 3.15. Much of what BCC uses requires
-+	  Linux 4.1 and above.
-+
-+	  Note: Before using bcc, you need either need to :
-+	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
-+	  to target folder /lib/module/<kernel_ver>/build.
-+	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
-+	  and use generated headers under /sys/kernel/kheaders.tar.xz
-+	  to populate /lib/module/<kernel_ver>/build.
-+
-+	  That's because the clang frontend build eBPF code at runtime.
-+
-+	  https://github.com/iovisor/bcc
-+
-+comment "bcc needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "bcc needs a glibc toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
-new file mode 100644
-index 0000000..e3fa662
---- /dev/null
-+++ b/package/bcc/bcc.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 38105c6c7e53d6a8d4c2be5c2e6dd46ebeaa1489600501711d85cfe9bc065e9d  bcc-v0.16.0.tar.gz
-+sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
-new file mode 100644
-index 0000000..4fe69cb
---- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# bcc
-+#
-+################################################################################
-+
-+BCC_VERSION = v0.16.0
-+BCC_SITE = https://github.com/iovisor/bcc.git
-+BCC_SITE_METHOD = git
-+BCC_GIT_SUBMODULES = YES
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+# libbcc.so and libbpf.so
-+BCC_INSTALL_STAGING = YES
-+BCC_DEPENDENCIES = host-bison host-flex host-luajit clang elfutils flex llvm \
-+		   luajit python3
-+
-+# ENABLE_LLVM_SHARED=ON to use llvm.so.
-+# Force REVISION otherwise bcc will use git describe to generate a version number.
-+BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
-+	-DREVISION=$(BCC_VERSION) \
-+	-DENABLE_CLANG_JIT=ON \
-+	-DENABLE_MAN=OFF
-+
-+# BCC requires python-bcc (shiped under bcc/src/python) to work.
-+# However, BCC compiles bcc/src/python/setup.py.in into bcc/src/python.
-+# The generated compiled folder (bcc/src/python/bcc-python/bcc) should
-+# be copied to target python's site-packages directory.
-+define BCC_INSTALL_PYTHON_BCC
-+	cp -r $(BUILD_DIR)/bcc-$(BCC_VERSION)/src/python/bcc-python/bcc \
-+	$(TARGET_DIR)/usr/lib/python3.*/site-packages/
-+endef
-+BCC_POST_INSTALL_TARGET_HOOKS += BCC_INSTALL_PYTHON_BCC
-+
-+define BCC_LINUX_CONFIG_FIXUPS
-+	# Enable kernel support for eBPF
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_JIT)
-+	# [for Linux kernel versions 4.1 through 4.6]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_BPF_JIT)
-+	# [for Linux kernel versions 4.7 and later]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_EBPF_JIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_EVENTS)
-+	# [for Linux kernel versions 5.2 and later]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IKHEADERS)
-+	# For running bcc networking examples on vanilla kernel
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCH_SFQ)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_POLICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_GACT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
-+endef
-+
-+$(eval $(cmake-package))
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ KISMET_CXXFLAGS += -O0
+ endif
 -- 
-2.7.4
+2.28.0
