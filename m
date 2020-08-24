@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:19:03 +0200
-Subject: [Buildroot] Building for Raspberry Pi on Pi (in Ubuntu WSL same
- is working)
-In-Reply-To: <VI1PR03MB4528407221D0FA62FAF6E2AC98560@VI1PR03MB4528.eurprd03.prod.outlook.com>
-References: <VI1PR03MB4528407221D0FA62FAF6E2AC98560@VI1PR03MB4528.eurprd03.prod.outlook.com>
-Message-ID: <20200824221903.167aeb55@windsurf.home>
+Date: Mon, 24 Aug 2020 22:21:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netopeer2: add patch to solve
+ issue with empty group name
+In-Reply-To: <20200824124147.23051-1-heiko.thiery@gmail.com>
+References: <20200824124147.23051-1-heiko.thiery@gmail.com>
+Message-ID: <20200824222109.4aa6b63d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marie,
+On Mon, 24 Aug 2020 14:41:47 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-On Mon, 24 Aug 2020 14:09:01 +0000
-Marie Maurer <marie.maurer@pixida.de> wrote:
+> When building on a host that has no name specified for the used group in
+> /etc/group the script in install step will fail due to missing group name.
+> 
+> CMake Error at CMakeLists.txt:80 (message):
+>   Learning server module group failed: id: cannot find name for group ID 8000
+> 
+> The patch was taken from upstream and modified manually because of merge
+> conflicts.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/f197ca1def9dc1292e1e784757f2da9d95484431/
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  ...support-using-current-user-for-SR-mo.patch | 98 +++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+>  create mode 100644 package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
 
-> /usr/bin/gcc -c -DHAVE_CONFIG_H -I. -I.. -D__GMP_WITHIN_GMP -I.. -DOPERATION_divrem_1 -I/home/pi/buildroot/buildroot-2020.08-rc1/output/host/include -O2 -I/home/pi/buildroot/buildroot-2020.08-rc1/output/host/include -Wa,--noexecstack tmp-divrem_1.s -fPIC -DPIC -o .libs/divrem_1.o
-> tmp-divrem_1.s: Assembler messages:
-> tmp-divrem_1.s:129: Error: selected processor does not support `mls r1,r4,r8,r11' in ARM mode
-> tmp-divrem_1.s:145: Error: selected processor does not support `mls r1,r4,r8,r11' in ARM mode
-> tmp-divrem_1.s:158: Error: selected processor does not support `mls r1,r4,r8,r11' in ARM mode
-> tmp-divrem_1.s:175: Error: selected processor does not support `mls r1,r4,r3,r8' in ARM mode
-> tmp-divrem_1.s:209: Error: selected processor does not support `mls r11,r4,r12,r3' in ARM mode
-
-So this means that the GMP build system thinks your CPU supports the
-MLS instruction (which exists since ARMv6T2), but in fact the gcc on
-your system says it is not available.
-
-I would suggest to have a look at how GMP detects which optimized ARM
-code to use in mpn/arm/ as this is probably where the issue is.
-
-Could you try with GMP 6.2.0 as was suggested in the thread, or share
-the complete build log of host-gmp, as well as the config.log file ?
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
