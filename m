@@ -1,7 +1,7 @@
 From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue, 25 Aug 2020 19:40:23 -0300
-Subject: [Buildroot] [PATCH] package/mutt: bump version to 1.14.6
-Message-ID: <20200825224023.15241-1-sergio.prado@e-labworks.com>
+Date: Tue, 25 Aug 2020 19:59:24 -0300
+Subject: [Buildroot] [PATCH] package/nano: bump version to 5.2
+Message-ID: <20200825225924.26199-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 972d1433df55..e3007370a48a 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ca8e56f8210b4fffa91ea08958b62b811cce552fe4fd7d726111cf53079ed3c3  mutt-1.14.4.tar.gz
-+sha256  47972a0152b81b9f67ff322a0a6682b914c15545bfdeac6bcc2f2c0bf9361844  mutt-1.14.6.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index b8a116aab035..6c85202fc0bf 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 54c8ab591d4a..792f18a0986b 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v4/nano-4.9.3.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.2.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  6e3438f033a0ed07d3d74c30d0803cbda3d2366ba1601b7bbf9b16ac371f51b4  nano-4.9.3.tar.xz
++sha256  32c2da43e1ae9a5e43437d8c6e1ec0388af870c7762c479e5bffb5f292bda7e1  nano-5.2.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index f3dd9fc89577..67ce0729804f 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MUTT_VERSION = 1.14.4
-+MUTT_VERSION = 1.14.6
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+-NANO_VERSION_MAJOR = 4
+-NANO_VERSION = $(NANO_VERSION_MAJOR).9.3
++NANO_VERSION_MAJOR = 5
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
 2.17.1
