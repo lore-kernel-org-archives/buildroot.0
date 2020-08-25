@@ -1,43 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Aug 2020 14:15:49 +0200
-Subject: [Buildroot] [PATCH] Do not remove path from RPATH when it is
- needed for dlopen at runtime
-In-Reply-To: <1569933210-12665-1-git-send-email-ysionneau@kalray.eu>
-References: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
- <1569933210-12665-1-git-send-email-ysionneau@kalray.eu>
-Message-ID: <20200825141549.52d79ff2@windsurf.home>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Tue, 25 Aug 2020 14:58:09 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: ensure tmpfiles.d/legacy.conf
+ is installed
+In-Reply-To: <20200825104313.6691deaa@windsurf.home>
+References: <20200825000246.4035-1-joseph.kogut@gmail.com>
+ <20200825104313.6691deaa@windsurf.home>
+Message-ID: <CADYdroN4Zo-OeMxiKny7=snTELUr=1pBbvjC1puVAprfsco77w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Am Di., 25. Aug. 2020 um 10:43 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> Hello,
+>
+> I'm adding Norbert Lange in Cc, since he has done quite a bit of
+> systemd work in Buildroot recently. Norbert, could you review the below
+> patch ?
+>
+> Also, Norbert, I think it would be nice if you could add yourself in
+> the DEVELOPERS file for package/systemd/. You have been very active
+> recently in improving our systemd package, and it would be good to have
+> someone review systemd related patches.
+>
+> Thanks!
+>
+> Thomas
+>
+> On Mon, 24 Aug 2020 17:02:46 -0700
+> Joseph Kogut <joseph.kogut@gmail.com> wrote:
+>
+> > Systemd doesn't install tmpfiles.d/legacy.conf when sysv compatiblity
+> > isn't enabled. This config sets up /var/lock, which many programs such
+> > as uboot's fw_printenv/setenv still depend on by default.
+> >
+> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> > ---
+> >  package/systemd/systemd.mk | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> > index e356cb1add..8454993823 100644
+> > --- a/package/systemd/systemd.mk
+> > +++ b/package/systemd/systemd.mk
+> > @@ -512,10 +512,18 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+> >       touch $(TARGET_DIR)/etc/machine-id
+> >  endef
+> >
+> > +# systemd doesn't install legacy.conf without sysv-compat
+> > +# This config ensures /var/lock is created
+> > +define SYSTEMD_INSTALL_LEGACY_CONF_HOOK
+> > +     $(INSTALL) -D -m 0644 $(@D)/tmpfiles.d/legacy.conf \
+> > +             $(TARGET_DIR)/usr/lib/tmpfiles.d
+> > +endef
+> > +
+> >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+> >       SYSTEMD_INSTALL_INIT_HOOK \
+> >       SYSTEMD_INSTALL_MACHINEID_HOOK \
+> > -     SYSTEMD_INSTALL_RESOLVCONF_HOOK
+> > +     SYSTEMD_INSTALL_RESOLVCONF_HOOK \
+> > +     SYSTEMD_INSTALL_LEGACY_CONF_HOOK
+> >
+> >  define SYSTEMD_INSTALL_IMAGES_CMDS
+> >       $(SYSTEMD_INSTALL_BOOT_FILES)
+>
+>
+>
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-On Tue,  1 Oct 2019 14:33:30 +0200
-Yann Sionneau <ysionneau@kalray.eu> wrote:
+Not sure what I should add here, technically the patch is fine.
 
-> Do not remove path from RPATH when it points to a directory containing no
-> shared object present as DT_NEEDED in .dynamic section.
-> The RPATH can pretty well be needed at runtime for dlopen.
-> 
-> This fixes tst-origin uClibc-ng unit test:
-> https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
-> https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
-> 
-> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+- Should BR support /var/lock?
+Then probably adding you own buildroot.conf to one of the skeletons
+would be better (handle /var/lock and /var/run at a central spot)
 
-It's been a long long while, but it turned out I was reported the exact
-same issue (though not with uClibc-ng tests), and indeed a simple test
-cases shows that patchelf is dropping RPATH entries if there's no
-library in that directory with a corresponding DT_NEEDED entry in the
-binary, which breaks dlopen() if it relies on RPATH entries.
+If not, then patching out its uses should be the long-term goal. I am
+not sure I agree with Joseph that many packages use /var/lock,
+even less so if you use a systemd rootfs (only know of a few busybox
+and if-updown services that do).
 
-So I've significantly rewritten your commit log, with more
-explanations, and applied your patch to master. Thanks!
+Being the guy that spent time removing all those legacy files I am
+prolly biased then it comes to the right answer;
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Norbert
