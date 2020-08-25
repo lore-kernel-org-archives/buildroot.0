@@ -1,114 +1,106 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 25 Aug 2020 09:41:28 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pycups: new package
-In-Reply-To: <20200824214857.4090659-1-joseph.kogut@gmail.com>
-References: <20200824214857.4090659-1-joseph.kogut@gmail.com>
-Message-ID: <CALFsTFUuBM9uJKo9Gz4jx2PV3TwwuJs5gcKySrTJih21ZHyt7Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 25 Aug 2020 09:14:24 +0200
+Subject: [Buildroot] [git commit branch/next] package/iptraf-ng: bump to
+ version 1.2.1
+Message-ID: <20200825070731.E9E5082132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a3cb9df7f555c59d4444e98c02ebf55a6fb1bdf4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, Aug 25, 2020 at 12:49 AM Joseph Kogut <joseph.kogut@gmail.com> wrote:
->
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/python-pycups/Config.in          |  7 +++++++
->  package/python-pycups/python-pycups.hash |  5 +++++
->  package/python-pycups/python-pycups.mk   | 15 +++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-pycups/Config.in
->  create mode 100644 package/python-pycups/python-pycups.hash
->  create mode 100644 package/python-pycups/python-pycups.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index bba3fd6029..74e05d640a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1385,6 +1385,7 @@ F:        package/libnss/
->  F:     package/lld/
->  F:     package/llvm/
->  F:     package/python-cython/
-> +F:     package/python-pycups/
->  F:     package/python-raven/
->  F:     package/python-schedule/
->  F:     package/python-sentry-sdk/
-> diff --git a/package/Config.in b/package/Config.in
-> index d7e79f4795..61a5ec8dc9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1080,6 +1080,7 @@ menu "External python modules"
->         source "package/python-pycli/Config.in"
->         source "package/python-pycparser/Config.in"
->         source "package/python-pycryptodomex/Config.in"
-> +       source "package/python-pycups/Config.in"
->         source "package/python-pydal/Config.in"
->         source "package/python-pydantic/Config.in"
->         source "package/python-pyelftools/Config.in"
-> diff --git a/package/python-pycups/Config.in b/package/python-pycups/Config.in
-> new file mode 100644
-> index 0000000000..eeaf70c9e6
-> --- /dev/null
-> +++ b/package/python-pycups/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PYCUPS
-According to the README in the repository, Python3 is required for
-this package so you should add:
-depends on BR2_PACKAGE_PYTHON3
+IPTraf-ng is a console-based network monitoring program for Linux that
+displays information about IP traffic. It returns such information as:
 
-> +       bool "python-pycups"
-> +       depends on BR2_PACKAGE_CUPS
-Since this package wraps the CUPS API and uses the cups package, you
-should select BR2_PACKAGE_CUPS instead of depending on it (and add the
-additional "depends on" sections from cups).
+- Current TCP connections
+- UDP, ICMP, OSPF, and other types of IP packets
+- Packet and byte counts on TCP connections
+- IP, TCP, UDP, ICMP, non-IP, and other packet and byte counts
+- TCP/UDP counts by ports
+- Packet counts by packet sizes
+- Packet and byte counts by IP address
+- Interface activity
+- Flag statuses on TCP packets
+- LAN station statistics
 
-> +       help
-> +         Python bindings for libcups.
-> +
-> +         https://github.com/zdohnal/pycups
-> diff --git a/package/python-pycups/python-pycups.hash b/package/python-pycups/python-pycups.hash
-> new file mode 100644
-> index 0000000000..d1498b61cf
-> --- /dev/null
-> +++ b/package/python-pycups/python-pycups.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/pycups/json
-> +md5  41eef188b86d01ccfdbaaa05cf0f6ca4  pycups-2.0.1.tar.gz
-> +sha256  57434ce5f62548eb12949ca8217f066f4eeb21a5d6ab8b13471dce350e380c90  pycups-2.0.1.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
-> new file mode 100644
-> index 0000000000..7572040325
-> --- /dev/null
-> +++ b/package/python-pycups/python-pycups.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-pycups
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYCUPS_VERSION = 2.0.1
-> +PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
-> +PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
-> +PYTHON_PYCUPS_SETUP_TYPE = distutils
-> +PYTHON_PYCUPS_LICENSE = GNU General Public License (GPL)
-GPL is actually a series of licenses, so you should state the specific type.
-In this case, you can do:
-PYTHON_PYCUPS_LICENSE = GPL-2.0
+V1.2.1 fixed multiple issues in V1.1.4 like :
+- Introduce packet capturing abstraction: add recvmmsg(),
+  TPACKET_V2 and TPACKET_V3 to capture in multigigabit speeds.
+- Handling mlock() failures and carry on execution (without
+  crashing iptraf-ng).
+- Properly account non-IP packets.
+- Show dropped packet count.
 
-> +PYTHON_PYCUPS_LICENSE_FILES = COPYING
-> +PYTHON_PYCUPS_DEPENDENCIES = cups
-> +
-> +$(eval $(python-package))
-> --
-> 2.28.0
->
-Best regards,
-Asaf.
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iptraf-ng/Config.in      |  7 +++----
+ package/iptraf-ng/iptraf-ng.hash |  3 +--
+ package/iptraf-ng/iptraf-ng.mk   | 19 ++++++++++++-------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
+index 5c3b4848b9..f240daf93d 100644
+--- a/package/iptraf-ng/Config.in
++++ b/package/iptraf-ng/Config.in
+@@ -3,11 +3,10 @@ config BR2_PACKAGE_IPTRAF_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  IPTraf-ng is a ncurses-based network monitoring utility. It
+-	  gathers data like TCP connection packet and byte counts,
+-	  interface statistics and activity indicators.
++	  IPTraf-ng is a console-based network monitoring program for
++	  Linux that gathers displays information about IP traffic.
+ 
+-	  https://fedorahosted.org/iptraf-ng/
++	  https://github.com/iptraf-ng/iptraf-ng
+ 
+ 	  IPTraf-ng is a fork of original IPTraf v3.0.0
+ 	  (http://iptraf.seul.org).
+diff --git a/package/iptraf-ng/iptraf-ng.hash b/package/iptraf-ng/iptraf-ng.hash
+index 0a257ec2fd..314d5cee29 100644
+--- a/package/iptraf-ng/iptraf-ng.hash
++++ b/package/iptraf-ng/iptraf-ng.hash
+@@ -1,4 +1,3 @@
+-# From https://fedorahosted.org/releases/i/p/iptraf-ng/iptraf-ng-1.1.4.tar.gz.sum
+-sha1	a2e51b0dd6b8c80583fc25d055850c96b3d2f544	iptraf-ng-1.1.4.tar.gz
+ # Locally computed
++sha256  9f5cef584065420dea1ba32c86126aede1fa9bd25b0f8362b0f9fd9754f00870  iptraf-ng-1.2.1.tar.gz
+ sha256  4e49bef38f621aac4a870da4b30011c7b7abc7256b218daec1c425b08448ae1e  LICENSE
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index ac572b9eef..044630be41 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -4,16 +4,21 @@
+ #
+ ################################################################################
+ 
+-IPTRAF_NG_VERSION = 1.1.4
+-IPTRAF_NG_SITE = https://fedorahosted.org/releases/i/p/iptraf-ng
++IPTRAF_NG_VERSION = 1.2.1
++IPTRAF_NG_SITE = $(call github,iptraf-ng,iptraf-ng,v$(IPTRAF_NG_VERSION))
+ IPTRAF_NG_LICENSE = GPL-2.0+
+ IPTRAF_NG_LICENSE_FILES = LICENSE
+ IPTRAF_NG_DEPENDENCIES = ncurses
+ 
+-IPTRAF_NG_MAKE_ENV = \
+-	NCURSES_LDFLAGS="-lpanel -lncurses"
++define IPTRAF_NG_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		NCURSES_LDFLAGS="-lpanel -lncurses" \
++		-C $(@D)
++endef
+ 
+-IPTRAF_NG_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++define IPTRAF_NG_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		prefix=/usr DESTDIR=$(TARGET_DIR) install
++endef
+ 
+-$(eval $(autotools-package))
++$(eval $(generic-package))
