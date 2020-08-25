@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 14:34:15 +0200
-Subject: [Buildroot] [git commit] package/watchdog: drop AUTORECONF
-Message-ID: <20200902161637.9E6E585EB9@busybox.osuosl.org>
+Date: Tue, 25 Aug 2020 23:02:07 +0200
+Subject: [Buildroot] [git commit] package/libyang: enable LYD_PRIV option
+ for frr package
+Message-ID: <20200902161636.482E785EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46080111af0fd3730048a15fc0b7f739ad39dd44
+commit: https://git.buildroot.net/buildroot/commit/?id=d97e54747c83977da7f5c00408da3c18756915e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The upstream tarball provides an already generated configure script,
-which works fine, so there's no need to AUTORECONF.
+This option is required by frr package, so enable it by default as there
+is no size difference with or without this option enabled.
 
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/watchdog/watchdog.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libyang/libyang.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/watchdog/watchdog.mk b/package/watchdog/watchdog.mk
-index b814fdc672..2699fb474f 100644
---- a/package/watchdog/watchdog.mk
-+++ b/package/watchdog/watchdog.mk
-@@ -6,7 +6,6 @@
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index 95185b1f9b..c1ca51c36e 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -15,7 +15,8 @@ HOST_LIBYANG_DEPENDENCIES = host-pcre
  
- WATCHDOG_VERSION = 5.16
- WATCHDOG_SITE = http://downloads.sourceforge.net/sourceforge/watchdog
--WATCHDOG_AUTORECONF = YES
- WATCHDOG_LICENSE = GPL-2.0+
- WATCHDOG_LICENSE_FILES = COPYING
- # By default installs binaries in /usr/sbin/, but we want them in
+ LIBYANG_CONF_OPTS = \
+ 	-DENABLE_VALGRIND_TESTS=OFF \
+-	-DGEN_PYTHON_BINDINGS=OFF
++	-DGEN_PYTHON_BINDINGS=OFF \
++	-DENABLE_LYD_PRIV=ON
+ 
+ HOST_LIBYANG_CONF_OPTS = \
+ 	-DENABLE_VALGRIND_TESTS=OFF \
