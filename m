@@ -1,104 +1,54 @@
-From: Marie Maurer <marie.maurer@pixida.de>
-Date: Tue, 25 Aug 2020 07:33:43 +0000
-Subject: [Buildroot] Problem adding a new package tpm2-tss-engine
-In-Reply-To: <20200824163801.GC2246@scaer>
-References: <VI1PR03MB45286A4A50F37EBB0DC2E56298560@VI1PR03MB4528.eurprd03.prod.outlook.com>
- <20200824160337.GB2246@scaer>
- <VI1PR03MB4528F54C1492D171A1B7B37B98560@VI1PR03MB4528.eurprd03.prod.outlook.com>
- <20200824163801.GC2246@scaer>
-Message-ID: <VI1PR03MB452804C180D2B7AC473E9F0B98570@VI1PR03MB4528.eurprd03.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 25 Aug 2020 09:33:45 +0200
+Subject: [Buildroot] Building for Raspberry Pi on Pi (in Ubuntu WSL same
+ is working)
+In-Reply-To: <VI1PR03MB4528133C5651F56F709E5ED698570@VI1PR03MB4528.eurprd03.prod.outlook.com>
+References: <VI1PR03MB4528407221D0FA62FAF6E2AC98560@VI1PR03MB4528.eurprd03.prod.outlook.com>
+ <20200824221903.167aeb55@windsurf.home>
+ <VI1PR03MB452800581DAF06C2AC4B1B0298570@VI1PR03MB4528.eurprd03.prod.outlook.com>
+ <VI1PR03MB4528133C5651F56F709E5ED698570@VI1PR03MB4528.eurprd03.prod.outlook.com>
+Message-ID: <20200825093345.50f51945@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hallo Yann,
+Hello Marie,
 
-you were right, I have overseen, that I must remove also remove TPM2_TSS_ENGINE_PRE_CONFIGURE_BOOTSTRAP.
+On Tue, 25 Aug 2020 07:26:18 +0000
+Marie Maurer <marie.maurer@pixida.de> wrote:
 
-It makes progress:
+> Perhaps full rebuild necessary?
 
-marie at 2020L009:~/buildroot-2020.08-rc1/buildroot-2020.08-rc1$ make
->>> tpm2-tss-engine 1.1.0-rc1 Configuring
->>> tpm2-tss-engine 1.1.0-rc1 Autoreconfiguring
-aclocal: installing 'm4/libtool.m4' from '/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/share/aclocal/libtool.m4'
-aclocal: installing 'm4/ltoptions.m4' from '/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/share/aclocal/ltoptions.m4'
-aclocal: installing 'm4/ltsugar.m4' from '/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/share/aclocal/ltsugar.m4'
-aclocal: installing 'm4/ltversion.m4' from '/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/share/aclocal/ltversion.m4'
-aclocal: installing 'm4/lt~obsolete.m4' from '/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/share/aclocal/lt~obsolete.m4'
-aclocal: installing 'm4/pkg.m4' from '/home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/share/aclocal/pkg.m4'
-libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
-libtoolize: copying file 'build-aux/ltmain.sh'
-libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
-libtoolize: copying file 'm4/libtool.m4'
-libtoolize: copying file 'm4/ltoptions.m4'
-libtoolize: copying file 'm4/ltsugar.m4'
-libtoolize: copying file 'm4/ltversion.m4'
-libtoolize: copying file 'm4/lt~obsolete.m4'
-configure.ac:51: error: possibly undefined macro: AC_SUBST
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-configure.ac:76: error: possibly undefined macro: AS_IF
-configure.ac:121: error: possibly undefined macro: AC_MSG_WARN
-configure.ac:173: error: possibly undefined macro: AC_MSG_ERROR
-autoreconf: /home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/host/bin/autoconf failed with exit status: 1
-make: *** [package/pkg-generic.mk:239: /home/marie/buildroot-2020.08-rc1/buildroot-2020.08-rc1/output/build/tpm2-tss-engine-1.1.0-rc1/.stamp_configured] Error 1
-marie at 2020L009:~/buildroot-2020.08-rc1/buildroot-2020.08-rc1$
+No, I don't think a full rebuild will help here.
 
-I must look how to deal with these new errors.
+> checking build system type... armv7l-unknown-linux-gnueabihf
+> checking host system type... armv7l-unknown-linux-gnueabihf
+
+On which RaspberryPi are you building ? It's detecting an ARMv7 core
+here.
+
+>  /usr/bin/gcc -c -DHAVE_CONFIG_H -I. -I.. -D__GMP_WITHIN_GMP -I.. -DOPERATION_divrem_1 -I/home/pi/buildroot/buildroot-2020.08-rc2/output/host/include -O2 -I/home/pi/buildroot/buildroot-2020.08-rc2/output/host/include -Wa,--noexecstack tmp-divrem_1.s -fPIC -DPIC -o .libs/divrem_1.o
+> tmp-divrem_1.s: Assembler messages:
+> tmp-divrem_1.s:130: Error: selected processor does not support `mls r1,r4,r8,r11' in ARM mode
+> tmp-divrem_1.s:146: Error: selected processor does not support `mls r1,r4,r8,r11' in ARM mode
+> tmp-divrem_1.s:159: Error: selected processor does not support `mls r1,r4,r8,r11' in ARM mode
+> tmp-divrem_1.s:176: Error: selected processor does not support `mls r1,r4,r3,r8' in ARM mode
+> tmp-divrem_1.s:210: Error: selected processor does not support `mls r11,r4,r12,r3' in ARM mode
+> make[3]: *** [Makefile:768: divrem_1.lo] Error 1
+
+And it doesn't make any sense for ARMv7 to not have support for MLS if
+I'm correct.
+
+But more globally, why are you trying to build Buildroot on a
+RaspberryPi itself? It's going to be massively slow compared to the
+build time you would achieve on any reasonable x86-64 system.
 
 Best regards,
 
-Marie
-
------Urspr?ngliche Nachricht-----
-Von: Yann E. MORIN <yann.morin.1998@free.fr>
-Gesendet: Montag, 24. August 2020 18:38
-An: Marie Maurer <marie.maurer@pixida.de>
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] Problem adding a new package tpm2-tss-engine
-
-Marie, All,
-
-On 2020-08-24 16:21 +0000, Marie Maurer spake thusly:
-> define TPM2_TSS_ENGINE_PRE_CONFIGURE_BOOTSTRAP
->         cd $(@D)/ && ./bootstrap
-> endef
-> TPM2_TSS_ENGINE_PRE_CONFIGURE_HOOKS +=
-> TPM2_TSS_ENGINE_PRE_CONFIGURE_BOOTSTRAP
-
-In case I was not clear in my previous reply: do _not_ use the bootstrap script, it is not needed.  So, drop your TPM2_TSS_ENGINE_PRE_CONFIGURE_BOOTSTRAP
-macro altogether.
-
-Setting _AUTORECONF = YES should be enough to trigger the autoreconfiguring of the package.
-
-Regards,
-Yann E. MORIN.
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-| conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-
-
-Pixida GmbH
-Ungererstr. 129
-80805 M?nchen
-
-Amtsgericht M?nchen - HRB 173520
-Gesch?ftsf?hrer Johann Neubauer, Panagiota Dimou
-
-
-
-www.pixida.de<http://www.pixida.de/>
-
-[PIXIDA]
-
-
-
-Unsere Datenschutzgrunds?tze<http://www.pixida.com/grundsaetze.html>
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
