@@ -1,109 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Aug 2020 23:33:38 +0000
-Subject: [Buildroot] [Bug 13141] Target-finalize fail with "depmod: ERROR:
- Bad version passed"
-In-Reply-To: <bug-13141-163@https.bugs.busybox.net/>
-References: <bug-13141-163@https.bugs.busybox.net/>
-Message-ID: <bug-13141-163-iy1AF4SsNu@https.bugs.busybox.net/>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 24 Aug 2020 17:02:46 -0700
+Subject: [Buildroot] [PATCH 1/1] systemd: ensure tmpfiles.d/legacy.conf is
+ installed
+Message-ID: <20200825000246.4035-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13141
+Systemd doesn't install tmpfiles.d/legacy.conf when sysv compatiblity
+isn't enabled. This config sets up /var/lock, which many programs such
+as uboot's fw_printenv/setenv still depend on by default.
 
---- Comment #3 from laurent at neko-labs.eu ---
-Hi yann,
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ package/systemd/systemd.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-> make V=1:
-if grep -q "CONFIG_MODULES=y"
-/home/buildroot/output/build/linux-linux4sam_6.2/.config; then
-/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
-`/usr/bin/make  HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
--I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
--Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
-INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null`; fi
-depmod: ERROR: Bad version passed make[1]:
-make: *** [Makefile:747: target-finalize] Error 1
-make : on quitte le r?pertoire ? /home/buildroot ?
-make : on entre dans le r?pertoire ? /home/buildroot ?
-
-> Adding printf 'probed linux version:"%s"\n'
->
-># Run depmod in a target-finalize hook, to encompass modules installed by
-># packages.
->define LINUX_RUN_DEPMOD
->        printf 'probed linux version:"%s"\n' "$(LINUX_VERSION_PROBED)"
->        if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
->                $(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) >$(LINUX_VERSION_PROBED); \
->        fi
->endef
->LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
-
-printf 'probed linux version:"%s"\n' "`/usr/bin/make 
-HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
--I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
--Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
-INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null`"
-probed linux version:"make[1]: Entering directory '/home/buildroot'
-4.19.78-linux4sam-6.2
-make[1]: Leaving directory '/home/buildroot/output/build/linux-linux4sam_6.2'"
-if grep -q "CONFIG_MODULES=y"
-/home/buildroot/output/build/linux-linux4sam_6.2/.config; then
-/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
-`/usr/bin/make  HOSTCC="/home/buildroot/output/host/bin/ccache /usr/bin/gcc -O2
--I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
--Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
-INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null`; fi
-depmod: ERROR: Bad version passed make[1]:
-make: *** [Makefile:747: target-finalize] Error 1
-make?: on quitte le r?pertoire ??/home/buildroot??
-make?: on entre dans le r?pertoire ??/home/buildroot??
-
->Removing ccache usage
-printf 'probed linux version:"%s"\n' "`/usr/bin/make  HOSTCC="/usr/bin/gcc -O2
--I/home/buildroot/output/host/include -L/home/buildroot/output/host/lib
--Wl,-rpath,/home/buildroot/output/host/lib" ARCH=arm
-INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null`"
-probed linux version:"make[1]: Entering directory '/home/buildroot'
-4.19.78-linux4sam-6.2
-make[1]: Leaving directory '/home/buildroot/output/build/linux-linux4sam_6.2'"
-if grep -q "CONFIG_MODULES=y"
-/home/buildroot/output/build/linux-linux4sam_6.2/.config; then
-/home/buildroot/output/host/sbin/depmod -a -b /home/buildroot/output/target
-`/usr/bin/make  HOSTCC="/usr/bin/gcc -O2 -I/home/buildroot/output/host/include
--L/home/buildroot/output/host/lib -Wl,-rpath,/home/buildroot/output/host/lib"
-ARCH=arm INSTALL_MOD_PATH=/home/buildroot/output/target
-CROSS_COMPILE="/home/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-"
-DEPMOD=/home/buildroot/output/host/sbin/depmod INSTALL_MOD_STRIP=1 -C
-/home/buildroot/output/build/linux-linux4sam_6.2 --no-print-directory -s
-kernelrelease 2>/dev/null`; fi
-depmod: ERROR: Bad version passed make[1]:
-make: *** [Makefile:747: target-finalize] Error 1
-
-
-For the empty line, I added it to empathize the result, it was not there, you
-are right.
-
-Laurent
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e356cb1add..8454993823 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -512,10 +512,18 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+ 
++# systemd doesn't install legacy.conf without sysv-compat
++# This config ensures /var/lock is created
++define SYSTEMD_INSTALL_LEGACY_CONF_HOOK
++	$(INSTALL) -D -m 0644 $(@D)/tmpfiles.d/legacy.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d
++endef
++
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+-	SYSTEMD_INSTALL_RESOLVCONF_HOOK
++	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
++	SYSTEMD_INSTALL_LEGACY_CONF_HOOK
+ 
+ define SYSTEMD_INSTALL_IMAGES_CMDS
+ 	$(SYSTEMD_INSTALL_BOOT_FILES)
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.28.0
