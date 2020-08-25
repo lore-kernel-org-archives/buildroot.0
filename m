@@ -1,52 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Aug 2020 23:01:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/assimp: also build with -mxgot on
- mips64(el)
-In-Reply-To: <20200825210143.293881-1-thomas.petazzoni@bootlin.com>
-References: <20200825210143.293881-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200825210143.293881-2-thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Aug 2020 23:23:37 +0200
+Subject: [Buildroot] [git commit] package/assimp: workaround m68k build
+ issues
+Message-ID: <20200825211828.38E3284F31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump of assimp to 5.0.1, we have build failures on mips64el,
-due to relocations being truncated. The issue seems to be quite
-similar to the one on m68k coldfire, as both m68k and MIPS have this
--mxgot gcc option to switch to using a GOT that has no size limit (but
-causes less efficient code to be produced).
+commit: https://git.buildroot.net/buildroot/commit/?id=e235d8fc8b8becabacf9254c1e3dfdb7a95ad9f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Here as well, the overall relevance of assimp on mips64(el) platforms
-being probably very limited, the incentive to search for a better
-solution is pretty limited.
+On m68k coldfire, we already pass -mxgot, but since the bump to assimp
+5.0.1, this is no longer sufficient, and we have failures such as:
+
+/tmp/ccqmJLil.s: Assembler messages:
+/tmp/ccqmJLil.s:307948: Error: value -43420 out of range
+/tmp/ccqmJLil.s:307985: Error: value -38606 out of range
+/tmp/ccqmJLil.s:308010: Error: value -38626 out of range
+/tmp/ccqmJLil.s:308056: Error: value -33280 out of range
+
+Since these issues only arise when building with -O2, let's disable
+the optimization for this package on m68k. The very relative relevance
+of assimp on m68k coldfire makes the research of a better solution not
+really useful (for the record, assimp is a "library to import various
+well-known 3D model formats in a uniform manner").
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/7df487d5117b2ee440a07dbff9cae1b181566748/
+  http://autobuild.buildroot.net/results/a7d4fb2653b0f1be4d036ee46a44e72da0ed4376/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/assimp/assimp.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/assimp/assimp.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index e8620c859a..e1b9a23499 100644
+index 4aeb2963a9..e8620c859a 100644
 --- a/package/assimp/assimp.mk
 +++ b/package/assimp/assimp.mk
-@@ -17,6 +17,13 @@ ifeq ($(BR2_m68k),y)
- ASSIMP_CXXFLAGS += -mxgot -O0
+@@ -10,9 +10,11 @@ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
+ ASSIMP_INSTALL_STAGING = YES
+ 
+-# relocation truncated to fit: R_68K_GOT16O
++# relocation truncated to fit: R_68K_GOT16O. We also need to disable
++# optimizations to not run into "Error: value -43420 out of range"
++# assembler issues.
+ ifeq ($(BR2_m68k),y)
+-ASSIMP_CXXFLAGS += -mxgot
++ASSIMP_CXXFLAGS += -mxgot -O0
  endif
  
-+# just like m68k coldfire, mips64 also has some limitations on the GOT
-+# size for large libraries, which can be overcome by passing
-+# -mxgot. Solves "relocation truncated to fit: R_MIPS_CALL16" issues.
-+ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-+ASSIMP_CXXFLAGS += -mxgot
-+endif
-+
  # workaround SuperH compiler failure when static linking (i.e -fPIC is
- # not passed) in gcc versions 5.x or older. The -Os optimization level
- # causes a "unable to find a register to spill in class
--- 
-2.26.2
