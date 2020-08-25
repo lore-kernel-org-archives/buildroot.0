@@ -1,58 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:45:58 +0200
-Subject: [Buildroot] [git commit] package/libblockdev: add support for loop
- plugin
-Message-ID: <20200902161638.C56DE85EB9@busybox.osuosl.org>
+Date: Tue, 25 Aug 2020 09:14:24 +0200
+Subject: [Buildroot] [git commit] package/iptraf-ng: bump to version 1.2.1
+Message-ID: <20200902161636.3F19485EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63759893f74a007b32bd56b25a2d4e18791a5e1c
+commit: https://git.buildroot.net/buildroot/commit/?id=a3cb9df7f555c59d4444e98c02ebf55a6fb1bdf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+IPTraf-ng is a console-based network monitoring program for Linux that
+displays information about IP traffic. It returns such information as:
+
+- Current TCP connections
+- UDP, ICMP, OSPF, and other types of IP packets
+- Packet and byte counts on TCP connections
+- IP, TCP, UDP, ICMP, non-IP, and other packet and byte counts
+- TCP/UDP counts by ports
+- Packet counts by packet sizes
+- Packet and byte counts by IP address
+- Interface activity
+- Flag statuses on TCP packets
+- LAN station statistics
+
+V1.2.1 fixed multiple issues in V1.1.4 like :
+- Introduce packet capturing abstraction: add recvmmsg(),
+  TPACKET_V2 and TPACKET_V3 to capture in multigigabit speeds.
+- Handling mlock() failures and carry on execution (without
+  crashing iptraf-ng).
+- Properly account non-IP packets.
+- Show dropped packet count.
+
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libblockdev/Config.in      | 3 +++
- package/libblockdev/libblockdev.mk | 7 ++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ package/iptraf-ng/Config.in      |  7 +++----
+ package/iptraf-ng/iptraf-ng.hash |  3 +--
+ package/iptraf-ng/iptraf-ng.mk   | 19 ++++++++++++-------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 8ef7247262..9f7f401dd3 100644
---- a/package/libblockdev/Config.in
-+++ b/package/libblockdev/Config.in
-@@ -33,6 +33,9 @@ config BR2_PACKAGE_LIBBLOCKDEV_FS
- comment "filesystem plugin needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
+diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
+index 5c3b4848b9..f240daf93d 100644
+--- a/package/iptraf-ng/Config.in
++++ b/package/iptraf-ng/Config.in
+@@ -3,11 +3,10 @@ config BR2_PACKAGE_IPTRAF_NG
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  IPTraf-ng is a ncurses-based network monitoring utility. It
+-	  gathers data like TCP connection packet and byte counts,
+-	  interface statistics and activity indicators.
++	  IPTraf-ng is a console-based network monitoring program for
++	  Linux that gathers displays information about IP traffic.
  
-+config BR2_PACKAGE_LIBBLOCKDEV_LOOP
-+	bool "loop"
-+
- endif
+-	  https://fedorahosted.org/iptraf-ng/
++	  https://github.com/iptraf-ng/iptraf-ng
  
- comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 2b111df82b..9216fc9932 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -22,7 +22,6 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--without-dmraid \
- 	--without-escrow \
- 	--without-kbd \
--	--without-loop \
- 	--without-lvm \
- 	--without-lvm_dbus \
- 	--without-mdraid \
-@@ -50,4 +49,10 @@ else
- LIBBLOCKDEV_CONF_OPTS += --without-fs
- endif
+ 	  IPTraf-ng is a fork of original IPTraf v3.0.0
+ 	  (http://iptraf.seul.org).
+diff --git a/package/iptraf-ng/iptraf-ng.hash b/package/iptraf-ng/iptraf-ng.hash
+index 0a257ec2fd..314d5cee29 100644
+--- a/package/iptraf-ng/iptraf-ng.hash
++++ b/package/iptraf-ng/iptraf-ng.hash
+@@ -1,4 +1,3 @@
+-# From https://fedorahosted.org/releases/i/p/iptraf-ng/iptraf-ng-1.1.4.tar.gz.sum
+-sha1	a2e51b0dd6b8c80583fc25d055850c96b3d2f544	iptraf-ng-1.1.4.tar.gz
+ # Locally computed
++sha256  9f5cef584065420dea1ba32c86126aede1fa9bd25b0f8362b0f9fd9754f00870  iptraf-ng-1.2.1.tar.gz
+ sha256  4e49bef38f621aac4a870da4b30011c7b7abc7256b218daec1c425b08448ae1e  LICENSE
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index ac572b9eef..044630be41 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -4,16 +4,21 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LOOP),y)
-+LIBBLOCKDEV_CONF_OPTS += --with-loop
-+else
-+LIBBLOCKDEV_CONF_OPTS += --without-loop
-+endif
-+
- $(eval $(autotools-package))
+-IPTRAF_NG_VERSION = 1.1.4
+-IPTRAF_NG_SITE = https://fedorahosted.org/releases/i/p/iptraf-ng
++IPTRAF_NG_VERSION = 1.2.1
++IPTRAF_NG_SITE = $(call github,iptraf-ng,iptraf-ng,v$(IPTRAF_NG_VERSION))
+ IPTRAF_NG_LICENSE = GPL-2.0+
+ IPTRAF_NG_LICENSE_FILES = LICENSE
+ IPTRAF_NG_DEPENDENCIES = ncurses
+ 
+-IPTRAF_NG_MAKE_ENV = \
+-	NCURSES_LDFLAGS="-lpanel -lncurses"
++define IPTRAF_NG_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		NCURSES_LDFLAGS="-lpanel -lncurses" \
++		-C $(@D)
++endef
+ 
+-IPTRAF_NG_CONF_ENV = \
+-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++define IPTRAF_NG_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		prefix=/usr DESTDIR=$(TARGET_DIR) install
++endef
+ 
+-$(eval $(autotools-package))
++$(eval $(generic-package))
