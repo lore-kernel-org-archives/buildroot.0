@@ -1,46 +1,35 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 24 Aug 2020 17:02:46 -0700
-Subject: [Buildroot] [PATCH 1/1] systemd: ensure tmpfiles.d/legacy.conf is
- installed
-Message-ID: <20200825000246.4035-1-joseph.kogut@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 25 Aug 2020 05:43:44 +0000
+Subject: [Buildroot] [Bug 13141] Target-finalize fail with "depmod: ERROR:
+ Bad version passed"
+In-Reply-To: <bug-13141-163@https.bugs.busybox.net/>
+References: <bug-13141-163@https.bugs.busybox.net/>
+Message-ID: <bug-13141-163-3GVXm5VRdU@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd doesn't install tmpfiles.d/legacy.conf when sysv compatiblity
-isn't enabled. This config sets up /var/lock, which many programs such
-as uboot's fw_printenv/setenv still depend on by default.
+https://bugs.busybox.net/show_bug.cgi?id=13141
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/systemd/systemd.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+--- Comment #4 from laurent at neko-labs.eu ---
+(In reply to Asaf Kahlon from comment #2)
+Asaf, Yann,
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index e356cb1add..8454993823 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -512,10 +512,18 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
- 	touch $(TARGET_DIR)/etc/machine-id
- endef
- 
-+# systemd doesn't install legacy.conf without sysv-compat
-+# This config ensures /var/lock is created
-+define SYSTEMD_INSTALL_LEGACY_CONF_HOOK
-+	$(INSTALL) -D -m 0644 $(@D)/tmpfiles.d/legacy.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d
-+endef
-+
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_INIT_HOOK \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
--	SYSTEMD_INSTALL_RESOLVCONF_HOOK
-+	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-+	SYSTEMD_INSTALL_LEGACY_CONF_HOOK
- 
- define SYSTEMD_INSTALL_IMAGES_CMDS
- 	$(SYSTEMD_INSTALL_BOOT_FILES)
+1/As suggested by asaf I checked my build script and I had:
+make -C $BR_SOURCE O=$BR_BUILD -j`nproc` V=1
+
+Removing -j`nproc` seems to remove the issue.
+
+--> I did the test during the night, I'll recheck tonight to be sure.
+
+2/Asaf you are right first time I build it failed (with -j`nproc`), then next
+time it succeed, but I was suspecting that buildroot somehow .stamp'ed the
+TARGET_FINALIZE stage.
+
+Laurent
+
 -- 
-2.28.0
+You are receiving this mail because:
+You are on the CC list for the bug.
