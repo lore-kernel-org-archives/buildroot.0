@@ -1,10 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Aug 2020 10:43:13 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: ensure tmpfiles.d/legacy.conf
- is installed
-In-Reply-To: <20200825000246.4035-1-joseph.kogut@gmail.com>
-References: <20200825000246.4035-1-joseph.kogut@gmail.com>
-Message-ID: <20200825104313.6691deaa@windsurf.home>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 25 Aug 2020 13:55:36 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-pycups: new package
+In-Reply-To: <20200825100821.49937320@windsurf.home>
+References: <20200824214857.4090659-1-joseph.kogut@gmail.com>
+ <CALFsTFUuBM9uJKo9Gz4jx2PV3TwwuJs5gcKySrTJih21ZHyt7Q@mail.gmail.com>
+ <20200825100821.49937320@windsurf.home>
+Message-ID: <CALFsTFUeh=PjLmkpjGQYjS8QQQ38hqcakBA=TXf_Gaxsk8Qo7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +14,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-I'm adding Norbert Lange in Cc, since he has done quite a bit of
-systemd work in Buildroot recently. Norbert, could you review the below
-patch ?
+On Tue, Aug 25, 2020 at 11:08 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Asaf,
+>
+> Thanks for reviewing!
+>
+> On Tue, 25 Aug 2020 09:41:28 +0300
+> Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> > > +       bool "python-pycups"
+> > > +       depends on BR2_PACKAGE_CUPS
+> > Since this package wraps the CUPS API and uses the cups package, you
+> > should select BR2_PACKAGE_CUPS instead of depending on it (and add the
+> > additional "depends on" sections from cups).
+>
+> I perhaps wouldn't be so strict on this. When a dependency is
+> "obvious", it is quite OK to have a "depends on". In this case, I
+> believe the user who wants python-pycups will realize that CUPS is
+> needed in the system, so I find a "depends on" dependency to be quite
+> OK in this case. Using "depends on" has the advantage that we don't
+> have to replicate the "depends on" from BR2_PACKAGE_CUPS.
+I completely agree that the advantage of this is not duplicating the
+"depends on" sections.
+On the other hand:
+* Differently from other packages that duplicate the "depends on",
+here we show nothing in case BR2_PACKAGE_CUPS isn't selected, so we
+should at least add a comment.
+* In my opinion, even if the user knows that python-pycups needs cups,
+he wouldn't want to select it on his own and expect it to be selected
+when choosing python-pycups.
+But I agree that in some cases it's not so critical.
 
-Also, Norbert, I think it would be nice if you could add yourself in
-the DEVELOPERS file for package/systemd/. You have been very active
-recently in improving our systemd package, and it would be good to have
-someone review systemd related patches.
-
-Thanks!
-
-Thomas
-
-On Mon, 24 Aug 2020 17:02:46 -0700
-Joseph Kogut <joseph.kogut@gmail.com> wrote:
-
-> Systemd doesn't install tmpfiles.d/legacy.conf when sysv compatiblity
-> isn't enabled. This config sets up /var/lock, which many programs such
-> as uboot's fw_printenv/setenv still depend on by default.
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/systemd/systemd.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index e356cb1add..8454993823 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -512,10 +512,18 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
->  	touch $(TARGET_DIR)/etc/machine-id
->  endef
->  
-> +# systemd doesn't install legacy.conf without sysv-compat
-> +# This config ensures /var/lock is created
-> +define SYSTEMD_INSTALL_LEGACY_CONF_HOOK
-> +	$(INSTALL) -D -m 0644 $(@D)/tmpfiles.d/legacy.conf \
-> +		$(TARGET_DIR)/usr/lib/tmpfiles.d
-> +endef
-> +
->  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->  	SYSTEMD_INSTALL_INIT_HOOK \
->  	SYSTEMD_INSTALL_MACHINEID_HOOK \
-> -	SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> +	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-> +	SYSTEMD_INSTALL_LEGACY_CONF_HOOK
->  
->  define SYSTEMD_INSTALL_IMAGES_CMDS
->  	$(SYSTEMD_INSTALL_BOOT_FILES)
-
-
-
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Asaf.
