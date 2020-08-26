@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:27:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng: bump to version 1.2.1
-In-Reply-To: <1597833691-18154-1-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1597833691-18154-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <20200826232701.1fc77e76@windsurf.home>
+Date: Wed, 26 Aug 2020 23:30:30 +0200
+Subject: [Buildroot] [PATCH 1/2] package/re2: new package
+In-Reply-To: <20200813144549.1262366-2-buildroot@heine.tech>
+References: <20200813144549.1262366-1-buildroot@heine.tech>
+ <20200813144549.1262366-2-buildroot@heine.tech>
+Message-ID: <20200826233030.16bd2230@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Aug 2020 12:41:31 +0200
-Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+On Thu, 13 Aug 2020 16:45:48 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-> PTraf-ng is a console-based network monitoring program for Linux that
-> displays information about IP traffic. It returns such information as:
+> RE2 is a fast, safe, thread-friendly alternative to backtracking
+> regular expression engines like those used in PCRE, Perl, and
+> Python. It is a C++ library.
 > 
-> - Current TCP connections
-> - UDP, ICMP, OSPF, and other types of IP packets
-> - Packet and byte counts on TCP connections
-> - IP, TCP, UDP, ICMP, non-IP, and other packet and byte counts
-> - TCP/UDP counts by ports
-> - Packet counts by packet sizes
-> - Packet and byte counts by IP address
-> - Interface activity
-> - Flag statuses on TCP packets
-> - LAN station statistics
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/Config.in     |  1 +
+>  package/re2/Config.in | 12 ++++++++++++
+>  package/re2/re2.hash  |  3 +++
+>  package/re2/re2.mk    | 25 +++++++++++++++++++++++++
+>  4 files changed, 41 insertions(+)
+>  create mode 100644 package/re2/Config.in
+>  create mode 100644 package/re2/re2.hash
+>  create mode 100644 package/re2/re2.mk
 
-This change is causing one build failure:
+It seems like there is an issue with this package:
 
-  http://autobuild.buildroot.net/?reason=iptraf-ng-1.2.1
+  http://autobuild.buildroot.net/results/a98/a98d3203f68f0f929c544537244e7621e80ce0a1/build-end.log
 
-Could you have a look ?
+Apparently, only a static version of libre2 gets installed, which is
+built without -fPIC (makes sense for a static library). But then it
+gets linked into a shared library, which booms as all the code in a
+shared library must be compiled with -fPIC.
 
-Thanks,
+Perhaps the issue is that we're not explicitly passing
+-DBUILD_SHARED_LIBS=ON to host CMake packages in package/pkg-cmake.mk ?
+
+Could you have a look into this ?
+
+Thanks!
 
 Thomas
 -- 
