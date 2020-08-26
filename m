@@ -1,46 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:23:41 +0200
-Subject: [Buildroot] [git commit branch/next] package/nasm: bump version to
- 2.15.04
-Message-ID: <20200826211723.32ADB8472A@busybox.osuosl.org>
+Date: Wed, 26 Aug 2020 23:23:44 +0200
+Subject: [Buildroot] [git commit branch/next] package/nano: bump version to
+ 5.2
+Message-ID: <20200826211723.4079C8472A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=090a748aae1b9495362000ca6bf953ef8bc8154e
+commit: https://git.buildroot.net/buildroot/commit/?id=54f1cf2cffbd4565852826282962a76c9a3a1991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Also separate the fields in the hash file by two spaces.
 
 Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nasm/nasm.hash | 4 ++--
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index d824f22b86..7d04add9dc 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 e24ade3e928f7253aa8c14aa44726d1edf3f98643f87c9d72ec1df44b26be8f5  nasm-2.14.02.tar.xz
--sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-+sha256  b0891d23aa083546e7845dfaa0a9109a03f1f57ad0740e7acd07f80df57876d8  nasm-2.15.04.tar.xz
-+sha256  1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index 5a46fd0a4b..63ff52a4af 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 54c8ab591d..792f18a098 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v4/nano-4.9.3.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.2.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  6e3438f033a0ed07d3d74c30d0803cbda3d2366ba1601b7bbf9b16ac371f51b4  nano-4.9.3.tar.xz
++sha256  32c2da43e1ae9a5e43437d8c6e1ec0388af870c7762c479e5bffb5f292bda7e1  nano-5.2.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index f3dd9fc895..67ce072980 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NASM_VERSION = 2.14.02
-+NASM_VERSION = 2.15.04
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
+-NANO_VERSION_MAJOR = 4
+-NANO_VERSION = $(NANO_VERSION_MAJOR).9.3
++NANO_VERSION_MAJOR = 5
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
