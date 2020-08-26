@@ -1,32 +1,30 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 26 Aug 2020 11:30:27 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Aug 2020 12:35:27 +0200
 Subject: [Buildroot] [PATCH 1/2] package/gnuradio: GNURADIO_QTGUI option
  require GNURADIO_ANALOG
-Message-ID: <20200826093028.870724-1-gwenj@trabucayre.com>
+In-Reply-To: <20200826093028.870724-1-gwenj@trabucayre.com>
+References: <20200826093028.870724-1-gwenj@trabucayre.com>
+Message-ID: <20200826123527.242f0624@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On Wed, 26 Aug 2020 11:30:27 +0200
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/gnuradio/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index cd31ce8864..2282f799da 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -138,6 +138,7 @@ config BR2_PACKAGE_GNURADIO_QTGUI
- 	bool "gr-qtgui"
- 	depends on BR2_PACKAGE_GNURADIO_PYTHON
- 	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_GNURADIO_ANALOG
- 	select BR2_PACKAGE_GNURADIO_FFT
- 	select BR2_PACKAGE_GNURADIO_FILTER
- 	select BR2_PACKAGE_PYTHON_PYQT5
+There's no commit log. Is this fixing a build issue? A runtime issue?
+Could you provide more details?
+
+Thanks,
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
