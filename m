@@ -1,26 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:25:49 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-visualisation-goom:
- bump version to 2.2.2-Leia
-In-Reply-To: <20200826171545.23835-1-bernd.kuhls@t-online.de>
-References: <20200826171545.23835-1-bernd.kuhls@t-online.de>
-Message-ID: <20200826232549.060f7488@windsurf.home>
+Date: Wed, 26 Aug 2020 23:27:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng: bump to version 1.2.1
+In-Reply-To: <1597833691-18154-1-git-send-email-jugurtha.belkalem@smile.fr>
+References: <1597833691-18154-1-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <20200826232701.1fc77e76@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 26 Aug 2020 19:15:45 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Wed, 19 Aug 2020 12:41:31 +0200
+Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
->  package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> PTraf-ng is a console-based network monitoring program for Linux that
+> displays information about IP traffic. It returns such information as:
+> 
+> - Current TCP connections
+> - UDP, ICMP, OSPF, and other types of IP packets
+> - Packet and byte counts on TCP connections
+> - IP, TCP, UDP, ICMP, non-IP, and other packet and byte counts
+> - TCP/UDP counts by ports
+> - Packet counts by packet sizes
+> - Packet and byte counts by IP address
+> - Interface activity
+> - Flag statuses on TCP packets
+> - LAN station statistics
 
-Applied to next, thanks.
+This change is causing one build failure:
+
+  http://autobuild.buildroot.net/?reason=iptraf-ng-1.2.1
+
+Could you have a look ?
+
+Thanks,
 
 Thomas
 -- 
