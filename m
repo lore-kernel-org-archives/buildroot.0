@@ -1,43 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:23:48 +0200
-Subject: [Buildroot] [git commit branch/next] package/mutt: bump version to
- 1.14.6
-Message-ID: <20200826211723.4F73A8472A@busybox.osuosl.org>
+Date: Wed, 26 Aug 2020 23:25:32 +0200
+Subject: [Buildroot] [PATCH] package/mutt: bump version to 1.14.6
+In-Reply-To: <20200825224023.15241-1-sergio.prado@e-labworks.com>
+References: <20200825224023.15241-1-sergio.prado@e-labworks.com>
+Message-ID: <20200826232532.6db48436@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9f31a32ecfd4daabf50df7088de12028fe4afb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 25 Aug 2020 19:40:23 -0300
+Sergio Prado <sergio.prado@e-labworks.com> wrote:
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  package/mutt/mutt.hash | 2 +-
+>  package/mutt/mutt.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 972d1433df..e3007370a4 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ca8e56f8210b4fffa91ea08958b62b811cce552fe4fd7d726111cf53079ed3c3  mutt-1.14.4.tar.gz
-+sha256  47972a0152b81b9f67ff322a0a6682b914c15545bfdeac6bcc2f2c0bf9361844  mutt-1.14.6.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index b8a116aab0..6c85202fc0 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.14.4
-+MUTT_VERSION = 1.14.6
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
