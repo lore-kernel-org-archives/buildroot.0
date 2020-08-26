@@ -1,64 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 26 Aug 2020 23:17:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libroxml: fix build with gcc 10
-Message-ID: <20200826211755.148673-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Aug 2020 23:23:41 +0200
+Subject: [Buildroot] [git commit branch/next] package/nasm: bump version to
+ 2.15.04
+Message-ID: <20200826211723.32ADB8472A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
+commit: https://git.buildroot.net/buildroot/commit/?id=090a748aae1b9495362000ca6bf953ef8bc8154e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also separate the fields in the hash file by two spaces.
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-src-roxml_mem.h-add-missing-extern.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+ package/nasm/nasm.hash | 4 ++--
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
-new file mode 100644
-index 0000000000..6f63d7b546
---- /dev/null
-+++ b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
-@@ -0,0 +1,37 @@
-+From b16f6813011519ce247b0af9a4b78486daefad54 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 26 Aug 2020 22:54:50 +0200
-+Subject: [PATCH] src/roxml_mem.h: add missing extern
-+
-+Add missing extern to head_cell otherwise the build with gcc 10 (with
-+-fno-common being default) will fail on:
-+
-+/bin/bash ./libtool  --tag=CC   --mode=link /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -DIGNORE_EMPTY_TEXT_NODES -DCONFIG_XML_CONTENT -DCONFIG_XML_NAV -DCONFIG_XML_BUFF  -DCONFIG_XML_COMMIT -DCONFIG_XML_EDIT -DCONFIG_XML_FILE -DCONFIG_XML_XPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -pthread -version-info 0:0:0  -o libroxml.la -rpath /usr/lib src/libroxml_la-roxml_core.lo src/libroxml_la-roxml_parser.lo src/libroxml_la-roxml_buff.lo src/libroxml_la-roxml_nav.lo src/libroxml_la-roxml_content.lo src/libroxml_la-roxml_mem.lo src/libroxml_la-roxml_stub.lo src/libroxml_la-roxml_commit.lo src/libroxml_la-roxml_edit.lo src/libroxml_la-roxml_file.lo src/libroxml_la-roxml_xpath.lo  -pthread
-+libtool: link: /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared  -fPIC -DPIC  src/.libs/libroxml_la-roxml_core.o src/.libs/libroxml_la-roxml_parser.o src/.libs/libroxml_la-roxml_buff.o src/.libs/libroxml_la-roxml_nav.o src/.libs/libroxml_la-roxml_content.o src/.libs/libroxml_la-roxml_mem.o src/.libs/libroxml_la-roxml_stub.o src/.libs/libroxml_la-roxml_commit.o src/.libs/libroxml_la-roxml_edit.o src/.libs/libroxml_la-roxml_file.o src/.libs/libroxml_la-roxml_xpath.o    -O2 -pthread -pthread   -pthread -Wl,-soname -Wl,libroxml.so.0 -o .libs/libroxml.so.0.0.0
-+/home/peko/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: src/.libs/libroxml_la-roxml_mem.o:(.data+0x0): multiple definition of `head_cell'; src/.libs/libroxml_la-roxml_content.o:(.bss+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/blunderer/libroxml/pull/79]
-+---
-+ src/roxml_mem.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/roxml_mem.h b/src/roxml_mem.h
-+index aff6137..34a5070 100644
-+--- a/src/roxml_mem.h
-++++ b/src/roxml_mem.h
-+@@ -14,7 +14,7 @@
-+ 
-+ #include "roxml_internal.h"
-+ 
-+-memory_cell_t head_cell;
-++extern memory_cell_t head_cell;
-+ 
-+ /** \brief alloc memory function
-+  *
-+-- 
-+2.28.0
-+
--- 
-2.28.0
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index d824f22b86..7d04add9dc 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e24ade3e928f7253aa8c14aa44726d1edf3f98643f87c9d72ec1df44b26be8f5  nasm-2.14.02.tar.xz
+-sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
++sha256  b0891d23aa083546e7845dfaa0a9109a03f1f57ad0740e7acd07f80df57876d8  nasm-2.15.04.tar.xz
++sha256  1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index 5a46fd0a4b..63ff52a4af 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NASM_VERSION = 2.14.02
++NASM_VERSION = 2.15.04
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2-Clause
