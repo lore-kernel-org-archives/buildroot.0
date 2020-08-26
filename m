@@ -1,95 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:01:04 +0200
-Subject: [Buildroot] [git commit] package/python-packaging: new package
-Message-ID: <20200902161636.B980585EB9@busybox.osuosl.org>
+Date: Wed, 26 Aug 2020 23:23:44 +0200
+Subject: [Buildroot] [git commit] package/nano: bump version to 5.2
+Message-ID: <20200902161636.6A9BF85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1563a5b101e7ed838f363d1c04b3430c2db0f50
+commit: https://git.buildroot.net/buildroot/commit/?id=54f1cf2cffbd4565852826282962a76c9a3a1991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-packaging/Config.in             |  8 ++++++++
- package/python-packaging/python-packaging.hash |  7 +++++++
- package/python-packaging/python-packaging.mk   | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c0c6de8d5d..d49b927756 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1597,6 +1597,7 @@ F:	package/luaossl/
- F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/python-ansicolors/
-+F:	package/python-packaging/
- F:	package/rs485conf/
- F:	package/turbolua/
- F:	support/testing/tests/package/test_netdata.py
-diff --git a/package/Config.in b/package/Config.in
-index 85a6f44910..15329929e2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1046,6 +1046,7 @@ menu "External python modules"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
- 	source "package/python-oauthlib/Config.in"
-+	source "package/python-packaging/Config.in"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-diff --git a/package/python-packaging/Config.in b/package/python-packaging/Config.in
-new file mode 100644
-index 0000000000..5a8135cd57
---- /dev/null
-+++ b/package/python-packaging/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PACKAGING
-+	bool "python-packaging"
-+	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Core utilities for Python packages.
-+
-+	  https://github.com/pypa/packaging
-diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
-new file mode 100644
-index 0000000000..112bc695f6
---- /dev/null
-+++ b/package/python-packaging/python-packaging.hash
-@@ -0,0 +1,7 @@
-+# md5, sha256 from https://pypi.org/pypi/packaging/json
-+md5  19e0d1f82a9007b448650ccfeffd0a26  packaging-20.3.tar.gz
-+sha256  3c292b474fda1671ec57d46d739d072bfd495a4f51ad01a055121d81e952b7a3  packaging-20.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
-+sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-+sha256  b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5  LICENSE.BSD
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-new file mode 100644
-index 0000000000..bd5177e8e5
---- /dev/null
-+++ b/package/python-packaging/python-packaging.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-packaging
-+#
-+################################################################################
-+
-+PYTHON_PACKAGING_VERSION = 20.3
-+PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
-+PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/65/37/83e3f492eb52d771e2820e88105f605335553fe10422cba9d256faeb1702
-+PYTHON_PACKAGING_SETUP_TYPE = setuptools
-+PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
-+PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-+
-+$(eval $(python-package))
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 54c8ab591d..792f18a098 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v4/nano-4.9.3.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.2.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  6e3438f033a0ed07d3d74c30d0803cbda3d2366ba1601b7bbf9b16ac371f51b4  nano-4.9.3.tar.xz
++sha256  32c2da43e1ae9a5e43437d8c6e1ec0388af870c7762c479e5bffb5f292bda7e1  nano-5.2.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index f3dd9fc895..67ce072980 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NANO_VERSION_MAJOR = 4
+-NANO_VERSION = $(NANO_VERSION_MAJOR).9.3
++NANO_VERSION_MAJOR = 5
++NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
