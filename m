@@ -1,106 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 21:22:31 +0200
-Subject: [Buildroot] [PATCH v3 06/10] package/pkg-cargo.mk: Introduce
- the cargo dl backend
-In-Reply-To: <20200220160119.3407-6-patrick.havelange@essensium.com>
+Date: Wed, 26 Aug 2020 21:26:07 +0200
+Subject: [Buildroot] [PATCH v3 09/10] package/ripgrep: add legal-info
+ for dependencies
+In-Reply-To: <20200220160119.3407-9-patrick.havelange@essensium.com>
 References: <20200220160119.3407-1-patrick.havelange@essensium.com>
- <20200220160119.3407-6-patrick.havelange@essensium.com>
-Message-ID: <20200826212231.19aef9e2@windsurf.home>
+ <20200220160119.3407-9-patrick.havelange@essensium.com>
+Message-ID: <20200826212607.7a336dad@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello all,
 
-On Thu, 20 Feb 2020 17:01:15 +0100
+On Thu, 20 Feb 2020 17:01:18 +0100
 Patrick Havelange <patrick.havelange@essensium.com> wrote:
 
-> Cargo is now a fully supported PKGMGR, automatically set for any
-> package using the cargo infrastructure.
-> This effectively splits the download phase and the build phase.
-> 
-> The cargo backend will set CARGO_HOME inside DL_DIR during download.
-> The cached files in CARGO_HOME permits to download only once the
-> crates index and each dependencies.
-> During download phase, it will call cargo vendor to copy the
-> dependencies inside the VENDOR directory inside the source archive.
-> 
-> A local cargo config is also inserted inside the archive in order
-> to use the VENDOR dir during the build phase.
-> The build phase is forced to not query the online repository anymore
-> and thus will be using the vendored dependencies from the tarball.
-> This also permits to have offline builds.
+> As the dependencies are now vendored in the tarball, we can
+> extract them easily. Added a helper script to list them.
+> Updated the .hash & .mk files with those new licenses.
 > 
 > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> ---
+>  package/ripgrep/find_vendor_licenses.sh |   6 +
+>  package/ripgrep/ripgrep.hash            | 167 +++++++++++++++++++++++
+>  package/ripgrep/ripgrep.mk              |   4 +-
+>  package/ripgrep/vendor.inc              | 169 ++++++++++++++++++++++++
+>  4 files changed, 345 insertions(+), 1 deletion(-)
 
-We looked at this patch series during the previous (virtual) Buildroot
-Developers Meeting in late July, and we forgot to give some feedback.
-I'll provide the raw IRC logs of the discussion we had, however, I see
-there's been more discussion tonight on the IRC channel on this topic.
+At the latest virtual Buildroot Developers Meeting, Yann and I talked
+about this. I'll paste the complete IRC conversation below. In short,
+Yann wanted some way of dynamically grabbing the legal information at
+runtime, but our discussion made it clear (I believe) that this was not
+possible. Yann agreed that a static description of the licenses and
+licenses files (like you did) was the only option. However, Yann didn't
+like that the vendor licenses are described in a separate vendor.inc
+file. I personally don't mind too much, as we already do that for the
+qt5webengine package. Overall, I believe this aspect is fairly minor
+compared to the concerns about the download backend.
 
-[13:54:34] <kos_tom> wow, wow this series https://patchwork.ozlabs.org/project/buildroot/list/?series=159771 has some pretty weird download infrastructure changes
-[13:55:17] <y_morin> Yes, it scares me quite a bit...
-[13:55:33] <y_morin> However, I think we already discussed that here some time ago.
-[13:55:52] <y_morin> The proposal I did was:
-[13:56:19] <y_morin> 1) introduce a cargo download backend
-[13:56:47] <y_morin> 2) have the cargo backend call the real backend (git, wget, etc...) for the cargo package,
-[13:57:21] <y_morin> 3) have the cargo backend call "cargo bundle" to complete the package archive.
-[13:57:26] <y_morin> kos_tom: ^^^
-[13:59:50] <kos_tom> y_morin: I'm not sure how the "cargo backend can call the real backend
-[14:00:10] <kos_tom> y_morin: what the patch series does is call "cargo vendor" to download all the dependencies
-[14:00:34] <kos_tom> and then it makes a tarball of the whole thing, i.e the actual package source code + all its cargo dependencies
-[14:00:48] <kos_tom> and that's what you get as a tarball for this package in DL_DIR
-[14:01:09] <y_morin> kos_tom: It is easy for the cargo backend to call the adequate "real" backend:  "${0%/*}/wget"
-[14:01:30] <y_morin> We "just" need to be able to pass that info yto he cargo backend
-[14:01:32] <kos_tom> y_morin: the cargo backend does not do the download of dependecnies by itself
-[14:01:37] <kos_tom> it calls the "cargo vendor" command
-[14:01:55] <y_morin> kos_tom: I don;t yet care about the depdnencies. I care about the main download for now.
-[14:02:15] <y_morin> kos_tom: Hold on a sec, I'll post a simple script that shows that...
-[14:02:46] <kos_tom> y_morin: look at the patch series
-[14:02:52] <kos_tom> y_morin: it does use *two* backends
-[14:02:56] <kos_tom> it uses the normal backend for the main download
-[14:03:04] <y_morin> kos_tom: I know.
-[14:03:08] <kos_tom> + an extra secondary backend, called "cargo" to download the dependencis
-[14:03:11] <y_morin> And I am not OK with that.
-[14:03:23] <y_morin> I am propiosing something else.
-[14:03:40] <y_morin> I.e. to invert the logic
-[14:03:48] <kos_tom> yeah, you are proposing that the "cargo" backend takes care of both the main download and the dependencies download
-[14:03:57] <kos_tom> and not have this concept of "secondary backend"
-[14:04:02] <y_morin> Exactly.
-[14:04:05] <kos_tom> Ok.
-[14:04:15] <kos_tom> the question is: do we want this kind of download integration at all?
-[14:04:22] <kos_tom> if we do, does it work for NodeJS ? PHP ?
-[14:05:40] <y_morin> kos_tom: https://pastebin.com/c3K42Lb7
-[14:06:03] <y_morin> kos_tom: That is also the idea. For go, it would be very similar too.
-[14:06:19] <kos_tom> y_morin: but how do you pass the "real backend" if the backend is "cargo" ?
-[14:06:22] <y_morin> And for npm and php, afaiu (which is not much), as well
-[14:06:28] <kos_tom> i.e if you have a cargo package to fetch from Git, and another from https
-[14:07:06] <y_morin> kos_tom: Pretty east. In the cargo infra:    FOO_SITE_METHOD = cargo  FOO_EXTRA_DLOPTS += --backend=$(whatever)
-[14:07:22] <y_morin> kos_tom: Hmm...
-[14:07:39] <y_morin> you mean "cargo vendor" can fetch from various locations?
-[14:08:07] <y_morin> I meant: from various location usign various methods?
-[14:08:21] <y_morin> It that is so, then my proposal is not good, indeed.
-[14:08:55] <kos_tom> y_morin: no I meant the primary download
-[14:09:11] <kos_tom> y_morin: ie. for the ripgrep package, the actual download of the ripgrep code
-[14:09:44] <kos_tom> of the cargo series, I'm wondering if I should apply patches 1/2/3, which create the package infra, but not the download stuff
-[14:09:53] <y_morin> kos_tom: Ah, but the primary download is exactly that: FOO_EXTRA_DLOPTS += --backend=$(geturischeme $(FOO_SITE))
-[14:10:08] <kos_tom> my main concern is that we have a single package that would use this infra right now, which doesn't make merging such a simple infra very convincing.
-[14:10:30] <kos_tom> y_morin: instead of an extra backend, can we do with a post-download hook ?
-[14:10:54] <y_morin> kos_tom: I had a good reason not to use such a hook.
-[14:11:06] <y_morin> kos_tom: I would have to dig my irc logs...
-[14:11:54] <y_morin> kos_tom: Ah yes, I know...
-[14:12:19] <y_morin> kos_tom: If you use a post-dl hook, it means the archive with just the main package is already in $(FOO_DL_DIR)
-[15:12:14] <kos_tom> y_morin: so can we try to conclude on the cargo download thing?
-[15:13:08] <y_morin> kos_tom: I provided some info above, not sure you saw it...
-[15:13:29] <y_morin> kos_tom: If you use a post-dl hook, it means the archive with just the main package is already in $(FOO_DL_DIR)
-[15:13:47] <kos_tom> y_morin: but is that a problem ?
-[15:14:00] <kos_tom> I guess it is indeed simpler to have a single tarball that has the source code for everything, including dependencies
-[15:14:05] <y_morin> kos_tom: Yes it is, for a subsequent build: it would not match the hashes.
-[15:14:35] <kos_tom> are the hashes anyway going to match when you see (from the "bat" example being discussed with Romain) that dependency versions anyway can change
-[15:14:40] <y_morin> kos_tom: That is the idea that the archive contains the main package *and* all its depednencies.
-[15:14:56] <y_morin> For those package managers that allow pinning the version, we can get hashes of the archive, then
+Here is the unedited IRC conversation:
+
+[15:32:56] <y_morin> kos_tom: For cargo: I do not like the vendor.inc stuff at all...
+[15:33:05] <kos_tom> y_morin: do we have a better proposal ?
+[15:33:33] <y_morin> kos_tom: Yes: handle it in the cargo infra
+[15:33:46] <y_morin> I.e.: do not let the packages do the inclusion by themselves.
+[15:33:53] <kos_tom> how would you do that? we don't support "dynamic legal-info" currently
+[15:35:29] <y_morin> And in the infra:  include $(pkgdir)/vendor.inc     $(1)_LICENSE += , $($(1)_VENDOR_LICENSE)   $(1)_LICENSE_FILES += $($(1)_VENDOR_LICENSE_FILES)
+[15:36:05] <y_morin> kos_tom: The trick with the license list, is that the 'space-comma' is properly replaced by a comma in the legal-infra already
+[15:36:25] <kos_tom> mooh, https://github.com/facebook/rocksdb/commit/085e4dcf8173e91311fbf9037d8bc9393f254c6f exists, but "git show 085e4dcf8173e91311fbf9037d8bc9393f254c6f" in this repo says "no such commit"
+[15:36:54] <kos_tom> y_morin: but the value of this VENDOR_LICENSE variable would only be known after the package has been downloaded
+[15:36:56] <y_morin> (*if* we can get the license list of the vensored stuff; having the license fiels would already be nice enough)
+[15:37:04] <kos_tom> y_morin: how does the infra fills it in ?
+[15:37:07] <y_morin> Ah, right/
+[15:37:24] <kos_tom> that's what I called "support for dynamic legal-info"
+[15:37:39] <y_morin> No, no, the infra does not fill in the variables, they are prepared as is.
+[15:37:45] <y_morin> ... as is in the series.
+[15:37:52] <kos_tom> aah, github says "This commit does not belong to any branch on this repository."
+[15:38:04] <y_morin> Except it is not the package ./mk that does the include and aggregartion, but the cvargo infra
+[15:38:09] <kos_tom> y_morin: ah, so it doesn't change much compared to the series
+[15:38:20] <y_morin> No, not much.
+[15:38:37] <y_morin> kos_tom: Except the series as is does not even catter for the list of licenses either.
+[15:39:21] <y_morin> kos_tom: But:
+[15:39:42] <y_morin> 1) I am not too fond of the vendor.inc to begin with; the info should be in the .mk
+[15:40:00] <y_morin> 2) *if* we want to go with the vendor.inc, then let's handle it in the cargo-infra
+[15:40:17] <y_morin> But TBH, I would really prefer option 1.
+[15:40:40] <y_morin> There is no reason to single out cargo from other infras.
+[15:41:36] <kos_tom> y_morin: we do have something similar as the vendor.inc already today
+[15:41:56] <y_morin> Where?
+[15:42:02] <kos_tom> enjoy package/qt5/qt5webengine/chromium-latest.inc
+[15:42:23] <y_morin> Oh noes... :-(
+[15:43:18] <y_morin> kos_tom: OK, so *if* we want to go that route, let's not let packages handle it, but let's handle it in the infra, and in pkg-generic at that.
+[15:44:05] <kos_tom> hm, maybe this is something we should do long-term, but I'm not sure it's really something we should promote at the pkg-generic level today
+[15:44:18] <kos_tom> we're only talking about a few cargo-related packages for now
+[15:46:05] <y_morin> kos_tom: https://pastebin.com/AQfyKaSL
+[15:46:18] <y_morin> I think it would not be much more complex that that.
+[15:46:46] <kos_tom> doesn't account for per-version subdirectories
+[15:47:04] <kos_tom> for qt5webengine, we use two have .inc files :-)
+[15:47:09] <y_morin> Yes, yes... You are nit-picking. ;-)
+[15:47:26] <kos_tom> to me, that is a minor detail in the whole story
+[15:47:37] <kos_tom> the question is: do we accept to handle legal-info for cargo packages this way ?
+[15:48:05] <y_morin> To me: no.
+[15:48:21] <y_morin> I'd like chromuium stays the esception.
+[15:49:19] <y_morin> I don;t think this is a problem that the .mk of cargo packages is just 99% legal-stuff. That's just the sad story there is to it.
+[15:49:42] <y_morin> Also, I don't like that parts of the legal-info is in the .mk, and part in the vendor.inc.
+[15:50:25] <y_morin> Unless we decide that we want to move the legal-info to is own file, like foo.mk foo.hash and now foo.legal
+[15:50:45] <y_morin> But meh, I would keep everything in a single file, please.
+[15:50:47] <kos_tom> the idea for qt5webengine is also that the .inc file is kind of auto-generated
+[15:51:07] <y_morin> Havinf the legal-info in a side file means it fille bit-rot there ebecause no one will look/update it.
+[15:51:37] <y_morin> kos_tom: So what? The legalinfo in scan-pypi or scan-cpan is also autogenerated the first time. Tyhen it is manually updated..
+[15:51:58] <kos_tom> y_morin: no, it is again updated with scanpypi or scancpan
+[15:52:05] <kos_tom> scanpypi and scancpan are not one-time scripts
+[15:52:18] <Jacmet> kos_tom: yeah, I couldn't backport the gnutls security bump before we had a fix for uclibc
+[15:53:34] <Kubu> kos_tom: ok, I'm able to build bat
+[15:53:40] <kos_tom> Kubu: ah :)
+[15:53:43] <Kubu> even with ARM toolchain
+[15:58:44] <y_morin> kos_tom: So, even the generated packages are properly updated, so even that is not an excuse ti have the licensing info outside the .mk
+[15:58:58] <y_morin> (sorry, I had a sigfood from the nano-tigers...)
+[16:00:33] <y_morin> Kubu: When you're done with cargo/rust, mind diving back into elf2flt:  https://patchwork.ozlabs.org/project/buildroot/patch/20200726094338.1276868-1-fontaine.fabrice at gmail.com/  ? ;-)
+[16:01:27] <Kubu> y_morin: well, there is no much change in this version compared to what we have currently
+[16:02:00] <kos_tom> y_morin: again, to me inside/outside the .mk is a small detail
+[16:02:21] <kos_tom> Lightsword: have you looked at the Lua 5.4 series from Fran?ois Perrad ?
+[16:02:22] <y_morin> kos_tom: So I am not sure I understood your question...
+[16:02:23] <Kubu> it's just about sync with with the tag added recently
+[16:02:52] <kos_tom> y_morin: are we OK with handling legal-info like this, i.e it's quite manual. I anyway don't really see any other option.
+[16:03:36] <y_morin> kos_tom: Still, not sure to understand... :-/
+[16:04:30] <y_morin> kos_tom: In fact, we *could* very well have the list established at runtime.
+[16:04:31] <kos_tom> y_morin: well, aside the location of the legal details, are we OK with the way it's done ?
+[16:04:59] <y_morin> Since the lists are not used to generate Makefile code, they are only evaluated in shell context
+[16:05:20] <kos_tom> ooh, but
+[16:05:22] <y_morin> so we could do:  FOO_LICENSE = `some script to extract the list`
+[16:05:23] <kos_tom> we already have BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
+[16:05:33] <kos_tom> which contains 5.1 for LuaJIT/Lua5.1 and 5.3 for Lua 5.3
+[16:06:03] <y_morin> and FOO_LICENSE_FILES = `some script to extract the list of files`
+[16:06:04] <kos_tom> y_morin: but then we could only evaluate the FOO_LICENSE variable after the download has taken place
+[16:06:32] <y_morin> kos_tom: No, because the variable are evaluated when the corresponding make rule is generated.
+[16:07:02] <y_morin> which is another rule than foo-legal-info
+[16:07:32] <y_morin> So, at the time foo-lkegal-info is "started/run", the foo-extract and foo-patch are finished
+[16:08:07] <y_morin> .. it should work (famous last words)
+[16:08:23] <kos_tom> y_morin: well, if I do "make FOO_LICENSE printvars"
+[16:08:47] <y_morin> That won;t work if the patckage is not extractd/patched, no. indeed.
+[16:09:09] <y_morin> So that wouild bust show-info too
+[16:09:12] <y_morin> So not good.
+[16:10:01] <y_morin> We indeed do need a static list of licenses and files
 
 Best regards,
 
