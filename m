@@ -1,45 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 30 Aug 2020 18:05:55 +0200
-Subject: [Buildroot] [git commit branch/next] packages/luainterpreter:
- remove target-finalize hack
-Message-ID: <20200901193956.C48B783786@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Aug 2020 23:23:48 +0200
+Subject: [Buildroot] [git commit] package/mutt: bump version to 1.14.6
+Message-ID: <20200902161636.731B385EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a3530c0085e8d0c6b90f1ada8f1ff8c6dfb8dae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=b9f31a32ecfd4daabf50df7088de12028fe4afb9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use LUAINTERPRETER_TARGET_FINALIZE_HOOKS, now that it's suported by
-virtual packages.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout: don't remove relevant comment]
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luainterpreter/luainterpreter.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index 58d421b183..9d9f85a579 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -7,15 +7,11 @@
- LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 972d1433df..e3007370a4 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ca8e56f8210b4fffa91ea08958b62b811cce552fe4fd7d726111cf53079ed3c3  mutt-1.14.4.tar.gz
++sha256  47972a0152b81b9f67ff322a0a6682b914c15545bfdeac6bcc2f2c0bf9361844  mutt-1.14.6.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index b8a116aab0..6c85202fc0 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Lua packages often install documentation, clean that up globally
--# Since luainterpreter is a virtual package, we can't use
--# LUAINTERPRETER_TARGET_FINALIZE_HOOKS
--ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
- define LUAINTERPRETER_REMOVE_DOC
- 	rm -rf $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/doc
- endef
- 
--TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
--endif
-+LUAINTERPRETER_TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
- 
- $(eval $(virtual-package))
- $(eval $(host-virtual-package))
+-MUTT_VERSION = 1.14.4
++MUTT_VERSION = 1.14.6
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
