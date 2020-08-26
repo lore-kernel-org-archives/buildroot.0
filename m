@@ -1,148 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:13:56 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/frr: new package
-In-Reply-To: <20200225155322.8440-3-vadim4j@gmail.com>
-References: <20200225155322.8440-1-vadim4j@gmail.com>
- <20200225155322.8440-3-vadim4j@gmail.com>
-Message-ID: <20200826231356.4b04ae09@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 26 Aug 2020 23:17:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libroxml: fix build with gcc 10
+Message-ID: <20200826211755.148673-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Feb 2020 17:53:22 +0200
-Vadim Kochan <vadim4j@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
 
-> FRR is free software that implements and manages various IPv4 and IPv6
-> routing protocols. It runs on nearly all distributions of Linux and BSD
-> as well as Solaris and supports all modern CPU architectures.
-> 
-> FRR currently supports the following protocols:
-> 
->     BGP
->     OSPFv2
->     OSPFv3
->     RIPv1
->     RIPv2
->     RIPng
->     IS-IS
->     PIM-SM/MSDP
->     LDP
->     BFD
->     Babel
->     PBR
->     OpenFabric
->     VRRP
->     EIGRP (alpha)
->     NHRP (alpha)
-> 
-> Some not-needed features were disabled to minimize package dependencies:
-> 
->     - POSIX capabilities
->     - RPKi
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...1-src-roxml_mem.h-add-missing-extern.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
 
-I've applied to next, with a few changes, see below.
-
-> diff --git a/package/frr/Config.in b/package/frr/Config.in
-> new file mode 100644
-> index 0000000000..c0c3bdd693
-> --- /dev/null
-> +++ b/package/frr/Config.in
-> @@ -0,0 +1,25 @@
-> +config BR2_PACKAGE_FRR
-> +	bool "frr"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_STATIC_LIBS # libyang
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_PACKAGE_BASH # init
-
-I've selected bash instead of depending on it.
-
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-> +	select BR2_PACKAGE_C_ARES
-> +	select BR2_PACKAGE_LIBYANG
-> +	select BR2_PACKAGE_LIBNL
-> +	select BR2_PACKAGE_READLINE
-> +	select BR2_PACKAGE_JSON_C
-> +	help
-> +	  The FRRouting Protocol Suite.
-> +
-> +	  FRR is free software that implements and manages various IPv4 and
-> +	  IPv6 routing protocols.
-> +
-> +	  https://frrouting.org
-> +
-> +comment "frr needs BASH, threads, dynamic library"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_PACKAGE_BASH || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		BR2_STATIC_LIBS
-
-And so I dropped the "bash" part of this comment.
-
-> +start() {
-> +	install -m 755 -o frr -g frr -d /var/run/frr
-> +	install -m 755 -o frr -g frr -d /var/log/frr
-> +
-> +	printf 'Starting %s: ' "$DAEMON"
-> +	/usr/sbin/frrinit.sh start
-
-It's not really great to have the Buildroot init script call another
-sort of init script. But looking into the frrinit.sh and ffrcommon.sh
-stuff, we can't really re-invent all this in Buildroot, it would be a
-nightmare to maintain, so we really have to re-use what upstream
-provides, like you did.
-
-
-> diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-> new file mode 100644
-> index 0000000000..2add98542a
-> --- /dev/null
-> +++ b/package/frr/frr.mk
-> @@ -0,0 +1,69 @@
-> +################################################################################
-> +#
-> +# frr
-> +#
-> +################################################################################
-> +
-> +FRR_VERSION = 7.3
-
-I've updated to 7.4, as 7.3 didn't build for me with uClibc-ng, due to
-the use of non-standard TRUE/FALSE. This was fixed in 7.4, which uses
-the standard true/false definitions.
-
-> +FRR_SITE = https://github.com/FRRouting/frr/archive
-
-Changed to use the github macro we have.
-
-> +FRR_DEPENDENCIES = host-frr readline json-c \
-> +	libyang libnl c-ares
-> +
-> +HOST_FRR_DEPENDENCIES = host-flex host-bison host-python
-
-Changed to use host-python3. We generally try to use host-python3
-whenever possible nowadays.
-
-> +define FRR_INSTALL_CONFIG_FILES
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/frr
-
-Not needed, as you're using $(INSTALL) -D below
-
-> +
-> +	$(foreach f,daemons daemons.conf frr.conf vtysh.conf support_bundle_commands.conf,\
-> +		$(INSTALL) -D -m 0640 $(@D)/tools/etc/frr/$(f) \
-> +		$(TARGET_DIR)/etc/frr/$(f)
-
-Indented with one more tab the last line.
-
-That's it!
-
-Thomas
+diff --git a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+new file mode 100644
+index 0000000000..6f63d7b546
+--- /dev/null
++++ b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+@@ -0,0 +1,37 @@
++From b16f6813011519ce247b0af9a4b78486daefad54 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 26 Aug 2020 22:54:50 +0200
++Subject: [PATCH] src/roxml_mem.h: add missing extern
++
++Add missing extern to head_cell otherwise the build with gcc 10 (with
++-fno-common being default) will fail on:
++
++/bin/bash ./libtool  --tag=CC   --mode=link /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -DIGNORE_EMPTY_TEXT_NODES -DCONFIG_XML_CONTENT -DCONFIG_XML_NAV -DCONFIG_XML_BUFF  -DCONFIG_XML_COMMIT -DCONFIG_XML_EDIT -DCONFIG_XML_FILE -DCONFIG_XML_XPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -pthread -version-info 0:0:0  -o libroxml.la -rpath /usr/lib src/libroxml_la-roxml_core.lo src/libroxml_la-roxml_parser.lo src/libroxml_la-roxml_buff.lo src/libroxml_la-roxml_nav.lo src/libroxml_la-roxml_content.lo src/libroxml_la-roxml_mem.lo src/libroxml_la-roxml_stub.lo src/libroxml_la-roxml_commit.lo src/libroxml_la-roxml_edit.lo src/libroxml_la-roxml_file.lo src/libroxml_la-roxml_xpath.lo  -pthread
++libtool: link: /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared  -fPIC -DPIC  src/.libs/libroxml_la-roxml_core.o src/.libs/libroxml_la-roxml_parser.o src/.libs/libroxml_la-roxml_buff.o src/.libs/libroxml_la-roxml_nav.o src/.libs/libroxml_la-roxml_content.o src/.libs/libroxml_la-roxml_mem.o src/.libs/libroxml_la-roxml_stub.o src/.libs/libroxml_la-roxml_commit.o src/.libs/libroxml_la-roxml_edit.o src/.libs/libroxml_la-roxml_file.o src/.libs/libroxml_la-roxml_xpath.o    -O2 -pthread -pthread   -pthread -Wl,-soname -Wl,libroxml.so.0 -o .libs/libroxml.so.0.0.0
++/home/peko/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: src/.libs/libroxml_la-roxml_mem.o:(.data+0x0): multiple definition of `head_cell'; src/.libs/libroxml_la-roxml_content.o:(.bss+0x0): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/blunderer/libroxml/pull/79]
++---
++ src/roxml_mem.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/roxml_mem.h b/src/roxml_mem.h
++index aff6137..34a5070 100644
++--- a/src/roxml_mem.h
+++++ b/src/roxml_mem.h
++@@ -14,7 +14,7 @@
++ 
++ #include "roxml_internal.h"
++ 
++-memory_cell_t head_cell;
+++extern memory_cell_t head_cell;
++ 
++ /** \brief alloc memory function
++  *
++-- 
++2.28.0
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
