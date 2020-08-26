@@ -1,67 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:35:30 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/kismet: fix build with gcc >= 9
-In-Reply-To: <20200824182121.1929324-1-fontaine.fabrice@gmail.com>
-References: <20200824182121.1929324-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200826233530.455941a8@windsurf.home>
+Date: Wed, 26 Aug 2020 23:37:15 +0200
+Subject: [Buildroot] [git commit] package/libroxml: fix build with gcc 10
+Message-ID: <20200826213002.6232B85637@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 24 Aug 2020 20:21:21 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=430c6ef5ceb0a3e0c477fe357f8bda1b1010fbe0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Adding -std=c++11 fix the build and can be removed as soon as kismet is
-> bumped to latest version as the offending code has been removed. It
-> should be noted that kismet builds fine with gcc 8 so it remains unclear
-> why this build failure is raised only with gcc >= 9 (build failure
-> confirmed with gcc 9 and 10)
+Fixes:
+ - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
 
-Meh, this looks weird :/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-src-roxml_mem.h-add-missing-extern.patch  | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-bits/socket.h defines the field like this:
-
-#if __glibc_c99_flexarr_available
-    __extension__ unsigned char __cmsg_data __flexarr; /* Ancillary data.  */
-#endif
-
-and __glibc_c99_flexarr_available is defined as follows:
-
-/* Support for flexible arrays.
-   Headers that should use flexible arrays only if they're "real"
-   (e.g. only if they won't affect sizeof()) should test
-   #if __glibc_c99_flexarr_available.  */
-#if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
-# define __flexarr      []
-# define __glibc_c99_flexarr_available 1
-#elif __GNUC_PREREQ (2,97)
-/* GCC 2.97 supports C99 flexible array members as an extension,
-   even when in C89 mode or compiling C++ (any version).  */
-# define __flexarr      []
-# define __glibc_c99_flexarr_available 1
-#elif defined __GNUC__
-/* Pre-2.97 GCC did not support C99 flexible arrays but did have
-   an equivalent extension with slightly different notation.  */
-# define __flexarr      [0]
-# define __glibc_c99_flexarr_available 1
-#else
-/* Some other non-C99 compiler.  Approximate with [1].  */
-# define __flexarr      [1]
-# define __glibc_c99_flexarr_available 0
-#endif
-
-Some it's really unclear how -std=c++11 can fix the issue.
-
-Could you have a look at which of those #if case we fall into in the
-different cases (between gcc 8.x and gcc 9.x, with/without -std=c++11) ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+new file mode 100644
+index 0000000000..6f63d7b546
+--- /dev/null
++++ b/package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch
+@@ -0,0 +1,37 @@
++From b16f6813011519ce247b0af9a4b78486daefad54 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 26 Aug 2020 22:54:50 +0200
++Subject: [PATCH] src/roxml_mem.h: add missing extern
++
++Add missing extern to head_cell otherwise the build with gcc 10 (with
++-fno-common being default) will fail on:
++
++/bin/bash ./libtool  --tag=CC   --mode=link /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -DIGNORE_EMPTY_TEXT_NODES -DCONFIG_XML_CONTENT -DCONFIG_XML_NAV -DCONFIG_XML_BUFF  -DCONFIG_XML_COMMIT -DCONFIG_XML_EDIT -DCONFIG_XML_FILE -DCONFIG_XML_XPATH -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -pthread -version-info 0:0:0  -o libroxml.la -rpath /usr/lib src/libroxml_la-roxml_core.lo src/libroxml_la-roxml_parser.lo src/libroxml_la-roxml_buff.lo src/libroxml_la-roxml_nav.lo src/libroxml_la-roxml_content.lo src/libroxml_la-roxml_mem.lo src/libroxml_la-roxml_stub.lo src/libroxml_la-roxml_commit.lo src/libroxml_la-roxml_edit.lo src/libroxml_la-roxml_file.lo src/libroxml_la-roxml_xpath.lo  -pthread
++libtool: link: /home/peko/autobuild/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -shared  -fPIC -DPIC  src/.libs/libroxml_la-roxml_core.o src/.libs/libroxml_la-roxml_parser.o src/.libs/libroxml_la-roxml_buff.o src/.libs/libroxml_la-roxml_nav.o src/.libs/libroxml_la-roxml_content.o src/.libs/libroxml_la-roxml_mem.o src/.libs/libroxml_la-roxml_stub.o src/.libs/libroxml_la-roxml_commit.o src/.libs/libroxml_la-roxml_edit.o src/.libs/libroxml_la-roxml_file.o src/.libs/libroxml_la-roxml_xpath.o    -O2 -pthread -pthread   -pthread -Wl,-soname -Wl,libroxml.so.0 -o .libs/libroxml.so.0.0.0
++/home/peko/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: src/.libs/libroxml_la-roxml_mem.o:(.data+0x0): multiple definition of `head_cell'; src/.libs/libroxml_la-roxml_content.o:(.bss+0x0): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b6ac3664d61ad826515b57c4d057b6f001b5167d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/blunderer/libroxml/pull/79]
++---
++ src/roxml_mem.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/roxml_mem.h b/src/roxml_mem.h
++index aff6137..34a5070 100644
++--- a/src/roxml_mem.h
+++++ b/src/roxml_mem.h
++@@ -14,7 +14,7 @@
++ 
++ #include "roxml_internal.h"
++ 
++-memory_cell_t head_cell;
+++extern memory_cell_t head_cell;
++ 
++ /** \brief alloc memory function
++  *
++-- 
++2.28.0
++
