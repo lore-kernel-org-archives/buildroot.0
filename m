@@ -1,49 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 27 Aug 2020 19:26:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/json-c: security bump to version
- 0.15
-Message-ID: <20200827172644.140369-1-fontaine.fabrice@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 27 Aug 2020 10:34:31 -0700
+Subject: [Buildroot] More maintainers
+Message-ID: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-12762: json-c through 0.14 has an integer overflow and
-out-of-bounds write via a large JSON file, as demonstrated by
-printbuf_memappend.
+Hello;
 
-Also update indentation in hash file (two spaces)
+Angelo and I were discussing the state of patches today in regards to Buildroot.
+It seems like the project could benefit from a few more maintainers of
+the project.
+We both understand that this is a volunteer project and that we are
+all adults and have a life outside of the project, and as such, we
+can't expect instant reviews on every submitted patch. However, as the
+project continues to grow in popularity, more patches will continue to
+be offered at an ever-increasing rate. This popularity increase is
+excellent news for the project, but also comes at the cost of more
+time and effort in regards to the number of patches and fixes in the
+queue to review and test.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/json-c/json-c.hash | 4 ++--
- package/json-c/json-c.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+As such, we would both like to throw our hat in the ring to help
+maintain the project. We both don't have all the time in the world,
+but any amount of help on the project can help alleviate the primary
+maintainers.
 
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index 93eaff67c3..a20d370eb0 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256 b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
-+sha256  b8d80a1ddb718b3ba7492916237bbf86609e9709fb007e7f7d4322f02341a4c6  json-c-0.15.tar.gz
- # Locally calculated
--sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-+sha256  74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 3e17effdad..5e27c9b23b 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.14
-+JSON_C_VERSION = 0.15
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
--- 
-2.28.0
+Let me know what you think.
+
+Adam
