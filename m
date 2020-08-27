@@ -1,51 +1,40 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu, 27 Aug 2020 11:18:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng : add dependency on Linux
- headers >= 3.14
-Message-ID: <20200827091821.17990-1-jugurtha.belkalem@smile.fr>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 27 Aug 2020 13:04:59 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libyang: bump version to 1.0.184
+Message-ID: <20200827110500.29809-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iptraf-ng uses a number of definitions (like PACKET_KERNEL and
-PACKET_USERSPACE) provided by the Linux kernel headers, which were
-introduced in Linux 3.14[1], so we need to add a dependency on
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14.
-
-[1] https://elixir.bootlin.com/linux/v3.14-rc1/source/include/uapi/linux/if_packet.h
-
-"""
-Fixes:
-
-  http://autobuild.buildroot.net/results/480/480b00b4b264cfe1da533c762595d21b72fa8211/build-end.log
-"""
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/iptraf-ng/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
-index f240daf93d..5c61b7c0e2 100644
---- a/package/iptraf-ng/Config.in
-+++ b/package/iptraf-ng/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_IPTRAF_NG
- 	bool "iptraf-ng"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  IPTraf-ng is a console-based network monitoring program for
-@@ -10,3 +11,7 @@ config BR2_PACKAGE_IPTRAF_NG
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index 27bf8690c9..d318ecb9d6 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9ee400695b79514535db1b58657d5d5e13f2ccf7186cc1af7d9bc574081bab2e  libyang-1.0.176.tar.gz
++sha256  1a5637451b73c4c5683837eb4c51371bb084795f653bc1a5fc20fed5541b58bc  libyang-1.0.184.tar.gz
+ sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index c1ca51c36e..779c440e27 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  IPTraf-ng is a fork of original IPTraf v3.0.0
- 	  (http://iptraf.seul.org).
-+
-+comment "iptraf-ng needs a toolchain w/ kernel headers >= 3.14"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+-LIBYANG_VERSION = 1.0.176
++LIBYANG_VERSION = 1.0.184
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
 -- 
-2.11.0
+2.20.1
