@@ -1,103 +1,173 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu, 27 Aug 2020 17:49:03 +0200
-Subject: [Buildroot] [PATCH] package/gnuradio: backport patch to fix
- INTERFACE_INCLUDE_DIRECTORIES
-Message-ID: <20200827154903.1107968-1-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Aug 2020 18:04:33 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: drop erroneous
+ "break" in CVE.affects()
+Message-ID: <20200827155717.827AD81845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b3f959fe968cca773cecf1c354b22f8b69201afc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gnuradio-runtimeTargets.cmake and gnuradio-pmtTargets.cmake are filled
-using CMAKE_INSTALL_PREFIX for INSTALL_INTERFACE.
+Commit 7d2779ecbb142b62f8913d30352b11058f922b2a
+("support/script/pkg-stats: handle exception when version comparison
+fails") erroneousy introduced a "break" within a try/expect block.
 
-Since CMAKE_INSTALL_PREFIX, in buildroot, is set to /usr, these files contains
-path to host system.
+This break has the unfortunate consequence that every CVE that was
+using the <= operator was skipped, and according to the current
+CVE statistics, made us miss 74 CVEs out of 141 CVEs.
 
-With BR2_COMPILER_PARANOID_UNSAFE_PATH package using gnuradio fails with:
-arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include'
+Here is for reference the complete list of CVEs we missed:
 
-By simply providing 'include', produced .cmake contains:
-INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-instead of
-INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
+ - gnupg
+   CVE-2006-3082
+   CVE-2019-13050
 
-[Upstream status: https://github.com/gnuradio/gnuradio/pull/3737]
+ - jhead
+   CVE-2020-6624
+   CVE-2020-6625
 
-Fix (many) gr-osmosdr build failure:
-- http://autobuild.buildroot.net/results/66b76c07f15bb3e6db697c47796ae3dd15ecf4b9/
+ - patch
+   CVE-2018-6952
+   CVE-2019-20633
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ - json-c
+   CVE-2020-12762
+
+ - git
+   CVE-2018-1000110
+   CVE-2018-1000182
+   CVE-2019-1003010
+   CVE-2020-2136
+
+ - iperf2
+   CVE-2016-4303
+
+ - libtorrent
+   CVE-2009-1760
+   CVE-2016-5301
+
+ - lua
+   CVE-2020-15888
+   CVE-2020-15889
+   CVE-2020-15945
+   CVE-2020-24342
+
+ - openvpn
+   CVE-2020-7224
+
+ - smack
+   CVE-2016-10027
+
+ - bashtop
+   CVE-2019-18276
+
+ - links
+   CVE-2008-3319
+
+ - argus
+   CVE-2011-3332
+
+ - libraw
+   CVE-2020-15503
+
+ - netcat
+   CVE-2008-5727
+   CVE-2008-5728
+   CVE-2008-5729
+   CVE-2008-5730
+   CVE-2008-5742
+   CVE-2015-2214
+
+ - subversion
+   CVE-2017-1000085
+   CVE-2018-1000111
+   CVE-2020-2111
+
+ - python
+   CVE-2013-1753
+   CVE-2015-5652
+   CVE-2017-17522
+   CVE-2017-18207
+   CVE-2019-20907
+   CVE-2019-9674
+
+ - cereal
+   CVE-2020-11104
+   CVE-2020-11105
+
+ - opencv
+   CVE-2017-1000450
+   CVE-2017-12597
+   CVE-2017-12598
+   CVE-2017-12599
+   CVE-2017-12600
+   CVE-2017-12601
+   CVE-2017-12602
+   CVE-2017-12603
+   CVE-2017-12604
+   CVE-2017-12605
+   CVE-2017-12606
+   CVE-2017-12862
+   CVE-2017-12863
+   CVE-2017-12864
+   CVE-2019-15939
+
+ - docker
+   CVE-2015-1843
+   CVE-2015-3627
+   CVE-2015-3630
+   CVE-2015-3631
+   CVE-2016-3697
+   CVE-2017-14992
+   CVE-2019-16884
+
+ - trousers
+   CVE-2020-24330
+   CVE-2020-24331
+   CVE-2020-24332
+
+ - libcroco
+   CVE-2020-12825
+
+ - libpupnp
+   CVE-2020-13848
+
+ - openjpeg
+   CVE-2020-15389
+
+ - flex
+   CVE-2015-1773
+
+ - libesmtp
+   CVE-2019-19977
+
+ - ed
+   CVE-2015-2987
+
+ - libmad
+   CVE-2018-7263
+
+ - grub
+   CVE-2020-15705
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...rdcode-INTERFACE_INCLUDE_DIRECTORIES.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
+ support/scripts/pkg-stats | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch b/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
-new file mode 100644
-index 0000000000..6b8987fa5f
---- /dev/null
-+++ b/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
-@@ -0,0 +1,57 @@
-+From 84dea8284c521f08508bb2dcbc99db3b5d3438fd Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Thu, 27 Aug 2020 17:32:09 +0200
-+Subject: [PATCH] gnuradio-runtime_pmt: dont hardcode
-+ INTERFACE_INCLUDE_DIRECTORIES
-+
-+gnuradio-runtimeTargets.cmake and gnuradio-pmtTargets.cmake are filled
-+using CMAKE_INSTALL_PREFIX for INSTALL_INTERFACE.
-+
-+Since CMAKE_INSTALL_PREFIX, in buildroot, is set to /usr, these files contains
-+path to host system.
-+
-+With BR2_COMPILER_PARANOID_UNSAFE_PATH package using gnuradio fails with:
-+arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include'
-+
-+By simply providing 'include', produced .cmake contains:
-+INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-+instead of
-+INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
-+
-+[Upstream status: https://github.com/gnuradio/gnuradio/pull/3737]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ gnuradio-runtime/lib/CMakeLists.txt     | 2 +-
-+ gnuradio-runtime/lib/pmt/CMakeLists.txt | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gnuradio-runtime/lib/CMakeLists.txt b/gnuradio-runtime/lib/CMakeLists.txt
-+index 5aa90a5e1..fc32f473b 100644
-+--- a/gnuradio-runtime/lib/CMakeLists.txt
-++++ b/gnuradio-runtime/lib/CMakeLists.txt
-+@@ -214,7 +214,7 @@ target_link_libraries(gnuradio-runtime PUBLIC
-+ 
-+ target_include_directories(gnuradio-runtime
-+   PUBLIC
-+-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
-++    $<INSTALL_INTERFACE:include>
-+     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-+     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../include>
-+   PRIVATE
-+diff --git a/gnuradio-runtime/lib/pmt/CMakeLists.txt b/gnuradio-runtime/lib/pmt/CMakeLists.txt
-+index 9fb98d0fc..6dfcd945c 100644
-+--- a/gnuradio-runtime/lib/pmt/CMakeLists.txt
-++++ b/gnuradio-runtime/lib/pmt/CMakeLists.txt
-+@@ -33,7 +33,7 @@ target_link_libraries(gnuradio-pmt
-+ 
-+ target_include_directories(gnuradio-pmt
-+   PUBLIC
-+-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
-++  $<INSTALL_INTERFACE:include>
-+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
-+   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/
-+   )
-+-- 
-+2.26.2
-+
--- 
-2.26.2
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 303af2f588..e642147b98 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -383,7 +383,6 @@ class CVE:
+                         continue
+                     try:
+                         affected = pkg_version <= cve_affected_version
+-                        break
+                     except TypeError:
+                         return CVE_UNKNOWN
+                     if affected:
