@@ -1,33 +1,103 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 27 Aug 2020 13:37:55 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as contact for
- linuxptp+ipmitool
-Message-ID: <20200827113754.10731-1-heiko.thiery@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Thu, 27 Aug 2020 17:49:03 +0200
+Subject: [Buildroot] [PATCH] package/gnuradio: backport patch to fix
+ INTERFACE_INCLUDE_DIRECTORIES
+Message-ID: <20200827154903.1107968-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 81391e5666..740fde93e6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1096,8 +1096,10 @@ F:	package/python-remi/
- F:	package/python-sip/
- 
- N:	Heiko Thiery <heiko.thiery@gmail.com>
-+F:	package/ipmitool/
- F:	package/libnetconf2/
- F:	package/libyang/
-+F:	package/linuxptp/
- F:	package/netopeer2/
- F:	package/sysrepo/
- 
+gnuradio-runtimeTargets.cmake and gnuradio-pmtTargets.cmake are filled
+using CMAKE_INSTALL_PREFIX for INSTALL_INTERFACE.
+
+Since CMAKE_INSTALL_PREFIX, in buildroot, is set to /usr, these files contains
+path to host system.
+
+With BR2_COMPILER_PARANOID_UNSAFE_PATH package using gnuradio fails with:
+arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include'
+
+By simply providing 'include', produced .cmake contains:
+INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+instead of
+INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
+
+[Upstream status: https://github.com/gnuradio/gnuradio/pull/3737]
+
+Fix (many) gr-osmosdr build failure:
+- http://autobuild.buildroot.net/results/66b76c07f15bb3e6db697c47796ae3dd15ecf4b9/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ ...rdcode-INTERFACE_INCLUDE_DIRECTORIES.patch | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
+
+diff --git a/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch b/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
+new file mode 100644
+index 0000000000..6b8987fa5f
+--- /dev/null
++++ b/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
+@@ -0,0 +1,57 @@
++From 84dea8284c521f08508bb2dcbc99db3b5d3438fd Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Thu, 27 Aug 2020 17:32:09 +0200
++Subject: [PATCH] gnuradio-runtime_pmt: dont hardcode
++ INTERFACE_INCLUDE_DIRECTORIES
++
++gnuradio-runtimeTargets.cmake and gnuradio-pmtTargets.cmake are filled
++using CMAKE_INSTALL_PREFIX for INSTALL_INTERFACE.
++
++Since CMAKE_INSTALL_PREFIX, in buildroot, is set to /usr, these files contains
++path to host system.
++
++With BR2_COMPILER_PARANOID_UNSAFE_PATH package using gnuradio fails with:
++arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include'
++
++By simply providing 'include', produced .cmake contains:
++INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
++instead of
++INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
++
++[Upstream status: https://github.com/gnuradio/gnuradio/pull/3737]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gnuradio-runtime/lib/CMakeLists.txt     | 2 +-
++ gnuradio-runtime/lib/pmt/CMakeLists.txt | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gnuradio-runtime/lib/CMakeLists.txt b/gnuradio-runtime/lib/CMakeLists.txt
++index 5aa90a5e1..fc32f473b 100644
++--- a/gnuradio-runtime/lib/CMakeLists.txt
+++++ b/gnuradio-runtime/lib/CMakeLists.txt
++@@ -214,7 +214,7 @@ target_link_libraries(gnuradio-runtime PUBLIC
++ 
++ target_include_directories(gnuradio-runtime
++   PUBLIC
++-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+++    $<INSTALL_INTERFACE:include>
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../include>
++   PRIVATE
++diff --git a/gnuradio-runtime/lib/pmt/CMakeLists.txt b/gnuradio-runtime/lib/pmt/CMakeLists.txt
++index 9fb98d0fc..6dfcd945c 100644
++--- a/gnuradio-runtime/lib/pmt/CMakeLists.txt
+++++ b/gnuradio-runtime/lib/pmt/CMakeLists.txt
++@@ -33,7 +33,7 @@ target_link_libraries(gnuradio-pmt
++ 
++ target_include_directories(gnuradio-pmt
++   PUBLIC
++-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+++  $<INSTALL_INTERFACE:include>
++   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
++   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/
++   )
++-- 
++2.26.2
++
 -- 
-2.20.1
+2.26.2
