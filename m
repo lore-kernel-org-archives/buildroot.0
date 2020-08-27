@@ -1,32 +1,43 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 27 Aug 2020 10:34:31 -0700
-Subject: [Buildroot] More maintainers
-Message-ID: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Aug 2020 21:30:15 +0200
+Subject: [Buildroot] [git commit branch/next] package/libyang: bump version
+ to 1.0.184
+Message-ID: <20200827192303.E75E085F29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+commit: https://git.buildroot.net/buildroot/commit/?id=939b4ac792a1a1e23ff5c60e35066fda495d7ebb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Angelo and I were discussing the state of patches today in regards to Buildroot.
-It seems like the project could benefit from a few more maintainers of
-the project.
-We both understand that this is a volunteer project and that we are
-all adults and have a life outside of the project, and as such, we
-can't expect instant reviews on every submitted patch. However, as the
-project continues to grow in popularity, more patches will continue to
-be offered at an ever-increasing rate. This popularity increase is
-excellent news for the project, but also comes at the cost of more
-time and effort in regards to the number of patches and fixes in the
-queue to review and test.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-As such, we would both like to throw our hat in the ring to help
-maintain the project. We both don't have all the time in the world,
-but any amount of help on the project can help alleviate the primary
-maintainers.
-
-Let me know what you think.
-
-Adam
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index 27bf8690c9..d318ecb9d6 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9ee400695b79514535db1b58657d5d5e13f2ccf7186cc1af7d9bc574081bab2e  libyang-1.0.176.tar.gz
++sha256  1a5637451b73c4c5683837eb4c51371bb084795f653bc1a5fc20fed5541b58bc  libyang-1.0.184.tar.gz
+ sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index c1ca51c36e..779c440e27 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBYANG_VERSION = 1.0.176
++LIBYANG_VERSION = 1.0.184
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
