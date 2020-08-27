@@ -1,25 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:04:32 +0200
-Subject: [Buildroot] [PATCH] package/netdata: bump to 1.21.1
-In-Reply-To: <20200429222609.2453988-1-m.niestroj@grinn-global.com>
-References: <20200429222609.2453988-1-m.niestroj@grinn-global.com>
-Message-ID: <20200827230432.1e01ec4f@windsurf.home>
+Date: Thu, 27 Aug 2020 23:05:23 +0200
+Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.4
+In-Reply-To: <20200430013700.23556-1-ryanbarnett3@gmail.com>
+References: <20200430013700.23556-1-ryanbarnett3@gmail.com>
+Message-ID: <20200827230523.6311a3ee@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 30 Apr 2020 00:26:09 +0200
-Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+On Wed, 29 Apr 2020 20:37:00 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> Update hash file to two space format.
+> 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 > ---
->  package/netdata/netdata.hash | 2 +-
->  package/netdata/netdata.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/iptables/iptables.hash | 4 ++--
+>  package/iptables/iptables.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
+Sorry, another patch from Peter Seiderer, even though posted after
+yours, got applied in the mean time. Sorry about that :/
 
 Thomas
 -- 
