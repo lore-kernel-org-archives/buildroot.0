@@ -1,127 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:07:04 +0200
-Subject: [Buildroot] [git commit branch/next] package/linuxptp: bump version
- to 3.0
-Message-ID: <20200827210049.8676584C70@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 23:06:53 +0200
+Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
+ to 3.56
+Message-ID: <20200827210049.79AA884C70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f7a7d7252d123477b8e689e7ebdfced14e7f97
+commit: https://git.buildroot.net/buildroot/commit/?id=b1be3277baec5b3ccd64012ee837cb17d9a06f63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- remove patch that is in new version
-- update indentation in hash file (two spaces)
+Bump version to 3.56. Unfortunately local patch is still pending
+upstream and not applied and I've just asked why:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
 
-Run tests:
+This version requires NSPR 4.28.
 
-             br-arm-full [1/6]: OK
-  br-arm-cortex-a9-glibc [2/6]: OK
-   br-arm-cortex-m4-full [3/6]: OK
-          br-x86-64-musl [4/6]: OK
-      br-arm-full-static [5/6]: OK
-            sourcery-arm [6/6]: OK
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.56_release_notes
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0002-fix-building-with-new-kernel-headers.patch | 55 ----------------------
- package/linuxptp/linuxptp.hash                     | 10 ++--
- package/linuxptp/linuxptp.mk                       |  2 +-
- 3 files changed, 6 insertions(+), 61 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch b/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
-deleted file mode 100644
-index 332e5491ff..0000000000
---- a/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From d663a483c40939bad58301c256d86da1f3da6cc0 Mon Sep 17 00:00:00 2001
--From: Miroslav Lichvar <mlichvar@redhat.com>
--Date: Tue, 13 Nov 2018 13:16:08 +0100
--Subject: [PATCH] Fix building with new kernel headers.
--
--net_tstamp.h in recent kernel versions requires time.h for clockid_t.
--
--Signed-off-by: Miroslav Lichvar <mlichvar@redhat.com>
-----
-- clock.c      | 2 +-
-- sk.c         | 1 +
-- timemaster.c | 1 +
-- 3 files changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/clock.c b/clock.c
--index 9c493c3..8533b39 100644
----- a/clock.c
--+++ b/clock.c
--@@ -17,11 +17,11 @@
--  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--  */
-- #include <errno.h>
--+#include <time.h>
-- #include <linux/net_tstamp.h>
-- #include <poll.h>
-- #include <stdlib.h>
-- #include <string.h>
---#include <time.h>
-- #include <sys/queue.h>
-- 
-- #include "address.h"
--diff --git a/sk.c b/sk.c
--index e2b1f28..30162eb 100644
----- a/sk.c
--+++ b/sk.c
--@@ -18,6 +18,7 @@
--  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--  */
-- #include <errno.h>
--+#include <time.h>
-- #include <linux/net_tstamp.h>
-- #include <linux/sockios.h>
-- #include <linux/ethtool.h>
--diff --git a/timemaster.c b/timemaster.c
--index 058678f..00db59f 100644
----- a/timemaster.c
--+++ b/timemaster.c
--@@ -22,6 +22,7 @@
-- #include <errno.h>
-- #include <libgen.h>
-- #include <limits.h>
--+#include <time.h>
-- #include <linux/net_tstamp.h>
-- #include <net/if.h>
-- #include <signal.h>
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index 5e6c7741cd..de82ff2b84 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/linuxptp/files/v2.0/
--sha1 592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
--md5 d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
-+# From https://sourceforge.net/projects/linuxptp/files/v3.0/
-+sha1  cf56f1ab6c622a569be8c14d2cb121f0183affc9  linuxptp-3.0.tgz
-+md5  1318805702eb6d59f9f247e1dd5ce12a  linuxptp-3.0.tgz
- 
- # Locally computed:
--sha256 0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
-+sha256  d74ceca722c75bfff53c633425f926dd48eb04f4a089451b855155c016d15785  linuxptp-3.0.tgz
- 
- # Hash for license file:
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 921c55ad59..3d018a4657 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index fcba10b99a..b153b614e9 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_55_RTM/src/SHA256SUMS
+-sha256  fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004  nss-3.55.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_56_RTM/src/SHA256SUMS
++sha256  f875e0e8ed3b5ce92d675be4a55aa25a8c1199789a4a01f69b5f2327e2048e9c  nss-3.56.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index a5e4432f8c..effad11b5b 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUXPTP_VERSION = 2.0
-+LINUXPTP_VERSION = 3.0
- LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
- LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
+-LIBNSS_VERSION = 3.55
++LIBNSS_VERSION = 3.56
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
