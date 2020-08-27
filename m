@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:06:22 +0200
-Subject: [Buildroot] [PATCH] package/json-c: bump to version 0.14
-In-Reply-To: <20200430022505.6767-1-ryanbarnett3@gmail.com>
-References: <20200430022505.6767-1-ryanbarnett3@gmail.com>
-Message-ID: <20200827230622.5336fa4a@windsurf.home>
+Date: Thu, 27 Aug 2020 23:04:17 +0200
+Subject: [Buildroot] [git commit branch/next] package/netdata: bump to 1.21.1
+Message-ID: <20200827210049.623D283FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 29 Apr 2020 21:25:05 -0500
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=86834b0d9cdf2c3a6cc69e263a84ad206fb90cb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> * Switch to cmake infrastructure
-> * Update hash file to two space format
-> 
-> Results of test-pkg:
-> 
->   $ ./utils/test-pkg -c json-c.config -p json-c
->                              br-arm-full [1/6]: OK
->                   br-arm-cortex-a9-glibc [2/6]: OK
->                    br-arm-cortex-m4-full [3/6]: OK
->                           br-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: OK
->                             sourcery-arm [6/6]: OK
->   6 builds, 0 skipped, 0 build failed, 0 legal-info failed
-> 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> ---
->  package/json-c/json-c.hash |  4 ++--
->  package/json-c/json-c.mk   | 14 +++-----------
->  2 files changed, 5 insertions(+), 13 deletions(-)
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/netdata/netdata.hash | 2 +-
+ package/netdata/netdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry, another patch posted by Christopher Pelloux doing the same thing
-got merged, even though it was posted after yours. Sorry about that :-/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
+index 2d6bd2a9a8..8d5ce51fca 100644
+--- a/package/netdata/netdata.hash
++++ b/package/netdata/netdata.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b6a80ac1e86d8a8d6fa16bba2ad15e8a8e5a89e3437cb7f30c538d11b95b5325  netdata-1.21.0.tar.gz
++sha256 60cdde3f1f8bd9035fef6a566053c0a7195d1714b5da6814473263e85382b4a8  netdata-1.21.1.tar.gz
+ sha256 0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index 34d6d53d0f..1c20c49dee 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETDATA_VERSION = 1.21.0
++NETDATA_VERSION = 1.21.1
+ NETDATA_SITE = $(call github,netdata,netdata,v$(NETDATA_VERSION))
+ NETDATA_LICENSE = GPL-3.0+
+ NETDATA_LICENSE_FILES = LICENSE
