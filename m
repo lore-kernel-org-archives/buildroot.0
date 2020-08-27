@@ -1,51 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 22:25:30 +0200
-Subject: [Buildroot] [git commit] package/iptraf-ng: add dependency on Linux
- headers >= 3.14
-Message-ID: <20200902161636.9FFD685EB9@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 23:04:17 +0200
+Subject: [Buildroot] [git commit] package/netdata: bump to 1.21.1
+Message-ID: <20200902161636.C276185EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9f551a9d0c2523337e9aafb667ddf3631509636
+commit: https://git.buildroot.net/buildroot/commit/?id=86834b0d9cdf2c3a6cc69e263a84ad206fb90cb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-iptraf-ng uses a number of definitions (like PACKET_KERNEL and
-PACKET_USERSPACE) provided by the Linux kernel headers, which were
-introduced in Linux 3.14 [1], so we need to add a dependency on
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14.
-
-[1] https://elixir.bootlin.com/linux/v3.14-rc1/source/include/uapi/linux/if_packet.h
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/480b00b4b264cfe1da533c762595d21b72fa8211/
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iptraf-ng/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/netdata/netdata.hash | 2 +-
+ package/netdata/netdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
-index f240daf93d..5c61b7c0e2 100644
---- a/package/iptraf-ng/Config.in
-+++ b/package/iptraf-ng/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_IPTRAF_NG
- 	bool "iptraf-ng"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  IPTraf-ng is a console-based network monitoring program for
-@@ -10,3 +11,7 @@ config BR2_PACKAGE_IPTRAF_NG
+diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
+index 2d6bd2a9a8..8d5ce51fca 100644
+--- a/package/netdata/netdata.hash
++++ b/package/netdata/netdata.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b6a80ac1e86d8a8d6fa16bba2ad15e8a8e5a89e3437cb7f30c538d11b95b5325  netdata-1.21.0.tar.gz
++sha256 60cdde3f1f8bd9035fef6a566053c0a7195d1714b5da6814473263e85382b4a8  netdata-1.21.1.tar.gz
+ sha256 0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index 34d6d53d0f..1c20c49dee 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  IPTraf-ng is a fork of original IPTraf v3.0.0
- 	  (http://iptraf.seul.org).
-+
-+comment "iptraf-ng needs a toolchain w/ kernel headers >= 3.14"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+-NETDATA_VERSION = 1.21.0
++NETDATA_VERSION = 1.21.1
+ NETDATA_SITE = $(call github,netdata,netdata,v$(NETDATA_VERSION))
+ NETDATA_LICENSE = GPL-3.0+
+ NETDATA_LICENSE_FILES = LICENSE
