@@ -1,47 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 23:29:31 +0200
-Subject: [Buildroot] [git commit] package/snmppp: bump to version 3.4.2
-Message-ID: <20200902161635.601C285EB9@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 22:59:29 +0200
+Subject: [Buildroot] [git commit] package/python-ansicolors: new package
+Message-ID: <20200902161636.AE27185EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb13451d5cba272cf121cb06cc58ec951a47b9b3
+commit: https://git.buildroot.net/buildroot/commit/?id=03787685eac0efc0a0dd11b0bb1c3cf6d95eaabb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The src/v3.cpp source file, used as a license file, has seen a few
-modifications (hence the change of hash) but none of these changes are
-related to licensing.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/snmppp/snmppp.hash | 4 ++--
- package/snmppp/snmppp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-ansicolors/Config.in              |  6 ++++++
+ package/python-ansicolors/python-ansicolors.hash |  5 +++++
+ package/python-ansicolors/python-ansicolors.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/snmppp/snmppp.hash b/package/snmppp/snmppp.hash
-index 320581fb91..2dcf836fc7 100644
---- a/package/snmppp/snmppp.hash
-+++ b/package/snmppp/snmppp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  ea7b676e48c7a53c380c406bc6163b7057df74a6a1bf9f3cc1f13ba246225907  snmp++-3.4.1.tar.gz
--sha256  bf7bcfe654a7b4f30374035016e563d0f654af2c8306692ebcc53c3d7e655420  src/v3.cpp
-+sha256  a3eb75e2310c315d9b2c2094154c7cd9b46684adb80a4b36b8957dcc09af4041  snmp++-3.4.2.tar.gz
-+sha256  f6fd4321c7eb6e51a272f91f964aea7f53039bb2b55f690d5a9d042f3a5d79b9  src/v3.cpp
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 270c41fc4b..601e28e207 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNMPPP_VERSION = 3.4.1
-+SNMPPP_VERSION = 3.4.2
- SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
- SNMPPP_SITE = http://www.agentpp.com/download
- SNMPPP_DEPENDENCIES = host-pkgconf
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 81391e5666..c0c6de8d5d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1596,6 +1596,7 @@ F:	package/lua-stdlib/
+ F:	package/luaossl/
+ F:	package/murata-cyw-fw/
+ F:	package/netdata/
++F:	package/python-ansicolors/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+ F:	support/testing/tests/package/test_netdata.py
+diff --git a/package/Config.in b/package/Config.in
+index 1a886a3597..85a6f44910 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -872,6 +872,7 @@ menu "External python modules"
+ 	source "package/python-aiosignal/Config.in"
+ 	source "package/python-aiozipkin/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
++	source "package/python-ansicolors/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-argon2-cffi/Config.in"
+ 	source "package/python-arrow/Config.in"
+diff --git a/package/python-ansicolors/Config.in b/package/python-ansicolors/Config.in
+new file mode 100644
+index 0000000000..78da50dfc2
+--- /dev/null
++++ b/package/python-ansicolors/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_ANSICOLORS
++	bool "python-ansicolors"
++	help
++	  ANSI colors for Python.
++
++	  http://github.com/jonathaneunice/colors/
+diff --git a/package/python-ansicolors/python-ansicolors.hash b/package/python-ansicolors/python-ansicolors.hash
+new file mode 100644
+index 0000000000..9fb51eb5d1
+--- /dev/null
++++ b/package/python-ansicolors/python-ansicolors.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/ansicolors/json
++md5  9ca7e2396ffa2e20af023c6b83ab7b14  ansicolors-1.1.8.zip
++sha256  99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0  ansicolors-1.1.8.zip
++# Locally computed sha256 checksums
++sha256  71a13496c621f01b454f9aa54fa608a712f58eb253e6dd2c91027fe78340c773  LICENSE
+diff --git a/package/python-ansicolors/python-ansicolors.mk b/package/python-ansicolors/python-ansicolors.mk
+new file mode 100644
+index 0000000000..787ce8c40b
+--- /dev/null
++++ b/package/python-ansicolors/python-ansicolors.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-ansicolors
++#
++################################################################################
++
++PYTHON_ANSICOLORS_VERSION = 1.1.8
++PYTHON_ANSICOLORS_SOURCE = ansicolors-$(PYTHON_ANSICOLORS_VERSION).zip
++PYTHON_ANSICOLORS_SITE = https://files.pythonhosted.org/packages/76/31/7faed52088732704523c259e24c26ce6f2f33fbeff2ff59274560c27628e
++PYTHON_ANSICOLORS_SETUP_TYPE = setuptools
++PYTHON_ANSICOLORS_LICENSE = ISC
++PYTHON_ANSICOLORS_LICENSE_FILES = LICENSE
++
++define PYTHON_ANSICOLORS_EXTRACT_CMDS
++	unzip $(PYTHON_ANSICOLORS_DL_DIR)/$(PYTHON_ANSICOLORS_SOURCE) -d $(@D)
++	mv $(@D)/ansicolors-$(PYTHON_ANSICOLORS_VERSION)/* $(@D)
++	$(RM) -r $(@D)/ansicolors-$(PYTHON_ANSICOLORS_VERSION)
++endef
++
++$(eval $(python-package))
