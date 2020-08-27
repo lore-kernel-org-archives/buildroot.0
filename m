@@ -1,206 +1,152 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:24:07 +0200
-Subject: [Buildroot] [git commit] package/python-matplotlib: simplify
- version checks
-Message-ID: <20200827211713.2139F7FAF4@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 23:19:36 +0200
+Subject: [Buildroot] [git commit] package/dillo: fix build with gcc 10
+Message-ID: <20200827211713.165817FAF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07b74f914dcdd7d76c33af8caee975efd8f7d0ea
+commit: https://git.buildroot.net/buildroot/commit/?id=ee7377919774c9a3a6266f9afeb5faae55c299d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hopefully, this should fix the following error on one of the
-autobuilders:
-
-png: no  [The C/C++ header for libpng (png.h) could not
-     be found.  You may need to install the development
-     package.]
-
 Fixes:
- - http://autobuild.buildroot.org/results/afddcc44b2fb7983244f24542bfae921869e4ab8
+ - http://autobuild.buildroot.org/results/9c777af97fe50143c6a68f0170fc86c87d8ead3f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...request-11983-from-anntzer-builddepchecks.patch | 170 +++++++++++++++++++++
- 1 file changed, 170 insertions(+)
+ package/dillo/0004-fix-build-with-gcc-10.patch | 124 +++++++++++++++++++++++++
+ 1 file changed, 124 insertions(+)
 
-diff --git a/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
+diff --git a/package/dillo/0004-fix-build-with-gcc-10.patch b/package/dillo/0004-fix-build-with-gcc-10.patch
 new file mode 100644
-index 0000000000..b3a22acbb4
+index 0000000000..413bccb00b
 --- /dev/null
-+++ b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-@@ -0,0 +1,170 @@
-+From 923ce72409f184bd8e8c61b196260891036ba87e Mon Sep 17 00:00:00 2001
-+From: Antony Lee <anntzer.lee@gmail.com>
-+Date: Thu, 30 Aug 2018 15:27:55 +0200
-+Subject: [PATCH] Simplify version checks for freetype and libpng.
++++ b/package/dillo/0004-fix-build-with-gcc-10.patch
+@@ -0,0 +1,124 @@
++fix build with gcc 10
 +
-+Currently, setupext.py replicates a lot of work done by the compiler to
-+check whether header files are present, and whether freetype and libpng
-+have sufficiently recent versions.
++gcc 10 is now defaulting to -fno-common resulting in the following build
++failures:
 +
-+Instead, we can just add a small stub source file at the top of the
-+extension sources which just tries to include the header and checks the
-+version macros.  If the header is not found, compilation will
-+immediately abort with `foo.h: No such file or directory`; if the
-+version is too old, we can emit an appropriate error message (`#pragma
-+message` is supported by all major compilers and allows expanding of
-+macros in the error message).
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g2 -D_FORTIFY_SOURCE=1 -DENABLE_IPV6 -DD_DNS_THREADED -D_REENTRANT -D_THREAD_SAFE -Wall -W -Wno-unused-parameter -Waggregate-return   -o dpid dpi.o dpi_socket_dir.o dpid.o dpid_common.o main.o misc_new.o ../dpip/libDpip.a ../dlib/libDlib.a 
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: dpi_socket_dir.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: dpid_common.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:61: multiple definition of `services_list'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:61: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:58: multiple definition of `dpi_attr_list'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:58: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:55: multiple definition of `numsocks'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:55: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:52: multiple definition of `numdpis'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:52: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:31: multiple definition of `srs_fd'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:31: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:28: multiple definition of `srs_name'; dpid.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid.h:28: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: main.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: misc_new.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: multiple definition of `dpi_errno'; dpi.o:/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/dillo-3.0.5/dpid/dpid_common.h:44: first defined here
 +
-+[Retrieved from:
-+https://github.com/matplotlib/matplotlib/commit/d1060a885309ec7ac19ca912d3011a5eb1673bd5]
++So add missing extern for srs_fd, numdpis, numsocks, dpi_attr_list,
++services_list and sock_set
++
++Also remove srs_name which is never used and give a name to dpi_errno
++enum
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9c777af97fe50143c6a68f0170fc86c87d8ead3f
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ setupext.py              | 83 +++++-----------------------------------
-+ src/checkdep_freetype2.c | 13 +++++++
-+ src/checkdep_libpng.c    |  5 +++
-+ 3 files changed, 28 insertions(+), 73 deletions(-)
-+ create mode 100644 src/checkdep_freetype2.c
-+ create mode 100644 src/checkdep_libpng.c
++[Upstream status: sent to jcid at dillo.org]
 +
-+diff --git a/setupext.py b/setupext.py
-+index d5f4b81f562..a5163e39288 100644
-+--- a/setupext.py
-++++ b/setupext.py
-+@@ -814,6 +814,13 @@ def add_flags(self, ext, add_sources=True):
-+                                for x in agg_sources)
++diff -r f60d55c02567 dpid/dpid.c
++--- a/dpid/dpid.c	Fri Oct 05 22:05:08 2018 +0200
+++++ b/dpid/dpid.c	Thu Aug 27 18:16:50 2020 +0200
++@@ -38,6 +38,12 @@
++ 
++ #define QUEUE 5
++ 
+++int srs_fd;
+++int numdpis;
+++int numsocks;
+++struct dp *dpi_attr_list;
+++Dlist *services_list;
+++fd_set sock_set;
++ volatile sig_atomic_t caught_sigchld = 0;
++ char *SharedKey = NULL;
++ 
++diff -r f60d55c02567 dpid/dpid.h
++--- a/dpid/dpid.h	Fri Oct 05 22:05:08 2018 +0200
+++++ b/dpid/dpid.h	Thu Aug 27 18:16:50 2020 +0200
++@@ -25,10 +25,9 @@
++ 
++ /*! \TODO: Should read this from dillorc */
++ #define SRS_NAME "dpid.srs"
++-char *srs_name;
++ 
++ /*! dpid's service request socket file descriptor */
++-int srs_fd;
+++extern int srs_fd;
++ 
++ /*! plugin state information
++  */
++@@ -49,19 +48,19 @@
++ };
++ 
++ /*! Number of available plugins */
++-int numdpis;
+++extern int numdpis;
++ 
++ /*! Number of sockets being watched */
++-int numsocks;
+++extern int numsocks;
++ 
++ /*! State information for each plugin. */
++-struct dp *dpi_attr_list;
+++extern struct dp *dpi_attr_list;
++ 
++ /*! service served for each plugin  */
++-Dlist *services_list;
+++extern Dlist *services_list;
++ 
++ /*! Set of sockets watched for connections */
++-fd_set sock_set;
+++extern fd_set sock_set;
++ 
++ /*! Set to 1 by the SIGCHLD handler dpi_sigchld */
++ extern volatile sig_atomic_t caught_sigchld;
++diff -r f60d55c02567 dpid/dpid_common.h
++--- a/dpid/dpid_common.h	Fri Oct 05 22:05:08 2018 +0200
+++++ b/dpid/dpid_common.h	Thu Aug 27 18:16:50 2020 +0200
++@@ -37,10 +37,10 @@
 + 
 + 
-++# For FreeType2 and libpng, we add a separate checkdep_foo.c source to at the
-++# top of the extension sources.  This file is compiled first and immediately
-++# aborts the compilation either with "foo.h: No such file or directory" if the
-++# header is not found, or an appropriate error message if the header indicates
-++# a too-old version.
-++
-++
-+ class FreeType(SetupPackage):
-+     name = "freetype"
-+     pkg_names = {
-+@@ -825,59 +832,8 @@ class FreeType(SetupPackage):
-+         "windows_url": "http://gnuwin32.sourceforge.net/packages/freetype.htm"
-+         }
++ /*! Error codes for dpid */
++-enum {
+++enum dpi_errno {
++    no_errors,
++    dpid_srs_addrinuse /* dpid service request socket address already in use */
++-} dpi_errno;
+++};
 + 
-+-    def check(self):
-+-        if options.get('local_freetype'):
-+-            return "Using local version for testing"
-+-
-+-        if sys.platform == 'win32':
-+-            try:
-+-                check_include_file(get_include_dirs(), 'ft2build.h', 'freetype')
-+-            except CheckFailed:
-+-                check_include_file(get_include_dirs(), os.path.join('freetype2', 'ft2build.h'), 'freetype')
-+-            return 'Using unknown version found on system.'
-+-
-+-        status, output = subprocess.getstatusoutput(
-+-            "freetype-config --ftversion")
-+-        if status == 0:
-+-            version = output
-+-        else:
-+-            version = None
-+-
-+-        # Early versions of freetype grep badly inside freetype-config,
-+-        # so catch those cases. (tested with 2.5.3).
-+-        if version is None or 'No such file or directory\ngrep:' in version:
-+-            version = self.version_from_header()
-+-
-+-        # pkg_config returns the libtool version rather than the
-+-        # freetype version so we need to explicitly pass the version
-+-        # to _check_for_pkg_config
-+-        return self._check_for_pkg_config(
-+-            'freetype2', 'ft2build.h',
-+-            min_version='2.3', version=version)
-+-
-+-    def version_from_header(self):
-+-        version = 'unknown'
-+-        ext = self.get_extension()
-+-        if ext is None:
-+-            return version
-+-        # Return the first version found in the include dirs.
-+-        for include_dir in ext.include_dirs:
-+-            header_fname = os.path.join(include_dir, 'freetype.h')
-+-            if os.path.exists(header_fname):
-+-                major, minor, patch = 0, 0, 0
-+-                with open(header_fname, 'r') as fh:
-+-                    for line in fh:
-+-                        if line.startswith('#define FREETYPE_'):
-+-                            value = line.rsplit(' ', 1)[1].strip()
-+-                            if 'MAJOR' in line:
-+-                                major = value
-+-                            elif 'MINOR' in line:
-+-                                minor = value
-+-                            else:
-+-                                patch = value
-+-                return '.'.join([major, minor, patch])
-+-
-+     def add_flags(self, ext):
-++        ext.sources.insert(0, 'src/checkdep_freetype2.c')
-+         if options.get('local_freetype'):
-+             src_path = os.path.join(
-+                 'build', 'freetype-{0}'.format(LOCAL_FREETYPE_VERSION))
-+@@ -1058,30 +1014,11 @@ class Png(SetupPackage):
-+         "windows_url": "http://gnuwin32.sourceforge.net/packages/libpng.htm"
-+         }
++ /*! Intended for identifying dillo plugins
++  * and related files
++diff -r f60d55c02567 dpid/main.c
++--- a/dpid/main.c	Fri Oct 05 22:05:08 2018 +0200
+++++ b/dpid/main.c	Thu Aug 27 18:16:50 2020 +0200
++@@ -231,7 +231,7 @@
++    /* this sleep used to unmask a race condition */
++    // sleep(2);
 + 
-+-    def check(self):
-+-        if sys.platform == 'win32':
-+-            check_include_file(get_include_dirs(), 'png.h', 'png')
-+-            return 'Using unknown version found on system.'
-+-
-+-        status, output = subprocess.getstatusoutput("libpng-config --version")
-+-        if status == 0:
-+-            version = output
-+-        else:
-+-            version = None
-+-
-+-        try:
-+-            return self._check_for_pkg_config(
-+-                'libpng', 'png.h',
-+-                min_version='1.2', version=version)
-+-        except CheckFailed as e:
-+-            if has_include_file(get_include_dirs(), 'png.h'):
-+-                return str(e) + ' Using unknown version found on system.'
-+-            raise
-+-
-+     def get_extension(self):
-+         sources = [
-++            'src/checkdep_libpng.c',
-+             'src/_png.cpp',
-+-            'src/mplutils.cpp'
-++            'src/mplutils.cpp',
-+             ]
-+         ext = make_extension('matplotlib._png', sources)
-+         pkg_config.setup_extension(
-+diff --git a/src/checkdep_freetype2.c b/src/checkdep_freetype2.c
-+new file mode 100644
-+index 00000000000..bf9a8c94e38
-+--- /dev/null
-++++ b/src/checkdep_freetype2.c
-+@@ -0,0 +1,13 @@
-++#include <ft2build.h>
-++#include FT_FREETYPE_H
-++
-++#define XSTR(x) STR(x)
-++#define STR(x) #x
-++
-++#pragma message("Compiling with FreeType version " \
-++  XSTR(FREETYPE_MAJOR) "." XSTR(FREETYPE_MINOR) "." XSTR(FREETYPE_PATCH) ".")
-++#if FREETYPE_MAJOR << 16 + FREETYPE_MINOR << 8 + FREETYPE_PATCH < 0x020300
-++    #error "FreeType version 2.3 or higher is required." \
-++      "Consider setting the MPLLOCALFREETYPE environment variable to 1."
-++  #error
-++#endif
-+diff --git a/src/checkdep_libpng.c b/src/checkdep_libpng.c
-+new file mode 100644
-+index 00000000000..5ebe5cbe4d7
-+--- /dev/null
-++++ b/src/checkdep_libpng.c
-+@@ -0,0 +1,5 @@
-++#include <png.h>
-++#pragma message("Compiling with libpng version " PNG_LIBPNG_VER_STRING ".")
-++#if PNG_LIBPNG_VER < 10200
-++  #error "libpng version 1.2 or higher is required."
-++#endif
++-   dpi_errno = no_errors;
+++   enum dpi_errno error_code = no_errors;
++ 
++    /* Get list of available dpis */
++    numdpis = register_all(&dpi_attr_list);
++@@ -254,7 +254,7 @@
++ 
++    /* Initialise sockets */
++    if ((numsocks = init_ids_srs_socket()) == -1) {
++-      switch (dpi_errno) {
+++      switch (error_code) {
++       case dpid_srs_addrinuse:
++          MSG_ERR("dpid refuses to start, possibly because:\n");
++          MSG_ERR("\t1) An instance of dpid is already running.\n");
