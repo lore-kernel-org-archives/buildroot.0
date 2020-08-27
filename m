@@ -1,125 +1,173 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 27 Aug 2020 13:05:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: bump version to 3.0
-Message-ID: <20200827110539.30185-1-heiko.thiery@gmail.com>
+Date: Thu, 27 Aug 2020 13:17:32 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/netopeer2: bump verstion to
+ 1.1.39
+Message-ID: <20200827111731.26090-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove patch that is in new version
-- update indentation in hash file (two spaces)
-
-Run tests:
-
-             br-arm-full [1/6]: OK
-  br-arm-cortex-a9-glibc [2/6]: OK
-   br-arm-cortex-m4-full [3/6]: OK
-          br-x86-64-musl [4/6]: OK
-      br-arm-full-static [5/6]: OK
-            sourcery-arm [6/6]: OK
-
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- ...fix-building-with-new-kernel-headers.patch | 55 -------------------
- package/linuxptp/linuxptp.hash                | 10 ++--
- package/linuxptp/linuxptp.mk                  |  2 +-
- 3 files changed, 6 insertions(+), 61 deletions(-)
- delete mode 100644 package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
+Changes v1 -> v2:
+  - drop patches already in version
 
-diff --git a/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch b/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
+
+ ...BUGFIX-take-DESTDIR-into-account-649.patch | 33 --------
+ ...HANGE-use-su-only-for-effective-root.patch | 79 -------------------
+ package/netopeer2/netopeer2.hash              |  2 +-
+ package/netopeer2/netopeer2.mk                |  2 +-
+ 4 files changed, 2 insertions(+), 114 deletions(-)
+ delete mode 100644 package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
+ delete mode 100644 package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
+
+diff --git a/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch b/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
 deleted file mode 100644
-index 332e5491ff..0000000000
---- a/package/linuxptp/0002-fix-building-with-new-kernel-headers.patch
+index bff4337fe7..0000000000
+--- a/package/netopeer2/0001-build-BUGFIX-take-DESTDIR-into-account-649.patch
 +++ /dev/null
-@@ -1,55 +0,0 @@
--From d663a483c40939bad58301c256d86da1f3da6cc0 Mon Sep 17 00:00:00 2001
--From: Miroslav Lichvar <mlichvar@redhat.com>
--Date: Tue, 13 Nov 2018 13:16:08 +0100
--Subject: [PATCH] Fix building with new kernel headers.
+@@ -1,33 +0,0 @@
+-From c6afffafd1e27054ff59b82ffed3a99795814631 Mon Sep 17 00:00:00 2001
+-From: Heiko Thiery <heiko.thiery@gmail.com>
+-Date: Mon, 8 Jun 2020 09:47:58 +0200
+-Subject: [PATCH] build BUGFIX take DESTDIR into account (#649)
 -
--net_tstamp.h in recent kernel versions requires time.h for clockid_t.
+-When installing yang modules add DESTDIR prefix to the NP2_MODULE_DIR.
 -
--Signed-off-by: Miroslav Lichvar <mlichvar@redhat.com>
+-Fixes #648
+-
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+-[patch taken from upstream:
+-https://github.com/CESNET/netopeer2/commit/726b1384a3f93090ede1143da86c99d5d24d06c5]
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ----
-- clock.c      | 2 +-
-- sk.c         | 1 +
-- timemaster.c | 1 +
-- 3 files changed, 3 insertions(+), 1 deletion(-)
+- scripts/setup.sh | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/clock.c b/clock.c
--index 9c493c3..8533b39 100644
----- a/clock.c
--+++ b/clock.c
--@@ -17,11 +17,11 @@
--  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--  */
-- #include <errno.h>
--+#include <time.h>
-- #include <linux/net_tstamp.h>
-- #include <poll.h>
-- #include <stdlib.h>
-- #include <string.h>
---#include <time.h>
-- #include <sys/queue.h>
+-diff --git a/scripts/setup.sh b/scripts/setup.sh
+-index 7175bc4..81abf63 100755
+---- a/scripts/setup.sh
+-+++ b/scripts/setup.sh
+-@@ -8,7 +8,7 @@ fi
 - 
-- #include "address.h"
--diff --git a/sk.c b/sk.c
--index e2b1f28..30162eb 100644
----- a/sk.c
--+++ b/sk.c
--@@ -18,6 +18,7 @@
--  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--  */
-- #include <errno.h>
--+#include <time.h>
-- #include <linux/net_tstamp.h>
-- #include <linux/sockios.h>
-- #include <linux/ethtool.h>
--diff --git a/timemaster.c b/timemaster.c
--index 058678f..00db59f 100644
----- a/timemaster.c
--+++ b/timemaster.c
--@@ -22,6 +22,7 @@
-- #include <errno.h>
-- #include <libgen.h>
-- #include <limits.h>
--+#include <time.h>
-- #include <linux/net_tstamp.h>
-- #include <net/if.h>
-- #include <signal.h>
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index 5e6c7741cd..de82ff2b84 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/linuxptp/files/v2.0/
--sha1 592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
--md5 d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
-+# From https://sourceforge.net/projects/linuxptp/files/v3.0/
-+sha1  cf56f1ab6c622a569be8c14d2cb121f0183affc9  linuxptp-3.0.tgz
-+md5  1318805702eb6d59f9f247e1dd5ce12a  linuxptp-3.0.tgz
- 
- # Locally computed:
--sha256 0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
-+sha256  d74ceca722c75bfff53c633425f926dd48eb04f4a089451b855155c016d15785  linuxptp-3.0.tgz
- 
- # Hash for license file:
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 921c55ad59..3d018a4657 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
+- # avoid problems with sudo path
+- SYSREPOCTL=`su -c "which sysrepoctl" $USER`
+--MODDIR=${NP2_MODULE_DIR}
+-+MODDIR=${DESTDIR}${NP2_MODULE_DIR}
+- PERMS=${NP2_MODULE_PERMS}
+- OWNER=${NP2_MODULE_OWNER}
+- GROUP=${NP2_MODULE_GROUP}
+--- 
+-2.20.1
+-
+diff --git a/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch b/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
+deleted file mode 100644
+index b960a87beb..0000000000
+--- a/package/netopeer2/0002-scripts-CHANGE-use-su-only-for-effective-root.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From 71cc996faa5500b3bfd499ad0c436c8b96629ea7 Mon Sep 17 00:00:00 2001
+-From: Michal Vasko <mvasko@cesnet.cz>
+-Date: Wed, 10 Jun 2020 15:20:23 +0200
+-Subject: [PATCH] scripts CHANGE use su only for effective root
+-
+-Fixes #645
+-
+-[patch taken from upstream:
+-https://github.com/CESNET/netopeer2/commit/2161b333009c21ffc8501e5127b82e6f0570ca8e]
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+----
+- scripts/merge_config.sh  |  8 ++++++--
+- scripts/merge_hostkey.sh | 11 ++++++++---
+- scripts/setup.sh         |  8 ++++++--
+- 3 files changed, 20 insertions(+), 7 deletions(-)
+-
+-diff --git a/scripts/merge_config.sh b/scripts/merge_config.sh
+-index dde0c75..4ad151c 100755
+---- a/scripts/merge_config.sh
+-+++ b/scripts/merge_config.sh
+-@@ -2,8 +2,12 @@
+- 
+- set -e
+- 
+--# avoid problems with sudo path
+--SYSREPOCFG=`su -c "which sysrepocfg" $USER`
+-+# avoid problems with sudo PATH
+-+if [ `id -u` -eq 0 ]; then
+-+    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
+-+else
+-+    SYSREPOCFG=`which sysrepocfg`
+-+fi
+- KS_KEY_NAME=genkey
+- 
+- # check that there is no listen/Call Home configuration yet
+-diff --git a/scripts/merge_hostkey.sh b/scripts/merge_hostkey.sh
+-index 87947fa..a0677ee 100755
+---- a/scripts/merge_hostkey.sh
+-+++ b/scripts/merge_hostkey.sh
+-@@ -2,9 +2,14 @@
+- 
+- set -e
+- 
+--# avoid problems with sudo path
+--SYSREPOCFG=`su -c "which sysrepocfg" $USER`
+--OPENSSL=`su -c "which openssl" $USER`
+-+# avoid problems with sudo PATH
+-+if [ `id -u` -eq 0 ]; then
+-+    SYSREPOCFG=`su -c 'which sysrepocfg' -l $USER`
+-+    OPENSSL=`su -c 'which openssl' -l $USER`
+-+else
+-+    SYSREPOCFG=`which sysrepocfg`
+-+    OPENSSL=`which openssl`
+-+fi
+- 
+- # check that there is no SSH key with this name yet
+- KEYSTORE_KEY=`$SYSREPOCFG -X -x "/ietf-keystore:keystore/asymmetric-keys/asymmetric-key[name='genkey']/name"`
+-diff --git a/scripts/setup.sh b/scripts/setup.sh
+-index 81abf63..8bf6825 100755
+---- a/scripts/setup.sh
+-+++ b/scripts/setup.sh
+-@@ -6,8 +6,12 @@ if [ -z "$NP2_MODULE_DIR" -o -z "$NP2_MODULE_PERMS" -o -z "$NP2_MODULE_OWNER" -o
+-     exit 1
+- fi
+- 
+--# avoid problems with sudo path
+--SYSREPOCTL=`su -c "which sysrepoctl" $USER`
+-+# avoid problems with sudo PATH
+-+if [ `id -u` -eq 0 ]; then
+-+    SYSREPOCTL=`su -c 'which sysrepoctl' -l $USER`
+-+else
+-+    SYSREPOCTL=`which sysrepoctl`
+-+fi
+- MODDIR=${DESTDIR}${NP2_MODULE_DIR}
+- PERMS=${NP2_MODULE_PERMS}
+- OWNER=${NP2_MODULE_OWNER}
+--- 
+-2.20.1
+-
+diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
+index 93a094d563..1d5997505f 100644
+--- a/package/netopeer2/netopeer2.hash
++++ b/package/netopeer2/netopeer2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  66f3ad68cc6e41f3231b090ef27016ccbfe007cda7d08ec19f409f7429f46ff9  netopeer2-1.1.34.tar.gz
++sha256  e983683eda68792fedd73af54a5c7997496091489aa921f2a9e0dd27f2f6e19a  netopeer2-1.1.39.tar.gz
+ sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index 641666e8d3..5787d3a8cf 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUXPTP_VERSION = 2.0
-+LINUXPTP_VERSION = 3.0
- LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
- LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
+-NETOPEER2_VERSION = 1.1.34
++NETOPEER2_VERSION = 1.1.39
+ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
+ NETOPEER2_DL_SUBDIR = netopeer2
+ NETOPEER2_LICENSE = BSD-3-Clause
 -- 
 2.20.1
