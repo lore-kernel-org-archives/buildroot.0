@@ -1,53 +1,56 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 27 Aug 2020 01:25:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libnss: bump version to 3.56
-In-Reply-To: <20200826232542.920792-1-giulio.benetti@benettiengineering.com>
-References: <20200826232542.920792-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200826232542.920792-3-giulio.benetti@benettiengineering.com>
+From: sam.voss at gmail.com <sam.voss@gmail.com>
+Date: Wed, 26 Aug 2020 19:44:24 -0500
+Subject: [Buildroot] [PATCH] package/ripgrep: fix build directories
+Message-ID: <20200827004424.325134-1-sam.voss@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 3.56. Unfortunately local patch is still pending
-upstream and not applied and I've just asked why:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
+From: Sam Voss <sam.voss@gmail.com>
 
-This version requires NSPR 4.28.
+RIPGREP_CARGO_MODE was no longer defined after 832c076f26 and caused
+issues during the install step as the build directory was malformed.
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.56_release_notes
+This patch maintains the release/dev profile distinction, while also
+assigning appropriate build folders.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/a4cd7ecc6d983aa6f15d3be1e21529f17e04b825/
+ - http://autobuild.buildroot.net/results/2bab8ffa590d4c4eabffe94ed27311c7f6607c98/
+
+Signed-off-by: Sam Voss <sam.voss@gmail.com>
+CC: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ripgrep/ripgrep.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index fcba10b99a..b153b614e9 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_55_RTM/src/SHA256SUMS
--sha256  fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004  nss-3.55.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_56_RTM/src/SHA256SUMS
-+sha256  f875e0e8ed3b5ce92d675be4a55aa25a8c1199789a4a01f69b5f2327e2048e9c  nss-3.56.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index b4bb09364c..f28e16a406 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 5f58630ffe..9dd8d58de1 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -12,13 +12,19 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
+ RIPGREP_DEPENDENCIES = host-rustc
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
  
--LIBNSS_VERSION = 3.55
-+LIBNSS_VERSION = 3.56
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
++RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_BIN_SUBDIR)
+ 
+ RIPGREP_CARGO_OPTS = \
+-	$(if $(BR2_ENABLE_DEBUG),,--release) \
+ 	--target=$(RUSTC_TARGET_NAME) \
+ 	--manifest-path=$(@D)/Cargo.toml
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++RIPGREP_CARGO_BIN_SUBDIR = debug
++else
++RIPGREP_CARGO_OPTS += --release
++RIPGREP_CARGO_BIN_SUBDIR = release
++endif
++
+ define RIPGREP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(RIPGREP_CARGO_ENV) \
+ 		cargo build $(RIPGREP_CARGO_OPTS)
 -- 
-2.25.1
+2.27.0
