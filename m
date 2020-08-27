@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Aug 2020 23:24:38 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-goom: bump
- version to 2.2.2-Leia
-Message-ID: <20200902161636.7C6A185EB9@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 21:30:21 +0200
+Subject: [Buildroot] [git commit] package/sysrepo: bump version to 1.4.70
+Message-ID: <20200902161636.8DE5385EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01af465ea19f21486c107cdf427fe88d509054ba
+commit: https://git.buildroot.net/buildroot/commit/?id=9bce0009c0eb03d5a7871a6366ec1e6e651637c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
+ package/sysrepo/sysrepo.hash | 2 +-
+ package/sysrepo/sysrepo.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index f12b0ec7c2..c7c45ab64d 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+diff --git a/package/sysrepo/sysrepo.hash b/package/sysrepo/sysrepo.hash
+index 894f26380f..cdd2f7e478 100644
+--- a/package/sysrepo/sysrepo.hash
++++ b/package/sysrepo/sysrepo.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  a02dfd844cfd5ff24f735e614a2a4727771112ce15642957a2511061f724392a  kodi-visualisation-goom-2.2.1-Leia.tar.gz
-+sha256  14b948e7e3b6e4b9c5d7a8438fe076480483d2a515047401a1769e82858ef245  kodi-visualisation-goom-2.2.2-Leia.tar.gz
- sha256  a6b36f495079206146ae0b11624a8db49a538f421ffe1341f8651c9e6b06f0b0  debian/copyright
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 29cd24df69..9883ef8c38 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+ # Locally calculated
+-sha256  4dbb916c32e0229238a06bfa929e5615af89e9f79d225b558df99efe6ac84c03  sysrepo-1.4.66.tar.gz
++sha256  f0f894d4ed98ce9d20fda219378b844731d796e95115c07f4c067d853e20ca36  sysrepo-1.4.70.tar.gz
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index eb7fdb0e8d..8a2e56bd61 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_GOOM_VERSION = 2.2.1-Leia
-+KODI_VISUALISATION_GOOM_VERSION = 2.2.2-Leia
- KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = debian/copyright
+-SYSREPO_VERSION = 1.4.66
++SYSREPO_VERSION = 1.4.70
+ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = Apache-2.0
