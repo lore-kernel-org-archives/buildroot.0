@@ -1,8 +1,8 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu, 27 Aug 2020 10:28:14 +0200
+Date: Thu, 27 Aug 2020 10:30:27 +0200
 Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng : fix build with
  toolchain header.
-Message-ID: <20200827082814.13846-1-jugurtha.belkalem@smile.fr>
+Message-ID: <20200827083027.13959-1-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Iptraf-ng is compatible with Linux 3.14 as the last
-introduced various paquet types like : PACKET_KERNEL and PACKET_USERSPACE[1].
+introduced various packet types like : PACKET_KERNEL and PACKET_USERSPACE[1].
 
 [1] https://elixir.bootlin.com/linux/v3.14-rc1/source/include/uapi/linux/if_packet.h
 
