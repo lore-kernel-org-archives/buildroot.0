@@ -1,41 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Aug 2020 10:22:24 +0200
-Subject: [Buildroot] [git commit] package/pkg-utils.mk: report the list of
- ignored CVEs in show-info
-Message-ID: <20200902161637.1AF6985EB9@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 22:25:30 +0200
+Subject: [Buildroot] [git commit] package/iptraf-ng: add dependency on Linux
+ headers >= 3.14
+Message-ID: <20200902161636.9FFD685EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9c9f23f9a063c3a19ae52677242845bf8799da9
+commit: https://git.buildroot.net/buildroot/commit/?id=f9f551a9d0c2523337e9aafb667ddf3631509636
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the list of the CVEs to ignore for each package because they
-already have a fix for it.
+iptraf-ng uses a number of definitions (like PACKET_KERNEL and
+PACKET_USERSPACE) provided by the Linux kernel headers, which were
+introduced in Linux 3.14 [1], so we need to add a dependency on
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14.
 
-This information will be useful for a cve-checker.
+[1] https://elixir.bootlin.com/linux/v3.14-rc1/source/include/uapi/linux/if_packet.h
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/480b00b4b264cfe1da533c762595d21b72fa8211/
+
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-utils.mk | 5 +++++
+ package/iptraf-ng/Config.in | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index d88a14ab0f..4fcb076e21 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -119,6 +119,11 @@ define _json-info-pkg
- 	"reverse_dependencies": [
- 		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES)))
- 	]
-+	$(if $($(1)_IGNORE_CVES),
-+		$(comma) "ignore_cves": [
-+			$(call make-comma-list,$(sort $($(1)_IGNORE_CVES)))
-+		]
-+	)
- endef
+diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
+index f240daf93d..5c61b7c0e2 100644
+--- a/package/iptraf-ng/Config.in
++++ b/package/iptraf-ng/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IPTRAF_NG
+ 	bool "iptraf-ng"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  IPTraf-ng is a console-based network monitoring program for
+@@ -10,3 +11,7 @@ config BR2_PACKAGE_IPTRAF_NG
  
- define _json-info-pkg-details
+ 	  IPTraf-ng is a fork of original IPTraf v3.0.0
+ 	  (http://iptraf.seul.org).
++
++comment "iptraf-ng needs a toolchain w/ kernel headers >= 3.14"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
