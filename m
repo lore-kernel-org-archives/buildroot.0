@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:19:07 +0200
-Subject: [Buildroot] [git commit] package/dillo: renumber patches
-Message-ID: <20200827211713.0C27D818D4@busybox.osuosl.org>
+Date: Thu, 27 Aug 2020 23:25:41 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dillo: renumber patches
+In-Reply-To: <20200827162746.121015-1-fontaine.fabrice@gmail.com>
+References: <20200827162746.121015-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200827232541.02b6820b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb90b946a465003da919028b4cae028e3b525f87
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 27 Aug 2020 18:27:45 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../dillo/{0002-usr-local-include.patch => 0001-usr-local-include.patch}  | 0
- ...{0003-Fix-openssl-detection.patch => 0002-Fix-openssl-detection.patch} | 0
- ...{0004-Support-OpenSSL-1.1.0.patch => 0003-Support-OpenSSL-1.1.0.patch} | 0
- 3 files changed, 0 insertions(+), 0 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...{0002-usr-local-include.patch => 0001-usr-local-include.patch} | 0
+>  ...x-openssl-detection.patch => 0002-Fix-openssl-detection.patch} | 0
+>  ...pport-OpenSSL-1.1.0.patch => 0003-Support-OpenSSL-1.1.0.patch} | 0
+>  3 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/dillo/{0002-usr-local-include.patch => 0001-usr-local-include.patch} (100%)
+>  rename package/dillo/{0003-Fix-openssl-detection.patch => 0002-Fix-openssl-detection.patch} (100%)
+>  rename package/dillo/{0004-Support-OpenSSL-1.1.0.patch => 0003-Support-OpenSSL-1.1.0.patch} (100%)
 
-diff --git a/package/dillo/0002-usr-local-include.patch b/package/dillo/0001-usr-local-include.patch
-similarity index 100%
-rename from package/dillo/0002-usr-local-include.patch
-rename to package/dillo/0001-usr-local-include.patch
-diff --git a/package/dillo/0003-Fix-openssl-detection.patch b/package/dillo/0002-Fix-openssl-detection.patch
-similarity index 100%
-rename from package/dillo/0003-Fix-openssl-detection.patch
-rename to package/dillo/0002-Fix-openssl-detection.patch
-diff --git a/package/dillo/0004-Support-OpenSSL-1.1.0.patch b/package/dillo/0003-Support-OpenSSL-1.1.0.patch
-similarity index 100%
-rename from package/dillo/0004-Support-OpenSSL-1.1.0.patch
-rename to package/dillo/0003-Support-OpenSSL-1.1.0.patch
+Both applied to master, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
