@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:57:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Fri, 28 Aug 2020 18:56:40 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
  package/gstreamer1/gst1-plugins-bad: fix deactivation of opencv
-Message-ID: <20200828165042.F2FA182108@busybox.osuosl.org>
+Message-ID: <20200828165047.E28B5821FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af9b6c9e89df027784bf916559017a35776afb70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3a8139282ffee6a8f1928ff2b682e4006d20ab87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Build can fail if opencv3 is built before gst1-plugins-bad because
 -Dopencv=disabled does not work in meson (i.e. since commit
