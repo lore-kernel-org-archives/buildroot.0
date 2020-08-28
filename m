@@ -1,51 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:05:36 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/tpm2-abrmd: bump
- to version 2.3.3
-Message-ID: <20200828170226.857878377C@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:07:38 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ docs/manual/adding-packages-cargo.txt: drop debug profile
+Message-ID: <20200828170226.976408377C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d49e9a0f0f7d4acc32378c85b47aa013895192e4
+commit: https://git.buildroot.net/buildroot/commit/?id=7ee0b7b09b193f9a30b8b3b09b16689b636fd292
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Bugfix release with a single fix:
+There is no debug profile on cargo. The available profiles are: dev
+(enabled by default), release, test and bench.
 
-Fixed:
-  - Fixed handle resource leak exhausting TPM resources.
-
-https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.3.3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b557b2e812483706f9d6d2df9585894a1b2235c7)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ec5b47071054a7f5e6ec6481fce35e7183bf3d3a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-abrmd/tpm2-abrmd.hash | 2 +-
- package/tpm2-abrmd/tpm2-abrmd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-cargo.txt | 41 +++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 21 deletions(-)
 
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.hash b/package/tpm2-abrmd/tpm2-abrmd.hash
-index f69cd369bf..1c6e739056 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.hash
-+++ b/package/tpm2-abrmd/tpm2-abrmd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  df02c18882116e19b56aa8c701687c0c0987dd334e6fc002b340cedf6e000d10  tpm2-abrmd-2.3.2.tar.gz
-+sha256  1e587808c6739079d59f124d9c1a0058f8d34dd84f1f656c946667fa0a181c48  tpm2-abrmd-2.3.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-abrmd/tpm2-abrmd.mk b/package/tpm2-abrmd/tpm2-abrmd.mk
-index 9d22219f67..0584ba928a 100644
---- a/package/tpm2-abrmd/tpm2-abrmd.mk
-+++ b/package/tpm2-abrmd/tpm2-abrmd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+index b6029e1eed..edf698e704 100644
+--- a/docs/manual/adding-packages-cargo.txt
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -47,32 +47,31 @@ package. Let's start with an example:
+ 13: FOO_DEPENDENCIES = host-cargo
+ 14:
+ 15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-16: FOO_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+-17:
+-18: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
+-19:
+-20: FOO_CARGO_OPTS = \
+-21:   --$(FOO_CARGO_MODE) \
+-22: 	--target=$(RUSTC_TARGET_NAME) \
+-23: 	--manifest-path=$(@D)/Cargo.toml
+-24:
+-25: define FOO_BUILD_CMDS
+-26: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
+-27: 		cargo build $(FOO_CARGO_OPTS)
+-28: endef
+-29:
+-30: define FOO_INSTALL_TARGET_CMDS
+-31: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
+-32: 		$(TARGET_DIR)/usr/bin/foo
+-33: endef
+-34:
+-35: $(eval $(generic-package))
++16:
++17: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
++18:
++19: FOO_CARGO_OPTS = \
++20: 	$(if $(BR2_ENABLE_DEBUG),,--release) \
++21: 	--target=$(RUSTC_TARGET_NAME) \
++22: 	--manifest-path=$(@D)/Cargo.toml
++23:
++24: define FOO_BUILD_CMDS
++25: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
++26: 		cargo build $(FOO_CARGO_OPTS)
++27: endef
++28:
++29: define FOO_INSTALL_TARGET_CMDS
++30: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
++31: 		$(TARGET_DIR)/usr/bin/foo
++32: endef
++33:
++34: $(eval $(generic-package))
+ --------------------------------
  
--TPM2_ABRMD_VERSION = 2.3.2
-+TPM2_ABRMD_VERSION = 2.3.3
- TPM2_ABRMD_SITE = https://github.com/tpm2-software/tpm2-abrmd/releases/download/$(TPM2_ABRMD_VERSION)
- TPM2_ABRMD_LICENSE = BSD-2-Clause
- TPM2_ABRMD_LICENSE_FILES = LICENSE
+ The Makefile starts with the definition of the standard variables for package
+ declaration (lines 7 to 11).
+ 
+-As seen in line 35, it is based on the
++As seen in line 34, it is based on the
+ xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
+ the variables required by this particular infrastructure, where Cargo is
+ invoked:
