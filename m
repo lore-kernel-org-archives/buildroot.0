@@ -1,36 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:03:46 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.22
-In-Reply-To: <20200821212612.9029-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 21 Aug 2020 23:26:12 +0200")
-References: <20200821212612.9029-1-peter@korsgaard.com>
-Message-ID: <878sdyr9cd.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 28 Aug 2020 19:03:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
+ security fix for CVE-2020-14347
+References: <20200810064109.447089-1-bernd.kuhls@t-online.de>
+ <20200811234906.051e8caa@windsurf.home>
+Message-ID: <ovpn1hxmln.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Am Tue, 11 Aug 2020 23:49:06 +0200 schrieb Thomas Petazzoni via buildroot:
 
- > Fixes the following security issues:
- > CVE-2020-8622: A truncated TSIG response can lead to an assertion failure
- > https://kb.isc.org/docs/cve-2020-8622
+> This raises a question: what about the older X.org server releases?
+> According to the NIST CVE entry, all versions prior to 1.20.9 are
+> affected, so should the patch be backported to the other X.org server
+> versions we support ?
 
- > CVE-2020-8623: A flaw in native PKCS#11 code can lead to a remotely
- > triggerable assertion failure in pk11.c
- > https://kb.isc.org/docs/cve-2020-8623
+Hi Thomas,
 
- > CVE-2020-8624: update-policy rules of type "subdomain" are enforced incorrectly
- > https://kb.isc.org/docs/cve-2020-8624
+the bump to 1.20.9 fixed four CVEs in total which makes backporting 
+upstream patches more complicated as time passes by and new issues arise, 
+upstream does not update the older branches anymore:
+https://cgit.freedesktop.org/xorg/xserver/
 
- > For more details, see the release notes:
- > https://downloads.isc.org/isc/bind9/9.11.22/RELEASE-NOTES-bind-9.11.22.html
+Due to the fact that personally I have no use for the older X.org server 
+versions I would like to raise the question whether we can remove them? 
+From my POV these older versions are unmaintained in buildroot because I 
+want to concentrate on the current release which is the one I am using.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Regards, Bernd
