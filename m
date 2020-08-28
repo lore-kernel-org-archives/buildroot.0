@@ -1,64 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:52:03 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/dovecot: security
- bump version to 2.3.11.3
-Message-ID: <20200828164643.74F1585FE9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:48:08 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/collectd: add
+ DPDK_TELEMETRY option
+Message-ID: <20200828164643.5B67685FE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=691d2e133432ea1908047e88c09d9c791d87a8df
+commit: https://git.buildroot.net/buildroot/commit/?id=47d2b5fd449737b37418e41e51f377b10aacaf1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2020-August/000440.html
+DPDK support is available since version 5.11.0 and
+https://github.com/collectd/collectd/commit/00cbd4d2c016a676db476ae66bbc58d6bf11a6a0
 
-Fixes the following CVEs:
+It depends on jansson and is currently enabled by default raising the
+following build failure on musl:
 
-* CVE-2020-12100: Parsing mails with a large number of MIME parts could
-  have resulted in excessive CPU usage or a crash due to running out of
-  stack memory.
-* CVE-2020-12673: Dovecot's NTLM implementation does not correctly check
-  message buffer size, which leads to reading past allocation which can
-  lead to crash.
-* CVE-2020-10967: lmtp/submission: Issuing the RCPT command with an
-  address that has the empty quoted string as local-part causes the lmtp
-  service to crash.
-* CVE-2020-12674: Dovecot's RPA mechanism implementation accepts
-  zero-length message, which leads to assert-crash later on.
+src/dpdk_telemetry.c:43:10: fatal error: sys/unistd.h: No such file or directory
+ #include <sys/unistd.h>
+          ^~~~~~~~~~~~~~
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/aafb8c72f147fefc7a988c45e4dc17de48b07a95
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6db0ea91ef94f6a6f3f5c4d1847733cd23679587)
+(cherry picked from commit 44e0b6014f7e67901af346af8f6a9452b095ddd5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...01-src-dpdk_telemetry.c-fix-build-on-musl.patch | 37 ++++++++++++++++++++++
+ package/collectd/Config.in                         |  7 ++++
+ package/collectd/collectd.mk                       |  5 +++
+ 3 files changed, 49 insertions(+)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 09295816d3..e5c2ab6f40 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  6642e62f23b1b23cfac235007ca6e21cb67460cca834689fad450724456eb10c  dovecot-2.3.10.1.tar.gz
-+sha256  d3d9ea9010277f57eb5b9f4166a5d2ba539b172bd6d5a2b2529a6db524baafdc  dovecot-2.3.11.3.tar.gz
- sha256  a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 59b52a3f84..f0508753a2 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch b/package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch
+new file mode 100644
+index 0000000000..8378cd0d33
+--- /dev/null
++++ b/package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch
+@@ -0,0 +1,37 @@
++From 70318d6bcf7ef89e1a73fc775d33f4c854aed484 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 14 Apr 2020 14:49:19 +0200
++Subject: [PATCH] src/dpdk_telemetry.c: fix build on musl
++
++Include unistd.h instead of sys/unistd.h to fix the following build
++failure on musl:
++
++src/dpdk_telemetry.c:43:10: fatal error: sys/unistd.h: No such file or directory
++ #include <sys/unistd.h>
++          ^~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/aafb8c72f147fefc7a988c45e4dc17de48b07a95
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/collectd/collectd/pull/3439]
++---
++ src/dpdk_telemetry.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/dpdk_telemetry.c b/src/dpdk_telemetry.c
++index b46e8574..cfee5f12 100755
++--- a/src/dpdk_telemetry.c
+++++ b/src/dpdk_telemetry.c
++@@ -40,7 +40,7 @@
++ #include <sys/queue.h>
++ #include <sys/socket.h>
++ #include <sys/un.h>
++-#include <sys/unistd.h>
+++#include <unistd.h>
++ 
++ #define BUF_SIZE 100000
++ #define PLUGIN_NAME "dpdk_telemetry"
++-- 
++2.25.1
++
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 188be3c0fb..771beced85 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -210,6 +210,13 @@ config BR2_PACKAGE_COLLECTD_DNS
+ 	help
+ 	  Collects statistics of DNS traffic using libpcap.
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).10.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).11.3
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
++config BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY
++	bool "dpdk_telemetry"
++	select BR2_PACKAGE_JANSSON
++	help
++	  Collects DPDK ethernet device metrics via dpdk_telemetry
++	  library.
++
+ config BR2_PACKAGE_COLLECTD_DRBD
+ 	bool "drbd"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 24cdad7e1b..52b218e139 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -66,6 +66,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DF),--enable-df,--disable-df) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DISK),--enable-disk,--disable-disk) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),--enable-dns,--disable-dns) \
++	$(if $(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),--enable-dpdk_telemetry,--disable-dpdk_telemetry) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DRBD),--enable-drbd,--disable-drbd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_EMPTY_COUNTER),--enable-match_empty_counter,--disable-match_empty_counter) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_ENTROPY),--enable-entropy,--disable-entropy) \
+@@ -156,6 +157,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
++	$(if $(BR2_PACKAGE_COLLECTD_DPKD_TELEMETRY),jansson) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+@@ -186,6 +188,9 @@ COLLECTD_DEPENDENCIES = \
+ ifeq ($(BR2_PACKAGE_GRPC),y)
+ COLLECTD_CONF_OPTS += --with-libgrpc++=$(STAGING_DIR)/usr
+ endif
++ifeq ($(BR2_PACKAGE_JANSSON),y)
++COLLECTD_CONF_OPTS += --with-libjansson=$(STAGING_DIR)/usr
++endif
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ COLLECTD_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr
+ endif
