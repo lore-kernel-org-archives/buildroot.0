@@ -1,32 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:29:39 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: add patch fixing
- sprintf error
-In-Reply-To: <20200808173800.2034897-1-christian@paral.in> (Christian
- Stewart's message of "Sat, 8 Aug 2020 10:38:00 -0700")
-References: <20200808173800.2034897-1-christian@paral.in>
-Message-ID: <87v9h2u424.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 18:31:14 +0200
+Subject: [Buildroot] [PATCH v2] package/cvs: fix mktime related compile
+ failure
+In-Reply-To: <20200813233651.0e5cc9f6@windsurf.home> (Thomas Petazzoni's
+ message of "Thu, 13 Aug 2020 23:36:51 +0200")
+References: <20200528215912.30258-1-ps.report@gmx.net>
+ <20200813233651.0e5cc9f6@windsurf.home>
+Message-ID: <87r1rqu3zh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes compile errors against certain kernels.
- > Signed-off-by: Christian Stewart <christian@paral.in>
- > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+ > On Thu, 28 May 2020 23:59:12 +0200
+ > Peter Seiderer <ps.report@gmx.net> wrote:
 
- > ---
-
- > v1 -> v2:
-
- >  -cjs: format patch with -N
- >  -cjs: add upstream + signed-off to patches
- >  -cjs: thanks for the review from Peter
-
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ >> Use ac_cv_func_working_mktime=yes to force the use of a provided
+ >> mktime implementation instead of compiling the failing own one.
+ >> 
+ >> Fixes:
+ >> 
+ >> http://autobuild.buildroot.net/results/5bcd8f4235002da682cc900f866116d2fe87f1c8
+ >> 
+ >> mktime.c: In function 'ydhms_diff':
+ >> mktime.c:106:52: error: size of array 'a' is negative
+ >> #define verify(name, assertion) struct name { char a[(assertion) ? 1 : -1]; }
+ >> ^
+ >> mktime.c:170:3: note: in expansion of macro 'verify'
+ >> verify (long_int_year_and_yday_are_wide_enough,
+ >> ^~~~~~
+ >> 
+ >> with the failure/assert comming from the lines:
+ >> 
+ >> verify (long_int_year_and_yday_are_wide_enough,
+ >> INT_MAX <= LONG_MAX / 2 || TIME_T_MAX <= UINT_MAX);
+ >> 
+ >> which fails since the y2038 time_t conversion from 32bit to 64bit
+ >> (musl libc).
+ >> 
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >> ---
+ >> Changes v1 -> v2:
+ >> - enhance commit log (as suggested by Thomas Petazzoni)
+ >> ---
+ >> package/cvs/cvs.mk | 4 +++-
+ >> 1 file changed, 3 insertions(+), 1 deletion(-)
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
