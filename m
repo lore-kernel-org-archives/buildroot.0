@@ -1,51 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 23:16:54 +0200
-Subject: [Buildroot] Buildroot 2020.08-rc3 released
-Message-ID: <87ft86lbcp.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 23:25:25 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/ibm-sw-tpm2: fix
+ patch to address musl builds
+Message-ID: <20200828211823.276AB81675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=3275a68299c9bd51218ae4598365659e18230389
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Buildroot 2020.08-rc3 is released - Go download it at:
+Previously, __WORDSIZE was being used to define RADIX_BITS.
 
-http://buildroot.net/downloads/buildroot-2020.08-rc3.tar.gz
+__WORDSIZE is not defined consistently via limits.h across all libc
+variants, so use LONG_BIT instead.
 
-or
+Fixes:
 
-http://buildroot.net/downloads/buildroot-2020.08-rc3.tar.bz2
+  http://autobuild.buildroot.net/results/b5cb347a98dc64f77982633c0fc48d14030aa5b6/
 
-Or get it from Git:
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 19bd08900448aa45b506320ad2ab912f789e6e5e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...RADIX_BITS.patch => 0001-Use-LONG_BIT-to-define-RADIX_BITS.patch} | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2020.08-rc2..
-
-    11  Fabrice Fontaine
-     7  Thomas Petazzoni
-     6  Peter Korsgaard
-     2  Bernd Kuhls
-     2  Heiko Thiery
-     2  Yann E. MORIN
-     1  Adam Duskett
-     1  Gwenhael Goavec-Merou
-     1  Sam Voss
-     1  Yann Sionneau
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08-rc3
-
-And expect the final 2020.08 release within a few days, unless something
-big shows up.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
+similarity index 91%
+rename from package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
+rename to package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
+index a19160f68c..3a7e02ba7a 100644
+--- a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
++++ b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
+@@ -1,12 +1,13 @@
+ From 24a352fc99ebde22235b05b18615817ef7f4263c Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 26 Apr 2020 15:33:39 +0200
+-Subject: [PATCH] Use __WORDSIZE to define RADIX_BITS
++Subject: [PATCH] Use LONG_BIT to define RADIX_BITS
+ 
+ This allows to avoid having to support each CPU architecture
+ individually.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+ ---
+  src/LibSupport.h | 17 +++--------------
+  1 file changed, 3 insertions(+), 14 deletions(-)
+@@ -35,7 +36,7 @@ index b2e6a51..f064d20 100644
+ -#endif // RADIX_BITS
+ +#include <limits.h>
+ +
+-+#define RADIX_BITS __WORDSIZE
+++#define RADIX_BITS LONG_BIT
+  
+  // These macros use the selected libraries to the proper include files.
+  #define LIB_QUOTE(_STRING_) #_STRING_
