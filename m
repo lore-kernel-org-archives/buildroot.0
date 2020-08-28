@@ -1,59 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 16:54:20 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] boot/uboot: Fix kconfig
- to use $(BR2_MAKE)
-Message-ID: <20200828155321.B9E1F86539@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:03:57 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/apache: security
+ bump version to 2.4.46
+Message-ID: <20200828155321.CFB9F7FE6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a31976ce5baa6554aa41c446bd637679dbe4aa2b
+commit: https://git.buildroot.net/buildroot/commit/?id=79302a559678534730b0d8cd5f330cf60b9de4e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-U-Boot must use $(BR2_MAKE) as it uses a Make feature from v4.0. We
-already use $(BR2_MAKE) in the BUILD_CMDS, but the kconfig commands
-still uses $(MAKE). Without this fix, building U-Boot with kconfig will
-fail with the following cryptic error.
+Changelog: http://archive.apache.org/dist/httpd/CHANGES_2.4.46
 
-> Makefile:37: *** missing separator.  Stop.
+Release notes: https://downloads.apache.org/httpd/Announcement2.4.html
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Fixes CVE-2020-9490, CVE-2020-11984 & CVE-2020-11993:
+https://httpd.apache.org/security/vulnerabilities_24.html
+
+Added sha512 hash provided by upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr:
+  - don't add md5 and sha1 hashes
+  - single comment above hashes
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 43dc2007a93194f6126987a2f2716dda1f3f17b5)
+(cherry picked from commit 7667418d970a4eca2d082f1de9f70aa5a93e9e1c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/apache/apache.hash | 5 +++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 1d50e72846..dc9f065332 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -16,6 +16,7 @@ UBOOT_INSTALL_IMAGES = YES
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 7b0e4ad8e7..bd3f6ac7ba 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,5 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
+-sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.{sha256,sha512}
++sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
++sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 068f36e325..203d637fbb 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # u-boot 2020.01+ needs make 4.0+
- UBOOT_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+UBOOT_MAKE = $(BR2_MAKE)
- 
- ifeq ($(UBOOT_VERSION),custom)
- # Handle custom U-Boot tarballs as specified by the configuration
-@@ -257,7 +258,7 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- define UBOOT_CONFIGURE_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-+		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_BOARD_NAME)_config
- endef
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-@@ -294,7 +295,7 @@ define UBOOT_BUILD_CMDS
- 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-+		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_MAKE_TARGET)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
- 		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+-APACHE_VERSION = 2.4.43
++APACHE_VERSION = 2.4.46
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
