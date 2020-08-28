@@ -1,23 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:23:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-gunicorn: select
- python-setuptools
-In-Reply-To: <20200810085920.447530-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 10 Aug 2020 10:59:20 +0200")
-References: <20200810085920.447530-1-fontaine.fabrice@gmail.com>
-Message-ID: <878sdyviw4.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 18:25:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: disable TEAP
+ for internal TLS implementation
+In-Reply-To: <20200813230848.16f715d0@windsurf.home> (Thomas Petazzoni's
+ message of "Thu, 13 Aug 2020 23:08:48 +0200")
+References: <20200108190439.459316-1-geomatsi@gmail.com>
+ <20200813230848.16f715d0@windsurf.home>
+Message-ID: <874komvitx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=13111
+ > On Wed,  8 Jan 2020 22:04:39 +0300
+ > Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
+ >> TLS implementation. This patch disables TEAP support in wpa_supplicant
+ >> when internal TLS implementation is selected. Similar fix for hostapd
+ >> package has already been merged to Buildroot: see commit 47d14e3b1c20
+ >> ("package/hostapd: disable TEAP for internal TLS implementation").
+ >> 
+ >> TEAP is still an experimental feature that is not recommmended for
+ >> production use. Currently it should not be used for anything else
+ >> than experimentation and interoperability testing. Those who needs
+ >> experimenting with TEAP are encouraged to enable openssl in their
+ >> buildroot configuration.
+ >> 
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
+ >> 
+ >> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+ >> ---
+ >> package/wpa_supplicant/wpa_supplicant.mk | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
