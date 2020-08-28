@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:03:40 +0200
-Subject: [Buildroot] [PATCH] package/chrony: security bump to version
- 3.5.1
-In-Reply-To: <20200821205105.733-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 21 Aug 2020 22:51:04 +0200")
-References: <20200821205105.733-1-peter@korsgaard.com>
-Message-ID: <87d03ar9cj.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:03:46 +0200
+Subject: [Buildroot] [PATCH] package/bind: security bump to version
+ 9.11.22
+In-Reply-To: <20200821212612.9029-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 21 Aug 2020 23:26:12 +0200")
+References: <20200821212612.9029-1-peter@korsgaard.com>
+Message-ID: <878sdyr9cd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,18 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes the following security issues:
- > CVE-2020-14367: Insecure writing of pidfile
- > -------------------------------------------
+ > CVE-2020-8622: A truncated TSIG response can lead to an assertion failure
+ > https://kb.isc.org/docs/cve-2020-8622
 
- > When chronyd is configured to save the pidfile in a directory where the
- > chrony user has write permissions (e.g. /var/run/chrony - the default
- > since chrony-3.4), an attacker that compromised the chrony user account
- > could create a symbolic link at the location of the pidfile to make
- > chronyd starting with root privileges follow the symlink and write its
- > process ID to a file for which the chrony user doesn't have write
- > permissions, causing a denial of service, or data loss.
+ > CVE-2020-8623: A flaw in native PKCS#11 code can lead to a remotely
+ > triggerable assertion failure in pk11.c
+ > https://kb.isc.org/docs/cve-2020-8623
 
- > This issue was reported by Matthias Gerstner of SUSE.
+ > CVE-2020-8624: update-policy rules of type "subdomain" are enforced incorrectly
+ > https://kb.isc.org/docs/cve-2020-8624
 
- > For further details, see the oss-security posting:
- > https://www.openwall.com/lists/oss-security/2020/08/21/1
+ > For more details, see the release notes:
+ > https://downloads.isc.org/isc/bind9/9.11.22/RELEASE-NOTES-bind-9.11.22.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
