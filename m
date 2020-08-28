@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:10:51 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/ghostscript: fix
+Date: Fri, 28 Aug 2020 18:10:40 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ghostscript: fix
  CVE-2020-15900
-Message-ID: <20200828160344.EE21F85F37@busybox.osuosl.org>
+Message-ID: <20200828160349.2F05381931@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d106d0f5db67d8dc03476de27a98a7546aee082a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=aa9b2b0abeff6d5c5991382fe20c27a5fbdddfaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 A memory corruption issue was found in Artifex Ghostscript 9.50 and
 9.52. Use of a non-standard PostScript operator can allow overriding of
@@ -89,7 +89,7 @@ index 0000000000..893b96c5be
 +2.17.1
 +
 diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 7d12195f17..5c2c14de0b 100644
+index a6e85d9894..b334616853 100644
 --- a/package/ghostscript/ghostscript.mk
 +++ b/package/ghostscript/ghostscript.mk
 @@ -23,6 +23,9 @@ GHOSTSCRIPT_DEPENDENCIES = \
