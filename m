@@ -1,68 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 16:54:18 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/pkg-kconfig:
- Support custom $(MAKE)
-Message-ID: <20200828155321.AF76181032@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:55:36 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] DEVELOPERS: add Gwenhael
+ Goavec-Merou for librtlsdr
+Message-ID: <20200828155322.2AE2286539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b0f8b475c4405c6e1eb266db653cd346ecf5bdf
+commit: https://git.buildroot.net/buildroot/commit/?id=ece6d79e72dcfaffe717e361e9d8cb79ea9143d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-The U-Boot package requires GNU Make v4.0 or later, and so all U-Boot
-"make" commands must use "$(BR2_MAKE)" so they use the host-make
-package. Currently pkg-kconfig is hardcoded to uses $(MAKE), so add a
-way to support $(BR2_MAKE). The package infra for pkg-automake and
-pkg-cmake have a similar problem, and they solved it by defining a
-$(PKG)_MAKE variable, and allowing each package to override it.
+Even though librtlsdr was initially introduced by Jason Pruitt in
+2014, and Jason is still listed in the DEVELOPERS file for this
+package, in recent times it's mainly Gwenhael who has been taking of
+this package. Let's reflect that in the DEVELOPERS file so that
+Gwenhael gets notified when there are librtlsdr issues.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Cc: Jason Pruitt <jrspruitt@gmail.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e729d0d4b6d90004bb41e2e81d7e8cb354b990a9)
+(cherry picked from commit 72df067afedff0318e61523c982f0c39df94adde)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kconfig.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 9d65b21ec5..45faf50e71 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -33,7 +33,7 @@ PKG_KCONFIG_COMMON_OPTS = \
- # Macro to save the defconfig file
- # $(1): the name of the package in upper-case letters
- define kconfig-package-savedefconfig
--	$($(1)_MAKE_ENV) $(MAKE) -C $($(1)_DIR) \
-+	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
- 		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
- endef
- 
-@@ -89,6 +89,7 @@ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
- 
- # Default values
-+$(2)_MAKE ?= $$(MAKE)
- $(2)_KCONFIG_EDITORS ?= menuconfig
- $(2)_KCONFIG_OPTS ?=
- $(2)_KCONFIG_FIXUP_CMDS ?=
-@@ -122,7 +123,7 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- 	done
- 
- $(2)_KCONFIG_MAKE = \
--	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
- 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
- 
- # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
-@@ -226,7 +227,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
- $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
- $$($(2)_DIR)/.kconfig_editor_%: PKG=$(2)
- $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
--	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$($(2)_CONFIGURATOR_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
- 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
- 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
- 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5d58fb2994..539a07511a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1076,6 +1076,7 @@ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ F:	package/gnuradio/
+ F:	package/gqrx/
+ F:	package/gr-osmosdr/
++F:	package/librtlsdr/
+ F:	package/libusbgx/
+ F:	package/matio/
+ F:	package/python-cheetah/
