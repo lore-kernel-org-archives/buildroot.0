@@ -1,59 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 16:47:31 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/busybox: enable
- flags for use as systemd pager
-Message-ID: <20200828155321.A6A0D7FFA5@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:54:04 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ package/x11r7/xserver_xorg-server: add security fix for CVE-2020-14347
+Message-ID: <20200828155322.1FA807FE6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75ff88093d3a7dd4cfb8e19e093772cd88f8ff97
+commit: https://git.buildroot.net/buildroot/commit/?id=37121ec547b1fb6c07f29159edcdf7dddf93554a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-If the less package is not enable and systemd is enabled,
-then configure the less applet to fully work with systemd.
+Release notes:
+https://lists.x.org/archives/xorg-announce/2020-July/003051.html
 
-systemd sets the flags for less in an environment variable
-and requires a few options for correct display.
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: add IGNORE_CVES entry.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c2caf816e9296c4812f83f0a5d16e0e33a264b72)
+(cherry picked from commit 8a46f3237a5f3c7cc59130b05b9afd4290a047fb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/busybox.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../1.20.8/0007-fix-for-ZDI-11426.patch            | 36 ++++++++++++++++++++++
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  5 +++
+ 2 files changed, 41 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 24f3ba3b19..7a1a506963 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -236,6 +236,18 @@ define BUSYBOX_SET_SELINUX
- endef
- endif
+diff --git a/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
+new file mode 100644
+index 0000000000..ce623b24cb
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
+@@ -0,0 +1,36 @@
++From aac28e162e5108510065ad4c323affd6deffd816 Mon Sep 17 00:00:00 2001
++From: Matthieu Herrb <matthieu@herrb.eu>
++Date: Sat, 25 Jul 2020 19:33:50 +0200
++Subject: [PATCH] fix for ZDI-11426
++
++Avoid leaking un-initalized memory to clients by zeroing the
++whole pixmap on initial allocation.
++
++This vulnerability was discovered by:
++Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
++
++Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
++Reviewed-by: Alan Coopersmith <alan.coopersmith@oracle.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[downloaded from upstream commit
++ https://gitlab.freedesktop.org/xorg/xserver/-/commit/aac28e162e5108510065ad4c323affd6deffd816]
++---
++ dix/pixmap.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/dix/pixmap.c b/dix/pixmap.c
++index 1186d7dbbf..5a0146bbb6 100644
++--- a/dix/pixmap.c
+++++ b/dix/pixmap.c
++@@ -116,7 +116,7 @@ AllocatePixmap(ScreenPtr pScreen, int pixDataSize)
++     if (pScreen->totalPixmapSize > ((size_t) - 1) - pixDataSize)
++         return NullPixmap;
++ 
++-    pPixmap = malloc(pScreen->totalPixmapSize + pixDataSize);
+++    pPixmap = calloc(1, pScreen->totalPixmapSize + pixDataSize);
++     if (!pPixmap)
++         return NullPixmap;
++ 
++-- 
++GitLab
++
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8ccc04224d..bab20b5c97 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -38,6 +38,11 @@ XSERVER_XORG_SERVER_DEPENDENCIES = \
+ 	mcookie \
+ 	host-pkgconf
  
-+# enable relevant options to allow the Busybox less applet to be used
-+# as a systemd pager
-+ifeq ($(BR2_PACKAGE_SYSTEMD):$(BR2_PACKAGE_LESS),y:)
-+define BUSYBOX_SET_LESS_FLAGS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_DASHCMD)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_RAW)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_TRUNCATE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_FLAGS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_ENV)
-+endef
++ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20),y)
++# 1.20.8/0007-fix-for-ZDI-11426.patch
++XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2020-14347
 +endif
 +
- ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
- define BUSYBOX_SET_INDIVIDUAL_BINARIES
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX)
-@@ -337,6 +349,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
-+	$(BUSYBOX_SET_LESS_FLAGS)
- 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
- endef
- 
+ # We force -O2 regardless of the optimization level chosen by the
+ # user, as the X.org server is known to trigger some compiler bugs at
+ # -Os on several architectures.
