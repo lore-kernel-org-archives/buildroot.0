@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:25:01 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/wpa_supplicant:
- disable TEAP for internal TLS implementation
-Message-ID: <20200828164642.BAD827FDAB@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:33:26 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] support/testing:
+ consistently use raw strings for re.compile
+Message-ID: <20200828164642.F19DD865B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aac5a090868fd7fbeb4e6c24accc1e8a878d0aad
+commit: https://git.buildroot.net/buildroot/commit/?id=0134c34c85628456dab6a1caaddc0ae6e10f3ddd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-EAP-TEAP support in hostapd/wpa_supplicant fails to build with internal
-TLS implementation. This patch disables TEAP support in wpa_supplicant
-when internal TLS implementation is selected. Similar fix for hostapd
-package has already been merged to Buildroot: see commit 47d14e3b1c20
-("package/hostapd: disable TEAP for internal TLS implementation").
+Otherwise Python 3.x flake8 complains with:
 
-TEAP is still an experimental feature that is not recommmended for
-production use. Currently it should not be used for anything else
-than experimentation and interoperability testing. Those who needs
-experimenting with TEAP are encouraged to enable openssl in their
-buildroot configuration.
+W605 invalid escape sequence '\s'
 
-Fixes:
-http://autobuild.buildroot.net/results/e83613c06041a60f89da787f4ebf876245713cd2/
-
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bb27efbce75071d7c9b36bc5a896d166e01c1aa1)
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b0078c058a4a935083f9494518216a46df20b5af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/infra/__init__.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 8e7b9c3a65..7170db0d07 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -115,7 +115,7 @@ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf libopenssl
- WPA_SUPPLICANT_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
- else
--WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+index 6392aa679b..6522a265f3 100644
+--- a/support/testing/infra/__init__.py
++++ b/support/testing/infra/__init__.py
+@@ -78,7 +78,7 @@ def get_elf_arch_tag(builddir, prefix, fpath, tag):
+     cmd = ["host/bin/{}-readelf".format(prefix),
+            "-A", os.path.join("target", fpath)]
+     out = run_cmd_on_host(builddir, cmd)
+-    regexp = re.compile("^  {}: (.*)$".format(tag))
++    regexp = re.compile(r"^  {}: (.*)$".format(tag))
+     for line in out.splitlines():
+         m = regexp.match(line)
+         if not m:
+@@ -105,7 +105,7 @@ def get_elf_prog_interpreter(builddir, prefix, fpath):
+     cmd = ["host/bin/{}-readelf".format(prefix),
+            "-l", os.path.join("target", fpath)]
+     out = run_cmd_on_host(builddir, cmd)
+-    regexp = re.compile("^ *\[Requesting program interpreter: (.*)\]$")
++    regexp = re.compile(r"^ *\[Requesting program interpreter: (.*)\]$")
+     for line in out.splitlines():
+         m = regexp.match(line)
+         if not m:
