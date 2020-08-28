@@ -1,53 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:52:24 +0200
+Date: Fri, 28 Aug 2020 19:50:56 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x]
- package/x11r7/xlib_libX11: security bump version to 1.6.12
-Message-ID: <20200828174508.C3E92866ED@busybox.osuosl.org>
+ package/shadowsocks-libev: security bump to version 3.3.4
+Message-ID: <20200828174508.AA5F88653F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c64bec3a35aebcaebf86d99e1da074477ceffffd
+commit: https://git.buildroot.net/buildroot/commit/?id=267804d758ffda843318788a48b878ea398289ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes CVE-2020-14363:
-https://lists.x.org/archives/xorg-announce/2020-August/003056.html
+- Fix CVE-2019-5163: An exploitable denial-of-service vulnerability
+  exists in the UDPRelay functionality of Shadowsocks-libev 3.3.2. When
+  utilizing a Stream Cipher and a local_address, arbitrary UDP packets
+  can cause a FATAL error code path and exit. An attacker can send
+  arbitrary UDP packets to trigger this vulnerability.
+- Fix CVE-2019-5164: An exploitable code execution vulnerability exists
+  in the ss-manager binary of Shadowsocks-libev 3.3.2. Specially crafted
+  network packets sent to ss-manager can cause an arbitrary binary to
+  run, resulting in code execution and privilege escalation. An attacker
+  can send network packets to trigger this vulnerability.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also update indentation in hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab0c98cac861197f2b8b56f5216c0f1312f6209b)
+(cherry picked from commit fd3dd9d9c5b502c8c67aac6b4fad1534f0b10b4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/shadowsocks-libev/shadowsocks-libev.hash | 8 ++++----
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index b77f98dfb1..142e4505d0 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-August/003053.html
--sha256  b1cc4b802058be7e3fb438ee2490f66fcc52ac3b2a14f47a22cbf77638e33606  libX11-1.6.11.tar.bz2
--sha512  2cb4e215c1e3ccb327e02586844f8c426068536a0f472a39f12191feace607f61a6a08586f03758248199678c2f6897a984b0f1222bc0d68fd2e02702f4ce0bf  libX11-1.6.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003057.html
-+sha256  f108227469419ac04d196df0f3b80ce1f7f65059bb54c0de811f4d8e03fd6ec7  libX11-1.6.12.tar.bz2
-+sha512  79df7d61d9009b0dd3b65f67a62189aa0a43799c01026b3d2d534092596a0b67f246af5e398a89eb1ccc61a27335f81be8262b8a39768a76f62d862cd7415a47  libX11-1.6.12.tar.bz2
- 
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index 76928ebb48..cc7993a54f 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,7 +1,7 @@
  # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index b0132efd31..ba9fcef258 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+-sha256 677356a5ed6b5ae9e32a898061db2587158ff27e245db03f4bde9b006ef12dc9 shadowsocks-libev-3.3.3.tar.gz
++sha256  fce47a956fad0c30def9c71821bcec450a40d3f881548e31e66cedf262b89eb1  shadowsocks-libev-3.3.4.tar.gz
+ 
+ # License files, locally calculated
+-sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+-sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
+-sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
++sha256  736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
++sha256  c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
++sha256  4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 4b0b963eef..3ba4cb875c 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.6.11
-+XLIB_LIBX11_VERSION = 1.6.12
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-SHADOWSOCKS_LIBEV_VERSION = 3.3.3
++SHADOWSOCKS_LIBEV_VERSION = 3.3.4
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
