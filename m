@@ -1,34 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:41:59 +0200
+Date: Fri, 28 Aug 2020 17:41:51 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/pkg-stats: add package count to stats
-Message-ID: <20200828155253.B3DC386539@busybox.osuosl.org>
+ support/scripts/pkg-stats: store licences of package
+Message-ID: <20200828155253.9BB8783DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a8dd28bc5d7d0ef5d232fbedbdb06ae35499313
+commit: https://git.buildroot.net/buildroot/commit/?id=8ca8c1572cd50f0556ba384a8a5d3d48801ecb07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0e267518cbd13747726fd946f6430e4bdcb1c121)
+(cherry picked from commit 5b7278e5f14f2bae4e120a42a7608723c1309a7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/pkg-stats | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 0d4bb13196..0e7d60bdbb 100755
+index e34841fc7c..9529ad5c6a 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -552,6 +552,7 @@ def check_package_cves(nvd_path, packages):
+@@ -56,7 +56,7 @@ http_pool = None
  
- def calculate_stats(packages):
-     stats = defaultdict(int)
-+    stats['packages'] = len(packages)
-     for pkg in packages:
-         # If packages have multiple infra, take the first one. For the
-         # vast majority of packages, the target and host infra are the
+ 
+ class Package:
+-    all_licenses = list()
++    all_licenses = dict()
+     all_license_files = list()
+     all_versions = dict()
+     all_ignored_cves = dict()
+@@ -65,6 +65,7 @@ class Package:
+         self.name = name
+         self.path = path
+         self.infras = None
++        self.license = None
+         self.has_license = False
+         self.has_license_files = False
+         self.has_hash = False
+@@ -125,6 +126,7 @@ class Package:
+         var = self.pkgvar()
+         if var in self.all_licenses:
+             self.has_license = True
++            self.license = self.all_licenses[var]
+         if var in self.all_license_files:
+             self.has_license_files = True
+ 
+@@ -387,7 +389,7 @@ def package_init_make_info():
+             if value == "unknown":
+                 continue
+             pkgvar = pkgvar[:-8]
+-            Package.all_licenses.append(pkgvar)
++            Package.all_licenses[pkgvar] = value
+ 
+         elif pkgvar.endswith("_LICENSE_FILES"):
+             if pkgvar.endswith("_MANIFEST_LICENSE_FILES"):
