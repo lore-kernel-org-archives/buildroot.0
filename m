@@ -1,54 +1,175 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:24:18 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/assimp: also
- build with -mxgot on mips64(el)
-Message-ID: <20200828174514.DB85B7FE85@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:29:42 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ support/scripts/pkg-stats: drop erroneous "break" in CVE.affects()
+Message-ID: <20200828174514.EF49B818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7d62fbeebbffb632d9dcda619ece1d277c3b5f7
+commit: https://git.buildroot.net/buildroot/commit/?id=8757e275447e1ef1a0d213e95ef36780b782301c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Since the bump of assimp to 5.0.1, we have build failures on mips64el,
-due to relocations being truncated. The issue seems to be quite
-similar to the one on m68k coldfire, as both m68k and MIPS have this
--mxgot gcc option to switch to using a GOT that has no size limit (but
-causes less efficient code to be produced).
+Commit 7d2779ecbb142b62f8913d30352b11058f922b2a
+("support/script/pkg-stats: handle exception when version comparison
+fails") erroneousy introduced a "break" within a try/expect block.
 
-Here as well, the overall relevance of assimp on mips64(el) platforms
-being probably very limited, the incentive to search for a better
-solution is pretty limited.
+This break has the unfortunate consequence that every CVE that was
+using the <= operator was skipped, and according to the current
+CVE statistics, made us miss 74 CVEs out of 141 CVEs.
 
-Fixes:
+Here is for reference the complete list of CVEs we missed:
 
-  http://autobuild.buildroot.net/results/7df487d5117b2ee440a07dbff9cae1b181566748/
+ - gnupg
+   CVE-2006-3082
+   CVE-2019-13050
+
+ - jhead
+   CVE-2020-6624
+   CVE-2020-6625
+
+ - patch
+   CVE-2018-6952
+   CVE-2019-20633
+
+ - json-c
+   CVE-2020-12762
+
+ - git
+   CVE-2018-1000110
+   CVE-2018-1000182
+   CVE-2019-1003010
+   CVE-2020-2136
+
+ - iperf2
+   CVE-2016-4303
+
+ - libtorrent
+   CVE-2009-1760
+   CVE-2016-5301
+
+ - lua
+   CVE-2020-15888
+   CVE-2020-15889
+   CVE-2020-15945
+   CVE-2020-24342
+
+ - openvpn
+   CVE-2020-7224
+
+ - smack
+   CVE-2016-10027
+
+ - bashtop
+   CVE-2019-18276
+
+ - links
+   CVE-2008-3319
+
+ - argus
+   CVE-2011-3332
+
+ - libraw
+   CVE-2020-15503
+
+ - netcat
+   CVE-2008-5727
+   CVE-2008-5728
+   CVE-2008-5729
+   CVE-2008-5730
+   CVE-2008-5742
+   CVE-2015-2214
+
+ - subversion
+   CVE-2017-1000085
+   CVE-2018-1000111
+   CVE-2020-2111
+
+ - python
+   CVE-2013-1753
+   CVE-2015-5652
+   CVE-2017-17522
+   CVE-2017-18207
+   CVE-2019-20907
+   CVE-2019-9674
+
+ - cereal
+   CVE-2020-11104
+   CVE-2020-11105
+
+ - opencv
+   CVE-2017-1000450
+   CVE-2017-12597
+   CVE-2017-12598
+   CVE-2017-12599
+   CVE-2017-12600
+   CVE-2017-12601
+   CVE-2017-12602
+   CVE-2017-12603
+   CVE-2017-12604
+   CVE-2017-12605
+   CVE-2017-12606
+   CVE-2017-12862
+   CVE-2017-12863
+   CVE-2017-12864
+   CVE-2019-15939
+
+ - docker
+   CVE-2015-1843
+   CVE-2015-3627
+   CVE-2015-3630
+   CVE-2015-3631
+   CVE-2016-3697
+   CVE-2017-14992
+   CVE-2019-16884
+
+ - trousers
+   CVE-2020-24330
+   CVE-2020-24331
+   CVE-2020-24332
+
+ - libcroco
+   CVE-2020-12825
+
+ - libpupnp
+   CVE-2020-13848
+
+ - openjpeg
+   CVE-2020-15389
+
+ - flex
+   CVE-2015-1773
+
+ - libesmtp
+   CVE-2019-19977
+
+ - ed
+   CVE-2015-2987
+
+ - libmad
+   CVE-2018-7263
+
+ - grub
+   CVE-2020-15705
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 275a5650a926dd059e1658221a26e739ef3fd144)
+(cherry picked from commit b3f959fe968cca773cecf1c354b22f8b69201afc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/assimp/assimp.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ support/scripts/pkg-stats | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index e8620c859a..e1b9a23499 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -17,6 +17,13 @@ ifeq ($(BR2_m68k),y)
- ASSIMP_CXXFLAGS += -mxgot -O0
- endif
- 
-+# just like m68k coldfire, mips64 also has some limitations on the GOT
-+# size for large libraries, which can be overcome by passing
-+# -mxgot. Solves "relocation truncated to fit: R_MIPS_CALL16" issues.
-+ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-+ASSIMP_CXXFLAGS += -mxgot
-+endif
-+
- # workaround SuperH compiler failure when static linking (i.e -fPIC is
- # not passed) in gcc versions 5.x or older. The -Os optimization level
- # causes a "unable to find a register to spill in class
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 303af2f588..e642147b98 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -383,7 +383,6 @@ class CVE:
+                         continue
+                     try:
+                         affected = pkg_version <= cve_affected_version
+-                        break
+                     except TypeError:
+                         return CVE_UNKNOWN
+                     if affected:
