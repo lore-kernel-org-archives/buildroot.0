@@ -1,36 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:01:43 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: fix typo
-Message-ID: <20200828170234.DCD9983598@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:08:57 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ripgrep: fix
+ debug build
+Message-ID: <20200828170235.3E42A84F31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d18afcfe4cccca04a887d086fd935506f50a82e
+commit: https://git.buildroot.net/buildroot/commit/?id=da17a05721844f76cb69be47bcecacb7575b0931
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-depednencies -> dependencies
+There is no --debug mode for cargo resulting in the following build
+failure since the addition of this package with commit
+4b0d1ef6ac00c5170a3fb9d15d06b3d3172e0c97:
+
+error: Unknown flag: '--debug'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/58e74bb056ec65680ecebaa559aa14bdebbf5c85
+ - http://autobuild.buildroot.org/results/28c6364a89a6044d5a036614f7a6e59815efb770
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: keep the default 'dev' mode when in debug]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 531e96e98cc8cd6fb839349ea0f86c9d5706ec0f)
+(cherry picked from commit d67ff44850fdb7f5159d2b6c3310e7501231a24f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-waf.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ripgrep/ripgrep.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
-index ffc004c290..101cddf1f1 100644
---- a/docs/manual/adding-packages-waf.txt
-+++ b/docs/manual/adding-packages-waf.txt
-@@ -34,7 +34,7 @@ will automatically download the tarball from this location.
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 0bb7017a96..2cfdeba9aa 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -11,12 +11,11 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
  
- On line 10, we tell Buildroot what options to enable for libfoo.
+ RIPGREP_DEPENDENCIES = host-cargo
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
  
--On line 11, we tell Buildroot the depednencies of libfoo.
-+On line 11, we tell Buildroot the dependencies of libfoo.
+ RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
  
- Finally, on line line 13, we invoke the +waf-package+
- macro that generates all the Makefile rules that actually allows the
+ RIPGREP_CARGO_OPTS = \
+-	--$(RIPGREP_CARGO_MODE) \
++	$(if $(BR2_ENABLE_DEBUG),,--release) \
+ 	--target=$(RUSTC_TARGET_NAME) \
+ 	--manifest-path=$(@D)/Cargo.toml
+ 
