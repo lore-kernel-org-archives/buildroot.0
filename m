@@ -1,47 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:59:47 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/rtl8188eu: bump
- version to 0924dc8f
-Message-ID: <20200828155254.A5E3C83DAE@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:56:55 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gdk-pixbuf:
+ security bump to version 2.36.12
+Message-ID: <20200828155254.8FDDA83DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4de8359792f2e43c818407933944a044ee4fe83
+commit: https://git.buildroot.net/buildroot/commit/?id=0c871aaa388ff208191ae0d87d974b8a64356d2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- fixes compile against linux-5.4.x
+- Fix CVE-2017-6312: Integer overflow in io-ico.c in gdk-pixbuf allows
+  context-dependent attackers to cause a denial of service (segmentation
+  fault and application crash) via a crafted image entry offset in an
+  ICO file, which triggers an out-of-bounds read, related to compiler
+  optimizations.
+- Fix CVE-2017-6313: Integer underflow in the load_resources function in
+  io-icns.c in gdk-pixbuf allows context-dependent attackers to cause a
+  denial of service (out-of-bounds read and program crash) via a crafted
+  image entry size in an ICO file.
+- Fix CVE-2017-6314: The make_available_at_least function in io-tiff.c
+  in gdk-pixbuf allows context-dependent attackers to cause a denial of
+  service (infinite loop) via a large TIFF file.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Also update indentation in hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 854b98408ce927163057411fbe2abaf69198173a)
+(cherry picked from commit d4559143324412903ed5dd73a5de20cb4d280397)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 +-
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.hash | 6 +++---
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
-index 88c128aa35..b16986176d 100644
---- a/package/rtl8188eu/rtl8188eu.hash
-+++ b/package/rtl8188eu/rtl8188eu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cc872aa0991c044d35abfcc81543bad950c6aae487e37d5a09d1cbf8c4cb3058  rtl8188eu-4b0ecca485b9f11f58670b69aa9f90ecad7da02f.tar.gz
-+sha256  24656123468506760974edf4a9087f6c77d13228fa6b6ce899c12c359a5dc1e7  rtl8188eu-0924dc8fe0845358ed5b3c4c673126069469b3fc.tar.gz
- sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index f292bba134..686b2ea9d2 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 9cb947f195..8fa178b55c 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.10.sha256sum
+-sha256 f8f6fa896b89475c73b6e9e8d2a2b062fc359c4b4ccb8e96470d6ab5da949ace  gdk-pixbuf-2.36.10.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.12.sha256sum
++sha256  fff85cf48223ab60e3c3c8318e2087131b590fd6f1737e42cb3759a3b427a334  gdk-pixbuf-2.36.12.tar.xz
+ # Locally calculated
+-sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
++sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 33de2e3d3a..3320827d0c 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RTL8188EU_VERSION = 4b0ecca485b9f11f58670b69aa9f90ecad7da02f
-+RTL8188EU_VERSION = 0924dc8fe0845358ed5b3c4c673126069469b3fc
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+ GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).10
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).12
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.0+
