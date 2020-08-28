@@ -1,60 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Aug 2020 23:43:21 +0200
-Subject: [Buildroot] [PATCH-next] configs/roseapplepi: switch to
- mainline 5.7.19 kernel
-In-Reply-To: <20200828113051.4253-1-peter@korsgaard.com>
-References: <20200828113051.4253-1-peter@korsgaard.com>
-Message-ID: <20200828234321.45f728ee@windsurf.home>
+Date: Fri, 28 Aug 2020 23:44:10 +0200
+Subject: [Buildroot] [git commit branch/next] package/powertop: bump version
+ to 2.13
+Message-ID: <20200828213718.28545821B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 28 Aug 2020 13:30:51 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=68cf4136bbe29832be38a91b8aaa74ae3862dc0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Mainline Linux now has basic s500/roseapplepi support, so switch to that to
-> get rid of the dependency on gcc7.  Add two patches for the dts / fix that
-> didn't make it for kernel 5.7.
-> 
-> The mainline kernel does not yet have support for the mmc interface, so
-> change to initramfs for now.  Patches for mmc support have been posted
-> recently, so this can be reverted once they show up in a stable kernel:
-> 
-> https://lore.kernel.org/lkml/cover.1593124368.git.cristian.ciocaltea at gmail.com/
-> 
-> The owl serial port is called ttyOWLn in mainline, so adjust the bootargs to
-> match.  Also drop the unneeded execute permission on uEnv.txt.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  board/roseapplepi/genimage.cfg                |  10 +-
->  board/roseapplepi/linux.config                |  45 +++
->  ...1-arm-dts-owl-s500-Fix-incorrect-PPI.patch |  52 +++
->  .../linux/0001-unbreak-xhci-trace.patch       |  31 --
->  ...002-arm-dts-owl-s500-add-RoseapplePi.patch |  89 +++++
->  .../0002-kernel-add-support-for-gcc-5.patch   |  99 -----
->  ...inux-use-static-inline-in-ARM-ftrace.patch |  54 ---
->  .../0004-Fix-compile-errors-with-gcc5.patch   | 121 ------
->  ...egrate-the-various-compiler-gcc-345-.patch | 363 ------------------
->  board/roseapplepi/uEnv.txt                    |   2 +-
->  configs/roseapplepi_defconfig                 |  20 +-
->  11 files changed, 198 insertions(+), 688 deletions(-)
->  create mode 100644 board/roseapplepi/linux.config
->  create mode 100644 board/roseapplepi/patches/linux/0001-arm-dts-owl-s500-Fix-incorrect-PPI.patch
->  delete mode 100644 board/roseapplepi/patches/linux/0001-unbreak-xhci-trace.patch
->  create mode 100644 board/roseapplepi/patches/linux/0002-arm-dts-owl-s500-add-RoseapplePi.patch
->  delete mode 100644 board/roseapplepi/patches/linux/0002-kernel-add-support-for-gcc-5.patch
->  delete mode 100644 board/roseapplepi/patches/linux/0003-ARM-8158-1-LLVMLinux-use-static-inline-in-ARM-ftrace.patch
->  delete mode 100644 board/roseapplepi/patches/linux/0004-Fix-compile-errors-with-gcc5.patch
->  delete mode 100644 board/roseapplepi/patches/linux/0005-compiler-gcc-integrate-the-various-compiler-gcc-345-.patch
->  mode change 100755 => 100644 board/roseapplepi/uEnv.txt
+Also separate the fields in the hash file by two spaces and add pgp
+signature check.
 
-Applied to next, thanks.
+Since we're now using the default value for POWERTOP_SOURCE, drop this
+variable definition.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/powertop/powertop.hash | 8 +++++---
+ package/powertop/powertop.mk   | 3 +--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/powertop/powertop.hash b/package/powertop/powertop.hash
+index a3261789d2..fc8f3cc52f 100644
+--- a/package/powertop/powertop.hash
++++ b/package/powertop/powertop.hash
+@@ -1,3 +1,5 @@
+-# Locally-generated hash
+-sha256	ae68c913784f78b497076e0b1d588f59854a66c074690d545dae7956e4f5d64f	powertop-v2.11-1-g7ef7f79.tar.gz
+-sha256	b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259	COPYING
++# Locally calculated after checking pgp signature
++# https://01.org/sites/default/files/downloads/powertop-2.13.tar.gz.asc.txt
++# using key 22E8F306C8FA4BAA2A5F36F3A0303B060918941C
++sha256  a65f992ca4a419bc73b623651060eb9fc00c5a86fa03556358cd9db011ef3178  powertop-2.13.tar.gz
++sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
+index 3dbc015cef..c3e8d2549c 100644
+--- a/package/powertop/powertop.mk
++++ b/package/powertop/powertop.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-POWERTOP_VERSION = 2.11
++POWERTOP_VERSION = 2.13
+ POWERTOP_SITE = https://01.org/sites/default/files/downloads
+-POWERTOP_SOURCE = powertop-v$(POWERTOP_VERSION)-1-g7ef7f79.tar.gz
+ POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ POWERTOP_LICENSE = GPL-2.0
