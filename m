@@ -1,68 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 16:54:04 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-kconfig:
- Support custom $(MAKE)
-Message-ID: <20200828155253.22F14811FF@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:41:46 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ support/scripts/pkg-stats: set developers info
+Message-ID: <20200828155253.8F1C083DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0f7595cea5688462cc7fcd01a58208e62a45ead
+commit: https://git.buildroot.net/buildroot/commit/?id=743b013a56c01cada50c08e13d29409a327903ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The U-Boot package requires GNU Make v4.0 or later, and so all U-Boot
-"make" commands must use "$(BR2_MAKE)" so they use the host-make
-package. Currently pkg-kconfig is hardcoded to uses $(MAKE), so add a
-way to support $(BR2_MAKE). The package infra for pkg-automake and
-pkg-cmake have a similar problem, and they solved it by defining a
-$(PKG)_MAKE variable, and allowing each package to override it.
+Use the function 'parse_developers' function from getdeveloperlib that
+collect the information about the developers and the files they
+maintain. Then set the maintainer(s) to each package.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e729d0d4b6d90004bb41e2e81d7e8cb354b990a9)
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c1fc827934a828179ae73f3b94bbc9d780cb4755)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kconfig.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index e2d52ee8ed..9aea101b45 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -33,7 +33,7 @@ PKG_KCONFIG_COMMON_OPTS = \
- # Macro to save the defconfig file
- # $(1): the name of the package in upper-case letters
- define kconfig-package-savedefconfig
--	$($(1)_MAKE_ENV) $(MAKE) -C $($(1)_DIR) \
-+	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
- 		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
- endef
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 87018eabd3..e34841fc7c 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -30,10 +30,14 @@ import certifi
+ import distutils.version
+ import time
+ import gzip
++import sys
+ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
  
-@@ -89,6 +89,7 @@ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
++sys.path.append('utils/')
++from getdeveloperlib import parse_developers
++
+ NVD_START_YEAR = 2002
+ NVD_JSON_VERSION = "1.0"
+ NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+@@ -171,6 +175,16 @@ class Package:
+         """
+         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
  
- # Default values
-+$(2)_MAKE ?= $$(MAKE)
- $(2)_KCONFIG_EDITORS ?= menuconfig
- $(2)_KCONFIG_OPTS ?=
- $(2)_KCONFIG_FIXUP_CMDS ?=
-@@ -122,7 +123,7 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- 	done
++    def set_developers(self, developers):
++        """
++        Fills in the .developers field
++        """
++        self.developers = [
++            dev.name
++            for dev in developers
++            if dev.hasfile(self.path)
++        ]
++
+     def __eq__(self, other):
+         return self.path == other.path
  
- $(2)_KCONFIG_MAKE = \
--	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
- 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
- 
- # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
-@@ -224,7 +225,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
- #
- $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
- $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
--	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$($(2)_CONFIGURATOR_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
- 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
- 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
- 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+@@ -894,6 +908,8 @@ def __main__():
+                                       'HEAD']).splitlines()[0].decode()
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
++    print("Getting developers ...")
++    developers = parse_developers()
+     print("Getting package make info ...")
+     package_init_make_info()
+     print("Getting package details ...")
+@@ -905,6 +921,7 @@ def __main__():
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+         pkg.set_url()
++        pkg.set_developers(developers)
+     print("Checking URL status")
+     check_package_urls(packages)
+     print("Getting latest versions ...")
