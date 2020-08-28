@@ -1,50 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:10:36 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/php: bump version
- to 7.4.9
-Message-ID: <20200828155321.E750A7FE6F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 16:47:31 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/busybox: enable
+ flags for use as systemd pager
+Message-ID: <20200828155321.A6A0D7FFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c50b83084902b5353f20a90c7a5ec23e2be435c
+commit: https://git.buildroot.net/buildroot/commit/?id=75ff88093d3a7dd4cfb8e19e093772cd88f8ff97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Changelog of this bugfix release:
-https://www.php.net/ChangeLog-7.php#7.4.9
+If the less package is not enable and systemd is enabled,
+then configure the less applet to fully work with systemd.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+systemd sets the flags for less in an environment variable
+and requires a few options for correct display.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 46ed4ac84740b1f377bc16ea335539ab480f22f5)
+(cherry picked from commit c2caf816e9296c4812f83f0a5d16e0e33a264b72)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 47879eecca..d648d90c04 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
-+sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 24f3ba3b19..7a1a506963 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -236,6 +236,18 @@ define BUSYBOX_SET_SELINUX
+ endef
+ endif
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 48af0f6fdc..5417a82cf4 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++# enable relevant options to allow the Busybox less applet to be used
++# as a systemd pager
++ifeq ($(BR2_PACKAGE_SYSTEMD):$(BR2_PACKAGE_LESS),y:)
++define BUSYBOX_SET_LESS_FLAGS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_DASHCMD)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_RAW)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_TRUNCATE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_FLAGS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_ENV)
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+ define BUSYBOX_SET_INDIVIDUAL_BINARIES
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX)
+@@ -337,6 +349,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
++	$(BUSYBOX_SET_LESS_FLAGS)
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
+ endef
  
--PHP_VERSION = 7.4.8
-+PHP_VERSION = 7.4.9
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
