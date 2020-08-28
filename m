@@ -1,18 +1,22 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 28 Aug 2020 08:23:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security bump
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Aug 2020 09:11:04 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: security bump
  version to 1.6.12
-Message-ID: <20200828062309.911291-1-bernd.kuhls@t-online.de>
+Message-ID: <20200828070339.E21C7854C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ab0c98cac861197f2b8b56f5216c0f1312f6209b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes CVE-2020-14363:
 https://lists.x.org/archives/xorg-announce/2020-August/003056.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
  package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
@@ -45,5 +49,3 @@ index b0132efd31..ba9fcef258 100644
  XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
  XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
  XLIB_LIBX11_LICENSE = MIT
--- 
-2.27.0
