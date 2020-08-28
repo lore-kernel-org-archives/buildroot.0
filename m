@@ -1,208 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:49:41 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- package/python-matplotlib: simplify version checks
-Message-ID: <20200828174515.2946185278@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:54:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump version
+ to 2.3.11.3
+In-Reply-To: <48qn1hxmln.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Fri, 28 Aug 2020 19:07:48 +0200")
+References: <20200818165436.145310-1-bernd.kuhls@t-online.de>
+ <20200818165436.145310-2-bernd.kuhls@t-online.de>
+ <87tuwmr9um.fsf@dell.be.48ers.dk>
+ <48qn1hxmln.ln2@ID-313208.user.individual.net>
+Message-ID: <87lfhymz9z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f3c81db0081737e0a6f1bbac5c0b9d05ca67b8f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Hopefully, this should fix the following error on one of the
-autobuilders:
+ > Am Fri, 28 Aug 2020 18:52:49 +0200 schrieb Peter Korsgaard:
+ >>>>>>> "Bernd" == Bernd Kuhls
+ >>>>>>> <bernd.kuhls@t-online.de> writes:
+ >> 
+ >> Committed to 2020.02.x and 2020.05.x, thanks.
 
-png: no  [The C/C++ header for libpng (png.h) could not
-     be found.  You may need to install the development
-     package.]
+ > Hi Peter,
 
-Fixes:
- - http://autobuild.buildroot.org/results/afddcc44b2fb7983244f24542bfae921869e4ab8
+ > please commit
+ > https://git.buildroot.net/buildroot/commit/package/dovecot-pigeonhole?
+ > id=bbb4e2104606bc55ba070d53cc4d90c878ef74b3
+ > to 2020.02.x and 2020.05.x as well because the previous version of 
+ > dovecot-pigeonhole is incompatible with dovecot-2.3.11.3.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 07b74f914dcdd7d76c33af8caee975efd8f7d0ea)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...request-11983-from-anntzer-builddepchecks.patch | 170 +++++++++++++++++++++
- 1 file changed, 170 insertions(+)
+ > For details see http://patchwork.ozlabs.org/project/buildroot/patch/
+ > 20200820061744.293397-1-bernd.kuhls at t-online.de/
 
-diff --git a/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-new file mode 100644
-index 0000000000..b3a22acbb4
---- /dev/null
-+++ b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-@@ -0,0 +1,170 @@
-+From 923ce72409f184bd8e8c61b196260891036ba87e Mon Sep 17 00:00:00 2001
-+From: Antony Lee <anntzer.lee@gmail.com>
-+Date: Thu, 30 Aug 2018 15:27:55 +0200
-+Subject: [PATCH] Simplify version checks for freetype and libpng.
-+
-+Currently, setupext.py replicates a lot of work done by the compiler to
-+check whether header files are present, and whether freetype and libpng
-+have sufficiently recent versions.
-+
-+Instead, we can just add a small stub source file at the top of the
-+extension sources which just tries to include the header and checks the
-+version macros.  If the header is not found, compilation will
-+immediately abort with `foo.h: No such file or directory`; if the
-+version is too old, we can emit an appropriate error message (`#pragma
-+message` is supported by all major compilers and allows expanding of
-+macros in the error message).
-+
-+[Retrieved from:
-+https://github.com/matplotlib/matplotlib/commit/d1060a885309ec7ac19ca912d3011a5eb1673bd5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ setupext.py              | 83 +++++-----------------------------------
-+ src/checkdep_freetype2.c | 13 +++++++
-+ src/checkdep_libpng.c    |  5 +++
-+ 3 files changed, 28 insertions(+), 73 deletions(-)
-+ create mode 100644 src/checkdep_freetype2.c
-+ create mode 100644 src/checkdep_libpng.c
-+
-+diff --git a/setupext.py b/setupext.py
-+index d5f4b81f562..a5163e39288 100644
-+--- a/setupext.py
-++++ b/setupext.py
-+@@ -814,6 +814,13 @@ def add_flags(self, ext, add_sources=True):
-+                                for x in agg_sources)
-+ 
-+ 
-++# For FreeType2 and libpng, we add a separate checkdep_foo.c source to at the
-++# top of the extension sources.  This file is compiled first and immediately
-++# aborts the compilation either with "foo.h: No such file or directory" if the
-++# header is not found, or an appropriate error message if the header indicates
-++# a too-old version.
-++
-++
-+ class FreeType(SetupPackage):
-+     name = "freetype"
-+     pkg_names = {
-+@@ -825,59 +832,8 @@ class FreeType(SetupPackage):
-+         "windows_url": "http://gnuwin32.sourceforge.net/packages/freetype.htm"
-+         }
-+ 
-+-    def check(self):
-+-        if options.get('local_freetype'):
-+-            return "Using local version for testing"
-+-
-+-        if sys.platform == 'win32':
-+-            try:
-+-                check_include_file(get_include_dirs(), 'ft2build.h', 'freetype')
-+-            except CheckFailed:
-+-                check_include_file(get_include_dirs(), os.path.join('freetype2', 'ft2build.h'), 'freetype')
-+-            return 'Using unknown version found on system.'
-+-
-+-        status, output = subprocess.getstatusoutput(
-+-            "freetype-config --ftversion")
-+-        if status == 0:
-+-            version = output
-+-        else:
-+-            version = None
-+-
-+-        # Early versions of freetype grep badly inside freetype-config,
-+-        # so catch those cases. (tested with 2.5.3).
-+-        if version is None or 'No such file or directory\ngrep:' in version:
-+-            version = self.version_from_header()
-+-
-+-        # pkg_config returns the libtool version rather than the
-+-        # freetype version so we need to explicitly pass the version
-+-        # to _check_for_pkg_config
-+-        return self._check_for_pkg_config(
-+-            'freetype2', 'ft2build.h',
-+-            min_version='2.3', version=version)
-+-
-+-    def version_from_header(self):
-+-        version = 'unknown'
-+-        ext = self.get_extension()
-+-        if ext is None:
-+-            return version
-+-        # Return the first version found in the include dirs.
-+-        for include_dir in ext.include_dirs:
-+-            header_fname = os.path.join(include_dir, 'freetype.h')
-+-            if os.path.exists(header_fname):
-+-                major, minor, patch = 0, 0, 0
-+-                with open(header_fname, 'r') as fh:
-+-                    for line in fh:
-+-                        if line.startswith('#define FREETYPE_'):
-+-                            value = line.rsplit(' ', 1)[1].strip()
-+-                            if 'MAJOR' in line:
-+-                                major = value
-+-                            elif 'MINOR' in line:
-+-                                minor = value
-+-                            else:
-+-                                patch = value
-+-                return '.'.join([major, minor, patch])
-+-
-+     def add_flags(self, ext):
-++        ext.sources.insert(0, 'src/checkdep_freetype2.c')
-+         if options.get('local_freetype'):
-+             src_path = os.path.join(
-+                 'build', 'freetype-{0}'.format(LOCAL_FREETYPE_VERSION))
-+@@ -1058,30 +1014,11 @@ class Png(SetupPackage):
-+         "windows_url": "http://gnuwin32.sourceforge.net/packages/libpng.htm"
-+         }
-+ 
-+-    def check(self):
-+-        if sys.platform == 'win32':
-+-            check_include_file(get_include_dirs(), 'png.h', 'png')
-+-            return 'Using unknown version found on system.'
-+-
-+-        status, output = subprocess.getstatusoutput("libpng-config --version")
-+-        if status == 0:
-+-            version = output
-+-        else:
-+-            version = None
-+-
-+-        try:
-+-            return self._check_for_pkg_config(
-+-                'libpng', 'png.h',
-+-                min_version='1.2', version=version)
-+-        except CheckFailed as e:
-+-            if has_include_file(get_include_dirs(), 'png.h'):
-+-                return str(e) + ' Using unknown version found on system.'
-+-            raise
-+-
-+     def get_extension(self):
-+         sources = [
-++            'src/checkdep_libpng.c',
-+             'src/_png.cpp',
-+-            'src/mplutils.cpp'
-++            'src/mplutils.cpp',
-+             ]
-+         ext = make_extension('matplotlib._png', sources)
-+         pkg_config.setup_extension(
-+diff --git a/src/checkdep_freetype2.c b/src/checkdep_freetype2.c
-+new file mode 100644
-+index 00000000000..bf9a8c94e38
-+--- /dev/null
-++++ b/src/checkdep_freetype2.c
-+@@ -0,0 +1,13 @@
-++#include <ft2build.h>
-++#include FT_FREETYPE_H
-++
-++#define XSTR(x) STR(x)
-++#define STR(x) #x
-++
-++#pragma message("Compiling with FreeType version " \
-++  XSTR(FREETYPE_MAJOR) "." XSTR(FREETYPE_MINOR) "." XSTR(FREETYPE_PATCH) ".")
-++#if FREETYPE_MAJOR << 16 + FREETYPE_MINOR << 8 + FREETYPE_PATCH < 0x020300
-++    #error "FreeType version 2.3 or higher is required." \
-++      "Consider setting the MPLLOCALFREETYPE environment variable to 1."
-++  #error
-++#endif
-+diff --git a/src/checkdep_libpng.c b/src/checkdep_libpng.c
-+new file mode 100644
-+index 00000000000..5ebe5cbe4d7
-+--- /dev/null
-++++ b/src/checkdep_libpng.c
-+@@ -0,0 +1,5 @@
-++#include <png.h>
-++#pragma message("Compiling with libpng version " PNG_LIBPNG_VER_STRING ".")
-++#if PNG_LIBPNG_VER < 10200
-++  #error "libpng version 1.2 or higher is required."
-++#endif
+Ok, thanks. I was hessitating about that.
+
+-- 
+Bye, Peter Korsgaard
