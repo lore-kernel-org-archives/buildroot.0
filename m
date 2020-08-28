@@ -1,66 +1,175 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:43:00 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/json-c: bump
- version to 0.14
-Message-ID: <20200828174508.709588653F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:29:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ support/scripts/pkg-stats: drop erroneous "break" in CVE.affects()
+Message-ID: <20200828174508.6680B8653F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7df4edb05a6e39b435aaf8d02fefe74b96523245
+commit: https://git.buildroot.net/buildroot/commit/?id=fc24b9572357d161aab25b0efd46abc838d2b8e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Notes:
+Commit 7d2779ecbb142b62f8913d30352b11058f922b2a
+("support/script/pkg-stats: handle exception when version comparison
+fails") erroneousy introduced a "break" within a try/expect block.
 
-- json-c now uses cmake instead of autoconf
-- This version also brings support to the much welcomed feature for
-  parsing uint64_t types
+This break has the unfortunate consequence that every CVE that was
+using the <= operator was skipped, and according to the current
+CVE statistics, made us miss 74 CVEs out of 141 CVEs.
 
-Signed-off-by: Christopher Pelloux <git@chp.io>
+Here is for reference the complete list of CVEs we missed:
+
+ - gnupg
+   CVE-2006-3082
+   CVE-2019-13050
+
+ - jhead
+   CVE-2020-6624
+   CVE-2020-6625
+
+ - patch
+   CVE-2018-6952
+   CVE-2019-20633
+
+ - json-c
+   CVE-2020-12762
+
+ - git
+   CVE-2018-1000110
+   CVE-2018-1000182
+   CVE-2019-1003010
+   CVE-2020-2136
+
+ - iperf2
+   CVE-2016-4303
+
+ - libtorrent
+   CVE-2009-1760
+   CVE-2016-5301
+
+ - lua
+   CVE-2020-15888
+   CVE-2020-15889
+   CVE-2020-15945
+   CVE-2020-24342
+
+ - openvpn
+   CVE-2020-7224
+
+ - smack
+   CVE-2016-10027
+
+ - bashtop
+   CVE-2019-18276
+
+ - links
+   CVE-2008-3319
+
+ - argus
+   CVE-2011-3332
+
+ - libraw
+   CVE-2020-15503
+
+ - netcat
+   CVE-2008-5727
+   CVE-2008-5728
+   CVE-2008-5729
+   CVE-2008-5730
+   CVE-2008-5742
+   CVE-2015-2214
+
+ - subversion
+   CVE-2017-1000085
+   CVE-2018-1000111
+   CVE-2020-2111
+
+ - python
+   CVE-2013-1753
+   CVE-2015-5652
+   CVE-2017-17522
+   CVE-2017-18207
+   CVE-2019-20907
+   CVE-2019-9674
+
+ - cereal
+   CVE-2020-11104
+   CVE-2020-11105
+
+ - opencv
+   CVE-2017-1000450
+   CVE-2017-12597
+   CVE-2017-12598
+   CVE-2017-12599
+   CVE-2017-12600
+   CVE-2017-12601
+   CVE-2017-12602
+   CVE-2017-12603
+   CVE-2017-12604
+   CVE-2017-12605
+   CVE-2017-12606
+   CVE-2017-12862
+   CVE-2017-12863
+   CVE-2017-12864
+   CVE-2019-15939
+
+ - docker
+   CVE-2015-1843
+   CVE-2015-3627
+   CVE-2015-3630
+   CVE-2015-3631
+   CVE-2016-3697
+   CVE-2017-14992
+   CVE-2019-16884
+
+ - trousers
+   CVE-2020-24330
+   CVE-2020-24331
+   CVE-2020-24332
+
+ - libcroco
+   CVE-2020-12825
+
+ - libpupnp
+   CVE-2020-13848
+
+ - openjpeg
+   CVE-2020-15389
+
+ - flex
+   CVE-2015-1773
+
+ - libesmtp
+   CVE-2019-19977
+
+ - ed
+   CVE-2015-2987
+
+ - libmad
+   CVE-2018-7263
+
+ - grub
+   CVE-2020-15705
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7b4581cca8676b44dc278d391575fdc22c2ecc1f)
+(cherry picked from commit b3f959fe968cca773cecf1c354b22f8b69201afc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/json-c/json-c.hash |  2 +-
- package/json-c/json-c.mk   | 14 +++-----------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+ support/scripts/pkg-stats | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index 0e03007476..93eaff67c3 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
-+sha256 b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
- # Locally calculated
- sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 2788fe563b..3e17effdad 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,19 +4,11 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.13.1
-+JSON_C_VERSION = 0.14
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
- 
--# update config.h.in timestamp to avoid autoheader run
--define JSON_C_UPDATE_CONFIG_TIMESTAMP
--	touch $(@D)/config.h.in
--endef
--
--JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
--HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 303af2f588..e642147b98 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -383,7 +383,6 @@ class CVE:
+                         continue
+                     try:
+                         affected = pkg_version <= cve_affected_version
+-                        break
+                     except TypeError:
+                         return CVE_UNKNOWN
+                     if affected:
