@@ -1,13 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:23:10 +0200
-Subject: [Buildroot] [PATCH] Do not remove path from RPATH when it is
- needed for dlopen at runtime
-In-Reply-To: <20200825141549.52d79ff2@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 25 Aug 2020 14:15:49 +0200")
-References: <2b2ed104-854c-8d70-9b57-30bd6bd2fe1a@kalray.eu>
- <1569933210-12665-1-git-send-email-ysionneau@kalray.eu>
- <20200825141549.52d79ff2@windsurf.home>
-Message-ID: <875z92ptvl.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:27:10 +0200
+Subject: [Buildroot] [PATCH 1/2] package/assimp: workaround m68k build
+ issues
+In-Reply-To: <20200825210143.293881-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 25 Aug 2020 23:01:41 +0200")
+References: <20200825210143.293881-1-thomas.petazzoni@bootlin.com>
+Message-ID: <871rjqptox.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,30 +14,28 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Hello Yann,
- > On Tue,  1 Oct 2019 14:33:30 +0200
- > Yann Sionneau <ysionneau@kalray.eu> wrote:
+ > On m68k coldfire, we already pass -mxgot, but since the bump to assimp
+ > 5.0.1, this is no longer sufficient, and we have failures such as:
 
- >> Do not remove path from RPATH when it points to a directory containing no
- >> shared object present as DT_NEEDED in .dynamic section.
- >> The RPATH can pretty well be needed at runtime for dlopen.
- >> 
- >> This fixes tst-origin uClibc-ng unit test:
- >> https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
- >> https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
- >> 
- >> Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+ > /tmp/ccqmJLil.s: Assembler messages:
+ > /tmp/ccqmJLil.s:307948: Error: value -43420 out of range
+ > /tmp/ccqmJLil.s:307985: Error: value -38606 out of range
+ > /tmp/ccqmJLil.s:308010: Error: value -38626 out of range
+ > /tmp/ccqmJLil.s:308056: Error: value -33280 out of range
 
- > It's been a long long while, but it turned out I was reported the exact
- > same issue (though not with uClibc-ng tests), and indeed a simple test
- > cases shows that patchelf is dropping RPATH entries if there's no
- > library in that directory with a corresponding DT_NEEDED entry in the
- > binary, which breaks dlopen() if it relies on RPATH entries.
+ > Since these issues only arise when building with -O2, let's disable
+ > the optimization for this package on m68k. The very relative relevance
+ > of assimp on m68k coldfire makes the research of a better solution not
+ > really useful (for the record, assimp is a "library to import various
+ > well-known 3D model formats in a uniform manner").
 
- > So I've significantly rewritten your commit log, with more
- > explanations, and applied your patch to master. Thanks!
+ > Fixes:
 
-Committed to 2020.02.x and 2020.05.x, thanks.
+ >   http://autobuild.buildroot.net/results/a7d4fb2653b0f1be4d036ee46a44e72da0ed4376/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
