@@ -1,208 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:49:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/python-matplotlib: simplify version checks
-Message-ID: <20200828174508.A03258653F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:19:59 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/hostapd: add
+ upstream 2020-1 security patches
+Message-ID: <20200828174508.450338653F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1e1767daa6b4161f28f239ca3d02981f913f009
+commit: https://git.buildroot.net/buildroot/commit/?id=df77691b15824fd62990137cec38903b100a94bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Hopefully, this should fix the following error on one of the
-autobuilders:
+Fixes the following security vulnerabilities:
 
-png: no  [The C/C++ header for libpng (png.h) could not
-     be found.  You may need to install the development
-     package.]
+CVE-2020-12695: The Open Connectivity Foundation UPnP specification before
+2020-04-17 does not forbid the acceptance of a subscription request with a
+delivery URL on a different network segment than the fully qualified
+event-subscription URL, aka the CallStranger issue.
 
-Fixes:
- - http://autobuild.buildroot.org/results/afddcc44b2fb7983244f24542bfae921869e4ab8
+For details, see the advisory:
+https://w1.fi/security/2020-1/upnp-subscribe-misbehavior-wps-ap.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 07b74f914dcdd7d76c33af8caee975efd8f7d0ea)
+(cherry picked from commit 9b020359b141f5316276079cbea8001649bcec0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...request-11983-from-anntzer-builddepchecks.patch | 170 +++++++++++++++++++++
- 1 file changed, 170 insertions(+)
+ package/hostapd/hostapd.hash | 3 +++
+ package/hostapd/hostapd.mk   | 7 +++++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-new file mode 100644
-index 0000000000..b3a22acbb4
---- /dev/null
-+++ b/package/python-matplotlib/0002-Merge-pull-request-11983-from-anntzer-builddepchecks.patch
-@@ -0,0 +1,170 @@
-+From 923ce72409f184bd8e8c61b196260891036ba87e Mon Sep 17 00:00:00 2001
-+From: Antony Lee <anntzer.lee@gmail.com>
-+Date: Thu, 30 Aug 2018 15:27:55 +0200
-+Subject: [PATCH] Simplify version checks for freetype and libpng.
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index bf5016acc3..e2f76c12d9 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,3 +1,6 @@
+ # Locally calculated
+ sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
++sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
++sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
++sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
+ sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index b94a0e4578..676e36d8ba 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -8,6 +8,10 @@ HOSTAPD_VERSION = 2.9
+ HOSTAPD_SITE = http://w1.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
++HOSTAPD_PATCH = \
++	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
++	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
++	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
+ HOSTAPD_DEPENDENCIES = host-pkgconf
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
+ HOSTAPD_LICENSE = BSD-3-Clause
+@@ -16,6 +20,9 @@ HOSTAPD_LICENSE_FILES = README
+ # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+ HOSTAPD_IGNORE_CVES += CVE-2019-16275
+ 
++# 0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
++HOSTAPD_IGNORE_CVES += CVE-2020-12695
 +
-+Currently, setupext.py replicates a lot of work done by the compiler to
-+check whether header files are present, and whether freetype and libpng
-+have sufficiently recent versions.
-+
-+Instead, we can just add a small stub source file at the top of the
-+extension sources which just tries to include the header and checks the
-+version macros.  If the header is not found, compilation will
-+immediately abort with `foo.h: No such file or directory`; if the
-+version is too old, we can emit an appropriate error message (`#pragma
-+message` is supported by all major compilers and allows expanding of
-+macros in the error message).
-+
-+[Retrieved from:
-+https://github.com/matplotlib/matplotlib/commit/d1060a885309ec7ac19ca912d3011a5eb1673bd5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ setupext.py              | 83 +++++-----------------------------------
-+ src/checkdep_freetype2.c | 13 +++++++
-+ src/checkdep_libpng.c    |  5 +++
-+ 3 files changed, 28 insertions(+), 73 deletions(-)
-+ create mode 100644 src/checkdep_freetype2.c
-+ create mode 100644 src/checkdep_libpng.c
-+
-+diff --git a/setupext.py b/setupext.py
-+index d5f4b81f562..a5163e39288 100644
-+--- a/setupext.py
-++++ b/setupext.py
-+@@ -814,6 +814,13 @@ def add_flags(self, ext, add_sources=True):
-+                                for x in agg_sources)
-+ 
-+ 
-++# For FreeType2 and libpng, we add a separate checkdep_foo.c source to at the
-++# top of the extension sources.  This file is compiled first and immediately
-++# aborts the compilation either with "foo.h: No such file or directory" if the
-++# header is not found, or an appropriate error message if the header indicates
-++# a too-old version.
-++
-++
-+ class FreeType(SetupPackage):
-+     name = "freetype"
-+     pkg_names = {
-+@@ -825,59 +832,8 @@ class FreeType(SetupPackage):
-+         "windows_url": "http://gnuwin32.sourceforge.net/packages/freetype.htm"
-+         }
-+ 
-+-    def check(self):
-+-        if options.get('local_freetype'):
-+-            return "Using local version for testing"
-+-
-+-        if sys.platform == 'win32':
-+-            try:
-+-                check_include_file(get_include_dirs(), 'ft2build.h', 'freetype')
-+-            except CheckFailed:
-+-                check_include_file(get_include_dirs(), os.path.join('freetype2', 'ft2build.h'), 'freetype')
-+-            return 'Using unknown version found on system.'
-+-
-+-        status, output = subprocess.getstatusoutput(
-+-            "freetype-config --ftversion")
-+-        if status == 0:
-+-            version = output
-+-        else:
-+-            version = None
-+-
-+-        # Early versions of freetype grep badly inside freetype-config,
-+-        # so catch those cases. (tested with 2.5.3).
-+-        if version is None or 'No such file or directory\ngrep:' in version:
-+-            version = self.version_from_header()
-+-
-+-        # pkg_config returns the libtool version rather than the
-+-        # freetype version so we need to explicitly pass the version
-+-        # to _check_for_pkg_config
-+-        return self._check_for_pkg_config(
-+-            'freetype2', 'ft2build.h',
-+-            min_version='2.3', version=version)
-+-
-+-    def version_from_header(self):
-+-        version = 'unknown'
-+-        ext = self.get_extension()
-+-        if ext is None:
-+-            return version
-+-        # Return the first version found in the include dirs.
-+-        for include_dir in ext.include_dirs:
-+-            header_fname = os.path.join(include_dir, 'freetype.h')
-+-            if os.path.exists(header_fname):
-+-                major, minor, patch = 0, 0, 0
-+-                with open(header_fname, 'r') as fh:
-+-                    for line in fh:
-+-                        if line.startswith('#define FREETYPE_'):
-+-                            value = line.rsplit(' ', 1)[1].strip()
-+-                            if 'MAJOR' in line:
-+-                                major = value
-+-                            elif 'MINOR' in line:
-+-                                minor = value
-+-                            else:
-+-                                patch = value
-+-                return '.'.join([major, minor, patch])
-+-
-+     def add_flags(self, ext):
-++        ext.sources.insert(0, 'src/checkdep_freetype2.c')
-+         if options.get('local_freetype'):
-+             src_path = os.path.join(
-+                 'build', 'freetype-{0}'.format(LOCAL_FREETYPE_VERSION))
-+@@ -1058,30 +1014,11 @@ class Png(SetupPackage):
-+         "windows_url": "http://gnuwin32.sourceforge.net/packages/libpng.htm"
-+         }
-+ 
-+-    def check(self):
-+-        if sys.platform == 'win32':
-+-            check_include_file(get_include_dirs(), 'png.h', 'png')
-+-            return 'Using unknown version found on system.'
-+-
-+-        status, output = subprocess.getstatusoutput("libpng-config --version")
-+-        if status == 0:
-+-            version = output
-+-        else:
-+-            version = None
-+-
-+-        try:
-+-            return self._check_for_pkg_config(
-+-                'libpng', 'png.h',
-+-                min_version='1.2', version=version)
-+-        except CheckFailed as e:
-+-            if has_include_file(get_include_dirs(), 'png.h'):
-+-                return str(e) + ' Using unknown version found on system.'
-+-            raise
-+-
-+     def get_extension(self):
-+         sources = [
-++            'src/checkdep_libpng.c',
-+             'src/_png.cpp',
-+-            'src/mplutils.cpp'
-++            'src/mplutils.cpp',
-+             ]
-+         ext = make_extension('matplotlib._png', sources)
-+         pkg_config.setup_extension(
-+diff --git a/src/checkdep_freetype2.c b/src/checkdep_freetype2.c
-+new file mode 100644
-+index 00000000000..bf9a8c94e38
-+--- /dev/null
-++++ b/src/checkdep_freetype2.c
-+@@ -0,0 +1,13 @@
-++#include <ft2build.h>
-++#include FT_FREETYPE_H
-++
-++#define XSTR(x) STR(x)
-++#define STR(x) #x
-++
-++#pragma message("Compiling with FreeType version " \
-++  XSTR(FREETYPE_MAJOR) "." XSTR(FREETYPE_MINOR) "." XSTR(FREETYPE_PATCH) ".")
-++#if FREETYPE_MAJOR << 16 + FREETYPE_MINOR << 8 + FREETYPE_PATCH < 0x020300
-++    #error "FreeType version 2.3 or higher is required." \
-++      "Consider setting the MPLLOCALFREETYPE environment variable to 1."
-++  #error
-++#endif
-+diff --git a/src/checkdep_libpng.c b/src/checkdep_libpng.c
-+new file mode 100644
-+index 00000000000..5ebe5cbe4d7
-+--- /dev/null
-++++ b/src/checkdep_libpng.c
-+@@ -0,0 +1,5 @@
-++#include <png.h>
-++#pragma message("Compiling with libpng version " PNG_LIBPNG_VER_STRING ".")
-++#if PNG_LIBPNG_VER < 10200
-++  #error "libpng version 1.2 or higher is required."
-++#endif
+ HOSTAPD_CONFIG_SET =
+ 
+ HOSTAPD_CONFIG_ENABLE = \
