@@ -1,59 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 16:54:12 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] boot/uboot: Fix kconfig
- to use $(BR2_MAKE)
-Message-ID: <20200828155253.366BE83DAE@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 16:47:26 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/busybox: enable
+ flags for use as systemd pager
+Message-ID: <20200828155253.1CA9A86539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff849fed4576757007d0af1d7e055ed6f26dd9c4
+commit: https://git.buildroot.net/buildroot/commit/?id=9faba29108e74eb4acab21f5919dfab0288b23ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-U-Boot must use $(BR2_MAKE) as it uses a Make feature from v4.0. We
-already use $(BR2_MAKE) in the BUILD_CMDS, but the kconfig commands
-still uses $(MAKE). Without this fix, building U-Boot with kconfig will
-fail with the following cryptic error.
+If the less package is not enable and systemd is enabled,
+then configure the less applet to fully work with systemd.
 
-> Makefile:37: *** missing separator.  Stop.
+systemd sets the flags for less in an environment variable
+and requires a few options for correct display.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 43dc2007a93194f6126987a2f2716dda1f3f17b5)
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c2caf816e9296c4812f83f0a5d16e0e33a264b72)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 2bfa50779b..9cbd81b05b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -16,6 +16,7 @@ UBOOT_INSTALL_IMAGES = YES
- 
- # u-boot 2020.01+ needs make 4.0+
- UBOOT_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
-+UBOOT_MAKE = $(BR2_MAKE)
- 
- ifeq ($(UBOOT_VERSION),custom)
- # Handle custom U-Boot tarballs as specified by the configuration
-@@ -247,7 +248,7 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- define UBOOT_CONFIGURE_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-+		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_BOARD_NAME)_config
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index b9d82ed71e..55aa9b0bb1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -237,6 +237,18 @@ define BUSYBOX_SET_SELINUX
  endef
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-@@ -284,7 +285,7 @@ define UBOOT_BUILD_CMDS
- 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(BR2_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-+		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
- 		$(UBOOT_MAKE_TARGET)
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
- 		$(@D)/tools/mxsboot sd $(@D)/u-boot.sb $(@D)/u-boot.sd)
+ endif
+ 
++# enable relevant options to allow the Busybox less applet to be used
++# as a systemd pager
++ifeq ($(BR2_PACKAGE_SYSTEMD):$(BR2_PACKAGE_LESS),y:)
++define BUSYBOX_SET_LESS_FLAGS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_DASHCMD)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_RAW)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_TRUNCATE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_FLAGS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_ENV)
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+ define BUSYBOX_SET_INDIVIDUAL_BINARIES
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
+@@ -338,6 +350,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
++	$(BUSYBOX_SET_LESS_FLAGS)
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
+ endef
+ 
