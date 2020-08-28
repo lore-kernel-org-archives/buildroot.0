@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:04:44 +0200
-Subject: [Buildroot] [git commit] package/openfpgaloader: C++ dependency
- is not inherited
-In-Reply-To: <20200823195346.5E569836F4@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 23 Aug 2020 21:51:27 +0200")
-References: <20200823195346.5E569836F4@busybox.osuosl.org>
-Message-ID: <874komr9ar.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:05:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to v7.72.0
+In-Reply-To: <20200819125640.142469-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Wed, 19 Aug 2020 14:56:40 +0200")
+References: <20200819125640.142469-1-titouan.christophe@railnova.eu>
+Message-ID: <87zh6epup5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=1ca0077d9141fff62c179bd2d17cfd6656a7d8a3
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > This new version fixes, amongst many other things, CVE-2020-8231
+ > (https://curl.haxx.se/docs/CVE-2020-8231.html). See the full changelog
+ > on https://curl.haxx.se/changes.html#7_72_0 .
 
- > openfpgaloader is written in C++, so the dependency on C++ is not
- > inherited from libftdipp1.
+ > Also drop the 4 patches, that have all been released upstream.
 
- > Drop the confusing comment.
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2020.05.x, thanks.
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
