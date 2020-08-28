@@ -1,50 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:10:50 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/php: bump version
- to 7.4.9
-Message-ID: <20200828155253.6A18283DAE@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:03:52 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/apache: security
+ bump version to 2.4.46
+Message-ID: <20200828155253.54E1D83DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd77d9131e67cc95a76158abf06e11e731767ebf
+commit: https://git.buildroot.net/buildroot/commit/?id=7e7f34281baf3747eb9c75d4b3523473902c5fcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changelog of this bugfix release:
-https://www.php.net/ChangeLog-7.php#7.4.9
+Changelog: http://archive.apache.org/dist/httpd/CHANGES_2.4.46
+
+Release notes: https://downloads.apache.org/httpd/Announcement2.4.html
+
+Fixes CVE-2020-9490, CVE-2020-11984 & CVE-2020-11993:
+https://httpd.apache.org/security/vulnerabilities_24.html
+
+Added sha512 hash provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 46ed4ac84740b1f377bc16ea335539ab480f22f5)
+[yann.morin.1998 at free.fr:
+  - don't add md5 and sha1 hashes
+  - single comment above hashes
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7667418d970a4eca2d082f1de9f70aa5a93e9e1c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apache/apache.hash | 5 +++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 47879eecca..d648d90c04 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
-+sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
- 
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 48af0f6fdc..5417a82cf4 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 7b0e4ad8e7..bd3f6ac7ba 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,5 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
+-sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.{sha256,sha512}
++sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
++sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 068f36e325..203d637fbb 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.8
-+PHP_VERSION = 7.4.9
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-APACHE_VERSION = 2.4.43
++APACHE_VERSION = 2.4.46
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
