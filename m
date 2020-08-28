@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:29:11 +0200
-Subject: [Buildroot] [PATCH] package/ripgrep: fix build directories
-In-Reply-To: <20200827004424.325134-1-sam.voss@gmail.com> (sam voss's message
- of "Wed, 26 Aug 2020 19:44:24 -0500")
-References: <20200827004424.325134-1-sam.voss@gmail.com>
-Message-ID: <87sgc6of14.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:30:50 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: drop
+ erroneous "break" in CVE.affects()
+In-Reply-To: <20200827155717.827AD81845@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 27 Aug 2020 18:04:33 +0200")
+References: <20200827155717.827AD81845@busybox.osuosl.org>
+Message-ID: <87o8muoeyd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "sam" == sam voss <sam.voss@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > From: Sam Voss <sam.voss@gmail.com>
- > RIPGREP_CARGO_MODE was no longer defined after 832c076f26 and caused
- > issues during the install step as the build directory was malformed.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=b3f959fe968cca773cecf1c354b22f8b69201afc
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This patch maintains the release/dev profile distinction, while also
- > assigning appropriate build folders.
+ > Commit 7d2779ecbb142b62f8913d30352b11058f922b2a
+ > ("support/script/pkg-stats: handle exception when version comparison
+ > fails") erroneousy introduced a "break" within a try/expect block.
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/a4cd7ecc6d983aa6f15d3be1e21529f17e04b825/
- >  - http://autobuild.buildroot.net/results/2bab8ffa590d4c4eabffe94ed27311c7f6607c98/
+ > This break has the unfortunate consequence that every CVE that was
+ > using the <= operator was skipped, and according to the current
+ > CVE statistics, made us miss 74 CVEs out of 141 CVEs.
 
- > Signed-off-by: Sam Voss <sam.voss@gmail.com>
- > CC: Yann E. MORIN <yann.morin.1998@free.fr>
+:/
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
