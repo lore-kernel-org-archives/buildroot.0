@@ -1,110 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:46:10 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] support/script/pkg-stats:
- handle exception when version comparison fails
-Message-ID: <20200828155254.3F48D83DAE@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:48:32 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ support/scripts/pkg-stats: show progress of upstream URL and latest version
+Message-ID: <20200828155254.69132811FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44f78b11de59e389fb72362c823b162f6fa8ef39
+commit: https://git.buildroot.net/buildroot/commit/?id=be53bbbdd0894b60ad4ad173128d81bbe0c67a5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-With python 3, when a package has a version number x-y-z instead of
-x.y.z, then the version returned by LooseVersion can't be compared
-which raises a TypeError exception:
+This commit slightly improves the output of pkg-stats by showing the
+progress of the upstream URL checks and latest version retrieval, on a
+package basis:
 
-Traceback (most recent call last):
-  File "./support/scripts/pkg-stats", line 1062, in <module>
-    __main__()
-  File "./support/scripts/pkg-stats", line 1051, in __main__
-    check_package_cves(args.nvd_path, {p.name: p for p in packages})
-  File "./support/scripts/pkg-stats", line 613, in check_package_cves
-    if pkg_name in packages and cve.affects(packages[pkg_name]):
-  File "./support/scripts/pkg-stats", line 386, in affects
-    return pkg_version <= cve_affected_version
-  File "/usr/lib64/python3.8/distutils/version.py", line 58, in __le__
-    c = self._cmp(other)
-  File "/usr/lib64/python3.8/distutils/version.py", line 337, in _cmp
-    if self.version < other.version:
-TypeError: '<' not supported between instances of 'str' and 'int'
+Checking URL status
+[0001/0062] curlpp
+[0002/0062] cmocka
+[0003/0062] snappy
+[0004/0062] nload
+[...]
+[0060/0062] librtas
+[0061/0062] libsilk
+[0062/0062] jhead
+Getting latest versions ...
+[0001/0064] libglob
+[0002/0064] perl-http-daemon
+[0003/0064] shadowsocks-libev
+[...]
+[0061/0064] lua-flu
+[0062/0064] python-aiohttp-security
+[0063/0064] ljlinenoise
+[0064/0064] matchbox-lib
 
-This patch handles this exception by adding a new return value when
-the comparison can't be done. The code is adjusted to take of this
-change. For now, a return value of CVE_UNKNOWN is handled the same way
-as a CVE_DOESNT_AFFECT return value, but this can be improved later
-on.
+Note that the above sample was run on 64 packages. Only 62 packages
+appear for the URL status check, because packages that do not have any
+URL in their Config.in file, or don't have any Config.in file at all,
+are not checked and therefore not accounted.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7d2779ecbb142b62f8913d30352b11058f922b2a)
+(cherry picked from commit 5fea2e39974410fcff51a775ff2a2335cb55c870)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ support/scripts/pkg-stats | 31 ++++++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 00f5c389bb..505836b35f 100755
+index 70e7fa7a0c..303af2f588 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -50,6 +50,10 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
- RM_API_STATUS_FOUND_BY_PATTERN = 3
- RM_API_STATUS_NOT_FOUND = 4
+@@ -498,20 +498,31 @@ def package_init_make_info():
+             Package.all_ignored_cves[pkgvar] = value.split()
  
-+CVE_AFFECTS = 1
-+CVE_DOESNT_AFFECT = 2
-+CVE_UNKNOWN = 3
+ 
+-async def check_url_status(session, pkg, retry=True):
++check_url_count = 0
 +
- # Used to make multiple requests to the same host. It is global
- # because it's used by sub-processes.
- http_pool = None
-@@ -364,7 +368,7 @@ class CVE:
-         by this CVE.
-         """
-         if br_pkg.is_cve_ignored(self.identifier):
--            return False
-+            return CVE_DOESNT_AFFECT
++
++async def check_url_status(session, pkg, npkgs, retry=True):
++    global check_url_count
++
+     try:
+         async with session.get(pkg.url) as resp:
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
++                check_url_count += 1
++                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+                 return
+     except (aiohttp.ClientError, asyncio.TimeoutError):
+         if retry:
+-            return await check_url_status(session, pkg, retry=False)
++            return await check_url_status(session, pkg, npkgs, retry=False)
+         else:
+             pkg.status['url'] = ("error", "invalid (err)")
++            check_url_count += 1
++            print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+             return
  
-         for product in self.each_product():
-             if product['product_name'] != br_pkg.name:
-@@ -373,7 +377,7 @@ class CVE:
-             for v in product['version']['version_data']:
-                 if v["version_affected"] == "=":
-                     if br_pkg.current_version == v["version_value"]:
--                        return True
-+                        return CVE_AFFECTS
-                 elif v["version_affected"] == "<=":
-                     pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
-                     if not hasattr(pkg_version, "version"):
-@@ -383,10 +387,18 @@ class CVE:
-                     if not hasattr(cve_affected_version, "version"):
-                         print("Cannot parse CVE affected version '%s'" % v["version_value"])
-                         continue
--                    return pkg_version <= cve_affected_version
-+                    try:
-+                        affected = pkg_version <= cve_affected_version
-+                        break
-+                    except TypeError:
-+                        return CVE_UNKNOWN
-+                    if affected:
-+                        return CVE_AFFECTS
-+                    else:
-+                        return CVE_DOESNT_AFFECT
-                 else:
-                     print("version_affected: %s" % v['version_affected'])
--        return False
-+        return CVE_DOESNT_AFFECT
+     pkg.status['url'] = ("ok", "valid")
++    check_url_count += 1
++    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
  
  
- def get_pkglist(npackages, package_list):
-@@ -609,7 +621,7 @@ def check_package_cves(nvd_path, packages):
+ async def check_package_urls(packages):
+@@ -520,7 +531,7 @@ async def check_package_urls(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+-            tasks.append(check_url_status(sess, pkg))
++            tasks.append(check_url_status(sess, pkg, len(packages)))
+         await asyncio.wait(tasks)
  
-     for cve in CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
--            if pkg_name in packages and cve.affects(packages[pkg_name]):
-+            if pkg_name in packages and cve.affects(packages[pkg_name]) == CVE_AFFECTS:
-                 packages[pkg_name].cves.append(cve.identifier)
+ 
+@@ -592,17 +603,27 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+             return False
+ 
+ 
+-async def check_package_latest_version_get(session, pkg):
++check_latest_count = 0
++
++
++async def check_package_latest_version_get(session, pkg, npkgs):
++    global check_latest_count
+ 
+     if await check_package_get_latest_version_by_distro(session, pkg):
++        check_latest_count += 1
++        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     if await check_package_get_latest_version_by_guess(session, pkg):
++        check_latest_count += 1
++        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     check_package_latest_version_set_status(pkg,
+                                             RM_API_STATUS_NOT_FOUND,
+                                             None, None)
++    check_latest_count += 1
++    print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+ 
+ 
+ async def check_package_latest_version(packages):
+@@ -628,7 +649,7 @@ async def check_package_latest_version(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.has_valid_infra]
+         for pkg in packages:
+-            tasks.append(check_package_latest_version_get(sess, pkg))
++            tasks.append(check_package_latest_version_get(sess, pkg, len(packages)))
+         await asyncio.wait(tasks)
  
  
