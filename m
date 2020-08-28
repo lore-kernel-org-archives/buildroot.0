@@ -1,85 +1,134 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:54:04 +0200
+Date: Fri, 28 Aug 2020 17:15:52 +0200
 Subject: [Buildroot] [git commit branch/2020.05.x]
- package/x11r7/xserver_xorg-server: add security fix for CVE-2020-14347
-Message-ID: <20200828155322.1FA807FE6F@busybox.osuosl.org>
+ support/scripts/pkg-stats: show progress of upstream URL and latest version
+Message-ID: <20200828155322.12DEA7FFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37121ec547b1fb6c07f29159edcdf7dddf93554a
+commit: https://git.buildroot.net/buildroot/commit/?id=2823c889fde913509f0c3a250a2c7537024528a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2020-July/003051.html
+This commit slightly improves the output of pkg-stats by showing the
+progress of the upstream URL checks and latest version retrieval, on a
+package basis:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: add IGNORE_CVES entry.]
+Checking URL status
+[0001/0062] curlpp
+[0002/0062] cmocka
+[0003/0062] snappy
+[0004/0062] nload
+[...]
+[0060/0062] librtas
+[0061/0062] libsilk
+[0062/0062] jhead
+Getting latest versions ...
+[0001/0064] libglob
+[0002/0064] perl-http-daemon
+[0003/0064] shadowsocks-libev
+[...]
+[0061/0064] lua-flu
+[0062/0064] python-aiohttp-security
+[0063/0064] ljlinenoise
+[0064/0064] matchbox-lib
+
+Note that the above sample was run on 64 packages. Only 62 packages
+appear for the URL status check, because packages that do not have any
+URL in their Config.in file, or don't have any Config.in file at all,
+are not checked and therefore not accounted.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8a46f3237a5f3c7cc59130b05b9afd4290a047fb)
+(cherry picked from commit 5fea2e39974410fcff51a775ff2a2335cb55c870)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../1.20.8/0007-fix-for-ZDI-11426.patch            | 36 ++++++++++++++++++++++
- .../xserver_xorg-server/xserver_xorg-server.mk     |  5 +++
- 2 files changed, 41 insertions(+)
+ support/scripts/pkg-stats | 31 ++++++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
-new file mode 100644
-index 0000000000..ce623b24cb
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
-@@ -0,0 +1,36 @@
-+From aac28e162e5108510065ad4c323affd6deffd816 Mon Sep 17 00:00:00 2001
-+From: Matthieu Herrb <matthieu@herrb.eu>
-+Date: Sat, 25 Jul 2020 19:33:50 +0200
-+Subject: [PATCH] fix for ZDI-11426
-+
-+Avoid leaking un-initalized memory to clients by zeroing the
-+whole pixmap on initial allocation.
-+
-+This vulnerability was discovered by:
-+Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-+
-+Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
-+Reviewed-by: Alan Coopersmith <alan.coopersmith@oracle.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[downloaded from upstream commit
-+ https://gitlab.freedesktop.org/xorg/xserver/-/commit/aac28e162e5108510065ad4c323affd6deffd816]
-+---
-+ dix/pixmap.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/dix/pixmap.c b/dix/pixmap.c
-+index 1186d7dbbf..5a0146bbb6 100644
-+--- a/dix/pixmap.c
-++++ b/dix/pixmap.c
-+@@ -116,7 +116,7 @@ AllocatePixmap(ScreenPtr pScreen, int pixDataSize)
-+     if (pScreen->totalPixmapSize > ((size_t) - 1) - pixDataSize)
-+         return NullPixmap;
-+ 
-+-    pPixmap = malloc(pScreen->totalPixmapSize + pixDataSize);
-++    pPixmap = calloc(1, pScreen->totalPixmapSize + pixDataSize);
-+     if (!pPixmap)
-+         return NullPixmap;
-+ 
-+-- 
-+GitLab
-+
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8ccc04224d..bab20b5c97 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -38,6 +38,11 @@ XSERVER_XORG_SERVER_DEPENDENCIES = \
- 	mcookie \
- 	host-pkgconf
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 70e7fa7a0c..303af2f588 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -498,20 +498,31 @@ def package_init_make_info():
+             Package.all_ignored_cves[pkgvar] = value.split()
  
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20),y)
-+# 1.20.8/0007-fix-for-ZDI-11426.patch
-+XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2020-14347
-+endif
+ 
+-async def check_url_status(session, pkg, retry=True):
++check_url_count = 0
 +
- # We force -O2 regardless of the optimization level chosen by the
- # user, as the X.org server is known to trigger some compiler bugs at
- # -Os on several architectures.
++
++async def check_url_status(session, pkg, npkgs, retry=True):
++    global check_url_count
++
+     try:
+         async with session.get(pkg.url) as resp:
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
++                check_url_count += 1
++                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+                 return
+     except (aiohttp.ClientError, asyncio.TimeoutError):
+         if retry:
+-            return await check_url_status(session, pkg, retry=False)
++            return await check_url_status(session, pkg, npkgs, retry=False)
+         else:
+             pkg.status['url'] = ("error", "invalid (err)")
++            check_url_count += 1
++            print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+             return
+ 
+     pkg.status['url'] = ("ok", "valid")
++    check_url_count += 1
++    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+ 
+ 
+ async def check_package_urls(packages):
+@@ -520,7 +531,7 @@ async def check_package_urls(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+-            tasks.append(check_url_status(sess, pkg))
++            tasks.append(check_url_status(sess, pkg, len(packages)))
+         await asyncio.wait(tasks)
+ 
+ 
+@@ -592,17 +603,27 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+             return False
+ 
+ 
+-async def check_package_latest_version_get(session, pkg):
++check_latest_count = 0
++
++
++async def check_package_latest_version_get(session, pkg, npkgs):
++    global check_latest_count
+ 
+     if await check_package_get_latest_version_by_distro(session, pkg):
++        check_latest_count += 1
++        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     if await check_package_get_latest_version_by_guess(session, pkg):
++        check_latest_count += 1
++        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     check_package_latest_version_set_status(pkg,
+                                             RM_API_STATUS_NOT_FOUND,
+                                             None, None)
++    check_latest_count += 1
++    print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+ 
+ 
+ async def check_package_latest_version(packages):
+@@ -628,7 +649,7 @@ async def check_package_latest_version(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.has_valid_infra]
+         for pkg in packages:
+-            tasks.append(check_package_latest_version_get(sess, pkg))
++            tasks.append(check_package_latest_version_get(sess, pkg, len(packages)))
+         await asyncio.wait(tasks)
+ 
+ 
