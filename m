@@ -1,46 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Aug 2020 20:56:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
- security fix
-In-Reply-To: <fbd81a16-35f0-5e1a-73fb-1b9c703a9408@t-online.de>
-References: <20200810064109.447089-1-bernd.kuhls@t-online.de>
- <fbd81a16-35f0-5e1a-73fb-1b9c703a9408@t-online.de>
-Message-ID: <20200828205640.705b1cb6@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Aug 2020 21:01:01 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{4, 7}.x series
+Message-ID: <20200828190101.6779-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-On Fri, 28 Aug 2020 19:03:25 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-
-> Due to the fact that personally I have no use for the older X.org server
-> versions I would like to raise the question whether we can remove them?
-> From my POV these older versions are unmaintained in buildroot because I
-> want to concentrate on the current release which is the one I am using.
-
-The problem comes from closed-source X.org drivers, which only work
-with a certain X.org driver ABI.
-
-We have amd-catalyst, which depends on ABI 19:
-
-package/amd-catalyst/Config.in: depends on BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
-
-And nvidia-tegra23, which depends on ABI 14:
-
-package/nvidia-tegra23/Config.in:       depends on BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
-
-So if we want to remove older X.org versions, we have to see if newer
-versions of those drivers are available, and perhaps coordinate with
-the maintainers of those drivers.
-
-Best regards,
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index 05727a88a7..7c2ede8ce2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -124,7 +124,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.7.17" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.7.19" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 638947ac9e..fbda638da6 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  cc8c3611c9bdcd29266b2606ab6c3a07a32fb64fd7f1cd731100e4eddb565225  linux-5.7.17.tar.xz
+-sha256  add2ab2385c40fc9a3dfebe403e56da8500b633dc7dc42cf0c670c61d151a223  linux-5.4.60.tar.xz
++sha256  419c6248b9ae4dfead4599787aecbfd202e88bc4124523adfa6dd2d642b99fe7  linux-5.7.19.tar.xz
++sha256  86f13d050f6389c5a1727fa81510ee8eceac795297bc584f443354609617fea4  linux-5.4.61.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  97e689dd083d780bf7bacdc17c0a9ec9e9be118507dccedf4b77eef9666ce7fc  linux-4.4.233.tar.xz
+-sha256  2a6dcab0652ab181820d56b6014235a125cf933e0edf5bdbc038160fa9e7aca5  linux-4.9.233.tar.xz
+-sha256  3ea4d0221a071d58703cd346a8a6ef1582a32a8c4565a4919578817444d4fae0  linux-4.14.194.tar.xz
+-sha256  a4421dea5333beeaaef81312c6f415330b9e4fda6027f399a1c55f97d3da2114  linux-4.19.141.tar.xz
++sha256  6994dda988e9fb7f5661cf80ff42039016cb0044acd39f830937ba0220296388  linux-4.4.234.tar.xz
++sha256  756f8544d261e8117716c911261690e4fb5491e14c1f4612c83e0986453782e3  linux-4.9.234.tar.xz
++sha256  394f28798670240baacd9e2cce521fbd79f8da5e1fc191695b0e11381445a021  linux-4.14.195.tar.xz
++sha256  6912db1c242d72ce9c8d4ff71982ac935d97690822af5c1c6ec22412b31667a4  linux-4.19.142.tar.xz
+ # Locally computed
+ sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
+ sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2480fb11c0..a04866d8cb 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -334,12 +334,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.233"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.233"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.194"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.141"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.60"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.7.17"	if BR2_KERNEL_HEADERS_5_7
++	default "4.4.234"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.234"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.195"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.142"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.61"	if BR2_KERNEL_HEADERS_5_4
++	default "5.7.19"	if BR2_KERNEL_HEADERS_5_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
