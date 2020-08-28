@@ -1,53 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:52:18 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- package/x11r7/xlib_libX11: security bump version to 1.6.12
-Message-ID: <20200828174515.4B09485278@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:22:24 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/patchelf: keep
+ RPATH entries even without DT_NEEDED libraries
+Message-ID: <20200828174514.C219E85278@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f79d15293c235dd1d62b402cffd32cd175f253ff
+commit: https://git.buildroot.net/buildroot/commit/?id=5be9c96030525ad0064868c7401b4595e3920437
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes CVE-2020-14363:
-https://lists.x.org/archives/xorg-announce/2020-August/003056.html
+Our patch
+0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch adds
+an option --make-rpath-relative, which we use to tweak RPATH of target
+binaries.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+However, one of the effect of this option is that it drops RPATH
+entries if the corresponding directory does not contain a library that
+is referenced by a DT_NEEDED entry of the binary.
+
+This unfortunately isn't correct, as RPATH entries are not only used
+by the dynamic linker to resolve the location of libraries listed
+through DT_NEEDED entries: RPATH entries are also used by dlopen()
+when resolving the location of libraries that are loaded at runtime.
+
+Therefore, the removal of RPATH entries that don't correspond to
+directories containing libraries referenced by DT_NEEDED entries break
+legitimate uses of RPATH for dlopen()ed libraries.
+
+This issue was even pointed out during the review of the upstream pull
+request:
+
+  https://github.com/NixOS/patchelf/pull/118#discussion_r329660138
+
+This fixes tst-origin uClibc-ng unit test:
+
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
+
+Without this patch:
+
+$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
+$ readelf -d toto | grep PATH
+ 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
+$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/
+toto
+patching ELF file `toto'
+Kernel page size is 4096 bytes
+removing directory '/tmp/test/bar' from RPATH because it does not contain needed libs
+new rpath is `'
+$ readelf -d toto | grep PATH
+ 0x000000000000001d (RUNPATH)            Library runpath: []
+
+With the patch applied:
+
+$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
+$ readelf -d toto | grep PATH
+ 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
+$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/ toto
+patching ELF file `toto'
+Kernel page size is 4096 bytes
+keeping relative path of /tmp/test/bar
+new rpath is `test/bar'
+$ readelf -d toto | grep PATH
+ 0x000000000000001d (RUNPATH)            Library runpath: [test/bar]
+
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab0c98cac861197f2b8b56f5216c0f1312f6209b)
+(cherry picked from commit bcdb74512d9f6e7eca878c53aca2eb3eccac7ef3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...ption-to-make-the-rpath-relative-under-a-specif.patch | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index b77f98dfb1..142e4505d0 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-August/003053.html
--sha256  b1cc4b802058be7e3fb438ee2490f66fcc52ac3b2a14f47a22cbf77638e33606  libX11-1.6.11.tar.bz2
--sha512  2cb4e215c1e3ccb327e02586844f8c426068536a0f472a39f12191feace607f61a6a08586f03758248199678c2f6897a984b0f1222bc0d68fd2e02702f4ce0bf  libX11-1.6.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003057.html
-+sha256  f108227469419ac04d196df0f3b80ce1f7f65059bb54c0de811f4d8e03fd6ec7  libX11-1.6.12.tar.bz2
-+sha512  79df7d61d9009b0dd3b65f67a62189aa0a43799c01026b3d2d534092596a0b67f246af5e398a89eb1ccc61a27335f81be8262b8a39768a76f62d862cd7415a47  libX11-1.6.12.tar.bz2
- 
- # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index b0132efd31..ba9fcef258 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBX11_VERSION = 1.6.11
-+XLIB_LIBX11_VERSION = 1.6.12
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+index feec627680..f9f2537a6c 100644
+--- a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
++++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+@@ -167,7 +167,7 @@ index 1d9a772..35b4a33 100644
+      if (op == rpShrink && !rpath) {
+          debug("no RPATH to shrink\n");
+          return;
+-@@ -1120,26 +1196,86 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
++@@ -1120,26 +1196,80 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
+                  continue;
+              }
+  
+@@ -250,12 +250,6 @@ index 1d9a772..35b4a33 100644
+ +                }
+ +            }
+ +
+-+            if (!libFoundInRPath(canonicalPath, neededLibs, neededLibFound)) {
+-+                debug("removing directory '%s' from RPATH because it does not contain needed libs\n",
+-+                      dirName.c_str());
+-+                continue;
+-+            }
+-+
+ +            /* Finally make "canonicalPath" relative to "filedir" in "rootDir" */
+ +            if (relativeToFile)
+ +                concatToRPath(newRPath, makePathRelative(canonicalPath, fileDir));
+@@ -268,7 +262,7 @@ index 1d9a772..35b4a33 100644
+      if (op == rpRemove) {
+          if (!rpath) {
+              debug("no RPATH to delete\n");
+-@@ -1413,7 +1549,9 @@ static bool shrinkRPath = false;
++@@ -1413,7 +1543,9 @@ static bool shrinkRPath = false;
+  static bool removeRPath = false;
+  static bool setRPath = false;
+  static bool printRPath = false;
+@@ -278,7 +272,7 @@ index 1d9a772..35b4a33 100644
+  static set<string> neededLibsToRemove;
+  static map<string, string> neededLibsToReplace;
+  static set<string> neededLibsToAdd;
+-@@ -1438,14 +1576,16 @@ static void patchElf2(ElfFile & elfFile)
++@@ -1438,14 +1570,16 @@ static void patchElf2(ElfFile & elfFile)
+          elfFile.setInterpreter(newInterpreter);
+  
+      if (printRPath)
+@@ -299,7 +293,7 @@ index 1d9a772..35b4a33 100644
+  
+      if (printNeeded) elfFile.printNeededLibs();
+  
+-@@ -1508,6 +1648,9 @@ void showHelp(const string & progName)
++@@ -1508,6 +1642,9 @@ void showHelp(const string & progName)
+    [--set-rpath RPATH]\n\
+    [--remove-rpath]\n\
+    [--shrink-rpath]\n\
+@@ -309,7 +303,7 @@ index 1d9a772..35b4a33 100644
+    [--print-rpath]\n\
+    [--force-rpath]\n\
+    [--add-needed LIBRARY]\n\
+-@@ -1564,6 +1707,17 @@ int main(int argc, char * * argv)
++@@ -1564,6 +1701,17 @@ int main(int argc, char * * argv)
+              setRPath = true;
+              newRPath = argv[i];
+          }
