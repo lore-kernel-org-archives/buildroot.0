@@ -1,46 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:14:03 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
+Date: Fri, 28 Aug 2020 19:12:16 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] {linux,
  linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 7}.x series
-Message-ID: <20200828170725.B50248527C@busybox.osuosl.org>
+Message-ID: <20200828170731.09D06821D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9393ff855df4d0b11f34576d59fb9353dfa0ac93
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e13bce47f83153e946ff5a7e474f3f8b1bb93831
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit 7a3711132a99406d3cdf8acca3b71a6b12f7281c)
 [Peter: drop 5.7.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
  linux/linux.hash                     | 10 +++++-----
  package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ba58ddad8e..8598d656e3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.53" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.60" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 diff --git a/linux/linux.hash b/linux/linux.hash
-index ec085548ae..0b7a447f8d 100644
+index 41c296ce66..23e7884e3d 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
+@@ -1,12 +1,12 @@
  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  62532fb257fe98a68601e4ca36bd3d34300b4f26f447bf495df4693442601ee8  linux-5.6.19.tar.xz
+ sha256  1448334371fb52f511255726832464d33877a210a7350260fb18eb225ae211eb  linux-5.5.19.tar.xz
 -sha256  faa7b6f99220d5726f0eaee74a6394f0a3b89be1a75254f3804630211f3d6d21  linux-5.4.53.tar.xz
 +sha256  add2ab2385c40fc9a3dfebe403e56da8500b633dc7dc42cf0c670c61d151a223  linux-5.4.60.tar.xz
  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
@@ -56,10 +44,10 @@ index ec085548ae..0b7a447f8d 100644
  sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
  sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index da35f26687..32c56256c3 100644
+index 672e738619..c48a3de89d 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -318,11 +318,11 @@ endchoice
+@@ -334,11 +334,11 @@ endchoice
  
  config BR2_DEFAULT_KERNEL_HEADERS
  	string
@@ -73,6 +61,6 @@ index da35f26687..32c56256c3 100644
 +	default "4.14.194"	if BR2_KERNEL_HEADERS_4_14
 +	default "4.19.141"	if BR2_KERNEL_HEADERS_4_19
 +	default "5.4.60"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.5.19"	if BR2_KERNEL_HEADERS_5_5
+ 	default "5.6.19"	if BR2_KERNEL_HEADERS_5_6
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
