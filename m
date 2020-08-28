@@ -1,146 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:53:26 +0200
-Subject: [Buildroot] [git commit] package/trousers: add upstream security fix
-Message-ID: <20200828174741.BFEB08650E@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:55:45 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/dovecot-pigeonhole: bump version to 0.5.11
+Message-ID: <20200828174818.6BE638650E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e71be18354391055a0a21e06a78aaade25ea62d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=53575d5ff2eaa2050b00338b4d4a26e356f01e48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issues:
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2020-August/000439.html
 
-CVE-2020-24332
-If the tcsd daemon is started with root privileges,
-the creation of the system.data file is prone to symlink attacks
-
-CVE-2020-24330
-If the tcsd daemon is started with root privileges,
-it fails to drop the root gid after it is no longer needed
-
-CVE-2020-24331
-If the tcsd daemon is started with root privileges,
-the tss user has read and write access to the /etc/tcsd.conf file
-
-For details, see the advisory:
-https://www.openwall.com/lists/oss-security/2020/05/20/3
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bbb4e2104606bc55ba070d53cc4d90c878ef74b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tiple-security-issues-that-are-present-if.patch | 90 ++++++++++++++++++++++
- package/trousers/trousers.mk                       |  3 +
- 2 files changed, 93 insertions(+)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
-new file mode 100644
-index 0000000000..609245dad8
---- /dev/null
-+++ b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
-@@ -0,0 +1,90 @@
-+From e74dd1d96753b0538192143adf58d04fcd3b242b Mon Sep 17 00:00:00 2001
-+From: Matthias Gerstner <mgerstner@suse.de>
-+Date: Fri, 14 Aug 2020 22:14:36 -0700
-+Subject: [PATCH] Correct multiple security issues that are present if the tcsd
-+ is started by root instead of the tss user.
-+
-+Patch fixes the following 3 CVEs:
-+
-+CVE-2020-24332
-+If the tcsd daemon is started with root privileges,
-+the creation of the system.data file is prone to symlink attacks
-+
-+CVE-2020-24330
-+If the tcsd daemon is started with root privileges,
-+it fails to drop the root gid after it is no longer needed
-+
-+CVE-2020-24331
-+If the tcsd daemon is started with root privileges,
-+the tss user has read and write access to the /etc/tcsd.conf file
-+
-+Authored-by: Matthias Gerstner <mgerstner@suse.de>
-+Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/tcs/ps/tcsps.c   |  2 +-
-+ src/tcsd/svrside.c   |  1 +
-+ src/tcsd/tcsd_conf.c | 10 +++++-----
-+ 3 files changed, 7 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/tcs/ps/tcsps.c b/src/tcs/ps/tcsps.c
-+index e47154b..85d45a9 100644
-+--- a/src/tcs/ps/tcsps.c
-++++ b/src/tcs/ps/tcsps.c
-+@@ -72,7 +72,7 @@ get_file()
-+ 	}
-+ 
-+ 	/* open and lock the file */
-+-	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR, 0600);
-++	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR|O_NOFOLLOW, 0600);
-+ 	if (system_ps_fd < 0) {
-+ 		LogError("system PS: open() of %s failed: %s",
-+ 				tcsd_options.system_ps_file, strerror(errno));
-+diff --git a/src/tcsd/svrside.c b/src/tcsd/svrside.c
-+index 1ae1636..1c12ff3 100644
-+--- a/src/tcsd/svrside.c
-++++ b/src/tcsd/svrside.c
-+@@ -473,6 +473,7 @@ main(int argc, char **argv)
-+ 		}
-+ 		return TCSERR(TSS_E_INTERNAL_ERROR);
-+ 	}
-++	setgid(pwd->pw_gid);
-+ 	setuid(pwd->pw_uid);
-+ #endif
-+ #endif
-+diff --git a/src/tcsd/tcsd_conf.c b/src/tcsd/tcsd_conf.c
-+index a31503d..ea8ea13 100644
-+--- a/src/tcsd/tcsd_conf.c
-++++ b/src/tcsd/tcsd_conf.c
-+@@ -743,7 +743,7 @@ conf_file_init(struct tcsd_config *conf)
-+ #ifndef SOLARIS
-+ 	struct group *grp;
-+ 	struct passwd *pw;
-+-	mode_t mode = (S_IRUSR|S_IWUSR);
-++	mode_t mode = (S_IRUSR|S_IWUSR|S_IRGRP);
-+ #endif /* SOLARIS */
-+ 	TSS_RESULT result;
-+ 
-+@@ -798,15 +798,15 @@ conf_file_init(struct tcsd_config *conf)
-+ 	}
-+ 
-+ 	/* make sure user/group TSS owns the conf file */
-+-	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
-++	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
-+ 		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
-+-				TSS_USER_NAME, TSS_GROUP_NAME);
-++				"root", TSS_GROUP_NAME);
-+ 		return TCSERR(TSS_E_INTERNAL_ERROR);
-+ 	}
-+ 
-+-	/* make sure only the tss user can manipulate the config file */
-++	/* make sure only the tss user can read (but not manipulate) the config file */
-+ 	if (((stat_buf.st_mode & 0777) ^ mode) != 0) {
-+-		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
-++		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
-+ 		return TCSERR(TSS_E_INTERNAL_ERROR);
-+ 	}
-+ #endif /* SOLARIS */
-+-- 
-+2.20.1
-+
-diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-index 1d5364959c..5e6161ce4d 100644
---- a/package/trousers/trousers.mk
-+++ b/package/trousers/trousers.mk
-@@ -13,6 +13,9 @@ TROUSERS_INSTALL_STAGING = YES
- TROUSERS_AUTORECONF = YES
- TROUSERS_DEPENDENCIES = host-pkgconf openssl
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index f8e5f1e60f..7f4b8579c1 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256  48c89cc9f3caa9c5f2454f9dcca74fe251a99749a38062bfab7e5017d329605e  dovecot-2.3-pigeonhole-0.5.10.tar.gz
++sha256  0b972a441f680545ddfacd2f41fb2a705fb03249d46ed5ce7e01fe68b6cfb5f0  dovecot-2.3-pigeonhole-0.5.11.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 033ae980a5..d7068cd873 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0003-Correct-multiple-security-issues-that-are-present-if.patch
-+TROUSERS_IGNORE_CVES += CVE-2020-24330 CVE-2020-24331 CVE-2020-24332
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- TROUSERS_DEPENDENCIES += libiconv
- endif
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.10
++DOVECOT_PIGEONHOLE_VERSION = 0.5.11
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
