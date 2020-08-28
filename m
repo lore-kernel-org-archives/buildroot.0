@@ -1,143 +1,421 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:50:35 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/ghostscript:
- security bump to version 9.52
-Message-ID: <20200828164643.6C5AF85FE9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:29:11 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/rtl8821au: add
+ patch fixing sprintf error
+Message-ID: <20200828164642.D4E8D85FE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2161a82dc7c11ff327cfc939966912c044163f7
+commit: https://git.buildroot.net/buildroot/commit/?id=ab97b0e954ab10e74060523dd948de4ba0450c20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fix a bunch of CVEs: CVE-2020-16287, CVE-2020-16288, CVE-2020-16289,
-CVE-2020-16290, CVE-2020-16291, CVE-2020-16292, CVE-2020-16293,
-CVE-2020-16294, CVE-2020-16295, CVE-2020-16296, CVE-2020-16297,
-CVE-2020-16298, CVE-2020-16299, CVE-2020-16300, CVE-2020-16301,
-CVE-2020-16302, CVE-2020-16303, CVE-2020-16304, CVE-2020-16305
-CVE-2020-16308, CVE-2020-16309, CVE-2020-17538
+Fixes compile errors against certain kernels.
 
-PKGCONFIG must be passed since version 9.51 and
-https://github.com/ArtifexSoftware/ghostpdl/commit/2d84ecc57837785b566ebd9d5909ba9edc9d697f
-
-Also drop patch (already in version) and update indentation in hash file
-(two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e90c68e77534752f0b60d3fdfd710c9ceb7f40d8)
+(cherry picked from commit d83e94ed82fff510026662f26bbbea4e4419ac75)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...900-Memory-Corruption-in-Ghostscript-9-52.patch | 54 ----------------------
- package/ghostscript/ghostscript.hash               |  6 +--
- package/ghostscript/ghostscript.mk                 |  8 ++--
- 3 files changed, 6 insertions(+), 62 deletions(-)
+ ...licit-fallthrough-comments-for-kernel-5.3.patch |   7 +-
+ ...5.3-driver-crashes-from-aircrack-ng-rtl88.patch |   5 +-
+ ...printf-for-extending-string-which-causes-.patch | 339 +++++++++++++++++++++
+ 3 files changed, 346 insertions(+), 5 deletions(-)
 
-diff --git a/package/ghostscript/0002-Bug-702582-CVE-2020-15900-Memory-Corruption-in-Ghostscript-9-52.patch b/package/ghostscript/0002-Bug-702582-CVE-2020-15900-Memory-Corruption-in-Ghostscript-9-52.patch
-deleted file mode 100644
-index 893b96c5be..0000000000
---- a/package/ghostscript/0002-Bug-702582-CVE-2020-15900-Memory-Corruption-in-Ghostscript-9-52.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 5d499272b95a6b890a1397e11d20937de000d31b Mon Sep 17 00:00:00 2001
--From: Ray Johnston <ray.johnston@artifex.com>
--Date: Wed, 22 Jul 2020 09:57:54 -0700
--Subject: [PATCH] Bug 702582, CVE 2020-15900 Memory Corruption in Ghostscript
-- 9.52
--
--Fix the 'rsearch' calculation for the 'post' size to give the correct
--size.  Previous calculation would result in a size that was too large,
--and could underflow to max uint32_t. Also fix 'rsearch' to return the
--correct 'pre' string with empty string match.
--
--A future change may 'undefine' this undocumented, non-standard operator
--during initialization as we do with the many other non-standard internal
--PostScript operators and procedures.
--
--[Retrieved from:
--https://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=5d499272b95a6b890a1397e11d20937de000d31b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- psi/zstring.c | 17 +++++++++++------
-- 1 file changed, 11 insertions(+), 6 deletions(-)
--
--diff --git a/psi/zstring.c b/psi/zstring.c
--index 33662dafa..58e1af2b3 100644
----- a/psi/zstring.c
--+++ b/psi/zstring.c
--@@ -142,13 +142,18 @@ search_impl(i_ctx_t *i_ctx_p, bool forward)
--     return 0;
-- found:
--     op->tas.type_attrs = op1->tas.type_attrs;
---    op->value.bytes = ptr;
---    r_set_size(op, size);
--+    op->value.bytes = ptr;				/* match */
--+    op->tas.rsize = size;				/* match */
--     push(2);
---    op[-1] = *op1;
---    r_set_size(op - 1, ptr - op[-1].value.bytes);
---    op1->value.bytes = ptr + size;
---    r_set_size(op1, count + (!forward ? (size - 1) : 0));
--+    op[-1] = *op1;					/* pre */
--+    op[-3].value.bytes = ptr + size;			/* post */
--+    if (forward) {
--+        op[-1].tas.rsize = ptr - op[-1].value.bytes;	/* pre */
--+        op[-3].tas.rsize = count;			/* post */
--+    } else {
--+        op[-1].tas.rsize = count;			/* pre */
--+        op[-3].tas.rsize -= count + size;		/* post */
--+    }
--     make_true(op);
--     return 0;
-- }
---- 
--2.17.1
--
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 51b3a2a094..d0b2e610df 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs950/SHA512SUMS
--sha512 3c1e5db519a427f4b6bfb8d93f3c3dfb67d5ec9ccd19c7afa7670deb768515f3fc617c5588e54934bbfbedfdf8609ce2ffa36dd7da3cb618937fe034f64f43ee  ghostscript-9.50.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/SHA512SUMS
-+sha512  4c4a33884e1138bad553eee61fac1a72158297ad5c2ce46a4b36150848dea8158affaf2b902f4ff03e4f72ebc8154c198b618112624f409230a610b7648faa67  ghostscript-9.52.tar.xz
+diff --git a/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch b/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
+index d323e8f938..00e801b6b1 100644
+--- a/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
++++ b/package/rtl8821au/0001-Fix-implicit-fallthrough-comments-for-kernel-5.3.patch
+@@ -1,10 +1,11 @@
+-From f41695e4069404639690d98c7aadfe72117965a6 Mon Sep 17 00:00:00 2001
++From 99f1e8bd7172ddf9613db3531a8b37921ed73351 Mon Sep 17 00:00:00 2001
+ From: Jesper Skov <jb1811@jyskebank.dk>
+ Date: Fri, 25 Oct 2019 10:05:41 +0200
+ Subject: [PATCH] Fix implicit fallthrough comments for kernel 5.3
  
- # Hash for license file:
--sha256 6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
-+sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 5c2c14de0b..9a74563a8c 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-[Upstram: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/e8a30a4c5a80efbbd5b1dbfe11b22916df4492f9.patch]
++[Upstream: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/e8a30a4c5a80efbbd5b1dbfe11b22916df4492f9.patch]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Christian Stewart <christian@paral.in>
+ ---
+  core/rtw_mlme_ext.c | 2 ++
+  1 file changed, 2 insertions(+)
+@@ -24,5 +25,5 @@ index 24565ea..380f507 100644
+  		_mgt_dispatcher(padapter, ptable, precv_frame);
+  #ifdef CONFIG_HOSTAPD_MLME
+ -- 
+-2.26.0
++2.28.0
  
--GHOSTSCRIPT_VERSION = 9.50
-+GHOSTSCRIPT_VERSION = 9.52
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_LICENSE = AGPL-3.0
-@@ -23,9 +23,6 @@ GHOSTSCRIPT_DEPENDENCIES = \
- 	libpng \
- 	tiff
+diff --git a/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch b/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
+index 6b1b70270a..213ea806b0 100644
+--- a/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
++++ b/package/rtl8821au/0002-Fix-kernel-5.3-driver-crashes-from-aircrack-ng-rtl88.patch
+@@ -1,10 +1,11 @@
+-From b7f8f8572d5abca6e1f0163a583628c0207d0be4 Mon Sep 17 00:00:00 2001
++From cde2dbf6e94e00fcf198422b03de01d3090675d9 Mon Sep 17 00:00:00 2001
+ From: Jesper Skov <jb1811@jyskebank.dk>
+ Date: Fri, 25 Oct 2019 10:10:29 +0200
+ Subject: [PATCH] Fix kernel 5.3 driver crashes, from aircrack-ng/rtl8812au#421
  
--# 0002-Bug-702582-CVE-2020-15900-Memory-Corruption-in-Ghostscript-9-52.patch
--GHOSTSCRIPT_IGNORE_CVES += CVE-2020-15900
--
- # Ghostscript includes (old) copies of several libraries, delete them.
- # Inspired by linuxfromscratch:
- # http://www.linuxfromscratch.org/blfs/view/svn/pst/gs.html
-@@ -38,7 +35,8 @@ GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+ [Upstream: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/822b485d36d6f72304a219c3be228f40968b542b.patch]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Christian Stewart <christian@paral.in>
+ ---
+  os_dep/linux/rtw_cfgvendor.c | 45 ++++++++++++++++++++++++++++++++++++
+  1 file changed, 45 insertions(+)
+@@ -164,5 +165,5 @@ index e7ba90a..81fc8af 100644
+  	}
+  };
+ -- 
+-2.26.0
++2.28.0
  
- GHOSTSCRIPT_CONF_ENV = \
- 	CCAUX="$(HOSTCC)" \
--	CFLAGSAUX="$(HOST_CFLAGS) $(HOST_LDFLAGS)"
-+	CFLAGSAUX="$(HOST_CFLAGS) $(HOST_LDFLAGS)" \
-+	PKGCONFIG="$(PKG_CONFIG_HOST_BINARY)"
- 
- GHOSTSCRIPT_CONF_OPTS = \
- 	--disable-compile-inits \
+diff --git a/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+new file mode 100644
+index 0000000000..2c4b595c37
+--- /dev/null
++++ b/package/rtl8821au/0003-Fix-using-sprintf-for-extending-string-which-causes-.patch
+@@ -0,0 +1,339 @@
++From 5b6641978e8fa68bca05d224a61f8513b010eda8 Mon Sep 17 00:00:00 2001
++From: Coleman <omegacoleman@gmail.com>
++Date: Fri, 17 Jul 2020 08:53:00 +0800
++Subject: [PATCH] Fix using sprintf for extending string, which causes
++ undefined behavior
++
++[Upstream: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/commit/be57045a0933d64e958878696883e9cf998e1bf3.patch]
++Signed-off-by: Coleman <omegacoleman@gmail.com>
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ core/rtw_mp.c              |   2 +-
++ os_dep/linux/ioctl_linux.c | 108 ++++++++++++++++++-------------------
++ 2 files changed, 55 insertions(+), 55 deletions(-)
++
++diff --git a/core/rtw_mp.c b/core/rtw_mp.c
++index c2e400d..989bb3e 100644
++--- a/core/rtw_mp.c
+++++ b/core/rtw_mp.c
++@@ -1871,7 +1871,7 @@ u32 mp_query_psd(PADAPTER pAdapter, u8 *data)
++ 		} else {
++ 			psd_data = rtw_GetPSDData(pAdapter, i);
++ 		}
++-		sprintf(data, "%s%x ", data, psd_data);
+++		sprintf(data + strlen(data), "%x ", psd_data);
++ 		i++;
++ 	}
++ 
++diff --git a/os_dep/linux/ioctl_linux.c b/os_dep/linux/ioctl_linux.c
++index c74a153..9543fa3 100644
++--- a/os_dep/linux/ioctl_linux.c
+++++ b/os_dep/linux/ioctl_linux.c
++@@ -9080,19 +9080,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
++ //			DBG_871X("0x%02x\t", i);
++-			sprintf(extra, "%s0x%02x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%02x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, PROMContent[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", PROMContent[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, PROMContent[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", PROMContent[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra,"%s\n",extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0], "realmap") == 0) {
++@@ -9107,19 +9107,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i = 0; i < EFUSE_MAP_SIZE; i += 16) {
++ //			DBG_871X("0x%02x\t", i);
++-			sprintf(extra, "%s0x%02x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%02x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra,"%s\n",extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0], "rmap") == 0) {
++@@ -9158,7 +9158,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("0x%02x ", data[i]);
++-			sprintf(extra, "%s0x%02X ", extra, data[i]);
+++			sprintf(extra + strlen(extra), "0x%02X ", data[i]);
++ 		}
++ //		DBG_871X("}\n");
++ 	} else if (strcmp(tmp[0], "realraw") == 0) {
++@@ -9174,17 +9174,17 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n0x00\t");
++ 		for (i=0; i< mapLen; i++) {
++ 			//			DBG_871X("%02X", rawdata[i]);
++-			sprintf(extra, "%s%02X", extra, rawdata[i]);
+++			sprintf(extra + strlen(extra), "%02X", rawdata[i]);
++ 			if ((i & 0xF) == 0xF) {
++ 				//				DBG_871X("\n");
++-				sprintf(extra, "%s\n", extra);
++-				sprintf(extra, "%s0x%02x\t", extra, i+1);
+++				sprintf(extra + strlen(extra), "\n");
+++				sprintf(extra + strlen(extra), "0x%02x\t", i+1);
++ 			} else if ((i & 0x7) == 0x7) {
++ 				//				DBG_871X("\t");
++-				sprintf(extra, "%s \t", extra);
+++				sprintf(extra + strlen(extra), " \t");
++ 			} else {
++ 				//				DBG_871X(" ");
++-				sprintf(extra, "%s ", extra);
+++				sprintf(extra + strlen(extra), " ");
++ 			}
++ 		}
++ 		//		DBG_871X("}\n");
++@@ -9269,10 +9269,10 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("%02X", data[i]);
++-			sprintf(extra, "%s%02X", extra, data[i]);
+++			sprintf(extra + strlen(extra), "%02X", data[i]);
++ 			if (i != (cnts-1)) {
++ //				DBG_871X(":");
++-				sprintf(extra,"%s:",extra);
+++				sprintf(extra + strlen(extra), ":");
++ 			}
++ 		}
++ //		DBG_871X("}\n");
++@@ -9330,10 +9330,10 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("0x%02x", data[i]);
++-			sprintf(extra, "%s0x%02X", extra, data[i]);
+++			sprintf(extra + strlen(extra), "0x%02X", data[i]);
++ 			if (i != (cnts-1)) {
++ //				DBG_871X(",");
++-				sprintf(extra,"%s,",extra);
+++				sprintf(extra + strlen(extra), ",");
++ 			}
++ 		}
++ //		DBG_871X("}\n");
++@@ -9355,19 +9355,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=0; i<512; i+=16) { // set 512 because the iwpriv's extra size have limit 0x7FF
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra,"%s\t",extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"btbmap") == 0) {
++@@ -9384,19 +9384,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=512; i<1024 ; i+=16) {
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra,"%s\t",extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", data[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->BTEfuseInitMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->BTEfuseInitMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"btrmap") == 0) {
++@@ -9436,7 +9436,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ //		DBG_871X("%s: bt efuse data={", __FUNCTION__);
++ 		for (i=0; i<cnts; i++) {
++ //			DBG_871X("0x%02x ", data[i]);
++-			sprintf(extra, "%s 0x%02X ", extra, data[i]);
+++			sprintf(extra + strlen(extra), " 0x%02X ", data[i]);
++ 		}
++ //		DBG_871X("}\n");
++ 		DBG_871X(FUNC_ADPT_FMT ": BT MAC=[%s]\n", FUNC_ADPT_ARG(padapter), extra);
++@@ -9445,19 +9445,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=0; i<512; i+=16) {
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"btbfake") == 0) {
++@@ -9465,19 +9465,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=512; i<1024; i+=16) {
++ //			DBG_871X("0x%03x\t", i);
++-			sprintf(extra, "%s0x%03x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%03x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeBTEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 	} else if (strcmp(tmp[0],"wlrfkmap")== 0) {
++@@ -9485,19 +9485,19 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		sprintf(extra, "\n");
++ 		for (i=0; i<EFUSE_MAP_SIZE; i+=16) {
++ //			DBG_871X("\t0x%02x\t", i);
++-			sprintf(extra, "%s0x%02x\t", extra, i);
+++			sprintf(extra + strlen(extra), "0x%02x\t", i);
++ 			for (j=0; j<8; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), "%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\t");
++-			sprintf(extra, "%s\t", extra);
+++			sprintf(extra + strlen(extra), "\t");
++ 			for (; j<16; j++) {
++ //				DBG_871X("%02X ", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++-				sprintf(extra, "%s %02X", extra, pEfuseHal->fakeEfuseModifiedMap[i+j]);
+++				sprintf(extra + strlen(extra), " %02X", pEfuseHal->fakeEfuseModifiedMap[i+j]);
++ 			}
++ //			DBG_871X("\n");
++-			sprintf(extra, "%s\n", extra);
+++			sprintf(extra + strlen(extra), "\n");
++ 		}
++ //		DBG_871X("\n");
++ 
++@@ -9523,7 +9523,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ 			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
++-			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeEfuseModifiedMap[addr+i]);
+++			sprintf(extra + strlen(extra), "0x%02X ", pEfuseHal->fakeEfuseModifiedMap[addr+i]);
++ 		}
++ 	} else if (strcmp(tmp[0],"btrfkrmap")== 0) {
++ 		if ((tmp[1]==NULL) || (tmp[2]==NULL)) {
++@@ -9547,7 +9547,7 @@ static int rtw_mp_efuse_get(struct net_device *dev,
++ 		*extra = 0;
++ 		for (i=0; i<cnts; i++) {
++ 			DBG_871X("wlrfkrmap = 0x%02x \n", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
++-			sprintf(extra, "%s0x%02X ", extra, pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
+++			sprintf(extra + strlen(extra), "0x%02X ", pEfuseHal->fakeBTEfuseModifiedMap[addr+i]);
++ 		}
++ 	} else {
++ 		sprintf(extra, "Command not found!");
++@@ -10409,7 +10409,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
++ 			pnext++;
++ 			if ( *pnext != '\0' ) {
++ 				strtout = simple_strtoul (pnext , &ptmp, 16);
++-				sprintf( extra, "%s %d" ,extra ,strtout );
+++				sprintf(extra + strlen(extra), " %d"  ,strtout );
++ 			} else {
++ 				break;
++ 			}
++@@ -10443,7 +10443,7 @@ static int rtw_mp_read_reg(struct net_device *dev,
++ 			pnext++;
++ 			if ( *pnext != '\0' ) {
++ 				strtout = simple_strtoul (pnext , &ptmp, 16);
++-				sprintf( extra, "%s %d" ,extra ,strtout );
+++				sprintf(extra + strlen(extra), " %d"  ,strtout );
++ 			} else {
++ 				break;
++ 			}
++@@ -10566,7 +10566,7 @@ static int rtw_mp_read_rf(struct net_device *dev,
++ 		pnext++;
++ 		if ( *pnext != '\0' ) {
++ 			strtou = simple_strtoul (pnext , &ptmp, 16);
++-			sprintf( extra, "%s %d" ,extra ,strtou );
+++			sprintf(extra + strlen(extra), " %d"  ,strtou );
++ 		} else {
++ 			break;
++ 		}
++@@ -12155,14 +12155,14 @@ todo:
++ 				goto exit;
++ 
++ #ifdef CONFIG_RTL8723A
++-			sprintf(extra, "%s %d ", extra, (pMptCtx->mptOutBuf[i]& 0x3f));
+++			sprintf(extra + strlen(extra), " %d ", (pMptCtx->mptOutBuf[i]& 0x3f));
++ #else
++-			sprintf(extra, "%s %d ", extra, (pMptCtx->mptOutBuf[i]& 0x1f));
+++			sprintf(extra + strlen(extra), " %d ", (pMptCtx->mptOutBuf[i]& 0x1f));
++ #endif
++ 		}
++ 	} else {
++ 		for (i=4; i<pMptCtx->mptOutLen; i++) {
++-			sprintf(extra, "%s 0x%x ", extra, pMptCtx->mptOutBuf[i]);
+++			sprintf(extra + strlen(extra), " 0x%x ", pMptCtx->mptOutBuf[i]);
++ 		}
++ 	}
++ 
++-- 
++2.28.0
++
