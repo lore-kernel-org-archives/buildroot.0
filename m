@@ -1,33 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 28 Aug 2020 19:07:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump version
- to 2.3.11.3
-References: <20200818165436.145310-1-bernd.kuhls@t-online.de>
- <20200818165436.145310-2-bernd.kuhls@t-online.de>
- <87tuwmr9um.fsf@dell.be.48ers.dk>
-Message-ID: <48qn1hxmln.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Aug 2020 19:01:43 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: fix typo
+Message-ID: <20200828170234.DCD9983598@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 28 Aug 2020 18:52:49 +0200 schrieb Peter Korsgaard:
+commit: https://git.buildroot.net/buildroot/commit/?id=5d18afcfe4cccca04a887d086fd935506f50a82e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
->>>>>> "Bernd" == Bernd Kuhls
->>>>>> <bernd.kuhls@t-online.de> writes:
-> 
-> Committed to 2020.02.x and 2020.05.x, thanks.
+depednencies -> dependencies
 
-Hi Peter,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 531e96e98cc8cd6fb839349ea0f86c9d5706ec0f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-packages-waf.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-please commit
-https://git.buildroot.net/buildroot/commit/package/dovecot-pigeonhole?
-id=bbb4e2104606bc55ba070d53cc4d90c878ef74b3
-to 2020.02.x and 2020.05.x as well because the previous version of 
-dovecot-pigeonhole is incompatible with dovecot-2.3.11.3.
-
-For details see http://patchwork.ozlabs.org/project/buildroot/patch/
-20200820061744.293397-1-bernd.kuhls at t-online.de/
-
-Regards, Bernd
+diff --git a/docs/manual/adding-packages-waf.txt b/docs/manual/adding-packages-waf.txt
+index ffc004c290..101cddf1f1 100644
+--- a/docs/manual/adding-packages-waf.txt
++++ b/docs/manual/adding-packages-waf.txt
+@@ -34,7 +34,7 @@ will automatically download the tarball from this location.
+ 
+ On line 10, we tell Buildroot what options to enable for libfoo.
+ 
+-On line 11, we tell Buildroot the depednencies of libfoo.
++On line 11, we tell Buildroot the dependencies of libfoo.
+ 
+ Finally, on line line 13, we invoke the +waf-package+
+ macro that generates all the Makefile rules that actually allows the
