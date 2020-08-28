@@ -1,62 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:34:43 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] utils/scanpypi: use raw
- strings in re.compile/re.sub
-Message-ID: <20200828164650.501778040F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:38:26 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: drop Maxime
+ Ripard from kmsxx maintainers
+Message-ID: <20200828164650.6D6188040F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caf04bab8dfec8308315aafa511fa27a371a50f4
+commit: https://git.buildroot.net/buildroot/commit/?id=98adbe7f901d242e278dfc7b9234eeecc5c1c495
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following Python 3.x flake8 warning:
+Maxime Ripard is no longer at Bootlin, his e-mail is bouncing:
 
-W605 invalid escape sequence '\w'
+<maxime.ripard@bootlin.com>: host spool.mail.gandi.net[217.70.178.1] said: 550
+    5.1.1 <maxime.ripard@bootlin.com>: Recipient address rejected: User unknown
+    in virtual mailbox table (in reply to RCPT TO command)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f9150a6a3d0650acdc61eb56ac354cda319e345b)
+(cherry picked from commit 3a4053b585c49a839770e9e201a3b0e9044368ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/scanpypi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 387755bbb8..dfbf8131cd 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -96,10 +96,10 @@ def pkg_buildroot_name(pkg_name):
-     Keyword arguments:
-     pkg_name -- String to rename
-     """
--    name = re.sub('[^\w-]', '', pkg_name.lower())
-+    name = re.sub(r'[^\w-]', '', pkg_name.lower())
-     name = name.replace('_', '-')
-     prefix = 'python-'
--    pattern = re.compile('^(?!' + prefix + ')(.+?)$')
-+    pattern = re.compile(r'^(?!' + prefix + ')(.+?)$')
-     name = pattern.sub(r'python-\1', name)
-     return name
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 64d2e2e609..5aa9256ad3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1721,9 +1721,6 @@ F:	package/systemd-bootchart/
+ F:	package/tinyalsa/
+ F:	package/tinyxml/
  
-@@ -337,7 +337,7 @@ class BuildrootPackage():
-             self.pkg_req = None
-             return set()
-         self.pkg_req = self.setup_metadata['install_requires']
--        self.pkg_req = [re.sub('([-.\w]+).*', r'\1', req)
-+        self.pkg_req = [re.sub(r'([-.\w]+).*', r'\1', req)
-                         for req in self.pkg_req]
- 
-         # get rid of commented lines and also strip the package strings
-@@ -451,7 +451,7 @@ class BuildrootPackage():
-                 "Mozilla Public License 2.0": "MPL-2.0",
-                 "Zope Public License": "ZPL"
-                 }
--            regexp = re.compile('^License :* *.* *:+ (.*)( \(.*\))?$')
-+            regexp = re.compile(r'^License :* *.* *:+ (.*)( \(.*\))?$')
-             classifiers_licenses = [regexp.sub(r"\1", lic)
-                                     for lic in self.metadata['info']['classifiers']
-                                     if regexp.match(lic)]
+-N:	Maxime Ripard <maxime.ripard@bootlin.com>
+-F:	package/kmsxx/
+-
+ N:	Michael Durrant <mdurrant@arcturusnetworks.com>
+ F:	board/arcturus/
+ F:	configs/arcturus_ucp1020_defconfig
