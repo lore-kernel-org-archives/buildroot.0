@@ -1,230 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:06:01 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/f2fs-tools: fsck
- should use correct returncodes
-Message-ID: <20200828155321.DC2457FE6F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 16:54:18 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/pkg-kconfig:
+ Support custom $(MAKE)
+Message-ID: <20200828155321.AF76181032@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69584ff717b8cdff404ae857dc49af30669371fa
+commit: https://git.buildroot.net/buildroot/commit/?id=0b0f8b475c4405c6e1eb266db653cd346ecf5bdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-fsck.f2fs does not implement the returncodes from the fsck interface.
-This is particularly bad if systemd is used with a root f2fs partition,
-as it will interpret the rc as order to reboot.
+The U-Boot package requires GNU Make v4.0 or later, and so all U-Boot
+"make" commands must use "$(BR2_MAKE)" so they use the host-make
+package. Currently pkg-kconfig is hardcoded to uses $(MAKE), so add a
+way to support $(BR2_MAKE). The package infra for pkg-automake and
+pkg-cmake have a similar problem, and they solved it by defining a
+$(PKG)_MAKE variable, and allowing each package to override it.
 
-for thread & pending upstream fix see:
-https://sourceforge.net/p/linux-f2fs/mailman/message/37079401/
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5d8811eb87b0a3b352817a72928586af8aad2892)
+(cherry picked from commit e729d0d4b6d90004bb41e2e81d7e8cb354b990a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-fsck.f2fs-correct-return-value.patch      | 195 +++++++++++++++++++++
- 1 file changed, 195 insertions(+)
+ package/pkg-kconfig.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch b/package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch
-new file mode 100644
-index 0000000000..b420e27a0e
---- /dev/null
-+++ b/package/f2fs-tools/0002-fsck.f2fs-correct-return-value.patch
-@@ -0,0 +1,195 @@
-+From eee12fe5e2e6c5f71bc7cbe25a608b730fd5362e Mon Sep 17 00:00:00 2001
-+From: Chao Yu <yuchao0@huawei.com>
-+Date: Fri, 7 Aug 2020 10:02:31 +0800
-+Subject: [PATCH] fsck.f2fs: correct return value
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+As Norbert Lange reported:
-+
-+"
-+$ fsck.f2fs -a /dev/mmcblk0p5; echo $?
-+Info: Fix the reported corruption.
-+Info: Mounted device!
-+Info: Check FS only on RO mounted device
-+Error: Failed to open the device!
-+255
-+"
-+
-+Michael La?? reminds:
-+
-+"
-+I think the return value is exactly the problem here. See fsck(8) (
-+https://linux.die.net/man/8/fsck) which specifies the return values.
-+Systemd looks at these and decides how to proceed:
-+
-+https://github.com/systemd/systemd/blob/a859abf062cef1511e4879c4ee39c6036ebeaec8/src/fsck/fsck.c#L407
-+
-+That means, if fsck.f2fs returns 255, then
-+the FSCK_SYSTEM_SHOULD_REBOOT bit is set and systemd will reboot.
-+"
-+
-+So the problem here is fsck.f2fs didn't return correct value to userspace
-+apps, result in later unexpected behavior of rebooting, let's fix this.
-+
-+Reported-by: Norbert Lange <nolange79@gmail.com>
-+Reported-by: Michael La?? <bevan@bi-co.net>
-+Signed-off-by: Chao Yu <yuchao0@huawei.com>
-+Signed-off-by: Norbert Lange <nolange79@gmail.com>
-+---
-+ fsck/fsck.h | 11 +++++++++++
-+ fsck/main.c | 45 +++++++++++++++++++++++++++++++--------------
-+ 2 files changed, 42 insertions(+), 14 deletions(-)
-+
-+diff --git a/fsck/fsck.h b/fsck/fsck.h
-+index ccf4a39..c8aeb06 100644
-+--- a/fsck/fsck.h
-++++ b/fsck/fsck.h
-+@@ -13,6 +13,17 @@
-+ 
-+ #include "f2fs.h"
-+ 
-++enum {
-++	FSCK_SUCCESS                 = 0,
-++	FSCK_ERROR_CORRECTED         = 1 << 0,
-++	FSCK_SYSTEM_SHOULD_REBOOT    = 1 << 1,
-++	FSCK_ERRORS_LEFT_UNCORRECTED = 1 << 2,
-++	FSCK_OPERATIONAL_ERROR       = 1 << 3,
-++	FSCK_USAGE_OR_SYNTAX_ERROR   = 1 << 4,
-++	FSCK_USER_CANCELLED          = 1 << 5,
-++	FSCK_SHARED_LIB_ERROR        = 1 << 7,
-++};
-++
-+ struct quota_ctx;
-+ 
-+ #define FSCK_UNMATCHED_EXTENT		0x00000001
-+diff --git a/fsck/main.c b/fsck/main.c
-+index 8c62a14..b0f2ec3 100644
-+--- a/fsck/main.c
-++++ b/fsck/main.c
-+@@ -591,7 +591,7 @@ void f2fs_parse_options(int argc, char *argv[])
-+ 	error_out(prog);
-+ }
-+ 
-+-static void do_fsck(struct f2fs_sb_info *sbi)
-++static int do_fsck(struct f2fs_sb_info *sbi)
-+ {
-+ 	struct f2fs_checkpoint *ckpt = F2FS_CKPT(sbi);
-+ 	u32 flag = le32_to_cpu(ckpt->ckpt_flags);
-+@@ -614,7 +614,7 @@ static void do_fsck(struct f2fs_sb_info *sbi)
-+ 			} else {
-+ 				MSG(0, "[FSCK] F2FS metadata   [Ok..]");
-+ 				fsck_free(sbi);
-+-				return;
-++				return FSCK_SUCCESS;
-+ 			}
-+ 
-+ 			if (!c.ro)
-+@@ -646,7 +646,7 @@ static void do_fsck(struct f2fs_sb_info *sbi)
-+ 		ret = quota_init_context(sbi);
-+ 		if (ret) {
-+ 			ASSERT_MSG("quota_init_context failure: %d", ret);
-+-			return;
-++			return FSCK_OPERATIONAL_ERROR;
-+ 		}
-+ 	}
-+ 	fsck_chk_orphan_node(sbi);
-+@@ -654,8 +654,14 @@ static void do_fsck(struct f2fs_sb_info *sbi)
-+ 			F2FS_FT_DIR, TYPE_INODE, &blk_cnt, NULL);
-+ 	fsck_chk_quota_files(sbi);
-+ 
-+-	fsck_verify(sbi);
-++	ret = fsck_verify(sbi);
-+ 	fsck_free(sbi);
-++
-++	if (!c.bug_on)
-++		return FSCK_SUCCESS;
-++	if (!ret)
-++		return FSCK_ERROR_CORRECTED;
-++	return FSCK_ERRORS_LEFT_UNCORRECTED;
-+ }
-+ 
-+ static void do_dump(struct f2fs_sb_info *sbi)
-+@@ -763,7 +769,7 @@ static int do_sload(struct f2fs_sb_info *sbi)
-+ int main(int argc, char **argv)
-+ {
-+ 	struct f2fs_sb_info *sbi;
-+-	int ret = 0;
-++	int ret = 0, ret2;
-+ 	clock_t start = clock();
-+ 
-+ 	f2fs_init_configuration();
-+@@ -771,10 +777,15 @@ int main(int argc, char **argv)
-+ 	f2fs_parse_options(argc, argv);
-+ 
-+ 	if (c.func != DUMP && f2fs_devs_are_umounted() < 0) {
-+-		if (errno == EBUSY)
-++		if (errno == EBUSY) {
-++			if (c.func == FSCK)
-++				return FSCK_OPERATIONAL_ERROR;
-+ 			return -1;
-++		}
-+ 		if (!c.ro || c.func == DEFRAG) {
-+ 			MSG(0, "\tError: Not available on mounted device!\n");
-++			if (c.func == FSCK)
-++				return FSCK_OPERATIONAL_ERROR;
-+ 			return -1;
-+ 		}
-+ 
-+@@ -789,8 +800,11 @@ int main(int argc, char **argv)
-+ 	}
-+ 
-+ 	/* Get device */
-+-	if (f2fs_get_device_info() < 0)
-++	if (f2fs_get_device_info() < 0) {
-++		if (c.func == FSCK)
-++			return FSCK_OPERATIONAL_ERROR;
-+ 		return -1;
-++	}
-+ 
-+ fsck_again:
-+ 	memset(&gfsck, 0, sizeof(gfsck));
-+@@ -808,7 +822,7 @@ fsck_again:
-+ 
-+ 	switch (c.func) {
-+ 	case FSCK:
-+-		do_fsck(sbi);
-++		ret = do_fsck(sbi);
-+ 		break;
-+ #ifdef WITH_DUMP
-+ 	case DUMP:
-+@@ -856,8 +870,8 @@ fsck_again:
-+ 			char ans[255] = {0};
-+ retry:
-+ 			printf("Do you want to fix this partition? [Y/N] ");
-+-			ret = scanf("%s", ans);
-+-			ASSERT(ret >= 0);
-++			ret2 = scanf("%s", ans);
-++			ASSERT(ret2 >= 0);
-+ 			if (!strcasecmp(ans, "y"))
-+ 				c.fix_on = 1;
-+ 			else if (!strcasecmp(ans, "n"))
-+@@ -869,12 +883,15 @@ retry:
-+ 				goto fsck_again;
-+ 		}
-+ 	}
-+-	ret = f2fs_finalize_device();
-+-	if (ret < 0)
-+-		return ret;
-++	ret2 = f2fs_finalize_device();
-++	if (ret2) {
-++		if (c.func == FSCK)
-++			return FSCK_OPERATIONAL_ERROR;
-++		return ret2;
-++	}
-+ 
-+ 	printf("\nDone: %lf secs\n", (clock() - start) / (double)CLOCKS_PER_SEC);
-+-	return 0;
-++	return ret;
-+ 
-+ out_err:
-+ 	if (sbi->ckpt)
-+-- 
-+2.27.0
-+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 9d65b21ec5..45faf50e71 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -33,7 +33,7 @@ PKG_KCONFIG_COMMON_OPTS = \
+ # Macro to save the defconfig file
+ # $(1): the name of the package in upper-case letters
+ define kconfig-package-savedefconfig
+-	$($(1)_MAKE_ENV) $(MAKE) -C $($(1)_DIR) \
++	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
+ 		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
+ endef
+ 
+@@ -89,6 +89,7 @@ $(2)_DEPENDENCIES += $$($(2)_KCONFIG_DEPENDENCIES)
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+ 
+ # Default values
++$(2)_MAKE ?= $$(MAKE)
+ $(2)_KCONFIG_EDITORS ?= menuconfig
+ $(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
+@@ -122,7 +123,7 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 	done
+ 
+ $(2)_KCONFIG_MAKE = \
+-	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
+ 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
+ 
+ # $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
+@@ -226,7 +227,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
+ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
+ $$($(2)_DIR)/.kconfig_editor_%: PKG=$(2)
+ $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+-	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$($(2)_CONFIGURATOR_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_DIR) \
+ 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
