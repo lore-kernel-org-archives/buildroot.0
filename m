@@ -1,53 +1,173 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Aug 2020 23:06:53 +0200
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.56
-Message-ID: <20200902161636.D606B85EB9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 09:14:38 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: drop erroneous
+ "break" in CVE.affects()
+Message-ID: <20200902161636.E754985EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1be3277baec5b3ccd64012ee837cb17d9a06f63
+commit: https://git.buildroot.net/buildroot/commit/?id=e631c314b1b8668886fea7659114054b1031e5dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump version to 3.56. Unfortunately local patch is still pending
-upstream and not applied and I've just asked why:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
+Commit 7d2779ecbb142b62f8913d30352b11058f922b2a
+("support/script/pkg-stats: handle exception when version comparison
+fails") erroneousy introduced a "break" within a try/expect block.
 
-This version requires NSPR 4.28.
+This break has the unfortunate consequence that every CVE that was
+using the <= operator was skipped, and according to the current
+CVE statistics, made us miss 74 CVEs out of 141 CVEs.
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.56_release_notes
+Here is for reference the complete list of CVEs we missed:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ - gnupg
+   CVE-2006-3082
+   CVE-2019-13050
+
+ - jhead
+   CVE-2020-6624
+   CVE-2020-6625
+
+ - patch
+   CVE-2018-6952
+   CVE-2019-20633
+
+ - json-c
+   CVE-2020-12762
+
+ - git
+   CVE-2018-1000110
+   CVE-2018-1000182
+   CVE-2019-1003010
+   CVE-2020-2136
+
+ - iperf2
+   CVE-2016-4303
+
+ - libtorrent
+   CVE-2009-1760
+   CVE-2016-5301
+
+ - lua
+   CVE-2020-15888
+   CVE-2020-15889
+   CVE-2020-15945
+   CVE-2020-24342
+
+ - openvpn
+   CVE-2020-7224
+
+ - smack
+   CVE-2016-10027
+
+ - bashtop
+   CVE-2019-18276
+
+ - links
+   CVE-2008-3319
+
+ - argus
+   CVE-2011-3332
+
+ - libraw
+   CVE-2020-15503
+
+ - netcat
+   CVE-2008-5727
+   CVE-2008-5728
+   CVE-2008-5729
+   CVE-2008-5730
+   CVE-2008-5742
+   CVE-2015-2214
+
+ - subversion
+   CVE-2017-1000085
+   CVE-2018-1000111
+   CVE-2020-2111
+
+ - python
+   CVE-2013-1753
+   CVE-2015-5652
+   CVE-2017-17522
+   CVE-2017-18207
+   CVE-2019-20907
+   CVE-2019-9674
+
+ - cereal
+   CVE-2020-11104
+   CVE-2020-11105
+
+ - opencv
+   CVE-2017-1000450
+   CVE-2017-12597
+   CVE-2017-12598
+   CVE-2017-12599
+   CVE-2017-12600
+   CVE-2017-12601
+   CVE-2017-12602
+   CVE-2017-12603
+   CVE-2017-12604
+   CVE-2017-12605
+   CVE-2017-12606
+   CVE-2017-12862
+   CVE-2017-12863
+   CVE-2017-12864
+   CVE-2019-15939
+
+ - docker
+   CVE-2015-1843
+   CVE-2015-3627
+   CVE-2015-3630
+   CVE-2015-3631
+   CVE-2016-3697
+   CVE-2017-14992
+   CVE-2019-16884
+
+ - trousers
+   CVE-2020-24330
+   CVE-2020-24331
+   CVE-2020-24332
+
+ - libcroco
+   CVE-2020-12825
+
+ - libpupnp
+   CVE-2020-13848
+
+ - openjpeg
+   CVE-2020-15389
+
+ - flex
+   CVE-2015-1773
+
+ - libesmtp
+   CVE-2019-19977
+
+ - ed
+   CVE-2015-2987
+
+ - libmad
+   CVE-2018-7263
+
+ - grub
+   CVE-2020-15705
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index fcba10b99a..b153b614e9 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_55_RTM/src/SHA256SUMS
--sha256  fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004  nss-3.55.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_56_RTM/src/SHA256SUMS
-+sha256  f875e0e8ed3b5ce92d675be4a55aa25a8c1199789a4a01f69b5f2327e2048e9c  nss-3.56.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index a5e4432f8c..effad11b5b 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.55
-+LIBNSS_VERSION = 3.56
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 303af2f588..e642147b98 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -383,7 +383,6 @@ class CVE:
+                         continue
+                     try:
+                         affected = pkg_version <= cve_affected_version
+-                        break
+                     except TypeError:
+                         return CVE_UNKNOWN
+                     if affected:
