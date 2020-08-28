@@ -1,24 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:28:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: add openssl optional
- dependency
-In-Reply-To: <20200727124145.1825309-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 27 Jul 2020 14:41:45 +0200")
-References: <20200727124145.1825309-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zh6eu44k.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 18:29:39 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: add patch fixing
+ sprintf error
+In-Reply-To: <20200808173800.2034897-1-christian@paral.in> (Christian
+ Stewart's message of "Sat, 8 Aug 2020 10:38:00 -0700")
+References: <20200808173800.2034897-1-christian@paral.in>
+Message-ID: <87v9h2u424.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > openssl is an optional dependency that is enabled by default since
- > version 0.7.0 and
- > https://github.com/capnproto/capnproto/commit/23db5e3fd91104a0b2881d8f8ab3c10bf9dd8e75
+ > Fixes compile errors against certain kernels.
+ > Signed-off-by: Christian Stewart <christian@paral.in>
+ > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+
+ > v1 -> v2:
+
+ >  -cjs: format patch with -N
+ >  -cjs: add upstream + signed-off to patches
+ >  -cjs: thanks for the review from Peter
+
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
