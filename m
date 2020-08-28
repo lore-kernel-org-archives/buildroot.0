@@ -1,53 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:06:26 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/xen: add upstream
- security fix for XSA-327
-Message-ID: <20200828170235.1E79784F31@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:02:58 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/chrony: security
+ bump to version 3.5.1
+Message-ID: <20200828170234.E87DC83598@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7c58e57ad37c6f884e0d0a1a3978ed3ccd3d711
+commit: https://git.buildroot.net/buildroot/commit/?id=09c531ca0925aef1302d32e95b924675bbd14583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issue:
+Fixes the following security issues:
 
-CVE-2020-15564: Missing alignment check in VCPUOP_register_vcpu_info
+CVE-2020-14367: Insecure writing of pidfile
+-------------------------------------------
 
-For further details, see the advisory:
+When chronyd is configured to save the pidfile in a directory where the
+chrony user has write permissions (e.g. /var/run/chrony - the default
+since chrony-3.4), an attacker that compromised the chrony user account
+could create a symbolic link at the location of the pidfile to make
+chronyd starting with root privileges follow the symlink and write its
+process ID to a file for which the chrony user doesn't have write
+permissions, causing a denial of service, or data loss.
 
-https://xenbits.xenproject.org/xsa/advisory-327.html
+This issue was reported by Matthias Gerstner of SUSE.
+
+For further details, see the oss-security posting:
+https://www.openwall.com/lists/oss-security/2020/08/21/1
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b541b68067f0ef478b2530f4371f2827e9c06e83)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 15484553f3d7e5d1a2a7dfb017ba40ad42b975e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/xen.hash | 1 +
- package/xen/xen.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/chrony/chrony.hash | 7 +++----
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index ab5f9d9083..0dd2f571a9 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,4 @@
- # Locally computed
- sha256  b97ce363e55b12c992063f4466c43cba0a6386ceb7a747b4dc670311f337ef01  xen-4.13.1.tar.gz
-+sha256  1d057695d5b74ce2857204103e943caeaf773bc4fb9d91ea78016e01a9147ed7  xsa327.patch
- sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 15742b5127..ee5e9847fe 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index c31c6893aa..57ce91ac80 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,5 +1,4 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2019/05/msg00001.html
+-md5 5f66338bc940a9b51eede8f391e7bed3  chrony-3.5.tar.gz
+-sha1 79e9aeace143550300387a99f17bff04b45673f7  chrony-3.5.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
++sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
+ # Locally calculated
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index d7f5c05183..f8938a80f5 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- XEN_VERSION = 4.13.1
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
-+XEN_PATCH = \
-+	https://xenbits.xenproject.org/xsa/xsa327.patch
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
- XEN_DEPENDENCIES = host-acpica host-python3
+-CHRONY_VERSION = 3.5
++CHRONY_VERSION = 3.5.1
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
