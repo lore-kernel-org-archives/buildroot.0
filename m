@@ -1,79 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:41:46 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/pkg-stats: set developers info
-Message-ID: <20200828155253.8F1C083DAE@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:10:50 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: bump version
+ to 7.4.9
+Message-ID: <20200828155253.6A18283DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=743b013a56c01cada50c08e13d29409a327903ae
+commit: https://git.buildroot.net/buildroot/commit/?id=bd77d9131e67cc95a76158abf06e11e731767ebf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Use the function 'parse_developers' function from getdeveloperlib that
-collect the information about the developers and the files they
-maintain. Then set the maintainer(s) to each package.
+Changelog of this bugfix release:
+https://www.php.net/ChangeLog-7.php#7.4.9
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c1fc827934a828179ae73f3b94bbc9d780cb4755)
+(cherry picked from commit 46ed4ac84740b1f377bc16ea335539ab480f22f5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 87018eabd3..e34841fc7c 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -30,10 +30,14 @@ import certifi
- import distutils.version
- import time
- import gzip
-+import sys
- from urllib3 import HTTPSConnectionPool
- from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 47879eecca..d648d90c04 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  642843890b732e8af01cb661e823ae01472af1402f211c83009c9b3abd073245  php-7.4.8.tar.xz
++sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
  
-+sys.path.append('utils/')
-+from getdeveloperlib import parse_developers
-+
- NVD_START_YEAR = 2002
- NVD_JSON_VERSION = "1.0"
- NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
-@@ -171,6 +175,16 @@ class Package:
-         """
-         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 48af0f6fdc..5417a82cf4 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+    def set_developers(self, developers):
-+        """
-+        Fills in the .developers field
-+        """
-+        self.developers = [
-+            dev.name
-+            for dev in developers
-+            if dev.hasfile(self.path)
-+        ]
-+
-     def __eq__(self, other):
-         return self.path == other.path
- 
-@@ -894,6 +908,8 @@ def __main__():
-                                       'HEAD']).splitlines()[0].decode()
-     print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
-+    print("Getting developers ...")
-+    developers = parse_developers()
-     print("Getting package make info ...")
-     package_init_make_info()
-     print("Getting package details ...")
-@@ -905,6 +921,7 @@ def __main__():
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
-         pkg.set_url()
-+        pkg.set_developers(developers)
-     print("Checking URL status")
-     check_package_urls(packages)
-     print("Getting latest versions ...")
+-PHP_VERSION = 7.4.8
++PHP_VERSION = 7.4.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
