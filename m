@@ -1,61 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:03:57 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/apache: security
- bump version to 2.4.46
-Message-ID: <20200828155321.CFB9F7FE6F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:15:15 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ support/scripts/pkg-stats: use aiohttp for upstream URL checking
+Message-ID: <20200828155322.08F437FFA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79302a559678534730b0d8cd5f330cf60b9de4e0
+commit: https://git.buildroot.net/buildroot/commit/?id=1a44eb53d2d6d28518d91aae8b4aa1b5cde61406
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Changelog: http://archive.apache.org/dist/httpd/CHANGES_2.4.46
+This commit reworks the code that checks if the upstream URL of each
+package (specified by its Config.in file) using the aiohttp
+module. This makes the implementation much more elegant, and avoids
+the problematic multiprocessing Pool which is causing issues in some
+situations.
 
-Release notes: https://downloads.apache.org/httpd/Announcement2.4.html
-
-Fixes CVE-2020-9490, CVE-2020-11984 & CVE-2020-11993:
-https://httpd.apache.org/security/vulnerabilities_24.html
-
-Added sha512 hash provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998 at free.fr:
-  - don't add md5 and sha1 hashes
-  - single comment above hashes
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7667418d970a4eca2d082f1de9f70aa5a93e9e1c)
+Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5c3221ac20c1bc374a44a727d0f552041a4a7247)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 5 +++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 46 +++++++++++++++++++++++++---------------------
+ 1 file changed, 25 insertions(+), 21 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 7b0e4ad8e7..bd3f6ac7ba 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,5 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
--sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.46.tar.bz2.{sha256,sha512}
-+sha256  740eddf6e1c641992b22359cabc66e6325868c3c5e2e3f98faf349b61ecf41ea  httpd-2.4.46.tar.bz2
-+sha512  5936784bb662e9d8a4f7fe38b70c043b468114d931cd10ea831bfe74461ea5856b64f88f42c567ab791fc8907640a99884ba4b6a600f86d661781812735b6f13  httpd-2.4.46.tar.bz2
- # Locally computed
- sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 068f36e325..203d637fbb 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 3423c44815..70e7fa7a0c 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -25,14 +25,13 @@ import os
+ from collections import defaultdict
+ import re
+ import subprocess
+-import requests  # URL checking
++import requests  # NVD database download
+ import json
+ import ijson
+ import distutils.version
+ import time
+ import gzip
+ import sys
+-from multiprocessing import Pool
  
--APACHE_VERSION = 2.4.43
-+APACHE_VERSION = 2.4.46
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ sys.path.append('utils/')
+ from getdeveloperlib import parse_developers  # noqa: E402
+@@ -499,26 +498,30 @@ def package_init_make_info():
+             Package.all_ignored_cves[pkgvar] = value.split()
+ 
+ 
+-def check_url_status_worker(url, url_status):
+-    if url_status[0] == 'ok':
+-        try:
+-            url_status_code = requests.head(url, timeout=30).status_code
+-            if url_status_code >= 400:
+-                return ("error", "invalid {}".format(url_status_code))
+-        except requests.exceptions.RequestException:
+-            return ("error", "invalid (err)")
+-        return ("ok", "valid")
+-    return url_status
++async def check_url_status(session, pkg, retry=True):
++    try:
++        async with session.get(pkg.url) as resp:
++            if resp.status >= 400:
++                pkg.status['url'] = ("error", "invalid {}".format(resp.status))
++                return
++    except (aiohttp.ClientError, asyncio.TimeoutError):
++        if retry:
++            return await check_url_status(session, pkg, retry=False)
++        else:
++            pkg.status['url'] = ("error", "invalid (err)")
++            return
+ 
++    pkg.status['url'] = ("ok", "valid")
+ 
+-def check_package_urls(packages):
+-    pool = Pool(processes=64)
+-    for pkg in packages:
+-        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.status['url']))
+-    for pkg in packages:
+-        pkg.status['url'] = pkg.url_worker.get(timeout=3600)
+-        del pkg.url_worker
+-    pool.terminate()
++
++async def check_package_urls(packages):
++    tasks = []
++    connector = aiohttp.TCPConnector(limit_per_host=5)
++    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
++        packages = [p for p in packages if p.status['url'][0] == 'ok']
++        for pkg in packages:
++            tasks.append(check_url_status(sess, pkg))
++        await asyncio.wait(tasks)
+ 
+ 
+ def check_package_latest_version_set_status(pkg, status, version, identifier):
+@@ -1068,7 +1071,8 @@ def __main__():
+         pkg.set_url()
+         pkg.set_developers(developers)
+     print("Checking URL status")
+-    check_package_urls(packages)
++    loop = asyncio.get_event_loop()
++    loop.run_until_complete(check_package_urls(packages))
+     print("Getting latest versions ...")
+     loop = asyncio.get_event_loop()
+     loop.run_until_complete(check_package_latest_version(packages))
