@@ -1,25 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:56:15 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/dovecot-pigeonhole: bump
- version to 0.5.11
-In-Reply-To: <20200818165436.145310-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 18 Aug 2020 18:54:35 +0200")
-References: <20200818165436.145310-1-bernd.kuhls@t-online.de>
-Message-ID: <87d03amz7k.fsf@dell.be.48ers.dk>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 28 Aug 2020 11:30:01 -0700
+Subject: [Buildroot] [PATCH v4 1/7] package/go: implement go modules
+ integration
+In-Reply-To: <20200813213220.260112-1-christian@paral.in>
+References: <20200813213220.260112-1-christian@paral.in>
+Message-ID: <CA+h8R2p-jVEHy=An0eRwDe7rt3Lt0KCaWp__uyPCwTNVi2Emew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hi all,
 
- > Release notes:
- > https://dovecot.org/pipermail/dovecot-news/2020-August/000439.html
+On Thu, Aug 13, 2020 at 2:32 PM Christian Stewart <christian@paral.in> wrote:
+>
+> Go has deprecated the GOPATH mechanism in favor of a new approach - Modules -
+> which specifies the root import path (and dependencies) in a "go.mod" file.
+>
+> This commit moves Buildroot to use the new go.mod approach. Both host and target
+> Go packages compile correctly with small tweaks adjusting the build target
+> specifier.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed to 2020.02.x and 2020.05.x, thanks.
+I'm looking to merge the Go modules change in advance of upgrading to
+Go 1.14 or Go 1.15.
 
--- 
-Bye, Peter Korsgaard
+Patchseries available here (same as v4 in the mailing list):
+
+https://patch-diff.githubusercontent.com/raw/paralin/buildroot/pull/8.patch
+
+As of now I haven't had anyone else - even the Go developers in
+Buildroot - test/review this.
+
+Adam (mender), Francois (docker-engine), Angelo (go.mk) - it would be
+very helpful if you could give this series a spin, particularly with
+the host packages you're using.
+
+Best regards,
+Christian Stewart
