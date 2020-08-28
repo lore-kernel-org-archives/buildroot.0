@@ -1,37 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:27:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/assimp: also build with -mxgot
- on mips64(el)
-In-Reply-To: <20200825210143.293881-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 25 Aug 2020 23:01:42 +0200")
-References: <20200825210143.293881-1-thomas.petazzoni@bootlin.com>
- <20200825210143.293881-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87wo1iof46.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:29:11 +0200
+Subject: [Buildroot] [PATCH] package/ripgrep: fix build directories
+In-Reply-To: <20200827004424.325134-1-sam.voss@gmail.com> (sam voss's message
+ of "Wed, 26 Aug 2020 19:44:24 -0500")
+References: <20200827004424.325134-1-sam.voss@gmail.com>
+Message-ID: <87sgc6of14.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "sam" == sam voss <sam.voss@gmail.com> writes:
 
- > Since the bump of assimp to 5.0.1, we have build failures on mips64el,
- > due to relocations being truncated. The issue seems to be quite
- > similar to the one on m68k coldfire, as both m68k and MIPS have this
- > -mxgot gcc option to switch to using a GOT that has no size limit (but
- > causes less efficient code to be produced).
+ > From: Sam Voss <sam.voss@gmail.com>
+ > RIPGREP_CARGO_MODE was no longer defined after 832c076f26 and caused
+ > issues during the install step as the build directory was malformed.
 
- > Here as well, the overall relevance of assimp on mips64(el) platforms
- > being probably very limited, the incentive to search for a better
- > solution is pretty limited.
+ > This patch maintains the release/dev profile distinction, while also
+ > assigning appropriate build folders.
 
  > Fixes:
+ >  - http://autobuild.buildroot.net/results/a4cd7ecc6d983aa6f15d3be1e21529f17e04b825/
+ >  - http://autobuild.buildroot.net/results/2bab8ffa590d4c4eabffe94ed27311c7f6607c98/
 
- >   http://autobuild.buildroot.net/results/7df487d5117b2ee440a07dbff9cae1b181566748/
+ > Signed-off-by: Sam Voss <sam.voss@gmail.com>
+ > CC: Yann E. MORIN <yann.morin.1998@free.fr>
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2020.05.x, thanks.
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
