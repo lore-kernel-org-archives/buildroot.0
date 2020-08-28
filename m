@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 16:37:14 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/ffmpeg: bump
+Date: Fri, 28 Aug 2020 16:37:04 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ffmpeg: bump
  version to 4.2.4
-Message-ID: <20200828142950.3AC4086515@busybox.osuosl.org>
+Message-ID: <20200828143000.604AA86515@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69d2ac4d373eeb008ee485d0d947c5e418820825
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=329ff9e9b8b2d9e1f084aa157ae1658fd929a0fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Bugfix release, fixing a number of issues since 4.2.3.  For details, see the
 changelog:
