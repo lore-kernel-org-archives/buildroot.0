@@ -1,68 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:45:46 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/opencv: fix build
- with jasper >= 2.0.17
-Message-ID: <20200828164650.86D09862C8@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:31:03 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/cvs: fix mktime
+ related compile failure
+Message-ID: <20200828164650.272ED862C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d95e110e441573347d2a5d1bf9424875692f45bb
+commit: https://git.buildroot.net/buildroot/commit/?id=fd9a468b4e48a29f0b95ba8c0891fd584b0dfbb9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/656e2232a0566ba8f7826a87b1fab9cc2c3d8e46
+Use ac_cv_func_working_mktime=yes to force the use of a provided
+mktime implementation instead of compiling the failing own one.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 521854251f5a1e1082dbed503772969cd5797c41)
+Fixes:
+
+  http://autobuild.buildroot.net/results/5bcd8f4235002da682cc900f866116d2fe87f1c8
+
+  mktime.c: In function 'ydhms_diff':
+  mktime.c:106:52: error: size of array 'a' is negative
+   #define verify(name, assertion) struct name { char a[(assertion) ? 1 : -1]; }
+                                                      ^
+  mktime.c:170:3: note: in expansion of macro 'verify'
+     verify (long_int_year_and_yday_are_wide_enough,
+     ^~~~~~
+
+with the failure/assert comming from the lines:
+
+  verify (long_int_year_and_yday_are_wide_enough,
+          INT_MAX <= LONG_MAX / 2 || TIME_T_MAX <= UINT_MAX);
+
+which fails since the y2038 time_t conversion from 32bit to 64bit
+(musl libc).
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ea2f52494c32c53a3def6dc3b0c5b9d5d7c7edf4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-of-grfmt_jpeg2000-cpp.patch     | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/cvs/cvs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/opencv/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch b/package/opencv/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-new file mode 100644
-index 0000000000..683dd95d97
---- /dev/null
-+++ b/package/opencv/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-@@ -0,0 +1,37 @@
-+From f66fc199a20882c546fa31142e9c0f5a8b3cf983 Mon Sep 17 00:00:00 2001
-+From: Florian Jung <flo@windfis.ch>
-+Date: Wed, 29 Jul 2020 18:51:55 +0200
-+Subject: [PATCH] Fix build of grfmt_jpeg2000.cpp
-+
-+libjasper has recently changed `jas_matrix_get` from a macro to an inline function
-+(389951d071 in https://github.com/jasper-software/jasper), causing the build to fail.
-+
-+[Retrieved (and backported) from:
-+https://github.com/opencv/opencv/commit/f66fc199a20882c546fa31142e9c0f5a8b3cf983]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ modules/imgcodecs/src/grfmt_jpeg2000.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/modules/highgui/src/grfmt_jpeg2000.cpp b/modules/highgui/src/grfmt_jpeg2000.cpp
-+index fe69f80c86f..0f4d28d6f4d 100644
-+--- a/modules/highgui/src/grfmt_jpeg2000.cpp
-++++ b/modules/highgui/src/grfmt_jpeg2000.cpp
-+@@ -377,7 +377,7 @@ bool  Jpeg2KDecoder::readComponent8u( uchar *data, void *_buffer,
-+ 
-+     for( y = 0; y < yend - ystart; )
-+     {
-+-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-+         uchar* dst = data + (y - yoffset) * step - xoffset;
-+ 
-+         if( xstep == 1 )
-+@@ -443,7 +443,7 @@ bool  Jpeg2KDecoder::readComponent16u( unsigned short *data, void *_buffer,
-+ 
-+     for( y = 0; y < yend - ystart; )
-+     {
-+-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-+         ushort* dst = data + (y - yoffset) * step - xoffset;
-+ 
-+         if( xstep == 1 )
+diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+index 563802cc9d..6f83ca6408 100644
+--- a/package/cvs/cvs.mk
++++ b/package/cvs/cvs.mk
+@@ -12,7 +12,9 @@ CVS_LICENSE = GPL-1.0+, LGPL-2.0+, LGPL-2.1+ (glob)
+ CVS_LICENSE_FILES = COPYING COPYING.LIB lib/glob-libc.h
+ CVS_DEPENDENCIES = ncurses
+ 
+-CVS_CONF_ENV = cvs_cv_func_printf_ptr=yes
++CVS_CONF_ENV = \
++	ac_cv_func_working_mktime=yes \
++	cvs_cv_func_printf_ptr=yes
+ 
+ CVS_CONFIGURE_ARGS = --disable-old-info-format-support
+ ifeq ($(BR2_PACKAGE_CVS_SERVER),y)
