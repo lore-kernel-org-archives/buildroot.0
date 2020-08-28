@@ -1,41 +1,146 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:55:06 +0200
-Subject: [Buildroot] [PATCH v2] package/trousers: add upstream security
- fix
-In-Reply-To: <20200824102516.29745-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 24 Aug 2020 12:25:16 +0200")
-References: <20200824102516.29745-1-peter@korsgaard.com>
-Message-ID: <87h7smmz9h.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:53:26 +0200
+Subject: [Buildroot] [git commit] package/trousers: add upstream security fix
+Message-ID: <20200828174741.BFEB08650E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e71be18354391055a0a21e06a78aaade25ea62d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issues:
- > CVE-2020-24332
- > If the tcsd daemon is started with root privileges,
- > the creation of the system.data file is prone to symlink attacks
+Fixes the following security issues:
 
- > CVE-2020-24330
- > If the tcsd daemon is started with root privileges,
- > it fails to drop the root gid after it is no longer needed
+CVE-2020-24332
+If the tcsd daemon is started with root privileges,
+the creation of the system.data file is prone to symlink attacks
 
- > CVE-2020-24331
- > If the tcsd daemon is started with root privileges,
- > the tss user has read and write access to the /etc/tcsd.conf file
+CVE-2020-24330
+If the tcsd daemon is started with root privileges,
+it fails to drop the root gid after it is no longer needed
 
- > For details, see the advisory:
- > https://www.openwall.com/lists/oss-security/2020/05/20/3
+CVE-2020-24331
+If the tcsd daemon is started with root privileges,
+the tss user has read and write access to the /etc/tcsd.conf file
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- > Changes since v1:
- > - Add _IGNORE_CVES entry
+For details, see the advisory:
+https://www.openwall.com/lists/oss-security/2020/05/20/3
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...tiple-security-issues-that-are-present-if.patch | 90 ++++++++++++++++++++++
+ package/trousers/trousers.mk                       |  3 +
+ 2 files changed, 93 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+new file mode 100644
+index 0000000000..609245dad8
+--- /dev/null
++++ b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+@@ -0,0 +1,90 @@
++From e74dd1d96753b0538192143adf58d04fcd3b242b Mon Sep 17 00:00:00 2001
++From: Matthias Gerstner <mgerstner@suse.de>
++Date: Fri, 14 Aug 2020 22:14:36 -0700
++Subject: [PATCH] Correct multiple security issues that are present if the tcsd
++ is started by root instead of the tss user.
++
++Patch fixes the following 3 CVEs:
++
++CVE-2020-24332
++If the tcsd daemon is started with root privileges,
++the creation of the system.data file is prone to symlink attacks
++
++CVE-2020-24330
++If the tcsd daemon is started with root privileges,
++it fails to drop the root gid after it is no longer needed
++
++CVE-2020-24331
++If the tcsd daemon is started with root privileges,
++the tss user has read and write access to the /etc/tcsd.conf file
++
++Authored-by: Matthias Gerstner <mgerstner@suse.de>
++Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/tcs/ps/tcsps.c   |  2 +-
++ src/tcsd/svrside.c   |  1 +
++ src/tcsd/tcsd_conf.c | 10 +++++-----
++ 3 files changed, 7 insertions(+), 6 deletions(-)
++
++diff --git a/src/tcs/ps/tcsps.c b/src/tcs/ps/tcsps.c
++index e47154b..85d45a9 100644
++--- a/src/tcs/ps/tcsps.c
+++++ b/src/tcs/ps/tcsps.c
++@@ -72,7 +72,7 @@ get_file()
++ 	}
++ 
++ 	/* open and lock the file */
++-	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR, 0600);
+++	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR|O_NOFOLLOW, 0600);
++ 	if (system_ps_fd < 0) {
++ 		LogError("system PS: open() of %s failed: %s",
++ 				tcsd_options.system_ps_file, strerror(errno));
++diff --git a/src/tcsd/svrside.c b/src/tcsd/svrside.c
++index 1ae1636..1c12ff3 100644
++--- a/src/tcsd/svrside.c
+++++ b/src/tcsd/svrside.c
++@@ -473,6 +473,7 @@ main(int argc, char **argv)
++ 		}
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
+++	setgid(pwd->pw_gid);
++ 	setuid(pwd->pw_uid);
++ #endif
++ #endif
++diff --git a/src/tcsd/tcsd_conf.c b/src/tcsd/tcsd_conf.c
++index a31503d..ea8ea13 100644
++--- a/src/tcsd/tcsd_conf.c
+++++ b/src/tcsd/tcsd_conf.c
++@@ -743,7 +743,7 @@ conf_file_init(struct tcsd_config *conf)
++ #ifndef SOLARIS
++ 	struct group *grp;
++ 	struct passwd *pw;
++-	mode_t mode = (S_IRUSR|S_IWUSR);
+++	mode_t mode = (S_IRUSR|S_IWUSR|S_IRGRP);
++ #endif /* SOLARIS */
++ 	TSS_RESULT result;
++ 
++@@ -798,15 +798,15 @@ conf_file_init(struct tcsd_config *conf)
++ 	}
++ 
++ 	/* make sure user/group TSS owns the conf file */
++-	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
+++	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
++ 		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
++-				TSS_USER_NAME, TSS_GROUP_NAME);
+++				"root", TSS_GROUP_NAME);
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
++ 
++-	/* make sure only the tss user can manipulate the config file */
+++	/* make sure only the tss user can read (but not manipulate) the config file */
++ 	if (((stat_buf.st_mode & 0777) ^ mode) != 0) {
++-		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
+++		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
++ #endif /* SOLARIS */
++-- 
++2.20.1
++
+diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
+index 1d5364959c..5e6161ce4d 100644
+--- a/package/trousers/trousers.mk
++++ b/package/trousers/trousers.mk
+@@ -13,6 +13,9 @@ TROUSERS_INSTALL_STAGING = YES
+ TROUSERS_AUTORECONF = YES
+ TROUSERS_DEPENDENCIES = host-pkgconf openssl
+ 
++# 0003-Correct-multiple-security-issues-that-are-present-if.patch
++TROUSERS_IGNORE_CVES += CVE-2020-24330 CVE-2020-24331 CVE-2020-24332
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ TROUSERS_DEPENDENCIES += libiconv
+ endif
