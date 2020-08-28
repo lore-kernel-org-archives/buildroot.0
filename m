@@ -1,33 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 28 Aug 2020 19:03:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
- security fix for CVE-2020-14347
-References: <20200810064109.447089-1-bernd.kuhls@t-online.de>
- <20200811234906.051e8caa@windsurf.home>
-Message-ID: <ovpn1hxmln.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Aug 2020 19:04:44 +0200
+Subject: [Buildroot] [git commit] package/openfpgaloader: C++ dependency
+ is not inherited
+In-Reply-To: <20200823195346.5E569836F4@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 23 Aug 2020 21:51:27 +0200")
+References: <20200823195346.5E569836F4@busybox.osuosl.org>
+Message-ID: <874komr9ar.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 11 Aug 2020 23:49:06 +0200 schrieb Thomas Petazzoni via buildroot:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> This raises a question: what about the older X.org server releases?
-> According to the NIST CVE entry, all versions prior to 1.20.9 are
-> affected, so should the patch be backported to the other X.org server
-> versions we support ?
+ > commit: https://git.buildroot.net/buildroot/commit/?id=1ca0077d9141fff62c179bd2d17cfd6656a7d8a3
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Thomas,
+ > openfpgaloader is written in C++, so the dependency on C++ is not
+ > inherited from libftdipp1.
 
-the bump to 1.20.9 fixed four CVEs in total which makes backporting 
-upstream patches more complicated as time passes by and new issues arise, 
-upstream does not update the older branches anymore:
-https://cgit.freedesktop.org/xorg/xserver/
+ > Drop the confusing comment.
 
-Due to the fact that personally I have no use for the older X.org server 
-versions I would like to raise the question whether we can remove them? 
-From my POV these older versions are unmaintained in buildroot because I 
-want to concentrate on the current release which is the one I am using.
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Regards, Bernd
+Committed to 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
