@@ -1,65 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:50:48 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- package/shadowsocks-libev: security bump to version 3.3.4
-Message-ID: <20200828174515.32D8E818F3@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:46:59 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/gnuradio:
+ backport patch to fix INTERFACE_INCLUDE_DIRECTORIES
+Message-ID: <20200828174515.1FCAD818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c74db053cc34ea1800da88d4ef37538f4734aa4
+commit: https://git.buildroot.net/buildroot/commit/?id=a81b187c16492724639dd394d805212bd100d5b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-- Fix CVE-2019-5163: An exploitable denial-of-service vulnerability
-  exists in the UDPRelay functionality of Shadowsocks-libev 3.3.2. When
-  utilizing a Stream Cipher and a local_address, arbitrary UDP packets
-  can cause a FATAL error code path and exit. An attacker can send
-  arbitrary UDP packets to trigger this vulnerability.
-- Fix CVE-2019-5164: An exploitable code execution vulnerability exists
-  in the ss-manager binary of Shadowsocks-libev 3.3.2. Specially crafted
-  network packets sent to ss-manager can cause an arbitrary binary to
-  run, resulting in code execution and privilege escalation. An attacker
-  can send network packets to trigger this vulnerability.
+gnuradio-runtimeTargets.cmake and gnuradio-pmtTargets.cmake are filled
+using CMAKE_INSTALL_PREFIX for INSTALL_INTERFACE.
 
-Also update indentation in hash file (two spaces)
+Since CMAKE_INSTALL_PREFIX, in buildroot, is set to /usr, these files contains
+path to host system.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+With BR2_COMPILER_PARANOID_UNSAFE_PATH package using gnuradio fails with:
+arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include'
+
+By simply providing 'include', produced .cmake contains:
+INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+instead of
+INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
+
+[Upstream status: https://github.com/gnuradio/gnuradio/pull/3737]
+
+Fix (many) gr-osmosdr build failure:
+- http://autobuild.buildroot.net/results/66b76c07f15bb3e6db697c47796ae3dd15ecf4b9/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fd3dd9d9c5b502c8c67aac6b4fad1534f0b10b4b)
+(cherry picked from commit 5209123494ccfb91ea802cc7675886c2ac800cc7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shadowsocks-libev/shadowsocks-libev.hash | 8 ++++----
- package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...nt-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-index 76928ebb48..cc7993a54f 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.hash
-+++ b/package/shadowsocks-libev/shadowsocks-libev.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha256 677356a5ed6b5ae9e32a898061db2587158ff27e245db03f4bde9b006ef12dc9 shadowsocks-libev-3.3.3.tar.gz
-+sha256  fce47a956fad0c30def9c71821bcec450a40d3f881548e31e66cedf262b89eb1  shadowsocks-libev-3.3.4.tar.gz
- 
- # License files, locally calculated
--sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
--sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
--sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
-+sha256  736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
-+sha256  c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
-+sha256  4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 4b0b963eef..3ba4cb875c 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHADOWSOCKS_LIBEV_VERSION = 3.3.3
-+SHADOWSOCKS_LIBEV_VERSION = 3.3.4
- SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
- SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
+diff --git a/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch b/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
+new file mode 100644
+index 0000000000..6b8987fa5f
+--- /dev/null
++++ b/package/gnuradio/0003-gnuradio-runtime_pmt-dont-hardcode-INTERFACE_INCLUDE_DIRECTORIES.patch
+@@ -0,0 +1,57 @@
++From 84dea8284c521f08508bb2dcbc99db3b5d3438fd Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Thu, 27 Aug 2020 17:32:09 +0200
++Subject: [PATCH] gnuradio-runtime_pmt: dont hardcode
++ INTERFACE_INCLUDE_DIRECTORIES
++
++gnuradio-runtimeTargets.cmake and gnuradio-pmtTargets.cmake are filled
++using CMAKE_INSTALL_PREFIX for INSTALL_INTERFACE.
++
++Since CMAKE_INSTALL_PREFIX, in buildroot, is set to /usr, these files contains
++path to host system.
++
++With BR2_COMPILER_PARANOID_UNSAFE_PATH package using gnuradio fails with:
++arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-isystem' '/usr/include'
++
++By simply providing 'include', produced .cmake contains:
++INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
++instead of
++INTERFACE_INCLUDE_DIRECTORIES "/usr/include"
++
++[Upstream status: https://github.com/gnuradio/gnuradio/pull/3737]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gnuradio-runtime/lib/CMakeLists.txt     | 2 +-
++ gnuradio-runtime/lib/pmt/CMakeLists.txt | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gnuradio-runtime/lib/CMakeLists.txt b/gnuradio-runtime/lib/CMakeLists.txt
++index 5aa90a5e1..fc32f473b 100644
++--- a/gnuradio-runtime/lib/CMakeLists.txt
+++++ b/gnuradio-runtime/lib/CMakeLists.txt
++@@ -214,7 +214,7 @@ target_link_libraries(gnuradio-runtime PUBLIC
++ 
++ target_include_directories(gnuradio-runtime
++   PUBLIC
++-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+++    $<INSTALL_INTERFACE:include>
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../include>
++   PRIVATE
++diff --git a/gnuradio-runtime/lib/pmt/CMakeLists.txt b/gnuradio-runtime/lib/pmt/CMakeLists.txt
++index 9fb98d0fc..6dfcd945c 100644
++--- a/gnuradio-runtime/lib/pmt/CMakeLists.txt
+++++ b/gnuradio-runtime/lib/pmt/CMakeLists.txt
++@@ -33,7 +33,7 @@ target_link_libraries(gnuradio-pmt
++ 
++ target_include_directories(gnuradio-pmt
++   PUBLIC
++-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+++  $<INSTALL_INTERFACE:include>
++   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
++   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/
++   )
++-- 
++2.26.2
++
