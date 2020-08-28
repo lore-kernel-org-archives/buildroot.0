@@ -1,78 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:43:39 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/mpv: atomic is
- mandatory
-Message-ID: <20200828164643.42A9085FE9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:48:42 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/collectd: fix
+ build with dpdk_telemetry
+Message-ID: <20200828164643.6360B865B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63f8f75aea52785ef65980ea4a88c8a536b1a546
+commit: https://git.buildroot.net/buildroot/commit/?id=c69c0eefecda52411a104c57ef5286558ca9b225
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-__sync builtins have been dropped since version 0.24.0 and
-https://github.com/mpv-player/mpv/commit/c3205d294e519f994829d9355eb133670729aab4
+Fix typo added by 44e0b6014f7e67901af346af8f6a9452b095ddd5
+
+Fixes:
+ - http://autobuild.buildroot.org/results/770293a007d683cb6f82f1fd3bcc20967e2b4bed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c6c381c483712bd193b621e70fc2e14579f91231)
+(cherry picked from commit 668530f1e32375b98e9ca2188431485261f3ee7b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpv/Config.in   | 4 ++--
- package/tovid/Config.in | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 32910f2245..697ad57ba6 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPV
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
-@@ -25,6 +25,6 @@ config BR2_PACKAGE_MPV
- 
- comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-diff --git a/package/tovid/Config.in b/package/tovid/Config.in
-index d5b7a28314..f4ddcfa4a0 100644
---- a/package/tovid/Config.in
-+++ b/package/tovid/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_TOVID
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # mpv
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mpv
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC # mpv
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC # mpv
- 	# The below dependencies are runtime dependencies only
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
-@@ -31,7 +31,7 @@ config BR2_PACKAGE_TOVID
- comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.5"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 \
- 		|| !BR2_INSTALL_LIBSTDCPP \
-@@ -41,7 +41,7 @@ comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.5"
- comment "tovid depends on python or python3"
- 	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 52b218e139..a67293159b 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -157,7 +157,7 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
+-	$(if $(BR2_PACKAGE_COLLECTD_DPKD_TELEMETRY),jansson) \
++	$(if $(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),jansson) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
