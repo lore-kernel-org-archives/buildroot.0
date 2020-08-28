@@ -1,175 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:29:38 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/pkg-stats: drop erroneous "break" in CVE.affects()
-Message-ID: <20200828174508.6680B8653F@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:22:08 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/patchelf: keep
+ RPATH entries even without DT_NEEDED libraries
+Message-ID: <20200828174508.5231680FD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc24b9572357d161aab25b0efd46abc838d2b8e3
+commit: https://git.buildroot.net/buildroot/commit/?id=8ddefc303c22ef46e6ce56bab9c95a3f0ff28221
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 7d2779ecbb142b62f8913d30352b11058f922b2a
-("support/script/pkg-stats: handle exception when version comparison
-fails") erroneousy introduced a "break" within a try/expect block.
+Our patch
+0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch adds
+an option --make-rpath-relative, which we use to tweak RPATH of target
+binaries.
 
-This break has the unfortunate consequence that every CVE that was
-using the <= operator was skipped, and according to the current
-CVE statistics, made us miss 74 CVEs out of 141 CVEs.
+However, one of the effect of this option is that it drops RPATH
+entries if the corresponding directory does not contain a library that
+is referenced by a DT_NEEDED entry of the binary.
 
-Here is for reference the complete list of CVEs we missed:
+This unfortunately isn't correct, as RPATH entries are not only used
+by the dynamic linker to resolve the location of libraries listed
+through DT_NEEDED entries: RPATH entries are also used by dlopen()
+when resolving the location of libraries that are loaded at runtime.
 
- - gnupg
-   CVE-2006-3082
-   CVE-2019-13050
+Therefore, the removal of RPATH entries that don't correspond to
+directories containing libraries referenced by DT_NEEDED entries break
+legitimate uses of RPATH for dlopen()ed libraries.
 
- - jhead
-   CVE-2020-6624
-   CVE-2020-6625
+This issue was even pointed out during the review of the upstream pull
+request:
 
- - patch
-   CVE-2018-6952
-   CVE-2019-20633
+  https://github.com/NixOS/patchelf/pull/118#discussion_r329660138
 
- - json-c
-   CVE-2020-12762
+This fixes tst-origin uClibc-ng unit test:
 
- - git
-   CVE-2018-1000110
-   CVE-2018-1000182
-   CVE-2019-1003010
-   CVE-2020-2136
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
+https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
 
- - iperf2
-   CVE-2016-4303
+Without this patch:
 
- - libtorrent
-   CVE-2009-1760
-   CVE-2016-5301
+$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
+$ readelf -d toto | grep PATH
+ 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
+$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/
+toto
+patching ELF file `toto'
+Kernel page size is 4096 bytes
+removing directory '/tmp/test/bar' from RPATH because it does not contain needed libs
+new rpath is `'
+$ readelf -d toto | grep PATH
+ 0x000000000000001d (RUNPATH)            Library runpath: []
 
- - lua
-   CVE-2020-15888
-   CVE-2020-15889
-   CVE-2020-15945
-   CVE-2020-24342
+With the patch applied:
 
- - openvpn
-   CVE-2020-7224
+$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
+$ readelf -d toto | grep PATH
+ 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
+$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/ toto
+patching ELF file `toto'
+Kernel page size is 4096 bytes
+keeping relative path of /tmp/test/bar
+new rpath is `test/bar'
+$ readelf -d toto | grep PATH
+ 0x000000000000001d (RUNPATH)            Library runpath: [test/bar]
 
- - smack
-   CVE-2016-10027
-
- - bashtop
-   CVE-2019-18276
-
- - links
-   CVE-2008-3319
-
- - argus
-   CVE-2011-3332
-
- - libraw
-   CVE-2020-15503
-
- - netcat
-   CVE-2008-5727
-   CVE-2008-5728
-   CVE-2008-5729
-   CVE-2008-5730
-   CVE-2008-5742
-   CVE-2015-2214
-
- - subversion
-   CVE-2017-1000085
-   CVE-2018-1000111
-   CVE-2020-2111
-
- - python
-   CVE-2013-1753
-   CVE-2015-5652
-   CVE-2017-17522
-   CVE-2017-18207
-   CVE-2019-20907
-   CVE-2019-9674
-
- - cereal
-   CVE-2020-11104
-   CVE-2020-11105
-
- - opencv
-   CVE-2017-1000450
-   CVE-2017-12597
-   CVE-2017-12598
-   CVE-2017-12599
-   CVE-2017-12600
-   CVE-2017-12601
-   CVE-2017-12602
-   CVE-2017-12603
-   CVE-2017-12604
-   CVE-2017-12605
-   CVE-2017-12606
-   CVE-2017-12862
-   CVE-2017-12863
-   CVE-2017-12864
-   CVE-2019-15939
-
- - docker
-   CVE-2015-1843
-   CVE-2015-3627
-   CVE-2015-3630
-   CVE-2015-3631
-   CVE-2016-3697
-   CVE-2017-14992
-   CVE-2019-16884
-
- - trousers
-   CVE-2020-24330
-   CVE-2020-24331
-   CVE-2020-24332
-
- - libcroco
-   CVE-2020-12825
-
- - libpupnp
-   CVE-2020-13848
-
- - openjpeg
-   CVE-2020-15389
-
- - flex
-   CVE-2015-1773
-
- - libesmtp
-   CVE-2019-19977
-
- - ed
-   CVE-2015-2987
-
- - libmad
-   CVE-2018-7263
-
- - grub
-   CVE-2020-15705
-
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b3f959fe968cca773cecf1c354b22f8b69201afc)
+(cherry picked from commit bcdb74512d9f6e7eca878c53aca2eb3eccac7ef3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 1 -
- 1 file changed, 1 deletion(-)
+ ...ption-to-make-the-rpath-relative-under-a-specif.patch | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 303af2f588..e642147b98 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -383,7 +383,6 @@ class CVE:
-                         continue
-                     try:
-                         affected = pkg_version <= cve_affected_version
--                        break
-                     except TypeError:
-                         return CVE_UNKNOWN
-                     if affected:
+diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+index feec627680..f9f2537a6c 100644
+--- a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
++++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
+@@ -167,7 +167,7 @@ index 1d9a772..35b4a33 100644
+      if (op == rpShrink && !rpath) {
+          debug("no RPATH to shrink\n");
+          return;
+-@@ -1120,26 +1196,86 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
++@@ -1120,26 +1196,80 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
+                  continue;
+              }
+  
+@@ -250,12 +250,6 @@ index 1d9a772..35b4a33 100644
+ +                }
+ +            }
+ +
+-+            if (!libFoundInRPath(canonicalPath, neededLibs, neededLibFound)) {
+-+                debug("removing directory '%s' from RPATH because it does not contain needed libs\n",
+-+                      dirName.c_str());
+-+                continue;
+-+            }
+-+
+ +            /* Finally make "canonicalPath" relative to "filedir" in "rootDir" */
+ +            if (relativeToFile)
+ +                concatToRPath(newRPath, makePathRelative(canonicalPath, fileDir));
+@@ -268,7 +262,7 @@ index 1d9a772..35b4a33 100644
+      if (op == rpRemove) {
+          if (!rpath) {
+              debug("no RPATH to delete\n");
+-@@ -1413,7 +1549,9 @@ static bool shrinkRPath = false;
++@@ -1413,7 +1543,9 @@ static bool shrinkRPath = false;
+  static bool removeRPath = false;
+  static bool setRPath = false;
+  static bool printRPath = false;
+@@ -278,7 +272,7 @@ index 1d9a772..35b4a33 100644
+  static set<string> neededLibsToRemove;
+  static map<string, string> neededLibsToReplace;
+  static set<string> neededLibsToAdd;
+-@@ -1438,14 +1576,16 @@ static void patchElf2(ElfFile & elfFile)
++@@ -1438,14 +1570,16 @@ static void patchElf2(ElfFile & elfFile)
+          elfFile.setInterpreter(newInterpreter);
+  
+      if (printRPath)
+@@ -299,7 +293,7 @@ index 1d9a772..35b4a33 100644
+  
+      if (printNeeded) elfFile.printNeededLibs();
+  
+-@@ -1508,6 +1648,9 @@ void showHelp(const string & progName)
++@@ -1508,6 +1642,9 @@ void showHelp(const string & progName)
+    [--set-rpath RPATH]\n\
+    [--remove-rpath]\n\
+    [--shrink-rpath]\n\
+@@ -309,7 +303,7 @@ index 1d9a772..35b4a33 100644
+    [--print-rpath]\n\
+    [--force-rpath]\n\
+    [--add-needed LIBRARY]\n\
+-@@ -1564,6 +1707,17 @@ int main(int argc, char * * argv)
++@@ -1564,6 +1701,17 @@ int main(int argc, char * * argv)
+              setRPath = true;
+              newRPath = argv[i];
+          }
