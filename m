@@ -1,34 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Aug 2020 09:18:17 +0200
-Subject: [Buildroot] [PATCH v3 1/8] support/scripts: Turn CVE check into
- a module
-In-Reply-To: <20200724154356.2607639-2-gregory.clement@bootlin.com>
-References: <20200724154356.2607639-1-gregory.clement@bootlin.com>
- <20200724154356.2607639-2-gregory.clement@bootlin.com>
-Message-ID: <20200828091817.45e1f982@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 28 Aug 2020 09:20:12 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-08-18
+In-Reply-To: <1af22d4f-2280-749b-351a-819d245251c5@ideasonboard.com>
+References: <5f3cda7b.1c69fb81.e5841.2292SMTPIN_ADDED_MISSING@mx.google.com>
+ <1af22d4f-2280-749b-351a-819d245251c5@ideasonboard.com>
+Message-ID: <a40c1a30-520a-4d98-b3eb-a96141a26dbe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Jul 2020 17:43:49 +0200
-Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
 
-> In order to be able to do CVE checking outside of pkg-stat, move the
-> CVE class in a module that can be used by other scripts.
+
+On 19/08/2020 11:51, Kieran Bingham wrote:
+> Hi Thomas, Fabrice,
 > 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  support/scripts/cve.py    | 156 ++++++++++++++++++++++++++++++++++++++
->  support/scripts/pkg-stats | 132 +-------------------------------
->  2 files changed, 160 insertions(+), 128 deletions(-)
->  create mode 100755 support/scripts/cve.py
+> This autobuilder failure is still on going for M68k
+> 
+> It relates to an assertion which only seems to fire on the m68k
+> regarding a ControlValue which we serialise, and therefore (currently)
+> require to know it's exact size.
+> 
+> 
+> -Wnon-virtual-dtor -Wextra -Werror -std=c++14 -O3 -Wno-unused-parameter
+> -include config.h -faligned-new -fPIC -pthread -MD -MQ
+> src/libcamera/libcamera.so.p/controls.cpp.o -MF
+> src/libcamera/libcamera.so.p/controls.cpp.o.d -o
+> src/libcamera/libcamera.so.p/controls.cpp.o -c ../src/libcamera/controls.cpp
+> ../src/libcamera/controls.cpp:92:36: error: static assertion failed:
+> Invalid size of ControlValue class
+>  static_assert(sizeof(ControlValue) == 16, "Invalid size of ControlValue
+> class");
+> 
+> I assumed that this happens because the m68k is 32 bit, but of course we
+> already successfully compile on other 32 bit architectures, so I'm not
+> sure of the underlying change of size.
 
-I've improved the commit log a bit, and applied to next. Thanks!
+ I haven't looked at it at all, but if ControlValue is a struct, it's more
+likely caused by padding.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+> Anyway, I'm quite certain we wouldn't expect libcamera to run on an
+> m68k. What's the easiest way to disable libcamera support for that target?
+> 
+> Should the have an architecture specific depends on !m68k or such in
+> Config.in, or is there a better way to handle this?
+
+ Yes, if you don't want to bother with fixing an issue, just add a !m68k with a
+small comment (e.g. "# Invalid size of ControlValue") and all of the explanation
+above in the commit message.
+
+ Regards,
+ Arnout
+
+> 
+> Regards
+> --
+> Kieran
+> 
+> 
+> 
+> On 19/08/2020 08:53, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> Autobuilder failures
+>> ====================
+>>
+>> Below is a list of build failures reported by the Buildroot
+>> autobuilders in relation to packages or CPU
+>> architectures you are in charge of. Please help us
+>> improving the quality of Buildroot by investigating
+>> those build failures and sending patches to fix
+>> them.Thanks!
+>>
+>> Results for the 'next' branch
+>> -----------------------------
+>>
+>> Build failures related to your packages:
+>>
+>>     arch     |             reason             |                                       url                                      
+>> -------------+--------------------------------+---------------------------------------------------------------------------------
+>>     m68k     | libcamera-565f95d64ff92e871... | http://autobuild.buildroot.net/results/40e8facc805b3eaac5fe6c95db0cd7b756eb1f18
+>>
+>>
+> 
