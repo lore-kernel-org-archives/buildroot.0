@@ -1,31 +1,36 @@
-From: Jeff Tchang <jeff.tchang@gmail.com>
-Date: Fri, 28 Aug 2020 13:41:16 -0700
-Subject: [Buildroot] Unable to bake in an initramfs filesystem into
- kernel image
-In-Reply-To: <87sgc6ld4d.fsf@dell.be.48ers.dk>
-References: <CAG+zT3rM=eaW6oykBgiVdPd4fnZF=efbgBok6Q8WCy2QQ2EnDw@mail.gmail.com>
- <313ae7e3-1817-e633-acc3-6d7097f99ffc@mind.be>
- <87sgc6ld4d.fsf@dell.be.48ers.dk>
-Message-ID: <CAG+zT3p7mpU9rs-mGZwuXC4t-agx0RoSboX2AE-kbvksvxnR6g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Aug 2020 22:57:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openal: needs gcc >= 4.9
+In-Reply-To: <20200818215412.522185-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 18 Aug 2020 23:54:12 +0200")
+References: <20200818215412.522185-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8mulc9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> FYI, I've just tested the initramfs support on current master (on an ARM
-> platform) and it works as expected.
->
->
-Thank you. I managed to resolve this. The issue was that the cpio file did
-not properly have /init in it.
-I double checked and extracted the file to make sure everything was where
-it was supposed to be and it wasn't.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixed that and everything worked like a charm.
+ > openal uses std::max_align_t since version 1.20.0 and
+ > https://github.com/kcat/openal-soft/commit/585b0cf3bed7d1c5720633eb7e5358a9fca865f6
 
--Jeff
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200828/9ca5b063/attachment.html>
+ > As a result, it is affected by
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56019
+ > and the build with gcc <= 4.8 will fail on:
+
+ > /home/buildroot/autobuild/instance-2/output-1/build/openal-1.20.1/common/almalloc.cpp: In function 'void* al_malloc(size_t, size_t)':
+ > /home/buildroot/autobuild/instance-2/output-1/build/openal-1.20.1/common/almalloc.cpp:20:45: error: 'max_align_t' is not a member of 'std'
+ >      alignment = std::max(alignment, alignof(std::max_align_t));
+ >                                              ^
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/589c7853ce334c7502f7cd4cdbcaaf3c6840f43b
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
