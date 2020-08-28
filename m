@@ -1,33 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:50:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
- version 9.52
-In-Reply-To: <20200817185109.3051830-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 17 Aug 2020 20:51:09 +0200")
-References: <20200817185109.3051830-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2lyr9xx.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 18:52:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: security bump version
+ to 2.3.11.3
+In-Reply-To: <20200818165436.145310-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 18 Aug 2020 18:54:36 +0200")
+References: <20200818165436.145310-1-bernd.kuhls@t-online.de>
+ <20200818165436.145310-2-bernd.kuhls@t-online.de>
+Message-ID: <87tuwmr9um.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fix a bunch of CVEs: CVE-2020-16287, CVE-2020-16288, CVE-2020-16289,
- > CVE-2020-16290, CVE-2020-16291, CVE-2020-16292, CVE-2020-16293,
- > CVE-2020-16294, CVE-2020-16295, CVE-2020-16296, CVE-2020-16297,
- > CVE-2020-16298, CVE-2020-16299, CVE-2020-16300, CVE-2020-16301,
- > CVE-2020-16302, CVE-2020-16303, CVE-2020-16304, CVE-2020-16305
- > CVE-2020-16308, CVE-2020-16309, CVE-2020-17538
+ > Release notes:
+ > https://dovecot.org/pipermail/dovecot-news/2020-August/000440.html
 
- > PKGCONFIG must be passed since version 9.51 and
- > https://github.com/ArtifexSoftware/ghostpdl/commit/2d84ecc57837785b566ebd9d5909ba9edc9d697f
+ > Fixes the following CVEs:
 
- > Also drop patch (already in version) and update indentation in hash file
- > (two spaces)
+ > * CVE-2020-12100: Parsing mails with a large number of MIME parts could
+ >   have resulted in excessive CPU usage or a crash due to running out of
+ >   stack memory.
+ > * CVE-2020-12673: Dovecot's NTLM implementation does not correctly check
+ >   message buffer size, which leads to reading past allocation which can
+ >   lead to crash.
+ > * CVE-2020-10967: lmtp/submission: Issuing the RCPT command with an
+ >   address that has the empty quoted string as local-part causes the lmtp
+ >   service to crash.
+ > * CVE-2020-12674: Dovecot's RPA mechanism implementation accepts
+ >   zero-length message, which leads to assert-crash later on.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
