@@ -1,34 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 22:36:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mender: Fix incorrectly named
- service file
-In-Reply-To: <20200828170844.412507-1-aduskett@gmail.com> (aduskett's message
- of "Fri, 28 Aug 2020 10:08:44 -0700")
-References: <20200828170844.412507-1-aduskett@gmail.com>
-Message-ID: <87wo1ild7q.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 22:38:42 +0200
+Subject: [Buildroot] Unable to bake in an initramfs filesystem into
+ kernel image
+In-Reply-To: <313ae7e3-1817-e633-acc3-6d7097f99ffc@mind.be> (Arnout
+ Vandecappelle's message of "Fri, 28 Aug 2020 09:28:33 +0200")
+References: <CAG+zT3rM=eaW6oykBgiVdPd4fnZF=efbgBok6Q8WCy2QQ2EnDw@mail.gmail.com>
+ <313ae7e3-1817-e633-acc3-6d7097f99ffc@mind.be>
+Message-ID: <87sgc6ld4d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- > From: Adam Duskett <Aduskett@gmail.com>
- > Many of the mender CLI commands use systemctl commands to get information about
- > the daemon, such as the PID (IE: systemctl show -p MainPID mender-client).
- > As seen above, these commands expect the service file to be named
- > "mender-client" instead of "mender."
+Hi,
 
- > As such, in the current state, running a forced update check in the CLI will
- > result in the following error:
- > failed to force updateCheck: could not find the PID of the mender daemon.
+ >> so not sure what is going on here. Do I need to pass in a kernel command
+ >> line to make sure the kernel reads the initramfs from the one baked in?
 
- > Changing the name of mender.service to mender-client.service fixes the issue.
+ >  Nope, it should automatically do that. However, it is possible that the
+ > embedded initramfs is ignored if your bootloader provides one, so make sure the
+ > initramfs argument of uboot's boot command is not set.
 
- > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Committed, thanks.
+ >  I've taken a quick look at the history since 2016.10 and I didn't find anything
+ > that would fix such an issue.
+
+ >  That said, we don't have a runtime test of this feature, so it might even be
+ > broken...
+
+FYI, I've just tested the initramfs support on current master (on an ARM
+platform) and it works as expected.
 
 -- 
 Bye, Peter Korsgaard
