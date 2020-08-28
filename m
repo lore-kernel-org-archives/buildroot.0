@@ -1,46 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:33:32 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- support/testing/tests/core/test_timezone.py: fix indentation
-Message-ID: <20200828164643.0792685FE9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:36:09 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] support/docker: use
+ python3-flake8
+Message-ID: <20200828164643.1E526865B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=909431a71e0c4a90c22f95af31de9f787ed98d62
+commit: https://git.buildroot.net/buildroot/commit/?id=89f369263ed542b11a854f3ba59067374a65fc21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes:
-
-support/testing/tests/core/test_timezone.py:7:9: E117 over-indented
+support/scripts/pkg-stats now uses some Python 3.x only constructs
+("async" and related keywords), so we must use the Python 3.x flake8.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc061128de8d99fd9e14c507b76d50852dce4f7d)
+(cherry picked from commit 385c4da3dd10b6bfbaf23c04f48e7835ce5cc701)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/core/test_timezone.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ support/docker/Dockerfile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/core/test_timezone.py b/support/testing/tests/core/test_timezone.py
-index 050624e0aa..f661519196 100644
---- a/support/testing/tests/core/test_timezone.py
-+++ b/support/testing/tests/core/test_timezone.py
-@@ -4,10 +4,10 @@ import infra.basetest
- 
- 
- def boot_armv5_cpio(emulator, builddir):
--        img = os.path.join(builddir, "images", "rootfs.cpio")
--        emulator.boot(arch="armv5", kernel="builtin",
--                      options=["-initrd", img])
--        emulator.login()
-+    img = os.path.join(builddir, "images", "rootfs.cpio")
-+    emulator.boot(arch="armv5", kernel="builtin",
-+                  options=["-initrd", img])
-+    emulator.login()
- 
- 
- class TestNoTimezone(infra.basetest.BRTest):
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 03acde85d2..8c555dcf7a 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -36,10 +36,10 @@ RUN apt-get install -y --no-install-recommends \
+         libncurses5-dev \
+         locales \
+         mercurial \
+-        python-flake8 \
+         python-nose2 \
+         python-pexpect \
+         python3 \
++        python3-flake8 \
+         python3-nose2 \
+         python3-pexpect \
+         qemu-system-arm \
