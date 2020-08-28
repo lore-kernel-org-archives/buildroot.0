@@ -1,113 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:42:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/pkg-stats: add defconfig support
-Message-ID: <20200828155253.C8A3C811FF@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:46:10 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] support/script/pkg-stats:
+ handle exception when version comparison fails
+Message-ID: <20200828155254.3F48D83DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75d97f2a8fe8588289dd98478310d06b2532238c
+commit: https://git.buildroot.net/buildroot/commit/?id=44f78b11de59e389fb72362c823b162f6fa8ef39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Scan configs directory and create Defconfig objects.
+With python 3, when a package has a version number x-y-z instead of
+x.y.z, then the version returned by LooseVersion can't be compared
+which raises a TypeError exception:
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Traceback (most recent call last):
+  File "./support/scripts/pkg-stats", line 1062, in <module>
+    __main__()
+  File "./support/scripts/pkg-stats", line 1051, in __main__
+    check_package_cves(args.nvd_path, {p.name: p for p in packages})
+  File "./support/scripts/pkg-stats", line 613, in check_package_cves
+    if pkg_name in packages and cve.affects(packages[pkg_name]):
+  File "./support/scripts/pkg-stats", line 386, in affects
+    return pkg_version <= cve_affected_version
+  File "/usr/lib64/python3.8/distutils/version.py", line 58, in __le__
+    c = self._cmp(other)
+  File "/usr/lib64/python3.8/distutils/version.py", line 337, in _cmp
+    if self.version < other.version:
+TypeError: '<' not supported between instances of 'str' and 'int'
+
+This patch handles this exception by adding a new return value when
+the comparison can't be done. The code is adjusted to take of this
+change. For now, a return value of CVE_UNKNOWN is handled the same way
+as a CVE_DOESNT_AFFECT return value, but this can be improved later
+on.
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8d77ecbad0e1eed3c84201c9634602195afe0d4b)
+(cherry picked from commit 7d2779ecbb142b62f8913d30352b11058f922b2a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 43 +++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 016c2322e6..a15d0ec24b 100755
+index 00f5c389bb..505836b35f 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -54,6 +54,34 @@ RM_API_STATUS_NOT_FOUND = 4
+@@ -50,6 +50,10 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
+ RM_API_STATUS_FOUND_BY_PATTERN = 3
+ RM_API_STATUS_NOT_FOUND = 4
+ 
++CVE_AFFECTS = 1
++CVE_DOESNT_AFFECT = 2
++CVE_UNKNOWN = 3
++
+ # Used to make multiple requests to the same host. It is global
  # because it's used by sub-processes.
  http_pool = None
+@@ -364,7 +368,7 @@ class CVE:
+         by this CVE.
+         """
+         if br_pkg.is_cve_ignored(self.identifier):
+-            return False
++            return CVE_DOESNT_AFFECT
  
-+class Defconfig:
-+    def __init__(self, name, path):
-+        self.name = name
-+        self.path = path
-+        self.developers = None
-+
-+    def set_developers(self, developers):
-+        """
-+        Fills in the .developers field
-+        """
-+        self.developers = [
-+            developer.name
-+            for developer in developers
-+            if developer.hasfile(self.path)
-+        ]
-+
-+
-+def get_defconfig_list():
-+    """
-+    Builds the list of Buildroot defconfigs, returning a list of Defconfig
-+    objects.
-+    """
-+    return [
-+        Defconfig(name[:-len('_defconfig')], os.path.join('configs', name))
-+        for name in os.listdir('configs')
-+        if name.endswith('_defconfig')
-+    ]
-+
- 
- class Package:
-     all_licenses = dict()
-@@ -889,7 +917,7 @@ def dump_html(packages, stats, date, commit, output):
-         f.write(html_footer)
- 
- 
--def dump_json(packages, stats, date, commit, output):
-+def dump_json(packages, defconfigs, stats, date, commit, output):
-     # Format packages as a dictionnary instead of a list
-     # Exclude local field that does not contains real date
-     excluded_fields = ['url_worker', 'name']
-@@ -900,6 +928,12 @@ def dump_json(packages, stats, date, commit, output):
-             if k not in excluded_fields
-         } for pkg in packages
-     }
-+    defconfigs = {
-+        d.name: {
-+            k: v
-+            for k, v in d.__dict__.items()
-+        } for d in defconfigs
-+    }
-     # Aggregate infrastructures into a single dict entry
-     statistics = {
-         k: v
-@@ -910,6 +944,7 @@ def dump_json(packages, stats, date, commit, output):
-     # The actual structure to dump, add commit and date to it
-     final = {'packages': pkgs,
-              'stats': statistics,
-+             'defconfigs': defconfigs,
-              'commit': commit,
-              'date': str(date)}
- 
-@@ -951,6 +986,10 @@ def __main__():
-     packages = get_pkglist(args.npackages, package_list)
-     print("Getting developers ...")
-     developers = parse_developers()
-+    print("Build defconfig list ...")
-+    defconfigs = get_defconfig_list()
-+    for d in defconfigs:
-+        d.set_developers(developers)
-     print("Getting package make info ...")
-     package_init_make_info()
-     print("Getting package details ...")
-@@ -977,7 +1016,7 @@ def __main__():
-         dump_html(packages, stats, date, commit, args.html)
-     if args.json:
-         print("Write JSON")
--        dump_json(packages, stats, date, commit, args.json)
-+        dump_json(packages, defconfigs, stats, date, commit, args.json)
+         for product in self.each_product():
+             if product['product_name'] != br_pkg.name:
+@@ -373,7 +377,7 @@ class CVE:
+             for v in product['version']['version_data']:
+                 if v["version_affected"] == "=":
+                     if br_pkg.current_version == v["version_value"]:
+-                        return True
++                        return CVE_AFFECTS
+                 elif v["version_affected"] == "<=":
+                     pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
+                     if not hasattr(pkg_version, "version"):
+@@ -383,10 +387,18 @@ class CVE:
+                     if not hasattr(cve_affected_version, "version"):
+                         print("Cannot parse CVE affected version '%s'" % v["version_value"])
+                         continue
+-                    return pkg_version <= cve_affected_version
++                    try:
++                        affected = pkg_version <= cve_affected_version
++                        break
++                    except TypeError:
++                        return CVE_UNKNOWN
++                    if affected:
++                        return CVE_AFFECTS
++                    else:
++                        return CVE_DOESNT_AFFECT
+                 else:
+                     print("version_affected: %s" % v['version_affected'])
+-        return False
++        return CVE_DOESNT_AFFECT
  
  
- __main__()
+ def get_pkglist(npackages, package_list):
+@@ -609,7 +621,7 @@ def check_package_cves(nvd_path, packages):
+ 
+     for cve in CVE.read_nvd_dir(nvd_path):
+         for pkg_name in cve.pkg_names:
+-            if pkg_name in packages and cve.affects(packages[pkg_name]):
++            if pkg_name in packages and cve.affects(packages[pkg_name]) == CVE_AFFECTS:
+                 packages[pkg_name].cves.append(cve.identifier)
+ 
+ 
