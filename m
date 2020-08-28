@@ -1,29 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:55:50 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Gwenhael Goavec-Merou for
- librtlsdr
-In-Reply-To: <20200811214248.514502-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Tue, 11 Aug 2020 23:42:48
- +0200")
-References: <20200811214248.514502-1-thomas.petazzoni@bootlin.com>
-Message-ID: <873646wyrd.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 17:57:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: security bump to
+ version 2.36.12
+In-Reply-To: <20200811101213.2117766-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine via buildroot's message of "Tue, 11 Aug 2020 12:12:13 +0200")
+References: <20200811101213.2117766-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2lyvk4h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@busybox.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine via buildroot <buildroot@busybox.net> writes:
 
- > Even though librtlsdr was initially introduced by Jason Pruitt in
- > 2014, and Jason is still listed in the DEVELOPERS file for this
- > package, in recent times it's mainly Gwenhael who has been taking of
- > this package. Let's reflect that in the DEVELOPERS file so that
- > Gwenhael gets notified when there are librtlsdr issues.
+ > - Fix CVE-2017-6312: Integer overflow in io-ico.c in gdk-pixbuf allows
+ >   context-dependent attackers to cause a denial of service (segmentation
+ >   fault and application crash) via a crafted image entry offset in an
+ >   ICO file, which triggers an out-of-bounds read, related to compiler
+ >   optimizations.
+ > - Fix CVE-2017-6313: Integer underflow in the load_resources function in
+ >   io-icns.c in gdk-pixbuf allows context-dependent attackers to cause a
+ >   denial of service (out-of-bounds read and program crash) via a crafted
+ >   image entry size in an ICO file.
+ > - Fix CVE-2017-6314: The make_available_at_least function in io-tiff.c
+ >   in gdk-pixbuf allows context-dependent attackers to cause a denial of
+ >   service (infinite loop) via a large TIFF file.
 
- > Cc: Jason Pruitt <jrspruitt@gmail.com>
- > Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Also update indentation in hash file (two spaces)
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
