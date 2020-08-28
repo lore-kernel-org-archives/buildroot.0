@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Aug 2020 22:24:35 +0200
-Subject: [Buildroot] [git commit] package/python-netaddr: bump to version
- 0.8.0
-Message-ID: <20200902161635.4E52785EB9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 09:14:38 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: consider "-" as
+ a wildcard when doing CVE version matching
+Message-ID: <20200902161636.F066B85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d8211412c714c72df083afd3424d071aa87d44b
+commit: https://git.buildroot.net/buildroot/commit/?id=008ca2c583cb9dc70cd30c5318b3b1cbef57b06a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Some CVE entries in the NVD database have version_value set to "-",
+which seems to indicate that it applies to all versions of the
+software project, or that they don't really know which versions are
+affected, and which are not.
+
+So, for the benefit of doubt, it seems more appropriate to consider
+such CVEs as affecting our packages.
+
+This makes the total number of CVEs affecting our next branch jump
+from 141 CVEs to 658 CVEs, but that number will go back down once we
+switch to the JSON 1.1 schema. Indeed, in the JSON 1.0 schema, there
+are often cases where a version_value is set to "=" *and* specific
+versions are set to.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-netaddr/python-netaddr.hash | 4 ++--
- package/python-netaddr/python-netaddr.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/scripts/pkg-stats | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
-index c834721d2c..91b200768f 100644
---- a/package/python-netaddr/python-netaddr.hash
-+++ b/package/python-netaddr/python-netaddr.hash
-@@ -1,5 +1,5 @@
- # md5 from https://pypi.python.org/pypi/netaddr/json
--md5 51019ef59c93f3979bcb37d3b8527e07 netaddr-0.7.19.tar.gz
-+md5 34cad578473b66ad77bc3b2a7613ed4a netaddr-0.8.0.tar.gz
- # Locally computed
--sha256 38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd netaddr-0.7.19.tar.gz
-+sha256 d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243 netaddr-0.8.0.tar.gz
- sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
-diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
-index a539845d54..e3ffe4e85b 100644
---- a/package/python-netaddr/python-netaddr.mk
-+++ b/package/python-netaddr/python-netaddr.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index e642147b98..4673c71d1a 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -370,7 +370,9 @@ class CVE:
  
--PYTHON_NETADDR_VERSION = 0.7.19
-+PYTHON_NETADDR_VERSION = 0.8.0
- PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
--PYTHON_NETADDR_SITE = https://pypi.python.org/packages/0c/13/7cbb180b52201c07c796243eeff4c256b053656da5cfe3916c3f5b57b3a0
-+PYTHON_NETADDR_SITE = https://pypi.python.org/packages/c3/3b/fe5bda7a3e927d9008c897cf1a0858a9ba9924a6b4750ec1824c9e617587
- PYTHON_NETADDR_LICENSE = BSD-3-Clause
- PYTHON_NETADDR_LICENSE_FILES = LICENSE
- PYTHON_NETADDR_SETUP_TYPE = setuptools
+             for v in product['version']['version_data']:
+                 if v["version_affected"] == "=":
+-                    if br_pkg.current_version == v["version_value"]:
++                    if v["version_value"] == "-":
++                        return CVE_AFFECTS
++                    elif br_pkg.current_version == v["version_value"]:
+                         return CVE_AFFECTS
+                 elif v["version_affected"] == "<=":
+                     pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
