@@ -1,69 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:19:45 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/hostapd: add
- upstream 2020-1 security patches
-Message-ID: <20200828174514.B7250818F3@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:50:48 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ package/shadowsocks-libev: security bump to version 3.3.4
+Message-ID: <20200828174515.32D8E818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92ecd5ca672c5072755c03bf23472831bfdc7fc1
+commit: https://git.buildroot.net/buildroot/commit/?id=1c74db053cc34ea1800da88d4ef37538f4734aa4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes the following security vulnerabilities:
+- Fix CVE-2019-5163: An exploitable denial-of-service vulnerability
+  exists in the UDPRelay functionality of Shadowsocks-libev 3.3.2. When
+  utilizing a Stream Cipher and a local_address, arbitrary UDP packets
+  can cause a FATAL error code path and exit. An attacker can send
+  arbitrary UDP packets to trigger this vulnerability.
+- Fix CVE-2019-5164: An exploitable code execution vulnerability exists
+  in the ss-manager binary of Shadowsocks-libev 3.3.2. Specially crafted
+  network packets sent to ss-manager can cause an arbitrary binary to
+  run, resulting in code execution and privilege escalation. An attacker
+  can send network packets to trigger this vulnerability.
 
-CVE-2020-12695: The Open Connectivity Foundation UPnP specification before
-2020-04-17 does not forbid the acceptance of a subscription request with a
-delivery URL on a different network segment than the fully qualified
-event-subscription URL, aka the CallStranger issue.
+Also update indentation in hash file (two spaces)
 
-For details, see the advisory:
-https://w1.fi/security/2020-1/upnp-subscribe-misbehavior-wps-ap.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b020359b141f5316276079cbea8001649bcec0c)
+(cherry picked from commit fd3dd9d9c5b502c8c67aac6b4fad1534f0b10b4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/hostapd.hash | 3 +++
- package/hostapd/hostapd.mk   | 7 +++++++
- 2 files changed, 10 insertions(+)
+ package/shadowsocks-libev/shadowsocks-libev.hash | 8 ++++----
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index bf5016acc3..e2f76c12d9 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -1,3 +1,6 @@
- # Locally calculated
- sha256  881d7d6a90b2428479288d64233151448f8990ab4958e0ecaca7eeb3c9db2bd7  hostapd-2.9.tar.gz
-+sha256  2d9a5b9d616f1b4aa4a22b967cee866e2f69b798b0b46803a7928c8559842bd7  0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
-+sha256  49feb35a5276279b465f6836d6fa2c6b34d94dc979e8b840d1918865c04260de  0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch
-+sha256  a8212a2d89a5bab2824d22b6047e7740553df163114fcec94832bfa9c5c5d78a  0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
- sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index b94a0e4578..676e36d8ba 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -8,6 +8,10 @@ HOSTAPD_VERSION = 2.9
- HOSTAPD_SITE = http://w1.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
-+HOSTAPD_PATCH = \
-+	https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch \
-+	https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch \
-+	https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch
- HOSTAPD_DEPENDENCIES = host-pkgconf
- HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
- HOSTAPD_LICENSE = BSD-3-Clause
-@@ -16,6 +20,9 @@ HOSTAPD_LICENSE_FILES = README
- # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
- HOSTAPD_IGNORE_CVES += CVE-2019-16275
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index 76928ebb48..cc7993a54f 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,7 +1,7 @@
+ # Locally computed
+-sha256 677356a5ed6b5ae9e32a898061db2587158ff27e245db03f4bde9b006ef12dc9 shadowsocks-libev-3.3.3.tar.gz
++sha256  fce47a956fad0c30def9c71821bcec450a40d3f881548e31e66cedf262b89eb1  shadowsocks-libev-3.3.4.tar.gz
  
-+# 0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch
-+HOSTAPD_IGNORE_CVES += CVE-2020-12695
-+
- HOSTAPD_CONFIG_SET =
+ # License files, locally calculated
+-sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+-sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
+-sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
++sha256  736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
++sha256  c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
++sha256  4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 4b0b963eef..3ba4cb875c 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOSTAPD_CONFIG_ENABLE = \
+-SHADOWSOCKS_LIBEV_VERSION = 3.3.3
++SHADOWSOCKS_LIBEV_VERSION = 3.3.4
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
