@@ -1,68 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:45:52 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/opencv3: fix
- build with jasper >= 2.0.17
-Message-ID: <20200828164650.8F6D4862C8@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:52:17 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dovecot: security
+ bump version to 2.3.11.3
+Message-ID: <20200828164650.A05BA862C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e499ad849fd6e252446065f648f9dcb6bd78228
+commit: https://git.buildroot.net/buildroot/commit/?id=1ef350aa6e3b19a723f8485980a8d0bba7a70dc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/8da00d4b079195f45fe74d879b10db05d74d0559
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2020-August/000440.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 594201acb5b4b59bf43fc7c8c024b6e42c0569e7)
+Fixes the following CVEs:
+
+* CVE-2020-12100: Parsing mails with a large number of MIME parts could
+  have resulted in excessive CPU usage or a crash due to running out of
+  stack memory.
+* CVE-2020-12673: Dovecot's NTLM implementation does not correctly check
+  message buffer size, which leads to reading past allocation which can
+  lead to crash.
+* CVE-2020-10967: lmtp/submission: Issuing the RCPT command with an
+  address that has the empty quoted string as local-part causes the lmtp
+  service to crash.
+* CVE-2020-12674: Dovecot's RPA mechanism implementation accepts
+  zero-length message, which leads to assert-crash later on.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6db0ea91ef94f6a6f3f5c4d1847733cd23679587)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-of-grfmt_jpeg2000-cpp.patch     | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch b/package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-new file mode 100644
-index 0000000000..e54fab852a
---- /dev/null
-+++ b/package/opencv3/0001-Fix-build-of-grfmt_jpeg2000-cpp.patch
-@@ -0,0 +1,37 @@
-+From f66fc199a20882c546fa31142e9c0f5a8b3cf983 Mon Sep 17 00:00:00 2001
-+From: Florian Jung <flo@windfis.ch>
-+Date: Wed, 29 Jul 2020 18:51:55 +0200
-+Subject: [PATCH] Fix build of grfmt_jpeg2000.cpp
-+
-+libjasper has recently changed `jas_matrix_get` from a macro to an inline function
-+(389951d071 in https://github.com/jasper-software/jasper), causing the build to fail.
-+
-+[Retrieved from:
-+https://github.com/opencv/opencv/commit/f66fc199a20882c546fa31142e9c0f5a8b3cf983]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ modules/imgcodecs/src/grfmt_jpeg2000.cpp | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/modules/imgcodecs/src/grfmt_jpeg2000.cpp b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-+index fe69f80c86f..0f4d28d6f4d 100644
-+--- a/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-++++ b/modules/imgcodecs/src/grfmt_jpeg2000.cpp
-+@@ -377,7 +377,7 @@ bool  Jpeg2KDecoder::readComponent8u( uchar *data, void *_buffer,
-+ 
-+     for( y = 0; y < yend - ystart; )
-+     {
-+-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-+         uchar* dst = data + (y - yoffset) * step - xoffset;
-+ 
-+         if( xstep == 1 )
-+@@ -443,7 +443,7 @@ bool  Jpeg2KDecoder::readComponent16u( unsigned short *data, void *_buffer,
-+ 
-+     for( y = 0; y < yend - ystart; )
-+     {
-+-        jas_seqent_t* pix_row = &jas_matrix_get( buffer, y / ystep, 0 );
-++        jas_seqent_t* pix_row = jas_matrix_getref( buffer, y / ystep, 0 );
-+         ushort* dst = data + (y - yoffset) * step - xoffset;
-+ 
-+         if( xstep == 1 )
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 09295816d3..e5c2ab6f40 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  6642e62f23b1b23cfac235007ca6e21cb67460cca834689fad450724456eb10c  dovecot-2.3.10.1.tar.gz
++sha256  d3d9ea9010277f57eb5b9f4166a5d2ba539b172bd6d5a2b2529a6db524baafdc  dovecot-2.3.11.3.tar.gz
+ sha256  a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 59b52a3f84..f0508753a2 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).10.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).11.3
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
