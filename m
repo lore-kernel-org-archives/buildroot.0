@@ -1,39 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:42:04 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/pkg-stats: store pkg dir path
-Message-ID: <20200828155253.BCFA4811FF@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:57:56 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/iputils: drop
+ wrong linux-headers dependency
+Message-ID: <20200828155254.9904086539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c981078735fb1d0cc0e6a11c97d3f5d71106333
+commit: https://git.buildroot.net/buildroot/commit/?id=e0707286e613ccff3b02fb1e035edf89f930d485
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This value can be used for later processing.
+Commit 9ffcd9279e5505535a73cf1200b3a86fd425cf32 wrongly added a
+linux-headers dependency when switching to meson.
 
-In the buildroot-stats application this is used to create links pointing
-to the git repo of buildroot.
+Remove it as headers are always provided by the toolchain.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d31fadfbf53a4e8c36c3fc4bb4b16c9dfd3e93e3)
+(cherry picked from commit d1d89d37c02e3d8224fb6f812e87fef5612a771a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 1 +
- 1 file changed, 1 insertion(+)
+ package/iputils/iputils.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 0e7d60bdbb..016c2322e6 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -64,6 +64,7 @@ class Package:
-     def __init__(self, name, path):
-         self.name = name
-         self.path = path
-+        self.pkg_path = os.path.dirname(path)
-         self.infras = None
-         self.license = None
-         self.has_license = False
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 0d260891e2..d09bc58b34 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -40,13 +40,8 @@ IPUTILS_DEPENDENCIES += libgcrypt
+ else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=openssl
+ IPUTILS_DEPENDENCIES += openssl
+-else ifeq ($(BR2_PACKAGE_LINUX_HEADERS),y)
+-IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
+-IPUTILS_DEPENDENCIES += linux-headers
+ else
+-IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+-# BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
+-IPUTILS_NINFOD = n
++IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
