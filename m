@@ -1,139 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:22:08 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/patchelf: keep
- RPATH entries even without DT_NEEDED libraries
-Message-ID: <20200828174508.5231680FD8@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:45:21 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openjpeg: add
+ CVE-2020-15389 entry
+Message-ID: <20200828174508.933898653F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ddefc303c22ef46e6ce56bab9c95a3f0ff28221
+commit: https://git.buildroot.net/buildroot/commit/?id=1ee1539bd04cd85b6a5bda02eef8bffddd4b529d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Our patch
-0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch adds
-an option --make-rpath-relative, which we use to tweak RPATH of target
-binaries.
+Commit b006cc373f96ec86c027779e113c8f70bc40d1c3 forgot to add
+the OPENJPEG_IGNORE_CVES entry
 
-However, one of the effect of this option is that it drops RPATH
-entries if the corresponding directory does not contain a library that
-is referenced by a DT_NEEDED entry of the binary.
-
-This unfortunately isn't correct, as RPATH entries are not only used
-by the dynamic linker to resolve the location of libraries listed
-through DT_NEEDED entries: RPATH entries are also used by dlopen()
-when resolving the location of libraries that are loaded at runtime.
-
-Therefore, the removal of RPATH entries that don't correspond to
-directories containing libraries referenced by DT_NEEDED entries break
-legitimate uses of RPATH for dlopen()ed libraries.
-
-This issue was even pointed out during the review of the upstream pull
-request:
-
-  https://github.com/NixOS/patchelf/pull/118#discussion_r329660138
-
-This fixes tst-origin uClibc-ng unit test:
-
-https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
-https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
-
-Without this patch:
-
-$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
-$ readelf -d toto | grep PATH
- 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
-$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/
-toto
-patching ELF file `toto'
-Kernel page size is 4096 bytes
-removing directory '/tmp/test/bar' from RPATH because it does not contain needed libs
-new rpath is `'
-$ readelf -d toto | grep PATH
- 0x000000000000001d (RUNPATH)            Library runpath: []
-
-With the patch applied:
-
-$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
-$ readelf -d toto | grep PATH
- 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
-$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/ toto
-patching ELF file `toto'
-Kernel page size is 4096 bytes
-keeping relative path of /tmp/test/bar
-new rpath is `test/bar'
-$ readelf -d toto | grep PATH
- 0x000000000000001d (RUNPATH)            Library runpath: [test/bar]
-
-Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bcdb74512d9f6e7eca878c53aca2eb3eccac7ef3)
+(cherry picked from commit 77ef9c333cdc13d1a51d88dbad8c4459c2dca156)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ption-to-make-the-rpath-relative-under-a-specif.patch | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ package/openjpeg/openjpeg.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-index feec627680..f9f2537a6c 100644
---- a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-+++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-@@ -167,7 +167,7 @@ index 1d9a772..35b4a33 100644
-      if (op == rpShrink && !rpath) {
-          debug("no RPATH to shrink\n");
-          return;
--@@ -1120,26 +1196,86 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
-+@@ -1120,26 +1196,80 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
-                  continue;
-              }
-  
-@@ -250,12 +250,6 @@ index 1d9a772..35b4a33 100644
- +                }
- +            }
- +
--+            if (!libFoundInRPath(canonicalPath, neededLibs, neededLibFound)) {
--+                debug("removing directory '%s' from RPATH because it does not contain needed libs\n",
--+                      dirName.c_str());
--+                continue;
--+            }
--+
- +            /* Finally make "canonicalPath" relative to "filedir" in "rootDir" */
- +            if (relativeToFile)
- +                concatToRPath(newRPath, makePathRelative(canonicalPath, fileDir));
-@@ -268,7 +262,7 @@ index 1d9a772..35b4a33 100644
-      if (op == rpRemove) {
-          if (!rpath) {
-              debug("no RPATH to delete\n");
--@@ -1413,7 +1549,9 @@ static bool shrinkRPath = false;
-+@@ -1413,7 +1543,9 @@ static bool shrinkRPath = false;
-  static bool removeRPath = false;
-  static bool setRPath = false;
-  static bool printRPath = false;
-@@ -278,7 +272,7 @@ index 1d9a772..35b4a33 100644
-  static set<string> neededLibsToRemove;
-  static map<string, string> neededLibsToReplace;
-  static set<string> neededLibsToAdd;
--@@ -1438,14 +1576,16 @@ static void patchElf2(ElfFile & elfFile)
-+@@ -1438,14 +1570,16 @@ static void patchElf2(ElfFile & elfFile)
-          elfFile.setInterpreter(newInterpreter);
-  
-      if (printRPath)
-@@ -299,7 +293,7 @@ index 1d9a772..35b4a33 100644
-  
-      if (printNeeded) elfFile.printNeededLibs();
-  
--@@ -1508,6 +1648,9 @@ void showHelp(const string & progName)
-+@@ -1508,6 +1642,9 @@ void showHelp(const string & progName)
-    [--set-rpath RPATH]\n\
-    [--remove-rpath]\n\
-    [--shrink-rpath]\n\
-@@ -309,7 +303,7 @@ index 1d9a772..35b4a33 100644
-    [--print-rpath]\n\
-    [--force-rpath]\n\
-    [--add-needed LIBRARY]\n\
--@@ -1564,6 +1707,17 @@ int main(int argc, char * * argv)
-+@@ -1564,6 +1701,17 @@ int main(int argc, char * * argv)
-              setRPath = true;
-              newRPath = argv[i];
-          }
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+index 1ff3111d64..b65dbce807 100644
+--- a/package/openjpeg/openjpeg.mk
++++ b/package/openjpeg/openjpeg.mk
+@@ -20,6 +20,9 @@ OPENJPEG_IGNORE_CVES += CVE-2020-6851
+ # 0007-opj_tcd_init_tile-avoid-integer-overflow.patch
+ OPENJPEG_IGNORE_CVES += CVE-2020-8112
+ 
++# 0008-opj_decompress-fix-double-free-on-input-directory-with-mix-of-valid.patch
++OPENJPEG_IGNORE_CVES += CVE-2020-15389
++
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
