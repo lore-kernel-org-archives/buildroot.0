@@ -1,139 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:22:24 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/patchelf: keep
- RPATH entries even without DT_NEEDED libraries
-Message-ID: <20200828174514.C219E85278@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 19:28:42 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/ripgrep: fix
+ build directories
+Message-ID: <20200828174514.E4E74818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5be9c96030525ad0064868c7401b4595e3920437
+commit: https://git.buildroot.net/buildroot/commit/?id=ddb90ca84cdae9a809994318116d666808c60777
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Our patch
-0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch adds
-an option --make-rpath-relative, which we use to tweak RPATH of target
-binaries.
+RIPGREP_CARGO_MODE was no longer defined after 832c076f26 and caused
+issues during the install step as the build directory was malformed.
 
-However, one of the effect of this option is that it drops RPATH
-entries if the corresponding directory does not contain a library that
-is referenced by a DT_NEEDED entry of the binary.
+This patch maintains the release/dev profile distinction, while also
+assigning appropriate build folders.
 
-This unfortunately isn't correct, as RPATH entries are not only used
-by the dynamic linker to resolve the location of libraries listed
-through DT_NEEDED entries: RPATH entries are also used by dlopen()
-when resolving the location of libraries that are loaded at runtime.
+Fixes:
+ - http://autobuild.buildroot.net/results/a4cd7ecc6d983aa6f15d3be1e21529f17e04b825/
+ - http://autobuild.buildroot.net/results/2bab8ffa590d4c4eabffe94ed27311c7f6607c98/
 
-Therefore, the removal of RPATH entries that don't correspond to
-directories containing libraries referenced by DT_NEEDED entries break
-legitimate uses of RPATH for dlopen()ed libraries.
-
-This issue was even pointed out during the review of the upstream pull
-request:
-
-  https://github.com/NixOS/patchelf/pull/118#discussion_r329660138
-
-This fixes tst-origin uClibc-ng unit test:
-
-https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/Makefile.in#L25
-https://github.com/wbx-github/uclibc-ng-test/blob/master/test/dlopen/tst-origin.c#L15
-
-Without this patch:
-
-$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
-$ readelf -d toto | grep PATH
- 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
-$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/
-toto
-patching ELF file `toto'
-Kernel page size is 4096 bytes
-removing directory '/tmp/test/bar' from RPATH because it does not contain needed libs
-new rpath is `'
-$ readelf -d toto | grep PATH
- 0x000000000000001d (RUNPATH)            Library runpath: []
-
-With the patch applied:
-
-$ gcc -o toto toto.c -Wl,-rpath,/tmp/test/bar
-$ readelf -d toto | grep PATH
- 0x000000000000000f (RPATH)              Library rpath: [/tmp/test/bar]
-$ ./output/host/bin/patchelf --debug --make-rpath-relative /tmp/ toto
-patching ELF file `toto'
-Kernel page size is 4096 bytes
-keeping relative path of /tmp/test/bar
-new rpath is `test/bar'
-$ readelf -d toto | grep PATH
- 0x000000000000001d (RUNPATH)            Library runpath: [test/bar]
-
-Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bcdb74512d9f6e7eca878c53aca2eb3eccac7ef3)
+Signed-off-by: Sam Voss <sam.voss@gmail.com>
+CC: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 32d27c2f4c47f4da97a484a37df8b0ba1743b0d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ption-to-make-the-rpath-relative-under-a-specif.patch | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ package/ripgrep/ripgrep.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-index feec627680..f9f2537a6c 100644
---- a/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-+++ b/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch
-@@ -167,7 +167,7 @@ index 1d9a772..35b4a33 100644
-      if (op == rpShrink && !rpath) {
-          debug("no RPATH to shrink\n");
-          return;
--@@ -1120,26 +1196,86 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
-+@@ -1120,26 +1196,80 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string newRPath)
-                  continue;
-              }
-  
-@@ -250,12 +250,6 @@ index 1d9a772..35b4a33 100644
- +                }
- +            }
- +
--+            if (!libFoundInRPath(canonicalPath, neededLibs, neededLibFound)) {
--+                debug("removing directory '%s' from RPATH because it does not contain needed libs\n",
--+                      dirName.c_str());
--+                continue;
--+            }
--+
- +            /* Finally make "canonicalPath" relative to "filedir" in "rootDir" */
- +            if (relativeToFile)
- +                concatToRPath(newRPath, makePathRelative(canonicalPath, fileDir));
-@@ -268,7 +262,7 @@ index 1d9a772..35b4a33 100644
-      if (op == rpRemove) {
-          if (!rpath) {
-              debug("no RPATH to delete\n");
--@@ -1413,7 +1549,9 @@ static bool shrinkRPath = false;
-+@@ -1413,7 +1543,9 @@ static bool shrinkRPath = false;
-  static bool removeRPath = false;
-  static bool setRPath = false;
-  static bool printRPath = false;
-@@ -278,7 +272,7 @@ index 1d9a772..35b4a33 100644
-  static set<string> neededLibsToRemove;
-  static map<string, string> neededLibsToReplace;
-  static set<string> neededLibsToAdd;
--@@ -1438,14 +1576,16 @@ static void patchElf2(ElfFile & elfFile)
-+@@ -1438,14 +1570,16 @@ static void patchElf2(ElfFile & elfFile)
-          elfFile.setInterpreter(newInterpreter);
-  
-      if (printRPath)
-@@ -299,7 +293,7 @@ index 1d9a772..35b4a33 100644
-  
-      if (printNeeded) elfFile.printNeededLibs();
-  
--@@ -1508,6 +1648,9 @@ void showHelp(const string & progName)
-+@@ -1508,6 +1642,9 @@ void showHelp(const string & progName)
-    [--set-rpath RPATH]\n\
-    [--remove-rpath]\n\
-    [--shrink-rpath]\n\
-@@ -309,7 +303,7 @@ index 1d9a772..35b4a33 100644
-    [--print-rpath]\n\
-    [--force-rpath]\n\
-    [--add-needed LIBRARY]\n\
--@@ -1564,6 +1707,17 @@ int main(int argc, char * * argv)
-+@@ -1564,6 +1701,17 @@ int main(int argc, char * * argv)
-              setRPath = true;
-              newRPath = argv[i];
-          }
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 2cfdeba9aa..1500733d09 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -12,13 +12,19 @@ RIPGREP_LICENSE_FILES = LICENSE-MIT
+ RIPGREP_DEPENDENCIES = host-cargo
+ RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+ 
+-RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_MODE)
++RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_BIN_SUBDIR)
+ 
+ RIPGREP_CARGO_OPTS = \
+-	$(if $(BR2_ENABLE_DEBUG),,--release) \
+ 	--target=$(RUSTC_TARGET_NAME) \
+ 	--manifest-path=$(@D)/Cargo.toml
+ 
++ifeq ($(BR2_ENABLE_DEBUG),y)
++RIPGREP_CARGO_BIN_SUBDIR = debug
++else
++RIPGREP_CARGO_OPTS += --release
++RIPGREP_CARGO_BIN_SUBDIR = release
++endif
++
+ define RIPGREP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(RIPGREP_CARGO_ENV) \
+ 		cargo build $(RIPGREP_CARGO_OPTS)
