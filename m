@@ -1,88 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 Aug 2020 09:20:12 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-08-18
-In-Reply-To: <1af22d4f-2280-749b-351a-819d245251c5@ideasonboard.com>
-References: <5f3cda7b.1c69fb81.e5841.2292SMTPIN_ADDED_MISSING@mx.google.com>
- <1af22d4f-2280-749b-351a-819d245251c5@ideasonboard.com>
-Message-ID: <a40c1a30-520a-4d98-b3eb-a96141a26dbe@mind.be>
+Date: Fri, 28 Aug 2020 09:28:33 +0200
+Subject: [Buildroot] Unable to bake in an initramfs filesystem into
+ kernel image
+In-Reply-To: <CAG+zT3rM=eaW6oykBgiVdPd4fnZF=efbgBok6Q8WCy2QQ2EnDw@mail.gmail.com>
+References: <CAG+zT3rM=eaW6oykBgiVdPd4fnZF=efbgBok6Q8WCy2QQ2EnDw@mail.gmail.com>
+Message-ID: <313ae7e3-1817-e633-acc3-6d7097f99ffc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Jeff,
+
+On 23/08/2020 19:43, Jeff Tchang wrote:
+> I'm using an older buildroot version (2016.02) and was wondering if there
+
+ We don't typically "support" (which is anyway voluntary) such old versions...
+Maybe try with 2020.02.x or master.
+
+> was an issue building an embedded initramfs filesystem into the kernel
+> image.
+> 
+> I am able to build an image and boot from it but I get
+> 
+> [    0.000000] Initrd not found or empty - disabling initrd
+> 
+> in the kernel log. This leads to me to believe that my image does not have
+> any initramfs root filesystem in it. I run mkimage to verify and it looks
+> like it doesn't:
+> 
+> # mkimage -l output/images/uImage.lzma
+> 
+> Image Name:   Linux-3.10.14
+> 
+> Created:      Sun Aug 23 16:22:20 2020
+> 
+> Image Type:   MIPS Linux Kernel Image (lzma compressed)
+
+ The initramfs is not stored as a multipart image. It's an object file that has
+a very large string value that is linked into the kernel ELF file itself. The
+only reasonable way to check if it's there is looking at the size...
+
+> Data Size:    2488545 Bytes = 2430.22 kB = 2.37 MB
+
+ ... and that looks a bit small. It's possible, but not likely. How large is the
+cpio image after compressing with lzma?
+
+> 
+> Load Address: 80010000
+> 
+> Entry Point:  80467a30
+> 
+> 
+> My expectation here is that I would see multiple images.
+> 
+> I did a make linux-dirclean and make again after tweaking a few things and
+> still got roughly the same output. My defconfig is here:
+> https://gist.github.com/tachang/136da666e5cf650e14be7bbca0069465
+> 
+> I do see output that says
+> 
+>>>>   Rebuilding kernel with initramfs
+> 
+> 
+> so not sure what is going on here. Do I need to pass in a kernel command
+> line to make sure the kernel reads the initramfs from the one baked in?
+
+ Nope, it should automatically do that. However, it is possible that the
+embedded initramfs is ignored if your bootloader provides one, so make sure the
+initramfs argument of uboot's boot command is not set.
 
 
-On 19/08/2020 11:51, Kieran Bingham wrote:
-> Hi Thomas, Fabrice,
-> 
-> This autobuilder failure is still on going for M68k
-> 
-> It relates to an assertion which only seems to fire on the m68k
-> regarding a ControlValue which we serialise, and therefore (currently)
-> require to know it's exact size.
-> 
-> 
-> -Wnon-virtual-dtor -Wextra -Werror -std=c++14 -O3 -Wno-unused-parameter
-> -include config.h -faligned-new -fPIC -pthread -MD -MQ
-> src/libcamera/libcamera.so.p/controls.cpp.o -MF
-> src/libcamera/libcamera.so.p/controls.cpp.o.d -o
-> src/libcamera/libcamera.so.p/controls.cpp.o -c ../src/libcamera/controls.cpp
-> ../src/libcamera/controls.cpp:92:36: error: static assertion failed:
-> Invalid size of ControlValue class
->  static_assert(sizeof(ControlValue) == 16, "Invalid size of ControlValue
-> class");
-> 
-> I assumed that this happens because the m68k is 32 bit, but of course we
-> already successfully compile on other 32 bit architectures, so I'm not
-> sure of the underlying change of size.
+ I've taken a quick look at the history since 2016.10 and I didn't find anything
+that would fix such an issue.
 
- I haven't looked at it at all, but if ControlValue is a struct, it's more
-likely caused by padding.
+ That said, we don't have a runtime test of this feature, so it might even be
+broken...
 
 
-> Anyway, I'm quite certain we wouldn't expect libcamera to run on an
-> m68k. What's the easiest way to disable libcamera support for that target?
-> 
-> Should the have an architecture specific depends on !m68k or such in
-> Config.in, or is there a better way to handle this?
+ You could try with a separate cpio image instead of an embedded one and see if
+that works better.
 
- Yes, if you don't want to bother with fixing an issue, just add a !m68k with a
-small comment (e.g. "# Invalid size of ControlValue") and all of the explanation
-above in the commit message.
+
+> I am using busybox as the /init file. I have tried specifying the directory
+> where I have the initramfs root, manually cpio'ing it up and passing that
+> file, and also just telling buildroot to embed the rootfs into the image.
+> 
+> Kernel boot log is also in the Github gist.
+
 
  Regards,
  Arnout
-
-> 
-> Regards
-> --
-> Kieran
-> 
-> 
-> 
-> On 19/08/2020 08:53, Thomas Petazzoni wrote:
->> Hello,
->>
->> Autobuilder failures
->> ====================
->>
->> Below is a list of build failures reported by the Buildroot
->> autobuilders in relation to packages or CPU
->> architectures you are in charge of. Please help us
->> improving the quality of Buildroot by investigating
->> those build failures and sending patches to fix
->> them.Thanks!
->>
->> Results for the 'next' branch
->> -----------------------------
->>
->> Build failures related to your packages:
->>
->>     arch     |             reason             |                                       url                                      
->> -------------+--------------------------------+---------------------------------------------------------------------------------
->>     m68k     | libcamera-565f95d64ff92e871... | http://autobuild.buildroot.net/results/40e8facc805b3eaac5fe6c95db0cd7b756eb1f18
->>
->>
-> 
