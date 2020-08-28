@@ -1,43 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:53:56 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/elixir: fix
- host-erlang dependency
-Message-ID: <20200828164643.7F7EB85FE9@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 18:34:34 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] utils/scanpypi: use raw
+ strings in re.compile/re.sub
+Message-ID: <20200828164643.16D4385FE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ff01509e04410e257f015cfbf40b48a40029ea3
+commit: https://git.buildroot.net/buildroot/commit/?id=ad70fdffc1fd551d42d6dc516f14acdbae7ee957
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-There is no target elixir package, so setting a value to
-ELIXIR_DEPENDENCIES has no effect, HOST_ELIXIR_DEPENDENCIES must be
-used instead.
+Fixes the following Python 3.x flake8 warning:
 
-Fixes:
+W605 invalid escape sequence '\w'
 
-  http://autobuild.buildroot.net/results/a3a37eb724ca5689f8e83c9b2af04d07afa80315/
-
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d059946df0ed896872dcb83cf49635c374e2c203)
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f9150a6a3d0650acdc61eb56ac354cda319e345b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/elixir/elixir.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/scanpypi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/elixir/elixir.mk b/package/elixir/elixir.mk
-index 7a545d43b0..6d935516f4 100644
---- a/package/elixir/elixir.mk
-+++ b/package/elixir/elixir.mk
-@@ -8,7 +8,7 @@ ELIXIR_VERSION = 1.9.4
- ELIXIR_SITE = $(call github,elixir-lang,elixir,v$(ELIXIR_VERSION))
- ELIXIR_LICENSE = Apache-2.0
- ELIXIR_LICENSE_FILES = LICENSE
--ELIXIR_DEPENDENCIES = host-erlang
-+HOST_ELIXIR_DEPENDENCIES = host-erlang
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 212dbea85e..51bc249f9e 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -96,10 +96,10 @@ def pkg_buildroot_name(pkg_name):
+     Keyword arguments:
+     pkg_name -- String to rename
+     """
+-    name = re.sub('[^\w-]', '', pkg_name.lower())
++    name = re.sub(r'[^\w-]', '', pkg_name.lower())
+     name = name.replace('_', '-')
+     prefix = 'python-'
+-    pattern = re.compile('^(?!' + prefix + ')(.+?)$')
++    pattern = re.compile(r'^(?!' + prefix + ')(.+?)$')
+     name = pattern.sub(r'python-\1', name)
+     return name
  
- define HOST_ELIXIR_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) compile
+@@ -337,7 +337,7 @@ class BuildrootPackage():
+             self.pkg_req = None
+             return set()
+         self.pkg_req = self.setup_metadata['install_requires']
+-        self.pkg_req = [re.sub('([-.\w]+).*', r'\1', req)
++        self.pkg_req = [re.sub(r'([-.\w]+).*', r'\1', req)
+                         for req in self.pkg_req]
+ 
+         # get rid of commented lines and also strip the package strings
+@@ -451,7 +451,7 @@ class BuildrootPackage():
+                 "Mozilla Public License 2.0": "MPL-2.0",
+                 "Zope Public License": "ZPL"
+                 }
+-            regexp = re.compile('^License :* *.* *:+ (.*)( \(.*\))?$')
++            regexp = re.compile(r'^License :* *.* *:+ (.*)( \(.*\))?$')
+             classifiers_licenses = [regexp.sub(r"\1", lic)
+                                     for lic in self.metadata['info']['classifiers']
+                                     if regexp.match(lic)]
