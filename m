@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:05:56 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-abrmd: bump to version 2.3.3
-In-Reply-To: <20200823100027.7567-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 23 Aug 2020 12:00:27 +0200")
-References: <20200823100027.7567-1-peter@korsgaard.com>
-Message-ID: <87v9h2puob.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:06:49 +0200
+Subject: [Buildroot] [PATCH] package/xen: add upstream security fix for
+ XSA-327
+In-Reply-To: <20200823203236.6175-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 23 Aug 2020 22:32:36 +0200")
+References: <20200823203236.6175-1-peter@korsgaard.com>
+Message-ID: <87r1rqpumu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Bugfix release with a single fix:
- > Fixed:
- >   - Fixed handle resource leak exhausting TPM resources.
+ > Fixes the following security issue:
+ > CVE-2020-15564: Missing alignment check in VCPUOP_register_vcpu_info
 
- > https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.3.3
+ > For further details, see the advisory:
+
+ > https://xenbits.xenproject.org/xsa/advisory-327.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
