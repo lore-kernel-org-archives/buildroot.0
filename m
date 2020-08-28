@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:01:24 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cpio: fix build
+Date: Fri, 28 Aug 2020 18:01:15 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/cpio: fix build
  with gcc 10
-Message-ID: <20200828155418.730DD810A8@busybox.osuosl.org>
+Message-ID: <20200828155426.00D4782DA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bda27f1b0c3307cc1c9960948f5fb14dfaf8ec14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=87f0bdcc9a9bfcc0dd8e029b3b75bbba49e088aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/22fefd9774cbd6648d67f29826f47f1978e9c069
