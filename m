@@ -1,42 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:44:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/pkg-stats: fix flake8 E402 warning
-Message-ID: <20200828155253.EEB13811FF@busybox.osuosl.org>
+Date: Fri, 28 Aug 2020 17:59:47 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/rtl8188eu: bump
+ version to 0924dc8f
+Message-ID: <20200828155254.A5E3C83DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ab030f1887b4f44068ce3ae38e7b489c32132c2
+commit: https://git.buildroot.net/buildroot/commit/?id=a4de8359792f2e43c818407933944a044ee4fe83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-flake8 complains with:
+- fixes compile against linux-5.4.x
 
-pkg-stats:38:1: E402 module level import not at top of file
-
-This is due to sys.path.append() being before the import from
-getdeveloperlib, but we really need this sys.path.append() to be
-before, so let's ignore this flake8 warning.
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 769f98c18c94d6d684bb2efc00239ce07a02d522)
+(cherry picked from commit 854b98408ce927163057411fbe2abaf69198173a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rtl8188eu/rtl8188eu.hash | 2 +-
+ package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index c0e2fbf413..3de4c2023c 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -36,7 +36,7 @@ from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
+diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+index 88c128aa35..b16986176d 100644
+--- a/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rtl8188eu/rtl8188eu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cc872aa0991c044d35abfcc81543bad950c6aae487e37d5a09d1cbf8c4cb3058  rtl8188eu-4b0ecca485b9f11f58670b69aa9f90ecad7da02f.tar.gz
++sha256  24656123468506760974edf4a9087f6c77d13228fa6b6ce899c12c359a5dc1e7  rtl8188eu-0924dc8fe0845358ed5b3c4c673126069469b3fc.tar.gz
+ sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index f292bba134..686b2ea9d2 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- sys.path.append('utils/')
--from getdeveloperlib import parse_developers
-+from getdeveloperlib import parse_developers  # noqa: E402
- 
- NVD_START_YEAR = 2002
- NVD_JSON_VERSION = "1.0"
+-RTL8188EU_VERSION = 4b0ecca485b9f11f58670b69aa9f90ecad7da02f
++RTL8188EU_VERSION = 0924dc8fe0845358ed5b3c4c673126069469b3fc
+ RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
