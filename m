@@ -1,85 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 17:54:27 +0200
+Date: Fri, 28 Aug 2020 17:45:16 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x]
- package/x11r7/xserver_xorg-server: add security fix for CVE-2020-14347
-Message-ID: <20200828155254.7B52B83DAE@busybox.osuosl.org>
+ support/scripts/pkg-stats: fix flake8 E722 warning
+Message-ID: <20200828155254.2A04A83DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10ba4cf76d512818f228af3ec971162f3ae59c4b
+commit: https://git.buildroot.net/buildroot/commit/?id=6a8e31a27a2fdcf6f1efa588394202465cff0d4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2020-July/003051.html
+flake8 complains with:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: add IGNORE_CVES entry.]
+  support/scripts/pkg-stats:339:13: E722 do not use bare 'except'
+
+Due to the construct:
+
+  try:
+     something
+  except:
+     print("some message")
+     raise
+
+Which is in fact OK because the exception is re-raised. This issue is
+discussed at https://github.com/PyCQA/pycodestyle/issues/703, and the
+general agreement is that these "bare except" are OK, and should be
+ignored from flake8 using a noqa statement.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8a46f3237a5f3c7cc59130b05b9afd4290a047fb)
+(cherry picked from commit 3b5bc480a59a100e835b8d7739ce71c4f14d2dba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../1.20.8/0007-fix-for-ZDI-11426.patch            | 36 ++++++++++++++++++++++
- .../xserver_xorg-server/xserver_xorg-server.mk     |  5 +++
- 2 files changed, 41 insertions(+)
+ support/scripts/pkg-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
-new file mode 100644
-index 0000000000..ce623b24cb
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.8/0007-fix-for-ZDI-11426.patch
-@@ -0,0 +1,36 @@
-+From aac28e162e5108510065ad4c323affd6deffd816 Mon Sep 17 00:00:00 2001
-+From: Matthieu Herrb <matthieu@herrb.eu>
-+Date: Sat, 25 Jul 2020 19:33:50 +0200
-+Subject: [PATCH] fix for ZDI-11426
-+
-+Avoid leaking un-initalized memory to clients by zeroing the
-+whole pixmap on initial allocation.
-+
-+This vulnerability was discovered by:
-+Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-+
-+Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
-+Reviewed-by: Alan Coopersmith <alan.coopersmith@oracle.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[downloaded from upstream commit
-+ https://gitlab.freedesktop.org/xorg/xserver/-/commit/aac28e162e5108510065ad4c323affd6deffd816]
-+---
-+ dix/pixmap.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/dix/pixmap.c b/dix/pixmap.c
-+index 1186d7dbbf..5a0146bbb6 100644
-+--- a/dix/pixmap.c
-++++ b/dix/pixmap.c
-+@@ -116,7 +116,7 @@ AllocatePixmap(ScreenPtr pScreen, int pixDataSize)
-+     if (pScreen->totalPixmapSize > ((size_t) - 1) - pixDataSize)
-+         return NullPixmap;
-+ 
-+-    pPixmap = malloc(pScreen->totalPixmapSize + pixDataSize);
-++    pPixmap = calloc(1, pScreen->totalPixmapSize + pixDataSize);
-+     if (!pPixmap)
-+         return NullPixmap;
-+ 
-+-- 
-+GitLab
-+
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8ccc04224d..bab20b5c97 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -38,6 +38,11 @@ XSERVER_XORG_SERVER_DEPENDENCIES = \
- 	mcookie \
- 	host-pkgconf
- 
-+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20),y)
-+# 1.20.8/0007-fix-for-ZDI-11426.patch
-+XSERVER_XORG_SERVER_IGNORE_CVES += CVE-2020-14347
-+endif
-+
- # We force -O2 regardless of the optimization level chosen by the
- # user, as the X.org server is known to trigger some compiler bugs at
- # -Os on several architectures.
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index d6239024eb..fda950862a 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -336,7 +336,7 @@ class CVE:
+             filename = CVE.download_nvd_year(nvd_dir, year)
+             try:
+                 content = ijson.items(gzip.GzipFile(filename), 'CVE_Items.item')
+-            except:
++            except:  # noqa: E722
+                 print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
+                 raise
+             for cve in content:
