@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 18:34:57 +0200
-Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: use raw
- strings for re.compile/re.match
-In-Reply-To: <20200814195008.D46E686449@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 14 Aug 2020 21:56:11 +0200")
-References: <20200814195008.D46E686449@busybox.osuosl.org>
-Message-ID: <875z92u3ta.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 18:36:18 +0200
+Subject: [Buildroot] [git commit] support/docker: use python3-flake8
+In-Reply-To: <20200814195008.EB84A8276B@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Fri, 14 Aug 2020 21:56:23 +0200")
+References: <20200814195008.EB84A8276B@busybox.osuosl.org>
+Message-ID: <871rjqu3r1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=c5b848d7192e615ead72419dcf5ce7286cf07a82
+ > commit: https://git.buildroot.net/buildroot/commit/?id=385c4da3dd10b6bfbaf23c04f48e7835ce5cc701
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following Python 3.x flake8 warning:
+ > support/scripts/pkg-stats now uses some Python 3.x only constructs
+ > ("async" and related keywords), so we must use the Python 3.x flake8.
 
- > W605 invalid escape sequence '\s'
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
