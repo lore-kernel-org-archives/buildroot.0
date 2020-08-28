@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Aug 2020 19:05:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to v7.72.0
-In-Reply-To: <20200819125640.142469-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Wed, 19 Aug 2020 14:56:40 +0200")
-References: <20200819125640.142469-1-titouan.christophe@railnova.eu>
-Message-ID: <87zh6epup5.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Aug 2020 19:05:56 +0200
+Subject: [Buildroot] [PATCH] package/tpm2-abrmd: bump to version 2.3.3
+In-Reply-To: <20200823100027.7567-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 23 Aug 2020 12:00:27 +0200")
+References: <20200823100027.7567-1-peter@korsgaard.com>
+Message-ID: <87v9h2puob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This new version fixes, amongst many other things, CVE-2020-8231
- > (https://curl.haxx.se/docs/CVE-2020-8231.html). See the full changelog
- > on https://curl.haxx.se/changes.html#7_72_0 .
+ > Bugfix release with a single fix:
+ > Fixed:
+ >   - Fixed handle resource leak exhausting TPM resources.
 
- > Also drop the 4 patches, that have all been released upstream.
+ > https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.3.3
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
 
