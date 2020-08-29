@@ -1,100 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 20:37:24 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.05.2
-Message-ID: <20200829183018.622AA87168@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 20:38:56 +0200
+Subject: [Buildroot] [git commit] CHANGES: fix typos in 2020.08-rcX notes
+Message-ID: <20200829183157.1E5E887145@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03b7ef2277676702f508dfc4fac44f829825145e
+commit: https://git.buildroot.net/buildroot/commit/?id=2915d1bd323bde196f5492c09665285d6b96a493
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 6be35c3216..4ea7ed541a 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/CHANGES b/CHANGES
+index 251d664d69..ea2749788e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,7 +2,7 @@
  
--      <h3 style="text-align: center;">Latest stable release: <b>2020.05.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.05.2</b></h3>
+ 	Fixes all over the tree.
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.05.1.tar.gz">buildroot-2020.05.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.05.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05.2.tar.gz">buildroot-2020.05.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
+-	Infrastructure: Ensure RPATH entries thay may be needed for
++	Infrastructure: Ensure RPATH entries that may be needed for
+ 	dlopen() are not dropped by patchelf.
  
--	  <h3><a href="/downloads/buildroot-2020.05.1.tar.bz2">buildroot-2020.05.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.05.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05.2.tar.bz2">buildroot-2020.05.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
+ 	Toolchain: Drop old GCC 6 based external Sourcery AMD64
+@@ -57,7 +57,7 @@
  
-diff --git a/docs/website/news.html b/docs/website/news.html
-index c4ef827cf3..92b97faab6 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.05.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 August 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.05.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.05.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-August/290474.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.05.2.tar.bz2">2020.05.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ 	#12876: nodejs fails to build when host-icu has been built before
+ 	#13111: python-gunicorn: missing dependency on python-setuptools
+-	#12121: wpa_supplicant fails to build without libopenssl enabled
++	#13121: wpa_supplicant fails to build without libopenssl enabled
+ 	#13146: raspberrypi3_defconfig: "Inappropriate ioctl for device"..
+ 	#13156: package live555 new license
+ 	#13166: python-rpi-gpio: does not work against aarch64, unint..
