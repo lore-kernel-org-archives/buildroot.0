@@ -1,40 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 20:38:56 +0200
-Subject: [Buildroot] [git commit] CHANGES: fix typos in 2020.08-rcX notes
-Message-ID: <20200829183157.1E5E887145@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 20:39:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp: bump to version 1.2.4
+Message-ID: <20200829183933.2791888-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2915d1bd323bde196f5492c09665285d6b96a493
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Extract from NEWS:
+- Fix subscription check on V6 link-local addresses
+- Add autofree function for GUPnPServiceProxyAction
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 251d664d69..ea2749788e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,7 +2,7 @@
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 6baf105318..60339ec9ca 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.3.sha256sum:
+-sha256  d447e54d88e4a8fab84ad1766070e9208e21166fc7e2ce95df6e33e49e8d29b1  gupnp-1.2.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.4.sha256sum:
++sha256  f7a0307ea51f5e44d1b832f493dd9045444a3a4e211ef85dfd9aa5dd6eaea7d1  gupnp-1.2.4.tar.xz
  
- 	Fixes all over the tree.
+ # Hash for license file:
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 953beb2559..e90787eb84 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--	Infrastructure: Ensure RPATH entries thay may be needed for
-+	Infrastructure: Ensure RPATH entries that may be needed for
- 	dlopen() are not dropped by patchelf.
- 
- 	Toolchain: Drop old GCC 6 based external Sourcery AMD64
-@@ -57,7 +57,7 @@
- 
- 	#12876: nodejs fails to build when host-icu has been built before
- 	#13111: python-gunicorn: missing dependency on python-setuptools
--	#12121: wpa_supplicant fails to build without libopenssl enabled
-+	#13121: wpa_supplicant fails to build without libopenssl enabled
- 	#13146: raspberrypi3_defconfig: "Inappropriate ioctl for device"..
- 	#13156: package live555 new license
- 	#13166: python-rpi-gpio: does not work against aarch64, unint..
+ GUPNP_VERSION_MAJOR = 1.2
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
+-- 
+2.28.0
