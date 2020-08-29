@@ -1,32 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Aug 2020 13:36:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: add
- security fix for CVE-2020-14347
-References: <20200810064109.447089-1-bernd.kuhls@t-online.de>
- <20200811234906.051e8caa@windsurf.home>
- <ovpn1hxmln.ln2@ID-313208.user.individual.net>
- <878sdymwsk.fsf@dell.be.48ers.dk>
-Message-ID: <27rp1hxg4f.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 13:37:21 +0200
+Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.13
+In-Reply-To: <20200829095120.15263-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 29 Aug 2020 11:51:19 +0200")
+References: <20200829095120.15263-1-peter@korsgaard.com>
+Message-ID: <87v9h1isy6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Am Fri, 28 Aug 2020 20:48:27 +0200 schrieb Peter Korsgaard:
+ > Fixes the following security issues:
+ > CVE-2020-15810: HTTP(S) Request Smuggling
+ > Due to incorrect data validation Squid is vulnerable to HTTP Request
+ > Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
+ > poisoning.
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
 
-> They were added to support various binary X11 video drivers,
-> E.G. nvidia-tegra23 for 1.14.x and amd-catalyst for 1.19.x. Given that
-> none of them have seen any real updates for ~5 years, I am fine with
-> removing those packages and the older xserver versions.
-> 
-> Care to send patches for this?
+ > CVE-2020-15811: HTTP(S) Request Splitting
+ > Due to incorrect data validation Squid is vulnerable to HTTP Request
+ > Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
+ > poisoning.
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
 
-done: http://patchwork.ozlabs.org/project/buildroot/list/?series=198371
+ > CVE-2020-24606: Denial of Service processing Cache Digest Response
+ > Due to Improper Input Validation Squid is vulnerable to a Denial of Service
+ > attack against the machine operating Squid.
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
 
-I have no idea and no time to investigate if there are alternative 
-drivers available so I just removed the catalyst & tegra23 drivers.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Regards, Bernd
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
