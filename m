@@ -1,740 +1,835 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Aug 2020 13:34:03 +0200
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xserver_xorg-server: remove
- unmaintained versions 1.14.7 & 1.17.4
+Date: Sat, 29 Aug 2020 13:34:02 +0200
+Subject: [Buildroot] [PATCH 2/3] package/amd-catalyst: remove package
 In-Reply-To: <20200829113403.122144-1-bernd.kuhls@t-online.de>
 References: <20200829113403.122144-1-bernd.kuhls@t-online.de>
-Message-ID: <20200829113403.122144-3-bernd.kuhls@t-online.de>
+Message-ID: <20200829113403.122144-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream does not maintain these older versions anymore. Due to security
-fixes not being backported to these versions anymore we remove these old
-X server versions.
+Current X.org X server is incompatible with this driver.
 
-Move current patches from version-specific directory to package directory.
+We no longer support unmaintainted versions of X.org X server.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                              |  6 ++
- .../0001-modesettings-needs-dri2.patch        |  0
- ...002-Remove-check-for-useSIGIO-option.patch |  0
- ...0003-include-misc.h-fix-uClibc-build.patch |  0
- ...nd-Makefile.am-fix-build-without-glx.patch |  0
- ...mon-xf86Init.c-fix-build-without-glx.patch |  0
- .../1.14.7/0001-sdksyms-gcc5.patch            | 50 -------------
- ...t-buffer-in-SProcXSendExtensionEvent.patch | 39 ----------
- ...ow-GenericEvent-in-SendEvent-request.patch | 71 -------------------
- ...ll-events-in-ProcXSendExtensionEvent.patch | 50 -------------
- ...5-Xi-Do-not-try-to-swap-GenericEvent.patch | 45 ------------
- .../1.17.4/0001-modesettings-needs-dri2.patch | 19 -----
- ...t-buffer-in-SProcXSendExtensionEvent.patch | 39 ----------
- ...ow-GenericEvent-in-SendEvent-request.patch | 71 -------------------
- ...ll-events-in-ProcXSendExtensionEvent.patch | 50 -------------
- ...5-Xi-Do-not-try-to-swap-GenericEvent.patch | 45 ------------
- package/x11r7/xserver_xorg-server/Config.in   | 48 -------------
- .../xserver_xorg-server.hash                  |  5 --
- .../xserver_xorg-server.mk                    |  8 +--
- 19 files changed, 7 insertions(+), 539 deletions(-)
- rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0001-modesettings-needs-dri2.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0002-Remove-check-for-useSIGIO-option.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0003-include-misc.h-fix-uClibc-build.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch (100%)
- delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+ Config.in.legacy                              |   6 +
+ package/Config.in                             |   1 -
+ .../0001-Add-support-for-Linux-4.0.patch      |  45 -----
+ .../0002-Add-support-for-Linux-4.1.patch      |  31 ----
+ .../0003-Add-support-for-Linux-4.2.patch      | 121 -------------
+ ...Use-fpregs_active-instead-of-has_fpu.patch |  33 ----
+ ...a-local-copy-of-copy_xregs_to_kernel.patch |  79 ---------
+ .../0006-Add-support-for-Linux-4.4.patch      |  78 ---------
+ .../0007-remove-gpl-symbols.patch             |  54 ------
+ package/amd-catalyst/20-fglrx.conf            |   4 -
+ package/amd-catalyst/Config.in                |  65 -------
+ package/amd-catalyst/amd-catalyst.hash        |   2 -
+ package/amd-catalyst/amd-catalyst.mk          | 162 ------------------
+ package/amd-catalyst/gl.pc                    |  12 --
+ 14 files changed, 6 insertions(+), 687 deletions(-)
+ delete mode 100644 package/amd-catalyst/0001-Add-support-for-Linux-4.0.patch
+ delete mode 100644 package/amd-catalyst/0002-Add-support-for-Linux-4.1.patch
+ delete mode 100644 package/amd-catalyst/0003-Add-support-for-Linux-4.2.patch
+ delete mode 100644 package/amd-catalyst/0004-Use-fpregs_active-instead-of-has_fpu.patch
+ delete mode 100644 package/amd-catalyst/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
+ delete mode 100644 package/amd-catalyst/0006-Add-support-for-Linux-4.4.patch
+ delete mode 100644 package/amd-catalyst/0007-remove-gpl-symbols.patch
+ delete mode 100644 package/amd-catalyst/20-fglrx.conf
+ delete mode 100644 package/amd-catalyst/Config.in
+ delete mode 100644 package/amd-catalyst/amd-catalyst.hash
+ delete mode 100644 package/amd-catalyst/amd-catalyst.mk
+ delete mode 100644 package/amd-catalyst/gl.pc
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index b91e6dbc69..45fb18540b 100644
+index a718e645d8..b91e6dbc69 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2020.08"
  
-+config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
-+	bool "X.org Enable AIGLX Extension"
++config BR2_PACKAGE_AMD_CATALYST
++	bool "amd-catalyst"
 +	select BR2_LEGACY
 +	help
-+	  AIGLX Extension was removed in X.org X server version 1.19.0
++	  Current X.org server is incompatible with this driver.
 +
- config BR2_PACKAGE_AMD_CATALYST
- 	bool "amd-catalyst"
+ config BR2_PACKAGE_NVIDIA_TEGRA23
+ 	bool "nvidia-tegra23 package removed"
  	select BR2_LEGACY
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0002-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0002-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0003-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/0003-include-misc.h-fix-uClibc-build.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0003-include-misc.h-fix-uClibc-build.patch
-rename to package/x11r7/xserver_xorg-server/0003-include-misc.h-fix-uClibc-build.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-rename to package/x11r7/xserver_xorg-server/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-rename to package/x11r7/xserver_xorg-server/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch b/package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch
+diff --git a/package/Config.in b/package/Config.in
+index 3d5a087986..8a072c0cf5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -417,7 +417,6 @@ endmenu
+ 	source "package/acpitool/Config.in"
+ 	source "package/aer-inject/Config.in"
+ 	source "package/am335x-pru-package/Config.in"
+-	source "package/amd-catalyst/Config.in"
+ 	source "package/apcupsd/Config.in"
+ 	source "package/avrdude/Config.in"
+ 	source "package/bcache-tools/Config.in"
+diff --git a/package/amd-catalyst/0001-Add-support-for-Linux-4.0.patch b/package/amd-catalyst/0001-Add-support-for-Linux-4.0.patch
 deleted file mode 100644
-index ad544aa30c..0000000000
---- a/package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 21b896939c5bb242f3aacc37baf12379e43254b6 Mon Sep 17 00:00:00 2001
--From: Egbert Eich <eich@freedesktop.org>
--Date: Tue, 3 Mar 2015 16:27:05 +0100
--Subject: symbols: Fix sdksyms.sh to cope with gcc5
--
--Gcc5 adds additional lines stating line numbers before and
--after __attribute__() which need to be skipped.
--
--Downloaded from upstream commit
--https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/sdksyms.sh?id=21b896939c5bb242f3aacc37baf12379e43254b6
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Egbert Eich <eich@freedesktop.org>
--Tested-by: Daniel Stone <daniels@collabora.com>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--
--diff --git a/hw/xfree86/sdksyms.sh b/hw/xfree86/sdksyms.sh
--index 2305073..05ac410 100755
----- a/hw/xfree86/sdksyms.sh
--+++ b/hw/xfree86/sdksyms.sh
--@@ -350,13 +350,25 @@ BEGIN {
--     if (sdk) {
-- 	n = 3;
-- 
--+        # skip line numbers GCC 5 adds before __attribute__
--+        while ($n == "" || $0 ~ /^# [0-9]+ "/) {
--+           getline;
--+           n = 1;
--+        }
--+
-- 	# skip attribute, if any
-- 	while ($n ~ /^(__attribute__|__global)/ ||
-- 	    # skip modifiers, if any
-- 	    $n ~ /^\*?(unsigned|const|volatile|struct|_X_EXPORT)$/ ||
-- 	    # skip pointer
---	    $n ~ /^[a-zA-Z0-9_]*\*$/)
--+	    $n ~ /^[a-zA-Z0-9_]*\*$/) {
-- 	    n++;
--+            # skip line numbers GCC 5 adds after __attribute__
--+            while ($n == "" || $0 ~ /^# [0-9]+ "/) {
--+               getline;
--+               n = 1;
--+            }
--+        }
-- 
-- 	# type specifier may not be set, as in
-- 	#   extern _X_EXPORT unsigned name(...)
---- 
--cgit v0.10.2
--
-diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
-deleted file mode 100644
-index c15dc9f50c..0000000000
---- a/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:39 +0300
--Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
--
--Make sure that the xEvent eventT is initialized with zeros, the same way as
--in SProcSendEvent.
--
--Some event swapping functions do not overwrite all 32 bytes of xEvent
--structure, for example XSecurityAuthorizationRevoked. Two cooperating
--clients, one swapped and the other not, can send
--XSecurityAuthorizationRevoked event to each other to retrieve old stack data
--from X server. This can be potentialy misused to go around ASLR or
--stack-protector.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Xi/sendexev.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 11d82029f..1cf118ab6 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
-- {
--     CARD32 *p;
--     int i;
---    xEvent eventT;
--+    xEvent eventT = { .u.u.type = 0 };
--     xEvent *eventP;
--     EventSwapPtr proc;
-- 
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
-deleted file mode 100644
-index 12da5f5cba..0000000000
---- a/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:40 +0300
--Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
--
--The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
--no less. Both ProcSendEvent and SProcSendEvent verify that the received data
--exactly match the request size. However nothing stops the client from passing
--in event with xEvent::type = GenericEvent and any value of
--xGenericEvent::length.
--
--In the case of ProcSendEvent, the event will be eventually passed to
--WriteEventsToClient which will see that it is Generic event and copy the
--arbitrary length from the receive buffer (and possibly past it) and send it to
--the other client. This allows clients to copy unitialized heap memory out of X
--server or to crash it.
--
--In case of SProcSendEvent, it will attempt to swap the incoming event by
--calling a swapping function from the EventSwapVector array. The swapped event
--is written to target buffer, which in this case is local xEvent variable. The
--xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
--expect that the target buffer has size matching the size of the source
--GenericEvent. This allows clients to cause stack buffer overflows.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- dix/events.c  | 6 ++++++
-- dix/swapreq.c | 7 +++++++
-- 2 files changed, 13 insertions(+)
--
--diff --git a/dix/events.c b/dix/events.c
--index 3e3a01ef9..d3a33ea3f 100644
----- a/dix/events.c
--+++ b/dix/events.c
--@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
--         client->errorValue = stuff->event.u.u.type;
--         return BadValue;
--     }
--+    /* Generic events can have variable size, but SendEvent request holds
--+       exactly 32B of event data. */
--+    if (stuff->event.u.u.type == GenericEvent) {
--+        client->errorValue = stuff->event.u.u.type;
--+        return BadValue;
--+    }
--     if (stuff->event.u.u.type == ClientMessage &&
--         stuff->event.u.u.detail != 8 &&
--         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
--diff --git a/dix/swapreq.c b/dix/swapreq.c
--index 719e9b81c..67850593b 100644
----- a/dix/swapreq.c
--+++ b/dix/swapreq.c
--@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
--     swapl(&stuff->destination);
--     swapl(&stuff->eventMask);
-- 
--+    /* Generic events can have variable size, but SendEvent request holds
--+       exactly 32B of event data. */
--+    if (stuff->event.u.u.type == GenericEvent) {
--+        client->errorValue = stuff->event.u.u.type;
--+        return BadValue;
--+    }
--+
--     /* Swap event */
--     proc = EventSwapVector[stuff->event.u.u.type & 0177];
--     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
-deleted file mode 100644
-index 2e651006ba..0000000000
---- a/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:41 +0300
--Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
--
--The requirement is that events have type in range
--EXTENSION_EVENT_BASE..lastEvent, but it was tested
--only for first event of all.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Xi/sendexev.c | 12 +++++++-----
-- 1 file changed, 7 insertions(+), 5 deletions(-)
--
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 1cf118ab6..5e63bfcca 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
-- int
-- ProcXSendExtensionEvent(ClientPtr client)
-- {
---    int ret;
--+    int ret, i;
--     DeviceIntPtr dev;
--     xEvent *first;
--     XEventClass *list;
--@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
--     /* The client's event type must be one defined by an extension. */
-- 
--     first = ((xEvent *) &stuff[1]);
---    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
---          (first->u.u.type < lastEvent))) {
---        client->errorValue = first->u.u.type;
---        return BadValue;
--+    for (i = 0; i < stuff->num_events; i++) {
--+        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
--+            (first[i].u.u.type < lastEvent))) {
--+            client->errorValue = first[i].u.u.type;
--+            return BadValue;
--+        }
--     }
-- 
--     list = (XEventClass *) (first + stuff->num_events);
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
-deleted file mode 100644
-index 871e7621ed..0000000000
---- a/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+index a0db9621a1..0000000000
+--- a/package/amd-catalyst/0001-Add-support-for-Linux-4.0.patch
 +++ /dev/null
 @@ -1,45 +0,0 @@
--From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:42 +0300
--Subject: [PATCH] Xi: Do not try to swap GenericEvent.
+-From c35482bc0cc56b40263b74c3e58e42be867fd9f2 Mon Sep 17 00:00:00 2001
+-From: Alberto Milone <alberto.milone@canonical.com>
+-Date: Thu, 17 Sep 2015 15:41:46 +0200
+-Subject: [PATCH] Add support for Linux 4.0
 -
--The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
--it is assuming that the event has fixed size and gives the swapping function
--xEvent-sized buffer.
--
--A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 ----
-- Xi/sendexev.c | 10 +++++++++-
-- 1 file changed, 9 insertions(+), 1 deletion(-)
+- common/lib/modules/fglrx/build_mod/firegl_public.c | 5 +++++
+- common/lib/modules/fglrx/build_mod/kcl_str.c       | 4 ++++
+- 2 files changed, 9 insertions(+)
 -
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 5e63bfcca..5c2e0fc56 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
+-diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-index 677565d..6017e89 100755
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-@@ -285,6 +285,11 @@ MODULE_DEVICE_TABLE(pci, fglrx_pci_table);
 - 
--     eventP = (xEvent *) &stuff[1];
--     for (i = 0; i < stuff->num_events; i++, eventP++) {
--+        if (eventP->u.u.type == GenericEvent) {
--+            client->errorValue = eventP->u.u.type;
--+            return BadValue;
--+        }
+- MODULE_INFO(supported, "external");
+- 
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 20, 0)
+-+#define read_cr4()       __read_cr4()
+-+#define write_cr4(cr4)   __write_cr4(cr4)
+-+#endif
 -+
--         proc = EventSwapVector[eventP->u.u.type & 0177];
---        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
--+        /* no swapping proc; invalid event type? */
--+        if (proc == NotImplemented) {
--+            client->errorValue = eventP->u.u.type;
--             return BadValue;
--+        }
--         (*proc) (eventP, &eventT);
--         *eventP = eventT;
--     }
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch
-deleted file mode 100644
-index 4ef95efc3e..0000000000
---- a/package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Kernel modesettings support also depends on dri2, see
--http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
--
--Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=91584
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr xorg-server-1.17.2.org/configure.ac xorg-server-1.17.2/configure.ac
----- xorg-server-1.17.2.org/configure.ac	2015-06-16 17:42:40.000000000 +0200
--+++ xorg-server-1.17.2/configure.ac	2015-08-08 10:44:59.702382624 +0200
--@@ -2036,7 +2036,7 @@
-- 	        XORG_SYS_LIBS="$XORG_SYS_LIBS $XORG_MODULES_LIBS"
-- 	fi
+- /* globals constants */
+- const char*         KCL_SYSINFO_OsVersionString = UTS_RELEASE;
+- const unsigned int  KCL_SYSINFO_PageSize        = PAGE_SIZE;
+-diff --git a/common/lib/modules/fglrx/build_mod/kcl_str.c b/common/lib/modules/fglrx/build_mod/kcl_str.c
+-index 2d89eb0..bacdb69 100755
+---- a/common/lib/modules/fglrx/build_mod/kcl_str.c
+-+++ b/common/lib/modules/fglrx/build_mod/kcl_str.c
+-@@ -42,6 +42,10 @@
+- #include "kcl_type.h"
+- #include "kcl_str.h"
 - 
---	if test "x$DRM" = xyes; then
--+	if test "x$DRM" = xyes -a "x$DRI2" = xyes; then
-- 		dnl 2.4.46 is required for cursor hotspot support.
-- 		PKG_CHECK_EXISTS(libdrm >= 2.4.46)
-- 		XORG_DRIVER_MODESETTING=yes
-diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 20, 0)
+-+#define strnicmp strncasecmp
+-+#endif
+-+
+- /** \brief Fill memory with a constant byte
+-  *  \param s Pointer to memory
+-  *  \param c Initializing value
+--- 
+-2.8.1
+-
+diff --git a/package/amd-catalyst/0002-Add-support-for-Linux-4.1.patch b/package/amd-catalyst/0002-Add-support-for-Linux-4.1.patch
 deleted file mode 100644
-index c15dc9f50c..0000000000
---- a/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+index cc95916e1e..0000000000
+--- a/package/amd-catalyst/0002-Add-support-for-Linux-4.1.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:39 +0300
--Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
+@@ -1,31 +0,0 @@
+-From e9c8ccb4c8c842042542b792c51f9a7ec6c85e06 Mon Sep 17 00:00:00 2001
+-From: Alberto Milone <alberto.milone@canonical.com>
+-Date: Thu, 17 Sep 2015 15:44:59 +0200
+-Subject: [PATCH] Add support for Linux 4.1
 -
--Make sure that the xEvent eventT is initialized with zeros, the same way as
--in SProcSendEvent.
--
--Some event swapping functions do not overwrite all 32 bytes of xEvent
--structure, for example XSecurityAuthorizationRevoked. Two cooperating
--clients, one swapped and the other not, can send
--XSecurityAuthorizationRevoked event to each other to retrieve old stack data
--from X server. This can be potentialy misused to go around ASLR or
--stack-protector.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 ----
-- Xi/sendexev.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- common/lib/modules/fglrx/build_mod/firegl_public.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
 -
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 11d82029f..1cf118ab6 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
+-diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-index 6017e89..94778f1 100755
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-@@ -3508,10 +3508,12 @@ int ATI_API_CALL KCL_InstallInterruptHandler(
+-         KCL_PUB_InterruptHandlerWrap,
+- #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
+-         ((useMSI) ? (SA_INTERRUPT) : (SA_SHIRQ)),
+--#else
+-+#elif LINUX_VERSION_CODE < KERNEL_VERSION(4,1,0)
+-         //when MSI enabled. keep irq disabled when calling the action handler,
+-         //exclude this IRQ from irq balancing (only on one CPU) 
+-         ((useMSI) ? (IRQF_DISABLED) : (IRQF_SHARED)),    
+-+#else
+-+        ((useMSI) ? (0x0) : (IRQF_SHARED)),
+- #endif
+-         dev_name,
+-         context);
+--- 
+-2.8.1
+-
+diff --git a/package/amd-catalyst/0003-Add-support-for-Linux-4.2.patch b/package/amd-catalyst/0003-Add-support-for-Linux-4.2.patch
+deleted file mode 100644
+index 7458162965..0000000000
+--- a/package/amd-catalyst/0003-Add-support-for-Linux-4.2.patch
++++ /dev/null
+@@ -1,121 +0,0 @@
+-From e2e6c2dac2a0311a022208dd289374b832538329 Mon Sep 17 00:00:00 2001
+-From: Alberto Milone <alberto.milone@canonical.com>
+-Date: Tue, 14 Jul 2015 12:56:37 +0200
+-Subject: [PATCH] Add support for Linux 4.2
+-
+-Deal with the FPU code renaming
+-
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+----
+- common/lib/modules/fglrx/build_mod/firegl_public.c | 38 ++++++++++++++++++++++
+- 1 file changed, 38 insertions(+)
+-
+-diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-index 94778f1..749ea51 100755
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-@@ -191,9 +191,17 @@
+- #include <linux/string.h>
+- #include <linux/gfp.h>
+- #include <linux/swap.h>
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+- #include "asm/i387.h"
+-+#else
+-+#include <asm/fpu/api.h>
+-+#endif
+- #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0)
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+- #include <asm/fpu-internal.h>
+-+#else
+-+#include <asm/fpu/internal.h>
+-+#endif
+- #endif
+- 
+- #include "firegl_public.h"
+-@@ -1711,6 +1719,9 @@ void ATI_API_CALL KCL_SetCurrentProcessState(KCL_ENUM_ProcessState state)
+- 
+- #if defined(__i386__) 
+- #ifndef __HAVE_ARCH_CMPXCHG
+-+#ifndef __xg
+-+#define __xg(x) ((volatile long *)(x))
+-+#endif
+- static inline 
+- unsigned long __fgl_cmpxchg(volatile void *ptr, unsigned long old,            
+-                         unsigned long new, int size)                      
+-@@ -1747,7 +1758,11 @@ unsigned long ATI_API_CALL kcl__cmpxchg(volatile void *ptr, unsigned long old,
+-          unsigned long new, int size)
 - {
--     CARD32 *p;
--     int i;
---    xEvent eventT;
--+    xEvent eventT = { .u.u.type = 0 };
--     xEvent *eventP;
--     EventSwapPtr proc;
+- #ifndef __HAVE_ARCH_CMPXCHG
+-+#if defined(__i386__)
+-     return __fgl_cmpxchg(ptr,old,new,size);
+-+#elif defined(__x86_64__)
+-+    return cmpxchg((unsigned long*)ptr,old,new);
+-+#endif
+- #else
+-     /* On kernel version 2.6.34 passing a variable or unsupported size
+-      * argument to the __cmpxchg macro causes the default-clause of a
+-@@ -6443,21 +6458,36 @@ static int KCL_fpu_save_init(struct task_struct *tsk)
+-    struct fpu *fpu = &tsk->thread.fpu;
 - 
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
-deleted file mode 100644
-index 12da5f5cba..0000000000
---- a/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:40 +0300
--Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
--
--The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
--no less. Both ProcSendEvent and SProcSendEvent verify that the received data
--exactly match the request size. However nothing stops the client from passing
--in event with xEvent::type = GenericEvent and any value of
--xGenericEvent::length.
--
--In the case of ProcSendEvent, the event will be eventually passed to
--WriteEventsToClient which will see that it is Generic event and copy the
--arbitrary length from the receive buffer (and possibly past it) and send it to
--the other client. This allows clients to copy unitialized heap memory out of X
--server or to crash it.
--
--In case of SProcSendEvent, it will attempt to swap the incoming event by
--calling a swapping function from the EventSwapVector array. The swapped event
--is written to target buffer, which in this case is local xEvent variable. The
--xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
--expect that the target buffer has size matching the size of the source
--GenericEvent. This allows clients to cause stack buffer overflows.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- dix/events.c  | 6 ++++++
-- dix/swapreq.c | 7 +++++++
-- 2 files changed, 13 insertions(+)
--
--diff --git a/dix/events.c b/dix/events.c
--index 3e3a01ef9..d3a33ea3f 100644
----- a/dix/events.c
--+++ b/dix/events.c
--@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
--         client->errorValue = stuff->event.u.u.type;
--         return BadValue;
--     }
--+    /* Generic events can have variable size, but SendEvent request holds
--+       exactly 32B of event data. */
--+    if (stuff->event.u.u.type == GenericEvent) {
--+        client->errorValue = stuff->event.u.u.type;
--+        return BadValue;
--+    }
--     if (stuff->event.u.u.type == ClientMessage &&
--         stuff->event.u.u.detail != 8 &&
--         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
--diff --git a/dix/swapreq.c b/dix/swapreq.c
--index 719e9b81c..67850593b 100644
----- a/dix/swapreq.c
--+++ b/dix/swapreq.c
--@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
--     swapl(&stuff->destination);
--     swapl(&stuff->eventMask);
+-    if(static_cpu_has(X86_FEATURE_XSAVE)) {
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+-       fpu_xsave(fpu);
+-       if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+-+#else
+-+      copy_xregs_to_kernel(&fpu->state.xsave);
+-+      if (!(fpu->state.xsave.header.xfeatures & XSTATE_FP))
+-+#endif
+- 	 return 1;
+-    } else if (static_cpu_has(X86_FEATURE_FXSR)) {
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+- 	 fpu_fxsave(fpu);
+-+#else
+-+     copy_fxregs_to_kernel(fpu);
+-+#endif
+-    } else {
+- 	 asm volatile("fnsave %[fx]; fwait"
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+-                   : [fx] "=m" (fpu->state->fsave));
+-+#else
+-+                  : [fx] "=m" (fpu->state.fsave));
+-+#endif
+- 	 return 0;
+-    }
 - 
--+    /* Generic events can have variable size, but SendEvent request holds
--+       exactly 32B of event data. */
--+    if (stuff->event.u.u.type == GenericEvent) {
--+        client->errorValue = stuff->event.u.u.type;
--+        return BadValue;
--+    }
--+
--     /* Swap event */
--     proc = EventSwapVector[stuff->event.u.u.type & 0177];
--     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
---- 
--2.11.0
--
-diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
-deleted file mode 100644
-index 2e651006ba..0000000000
---- a/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:41 +0300
--Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
--
--The requirement is that events have type in range
--EXTENSION_EVENT_BASE..lastEvent, but it was tested
--only for first event of all.
--
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Xi/sendexev.c | 12 +++++++-----
-- 1 file changed, 7 insertions(+), 5 deletions(-)
--
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 1cf118ab6..5e63bfcca 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
-- int
-- ProcXSendExtensionEvent(ClientPtr client)
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+-    if (unlikely(fpu->state->fxsave.swd & X87_FSW_ES)) {
+- 	asm volatile("fnclex");
+- 	return 0;
+-    }
+-+#endif
+-    return 1;
+- }
+- #endif
+-@@ -6469,8 +6499,12 @@ static int KCL_fpu_save_init(struct task_struct *tsk)
+- void ATI_API_CALL KCL_fpu_begin(void)
 - {
---    int ret;
--+    int ret, i;
--     DeviceIntPtr dev;
--     xEvent *first;
--     XEventClass *list;
--@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
--     /* The client's event type must be one defined by an extension. */
+- #ifdef CONFIG_X86_64
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+-     kernel_fpu_begin();
+- #else
+-+    __kernel_fpu_begin();
+-+#endif
+-+#else
+- #ifdef TS_USEDFPU
+-     struct thread_info *cur_thread = current_thread_info();
+-     struct task_struct *cur_task = get_current();
+-@@ -6515,7 +6549,11 @@ void ATI_API_CALL KCL_fpu_begin(void)
+-  */
+- void ATI_API_CALL KCL_fpu_end(void)
+- {
+-+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+-     kernel_fpu_end();
+-+#else
+-+    __kernel_fpu_end();
+-+#endif
+- }
 - 
--     first = ((xEvent *) &stuff[1]);
---    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
---          (first->u.u.type < lastEvent))) {
---        client->errorValue = first->u.u.type;
---        return BadValue;
--+    for (i = 0; i < stuff->num_events; i++) {
--+        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
--+            (first[i].u.u.type < lastEvent))) {
--+            client->errorValue = first[i].u.u.type;
--+            return BadValue;
--+        }
--     }
-- 
--     list = (XEventClass *) (first + stuff->num_events);
+- /** Create new directory entry under "/proc/...."
 --- 
--2.11.0
+-2.8.1
 -
-diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+diff --git a/package/amd-catalyst/0004-Use-fpregs_active-instead-of-has_fpu.patch b/package/amd-catalyst/0004-Use-fpregs_active-instead-of-has_fpu.patch
 deleted file mode 100644
-index 871e7621ed..0000000000
---- a/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+index 4d375b8ad8..0000000000
+--- a/package/amd-catalyst/0004-Use-fpregs_active-instead-of-has_fpu.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
--From: Michal Srb <msrb@suse.com>
--Date: Wed, 24 May 2017 15:54:42 +0300
--Subject: [PATCH] Xi: Do not try to swap GenericEvent.
+@@ -1,33 +0,0 @@
+-From 7120f00015570a2e4d9b6532731960d509c71cba Mon Sep 17 00:00:00 2001
+-From: Alberto Milone <alberto.milone@canonical.com>
+-Date: Thu, 17 Sep 2015 15:48:30 +0200
+-Subject: [PATCH] Use fpregs_active instead of has_fpu
 -
--The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
--it is assuming that the event has fixed size and gives the swapping function
--xEvent-sized buffer.
+-This is for Linux 4.2
 -
--A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
+-Thanks to Tim Gardner for the patch.
 -
--Signed-off-by: Michal Srb <msrb@suse.com>
--Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 ----
-- Xi/sendexev.c | 10 +++++++++-
-- 1 file changed, 9 insertions(+), 1 deletion(-)
+- common/lib/modules/fglrx/build_mod/firegl_public.c | 4 ++++
+- 1 file changed, 4 insertions(+)
 -
--diff --git a/Xi/sendexev.c b/Xi/sendexev.c
--index 5e63bfcca..5c2e0fc56 100644
----- a/Xi/sendexev.c
--+++ b/Xi/sendexev.c
--@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
-- 
--     eventP = (xEvent *) &stuff[1];
--     for (i = 0; i < stuff->num_events; i++, eventP++) {
--+        if (eventP->u.u.type == GenericEvent) {
--+            client->errorValue = eventP->u.u.type;
--+            return BadValue;
--+        }
--+
--         proc = EventSwapVector[eventP->u.u.type & 0177];
---        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
--+        /* no swapping proc; invalid event type? */
--+        if (proc == NotImplemented) {
--+            client->errorValue = eventP->u.u.type;
--             return BadValue;
--+        }
--         (*proc) (eventP, &eventT);
--         *eventP = eventT;
--     }
+-diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-index 749ea51..4c1f9a5 100755
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-@@ -6528,7 +6528,11 @@ void ATI_API_CALL KCL_fpu_begin(void)
+-     /* The thread structure is changed with the commit below for kernel 3.3:
+-      * https://github.com/torvalds/linux/commit/7e16838d94b566a17b65231073d179bc04d590c8
+-      */
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0)
+-+    if (cur_task->thread.fpu.fpregs_active)
+-+#else
+-     if (cur_task->thread.fpu.has_fpu)
+-+#endif
+- #else
+-     if (cur_task->thread.has_fpu)
+- #endif
 --- 
--2.11.0
+-2.8.1
 -
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 87f1b37daf..d53083ef90 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -42,47 +42,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 
- if BR2_PACKAGE_XSERVER_XORG_SERVER
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
--	bool
+diff --git a/package/amd-catalyst/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch b/package/amd-catalyst/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
+deleted file mode 100644
+index c9513ef188..0000000000
+--- a/package/amd-catalyst/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From eb703737be5c91c1a0817351db8ec152c523c85d Mon Sep 17 00:00:00 2001
+-From: Alberto Milone <alberto.milone@canonical.com>
+-Date: Thu, 17 Sep 2015 15:49:46 +0200
+-Subject: [PATCH] Use a local copy of copy_xregs_to_kernel
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
--	bool
+-This is needed for Linux 4.2.
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
--	bool
+-Thanks to Tim Gardner for the patch.
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
--	int
--	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
--	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
--	default 24 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+----
+- common/lib/modules/fglrx/build_mod/firegl_public.c | 44 +++++++++++++++++++++-
+- 1 file changed, 43 insertions(+), 1 deletion(-)
 -
--choice
--	bool "X Window System server version"
+-diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-index 4c1f9a5..bb67bba 100755
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-@@ -6443,6 +6443,48 @@ int ATI_API_CALL kcl_sscanf(const char * buf, const char * fmt, ...)
+-     return i;
+- }
+- 
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0)
+-+/*
+-+ * Save processor xstate to xsave area.
+-+ */
+-+static void _copy_xregs_to_kernel(struct xregs_state *xstate)
+-+{
+-+        u64 mask = -1;
+-+        u32 lmask = mask;
+-+        u32 hmask = mask >> 32;
+-+        int err = 0;
+-+
+-+        /*WARN_ON(!alternatives_patched);*/
+-+
+-+        /*
+-+         * If xsaves is enabled, xsaves replaces xsaveopt because
+-+         * it supports compact format and supervisor states in addition to
+-+         * modified optimization in xsaveopt.
+-+         *
+-+         * Otherwise, if xsaveopt is enabled, xsaveopt replaces xsave
+-+         * because xsaveopt supports modified optimization which is not
+-+         * supported by xsave.
+-+         *
+-+         * If none of xsaves and xsaveopt is enabled, use xsave.
+-+         */
+-+        alternative_input_2(
+-+                "1:"XSAVE,
+-+                XSAVEOPT,
+-+                X86_FEATURE_XSAVEOPT,
+-+                XSAVES,
+-+                X86_FEATURE_XSAVES,
+-+                [xstate] "D" (xstate), "a" (lmask), "d" (hmask) :
+-+                "memory");
+-+        asm volatile("2:\n\t"
+-+                     xstate_fault(err)
+-+                     : "0" (err)
+-+                     : "memory");
+-+
+-+        /* We should never fault when copying to a kernel buffer: */
+-+        WARN_ON_FPU(err);
+-+}
+-+#endif
+-+
+- /** \brief Generate UUID
+-  *  \param buf pointer to the generated UUID
+-  *  \return None
+-@@ -6462,7 +6504,7 @@ static int KCL_fpu_save_init(struct task_struct *tsk)
+-       fpu_xsave(fpu);
+-       if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+- #else
+--      copy_xregs_to_kernel(&fpu->state.xsave);
+-+      _copy_xregs_to_kernel(&fpu->state.xsave);
+-       if (!(fpu->state.xsave.header.xfeatures & XSTATE_FP))
+- #endif
+- 	 return 1;
+--- 
+-2.8.1
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
--	bool "1.20.9"
--	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
--	select BR2_PACKAGE_XLIB_LIBXFONT2
+diff --git a/package/amd-catalyst/0006-Add-support-for-Linux-4.4.patch b/package/amd-catalyst/0006-Add-support-for-Linux-4.4.patch
+deleted file mode 100644
+index 104e2c599d..0000000000
+--- a/package/amd-catalyst/0006-Add-support-for-Linux-4.4.patch
++++ /dev/null
+@@ -1,78 +0,0 @@
+-From 54b230e26a1889c08507e791ab043f8a4b4ff771 Mon Sep 17 00:00:00 2001
+-From: Romain Perier <romain.perier@free-electrons.com>
+-Date: Thu, 7 Jul 2016 14:40:53 +0200
+-Subject: [PATCH] Add support for Linux 4.4
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
--	bool "1.17.4"
--	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
--	select BR2_PACKAGE_XLIB_LIBXFONT
+-It fixes various things like the use of seq_printf because its API
+-changed. It also replaces the call to mtrr_add and mtrr_del by
+-arch_phys_wc_add and arch_phys_wc_del because these symbols are
+-no longer exported for Linux >= 4.3.x.
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
--	bool "1.14.7"
--	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
--	select BR2_PACKAGE_XLIB_LIBXFONT
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+----
+- common/lib/modules/fglrx/build_mod/firegl_public.c | 21 +++++++++++++++++++++
+- 1 file changed, 21 insertions(+)
 -
--endchoice
+-diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-index bb67bba..b4b2d30 100755
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c
+-@@ -636,9 +636,16 @@ static int firegl_major_proc_read(struct seq_file *m, void* data)
+- 
+-     len = snprintf(buf, request, "%d\n", major);
+- #else
+-+
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
+-+    seq_printf(m, "%d\n", major);
+-+    len = 0;
+-+#else
+-     len = seq_printf(m, "%d\n", major);
+- #endif
+- 
+-+#endif
+-+
+-     KCL_DEBUG1(FN_FIREGL_PROC, "return len=%i\n",len);
+- 
+-     return len;
+-@@ -3432,7 +3439,11 @@ int ATI_API_CALL KCL_MEM_MTRR_Support(void)
+- int ATI_API_CALL KCL_MEM_MTRR_AddRegionWc(unsigned long base, unsigned long size)
+- {
+- #ifdef CONFIG_MTRR
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
+-+    return arch_phys_wc_add(base, size);
+-+#else
+-     return mtrr_add(base, size, MTRR_TYPE_WRCOMB, 1);
+-+#endif
+- #else /* !CONFIG_MTRR */
+-     return -EPERM;
+- #endif /* !CONFIG_MTRR */
+-@@ -3441,7 +3452,12 @@ int ATI_API_CALL KCL_MEM_MTRR_AddRegionWc(unsigned long base, unsigned long size
+- int ATI_API_CALL KCL_MEM_MTRR_DeleteRegion(int reg, unsigned long base, unsigned long size)
+- {
+- #ifdef CONFIG_MTRR
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
+-+    arch_phys_wc_del(reg);
+-+    return 0;
+-+#else
+-     return mtrr_del(reg, base, size);
+-+#endif
+- #else /* !CONFIG_MTRR */
+-     return -EPERM;
+- #endif /* !CONFIG_MTRR */
+-@@ -6505,8 +6521,13 @@ static int KCL_fpu_save_init(struct task_struct *tsk)
+-       if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+- #else
+-       _copy_xregs_to_kernel(&fpu->state.xsave);
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,4,0)
+-+      if (!(fpu->state.xsave.header.xfeatures & XFEATURE_MASK_FP))
+-+#else
+-       if (!(fpu->state.xsave.header.xfeatures & XSTATE_FP))
+- #endif
+-+
+-+#endif
+- 	 return 1;
+-    } else if (static_cpu_has(X86_FEATURE_FXSR)) {
+- #if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+--- 
+-2.8.1
 -
--config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
--	string
--	default "1.20.9" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
--	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
--	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+diff --git a/package/amd-catalyst/0007-remove-gpl-symbols.patch b/package/amd-catalyst/0007-remove-gpl-symbols.patch
+deleted file mode 100644
+index d0094b0934..0000000000
+--- a/package/amd-catalyst/0007-remove-gpl-symbols.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-Author: Manuel R?ger <mrueg@gentoo.org>
+-Date: Sat, 2 Jan 2016 17:24:30 +0100
+-URL: https://gitweb.gentoo.org/repo/gentoo.git/commit/x11-drivers/ati-drivers/files?id=179aa11ed2f1bd79cf1b190263c3a7a07279fc50
 -
- choice
- 	prompt "X Window System server type"
- 	help
-@@ -114,13 +73,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
- 
- endchoice
- 
--config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
--	bool "Enable AIGLX Extension"
--	# AIGLX Extension removed in 1.19.0
--	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14 || BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+-Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+----
+---- a/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-09-18 23:57:02.000000000 -0400
+-+++ b/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-09-18 23:57:11.000000000 -0400
+-@@ -136,7 +136,6 @@
+- #include <asm/mman.h>
+- #include <asm/uaccess.h>
+- #include <asm/processor.h>
+--#include <asm/tlbflush.h> // for flush_tlb_page
+- #include <asm/cpufeature.h>
+- #ifdef CONFIG_MTRR
+- #include <asm/mtrr.h>
+-@@ -251,6 +250,26 @@
+- #define WRITE_CR4(x)    write_cr4(x)
+- #endif
+- 
+-+#define __flush_tlb_one(addr) asm volatile("invlpg (%0)" ::"r" (addr) : "memory")
+-+#define __flush_tlb() native_write_cr3(native_read_cr3())
+-+
+-+static inline void __flush_tlb_all(void)
+-+{
+-+        if (cpu_has_pge)
+-+        {
+-+                unsigned long flags, cr4;
+-+                raw_local_irq_save(flags);
+-+                cr4 = native_read_cr4();
+-+                native_write_cr4(cr4 & ~X86_CR4_PGE);
+-+                native_write_cr4(cr4);
+-+                raw_local_irq_restore(flags);
+-+        }
+-+        else
+-+        {
+-+                __flush_tlb();
+-+        }
+-+}
+-+
+- // ============================================================
+- /* globals */
+- 
+---- a/common/lib/modules/fglrx/build_mod/kcl_acpi.c	2015-09-19 00:43:35.000000000 -0400
+-+++ b/common/lib/modules/fglrx/build_mod/kcl_acpi.c	2015-09-19 00:43:48.000000000 -0400
+-@@ -868,7 +868,7 @@ void ATI_API_CALL KCL_ACPI_No_Hotplug(vo
+- #elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
+-     if(pdev)
+-     {
+--#if (UTS_UBUNTU_RELEASE_ABI < 0 && LINUX_VERSION_CODE < KERNEL_VERSION(4,1,3)) || (UTS_UBUNTU_RELEASE_ABI >= 0 && UTS_UBUNTU_RELEASE_ABI < 26 && LINUX_VERSION_CODE <= KERNEL_VERSION(3,19,8))
+-+#if 0 && (UTS_UBUNTU_RELEASE_ABI < 0 && LINUX_VERSION_CODE < KERNEL_VERSION(4,1,3)) || (UTS_UBUNTU_RELEASE_ABI >= 0 && UTS_UBUNTU_RELEASE_ABI < 26 && LINUX_VERSION_CODE <= KERNEL_VERSION(3,19,8))
+-        pci_ignore_hotplug(pdev);
+- #else
+-        pdev->ignore_hotplug = 1;
+diff --git a/package/amd-catalyst/20-fglrx.conf b/package/amd-catalyst/20-fglrx.conf
+deleted file mode 100644
+index d83ff582f6..0000000000
+--- a/package/amd-catalyst/20-fglrx.conf
++++ /dev/null
+@@ -1,4 +0,0 @@
+-Section "Device"
+-	Identifier "AMD Radeon GPU"
+-	Driver "fglrx"
+-EndSection
+diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+deleted file mode 100644
+index 1a5bf02953..0000000000
+--- a/package/amd-catalyst/Config.in
++++ /dev/null
+@@ -1,65 +0,0 @@
+-comment "amd-catalyst needs a glibc toolchain"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-
+-config BR2_PACKAGE_AMD_CATALYST
+-	bool "amd-catalyst"
+-	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
 -	help
--	  Enable/Use AIGLX extension.
+-	  The binary-only driver blob for AMD cards.
+-	  This driver supports AMD Radeon HD 5xxx and newer graphics
+-	  cards.
 -
- if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 930900c5ea..2b55449e14 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,8 +1,3 @@
--# From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
--sha1  7a95765e56b124758fcd7b609589e65b8870880b  xorg-server-1.14.7.tar.bz2
--sha256  fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f  xorg-server-1.14.7.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
--sha256  0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457  xorg-server-1.17.4.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2020-August/003059.html
- sha256  e219f2e0dfe455467939149d7cd2ee53b79b512cc1d2094ae4f5c9ed9ccd3571  xorg-server-1.20.9.tar.bz2
- sha512  d9b5f93e1b9763a89187d8b272aa7d4ce9709641b8539f4536708af153310e5a4931bffd4229c51a3b0e3b12da7838750aa71b635751fb4c0bb27438cce4e5e6  xorg-server-1.20.9.tar.bz2
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8ccc04224d..e0059166b3 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = $(call qstrip,$(BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION))
-+XSERVER_XORG_SERVER_VERSION = 1.20.9
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
-@@ -127,12 +127,6 @@ else
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
- endif
- 
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
--XSERVER_XORG_SERVER_CONF_OPTS += --enable-aiglx
--else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-aiglx
+-	  http://www.amd.com/
+-
+-if BR2_PACKAGE_AMD_CATALYST
+-
+-comment "amd-catalyst X.org drivers needs a modular Xorg server <= 1.17"
+-	depends on !BR2_PACKAGE_XORG7 \
+-	|| !BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR \
+-	|| !BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-
+-config BR2_PACKAGE_AMD_CATALYST_XORG
+-	bool "X.org drivers"
+-	default y
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+-	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
+-	select BR2_PACKAGE_ACPID # runtime
+-	select BR2_PACKAGE_XLIB_LIBX11 # runtime
+-	select BR2_PACKAGE_XLIB_LIBXEXT # runtime
+-	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE # runtime
+-	# This package does not have standard GL headers
+-	select BR2_PACKAGE_MESA3D_HEADERS
+-	select BR2_PACKAGE_HAS_LIBGL
+-
+-if BR2_PACKAGE_AMD_CATALYST_XORG
+-
+-config BR2_PACKAGE_PROVIDES_LIBGL
+-	default "amd-catalyst"
+-
+-config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
+-	bool "command-line configuration tools"
+-	help
+-	  Build and install the AMD command line tools.
+-
 -endif
 -
- # Optional packages
- ifeq ($(BR2_PACKAGE_TSLIB),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += tslib
+-comment "amd-catalyst kernel module needs a kernel to be built"
+-	depends on !BR2_LINUX_KERNEL
+-
+-config BR2_PACKAGE_AMD_CATALYST_MODULE
+-	bool "fglrx kernel module"
+-	depends on BR2_LINUX_KERNEL
+-	help
+-	  Builds and install the fglrx kernel module
+-
+-config BR2_PACKAGE_AMD_CATALYST_OPENCL
+-	bool "OpenCL support"
+-	help
+-	  Installs the OpenCL binary blobs and the ICD profile
+-	  for GPGPU computing.
+-
+-endif # BR2_PACKAGE_AMD_CATALYST
+diff --git a/package/amd-catalyst/amd-catalyst.hash b/package/amd-catalyst/amd-catalyst.hash
+deleted file mode 100644
+index 9f9b0a3149..0000000000
+--- a/package/amd-catalyst/amd-catalyst.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256	bf3e6e7d5c51db3d075410a3f116f865b82823debc1d66698d187249feec6a91	amd-catalyst-15.9-linux-installer-15.201.1151-x86.x86_64.zip
+diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+deleted file mode 100644
+index fe8aa850f0..0000000000
+--- a/package/amd-catalyst/amd-catalyst.mk
++++ /dev/null
+@@ -1,162 +0,0 @@
+-################################################################################
+-#
+-# amd-catalyst
+-#
+-################################################################################
+-
+-AMD_CATALYST_VERSION = 15.9
+-AMD_CATALYST_VERBOSE_VER = 15.201.1151
+-AMD_CATALYST_SITE = http://www2.ati.com/drivers/linux
+-AMD_CATALYST_DL_OPTS = --referer='http://support.amd.com'
+-AMD_CATALYST_SOURCE = amd-catalyst-$(AMD_CATALYST_VERSION)-linux-installer-$(AMD_CATALYST_VERBOSE_VER)-x86.x86_64.zip
+-AMD_CATALYST_LICENSE = AMD Software License
+-AMD_CATALYST_LICENSE_FILES = LICENSE.TXT
+-AMD_CATALYST_INSTALL_STAGING = YES
+-AMD_CATALYST_SUFFIX = $(if $(BR2_x86_64),_64)
+-AMD_CATALYST_ARCH_DIR = $(@D)/arch/x86$(AMD_CATALYST_SUFFIX)
+-AMD_CATALYST_LIB_SUFFIX = $(if $(BR2_x86_64),64)
+-
+-define AMD_CATALYST_EXTRACT_CMDS
+-	unzip -q $(AMD_CATALYST_DL_DIR)/$(AMD_CATALYST_SOURCE) -d $(@D)
+-	$(SHELL) $(@D)/AMD-Catalyst-$(AMD_CATALYST_VERSION)-Linux-installer-$(AMD_CATALYST_VERBOSE_VER)-x86.x86_64.run --extract $(@D)
+-endef
+-
+-ifeq ($(BR2_PACKAGE_AMD_CATALYST_MODULE),y)
+-AMD_CATALYST_MODULE_SUBDIRS = common/lib/modules/fglrx/build_mod/2.6.x
+-AMD_CATALYST_MODULE_MAKE_OPTS = \
+-	CFLAGS_MODULE="-DCOMPAT_ALLOC_USER_SPACE=arch_compat_alloc_user_space"
+-
+-define AMD_CATALYST_PREPARE_MODULE
+-	# The Makefile expects to have source in the folder 2.6.x
+-	cp $(@D)/common/lib/modules/fglrx/build_mod/*.{c,h} \
+-		$(@D)/common/lib/modules/fglrx/build_mod/2.6.x
+-	# This static lib is required during the link
+-	cp $(@D)/arch/x86$(AMD_CATALYST_SUFFIX)/lib/modules/fglrx/build_mod/libfglrx_ip.a \
+-		$(@D)/common/lib/modules/fglrx/build_mod/2.6.x
+-endef
+-
+-AMD_CATALYST_POST_PATCH_HOOKS += AMD_CATALYST_PREPARE_MODULE
+-
+-$(eval $(kernel-module))
+-endif
+-
+-ifeq ($(BR2_PACKAGE_AMD_CATALYST_OPENCL),y)
+-
+-AMD_CATALYST_OCL_SUFFIX = $(if $(BR2_x86_64),64,32)
+-AMD_CATALYST_OPENCL_FILES = \
+-	libOpenCL.so.1 \
+-	libaticalcl.so \
+-	libamdocl$(AMD_CATALYST_OCL_SUFFIX).so \
+-	libamdocl12cl$(AMD_CATALYST_OCL_SUFFIX).so
+-
+-define AMD_CATALYST_INSTALL_OPENCL
+-	$(foreach f,$(AMD_CATALYST_OPENCL_FILES), \
+-		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/lib$(AMD_CATALYST_LIB_SUFFIX)/$(f) $(TARGET_DIR)/usr/lib/$(f)
+-	)
+-	ln -sf libOpenCL.so.1 \
+-		$(TARGET_DIR)/usr/lib/libOpenCL.so
+-	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/bin/clinfo \
+-		$(TARGET_DIR)/usr/bin/clinfo
+-	$(INSTALL) -D -m 0644 $(AMD_CATALYST_ARCH_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd \
+-		$(TARGET_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd
+-endef
+-
+-endif
+-
+-ifeq ($(BR2_PACKAGE_AMD_CATALYST_XORG), y)
+-
+-# GL headers are needed by any package that wants to use libgl, so they need to
+-# be installed before any user of it. The only way to do so is to have this
+-# package depends on mesa3d-headers.
+-AMD_CATALYST_DEPENDENCIES += mesa3d-headers
+-AMD_CATALYST_PROVIDES = libgl
+-AMD_CATALYST_X11R6_LIB = $(@D)/xpic$(if $(BR2_x86_64),_64a)/usr/X11R6/lib$(AMD_CATALYST_LIB_SUFFIX)
+-
+-define AMD_CATALYST_INSTALL_GL_LIBS
+-	$(INSTALL) -m 0644 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/lib$(AMD_CATALYST_LIB_SUFFIX)/fglrx/fglrx-libGL.so.1.2 \
+-		$(1)/usr/lib
+-	ln -sf fglrx-libGL.so.1.2 $(1)/usr/lib/libGL.so.1.2
+-	ln -sf fglrx-libGL.so.1.2 $(1)/usr/lib/libGL.so.1
+-	ln -sf fglrx-libGL.so.1.2 $(1)/usr/lib/libGL.so
+-endef
+-
+-define AMD_CATALYST_INSTALL_STAGING_XORG
+-	$(call AMD_CATALYST_INSTALL_GL_LIBS,$(STAGING_DIR))
+-	$(INSTALL) -D -m 0644 package/amd-catalyst/gl.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/gl.pc
+-endef
+-
+-AMD_CATALYST_XORG_DRIVERS_FILES = modules/amdxmm.so \
+-	modules/drivers/fglrx_drv.so \
+-	modules/linux/libfglrxdrm.so
+-
+-define AMD_CATALYST_INSTALL_XORG
+-	# Xorg drivers
+-	$(foreach f,$(AMD_CATALYST_XORG_DRIVERS_FILES), \
+-		$(INSTALL) -D -m 0755 $(AMD_CATALYST_X11R6_LIB)/$(f) \
+-		$(TARGET_DIR)/usr/lib/xorg/$(f)
+-	)
+-
+-	# Xorg is not able to detect the driver automatically
+-	$(INSTALL) -D -m 0644 package/amd-catalyst/20-fglrx.conf \
+-		$(TARGET_DIR)/etc/X11/xorg.conf.d/20-fglrx.conf
+-
+-	# Common files: containing binary profiles about GPUs,
+-	# required by the fglrx_drv xorg driver
+-	$(INSTALL) -d $(TARGET_DIR)/etc/ati
+-	$(INSTALL) -m 0644 $(@D)/common/etc/ati/* $(TARGET_DIR)/etc/ati/
+-
+-	# DRI and GLX xorg modules: by default DRI is activated,
+-	# these modules are required by the fglrx_drv.so xorg driver
+-	$(INSTALL) -D -m 0644 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/lib$(AMD_CATALYST_LIB_SUFFIX)/modules/dri/fglrx_dri.so \
+-		$(TARGET_DIR)/usr/lib/dri/fglrx_dri.so
+-	$(INSTALL) -D -m 0644 $(AMD_CATALYST_X11R6_LIB)/modules/extensions/fglrx/fglrx-libglx.so \
+-		$(TARGET_DIR)/usr/lib/xorg/modules/extensions/libglx.so
+-	$(INSTALL) -D -m 0644 $(AMD_CATALYST_X11R6_LIB)/modules/glesx.so \
+-		$(TARGET_DIR)/usr/lib/xorg/modules/glesx.so
+-
+-	# Userspace GL libraries, also runtime dependency of most of the cmdline
+-	# tools
+-	$(INSTALL) -m 0644 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/lib$(AMD_CATALYST_LIB_SUFFIX)/*.so \
+-		$(TARGET_DIR)/usr/lib/
+-	$(call AMD_CATALYST_INSTALL_GL_LIBS,$(TARGET_DIR))
+-
+-	# Runtime dependency required by libfglrxdrm.so
+-	$(INSTALL) -m 0644 $(AMD_CATALYST_ARCH_DIR)/usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libatiuki.so.1.0 \
+-		$(TARGET_DIR)/usr/lib/
+-	ln -sf libatiuki.so.1.0 \
+-		$(TARGET_DIR)/usr/lib/libatiuki.so.1
+-endef
+-
+-endif
+-
+-ifeq ($(BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS), y)
+-AMD_CATALYST_CMDLINE_TOOLS_FILES = \
+-	atiode \
+-	atiodcli \
+-	fgl_glxgears \
+-	aticonfig \
+-	amd-console-helper \
+-	fglrxinfo
+-
+-define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
+-	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/atieventsd \
+-		$(TARGET_DIR)/usr/sbin
+-	$(foreach f,$(AMD_CATALYST_CMDLINE_TOOLS_FILES), \
+-		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/$(f) \
+-			$(TARGET_DIR)/usr/bin/$(f)
+-	)
+-endef
+-endif
+-
+-define AMD_CATALYST_INSTALL_STAGING_CMDS
+-	$(call AMD_CATALYST_INSTALL_STAGING_XORG)
+-endef
+-
+-define AMD_CATALYST_INSTALL_TARGET_CMDS
+-	$(call AMD_CATALYST_INSTALL_XORG)
+-	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+-	$(call AMD_CATALYST_INSTALL_OPENCL)
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/package/amd-catalyst/gl.pc b/package/amd-catalyst/gl.pc
+deleted file mode 100644
+index 8729271fa0..0000000000
+--- a/package/amd-catalyst/gl.pc
++++ /dev/null
+@@ -1,12 +0,0 @@
+-prefix=/usr
+-exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
+-includedir=${prefix}/include
+-
+-Name: gl
+-Description: AMD Catalyst OpenGL library
+-Version: 15.9
+-Libs: -L${libdir} -lGL -lm -lXext -lX11 -ldl
+-Cflags: -I${includedir}
+-glx_tls: no
+-
 -- 
 2.27.0
