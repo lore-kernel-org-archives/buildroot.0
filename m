@@ -1,77 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 20:21:38 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/openjpeg: fix
- CVE-2020-15389
-Message-ID: <20200829182229.718C581934@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 20:32:34 +0200
+Subject: [Buildroot] Buildroot 2020.05.2 released
+Message-ID: <87r1rpe20t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef7af0cae7c51048d721feac7852c9b3a7104c12
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+Hi,
 
-Fix CVE-2020-15389: jp2/opj_decompress.c in OpenJPEG through 2.3.1 has a
-use-after-free that can be triggered if there is a mix of valid and
-invalid files in a directory operated on by the decompressor. Triggering
-a double-free may also be possible. This is related to calling
-opj_image_destroy twice.
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b006cc373f96ec86c027779e113c8f70bc40d1c3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...free-on-input-directory-with-mix-of-valid.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+Buildroot 2020.05.2 is released - Go download it at:
 
-diff --git a/package/openjpeg/0008-opj_decompress-fix-double-free-on-input-directory-with-mix-of-valid.patch b/package/openjpeg/0008-opj_decompress-fix-double-free-on-input-directory-with-mix-of-valid.patch
-new file mode 100644
-index 0000000000..4c1b3eb2a8
---- /dev/null
-+++ b/package/openjpeg/0008-opj_decompress-fix-double-free-on-input-directory-with-mix-of-valid.patch
-@@ -0,0 +1,43 @@
-+From e8e258ab049240c2dd1f1051b4e773b21e2d3dc0 Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Sun, 28 Jun 2020 14:19:59 +0200
-+Subject: [PATCH] opj_decompress: fix double-free on input directory with mix
-+ of valid and invalid images (CVE-2020-15389)
-+
-+Fixes #1261
-+
-+Credits to @Ruia-ruia for reporting and analysis.
-+
-+[Retrieved from:
-+https://github.com/uclouvain/openjpeg/commit/e8e258ab049240c2dd1f1051b4e773b21e2d3dc0]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/bin/jp2/opj_decompress.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/bin/jp2/opj_decompress.c b/src/bin/jp2/opj_decompress.c
-+index 7eeb0952f..2634907f0 100644
-+--- a/src/bin/jp2/opj_decompress.c
-++++ b/src/bin/jp2/opj_decompress.c
-+@@ -1316,10 +1316,6 @@ static opj_image_t* upsample_image_components(opj_image_t* original)
-+ int main(int argc, char **argv)
-+ {
-+     opj_decompress_parameters parameters;           /* decompression parameters */
-+-    opj_image_t* image = NULL;
-+-    opj_stream_t *l_stream = NULL;              /* Stream */
-+-    opj_codec_t* l_codec = NULL;                /* Handle to a decompressor */
-+-    opj_codestream_index_t* cstr_index = NULL;
-+ 
-+     OPJ_INT32 num_images, imageno;
-+     img_fol_t img_fol;
-+@@ -1393,6 +1389,10 @@ int main(int argc, char **argv)
-+ 
-+     /*Decoding image one by one*/
-+     for (imageno = 0; imageno < num_images ; imageno++)  {
-++        opj_image_t* image = NULL;
-++        opj_stream_t *l_stream = NULL;              /* Stream */
-++        opj_codec_t* l_codec = NULL;                /* Handle to a decompressor */
-++        opj_codestream_index_t* cstr_index = NULL;
-+ 
-+         if (!parameters.quiet) {
-+             fprintf(stderr, "\n");
+http://buildroot.org/downloads/buildroot-2020.05.2.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2020.05.2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.05.2 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2020.05.1 release.
+
+- Infrastructure: Ensure RPATH entries that may be needed for dlopen()
+  are not dropped by patchelf.
+
+  BR_VERSION_FULL/setlocalversion (used by make print-version
+  and /etc/os-release): Properly handle local git tags
+
+- Security fixes for apache, bind, chrony, dovecot, dropbear, gd,
+  gdk-pixbuf, ghostscript, glibc, grub2, hostapd, jasper, json-c,
+  libcurl, mongodb, mosquitto, openjpeg, perl, postgresql,
+  python-django, ruby, shadowsocks-libev, squid, systemd, trousers,
+  webkitgtk, wireshark, wolfssl, wpewebkit, xen, xlib_libX11,
+  xserver_xorg-server
+
+- Fixes for download/compilation/runtime/license issues in assimp,
+  at91bootstrap3, boost, busybox, capnproto, cegui, collectd, cpio,
+  cryptsetup, cups, cvs, dbus, docker-engine, domoticz,
+  dovecot-pigeonhole, efl, elixir, f2fs-tools, ffmpeg, gnuradio,
+  gst1-plugins-bad, gstreamer1-editing-services, ibm-sw-tpm2, iputils,
+  libcurl, libressl, libwebsockets, linux, live555, mesa3d, mosquitto,
+  mpv, nodejs, opencv, opencv3, openfpgaloader, patchelf, php,
+  postgresql, prosody, python-gunicorn, python-matplotlib, ripgrep,
+  rtl8188eu, rtl8821au, systemd, tpm2-abrmd, tpm2-tools, wpa_supplicant
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.2
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.05.1..
+
+    30  Fabrice Fontaine
+    21  Peter Korsgaard
+    19  Thomas Petazzoni
+    12  Bernd Kuhls
+     4  Angelo Compagnucci
+     4  Francois Perrad
+     4  Titouan Christophe
+     3  Adam Duskett
+     3  James Hilliard
+     3  Yann E. MORIN
+     2  Adrian Perez de Castro
+     2  Brandon Maier
+     2  Michael Nosthoff
+     2  Norbert Lange
+     2  Peter Seiderer
+     2  Vincent Fazio
+     1  Bartosz Bilas
+     1  Baruch Siach
+     1  Christian Stewart
+     1  Christopher Pelloux
+     1  Eugen Hristev
+     1  Frank Vanbever
+     1  Gwenhael Goavec-Merou
+     1  John Keeping
+     1  Michael Vetter
+     1  Paul Cercueil
+     1  Romain Naour
+     1  Sam Voss
+     1  Sergey Matyukevich
+     1  Stefan S?rensen
+     1  Thomas De Schampheleire
+     1  Yann Sionneau
+
+-- 
+Bye, Peter Korsgaard
