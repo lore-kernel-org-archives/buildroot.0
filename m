@@ -1,36 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 14:49:12 +0200
-Subject: [Buildroot] [git commit branch/next] package/docker-proxy: drop
- <pkg>_WORKSPACE variable
-Message-ID: <20200829124233.2721986CCD@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 14:35:49 +0200
+Subject: [Buildroot] [git commit branch/next] package/go: drop GO_TARGET_ENV
+ / GO_HOST_ENV
+Message-ID: <20200829124232.C3EE28152D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=913fac5bb1c9e38bd38637ea0271a1c513529a67
+commit: https://git.buildroot.net/buildroot/commit/?id=0d26fb58b79c6412c49287923e562ea6c8d950e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With the go.mod integration, the <pkg>_WORKSPACE variable has become
-useless, drop it.
+Now that GO_TARGET_ENV and GO_HOST_ENV are just aliases to
+HOST_GO_TARGET_ENV and HOST_GO_HOST_ENV, drop the former two, and use
+the latter two directly.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-proxy/docker-proxy.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/pkg-golang.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
-index 8843266c30..6600b24ed9 100644
---- a/package/docker-proxy/docker-proxy.mk
-+++ b/package/docker-proxy/docker-proxy.mk
-@@ -12,8 +12,6 @@ DOCKER_PROXY_LICENSE_FILES = LICENSE
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 9904ddcc1a..7424c31924 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -23,12 +23,6 @@
  
- DOCKER_PROXY_DEPENDENCIES = host-pkgconf
+ GO_BIN = $(HOST_DIR)/bin/go
  
--DOCKER_PROXY_WORKSPACE = gopath
+-GO_TARGET_ENV = \
+-	$(HOST_GO_TARGET_ENV)
 -
- DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
- 
- define DOCKER_PROXY_INSTALL_TARGET_CMDS
+-GO_HOST_ENV = \
+-	$(HOST_GO_HOST_ENV)
+-
+ ################################################################################
+ # inner-golang-package -- defines how the configuration, compilation and
+ # installation of a Go package should be done, implements a few hooks to tune
+@@ -102,7 +96,7 @@ endif
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+-		$$(GO_TARGET_ENV) \
++		$$(HOST_GO_TARGET_ENV) \
+ 			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+@@ -115,7 +109,7 @@ else
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+-		$$(GO_HOST_ENV) \
++		$$(HOST_GO_HOST_ENV) \
+ 			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
