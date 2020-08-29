@@ -1,65 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:46:26 +0200
-Subject: [Buildroot] [git commit] package/libblockdev: add support for lvm
- plugin
-Message-ID: <20200902161638.CE9DB85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:06:22 +0200
+Subject: [Buildroot] [git commit] package/libidn: bump to version 1.36
+Message-ID: <20200902161639.712E285EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05c46e723abd7ebb9dbcae472ac6904e9429b81b
+commit: https://git.buildroot.net/buildroot/commit/?id=9e16680bbe4223a50fb7f79e2718c5784399060f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Update indentation in hash file (two spaces)
+
+Extract from NEWS:
+ - Fix unlikely memory leak in idna_to_unicode_4z4z().
+ - Check codepoint validity in punycode_decode() and punycode_decode().
+ - tld: Add U+00EF to .nl TLD table.
+ - Indent code.
+ - Translation fixes.
+ - Update gnulib files.
+ - API and ABI is backwards compatible with the previous version.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libblockdev/Config.in      | 9 +++++++++
- package/libblockdev/libblockdev.mk | 8 +++++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ package/libidn/libidn.hash | 8 ++++----
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 9f7f401dd3..732ac410b0 100644
---- a/package/libblockdev/Config.in
-+++ b/package/libblockdev/Config.in
-@@ -36,6 +36,15 @@ comment "filesystem plugin needs a toolchain w/ locale"
- config BR2_PACKAGE_LIBBLOCKDEV_LOOP
- 	bool "loop"
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index f5ba311e90..0255a63950 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,7 +1,7 @@
+ # Locally computed:
+-sha256	f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e	libidn-1.35.tar.gz
++sha256  14b67108344d81ba844631640df77c9071d9fb0659b080326ff5424e86b14038  libidn-1.36.tar.gz
  
-+config BR2_PACKAGE_LIBBLOCKDEV_LVM2
-+	bool "lvm2"
-+	depends on BR2_ENABLE_LOCALE # parted
-+	select BR2_PACKAGE_PARTED
-+	select BR2_PACKAGE_LVM2
-+
-+comment "lvm2 support needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
- endif
+ # Hash for license files:
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYINGv3
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYINGv3
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 601edcb57d..2df3437029 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 9216fc9932..b0b0852e8d 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -22,7 +22,6 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--without-dmraid \
- 	--without-escrow \
- 	--without-kbd \
--	--without-lvm \
- 	--without-lvm_dbus \
- 	--without-mdraid \
- 	--without-mpath \
-@@ -55,4 +54,11 @@ else
- LIBBLOCKDEV_CONF_OPTS += --without-loop
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LVM2),y)
-+LIBBLOCKDEV_DEPENDENCIES += lvm2 parted
-+LIBBLOCKDEV_CONF_OPTS += --with-lvm
-+else
-+LIBBLOCKDEV_CONF_OPTS += --without-lvm
-+endif
-+
- $(eval $(autotools-package))
+-LIBIDN_VERSION = 1.35
++LIBIDN_VERSION = 1.36
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no" MAKEINFO=true
