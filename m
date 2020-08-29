@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 23:06:09 +0200
-Subject: [Buildroot] [git commit] package/libnpupnp: bump to version 4.0.10
-Message-ID: <20200902161639.5E5F685EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 21:46:26 +0200
+Subject: [Buildroot] [git commit] package/libblockdev: add support for lvm
+ plugin
+Message-ID: <20200902161638.CE9DB85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b23ef48790a2a54650b4cd66b3c06d23a813225a
+commit: https://git.buildroot.net/buildroot/commit/?id=05c46e723abd7ebb9dbcae472ac6904e9429b81b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.lesbonscomptes.com/upmpdcli/releases.html#_2020_07_20_libnpupnp_4_0_10
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnpupnp/libnpupnp.hash | 4 ++--
- package/libnpupnp/libnpupnp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libblockdev/Config.in      | 9 +++++++++
+ package/libblockdev/libblockdev.mk | 8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
-index 41cc41955b..3bad603269 100644
---- a/package/libnpupnp/libnpupnp.hash
-+++ b/package/libnpupnp/libnpupnp.hash
-@@ -1,5 +1,5 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.7.tar.gz.sha256
--sha256  30f15caa67dc83f76b0976438165aa4704a50c7e3e5444c50bb8cbad874877ca  libnpupnp-4.0.7.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.10.tar.gz.sha256
-+sha256  a682d0584d79acd5a4d551ae18efc83cb0765624da27fb0edcd47e3fb94418f9  libnpupnp-4.0.10.tar.gz
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 9f7f401dd3..732ac410b0 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -36,6 +36,15 @@ comment "filesystem plugin needs a toolchain w/ locale"
+ config BR2_PACKAGE_LIBBLOCKDEV_LOOP
+ 	bool "loop"
  
- # Hash for license file:
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
-index abd80ab63b..4575ad40f2 100644
---- a/package/libnpupnp/libnpupnp.mk
-+++ b/package/libnpupnp/libnpupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_PACKAGE_LIBBLOCKDEV_LVM2
++	bool "lvm2"
++	depends on BR2_ENABLE_LOCALE # parted
++	select BR2_PACKAGE_PARTED
++	select BR2_PACKAGE_LVM2
++
++comment "lvm2 support needs a toolchain w/ locale"
++	depends on !BR2_ENABLE_LOCALE
++
+ endif
  
--LIBNPUPNP_VERSION = 4.0.7
-+LIBNPUPNP_VERSION = 4.0.10
- LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBNPUPNP_LICENSE = BSD-3-Clause
- LIBNPUPNP_LICENSE_FILES = COPYING
+ comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 9216fc9932..b0b0852e8d 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -22,7 +22,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--without-dmraid \
+ 	--without-escrow \
+ 	--without-kbd \
+-	--without-lvm \
+ 	--without-lvm_dbus \
+ 	--without-mdraid \
+ 	--without-mpath \
+@@ -55,4 +54,11 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-loop
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LVM2),y)
++LIBBLOCKDEV_DEPENDENCIES += lvm2 parted
++LIBBLOCKDEV_CONF_OPTS += --with-lvm
++else
++LIBBLOCKDEV_CONF_OPTS += --without-lvm
++endif
++
+ $(eval $(autotools-package))
