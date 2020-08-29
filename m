@@ -1,47 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 14:20:54 +0200
-Subject: [Buildroot] [PATCH] Makefile: hide commands that build the package
- file lists at end of build
-Message-ID: <20200829122055.131928-1-thomas.petazzoni@bootlin.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 14:30:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mongodb: security bump to version
+ 4.2.9
+Message-ID: <20200829123000.1247821-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 0e2be4db8ab01d479177a3a187c22525752195ae
-("package/pkg-generic: make file list logic parallel build
-compatible"), the commands executed at the every end of the build to
-assemble the list of files installed by the different packages are
-visible in the make output. They are quite noisy, and clutter the
-output.
+SERVER-47733 SymmetricEncryptorWindows shouldn?t pad when update is
+called
 
-The other commands in target-finalize are also hidden using "@", so do
-the same for those commands.
+https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index faef1a1be3..4a5c13b92f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -815,11 +815,11 @@ endif # merged /usr
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index 943ffda997..efbdf33e79 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  e8880277e3910afd82c71ed61861d518f2040cbc062e00a26d53a3224284db8f  mongodb-src-r4.2.8.tar.gz
++sha256  4a8633ec92383864bb4b791f9776ef6f4652bf36b2c5a73557d1217ba85bca2b  mongodb-src-r4.2.9.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index fa111bef7b..d4af320105 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	$(if $(TARGET_DIR_FILES_LISTS), \
-+	@$(if $(TARGET_DIR_FILES_LISTS), \
- 		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
--	$(if $(HOST_DIR_FILES_LISTS), \
-+	@$(if $(HOST_DIR_FILES_LISTS), \
- 		cat $(HOST_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-host.txt
--	$(if $(STAGING_DIR_FILES_LISTS), \
-+	@$(if $(STAGING_DIR_FILES_LISTS), \
- 		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
+-MONGODB_VERSION = 4.2.8
++MONGODB_VERSION = 4.2.9
+ MONGODB_SITE = https://fastdl.mongodb.org/src
+ MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
 -- 
-2.26.2
+2.28.0
