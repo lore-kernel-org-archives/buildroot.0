@@ -1,58 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:58:02 +0200
-Subject: [Buildroot] [git commit branch/next] package/i2pd: bump to version
- 2.33.0
-Message-ID: <20200829195247.0A4D88149E@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 22:11:04 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/libnpupnp: bump to version
+ 4.0.10
+Message-ID: <20200829201105.2812409-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8535d1b1964be54b4bb55bef7c09371527fb7b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-From https://github.com/PurpleI2P/i2pd/releases/tag/2.33.0:
- - UDP tunnels through ECIES-X25519-AEAD-Ratchet
- - Shared transient addresses
- - ECIES-X25519-AEAD-Ratchet and multiple encryption keys through I2CP
- - Pre-calculated x25519 ephemeral keys
- - crypto.ratchet.inboundTags parameter
- - Don't save invalid address to AddressBook
- - Correct ECDSA signatures names in SAM
- - New webconsole layout
- - Shared routing path for datagram session
- - Change datagram routing path if nothing comes back in 10 seconds
- - Updated reseed servers list
- - Don't connect through terminated SAM destination
+https://www.lesbonscomptes.com/upmpdcli/releases.html#_2020_07_20_libnpupnp_4_0_10
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/i2pd/i2pd.hash | 3 ++-
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libnpupnp/libnpupnp.hash | 4 ++--
+ package/libnpupnp/libnpupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index d56c9c1b47..1a19ccf687 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/PurpleI2P/i2pd/releases/download/2.33.0/SHA512SUMS
-+sha512  7a3e7a8a908be8a12b675fda4ce923cb2b0eaf3e9b12a513b9ae7b56e9ecb593eef0ea278debb4027406d50ee9a46599a6792a54ce2e2f4e2c44c1fc82479910  i2pd-2.33.0.tar.gz
- # Locally computed:
--sha256  64229101411a9dda3237dc27939aa13ec90d4900aae499e59931063c36e8556b  i2pd-2.32.1.tar.gz
- sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 736794866d..461f483d1f 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index 41cc41955b..3bad603269 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.7.tar.gz.sha256
+-sha256  30f15caa67dc83f76b0976438165aa4704a50c7e3e5444c50bb8cbad874877ca  libnpupnp-4.0.7.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.10.tar.gz.sha256
++sha256  a682d0584d79acd5a4d551ae18efc83cb0765624da27fb0edcd47e3fb94418f9  libnpupnp-4.0.10.tar.gz
+ 
+ # Hash for license file:
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index abd80ab63b..4575ad40f2 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--I2PD_VERSION = 2.32.1
-+I2PD_VERSION = 2.33.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+-LIBNPUPNP_VERSION = 4.0.7
++LIBNPUPNP_VERSION = 4.0.10
+ LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
+-- 
+2.28.0
