@@ -1,250 +1,97 @@
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Sat, 29 Aug 2020 15:05:05 +0530
-Subject: [Buildroot] [PATCH v2 3/4] configs/nanopi_m4: new defconfig
-In-Reply-To: <20200829093506.25260-1-sunil@amarulasolutions.com>
-References: <20200829093506.25260-1-sunil@amarulasolutions.com>
-Message-ID: <20200829093506.25260-4-sunil@amarulasolutions.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Aug 2020 11:50:23 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <20200827223956.7cb87050@windsurf.home>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <20200827223956.7cb87050@windsurf.home>
+Message-ID: <20200829095023.GC14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A defconfig for the friendlyarm nanopi-m4 was added in
-493c3979a4def978a1137cf8543bf0de50d2615e, but then removed
-in a24bd8936f57a590f810e14d7828cf1bddce580e because an ARM32
-compiler was needed to build ATF, and this was not supported
-back then.
+Thomas, Adam. Angelo, All,
 
-Now, since package/arm-gnu-a-toolchain/ has been added, this
-defconfig can be re-introduced.
+On 2020-08-27 22:39 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 27 Aug 2020 10:34:31 -0700
+> Adam Duskett <aduskett@gmail.com> wrote:
+> > Angelo and I were discussing the state of patches today in regards to Buildroot.
+> > It seems like the project could benefit from a few more maintainers of
+> > the project.
+> > We both understand that this is a volunteer project and that we are
+> > all adults and have a life outside of the project, and as such, we
+> > can't expect instant reviews on every submitted patch. However, as the
+> > project continues to grow in popularity, more patches will continue to
+> > be offered at an ever-increasing rate. This popularity increase is
+> > excellent news for the project, but also comes at the cost of more
+> > time and effort in regards to the number of patches and fixes in the
+> > queue to review and test.
+> > 
+> > As such, we would both like to throw our hat in the ring to help
+> > maintain the project. We both don't have all the time in the world,
+> > but any amount of help on the project can help alleviate the primary
+> > maintainers.
+> 
+> I agree that we probably need to extend or change the current
+> maintainers team.
+> 
+> However, what is also true is that very little patches that are posted
+> get review from other contributors. And this is actually what is the
+> most important. When I see a patch series that has been looked at by 1
+> or 2 other people that I trust and who gave their Reviewed-by, I will
+> apply such a patch series very easily, without almost looking at it.
+> 
+> You can go have a look at
+> https://patchwork.ozlabs.org/project/buildroot/list/ and see how many
+> patches in the list have a Reviewed-by tag. Very few. This is
+> definitely something where everybody can help, and it is by doing such
+> reviews that the trust will increase with the current maintainers,
+> which is key for becoming a maintainer IMO.
+> 
+> What do you think ?
 
-Following new changes are introduced in comparision with the
-older changeset:
-        - readme updated
-        - GPT partition layout
-        - update defconfig to build ATF
-        - bump u-boot to 2020.07
-        - bump linux to 5.8.2
+I do agree with all of this, both the remarks from Adam and Angelo, and
+the feedback from Thomas.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
----
-Changes for v2:
-- Done few changes based on Thomas Pettazonni suggestions and 
-  mailing list
-- bumped linux version from 5.4.46 to 5.8.2
-- bumped u-boot version from 2020.04 to 2020.07
+The burden is not in applying patches; this is the easy part.
 
-NOTE:
-- new patch 
----
- DEVELOPERS                                |  2 ++
- board/friendlyarm/nanopi-m4/extlinux.conf |  4 +++
- board/friendlyarm/nanopi-m4/genimage.cfg  | 39 +++++++++++++++++++++++
- board/friendlyarm/nanopi-m4/post-build.sh |  5 +++
- board/friendlyarm/nanopi-m4/readme.txt    | 45 ++++++++++++++++++++++++++
- configs/nanopi_m4_defconfig               | 53 +++++++++++++++++++++++++++++++
- 6 files changed, 148 insertions(+)
- create mode 100644 board/friendlyarm/nanopi-m4/extlinux.conf
- create mode 100644 board/friendlyarm/nanopi-m4/genimage.cfg
- create mode 100755 board/friendlyarm/nanopi-m4/post-build.sh
- create mode 100644 board/friendlyarm/nanopi-m4/readme.txt
- create mode 100644 configs/nanopi_m4_defconfig
+What really takes time is actually reviewing patches: understanding the
+problem, understanding how it is fixed, why it is fixed in such a way,
+and seeing how it fits in the overall big-picture across the whole
+project.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index afab0c1..0ef0968 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2438,11 +2438,13 @@ F:	package/powertop/
- 
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/firefly/
-+F:	board/friendlyarm/nanopi-m4
- F:	board/orangepi/orangepi-rk3399
- F:	board/pine64/rockpro64
- F:	board/radxa/rockpi-4
- F:	board/radxa/rockpi-n8
- F:	board/radxa/rockpi-n10
-+F: 	configs/nanopi_m4_defconfig
- F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
- F:	configs/rock_pi_4_defconfig
-diff --git a/board/friendlyarm/nanopi-m4/extlinux.conf b/board/friendlyarm/nanopi-m4/extlinux.conf
-new file mode 100644
-index 0000000..fb24f09
---- /dev/null
-+++ b/board/friendlyarm/nanopi-m4/extlinux.conf
-@@ -0,0 +1,4 @@
-+label RK3399_NANOPI_M4 linux
-+  kernel /Image
-+  devicetree /rk3399-nanopi-m4.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
-new file mode 100644
-index 0000000..f14d493
---- /dev/null
-+++ b/board/friendlyarm/nanopi-m4/genimage.cfg
-@@ -0,0 +1,39 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image",
-+			"rk3399-nanopi-m4.dtb",
-+			"extlinux"
-+		}
-+	}
-+	size = 64M
-+}
-+
-+image sdcard.img {
-+
-+	hdimage {
-+		gpt = true
-+	}
-+
-+	partition loader1 {
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
-+
-+	partition loader2 {
-+		image = "u-boot.itb"
-+		offset = 8M
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 16M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/friendlyarm/nanopi-m4/post-build.sh b/board/friendlyarm/nanopi-m4/post-build.sh
-new file mode 100755
-index 0000000..ba29375
---- /dev/null
-+++ b/board/friendlyarm/nanopi-m4/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopi-m4/readme.txt b/board/friendlyarm/nanopi-m4/readme.txt
-new file mode 100644
-index 0000000..4a606cf
---- /dev/null
-+++ b/board/friendlyarm/nanopi-m4/readme.txt
-@@ -0,0 +1,45 @@
-+FriendlyARM NANOPI-M4
-+=====================
-+
-+Build:
-+
-+  $ make nanopi_m4_defconfig
-+  $ make
-+
-+Files created in output directory
-+=================================
-+
-+output/images
-+
-+????????? bl31.elf
-+????????? boot.vfat
-+????????? extlinux
-+????????? idbloader.img
-+????????? Image
-+????????? rk3399-nanopi-m4.dtb
-+????????? rootfs.ext2
-+????????? rootfs.ext4 -> rootfs.ext2
-+????????? rootfs.tar
-+????????? sdcard.img
-+????????? u-boot.bin
-+????????? u-boot.itb
-+
-+Creating bootable SD card:
-+==========================
-+
-+Simply invoke (as root)
-+
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
-+
-+Where X is your SD card device
-+
-+Serial console
-+--------------
-+
-+Baudrate for this board is 1500000
-+
-+Login:
-+------
-+Enter 'root' as login user, and the prompt is ready.
-+
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/nanopi_m4.html
-diff --git a/configs/nanopi_m4_defconfig b/configs/nanopi_m4_defconfig
-new file mode 100644
-index 0000000..07f818e
---- /dev/null
-+++ b/configs/nanopi_m4_defconfig
-@@ -0,0 +1,53 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+
-+# Linux headers same as kernel, a 5.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_LATEST_VERSION=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-m4-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-m4"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="nanopi-m4"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to NANOPI-M4"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m4/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-m4/post-build.sh"
+Then, requesting changes also takes time: explaining what has to be
+changed, why it has to be changed, and how it has to be changed also
+takes time.
+
+So, I would also like to emphasize that contributing is not only about
+sending patches; it is also about reviewing and testing the patches of
+others, and such contributions are dearly needed.
+
+When a patch is technically ready, the review can range from the laconic
+"reviewed-by", which means just that, up to complementing the commit log
+with additional details and explanations, which means that the problem
+and solution have been fully assessed.
+
+Now for a personal comment: my pet-peeve are commit logs that just
+describe the patch; I usually don't need that, except in very complex
+patches. What I really need is a commit log that explains the patch,
+that tells me the why, not the how.
+
+Of course, finding the right balance between "not enough details" and
+"too many details" is not trivial, and is an exercise in its own right.
+
+But again, I do appreciate that people are concerned enough about the
+project, and call on the maintainers.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
