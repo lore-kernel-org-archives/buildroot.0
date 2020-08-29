@@ -1,59 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 18:37:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: fix build with big endian
-Message-ID: <20200829163739.2287984-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 18:34:38 +0200
+Subject: [Buildroot] [git commit] package/systemd: disable cryptsetup for
+ host package
+Message-ID: <20200829164016.767E6805B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=04b54138e67e2a6bb6498da201f55b5a109af917
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Build with cryptsetup and without libblkid will fail on:
+
+../src/shared/dissect-image.c:1336:34: error: 'N_DEVICE_NODE_LIST_ATTEMPTS' undeclared (first use in this function)
+ 1336 |         for (unsigned i = 0; i < N_DEVICE_NODE_LIST_ATTEMPTS; i++) {
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This bug has been reported upstream:
+https://github.com/systemd/systemd/pull/16901
+and is not an issue for the target variant as libblkid is select by
+BR2_PACKAGE_UTIL_LINUX_MOUNT
+
+As cryptsetup does not seem needed for host-systemd, just disable it
+
 Fixes:
- - http://autobuild.buildroot.org/results/21098180d386890025ed5cdd243bf5a9b444c5cf
+ - http://autobuild.buildroot.org/results/67782c225c08387c1bbcbea9eee3ca12bc6577cd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-available-for-big-and-little-endian.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
+ package/systemd/systemd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch b/package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
-new file mode 100644
-index 0000000000..48a318d53e
---- /dev/null
-+++ b/package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
-@@ -0,0 +1,32 @@
-+From b90acc91d0cd276befe7f08f87ba2dc5ee7122ff Mon Sep 17 00:00:00 2001
-+From: Tesfa Mael <tesfa@wolfssl.com>
-+Date: Wed, 26 Aug 2020 10:13:06 -0700
-+Subject: [PATCH] Make ByteReverseWords available for big and little endian
-+
-+[Retrieved from:
-+https://github.com/wolfSSL/wolfssl/pull/3255/commits/b90acc91d0cd276befe7f08f87ba2dc5ee7122ff]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ wolfcrypt/src/misc.c | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/wolfcrypt/src/misc.c b/wolfcrypt/src/misc.c
-+index fe66ee0a1a..23bfa1adc5 100644
-+--- a/wolfcrypt/src/misc.c
-++++ b/wolfcrypt/src/misc.c
-+@@ -120,7 +120,6 @@ WC_STATIC WC_INLINE word32 ByteReverseWord32(word32 value)
-+     return rotlFixed(value, 16U);
-+ #endif
-+ }
-+-#if defined(LITTLE_ENDIAN_ORDER)
-+ /* This routine performs a byte swap of words array of a given count. */
-+ WC_STATIC WC_INLINE void ByteReverseWords(word32* out, const word32* in,
-+                                     word32 byteCount)
-+@@ -131,7 +130,6 @@ WC_STATIC WC_INLINE void ByteReverseWords(word32* out, const word32* in,
-+         out[i] = ByteReverseWord32(in[i]);
-+ 
-+ }
-+-#endif /* LITTLE_ENDIAN_ORDER */
-+ 
-+ #if defined(WORD64_AVAILABLE) && !defined(WOLFSSL_NO_WORD64_OPS)
-+ 
--- 
-2.28.0
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e356cb1add..115ccbda06 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -699,7 +699,8 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dinitrd=false \
+ 	-Dxdg-autostart=false \
+ 	-Dkernel-install=false \
+-	-Dsystemd-analyze=false
++	-Dsystemd-analyze=false \
++	-Dlibcryptsetup=false
+ 
+ HOST_SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
