@@ -1,18 +1,18 @@
 From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Sat, 29 Aug 2020 15:05:06 +0530
-Subject: [Buildroot] [PATCH v2 4/4] configs/nanopc_t4: new defconfig
+Date: Sat, 29 Aug 2020 15:05:05 +0530
+Subject: [Buildroot] [PATCH v2 3/4] configs/nanopi_m4: new defconfig
 In-Reply-To: <20200829093506.25260-1-sunil@amarulasolutions.com>
 References: <20200829093506.25260-1-sunil@amarulasolutions.com>
-Message-ID: <20200829093506.25260-5-sunil@amarulasolutions.com>
+Message-ID: <20200829093506.25260-4-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A defconfig for the friendlyarm nanopc-t4 was added in
-c23895f06e0988319a1959764a402b57bc21ffaf, but then removed
-in 8efd4463f78fd68c85b45cc0da347dfb805abb7e because an ARM32
+A defconfig for the friendlyarm nanopi-m4 was added in
+493c3979a4def978a1137cf8543bf0de50d2615e, but then removed
+in a24bd8936f57a590f810e14d7828cf1bddce580e because an ARM32
 compiler was needed to build ATF, and this was not supported
 back then.
 
@@ -21,12 +21,11 @@ defconfig can be re-introduced.
 
 Following new changes are introduced in comparision with the
 older changeset:
-
-	- updated readme
-	- GPT partition layout is being used
-	- update defconfig to build ATF
-	- bump u-boot to 2020.07
-	- bump linux to 5.8.2
+        - readme updated
+        - GPT partition layout
+        - update defconfig to build ATF
+        - bump u-boot to 2020.07
+        - bump linux to 5.8.2
 
 Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
@@ -38,118 +37,117 @@ Changes for v2:
 - bumped u-boot version from 2020.04 to 2020.07
 
 NOTE:
-- new patch
+- new patch 
 ---
  DEVELOPERS                                |  2 ++
- board/friendlyarm/nanopc-t4/extlinux.conf |  4 +++
- board/friendlyarm/nanopc-t4/genimage.cfg  | 39 +++++++++++++++++++++++
- board/friendlyarm/nanopc-t4/post-build.sh |  5 +++
- board/friendlyarm/nanopc-t4/readme.txt    | 45 ++++++++++++++++++++++++++
- configs/nanopc_t4_defconfig               | 53 +++++++++++++++++++++++++++++++
+ board/friendlyarm/nanopi-m4/extlinux.conf |  4 +++
+ board/friendlyarm/nanopi-m4/genimage.cfg  | 39 +++++++++++++++++++++++
+ board/friendlyarm/nanopi-m4/post-build.sh |  5 +++
+ board/friendlyarm/nanopi-m4/readme.txt    | 45 ++++++++++++++++++++++++++
+ configs/nanopi_m4_defconfig               | 53 +++++++++++++++++++++++++++++++
  6 files changed, 148 insertions(+)
- create mode 100644 board/friendlyarm/nanopc-t4/extlinux.conf
- create mode 100644 board/friendlyarm/nanopc-t4/genimage.cfg
- create mode 100755 board/friendlyarm/nanopc-t4/post-build.sh
- create mode 100644 board/friendlyarm/nanopc-t4/readme.txt
- create mode 100644 configs/nanopc_t4_defconfig
+ create mode 100644 board/friendlyarm/nanopi-m4/extlinux.conf
+ create mode 100644 board/friendlyarm/nanopi-m4/genimage.cfg
+ create mode 100755 board/friendlyarm/nanopi-m4/post-build.sh
+ create mode 100644 board/friendlyarm/nanopi-m4/readme.txt
+ create mode 100644 configs/nanopi_m4_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0ef0968..233ea38 100644
+index afab0c1..0ef0968 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2438,12 +2438,14 @@ F:	package/powertop/
+@@ -2438,11 +2438,13 @@ F:	package/powertop/
  
  N:	Suniel Mahesh <sunil@amarulasolutions.com>
  F:	board/firefly/
-+F:	board/friendlyarm/nanopc-t4
- F:	board/friendlyarm/nanopi-m4
++F:	board/friendlyarm/nanopi-m4
  F:	board/orangepi/orangepi-rk3399
  F:	board/pine64/rockpro64
  F:	board/radxa/rockpi-4
  F:	board/radxa/rockpi-n8
  F:	board/radxa/rockpi-n10
-+F: 	configs/nanopc_t4_defconfig
- F: 	configs/nanopi_m4_defconfig
++F: 	configs/nanopi_m4_defconfig
  F:	configs/orangepi_rk3399_defconfig
  F:	configs/roc_pc_rk3399_defconfig
-diff --git a/board/friendlyarm/nanopc-t4/extlinux.conf b/board/friendlyarm/nanopc-t4/extlinux.conf
+ F:	configs/rock_pi_4_defconfig
+diff --git a/board/friendlyarm/nanopi-m4/extlinux.conf b/board/friendlyarm/nanopi-m4/extlinux.conf
 new file mode 100644
-index 0000000..31c6b30
+index 0000000..fb24f09
 --- /dev/null
-+++ b/board/friendlyarm/nanopc-t4/extlinux.conf
++++ b/board/friendlyarm/nanopi-m4/extlinux.conf
 @@ -0,0 +1,4 @@
-+label RK3399_NanoPC_T4 linux
++label RK3399_NANOPI_M4 linux
 +  kernel /Image
-+  devicetree /rk3399-nanopc-t4.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rootwait
-diff --git a/board/friendlyarm/nanopc-t4/genimage.cfg b/board/friendlyarm/nanopc-t4/genimage.cfg
++  devicetree /rk3399-nanopi-m4.dtb
++  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
+diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
 new file mode 100644
-index 0000000..b3202f7
+index 0000000..f14d493
 --- /dev/null
-+++ b/board/friendlyarm/nanopc-t4/genimage.cfg
++++ b/board/friendlyarm/nanopi-m4/genimage.cfg
 @@ -0,0 +1,39 @@
 +image boot.vfat {
-+        vfat {
-+                files = {
-+                        "Image",
-+                        "rk3399-nanopc-t4.dtb",
-+                        "extlinux"
-+                }
-+        }
-+        size = 64M
++	vfat {
++		files = {
++			"Image",
++			"rk3399-nanopi-m4.dtb",
++			"extlinux"
++		}
++	}
++	size = 64M
 +}
 +
 +image sdcard.img {
 +
-+        hdimage {
-+                gpt = true
-+        }
++	hdimage {
++		gpt = true
++	}
 +
-+        partition loader1 {
-+                image = "idbloader.img"
-+                offset = 32K
-+        }
++	partition loader1 {
++		image = "idbloader.img"
++		offset = 32K
++	}
 +
-+        partition loader2 {
-+                image = "u-boot.itb"
-+                offset = 8M
-+        }
++	partition loader2 {
++		image = "u-boot.itb"
++		offset = 8M
++	}
 +
-+        partition boot {
-+                partition-type = 0xC
-+                bootable = "true"
-+                image = "boot.vfat"
-+                offset = 16M
-+        }
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 16M
++	}
 +
-+        partition rootfs {
-+                partition-type = 0x83
-+                image = "rootfs.ext4"
-+        }
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
 +}
-diff --git a/board/friendlyarm/nanopc-t4/post-build.sh b/board/friendlyarm/nanopc-t4/post-build.sh
+diff --git a/board/friendlyarm/nanopi-m4/post-build.sh b/board/friendlyarm/nanopi-m4/post-build.sh
 new file mode 100755
 index 0000000..ba29375
 --- /dev/null
-+++ b/board/friendlyarm/nanopc-t4/post-build.sh
++++ b/board/friendlyarm/nanopi-m4/post-build.sh
 @@ -0,0 +1,5 @@
 +#!/bin/sh
 +
 +BOARD_DIR="$(dirname $0)"
 +
 +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/friendlyarm/nanopc-t4/readme.txt b/board/friendlyarm/nanopc-t4/readme.txt
+diff --git a/board/friendlyarm/nanopi-m4/readme.txt b/board/friendlyarm/nanopi-m4/readme.txt
 new file mode 100644
-index 0000000..6259c9e
+index 0000000..4a606cf
 --- /dev/null
-+++ b/board/friendlyarm/nanopc-t4/readme.txt
++++ b/board/friendlyarm/nanopi-m4/readme.txt
 @@ -0,0 +1,45 @@
-+FriendlyARM NANOPC-T4
++FriendlyARM NANOPI-M4
 +=====================
 +
 +Build:
 +
-+  $ make nanopc_t4_defconfig
++  $ make nanopi_m4_defconfig
 +  $ make
 +
 +Files created in output directory
@@ -162,7 +160,7 @@ index 0000000..6259c9e
 +????????? extlinux
 +????????? idbloader.img
 +????????? Image
-+????????? rk3399-nanopc-t4.dtb
++????????? rk3399-nanopi-m4.dtb
 +????????? rootfs.ext2
 +????????? rootfs.ext4 -> rootfs.ext2
 +????????? rootfs.tar
@@ -186,14 +184,14 @@ index 0000000..6259c9e
 +
 +Login:
 +------
-+Apply power and press the PWR button for 3 sec. Enter 'root' as login user, and the prompt is ready.
++Enter 'root' as login user, and the prompt is ready.
 +
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/npc_t4.html
-diff --git a/configs/nanopc_t4_defconfig b/configs/nanopc_t4_defconfig
++https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/nanopi_m4.html
+diff --git a/configs/nanopi_m4_defconfig b/configs/nanopi_m4_defconfig
 new file mode 100644
-index 0000000..c1b1e40
+index 0000000..07f818e
 --- /dev/null
-+++ b/configs/nanopc_t4_defconfig
++++ b/configs/nanopi_m4_defconfig
 @@ -0,0 +1,53 @@
 +# Architecture
 +BR2_aarch64=y
@@ -216,7 +214,7 @@ index 0000000..c1b1e40
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_LATEST_VERSION=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopc-t4-rk3399"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-m4-rk3399"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
@@ -233,12 +231,12 @@ index 0000000..c1b1e40
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopc-t4"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-m4"
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="nanopc-t4"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPC-T4"
++BR2_TARGET_GENERIC_HOSTNAME="nanopi-m4"
++BR2_TARGET_GENERIC_ISSUE="Welcome to NANOPI-M4"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
@@ -246,7 +244,7 @@ index 0000000..c1b1e40
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopc-t4/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopc-t4/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m4/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-m4/post-build.sh"
 -- 
 2.7.4
