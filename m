@@ -1,61 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:57:13 +0200
-Subject: [Buildroot] [git commit] package/libblockdev: add support for swap
- plugin
-Message-ID: <20200902161638.ED55E85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:05:20 +0200
+Subject: [Buildroot] [git commit] package/gsl: bump to version 2.6
+Message-ID: <20200902161639.55BB085EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29db5b3aed2c49ca6eb5fcfde9ff7cbf224dc428
+commit: https://git.buildroot.net/buildroot/commit/?id=a7074155cf8ff3627b0feaf791aa3c9775694958
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Update indentation in hash file (two spaces)
+
+http://git.savannah.gnu.org/cgit/gsl.git/tree/NEWS?h=release-2-6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libblockdev/Config.in      | 5 +++++
- package/libblockdev/libblockdev.mk | 8 +++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ package/gsl/gsl.hash | 4 ++--
+ package/gsl/gsl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index d15e624091..3c501b7871 100644
---- a/package/libblockdev/Config.in
-+++ b/package/libblockdev/Config.in
-@@ -57,6 +57,11 @@ config BR2_PACKAGE_LIBBLOCKDEV_PART
- comment "part plugin needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
+diff --git a/package/gsl/gsl.hash b/package/gsl/gsl.hash
+index 8a979d6e8b..0d40a75497 100644
+--- a/package/gsl/gsl.hash
++++ b/package/gsl/gsl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 0460ad7c2542caaddc6729762952d345374784100223995eb14d614861f2258d  gsl-2.5.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  b782339fc7a38fe17689cb39966c4d821236c28018b6593ddb6fd59ee40786a8  gsl-2.6.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+index d3c764787d..416955b72c 100644
+--- a/package/gsl/gsl.mk
++++ b/package/gsl/gsl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_LIBBLOCKDEV_SWAP
-+	bool "swap"
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+
- endif
- 
- comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index d7ae03e359..1b094555d2 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -28,7 +28,6 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--without-python2 \
- 	--without-python3 \
- 	--without-s390 \
--	--without-swap \
- 	--without-tools \
- 	--without-vdo
- 
-@@ -73,4 +72,11 @@ else
- LIBBLOCKDEV_CONF_OPTS += --without-part
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_SWAP),y)
-+LIBBLOCKDEV_DEPENDENCIES += util-linux
-+LIBBLOCKDEV_CONF_OPTS += --with-swap
-+else
-+LIBBLOCKDEV_CONF_OPTS += --without-swap
-+endif
-+
- $(eval $(autotools-package))
+-GSL_VERSION = 2.5
++GSL_VERSION = 2.6
+ GSL_SITE = $(BR2_GNU_MIRROR)/gsl
+ GSL_INSTALL_STAGING = YES
+ GSL_LICENSE = GPL-3.0
