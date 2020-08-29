@@ -1,77 +1,57 @@
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Sat, 29 Aug 2020 15:05:02 +0530
-Subject: [Buildroot] [PATCH v2 0/4] Add support for rk3399 based targets
-Message-ID: <20200829093506.25260-1-sunil@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 11:56:52 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/wireshark:
+ security bump to version 3.2.6
+Message-ID: <20200829094922.A607E868A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series adds support for targets from friendlyarm, pine64 and orangepi,
-based on rk3399 SOC.
+commit: https://git.buildroot.net/buildroot/commit/?id=e03fb449502256e68e3c578f793cc2b77861dad6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Merged two patch series at https://patchwork.ozlabs.org/project/buildroot/list/?series=174279,
-into this series.
+Fix CVE-2020-17498: In Wireshark 3.2.0 to 3.2.5, the Kafka protocol
+dissector could crash. This was addressed in
+epan/dissectors/packet-kafka.c by avoiding a double free during LZ4
+decompression.
 
-patch #1, #2, are basically a resend. patch #3, #4 are new patches.
+https://www.wireshark.org/security/wnpa-sec-2020-10.html
 
-Changes for v2:
-- Done few changes based on Thomas Pettazonni suggestions and 
-  mailing list
-- bumped linux version from 5.4.46 to 5.8.2
-- bumped u-boot version from 2020.04 to 2020.07
-- recent series is at:
-  https://patchwork.ozlabs.org/project/buildroot/cover/1592073154-13731-1-git-send-email-sunil at amarulasolutions.com/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 753d01ac567e24760242e62053c2c3907304ec40)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Suniel Mahesh (4):
-  configs/rockpro64: new defconfig
-  configs/orangepi_rk3399: new defconfig
-  configs/nanopi_m4: new defconfig
-  configs/nanopc_t4: new defconfig
-
- DEVELOPERS                                   |  8 ++++
- board/friendlyarm/nanopc-t4/extlinux.conf    |  4 ++
- board/friendlyarm/nanopc-t4/genimage.cfg     | 39 ++++++++++++++++++
- board/friendlyarm/nanopc-t4/post-build.sh    |  5 +++
- board/friendlyarm/nanopc-t4/readme.txt       | 45 +++++++++++++++++++++
- board/friendlyarm/nanopi-m4/extlinux.conf    |  4 ++
- board/friendlyarm/nanopi-m4/genimage.cfg     | 39 ++++++++++++++++++
- board/friendlyarm/nanopi-m4/post-build.sh    |  5 +++
- board/friendlyarm/nanopi-m4/readme.txt       | 45 +++++++++++++++++++++
- board/orangepi/orangepi-rk3399/extlinux.conf |  4 ++
- board/orangepi/orangepi-rk3399/genimage.cfg  | 39 ++++++++++++++++++
- board/orangepi/orangepi-rk3399/post-build.sh |  5 +++
- board/orangepi/orangepi-rk3399/readme.txt    | 56 ++++++++++++++++++++++++++
- board/pine64/rockpro64/extlinux.conf         |  4 ++
- board/pine64/rockpro64/genimage.cfg          | 39 ++++++++++++++++++
- board/pine64/rockpro64/post-build.sh         |  5 +++
- board/pine64/rockpro64/readme.txt            | 60 ++++++++++++++++++++++++++++
- configs/nanopc_t4_defconfig                  | 53 ++++++++++++++++++++++++
- configs/nanopi_m4_defconfig                  | 53 ++++++++++++++++++++++++
- configs/orangepi_rk3399_defconfig            | 53 ++++++++++++++++++++++++
- configs/rockpro64_defconfig                  | 53 ++++++++++++++++++++++++
- 21 files changed, 618 insertions(+)
- create mode 100644 board/friendlyarm/nanopc-t4/extlinux.conf
- create mode 100644 board/friendlyarm/nanopc-t4/genimage.cfg
- create mode 100755 board/friendlyarm/nanopc-t4/post-build.sh
- create mode 100644 board/friendlyarm/nanopc-t4/readme.txt
- create mode 100644 board/friendlyarm/nanopi-m4/extlinux.conf
- create mode 100644 board/friendlyarm/nanopi-m4/genimage.cfg
- create mode 100755 board/friendlyarm/nanopi-m4/post-build.sh
- create mode 100644 board/friendlyarm/nanopi-m4/readme.txt
- create mode 100644 board/orangepi/orangepi-rk3399/extlinux.conf
- create mode 100644 board/orangepi/orangepi-rk3399/genimage.cfg
- create mode 100755 board/orangepi/orangepi-rk3399/post-build.sh
- create mode 100644 board/orangepi/orangepi-rk3399/readme.txt
- create mode 100644 board/pine64/rockpro64/extlinux.conf
- create mode 100644 board/pine64/rockpro64/genimage.cfg
- create mode 100755 board/pine64/rockpro64/post-build.sh
- create mode 100644 board/pine64/rockpro64/readme.txt
- create mode 100644 configs/nanopc_t4_defconfig
- create mode 100644 configs/nanopi_m4_defconfig
- create mode 100644 configs/orangepi_rk3399_defconfig
- create mode 100644 configs/rockpro64_defconfig
-
--- 
-2.7.4
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index b74b69244d..c9f62ad1a8 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.5.txt
+-sha1  468c547ad13df805322e0979b348dcc602904017  wireshark-3.2.5.tar.xz
+-sha256  bd89052a5766cce08b1090df49628567e48cdd24bbaa47667c851bac6aaac940  wireshark-3.2.5.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.6.txt
++sha1  e8f3e6cb9072670c8bdbbff7e5fe3ccd5203d35e  wireshark-3.2.6.tar.xz
++sha256  ebb1eebe39bcecee02195dc328dd25f6862fc9e9dea4c2e29eae50537d5eb4f2  wireshark-3.2.6.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 638a8a249e..04e3e13ff1 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.2.5
++WIRESHARK_VERSION = 3.2.6
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
