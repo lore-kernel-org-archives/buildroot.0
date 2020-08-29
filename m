@@ -1,108 +1,284 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 22:45:14 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libcap-ng: bump to version
- 0.7.11
-Message-ID: <20200829204514.2892410-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 22:48:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: new package
+In-Reply-To: <20200829082632.27414-1-egorenar-dev@posteo.net>
+References: <20200829082632.27414-1-egorenar-dev@posteo.net>
+Message-ID: <20200829224826.05bdb28b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (already in version) and so autoreconf
-- Update indentation in hash file (two spaces)
+Hello Alexander,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...01-Fix-compilation-without-pthread.h.patch | 47 -------------------
- package/libcap-ng/libcap-ng.hash              |  6 +--
- package/libcap-ng/libcap-ng.mk                |  4 +-
- 3 files changed, 4 insertions(+), 53 deletions(-)
- delete mode 100644 package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
+Again, thanks for your contribution! See below for a number of comments.
 
-diff --git a/package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch b/package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
-deleted file mode 100644
-index eb91d40631..0000000000
---- a/package/libcap-ng/0001-Fix-compilation-without-pthread.h.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 1d28cf070933568db8006ce45411723c5369e145 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 10 Apr 2018 19:54:50 +0200
--Subject: [PATCH] Fix compilation without pthread.h
--
--Commit 7759e6f8469eb33aef1a1d5eba5d300c3a8fcb63 broke compilation on
--systems without pthread.h. So add a call to AC_CHECK_HEADERS in
--configure.ac and put include <pthread.h> under HAVE_PTHREAD_H define
--
--Fixes:
-- - http://autobuild.buildroot.net/results/6132f33fb282fda3c39deb292784b9006c9e7872
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 1 +
-- src/cap-ng.c | 2 ++
-- 2 files changed, 3 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index 7a99c72..4d6afee 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -56,6 +56,7 @@ AC_CHECK_HEADERS(sys/xattr.h, [], [
-- 	AC_CHECK_HEADERS(attr/xattr.h, [], [AC_MSG_WARN(attr/xattr.h not found, disabling file system capabilities.)])
-- 	])
-- AC_CHECK_HEADERS(linux/securebits.h, [], [])
--+AC_CHECK_HEADERS(pthread.h, [], [AC_MSG_WARN(pthread.h not found, disabling pthread_atfork.)])
-- 
-- AC_C_CONST
-- AC_C_INLINE
--diff --git a/src/cap-ng.c b/src/cap-ng.c
--index db647fd..240d2ba 100644
----- a/src/cap-ng.c
--+++ b/src/cap-ng.c
--@@ -34,7 +34,9 @@
-- #include <errno.h>
-- #include <fcntl.h>
-- #include <byteswap.h>
--+#ifdef HAVE_PTHREAD_H
-- #include <pthread.h>	// For pthread_atfork
--+#endif
-- #ifdef HAVE_SYSCALL_H
-- #include <sys/syscall.h>
-- #endif
---- 
--2.14.1
--
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
-index f8342ea928..d1c7034c08 100644
---- a/package/libcap-ng/libcap-ng.hash
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 4a1532bcf3731aade40936f6d6a586ed5a66ca4c7455e1338d1f6c3e09221328 libcap-ng-0.7.9.tar.gz
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
--sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
-+sha256  85815c711862d01a440db471f12fba462c9949e923966f5859607e652d9c0ae9  libcap-ng-0.7.11.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index 102b472d1a..914a72333b 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
- 
--LIBCAP_NG_VERSION = 0.7.9
-+LIBCAP_NG_VERSION = 0.7.11
- LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
- LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
- LIBCAP_NG_INSTALL_STAGING = YES
--# 0001-Fix-compilation-without-pthread.h.patch
--LIBCAP_NG_AUTORECONF = YES
- 
- LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
- LIBCAP_NG_CONF_OPTS = --without-python
+On Sat, 29 Aug 2020 10:26:32 +0200
+Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+
+> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+> ---
+>  package/Config.in                             |  1 +
+>  .../0001-Cross-compilation-fixes.patch        | 45 +++++++++++++++++
+>  .../0002-Fix-parallel-make.patch              | 49 +++++++++++++++++++
+>  .../multipath-tools/0003-systemd-fix.patch    | 28 +++++++++++
+>  .../0004-udev-rules-path.patch                | 13 +++++
+>  ...005-libdmmp_private.h-add-TRUE-FALSE.patch | 17 +++++++
+>  package/multipath-tools/Config.in             | 12 +++++
+>  package/multipath-tools/S60multipathd         | 39 +++++++++++++++
+>  package/multipath-tools/multipath-tools.hash  |  3 ++
+>  package/multipath-tools/multipath-tools.mk    | 34 +++++++++++++
+>  10 files changed, 241 insertions(+)
+
+As usual, we need an entry in the DEVELOPERS file.
+
+>  create mode 100644 package/multipath-tools/0001-Cross-compilation-fixes.patch
+>  create mode 100644 package/multipath-tools/0002-Fix-parallel-make.patch
+>  create mode 100644 package/multipath-tools/0003-systemd-fix.patch
+>  create mode 100644 package/multipath-tools/0004-udev-rules-path.patch
+>  create mode 100644 package/multipath-tools/0005-libdmmp_private.h-add-TRUE-FALSE.patch
+
+All those patches should have a description, Signed-off-by line, and be
+generated with git format-patch.
+
+> diff --git a/package/multipath-tools/0001-Cross-compilation-fixes.patch b/package/multipath-tools/0001-Cross-compilation-fixes.patch
+> new file mode 100644
+> index 0000000000..8914b3bae7
+> --- /dev/null
+> +++ b/package/multipath-tools/0001-Cross-compilation-fixes.patch
+> @@ -0,0 +1,45 @@
+> +Index: multipath-tools-0.8.4/libmultipath/Makefile
+> +===================================================================
+> +--- multipath-tools-0.8.4.orig/libmultipath/Makefile
+> ++++ multipath-tools-0.8.4/libmultipath/Makefile
+> +@@ -20,21 +20,10 @@ ifdef SYSTEMD
+> + 	endif
+> + endif
+> + 
+> +-ifneq ($(call check_func,dm_task_no_flush,/usr/include/libdevmapper.h),0)
+> +-	CFLAGS += -DLIBDM_API_FLUSH -D_GNU_SOURCE
+> +-endif
+> +-
+> +-ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
+> +-	CFLAGS += -DLIBDM_API_COOKIE
+> +-endif
+> +-
+> +-ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,/usr/include/libudev.h),0)
+> +-	CFLAGS += -DLIBUDEV_API_RECVBUF
+> +-endif
+> +-
+> +-ifneq ($(call check_func,dm_task_deferred_remove,/usr/include/libdevmapper.h),0)
+> +-	CFLAGS += -DLIBDM_API_DEFERRED
+> +-endif
+> ++CFLAGS += -DLIBDM_API_FLUSH -D_GNU_SOURCE
+> ++CFLAGS += -DLIBDM_API_COOKIE
+> ++CFLAGS += -DLIBUDEV_API_RECVBUF
+> ++CFLAGS += -DLIBDM_API_DEFERRED
+
+Hum, this is not the best solution. Can we find something that works
+also for cross-compilation ?
+
+> diff --git a/package/multipath-tools/0002-Fix-parallel-make.patch b/package/multipath-tools/0002-Fix-parallel-make.patch
+> new file mode 100644
+> index 0000000000..8d493659bd
+> --- /dev/null
+> +++ b/package/multipath-tools/0002-Fix-parallel-make.patch
+
+This one can be submitted upstream. Did you do it already?
+
+> diff --git a/package/multipath-tools/0003-systemd-fix.patch b/package/multipath-tools/0003-systemd-fix.patch
+> new file mode 100644
+> index 0000000000..15e708b2ca
+> --- /dev/null
+> +++ b/package/multipath-tools/0003-systemd-fix.patch
+> @@ -0,0 +1,28 @@
+> +Index: multipath-tools-0.8.4/Makefile.inc
+> +===================================================================
+> +--- multipath-tools-0.8.4.orig/Makefile.inc
+> ++++ multipath-tools-0.8.4/Makefile.inc
+> +@@ -36,13 +36,8 @@ ifndef RUN
+> + endif
+> + 
+> + ifndef SYSTEMD
+> +-	ifeq ($(shell pkg-config --modversion libsystemd >/dev/null 2>&1 && echo 1), 1)
+> +-		SYSTEMD = $(shell pkg-config --modversion libsystemd)
+> +-	else
+> +-		ifeq ($(shell systemctl --version >/dev/null 2>&1 && echo 1), 1)
+> +-			SYSTEMD = $(shell systemctl --version 2> /dev/null | \
+> +-				sed -n 's/systemd \([0-9]*\).*/\1/p')
+> +-		endif
+> ++	ifeq ($(shell $(PKG_CONFIG) --modversion libsystemd >/dev/null 2>&1 && echo 1), 1)
+> ++		SYSTEMD = $(shell $(PKG_CONFIG) --modversion libsystemd)
+> + 	endif
+
+I like that you're using $(PKG_CONFIG), but it's a bit annoying that
+you're dropping the systemctl usage because it makes the patch probably
+unsuitable for upstream. Should there be a way to avoid the systemctl
+usage if we're cross-compiling ?
+
+> diff --git a/package/multipath-tools/0004-udev-rules-path.patch b/package/multipath-tools/0004-udev-rules-path.patch
+> new file mode 100644
+> index 0000000000..a53be4004c
+> --- /dev/null
+> +++ b/package/multipath-tools/0004-udev-rules-path.patch
+> @@ -0,0 +1,13 @@
+> +Index: multipath-tools-0.8.4/Makefile.inc
+> +===================================================================
+> +--- multipath-tools-0.8.4.orig/Makefile.inc
+> ++++ multipath-tools-0.8.4/Makefile.inc
+> +@@ -49,7 +49,7 @@ prefix		=
+> + exec_prefix	= $(prefix)
+> + usr_prefix	= $(prefix)
+> + bindir		= $(exec_prefix)/sbin
+> +-libudevdir	= $(prefix)/$(SYSTEMDPATH)/udev
+> ++libudevdir	= $(prefix)/lib/udev
+
+Not sure why this change is needed. Perhaps to support non-systemd
+situations ?
+
+> diff --git a/package/multipath-tools/0005-libdmmp_private.h-add-TRUE-FALSE.patch b/package/multipath-tools/0005-libdmmp_private.h-add-TRUE-FALSE.patch
+> new file mode 100644
+> index 0000000000..4d6f71cb86
+> --- /dev/null
+> +++ b/package/multipath-tools/0005-libdmmp_private.h-add-TRUE-FALSE.patch
+> @@ -0,0 +1,17 @@
+> +--- a/libdmmp/libdmmp_private.h	2020-06-29 08:29:04.308560526 +0200
+> ++++ b/libdmmp/libdmmp_private.h	2020-06-29 08:29:12.196605583 +0200
+> +@@ -34,6 +34,14 @@
+> + 
+> + #include "libdmmp/libdmmp.h"
+> + 
+> ++#ifndef FALSE
+> ++#define FALSE   (0)
+> ++#endif
+> ++
+> ++#ifndef TRUE
+> ++#define TRUE    (!FALSE)
+> ++#endif
+> ++
+> + #ifdef __cplusplus
+> + extern "C" {
+> + #endif
+
+This should be submitted upstream too.
+
+> diff --git a/package/multipath-tools/Config.in b/package/multipath-tools/Config.in
+> new file mode 100644
+> index 0000000000..54f670089c
+> --- /dev/null
+> +++ b/package/multipath-tools/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_MULTIPATH_TOOLS
+> +	bool "multipath-tools"
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_LIBURCU
+
+So you need to replicate:
+
+        depends on BR2_TOOLCHAIN_HAS_THREADS
+
+> +	select BR2_PACKAGE_JSON_C
+
+So you need to replicate:
+
+        depends on BR2_TOOLCHAIN_HAS_SYNC_4
+
+> +	select BR2_PACKAGE_LIBAIO
+
+Is libaio directly used by multipath-tools, or just as a dependency of
+lvm2 ?
+
+> +	select BR2_PACKAGE_READLINE
+> +	select BR2_PACKAGE_LVM2
+
+You also need to replicate:
+
+        depends on BR2_TOOLCHAIN_HAS_THREADS
+        depends on BR2_USE_MMU # needs fork()
+        depends on !BR2_STATIC_LIBS # It fails to build statically
+
+> +	select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+
+And:
+
+        depends on !BR2_TOOLCHAIN_USES_MUSL
+
+> +	help
+> +	  Makes a small dumpfile of kdump.
+
+This description is wrong.
+
+The upstream URL of the project at the end of the Config.in help text
+is missing.
+
+Hint: run "make check-package".
+
+You're also missing a Config.in comment about the dependencies.
+
+> diff --git a/package/multipath-tools/S60multipathd b/package/multipath-tools/S60multipathd
+> new file mode 100644
+> index 0000000000..1c687901c7
+> --- /dev/null
+> +++ b/package/multipath-tools/S60multipathd
+
+Could you take package/busybox/S01syslogd as a template for the init
+script ?
+
+> diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+> new file mode 100644
+> index 0000000000..7eaf246094
+> --- /dev/null
+> +++ b/package/multipath-tools/multipath-tools.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256  ccd73bf67621161d9e42d1a770c3a7efff6e252433e8b8ed5f64a88cb5e7151d  multipath-tools-0.8.4.tar.gz
+> +sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+> diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+> new file mode 100644
+> index 0000000000..2572172895
+> --- /dev/null
+> +++ b/package/multipath-tools/multipath-tools.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# multipath-tools
+> +#
+> +################################################################################
+> +
+> +MULTIPATH_TOOLS_VERSION = 0.8.4
+> +MULTIPATH_TOOLS_SITE = $(call github,openSUSE,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+> +MULTIPATH_TOOLS_LICENSE = LGPL-2.0
+> +MULTIPATH_TOOLS_LICENSE_FILES = COPYING
+> +MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev
+
+In the Config.in file, you are selecting liburcu, libaio, but you don't
+have them as build dependencies here. Could you check that ?
+
+Also, since you're using pkg-config, you probably want host-pkgconf in
+the dependencies.
+
+> +MULTIPATH_TOOLS_MAKE_FLAGS =
+
+An empty variable is quite useless.
+
+> +
+> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> +MULTIPATH_TOOLS_DEPENDENCIES += systemd
+> +endif
+> +
+> +define MULTIPATH_TOOLS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> +		OPTFLAGS="$(TARGET_CFLAGS)"
+
+Could you try to use $(TARGET_CONFIGURE_OPTS) to pass CC, PKG_CONFIG,
+etc. ?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
