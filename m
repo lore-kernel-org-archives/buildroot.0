@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:37:40 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/mongodb: security
- bump to version 4.2.9
-Message-ID: <20200829173331.5A68C81585@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 19:36:31 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] Makefile: hide commands
+ that build the package file lists at end of build
+Message-ID: <20200829173331.4758E86F1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f2dbb31df364ae51674a017cb3acfbcc6896d1f
+commit: https://git.buildroot.net/buildroot/commit/?id=e27d0d8b5bc16f20d09bc646a2aaa9d9c6d11ca0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-SERVER-47733 SymmetricEncryptorWindows shouldn???t pad when update is
-called
+Since commit 0e2be4db8ab01d479177a3a187c22525752195ae
+("package/pkg-generic: make file list logic parallel build
+compatible"), the commands executed at the every end of the build
+to assemble the list of files installed by the different packages
+are visible in the make output. They are quite noisy, and clutter
+the output.
 
-https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
+The other commands in target-finalize are also hidden using "@",
+so we should also do the same for those commands. But that hurts
+debuggability, so we use $(Q) (the existing '@'s can be changed
+in a followup patch).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f5919b6059c25e685a2ffc749f25c95e8edb96bf)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: use '$(Q)', not '@']
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 18f6c2611898c852a10e38978249a9ce81c24163)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongodb/mongodb.hash | 2 +-
- package/mongodb/mongodb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-index 943ffda997..efbdf33e79 100644
---- a/package/mongodb/mongodb.hash
-+++ b/package/mongodb/mongodb.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  e8880277e3910afd82c71ed61861d518f2040cbc062e00a26d53a3224284db8f  mongodb-src-r4.2.8.tar.gz
-+sha256  4a8633ec92383864bb4b791f9776ef6f4652bf36b2c5a73557d1217ba85bca2b  mongodb-src-r4.2.9.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
- sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index fa111bef7b..d4af320105 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 0026e7761c..79096fdc90 100644
+--- a/Makefile
++++ b/Makefile
+@@ -816,11 +816,11 @@ endif # merged /usr
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
  
--MONGODB_VERSION = 4.2.8
-+MONGODB_VERSION = 4.2.9
- MONGODB_SITE = https://fastdl.mongodb.org/src
- MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+-	$(if $(TARGET_DIR_FILES_LISTS), \
++	$(Q)$(if $(TARGET_DIR_FILES_LISTS), \
+ 		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
+-	$(if $(HOST_DIR_FILES_LISTS), \
++	$(Q)$(if $(HOST_DIR_FILES_LISTS), \
+ 		cat $(HOST_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-host.txt
+-	$(if $(STAGING_DIR_FILES_LISTS), \
++	$(Q)$(if $(STAGING_DIR_FILES_LISTS), \
+ 		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
  
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
