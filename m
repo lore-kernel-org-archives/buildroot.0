@@ -1,45 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 19:36:41 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/gsl: bump to version 2.6
-Message-ID: <20200829173641.2463266-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 19:37:01 +0200
+Subject: [Buildroot] [git commit] Makefile: hide commands that build the
+ package file lists at end of build
+In-Reply-To: <20200829122742.BDDB4815F5@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sat, 29 Aug 2020 14:33:21 +0200")
+References: <20200829122742.BDDB4815F5@busybox.osuosl.org>
+Message-ID: <87y2lxfj5u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-http://git.savannah.gnu.org/cgit/gsl.git/tree/NEWS?h=release-2-6
+ > commit: https://git.buildroot.net/buildroot/commit/?id=18f6c2611898c852a10e38978249a9ce81c24163
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gsl/gsl.hash | 4 ++--
- package/gsl/gsl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Since commit 0e2be4db8ab01d479177a3a187c22525752195ae
+ > ("package/pkg-generic: make file list logic parallel build
+ > compatible"), the commands executed at the every end of the build
+ > to assemble the list of files installed by the different packages
+ > are visible in the make output. They are quite noisy, and clutter
+ > the output.
 
-diff --git a/package/gsl/gsl.hash b/package/gsl/gsl.hash
-index 8a979d6e8b..0d40a75497 100644
---- a/package/gsl/gsl.hash
-+++ b/package/gsl/gsl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 0460ad7c2542caaddc6729762952d345374784100223995eb14d614861f2258d  gsl-2.5.tar.gz
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  b782339fc7a38fe17689cb39966c4d821236c28018b6593ddb6fd59ee40786a8  gsl-2.6.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
-index d3c764787d..416955b72c 100644
---- a/package/gsl/gsl.mk
-+++ b/package/gsl/gsl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSL_VERSION = 2.5
-+GSL_VERSION = 2.6
- GSL_SITE = $(BR2_GNU_MIRROR)/gsl
- GSL_INSTALL_STAGING = YES
- GSL_LICENSE = GPL-3.0
+ > The other commands in target-finalize are also hidden using "@",
+ > so we should also do the same for those commands. But that hurts
+ > debuggability, so we use $(Q) (the existing '@'s can be changed
+ > in a followup patch).
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > [yann.morin.1998 at free.fr: use '$(Q)', not '@']
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
