@@ -1,43 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 17:44:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.15.0
-Message-ID: <20200829154449.2171104-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 17:46:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libressl: bump to version 3.1.4
+Message-ID: <20200829154645.2207978-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://botan.randombit.net/news.html
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.1.4-relnotes.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 15e79bbe40..e8d62aa98c 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 957af1e32c..eb784868a8 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
 @@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  0c10f12b424a40ee19bde00292098e201d7498535c062d8d5b586d07861a54b5  Botan-2.14.0.tar.xz
-+sha256  d88af1307f1fefac79aa4f2f524699478d69ce15a857cf2d0a90ac6bf2a50009  Botan-2.15.0.tar.xz
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  c76b0316acf612ecb62f5cb014a20d972a663bd9e40abf952a86f3b998b69fa0  libressl-3.1.3.tar.gz
++sha256  414c149c9963983f805a081db5bd3aec146b5f82d529bb63875ac941b25dcbb6  libressl-3.1.4.tar.gz
  # Locally computed
- sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index a5551b110f..19677a40e0 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index dad119a041..06b7174c5e 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOTAN_VERSION = 2.14.0
-+BOTAN_VERSION = 2.15.0
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+-LIBRESSL_VERSION = 3.1.3
++LIBRESSL_VERSION = 3.1.4
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
 -- 
 2.28.0
