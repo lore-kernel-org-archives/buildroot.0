@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 18:49:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libressl: bump to version 3.1.4
-In-Reply-To: <20200829154645.2207978-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 29 Aug 2020 17:46:45 +0200")
-References: <20200829154645.2207978-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8mtgzx8.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Aug 2020 18:50:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.2
+In-Reply-To: <20200829154845.2214590-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Aug 2020 17:48:45 +0200")
+References: <20200829154845.2214590-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k0xhgzvk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.1.4-relnotes.txt
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Drop patch (already in version)
+ > http://www.haproxy.org/download/2.2/src/CHANGELOG
 
-Committed, thanks.
+Committed to master given the bugfixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
