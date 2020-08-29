@@ -1,51 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:52:32 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/mosquitto: security bump to
- v1.6.12
-In-Reply-To: <20200829130610.169904-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Sat, 29 Aug 2020 15:06:10 +0200")
-References: <20200829130610.169904-1-titouan.christophe@railnova.eu>
-Message-ID: <87zh6de3vj.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Aug 2020 19:51:21 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/{collectd,
+ domoticz}: fix outdated dependencies for mosquitto
+Message-ID: <20200829174502.6B46682D5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7de027bf954362cf35939ed9deb5d84cc7982317
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Mosquitto 1.6.11 is a bugfix release, read the whole announcement on
- > http://mosquitto.org/blog/2020/08/version-1-6-11-released/
+In 4fc62e1eb6b3adbfc3d3eb7f841275ae8cd1b424, we removed arch/toolchain
+dependencies from the mosquitto library (MMU, !STATIC, SYNC4), and moved
+them to the mosquitto broker only.
 
- > Mosquitto 1.6.12 is a security and bugfix release, read
- > http://mosquitto.org/blog/2020/08/version-1-6-12-released/
+All the packages modified here only need the mosquitto library, so they
+shouldn't have those depends anymore; but this was never done before.
 
- > From the 1.6.11 changelog of the client library:
- > mosquitto_loop_start() now sets a thread name on Linux, FreeBSD, NetBSD,
- > and OpenBSD. Closes #1777.
- > This is done with pthread_setname_np; so mosquitto now requires
- > BR2_TOOLCHAIN_HAS_THREADS_NPTL when built with threading support.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+[Peter: leave mmu/!static dependency for domoticz as it uses fork()/looks
+	for libmosquitto.so]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8f5a9f597e35e6bc89dc938edbe753004d0201d1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/Config.in | 1 -
+ package/domoticz/Config.in | 5 ++---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
- > 2 reverse dependencies use the threaded API, but they already
- > depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL:
- > * domoticz [1] (we add a comment for mosquitto)
- > * shairport-sync [2]
-
- > [1] https://github.com/domoticz/domoticz/blob/2020.1/main/mosquitto_helper.cpp#L344
- > [2] https://github.com/mikebrady/shairport-sync/blob/3.3.6/mqtt.c#L227-L229
-
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
- > ---
- > Changes v1->v2:
- > * Conditionally depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- > * Add patch to support building on platforms without pthread
-
- > Changes v2->v3:
- > * Bump to newer version 1.6.12
- > * Drop patch that was released upstream
- > * Don't add custom option BR2_PACKAGE_MOSQUITTO_WITH_THREADING
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 303b5dc01b..5b194e943c 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -593,7 +593,6 @@ comment "grpc needs a toolchain w/ C++, gcc >= 4.8"
+ 
+ config BR2_PACKAGE_COLLECTD_MQTT
+ 	bool "mqtt"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
+ 	select BR2_PACKAGE_MOSQUITTO
+ 	help
+ 	  Sends metrics to and/or receives metrics from an MQTT broker.
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index b99e548012..e05861eb4d 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_DOMOTICZ
+ 	bool "domoticz"
+-	depends on BR2_USE_MMU # mosquitto
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mosquitto
+-	depends on !BR2_STATIC_LIBS # mosquitto
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sleep_for
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
