@@ -1,279 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 22:29:05 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/oprofile: bump to version 1.4.0
-Message-ID: <20200829202905.2864307-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 29 Aug 2020 22:34:21 +0200
+Subject: [Buildroot] [PATCH v2 08/12] package/clang: add a host entry
+ for clang
+In-Reply-To: <20190907094027.9537-9-romain.naour@smile.fr>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+ <20190907094027.9537-9-romain.naour@smile.fr>
+Message-ID: <fc570c27-953d-5db3-cdea-f600cd3ae5d7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop third patch (already in version) and so drop second patch and
-  autoreconf
-- Update indentation in hash file (two spaces)
 
-https://oprofile.sourceforge.io/release-notes/oprofile-1.4.0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...d-foreign-option-to-AM_INIT_AUTOMAKE.patch |  36 ----
- ...o-handle-the-binutils-2.34-api-chang.patch | 169 ------------------
- package/oprofile/oprofile.hash                |   8 +-
- package/oprofile/oprofile.mk                  |   5 +-
- 4 files changed, 5 insertions(+), 213 deletions(-)
- delete mode 100644 package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
- delete mode 100644 package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
+On 07/09/2019 11:40, Romain Naour wrote:
+> In order to allow Buildroot's user to select clang
+> as cross-compiler we need first an option to select
+> host-clang package in menuconfig.
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+> ---
+>  package/Config.in.host       |  1 +
+>  package/clang/Config.in.host | 19 +++++++++++++++++++
+>  2 files changed, 20 insertions(+)
+>  create mode 100644 package/clang/Config.in.host
+> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 93822304e9..182e175a78 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -7,6 +7,7 @@ menu "Host utilities"
+>  	source "package/cbootimage/Config.in.host"
+>  	source "package/checkpolicy/Config.in.host"
+>  	source "package/checksec/Config.in.host"
+> +	source "package/clang/Config.in.host"
+>  	source "package/cmake/Config.in.host"
+>  	source "package/cramfs/Config.in.host"
+>  	source "package/cryptsetup/Config.in.host"
+> diff --git a/package/clang/Config.in.host b/package/clang/Config.in.host
+> new file mode 100644
+> index 0000000000..ca5d7ba678
+> --- /dev/null
+> +++ b/package/clang/Config.in.host
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_HOST_CLANG
+> +	bool "clang cross-compiler"
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_USE_WCHAR # std::wstring
 
-diff --git a/package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch b/package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
-deleted file mode 100644
-index 98dcac6906..0000000000
---- a/package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From ff172a49d1ca5708f45939b9b4f125cafba01db3 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Tue, 24 Mar 2020 22:50:32 +0100
--Subject: [PATCH] configure.ac: add foreign option to AM_INIT_AUTOMAKE
--
--oprofile doesn't provide the NEWS, AUTHORS and ChangeLog file, so
--autoreconf complains with:
--
--Makefile.am: error: required file './NEWS' not found
--Makefile.am: error: required file './AUTHORS' not found
--Makefile.am: error: required file './ChangeLog' not found
--
--Such errors can be avoided by passing the "foreign" option to
--AM_INIT_AUTOMAKE.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 00e30079..87afe2b7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -13,7 +13,7 @@ AC_PREREQ(2.13)
-- 
-- AC_INIT([OProfile], [1.3.0])
-- AC_CONFIG_SRCDIR([libop/op_config.h])
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([foreign])
-- AC_CONFIG_HEADERS(config.h)
-- 
-- AC_CHECK_DECLS([basename], [], [], [[#include <libgen.h>]])
---- 
--2.25.1
--
-diff --git a/package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch b/package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
-deleted file mode 100644
-index cff5030e00..0000000000
---- a/package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
-+++ /dev/null
-@@ -1,169 +0,0 @@
--From 377610414fb6cd7ac30e4485d9d6482fcf29aca6 Mon Sep 17 00:00:00 2001
--From: William Cohen <wcohen@redhat.com>
--Date: Wed, 18 Mar 2020 21:19:16 -0400
--Subject: [PATCH] Macro wrappers to handle the binutils 2.34 api changes
--
--Changes in binutils 2.34 API prevented oprofile from compiling with
--it.  This patch tests for the changes in the binutils API during
--configuration and selects the appropiate wrappers to allow oprofile to
--compile.  This allows oprofile to compile with both older and newer
--versions of binutils.
--
--Upstream: 377610414fb6cd7ac30e4485d9d6482fcf29aca6
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- configure.ac              | 20 ++++++++++++++++++++
-- libutil++/bfd_support.cpp | 11 ++++++-----
-- libutil/op_bfd_wrappers.h | 28 ++++++++++++++++++++++++++++
-- opjitconv/create_bfd.c    |  7 ++++---
-- 4 files changed, 58 insertions(+), 8 deletions(-)
-- create mode 100644 libutil/op_bfd_wrappers.h
--
--diff --git a/configure.ac b/configure.ac
--index ac2fd35e..df032a78 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -224,6 +224,26 @@ if test "$host_cpu" = "powerpc64le" -o "$host_cpu" = "powerpc64"; then
-- fi
-- AC_SUBST(PFM_LIB)
-- 
--+HAVE_BINUTILS_234='1'
--+AC_MSG_CHECKING([whether binutils 2.34 is being used])
--+rm -f test-for-BINUTILS
--+AC_LANG_CONFTEST(
--+	[AC_LANG_PROGRAM([[#include <bfd.h>]],
--+		[[asection * sect;
--+		bfd_size_type buildid_sect_size = bfd_section_size(sect);
--+		return 0;]])
--+	])
--+$CC conftest.$ac_ext $CFLAGS $LDFLAGS $LIBS $PERF_EVENT_FLAGS -o test-for-BINUTILS  > /dev/null 2>&1
--+if test -f test-for-BINUTILS; then
--+	echo "yes"
--+	HAVE_BINUTILS_234='1'
--+else
--+	echo "no"
--+	HAVE_BINUTILS_234='0'
--+fi
--+AC_DEFINE_UNQUOTED(HAVE_BINUTILS_234, $HAVE_BINUTILS_234, [Using binutils 2.34])
--+rm -f test-for-BINUTILS*
--+
-- AC_ARG_WITH(java,
-- [  --with-java=java-home        Path to Java home directory (default is "no"; "yes" will use /usr as Java home)],
-- JAVA_HOMEDIR=$with_java, [with_java=no])
--diff --git a/libutil++/bfd_support.cpp b/libutil++/bfd_support.cpp
--index fa904839..cd0f4f71 100644
----- a/libutil++/bfd_support.cpp
--+++ b/libutil++/bfd_support.cpp
--@@ -19,6 +19,7 @@
-- #include "locate_images.h"
-- #include "op_libiberty.h"
-- #include "op_exception.h"
--+#include "op_bfd_wrappers.h"
-- 
-- #include <unistd.h>
-- #include <errno.h>
--@@ -137,7 +138,7 @@ static bool get_build_id(bfd * ibfd, unsigned char * build_id)
-- 		}
-- 	}
-- 
---	bfd_size_type buildid_sect_size = bfd_section_size(ibfd, sect);
--+	bfd_size_type buildid_sect_size = op_bfd_section_size(ibfd, sect);
-- 	char * contents = (char *) xmalloc(buildid_sect_size);
-- 	errno = 0;
-- 	if (!bfd_get_section_contents(ibfd, sect,
--@@ -188,7 +189,7 @@ bool get_debug_link_info(bfd * ibfd, string & filename, unsigned long & crc32)
-- 	if (sect == NULL)
-- 		return false;
-- 	
---	bfd_size_type debuglink_size = bfd_section_size(ibfd, sect);  
--+	bfd_size_type debuglink_size = op_bfd_section_size(ibfd, sect);
-- 	char * contents = (char *) xmalloc(debuglink_size);
-- 	cverb << vbfd
-- 	      << ".gnu_debuglink section has size " << debuglink_size << endl;
--@@ -346,7 +347,7 @@ void fixup_linenr(bfd * abfd, asection * section, asymbol ** syms,
-- 	// first restrict the search on a sensible range of vma, 16 is
-- 	// an intuitive value based on epilog code look
-- 	size_t max_search = 16;
---	size_t section_size = bfd_section_size(abfd, section);
--+	size_t section_size = op_bfd_section_size(abfd, section);
-- 	if (pc + max_search > section_size)
-- 		max_search = section_size - pc;
-- 
--@@ -819,10 +820,10 @@ find_nearest_line(bfd_info const & b, op_bfd_symbol const & sym,
-- 	else
-- 		pc = (sym.value() + offset) - sym.filepos();
-- 
---	if ((bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
--+	if ((op_bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
-- 		goto fail;
-- 
---	if (pc >= bfd_section_size(abfd, section))
--+	if (pc >= op_bfd_section_size(abfd, section))
-- 		goto fail;
-- 
-- 	ret = bfd_find_nearest_line(abfd, section, syms, pc, &cfilename,
--diff --git a/libutil/op_bfd_wrappers.h b/libutil/op_bfd_wrappers.h
--new file mode 100644
--index 00000000..b229cc12
----- /dev/null
--+++ b/libutil/op_bfd_wrappers.h
--@@ -0,0 +1,28 @@
--+/**
--+ * @file op_bfd_wrappers.h
--+ * Wrappers to hide API changes in binutils 2.34
--+ *
--+ * @remark Copyright 2020 OProfile authors
--+ * @remark Read the file COPYING
--+ *
--+ * @author William Cohen
--+ */
--+
--+#ifndef OP_BFD_WRAPPERS_H
--+#define OP_BFD_WRAPPERS_H
--+
--+#if HAVE_BINUTILS_234
--+#define op_bfd_section_size(ibfd, sec) bfd_section_size(sec)
--+#define op_bfd_get_section_flags(abfd, sec) bfd_section_flags(sec)
--+#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(sec, flags)
--+#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(sec, vma)
--+#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(sec, size)
--+#else
--+#define op_bfd_section_size(ibfd, sec) bfd_section_size(ibfd, sec)
--+#define op_bfd_get_section_flags(abfd, sec) bfd_get_section_flags(abfd, sec)
--+#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(abfd, sec, flags)
--+#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(abfd, sec, vma)
--+#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(abfd, sec, size)
--+#endif
--+
--+#endif /* !OP_BFD_WRAPPERS_H */
--diff --git a/opjitconv/create_bfd.c b/opjitconv/create_bfd.c
--index 48db143b..da1e6d29 100644
----- a/opjitconv/create_bfd.c
--+++ b/opjitconv/create_bfd.c
--@@ -16,6 +16,7 @@
-- 
-- #include "opjitconv.h"
-- #include "op_libiberty.h"
--+#include "op_bfd_wrappers.h"
-- 
-- #include <bfd.h>
-- #include <assert.h>
--@@ -86,12 +87,12 @@ asection * create_section(bfd * abfd, char const * section_name,
-- 		bfd_perror("bfd_make_section");
-- 		goto error;
-- 	}
---	bfd_set_section_vma(abfd, section, vma);
---	if (bfd_set_section_size(abfd, section, size) == FALSE) {
--+	op_bfd_set_section_vma(abfd, section, vma);
--+	if (op_bfd_set_section_size(abfd, section, size) == FALSE) {
-- 		bfd_perror("bfd_set_section_size");
-- 		goto error;
-- 	}
---	if (bfd_set_section_flags(abfd, section, flags) == FALSE) {
--+	if (op_bfd_set_section_flags(abfd, section, flags) == FALSE) {
-- 		bfd_perror("bfd_set_section_flags");
-- 		goto error;
-- 	}
---- 
--2.25.1
--
-diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
-index d1d96c6232..7d005aa747 100644
---- a/package/oprofile/oprofile.hash
-+++ b/package/oprofile/oprofile.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.3.0/
--sha1	7daa0cca8587e399cb3df9eb817c6a39ffea2082	oprofile-1.3.0.tar.gz
--md5	bd998df5521ebedae31e71cd3fb6200b		oprofile-1.3.0.tar.gz
-+# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.4.0/
-+sha1  d4d7634372d18de821b33650ad0ff7392e94c6e3  oprofile-1.4.0.tar.gz
-+md5  ac0ff685ec9735e30d6a4d19de0efed7  oprofile-1.4.0.tar.gz
- 
- # Hash for license file:
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index b9d7d9e608..50693ddd1e 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,13 +4,10 @@
- #
- ################################################################################
- 
--OPROFILE_VERSION = 1.3.0
-+OPROFILE_VERSION = 1.4.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPL-2.0+
- OPROFILE_LICENSE_FILES = COPYING
--# 0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
--# 0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
--OPROFILE_AUTORECONF = YES
- OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
- 	--enable-gui=no \
--- 
-2.28.0
+ I suppose you blindly copied these dependencies from target llvm? I wonder if
+they are really relevant for host clang... AFAIU, most of them are limitations
+of the LLVM source code itself, but since we don't compile that for the target
+here, they shouldn't apply to host-clang. The only one that I imagine really is
+necessary, is BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 - IIUC, clang uses libstdc++ from
+gcc, and I can imagine that it requires a "high enough" version of it.
+
+ So I would tend to remove all these limitations except the first three, and
+just rely on the autobuilders to turn up any problems.
+
+ Regards,
+ Arnout
+
+> +	help
+> +	  Clang is a C/C++, Objective C/C++ and OpenCL C front-end
+> +	  for the LLVM compiler.
+> +
+> +	  This option install the clang cross-compiler and it's
+> +	  libraires. It doesn't mean that's used by Buildroot
+> +	  infra to build packages.
+> +
+> +	  http://clang.llvm.org
+> 
