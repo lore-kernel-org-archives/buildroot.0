@@ -1,149 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 10:39:13 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/trousers: add
- upstream security fix
-Message-ID: <20200829084438.B41DE812C5@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 10:40:55 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] linux: workaround
+ make-4.1 bug
+Message-ID: <20200829084445.C5A29815BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fbff3633772347e9379aa9443538af0febbb8ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8543be6effbab2ca8f814beedd641f884cc93ffd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes the following security issues:
+On Ubuntu 18.04, make-4.1 emits spurious, incorrect "entering/leaving"
+messages, which end up in the LINUX_VERSION_PROBED variable:
 
-CVE-2020-24332
-If the tcsd daemon is started with root privileges,
-the creation of the system.data file is prone to symlink attacks
+    printf 'probed linux version: "%s"\n' "$(LINUX_VERSION_PROBED)"
+    probed linux version: "make[1]: Entering directory '/home/buildroot'
+    4.19.78-linux4sam-6.2
+    make[1]: Leaving directory '/home/buildroot/output/build/linux-linux4sam_6.2'"
 
-CVE-2020-24330
-If the tcsd daemon is started with root privileges,
-it fails to drop the root gid after it is no longer needed
+First, the messages are displayed even though we do explicitly pass
+--no-print-directory -s.
 
-CVE-2020-24331
-If the tcsd daemon is started with root privileges,
-the tss user has read and write access to the /etc/tcsd.conf file
+Second, the entering and leaving messages are not about the same
+directory!
 
-For details, see the advisory:
-https://www.openwall.com/lists/oss-security/2020/05/20/3
+This *only* occurs in the following conditions:
 
+  - the user has the correct 0022 umask,
+  - top-level parallel is used (with or without PPD),
+  - initial -C is specified as well.
+
+    $ umask 0022
+    $ make -j16 -C $(pwd)
+    [...]
+    depmod: ERROR: Bad version passed make[1]:
+    [...]
+
+(yes, 'make[1]:' is the string depmod is trying, and fails, to parse as
+a version string).
+
+If any of the three conditions above is removed, the problem no longer
+occurs. Here's a table of the MAKEFLAGS:
+
+                |                   0002                         |          0022            |
+    ----+-------+------------------------------------------------+--------------------------+
+        | no-j  | --no-print-directory --                        |                          |
+    noC |       +------------------------------------------------+--------------------------+
+        | -j16  | -j --jobserver-fds=3,4 --no-print-directory -- | -j --jobserver-fds=3,4   |
+    ----+-------+------------------------------------------------+--------------------------+
+        | no-j  | --no-print-directory --                        | w                        |
+    -C  |       +------------------------------------------------+--------------------------+
+        | -j16  | -j --jobserver-fds=3,4 --no-print-directory -- | w -j --jobserver-fds=3,4 |
+    ----+-------+------------------------------------------------+--------------------------+
+
+    0002: umask == 0002
+    0022: umask == 0022
+
+    no-j: no -j flag
+    -j16: -j16 flag
+
+    noC: no -C flag
+    -C : -C /path/of/buildroot/
+
+Only the bottom-right-most case fails...
+
+This behaviour goes against what is documented:
+
+    https://www.gnu.org/software/make/manual/make.html#g_t_002dw-Option
+
+    5.7.4 The ???--print-directory??? Option
+    [...]
+    you do not need to specify this option because ???make??? does it for
+    you: ???-w??? is turned on automatically when you use the ???-C??? option,
+    and in sub-makes. make will not automatically turn on ???-w??? if you
+    also use ???-s???, which says to be silent, or if you use
+    ???--no-print-directory??? to explicitly disable it.
+
+So this exactly describes our situation; yet 'w' is added to MAKEFLAGS.
+
+Getting rid of the 'w' flag makes the build succeed again, so that's
+what we do here (bleark, icky)...
+
+Furthermore, the documented way to override MAKEFLAGS is to do so as a
+make parameter:
+
+    https://www.gnu.org/software/make/manual/make.html#Options_002fRecursion
+
+    5.7.3 Communicating Options to a Sub-make
+    [...]
+    If you do not want to pass the other flags down, you must change the
+    value of MAKEFLAGS, like this:
+
+        subsystem:
+            cd subdir && $(MAKE) MAKEFLAGS=
+
+However, doing so does not fix the issue. So we resort to pass the
+modified MAKEFLAGS via the environment (bleark, icky)...
+
+Fixes: #13141
+
+Reported-by: Laurent <laurent@neko-labs.eu>
+Reported-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e71be18354391055a0a21e06a78aaade25ea62d0)
+(cherry picked from commit 3f6a40e9fae92b3fe476d82449ddd6851cea03da)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tiple-security-issues-that-are-present-if.patch | 90 ++++++++++++++++++++++
- package/trousers/trousers.mk                       |  3 +
- 2 files changed, 93 insertions(+)
+ linux/linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
-new file mode 100644
-index 0000000000..609245dad8
---- /dev/null
-+++ b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
-@@ -0,0 +1,90 @@
-+From e74dd1d96753b0538192143adf58d04fcd3b242b Mon Sep 17 00:00:00 2001
-+From: Matthias Gerstner <mgerstner@suse.de>
-+Date: Fri, 14 Aug 2020 22:14:36 -0700
-+Subject: [PATCH] Correct multiple security issues that are present if the tcsd
-+ is started by root instead of the tss user.
-+
-+Patch fixes the following 3 CVEs:
-+
-+CVE-2020-24332
-+If the tcsd daemon is started with root privileges,
-+the creation of the system.data file is prone to symlink attacks
-+
-+CVE-2020-24330
-+If the tcsd daemon is started with root privileges,
-+it fails to drop the root gid after it is no longer needed
-+
-+CVE-2020-24331
-+If the tcsd daemon is started with root privileges,
-+the tss user has read and write access to the /etc/tcsd.conf file
-+
-+Authored-by: Matthias Gerstner <mgerstner@suse.de>
-+Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/tcs/ps/tcsps.c   |  2 +-
-+ src/tcsd/svrside.c   |  1 +
-+ src/tcsd/tcsd_conf.c | 10 +++++-----
-+ 3 files changed, 7 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/tcs/ps/tcsps.c b/src/tcs/ps/tcsps.c
-+index e47154b..85d45a9 100644
-+--- a/src/tcs/ps/tcsps.c
-++++ b/src/tcs/ps/tcsps.c
-+@@ -72,7 +72,7 @@ get_file()
-+ 	}
-+ 
-+ 	/* open and lock the file */
-+-	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR, 0600);
-++	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR|O_NOFOLLOW, 0600);
-+ 	if (system_ps_fd < 0) {
-+ 		LogError("system PS: open() of %s failed: %s",
-+ 				tcsd_options.system_ps_file, strerror(errno));
-+diff --git a/src/tcsd/svrside.c b/src/tcsd/svrside.c
-+index 1ae1636..1c12ff3 100644
-+--- a/src/tcsd/svrside.c
-++++ b/src/tcsd/svrside.c
-+@@ -473,6 +473,7 @@ main(int argc, char **argv)
-+ 		}
-+ 		return TCSERR(TSS_E_INTERNAL_ERROR);
-+ 	}
-++	setgid(pwd->pw_gid);
-+ 	setuid(pwd->pw_uid);
-+ #endif
-+ #endif
-+diff --git a/src/tcsd/tcsd_conf.c b/src/tcsd/tcsd_conf.c
-+index a31503d..ea8ea13 100644
-+--- a/src/tcsd/tcsd_conf.c
-++++ b/src/tcsd/tcsd_conf.c
-+@@ -743,7 +743,7 @@ conf_file_init(struct tcsd_config *conf)
-+ #ifndef SOLARIS
-+ 	struct group *grp;
-+ 	struct passwd *pw;
-+-	mode_t mode = (S_IRUSR|S_IWUSR);
-++	mode_t mode = (S_IRUSR|S_IWUSR|S_IRGRP);
-+ #endif /* SOLARIS */
-+ 	TSS_RESULT result;
-+ 
-+@@ -798,15 +798,15 @@ conf_file_init(struct tcsd_config *conf)
-+ 	}
-+ 
-+ 	/* make sure user/group TSS owns the conf file */
-+-	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
-++	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
-+ 		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
-+-				TSS_USER_NAME, TSS_GROUP_NAME);
-++				"root", TSS_GROUP_NAME);
-+ 		return TCSERR(TSS_E_INTERNAL_ERROR);
-+ 	}
-+ 
-+-	/* make sure only the tss user can manipulate the config file */
-++	/* make sure only the tss user can read (but not manipulate) the config file */
-+ 	if (((stat_buf.st_mode & 0777) ^ mode) != 0) {
-+-		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
-++		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
-+ 		return TCSERR(TSS_E_INTERNAL_ERROR);
-+ 	}
-+ #endif /* SOLARIS */
-+-- 
-+2.20.1
-+
-diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-index 1d5364959c..5e6161ce4d 100644
---- a/package/trousers/trousers.mk
-+++ b/package/trousers/trousers.mk
-@@ -13,6 +13,9 @@ TROUSERS_INSTALL_STAGING = YES
- TROUSERS_AUTORECONF = YES
- TROUSERS_DEPENDENCIES = host-pkgconf openssl
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b9f2052ee7..bb4d511433 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -160,7 +160,8 @@ endif
  
-+# 0003-Correct-multiple-security-issues-that-are-present-if.patch
-+TROUSERS_IGNORE_CVES += CVE-2020-24330 CVE-2020-24331 CVE-2020-24332
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- TROUSERS_DEPENDENCIES += libiconv
- endif
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+-LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
++# Filter out 'w' from MAKEFLAGS, to workaround a bug in make 4.1 (#13141)
++LINUX_VERSION_PROBED = `MAKEFLAGS='$(filter-out w,$(MAKEFLAGS))' $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+ 
+ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+ 
