@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Aug 2020 09:14:38 +0200
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: consider "-" as
- a wildcard when doing CVE version matching
-Message-ID: <20200902161636.F066B85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 13:52:02 +0200
+Subject: [Buildroot] [git commit] package/mender-artifact: do not download
+ modules during the build process
+Message-ID: <20200902161637.7289685EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=008ca2c583cb9dc70cd30c5318b3b1cbef57b06a
+commit: https://git.buildroot.net/buildroot/commit/?id=cfe47f4f79f016370bd7ab30e0b049f4e8a37e5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some CVE entries in the NVD database have version_value set to "-",
-which seems to indicate that it applies to all versions of the
-software project, or that they don't really know which versions are
-affected, and which are not.
+By default, go will attempt to download needed modules before building, which
+is not desirable. This behavior also causes permission issues when cleaning,
+as go downloads modules as read-only by default. Because mender-artifact
+includes the modules in the vendor directory, mod=vendor prevents the package
+from downloading the go modules during the build process and prevents
+permission issues when cleaning.
 
-So, for the benefit of doubt, it seems more appropriate to consider
-such CVEs as affecting our packages.
+Fixes:
+http://autobuild.buildroot.net/results/d5bcaca73ae74fe8b0ebd39b6331564cd639fb66
 
-This makes the total number of CVEs affecting our next branch jump
-from 141 CVEs to 658 CVEs, but that number will go back down once we
-switch to the JSON 1.1 schema. Indeed, in the JSON 1.0 schema, there
-are often cases where a version_value is set to "=" *and* specific
-versions are set to.
-
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/mender-artifact/mender-artifact.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index e642147b98..4673c71d1a 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -370,7 +370,9 @@ class CVE:
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index c81ec9ba53..67fdc44b9d 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -31,6 +31,14 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
  
-             for v in product['version']['version_data']:
-                 if v["version_affected"] == "=":
--                    if br_pkg.current_version == v["version_value"]:
-+                    if v["version_value"] == "-":
-+                        return CVE_AFFECTS
-+                    elif br_pkg.current_version == v["version_value"]:
-                         return CVE_AFFECTS
-                 elif v["version_affected"] == "<=":
-                     pkg_version = distutils.version.LooseVersion(br_pkg.current_version)
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ 
++# By default, go will attempt to download needed modules before building, which
++# is not desirable. This behavior also causes permission issues when cleaning,
++# as go downloads modules as read-only by default. Because mender-artifact
++# includes the modules in the vendor directory, mod=vendor prevents the package
++# from downloading the go modules during the build process and prevents
++# permission issues when cleaning.
++HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
++
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
+ HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
