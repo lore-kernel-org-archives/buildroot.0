@@ -1,48 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 23:06:14 +0200
-Subject: [Buildroot] [git commit branch/next] package/libupnpp: bump to
- version 0.19.3
-Message-ID: <20200829205920.804838198B@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:06:22 +0200
+Subject: [Buildroot] [git commit branch/next] package/libidn: bump to
+ version 1.36
+Message-ID: <20200829205920.8B3DE8198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd7eb9514b82b88bc5ae7d396858a6c361b640c1
+commit: https://git.buildroot.net/buildroot/commit/?id=9e16680bbe4223a50fb7f79e2718c5784399060f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://www.lesbonscomptes.com/upmpdcli/releases.html#_2020_07_04_libupnpp_0_19_3
+Update indentation in hash file (two spaces)
+
+Extract from NEWS:
+ - Fix unlikely memory leak in idna_to_unicode_4z4z().
+ - Check codepoint validity in punycode_decode() and punycode_decode().
+ - tld: Add U+00EF to .nl TLD table.
+ - Indent code.
+ - Translation fixes.
+ - Update gnulib files.
+ - API and ABI is backwards compatible with the previous version.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libupnpp/libupnpp.hash | 4 ++--
- package/libupnpp/libupnpp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libidn/libidn.hash | 8 ++++----
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
-index fb510236a3..dde0d970cb 100644
---- a/package/libupnpp/libupnpp.hash
-+++ b/package/libupnpp/libupnpp.hash
-@@ -1,5 +1,5 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.2.tar.gz.sha256
--sha256  c9623533271605c92dfa603f5fe0ab6d3d5b4384a0c9173800784f4aa643a190  libupnpp-0.19.2.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.3.tar.gz.sha256
-+sha256  a16f35ef1ce3d687e9599422c09677c2c1591bfcf68e242931082d4561f66be4  libupnpp-0.19.3.tar.gz
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index f5ba311e90..0255a63950 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,7 +1,7 @@
+ # Locally computed:
+-sha256	f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e	libidn-1.35.tar.gz
++sha256  14b67108344d81ba844631640df77c9071d9fb0659b080326ff5424e86b14038  libidn-1.36.tar.gz
  
- # Hash for license file:
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index ef1816166e..a8db575984 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
+ # Hash for license files:
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYINGv3
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYINGv3
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 601edcb57d..2df3437029 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNPP_VERSION = 0.19.2
-+LIBUPNPP_VERSION = 0.19.3
- LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
+-LIBIDN_VERSION = 1.35
++LIBIDN_VERSION = 1.36
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no" MAKEINFO=true
